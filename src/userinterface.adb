@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Containers.Vectors; use Ada.Containers;
 with Terminal_Interface.Curses_Constants; use Terminal_Interface.Curses_Constants;
 with Maps; use Maps;
 with Ships; use Ships;
@@ -24,6 +25,8 @@ with Crew; use Crew;
 package body UserInterface is
 
     MemberIndex : Natural;
+    package Messages_Container is new Vectors(Positive, Unbounded_String);
+    Messages_List : Messages_Container.Vector;
 
     procedure ShowMainMenu is
         Visibility : Cursor_Visibility := Invisible;
@@ -78,12 +81,17 @@ package body UserInterface is
         return To_String(Result);
     end FormatedTime;
 
+    procedure AddMessage(Message : String) is
+    begin
+        Messages_List.Append(New_Item => To_Unbounded_String(FormatedTime) & ": " & To_Unbounded_String(Message));
+    end AddMessage;
+
     procedure ShowGameMenu is
     begin
         Add(Str => "[Ship] [Crew] [Messages] [Help] [Quit]");
         Change_Attributes(Line => 0, Column => 1, Count => 1, Color => 1);
         Change_Attributes(Line => 0, Column => 8, Count => 1, Color => 1);
-        --Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
+        Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
         --Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
         Change_Attributes(Line => 0, Column => 33, Count => 1, Color => 1);
         Move_Cursor(Line => 0, Column => (Columns / 3));
@@ -296,6 +304,28 @@ package body UserInterface is
         Refresh(OrdersWindow);
     end ShowOrdersMenu;
 
+    
+    procedure ShowMessages is
+        LoopStart : Positive;
+        LinePos : Line_Position := 2;
+    begin
+        if Messages_List.Length = 0 then
+            Move_Cursor(Line => (Lines / 2), Column => (Columns / 2));
+            Add(Str => "No messages yet.");
+            return;
+        end if;
+        if Messages_List.Last_Index > Positive(Lines - 2) then
+            LoopStart := Messages_List.Last_Index - Positive(Lines - 2);
+        else
+            LoopStart := Messages_List.First_Index;
+        end if;
+        for I in LoopStart..Messages_List.Last_Index loop
+            Move_Cursor(Line => LinePos, Column => 2);
+            Add(Str => To_String(Messages_List.Element(I)));
+            LinePos := LinePos + 1;
+        end loop;
+    end ShowMessages;
+
     procedure DrawGame(CurrentState : GameStates) is
     begin
         Erase;
@@ -312,6 +342,8 @@ package body UserInterface is
                 ShowCrewInfo(KEY_NONE);
             when Giving_Orders =>
                 ShowOrdersMenu;
+            when Messages_View =>
+                ShowMessages;
             when others =>
                 null;
         end case;
@@ -336,6 +368,7 @@ package body UserInterface is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to main menu
+                Messages_List.Clear;
                 Erase;
                 Refresh;
                 ShowMainMenu;
@@ -346,6 +379,9 @@ package body UserInterface is
             when Character'Pos('c') | Character'Pos('C') => -- Crew info screen
                 DrawGame(Crew_Info);
                 return Crew_Info;
+            when Character'Pos('m') | Character'Pos('M') => -- Messages list screen
+                DrawGame(Messages_View);
+                return Messages_View;
             when others =>
                 return CurrentState;
         end case;
@@ -453,5 +489,18 @@ package body UserInterface is
                 return Giving_Orders;
         end case;
     end CrewOrdersKeys;
+
+
+    function MessagesKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
+            when others =>
+                DrawGame(Messages_View);
+                return Messages_View;
+        end case;
+    end MessagesKeys;
 
 end UserInterface;

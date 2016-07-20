@@ -57,6 +57,8 @@ begin
                 GameState := CrewInfoKeys(Key);
             when Giving_Orders =>
                 GameState := CrewOrdersKeys(Key);
+            when Messages_View =>
+                GameState := MessagesKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
