@@ -31,6 +31,6 @@ package Crew is
             Thirst : Natural; -- Thirst level of member
             Order : Crew_Orders; -- Current order for member
         end record;
-    procedure GiveOrders(MemberIndex : Positive; NewOrder: Crew_Orders); -- Change order for selected crew member
+    procedure GiveOrders(MemberIndex : Positive; GivenOrder: Crew_Orders); -- Change order for selected crew member
 
 end Crew;
