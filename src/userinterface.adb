@@ -60,6 +60,9 @@ package body UserInterface is
         --Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
         --Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
         Change_Attributes(Line => 0, Column => 33, Count => 1, Color => 1);
+        Move_Cursor(Line => 0, Column => (Columns / 2));
+        Add(Str => Natural'Image(GameDate.Year) & Natural'Image(GameDate.Month) &
+            Natural'Image(GameDate.Day));
     end ShowGameMenu;
 
     procedure ShowSpeedControl is
