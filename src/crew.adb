@@ -18,29 +18,27 @@
 with Ships; use Ships;
 
 package body Crew is
-    
-    Order : Crew_Orders;
 
-    procedure UpdateOrder(Member : in out Member_Data) is
+    procedure GiveOrders(MemberIndex : Positive; GivenOrder : Crew_Orders) is
+        NewOrder : Crew_Orders;
+        procedure UpdateOrder(Member : in out Member_Data) is
+        begin
+            Member.Order := NewOrder;
+        end UpdateOrder;
     begin
-        Member.Order := Order;
-    end UpdateOrder;
-
-    procedure GiveOrders(MemberIndex : Positive; NewOrder : Crew_Orders) is
-    begin
-        if NewOrder = PlayerShip.Crew.Element(MemberIndex).Order then
+        if GivenOrder = PlayerShip.Crew.Element(MemberIndex).Order then
             return;
         end if;
-        if NewOrder = Duty and MemberIndex > 1 then
+        if GivenOrder = Duty and MemberIndex > 1 then
             return;
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = NewOrder then
-                Order := Rest;
+            if PlayerShip.Crew.Element(I).Order = GivenOrder then
+                NewOrder := Rest;
                 PlayerShip.Crew.Update_Element(Index => I, Process => UpdateOrder'Access);
             end if;
         end loop;
-        Order := NewOrder;
+        NewOrder := GivenOrder;
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
     end GiveOrders;
 
