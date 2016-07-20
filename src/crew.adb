@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ships; use Ships;
+with UserInterface; use UserInterface;
 
 package body Crew is
 
@@ -36,6 +37,7 @@ package body Crew is
             if PlayerShip.Crew.Element(I).Order = GivenOrder then
                 NewOrder := Rest;
                 PlayerShip.Crew.Update_Element(Index => I, Process => UpdateOrder'Access);
+                AddMessage(To_String(PlayerShip.Crew.Element(I).Name) & " going on break.");
             end if;
         end loop;
         NewOrder := GivenOrder;
