@@ -21,9 +21,21 @@ package body Ships is
 
     function MoveShip(ShipIndex, X, Y: Integer) return Boolean is
         NewX, NewY : Integer;
+        HavePilot, HaveEngineer : Boolean := False;
     begin
         if ShipIndex = 0 then
             if PlayerShip.Speed < QUARTER_SPEED then
+                return False;
+            end if;
+            for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                if PlayerShip.Crew.Element(I).Order = Pilot then
+                    HavePilot := True;
+                end if;
+                if PlayerShip.Crew.Element(I).Order = Engineer then
+                    HaveEngineer := True;
+                end if;
+            end loop;
+            if not HavePilot or not HaveEngineer then
                 return False;
             end if;
             NewX := PlayerShip.SkyX + X;
