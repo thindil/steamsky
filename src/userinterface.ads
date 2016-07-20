@@ -25,8 +25,8 @@ package UserInterface is
     function GameMenuKeys(CurrentState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in game menu
     procedure DrawGame(CurrentState : GameStates); -- Draw game screen
     function SpeedMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in speed control menu
-    function ShipInfoKeys(Key : Key_Code) return GameStates; -- Hanlde keys in ship info menu
-    function CrewInfoKeys(Key : Key_Code) return GameStates; -- Hanlde keys in crew info menu
-    function CrewOrdersKeys(Key : Key_Code) return GameStates; -- Hanlde keys in crew orders menu
+    function ShipInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in ship info menu
+    function CrewInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in crew info menu
+    function CrewOrdersKeys(Key : Key_Code) return GameStates; -- Handle keys in crew orders menu
     
 end UserInterface;
