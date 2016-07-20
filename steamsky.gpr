@@ -1,0 +1,27 @@
+with "adacurses";
+
+project steamsky is
+    
+    for Main use ("steamsky.adb");
+    for Source_Dirs use ("src/**");
+    for Object_Dir use "obj";
+    for Exec_Dir use "bin";
+
+    type Mode_Type is ("debug", "release");
+    Mode : Mode_Type := external ("Mode", "debug");
+
+    package Compiler is
+        case Mode is
+            when "debug" =>
+                for Default_Switches ("ada") use ("-gnatwa",
+                    "-g",
+                    "-fstack-check");
+            when "release" =>
+                for Default_Switches ("ada") use ("-gnatwa",
+                    "-O2",
+                    "-gnatn2",
+                    "-fstack-check");
+        end case;
+    end Compiler;
+
+end steamsky;
