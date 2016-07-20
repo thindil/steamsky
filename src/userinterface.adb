@@ -52,6 +52,32 @@ package body UserInterface is
         Add(Str => "2016 Bartek thindil Jasicki");
     end ShowMainMenu;
 
+    function FormatedTime return String is
+        Result : Unbounded_String := To_Unbounded_String("");
+        RawImage : Unbounded_String;
+        TimeArray : constant array(1..5) of Natural := (GameDate.Year,
+            GameDate.Month, GameDate.Day, GameDate.Hour, GameDate.Minutes);
+    begin
+        for I in TimeArray'Range loop
+            RawImage := To_Unbounded_String(Natural'Image(TimeArray(I)));
+            case I is
+                when 1 =>
+                    Result := Result & Trim(RawImage, Ada.Strings.Left);
+                when 2 | 3 =>
+                    Result := Result & To_Unbounded_String("-") & Trim(RawImage, Ada.Strings.Left);
+                when 4 =>
+                    Result := Result & RawImage;
+                when 5 =>
+                    if TimeArray(5) < 10 then
+                        Result := Result & ":0" & Trim(RawImage, Ada.Strings.Left);
+                    else
+                        Result := Result & ":" & Trim(RawImage, Ada.Strings.Left);
+                    end if;
+            end case;
+        end loop;
+        return To_String(Result);
+    end FormatedTime;
+
     procedure ShowGameMenu is
     begin
         Add(Str => "[Ship] [Crew] [Messages] [Help] [Quit]");
@@ -60,9 +86,8 @@ package body UserInterface is
         --Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
         --Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
         Change_Attributes(Line => 0, Column => 33, Count => 1, Color => 1);
-        Move_Cursor(Line => 0, Column => (Columns / 2));
-        Add(Str => Natural'Image(GameDate.Year) & Natural'Image(GameDate.Month) &
-            Natural'Image(GameDate.Day));
+        Move_Cursor(Line => 0, Column => (Columns / 3));
+        Add(Str => FormatedTime);
     end ShowGameMenu;
 
     procedure ShowSpeedControl is

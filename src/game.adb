@@ -35,8 +35,7 @@ package body Game is
         ShipCrew : Crew_Container.Vector;
     begin
         -- Set Game time
-        GameTime := (Hour => 8, Minutes => 0, Seconds => 0);
-        GameDate := (Year => 1600, Month => 3, Day => 1);
+        GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
         -- Generate world
         Rand_Int.Reset(Generator);
         SkyMap := (others => (others => (BaseIndex => 0)));
