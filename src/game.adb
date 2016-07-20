@@ -34,6 +34,9 @@ package body Game is
         ShipCargo : Cargo_Container.Vector; 
         ShipCrew : Crew_Container.Vector;
     begin
+        -- Set Game time
+        GameTime := (Hour => 8, Minutes => 0, Seconds => 0);
+        GameDate := (Year => 1600, Month => 3, Day => 1);
         -- Generate world
         Rand_Int.Reset(Generator);
         SkyMap := (others => (others => (BaseIndex => 0)));
@@ -46,7 +49,7 @@ package body Game is
         end loop;
         -- Place player ship in random base
         RandomBase := Rand_Int.Random(Generator);
-        -- Create player ship (with modules and cargo)
+        -- Create player ship with modules
         ShipModules.Append(New_Item => (Name => To_Unbounded_String("Hawk hull"), 
             MType => HULL, Weight => 8000, Current_Value => 10,
             Max_Value => 10, Durability => 500, MaxDurability => 500));
@@ -83,6 +86,7 @@ package body Game is
         ShipModules.Append(New_Item => (Name => To_Unbounded_String("20mm gun"), 
             MTYPE => GUN, Weight => 30, Current_Value => 1, Max_Value =>
             10, Durability => 20, MaxDurability => 20));
+        -- Add cargo to ship
         ShipCargo.Append(New_Item => (Name => To_Unbounded_String("Charcollum"),
             Weight => 2000, Amount => 2000));
         ShipCargo.Append(New_Item => (Name => To_Unbounded_String("Basic rations"),
@@ -91,6 +95,7 @@ package body Game is
             Weight => 200, Amount => 200));
         ShipCargo.Append(New_Item => (Name => To_Unbounded_String("20mm ammo"), 
             Weight => 500, Amount => 500));
+        -- Add crew to ship
         ShipCrew.Append(New_Item => (Name => To_Unbounded_String("You"),
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0), (1,0)), 
             Hunger => 0, Thirst => 0, Order => Duty)); 

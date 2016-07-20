@@ -19,6 +19,20 @@ package Game is
 
     type GameStates is (Quit, Main_Menu, Sky_Map_View, Control_Speed,
         Ship_Info, Crew_Info, Giving_Orders); -- Game states
+    type Time_Record is -- Data for game time
+        record
+            Hour : Natural;
+            Minutes : Natural;
+            Seconds : Natural;
+        end record;
+    type Date_Record is -- Data for game date
+        record
+            Year : Natural;
+            Month : Natural;
+            Day : Natural;
+        end record;
+    GameTime : Time_Record;
+    GameDate : Date_Record;
     
     procedure NewGame; -- Start new game: create map, place ship, crew, etc
 
