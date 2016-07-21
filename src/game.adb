@@ -37,6 +37,7 @@ package body Game is
         ShipModules : Modules_Container.Vector;
         ShipCargo : Cargo_Container.Vector; 
         ShipCrew : Crew_Container.Vector;
+        Goods : Goods_Array;
     begin
         -- Set Game time
         GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
@@ -48,10 +49,24 @@ package body Game is
             PosX := Rand_Int.Random(Generator);
             PosY := Rand_Int.Random(Generator);
             BaseType := Rand_Base.Random(Generator2);
+            case BaseType is
+                when Bases_Types'Pos(Industrial) =>
+                    Goods := ((To_Unbounded_String("Basic rations"), 1, 2,
+                    False), (To_Unbounded_String("Water"), 1, 2, False),
+                    (To_Unbounded_String("20mm ammo"), 1, 3, True));
+                when Bases_Types'Pos(Agricultural) =>
+                    Goods := ((To_Unbounded_String("Basic rations"), 1, 1,
+                    True), (To_Unbounded_String("Water"), 1, 1, True),
+                    (To_Unbounded_String("20mm ammo"), 1, 5, False));
+                when Bases_Types'Pos(Refinery) =>
+                    Goods := ((To_Unbounded_String("Basic rations"), 1, 2,
+                    False), (To_Unbounded_String("Water"), 1, 2, False),
+                    (To_Unbounded_String("20mm ammo"), 1, 5, False));
+            end case;
             SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I));
             SkyBases(Integer(I)) := (Name => To_Unbounded_String("Base" & Rand_Range'Image(I)),
                 Visited => False, SkyX => Integer(PosX), SkyY => Integer(PosY),
-                BaseType => Bases_Types'Val(BaseType));
+                BaseType => Bases_Types'Val(BaseType), Goods => Goods);
         end loop;
         -- Place player ship in random base
         RandomBase := Rand_Int.Random(Generator);
