@@ -21,6 +21,7 @@ with Terminal_Interface.Curses_Constants; use Terminal_Interface.Curses_Constant
 with Maps; use Maps;
 with Ships; use Ships;
 with Crew; use Crew;
+with Bases; use Bases;
 
 package body UserInterface is
 
@@ -104,8 +105,12 @@ package body UserInterface is
         SpeedWindow := Create(10, 20, (Lines / 3), (Columns / 3));
         Box(SpeedWindow);
         if PlayerShip.Speed = DOCKED then
-            Move_Cursor(Win => SpeedWindow, Line => 4, Column => 5);
+            Move_Cursor(Win => SpeedWindow, Line => 3, Column => 5);
             Add(Win => SpeedWindow, Str => "Undock");
+            Change_Attributes(Win => SpeedWindow, Line => 3, Column => 5, 
+                Count => 1, Color => 1);
+            Move_Cursor(Win => SpeedWindow, Line => 4, Column => 5);
+            Add(Win => SpeedWindow, Str => "Trade");
             Change_Attributes(Win => SpeedWindow, Line => 4, Column => 5, 
                 Count => 1, Color => 1);
         else
@@ -304,7 +309,6 @@ package body UserInterface is
         Change_Attributes(OrdersWindow, Line => 8, Column => 5, Count => 1, Color => 1);
         Refresh(OrdersWindow);
     end ShowOrdersMenu;
-
     
     procedure ShowMessages is
         LoopStart : Positive;
@@ -330,6 +334,44 @@ package body UserInterface is
         Change_Attributes(Line => (Lines - 2), Column => 2, Count => 1, Color => 1);
     end ShowMessages;
 
+    procedure ShowTrade(Key : Key_Code) is
+        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        BuyLetter, SellLetter : Character;
+        FoundCargo : Boolean := False;
+    begin
+        Move_Cursor(Line => 1, Column => 2);
+        Add(Str => "BUY SELL");
+        for I in SkyBases(BaseIndex).Goods'Range loop
+            if SkyBases(BaseIndex).Goods(I).Buyable then
+                BuyLetter := Character'Val(96 + I);
+            else
+                BuyLetter := ' ';
+            end if;
+            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if PlayerShip.Cargo.Element(J).Name = SkyBases(BaseIndex).Goods(I).Name then
+                    FoundCargo := True;
+                    exit;
+                end if;
+            end loop;
+            if FoundCargo then
+                SellLetter := Character'Val(64 + I);
+            else
+                SellLetter := ' ';
+            end if;
+            Move_Cursor(Line => Line_Position(1 + I), Column => 3);
+            Add(Str => BuyLetter & "   " & SellLetter & "   " &
+                To_String(SkyBases(BaseIndex).Goods(I).Name) & " Price:" &
+                Positive'Image(SkyBases(BaseIndex).Goods(I).Price) & 
+                " charcollum");
+        end loop;
+        if Key /= KEY_NONE then -- start buying/selling items from/to base
+            null;
+        end if;
+        Move_Cursor(Line => (Lines - 2), Column => 2);
+        Add(Str => "Q for close this info");
+        Change_Attributes(Line => (Lines - 2), Column => 2, Count => 1, Color => 1);
+    end ShowTrade;
+
     procedure DrawGame(CurrentState : GameStates) is
     begin
         Erase;
@@ -348,6 +390,8 @@ package body UserInterface is
                 ShowOrdersMenu;
             when Messages_View =>
                 ShowMessages;
+            when Trade_View =>
+                ShowTrade(KEY_NONE);
             when others =>
                 null;
         end case;
@@ -397,6 +441,13 @@ package body UserInterface is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 DrawGame(Sky_Map_View);
                 return OldState;
+            when Character'Pos('t') | Character'Pos('T') => -- Trade with base
+                if PlayerShip.Speed = DOCKED then
+                    DrawGame(Trade_View);
+                    return Trade_View;
+                else
+                    return Control_Speed;
+                end if;
             when Character'Pos('u') | Character'Pos('U') => -- Undock ship from base
                 DockShip(False);
                 DrawGame(Sky_Map_View);
@@ -506,5 +557,17 @@ package body UserInterface is
                 return Messages_View;
         end case;
     end MessagesKeys;
+
+    function TradeKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
+            when others =>
+                DrawGame(Trade_View);
+                return Trade_View;
+        end case;
+    end TradeKeys;
 
 end UserInterface;
