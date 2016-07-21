@@ -19,12 +19,14 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Bases is
 
+    type Bases_Types is (Industrial, Agricultural, Refinery);
     type BaseRecord is -- Data structure for bases
         record
             Name : Unbounded_String; -- Base name
             Visited : Boolean; -- Did player visited base ealier
             SkyX : Integer; -- X coordinate on sky map
             SkyY : Integer; -- Y coordinate on sky map
+            BaseType : Bases_Types; -- Type of base
         end record;
     SkyBases : array (1..1024) of BaseRecord; -- List of sky bases
 

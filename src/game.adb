@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Discrete_Random;
+with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Bases; use Bases;
 with Maps; use Maps;
@@ -26,10 +26,14 @@ package body Game is
 
     procedure NewGame is
         type Rand_Range is range 1..1024;
-        package Rand_Int is new Ada.Numerics.Discrete_Random(Rand_Range);
+        type Bases_Range is range 0..2;
+        package Rand_Int is new Discrete_Random(Rand_Range);
+        package Rand_Base is new Discrete_Random(Bases_Range);
         Generator : Rand_Int.Generator;
+        Generator2 : Rand_Base.Generator;
         PosX, PosY : Rand_Range;
         RandomBase : Rand_Range;
+        BaseType : Bases_Range;
         ShipModules : Modules_Container.Vector;
         ShipCargo : Cargo_Container.Vector; 
         ShipCrew : Crew_Container.Vector;
@@ -38,13 +42,16 @@ package body Game is
         GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
         -- Generate world
         Rand_Int.Reset(Generator);
+        Rand_Base.Reset(Generator2);
         SkyMap := (others => (others => (BaseIndex => 0)));
         for I in Rand_Range loop
             PosX := Rand_Int.Random(Generator);
             PosY := Rand_Int.Random(Generator);
+            BaseType := Rand_Base.Random(Generator2);
             SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I));
-            SkyBases(Integer(I)) := (Name => To_Unbounded_String("Base " & Rand_Range'Image(I)),
-                Visited => False, SkyX => Integer(PosX), SkyY => Integer(PosY));
+            SkyBases(Integer(I)) := (Name => To_Unbounded_String("Base" & Rand_Range'Image(I)),
+                Visited => False, SkyX => Integer(PosX), SkyY => Integer(PosY),
+                BaseType => Bases_Types'Val(BaseType));
         end loop;
         -- Place player ship in random base
         RandomBase := Rand_Int.Random(Generator);
