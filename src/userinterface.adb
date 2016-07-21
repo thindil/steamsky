@@ -199,6 +199,7 @@ package body UserInterface is
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             Move_Cursor(Line => Line_Position(2 + I), Column => 2);
             Add(Str => Character'Val(96 + I) & " " & To_String(PlayerShip.Crew.Element(I).Name));
+            Change_Attributes(Line => Line_Position(2 + I), Column => 2, Count => 1, Color => 1);
             if PlayerShip.Crew.Element(I).Health = 100 then
                 Health := To_Unbounded_String("");
             elsif PlayerShip.Crew.Element(I).Health < 100 and PlayerShip.Crew.Element(I).Health > 50 then
