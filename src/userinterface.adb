@@ -325,6 +325,9 @@ package body UserInterface is
             Add(Str => To_String(Messages_List.Element(I)));
             LinePos := LinePos + 1;
         end loop;
+        Move_Cursor(Line => (Lines - 2), Column => 2);
+        Add(Str => "Q for close this info");
+        Change_Attributes(Line => (Lines - 2), Column => 2, Count => 1, Color => 1);
     end ShowMessages;
 
     procedure DrawGame(CurrentState : GameStates) is
