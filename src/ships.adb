@@ -16,6 +16,8 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Maps; use Maps;
+with UserInterface; use UserInterface;
+with Bases; use Bases;
 
 package body Ships is
 
@@ -64,8 +66,12 @@ package body Ships is
         end if;
         if Docking then
             PlayerShip.Speed := DOCKED;
+            AddMessage("Ship docked to base " & To_String(SkyBases(SkyMap(PlayerShip.SkyX, 
+                PlayerShip.SkyY).BaseIndex).Name));
         else
             PlayerShip.Speed := QUARTER_SPEED;
+            AddMessage("Ship undocked from base " & To_String(SkyBases(SkyMap(PlayerShip.SkyX, 
+                PlayerShip.SkyY).BaseIndex).Name));
         end if;
     end DockShip;
 
