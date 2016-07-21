@@ -338,7 +338,16 @@ package body UserInterface is
         BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         BuyLetter, SellLetter : Character;
         FoundCargo : Boolean := False;
+        BuyLetters : array (SkyBases(BaseIndex).Goods'Range) of Character;
+        SellLetters : array (1..PlayerShip.Cargo.Last_Index) of Character;
+        ValidKey : Boolean := False;
+        Visibility : Cursor_Visibility := Normal;
     begin
+        if Key /= KEY_NONE then
+            Erase;
+            Refresh;
+            ShowGameMenu;
+        end if;
         Move_Cursor(Line => 1, Column => 2);
         Add(Str => "BUY SELL");
         for I in SkyBases(BaseIndex).Goods'Range loop
@@ -347,6 +356,7 @@ package body UserInterface is
             else
                 BuyLetter := ' ';
             end if;
+            BuyLetters(I) := BuyLetter;
             for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                 if PlayerShip.Cargo.Element(J).Name = SkyBases(BaseIndex).Goods(I).Name then
                     FoundCargo := True;
@@ -358,18 +368,48 @@ package body UserInterface is
             else
                 SellLetter := ' ';
             end if;
+            SellLetters(I) := SellLetter;
             Move_Cursor(Line => Line_Position(1 + I), Column => 3);
             Add(Str => BuyLetter & "   " & SellLetter & "   " &
                 To_String(SkyBases(BaseIndex).Goods(I).Name) & " Price:" &
                 Positive'Image(SkyBases(BaseIndex).Goods(I).Price) & 
                 " charcollum");
         end loop;
-        if Key /= KEY_NONE then -- start buying/selling items from/to base
-            null;
-        end if;
         Move_Cursor(Line => (Lines - 2), Column => 2);
         Add(Str => "Q for close this info");
         Change_Attributes(Line => (Lines - 2), Column => 2, Count => 1, Color => 1);
+        if Key /= KEY_NONE then -- start buying/selling items from/to base
+            for I in BuyLetters'Range loop
+                if Key = Character'Pos(BuyLetters(I)) and BuyLetters(I) /= ' ' then
+                    ValidKey := True;
+                    exit;
+                end if;
+            end loop;
+            if ValidKey then -- Buy item from base
+                Set_Echo_Mode(False);
+                Set_Cursor_Visibility(Visibility);
+                Move_Cursor(Line => (Lines / 2), Column => 2);
+                Add(Str => "Enter amount to buy: ");
+            else
+                for I in SellLetters'Range loop
+                    if Key = Character'Pos(SellLetters(I)) and SellLetters(I) /= ' ' then
+                        ValidKey := True;
+                        exit;
+                    end if;
+                end loop;
+                if ValidKey then -- Sell item to base
+                    Set_Echo_Mode(False);
+                    Set_Cursor_Visibility(Visibility);
+                    Move_Cursor(Line => (Lines / 2), Column => 2);
+                    Add(Str => "Enter amount to sell: ");
+                end if;
+            end if;
+            if not ValidKey then
+                Visibility := Invisible;
+                Set_Echo_Mode(False);
+                Set_Cursor_Visibility(Visibility);
+            end if;
+        end if;
     end ShowTrade;
 
     procedure DrawGame(CurrentState : GameStates) is
@@ -565,7 +605,7 @@ package body UserInterface is
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when others =>
-                DrawGame(Trade_View);
+                ShowTrade(Key);
                 return Trade_View;
         end case;
     end TradeKeys;
