@@ -42,6 +42,18 @@ package body Crew is
         end loop;
         NewOrder := GivenOrder;
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
+        case GivenOrder is
+            when Duty =>
+                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " back on duty.");
+            when Pilot =>
+                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " starts piloting.");
+            when Engineer =>
+                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " starts engineers duty.");
+            when Gunner =>
+                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " starts operating gun.");
+            when Rest =>
+                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " going on break.");
+        end case;
     end GiveOrders;
 
 end Crew;
