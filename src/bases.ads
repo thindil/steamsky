@@ -38,5 +38,7 @@ package Bases is
             Goods: Goods_Array; -- List of goods for sale in base
         end record;
     SkyBases : array (1..1024) of BaseRecord; -- List of sky bases
+    procedure BuyItems(ItemIndex : Positive; Amount : String); -- Buy items from bases
+    procedure SellItems(ItemIndex : Positive; Amount : String); -- Sell items from bases
 
 end Bases;

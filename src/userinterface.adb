@@ -340,8 +340,9 @@ package body UserInterface is
         FoundCargo : Boolean := False;
         BuyLetters : array (SkyBases(BaseIndex).Goods'Range) of Character;
         SellLetters : array (1..PlayerShip.Cargo.Last_Index) of Character;
-        ValidKey : Boolean := False;
         Visibility : Cursor_Visibility := Normal;
+        Amount : String(1..6);
+        ItemIndex : Natural := 0;
     begin
         if Key /= KEY_NONE then
             Erase;
@@ -381,30 +382,36 @@ package body UserInterface is
         if Key /= KEY_NONE then -- start buying/selling items from/to base
             for I in BuyLetters'Range loop
                 if Key = Character'Pos(BuyLetters(I)) and BuyLetters(I) /= ' ' then
-                    ValidKey := True;
+                    ItemIndex := I;
                     exit;
                 end if;
             end loop;
-            if ValidKey then -- Buy item from base
-                Set_Echo_Mode(False);
+            if ItemIndex > 0 then -- Buy item from base
+                Set_Echo_Mode(True);
                 Set_Cursor_Visibility(Visibility);
                 Move_Cursor(Line => (Lines / 2), Column => 2);
                 Add(Str => "Enter amount to buy: ");
+                Get(Str => Amount, Len => 6);
+                BuyItems(ItemIndex, Amount);
+                ItemIndex := 0;
             else
                 for I in SellLetters'Range loop
                     if Key = Character'Pos(SellLetters(I)) and SellLetters(I) /= ' ' then
-                        ValidKey := True;
+                        ItemIndex := I;
                         exit;
                     end if;
                 end loop;
-                if ValidKey then -- Sell item to base
-                    Set_Echo_Mode(False);
+                if ItemIndex > 0 then -- Sell item to base
+                    Set_Echo_Mode(True);
                     Set_Cursor_Visibility(Visibility);
                     Move_Cursor(Line => (Lines / 2), Column => 2);
                     Add(Str => "Enter amount to sell: ");
+                    Get(Str => Amount, Len => 6);
+                    SellItems(ItemIndex, Amount);
+                    ItemIndex := 0;
                 end if;
             end if;
-            if not ValidKey then
+            if ItemIndex = 0 then
                 Visibility := Invisible;
                 Set_Echo_Mode(False);
                 Set_Cursor_Visibility(Visibility);
