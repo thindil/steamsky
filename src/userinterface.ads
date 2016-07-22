@@ -30,6 +30,7 @@ package UserInterface is
     function CrewOrdersKeys(Key : Key_Code) return GameStates; -- Handle keys in crew orders menu
     function MessagesKeys(Key : Key_Code) return GameStates; -- Handle keys in messages list
     function TradeKeys(Key : Key_Code) return GameStates; -- Handle keys in bases trades
+    function HelpKeys(Key : Key_Code) return GameStates; -- Handle keys in help window
     procedure AddMessage(Message : String); -- Add new message to list
     
 end UserInterface;

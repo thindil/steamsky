@@ -93,7 +93,7 @@ package body UserInterface is
         Change_Attributes(Line => 0, Column => 1, Count => 1, Color => 1);
         Change_Attributes(Line => 0, Column => 8, Count => 1, Color => 1);
         Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
-        --Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
+        Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
         Change_Attributes(Line => 0, Column => 33, Count => 1, Color => 1);
         Move_Cursor(Line => 0, Column => (Columns / 3));
         Add(Str => FormatedTime);
@@ -415,6 +415,21 @@ package body UserInterface is
         end if;
     end ShowTrade;
 
+    procedure ShowHelp is
+    begin
+        Move_Cursor(Line => 2, Column => 2);
+        Add(Str => "At this moment, help is under heavy developement (as whole game). Below you can find few useful tips.");
+        Move_Cursor(Line => 4, Column => 2);
+        Add(Str => "* Your ship starts docked to base. To move it, you must first undock from base. Hit 5 on keypad (with Num Lock active) for actions menu.");
+        Move_Cursor(Line => 6, Column => 2);
+        Add(Str => "* To move your ship, you need to set it speed, have fuel (charcollum, which works as moneys too) and pilot and engineer on duty.");
+        Move_Cursor(Line => 8, Column => 2);
+        Add(Str => "* To buy/sell items from bases you must first dock to base. All bases buy all items, but which items are sold, depends on base type.");
+        Move_Cursor(Line => (Lines - 2), Column => 2);
+        Add(Str => "Q for close help");
+        Change_Attributes(Line => (Lines - 2), Column => 2, Count => 1, Color => 1);
+    end ShowHelp;
+
     procedure DrawGame(CurrentState : GameStates) is
     begin
         Erase;
@@ -435,6 +450,8 @@ package body UserInterface is
                 ShowMessages;
             when Trade_View =>
                 ShowTrade(KEY_NONE);
+            when Help_View =>
+                ShowHelp;
             when others =>
                 null;
         end case;
@@ -473,6 +490,9 @@ package body UserInterface is
             when Character'Pos('m') | Character'Pos('M') => -- Messages list screen
                 DrawGame(Messages_View);
                 return Messages_View;
+            when Character'Pos('h') | Character'Pos('H') => -- Help screen
+                DrawGame(Help_View);
+                return Help_View;
             when others =>
                 return CurrentState;
         end case;
@@ -612,5 +632,17 @@ package body UserInterface is
                 return Trade_View;
         end case;
     end TradeKeys;
+
+    function HelpKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
+            when others =>
+                ShowHelp;
+                return Help_View;
+        end case;
+    end HelpKeys;
 
 end UserInterface;
