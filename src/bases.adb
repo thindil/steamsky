@@ -17,6 +17,7 @@
 
 with Ships; use Ships;
 with Maps; use Maps;
+with UserInterface; use UserInterface;
 
 package body Bases is
 
@@ -24,7 +25,13 @@ package body Bases is
         BuyAmount : Positive;
         BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         Cost : Positive;
-        MoneyIndex : Natural := 0;
+        MoneyIndex, CargoItemIndex : Natural := 0;
+        NewAmount, NewWeight : Natural;
+        procedure UpdateCargo(Item : in out CargoData) is
+        begin
+            Item.Amount := NewAmount;
+            Item.Weight := NewWeight;
+        end UpdateCargo;
     begin
         BuyAmount := Positive'Value(Amount);
         if not SkyBases(BaseIndex).Goods(ItemIndex).Buyable then
@@ -43,6 +50,31 @@ package body Bases is
         if Cost > PlayerShip.Cargo.Element(MoneyIndex).Amount then
             return;
         end if;
+        -- Update amount of "money" (charcollum)
+        NewAmount := PlayerShip.Cargo.Element(MoneyIndex).Amount - Cost;
+        NewWeight := PlayerShip.Cargo.Element(MoneyIndex).Weight - Cost;
+        if NewAmount = 0 then
+            PlayerShip.Cargo.Delete(Index => MoneyIndex, Count => 1);
+        else
+            PlayerShip.Cargo.Update_Element(Index => MoneyIndex, Process => UpdateCargo'Access);
+        end if;
+        -- Add/update cargo
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if PlayerShip.Cargo.Element(I).Name = SkyBases(BaseIndex).Goods(ItemIndex).Name then
+                CargoItemIndex := I;
+                exit;
+            end if;
+        end loop;
+        NewWeight := PlayerShip.Cargo.Element(CargoItemIndex).Weight + (BuyAmount * SkyBases(BaseIndex).Goods(ItemIndex).Weight);
+        if CargoItemIndex > 0 then
+            NewAmount := PlayerShip.Cargo.Element(CargoItemIndex).Amount + BuyAmount;
+            PlayerShip.Cargo.Update_Element(Index => CargoItemIndex, Process => UpdateCargo'Access);
+        else
+            PlayerShip.Cargo.Append(New_Item => (Name => SkyBases(BaseIndex).Goods(ItemIndex).Name, 
+                Weight => NewWeight, Amount => BuyAmount));
+        end if;
+        AddMessage("You bought" & Positive'Image(BuyAmount) & " " & To_String(SkyBases(BaseIndex).Goods(ItemIndex).Name) &
+            " for" & Positive'Image(Cost) & " Charcollum.");
     exception
         when others =>
             return;
