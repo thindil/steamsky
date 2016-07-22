@@ -61,6 +61,8 @@ begin
                 GameState := MessagesKeys(Key);
             when Trade_View =>
                 GameState := TradeKeys(Key);
+            when Help_View =>
+                GameState := HelpKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
