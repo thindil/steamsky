@@ -337,9 +337,8 @@ package body UserInterface is
     procedure ShowTrade(Key : Key_Code) is
         BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         BuyLetter, SellLetter : Character;
-        FoundCargo : Boolean := False;
         BuyLetters : array (SkyBases(BaseIndex).Goods'Range) of Character;
-        SellLetters : array (1..PlayerShip.Cargo.Last_Index) of Character;
+        SellLetters : array (1..PlayerShip.Cargo.Last_Index) of Character := (others => ' ');
         Visibility : Cursor_Visibility := Normal;
         Amount : String(1..6);
         ItemIndex : Natural := 0;
@@ -358,18 +357,14 @@ package body UserInterface is
                 BuyLetter := ' ';
             end if;
             BuyLetters(I) := BuyLetter;
+            SellLetter := ' ';
             for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                 if PlayerShip.Cargo.Element(J).Name = SkyBases(BaseIndex).Goods(I).Name then
-                    FoundCargo := True;
+                    SellLetter := Character'Val(64 + I);
+                    SellLetters(J) := SellLetter;
                     exit;
                 end if;
             end loop;
-            if FoundCargo then
-                SellLetter := Character'Val(64 + I);
-            else
-                SellLetter := ' ';
-            end if;
-            SellLetters(I) := SellLetter;
             Move_Cursor(Line => Line_Position(1 + I), Column => 3);
             Add(Str => BuyLetter & "   " & SellLetter & "   " &
                 To_String(SkyBases(BaseIndex).Goods(I).Name) & " Price:" &
@@ -415,6 +410,7 @@ package body UserInterface is
                 Visibility := Invisible;
                 Set_Echo_Mode(False);
                 Set_Cursor_Visibility(Visibility);
+                DrawGame(Trade_View);
             end if;
         end if;
     end ShowTrade;
