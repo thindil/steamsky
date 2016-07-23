@@ -178,13 +178,6 @@ package body Game is
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         RawValue := To_Unbounded_String(Integer'Image(GameDate.Minutes));
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-        -- Save sky map
-        for X in 1..1024 loop
-            for Y in 1..1024 loop
-                RawValue := To_Unbounded_String(Integer'Image(SkyMap(X, Y).BaseIndex));
-                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            end loop;
-        end loop;
         -- Save bases
         for I in SkyBases'Range loop
             Put(SaveGame, To_String(SkyBases(I).Name) & ";");
