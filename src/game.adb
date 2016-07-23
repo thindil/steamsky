@@ -135,4 +135,30 @@ package body Game is
         SkyBases(Integer(RandomBase)).Visited := True;
     end NewGame;
 
+    procedure UpdateGame(Minutes : Positive) is
+        AddedHours, AddedMinutes : Natural;
+    begin
+        -- Update time
+        AddedMinutes := Minutes rem 60;
+        AddedHours := Minutes / 60;
+        GameDate.Minutes := GameDate.Minutes + AddedMinutes;
+        if GameDate.Minutes > 59 then
+            GameDate.Minutes := GameDate.Minutes - 60;
+            GameDate.Hour := GameDate.Hour + 1;
+        end if;
+        GameDate.Hour := GameDate.Hour + AddedHours;
+        if GameDate.Hour > 23 then
+            GameDate.Hour := GameDate.Hour - 24;
+            GameDate.Day := GameDate.Day + 1;
+        end if;
+        if GameDate.Day > 30 then
+            GameDate.Day := 1;
+            GameDate.Month := GameDate.Month + 1;
+        end if;
+        if GameDate.Month > 12 then
+            GameDate.Month := 1;
+            GameDate.Year := GameDate.Year + 1;
+        end if;
+    end UpdateGame;
+
 end Game;

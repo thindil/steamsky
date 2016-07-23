@@ -18,6 +18,7 @@
 with Maps; use Maps;
 with UserInterface; use UserInterface;
 with Bases; use Bases;
+with Game; use Game;
 
 package body Ships is
 
@@ -49,6 +50,16 @@ package body Ships is
         if ShipIndex = 0 then
             PlayerShip.SkyX := NewX;
             PlayerShip.SkyY := NewY;
+            case PlayerShip.Speed is
+                when QUARTER_SPEED =>
+                    UpdateGame(120);
+                when HALF_SPEED =>
+                    UpdateGame(60);
+                when FULL_SPEED =>
+                    UpdateGame(30);
+                when others =>
+                    null;
+            end case;
         end if;
         return True;
     end MoveShip;
@@ -68,10 +79,12 @@ package body Ships is
             PlayerShip.Speed := DOCKED;
             AddMessage("Ship docked to base " & To_String(SkyBases(SkyMap(PlayerShip.SkyX, 
                 PlayerShip.SkyY).BaseIndex).Name));
+            UpdateGame(10);
         else
             PlayerShip.Speed := QUARTER_SPEED;
             AddMessage("Ship undocked from base " & To_String(SkyBases(SkyMap(PlayerShip.SkyX, 
                 PlayerShip.SkyY).BaseIndex).Name));
+            UpdateGame(5);
         end if;
     end DockShip;
 
