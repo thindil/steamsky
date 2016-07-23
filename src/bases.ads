@@ -22,8 +22,7 @@ package Bases is
     type Bases_Types is (Industrial, Agricultural, Refinery);
     type GoodData is -- Data structure for goods in bases
         record
-            Name : Unbounded_String; -- Name of good
-            Weight : Positive; -- Weight of one unit of good
+            ProtoIndex : Positive; -- Prototype index for good
             Price : Positive; -- Selling price of good
             Buyable : Boolean; -- Did this item is buyable on this base
         end record;

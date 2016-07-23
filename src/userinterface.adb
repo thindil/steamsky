@@ -22,6 +22,7 @@ with Maps; use Maps;
 with Ships; use Ships;
 with Crew; use Crew;
 with Bases; use Bases;
+with Prototypes; use Prototypes;
 
 package body UserInterface is
 
@@ -156,6 +157,7 @@ package body UserInterface is
 
     procedure ShowShipInfo is
         Weight : Integer;
+        CargoWeight : Positive;
     begin
         Weight := 0;
         Move_Cursor(Line => 2, Column => 2);
@@ -187,11 +189,12 @@ package body UserInterface is
         Move_Cursor(Line => 4, Column => (Columns / 2));
         Add(Str => "CARGO:");
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            CargoWeight := PlayerShip.Cargo.Element(I).Amount * Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Weight;
             Move_Cursor(Line => Line_Position(4 + I), Column => (Columns / 2));
             Add(Str => Positive'Image(PlayerShip.Cargo.Element(I).Amount) & "x" &
-                To_String(PlayerShip.Cargo.Element(I).Name) & " (" &
-                Positive'Image(PlayerShip.Cargo.Element(I).Weight) & "kg )");
-            Weight := Weight + PlayerShip.Cargo.Element(I).Weight;
+                To_String(Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Name) & " (" &
+                Positive'Image(CargoWeight) & "kg )");
+            Weight := Weight + CargoWeight;
         end loop;
         Move_Cursor(Line => 3, Column => 2);
         Add(Str => "Weight: " & Integer'Image(Weight) & "kg");
@@ -369,7 +372,7 @@ package body UserInterface is
             BuyLetters(I) := BuyLetter;
             SellLetter := ' ';
             for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if PlayerShip.Cargo.Element(J).Name = SkyBases(BaseIndex).Goods(I).Name then
+                if PlayerShip.Cargo.Element(J).ProtoIndex = SkyBases(BaseIndex).Goods(I).ProtoIndex then
                     SellLetter := Character'Val(64 + I);
                     SellLetters(J) := SellLetter;
                     exit;
@@ -377,7 +380,7 @@ package body UserInterface is
             end loop;
             Move_Cursor(Line => Line_Position(1 + I), Column => 3);
             Add(Str => BuyLetter & "   " & SellLetter & "   " &
-                To_String(SkyBases(BaseIndex).Goods(I).Name) & " Price:" &
+                To_String(Objects_Prototypes(SkyBases(BaseIndex).Goods(I).ProtoIndex).Name) & " Price:" &
                 Positive'Image(SkyBases(BaseIndex).Goods(I).Price) & 
                 " charcollum");
         end loop;

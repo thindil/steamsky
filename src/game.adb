@@ -52,17 +52,11 @@ package body Game is
             BaseType := Rand_Base.Random(Generator2);
             case BaseType is
                 when Bases_Types'Pos(Industrial) =>
-                    Goods := ((To_Unbounded_String("Basic rations"), 1, 2,
-                    False), (To_Unbounded_String("Water"), 1, 2, False),
-                    (To_Unbounded_String("20mm ammo"), 1, 3, True));
+                    Goods := ((2, 2, False), (3, 2, False), (4, 3, True));
                 when Bases_Types'Pos(Agricultural) =>
-                    Goods := ((To_Unbounded_String("Basic rations"), 1, 1,
-                    True), (To_Unbounded_String("Water"), 1, 1, True),
-                    (To_Unbounded_String("20mm ammo"), 1, 5, False));
+                    Goods := ((2, 1, True), (3, 1, True), (4, 5, False));
                 when Bases_Types'Pos(Refinery) =>
-                    Goods := ((To_Unbounded_String("Basic rations"), 1, 2,
-                    False), (To_Unbounded_String("Water"), 1, 2, False),
-                    (To_Unbounded_String("20mm ammo"), 1, 5, False));
+                    Goods := ((2, 2, False), (3, 2, False), (4, 5, False));
             end case;
             SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I));
             SkyBases(Integer(I)) := (Name => To_Unbounded_String("Base" & Rand_Range'Image(I)),
@@ -109,14 +103,10 @@ package body Game is
             MTYPE => GUN, Weight => 30, Current_Value => 1, Max_Value =>
             10, Durability => 20, MaxDurability => 20));
         -- Add cargo to ship
-        ShipCargo.Append(New_Item => (Name => To_Unbounded_String("Charcollum"),
-            Weight => 2000, Amount => 2000));
-        ShipCargo.Append(New_Item => (Name => To_Unbounded_String("Basic rations"),
-            Weight => 100, Amount => 100));
-        ShipCargo.Append(New_Item => (Name => To_Unbounded_String("Water"),
-            Weight => 200, Amount => 200));
-        ShipCargo.Append(New_Item => (Name => To_Unbounded_String("20mm ammo"), 
-            Weight => 500, Amount => 500));
+        ShipCargo.Append(New_Item => (ProtoIndex => 1, Amount => 2000));
+        ShipCargo.Append(New_Item => (ProtoIndex => 2, Amount => 100));
+        ShipCargo.Append(New_Item => (ProtoIndex => 3, Amount => 200));
+        ShipCargo.Append(New_Item => (ProtoIndex => 4, Amount => 500));
         -- Add crew to ship
         ShipCrew.Append(New_Item => (Name => To_Unbounded_String("You"),
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0), (1,0)), 
@@ -193,16 +183,15 @@ package body Game is
             RawValue := To_Unbounded_String(Integer'Image(Bases_Types'Pos(SkyBases(I).BaseType)));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             for J in Goods_Array'Range loop
-               Put(SaveGame, To_String(SkyBases(I).Goods(J).Name) & ";");
-               RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Goods(J).Weight));
-               Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-               RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Goods(J).Price));
-               Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-               if SkyBases(I).Goods(J).Buyable then
-                   Put(SaveGame, "1;");
-               else
-                   Put(SaveGame, "0;");
-               end if;
+                RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Goods(J).ProtoIndex));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Goods(J).Price));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                if SkyBases(I).Goods(J).Buyable then
+                    Put(SaveGame, "1;");
+                else
+                    Put(SaveGame, "0;");
+                end if;
             end loop;
         end loop;
         -- Save player ship
@@ -232,8 +221,7 @@ package body Game is
         RawValue := To_Unbounded_String(PlayerShip.Cargo.Length'Img);
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            Put(SaveGame, To_String(PlayerShip.Cargo.Element(I).Name) & ";");
-            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Cargo.Element(I).Weight));
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Cargo.Element(I).ProtoIndex));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Cargo.Element(I).Amount));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
