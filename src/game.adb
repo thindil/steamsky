@@ -17,6 +17,7 @@
 
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO; use Ada.Text_IO;
 with Bases; use Bases;
 with Maps; use Maps;
 with Ships; use Ships;
@@ -161,4 +162,115 @@ package body Game is
         end if;
     end UpdateGame;
 
+    procedure SaveGame is
+        SaveGame : File_Type;
+        RawValue : Unbounded_String;
+    begin
+        Create(SaveGame, Out_File, "data/savegame.dat");
+        -- Save game date
+        RawValue := To_Unbounded_String(Integer'Image(GameDate.Year));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Integer'Image(GameDate.Month));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Integer'Image(GameDate.Day));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Integer'Image(GameDate.Hour));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Integer'Image(GameDate.Minutes));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        -- Save sky map
+        for X in 1..1024 loop
+            for Y in 1..1024 loop
+                RawValue := To_Unbounded_String(Integer'Image(SkyMap(X, Y).BaseIndex));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            end loop;
+        end loop;
+        -- Save bases
+        for I in SkyBases'Range loop
+            Put(SaveGame, To_String(SkyBases(I).Name) & ";");
+            if SkyBases(I).Visited then
+                Put(SaveGame, "1;");
+            else
+                Put(SaveGame, "0;");
+            end if;
+            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).SkyX));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).SkyY));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(Bases_Types'Pos(SkyBases(I).BaseType)));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            for J in Goods_Array'Range loop
+               Put(SaveGame, To_String(SkyBases(I).Goods(J).Name) & ";");
+               RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Goods(J).Weight));
+               Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+               RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Goods(J).Price));
+               Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+               if SkyBases(I).Goods(J).Buyable then
+                   Put(SaveGame, "1;");
+               else
+                   Put(SaveGame, "0;");
+               end if;
+            end loop;
+        end loop;
+        -- Save player ship
+        RawValue := To_Unbounded_String(Integer'Image(PlayerShip.SkyX));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Integer'Image(PlayerShip.SkyY));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Integer'Image(ShipSpeed'Pos(PlayerShip.Speed)));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(PlayerShip.Modules.Length'Img);
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            Put(SaveGame, To_String(PlayerShip.Modules.Element(I).Name) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(ModuleType'Pos(PlayerShip.Modules.Element(I).MType)));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Modules.Element(I).Weight));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Modules.Element(I).Current_Value));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Modules.Element(I).Max_Value));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Modules.Element(I).Durability));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Modules.Element(I).MaxDurability));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        end loop;
+        RawValue := To_Unbounded_String(PlayerShip.Cargo.Length'Img);
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            Put(SaveGame, To_String(PlayerShip.Cargo.Element(I).Name) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Cargo.Element(I).Weight));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Cargo.Element(I).Amount));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        end loop;
+        RawValue := To_Unbounded_String(PlayerShip.Cargo.Length'Img);
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            Put(SaveGame, To_String(PlayerShip.Crew.Element(I).Name) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Health));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Tired));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            for J in Skills_Array'Range loop
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Skills(J, 1)));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Skills(J, 2)));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            end loop;
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Hunger));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Thirst));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(Crew_Orders'Pos(PlayerShip.Crew.Element(I).Order)));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        end loop;
+        Close(SaveGame);
+    end SaveGame;
+
+    procedure LoadGame is
+    begin
+        null;
+    end LoadGame;
 end Game;
