@@ -18,6 +18,7 @@
 with Ships; use Ships;
 with Maps; use Maps;
 with UserInterface; use UserInterface;
+with Game; use Game;
 
 package body Bases is
 
@@ -75,6 +76,7 @@ package body Bases is
         end if;
         AddMessage("You bought" & Positive'Image(BuyAmount) & " " & To_String(SkyBases(BaseIndex).Goods(ItemIndex).Name) &
             " for" & Positive'Image(Cost) & " Charcollum.");
+        UpdateGame(5);
     exception
         when others =>
             return;
@@ -128,6 +130,7 @@ package body Bases is
         end if;
         AddMessage("You sold" & Positive'Image(SellAmount) & " " & To_String(SkyBases(BaseIndex).Goods(BaseItemIndex).Name) &
             " for" & Positive'Image(Profit) & " Charcollum.");
+        UpdateGame(5);
     exception
         when others =>
             return;
