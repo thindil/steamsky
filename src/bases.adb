@@ -19,6 +19,7 @@ with Ships; use Ships;
 with Maps; use Maps;
 with UserInterface; use UserInterface;
 with Game; use Game;
+with Prototypes; use Prototypes;
 
 package body Bases is
 
@@ -34,7 +35,7 @@ package body Bases is
         end if;
         Cost := BuyAmount * SkyBases(BaseIndex).Goods(ItemIndex).Price;
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).Name = "Charcollum" then
+            if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
                 MoneyIndex := I;
                 exit;
             end if;
@@ -45,10 +46,10 @@ package body Bases is
         if Cost > PlayerShip.Cargo.Element(MoneyIndex).Amount then
             return;
         end if;
-        UpdateCargo(To_Unbounded_String("Charcollum"), (0 - Cost), 1);
-        UpdateCargo(SkyBases(BaseIndex).Goods(ItemIndex).Name, BuyAmount,
-            SkyBases(BaseIndex).Goods(ItemIndex).Weight);
-        AddMessage("You bought" & Positive'Image(BuyAmount) & " " & To_String(SkyBases(BaseIndex).Goods(ItemIndex).Name) &
+        UpdateCargo(1, (0 - Cost));
+        UpdateCargo(SkyBases(BaseIndex).Goods(ItemIndex).ProtoIndex, BuyAmount);
+        AddMessage("You bought" & Positive'Image(BuyAmount) & " " &
+            To_String(Objects_Prototypes(SkyBases(BaseIndex).Goods(ItemIndex).ProtoIndex).Name) &
             " for" & Positive'Image(Cost) & " Charcollum.");
         UpdateGame(5);
     exception
@@ -67,16 +68,17 @@ package body Bases is
             return;
         end if;
         for I in SkyBases(BaseIndex).Goods'Range loop
-            if SkyBases(BaseIndex).Goods(I).Name = PlayerShip.Cargo.Element(ItemIndex).Name then
+            if SkyBases(BaseIndex).Goods(I).ProtoIndex = PlayerShip.Cargo.Element(ItemIndex).ProtoIndex then
                 BaseItemIndex := I;
                 exit;
             end if;
         end loop;
-        UpdateCargo(SkyBases(BaseIndex).Goods(BaseItemIndex).Name, (0 -
-            SellAmount), SkyBases(BaseIndex).Goods(BaseItemIndex).Weight);
+        UpdateCargo(SkyBases(BaseIndex).Goods(BaseItemIndex).ProtoIndex, (0 -
+            SellAmount));
         Profit := SkyBases(BaseIndex).Goods(BaseItemIndex).Price * SellAmount;
-        UpdateCargo(To_Unbounded_String("Charcollum"), Profit, 1);
-        AddMessage("You sold" & Positive'Image(SellAmount) & " " & To_String(SkyBases(BaseIndex).Goods(BaseItemIndex).Name) &
+        UpdateCargo(1, Profit);
+        AddMessage("You sold" & Positive'Image(SellAmount) & " " &
+            To_String(Objects_Prototypes(SkyBases(BaseIndex).Goods(BaseItemIndex).ProtoIndex).Name) &
             " for" & Positive'Image(Profit) & " Charcollum.");
         UpdateGame(5);
     exception

@@ -37,8 +37,7 @@ package Ships is
     package Modules_Container is new Vectors(Positive, ModuleData); 
     type CargoData is -- Data structure for ship cargo
         record
-            Name : Unbounded_String; -- Name of cargo
-            Weight : Positive; -- Weight of cargo
+            ProtoIndex : Positive; -- Index of prototype
             Amount : Positive; -- Amount of cargo
         end record;
     package Cargo_Container is new Vectors(Positive, CargoData);
@@ -57,6 +56,6 @@ package Ships is
     function MoveShip(ShipIndex, X, Y : Integer) return Boolean; -- Move selected ship, return True if ship moved
     procedure DockShip(Docking : Boolean); -- Dock/Undock ship at base
     procedure ChangeShipSpeed(SpeedValue : ShipSpeed); -- Change speed of ship
-    procedure UpdateCargo(Name : Unbounded_String; Amount : Integer; Weight : Positive); -- Update selected item in ship cargo
+    procedure UpdateCargo(ProtoIndex : Positive; Amount : Integer); -- Update selected item in ship cargo
 
 end Ships;

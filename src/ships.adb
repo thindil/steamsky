@@ -53,7 +53,7 @@ package body Ships is
                     return False;
             end case;
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop -- Check for fuel
-                if PlayerShip.Cargo.Element(I).Name = "Charcollum" and
+                if PlayerShip.Cargo.Element(I).ProtoIndex = 1 and
                     PlayerShip.Cargo.Element(I).Amount < abs FuelNeeded then
                     return False;
                 end if;
@@ -67,7 +67,7 @@ package body Ships is
         if ShipIndex = 0 then
             PlayerShip.SkyX := NewX;
             PlayerShip.SkyY := NewY;
-            UpdateCargo(To_Unbounded_String("Charcollum"), FuelNeeded, 1);
+            UpdateCargo(1, FuelNeeded);
             case PlayerShip.Speed is
                 when QUARTER_SPEED =>
                     UpdateGame(120);
@@ -116,30 +116,28 @@ package body Ships is
         PlayerShip.Speed := SpeedValue;
     end ChangeShipSpeed;
 
-    procedure UpdateCargo(Name : Unbounded_String; Amount : Integer; Weight : Positive) is
+    procedure UpdateCargo(ProtoIndex : Positive; Amount : Integer) is
         ItemIndex : Natural := 0;
-        NewAmount, NewWeight : Natural;
+        NewAmount : Natural;
         procedure UpdateItem(Item : in out CargoData) is
         begin
             Item.Amount := NewAmount;
-            Item.Weight := NewWeight;
         end UpdateItem;
     begin
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).Name = Name then
+            if PlayerShip.Cargo.Element(I).ProtoIndex = ProtoIndex then
                 ItemIndex := I;
                 exit;
             end if;
         end loop;
         if ItemIndex = 0 then
-            PlayerShip.Cargo.Append(New_Item => (Name => Name, Amount =>
-                Amount, Weight => (Amount * Weight)));
+            PlayerShip.Cargo.Append(New_Item => (ProtoIndex => ProtoIndex, Amount =>
+                Amount));
         else
             NewAmount := PlayerShip.Cargo.Element(ItemIndex).Amount + Amount;
             if NewAmount < 1 then
                 PlayerShip.Cargo.Delete(Index => ItemIndex, Count => 1);
             else
-                NewWeight := PlayerShip.Cargo.Element(ItemIndex).Weight + (Weight * Amount);
                 PlayerShip.Cargo.Update_Element(Index => ItemIndex, Process => UpdateItem'Access);
             end if;
         end if;
