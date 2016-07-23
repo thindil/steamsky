@@ -25,6 +25,7 @@ package body Ships is
     function MoveShip(ShipIndex, X, Y: Integer) return Boolean is
         NewX, NewY : Integer;
         HavePilot, HaveEngineer : Boolean := False;
+        FuelNeeded : Integer;
     begin
         if ShipIndex = 0 then
             if PlayerShip.Speed < QUARTER_SPEED then
@@ -41,6 +42,22 @@ package body Ships is
             if not HavePilot or not HaveEngineer then
                 return False;
             end if;
+            case PlayerShip.Speed is
+                when QUARTER_SPEED =>
+                    FuelNeeded := -1;
+                when HALF_SPEED =>
+                    FuelNeeded := -2;
+                when FULL_SPEED =>
+                    FuelNeeded := -4;
+                when others =>
+                    return False;
+            end case;
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop -- Check for fuel
+                if PlayerShip.Cargo.Element(I).Name = "Charcollum" and
+                    PlayerShip.Cargo.Element(I).Amount < abs FuelNeeded then
+                    return False;
+                end if;
+            end loop;
             NewX := PlayerShip.SkyX + X;
             NewY := PlayerShip.SkyY + Y;
         end if;
@@ -50,6 +67,7 @@ package body Ships is
         if ShipIndex = 0 then
             PlayerShip.SkyX := NewX;
             PlayerShip.SkyY := NewY;
+            UpdateCargo(To_Unbounded_String("Charcollum"), FuelNeeded, 1);
             case PlayerShip.Speed is
                 when QUARTER_SPEED =>
                     UpdateGame(120);
