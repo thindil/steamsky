@@ -96,4 +96,33 @@ package body Ships is
         PlayerShip.Speed := SpeedValue;
     end ChangeShipSpeed;
 
+    procedure UpdateCargo(Name : Unbounded_String; Amount : Integer; Weight : Positive) is
+        ItemIndex : Natural := 0;
+        NewAmount, NewWeight : Natural;
+        procedure UpdateItem(Item : in out CargoData) is
+        begin
+            Item.Amount := NewAmount;
+            Item.Weight := NewWeight;
+        end UpdateItem;
+    begin
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if PlayerShip.Cargo.Element(I).Name = Name then
+                ItemIndex := I;
+                exit;
+            end if;
+        end loop;
+        if ItemIndex = 0 then
+            PlayerShip.Cargo.Append(New_Item => (Name => Name, Amount =>
+                Amount, Weight => (Amount * Weight)));
+        else
+            NewAmount := PlayerShip.Cargo.Element(ItemIndex).Amount + Amount;
+            if NewAmount < 1 then
+                PlayerShip.Cargo.Delete(Index => ItemIndex, Count => 1);
+            else
+                NewWeight := PlayerShip.Cargo.Element(ItemIndex).Weight + (Weight * Amount);
+                PlayerShip.Cargo.Update_Element(Index => ItemIndex, Process => UpdateItem'Access);
+            end if;
+        end if;
+    end UpdateCargo;
+
 end Ships;

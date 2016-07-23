@@ -57,5 +57,6 @@ package Ships is
     function MoveShip(ShipIndex, X, Y : Integer) return Boolean; -- Move selected ship, return True if ship moved
     procedure DockShip(Docking : Boolean); -- Dock/Undock ship at base
     procedure ChangeShipSpeed(SpeedValue : ShipSpeed); -- Change speed of ship
+    procedure UpdateCargo(Name : Unbounded_String; Amount : Integer; Weight : Positive); -- Update selected item in ship cargo
 
 end Ships;

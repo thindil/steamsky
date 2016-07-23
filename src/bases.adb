@@ -26,13 +26,7 @@ package body Bases is
         BuyAmount : Positive;
         BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         Cost : Positive;
-        MoneyIndex, CargoItemIndex : Natural := 0;
-        NewAmount, NewWeight : Natural;
-        procedure UpdateCargo(Item : in out CargoData) is
-        begin
-            Item.Amount := NewAmount;
-            Item.Weight := NewWeight;
-        end UpdateCargo;
+        MoneyIndex : Natural := 0;
     begin
         BuyAmount := Positive'Value(Amount);
         if not SkyBases(BaseIndex).Goods(ItemIndex).Buyable then
@@ -51,29 +45,9 @@ package body Bases is
         if Cost > PlayerShip.Cargo.Element(MoneyIndex).Amount then
             return;
         end if;
-        -- Update amount of "moneys" (charcollum)
-        NewAmount := PlayerShip.Cargo.Element(MoneyIndex).Amount - Cost;
-        NewWeight := PlayerShip.Cargo.Element(MoneyIndex).Weight - Cost;
-        if NewAmount = 0 then
-            PlayerShip.Cargo.Delete(Index => MoneyIndex, Count => 1);
-        else
-            PlayerShip.Cargo.Update_Element(Index => MoneyIndex, Process => UpdateCargo'Access);
-        end if;
-        -- Add/update cargo
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).Name = SkyBases(BaseIndex).Goods(ItemIndex).Name then
-                CargoItemIndex := I;
-                exit;
-            end if;
-        end loop;
-        NewWeight := PlayerShip.Cargo.Element(CargoItemIndex).Weight + (BuyAmount * SkyBases(BaseIndex).Goods(ItemIndex).Weight);
-        if CargoItemIndex > 0 then
-            NewAmount := PlayerShip.Cargo.Element(CargoItemIndex).Amount + BuyAmount;
-            PlayerShip.Cargo.Update_Element(Index => CargoItemIndex, Process => UpdateCargo'Access);
-        else
-            PlayerShip.Cargo.Append(New_Item => (Name => SkyBases(BaseIndex).Goods(ItemIndex).Name, 
-                Weight => NewWeight, Amount => BuyAmount));
-        end if;
+        UpdateCargo(To_Unbounded_String("Charcollum"), (0 - Cost), 1);
+        UpdateCargo(SkyBases(BaseIndex).Goods(ItemIndex).Name, BuyAmount,
+            SkyBases(BaseIndex).Goods(ItemIndex).Weight);
         AddMessage("You bought" & Positive'Image(BuyAmount) & " " & To_String(SkyBases(BaseIndex).Goods(ItemIndex).Name) &
             " for" & Positive'Image(Cost) & " Charcollum.");
         UpdateGame(5);
@@ -86,13 +60,7 @@ package body Bases is
         SellAmount : Positive;
         BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         Profit : Positive;
-        MoneyIndex, BaseItemIndex : Natural := 0;
-        NewAmount, NewWeight : Natural;
-        procedure UpdateCargo(Item : in out CargoData) is
-        begin
-            Item.Amount := NewAmount;
-            Item.Weight := NewWeight;
-        end UpdateCargo;
+        BaseItemIndex : Natural := 0;
     begin
         SellAmount := Positive'Value(Amount);
         if PlayerShip.Cargo.Element(ItemIndex).Amount < SellAmount then
@@ -104,30 +72,10 @@ package body Bases is
                 exit;
             end if;
         end loop;
-        -- Update amount of items
-        NewAmount := PlayerShip.Cargo.Element(ItemIndex).Amount - SellAmount;
-        if NewAmount = 0 then
-            PlayerShip.Cargo.Delete(Index => ItemIndex, Count => 1);
-        else
-            NewWeight := PlayerShip.Cargo.Element(ItemIndex).Amount * SkyBases(BaseIndex).Goods(BaseItemIndex).Weight;
-            PlayerShip.Cargo.Update_Element(Index => ItemIndex, Process => UpdateCargo'Access);
-        end if;
-        -- Update amount of "moneys" charcollum
+        UpdateCargo(SkyBases(BaseIndex).Goods(BaseItemIndex).Name, (0 -
+            SellAmount), SkyBases(BaseIndex).Goods(BaseItemIndex).Weight);
         Profit := SkyBases(BaseIndex).Goods(BaseItemIndex).Price * SellAmount;
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).Name = "Charcollum" then
-                MoneyIndex := I;
-                exit;
-            end if;
-        end loop;
-        if MoneyIndex = 0 then
-            PlayerShip.Cargo.Append(New_Item => (Name => To_Unbounded_String("Charcollum"),
-                Weight => Profit, Amount => Profit));
-        else
-            NewAmount := PlayerShip.Cargo.Element(MoneyIndex).Amount + Profit;
-            NewWeight := PlayerShip.Cargo.Element(MoneyIndex).Weight + Profit;
-            PlayerShip.Cargo.Update_Element(Index => MoneyIndex, Process => UpdateCargo'Access);
-        end if;
+        UpdateCargo(To_Unbounded_String("Charcollum"), Profit, 1);
         AddMessage("You sold" & Positive'Image(SellAmount) & " " & To_String(SkyBases(BaseIndex).Goods(BaseItemIndex).Name) &
             " for" & Positive'Image(Profit) & " Charcollum.");
         UpdateGame(5);
