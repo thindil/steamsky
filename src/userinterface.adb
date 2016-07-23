@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Directories; use Ada.Directories;
 with Maps; use Maps;
 with Ships; use Ships;
 with Crew; use Crew;
@@ -45,10 +46,21 @@ package body UserInterface is
         Add(Str => "New game");
         Change_Attributes(Line => (Lines / 3) + 1, Column => (Columns - 12) / 2,
             Count => 1, Color => 1);
-        Move_Cursor(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2);
-        Add(Str => "Quit game");
-        Change_Attributes(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2,
-            Count => 1, Color => 1);
+        if Exists("data/savegame.dat") then
+            Move_Cursor(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2);
+            Add(Str => "Load game");
+            Change_Attributes(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2,
+                Count => 1, Color => 1);
+            Move_Cursor(Line => (Lines / 3) + 3, Column => (Columns - 12) / 2);
+            Add(Str => "Quit game");
+            Change_Attributes(Line => (Lines / 3) + 3, Column => (Columns - 12) / 2,
+                Count => 1, Color => 1);
+        else
+            Move_Cursor(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2);
+            Add(Str => "Quit game");
+            Change_Attributes(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2,
+                Count => 1, Color => 1);
+        end if;
         -- Copyright
         Move_Cursor(Line => Lines - 1, Column => (Columns - 20) / 2);
         Add(Str => "2016 Bartek thindil Jasicki");
@@ -482,6 +494,7 @@ package body UserInterface is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to main menu
+                SaveGame;
                 Messages_List.Clear;
                 Erase;
                 Refresh;
