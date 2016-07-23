@@ -16,12 +16,14 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ships; use Ships;
+with Bases; use Bases;
 
 package body Maps is
 
     procedure ShowSkyMap is
         StartX : Integer;
         StartY : Integer;
+        BaseIndex : Natural;
     begin
         StartX := PlayerShip.SkyX - Integer(Columns / 2);
         if StartX < 0 then
@@ -37,13 +39,26 @@ package body Maps is
         end if;
         for X in 1..Integer(Columns) - 1 loop
             for Y in 1..Integer(Lines) - 1 loop
-                if SkyMap(StartX + X, StartY + Y).BaseIndex > 0 then
+                BaseIndex := SkyMap(StartX + X, StartY + Y).BaseIndex;
+                if BaseIndex > 0 then
                     Move_Cursor(Line => Line_Position(Y), Column =>
                         Column_Position(X - 1));
                     Add(Ch => 'o');
+                    if SkyBases(BaseIndex).Visited then
+                        case SkyBases(BaseIndex).BaseType is
+                            when Industrial =>
+                                Change_Attributes(Line => Line_Position(Y), Column =>
+                                Column_Position(X - 1), Count => 1, Color => 3);
+                            when Agricultural =>
+                                Change_Attributes(Line => Line_Position(Y), Column =>
+                                Column_Position(X - 1), Count => 1, Color => 2);
+                            when Refinery =>
+                                Change_Attributes(Line => Line_Position(Y), Column =>
+                                Column_Position(X - 1), Count => 1, Color => 4);
+                        end case;
+                    end if;
                 end if;
-                if StartX + X = PlayerShip.SkyX and StartY + Y =
-                    PlayerShip.SkyY then
+                if StartX + X = PlayerShip.SkyX and StartY + Y = PlayerShip.SkyY then
                     Move_Cursor(Line => Line_Position(Y), Column =>
                         Column_Position(X - 1));
                     Add(Ch => '+');

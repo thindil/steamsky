@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
+with Terminal_Interface.Curses_Constants; use Terminal_Interface.Curses_Constants;
 with UserInterface; use UserInterface;
 with Maps; use Maps;
 with Game; use Game;
@@ -29,6 +30,10 @@ begin
     Init_Screen;
     Start_Color;
     Set_Timeout_Mode(Standard_Window, Blocking, 0);
+    Init_Pair(1, Color_Yellow, Color_Black);
+    Init_Pair(2, Color_Green, Color_Black);
+    Init_Pair(3, Color_Red, Color_Black);
+    Init_Pair(4, Color_Blue, Color_Black);
 
     ShowMainMenu;
 
