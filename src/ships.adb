@@ -83,6 +83,7 @@ package body Ships is
     end MoveShip;
 
     procedure DockShip(Docking : Boolean) is
+        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
     begin
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
             return;
@@ -95,13 +96,14 @@ package body Ships is
         end if;
         if Docking then
             PlayerShip.Speed := DOCKED;
-            AddMessage("Ship docked to base " & To_String(SkyBases(SkyMap(PlayerShip.SkyX, 
-                PlayerShip.SkyY).BaseIndex).Name));
+            if not SkyBases(BaseIndex).Visited then
+                SkyBases(BaseIndex).Visited := True;
+            end if;
+            AddMessage("Ship docked to base " & To_String(SkyBases(BaseIndex).Name));
             UpdateGame(10);
         else
             PlayerShip.Speed := QUARTER_SPEED;
-            AddMessage("Ship undocked from base " & To_String(SkyBases(SkyMap(PlayerShip.SkyX, 
-                PlayerShip.SkyY).BaseIndex).Name));
+            AddMessage("Ship undocked from base " & To_String(SkyBases(BaseIndex).Name));
             UpdateGame(5);
         end if;
     end DockShip;

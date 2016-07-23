@@ -17,7 +17,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
-with Terminal_Interface.Curses_Constants; use Terminal_Interface.Curses_Constants;
 with Maps; use Maps;
 with Ships; use Ships;
 with Crew; use Crew;
@@ -44,7 +43,6 @@ package body UserInterface is
         Move_Cursor(Line => (Lines / 3) + 1, Column => (Columns - 12) / 2);
         -- Game menu
         Add(Str => "New game");
-        Init_Pair(1, Color_Yellow, Color_Black);
         Change_Attributes(Line => (Lines / 3) + 1, Column => (Columns - 12) / 2,
             Count => 1, Color => 1);
         Move_Cursor(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2);
@@ -416,15 +414,23 @@ package body UserInterface is
     end ShowTrade;
 
     procedure ShowHelp is
+        Line : Line_Position;
+        Column : Column_Position;
     begin
         Move_Cursor(Line => 2, Column => 2);
         Add(Str => "At this moment, help is under heavy developement (as whole game). Below you can find few useful tips.");
-        Move_Cursor(Line => 4, Column => 2);
+        Get_Cursor_Position(Line => Line, Column => Column);
+        Move_Cursor(Line => (Line + 1), Column => 2);
         Add(Str => "* Your ship starts docked to base. To move it, you must first undock from base. Hit 5 on keypad (with Num Lock active) for actions menu.");
-        Move_Cursor(Line => 6, Column => 2);
+        Get_Cursor_Position(Line => Line, Column => Column);
+        Move_Cursor(Line => (Line + 1), Column => 2);
         Add(Str => "* To move your ship, you need to set it speed, have fuel (charcollum, which works as moneys too) and pilot and engineer on duty.");
-        Move_Cursor(Line => 8, Column => 2);
+        Get_Cursor_Position(Line => Line, Column => Column);
+        Move_Cursor(Line => (Line + 1), Column => 2);
         Add(Str => "* To buy/sell items from bases you must first dock to base. All bases buy all items, but which items are sold, depends on base type.");
+        Get_Cursor_Position(Line => Line, Column => Column);
+        Move_Cursor(Line => (Line + 1), Column => 2);
+        Add(Str => "* As you dock to stations, you discover they types and then they will be colored on sky map (eg. Agricultural bases are green). Unvisited bases are white. ");
         Move_Cursor(Line => (Lines - 2), Column => 2);
         Add(Str => "Q for close help");
         Change_Attributes(Line => (Lines - 2), Column => 2, Count => 1, Color => 1);
