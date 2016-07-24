@@ -53,7 +53,7 @@ package body Bases is
             " for" & Positive'Image(Cost) & " Charcollum.");
         UpdateGame(5);
     exception
-        when others =>
+        when CONSTRAINT_ERROR =>
             return;
     end BuyItems;
 
@@ -82,7 +82,7 @@ package body Bases is
             " for" & Positive'Image(Profit) & " Charcollum.");
         UpdateGame(5);
     exception
-        when others =>
+        when CONSTRAINT_ERROR =>
             return;
     end SellItems;
 

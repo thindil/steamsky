@@ -10,6 +10,10 @@ project steamsky is
     type Mode_Type is ("debug", "release");
     Mode : Mode_Type := external ("Mode", "debug");
 
+    package Binder is
+        for Default_Switches("ada") use ("-E");
+    end Binder;
+
     package Compiler is
         case Mode is
             when "debug" =>
