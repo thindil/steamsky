@@ -251,7 +251,84 @@ package body Game is
     end SaveGame;
 
     procedure LoadGame is
+        SaveGame : File_Type;
+        VectorLength : Positive;
+        Skills : Skills_Array := ((0, 0), (0, 0), (0, 0), (0 ,0));
+        Hunger, Thirst : Natural;
+        Order : Crew_Orders;
+        function ReadData return Unbounded_String is
+            RawData : Unbounded_String := To_Unbounded_String("");
+            Char : Character;
+        begin
+            Get(SaveGame, Char);
+            while Char not in ';' loop
+                Append(RawData, Char);
+                Get(SaveGame, Char);
+            end loop;
+            return RawData;
+        end ReadData;
+        procedure UpdateItem(Item : in out Member_Data) is
+        begin
+            Item.Skills := Skills;
+            Item.Hunger := Hunger;
+            Item.Thirst := Thirst;
+            Item.Order := Order;
+        end UpdateItem;
     begin
-        null;
+        -- Load game date
+        GameDate.Year := Natural'Value(To_String(ReadData));
+        GameDate.Month := Natural'Value(To_String(ReadData));
+        GameDate.Day := Natural'Value(To_String(ReadData));
+        GameDate.Hour := Natural'Value(To_String(ReadData));
+        GameDate.Minutes := Natural'Value(To_String(ReadData));
+        -- Load sky bases
+        for I in SkyBases'Range loop
+            SkyBases(I) := (Name => ReadData, Visited => False, SkyX => 0, SkyY => 0,
+                BaseType => Industrial, Goods => ((2, 2, False), (3, 2, False),
+                (4, 3, False)));
+            if To_String(ReadData) = "1" then
+                SkyBases(I).Visited := True;
+            end if;
+            SkyBases(I).SkyX := Integer'Value(To_String(ReadData));
+            SkyBases(I).SkyY := Integer'Value(To_String(ReadData));
+            SkyBases(I).BaseType := Bases_Types'Val(Integer'Value(To_String(ReadData)));
+            for J in Goods_Array'Range loop
+                SkyBases(I).Goods(J).ProtoIndex := Positive'Value(To_String(ReadData));
+                SkyBases(I).Goods(J).Price := Positive'Value(To_String(ReadData));
+                if To_String(ReadData) = "1" then
+                    SkyBases(I).Goods(J).Buyable := True;
+                end if;
+            end loop;
+        end loop;
+        -- Load player ship
+        PlayerShip.SkyX := Integer'Value(To_String(ReadData));
+        PlayerShip.SkyY := Integer'Value(To_String(ReadData));
+        PlayerShip.Speed := ShipSpeed'Val(Integer'Value(To_String(ReadData)));
+        VectorLength := Positive'Value(To_String(ReadData));
+        for I in 1..VectorLength loop
+            PlayerShip.Modules.Append(New_Item => (Name => ReadData, Mtype =>
+                ModuleType'Val(Integer'Value(To_String(ReadData))), Weight =>
+                Natural'Value(To_String(ReadData)), Current_Value =>
+                Integer'Value(To_String(ReadData)), Max_Value =>
+                Integer'Value(To_String(ReadData)), Durability =>
+                Integer'Value(To_String(ReadData)), MaxDurability =>
+                Integer'Value(To_String(ReadData))));
+        end loop;
+        VectorLength := Positive'Value(To_String(ReadData));
+        for I in 1..VectorLength loop
+            PlayerShip.Cargo.Append(New_Item => (ProtoIndex =>
+                Positive'Value(To_String(ReadData)), Amount =>
+                Positive'Value(To_String(ReadData))));
+        end loop;
+        VectorLength := Positive'Value(To_String(ReadData));
+        for I in 1..VectorLength loop
+            PlayerShip.Crew.Append(New_Item => (Name => ReadData, Health =>
+            Natural'Value(To_String(ReadData)), Tired =>
+            Natural'Value(To_String(ReadData)), Skills => Skills, Hunger => 
+            0, Thirst => 0, Order => Rest));
+            for J in Skills_Array'Range loop
+                null;
+            end loop;
+        end loop;
     end LoadGame;
 end Game;
