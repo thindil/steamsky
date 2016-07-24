@@ -488,6 +488,14 @@ package body UserInterface is
                 NewGame;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
+            when Character'Pos('l') | Character'Pos('L') => -- Load game
+                if Exists("data/savegame.dat") then
+                    LoadGame;
+                    DrawGame(Sky_Map_View);
+                    return Sky_Map_View;
+                else
+                    return Main_Menu;
+                end if;
             when others => 
                 return Main_Menu;
         end case;
