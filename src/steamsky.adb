@@ -15,6 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Directories; use Ada.Directories;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Terminal_Interface.Curses_Constants; use Terminal_Interface.Curses_Constants;
 with UserInterface; use UserInterface;
@@ -26,6 +29,7 @@ procedure SteamSky is
     OldState : GameStates;
     Key : Key_Code;
     Result : Integer;
+    ErrorFile : File_Type;
 begin
     Init_Screen;
     Start_Color;
@@ -74,4 +78,23 @@ begin
     end loop;
 
     End_Windows;
+exception
+    when An_Exception : others =>
+        if GameStates'Pos(GameState) > 1 then
+            SaveGame;
+        end if;
+        if Exists("data/error.log") then
+            Open(ErrorFile, Append_File, "data/error.log");
+        else
+            Create(ErrorFile, Append_File, "data/error.log");
+        end if;
+        Put_Line(ErrorFile, "Version: 0.1"); 
+        Put_Line(ErrorFile, Exception_Information(An_Exception));
+        Close(ErrorFile);
+        Erase;
+        Refresh;
+        Move_Cursor(Line => (Lines / 2), Column => 2);
+        Add(Str => "Oops, something bad happens and game crashed. Game should save your progress, but better check it. Also, please, remember what you done before crash, report bug at https://github.com/thindil/steamsky/issues and attach (if possible) file error.log from data directory. Hit any key to quit game.");
+        Key := Get_Keystroke;
+        End_Windows;
 end SteamSky;
