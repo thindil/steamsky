@@ -234,18 +234,18 @@ package body Game is
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Tired));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            for J in Skills_Array'Range loop
-                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Skills(J, 1)));
-                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Skills(J, 2)));
-                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            end loop;
             RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Hunger));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Thirst));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(Crew_Orders'Pos(PlayerShip.Crew.Element(I).Order)));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            for J in Skills_Array'Range loop
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Skills(J, 1)));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Skills(J, 2)));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            end loop;
         end loop;
         Close(SaveGame);
     end SaveGame;
@@ -254,8 +254,9 @@ package body Game is
         SaveGame : File_Type;
         VectorLength : Positive;
         Skills : Skills_Array := ((0, 0), (0, 0), (0, 0), (0 ,0));
-        Hunger, Thirst : Natural;
-        Order : Crew_Orders;
+        ShipModules : Modules_Container.Vector;
+        ShipCargo : Cargo_Container.Vector; 
+        ShipCrew : Crew_Container.Vector;
         function ReadData return Unbounded_String is
             RawData : Unbounded_String := To_Unbounded_String("");
             Char : Character;
@@ -267,14 +268,12 @@ package body Game is
             end loop;
             return RawData;
         end ReadData;
-        procedure UpdateItem(Item : in out Member_Data) is
+        procedure UpdateMember(Member : in out Member_Data) is
         begin
-            Item.Skills := Skills;
-            Item.Hunger := Hunger;
-            Item.Thirst := Thirst;
-            Item.Order := Order;
-        end UpdateItem;
+            Member.Skills := Skills;
+        end UpdateMember;
     begin
+        Open(SaveGame, In_File, "data/savegame.dat");
         -- Load game date
         GameDate.Year := Natural'Value(To_String(ReadData));
         GameDate.Month := Natural'Value(To_String(ReadData));
@@ -299,6 +298,7 @@ package body Game is
                     SkyBases(I).Goods(J).Buyable := True;
                 end if;
             end loop;
+            SkyMap(SkyBases(I).SkyX, SkyBases(I).SkyY).BaseIndex := I;
         end loop;
         -- Load player ship
         PlayerShip.SkyX := Integer'Value(To_String(ReadData));
@@ -306,7 +306,7 @@ package body Game is
         PlayerShip.Speed := ShipSpeed'Val(Integer'Value(To_String(ReadData)));
         VectorLength := Positive'Value(To_String(ReadData));
         for I in 1..VectorLength loop
-            PlayerShip.Modules.Append(New_Item => (Name => ReadData, Mtype =>
+            ShipModules.Append(New_Item => (Name => ReadData, Mtype =>
                 ModuleType'Val(Integer'Value(To_String(ReadData))), Weight =>
                 Natural'Value(To_String(ReadData)), Current_Value =>
                 Integer'Value(To_String(ReadData)), Max_Value =>
@@ -314,21 +314,30 @@ package body Game is
                 Integer'Value(To_String(ReadData)), MaxDurability =>
                 Integer'Value(To_String(ReadData))));
         end loop;
+        PlayerShip.Modules := ShipModules;
         VectorLength := Positive'Value(To_String(ReadData));
         for I in 1..VectorLength loop
-            PlayerShip.Cargo.Append(New_Item => (ProtoIndex =>
+            ShipCargo.Append(New_Item => (ProtoIndex =>
                 Positive'Value(To_String(ReadData)), Amount =>
                 Positive'Value(To_String(ReadData))));
         end loop;
+        PlayerShip.Cargo := ShipCargo;
         VectorLength := Positive'Value(To_String(ReadData));
         for I in 1..VectorLength loop
-            PlayerShip.Crew.Append(New_Item => (Name => ReadData, Health =>
-            Natural'Value(To_String(ReadData)), Tired =>
-            Natural'Value(To_String(ReadData)), Skills => Skills, Hunger => 
-            0, Thirst => 0, Order => Rest));
+            ShipCrew.Append(New_Item => (Name => ReadData, Health =>
+                Natural'Value(To_String(ReadData)), Tired =>
+                Natural'Value(To_String(ReadData)), Skills => Skills, Hunger => 
+                Natural'Value(To_String(ReadData)), Thirst =>
+                Natural'Value(To_String(ReadData)), Order =>
+                Crew_Orders'Val(Integer'Value(To_String(ReadData)))));
             for J in Skills_Array'Range loop
-                null;
+                Skills(J, 1) := Natural'Value(To_String(ReadData));
+                Skills(J, 2) := Natural'Value(To_String(ReadData));
             end loop;
+            ShipCrew.Update_Element(Index => ShipCrew.Last_Index,
+                Process => UpdateMember'Access);
         end loop;
+        PlayerShip.Crew := ShipCrew;
+        Close(SaveGame);
     end LoadGame;
 end Game;
