@@ -406,7 +406,7 @@ package body UserInterface is
         Add(Str => "At this moment, help is under heavy developement (as whole game). Below you can find few useful tips.");
         Get_Cursor_Position(Line => Line, Column => Column);
         Move_Cursor(Line => (Line + 1), Column => 2);
-        Add(Str => "* Your ship starts docked to base. To move it, you must first undock from base. Hit 5 on keypad (with Num Lock active) for actions menu.");
+        Add(Str => "* Your ship starts docked to base. To move it, you must first undock from base. Hit 'o' key for open orders menu.");
         Get_Cursor_Position(Line => Line, Column => Column);
         Move_Cursor(Line => (Line + 1), Column => 2);
         Add(Str => "* To move your ship, you need to set it speed, have fuel (charcollum, which works as moneys too) and pilot and engineer on duty.");
