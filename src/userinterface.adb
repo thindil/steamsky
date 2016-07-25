@@ -103,12 +103,13 @@ package body UserInterface is
     begin
         case CurrentState is
             when Sky_Map_View =>
-                Add(Str => "[Ship] [Crew] [Messages] [Help] [Quit]");
+                Add(Str => "[Ship] [Crew] [Orders] [Messages] [Help] [Quit]");
                 Change_Attributes(Line => 0, Column => 1, Count => 1, Color => 1);
                 Change_Attributes(Line => 0, Column => 8, Count => 1, Color => 1);
                 Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
-                Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
-                Change_Attributes(Line => 0, Column => 33, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 24, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 35, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 42, Count => 1, Color => 1);
             when Ship_Info =>
                 Add(Str => "Ship Informations [Quit]");
                 Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
@@ -140,7 +141,7 @@ package body UserInterface is
                 when FULL_SPEED =>
                     Speed := To_Unbounded_String("Full Speed");
             end case;
-            Move_Cursor(Line => 0, Column => (Columns / 3));
+            Move_Cursor(Line => 0, Column => (Columns / 2));
             Add(Str => FormatedTime & "     Speed: " & To_String(Speed));
         end if;
     end ShowGameMenu;
