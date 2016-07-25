@@ -98,16 +98,46 @@ package body UserInterface is
         Messages_List.Append(New_Item => To_Unbounded_String(FormatedTime) & ": " & To_Unbounded_String(Message));
     end AddMessage;
 
-    procedure ShowGameMenu is
+    procedure ShowGameMenu(CurrentState : GameStates) is
+        Speed : Unbounded_String;
     begin
-        Add(Str => "[Ship] [Crew] [Messages] [Help] [Quit]");
-        Change_Attributes(Line => 0, Column => 1, Count => 1, Color => 1);
-        Change_Attributes(Line => 0, Column => 8, Count => 1, Color => 1);
-        Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
-        Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
-        Change_Attributes(Line => 0, Column => 33, Count => 1, Color => 1);
-        Move_Cursor(Line => 0, Column => (Columns / 3));
-        Add(Str => FormatedTime);
+        case CurrentState is
+            when Sky_Map_View =>
+                Add(Str => "[Ship] [Crew] [Messages] [Help] [Quit]");
+                Change_Attributes(Line => 0, Column => 1, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 8, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 33, Count => 1, Color => 1);
+            when Ship_Info =>
+                Add(Str => "Ship Informations");
+            when Crew_Info =>
+                Add(Str => "Crew Informations");
+            when Messages_View =>
+                Add(Str => "Last Messages");
+            when Trade_View =>
+                Add(Str => "Trade with base");
+            when Help_View =>
+                Add(Str => "Help");
+            when others =>
+                null;
+        end case;
+        if CurrentState /= Help_View then
+            case PlayerShip.Speed is
+                when DOCKED =>
+                    Speed := To_Unbounded_String("Docked");
+                when FULL_STOP =>
+                    Speed := To_Unbounded_String("Stopped");
+                when QUARTER_SPEED =>
+                    Speed := To_Unbounded_String("Quarter Speed");
+                when HALF_SPEED =>
+                    Speed := To_Unbounded_String("Half Speed");
+                when FULL_SPEED =>
+                    Speed := To_Unbounded_String("Full Speed");
+            end case;
+            Move_Cursor(Line => 0, Column => (Columns / 3));
+            Add(Str => FormatedTime & "     Speed: " & To_String(Speed));
+        end if;
     end ShowGameMenu;
 
     procedure ShowSpeedControl is
@@ -212,7 +242,7 @@ package body UserInterface is
         if Key /= KEY_NONE then
             Erase;
             Refresh;
-            ShowGameMenu;
+            ShowGameMenu(Crew_Info);
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             Move_Cursor(Line => Line_Position(2 + I), Column => 2);
@@ -359,7 +389,7 @@ package body UserInterface is
         if Key /= KEY_NONE then
             Erase;
             Refresh;
-            ShowGameMenu;
+            ShowGameMenu(Trade_View);
         end if;
         Move_Cursor(Line => 1, Column => 2);
         Add(Str => "BUY SELL");
@@ -455,7 +485,7 @@ package body UserInterface is
     begin
         Erase;
         Refresh;
-        ShowGameMenu;
+        ShowGameMenu(CurrentState);
         case CurrentState is
             when Sky_Map_View =>
                 ShowSkyMap;
