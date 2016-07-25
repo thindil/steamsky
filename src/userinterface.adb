@@ -41,7 +41,7 @@ package body UserInterface is
         Add(Str => "STEAM SKY");
         Move_Cursor(Line => (Lines / 5) + 1, Column => (Columns - 12) / 2);
         -- Game version
-        Add(Str => "ver 0.1");
+        Add(Str => "ver 0.2");
         Move_Cursor(Line => (Lines / 3) + 1, Column => (Columns - 12) / 2);
         -- Game menu
         Add(Str => "New game");
