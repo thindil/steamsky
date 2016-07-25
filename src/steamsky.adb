@@ -25,6 +25,9 @@ with UserInterface; use UserInterface;
 with Maps; use Maps;
 with Game; use Game;
 with Messages; use Messages;
+with Crew; use Crew;
+with Ships; use Ships;
+with Bases; use Bases;
 
 procedure SteamSky is
     GameState : GameStates := Main_Menu;

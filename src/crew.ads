@@ -16,6 +16,8 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Terminal_Interface.Curses; use Terminal_Interface.Curses;
+with Game; use Game;
 
 package Crew is
 
@@ -32,5 +34,9 @@ package Crew is
             Order : Crew_Orders; -- Current order for member
         end record;
     procedure GiveOrders(MemberIndex : Positive; GivenOrder: Crew_Orders); -- Change order for selected crew member
+    procedure ShowCrewInfo(Key : Key_Code); -- Show crew info
+    procedure ShowOrdersMenu; -- Show menu with orders for crew
+    function CrewInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in crew info menu
+    function CrewOrdersKeys(Key : Key_Code) return GameStates; -- Handle keys in crew orders menu
 
 end Crew;
