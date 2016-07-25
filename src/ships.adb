@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Maps; use Maps;
-with UserInterface; use UserInterface;
+with Messages; use Messages;
 with Bases; use Bases;
 with Game; use Game;
 

@@ -16,19 +16,17 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Directories; use Ada.Directories;
 with Maps; use Maps;
 with Ships; use Ships;
 with Crew; use Crew;
 with Bases; use Bases;
 with Prototypes; use Prototypes;
+with Messages; use Messages;
 
 package body UserInterface is
 
     MemberIndex : Natural;
-    package Messages_Container is new Vectors(Positive, Unbounded_String);
-    Messages_List : Messages_Container.Vector;
 
     procedure ShowMainMenu is
         Visibility : Cursor_Visibility := Invisible;
@@ -66,37 +64,6 @@ package body UserInterface is
         Move_Cursor(Line => Lines - 1, Column => (Columns - 20) / 2);
         Add(Str => "2016 Bartek thindil Jasicki");
     end ShowMainMenu;
-
-    function FormatedTime return String is
-        Result : Unbounded_String := To_Unbounded_String("");
-        RawImage : Unbounded_String;
-        TimeArray : constant array(1..5) of Natural := (GameDate.Year,
-            GameDate.Month, GameDate.Day, GameDate.Hour, GameDate.Minutes);
-    begin
-        for I in TimeArray'Range loop
-            RawImage := To_Unbounded_String(Natural'Image(TimeArray(I)));
-            case I is
-                when 1 =>
-                    Result := Result & Trim(RawImage, Ada.Strings.Left);
-                when 2 | 3 =>
-                    Result := Result & To_Unbounded_String("-") & Trim(RawImage, Ada.Strings.Left);
-                when 4 =>
-                    Result := Result & RawImage;
-                when 5 =>
-                    if TimeArray(5) < 10 then
-                        Result := Result & ":0" & Trim(RawImage, Ada.Strings.Left);
-                    else
-                        Result := Result & ":" & Trim(RawImage, Ada.Strings.Left);
-                    end if;
-            end case;
-        end loop;
-        return To_String(Result);
-    end FormatedTime;
-
-    procedure AddMessage(Message : String) is
-    begin
-        Messages_List.Append(New_Item => To_Unbounded_String(FormatedTime) & ": " & To_Unbounded_String(Message));
-    end AddMessage;
 
     procedure ShowGameMenu(CurrentState : GameStates) is
         Speed : Unbounded_String;
@@ -353,27 +320,6 @@ package body UserInterface is
         Refresh(OrdersWindow);
     end ShowOrdersMenu;
     
-    procedure ShowMessages is
-        LoopStart : Positive;
-        LinePos : Line_Position := 2;
-    begin
-        if Messages_List.Length = 0 then
-            Move_Cursor(Line => (Lines / 2), Column => (Columns / 2));
-            Add(Str => "No messages yet.");
-            return;
-        end if;
-        if Messages_List.Last_Index > Positive(Lines - 2) then
-            LoopStart := Messages_List.Last_Index - Positive(Lines - 2);
-        else
-            LoopStart := Messages_List.First_Index;
-        end if;
-        for I in LoopStart..Messages_List.Last_Index loop
-            Move_Cursor(Line => LinePos, Column => 2);
-            Add(Str => To_String(Messages_List.Element(I)));
-            LinePos := LinePos + 1;
-        end loop;
-    end ShowMessages;
-
     procedure ShowTrade(Key : Key_Code) is
         BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         BuyLetter, SellLetter : Character;
@@ -527,7 +473,7 @@ package body UserInterface is
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to main menu
                 SaveGame;
-                Messages_List.Clear;
+                ClearMessages;
                 Erase;
                 Refresh;
                 ShowMainMenu;
@@ -658,19 +604,6 @@ package body UserInterface is
                 return Giving_Orders;
         end case;
     end CrewOrdersKeys;
-
-
-    function MessagesKeys(Key : Key_Code) return GameStates is
-    begin
-        case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-                DrawGame(Sky_Map_View);
-                return Sky_Map_View;
-            when others =>
-                DrawGame(Messages_View);
-                return Messages_View;
-        end case;
-    end MessagesKeys;
 
     function TradeKeys(Key : Key_Code) return GameStates is
     begin
