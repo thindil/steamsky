@@ -17,7 +17,7 @@
 
 with Ships; use Ships;
 with Maps; use Maps;
-with UserInterface; use UserInterface;
+with Messages; use Messages;
 with Game; use Game;
 with Prototypes; use Prototypes;
 
