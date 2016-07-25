@@ -110,15 +110,20 @@ package body UserInterface is
                 Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
                 Change_Attributes(Line => 0, Column => 33, Count => 1, Color => 1);
             when Ship_Info =>
-                Add(Str => "Ship Informations");
+                Add(Str => "Ship Informations [Quit]");
+                Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
             when Crew_Info =>
-                Add(Str => "Crew Informations");
+                Add(Str => "Crew Informations [Quit]");
+                Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
             when Messages_View =>
-                Add(Str => "Last Messages");
+                Add(Str => "Last Messages [Quit]");
+                Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
             when Trade_View =>
-                Add(Str => "Trade with base");
+                Add(Str => "Trade with base [Quit]");
+                Change_Attributes(Line => 0, Column => 17, Count => 1, Color => 1);
             when Help_View =>
-                Add(Str => "Help");
+                Add(Str => "Help [Quit]");
+                Change_Attributes(Line => 0, Column => 6, Count => 1, Color => 1);
             when others =>
                 null;
         end case;
@@ -228,9 +233,6 @@ package body UserInterface is
         end loop;
         Move_Cursor(Line => 3, Column => 2);
         Add(Str => "Weight: " & Integer'Image(Weight) & "kg");
-        Move_Cursor(Line => (Lines - 2), Column => 2);
-        Add(Str => "Q for close this info");
-        Change_Attributes(Line => (Lines - 2), Column => 2, Count => 1, Color => 1);
     end ShowShipInfo;
 
     procedure ShowCrewInfo(Key : Key_Code) is
@@ -323,9 +325,6 @@ package body UserInterface is
                 MemberIndex := 0;
             end if;
         end if;
-        Move_Cursor(Line => (Lines - 2), Column => 2);
-        Add(Str => "Q for close this info");
-        Change_Attributes(Line => (Lines - 2), Column => 2, Count => 1, Color => 1);
     end ShowCrewInfo;
 
     procedure ShowOrdersMenu is
@@ -372,9 +371,6 @@ package body UserInterface is
             Add(Str => To_String(Messages_List.Element(I)));
             LinePos := LinePos + 1;
         end loop;
-        Move_Cursor(Line => (Lines - 2), Column => 2);
-        Add(Str => "Q for close this info");
-        Change_Attributes(Line => (Lines - 2), Column => 2, Count => 1, Color => 1);
     end ShowMessages;
 
     procedure ShowTrade(Key : Key_Code) is
@@ -414,9 +410,6 @@ package body UserInterface is
                 Positive'Image(SkyBases(BaseIndex).Goods(I).Price) & 
                 " charcollum");
         end loop;
-        Move_Cursor(Line => (Lines - 2), Column => 2);
-        Add(Str => "Q for close this info");
-        Change_Attributes(Line => (Lines - 2), Column => 2, Count => 1, Color => 1);
         if Key /= KEY_NONE then -- start buying/selling items from/to base
             for I in BuyLetters'Range loop
                 if Key = Character'Pos(BuyLetters(I)) and BuyLetters(I) /= ' ' then
@@ -476,9 +469,6 @@ package body UserInterface is
         Get_Cursor_Position(Line => Line, Column => Column);
         Move_Cursor(Line => (Line + 1), Column => 2);
         Add(Str => "* As you dock to stations, you discover they types and then they will be colored on sky map (eg. Agricultural bases are green). Unvisited bases are white. ");
-        Move_Cursor(Line => (Lines - 2), Column => 2);
-        Add(Str => "Q for close help");
-        Change_Attributes(Line => (Lines - 2), Column => 2, Count => 1, Color => 1);
     end ShowHelp;
 
     procedure DrawGame(CurrentState : GameStates) is
