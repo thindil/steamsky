@@ -103,7 +103,7 @@ package body Maps is
                 if MoveShip(0, 1, -1) then
                     Result := 1;
                 end if;
-            when 53 => -- Change ship speed/docking
+            when Character'Pos('o') | Character'Pos('O') => -- Ship orders menu
                 Result := 2;
             when others =>
                 null;
