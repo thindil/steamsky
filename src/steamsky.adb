@@ -24,6 +24,7 @@ with Terminal_Interface.Curses_Constants; use Terminal_Interface.Curses_Constant
 with UserInterface; use UserInterface;
 with Maps; use Maps;
 with Game; use Game;
+with Messages; use Messages;
 
 procedure SteamSky is
     GameState : GameStates := Main_Menu;

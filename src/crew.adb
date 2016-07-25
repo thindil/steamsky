@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ships; use Ships;
-with UserInterface; use UserInterface;
+with Messages; use Messages;
 
 package body Crew is
 
