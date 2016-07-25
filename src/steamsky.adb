@@ -18,6 +18,7 @@
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with Ada.Command_Line; use Ada.Command_Line;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Terminal_Interface.Curses_Constants; use Terminal_Interface.Curses_Constants;
 with UserInterface; use UserInterface;
@@ -31,6 +32,7 @@ procedure SteamSky is
     Result : Integer;
     ErrorFile : File_Type;
 begin
+    Set_Directory(Command_Name(Command_Name'First..Command_Name'Last - 9));
     Init_Screen;
     Start_Color;
     Set_Timeout_Mode(Standard_Window, Blocking, 0);
