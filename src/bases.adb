@@ -18,8 +18,8 @@
 with Ships; use Ships;
 with Maps; use Maps;
 with Messages; use Messages;
-with Game; use Game;
 with Prototypes; use Prototypes;
+with UserInterface; use UserInterface;
 
 package body Bases is
 
@@ -85,5 +85,95 @@ package body Bases is
         when CONSTRAINT_ERROR =>
             return;
     end SellItems;
+
+    procedure ShowTrade(Key : Key_Code) is
+        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        BuyLetter, SellLetter : Character;
+        BuyLetters : array (SkyBases(BaseIndex).Goods'Range) of Character;
+        SellLetters : array (1..PlayerShip.Cargo.Last_Index) of Character := (others => ' ');
+        Visibility : Cursor_Visibility := Normal;
+        Amount : String(1..6);
+        ItemIndex : Natural := 0;
+    begin
+        if Key /= KEY_NONE then
+            Erase;
+            Refresh;
+            ShowGameMenu(Trade_View);
+        end if;
+        Move_Cursor(Line => 1, Column => 2);
+        Add(Str => "BUY SELL");
+        for I in SkyBases(BaseIndex).Goods'Range loop
+            if SkyBases(BaseIndex).Goods(I).Buyable then
+                BuyLetter := Character'Val(96 + I);
+            else
+                BuyLetter := ' ';
+            end if;
+            BuyLetters(I) := BuyLetter;
+            SellLetter := ' ';
+            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if PlayerShip.Cargo.Element(J).ProtoIndex = SkyBases(BaseIndex).Goods(I).ProtoIndex then
+                    SellLetter := Character'Val(64 + I);
+                    SellLetters(J) := SellLetter;
+                    exit;
+                end if;
+            end loop;
+            Move_Cursor(Line => Line_Position(1 + I), Column => 3);
+            Add(Str => BuyLetter & "   " & SellLetter & "   " &
+                To_String(Objects_Prototypes(SkyBases(BaseIndex).Goods(I).ProtoIndex).Name) & " Price:" &
+                Positive'Image(SkyBases(BaseIndex).Goods(I).Price) & 
+                " charcollum");
+        end loop;
+        if Key /= KEY_NONE then -- start buying/selling items from/to base
+            for I in BuyLetters'Range loop
+                if Key = Character'Pos(BuyLetters(I)) and BuyLetters(I) /= ' ' then
+                    ItemIndex := I;
+                    exit;
+                end if;
+            end loop;
+            if ItemIndex > 0 then -- Buy item from base
+                Set_Echo_Mode(True);
+                Set_Cursor_Visibility(Visibility);
+                Move_Cursor(Line => (Lines / 2), Column => 2);
+                Add(Str => "Enter amount to buy: ");
+                Get(Str => Amount, Len => 6);
+                BuyItems(ItemIndex, Amount);
+                ItemIndex := 0;
+            else
+                for I in SellLetters'Range loop
+                    if Key = Character'Pos(SellLetters(I)) and SellLetters(I) /= ' ' then
+                        ItemIndex := I;
+                        exit;
+                    end if;
+                end loop;
+                if ItemIndex > 0 then -- Sell item to base
+                    Set_Echo_Mode(True);
+                    Set_Cursor_Visibility(Visibility);
+                    Move_Cursor(Line => (Lines / 2), Column => 2);
+                    Add(Str => "Enter amount to sell: ");
+                    Get(Str => Amount, Len => 6);
+                    SellItems(ItemIndex, Amount);
+                    ItemIndex := 0;
+                end if;
+            end if;
+            if ItemIndex = 0 then
+                Visibility := Invisible;
+                Set_Echo_Mode(False);
+                Set_Cursor_Visibility(Visibility);
+                DrawGame(Trade_View);
+            end if;
+        end if;
+    end ShowTrade;
+
+    function TradeKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
+            when others =>
+                ShowTrade(Key);
+                return Trade_View;
+        end case;
+    end TradeKeys;
 
 end Bases;
