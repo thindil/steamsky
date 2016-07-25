@@ -15,7 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Game; use Game;
 
 package Bases is
 
@@ -39,5 +41,7 @@ package Bases is
     SkyBases : array (1..1024) of BaseRecord; -- List of sky bases
     procedure BuyItems(ItemIndex : Positive; Amount : String); -- Buy items from bases
     procedure SellItems(ItemIndex : Positive; Amount : String); -- Sell items from bases
+    procedure ShowTrade(Key : Key_Code); -- Show trade window
+    function TradeKeys(Key : Key_Code) return GameStates; -- Handle keys in bases trades
 
 end Bases;

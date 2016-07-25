@@ -21,14 +21,11 @@ with Game; use Game;
 package UserInterface is
     
     procedure ShowMainMenu; -- Show main game menu
+    procedure ShowGameMenu(CurrentState : GameStates); -- Show in-game menu
     function MainMenuKeys(Key : Key_Code) return GameStates; -- Handle keys on main menu
     function GameMenuKeys(CurrentState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in game menu
     procedure DrawGame(CurrentState : GameStates); -- Draw game screen
     function SpeedMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in speed control menu
-    function ShipInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in ship info menu
-    function CrewInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in crew info menu
-    function CrewOrdersKeys(Key : Key_Code) return GameStates; -- Handle keys in crew orders menu
-    function TradeKeys(Key : Key_Code) return GameStates; -- Handle keys in bases trades
     function HelpKeys(Key : Key_Code) return GameStates; -- Handle keys in help window
     
 end UserInterface;
