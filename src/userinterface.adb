@@ -66,7 +66,7 @@ package body UserInterface is
         Speed : Unbounded_String;
     begin
         case CurrentState is
-            when Sky_Map_View =>
+            when Sky_Map_View | Control_Speed =>
                 Add(Str => "[Ship] [Crew] [Orders] [Messages] [Help] [Quit]");
                 Change_Attributes(Line => 0, Column => 1, Count => 1, Color => 1);
                 Change_Attributes(Line => 0, Column => 8, Count => 1, Color => 1);
@@ -77,7 +77,7 @@ package body UserInterface is
             when Ship_Info =>
                 Add(Str => "Ship Informations [Quit]");
                 Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
-            when Crew_Info =>
+            when Crew_Info | Giving_Orders =>
                 Add(Str => "Crew Informations [Quit]");
                 Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
             when Messages_View =>
@@ -181,18 +181,21 @@ package body UserInterface is
     procedure DrawGame(CurrentState : GameStates) is
     begin
         Erase;
-        Refresh;
         ShowGameMenu(CurrentState);
         case CurrentState is
             when Sky_Map_View =>
                 ShowSkyMap;
             when Control_Speed =>
+                ShowSkyMap;
+                Refresh_Without_Update;
                 ShowSpeedControl;
             when Ship_Info =>
                 ShowShipInfo;
             when Crew_Info =>
                 ShowCrewInfo(KEY_NONE);
             when Giving_Orders =>
+                ShowCrewInfo(KEY_NONE);
+                Refresh_Without_Update;
                 ShowOrdersMenu;
             when Messages_View =>
                 ShowMessages;
@@ -208,6 +211,7 @@ package body UserInterface is
             Add(Str => To_String(LastMessage));
             LastMessage := To_Unbounded_String("");
         end if;
+        Update_Screen;
     end DrawGame;
 
     function MainMenuKeys(Key : Key_Code) return GameStates is
