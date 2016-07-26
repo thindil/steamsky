@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Added wait 1 game minute command
 - Added fatigue to crew members
+- Show last message on screen
 
 ### Changed
 - Updated README.md
