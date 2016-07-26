@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with UserInterface; use UserInterface;
 
@@ -53,6 +52,7 @@ package body Messages is
     procedure AddMessage(Message : String) is
     begin
         Messages_List.Append(New_Item => To_Unbounded_String(FormatedTime) & ": " & To_Unbounded_String(Message));
+        LastMessage := To_Unbounded_String(Message);
     end AddMessage;
 
     procedure ClearMessages is

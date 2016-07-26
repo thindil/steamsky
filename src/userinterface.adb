@@ -203,6 +203,11 @@ package body UserInterface is
             when others =>
                 null;
         end case;
+        if LastMessage /= To_Unbounded_String("") then
+            Move_Cursor(Line => 2, Column => 2);
+            Add(Str => To_String(LastMessage));
+            LastMessage := To_Unbounded_String("");
+        end if;
     end DrawGame;
 
     function MainMenuKeys(Key : Key_Code) return GameStates is

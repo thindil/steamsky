@@ -15,11 +15,13 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Game; use Game;
 
 package Messages is
 
+    LastMessage : Unbounded_String := To_Unbounded_String(""); -- Last message received
     function FormatedTime return String; -- Format game time
     procedure AddMessage(Message : String); -- Add new message to list
     procedure ClearMessages; -- Remove all messages;
