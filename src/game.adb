@@ -22,6 +22,7 @@ with Bases; use Bases;
 with Maps; use Maps;
 with Ships; use Ships;
 with Crew; use Crew;
+with Messages; use Messages;
 
 package body Game is
 
@@ -127,9 +128,23 @@ package body Game is
     end NewGame;
 
     procedure UpdateGame(Minutes : Positive) is
+        TiredLevel : Integer := 0;
         AddedHours, AddedMinutes : Natural;
+        TiredPoints : Natural := 0;
+        procedure UpdateMember(Member : in out Member_Data) is
+        begin
+            Member.Tired := TiredLevel;
+            if TiredLevel > 80 and Member.Order /= Rest then
+                Member.Order := Rest;
+                AddMessage(To_String(Member.Name) & " is too tired to work, going rest.");
+            end if;
+        end UpdateMember;
     begin
-        -- Update time
+        for I in 1..Minutes loop
+            if ((GameDate.Minutes + I) rem 15) = 0 then
+                TiredPoints := TiredPoints + 1;
+            end if;
+        end loop;
         AddedMinutes := Minutes rem 60;
         AddedHours := Minutes / 60;
         GameDate.Minutes := GameDate.Minutes + AddedMinutes;
@@ -150,6 +165,22 @@ package body Game is
             GameDate.Month := 1;
             GameDate.Year := GameDate.Year + 1;
         end if;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Rest then
+                if PlayerShip.Crew.Element(I).Tired > 0 then
+                    TiredLevel := PlayerShip.Crew.Element(I).Tired - Minutes;
+                    if TiredLevel < 0 then
+                        TiredLevel := 0;
+                    end if;
+                end if;
+            else
+                TiredLevel := PlayerShip.Crew.Element(I).Tired + TiredPoints;
+                if TiredLevel > 100 then
+                    TiredLevel := 100;
+                end if;
+            end if;
+            PlayerShip.Crew.Update_Element(Index => I, Process => UpdateMember'Access);
+        end loop;
     end UpdateGame;
 
     procedure SaveGame is
