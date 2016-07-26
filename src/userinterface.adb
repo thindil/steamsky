@@ -204,7 +204,7 @@ package body UserInterface is
                 null;
         end case;
         if LastMessage /= To_Unbounded_String("") then
-            Move_Cursor(Line => 2, Column => 2);
+            Move_Cursor(Line => 1, Column => 2);
             Add(Str => To_String(LastMessage));
             LastMessage := To_Unbounded_String("");
         end if;

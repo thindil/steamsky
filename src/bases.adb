@@ -100,7 +100,7 @@ package body Bases is
             Refresh;
             ShowGameMenu(Trade_View);
         end if;
-        Move_Cursor(Line => 1, Column => 2);
+        Move_Cursor(Line => 2, Column => 2);
         Add(Str => "BUY SELL");
         for I in SkyBases(BaseIndex).Goods'Range loop
             if SkyBases(BaseIndex).Goods(I).Buyable then
@@ -117,7 +117,7 @@ package body Bases is
                     exit;
                 end if;
             end loop;
-            Move_Cursor(Line => Line_Position(1 + I), Column => 3);
+            Move_Cursor(Line => Line_Position(2 + I), Column => 3);
             Add(Str => BuyLetter & "   " & SellLetter & "   " &
                 To_String(Objects_Prototypes(SkyBases(BaseIndex).Goods(I).ProtoIndex).Name) & " Price:" &
                 Positive'Image(SkyBases(BaseIndex).Goods(I).Price) & 
