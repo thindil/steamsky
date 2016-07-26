@@ -173,6 +173,9 @@ package body UserInterface is
         Get_Cursor_Position(Line => Line, Column => Column);
         Move_Cursor(Line => (Line + 1), Column => 2);
         Add(Str => "* As you dock to stations, you discover they types and then they will be colored on sky map (eg. Agricultural bases are green). Unvisited bases are white. ");
+        Get_Cursor_Position(Line => Line, Column => Column);
+        Move_Cursor(Line => (Line + 1), Column => 2);
+        Add(Str => "* You can wait a moment without doing anything, by hit key 5 on keypad.");
     end ShowHelp;
 
     procedure DrawGame(CurrentState : GameStates) is
