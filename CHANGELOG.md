@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+### Added
+- Added wait 1 game minute command
+
 ### Changed
 - Updated README.md
 - Updated in-game menu

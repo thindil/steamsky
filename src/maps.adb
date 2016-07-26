@@ -17,6 +17,7 @@
 
 with Ships; use Ships;
 with Bases; use Bases;
+with Game; use Game;
 
 package body Maps is
 
@@ -105,6 +106,9 @@ package body Maps is
                 end if;
             when Character'Pos('o') | Character'Pos('O') => -- Ship orders menu
                 Result := 2;
+            when 53 => -- Wait 1 minute
+                UpdateGame(1);
+                Result := 1;
             when others =>
                 null;
         end case;
