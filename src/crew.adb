@@ -73,7 +73,6 @@ package body Crew is
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             Move_Cursor(Line => Line_Position(2 + I), Column => 2);
             Add(Str => Character'Val(96 + I) & " " & To_String(PlayerShip.Crew.Element(I).Name));
-            Change_Attributes(Line => Line_Position(2 + I), Column => 2, Count => 1, Color => 1);
             if PlayerShip.Crew.Element(I).Health = 100 then
                 Health := To_Unbounded_String("");
             elsif PlayerShip.Crew.Element(I).Health < 100 and PlayerShip.Crew.Element(I).Health > 50 then
@@ -83,11 +82,11 @@ package body Crew is
             else
                 Health := To_Unbounded_String(" Dead");
             end if;
-            if PlayerShip.Crew.Element(I).Tired = 0 then
+            if PlayerShip.Crew.Element(I).Tired < 41 then
                 Tired := To_Unbounded_String("");
-            elsif PlayerShip.Crew.Element(I).Tired > 0 and PlayerShip.Crew(I).Tired < 41 then
+            elsif PlayerShip.Crew.Element(I).Tired > 40 and PlayerShip.Crew(I).Tired < 81 then
                 Tired := To_Unbounded_String(" Tired");
-            elsif PlayerShip.Crew.Element(I).Tired > 40 and PlayerShip.Crew(I).Tired < 100 then
+            elsif PlayerShip.Crew.Element(I).Tired > 80 and PlayerShip.Crew(I).Tired < 100 then
                 Tired := To_Unbounded_String(" Very tired");
             else
                 Tired := To_Unbounded_String(" Unconscious");
@@ -112,6 +111,7 @@ package body Crew is
             end if;
             Add(Str => To_String(Health) & To_String(Tired) & To_String(Hungry)
                 & To_String(Thirsty));
+            Change_Attributes(Line => Line_Position(2 + I), Column => 2, Count => 1, Color => 1);
         end loop;
         if Key /= KEY_NONE then -- Show details about selected crew member
             if (Key >= Key_Code(96 + PlayerShip.Crew.First_Index)) and (Key <= Key_Code(96 + PlayerShip.Crew.Last_Index)) then
