@@ -34,6 +34,7 @@ package body Crew is
             return;
         end if;
         if GivenOrder = Duty and MemberIndex > 1 then
+            ShowDialog("Only you can go on duty.");
             return;
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
