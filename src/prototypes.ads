@@ -19,15 +19,17 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Prototypes is
 
+    type Items_Types is (Fuel, Food, Drink, Ammo); -- Types of items
     type Object_Data is -- Data structure for objects prototypes
         record
             Name : Unbounded_String; -- Name of item
             Weight : Positive; -- Weight of item
+            IType : Items_Types; -- Type of item
         end record;
     Objects_Prototypes : constant array(1..4) of Object_Data := ((Name =>
-    To_Unbounded_String("Charcollum"), Weight => 1), (Name =>
-    To_Unbounded_String("Basic rations"), Weight => 1), (Name =>
-    To_Unbounded_String("Water"), Weight => 1), (Name =>
-    To_Unbounded_String("20mm ammo"), Weight => 1));
+    To_Unbounded_String("Charcollum"), Weight => 1, IType => Fuel), (Name =>
+    To_Unbounded_String("Basic rations"), Weight => 1, IType => Food), (Name =>
+    To_Unbounded_String("Water"), Weight => 1, IType => Drink), (Name =>
+    To_Unbounded_String("20mm ammo"), Weight => 1, IType => Ammo));
 
 end Prototypes;

@@ -34,6 +34,7 @@ package Crew is
             Order : Crew_Orders; -- Current order for member
         end record;
     procedure GiveOrders(MemberIndex : Positive; GivenOrder: Crew_Orders); -- Change order for selected crew member
+    function Eat return Boolean; -- Eat food by crew member. Returns true if all ok, otherwise false
     procedure ShowCrewInfo(Key : Key_Code); -- Show crew info
     procedure ShowOrdersMenu; -- Show menu with orders for crew
     function CrewInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in crew info menu
