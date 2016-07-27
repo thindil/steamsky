@@ -122,6 +122,12 @@ package body Bases is
                 To_String(Objects_Prototypes(SkyBases(BaseIndex).Goods(I).ProtoIndex).Name) & " Price:" &
                 Positive'Image(SkyBases(BaseIndex).Goods(I).Price) & 
                 " charcollum");
+            if BuyLetter /= ' ' then
+                Change_Attributes(Line => Line_Position(2 + I), Column => 3, Count => 1, Color => 1);
+            end if;
+            if SellLetter /= ' ' then
+                Change_Attributes(Line => Line_Position(2 + I), Column => 7, Count => 1, Color => 1);
+            end if;
         end loop;
         if Key /= KEY_NONE then -- start buying/selling items from/to base
             for I in BuyLetters'Range loop
@@ -134,7 +140,9 @@ package body Bases is
                 Set_Echo_Mode(True);
                 Set_Cursor_Visibility(Visibility);
                 Move_Cursor(Line => (Lines / 2), Column => 2);
-                Add(Str => "Enter amount to buy: ");
+                Add(Str => "Enter amount of " &
+                    To_String(Objects_Prototypes(SkyBases(BaseIndex).Goods(ItemIndex).ProtoIndex).Name)
+                    & " to buy: ");
                 Get(Str => Amount, Len => 6);
                 BuyItems(ItemIndex, Amount);
                 ItemIndex := 0;
@@ -149,7 +157,9 @@ package body Bases is
                     Set_Echo_Mode(True);
                     Set_Cursor_Visibility(Visibility);
                     Move_Cursor(Line => (Lines / 2), Column => 2);
-                    Add(Str => "Enter amount to sell: ");
+                    Add(Str => "Enter amount of " &
+                        To_String(Objects_Prototypes(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name)
+                        & " to sell: ");
                     Get(Str => Amount, Len => 6);
                     SellItems(ItemIndex, Amount);
                     ItemIndex := 0;
