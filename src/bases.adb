@@ -29,6 +29,7 @@ package body Bases is
         ItemName : constant String := To_String(Objects_Prototypes(SkyBases(BaseIndex).Goods(ItemIndex).ProtoIndex).Name);
         Cost : Positive;
         MoneyIndex : Natural := 0;
+        FreeCargo : Integer := 0;
     begin
         BuyAmount := Positive'Value(Amount);
         if not SkyBases(BaseIndex).Goods(ItemIndex).Buyable then
@@ -36,12 +37,25 @@ package body Bases is
             return;
         end if;
         Cost := BuyAmount * SkyBases(BaseIndex).Goods(ItemIndex).Price;
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
-                MoneyIndex := I;
-                exit;
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if PlayerShip.Modules.Element(I).Mtype = CARGO then
+                FreeCargo := FreeCargo + PlayerShip.Modules.Element(I).Max_Value;
             end if;
         end loop;
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            FreeCargo := FreeCargo - (Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Weight * 
+                PlayerShip.Cargo.Element(I).Amount);
+            if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
+                MoneyIndex := I;
+            end if;
+        end loop;
+        FreeCargo := FreeCargo - (Objects_Prototypes(SkyBases(BaseIndex).Goods(ItemIndex).ProtoIndex).Weight *
+            BuyAmount); 
+        FreeCargo := FreeCargo + Cost;
+        if FreeCargo < 0 then
+            ShowDialog("You don't have that much free space in your ship cargo.");
+            return;
+        end if;
         if MoneyIndex = 0 then
             ShowDialog("You don't have charcollum to buy " & ItemName & ".");
             return;
