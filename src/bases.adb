@@ -79,6 +79,7 @@ package body Bases is
         ItemName : constant String := To_String(Objects_Prototypes(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name);
         Profit : Positive;
         BaseItemIndex : Natural := 0;
+        FreeCargo : Integer := 0;
     begin
         SellAmount := Positive'Value(Amount);
         if PlayerShip.Cargo.Element(ItemIndex).Amount < SellAmount then
@@ -91,8 +92,24 @@ package body Bases is
                 exit;
             end if;
         end loop;
-        UpdateCargo(SkyBases(BaseIndex).Goods(BaseItemIndex).ProtoIndex, (0 - SellAmount));
         Profit := SkyBases(BaseIndex).Goods(BaseItemIndex).Price * SellAmount;
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if PlayerShip.Modules.Element(I).Mtype = CARGO then
+                FreeCargo := FreeCargo + PlayerShip.Modules.Element(I).Max_Value;
+            end if;
+        end loop;
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            FreeCargo := FreeCargo - (Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Weight * 
+                PlayerShip.Cargo.Element(I).Amount);
+        end loop;
+        FreeCargo := FreeCargo + (Objects_Prototypes(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Weight *
+            SellAmount);
+        FreeCargo := FreeCargo - Profit;
+        if FreeCargo < 0 then
+            ShowDialog("You don't have enough free cargo space in your ship for Charcollum.");
+            return;
+        end if;
+        UpdateCargo(SkyBases(BaseIndex).Goods(BaseItemIndex).ProtoIndex, (0 - SellAmount));
         UpdateCargo(1, Profit);
         AddMessage("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" & Positive'Image(Profit) & " Charcollum.");
         UpdateGame(5);
