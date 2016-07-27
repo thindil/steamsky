@@ -18,6 +18,7 @@
 with Ships; use Ships;
 with Messages; use Messages;
 with UserInterface; use UserInterface;
+with Prototypes; use Prototypes;
 
 package body Crew is
 
@@ -59,6 +60,22 @@ package body Crew is
                 AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " going on break.");
         end case;
     end GiveOrders;
+
+    function Eat return Boolean is
+        ProtoIndex : Natural := 0;
+    begin
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Food then
+                ProtoIndex := PlayerShip.Cargo.Element(I).ProtoIndex;
+                exit;
+            end if;
+        end loop;
+        if ProtoIndex = 0 then
+            return False;
+        end if;
+        UpdateCargo(ProtoIndex, (0 - 1));
+        return True;
+    end Eat;
 
     procedure ShowCrewInfo(Key : Key_Code) is
         Health, Tired, Hungry, Thirsty, SkillLevel, OrderName : Unbounded_String;
