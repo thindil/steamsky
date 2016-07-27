@@ -65,7 +65,7 @@ package body Messages is
         LinePos : Line_Position := 2;
     begin
         if Messages_List.Length = 0 then
-            Move_Cursor(Line => (Lines / 2), Column => (Columns / 2));
+            Move_Cursor(Line => (Lines / 2), Column => (Columns / 2) - 8);
             Add(Str => "No messages yet.");
             return;
         end if;
