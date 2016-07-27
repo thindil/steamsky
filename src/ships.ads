@@ -55,7 +55,7 @@ package Ships is
         end record;
     PlayerShip : ShipRecord;
     
-    function MoveShip(ShipIndex, X, Y : Integer) return Boolean; -- Move selected ship, return True if ship moved
+    procedure MoveShip(ShipIndex, X, Y : Integer); -- Move selected ship
     procedure DockShip(Docking : Boolean); -- Dock/Undock ship at base
     procedure ChangeShipSpeed(SpeedValue : ShipSpeed); -- Change speed of ship
     procedure UpdateCargo(ProtoIndex : Positive; Amount : Integer); -- Update selected item in ship cargo
