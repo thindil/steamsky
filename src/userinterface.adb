@@ -113,7 +113,7 @@ package body UserInterface is
     procedure ShowSpeedControl is
         SpeedWindow : Window;
     begin
-        SpeedWindow := Create(10, 20, (Lines / 3), (Columns / 3));
+        SpeedWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
         Box(SpeedWindow);
         if PlayerShip.Speed = DOCKED then
             Move_Cursor(Win => SpeedWindow, Line => 3, Column => 5);
@@ -193,10 +193,6 @@ package body UserInterface is
                 ShowShipInfo;
             when Crew_Info =>
                 ShowCrewInfo(KEY_NONE);
-            when Giving_Orders =>
-                ShowCrewInfo(KEY_NONE);
-                Refresh_Without_Update;
-                ShowOrdersMenu;
             when Messages_View =>
                 ShowMessages;
             when Trade_View =>
