@@ -64,6 +64,7 @@ package body Crew is
         Skills_Names : constant array (1..4) of Unbounded_String := (To_Unbounded_String("Piloting"), 
             To_Unbounded_String("Engineering"), To_Unbounded_String("Gunnery"), 
             To_Unbounded_String("Bartering"));
+        SkillLine : Line_Position := 3;
     begin
         if Key /= KEY_NONE then
             Erase;
@@ -76,38 +77,38 @@ package body Crew is
             if PlayerShip.Crew.Element(I).Health = 100 then
                 Health := To_Unbounded_String("");
             elsif PlayerShip.Crew.Element(I).Health < 100 and PlayerShip.Crew.Element(I).Health > 50 then
-                Health := To_Unbounded_String(" Wounded");
+                Health := To_Unbounded_String(" [Wounded]");
             elsif PlayerShip.Crew.Element(I).Health < 51 and PlayerShip.Crew.Element(I).Health > 0 then
-                Health := To_Unbounded_String(" Heavily Wounded");
+                Health := To_Unbounded_String(" [Heavily Wounded]");
             else
-                Health := To_Unbounded_String(" Dead");
+                Health := To_Unbounded_String(" [Dead]");
             end if;
             if PlayerShip.Crew.Element(I).Tired < 41 then
                 Tired := To_Unbounded_String("");
             elsif PlayerShip.Crew.Element(I).Tired > 40 and PlayerShip.Crew(I).Tired < 81 then
-                Tired := To_Unbounded_String(" Tired");
+                Tired := To_Unbounded_String(" [Tired]");
             elsif PlayerShip.Crew.Element(I).Tired > 80 and PlayerShip.Crew(I).Tired < 100 then
-                Tired := To_Unbounded_String(" Very tired");
+                Tired := To_Unbounded_String(" [Very tired]");
             else
-                Tired := To_Unbounded_String(" Unconscious");
+                Tired := To_Unbounded_String(" [Unconscious]");
             end if;
-            if PlayerShip.Crew.Element(I).Hunger = 0 then
+            if PlayerShip.Crew.Element(I).Hunger < 41 then
                 Hungry := To_Unbounded_String("");
-            elsif PlayerShip.Crew.Element(I).Hunger > 0 and PlayerShip.Crew(I).Hunger < 41 then
-                Hungry := To_Unbounded_String(" Hungry");
-            elsif PlayerShip.Crew.Element(I).Hunger > 40 and PlayerShip.Crew(I).Hunger < 100 then
-                Hungry := To_Unbounded_String(" Very hungry");
+            elsif PlayerShip.Crew.Element(I).Hunger > 40 and PlayerShip.Crew(I).Hunger < 81 then
+                Hungry := To_Unbounded_String(" [Hungry]");
+            elsif PlayerShip.Crew.Element(I).Hunger > 80 and PlayerShip.Crew(I).Hunger < 100 then
+                Hungry := To_Unbounded_String(" [Very hungry]");
             else
-                Hungry := To_Unbounded_String(" Starving");
+                Hungry := To_Unbounded_String(" [Starving]");
             end if;
-            if PlayerShip.Crew.Element(I).Thirst = 0 then
+            if PlayerShip.Crew.Element(I).Thirst < 40 then
                 Thirsty := To_Unbounded_String("");
-            elsif PlayerShip.Crew.Element(I).Thirst > 0 and PlayerShip.Crew(I).Thirst < 41 then
-                Thirsty := To_Unbounded_String(" Thirsty");
-            elsif PlayerShip.Crew.Element(I).Thirst > 40 and PlayerShip.Crew(I).Thirst < 100 then
-                Thirsty := To_Unbounded_String(" Very thirsty");
+            elsif PlayerShip.Crew.Element(I).Thirst > 40 and PlayerShip.Crew(I).Thirst < 81 then
+                Thirsty := To_Unbounded_String(" [Thirsty]");
+            elsif PlayerShip.Crew.Element(I).Thirst > 80 and PlayerShip.Crew(I).Thirst < 100 then
+                Thirsty := To_Unbounded_String(" [Very thirsty]");
             else
-                Thirsty := To_Unbounded_String(" Dehydrated");
+                Thirsty := To_Unbounded_String(" [Dehydrated]");
             end if;
             Add(Str => To_String(Health) & To_String(Tired) & To_String(Hungry)
                 & To_String(Thirsty));
@@ -116,6 +117,8 @@ package body Crew is
         if Key /= KEY_NONE then -- Show details about selected crew member
             if (Key >= Key_Code(96 + PlayerShip.Crew.First_Index)) and (Key <= Key_Code(96 + PlayerShip.Crew.Last_Index)) then
                 MemberIndex := Integer(Key) - 96;
+                Move_Cursor(Line => 2, Column => (Columns / 2));
+                Add(Str => "Name: " & To_String(PlayerShip.Crew.Element(MemberIndex).Name));
                 for J in PlayerShip.Crew.Element(MemberIndex).Skills'Range loop
                     SkillLevel := To_Unbounded_String("");
                     if PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) > 0 and PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) < 30 then
@@ -126,8 +129,9 @@ package body Crew is
                         SkillLevel := To_Unbounded_String("Expert");
                     end if;
                     if SkillLevel /= "" then
-                        Move_Cursor(Line => Line_Position(2 + J), Column => (Columns / 2));
+                        Move_Cursor(Line => SkillLine, Column => (Columns / 2));
                         Add(Str => To_String(Skills_Names(J)) & ": " & To_String(SkillLevel));
+                        SkillLine := SkillLine + 1;
                     end if;
                 end loop;
                 case PlayerShip.Crew.Element(MemberIndex).Order is
@@ -158,7 +162,7 @@ package body Crew is
             To_Unbounded_String("Gunner"), To_Unbounded_String("On break"));
         StartIndex : Integer;
     begin
-        OrdersWindow := Create(10, 20, (Lines / 3), (Columns / 3));
+        OrdersWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
         Box(OrdersWindow);
         if MemberIndex = 1 then
             StartIndex := 1;
@@ -184,7 +188,10 @@ package body Crew is
                 return Sky_Map_View;
             when Character'Pos('o') | Character'Pos('O') => -- Give orders to selected crew member
                 if MemberIndex > 0 then
-                    DrawGame(Giving_Orders);
+                    ShowCrewInfo(Key_Code(MemberIndex + 96));
+                    Refresh_Without_Update;
+                    ShowOrdersMenu;
+                    Update_Screen;
                     return Giving_Orders;
                 else
                     ShowCrewInfo(Key);
