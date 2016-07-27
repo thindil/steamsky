@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 - Fatigue to crew members
 - Show last message on screen
 - Informations why action failed (trade/ship moving)
-- Check for free cargo space during buying items
+- Check for free cargo space during trade items
 
 ### Changed
 - Updated README.md
