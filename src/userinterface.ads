@@ -23,7 +23,7 @@ package UserInterface is
     procedure ShowMainMenu; -- Show main game menu
     procedure ShowGameMenu(CurrentState : GameStates); -- Show in-game menu
     procedure ShowDialog(Message : String); -- Show dialog window with message
-    procedure HideDialog; -- Hide dialog if visible
+    function HideDialog return Boolean; -- Hide dialog if visible, return True if dialog was hidden
     procedure DrawGame(CurrentState : GameStates); -- Draw game screen
     function MainMenuKeys(Key : Key_Code) return GameStates; -- Handle keys on main menu
     function GameMenuKeys(CurrentState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in game menu

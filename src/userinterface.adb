@@ -207,11 +207,13 @@ package body UserInterface is
         end if;
     end ShowDialog;
 
-    procedure HideDialog is
+    function HideDialog return Boolean is
     begin
         if not Is_Hidden(DialogPanel) then
             Hide(DialogPanel);
+            return True;
         end if;
+        return False;
     end HideDialog;
 
     procedure DrawGame(CurrentState : GameStates) is

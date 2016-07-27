@@ -23,14 +23,19 @@ with UserInterface; use UserInterface;
 
 package body Ships is
 
-    function MoveShip(ShipIndex, X, Y: Integer) return Boolean is
+    procedure MoveShip(ShipIndex, X, Y: Integer) is
         NewX, NewY : Integer;
         HavePilot, HaveEngineer : Boolean := False;
         FuelNeeded : Integer;
     begin
         if ShipIndex = 0 then
-            if PlayerShip.Speed < QUARTER_SPEED then
-                return False;
+            if PlayerShip.Speed = DOCKED then
+                ShowDialog("First you must undock ship from base.");
+                return;
+            end if;
+            if PlayerShip.Speed = FULL_STOP then
+                ShowDialog("First you must set speed for ship.");
+                return;
             end if;
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                 if PlayerShip.Crew.Element(I).Order = Pilot then
@@ -40,8 +45,13 @@ package body Ships is
                     HaveEngineer := True;
                 end if;
             end loop;
-            if not HavePilot or not HaveEngineer then
-                return False;
+            if not HavePilot then
+                ShowDialog("You dont have pilot on duty.");
+                return;
+            end if;
+            if not HaveEngineer then
+                ShowDialog("You dont have engineer on duty.");
+                return;
             end if;
             case PlayerShip.Speed is
                 when QUARTER_SPEED =>
@@ -51,19 +61,19 @@ package body Ships is
                 when FULL_SPEED =>
                     FuelNeeded := -4;
                 when others =>
-                    return False;
+                    return;
             end case;
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop -- Check for fuel
-                if PlayerShip.Cargo.Element(I).ProtoIndex = 1 and
-                    PlayerShip.Cargo.Element(I).Amount < abs FuelNeeded then
-                    return False;
+                if PlayerShip.Cargo.Element(I).ProtoIndex = 1 and PlayerShip.Cargo.Element(I).Amount < abs FuelNeeded then
+                    ShowDialog("You dont have enough fuel (charcollum).");
+                    return;
                 end if;
             end loop;
             NewX := PlayerShip.SkyX + X;
             NewY := PlayerShip.SkyY + Y;
         end if;
         if NewX < 1 or NewX > 1024 or NewY < 1 or NewY > 1024 then
-            return False;
+            return;
         end if;
         if ShipIndex = 0 then
             PlayerShip.SkyX := NewX;
@@ -80,19 +90,21 @@ package body Ships is
                     null;
             end case;
         end if;
-        return True;
     end MoveShip;
 
     procedure DockShip(Docking : Boolean) is
-        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
     begin
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
+            ShowDialog("Here no base to dock or undock.");
             return;
         end if;
         if Docking and PlayerShip.Speed = DOCKED then
+            ShowDialog("Ship is docked to base.");
             return;
         end if;
         if not Docking and PlayerShip.Speed > DOCKED then
+            ShowDialog("Ship isn't docked to base.");
             return;
         end if;
         if Docking then
@@ -111,7 +123,11 @@ package body Ships is
 
     procedure ChangeShipSpeed(SpeedValue : ShipSpeed) is
     begin
-        if PlayerShip.Speed = DOCKED or PlayerShip.Speed = SpeedValue then
+        if PlayerShip.Speed = DOCKED then
+            ShowDialog("First undock from base before you set ship speed.");
+            return;
+        end if;
+        if PlayerShip.Speed = SpeedValue then
             return;
         end if;
         PlayerShip.Speed := SpeedValue;

@@ -69,48 +69,31 @@ package body Maps is
     end ShowSkyMap;
 
     function SkyMapKeys(Key : Key_Code) return Integer is
-        Result : Integer := 0;
+        Result : Integer := 1;
     begin
         case Key is
             when 56 | 65 => -- Move up
-                if MoveShip(0, 0, -1) then
-                    Result := 1;
-                end if;
+                MoveShip(0, 0, -1);
             when 50 | 66 => -- Move down
-                if MoveShip(0, 0, 1) then
-                    Result := 1;
-                end if;
+                MoveShip(0, 0, 1); 
             when 54 | 67 => -- Move right
-                if MoveShip(0, 1, 0) then
-                    Result := 1;
-                end if;
+                MoveShip(0, 1, 0);
             when 52 | 68 => -- Move left
-                if MoveShip(0, -1, 0) then
-                    Result := 1;
-                end if;
+                MoveShip(0, -1, 0);
             when 49 => -- Move down/left
-                if MoveShip(0, -1, 1) then
-                    Result := 1;
-                end if;
+                MoveShip(0, -1, 1);
             when 51 => -- Move down/right
-                if MoveShip(0, 1, 1) then
-                    Result := 1;
-                end if;
+                MoveShip(0, 1, 1);
             when 55 => -- Move up/left
-                if MoveShip(0, -1, -1) then
-                    Result := 1;
-                end if;
+                MoveShip(0, -1, -1);
             when 57 => -- Move up/right
-                if MoveShip(0, 1, -1) then
-                    Result := 1;
-                end if;
+                MoveShip(0, 1, -1);
             when Character'Pos('o') | Character'Pos('O') => -- Ship orders menu
                 Result := 2;
             when 53 => -- Wait 1 minute
                 UpdateGame(1);
-                Result := 1;
             when others =>
-                null;
+                Result := 0;
         end case;
         return Result;
     end SkyMapKeys;
