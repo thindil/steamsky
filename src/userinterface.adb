@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Directories; use Ada.Directories;
+with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Maps; use Maps;
 with Ships; use Ships;
 with Crew; use Crew;
@@ -24,6 +25,8 @@ with Bases; use Bases;
 with Messages; use Messages;
 
 package body UserInterface is
+
+    DialogPanel : Panel := Null_Panel;
 
     procedure ShowMainMenu is
         Visibility : Cursor_Visibility := Invisible;
@@ -178,6 +181,39 @@ package body UserInterface is
         Add(Str => "* You can wait a moment without doing anything, by hit key 5 on keypad.");
     end ShowHelp;
 
+    procedure ShowDialog(Message : String) is
+        DialogWindow : Window;
+        Width : Positive;
+        Height : Positive := 1;
+    begin
+        Width := Message'Length + 2;
+        if Width >= Positive(Columns - 4) then
+            Height := Width / Positive(Columns - 4);
+            Width := (Width / Height) + 2;
+        end if;
+        Height := Height + 2;
+        DialogWindow := New_Window(Line_Position(Height),
+            Column_Position(Width), ((Lines / 2) - Line_Position(Height / 2)),
+            ((Columns / 2) - Column_Position(Width / 2)));
+        Box(DialogWindow);
+        Add(Win => DialogWindow, Str => Message, Line => 1, Column => 1);
+        if DialogPanel = Null_Panel then
+            DialogPanel := New_Panel(DialogWindow);
+        else
+            Replace(DialogPanel, DialogWindow);
+        end if;
+        if Is_Hidden(DialogPanel) then
+            Show(DialogPanel);
+        end if;
+    end ShowDialog;
+
+    procedure HideDialog is
+    begin
+        if not Is_Hidden(DialogPanel) then
+            Hide(DialogPanel);
+        end if;
+    end HideDialog;
+
     procedure DrawGame(CurrentState : GameStates) is
     begin
         Erase;
@@ -207,6 +243,7 @@ package body UserInterface is
             Add(Str => To_String(LastMessage));
             LastMessage := To_Unbounded_String("");
         end if;
+        Update_Panels;
         Update_Screen;
     end DrawGame;
 

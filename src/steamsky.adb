@@ -49,6 +49,7 @@ begin
 
     while GameState /= Quit loop
         Key := Get_Keystroke;
+        HideDialog;
         case GameState is
             when Main_Menu =>
                 GameState := MainMenuKeys(Key);
