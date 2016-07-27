@@ -26,11 +26,13 @@ package body Bases is
     procedure BuyItems(ItemIndex : Positive; Amount : String) is
         BuyAmount : Positive;
         BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        ItemName : constant String := To_String(Objects_Prototypes(SkyBases(BaseIndex).Goods(ItemIndex).ProtoIndex).Name);
         Cost : Positive;
         MoneyIndex : Natural := 0;
     begin
         BuyAmount := Positive'Value(Amount);
         if not SkyBases(BaseIndex).Goods(ItemIndex).Buyable then
+            ShowDialog("You can't buy " & ItemName & " in this base.");
             return;
         end if;
         Cost := BuyAmount * SkyBases(BaseIndex).Goods(ItemIndex).Price;
@@ -41,30 +43,32 @@ package body Bases is
             end if;
         end loop;
         if MoneyIndex = 0 then
+            ShowDialog("You don't have charcollum to buy " & ItemName & ".");
             return;
         end if;
         if Cost > PlayerShip.Cargo.Element(MoneyIndex).Amount then
+            ShowDialog("You don't have enough charcollum to buy so much " & ItemName & ".");
             return;
         end if;
         UpdateCargo(1, (0 - Cost));
         UpdateCargo(SkyBases(BaseIndex).Goods(ItemIndex).ProtoIndex, BuyAmount);
-        AddMessage("You bought" & Positive'Image(BuyAmount) & " " &
-            To_String(Objects_Prototypes(SkyBases(BaseIndex).Goods(ItemIndex).ProtoIndex).Name) &
-            " for" & Positive'Image(Cost) & " Charcollum.");
+        AddMessage("You bought" & Positive'Image(BuyAmount) & " " & ItemName & " for" & Positive'Image(Cost) & " Charcollum.");
         UpdateGame(5);
     exception
         when CONSTRAINT_ERROR =>
-            return;
+            ShowDialog("You must enter number as an amount to buy.");
     end BuyItems;
 
     procedure SellItems(ItemIndex : Positive; Amount : String) is
         SellAmount : Positive;
         BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        ItemName : constant String := To_String(Objects_Prototypes(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name);
         Profit : Positive;
         BaseItemIndex : Natural := 0;
     begin
         SellAmount := Positive'Value(Amount);
         if PlayerShip.Cargo.Element(ItemIndex).Amount < SellAmount then
+            ShowDialog("You dont have that much " & ItemName & " in ship cargo.");
             return;
         end if;
         for I in SkyBases(BaseIndex).Goods'Range loop
@@ -73,17 +77,14 @@ package body Bases is
                 exit;
             end if;
         end loop;
-        UpdateCargo(SkyBases(BaseIndex).Goods(BaseItemIndex).ProtoIndex, (0 -
-            SellAmount));
+        UpdateCargo(SkyBases(BaseIndex).Goods(BaseItemIndex).ProtoIndex, (0 - SellAmount));
         Profit := SkyBases(BaseIndex).Goods(BaseItemIndex).Price * SellAmount;
         UpdateCargo(1, Profit);
-        AddMessage("You sold" & Positive'Image(SellAmount) & " " &
-            To_String(Objects_Prototypes(SkyBases(BaseIndex).Goods(BaseItemIndex).ProtoIndex).Name) &
-            " for" & Positive'Image(Profit) & " Charcollum.");
+        AddMessage("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" & Positive'Image(Profit) & " Charcollum.");
         UpdateGame(5);
     exception
         when CONSTRAINT_ERROR =>
-            return;
+            ShowDialog("You must enter number as an amount to sell.");
     end SellItems;
 
     procedure ShowTrade(Key : Key_Code) is
