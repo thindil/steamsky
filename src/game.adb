@@ -128,9 +128,10 @@ package body Game is
     end NewGame;
 
     procedure UpdateGame(Minutes : Positive) is
-        TiredLevel : Integer := 0;
+        TiredLevel, HungerLevel : Integer := 0;
         AddedHours, AddedMinutes : Natural;
         TiredPoints : Natural := 0;
+        HealthLevel : Integer := 100;
         procedure UpdateMember(Member : in out Member_Data) is
         begin
             Member.Tired := TiredLevel;
@@ -138,6 +139,18 @@ package body Game is
                 Member.Order := Rest;
                 AddMessage(To_String(Member.Name) & " is too tired to work, going rest.");
             end if;
+            if HungerLevel > 80 then
+                if Eat then
+                    HungerLevel := HungerLevel - 80;
+                    if HungerLevel < 0 then
+                        HungerLevel := 0;
+                    end if;
+                else
+                    AddMessage(To_String(Member.Name) & " is hungry, but can't find anything to eat.");
+                end if;
+            end if;
+            Member.Hunger := HungerLevel;
+            Member.Health := HealthLevel;
         end UpdateMember;
     begin
         for I in 1..Minutes loop
@@ -165,6 +178,7 @@ package body Game is
             GameDate.Month := 1;
             GameDate.Year := GameDate.Year + 1;
         end if;
+        -- Update crew
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Rest then
                 if PlayerShip.Crew.Element(I).Tired > 0 then
@@ -178,6 +192,16 @@ package body Game is
                 if TiredLevel > 100 then
                     TiredLevel := 100;
                 end if;
+            end if;
+            HungerLevel := PlayerShip.Crew.Element(I).Hunger + TiredPoints;
+            if HungerLevel > 100 then
+                HungerLevel := 100;
+            end if;
+            if PlayerShip.Crew.Element(I).Hunger = 100 then
+                HealthLevel := PlayerShip.Crew.Element(I).Health - TiredPoints;
+            end if;
+            if HealthLevel < 0 then
+                HealthLevel := 0;
             end if;
             PlayerShip.Crew.Update_Element(Index => I, Process => UpdateMember'Access);
         end loop;
