@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Wait 1 game minute command
 - Fatigue to crew members
 - Show last message on screen
+- Informations why action failed (trade/ship moving)
 
 ### Changed
 - Updated README.md
