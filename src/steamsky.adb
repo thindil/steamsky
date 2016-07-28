@@ -20,6 +20,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Ada.Command_Line; use Ada.Command_Line;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
+with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Terminal_Interface.Curses_Constants; use Terminal_Interface.Curses_Constants;
 with UserInterface; use UserInterface;
 with Maps; use Maps;
@@ -49,6 +50,22 @@ begin
 
     while GameState /= Quit loop
         Key := Get_Keystroke;
+        if GameState /= Main_Menu then
+            if PlayerShip.Crew.Element(1).Health = 0 then -- Player is dead
+                ShowDialog("You are dead.");
+                Update_Panels;
+                Update_Screen;
+                Key := Get_Keystroke;
+                if Exists("data/savegame.dat") then
+                    Delete_File("data/savegame.dat");
+                end if;
+                ClearMessages;
+                Erase;
+                Refresh;
+                ShowMainMenu;
+                GameState := Main_Menu;
+            end if;
+        end if;
         if HideDialog then
             Key := Get_Keystroke;
         end if;
