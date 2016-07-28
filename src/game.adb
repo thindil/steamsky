@@ -112,7 +112,7 @@ package body Game is
         -- Add crew to ship
         ShipCrew.Append(New_Item => (Name => To_Unbounded_String("You"),
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0), (1,0)), 
-            Hunger => 0, Thirst => 0, Order => Duty)); 
+            Hunger => 0, Thirst => 0, Order => Rest)); 
         ShipCrew.Append(New_Item => (Name => To_Unbounded_String("Pilot"),
             Health => 100, Tired => 0, Skills => ((1, 0), (0, 0), (0, 0), (0,0)), 
             Hunger => 0, Thirst => 0, Order => Pilot)); 
@@ -121,7 +121,7 @@ package body Game is
             Hunger => 0, Thirst => 0, Order => Engineer)); 
         ShipCrew.Append(New_Item => (Name => To_Unbounded_String("Gunner"),
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (1, 0), (0, 0)),
-            Hunger => 0, Thirst => 0, Order => Gunner)); 
+            Hunger => 0, Thirst => 0, Order => Rest)); 
         PlayerShip := (SkyX => SkyBases(Integer(RandomBase)).SkyX, SkyY =>
             SkyBases(Integer(RandomBase)).SkyY, Speed => DOCKED, Modules =>
             ShipModules, Cargo => ShipCargo, Crew => ShipCrew);
