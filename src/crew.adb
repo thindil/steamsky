@@ -18,7 +18,6 @@
 with Ships; use Ships;
 with Messages; use Messages;
 with UserInterface; use UserInterface;
-with Prototypes; use Prototypes;
 
 package body Crew is
 
@@ -78,11 +77,11 @@ package body Crew is
         end case;
     end GiveOrders;
 
-    function Eat return Boolean is
+    function Consume(ItemType : Items_Types) return Boolean is
         ProtoIndex : Natural := 0;
     begin
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Food then
+            if Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).IType = ItemType then
                 ProtoIndex := PlayerShip.Cargo.Element(I).ProtoIndex;
                 exit;
             end if;
@@ -92,7 +91,7 @@ package body Crew is
         end if;
         UpdateCargo(ProtoIndex, (0 - 1));
         return True;
-    end Eat;
+    end Consume;
 
     procedure ShowCrewInfo(Key : Key_Code) is
         Health, Tired, Hungry, Thirsty, SkillLevel, OrderName : Unbounded_String;

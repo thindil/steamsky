@@ -23,6 +23,7 @@ with Maps; use Maps;
 with Ships; use Ships;
 with Crew; use Crew;
 with Messages; use Messages;
+with Prototypes; use Prototypes;
 
 package body Game is
 
@@ -128,7 +129,7 @@ package body Game is
     end NewGame;
 
     procedure UpdateGame(Minutes : Positive) is
-        TiredLevel, HungerLevel : Integer := 0;
+        TiredLevel, HungerLevel, ThirstLevel : Integer := 0;
         AddedHours, AddedMinutes : Natural;
         TiredPoints : Natural := 0;
         HealthLevel : Integer := 100;
@@ -140,7 +141,7 @@ package body Game is
                 AddMessage(To_String(Member.Name) & " is too tired to work, going rest.");
             end if;
             if HungerLevel > 80 then
-                if Eat then
+                if Consume(Food) then
                     HungerLevel := HungerLevel - 80;
                     if HungerLevel < 0 then
                         HungerLevel := 0;
@@ -150,6 +151,17 @@ package body Game is
                 end if;
             end if;
             Member.Hunger := HungerLevel;
+            if ThirstLevel > 40 then
+                if Consume(Drink) then
+                    ThirstLevel := ThirstLevel - 40;
+                    if ThirstLevel < 0 then
+                        ThirstLevel := 0;
+                    end if;
+                else
+                    AddMessage(To_String(Member.Name) & " is thirsty, but can't find anything to drink.");
+                end if;
+            end if;
+            Member.Thirst := ThirstLevel;
             Member.Health := HealthLevel;
         end UpdateMember;
     begin
@@ -197,8 +209,16 @@ package body Game is
             if HungerLevel > 100 then
                 HungerLevel := 100;
             end if;
+            HealthLevel := PlayerShip.Crew.Element(I).Health;
             if PlayerShip.Crew.Element(I).Hunger = 100 then
-                HealthLevel := PlayerShip.Crew.Element(I).Health - TiredPoints;
+                HealthLevel := HealthLevel - TiredPoints;
+            end if;
+            ThirstLevel := PlayerShip.Crew.Element(I).Thirst + TiredPoints;
+            if ThirstLevel > 100 then
+                ThirstLevel := 100;
+            end if;
+            if PlayerShip.Crew.Element(I).Thirst = 100 then
+                HealthLevel := HealthLevel - TiredPoints;
             end if;
             if HealthLevel < 0 then
                 HealthLevel := 0;
