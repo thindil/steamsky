@@ -180,6 +180,16 @@ package body UserInterface is
         Move_Cursor(Line => (Line + 1), Column => 2);
         Add(Str => "* You can wait a moment without doing anything, by hit key 5 on keypad.");
     end ShowHelp;
+    
+    procedure ShowConfirm is
+        ConfirmWindow : Window;
+    begin
+        ConfirmWindow := Create(3, 39, (Lines / 2) - 2, (Columns / 2) - 19);
+        Box(ConfirmWindow);
+        Move_Cursor(Win => ConfirmWindow, Line => 1, Column => 1);
+        Add(Win => ConfirmWindow, Str => "Are you sure want to quit game? (Y/N)");
+        Refresh(ConfirmWindow);
+    end ShowConfirm;
 
     procedure ShowDialog(Message : String) is
         DialogWindow : Window;
@@ -237,6 +247,9 @@ package body UserInterface is
                 ShowTrade(KEY_NONE);
             when Help_View =>
                 ShowHelp;
+            when Quit_Confirm =>
+                Refresh_Without_Update;
+                ShowConfirm;
             when others =>
                 null;
         end case;
@@ -276,12 +289,8 @@ package body UserInterface is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to main menu
-                SaveGame;
-                ClearMessages;
-                Erase;
-                Refresh;
-                ShowMainMenu;
-                return Main_Menu;
+                DrawGame(Quit_Confirm);
+                return Quit_Confirm;
             when Character'Pos('s') | Character'Pos('S') => -- Ship info screen
                 DrawGame(Ship_Info);
                 return Ship_Info;
@@ -352,5 +361,24 @@ package body UserInterface is
                 return Help_View;
         end case;
     end HelpKeys;
+
+    function ConfirmKeys(OldState : GameStates; Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when Character'Pos('n') | Character'Pos('N') => -- Stop quitting from game
+                DrawGame(OldState);
+                return OldState;
+            when Character'Pos('y') | Character'Pos('Y') => -- Quit from game
+                SaveGame;
+                ClearMessages;
+                Erase;
+                Refresh;
+                ShowMainMenu;
+                return Main_Menu;
+            when others =>
+                DrawGame(Quit_Confirm);
+                return Quit_Confirm;
+        end case;
+    end ConfirmKeys;
 
 end UserInterface;
