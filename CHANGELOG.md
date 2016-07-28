@@ -7,8 +7,9 @@ All notable changes to this project will be documented in this file.
 - Wait 1 game minute command
 - Fatigue to crew members
 - Show last message on screen
-- Informations why action failed (trade/ship moving)
+- Informations why action failed (trade/ship moving/orders)
 - Check for free cargo space during trade items
+- End game on player death
 
 ### Changed
 - Updated README.md
@@ -19,6 +20,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash in save game when game was started from other directory
+- Giving orders to dead/starving/dehydrated/too tired crew members
 
 ## [0.1] - 2016-07-24
 Initial release
