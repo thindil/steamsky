@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Wait 1 game minute command
-- Fatigue to crew members
+- Fatigue, hunger and thirst to crew members
 - Show last message on screen
 - Informations why action failed (trade/ship moving/orders)
 - Check for free cargo space during trade items
