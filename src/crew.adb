@@ -26,12 +26,29 @@ package body Crew is
 
     procedure GiveOrders(MemberIndex : Positive; GivenOrder : Crew_Orders) is
         NewOrder : Crew_Orders;
+        MemberName : constant String := To_String(PlayerShip.Crew.Element(MemberIndex).Name);
         procedure UpdateOrder(Member : in out Member_Data) is
         begin
             Member.Order := NewOrder;
         end UpdateOrder;
     begin
         if GivenOrder = PlayerShip.Crew.Element(MemberIndex).Order then
+            return;
+        end if;
+        if PlayerShip.Crew.Element(MemberIndex).Health = 0 then
+            AddMessage("You can't give orders to dead crew.");
+            return;
+        end if;
+        if PlayerShip.Crew.Element(MemberIndex).Tired = 100 then
+            AddMessage(MemberName & " is too tired to work.");
+            return;
+        end if;
+        if PlayerShip.Crew.Element(MemberIndex).Hunger = 100 then
+            AddMessage(MemberName & " is too hungry to work.");
+            return;
+        end if;
+        if PlayerShip.Crew.Element(MemberIndex).Thirst = 100 then
+            AddMessage(MemberName & " is too thirsty to work.");
             return;
         end if;
         if GivenOrder = Duty and MemberIndex > 1 then
@@ -166,7 +183,10 @@ package body Crew is
                 end case;
                 Move_Cursor(Line => 8, Column => (Columns / 2));
                 Add(Str => "Order: " & To_String(OrderName));
-                Change_Attributes(Line => 8, Column => (Columns / 2), Count => 1, Color => 1);
+                if PlayerShip.Crew.Element(MemberIndex).Health > 0 and PlayerShip.Crew.Element(MemberIndex).Tired < 100 and
+                    PlayerShip.Crew.Element(MemberIndex).Hunger < 100 and PlayerShip.Crew.Element(MemberIndex).Thirst < 100 then
+                    Change_Attributes(Line => 8, Column => (Columns / 2), Count => 1, Color => 1);
+                end if;
             else
                 MemberIndex := 0;
             end if;
@@ -206,11 +226,17 @@ package body Crew is
                 return Sky_Map_View;
             when Character'Pos('o') | Character'Pos('O') => -- Give orders to selected crew member
                 if MemberIndex > 0 then
-                    ShowCrewInfo(Key_Code(MemberIndex + 96));
-                    Refresh_Without_Update;
-                    ShowOrdersMenu;
-                    Update_Screen;
-                    return Giving_Orders;
+                    if PlayerShip.Crew.Element(MemberIndex).Health > 0 and PlayerShip.Crew.Element(MemberIndex).Tired < 100 and
+                        PlayerShip.Crew.Element(MemberIndex).Hunger < 100 and PlayerShip.Crew.Element(MemberIndex).Thirst < 100 then
+                        ShowCrewInfo(Key_Code(MemberIndex + 96));
+                        Refresh_Without_Update;
+                        ShowOrdersMenu;
+                        Update_Screen;
+                        return Giving_Orders;
+                    else
+                        ShowCrewInfo(Key);
+                        return Crew_Info;
+                    end if;
                 else
                     ShowCrewInfo(Key);
                     return Crew_Info;
