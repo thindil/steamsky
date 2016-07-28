@@ -50,10 +50,6 @@ package body Crew is
             AddMessage(MemberName & " is too thirsty to work.");
             return;
         end if;
-        if GivenOrder = Duty and MemberIndex > 1 then
-            ShowDialog("Only you can go on duty.");
-            return;
-        end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = GivenOrder then
                 NewOrder := Rest;
@@ -64,8 +60,6 @@ package body Crew is
         NewOrder := GivenOrder;
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
         case GivenOrder is
-            when Duty =>
-                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " back on duty.");
             when Pilot =>
                 AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " starts piloting.");
             when Engineer =>
@@ -169,8 +163,6 @@ package body Crew is
                     end if;
                 end loop;
                 case PlayerShip.Crew.Element(MemberIndex).Order is
-                    when Duty =>
-                        OrderName := To_Unbounded_String("On duty");
                     when Pilot =>
                         OrderName := To_Unbounded_String("Piloting");
                     when Engineer =>
@@ -194,9 +186,8 @@ package body Crew is
 
     procedure ShowOrdersMenu is
         OrdersWindow : Window;
-        OrdersNames : constant array (1..5) of Unbounded_String := (To_Unbounded_String("Duty"), 
-            To_Unbounded_String("Piloting"), To_Unbounded_String("Engineering"), 
-            To_Unbounded_String("Gunner"), To_Unbounded_String("On break"));
+        OrdersNames : constant array (1..4) of Unbounded_String := (To_Unbounded_String("Piloting"), 
+            To_Unbounded_String("Engineering"), To_Unbounded_String("Gunner"), To_Unbounded_String("On break"));
         StartIndex : Integer;
     begin
         OrdersWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
@@ -250,11 +241,6 @@ package body Crew is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to crew info
-                MemberIndex := 0;
-                DrawGame(Crew_Info);
-                return Crew_Info;
-            when Character'Pos('d') | Character'Pos('D') => -- Give order on duty
-                GiveOrders(MemberIndex, Duty);
                 MemberIndex := 0;
                 DrawGame(Crew_Info);
                 return Crew_Info;

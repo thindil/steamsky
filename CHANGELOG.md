@@ -17,10 +17,14 @@ All notable changes to this project will be documented in this file.
 - Moved ship orders to game menu
 - Updated help
 - Updated interface
+- Player and gunner starts game with on break command
 
 ### Fixed
 - Crash in save game when game was started from other directory
 - Giving orders to dead/starving/dehydrated/too tired crew members
+
+### Removed
+- Duty order for player
 
 ## [0.1] - 2016-07-24
 Initial release
