@@ -179,6 +179,9 @@ package body UserInterface is
         Get_Cursor_Position(Line => Line, Column => Column);
         Move_Cursor(Line => (Line + 1), Column => 2);
         Add(Str => "* You can wait a moment without doing anything, by hit key 5 on keypad.");
+        Get_Cursor_Position(Line => Line, Column => Column);
+        Move_Cursor(Line => (Line + 1), Column => 2);
+        Add(Str => "* You and your crew must eat and drink. If you dont have food or drink onboard, your crew will slowly die from dehydration or starvation.");
     end ShowHelp;
     
     procedure ShowConfirm is
