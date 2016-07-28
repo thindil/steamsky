@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Informations why action failed (trade/ship moving/orders)
 - Check for free cargo space during trade items
 - End game on player death
+- Confirmation dialog for quit to main menu
 
 ### Changed
 - Updated README.md
