@@ -76,6 +76,7 @@ begin
                 Result := SkyMapKeys(Key);
                 case Result is
                     when 0 =>
+                        OldState := GameState;
                         GameState := GameMenuKeys(GameState, Key);
                     when 2 =>
                         OldState := GameState;
@@ -98,6 +99,8 @@ begin
                 GameState := TradeKeys(Key);
             when Help_View =>
                 GameState := HelpKeys(Key);
+            when Quit_Confirm =>
+                GameState := ConfirmKeys(OldState, Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
