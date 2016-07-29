@@ -46,6 +46,7 @@ package Ships is
     package Crew_Container is new Vectors(Positive, Member_Data);
     type ShipRecord is -- Data structure for ships
         record
+            Name : Unbounded_String; -- Ship name
             SkyX : Integer; -- X coordinate on sky map
             SkyY : Integer; -- Y coordinate on sky map
             Speed : ShipSpeed; -- Speed of ship

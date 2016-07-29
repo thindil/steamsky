@@ -15,6 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
 package Game is
 
     type GameStates is (Quit, Main_Menu, Sky_Map_View, Control_Speed,
@@ -30,7 +32,7 @@ package Game is
         end record;
     GameDate : Date_Record;
     
-    procedure NewGame; -- Start new game: create map, place ship, crew, etc
+    procedure NewGame(CharName, ShipName : Unbounded_String); -- Start new game: create map, place ship, crew, etc
     procedure UpdateGame(Minutes : Positive); -- Game ticks (update time, crew, ship, etc)
     procedure SaveGame; -- Save game to file
     procedure LoadGame; -- Load game from file
