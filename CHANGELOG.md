@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Check for free cargo space during trade items
 - End game on player death
 - Confirmation dialog for quit to main menu
+- New game window with ability to set player and ship names
 
 ### Changed
 - Updated README.md
