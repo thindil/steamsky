@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Bases; use Bases;
 with Maps; use Maps;
@@ -27,7 +26,7 @@ with Prototypes; use Prototypes;
 
 package body Game is
 
-    procedure NewGame is
+    procedure NewGame(CharName, ShipName : Unbounded_String) is
         type Rand_Range is range 1..1024;
         type Bases_Range is range 0..2;
         package Rand_Int is new Discrete_Random(Rand_Range);
@@ -110,7 +109,7 @@ package body Game is
         ShipCargo.Append(New_Item => (ProtoIndex => 3, Amount => 200));
         ShipCargo.Append(New_Item => (ProtoIndex => 4, Amount => 500));
         -- Add crew to ship
-        ShipCrew.Append(New_Item => (Name => To_Unbounded_String("You"),
+        ShipCrew.Append(New_Item => (Name => CharName,
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0), (1,0)), 
             Hunger => 0, Thirst => 0, Order => Rest)); 
         ShipCrew.Append(New_Item => (Name => To_Unbounded_String("Pilot"),
@@ -122,7 +121,7 @@ package body Game is
         ShipCrew.Append(New_Item => (Name => To_Unbounded_String("Gunner"),
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (1, 0), (0, 0)),
             Hunger => 0, Thirst => 0, Order => Rest)); 
-        PlayerShip := (SkyX => SkyBases(Integer(RandomBase)).SkyX, SkyY =>
+        PlayerShip := (Name => ShipName, SkyX => SkyBases(Integer(RandomBase)).SkyX, SkyY =>
             SkyBases(Integer(RandomBase)).SkyY, Speed => DOCKED, Modules =>
             ShipModules, Cargo => ShipCargo, Crew => ShipCrew);
         SkyBases(Integer(RandomBase)).Visited := True;
@@ -270,6 +269,7 @@ package body Game is
             end loop;
         end loop;
         -- Save player ship
+        Put(SaveGame, To_String(PlayerShip.Name) & ";");
         RawValue := To_Unbounded_String(Integer'Image(PlayerShip.SkyX));
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         RawValue := To_Unbounded_String(Integer'Image(PlayerShip.SkyY));
@@ -376,6 +376,7 @@ package body Game is
             SkyMap(SkyBases(I).SkyX, SkyBases(I).SkyY).BaseIndex := I;
         end loop;
         -- Load player ship
+        PlayerShip.Name := ReadData;
         PlayerShip.SkyX := Integer'Value(To_String(ReadData));
         PlayerShip.SkyY := Integer'Value(To_String(ReadData));
         PlayerShip.Speed := ShipSpeed'Val(Integer'Value(To_String(ReadData)));
