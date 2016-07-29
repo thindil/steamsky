@@ -50,7 +50,7 @@ begin
 
     while GameState /= Quit loop
         Key := Get_Keystroke;
-        if GameState /= Main_Menu then
+        if GameState /= Main_Menu and GameState /= New_Game then
             if PlayerShip.Crew.Element(1).Health = 0 then -- Player is dead
                 ShowDialog("You are dead.");
                 Update_Panels;
@@ -101,6 +101,8 @@ begin
                 GameState := HelpKeys(Key);
             when Quit_Confirm =>
                 GameState := ConfirmKeys(OldState, Key);
+            when New_Game =>
+                GameState := MainMenuKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
@@ -109,7 +111,7 @@ begin
     End_Windows;
 exception
     when An_Exception : others =>
-        if GameStates'Pos(GameState) > 1 then
+        if GameState /= Main_Menu and GameState /= New_Game then
             SaveGame;
         end if;
         if Exists("data/error.log") then
