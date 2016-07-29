@@ -166,19 +166,7 @@ package body Ships is
     begin
         Weight := 0;
         Move_Cursor(Line => 2, Column => 2);
-        Add(Str => "Speed: ");
-        case PlayerShip.Speed is
-            when DOCKED =>
-                Add(Str => "Stopped (Docked to base)");
-            when FULL_STOP =>
-                Add(Str => "Stopped");
-            when QUARTER_SPEED =>
-                Add(Str => "Quarter speed");
-            when HALF_SPEED =>
-                Add(Str => "Half speed");
-            when FULL_SPEED =>
-                Add(Str => "Full speed");
-        end case;
+        Add(Str => "Name: " & To_String(PlayerShip.Name));
         Move_Cursor(Line => 4, Column => 2);
         Add(Str => "STATUS:");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
