@@ -231,6 +231,8 @@ package body Game is
         RawValue : Unbounded_String;
     begin
         Create(SaveGame, Out_File, "data/savegame.dat");
+        -- Save version
+        Put(SaveGame, "0.2;");
         -- Save game date
         RawValue := To_Unbounded_String(Integer'Image(GameDate.Year));
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -325,7 +327,7 @@ package body Game is
         Close(SaveGame);
     end SaveGame;
 
-    procedure LoadGame is
+    function LoadGame return Boolean is
         SaveGame : File_Type;
         VectorLength : Positive;
         Skills : Skills_Array := ((0, 0), (0, 0), (0, 0), (0 ,0));
@@ -349,6 +351,11 @@ package body Game is
         end UpdateMember;
     begin
         Open(SaveGame, In_File, "data/savegame.dat");
+        -- Check save version
+        if ReadData /= "0.2" then
+            Close(SaveGame);
+            return False;
+        end if;
         -- Load game date
         GameDate.Year := Natural'Value(To_String(ReadData));
         GameDate.Month := Natural'Value(To_String(ReadData));
@@ -415,5 +422,6 @@ package body Game is
         end loop;
         PlayerShip.Crew := ShipCrew;
         Close(SaveGame);
+        return True;
     end LoadGame;
 end Game;

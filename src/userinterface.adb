@@ -335,9 +335,15 @@ package body UserInterface is
                 return New_Game;
             when Character'Pos('l') | Character'Pos('L') => -- Load game
                 if Exists("data/savegame.dat") then
-                    LoadGame;
-                    DrawGame(Sky_Map_View);
-                    return Sky_Map_View;
+                    if LoadGame then
+                        DrawGame(Sky_Map_View);
+                        return Sky_Map_View;
+                    else
+                        ShowDialog("This saved game is incompatible with this version of game and can't be loaded.");
+                        Update_Panels;
+                        Update_Screen;
+                        return Main_Menu;
+                    end if;
                 else
                     return Main_Menu;
                 end if;
