@@ -73,16 +73,16 @@ package body Game is
         ShipModules.Append(New_Item => (Name => To_Unbounded_String("Small engine"), 
             MType => ENGINE, Weight => 1000, Current_Value => 0,
             Max_Value => 2000, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Your Cabin"), 
+        ShipModules.Append(New_Item => (Name => CharName & To_Unbounded_String("'s Cabin"), 
             MTYPE => CABIN, Weight => 200, Current_Value => 20, Max_Value =>
             20, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Pilot Cabin"), 
+        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Pilot's Cabin"), 
             MTYPE => CABIN, Weight => 200, Current_Value => 20, Max_Value =>
             20, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Engineer Cabin"), 
+        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Engineer's Cabin"), 
             MTYPE => CABIN, Weight => 200, Current_Value => 20, Max_Value =>
             20, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Gunner Cabin"), 
+        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Gunner's Cabin"), 
             MTYPE => CABIN, Weight => 200, Current_Value => 20, Max_Value =>
             20, Durability => 100, MaxDurability => 100));
         ShipModules.Append(New_Item => (Name => To_Unbounded_String("Cocpit"), 
