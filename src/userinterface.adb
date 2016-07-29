@@ -27,6 +27,8 @@ with Messages; use Messages;
 package body UserInterface is
 
     DialogPanel : Panel := Null_Panel;
+    CharName : String(1..12);
+    ShipName : String(1..12);
 
     procedure ShowMainMenu is
         Visibility : Cursor_Visibility := Invisible;
@@ -231,10 +233,13 @@ package body UserInterface is
 
     procedure ShowNewGameMenu(Key : Key_Code) is
         NewGameWindow : Window;
-        CharName : String(1..12) := "Laeran      ";
-        ShipName : Unbounded_String := To_Unbounded_String("Hawk");
         Visibility : Cursor_Visibility := Normal;
     begin
+        if Key = Character'Pos('c') or Key = Character'Pos('C') then
+            CharName := "            ";
+        elsif Key = Character'Pos('h') or Key = Character'Pos('H') then
+            ShipName := "            ";
+        end if;
         NewGameWindow := Create(6, 31, (Lines / 3), (Columns / 3));
         Box(NewGameWindow);
         Move_Cursor(Win => NewGameWindow, Line => 1, Column => 1);
@@ -242,7 +247,7 @@ package body UserInterface is
         Change_Attributes(Win => NewGameWindow, Line => 1, Column => 1,
             Count => 1, Color => 1);
         Move_Cursor(Win => NewGameWindow, Line => 2, Column => 1);
-        Add(Win => NewGameWindow, Str => "Ship Name: " & To_String(ShipName));
+        Add(Win => NewGameWindow, Str => "Ship Name: " & ShipName);
         Change_Attributes(Win => NewGameWindow, Line => 2, Column => 2,
             Count => 1, Color => 1);
         Move_Cursor(Win => NewGameWindow, Line => 4, Column => 5);
@@ -257,6 +262,19 @@ package body UserInterface is
                 Set_Cursor_Visibility(Visibility);
                 Move_Cursor(Win => NewGameWindow, Line => 1, Column => 17);
                 Get(Win => NewGameWindow, Str => CharName, Len => 12);
+            elsif Key = Character'Pos('h') or Key = Character'Pos('H') then
+                Set_Echo_Mode(True);
+                Set_Cursor_Visibility(Visibility);
+                Move_Cursor(Win => NewGameWindow, Line => 2, Column => 12);
+                Get(Win => NewGameWindow, Str => ShipName, Len => 12);
+            end if;
+            if Key = Character'Pos('c') or Key = Character'Pos('C') or Key = Character'Pos('h') or Key = Character'Pos('H') then
+                Erase;
+                ShowMainMenu;
+                Refresh_Without_Update;
+                ShowNewGameMenu(KEY_NONE);
+                Update_Screen;
+                return;
             end if;
         end if;
         Refresh(NewGameWindow);
@@ -304,6 +322,8 @@ package body UserInterface is
             when Character'Pos('q') | Character'Pos('Q') => -- Quit game
                 return Quit;
             when Character'Pos('n') | Character'Pos('N') => -- New game
+                CharName := "Laeran      ";
+                ShipName := "Hawk        ";
                 ShowNewGameMenu(KEY_NONE);
                 Update_Screen;
                 return New_Game;
@@ -417,6 +437,7 @@ package body UserInterface is
     end ConfirmKeys;
 
     function NewGameKeys(Key : Key_Code) return GameStates is
+        NewCharName, NewShipName : Unbounded_String;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to main menu
@@ -431,6 +452,12 @@ package body UserInterface is
                 ShowNewGameMenu(Key);
                 Update_Screen;
                 return New_Game;
+            when Character'Pos('s') | Character'Pos('S') => -- Start new game;
+                NewCharName := Trim(To_Unbounded_String(CharName), Ada.Strings.Both);
+                NewShipName := Trim(To_Unbounded_String(ShipName), Ada.Strings.Both);
+                NewGame(NewCharName, NewShipName);
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
             when others =>
                 return New_Game;
         end case;
