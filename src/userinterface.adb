@@ -262,11 +262,17 @@ package body UserInterface is
                 Set_Cursor_Visibility(Visibility);
                 Move_Cursor(Win => NewGameWindow, Line => 1, Column => 17);
                 Get(Win => NewGameWindow, Str => CharName, Len => 12);
+                if CharName = "            " then
+                    CharName := "Laeran      ";
+                end if;
             elsif Key = Character'Pos('h') or Key = Character'Pos('H') then
                 Set_Echo_Mode(True);
                 Set_Cursor_Visibility(Visibility);
                 Move_Cursor(Win => NewGameWindow, Line => 2, Column => 12);
                 Get(Win => NewGameWindow, Str => ShipName, Len => 12);
+                if ShipName = "            " then
+                    ShipName := "Hawk        ";
+                end if;
             end if;
             if Key = Character'Pos('c') or Key = Character'Pos('C') or Key = Character'Pos('h') or Key = Character'Pos('H') then
                 Erase;
