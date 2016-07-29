@@ -35,6 +35,6 @@ package Game is
     procedure NewGame(CharName, ShipName : Unbounded_String); -- Start new game: create map, place ship, crew, etc
     procedure UpdateGame(Minutes : Positive); -- Game ticks (update time, crew, ship, etc)
     procedure SaveGame; -- Save game to file
-    procedure LoadGame; -- Load game from file
+    function LoadGame return Boolean; -- Load game from file, return false if save can't be loaded
 
 end Game;
