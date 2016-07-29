@@ -229,22 +229,20 @@ package body UserInterface is
         return False;
     end HideDialog;
 
-    procedure ShowNewGameMenu is
+    procedure ShowNewGameMenu(Key : Key_Code) is
         NewGameWindow : Window;
-        Width : Positive;
+        CharName : String(1..12) := "Laeran      ";
+        ShipName : Unbounded_String := To_Unbounded_String("Hawk");
+        Visibility : Cursor_Visibility := Normal;
     begin
-        Width := 30;
-        if Width > Positive(Columns) then
-            Width := Integer(Columns);
-        end if;
-        NewGameWindow := Create(6, Column_Position(Width), (Lines / 3), (Columns / 3));
+        NewGameWindow := Create(6, 31, (Lines / 3), (Columns / 3));
         Box(NewGameWindow);
         Move_Cursor(Win => NewGameWindow, Line => 1, Column => 1);
-        Add(Win => NewGameWindow, Str => "Character Name: You");
+        Add(Win => NewGameWindow, Str => "Character Name: " & CharName);
         Change_Attributes(Win => NewGameWindow, Line => 1, Column => 1,
             Count => 1, Color => 1);
         Move_Cursor(Win => NewGameWindow, Line => 2, Column => 1);
-        Add(Win => NewGameWindow, Str => "Ship Name: Hawk");
+        Add(Win => NewGameWindow, Str => "Ship Name: " & To_String(ShipName));
         Change_Attributes(Win => NewGameWindow, Line => 2, Column => 2,
             Count => 1, Color => 1);
         Move_Cursor(Win => NewGameWindow, Line => 4, Column => 5);
@@ -253,6 +251,14 @@ package body UserInterface is
             Count => 1, Color => 1);
         Change_Attributes(Win => NewGameWindow, Line => 4, Column => 13,
             Count => 1, Color => 1);
+        if Key /= KEY_NONE then
+            if Key = Character'Pos('c') or Key = Character'Pos('C') then
+                Set_Echo_Mode(True);
+                Set_Cursor_Visibility(Visibility);
+                Move_Cursor(Win => NewGameWindow, Line => 1, Column => 17);
+                Get(Win => NewGameWindow, Str => CharName, Len => 12);
+            end if;
+        end if;
         Refresh(NewGameWindow);
     end ShowNewGameMenu;
 
@@ -298,7 +304,7 @@ package body UserInterface is
             when Character'Pos('q') | Character'Pos('Q') => -- Quit game
                 return Quit;
             when Character'Pos('n') | Character'Pos('N') => -- New game
-                ShowNewGameMenu;
+                ShowNewGameMenu(KEY_NONE);
                 Update_Screen;
                 return New_Game;
             when Character'Pos('l') | Character'Pos('L') => -- Load game
@@ -409,5 +415,25 @@ package body UserInterface is
                 return Quit_Confirm;
         end case;
     end ConfirmKeys;
+
+    function NewGameKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to main menu
+                Erase;
+                Refresh;
+                ShowMainMenu;
+                return Main_Menu;
+            when Character'Pos('c') | Character'Pos('C') | Character'Pos('h') | Character'Pos('H') => -- Change character/ship name
+                Erase;
+                ShowMainMenu;
+                Refresh_Without_Update;
+                ShowNewGameMenu(Key);
+                Update_Screen;
+                return New_Game;
+            when others =>
+                return New_Game;
+        end case;
+    end NewGameKeys;
 
 end UserInterface;

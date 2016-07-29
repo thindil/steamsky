@@ -102,7 +102,7 @@ begin
             when Quit_Confirm =>
                 GameState := ConfirmKeys(OldState, Key);
             when New_Game =>
-                GameState := MainMenuKeys(Key);
+                GameState := NewGameKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
