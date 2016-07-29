@@ -229,6 +229,33 @@ package body UserInterface is
         return False;
     end HideDialog;
 
+    procedure ShowNewGameMenu is
+        NewGameWindow : Window;
+        Width : Positive;
+    begin
+        Width := 30;
+        if Width > Positive(Columns) then
+            Width := Integer(Columns);
+        end if;
+        NewGameWindow := Create(6, Column_Position(Width), (Lines / 3), (Columns / 3));
+        Box(NewGameWindow);
+        Move_Cursor(Win => NewGameWindow, Line => 1, Column => 1);
+        Add(Win => NewGameWindow, Str => "Character Name: You");
+        Change_Attributes(Win => NewGameWindow, Line => 1, Column => 1,
+            Count => 1, Color => 1);
+        Move_Cursor(Win => NewGameWindow, Line => 2, Column => 1);
+        Add(Win => NewGameWindow, Str => "Ship Name: Hawk");
+        Change_Attributes(Win => NewGameWindow, Line => 2, Column => 2,
+            Count => 1, Color => 1);
+        Move_Cursor(Win => NewGameWindow, Line => 4, Column => 5);
+        Add(Win => NewGameWindow, Str => "[Quit] [Start]");
+        Change_Attributes(Win => NewGameWindow, Line => 4, Column => 6,
+            Count => 1, Color => 1);
+        Change_Attributes(Win => NewGameWindow, Line => 4, Column => 13,
+            Count => 1, Color => 1);
+        Refresh(NewGameWindow);
+    end ShowNewGameMenu;
+
     procedure DrawGame(CurrentState : GameStates) is
     begin
         Erase;
@@ -271,10 +298,9 @@ package body UserInterface is
             when Character'Pos('q') | Character'Pos('Q') => -- Quit game
                 return Quit;
             when Character'Pos('n') | Character'Pos('N') => -- New game
-                -- Start new game
-                NewGame;
-                DrawGame(Sky_Map_View);
-                return Sky_Map_View;
+                ShowNewGameMenu;
+                Update_Screen;
+                return New_Game;
             when Character'Pos('l') | Character'Pos('L') => -- Load game
                 if Exists("data/savegame.dat") then
                     LoadGame;
