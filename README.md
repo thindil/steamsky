@@ -13,15 +13,22 @@ To build it, you need:
 * Any Ada language compiler, for example GCC with enabled Ada support or GNAT: 
   http://libre.adacore.com/download/
 
-* gprbuild program - should be available in most distributions, if not, download
-  from: http://libre.adacore.com/download/
-
 * ncurses Ada binding (should be available in most distributions or with ncurses 
   package or as standalone package). If not, you can download it from:
   http://invisible-island.net/ncurses/ncurses-Ada95.html
 
-If you have all, in main source code directory type: `gprbuild steamsky.gpr` for debug mode build 
-or for release mode: `gprbuild steamsky.gpr -XMode=release`
+* optional, but highly recommended:  gprbuild program - should be available in most 
+  distributions, if not, download from: http://libre.adacore.com/download/
+
+
+If you have all, in main source code directory type: 
+
+* if you don't have gprbuild: `gnatmake -j0 -P steamsky.gpr` for debug build or for
+  release version: `gnatmake -j0 -P steamsky.gpr -XMode=release`
+
+* if you have gprbuild: `gprbuild -j0 steamsky.gpr` for debug mode build 
+or for release mode: `gprbuild -j0 steamsky.gpr -XMode=release`
+
 
 ## Running game
 To run game need only ncurses library, available in all Linux distribution.
