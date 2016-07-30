@@ -184,6 +184,9 @@ package body UserInterface is
         Get_Cursor_Position(Line => Line, Column => Column);
         Move_Cursor(Line => (Line + 1), Column => 2);
         Add(Str => "* You and your crew must eat and drink. If you dont have food or drink onboard, your crew will slowly die from dehydration or starvation.");
+        Get_Cursor_Position(Line => Line, Column => Column);
+        Move_Cursor(Line => (Line + 1), Column => 2);
+        Add(Str => "* Travel time depends on skills of Pilot and Engineer (current members on this positions). Prices in bases depends on player skill Bartering - with higher skill you can sell items for more and buy for less.");
     end ShowHelp;
     
     procedure ShowConfirm is
