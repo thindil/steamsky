@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Version to savegame file which made saves from 0.1 incompatible
 - Window with informations about current location
 - Gaining experience in skill by crew members
+- Pilot/Engineer skills influence on flying time
 
 ### Changed
 - Updated README.md
