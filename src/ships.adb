@@ -25,8 +25,9 @@ package body Ships is
 
     procedure MoveShip(ShipIndex, X, Y: Integer) is
         NewX, NewY : Integer;
-        HavePilot, HaveEngineer : Boolean := False;
+        PilotIndex, EngineerIndex : Natural := 0;
         FuelNeeded : Integer;
+        TimePassed : Integer := 0;
     begin
         if ShipIndex = 0 then
             if PlayerShip.Speed = DOCKED then
@@ -39,17 +40,17 @@ package body Ships is
             end if;
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                 if PlayerShip.Crew.Element(I).Order = Pilot then
-                    HavePilot := True;
+                    PilotIndex := I;
                 end if;
                 if PlayerShip.Crew.Element(I).Order = Engineer then
-                    HaveEngineer := True;
+                    EngineerIndex := I;
                 end if;
             end loop;
-            if not HavePilot then
+            if PilotIndex = 0 then
                 ShowDialog("You dont have pilot on duty.");
                 return;
             end if;
-            if not HaveEngineer then
+            if EngineerIndex = 0 then
                 ShowDialog("You dont have engineer on duty.");
                 return;
             end if;
@@ -81,14 +82,37 @@ package body Ships is
             UpdateCargo(1, FuelNeeded);
             case PlayerShip.Speed is
                 when QUARTER_SPEED =>
-                    UpdateGame(120);
+                    TimePassed := 120;
                 when HALF_SPEED =>
-                    UpdateGame(60);
+                    TimePassed := 60;
                 when FULL_SPEED =>
-                    UpdateGame(30);
+                    TimePassed := 30;
                 when others =>
                     null;
             end case;
+            if TimePassed > 0 then
+                TimePassed := TimePassed - Integer(Float'Floor(Float(TimePassed) *
+                    (Float(PlayerShip.Crew.Element(PilotIndex).Skills(1, 1)) / 200.0)));
+                TimePassed := TimePassed - Integer(Float'Floor(Float(TimePassed) *
+                    (Float(PlayerShip.Crew.Element(EngineerIndex).Skills(2, 1)) / 200.0)));
+                case PlayerShip.Speed is
+                    when QUARTER_SPEED =>
+                        if TimePassed < 60 then
+                            TimePassed := 60;
+                        end if;
+                    when HALF_SPEED =>
+                        if TimePassed < 30 then
+                            TimePassed := 30;
+                        end if;
+                    when FULL_SPEED =>
+                        if TimePassed < 15 then
+                            TimePassed := 15;
+                        end if;
+                    when others =>
+                        null;
+                end case;
+                UpdateGame(TimePassed);
+            end if;
         end if;
     end MoveShip;
 
