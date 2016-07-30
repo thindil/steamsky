@@ -38,6 +38,8 @@ package body Bases is
             return;
         end if;
         Cost := BuyAmount * SkyBases(BaseIndex).Goods(ItemIndex).Price;
+        Cost := Cost - Integer(Float'Floor(Float(Cost) *
+                (Float(PlayerShip.Crew.Element(1).Skills(4, 1)) / 200.0)));
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if PlayerShip.Modules.Element(I).Mtype = CARGO then
                 FreeCargo := FreeCargo + PlayerShip.Modules.Element(I).Max_Value;
@@ -95,6 +97,8 @@ package body Bases is
             end if;
         end loop;
         Profit := SkyBases(BaseIndex).Goods(BaseItemIndex).Price * SellAmount;
+        Profit := Profit + Integer(Float'Floor(Float(Profit) *
+                (Float(PlayerShip.Crew.Element(1).Skills(4, 1)) / 200.0)));
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if PlayerShip.Modules.Element(I).Mtype = CARGO then
                 FreeCargo := FreeCargo + PlayerShip.Modules.Element(I).Max_Value;
