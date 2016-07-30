@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Confirmation dialog for quit to main menu
 - New game window with ability to set player and ship names
 - Version to savegame file which made saves from 0.1 incompatible
+- Window with informations about current location
 
 ### Changed
 - Updated README.md
