@@ -295,7 +295,6 @@ package body UserInterface is
                 ShowSkyMap;
             when Control_Speed =>
                 ShowSkyMap;
-                Refresh_Without_Update;
                 ShowSpeedControl;
             when Ship_Info =>
                 ShowShipInfo;
