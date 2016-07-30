@@ -87,6 +87,26 @@ package body Crew is
         return True;
     end Consume;
 
+    procedure GainExp(Amount : Natural; SkillNumber, CrewIndex : Positive) is
+        SkillExp, SkillLevel : Natural;
+        procedure UpdateSkill(Member : in out Member_Data) is
+        begin
+            Member.Skills(SkillNumber, 1) := SkillLevel;
+            Member.Skills(SkillNumber, 2) := SkillExp;
+        end UpdateSkill;
+    begin
+        if PlayerShip.Crew.Element(CrewIndex).Skills(SkillNumber, 1) = 100 then
+            return;
+        end if;
+        SkillLevel := PlayerShip.Crew.Element(CrewIndex).Skills(SkillNumber, 1);
+        SkillExp := PlayerShip.Crew.Element(CrewIndex).Skills(SkillNumber, 2) + Amount;
+        if SkillExp >= (SkillLevel * 100) then
+            SkillExp := SkillExp - (SkillLevel * 100);
+            SkillLevel := SkillLevel + 1;
+        end if;
+        PlayerShip.Crew.Update_Element(Index => CrewIndex, Process => UpdateSkill'Access);
+    end GainExp;
+
     procedure ShowCrewInfo(Key : Key_Code) is
         Health, Tired, Hungry, Thirsty, SkillLevel, OrderName : Unbounded_String;
         Skills_Names : constant array (1..4) of Unbounded_String := (To_Unbounded_String("Piloting"), 

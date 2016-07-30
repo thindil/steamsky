@@ -20,6 +20,7 @@ with Maps; use Maps;
 with Messages; use Messages;
 with Prototypes; use Prototypes;
 with UserInterface; use UserInterface;
+with Crew; use Crew;
 
 package body Bases is
 
@@ -66,6 +67,7 @@ package body Bases is
         end if;
         UpdateCargo(1, (0 - Cost));
         UpdateCargo(SkyBases(BaseIndex).Goods(ItemIndex).ProtoIndex, BuyAmount);
+        GainExp(1, 4, 1);
         AddMessage("You bought" & Positive'Image(BuyAmount) & " " & ItemName & " for" & Positive'Image(Cost) & " Charcollum.");
         UpdateGame(5);
     exception
@@ -111,6 +113,7 @@ package body Bases is
         end if;
         UpdateCargo(SkyBases(BaseIndex).Goods(BaseItemIndex).ProtoIndex, (0 - SellAmount));
         UpdateCargo(1, Profit);
+        GainExp(1, 4, 1);
         AddMessage("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" & Positive'Image(Profit) & " Charcollum.");
         UpdateGame(5);
     exception
