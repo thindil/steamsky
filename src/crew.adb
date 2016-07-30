@@ -208,16 +208,10 @@ package body Crew is
         OrdersWindow : Window;
         OrdersNames : constant array (1..4) of Unbounded_String := (To_Unbounded_String("Piloting"), 
             To_Unbounded_String("Engineering"), To_Unbounded_String("Gunner"), To_Unbounded_String("On break"));
-        StartIndex : Integer;
     begin
         OrdersWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
         Box(OrdersWindow);
-        if MemberIndex = 1 then
-            StartIndex := 1;
-        else
-            StartIndex := 2;
-        end if;
-        for I in StartIndex..OrdersNames'Last loop
+        for I in OrdersNames'Range loop
             Move_Cursor(OrdersWindow, Line => Line_Position(I + 1), Column => 5);
             Add(OrdersWindow, Str => To_String(OrdersNames(I)));
             Change_Attributes(OrdersWindow, Line => Line_Position(I + 1), Column => 5, Count => 1, Color => 1);
