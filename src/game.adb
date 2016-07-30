@@ -203,6 +203,7 @@ package body Game is
                 if TiredLevel > 100 then
                     TiredLevel := 100;
                 end if;
+                GainExp(TiredPoints, (Crew_Orders'Pos(PlayerShip.Crew.Element(I).Order) + 1), I);
             end if;
             HungerLevel := PlayerShip.Crew.Element(I).Hunger + TiredPoints;
             if HungerLevel > 100 then
