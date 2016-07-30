@@ -15,6 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ships; use Ships;
 with Bases; use Bases;
 with Game; use Game;
@@ -25,6 +27,7 @@ package body Maps is
         StartX : Integer;
         StartY : Integer;
         BaseIndex : Natural;
+        InfoWindow : Window;
     begin
         StartX := PlayerShip.SkyX - Integer(Columns / 2);
         if StartX < 0 then
@@ -66,6 +69,22 @@ package body Maps is
                 end if;
             end loop;
         end loop;
+        Refresh_Without_Update;
+        InfoWindow := Create(10, 20, 1, (Columns - 21));
+        Box(InfoWindow);
+        Move_Cursor(Win => InfoWindow, Line => 1, Column => 3);
+        Add(Win => InfoWindow, Str => "X:" & Positive'Image(PlayerShip.SkyX) & 
+            " Y:" & Positive'Image(PlayerShip.SkyY));
+        if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+            BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+            Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
+            Add(Win => InfoWindow, Str => To_String(SkyBases(BaseIndex).Name));
+            if SkyBases(BaseIndex).Visited then
+                Move_Cursor(Win => InfoWindow, Line => 4, Column => 2);
+                Add(Win => InfoWindow, Str => To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
+            end if;
+        end if;
+        Refresh(InfoWindow);
     end ShowSkyMap;
 
     function SkyMapKeys(Key : Key_Code) return Integer is
