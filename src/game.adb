@@ -51,9 +51,8 @@ package body Game is
             PosY := Rand_Int.Random(Generator);
             BaseType := Rand_Base.Random(Generator2);
             SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I));
-            SkyBases(Integer(I)) := (Name => To_Unbounded_String("Base" & Rand_Range'Image(I)),
-                Visited => False, SkyX => Integer(PosX), SkyY => Integer(PosY),
-                BaseType => Bases_Types'Val(BaseType));
+            SkyBases(Integer(I)) := (Name => GenerateBaseName, Visited => False, 
+                SkyX => Integer(PosX), SkyY => Integer(PosY), BaseType => Bases_Types'Val(BaseType));
         end loop;
         -- Place player ship in random base
         RandomBase := Rand_Int.Random(Generator);
