@@ -192,6 +192,7 @@ package body Game is
         -- Update crew
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Rest then
+                TiredLevel := 0;
                 if PlayerShip.Crew.Element(I).Tired > 0 then
                     TiredLevel := PlayerShip.Crew.Element(I).Tired - Minutes;
                     if TiredLevel < 0 then
