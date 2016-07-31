@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ships; use Ships;
 with Maps; use Maps;
 with Messages; use Messages;
@@ -117,6 +118,35 @@ package body Bases is
         when CONSTRAINT_ERROR =>
             ShowDialog("You must enter number as an amount to sell.");
     end SellItems;
+
+    function GenerateBaseName return Unbounded_String is
+        type Syllabes_Range is range 1..16;
+        StartSyllabes : constant array (Syllabes_Range) of Unbounded_String := 
+            (To_Unbounded_String("Ael"), To_Unbounded_String("Ash"),
+            To_Unbounded_String("Barrow"), To_Unbounded_String("Bel"),
+            To_Unbounded_String("Black"), To_Unbounded_String("Clear"),
+            To_Unbounded_String("Cold"), To_Unbounded_String("Crystal"),
+            To_Unbounded_String("Deep"), To_Unbounded_String("Edge"),
+            To_Unbounded_String("Falcon"), To_Unbounded_String("Fair"),
+            To_Unbounded_String("Fall"), To_Unbounded_String("Glass"),
+            To_Unbounded_String("Gold"), To_Unbounded_String("Ice"));
+        EndSyllabes : constant array (Syllabes_Range) of Unbounded_String :=
+            (To_Unbounded_String("ash"), To_Unbounded_String("burn"),
+            To_Unbounded_String("barrow"), To_Unbounded_String("bridge"),
+            To_Unbounded_String("castle"), To_Unbounded_String("cliff"),
+            To_Unbounded_String("coast"), To_Unbounded_String("crest"),
+            To_Unbounded_String("dale"), To_Unbounded_String("dell"),
+            To_Unbounded_String("dor"), To_Unbounded_String("fall"),
+            To_Unbounded_String("field"), To_Unbounded_String("ford"),
+            To_Unbounded_String("fort"), To_Unbounded_String("gate"));
+        package Rand_Syllabe is new Discrete_Random(Syllabes_Range);
+        Generator : Rand_Syllabe.Generator;
+        NewName : Unbounded_String;
+    begin
+        Rand_Syllabe.Reset(Generator);
+        NewName := StartSyllabes(Rand_Syllabe.Random(Generator)) & EndSyllabes(Rand_Syllabe.Random(Generator));
+        return NewName;
+    end GenerateBaseName;
 
     procedure ShowTrade(Key : Key_Code) is
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
