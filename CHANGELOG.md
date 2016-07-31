@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Player and gunner starts game with on break command
 - Show ship name instead speed in ship info screen
+- Moved more items informations to prototypes
 
 ### Fixed
 - Crash in save game when game was started from other directory
