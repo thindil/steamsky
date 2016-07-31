@@ -39,7 +39,6 @@ package body Game is
         ShipModules : Modules_Container.Vector;
         ShipCargo : Cargo_Container.Vector; 
         ShipCrew : Crew_Container.Vector;
-        Goods : Goods_Array;
     begin
         -- Set Game time
         GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
@@ -51,18 +50,10 @@ package body Game is
             PosX := Rand_Int.Random(Generator);
             PosY := Rand_Int.Random(Generator);
             BaseType := Rand_Base.Random(Generator2);
-            case BaseType is
-                when Bases_Types'Pos(Industrial) =>
-                    Goods := ((2, 2, False), (3, 2, False), (4, 3, True));
-                when Bases_Types'Pos(Agricultural) =>
-                    Goods := ((2, 1, True), (3, 1, True), (4, 5, False));
-                when Bases_Types'Pos(Refinery) =>
-                    Goods := ((2, 2, False), (3, 2, False), (4, 5, False));
-            end case;
             SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I));
             SkyBases(Integer(I)) := (Name => To_Unbounded_String("Base" & Rand_Range'Image(I)),
                 Visited => False, SkyX => Integer(PosX), SkyY => Integer(PosY),
-                BaseType => Bases_Types'Val(BaseType), Goods => Goods);
+                BaseType => Bases_Types'Val(BaseType));
         end loop;
         -- Place player ship in random base
         RandomBase := Rand_Int.Random(Generator);
@@ -267,17 +258,6 @@ package body Game is
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(Bases_Types'Pos(SkyBases(I).BaseType)));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            for J in Goods_Array'Range loop
-                RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Goods(J).ProtoIndex));
-                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Goods(J).Price));
-                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                if SkyBases(I).Goods(J).Buyable then
-                    Put(SaveGame, "1;");
-                else
-                    Put(SaveGame, "0;");
-                end if;
-            end loop;
         end loop;
         -- Save player ship
         Put(SaveGame, To_String(PlayerShip.Name) & ";");
@@ -374,21 +354,13 @@ package body Game is
         -- Load sky bases
         for I in SkyBases'Range loop
             SkyBases(I) := (Name => ReadData, Visited => False, SkyX => 0, SkyY => 0,
-                BaseType => Industrial, Goods => ((2, 2, False), (3, 2, False),
-                (4, 3, False)));
+                BaseType => Industrial);
             if To_String(ReadData) = "1" then
                 SkyBases(I).Visited := True;
             end if;
             SkyBases(I).SkyX := Integer'Value(To_String(ReadData));
             SkyBases(I).SkyY := Integer'Value(To_String(ReadData));
             SkyBases(I).BaseType := Bases_Types'Val(Integer'Value(To_String(ReadData)));
-            for J in Goods_Array'Range loop
-                SkyBases(I).Goods(J).ProtoIndex := Positive'Value(To_String(ReadData));
-                SkyBases(I).Goods(J).Price := Positive'Value(To_String(ReadData));
-                if To_String(ReadData) = "1" then
-                    SkyBases(I).Goods(J).Buyable := True;
-                end if;
-            end loop;
             SkyMap(SkyBases(I).SkyX, SkyBases(I).SkyY).BaseIndex := I;
         end loop;
         -- Load player ship

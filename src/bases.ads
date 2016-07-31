@@ -22,13 +22,6 @@ with Game; use Game;
 package Bases is
 
     type Bases_Types is (Industrial, Agricultural, Refinery);
-    type GoodData is -- Data structure for goods in bases
-        record
-            ProtoIndex : Positive; -- Prototype index for good
-            Price : Positive; -- Selling price of good
-            Buyable : Boolean; -- Did this item is buyable on this base
-        end record;
-    type Goods_Array is array(1..3) of GoodData;
     type BaseRecord is -- Data structure for bases
         record
             Name : Unbounded_String; -- Base name
@@ -36,7 +29,6 @@ package Bases is
             SkyX : Integer; -- X coordinate on sky map
             SkyY : Integer; -- Y coordinate on sky map
             BaseType : Bases_Types; -- Type of base
-            Goods: Goods_Array; -- List of goods for sale in base
         end record;
     SkyBases : array (1..1024) of BaseRecord; -- List of sky bases
     procedure BuyItems(ItemIndex : Positive; Amount : String); -- Buy items from bases
