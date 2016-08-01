@@ -119,7 +119,7 @@ package body Bases is
             ShowDialog("You must enter number as an amount to sell.");
     end SellItems;
 
-    function GenerateBaseName return Unbounded_String is
+    function GenerateBaseName return Unbounded_String is -- based on name generator from libtcod
         type Syllabes_Range is range 1..34;
         StartSyllabes : constant array (Syllabes_Range) of Unbounded_String := 
             (To_Unbounded_String("Ael"), To_Unbounded_String("Ash"),

@@ -108,7 +108,7 @@ package body Crew is
         PlayerShip.Crew.Update_Element(Index => CrewIndex, Process => UpdateSkill'Access);
     end GainExp;
 
-    function GenerateMemberName return Unbounded_String is
+    function GenerateMemberName return Unbounded_String is -- based on name generator from libtcod
         type Short_Range is range 1..2;
         type Start_Range is range 1..36;
         type Mid_Range is range 1..9;
