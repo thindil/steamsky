@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ships; use Ships;
 with Messages; use Messages;
 with UserInterface; use UserInterface;
@@ -106,6 +107,47 @@ package body Crew is
         end if;
         PlayerShip.Crew.Update_Element(Index => CrewIndex, Process => UpdateSkill'Access);
     end GainExp;
+
+    function GenerateMemberName return Unbounded_String is
+        type Short_Range is range 1..2;
+        type Start_Range is range 1..8;
+        type Mid_Range is range 1..9;
+        StartSyllMale : constant array(Start_Range) of Unbounded_String :=
+            (To_Unbounded_String("Aer"), To_Unbounded_String("An"),
+            To_Unbounded_String("Ar"), To_Unbounded_String("Ban"),
+            To_Unbounded_String("Ber"), To_Unbounded_String("Beth"),
+            To_Unbounded_String("Cut"), To_Unbounded_String("Dan"));
+        MiddleSyllMale : constant array(Mid_Range) of Unbounded_String :=
+            (To_Unbounded_String("al"), To_Unbounded_String("an"),
+            To_Unbounded_String("ar"), To_Unbounded_String("el"),
+            To_Unbounded_String("en"), To_Unbounded_String("ess"),
+            To_Unbounded_String("ian"), To_Unbounded_String("onn"),
+            To_Unbounded_String("or"));
+        EndSyllMale : constant array(Mid_Range) of Unbounded_String :=
+            (To_Unbounded_String("ai"), To_Unbounded_String("an"),
+            To_Unbounded_String("ar"), To_Unbounded_String("ath"),
+            To_Unbounded_String("en"), To_Unbounded_String("eo"),
+            To_Unbounded_String("is"), To_Unbounded_String("u"),
+            To_Unbounded_String("or"));
+        package Rand_Start is new Discrete_Random(Start_Range);
+        package Rand_Mid is new Discrete_Random(Mid_Range);
+        package Rand_Short is new Discrete_Random(Short_Range);
+        Generator : Rand_Start.Generator;
+        Generator2 : Rand_Mid.Generator;
+        Generator3 : Rand_Short.Generator;
+        NewName : Unbounded_String;
+    begin
+        Rand_Start.Reset(Generator);
+        Rand_Mid.Reset(Generator2);
+        Rand_Short.Reset(Generator3);
+        if Rand_Short.Random(Generator3) = 1 then
+            NewName := StartSyllMale(Rand_Start.Random(Generator)) & MiddleSyllMale(Rand_Mid.Random(Generator2)) &
+                EndSyllMale(Rand_Mid.Random(Generator2));
+        else
+            NewName := StartSyllMale(Rand_Start.Random(Generator)) & EndSyllMale(Rand_Mid.Random(Generator2));
+        end if;
+        return NewName;
+    end GenerateMemberName;
 
     procedure ShowCrewInfo(Key : Key_Code) is
         Health, Tired, Hungry, Thirsty, SkillLevel, OrderName : Unbounded_String;
