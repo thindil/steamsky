@@ -110,13 +110,27 @@ package body Crew is
 
     function GenerateMemberName return Unbounded_String is
         type Short_Range is range 1..2;
-        type Start_Range is range 1..8;
+        type Start_Range is range 1..36;
         type Mid_Range is range 1..9;
         StartSyllMale : constant array(Start_Range) of Unbounded_String :=
             (To_Unbounded_String("Aer"), To_Unbounded_String("An"),
             To_Unbounded_String("Ar"), To_Unbounded_String("Ban"),
             To_Unbounded_String("Ber"), To_Unbounded_String("Beth"),
-            To_Unbounded_String("Cut"), To_Unbounded_String("Dan"));
+            To_Unbounded_String("Cut"), To_Unbounded_String("Dan"),
+            To_Unbounded_String("Dar"), To_Unbounded_String("Dell"),
+            To_Unbounded_String("Der"), To_Unbounded_String("Edr"),
+            To_Unbounded_String("Er"), To_Unbounded_String("Eth"),
+            To_Unbounded_String("Ett"), To_Unbounded_String("Fin"),
+            To_Unbounded_String("Ian"), To_Unbounded_String("Iarr"),
+            To_Unbounded_String("Ill"), To_Unbounded_String("Jed"),
+            To_Unbounded_String("Kan"), To_Unbounded_String("Kar"),
+            To_Unbounded_String("Ker"), To_Unbounded_String("Kurr"),
+            To_Unbounded_String("Kyr"), To_Unbounded_String("Man"),
+            To_Unbounded_String("Mar"), To_Unbounded_String("Mer"),
+            To_Unbounded_String("Mir"), To_Unbounded_String("Tsal"),
+            To_Unbounded_String("Tser"), To_Unbounded_String("Tsir"),
+            To_Unbounded_String("Van"), To_Unbounded_String("Var"),
+            To_Unbounded_String("Yur"), To_Unbounded_String("Yyr"));
         MiddleSyllMale : constant array(Mid_Range) of Unbounded_String :=
             (To_Unbounded_String("al"), To_Unbounded_String("an"),
             To_Unbounded_String("ar"), To_Unbounded_String("el"),
