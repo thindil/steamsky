@@ -39,6 +39,7 @@ package body Game is
         ShipModules : Modules_Container.Vector;
         ShipCargo : Cargo_Container.Vector; 
         ShipCrew : Crew_Container.Vector;
+        PilotName, EngineerName, GunnerName : Unbounded_String;
     begin
         -- Set Game time
         GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
@@ -56,6 +57,10 @@ package body Game is
         end loop;
         -- Place player ship in random base
         RandomBase := Rand_Int.Random(Generator);
+        -- Generate names for crew
+        PilotName := GenerateMemberName;
+        EngineerName := GenerateMemberName;
+        GunnerName := GenerateMemberName;
         -- Create player ship with modules
         ShipModules.Append(New_Item => (Name => To_Unbounded_String("Hawk hull"), 
             MType => HULL, Weight => 8000, Current_Value => 10,
@@ -66,13 +71,13 @@ package body Game is
         ShipModules.Append(New_Item => (Name => CharName & To_Unbounded_String("'s Cabin"), 
             MTYPE => CABIN, Weight => 200, Current_Value => 20, Max_Value =>
             20, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Pilot's Cabin"), 
+        ShipModules.Append(New_Item => (Name => PilotName & To_Unbounded_String("'s Cabin"), 
             MTYPE => CABIN, Weight => 200, Current_Value => 20, Max_Value =>
             20, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Engineer's Cabin"), 
+        ShipModules.Append(New_Item => (Name => EngineerName & To_Unbounded_String("'s Cabin"), 
             MTYPE => CABIN, Weight => 200, Current_Value => 20, Max_Value =>
             20, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Gunner's Cabin"), 
+        ShipModules.Append(New_Item => (Name => GunnerName & To_Unbounded_String("'s Cabin"), 
             MTYPE => CABIN, Weight => 200, Current_Value => 20, Max_Value =>
             20, Durability => 100, MaxDurability => 100));
         ShipModules.Append(New_Item => (Name => To_Unbounded_String("Cocpit"), 
@@ -102,13 +107,13 @@ package body Game is
         ShipCrew.Append(New_Item => (Name => CharName,
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0), (1,0)), 
             Hunger => 0, Thirst => 0, Order => Rest)); 
-        ShipCrew.Append(New_Item => (Name => To_Unbounded_String("Pilot"),
+        ShipCrew.Append(New_Item => (Name => PilotName,
             Health => 100, Tired => 0, Skills => ((1, 0), (0, 0), (0, 0), (0,0)), 
             Hunger => 0, Thirst => 0, Order => Pilot)); 
-        ShipCrew.Append(New_Item => (Name => To_Unbounded_String("Engineer"),
+        ShipCrew.Append(New_Item => (Name => EngineerName,
             Health => 100, Tired => 0, Skills => ((0, 0), (1, 0), (0, 0), (0,0)), 
             Hunger => 0, Thirst => 0, Order => Engineer)); 
-        ShipCrew.Append(New_Item => (Name => To_Unbounded_String("Gunner"),
+        ShipCrew.Append(New_Item => (Name => GunnerName,
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (1, 0), (0, 0)),
             Hunger => 0, Thirst => 0, Order => Rest)); 
         PlayerShip := (Name => ShipName, SkyX => SkyBases(Integer(RandomBase)).SkyX, SkyY =>
