@@ -105,16 +105,16 @@ package body Game is
         ShipCargo.Append(New_Item => (ProtoIndex => 4, Amount => 500));
         -- Add crew to ship
         ShipCrew.Append(New_Item => (Name => CharName,
-            Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0), (1,0)), 
+            Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0), (5,0)), 
             Hunger => 0, Thirst => 0, Order => Rest)); 
         ShipCrew.Append(New_Item => (Name => PilotName,
-            Health => 100, Tired => 0, Skills => ((1, 0), (0, 0), (0, 0), (0,0)), 
+            Health => 100, Tired => 0, Skills => ((5, 0), (0, 0), (0, 0), (0,0)), 
             Hunger => 0, Thirst => 0, Order => Pilot)); 
         ShipCrew.Append(New_Item => (Name => EngineerName,
-            Health => 100, Tired => 0, Skills => ((0, 0), (1, 0), (0, 0), (0,0)), 
+            Health => 100, Tired => 0, Skills => ((0, 0), (5, 0), (0, 0), (0,0)), 
             Hunger => 0, Thirst => 0, Order => Engineer)); 
         ShipCrew.Append(New_Item => (Name => GunnerName,
-            Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (1, 0), (0, 0)),
+            Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (5, 0), (0, 0)),
             Hunger => 0, Thirst => 0, Order => Rest)); 
         PlayerShip := (Name => ShipName, SkyX => SkyBases(Integer(RandomBase)).SkyX, SkyY =>
             SkyBases(Integer(RandomBase)).SkyY, Speed => DOCKED, Modules =>
