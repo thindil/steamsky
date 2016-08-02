@@ -63,7 +63,10 @@ package body Game is
         GunnerName := GenerateMemberName;
         -- Create player ship with modules
         ShipModules.Append(New_Item => (Name => To_Unbounded_String("Hawk hull"), 
-            MType => HULL, Weight => 8000, Current_Value => 10,
+            MType => HULL, Weight => 4000, Current_Value => 10,
+            Max_Value => 10, Durability => 100, MaxDurability => 100));
+        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Bronze armor"), 
+            MType => ARMOR, Weight => 4000, Current_Value => 5,
             Max_Value => 10, Durability => 500, MaxDurability => 500));
         ShipModules.Append(New_Item => (Name => To_Unbounded_String("Small engine"), 
             MType => ENGINE, Weight => 1000, Current_Value => 0,
