@@ -192,11 +192,20 @@ package body UserInterface is
     
     procedure ShowConfirm(Message : String) is
         ConfirmWindow : Window;
+        Width : Positive;
+        Height : Positive := 1;
     begin
-        ConfirmWindow := Create(3, 39, (Lines / 2) - 2, (Columns / 2) - 19);
+        Width := Message'Length + 8;
+        if Width >= Positive(Columns - 4) then
+            Height := (Width / Positive(Columns - 4) + 2);
+            Width := (Width / Height) + 2;
+        end if;
+        Height := Height + 2;
+        ConfirmWindow := New_Window(Line_Position(Height),
+            Column_Position(Width), ((Lines / 2) - Line_Position(Height / 2)),
+            ((Columns / 2) - Column_Position(Width / 2)));
         Box(ConfirmWindow);
-        Move_Cursor(Win => ConfirmWindow, Line => 1, Column => 1);
-        Add(Win => ConfirmWindow, Str => Message & " (Y/N)");
+        Add(Win => ConfirmWindow, Str => Message & " (Y/N)", Line => 1, Column => 1);
         Refresh(ConfirmWindow);
     end ShowConfirm;
 
@@ -315,7 +324,7 @@ package body UserInterface is
                 ShowConfirm("Are you sure want to quit game?");
             when Combat_Confirm =>
                 Refresh_Without_Update;
-                ShowConfirm("We are attacked, engage? ");
+                ShowConfirm("We are attacked, engage?");
             when Combat_State =>
                 ShowCombat;
             when others =>
@@ -456,8 +465,8 @@ package body UserInterface is
                     return Combat_State;
                 end if;
             when others =>
-                DrawGame(Quit_Confirm);
-                return Quit_Confirm;
+                DrawGame(OldState);
+                return OldState;
         end case;
     end ConfirmKeys;
 
