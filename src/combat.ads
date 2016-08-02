@@ -20,5 +20,6 @@ package Combat is
     type Enemy_Types is (SmallPirateShip, SmallUndeadShip, SmallDrone); -- Types of enemies
 
     procedure StartCombat(EnemyType : Enemy_Types); -- Generate enemy and start battle
+    procedure ShowCombat; -- Show combat screen
 
 end Combat;

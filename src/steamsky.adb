@@ -75,15 +75,14 @@ begin
                 GameState := MainMenuKeys(Key);
             when Sky_Map_View =>
                 Result := SkyMapKeys(Key);
+                OldState := GameState;
                 case Result is
                     when 0 =>
-                        OldState := GameState;
                         GameState := GameMenuKeys(GameState, Key);
                     when 1 =>
                         GameState := CheckForEvent(GameState);
                         DrawGame(GameState);
                     when 2 =>
-                        OldState := GameState;
                         GameState := Control_Speed;
                         DrawGame(GameState);
                     when others =>
@@ -103,8 +102,8 @@ begin
                 GameState := TradeKeys(Key);
             when Help_View =>
                 GameState := HelpKeys(Key);
-            when Quit_Confirm =>
-                GameState := ConfirmKeys(OldState, Key);
+            when Quit_Confirm | Combat_Confirm =>
+                GameState := ConfirmKeys(GameState, Key);
             when New_Game =>
                 GameState := NewGameKeys(Key);
             when others =>

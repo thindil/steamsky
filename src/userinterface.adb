@@ -23,6 +23,7 @@ with Ships; use Ships;
 with Crew; use Crew;
 with Bases; use Bases;
 with Messages; use Messages;
+with Combat; use Combat;
 
 package body UserInterface is
 
@@ -189,13 +190,13 @@ package body UserInterface is
         Add(Str => "* Travel time depends on skills of Pilot and Engineer (current members on this positions). Prices in bases depends on player skill Bartering - with higher skill you can sell items for more and buy for less.");
     end ShowHelp;
     
-    procedure ShowConfirm is
+    procedure ShowConfirm(Message : String) is
         ConfirmWindow : Window;
     begin
         ConfirmWindow := Create(3, 39, (Lines / 2) - 2, (Columns / 2) - 19);
         Box(ConfirmWindow);
         Move_Cursor(Win => ConfirmWindow, Line => 1, Column => 1);
-        Add(Win => ConfirmWindow, Str => "Are you sure want to quit game? (Y/N)");
+        Add(Win => ConfirmWindow, Str => Message & " (Y/N)");
         Refresh(ConfirmWindow);
     end ShowConfirm;
 
@@ -311,7 +312,12 @@ package body UserInterface is
                 ShowHelp;
             when Quit_Confirm =>
                 Refresh_Without_Update;
-                ShowConfirm;
+                ShowConfirm("Are you sure want to quit game?");
+            when Combat_Confirm =>
+                Refresh_Without_Update;
+                ShowConfirm("We are attacked, engage? ");
+            when Combat_State =>
+                ShowCombat;
             when others =>
                 null;
         end case;
@@ -434,16 +440,21 @@ package body UserInterface is
     function ConfirmKeys(OldState : GameStates; Key : Key_Code) return GameStates is
     begin
         case Key is
-            when Character'Pos('n') | Character'Pos('N') => -- Stop quitting from game
-                DrawGame(OldState);
-                return OldState;
-            when Character'Pos('y') | Character'Pos('Y') => -- Quit from game
-                SaveGame;
-                ClearMessages;
-                Erase;
-                Refresh;
-                ShowMainMenu;
-                return Main_Menu;
+            when Character'Pos('n') | Character'Pos('N') => -- Back to old screen
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
+            when Character'Pos('y') | Character'Pos('Y') => -- Confirm action
+                if OldState = Quit_Confirm then
+                    SaveGame;
+                    ClearMessages;
+                    Erase;
+                    Refresh;
+                    ShowMainMenu;
+                    return Main_Menu;
+                else
+                    DrawGame(Combat_State);
+                    return Combat_State;
+                end if;
             when others =>
                 DrawGame(Quit_Confirm);
                 return Quit_Confirm;
