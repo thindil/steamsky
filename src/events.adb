@@ -18,10 +18,11 @@
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ships; use Ships;
 with Maps; use Maps;
+with Combat; use Combat;
 
 package body Events is
 
-    procedure GenerateEvent is
+    function CheckForEvent (OldState : GameStates) return GameStates is
         type Percent_Range is range 1..100;
         type Events_Range is range 1..3;
         package Rand_Roll is new Discrete_Random(Percent_Range);
@@ -32,12 +33,24 @@ package body Events is
     begin
         Event := No_Event;
         Rand_Roll.Reset(Generator);
-        Rand_Event.Reset(Generator);
+        Rand_Event.Reset(Generator2);
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then -- Outside bases
             if Rand_Roll.Random(Generator) < 10 then -- Combat
                 Event := Events_Types'Val(Rand_Event.Random(Generator2));
+                case Event is
+                    when Combat_Pirates =>
+                        StartCombat(SmallPirateShip);
+                    when Combat_Undead =>
+                        StartCombat(SmallUndeadShip);
+                    when Combat_ClockWork =>
+                        StartCombat(SmallDrone);
+                    when others =>
+                        null;
+                end case;
+                return Combat_State;
             end if;
         end if;
-    end GenerateEvent;
+        return OldState;
+    end CheckForEvent;
 
 end Events;
