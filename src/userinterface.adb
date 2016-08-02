@@ -216,7 +216,7 @@ package body UserInterface is
     begin
         Width := Message'Length + 2;
         if Width >= Positive(Columns - 4) then
-            Height := Width / Positive(Columns - 4);
+            Height := (Width / Positive(Columns - 4) + 2);
             Width := (Width / Height) + 2;
         end if;
         Height := Height + 2;
