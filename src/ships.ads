@@ -25,7 +25,7 @@ package Ships is
     type ShipSpeed is (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED,
         FULL_SPEED);
     type ModuleType is (ENGINE, CABIN, COCPIT, TURRET, GUN, CARGO, ALCHEMY_LAB,
-        HULL);
+        HULL, ARMOR);
     type ModuleData is -- Data structure for ship modules
         record
             Name : Unbounded_String; -- Name of module
