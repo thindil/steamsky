@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Pilot/Engineer skills influence on flying time
 - Player Bartering skill influence on item prices in bases
 - Random names for bases and crew members
+- Armor module for ships
 
 ### Changed
 - Updated README.md
