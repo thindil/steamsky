@@ -15,12 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Game; use Game;
-
-package Events is
+package Combat is
     
-    type Events_Types is (No_Event, Combat_Pirates, Combat_Undead, Combat_Clockwork); -- Types of events
+    type Enemy_Types is (SmallPirateShip, SmallUndeadShip, SmallDrone); -- Types of enemies
 
-    function CheckForEvent(OldState : GameStates) return GameStates; -- Check if event happen
+    procedure StartCombat(EnemyType : Enemy_Types); -- Generate enemy and start battle
 
-end Events;
+end Combat;

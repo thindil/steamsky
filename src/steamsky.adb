@@ -29,6 +29,7 @@ with Messages; use Messages;
 with Crew; use Crew;
 with Ships; use Ships;
 with Bases; use Bases;
+with Events; use Events;
 
 procedure SteamSky is
     GameState : GameStates := Main_Menu;
@@ -78,6 +79,9 @@ begin
                     when 0 =>
                         OldState := GameState;
                         GameState := GameMenuKeys(GameState, Key);
+                    when 1 =>
+                        GameState := CheckForEvent(GameState);
+                        DrawGame(GameState);
                     when 2 =>
                         OldState := GameState;
                         GameState := Control_Speed;
