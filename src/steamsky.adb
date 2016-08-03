@@ -30,6 +30,7 @@ with Crew; use Crew;
 with Ships; use Ships;
 with Bases; use Bases;
 with Events; use Events;
+with Combat; use Combat;
 
 procedure SteamSky is
     GameState : GameStates := Main_Menu;
@@ -106,6 +107,8 @@ begin
                 GameState := ConfirmKeys(GameState, Key);
             when New_Game =>
                 GameState := NewGameKeys(Key);
+            when Combat_State =>
+                GameState := CombatKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;

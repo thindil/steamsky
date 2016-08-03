@@ -15,11 +15,15 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Terminal_Interface.Curses; use Terminal_Interface.Curses;
+with Game; use Game;
+
 package Combat is
     
     type Enemy_Types is (SmallPirateShip, SmallUndeadShip, SmallDrone); -- Types of enemies
 
     procedure StartCombat(EnemyType : Enemy_Types); -- Generate enemy and start battle
     procedure ShowCombat; -- Show combat screen
+    function CombatKeys(Key : Key_Code) return GameStates; -- Handle keys on combat screen
 
 end Combat;

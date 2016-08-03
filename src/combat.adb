@@ -16,9 +16,9 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Ships; use Ships;
 with Crew; use Crew;
+with UserInterface; use UserInterface;
 
 package body Combat is
     
@@ -55,6 +55,11 @@ package body Combat is
                     To_Unbounded_String("Long"), Speed => FULL_SPEED);
         end case;
     end StartCombat;
+
+    procedure CombatTurn is
+    begin
+        UpdateGame(1);
+    end CombatTurn;
 
     procedure ShowCombat is
         PilotName, EngineerName, GunnerName : Unbounded_String :=
@@ -122,6 +127,48 @@ package body Combat is
             when others =>
                 null;
         end case;
+        Move_Cursor(Line => 13, Column => (Columns / 2));
+        Add(Str => "SPACE for next turn");
+        Change_Attributes(Line => 13, Column => (Columns / 2),
+            Count => 5, Color => 1);
     end ShowCombat;
+
+    procedure ShowOrdersMenu(OrdersType : Positive) is
+        OrdersWindow : Window;
+    begin
+        OrdersWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
+        Box(OrdersWindow);
+        Refresh(OrdersWindow);
+    end ShowOrdersMenu;
+
+    function CombatKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when Character'Pos('p') | Character'Pos('P') => -- Give orders to pilot
+                Refresh_Without_Update;
+                ShowOrdersMenu(1);
+                Update_Screen;
+                return Combat_Orders;
+            when Character'Pos('e') | Character'Pos('E') => -- Give orders to engineer
+                Refresh_Without_Update;
+                ShowOrdersMenu(2);
+                Update_Screen;
+                return Combat_Orders;
+            when Character'Pos('g') | Character'Pos('G') => -- Give orders to gunner
+                Refresh_Without_Update;
+                ShowOrdersMenu(3);
+                Update_Screen;
+                return Combat_Orders;
+            when Character'Pos(' ') => -- Next combat turn
+                CombatTurn;
+                DrawGame(Combat_State);
+                return Combat_State;
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to main menu (test code)
+                DrawGame(Quit_Confirm);
+                return Quit_Confirm;
+            when others =>
+                return Combat_State;
+        end case;
+    end CombatKeys;
 
 end Combat;
