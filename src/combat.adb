@@ -133,11 +133,58 @@ package body Combat is
             Count => 5, Color => 1);
     end ShowCombat;
 
-    procedure ShowOrdersMenu(OrdersType : Positive) is
+    procedure ShowOrdersMenu(Order : Crew_Orders) is
         OrdersWindow : Window;
+        Line : Line_Position := 1;
+        MemberIndex : Natural := 0;
     begin
         OrdersWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
         Box(OrdersWindow);
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Order then
+                MemberIndex := I;
+                exit;
+            end if;
+        end loop;
+        if MemberIndex > 0 then
+            case Order is
+                when Pilot =>
+                    Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
+                    Add(Win => OrdersWindow, Str => "a Go closer");
+                    Move_Cursor(Win => OrdersWindow, Line => 2, Column => 1);
+                    Add(Win => OrdersWindow, Str => "b Keep distance");
+                    Move_Cursor(Win => OrdersWindow, Line => 3, Column => 1);
+                    Add(Win => OrdersWindow, Str => "c Evade");
+                    Move_Cursor(Win => OrdersWindow, Line => 4, Column => 1);
+                    Add(Win => OrdersWindow, Str => "d Escape");
+                    Line := 4;
+                when Engineer =>
+                    Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
+                    Add(Win => OrdersWindow, Str => "a Full stop");
+                    Move_Cursor(Win => OrdersWindow, Line => 2, Column => 1);
+                    Add(Win => OrdersWindow, Str => "b Quarter speed");
+                    Move_Cursor(Win => OrdersWindow, Line => 3, Column => 1);
+                    Add(Win => OrdersWindow, Str => "c Half speed");
+                    Move_Cursor(Win => OrdersWindow, Line => 4, Column => 1);
+                    Add(Win => OrdersWindow, Str => "d Full speed");
+                    Line := 4;
+                when Gunner =>
+                    Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
+                    Add(Win => OrdersWindow, Str => "a Stop shooting");
+                    Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
+                    Add(Win => OrdersWindow, Str => "a Precise fire");
+                    Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
+                    Add(Win => OrdersWindow, Str => "a Fire at will");
+                    Line := 3;
+                when others =>
+                    null;
+            end case;
+        end if;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            Move_Cursor(Win => OrdersWindow, Line => (Line + Line_Position(I)), Column => 1);
+            Add(Win => OrdersWindow, Str => Character'Val(64 + I) & " assign " &
+                To_String(PlayerShip.Crew.Element(I).Name));
+        end loop;
         Refresh(OrdersWindow);
     end ShowOrdersMenu;
 
@@ -146,17 +193,17 @@ package body Combat is
         case Key is
             when Character'Pos('p') | Character'Pos('P') => -- Give orders to pilot
                 Refresh_Without_Update;
-                ShowOrdersMenu(1);
+                ShowOrdersMenu(Pilot);
                 Update_Screen;
                 return Combat_Orders;
             when Character'Pos('e') | Character'Pos('E') => -- Give orders to engineer
                 Refresh_Without_Update;
-                ShowOrdersMenu(2);
+                ShowOrdersMenu(Engineer);
                 Update_Screen;
                 return Combat_Orders;
             when Character'Pos('g') | Character'Pos('G') => -- Give orders to gunner
                 Refresh_Without_Update;
-                ShowOrdersMenu(3);
+                ShowOrdersMenu(Gunner);
                 Update_Screen;
                 return Combat_Orders;
             when Character'Pos(' ') => -- Next combat turn
