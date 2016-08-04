@@ -19,6 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ships; use Ships;
 with Crew; use Crew;
 with UserInterface; use UserInterface;
+with Messages; use Messages;
 
 package body Combat is
     
@@ -212,6 +213,10 @@ package body Combat is
         Add(Str => "SPACE for next turn");
         Change_Attributes(Line => 13, Column => (Columns / 2),
             Count => 5, Color => 1);
+        for I in -5..-1 loop
+            Move_Cursor(Line => Lines + Line_Position(I), Column => 2);
+            Add(Str => GetMessage(I));
+        end loop;
     end ShowCombat;
 
     procedure ShowOrdersMenu is
