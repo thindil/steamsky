@@ -60,11 +60,11 @@ package body Messages is
         if MessageIndex > Integer(Messages_List.Length) then
             return "";
         end if;
-        if MessageIndex < 0 then
+        if MessageIndex < 1 then
             if Integer(Messages_List.Length) + MessageIndex < 1 then
                 return "";
             else
-                return To_String(Messages_List.Element(Integer(Messages_List.Length) - MessageIndex));
+                return To_String(Messages_List.Element(Integer(Messages_List.Length) + MessageIndex));
             end if;
         end if;
         return To_String(Messages_List.Element(MessageIndex));
