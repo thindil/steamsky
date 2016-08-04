@@ -111,18 +111,24 @@ package body Combat is
                 when Pilot =>
                     if OrderIndex <= PilotOrders'Length then
                         PilotOrder := OrderIndex;
+                        AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
+                            " was set on: " & To_String(PilotOrders(PilotOrder)));
                     else
                         GiveOrders((OrderIndex - PilotOrders'Length), Order);
                     end if;
                 when Engineer =>
                     if OrderIndex <= EngineerOrders'Length then
                         EngineerOrder := OrderIndex;
+                        AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
+                            " was set on: " & To_String(EngineerOrders(EngineerOrder)));
                     else
                         GiveOrders((OrderIndex - EngineerOrders'Length), Order);
                     end if;
                 when Gunner =>
                     if OrderIndex <= GunnerOrders'Length then
                         GunnerOrder := OrderIndex;
+                        AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
+                            " was set on: " & To_String(GunnerOrders(GunnerOrder)));
                     else
                         GiveOrders((OrderIndex - GunnerOrders'Length), Order);
                     end if;
@@ -213,7 +219,7 @@ package body Combat is
         Add(Str => "SPACE for next turn");
         Change_Attributes(Line => 13, Column => (Columns / 2),
             Count => 5, Color => 1);
-        for I in -5..-1 loop
+        for I in -10..-1 loop
             Move_Cursor(Line => Lines + Line_Position(I), Column => 2);
             Add(Str => GetMessage((I + 1)));
         end loop;
