@@ -43,6 +43,7 @@ package body Combat is
         To_Unbounded_String("Full speed"));
     GunnerOrders : constant array (1..3) of Unbounded_String := (To_Unbounded_String("Don't shoot"),
         To_Unbounded_String("Precise fire"), To_Unbounded_String("Fire at will"));
+    Order : Crew_Orders;
 
     procedure StartCombat(EnemyType : Enemy_Types) is
     begin
@@ -72,6 +73,38 @@ package body Combat is
     begin
         UpdateGame(1);
     end CombatTurn;
+
+    function CombatOrders(Key : Key_Code) return GameStates is
+        KeyMax : Key_Code;
+        MemberIndex : Natural := 0;
+    begin
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Order then
+                MemberIndex := I;
+                exit;
+            end if;
+        end loop;
+        if MemberIndex > 0 then
+            case Order is
+                when Pilot =>
+                    KeyMax := Key_Code(PlayerShip.Crew.Length) + PilotOrders'Length + 96;
+                when Engineer =>
+                    KeyMax := Key_Code(PlayerShip.Crew.Length) + EngineerOrders'Length + 96;
+                when Gunner =>
+                    KeyMax := Key_Code(PlayerShip.Crew.Length) + GunnerOrders'Length + 96;
+                when others =>
+                    null;
+            end case;
+        else
+            KeyMax := Key_Code(PlayerShip.Crew.Length) + 96;
+        end if;
+        if Key < 97 or Key > KeyMax then
+            return Combat_Orders;
+        else
+            DrawGame(Combat_State);
+            return Combat_State;
+        end if;
+    end CombatOrders;
 
     procedure ShowCombat is
         PilotName, EngineerName, GunnerName : Unbounded_String :=
@@ -154,7 +187,7 @@ package body Combat is
             Count => 5, Color => 1);
     end ShowCombat;
 
-    procedure ShowOrdersMenu(Order : Crew_Orders) is
+    procedure ShowOrdersMenu is
         OrdersWindow : Window;
         Line : Line_Position := 0;
         MemberIndex : Natural := 0;
@@ -221,18 +254,21 @@ package body Combat is
     begin
         case Key is
             when Character'Pos('p') | Character'Pos('P') => -- Give orders to pilot
+                Order := Pilot;
                 Refresh_Without_Update;
-                ShowOrdersMenu(Pilot);
+                ShowOrdersMenu;
                 Update_Screen;
                 return Combat_Orders;
             when Character'Pos('e') | Character'Pos('E') => -- Give orders to engineer
+                Order := Engineer;
                 Refresh_Without_Update;
-                ShowOrdersMenu(Engineer);
+                ShowOrdersMenu;
                 Update_Screen;
                 return Combat_Orders;
             when Character'Pos('g') | Character'Pos('G') => -- Give orders to gunner
+                Order := Gunner;
                 Refresh_Without_Update;
-                ShowOrdersMenu(Gunner);
+                ShowOrdersMenu;
                 Update_Screen;
                 return Combat_Orders;
             when Character'Pos(' ') => -- Next combat turn
@@ -254,7 +290,7 @@ package body Combat is
                 DrawGame(Combat_State);
                 return Combat_State;
             when others =>
-                return Combat_Orders;
+                return CombatOrders(Key);
         end case;
     end CombatOrdersKeys;
 
