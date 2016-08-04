@@ -135,7 +135,7 @@ package body Combat is
 
     procedure ShowOrdersMenu(Order : Crew_Orders) is
         OrdersWindow : Window;
-        Line : Line_Position := 1;
+        Line : Line_Position := 0;
         MemberIndex : Natural := 0;
     begin
         OrdersWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
@@ -151,30 +151,52 @@ package body Combat is
                 when Pilot =>
                     Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
                     Add(Win => OrdersWindow, Str => "a Go closer");
+                    Change_Attributes(Win => OrdersWindow, Line => 1, Column => 1, 
+                        Count => 1, Color => 1);
                     Move_Cursor(Win => OrdersWindow, Line => 2, Column => 1);
                     Add(Win => OrdersWindow, Str => "b Keep distance");
+                    Change_Attributes(Win => OrdersWindow, Line => 2, Column => 1, 
+                        Count => 1, Color => 1);
                     Move_Cursor(Win => OrdersWindow, Line => 3, Column => 1);
                     Add(Win => OrdersWindow, Str => "c Evade");
+                    Change_Attributes(Win => OrdersWindow, Line => 3, Column => 1, 
+                        Count => 1, Color => 1);
                     Move_Cursor(Win => OrdersWindow, Line => 4, Column => 1);
                     Add(Win => OrdersWindow, Str => "d Escape");
+                    Change_Attributes(Win => OrdersWindow, Line => 4, Column => 1, 
+                        Count => 1, Color => 1);
                     Line := 4;
                 when Engineer =>
                     Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
                     Add(Win => OrdersWindow, Str => "a Full stop");
+                    Change_Attributes(Win => OrdersWindow, Line => 1, Column => 1, 
+                        Count => 1, Color => 1);
                     Move_Cursor(Win => OrdersWindow, Line => 2, Column => 1);
                     Add(Win => OrdersWindow, Str => "b Quarter speed");
+                    Change_Attributes(Win => OrdersWindow, Line => 2, Column => 1, 
+                        Count => 1, Color => 1);
                     Move_Cursor(Win => OrdersWindow, Line => 3, Column => 1);
                     Add(Win => OrdersWindow, Str => "c Half speed");
+                    Change_Attributes(Win => OrdersWindow, Line => 3, Column => 1, 
+                        Count => 1, Color => 1);
                     Move_Cursor(Win => OrdersWindow, Line => 4, Column => 1);
                     Add(Win => OrdersWindow, Str => "d Full speed");
+                    Change_Attributes(Win => OrdersWindow, Line => 4, Column => 1, 
+                        Count => 1, Color => 1);
                     Line := 4;
                 when Gunner =>
                     Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
                     Add(Win => OrdersWindow, Str => "a Stop shooting");
+                    Change_Attributes(Win => OrdersWindow, Line => 1, Column => 1, 
+                        Count => 1, Color => 1);
                     Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
                     Add(Win => OrdersWindow, Str => "b Precise fire");
+                    Change_Attributes(Win => OrdersWindow, Line => 2, Column => 1, 
+                        Count => 1, Color => 1);
                     Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
                     Add(Win => OrdersWindow, Str => "c Fire at will");
+                    Change_Attributes(Win => OrdersWindow, Line => 3, Column => 1, 
+                        Count => 1, Color => 1);
                     Line := 3;
                 when others =>
                     null;
@@ -184,10 +206,16 @@ package body Combat is
             if I /= MemberIndex then
                 Line := Line + 1;
                 Move_Cursor(Win => OrdersWindow, Line => Line, Column => 1);
-                Add(Win => OrdersWindow, Str => Character'Val(64 + I) & " assign " &
-                    To_String(PlayerShip.Crew.Element(I).Name));
+                Add(Win => OrdersWindow, Str => Character'Val(96 + Integer(Line)) & 
+                    " assign " & To_String(PlayerShip.Crew.Element(I).Name));
+                Change_Attributes(Win => OrdersWindow, Line => Line, Column => 1, 
+                    Count => 1, Color => 1);
             end if;
         end loop;
+        Move_Cursor(Win => OrdersWindow, Line => 8, Column => 1);
+        Add(Win => OrdersWindow, Str => "Quit");
+        Change_Attributes(Win => OrdersWindow, Line => 8, Column => 1, 
+            Count => 1, Color => 1);
         Refresh(OrdersWindow);
     end ShowOrdersMenu;
 
@@ -220,5 +248,16 @@ package body Combat is
                 return Combat_State;
         end case;
     end CombatKeys;
+
+    function CombatOrdersKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Dont give any new order
+                DrawGame(Combat_State);
+                return Combat_State;
+            when others =>
+                return Combat_Orders;
+        end case;
+    end CombatOrdersKeys;
 
 end Combat;
