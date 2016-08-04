@@ -330,7 +330,7 @@ package body UserInterface is
             when others =>
                 null;
         end case;
-        if LastMessage /= To_Unbounded_String("") then
+        if LastMessage /= To_Unbounded_String("") and CurrentState /= Combat_State then
             Move_Cursor(Line => 1, Column => 2);
             Add(Str => To_String(LastMessage));
             LastMessage := To_Unbounded_String("");
