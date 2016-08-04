@@ -172,18 +172,21 @@ package body Combat is
                     Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
                     Add(Win => OrdersWindow, Str => "a Stop shooting");
                     Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
-                    Add(Win => OrdersWindow, Str => "a Precise fire");
+                    Add(Win => OrdersWindow, Str => "b Precise fire");
                     Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
-                    Add(Win => OrdersWindow, Str => "a Fire at will");
+                    Add(Win => OrdersWindow, Str => "c Fire at will");
                     Line := 3;
                 when others =>
                     null;
             end case;
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            Move_Cursor(Win => OrdersWindow, Line => (Line + Line_Position(I)), Column => 1);
-            Add(Win => OrdersWindow, Str => Character'Val(64 + I) & " assign " &
-                To_String(PlayerShip.Crew.Element(I).Name));
+            if I /= MemberIndex then
+                Line := Line + 1;
+                Move_Cursor(Win => OrdersWindow, Line => Line, Column => 1);
+                Add(Win => OrdersWindow, Str => Character'Val(64 + I) & " assign " &
+                    To_String(PlayerShip.Crew.Element(I).Name));
+            end if;
         end loop;
         Refresh(OrdersWindow);
     end ShowOrdersMenu;
