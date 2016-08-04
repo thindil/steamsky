@@ -55,6 +55,21 @@ package body Messages is
         LastMessage := To_Unbounded_String(Message);
     end AddMessage;
 
+    function GetMessage(MessageIndex : Integer) return String is
+    begin
+        if MessageIndex > Integer(Messages_List.Length) then
+            return "";
+        end if;
+        if MessageIndex < 0 then
+            if Integer(Messages_List.Length) + MessageIndex < 1 then
+                return "";
+            else
+                return To_String(Messages_List.Element(Integer(Messages_List.Length) - MessageIndex));
+            end if;
+        end if;
+        return To_String(Messages_List.Element(MessageIndex));
+    end GetMessage;
+
     procedure ClearMessages is
     begin
         Messages_List.Clear;

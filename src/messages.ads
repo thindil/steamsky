@@ -24,6 +24,7 @@ package Messages is
     LastMessage : Unbounded_String := To_Unbounded_String(""); -- Last message received
     function FormatedTime return String; -- Format game time
     procedure AddMessage(Message : String); -- Add new message to list
+    function GetMessage(MessageIndex : Integer) return String; -- Return selected message
     procedure ClearMessages; -- Remove all messages;
     procedure ShowMessages; -- Show messages list
     function MessagesKeys(Key : Key_Code) return GameStates; -- Handle keys in messages list
