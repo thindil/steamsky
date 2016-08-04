@@ -77,6 +77,7 @@ package body Combat is
     function CombatOrders(Key : Key_Code) return GameStates is
         KeyMax : Key_Code;
         MemberIndex : Natural := 0;
+        OrderIndex : Positive;
     begin
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Order then
@@ -98,12 +99,38 @@ package body Combat is
         else
             KeyMax := Key_Code(PlayerShip.Crew.Length) + 96;
         end if;
-        if Key < 97 or Key > KeyMax then
+        if Key < 97 or Key > KeyMax then -- check if key is valid
             return Combat_Orders;
-        else
-            DrawGame(Combat_State);
-            return Combat_State;
         end if;
+        OrderIndex := Positive(Key - 96);
+        if MemberIndex = 0 then -- assign someone to position
+            GiveOrders(OrderIndex, Order);
+        else
+            case Order is
+                when Pilot =>
+                    if OrderIndex <= PilotOrders'Length then
+                        PilotOrder := OrderIndex;
+                    else
+                        GiveOrders((OrderIndex - PilotOrders'Length), Order);
+                    end if;
+                when Engineer =>
+                    if OrderIndex <= EngineerOrders'Length then
+                        EngineerOrder := OrderIndex;
+                    else
+                        GiveOrders((OrderIndex - EngineerOrders'Length), Order);
+                    end if;
+                when Gunner =>
+                    if OrderIndex <= GunnerOrders'Length then
+                        GunnerOrder := OrderIndex;
+                    else
+                        GiveOrders((OrderIndex - GunnerOrders'Length), Order);
+                    end if;
+                when others =>
+                    null;
+            end case;
+        end if;
+        DrawGame(Combat_State);
+        return Combat_State;
     end CombatOrders;
 
     procedure ShowCombat is
