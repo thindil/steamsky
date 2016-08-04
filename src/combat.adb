@@ -34,6 +34,15 @@ package body Combat is
             Speed : ShipSpeed; 
         end record;
     Enemy : Enemy_Record;
+    PilotOrder, EngineerOrder, GunnerOrder : Positive;
+    PilotOrders : constant array (1..4) of Unbounded_String := (To_Unbounded_String("Go closer"), 
+        To_Unbounded_String("Keep distance"), To_Unbounded_String("Evade"),
+        To_Unbounded_String("Escape"));
+    EngineerOrders : constant array (1..4) of Unbounded_String := (To_Unbounded_String("Full stop"), 
+        To_Unbounded_String("Quarter speed"), To_Unbounded_String("Half speed"),
+        To_Unbounded_String("Full speed"));
+    GunnerOrders : constant array (1..3) of Unbounded_String := (To_Unbounded_String("Don't shoot"),
+        To_Unbounded_String("Precise fire"), To_Unbounded_String("Fire at will"));
 
     procedure StartCombat(EnemyType : Enemy_Types) is
     begin
@@ -54,6 +63,9 @@ package body Combat is
                     => 1, MaxDurability => 50, Distance =>
                     To_Unbounded_String("Long"), Speed => FULL_SPEED);
         end case;
+        PilotOrder := 2;
+        EngineerOrder := 3;
+        GunnerOrder := 1;
     end StartCombat;
 
     procedure CombatTurn is
@@ -79,14 +91,23 @@ package body Combat is
         end loop;
         Move_Cursor(Line => 1, Column => 2);
         Add(Str => "Pilot: " & To_String(PilotName));
+        if PilotName /= To_Unbounded_String("Vacant") then
+            Add(Str => " -> " & To_String(PilotOrders(PilotOrder)));
+        end if;
         Change_Attributes(Line => 1, Column => 2,
             Count => 1, Color => 1);
         Move_Cursor(Line => 2, Column => 2);
         Add(Str => "Engineer: " & To_String(EngineerName));
+        if EngineerName /= To_Unbounded_String("Vacant") then
+            Add(Str => " -> " & To_String(EngineerOrders(EngineerOrder)));
+        end if;
         Change_Attributes(Line => 2, Column => 2,
             Count => 1, Color => 1);
         Move_Cursor(Line => 3, Column => 2);
         Add(Str => "Gunner: " & To_String(GunnerName));
+        if GunnerName /= To_Unbounded_String("Vacant") then
+            Add(Str => " -> " & To_String(GunnerOrders(GunnerOrder)));
+        end if;
         Change_Attributes(Line => 3, Column => 2,
             Count => 1, Color => 1);
         Move_Cursor(Line => 5, Column => 2);
@@ -149,55 +170,32 @@ package body Combat is
         if MemberIndex > 0 then
             case Order is
                 when Pilot =>
-                    Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
-                    Add(Win => OrdersWindow, Str => "a Go closer");
-                    Change_Attributes(Win => OrdersWindow, Line => 1, Column => 1, 
-                        Count => 1, Color => 1);
-                    Move_Cursor(Win => OrdersWindow, Line => 2, Column => 1);
-                    Add(Win => OrdersWindow, Str => "b Keep distance");
-                    Change_Attributes(Win => OrdersWindow, Line => 2, Column => 1, 
-                        Count => 1, Color => 1);
-                    Move_Cursor(Win => OrdersWindow, Line => 3, Column => 1);
-                    Add(Win => OrdersWindow, Str => "c Evade");
-                    Change_Attributes(Win => OrdersWindow, Line => 3, Column => 1, 
-                        Count => 1, Color => 1);
-                    Move_Cursor(Win => OrdersWindow, Line => 4, Column => 1);
-                    Add(Win => OrdersWindow, Str => "d Escape");
-                    Change_Attributes(Win => OrdersWindow, Line => 4, Column => 1, 
-                        Count => 1, Color => 1);
-                    Line := 4;
+                    for I in PilotOrders'Range loop
+                        Move_Cursor(Win => OrdersWindow, Line => Line_Position(I), Column => 1);
+                        Add(Win => OrdersWindow, Str => Character'Val(96 + I) &
+                            " " & To_String(PilotOrders(I)));
+                        Change_Attributes(Win => OrdersWindow, Line => Line_Position(I), Column => 1, 
+                            Count => 1, Color => 1);
+                    end loop;
+                    Line := PilotOrders'Length;
                 when Engineer =>
-                    Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
-                    Add(Win => OrdersWindow, Str => "a Full stop");
-                    Change_Attributes(Win => OrdersWindow, Line => 1, Column => 1, 
-                        Count => 1, Color => 1);
-                    Move_Cursor(Win => OrdersWindow, Line => 2, Column => 1);
-                    Add(Win => OrdersWindow, Str => "b Quarter speed");
-                    Change_Attributes(Win => OrdersWindow, Line => 2, Column => 1, 
-                        Count => 1, Color => 1);
-                    Move_Cursor(Win => OrdersWindow, Line => 3, Column => 1);
-                    Add(Win => OrdersWindow, Str => "c Half speed");
-                    Change_Attributes(Win => OrdersWindow, Line => 3, Column => 1, 
-                        Count => 1, Color => 1);
-                    Move_Cursor(Win => OrdersWindow, Line => 4, Column => 1);
-                    Add(Win => OrdersWindow, Str => "d Full speed");
-                    Change_Attributes(Win => OrdersWindow, Line => 4, Column => 1, 
-                        Count => 1, Color => 1);
-                    Line := 4;
+                    for I in EngineerOrders'Range loop
+                        Move_Cursor(Win => OrdersWindow, Line => Line_Position(I), Column => 1);
+                        Add(Win => OrdersWindow, Str => Character'Val(96 + I) &
+                            " " & To_String(EngineerOrders(I)));
+                        Change_Attributes(Win => OrdersWindow, Line => Line_Position(I), Column => 1, 
+                            Count => 1, Color => 1);
+                    end loop;
+                    Line := EngineerOrders'Length;
                 when Gunner =>
-                    Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
-                    Add(Win => OrdersWindow, Str => "a Stop shooting");
-                    Change_Attributes(Win => OrdersWindow, Line => 1, Column => 1, 
-                        Count => 1, Color => 1);
-                    Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
-                    Add(Win => OrdersWindow, Str => "b Precise fire");
-                    Change_Attributes(Win => OrdersWindow, Line => 2, Column => 1, 
-                        Count => 1, Color => 1);
-                    Move_Cursor(Win => OrdersWindow, Line => 1, Column => 1);
-                    Add(Win => OrdersWindow, Str => "c Fire at will");
-                    Change_Attributes(Win => OrdersWindow, Line => 3, Column => 1, 
-                        Count => 1, Color => 1);
-                    Line := 3;
+                    for I in GunnerOrders'Range loop
+                        Move_Cursor(Win => OrdersWindow, Line => Line_Position(I), Column => 1);
+                        Add(Win => OrdersWindow, Str => Character'Val(96 + I) &
+                            " " & To_String(GunnerOrders(I)));
+                        Change_Attributes(Win => OrdersWindow, Line => Line_Position(I), Column => 1, 
+                            Count => 1, Color => 1);
+                    end loop;
+                    Line := GunnerOrders'Length;
                 when others =>
                     null;
             end case;
