@@ -215,8 +215,9 @@ package body Combat is
             Count => 5, Color => 1);
         for I in -5..-1 loop
             Move_Cursor(Line => Lines + Line_Position(I), Column => 2);
-            Add(Str => GetMessage(I));
+            Add(Str => GetMessage((I + 1)));
         end loop;
+        LastMessage := To_Unbounded_String("");
     end ShowCombat;
 
     procedure ShowOrdersMenu is
