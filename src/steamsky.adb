@@ -109,6 +109,8 @@ begin
                 GameState := NewGameKeys(Key);
             when Combat_State =>
                 GameState := CombatKeys(Key);
+            when Combat_Orders =>
+                GameState := CombatOrdersKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
