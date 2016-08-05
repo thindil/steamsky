@@ -31,7 +31,7 @@ package body Combat is
             Damage : Positive;
             DamageRange : Natural;
             Accuracy : Positive;
-            Distance : Unbounded_String;
+            Distance : Natural;
             Speed : ShipSpeed; 
         end record;
     Enemy : Enemy_Record;
@@ -44,6 +44,9 @@ package body Combat is
         To_Unbounded_String("Full speed"));
     GunnerOrders : constant array (1..3) of Unbounded_String := (To_Unbounded_String("Don't shoot"),
         To_Unbounded_String("Precise fire"), To_Unbounded_String("Fire at will"));
+    DistanceNames : constant array (1..4) of Unbounded_String := (To_Unbounded_String("Close"),
+        To_Unbounded_String("Short"), To_Unbounded_String("Medium"),
+        To_Unbounded_String("Long"));
     Order : Crew_Orders;
 
     procedure StartCombat(EnemyType : Enemy_Types) is
@@ -52,18 +55,15 @@ package body Combat is
             when SmallPirateShip =>
                 Enemy := (Name => To_Unbounded_String("Small pirates ship"),
                     Durability => 100, Damage => 5, DamageRange => 1, Accuracy
-                    => 1, MaxDurability => 100, Distance =>
-                    To_Unbounded_String("Long"), Speed => FULL_SPEED);
+                    => 1, MaxDurability => 100, Distance => 4, Speed => FULL_SPEED);
             when SmallUndeadShip =>
                 Enemy := (Name => To_Unbounded_String("Small undead ship"),
                     Durability => 100, Damage => 10, DamageRange => 0, Accuracy
-                    => 1, MaxDurability => 100, Distance =>
-                    To_Unbounded_String("Long"), Speed => FULL_SPEED);
+                    => 1, MaxDurability => 100, Distance => 4, Speed => FULL_SPEED);
             when SmallDrone =>
                 Enemy := (Name => To_Unbounded_String("Small clockwork drone"),
                     Durability => 50, Damage => 5, DamageRange => 0, Accuracy
-                    => 1, MaxDurability => 50, Distance =>
-                    To_Unbounded_String("Long"), Speed => FULL_SPEED);
+                    => 1, MaxDurability => 50, Distance => 4, Speed => FULL_SPEED);
         end case;
         PilotOrder := 2;
         EngineerOrder := 3;
@@ -193,7 +193,7 @@ package body Combat is
         Move_Cursor(Line => 7, Column => (Columns / 2));
         Add(Str => "Enemy: " & To_String(Enemy.Name));
         Move_Cursor(Line => 8, Column => (Columns / 2));
-        Add(Str => "Distance: " & To_String(Enemy.Distance));
+        Add(Str => "Distance: " & To_String(DistanceNames(Enemy.Distance)));
         Move_Cursor(Line => 9, Column => (Columns / 2));
         Add(Str => "Status: ");
         if Enemy.Durability = Enemy.MaxDurability then
