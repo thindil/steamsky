@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ships; use Ships;
 with Crew; use Crew;
 with UserInterface; use UserInterface;
@@ -54,16 +55,16 @@ package body Combat is
         case EnemyType is
             when SmallPirateShip =>
                 Enemy := (Name => To_Unbounded_String("Small pirates ship"),
-                    Durability => 100, Damage => 5, DamageRange => 1, Accuracy
-                    => 1, MaxDurability => 100, Distance => 4, Speed => FULL_SPEED);
+                    Durability => 100, Damage => 5, DamageRange => 2, Accuracy
+                    => 1, MaxDurability => 100, Distance => 4, Speed => HALF_SPEED);
             when SmallUndeadShip =>
                 Enemy := (Name => To_Unbounded_String("Small undead ship"),
-                    Durability => 100, Damage => 10, DamageRange => 0, Accuracy
-                    => 1, MaxDurability => 100, Distance => 4, Speed => FULL_SPEED);
+                    Durability => 100, Damage => 10, DamageRange => 1, Accuracy
+                    => 1, MaxDurability => 100, Distance => 4, Speed => HALF_SPEED);
             when SmallDrone =>
                 Enemy := (Name => To_Unbounded_String("Small clockwork drone"),
-                    Durability => 50, Damage => 5, DamageRange => 0, Accuracy
-                    => 1, MaxDurability => 50, Distance => 4, Speed => FULL_SPEED);
+                    Durability => 50, Damage => 5, DamageRange => 1, Accuracy
+                    => 1, MaxDurability => 50, Distance => 4, Speed => HALF_SPEED);
         end case;
         PilotOrder := 2;
         EngineerOrder := 3;
@@ -71,7 +72,116 @@ package body Combat is
     end StartCombat;
 
     procedure CombatTurn is
+        type Roll_Range is range 1..100;
+        package Rand_Roll is new Discrete_Random(Roll_Range);
+        Generator : Rand_Roll.Generator;
+        AccuracyBonus, EvadeBonus : Integer := 0;
+        PilotIndex, EngineerIndex, GunnerIndex, WeaponIndex, AmmoIndex : Natural := 0;
+        Shoots : Integer;
     begin
+        Rand_Roll.Reset(Generator);
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            case PlayerShip.Crew.Element(I).Order is
+                when Pilot =>
+                    PilotIndex := I;
+                when Engineer =>
+                    EngineerIndex := I;
+                when Gunner =>
+                    GunnerIndex := I;
+                when others =>
+                    null;
+            end case;
+        end loop;
+        if PilotIndex > 0 then
+            case PilotOrder is
+                when 1 =>
+                    AccuracyBonus := 20;
+                    EvadeBonus := -10;
+                when 2 =>
+                    AccuracyBonus := 10;
+                    EvadeBonus := 0;
+                when 3 =>
+                    AccuracyBonus := 0;
+                    EvadeBonus := 10;
+                when 4 =>
+                    AccuracyBonus := -10;
+                    EvadeBonus := 20;
+                when others =>
+                    null;
+            end case;
+        end if;
+        if EngineerIndex > 0 then
+            case EngineerOrder is
+                when 1 =>
+                    AccuracyBonus := 40;
+                    EvadeBonus := -40;
+                when 2 =>
+                    AccuracyBonus := AccuracyBonus + 10;
+                    EvadeBonus := EvadeBonus - 10;
+                when 4 =>
+                    AccuracyBonus := AccuracyBonus - 10;
+                    EvadeBonus := EvadeBonus + 10;
+                when others =>
+                    null;
+            end case;
+        end if;
+        if PilotIndex > 0 and EngineerIndex > 0 then
+            if PilotOrder < 4 and EngineerOrder < 4 and Enemy.Distance > 1 then
+                Enemy.Distance := Enemy.Distance - 1;
+            end if;
+            if PilotOrder = 4 and EngineerOrder = 4 then
+                Enemy.Distance := Enemy.Distance + 1;
+            end if;
+        end if;
+        case Enemy.Distance is
+            when 1 =>
+                AccuracyBonus := AccuracyBonus + 20;
+                EvadeBonus := EvadeBonus - 10;
+            when 2 =>
+                AccuracyBonus := AccuracyBonus + 10;
+            when 4 =>
+                AccuracyBonus := AccuracyBonus - 10;
+                EvadeBonus := EvadeBonus + 10;
+            when others =>
+                null;
+        end case;
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if PlayerShip.Modules.Element(I).MType = GUN then
+                WeaponIndex := I;
+                exit;
+            end if;
+        end loop;
+        if GunnerIndex = 0 then
+            Shoots := -1;
+        else
+            case GunnerOrder is
+                when 2 =>
+                    AccuracyBonus := AccuracyBonus + 20;
+                    Shoots := 2;
+                when 3 =>
+                    Shoots := 3;
+                when others =>
+                    Shoots := 0;
+            end case;
+        end if;
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if PlayerShip.Cargo.Element(I).ProtoIndex = PlayerShip.Modules.Element(WeaponIndex).Current_Value then
+                AmmoIndex := I;
+                exit;
+            end if;
+        end loop;
+        if AmmoIndex = 0 then
+            Shoots := -2;
+        elsif PlayerShip.Cargo.Element(AmmoIndex).Amount < Shoots then
+            Shoots := PlayerShip.Cargo.Element(AmmoIndex).Amount;
+        end if;
+        if Shoots = -2 then
+            AddMessage("You don't have ammo to your gun!");
+        elsif Shoots > 0 then
+            for I in 1..Shoots loop
+                null;
+            end loop;
+        end if;
         UpdateGame(1);
     end CombatTurn;
 
