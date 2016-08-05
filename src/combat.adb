@@ -27,7 +27,7 @@ package body Combat is
     type Enemy_Record is -- Data structure for enemies
         record
             Name : Unbounded_String;
-            Durability : Natural;
+            Durability : Integer;
             MaxDurability : Natural;
             Damage : Positive;
             DamageRange : Natural;
@@ -78,6 +78,8 @@ package body Combat is
         AccuracyBonus, EvadeBonus : Integer := 0;
         PilotIndex, EngineerIndex, GunnerIndex, WeaponIndex, AmmoIndex : Natural := 0;
         Shoots : Integer;
+        HitChance : Integer;
+        ShootMessage : Unbounded_String;
     begin
         Rand_Roll.Reset(Generator);
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
@@ -124,6 +126,7 @@ package body Combat is
                 when others =>
                     null;
             end case;
+            ChangeShipSpeed(ShipSpeed'Val(EngineerOrder));
         end if;
         if PilotIndex > 0 and EngineerIndex > 0 then
             if PilotOrder < 4 and EngineerOrder < 4 and Enemy.Distance > 1 then
@@ -159,7 +162,7 @@ package body Combat is
                     AccuracyBonus := AccuracyBonus + 20;
                     Shoots := 2;
                 when 3 =>
-                    Shoots := 3;
+                    Shoots := 4;
                 when others =>
                     Shoots := 0;
             end case;
@@ -177,10 +180,34 @@ package body Combat is
         end if;
         if Shoots = -2 then
             AddMessage("You don't have ammo to your gun!");
-        elsif Shoots > 0 then
+        elsif Shoots > 0 then -- Player attacks
+            HitChance := AccuracyBonus + PlayerShip.Crew.Element(GunnerIndex).Skills(3, 1);
             for I in 1..Shoots loop
-                null;
+                ShootMessage := PlayerShip.Crew.Element(GunnerIndex).Name & To_Unbounded_String(" shoots to ") & 
+                    Enemy.Name;
+                if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
+                    Enemy.Durability := Enemy.Durability - PlayerShip.Modules.Element(WeaponIndex).Max_Value;
+                    ShootMessage := ShootMessage & To_Unbounded_String(" and hit.");
+                else
+                    ShootMessage := ShootMessage & To_Unbounded_String(" and miss.");
+                end if;
+                AddMessage(To_String(ShootMessage));
+                if Enemy.Durability < 1 then
+                    Enemy.Durability := 0;
+                    AddMessage("Enemy is destroyed!");
+                    exit;
+                end if;
             end loop;
+        end if;
+        if Enemy.Durability > 0 then -- Enemy attack
+            HitChance := Enemy.Accuracy - EvadeBonus;
+            ShootMessage := To_Unbounded_String("Enemy attacks you and ");
+            if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
+                ShootMessage := ShootMessage & To_Unbounded_String("hits.");
+            else
+                ShootMessage := ShootMessage & To_Unbounded_String("miss.");
+            end if;
+            AddMessage(To_String(ShootMessage));
         end if;
         UpdateGame(1);
     end CombatTurn;
