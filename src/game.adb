@@ -67,7 +67,7 @@ package body Game is
             Max_Value => 10, Durability => 100, MaxDurability => 100));
         ShipModules.Append(New_Item => (Name => To_Unbounded_String("Bronze armor"), 
             MType => ARMOR, Weight => 4000, Current_Value => 5,
-            Max_Value => 10, Durability => 500, MaxDurability => 500));
+            Max_Value => 10, Durability => 200, MaxDurability => 200));
         ShipModules.Append(New_Item => (Name => To_Unbounded_String("Small engine"), 
             MType => ENGINE, Weight => 1000, Current_Value => 0,
             Max_Value => 2000, Durability => 100, MaxDurability => 100));
