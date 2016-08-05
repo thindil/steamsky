@@ -45,9 +45,9 @@ package body Combat is
         To_Unbounded_String("Full speed"));
     GunnerOrders : constant array (1..3) of Unbounded_String := (To_Unbounded_String("Don't shoot"),
         To_Unbounded_String("Precise fire"), To_Unbounded_String("Fire at will"));
-    DistanceNames : constant array (1..4) of Unbounded_String := (To_Unbounded_String("Close"),
+    DistanceNames : constant array (1..5) of Unbounded_String := (To_Unbounded_String("Close"),
         To_Unbounded_String("Short"), To_Unbounded_String("Medium"),
-        To_Unbounded_String("Long"));
+        To_Unbounded_String("Long"), To_Unbounded_String("Escaped"));
     Order : Crew_Orders;
 
     procedure StartCombat(EnemyType : Enemy_Types) is
@@ -133,7 +133,7 @@ package body Combat is
             if PilotOrder < 4 and EngineerOrder < 4 and Enemy.Distance > 1 then
                 Enemy.Distance := Enemy.Distance - 1;
             end if;
-            if PilotOrder = 4 and EngineerOrder = 4 then
+            if PilotOrder = 4 and EngineerOrder = 4 and Enemy.Distance < 5 then
                 Enemy.Distance := Enemy.Distance + 1;
             end if;
         end if;
@@ -146,6 +146,9 @@ package body Combat is
             when 4 =>
                 AccuracyBonus := AccuracyBonus - 10;
                 EvadeBonus := EvadeBonus + 10;
+            when 5 =>
+                AddMessage("You escaped from " & To_String(Enemy.Name));
+                return;
             when others =>
                 null;
         end case;
@@ -356,29 +359,37 @@ package body Combat is
         Add(Str => "Distance: " & To_String(DistanceNames(Enemy.Distance)));
         Move_Cursor(Line => 9, Column => (Columns / 2));
         Add(Str => "Status: ");
-        if Enemy.Durability = Enemy.MaxDurability then
-            Add(Str => "Ok");
-        elsif Enemy.Durability > 0 then
-            Add(Str => "Damaged");
+        if Enemy.Distance < 5 then
+            if Enemy.Durability = Enemy.MaxDurability then
+                Add(Str => "Ok");
+            elsif Enemy.Durability > 0 then
+                Add(Str => "Damaged");
+            else
+                Add(Str => "Destroyed");
+            end if;
         else
-            Add(Str => "Destroyed");
+            Add(Str => "Unknown");
         end if;
         Move_Cursor(Line => 10, Column => (Columns / 2));
         Add(Str => "Speed: ");
-        case Enemy.Speed is
-            when FULL_STOP =>
-                Add(Str => "Stopped");
-            when QUARTER_SPEED =>
-                Add(Str => "Slow");
-            when HALF_SPEED =>
-                Add(Str => "Medium");
-            when FULL_SPEED =>
-                Add(Str => "Fast");
-            when others =>
-                null;
-        end case;
+        if Enemy.Distance < 5 then
+            case Enemy.Speed is
+                when FULL_STOP =>
+                    Add(Str => "Stopped");
+                when QUARTER_SPEED =>
+                    Add(Str => "Slow");
+                when HALF_SPEED =>
+                    Add(Str => "Medium");
+                when FULL_SPEED =>
+                    Add(Str => "Fast");
+                when others =>
+                    null;
+            end case;
+        else
+            Add(Str => "Unknown");
+        end if;
         Move_Cursor(Line => 13, Column => (Columns / 2));
-        if Enemy.Durability > 0 then
+        if Enemy.Durability > 0 and Enemy.Distance < 5 then
             Add(Str => "SPACE for next turn");
         else
             Add(Str => "SPACE for back to sky map");
@@ -477,7 +488,7 @@ package body Combat is
                 Update_Screen;
                 return Combat_Orders;
             when Character'Pos(' ') => -- Next combat turn or back to sky map if end combat
-                if Enemy.Durability > 0 then
+                if Enemy.Durability > 0 and Enemy.Distance < 5 then
                     CombatTurn;
                     DrawGame(Combat_State);
                     return Combat_State;
