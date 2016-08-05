@@ -49,6 +49,7 @@ package body Combat is
         To_Unbounded_String("Short"), To_Unbounded_String("Medium"),
         To_Unbounded_String("Long"), To_Unbounded_String("Escaped"));
     Order : Crew_Orders;
+    EndCombat : Boolean;
 
     procedure StartCombat(EnemyType : Enemy_Types) is
     begin
@@ -69,6 +70,7 @@ package body Combat is
         PilotOrder := 2;
         EngineerOrder := 3;
         GunnerOrder := 1;
+        EndCombat := False;
     end StartCombat;
 
     procedure CombatTurn is
@@ -81,6 +83,11 @@ package body Combat is
         Shoots : Integer;
         HitChance : Integer;
         ShootMessage : Unbounded_String;
+        HitLocation : Integer;
+        procedure UpdatePlayer(Player : in out Member_Data) is
+        begin
+            Player.Health := 0;
+        end UpdatePlayer;
     begin
         Rand_Roll.Reset(Generator);
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
@@ -148,6 +155,7 @@ package body Combat is
                 EvadeBonus := EvadeBonus + 10;
             when 5 =>
                 AddMessage("You escaped from " & To_String(Enemy.Name));
+                EndCombat := True;
                 return;
             when others =>
                 null;
@@ -213,6 +221,7 @@ package body Combat is
                     Enemy.Speed := FULL_STOP;
                     Shoots := I;
                     AddMessage(To_String(Enemy.Name) & " is destroyed!");
+                    EndCombat := True;
                     exit;
                 end if;
             end loop;
@@ -227,6 +236,27 @@ package body Combat is
                 if ArmorIndex > 0 then
                     UpdateModule(ArmorIndex, "Durability", (1 - Enemy.Damage));
                     ShootMessage := ShootMessage & To_Unbounded_String("armor.");
+                else
+                    HitLocation := Integer(Rand_Roll.Random(Generator)) / Integer(PlayerShip.Modules.Length);
+                    if HitLocation = 0 then
+                        HitLocation := 1;
+                    end if;
+                    while PlayerShip.Modules.Element(HitLocation).Durability = 0 loop
+                            HitLocation := HitLocation - 1;
+                    end loop;
+                    ShootMessage := ShootMessage & PlayerShip.Modules.Element(HitLocation).Name &
+                        To_Unbounded_String(".");
+                    UpdateModule(HitLocation, "Durability", (1 - Enemy.Damage));
+                    if (PlayerShip.Modules.Element(HitLocation).MType = HULL or
+                        PlayerShip.Modules.Element(HitLocation).MType = ENGINE)
+                    and PlayerShip.Modules.Element(HitLocation).Durability = 0 then
+                        PlayerShip.Crew.Update_Element(Index => 1, Process => UpdatePlayer'Access);
+                        AddMessage(To_String(ShootMessage));
+                        AddMessage("You died in ship explosion!");
+                        EndCombat := True;
+                        DrawGame(Combat_State);
+                        return;
+                    end if;
                 end if;
             else
                 ShootMessage := ShootMessage & To_Unbounded_String("miss.");
@@ -389,13 +419,15 @@ package body Combat is
             Add(Str => "Unknown");
         end if;
         Move_Cursor(Line => 13, Column => (Columns / 2));
-        if Enemy.Durability > 0 and Enemy.Distance < 5 then
+        if not EndCombat then
             Add(Str => "SPACE for next turn");
+            Change_Attributes(Line => 13, Column => (Columns / 2),
+                Count => 5, Color => 1);
         else
-            Add(Str => "SPACE for back to sky map");
+            Add(Str => "Hit any key for back to sky map");
+            Change_Attributes(Line => 13, Column => (Columns / 2),
+                Count => 3, Color => 1);
         end if;
-        Change_Attributes(Line => 13, Column => (Columns / 2),
-            Count => 5, Color => 1);
         for I in -10..-1 loop
             Move_Cursor(Line => Lines + Line_Position(I), Column => 2);
             Add(Str => GetMessage((I + 1)));
@@ -468,37 +500,37 @@ package body Combat is
 
     function CombatKeys(Key : Key_Code) return GameStates is
     begin
-        case Key is
-            when Character'Pos('p') | Character'Pos('P') => -- Give orders to pilot
-                Order := Pilot;
-                Refresh_Without_Update;
-                ShowOrdersMenu;
-                Update_Screen;
-                return Combat_Orders;
-            when Character'Pos('e') | Character'Pos('E') => -- Give orders to engineer
-                Order := Engineer;
-                Refresh_Without_Update;
-                ShowOrdersMenu;
-                Update_Screen;
-                return Combat_Orders;
-            when Character'Pos('g') | Character'Pos('G') => -- Give orders to gunner
-                Order := Gunner;
-                Refresh_Without_Update;
-                ShowOrdersMenu;
-                Update_Screen;
-                return Combat_Orders;
-            when Character'Pos(' ') => -- Next combat turn or back to sky map if end combat
-                if Enemy.Durability > 0 and Enemy.Distance < 5 then
+        if not EndCombat then
+            case Key is
+                when Character'Pos('p') | Character'Pos('P') => -- Give orders to pilot
+                    Order := Pilot;
+                    Refresh_Without_Update;
+                    ShowOrdersMenu;
+                    Update_Screen;
+                    return Combat_Orders;
+                when Character'Pos('e') | Character'Pos('E') => -- Give orders to engineer
+                    Order := Engineer;
+                    Refresh_Without_Update;
+                    ShowOrdersMenu;
+                    Update_Screen;
+                    return Combat_Orders;
+                when Character'Pos('g') | Character'Pos('G') => -- Give orders to gunner
+                    Order := Gunner;
+                    Refresh_Without_Update;
+                    ShowOrdersMenu;
+                    Update_Screen;
+                    return Combat_Orders;
+                when Character'Pos(' ') => -- Next combat turn or back to sky map if end combat
                     CombatTurn;
                     DrawGame(Combat_State);
                     return Combat_State;
-                else
-                    DrawGame(Sky_Map_View);
-                    return Sky_Map_View;
-                end if;
-            when others =>
-                return Combat_State;
-        end case;
+                when others =>
+                    return Combat_State;
+            end case;
+        else
+            DrawGame(Sky_Map_View);
+            return Sky_Map_View;
+        end if;
     end CombatKeys;
 
     function CombatOrdersKeys(Key : Key_Code) return GameStates is
