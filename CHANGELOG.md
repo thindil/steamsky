@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Wait 1 game minute command
-- Fatigue, hunger and thirst to crew members
+- Fatigue, hunger, thirst, health to crew members
 - Show last message on screen
 - Informations why action failed (trade/ship moving/orders)
 - Check for free cargo space during trade items
@@ -19,6 +19,8 @@ All notable changes to this project will be documented in this file.
 - Player Bartering skill influence on item prices in bases
 - Random names for bases and crew members
 - Armor module for ships
+- Combat between ships
+- Random event during fly (combat)
 
 ### Changed
 - Updated README.md
