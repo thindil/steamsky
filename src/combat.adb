@@ -207,6 +207,7 @@ package body Combat is
                 AddMessage(To_String(ShootMessage));
                 if Enemy.Durability < 1 then
                     Enemy.Durability := 0;
+                    Enemy.Speed := FULL_STOP;
                     Shoots := I;
                     AddMessage(To_String(Enemy.Name) & " is destroyed!");
                     exit;
@@ -339,10 +340,12 @@ package body Combat is
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             Move_Cursor(Line => Line_Position(6 + I), Column => 2);
             Add(Str => To_String(PlayerShip.Modules.Element(I).Name) & ": ");
-            if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+            if PlayerShip.Modules.Element(I).Durability = PlayerShip.Modules.Element(I).MaxDurability then
+                Add(Str => "Ok");
+            elsif PlayerShip.Modules.Element(I).Durability > 0 then
                 Add(Str => "Damaged");
             else
-                Add(Str => "OK");
+                Add(Str => "Destroyed");
             end if;
         end loop;
         Move_Cursor(Line => 5, Column => (Columns / 2));
@@ -355,8 +358,10 @@ package body Combat is
         Add(Str => "Status: ");
         if Enemy.Durability = Enemy.MaxDurability then
             Add(Str => "Ok");
-        else
+        elsif Enemy.Durability > 0 then
             Add(Str => "Damaged");
+        else
+            Add(Str => "Destroyed");
         end if;
         Move_Cursor(Line => 10, Column => (Columns / 2));
         Add(Str => "Speed: ");
