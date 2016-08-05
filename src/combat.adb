@@ -76,7 +76,8 @@ package body Combat is
         package Rand_Roll is new Discrete_Random(Roll_Range);
         Generator : Rand_Roll.Generator;
         AccuracyBonus, EvadeBonus : Integer := 0;
-        PilotIndex, EngineerIndex, GunnerIndex, WeaponIndex, AmmoIndex : Natural := 0;
+        PilotIndex, EngineerIndex, GunnerIndex, WeaponIndex, AmmoIndex,
+            ArmorIndex : Natural := 0;
         Shoots : Integer;
         HitChance : Integer;
         ShootMessage : Unbounded_String;
@@ -149,9 +150,15 @@ package body Combat is
                 null;
         end case;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).MType = GUN then
-                WeaponIndex := I;
-                exit;
+            if PlayerShip.Modules.Element(I).Durability > 0 then
+                case PlayerShip.Modules.Element(I).MType is
+                    when GUN =>
+                        WeaponIndex := I;
+                    when ARMOR =>
+                        ArmorIndex := I;
+                    when others =>
+                        null;
+                end case;
             end if;
         end loop;
         if GunnerIndex = 0 then
@@ -167,18 +174,24 @@ package body Combat is
                     Shoots := 0;
             end case;
         end if;
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).ProtoIndex = PlayerShip.Modules.Element(WeaponIndex).Current_Value then
-                AmmoIndex := I;
-                exit;
-            end if;
-        end loop;
+        if WeaponIndex = 0 then
+            Shoots := -3;
+        else
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if PlayerShip.Cargo.Element(I).ProtoIndex = PlayerShip.Modules.Element(WeaponIndex).Current_Value then
+                    AmmoIndex := I;
+                    exit;
+                end if;
+            end loop;
+        end if;
         if AmmoIndex = 0 then
             Shoots := -2;
         elsif PlayerShip.Cargo.Element(AmmoIndex).Amount < Shoots then
             Shoots := PlayerShip.Cargo.Element(AmmoIndex).Amount;
         end if;
-        if Shoots = -2 then
+        if Shoots = -3 then
+            AddMessage("You don't have gun to shoot!");
+        elsif Shoots = -2 then
             AddMessage("You don't have ammo to your gun!");
         elsif Shoots > 0 then -- Player attacks
             HitChance := AccuracyBonus + PlayerShip.Crew.Element(GunnerIndex).Skills(3, 1);
@@ -194,16 +207,23 @@ package body Combat is
                 AddMessage(To_String(ShootMessage));
                 if Enemy.Durability < 1 then
                     Enemy.Durability := 0;
-                    AddMessage("Enemy is destroyed!");
+                    Shoots := I;
+                    AddMessage(To_String(Enemy.Name) & " is destroyed!");
                     exit;
                 end if;
             end loop;
+            UpdateCargo(PlayerShip.Cargo.Element(AmmoIndex).ProtoIndex, (1 - Shoots));
+            GainExp(Shoots, 3, GunnerIndex);
         end if;
         if Enemy.Durability > 0 then -- Enemy attack
             HitChance := Enemy.Accuracy - EvadeBonus;
-            ShootMessage := To_Unbounded_String("Enemy attacks you and ");
+            ShootMessage := Enemy.Name & To_Unbounded_String(" attacks you and ");
             if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
-                ShootMessage := ShootMessage & To_Unbounded_String("hits.");
+                ShootMessage := ShootMessage & To_Unbounded_String("hits in ");
+                if ArmorIndex > 0 then
+                    UpdateModule(ArmorIndex, "Durability", (1 - Enemy.Damage));
+                    ShootMessage := ShootMessage & To_Unbounded_String("armor.");
+                end if;
             else
                 ShootMessage := ShootMessage & To_Unbounded_String("miss.");
             end if;
@@ -353,7 +373,11 @@ package body Combat is
                 null;
         end case;
         Move_Cursor(Line => 13, Column => (Columns / 2));
-        Add(Str => "SPACE for next turn");
+        if Enemy.Durability > 0 then
+            Add(Str => "SPACE for next turn");
+        else
+            Add(Str => "SPACE for back to sky map");
+        end if;
         Change_Attributes(Line => 13, Column => (Columns / 2),
             Count => 5, Color => 1);
         for I in -10..-1 loop
@@ -447,13 +471,15 @@ package body Combat is
                 ShowOrdersMenu;
                 Update_Screen;
                 return Combat_Orders;
-            when Character'Pos(' ') => -- Next combat turn
-                CombatTurn;
-                DrawGame(Combat_State);
-                return Combat_State;
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to main menu (test code)
-                DrawGame(Quit_Confirm);
-                return Quit_Confirm;
+            when Character'Pos(' ') => -- Next combat turn or back to sky map if end combat
+                if Enemy.Durability > 0 then
+                    CombatTurn;
+                    DrawGame(Combat_State);
+                    return Combat_State;
+                else
+                    DrawGame(Sky_Map_View);
+                    return Sky_Map_View;
+                end if;
             when others =>
                 return Combat_State;
         end case;
