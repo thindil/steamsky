@@ -188,6 +188,15 @@ package body UserInterface is
         Get_Cursor_Position(Line => Line, Column => Column);
         Move_Cursor(Line => (Line + 1), Column => 2);
         Add(Str => "* Travel time depends on skills of Pilot and Engineer (current members on this positions). Prices in bases depends on player skill Bartering - with higher skill you can sell items for more and buy for less.");
+        Get_Cursor_Position(Line => Line, Column => Column);
+        Move_Cursor(Line => (Line + 1), Column => 2);
+        Add(Str => "* To escape from fight, you must set Pilot order on Escape and Engineer order on Full Speed, after few turns (depends how far enemy was) you should escape.");
+        Get_Cursor_Position(Line => Line, Column => Column);
+        Move_Cursor(Line => (Line + 1), Column => 2);
+        Add(Str => "* Slow speed in combat helps your gunner hits enemies but also helps enemies hits you. If you want to have more chances to evade enemy attack, set speed to full speed. That same is with pilot orders - evade or escape order helps avoids attacks but also reduce your chance to hit enemies.");
+        Get_Cursor_Position(Line => Line, Column => Column);
+        Move_Cursor(Line => (Line + 1), Column => 2);
+        Add(Str => "* Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too and you die.");
     end ShowHelp;
     
     procedure ShowConfirm(Message : String) is
