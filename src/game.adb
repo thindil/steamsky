@@ -99,7 +99,7 @@ package body Game is
             MTYPE => TURRET, Weight => 50, Current_Value => 0, Max_Value =>
             0, Durability => 100, MaxDurability => 100));
         ShipModules.Append(New_Item => (Name => To_Unbounded_String("20mm gun"), 
-            MTYPE => GUN, Weight => 30, Current_Value => 1, Max_Value =>
+            MTYPE => GUN, Weight => 30, Current_Value => 4, Max_Value =>
             10, Durability => 20, MaxDurability => 20));
         -- Add cargo to ship
         ShipCargo.Append(New_Item => (ProtoIndex => 1, Amount => 2000));
