@@ -215,7 +215,7 @@ package body Combat is
             UpdateCargo(PlayerShip.Cargo.Element(AmmoIndex).ProtoIndex, (1 - Shoots));
             GainExp(Shoots, 3, GunnerIndex);
         end if;
-        if Enemy.Durability > 0 then -- Enemy attack
+        if Enemy.Durability > 0 and Enemy.Distance <= Enemy.DamageRange then -- Enemy attack
             HitChance := Enemy.Accuracy - EvadeBonus;
             ShootMessage := Enemy.Name & To_Unbounded_String(" attacks you and ");
             if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
