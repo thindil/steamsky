@@ -35,7 +35,7 @@ package body Events is
         Rand_Roll.Reset(Generator);
         Rand_Event.Reset(Generator2);
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
-            if Rand_Roll.Random(Generator) < 100 then -- Combat
+            if Rand_Roll.Random(Generator) < 10 then -- Combat
                 Event := Events_Types'Val(Rand_Event.Random(Generator2));
                 case Event is
                     when Combat_Pirates =>
