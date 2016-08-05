@@ -184,6 +184,26 @@ package body Ships is
         end if;
     end UpdateCargo;
 
+    procedure UpdateModule(ModuleIndex : Positive; Field : String; Value : Integer) is
+        NewDurability : Integer;
+        procedure UpdateMod(Module : in out ModuleData) is
+        begin
+            Module.Durability := NewDurability;
+        end UpdateMod;
+    begin
+        if ModuleIndex > Positive(PlayerShip.Modules.Length) then
+            return;
+        end if;
+        NewDurability := PlayerShip.Modules.Element(ModuleIndex).Durability;
+        if Field = "Durability" then
+            NewDurability := NewDurability + Value;
+            if NewDurability < 0 then
+                NewDurability := 0;
+            end if;
+        end if;
+        PlayerShip.Modules.Update_Element(Index => ModuleIndex, Process => UpdateMod'Access);
+    end UpdateModule;
+
     procedure ShowShipInfo is
         Weight : Integer;
         CargoWeight : Positive;
