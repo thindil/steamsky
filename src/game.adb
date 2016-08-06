@@ -131,6 +131,8 @@ package body Game is
         AddedHours, AddedMinutes : Natural;
         TiredPoints : Natural := 0;
         HealthLevel : Integer := 100;
+        RepairPoints : Natural := 0;
+        ProtoIndex : Positive;
         procedure UpdateMember(Member : in out Member_Data) is
         begin
             Member.Tired := TiredLevel;
@@ -212,6 +214,9 @@ package body Game is
                         GainExp(TiredPoints, 1, I);
                     when Engineer =>
                         GainExp(TiredPoints, 2, I);
+                    when Repair =>
+                        RepairPoints := RepairPoints + TiredPoints;
+                        GainExp(TiredPoints, 2, I);
                     when others =>
                         null;
                 end case;
@@ -235,6 +240,48 @@ package body Game is
             end if;
             PlayerShip.Crew.Update_Element(Index => I, Process => UpdateMember'Access);
         end loop;
+        -- Repair ship (if needed)
+        if RepairPoints > 0 then
+            -- Limit repair point depends on amount of repair materials
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Itype = RepairMaterial then
+                    if PlayerShip.Cargo.Element(I).Amount < RepairPoints then
+                        RepairPoints := PlayerShip.Cargo.Element(I).Amount;
+                    end if;
+                    ProtoIndex := PlayerShip.Cargo.Element(I).ProtoIndex;
+                    exit;
+                end if;
+            end loop;
+            -- Repair modules
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                    if PlayerShip.Modules.Element(I).Durability + RepairPoints > PlayerShip.Modules.Element(I).MaxDurability then
+                        RepairPoints := PlayerShip.Modules.Element(I).MaxDurability - (PlayerShip.Modules.Element(I).Durability +
+                            RepairPoints);
+                        UpdateCargo(ProtoIndex, (PlayerShip.Modules.Element(I).Durability - 
+                            PlayerShip.Modules.Element(I).MaxDurability));
+                        UpdateModule(I, "Durability", (PlayerShip.Modules.Element(I).MaxDurability - 
+                            PlayerShip.Modules.Element(I).Durability));
+                    else
+                        UpdateCargo(ProtoIndex, (1 - RepairPoints));
+                        UpdateModule(I, "Durability", RepairPoints);
+                        RepairPoints := 0;
+                    end if;
+                    if RepairPoints = 0 then
+                        exit;
+                    end if;
+                end if;
+            end loop;
+            -- Send repair team on break if all is ok
+            if RepairPoints > 0 then
+                AddMessage("All repairs are finished.");
+                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                    if PlayerShip.Crew.Element(I).Order = Repair then
+                        GiveOrders(I, Rest);
+                    end if;
+                end loop;
+            end if;
+        end if;
     end UpdateGame;
 
     procedure SaveGame is

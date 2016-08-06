@@ -27,6 +27,7 @@ package body Crew is
     procedure GiveOrders(MemberIndex : Positive; GivenOrder : Crew_Orders) is
         NewOrder : Crew_Orders;
         MemberName : constant String := To_String(PlayerShip.Crew.Element(MemberIndex).Name);
+        HaveMaterial, RepairNeeded : Boolean := False;
         procedure UpdateOrder(Member : in out Member_Data) is
         begin
             Member.Order := NewOrder;
@@ -51,13 +52,36 @@ package body Crew is
             AddMessage(MemberName & " is too thirsty to work.");
             return;
         end if;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = GivenOrder then
-                NewOrder := Rest;
-                PlayerShip.Crew.Update_Element(Index => I, Process => UpdateOrder'Access);
-                AddMessage(To_String(PlayerShip.Crew.Element(I).Name) & " going on break.");
+        if GivenOrder = Repair then
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).IType = RepairMaterial then
+                    HaveMaterial := True;
+                    exit;
+                end if;
+            end loop;
+            if not HaveMaterial then
+                AddMessage("You don't have repair materials.");
+                return;
             end if;
-        end loop;
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                    RepairNeeded := True;
+                    exit;
+                end if;
+            end loop;
+            if not RepairNeeded then
+                AddMessage("Your ship don't need repair.");
+                return;
+            end if;
+        else
+            for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                if PlayerShip.Crew.Element(I).Order = GivenOrder then
+                    NewOrder := Rest;
+                    PlayerShip.Crew.Update_Element(Index => I, Process => UpdateOrder'Access);
+                    AddMessage(To_String(PlayerShip.Crew.Element(I).Name) & " going on break.");
+                end if;
+            end loop;
+        end if;
         NewOrder := GivenOrder;
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
         case GivenOrder is
@@ -69,6 +93,8 @@ package body Crew is
                 AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " starts operating gun.");
             when Rest =>
                 AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " going on break.");
+            when Repair =>
+                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " starts repair ship.");
         end case;
     end GiveOrders;
 
@@ -247,6 +273,8 @@ package body Crew is
                         OrderName := To_Unbounded_String("Gunner");
                     when Rest =>
                         OrderName := To_Unbounded_String("On break");
+                    when Repair =>
+                        OrderName := To_Unbounded_String("Repair ship");
                 end case;
                 Move_Cursor(Line => 8, Column => (Columns / 2));
                 Add(Str => "Order: " & To_String(OrderName));
@@ -262,8 +290,9 @@ package body Crew is
 
     procedure ShowOrdersMenu is
         OrdersWindow : Window;
-        OrdersNames : constant array (1..4) of Unbounded_String := (To_Unbounded_String("Piloting"), 
-            To_Unbounded_String("Engineering"), To_Unbounded_String("Gunner"), To_Unbounded_String("On break"));
+        OrdersNames : constant array (1..5) of Unbounded_String := (To_Unbounded_String("Piloting"), 
+            To_Unbounded_String("Engineering"), To_Unbounded_String("Gunner"),
+            To_Unbounded_String("On break"), To_Unbounded_String("Repair ship"));
     begin
         OrdersWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
         Box(OrdersWindow);
@@ -331,6 +360,11 @@ package body Crew is
                 return Crew_Info;
             when Character'Pos('o') | Character'Pos('O') => -- Give order rest
                 GiveOrders(MemberIndex, Rest);
+                MemberIndex := 0;
+                DrawGame(Crew_Info);
+                return Crew_Info;
+            when Character'Pos('r') | Character'Pos('R') => -- Give order repair
+                GiveOrders(MemberIndex, Repair);
                 MemberIndex := 0;
                 DrawGame(Crew_Info);
                 return Crew_Info;
