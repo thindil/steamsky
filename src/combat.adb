@@ -21,6 +21,7 @@ with Ships; use Ships;
 with Crew; use Crew;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
+with Prototypes; use Prototypes;
 
 package body Combat is
     
@@ -84,6 +85,8 @@ package body Combat is
         HitChance : Integer;
         ShootMessage : Unbounded_String;
         HitLocation : Integer;
+        FreeCargo : Integer := 0;
+        LootAmount : Integer;
         procedure UpdatePlayer(Player : in out Member_Data) is
         begin
             Player.Health := 0;
@@ -167,6 +170,8 @@ package body Combat is
                         WeaponIndex := I;
                     when ARMOR =>
                         ArmorIndex := I;
+                    when CARGO =>
+                        FreeCargo := FreeCargo + PlayerShip.Modules.Element(I).Max_Value;
                     when others =>
                         null;
                 end case;
@@ -221,6 +226,19 @@ package body Combat is
                     Enemy.Speed := FULL_STOP;
                     Shoots := I;
                     AddMessage(To_String(Enemy.Name) & " is destroyed!");
+                    for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                        FreeCargo := FreeCargo - (Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Weight * 
+                            PlayerShip.Cargo.Element(I).Amount);
+                    end loop;
+                    LootAmount := Integer(Rand_Roll.Random(Generator));
+                    if (FreeCargo - LootAmount) < 0 then
+                        LootAmount := LootAmount - FreeCargo;
+                    end if;
+                    if LootAmount > 0 then
+                        AddMessage("You looted" & Integer'Image(LootAmount) & " Charcollum from " & 
+                            To_String(Enemy.Name) & ".");
+                        UpdateCargo(1, LootAmount);
+                    end if;
                     EndCombat := True;
                     exit;
                 end if;
