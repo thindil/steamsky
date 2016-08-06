@@ -189,6 +189,7 @@ package body Game is
         end if;
         -- Update crew
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            HealthLevel := PlayerShip.Crew.Element(I).Health;
             if PlayerShip.Crew.Element(I).Order = Rest then
                 TiredLevel := 0;
                 if PlayerShip.Crew.Element(I).Tired > 0 then
@@ -196,6 +197,9 @@ package body Game is
                     if TiredLevel < 0 then
                         TiredLevel := 0;
                     end if;
+                end if;
+                if HealthLevel < 100 then
+                    HealthLevel := HealthLevel + TiredPoints;
                 end if;
             else
                 TiredLevel := PlayerShip.Crew.Element(I).Tired + TiredPoints;
@@ -215,7 +219,6 @@ package body Game is
             if HungerLevel > 100 then
                 HungerLevel := 100;
             end if;
-            HealthLevel := PlayerShip.Crew.Element(I).Health;
             if PlayerShip.Crew.Element(I).Hunger = 100 then
                 HealthLevel := HealthLevel - TiredPoints;
             end if;
