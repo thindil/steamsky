@@ -350,7 +350,7 @@ package body Game is
             RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Cargo.Element(I).Amount));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         end loop;
-        RawValue := To_Unbounded_String(PlayerShip.Cargo.Length'Img);
+        RawValue := To_Unbounded_String(PlayerShip.Crew.Length'Img);
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             Put(SaveGame, To_String(PlayerShip.Crew.Element(I).Name) & ";");
