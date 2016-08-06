@@ -215,7 +215,9 @@ package body Game is
                     when Engineer =>
                         GainExp(TiredPoints, 2, I);
                     when Repair =>
-                        RepairPoints := RepairPoints + TiredPoints;
+                        if TiredPoints > 0 then
+                            RepairPoints := RepairPoints + TiredPoints + (PlayerShip.Crew.Element(I).Skills(2, 1) / 10);
+                        end if;
                         GainExp(TiredPoints, 2, I);
                     when others =>
                         null;
@@ -256,14 +258,14 @@ package body Game is
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                 if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
                     if PlayerShip.Modules.Element(I).Durability + RepairPoints > PlayerShip.Modules.Element(I).MaxDurability then
-                        RepairPoints := PlayerShip.Modules.Element(I).MaxDurability - (PlayerShip.Modules.Element(I).Durability +
-                            RepairPoints);
+                        RepairPoints := (PlayerShip.Modules.Element(I).Durability + RepairPoints) - 
+                            PlayerShip.Modules.Element(I).MaxDurability;
                         UpdateCargo(ProtoIndex, (PlayerShip.Modules.Element(I).Durability - 
                             PlayerShip.Modules.Element(I).MaxDurability));
                         UpdateModule(I, "Durability", (PlayerShip.Modules.Element(I).MaxDurability - 
                             PlayerShip.Modules.Element(I).Durability));
                     else
-                        UpdateCargo(ProtoIndex, (1 - RepairPoints));
+                        UpdateCargo(ProtoIndex, (0 - RepairPoints));
                         UpdateModule(I, "Durability", RepairPoints);
                         RepairPoints := 0;
                     end if;
