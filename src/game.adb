@@ -106,6 +106,7 @@ package body Game is
         ShipCargo.Append(New_Item => (ProtoIndex => 2, Amount => 100));
         ShipCargo.Append(New_Item => (ProtoIndex => 3, Amount => 200));
         ShipCargo.Append(New_Item => (ProtoIndex => 4, Amount => 500));
+        ShipCargo.Append(New_Item => (ProtoIndex => 5, Amount => 100));
         -- Add crew to ship
         ShipCrew.Append(New_Item => (Name => CharName,
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0), (5,0)), 

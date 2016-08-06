@@ -19,7 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Prototypes is
 
-    type Items_Types is (Fuel, Food, Drink, Ammo); -- Types of items
+    type Items_Types is (Fuel, Food, Drink, Ammo, RepairMaterial); -- Types of items
     type Object_Prices is array(1..3) of Natural; -- Prices of item in bases
     type Object_Buyable is array(1..3) of Boolean; -- Did item is buyable in bases
     type Object_Data is -- Data structure for objects prototypes
@@ -30,13 +30,15 @@ package Prototypes is
             Prices : Object_Prices; -- Prices of item in bases
             Buyable : Object_Buyable; -- Did item is buyable in selected bases
         end record;
-    Objects_Prototypes : constant array(1..4) of Object_Data := ((Name =>
+    Objects_Prototypes : constant array(1..5) of Object_Data := ((Name =>
         To_Unbounded_String("Charcollum"), Weight => 1, IType => Fuel, Prices =>
         (0, 0, 0), Buyable => (False, False, False)), (Name => To_Unbounded_String("Basic rations"), 
         Weight => 1, IType => Food, Prices => (2, 1, 2), Buyable => (False, True,
         False)), (Name => To_Unbounded_String("Water"), Weight => 1, IType =>
         Drink, Prices => (2, 1, 2), Buyable => (False, True, False)), (Name =>
         To_Unbounded_String("20mm ammo"), Weight => 1, IType => Ammo, Prices => (3,
-        5, 5), Buyable => (True, False, False)));
+        5, 5), Buyable => (True, False, False)), (Name =>
+        To_Unbounded_String("Bronze plates"),Weight => 5, IType =>
+        RepairMaterial, Prices => (2, 4, 4), Buyable => (True, False, False)));
 
 end Prototypes;
