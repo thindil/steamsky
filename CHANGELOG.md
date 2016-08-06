@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Armor module for ships
 - Combat between ships
 - Random event during fly (combat)
+- New item - bronze plates
 
 ### Changed
 - Updated README.md
