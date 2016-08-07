@@ -109,19 +109,19 @@ package body Game is
         ShipCargo.Append(New_Item => (ProtoIndex => 5, Amount => 100));
         -- Add crew to ship
         ShipCrew.Append(New_Item => (Name => CharName,
-            Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0), (5,0)), 
-            Hunger => 0, Thirst => 0, Order => Rest)); 
+            Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0),
+            (5,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest)); 
         ShipCrew.Append(New_Item => (Name => PilotName,
-            Health => 100, Tired => 0, Skills => ((5, 0), (0, 0), (0, 0), (0,0)), 
-            Hunger => 0, Thirst => 0, Order => Pilot)); 
+            Health => 100, Tired => 0, Skills => ((5, 0), (0, 0), (0, 0),
+            (0,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Pilot)); 
         ShipCrew.Append(New_Item => (Name => EngineerName,
-            Health => 100, Tired => 0, Skills => ((0, 0), (5, 0), (0, 0), (0,0)), 
-            Hunger => 0, Thirst => 0, Order => Engineer)); 
+            Health => 100, Tired => 0, Skills => ((0, 0), (5, 0), (0, 0),
+            (0,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Engineer)); 
         ShipCrew.Append(New_Item => (Name => GunnerName,
-            Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (5, 0), (0, 0)),
-            Hunger => 0, Thirst => 0, Order => Rest)); 
+            Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (5, 0), (0,
+            0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest)); 
         PlayerShip := (Name => ShipName, SkyX => SkyBases(Integer(RandomBase)).SkyX, SkyY =>
-            SkyBases(Integer(RandomBase)).SkyY, Speed => DOCKED, Modules =>
+            SkyBases(Integer(RandomBase)).SkyY, Speed => DOCKED, Craft => 0, Modules =>
             ShipModules, Cargo => ShipCargo, Crew => ShipCrew);
         SkyBases(Integer(RandomBase)).Visited := True;
     end NewGame;
@@ -327,6 +327,8 @@ package body Game is
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         RawValue := To_Unbounded_String(Integer'Image(ShipSpeed'Pos(PlayerShip.Speed)));
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Craft));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         RawValue := To_Unbounded_String(PlayerShip.Modules.Length'Img);
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
@@ -379,7 +381,7 @@ package body Game is
     function LoadGame return Boolean is
         SaveGame : File_Type;
         VectorLength : Positive;
-        Skills : Skills_Array := ((0, 0), (0, 0), (0, 0), (0 ,0));
+        Skills : Skills_Array := ((0, 0), (0, 0), (0, 0), (0 ,0), (0, 0));
         ShipModules : Modules_Container.Vector;
         ShipCargo : Cargo_Container.Vector; 
         ShipCrew : Crew_Container.Vector;
@@ -428,6 +430,7 @@ package body Game is
         PlayerShip.SkyX := Integer'Value(To_String(ReadData));
         PlayerShip.SkyY := Integer'Value(To_String(ReadData));
         PlayerShip.Speed := ShipSpeed'Val(Integer'Value(To_String(ReadData)));
+        PlayerShip.Craft := Integer'Value(To_String(ReadData));
         VectorLength := Positive'Value(To_String(ReadData));
         for I in 1..VectorLength loop
             ShipModules.Append(New_Item => (Name => ReadData, Mtype =>

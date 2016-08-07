@@ -50,6 +50,7 @@ package Ships is
             SkyX : Integer; -- X coordinate on sky map
             SkyY : Integer; -- Y coordinate on sky map
             Speed : ShipSpeed; -- Speed of ship
+            Craft : Natural; -- Recipe number to craft on ship
             Modules : Modules_Container.Vector; -- List of ship modules
             Cargo : Cargo_Container.Vector; -- List of ship cargo
             Crew : Crew_Container.Vector; -- List of ship crew

@@ -95,6 +95,8 @@ package body Crew is
                 AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " going on break.");
             when Repair =>
                 AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " starts repair ship.");
+            when Craft =>
+                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " starts manufacturing.");
         end case;
     end GiveOrders;
 
@@ -275,6 +277,8 @@ package body Crew is
                         OrderName := To_Unbounded_String("On break");
                     when Repair =>
                         OrderName := To_Unbounded_String("Repair ship");
+                    when Craft =>
+                        OrderName := To_Unbounded_String("Manufacturing");
                 end case;
                 Move_Cursor(Line => 8, Column => (Columns / 2));
                 Add(Str => "Order: " & To_String(OrderName));
