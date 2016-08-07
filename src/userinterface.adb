@@ -24,6 +24,7 @@ with Crew; use Crew;
 with Bases; use Bases;
 with Messages; use Messages;
 with Combat; use Combat;
+with Crafts; use Crafts;
 
 package body UserInterface is
 
@@ -73,13 +74,14 @@ package body UserInterface is
     begin
         case CurrentState is
             when Sky_Map_View | Control_Speed =>
-                Add(Str => "[Ship] [Crew] [Orders] [Messages] [Help] [Quit]");
+                Add(Str => "[Ship] [Crew] [Orders] [Craft] [Messages] [Help] [Quit]");
                 Change_Attributes(Line => 0, Column => 1, Count => 1, Color => 1);
                 Change_Attributes(Line => 0, Column => 8, Count => 1, Color => 1);
                 Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
-                Change_Attributes(Line => 0, Column => 24, Count => 1, Color => 1);
-                Change_Attributes(Line => 0, Column => 35, Count => 1, Color => 1);
-                Change_Attributes(Line => 0, Column => 42, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 25, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 32, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 43, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 50, Count => 1, Color => 1);
             when Ship_Info =>
                 Add(Str => "Ship Informations [Quit]");
                 Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
@@ -95,6 +97,9 @@ package body UserInterface is
             when Help_View =>
                 Add(Str => "Help [Quit]");
                 Change_Attributes(Line => 0, Column => 6, Count => 1, Color => 1);
+            when Craft_View =>
+                Add(Str => "Manufacturing [Quit]");
+                Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
             when others =>
                 null;
         end case;
@@ -336,6 +341,8 @@ package body UserInterface is
                 ShowConfirm("We are attacked, engage?");
             when Combat_State =>
                 ShowCombat;
+            when Craft_View =>
+                ShowCraft;
             when others =>
                 null;
         end case;
@@ -390,6 +397,9 @@ package body UserInterface is
             when Character'Pos('c') | Character'Pos('C') => -- Crew info screen
                 DrawGame(Crew_Info);
                 return Crew_Info;
+            when Character'Pos('r') | Character'Pos('R') => -- Crafting screen
+                DrawGame(Craft_View);
+                return Craft_View;
             when Character'Pos('m') | Character'Pos('M') => -- Messages list screen
                 DrawGame(Messages_View);
                 return Messages_View;
