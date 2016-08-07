@@ -37,19 +37,19 @@ package body Crew is
             return;
         end if;
         if PlayerShip.Crew.Element(MemberIndex).Health = 0 then
-            AddMessage("You can't give orders to dead crew.");
+            ShowDialog("You can't give orders to dead crew.");
             return;
         end if;
         if PlayerShip.Crew.Element(MemberIndex).Tired = 100 then
-            AddMessage(MemberName & " is too tired to work.");
+            ShowDialog(MemberName & " is too tired to work.");
             return;
         end if;
         if PlayerShip.Crew.Element(MemberIndex).Hunger = 100 then
-            AddMessage(MemberName & " is too hungry to work.");
+            ShowDialog(MemberName & " is too hungry to work.");
             return;
         end if;
         if PlayerShip.Crew.Element(MemberIndex).Thirst = 100 then
-            AddMessage(MemberName & " is too thirsty to work.");
+            ShowDialog(MemberName & " is too thirsty to work.");
             return;
         end if;
         if GivenOrder = Repair then
@@ -60,7 +60,7 @@ package body Crew is
                 end if;
             end loop;
             if not HaveMaterial then
-                AddMessage("You don't have repair materials.");
+                ShowDialog("You don't have repair materials.");
                 return;
             end if;
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
@@ -70,7 +70,7 @@ package body Crew is
                 end if;
             end loop;
             if not RepairNeeded then
-                AddMessage("Your ship don't need repair.");
+                ShowDialog("Your ship don't need repair.");
                 return;
             end if;
         else
