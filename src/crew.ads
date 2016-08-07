@@ -22,8 +22,8 @@ with Prototypes; use Prototypes;
 
 package Crew is
 
-    type Skills_Array is array(1..4, 1..2) of Natural;
-    type Crew_Orders is (Pilot, Engineer, Gunner, Rest, Repair);
+    type Skills_Array is array(1..5, 1..2) of Natural;
+    type Crew_Orders is (Pilot, Engineer, Gunner, Rest, Repair, Craft);
     type Member_Data is -- Data structure for ship crew member
         record
             Name : Unbounded_String; -- Name of member
