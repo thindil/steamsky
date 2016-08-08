@@ -342,7 +342,7 @@ package body UserInterface is
             when Combat_State =>
                 ShowCombat;
             when Craft_View =>
-                ShowCraft;
+                ShowCraft(KEY_NONE);
             when others =>
                 null;
         end case;
