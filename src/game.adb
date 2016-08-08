@@ -291,7 +291,8 @@ package body Game is
         -- Craft items
         if CrafterIndex > 0 and TiredPoints > 0 then
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if PlayerShip.Modules.Element(I).MType = Recipes(PlayerShip.Craft).Workplace then
+                if PlayerShip.Modules.Element(I).MType = Recipes(PlayerShip.Craft).Workplace and
+                    PlayerShip.Modules.ELement(I).Durability > 0 then
                     ModuleIndex := I;
                     exit;
                 end if;
