@@ -36,7 +36,8 @@ package body Crafts is
             end if;
         end loop;
         if MaterialIndex = 0 then
-            ShowDialog("You don't have enough materials to start manufacturing this recipe.");
+            ShowDialog("You don't have enough materials to start manufacturing " & 
+                To_String(Objects_Prototypes(Recipes(RecipeIndex).ResultIndex).Name) & ".");
             return;
         end if;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
@@ -58,6 +59,7 @@ package body Crafts is
         end if;
         PlayerShip.Craft := RecipeIndex;
         AddMessage(To_String(Objects_Prototypes(Recipes(RecipeIndex).ResultIndex).Name) & " was set as manufacturing order.");
+        RecipeIndex := 0;
     end SetRecipe;
 
     procedure ShowCraft(Key : Key_Code) is
@@ -117,9 +119,9 @@ package body Crafts is
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when Character'Pos(' ') => -- Set selected manufacturing order
-                ShowCraft(Key_Code(RecipeIndex + 96));
                 if RecipeIndex > 0 then
                     SetRecipe;
+                    DrawGame(Craft_View);
                 end if;
                 return Craft_View;
             when others =>
