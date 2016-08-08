@@ -193,9 +193,9 @@ package body Crew is
 
     procedure ShowCrewInfo(Key : Key_Code) is
         Health, Tired, Hungry, Thirsty, SkillLevel, OrderName : Unbounded_String;
-        Skills_Names : constant array (1..4) of Unbounded_String := (To_Unbounded_String("Piloting"), 
+        Skills_Names : constant array (1..5) of Unbounded_String := (To_Unbounded_String("Piloting"), 
             To_Unbounded_String("Engineering"), To_Unbounded_String("Gunnery"), 
-            To_Unbounded_String("Bartering"));
+            To_Unbounded_String("Bartering"), To_Unbounded_String("Alchemy"));
         SkillLine : Line_Position := 3;
     begin
         if Key /= KEY_NONE then
@@ -294,9 +294,10 @@ package body Crew is
 
     procedure ShowOrdersMenu is
         OrdersWindow : Window;
-        OrdersNames : constant array (1..5) of Unbounded_String := (To_Unbounded_String("Piloting"), 
+        OrdersNames : constant array (1..6) of Unbounded_String := (To_Unbounded_String("Piloting"), 
             To_Unbounded_String("Engineering"), To_Unbounded_String("Gunner"),
-            To_Unbounded_String("On break"), To_Unbounded_String("Repair ship"));
+            To_Unbounded_String("On break"), To_Unbounded_String("Repair ship"), 
+            To_Unbounded_String("Manufacturing"));
     begin
         OrdersWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
         Box(OrdersWindow);
@@ -369,6 +370,11 @@ package body Crew is
                 return Crew_Info;
             when Character'Pos('r') | Character'Pos('R') => -- Give order repair
                 GiveOrders(MemberIndex, Repair);
+                MemberIndex := 0;
+                DrawGame(Crew_Info);
+                return Crew_Info;
+            when Character'Pos('m') | Character'Pos('M') => -- Give order manufacturing
+                GiveOrders(MemberIndex, Craft);
                 MemberIndex := 0;
                 DrawGame(Crew_Info);
                 return Crew_Info;
