@@ -20,6 +20,7 @@ with Messages; use Messages;
 with Bases; use Bases;
 with Prototypes; use Prototypes;
 with UserInterface; use UserInterface;
+with Crafts; use Crafts;
 
 package body Ships is
 
@@ -211,10 +212,17 @@ package body Ships is
         Weight := 0;
         Move_Cursor(Line => 2, Column => 2);
         Add(Str => "Name: " & To_String(PlayerShip.Name));
-        Move_Cursor(Line => 4, Column => 2);
+        Move_Cursor(Line => 3, Column => 2);
+        Add(Str => "Manufacturing: ");
+        if PlayerShip.Craft = 0 then
+            Add(Str => "Nothing");
+        else
+            Add(Str => To_String(Objects_Prototypes(Recipes(PlayerShip.Craft).ResultIndex).Name));
+        end if;
+        Move_Cursor(Line => 5, Column => 2);
         Add(Str => "STATUS:");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            Move_Cursor(Line => Line_Position(4 + I), Column => 2);
+            Move_Cursor(Line => Line_Position(5 + I), Column => 2);
             Add(Str => To_String(PlayerShip.Modules.Element(I).Name) & ": ");
             if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
                 Add(Str => "Damaged");
@@ -223,17 +231,17 @@ package body Ships is
             end if;
             Weight := Weight + PlayerShip.Modules.Element(I).Weight;
         end loop;
-        Move_Cursor(Line => 4, Column => (Columns / 2));
+        Move_Cursor(Line => 5, Column => (Columns / 2));
         Add(Str => "CARGO:");
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
             CargoWeight := PlayerShip.Cargo.Element(I).Amount * Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Weight;
-            Move_Cursor(Line => Line_Position(4 + I), Column => (Columns / 2));
+            Move_Cursor(Line => Line_Position(5 + I), Column => (Columns / 2));
             Add(Str => Positive'Image(PlayerShip.Cargo.Element(I).Amount) & "x" &
                 To_String(Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Name) & " (" &
                 Positive'Image(CargoWeight) & "kg )");
             Weight := Weight + CargoWeight;
         end loop;
-        Move_Cursor(Line => 3, Column => 2);
+        Move_Cursor(Line => 2, Column => (Columns / 2));
         Add(Str => "Weight: " & Integer'Image(Weight) & "kg");
     end ShowShipInfo;
 
