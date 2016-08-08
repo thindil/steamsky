@@ -202,6 +202,9 @@ package body UserInterface is
         Get_Cursor_Position(Line => Line, Column => Column);
         Move_Cursor(Line => (Line + 1), Column => 2);
         Add(Str => "* Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too and you die.");
+        Get_Cursor_Position(Line => Line, Column => Column);
+        Move_Cursor(Line => (Line + 1), Column => 2);
+        Add(Str => "* To start manufacturing items, first you must have enough material and proper module installed on ship. Then you must set proper crafting order in Craft menu and give crew member order to start crafting.");
     end ShowHelp;
     
     procedure ShowConfirm(Message : String) is
