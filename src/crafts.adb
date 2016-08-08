@@ -24,8 +24,7 @@ package body Crafts is
     RecipeIndex : Natural;
 
     procedure SetRecipe is
-        MaterialIndex : Natural := 0;
-        FreeCargo : Integer := 0;
+        MaterialIndex, ModuleIndex : Natural := 0;
     begin
         -- Check for materials
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
@@ -41,19 +40,19 @@ package body Crafts is
             return;
         end if;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Mtype = CARGO then
-                FreeCargo := FreeCargo + PlayerShip.Modules.Element(I).Max_Value;
+            if PlayerShip.Modules.Element(I).Mtype = Recipes(RecipeIndex).Workplace and
+                PlayerShip.Modules.Element(I).Durability > 0 then
+                ModuleIndex := I;
+                exit;
             end if;
         end loop;
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            FreeCargo := FreeCargo - (Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Weight * 
-                PlayerShip.Cargo.Element(I).Amount);
-        end loop;
-        FreeCargo := FreeCargo - (Objects_Prototypes(Recipes(RecipeIndex).ResultIndex).Weight *
-            Recipes(RecipeIndex).ResultAmount);
-        FreeCargo := FreeCargo + (Objects_Prototypes(MaterialIndex).Weight *
-            Recipes(RecipeIndex).MaterialAmount);
-        if FreeCargo < 0 then
+        if ModuleIndex = 0 then
+            ShowDialog("You don't have workplace for manufacture " & 
+                To_String(Objects_Prototypes(Recipes(RecipeIndex).ResultIndex).Name) & ".");
+            return;
+        end if;
+        if FreeCargo((Objects_Prototypes(MaterialIndex).Weight * Recipes(RecipeIndex).MaterialAmount) - 
+            (Objects_Prototypes(Recipes(RecipeIndex).ResultIndex).Weight * Recipes(RecipeIndex).ResultAmount)) < 0 then
             ShowDialog("You don't have that much free space in your ship cargo.");
             return;
         end if;
