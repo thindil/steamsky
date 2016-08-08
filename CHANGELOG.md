@@ -21,8 +21,8 @@ All notable changes to this project will be documented in this file.
 - Armor module for ships
 - Combat between ships
 - Random event during fly (combat)
-- New items: bronze plates, fresh fruits, fresh vegetables, fresh meat, andrae
-  logs
+- Items manufacturing
+- New items: bronze plates, fresh fruits, fresh vegetables, fresh meat, andrae logs
 
 ### Changed
 - Updated README.md
