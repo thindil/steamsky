@@ -62,6 +62,7 @@ package Ships is
     procedure ChangeShipSpeed(SpeedValue : ShipSpeed); -- Change speed of ship
     procedure UpdateCargo(ProtoIndex : Positive; Amount : Integer); -- Update selected item in ship cargo
     procedure UpdateModule(ModuleIndex : Positive; Field : String; Value : Integer); -- Update selected module in ship
+    function FreeCargo(Amount : Integer) return Integer; -- Return available space in cargo after adding/extracting Amount
     procedure ShowShipInfo; -- Show informations about ship status and cargo
     function ShipInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in ship info menu
 

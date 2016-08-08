@@ -32,7 +32,6 @@ package body Bases is
         ItemName : constant String := To_String(Objects_Prototypes(ItemIndex).Name);
         Cost : Positive;
         MoneyIndex : Natural := 0;
-        FreeCargo : Integer := 0;
     begin
         BuyAmount := Positive'Value(Amount);
         if not Objects_Prototypes(ItemIndex).Buyable(BaseType) then
@@ -42,21 +41,12 @@ package body Bases is
         Cost := BuyAmount * Objects_Prototypes(ItemIndex).Prices(BaseType);
         Cost := Cost - Integer(Float'Floor(Float(Cost) *
                 (Float(PlayerShip.Crew.Element(1).Skills(4, 1)) / 200.0)));
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Mtype = CARGO then
-                FreeCargo := FreeCargo + PlayerShip.Modules.Element(I).Max_Value;
-            end if;
-        end loop;
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            FreeCargo := FreeCargo - (Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Weight * 
-                PlayerShip.Cargo.Element(I).Amount);
             if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
                 MoneyIndex := I;
             end if;
         end loop;
-        FreeCargo := FreeCargo - (Objects_Prototypes(ItemIndex).Weight * BuyAmount); 
-        FreeCargo := FreeCargo + Cost;
-        if FreeCargo < 0 then
+        if FreeCargo(Cost - (Objects_Prototypes(ItemIndex).Weight * BuyAmount)) < 0 then
             ShowDialog("You don't have that much free space in your ship cargo.");
             return;
         end if;
@@ -85,7 +75,6 @@ package body Bases is
         ProtoIndex : constant Positive := PlayerShip.Cargo.Element(ItemIndex).ProtoIndex;
         ItemName : constant String := To_String(Objects_Prototypes(ProtoIndex).Name);
         Profit : Positive;
-        FreeCargo : Integer := 0;
     begin
         SellAmount := Positive'Value(Amount);
         if PlayerShip.Cargo.Element(ItemIndex).Amount < SellAmount then
@@ -95,18 +84,7 @@ package body Bases is
         Profit := Objects_Prototypes(ProtoIndex).Prices(BaseType) * SellAmount;
         Profit := Profit + Integer(Float'Floor(Float(Profit) *
                 (Float(PlayerShip.Crew.Element(1).Skills(4, 1)) / 200.0)));
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Mtype = CARGO then
-                FreeCargo := FreeCargo + PlayerShip.Modules.Element(I).Max_Value;
-            end if;
-        end loop;
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            FreeCargo := FreeCargo - (Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Weight * 
-                PlayerShip.Cargo.Element(I).Amount);
-        end loop;
-        FreeCargo := FreeCargo + (Objects_Prototypes(ProtoIndex).Weight * SellAmount);
-        FreeCargo := FreeCargo - Profit;
-        if FreeCargo < 0 then
+        if FreeCargo((Objects_Prototypes(ProtoIndex).Weight * SellAmount) - Profit) < 0 then
             ShowDialog("You don't have enough free cargo space in your ship for Charcollum.");
             return;
         end if;
