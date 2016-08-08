@@ -15,8 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Prototypes; use Prototypes;
 with Ships; use Ships;
+with Game; use Game;
 
 package Crafts is
 
@@ -33,6 +35,7 @@ package Crafts is
     Workplace => ALCHEMY_LAB), (MaterialType => FuelMaterial, MaterialAmount =>
     1, ResultIndex => 1, ResultAmount => 5, Workplace => ALCHEMY_LAB));
 
-    procedure ShowCraft; -- Show crafting screen
+    procedure ShowCraft(Key : Key_Code); -- Show crafting screen
+    function CraftKeys(Key : Key_Code) return GameStates; -- Handle keys in craft screen
 
 end Crafts;
