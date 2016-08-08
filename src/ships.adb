@@ -204,6 +204,22 @@ package body Ships is
         end if;
         PlayerShip.Modules.Update_Element(Index => ModuleIndex, Process => UpdateMod'Access);
     end UpdateModule;
+    
+    function FreeCargo(Amount : Integer) return Integer is
+        FreeCargo : Integer := 0;
+    begin
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if PlayerShip.Modules.Element(I).Mtype = CARGO then
+                FreeCargo := FreeCargo + PlayerShip.Modules.Element(I).Max_Value;
+            end if;
+        end loop;
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            FreeCargo := FreeCargo - (Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Weight * 
+                PlayerShip.Cargo.Element(I).Amount);
+        end loop;
+        FreeCargo := FreeCargo + Amount;
+        return FreeCargo;
+    end FreeCargo;
 
     procedure ShowShipInfo is
         Weight : Integer;
