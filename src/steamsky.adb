@@ -31,6 +31,7 @@ with Ships; use Ships;
 with Bases; use Bases;
 with Events; use Events;
 with Combat; use Combat;
+with Crafts; use Crafts;
 
 procedure SteamSky is
     GameState : GameStates := Main_Menu;
@@ -111,6 +112,8 @@ begin
                 GameState := CombatKeys(Key);
             when Combat_Orders =>
                 GameState := CombatOrdersKeys(Key);
+            when Craft_View =>
+                GameState := CraftKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
