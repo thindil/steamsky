@@ -32,6 +32,7 @@ with Bases; use Bases;
 with Events; use Events;
 with Combat; use Combat;
 with Crafts; use Crafts;
+with Help; use Help;
 
 procedure SteamSky is
     GameState : GameStates := Main_Menu;
