@@ -22,7 +22,7 @@ with UserInterface; use UserInterface;
 package body Help is
 
     HelpText : Unbounded_String := Null_Unbounded_String;
-    StartIndex : Natural := 1;
+    StartIndex : Integer := 1;
     EndIndex : Integer := 0;
 
     procedure LoadHelp is
@@ -66,19 +66,16 @@ package body Help is
                     DrawGame(Help_View);
                     return Help_View;
                 end if;
-                EndIndex := EndIndex - Positive(Columns);
-                if EndIndex < StartIndex then
-                    EndIndex := Integer(Lines - 6) * Integer(Columns);
-                    if EndIndex > Length(HelpText) then
-                        EndIndex := Length(HelpText);
-                    end if;
+                EndIndex := StartIndex + (Integer(Lines - 6) * Integer(Columns));
+                if EndIndex > Length(HelpText) then
+                    EndIndex := Length(HelpText);
                 end if;
                 DrawGame(Help_View);
                 return Help_View;
             when 50 | 66 => -- Move help down
                 StartIndex := StartIndex + Positive(Columns);
-                if StartIndex > Length(HelpText) then
-                    StartIndex := Length(HelpText) - EndIndex;
+                if StartIndex > Length(HelpText) - (Integer(Lines - 6) * Integer(Columns)) then
+                    StartIndex := Length(HelpText) - (Integer(Lines - 6) * Integer(Columns));
                     if StartIndex < 1 then
                         StartIndex := 1;
                         EndIndex := Integer(Lines - 6) * Integer(Columns);
@@ -89,14 +86,13 @@ package body Help is
                     DrawGame(Help_View);
                     return Help_View;
                 end if;
-                EndIndex := EndIndex + Positive(Columns);
+                EndIndex := StartIndex + (Integer(Lines - 6) * Integer(Columns));
                 if EndIndex > Length(HelpText) then
                     EndIndex := Length(HelpText);
                 end if;
                 DrawGame(Help_View);
                 return Help_View;
             when others =>
-                DrawGame(Help_View);
                 return Help_View;
         end case;
     end HelpKeys;
