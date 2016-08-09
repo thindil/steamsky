@@ -331,6 +331,7 @@ package body UserInterface is
                 return New_Game;
             when Character'Pos('l') | Character'Pos('L') => -- Load game
                 if Exists("data/savegame.dat") then
+                    LoadHelp;
                     if LoadGame then
                         DrawGame(Sky_Map_View);
                         return Sky_Map_View;
@@ -457,6 +458,7 @@ package body UserInterface is
                 Update_Screen;
                 return New_Game;
             when Character'Pos('s') | Character'Pos('S') => -- Start new game;
+                LoadHelp;
                 NewCharName := Trim(To_Unbounded_String(CharName), Ada.Strings.Both);
                 NewShipName := Trim(To_Unbounded_String(ShipName), Ada.Strings.Both);
                 NewGame(NewCharName, NewShipName);

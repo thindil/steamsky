@@ -20,6 +20,7 @@ with Game; use Game;
 
 package Help is
 
+    procedure LoadHelp; -- Load help text from file
     procedure ShowHelp; -- Show in-game help window
     function HelpKeys(Key : Key_Code) return GameStates; -- Handle keys in help window
 
