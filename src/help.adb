@@ -22,6 +22,8 @@ with UserInterface; use UserInterface;
 package body Help is
 
     HelpText : Unbounded_String := Null_Unbounded_String;
+    StartIndex : Natural := 1;
+    EndIndex : Integer := 0;
 
     procedure LoadHelp is
         HelpFile : File_Type;
@@ -35,12 +37,16 @@ package body Help is
             Append(HelpText, ASCII.LF);
         end loop;
         Close(HelpFile);
+        EndIndex := Integer(Lines - 6) * Integer(Columns);
+        if EndIndex > Length(HelpText) then
+            EndIndex := Length(HelpText);
+        end if;
     end LoadHelp;
 
     procedure ShowHelp is
     begin
         Move_Cursor(Line => 2, Column => 0);
-        Add(Str => To_String(HelpText));
+        Add(Str => Slice(HelpText, StartIndex, EndIndex));
     end ShowHelp;
 
     function HelpKeys(Key : Key_Code) return GameStates is
@@ -49,8 +55,48 @@ package body Help is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
+            when 56 | 65 => -- Move help up
+                StartIndex := StartIndex - Positive(Columns);
+                if StartIndex < 1 then
+                    StartIndex := 1;
+                    EndIndex := Integer(Lines - 6) * Integer(Columns);
+                    if EndIndex > Length(HelpText) then
+                        EndIndex := Length(HelpText);
+                    end if;
+                    DrawGame(Help_View);
+                    return Help_View;
+                end if;
+                EndIndex := EndIndex - Positive(Columns);
+                if EndIndex < StartIndex then
+                    EndIndex := Integer(Lines - 6) * Integer(Columns);
+                    if EndIndex > Length(HelpText) then
+                        EndIndex := Length(HelpText);
+                    end if;
+                end if;
+                DrawGame(Help_View);
+                return Help_View;
+            when 50 | 66 => -- Move help down
+                StartIndex := StartIndex + Positive(Columns);
+                if StartIndex > Length(HelpText) then
+                    StartIndex := Length(HelpText) - EndIndex;
+                    if StartIndex < 1 then
+                        StartIndex := 1;
+                        EndIndex := Integer(Lines - 6) * Integer(Columns);
+                        if EndIndex > Length(HelpText) then
+                            EndIndex := Length(HelpText);
+                        end if;
+                    end if;
+                    DrawGame(Help_View);
+                    return Help_View;
+                end if;
+                EndIndex := EndIndex + Positive(Columns);
+                if EndIndex > Length(HelpText) then
+                    EndIndex := Length(HelpText);
+                end if;
+                DrawGame(Help_View);
+                return Help_View;
             when others =>
-                ShowHelp;
+                DrawGame(Help_View);
                 return Help_View;
         end case;
     end HelpKeys;
