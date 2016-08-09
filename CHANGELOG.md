@@ -34,6 +34,8 @@ All notable changes to this project will be documented in this file.
 - Show ship name instead speed in ship info screen
 - Moved more items informations to prototypes
 - Raised starting skills levels
+- Moved help text to separated text file
+- Raised price of basic rations
 
 ### Fixed
 - Crash in save game when game was started from other directory
