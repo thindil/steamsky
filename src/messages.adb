@@ -75,6 +75,16 @@ package body Messages is
         Messages_List.Clear;
     end ClearMessages;
 
+    function MessagesAmount return Natural is
+    begin
+        return Natural(Messages_List.Length);
+    end MessagesAmount;
+
+    procedure RestoreMessage(Message : Unbounded_String) is
+    begin
+        Messages_List.Append(New_Item => Message);
+    end RestoreMessage;
+
     procedure ShowMessages is
         LoopStart : Positive;
         LinePos : Line_Position := 2;
