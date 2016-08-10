@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Random event during fly (combat)
 - Items manufacturing
 - New items: bronze plates, fresh fruits, fresh vegetables, fresh meat, andrae logs
+- Save to file last 10 messages
 
 ### Changed
 - Updated README.md
