@@ -75,7 +75,7 @@ package body Crew is
             end if;
         else
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                if PlayerShip.Crew.Element(I).Order = GivenOrder then
+                if PlayerShip.Crew.Element(I).Order = GivenOrder and PlayerShip.Crew.Element(I).Order /= Rest then
                     NewOrder := Rest;
                     PlayerShip.Crew.Update_Element(Index => I, Process => UpdateOrder'Access);
                     AddMessage(To_String(PlayerShip.Crew.Element(I).Name) & " going on break.");
