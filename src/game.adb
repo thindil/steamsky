@@ -134,7 +134,8 @@ package body Game is
         HealthLevel : Integer := 100;
         RepairPoints : Natural := 0;
         ProtoIndex : Positive;
-        CrafterIndex, Amount, MaterialIndex, ModuleIndex : Natural := 0;
+        CrafterIndex, MaterialIndex, ModuleIndex, ResultAmount : Natural := 0;
+        Amount : Integer;
         procedure UpdateMember(Member : in out Member_Data) is
         begin
             Member.Tired := TiredLevel;
@@ -319,8 +320,10 @@ package body Game is
                 end if;
                 Amount := Objects_Prototypes(PlayerShip.Cargo.Element(MaterialIndex).ProtoIndex).Weight * 
                 Recipes(PlayerShip.Craft).MaterialAmount;
-                Amount := Amount - (Objects_Prototypes(Recipes(PlayerShip.Craft).ResultIndex).Weight *
-                Recipes(PlayerShip.Craft).ResultAmount);
+                ResultAmount := Recipes(PlayerShip.Craft).ResultAmount +
+                    Integer(Float'Floor(Float(Recipes(PlayerShip.Craft).ResultAmount) *
+                    (Float(PlayerShip.Crew.Element(CrafterIndex).Skills(5, 1)) / 100.0)));
+                Amount := Amount - (Objects_Prototypes(Recipes(PlayerShip.Craft).ResultIndex).Weight * ResultAmount);
                 if FreeCargo(Amount) < 0 then
                     AddMessage("You don't have free cargo space for manufacturing items.");
                     GiveOrders(CrafterIndex, Rest);
@@ -335,10 +338,9 @@ package body Game is
                 end if;
                 GainExp(1, 5, CrafterIndex);
                 UpdateCargo(PlayerShip.Cargo.Element(MaterialIndex).ProtoIndex, (0 - Recipes(PlayerShip.Craft).MaterialAmount));
-                UpdateCargo(Recipes(PlayerShip.Craft).ResultIndex, Recipes(PlayerShip.Craft).ResultAmount);
-                AddMessage(To_String(PlayerShip.Crew.Element(CrafterIndex).Name) & " was manufactured" &
-                    Integer'Image(Recipes(PlayerShip.Craft).ResultAmount) & " " &
-                    To_String(Objects_Prototypes(Recipes(PlayerShip.Craft).ResultIndex).Name) & ".");
+                UpdateCargo(Recipes(PlayerShip.Craft).ResultIndex, ResultAmount);
+                AddMessage(To_String(PlayerShip.Crew.Element(CrafterIndex).Name) & " was manufactured" & Integer'Image(ResultAmount) & 
+                    " " & To_String(Objects_Prototypes(Recipes(PlayerShip.Craft).ResultIndex).Name) & ".");
             end loop;
         end if;
     end UpdateGame;
