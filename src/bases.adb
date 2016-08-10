@@ -161,7 +161,9 @@ package body Bases is
             ShowGameMenu(Trade_View);
         end if;
         Move_Cursor(Line => 2, Column => 2);
-        Add(Str => "BUY SELL");
+        Add(Str => "BUY SELL     NAME");
+        Move_Cursor(Line => 2, Column => 35);
+        Add(Str => "PRICE");
         for I in 2..Objects_Prototypes'Last loop
             if Objects_Prototypes(I).Buyable(BaseType) then
                 BuyLetter := Character'Val(95 + I);
@@ -179,9 +181,9 @@ package body Bases is
             end loop;
             Move_Cursor(Line => Line_Position(1 + I), Column => 3);
             Add(Str => BuyLetter & "   " & SellLetter & "   " &
-                To_String(Objects_Prototypes(I).Name) & " Price:" &
-                Positive'Image(Objects_Prototypes(I).Prices(BaseType)) & 
-                " charcollum");
+                To_String(Objects_Prototypes(I).Name));
+            Move_Cursor(Line => Line_Position(1 + I), Column => 30);
+            Add(Str => Positive'Image(Objects_Prototypes(I).Prices(BaseType)) & " charcollum");
             if BuyLetter /= ' ' then
                 Change_Attributes(Line => Line_Position(1 + I), Column => 3, Count => 1, Color => 1);
             end if;
