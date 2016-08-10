@@ -348,6 +348,7 @@ package body Game is
     procedure SaveGame is
         SaveGame : File_Type;
         RawValue : Unbounded_String;
+        Messages : Natural := 10;
     begin
         Create(SaveGame, Out_File, "data/savegame.dat");
         -- Save version
@@ -434,6 +435,16 @@ package body Game is
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             end loop;
         end loop;
+        if Messages > MessagesAmount then
+            Messages := MessagesAmount;
+        end if;
+        RawValue := To_Unbounded_String(Messages'Img);
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        if Messages > 0 then
+            for I in 1..Messages loop
+                Put(SaveGame, GetMessage(I) & ";");
+            end loop;
+        end if;
         Close(SaveGame);
     end SaveGame;
 
@@ -444,6 +455,7 @@ package body Game is
         ShipModules : Modules_Container.Vector;
         ShipCargo : Cargo_Container.Vector; 
         ShipCrew : Crew_Container.Vector;
+        Messages : Natural;
         function ReadData return Unbounded_String is
             RawData : Unbounded_String := To_Unbounded_String("");
             Char : Character;
@@ -524,6 +536,10 @@ package body Game is
                 Process => UpdateMember'Access);
         end loop;
         PlayerShip.Crew := ShipCrew;
+        Messages := Integer'Value(To_String(ReadData));
+        for I in 1..Messages loop
+            RestoreMessage(ReadData);
+        end loop;
         Close(SaveGame);
         return True;
     end LoadGame;

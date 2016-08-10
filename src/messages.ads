@@ -26,6 +26,8 @@ package Messages is
     procedure AddMessage(Message : String); -- Add new message to list
     function GetMessage(MessageIndex : Integer) return String; -- Return selected message
     procedure ClearMessages; -- Remove all messages;
+    function MessagesAmount return Natural; -- Return amount of messages
+    procedure RestoreMessage(Message : Unbounded_String); -- Restore message from save file
     procedure ShowMessages; -- Show messages list
     function MessagesKeys(Key : Key_Code) return GameStates; -- Handle keys in messages list
 
