@@ -1,11 +1,12 @@
-At this moment, help is under heavy developement (as whole game). Below you can find few useful tips.
+At this moment, help is under heavy development (as whole game). Below you can find few useful tips.
+* You can scroll this help window with arrow keys.
 * Your ship starts docked to base. To move it, you must first undock from base. Hit 'o' key for open orders menu.
 * To move your ship, you need to set it speed, have fuel (charcollum, which works as moneys too) and pilot and engineer on duty.
 * To buy/sell items from bases you must first dock to base. All bases buy all items, but which items are sold, depends on base type.
-* As you dock to stations, you discover they types and then they will be colored on sky map (eg. Agricultural bases are green). Unvisited bases are white.
+* As you dock to stations, you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are white.
 * You can wait a moment without doing anything, by hit key 5 on keypad.
-* You and your crew must eat and drink. If you dont have food or drink onboard, your crew will slowly die from dehydration or starvation.
-* Travel time depends on skills of Pilot and Engineer (current members on this positions). Prices in bases depends on player skill Bartering - with higher skill you can sell items for more and buy for less.
+* You and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation.
+* Travel time depends on skills of Pilot and Engineer (current members on this positions). Prices in bases depends on skill Bartering - with higher skill you can sell items for more and buy for less. Crafting skill determine amount of manufactured items
 * To escape from fight, you must set Pilot order on Escape and Engineer order on Full Speed, after few turns (depends how far enemy was) you should escape.
 * Slow speed in combat helps your gunner hits enemies but also helps enemies hits you. If you want to have more chances to evade enemy attack, set speed to full speed. That same is with pilot orders - evade or escape order helps avoids attacks but also reduce your chance to hit enemies.
 * Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too and you die.
