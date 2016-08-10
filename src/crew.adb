@@ -266,6 +266,7 @@ package body Crew is
                         SkillLine := SkillLine + 1;
                     end if;
                 end loop;
+                SkillLine := SkillLine + 1;
                 case PlayerShip.Crew.Element(MemberIndex).Order is
                     when Pilot =>
                         OrderName := To_Unbounded_String("Piloting");
@@ -280,11 +281,11 @@ package body Crew is
                     when Craft =>
                         OrderName := To_Unbounded_String("Manufacturing");
                 end case;
-                Move_Cursor(Line => 8, Column => (Columns / 2));
+                Move_Cursor(Line => SkillLine, Column => (Columns / 2));
                 Add(Str => "Order: " & To_String(OrderName));
                 if PlayerShip.Crew.Element(MemberIndex).Health > 0 and PlayerShip.Crew.Element(MemberIndex).Tired < 100 and
                     PlayerShip.Crew.Element(MemberIndex).Hunger < 100 and PlayerShip.Crew.Element(MemberIndex).Thirst < 100 then
-                    Change_Attributes(Line => 8, Column => (Columns / 2), Count => 1, Color => 1);
+                    Change_Attributes(Line => SkillLine, Column => (Columns / 2), Count => 1, Color => 1);
                 end if;
             else
                 MemberIndex := 0;
