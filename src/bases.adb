@@ -154,6 +154,7 @@ package body Bases is
         Visibility : Cursor_Visibility := Normal;
         Amount : String(1..6);
         ItemIndex : Natural := 0;
+        CargoAmount : Natural;
     begin
         if Key /= KEY_NONE then
             Erase;
@@ -164,6 +165,8 @@ package body Bases is
         Add(Str => "BUY SELL     NAME");
         Move_Cursor(Line => 2, Column => 35);
         Add(Str => "PRICE");
+        Move_Cursor(Line => 2, Column => 50);
+        Add(Str => "OWNED");
         for I in 2..Objects_Prototypes'Last loop
             if Objects_Prototypes(I).Buyable(BaseType) then
                 BuyLetter := Character'Val(95 + I);
@@ -172,10 +175,12 @@ package body Bases is
             end if;
             BuyLetters(I) := BuyLetter;
             SellLetter := ' ';
+            CargoAmount := 0;
             for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                 if PlayerShip.Cargo.Element(J).ProtoIndex = I then
                     SellLetter := Character'Val(63 + I);
                     SellLetters(J) := SellLetter;
+                    CargoAmount := PlayerShip.Cargo.Element(J).Amount;
                     exit;
                 end if;
             end loop;
@@ -184,6 +189,8 @@ package body Bases is
                 To_String(Objects_Prototypes(I).Name));
             Move_Cursor(Line => Line_Position(1 + I), Column => 30);
             Add(Str => Positive'Image(Objects_Prototypes(I).Prices(BaseType)) & " charcollum");
+            Move_Cursor(Line => Line_Position(1 + I), Column => 50);
+            Add(Str => Natural'Image(CargoAmount));
             if BuyLetter /= ' ' then
                 Change_Attributes(Line => Line_Position(1 + I), Column => 3, Count => 1, Color => 1);
             end if;
