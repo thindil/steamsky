@@ -23,6 +23,8 @@ with Game; use Game;
 
 package body Maps is
 
+    MoveX, MoveY : Integer := 0;
+
     procedure ShowSkyMap is
         StartX : Integer;
         StartY : Integer;
@@ -31,16 +33,22 @@ package body Maps is
         WindowHeight : Line_Position := 3;
     begin
         StartX := PlayerShip.SkyX - Integer(Columns / 2);
+        StartX := StartX + MoveX;
         if StartX < 0 then
             StartX := 0;
+            MoveX := MoveX + 1;
         elsif  (StartX + Integer(Columns)) > 1025 then
             StartX := 1025 - Integer(Columns);
+            MoveX := MoveX - 1;
         end if;
         StartY := PlayerShip.SkyY - Integer(Lines / 2);
+        StartY := StartY + MoveY;
         if StartY < 0 then
             StartY := 0;
+            MoveY := MoveY + 1;
         elsif (StartY + Integer(Lines)) > 1025 then
             StartY := 1025 - Integer(Lines);
+            MoveY := MoveY - 1;
         end if;
         for X in 1..Integer(Columns) - 1 loop
             for Y in 1..Integer(Lines) - 1 loop
@@ -116,23 +124,38 @@ package body Maps is
                 Result := 2;
             when 53 => -- Wait 1 minute
                 UpdateGame(1);
-            when 27 =>
+            when 27 => -- Map moving
                 NewKey := Get_KeyStroke;
                 if NewKey = 91 then
                     NewKey := Get_KeyStroke;
                     case NewKey is
                         when 97 => -- Move map up
-                            null;
+                            MoveY := MoveY - 1;
                         when 98 => -- Move map down
-                            null;
+                            MoveY := MoveY + 1;
                         when 99 => -- Move map right
-                            null;
+                            MoveX := MoveX + 1;
                         when 100 => -- Move map left
-                            null;
+                            MoveX := MoveX - 1;
+                        when 55 => -- Move map up/left
+                            MoveX := MoveX - 1;
+                            MoveY := MoveY - 1;
+                        when 53 => -- Move map up/right
+                            MoveX := MoveX + 1;
+                            MoveY := MoveY - 1;
+                        when 56 => -- Move map down/left
+                            MoveX := MoveX - 1;
+                            MoveY := MoveY + 1;
+                        when 54 => -- Move map down/right
+                            MoveX := MoveX + 1;
+                            MoveY := MoveY + 1;
                         when others =>
                             Result := 0;
                     end case;
                 end if;
+            when Character'Pos(' ') => -- Center on ship
+                MoveX := 0;
+                MoveY := 0;
             when others =>
                 Result := 0;
         end case;
