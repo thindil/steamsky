@@ -22,6 +22,7 @@ package body Messages is
 
     package Messages_Container is new Vectors(Positive, Unbounded_String);
     Messages_List : Messages_Container.Vector;
+    StartIndex : Integer := 0;
 
     function FormatedTime return String is
         Result : Unbounded_String := To_Unbounded_String("");
@@ -86,7 +87,7 @@ package body Messages is
     end RestoreMessage;
 
     procedure ShowMessages is
-        LoopStart : Positive;
+        LoopEnd : Integer;
         LinePos : Line_Position := 2;
     begin
         if Messages_List.Length = 0 then
@@ -94,12 +95,17 @@ package body Messages is
             Add(Str => "No messages yet.");
             return;
         end if;
-        if Messages_List.Last_Index > Positive(Lines - 2) then
-            LoopStart := Messages_List.Last_Index - Positive(Lines - 4);
-        else
-            LoopStart := Messages_List.First_Index;
+        if StartIndex = 0 then
+            StartIndex := Messages_List.Last_Index - Positive(Lines - 4);
+            if StartIndex < 0 then
+                StartIndex := 1;
+            end if;
         end if;
-        for I in LoopStart..Messages_List.Last_Index loop
+        LoopEnd := StartIndex + Positive(Lines - 4);
+        if LoopEnd > Messages_List.Last_Index then
+            LoopEnd := Messages_List.Last_Index;
+        end if;
+        for I in StartIndex..LoopEnd loop
             Move_Cursor(Line => LinePos, Column => 2);
             Add(Str => To_String(Messages_List.Element(I)));
             LinePos := LinePos + 1;
@@ -110,10 +116,24 @@ package body Messages is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                StartIndex := 0;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
-            when others =>
+            when 56 | 65 => -- Scroll messages up
+                StartIndex := StartIndex - 1;
+                if StartIndex < 1 then
+                    StartIndex := 1;
+                end if;
                 DrawGame(Messages_View);
+                return Messages_View;
+            when 50 | 66 => -- Scroll messages down
+                StartIndex := StartIndex + 1;
+                if StartIndex > Messages_List.Last_Index - Positive(Lines - 4) then
+                    StartIndex := Messages_List.Last_Index - Positive(Lines - 4);
+                end if;
+                DrawGame(Messages_View);
+                return Messages_View;
+            when others =>
                 return Messages_View;
         end case;
     end MessagesKeys;
