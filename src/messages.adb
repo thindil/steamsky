@@ -95,7 +95,7 @@ package body Messages is
             return;
         end if;
         if Messages_List.Last_Index > Positive(Lines - 2) then
-            LoopStart := Messages_List.Last_Index - Positive(Lines - 2);
+            LoopStart := Messages_List.Last_Index - Positive(Lines - 4);
         else
             LoopStart := Messages_List.First_Index;
         end if;
