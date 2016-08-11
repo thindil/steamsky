@@ -42,6 +42,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash in save game when game was started from other directory
 - Giving orders to dead/starving/dehydrated/too tired crew members
+- Crash on too long list of messages to show
 
 ### Removed
 - Duty order for player
