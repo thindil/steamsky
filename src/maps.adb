@@ -93,6 +93,7 @@ package body Maps is
 
     function SkyMapKeys(Key : Key_Code) return Integer is
         Result : Integer := 1;
+        NewKey : Key_Code;
     begin
         case Key is
             when 56 | 65 => -- Move up
@@ -115,6 +116,23 @@ package body Maps is
                 Result := 2;
             when 53 => -- Wait 1 minute
                 UpdateGame(1);
+            when 27 =>
+                NewKey := Get_KeyStroke;
+                if NewKey = 91 then
+                    NewKey := Get_KeyStroke;
+                    case NewKey is
+                        when 97 => -- Move map up
+                            null;
+                        when 98 => -- Move map down
+                            null;
+                        when 99 => -- Move map right
+                            null;
+                        when 100 => -- Move map left
+                            null;
+                        when others =>
+                            Result := 0;
+                    end case;
+                end if;
             when others =>
                 Result := 0;
         end case;
