@@ -28,6 +28,7 @@ package body Maps is
         StartY : Integer;
         BaseIndex : Natural;
         InfoWindow : Window;
+        WindowHeight : Line_Position := 3;
     begin
         StartX := PlayerShip.SkyX - Integer(Columns / 2);
         if StartX < 0 then
@@ -70,7 +71,10 @@ package body Maps is
             end loop;
         end loop;
         Refresh_Without_Update;
-        InfoWindow := Create(10, 20, 1, (Columns - 21));
+        if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+            WindowHeight := WindowHeight + 3;
+        end if;
+        InfoWindow := Create(WindowHeight, 20, 1, (Columns - 21));
         Box(InfoWindow);
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 3);
         Add(Win => InfoWindow, Str => "X:" & Positive'Image(PlayerShip.SkyX) & 
