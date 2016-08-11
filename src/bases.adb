@@ -155,6 +155,8 @@ package body Bases is
         Amount : String(1..6);
         ItemIndex : Natural := 0;
         CargoAmount : Natural;
+        CurrentLine : Line_Position := 2;
+        MoneyIndex: Natural := 0;
     begin
         if Key /= KEY_NONE then
             Erase;
@@ -183,21 +185,32 @@ package body Bases is
                     CargoAmount := PlayerShip.Cargo.Element(J).Amount;
                     exit;
                 end if;
+                if PlayerShip.Cargo.Element(J).ProtoIndex = 1 then
+                    MoneyIndex := J;
+                end if;
             end loop;
-            Move_Cursor(Line => Line_Position(1 + I), Column => 3);
+            CurrentLine := CurrentLine + 1;
+            Move_Cursor(Line => CurrentLine, Column => 3);
             Add(Str => BuyLetter & "   " & SellLetter & "   " &
                 To_String(Objects_Prototypes(I).Name));
-            Move_Cursor(Line => Line_Position(1 + I), Column => 30);
+            Move_Cursor(Line => CurrentLine, Column => 30);
             Add(Str => Positive'Image(Objects_Prototypes(I).Prices(BaseType)) & " charcollum");
-            Move_Cursor(Line => Line_Position(1 + I), Column => 50);
+            Move_Cursor(Line => CurrentLine, Column => 50);
             Add(Str => Natural'Image(CargoAmount));
             if BuyLetter /= ' ' then
-                Change_Attributes(Line => Line_Position(1 + I), Column => 3, Count => 1, Color => 1);
+                Change_Attributes(Line => CurrentLine, Column => 3, Count => 1, Color => 1);
             end if;
             if SellLetter /= ' ' then
-                Change_Attributes(Line => Line_Position(1 + I), Column => 7, Count => 1, Color => 1);
+                Change_Attributes(Line => CurrentLine, Column => 7, Count => 1, Color => 1);
             end if;
         end loop;
+        Move_Cursor(Line => (CurrentLine + 2), Column => 1);
+        if MoneyIndex > 0 then
+            Add(Str => "You have" & Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
+                " Charcollum.");
+        else
+            Add(Str => "You don't have any charcollum to buy items.");
+        end if;
         if Key /= KEY_NONE then -- start buying/selling items from/to base
             for I in BuyLetters'Range loop
                 if Key = Character'Pos(BuyLetters(I)) and BuyLetters(I) /= ' ' then
