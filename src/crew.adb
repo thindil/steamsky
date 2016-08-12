@@ -253,12 +253,23 @@ package body Crew is
                 Add(Str => "Name: " & To_String(PlayerShip.Crew.Element(MemberIndex).Name));
                 for J in PlayerShip.Crew.Element(MemberIndex).Skills'Range loop
                     SkillLevel := To_Unbounded_String("");
-                    if PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) > 0 and PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) < 30 then
+                    if PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) > 0 and 
+                        PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) < 20 then
                         SkillLevel := To_Unbounded_String("Novice");
-                    elsif PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) > 31 and PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) < 80 then
+                    elsif PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) > 21 and 
+                        PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) < 40 then
+                        SkillLevel := To_Unbounded_String("Beginner");
+                    elsif PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) > 41 and 
+                        PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) < 60 then
                         SkillLevel := To_Unbounded_String("Competent");
-                    elsif PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) > 79 then
+                    elsif PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) > 61 and 
+                        PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) < 80 then
                         SkillLevel := To_Unbounded_String("Expert");
+                    elsif PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) > 81 and 
+                        PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) < 100 then
+                            SkillLevel := To_Unbounded_String("Master");
+                    elsif PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) > 99 then
+                        SkillLevel := To_Unbounded_String("Grandmaster");
                     end if;
                     if SkillLevel /= "" then
                         Move_Cursor(Line => SkillLine, Column => (Columns / 2));
