@@ -33,26 +33,26 @@ package body Help is
         Open(HelpFile, In_File, "data/help.dat");
         while not End_Of_File(HelpFile) loop
             Append(HelpText, Get_Line(HelpFile));
-            Append(HelpText, ASCII.LF);
         end loop;
         Close(HelpFile);
     end LoadHelp;
 
     procedure ShowHelp is
-        EndIndex : Integer;
-        CurrentLine : Line_Position;
+        CurrentLine : Line_Position := 2;
         CurrentColumn : Column_Position;
+        Index : Positive;
     begin
-        EndIndex := StartIndex + (Integer(Lines) * Integer(Columns));
-        if EndIndex > Length(HelpText) then
-            EndIndex := Length(HelpText);
-        end if;
         Move_Cursor(Line => 2, Column => 0);
-        for I in StartIndex..EndIndex loop
-            Add(Ch => Element(HelpText, I));
+        Index := StartIndex;
+        while CurrentLine < (Lines - 1) and Index <= Length(HelpText) loop
+            Add(Ch => Element(HelpText, Index));
+            Index := Index + 1;
             Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
-            if CurrentLine >= (Lines - 3) and CurrentColumn >= (Columns - 3) then
-                exit;
+            if Index <= Length(HelpText) then
+                if Element(HelpText, Index) = '*' then
+                    CurrentLine := CurrentLine + 1;
+                    Move_Cursor(Line => CurrentLine, Column => 0);
+                end if;
             end if;
         end loop;
     end ShowHelp;
@@ -74,13 +74,8 @@ package body Help is
                 return Help_View;
             when 50 | 66 => -- Move help down
                 StartIndex := StartIndex + Positive(Columns);
-                if StartIndex > Length(HelpText) then
-                    StartIndex := Length(HelpText) - Positive(Columns);
-                    if StartIndex < 1 then
-                        StartIndex := 1;
-                    end if;
-                    DrawGame(Help_View);
-                    return Help_View;
+                if (Length(HelpText) - StartIndex) < (Positive(Lines - 7) * Positive(Columns)) then
+                    StartIndex := StartIndex - Positive(Columns);
                 end if;
                 DrawGame(Help_View);
                 return Help_View;
