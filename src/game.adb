@@ -251,7 +251,7 @@ package body Game is
         if RepairPoints > 0 then
             -- Limit repair point depends on amount of repair materials
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Itype = RepairMaterial then
+                if Items.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Itype = RepairMaterial then
                     if PlayerShip.Cargo.Element(I).Amount < RepairPoints then
                         RepairPoints := PlayerShip.Cargo.Element(I).Amount;
                     end if;
@@ -307,7 +307,7 @@ package body Game is
             for I in 1..TiredPoints loop
                 MaterialIndex := 0;
                 for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Recipes(PlayerShip.Craft).MaterialType then
+                    if Items.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Recipes(PlayerShip.Craft).MaterialType then
                         MaterialIndex := I;
                         exit;
                     end if;
@@ -318,12 +318,12 @@ package body Game is
                     PlayerShip.Craft := 0;
                     exit;
                 end if;
-                Amount := Objects_Prototypes(PlayerShip.Cargo.Element(MaterialIndex).ProtoIndex).Weight * 
+                Amount := Items.Element(PlayerShip.Cargo.Element(MaterialIndex).ProtoIndex).Weight * 
                 Recipes(PlayerShip.Craft).MaterialAmount;
                 ResultAmount := Recipes(PlayerShip.Craft).ResultAmount +
                     Integer(Float'Floor(Float(Recipes(PlayerShip.Craft).ResultAmount) *
                     (Float(PlayerShip.Crew.Element(CrafterIndex).Skills(5, 1)) / 100.0)));
-                Amount := Amount - (Objects_Prototypes(Recipes(PlayerShip.Craft).ResultIndex).Weight * ResultAmount);
+                Amount := Amount - (Items.Element(Recipes(PlayerShip.Craft).ResultIndex).Weight * ResultAmount);
                 if FreeCargo(Amount) < 0 then
                     AddMessage("You don't have free cargo space for manufacturing items.");
                     GiveOrders(CrafterIndex, Rest);
@@ -340,7 +340,7 @@ package body Game is
                 UpdateCargo(PlayerShip.Cargo.Element(MaterialIndex).ProtoIndex, (0 - Recipes(PlayerShip.Craft).MaterialAmount));
                 UpdateCargo(Recipes(PlayerShip.Craft).ResultIndex, ResultAmount);
                 AddMessage(To_String(PlayerShip.Crew.Element(CrafterIndex).Name) & " was manufactured" & Integer'Image(ResultAmount) & 
-                    " " & To_String(Objects_Prototypes(Recipes(PlayerShip.Craft).ResultIndex).Name) & ".");
+                    " " & To_String(Items.Element(Recipes(PlayerShip.Craft).ResultIndex).Name) & ".");
             end loop;
         end if;
     end UpdateGame;

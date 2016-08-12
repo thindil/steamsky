@@ -214,7 +214,7 @@ package body Ships is
             end if;
         end loop;
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            FreeCargo := FreeCargo - (Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Weight * 
+            FreeCargo := FreeCargo - (Items.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Weight * 
                 PlayerShip.Cargo.Element(I).Amount);
         end loop;
         FreeCargo := FreeCargo + Amount;
@@ -233,7 +233,7 @@ package body Ships is
         if PlayerShip.Craft = 0 then
             Add(Str => "Nothing");
         else
-            Add(Str => To_String(Objects_Prototypes(Recipes(PlayerShip.Craft).ResultIndex).Name));
+            Add(Str => To_String(Items.Element(Recipes(PlayerShip.Craft).ResultIndex).Name));
         end if;
         Move_Cursor(Line => 5, Column => 2);
         Add(Str => "STATUS:");
@@ -250,10 +250,10 @@ package body Ships is
         Move_Cursor(Line => 5, Column => (Columns / 2));
         Add(Str => "CARGO:");
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            CargoWeight := PlayerShip.Cargo.Element(I).Amount * Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Weight;
+            CargoWeight := PlayerShip.Cargo.Element(I).Amount * Items.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Weight;
             Move_Cursor(Line => Line_Position(5 + I), Column => (Columns / 2));
             Add(Str => Positive'Image(PlayerShip.Cargo.Element(I).Amount) & "x" &
-                To_String(Objects_Prototypes(PlayerShip.Cargo.Element(I).ProtoIndex).Name) & " (" &
+                To_String(Items.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name) & " (" &
                 Positive'Image(CargoWeight) & "kg )");
             Weight := Weight + CargoWeight;
         end loop;
