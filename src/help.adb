@@ -23,7 +23,6 @@ package body Help is
 
     HelpText : Unbounded_String := Null_Unbounded_String;
     StartIndex : Integer := 1;
-    EndIndex : Integer := 0;
 
     procedure LoadHelp is
         HelpFile : File_Type;
@@ -37,16 +36,25 @@ package body Help is
             Append(HelpText, ASCII.LF);
         end loop;
         Close(HelpFile);
-        EndIndex := Integer(Lines - 6) * Integer(Columns);
-        if EndIndex > Length(HelpText) then
-            EndIndex := Length(HelpText);
-        end if;
     end LoadHelp;
 
     procedure ShowHelp is
+        EndIndex : Integer;
+        CurrentLine : Line_Position;
+        CurrentColumn : Column_Position;
     begin
+        EndIndex := StartIndex + (Integer(Lines) * Integer(Columns));
+        if EndIndex > Length(HelpText) then
+            EndIndex := Length(HelpText);
+        end if;
         Move_Cursor(Line => 2, Column => 0);
-        Add(Str => Slice(HelpText, StartIndex, EndIndex));
+        for I in StartIndex..EndIndex loop
+            Add(Ch => Element(HelpText, I));
+            Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
+            if CurrentLine >= (Lines - 3) and CurrentColumn >= (Columns - 3) then
+                exit;
+            end if;
+        end loop;
     end ShowHelp;
 
     function HelpKeys(Key : Key_Code) return GameStates is
@@ -59,36 +67,20 @@ package body Help is
                 StartIndex := StartIndex - Positive(Columns);
                 if StartIndex < 1 then
                     StartIndex := 1;
-                    EndIndex := Integer(Lines - 6) * Integer(Columns);
-                    if EndIndex > Length(HelpText) then
-                        EndIndex := Length(HelpText);
-                    end if;
                     DrawGame(Help_View);
                     return Help_View;
-                end if;
-                EndIndex := StartIndex + (Integer(Lines - 6) * Integer(Columns));
-                if EndIndex > Length(HelpText) then
-                    EndIndex := Length(HelpText);
                 end if;
                 DrawGame(Help_View);
                 return Help_View;
             when 50 | 66 => -- Move help down
                 StartIndex := StartIndex + Positive(Columns);
-                if StartIndex > Length(HelpText) - (Integer(Lines - 6) * Integer(Columns)) then
-                    StartIndex := Length(HelpText) - (Integer(Lines - 6) * Integer(Columns));
+                if StartIndex > Length(HelpText) then
+                    StartIndex := Length(HelpText) - Positive(Columns);
                     if StartIndex < 1 then
                         StartIndex := 1;
-                        EndIndex := Integer(Lines - 6) * Integer(Columns);
-                        if EndIndex > Length(HelpText) then
-                            EndIndex := Length(HelpText);
-                        end if;
                     end if;
                     DrawGame(Help_View);
                     return Help_View;
-                end if;
-                EndIndex := StartIndex + (Integer(Lines - 6) * Integer(Columns));
-                if EndIndex > Length(HelpText) then
-                    EndIndex := Length(HelpText);
                 end if;
                 DrawGame(Help_View);
                 return Help_View;
