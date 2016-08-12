@@ -1,0 +1,55 @@
+[ITEM]
+Name = Charcollum
+Weight = 1
+Type = Fuel
+Prices = 0, 0, 0
+Buyable = N, N, N
+[ITEM]
+Name = Basic Rations
+Weight = 1
+Type = Food
+Prices = 3, 2, 3
+Buyable = N, Y, N
+[ITEM]
+Name = Water
+Weight = 1
+Type = Drink
+Prices = 2, 1, 2
+Buyable = N, Y, N
+[ITEM]
+Name = 20mm ammo
+Weight = 1
+Type = Ammo
+Prices = 3, 5, 5
+Buyable = Y, N, N
+[ITEM]
+Name = Bronze plates
+Weight = 5
+Type = RepairMaterial
+Prices = 2, 4, 4
+Buyable = Y, N, N
+[ITEM]
+Name = Fresh vegetables
+Weight = 1
+Type = FoodMaterial
+Prices = 2, 1, 2
+Buyable = N, Y, N
+[ITEM]
+Name = Fresh fruits
+Weight = 1
+Type = FoodMaterial
+Prices = 2, 1, 2
+Buyable = N, Y, N
+[ITEM]
+Name = Fresh meat
+Weight = 1
+Type = FoodMaterial
+Prices = 2, 1, 2
+Buyable = N, Y, N
+[ITEM]
+Name = Andrae logs
+Weight = 5
+Type = FuelMaterial
+Prices = 5, 5, 3
+Buyable = N, N, Y
+[]

@@ -26,6 +26,7 @@ with Messages; use Messages;
 with Combat; use Combat;
 with Crafts; use Crafts;
 with Help; use Help;
+with Prototypes; use Prototypes;
 
 package body UserInterface is
 
@@ -338,6 +339,7 @@ package body UserInterface is
             when Character'Pos('l') | Character'Pos('L') => -- Load game
                 if Exists("data/savegame.dat") then
                     LoadHelp;
+                    LoadItems;
                     if LoadGame then
                         DrawGame(Sky_Map_View);
                         return Sky_Map_View;
@@ -465,6 +467,7 @@ package body UserInterface is
                 return New_Game;
             when Character'Pos('s') | Character'Pos('S') => -- Start new game;
                 LoadHelp;
+                LoadItems;
                 NewCharName := Trim(To_Unbounded_String(CharName), Ada.Strings.Both);
                 NewShipName := Trim(To_Unbounded_String(ShipName), Ada.Strings.Both);
                 NewGame(NewCharName, NewShipName);
