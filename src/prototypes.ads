@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Containers.Vectors; use Ada.Containers;
 
 package Prototypes is
 
@@ -31,23 +32,9 @@ package Prototypes is
             Prices : Object_Prices; -- Prices of item in bases
             Buyable : Object_Buyable; -- Did item is buyable in selected bases
         end record;
-    Objects_Prototypes : constant array(1..9) of Object_Data := ((Name =>
-        To_Unbounded_String("Charcollum"), Weight => 1, IType => Fuel, Prices =>
-        (0, 0, 0), Buyable => (False, False, False)), (Name => To_Unbounded_String("Basic rations"), 
-        Weight => 1, IType => Food, Prices => (3, 2, 3), Buyable => (False, True,
-        False)), (Name => To_Unbounded_String("Water"), Weight => 1, IType =>
-        Drink, Prices => (2, 1, 2), Buyable => (False, True, False)), (Name =>
-        To_Unbounded_String("20mm ammo"), Weight => 1, IType => Ammo, Prices => (3,
-        5, 5), Buyable => (True, False, False)), (Name =>
-        To_Unbounded_String("Bronze plates"),Weight => 5, IType =>
-        RepairMaterial, Prices => (2, 4, 4), Buyable => (True, False, False)),
-        (Name => To_Unbounded_String("Fresh vegetables"), Weight => 1, IType =>
-        FoodMaterial, Prices => (2, 1, 2), Buyable => (False, True, False)),
-        (Name => To_Unbounded_String("Fresh fruits"), Weight => 1, IType =>
-        FoodMaterial, Prices => (2, 1, 2), Buyable => (False, True, False)),
-        (Name => To_Unbounded_String("Fresh meat"), Weight => 1, IType =>
-        FoodMaterial, Prices => (2, 1, 2), Buyable => (False, True, False)),
-        (Name => To_Unbounded_String("Andrae logs"), Weight => 5, IType =>
-        FuelMaterial, Prices => (5, 5, 3), Buyable => (False, False, True)));
+    package Objects_Container is new Vectors(Positive, Object_Data);
+    Items : Objects_Container.Vector; -- List of item available in game
+
+    procedure LoadItems; -- Load items from file
 
 end Prototypes;
