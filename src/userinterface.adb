@@ -125,18 +125,24 @@ package body UserInterface is
     procedure ShowSpeedControl is
         SpeedWindow : Window;
     begin
-        SpeedWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
-        Box(SpeedWindow);
         if PlayerShip.Speed = DOCKED then
-            Move_Cursor(Win => SpeedWindow, Line => 3, Column => 5);
+            SpeedWindow := Create(7, 16, (Lines / 2) - 5, (Columns / 2) - 8);
+            Box(SpeedWindow);
+            Move_Cursor(Win => SpeedWindow, Line => 2, Column => 5);
             Add(Win => SpeedWindow, Str => "Undock");
+            Change_Attributes(Win => SpeedWindow, Line => 2, Column => 5, 
+                Count => 1, Color => 1);
+            Move_Cursor(Win => SpeedWindow, Line => 3, Column => 5);
+            Add(Win => SpeedWindow, Str => "Trade");
             Change_Attributes(Win => SpeedWindow, Line => 3, Column => 5, 
                 Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 4, Column => 5);
-            Add(Win => SpeedWindow, Str => "Trade");
-            Change_Attributes(Win => SpeedWindow, Line => 4, Column => 5, 
-                Count => 1, Color => 1);
+            Move_Cursor(Win => SpeedWindow, Line => 5, Column => 5);
+            Add(Win => SpeedWindow, Str => "Quit");
+            Change_Attributes(Win => SpeedWindow, Line => 5, Column => 5, Count => 1,
+                Color => 1);
         else
+            SpeedWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
+            Box(SpeedWindow);
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
                 Move_Cursor(Win => SpeedWindow, Line => 2, Column => 5);
                 Add(Win => SpeedWindow, Str => "Dock");
@@ -159,11 +165,11 @@ package body UserInterface is
             Add(Win => SpeedWindow, Str => "Full speed");
             Change_Attributes(Win => SpeedWindow, Line => 6, Column => 7, 
                 Count => 1, Color => 1);
+            Move_Cursor(Win => SpeedWindow, Line => 8, Column => 5);
+            Add(Win => SpeedWindow, Str => "Quit");
+            Change_Attributes(Win => SpeedWindow, Line => 8, Column => 5, Count => 1,
+                Color => 1);
         end if;
-        Move_Cursor(Win => SpeedWindow, Line => 8, Column => 5);
-        Add(Win => SpeedWindow, Str => "Quit");
-        Change_Attributes(Win => SpeedWindow, Line => 8, Column => 5, Count => 1,
-            Color => 1);
         Refresh(SpeedWindow);
     end ShowSpeedControl;
 
