@@ -258,7 +258,7 @@ package body Ships is
             Weight := Weight + CargoWeight;
         end loop;
         Move_Cursor(Line => 2, Column => (Columns / 2));
-        Add(Str => "Weight: " & Integer'Image(Weight) & "kg");
+        Add(Str => "Weight:" & Integer'Image(Weight) & "kg");
     end ShowShipInfo;
 
     function ShipInfoKeys(Key : Key_Code) return GameStates is
