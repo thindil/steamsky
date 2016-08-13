@@ -54,7 +54,7 @@ package body Crew is
         end if;
         if GivenOrder = Repair then
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if Items.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = RepairMaterial then
+                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = RepairMaterial then
                     HaveMaterial := True;
                     exit;
                 end if;
@@ -104,7 +104,7 @@ package body Crew is
         ProtoIndex : Natural := 0;
     begin
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if Items.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = ItemType then
+            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = ItemType then
                 ProtoIndex := PlayerShip.Cargo.Element(I).ProtoIndex;
                 exit;
             end if;
