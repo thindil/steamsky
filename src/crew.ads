@@ -33,6 +33,7 @@ package Crew is
             Hunger : Natural; -- Hunger level of member
             Thirst : Natural; -- Thirst level of member
             Order : Crew_Orders; -- Current order for member
+            PreviousOrder : Crew_Orders; -- Previous order for member
         end record;
     procedure GiveOrders(MemberIndex : Positive; GivenOrder: Crew_Orders); -- Change order for selected crew member
     function Consume(ItemType : Items_Types) return Boolean; -- Eat/drink by crew member. Returns true if all ok, otherwise false

@@ -111,16 +111,20 @@ package body Game is
         -- Add crew to ship
         ShipCrew.Append(New_Item => (Name => CharName,
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0),
-            (5,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest)); 
+            (5,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
+            PreviousOrder => Rest)); 
         ShipCrew.Append(New_Item => (Name => PilotName,
             Health => 100, Tired => 0, Skills => ((5, 0), (0, 0), (0, 0),
-            (0,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Pilot)); 
+            (0,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Pilot,
+            PreviousOrder => Rest)); 
         ShipCrew.Append(New_Item => (Name => EngineerName,
             Health => 100, Tired => 0, Skills => ((0, 0), (5, 0), (0, 0),
-            (0,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Engineer)); 
+            (0,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Engineer,
+            PreviousOrder => Rest)); 
         ShipCrew.Append(New_Item => (Name => GunnerName,
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (5, 0), (0,
-            0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest)); 
+            0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
+            PreviousOrder => Rest)); 
         PlayerShip := (Name => ShipName, SkyX => SkyBases(Integer(RandomBase)).SkyX, SkyY =>
             SkyBases(Integer(RandomBase)).SkyY, Speed => DOCKED, Craft => 0, Modules =>
             ShipModules, Cargo => ShipCargo, Crew => ShipCrew);
@@ -137,9 +141,26 @@ package body Game is
         CrafterIndex, MaterialIndex, ModuleIndex, ResultAmount : Natural := 0;
         Amount : Integer;
         procedure UpdateMember(Member : in out Member_Data) is
+            BackToWork : Boolean := True;
         begin
             Member.Tired := TiredLevel;
+            if TiredLevel = 0 and Member.Order = Rest and Member.PreviousOrder /= Rest then
+                if Member.PreviousOrder /= Repair then
+                    for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                        if PlayerShip.Crew.Element(I).Order = Member.PreviousOrder then
+                            BackToWork := False;
+                            exit;
+                        end if;
+                    end loop;
+                end if;
+                if BackToWork then
+                    Member.Order := Member.PreviousOrder;
+                    AddMessage(To_String(Member.Name) & " back to work, fully rested.");
+                end if;
+                Member.PreviousOrder := Rest;
+            end if;
             if TiredLevel > 80 and Member.Order /= Rest then
+                Member.PreviousOrder := Member.Order;
                 Member.Order := Rest;
                 AddMessage(To_String(Member.Name) & " is too tired to work, going rest.");
             end if;
@@ -429,6 +450,8 @@ package body Game is
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(Crew_Orders'Pos(PlayerShip.Crew.Element(I).Order)));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(Crew_Orders'Pos(PlayerShip.Crew.Element(I).PreviousOrder)));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             for J in Skills_Array'Range loop
                 RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Skills(J, 1)));
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -529,7 +552,8 @@ package body Game is
                 Natural'Value(To_String(ReadData)), Skills => Skills, Hunger => 
                 Natural'Value(To_String(ReadData)), Thirst =>
                 Natural'Value(To_String(ReadData)), Order =>
-                Crew_Orders'Val(Integer'Value(To_String(ReadData)))));
+                Crew_Orders'Val(Integer'Value(To_String(ReadData))), 
+                PreviousOrder => Crew_Orders'Val(Integer'Value(To_String(ReadData)))));
             for J in Skills_Array'Range loop
                 Skills(J, 1) := Natural'Value(To_String(ReadData));
                 Skills(J, 2) := Natural'Value(To_String(ReadData));
