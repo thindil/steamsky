@@ -33,6 +33,7 @@ with Events; use Events;
 with Combat; use Combat;
 with Crafts; use Crafts;
 with Help; use Help;
+with MainMenu; use MainMenu;
 
 procedure SteamSky is
     GameState : GameStates := Main_Menu;
