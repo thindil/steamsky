@@ -118,6 +118,8 @@ begin
                 GameState := CraftKeys(Key);
             when License_Info =>
                 GameState := LicenseKeys(Key);
+            when License_Full =>
+                GameState := FullLicenseKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
