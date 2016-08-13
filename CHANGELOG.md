@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - New items: bronze plates, fresh fruits, fresh vegetables, fresh meat, andrae logs
 - Save to file last 10 messages
 - Ability to move map without moving ship
+- Informations about license to main menu
 
 ### Changed
 - Updated README.md
