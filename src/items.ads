@@ -18,7 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 
-package Prototypes is
+package Items is
 
     type Items_Types is (Fuel, Food, Drink, Ammo, RepairMaterial, FoodMaterial,
         FuelMaterial); -- Types of items
@@ -33,8 +33,8 @@ package Prototypes is
             Buyable : Object_Buyable; -- Did item is buyable in selected bases
         end record;
     package Objects_Container is new Vectors(Positive, Object_Data);
-    Items : Objects_Container.Vector; -- List of item available in game
+    Items_List : Objects_Container.Vector; -- List of item available in game
 
     procedure LoadItems; -- Load items from file
 
-end Prototypes;
+end Items;

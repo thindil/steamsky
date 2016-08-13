@@ -18,7 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Game; use Game;
-with Prototypes; use Prototypes;
+with Items; use Items;
 
 package Crew is
 

@@ -19,7 +19,7 @@ with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ships; use Ships;
 with Maps; use Maps;
 with Messages; use Messages;
-with Prototypes; use Prototypes;
+with Items; use Items;
 with UserInterface; use UserInterface;
 with Crew; use Crew;
 
@@ -29,16 +29,16 @@ package body Bases is
         BuyAmount : Positive;
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
-        ItemName : constant String := To_String(Items.Element(ItemIndex).Name);
+        ItemName : constant String := To_String(Items_List.Element(ItemIndex).Name);
         Cost : Positive;
         MoneyIndex : Natural := 0;
     begin
         BuyAmount := Positive'Value(Amount);
-        if not Items.Element(ItemIndex).Buyable(BaseType) then
+        if not Items_List.Element(ItemIndex).Buyable(BaseType) then
             ShowDialog("You can't buy " & ItemName & " in this base.");
             return;
         end if;
-        Cost := BuyAmount * Items.Element(ItemIndex).Prices(BaseType);
+        Cost := BuyAmount * Items_List.Element(ItemIndex).Prices(BaseType);
         Cost := Cost - Integer(Float'Floor(Float(Cost) *
                 (Float(PlayerShip.Crew.Element(1).Skills(4, 1)) / 200.0)));
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
@@ -46,7 +46,7 @@ package body Bases is
                 MoneyIndex := I;
             end if;
         end loop;
-        if FreeCargo(Cost - (Items.Element(ItemIndex).Weight * BuyAmount)) < 0 then
+        if FreeCargo(Cost - (Items_List.Element(ItemIndex).Weight * BuyAmount)) < 0 then
             ShowDialog("You don't have that much free space in your ship cargo.");
             return;
         end if;
@@ -73,7 +73,7 @@ package body Bases is
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         ProtoIndex : constant Positive := PlayerShip.Cargo.Element(ItemIndex).ProtoIndex;
-        ItemName : constant String := To_String(Items.Element(ProtoIndex).Name);
+        ItemName : constant String := To_String(Items_List.Element(ProtoIndex).Name);
         Profit : Positive;
     begin
         SellAmount := Positive'Value(Amount);
@@ -81,10 +81,10 @@ package body Bases is
             ShowDialog("You dont have that much " & ItemName & " in ship cargo.");
             return;
         end if;
-        Profit := Items.Element(ProtoIndex).Prices(BaseType) * SellAmount;
+        Profit := Items_List.Element(ProtoIndex).Prices(BaseType) * SellAmount;
         Profit := Profit + Integer(Float'Floor(Float(Profit) *
                 (Float(PlayerShip.Crew.Element(1).Skills(4, 1)) / 200.0)));
-        if FreeCargo((Items.Element(ProtoIndex).Weight * SellAmount) - Profit) < 0 then
+        if FreeCargo((Items_List.Element(ProtoIndex).Weight * SellAmount) - Profit) < 0 then
             ShowDialog("You don't have enough free cargo space in your ship for Charcollum.");
             return;
         end if;
@@ -149,7 +149,7 @@ package body Bases is
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         BuyLetter, SellLetter : Character;
-        BuyLetters : array (2..Items.Last_Index) of Character;
+        BuyLetters : array (2..Items_List.Last_Index) of Character;
         SellLetters : array (1..PlayerShip.Cargo.Last_Index) of Character := (others => ' ');
         Visibility : Cursor_Visibility := Normal;
         Amount : String(1..6);
@@ -169,8 +169,8 @@ package body Bases is
         Add(Str => "PRICE");
         Move_Cursor(Line => 2, Column => 50);
         Add(Str => "OWNED");
-        for I in 2..Items.Last_Index loop
-            if Items.Element(I).Buyable(BaseType) then
+        for I in 2..Items_List.Last_Index loop
+            if Items_List.Element(I).Buyable(BaseType) then
                 BuyLetter := Character'Val(95 + I);
             else
                 BuyLetter := ' ';
@@ -192,9 +192,9 @@ package body Bases is
             CurrentLine := CurrentLine + 1;
             Move_Cursor(Line => CurrentLine, Column => 3);
             Add(Str => BuyLetter & "   " & SellLetter & "   " &
-                To_String(Items.Element(I).Name));
+                To_String(Items_List.Element(I).Name));
             Move_Cursor(Line => CurrentLine, Column => 30);
-            Add(Str => Positive'Image(Items.Element(I).Prices(BaseType)) & " charcollum");
+            Add(Str => Positive'Image(Items_List.Element(I).Prices(BaseType)) & " charcollum");
             Move_Cursor(Line => CurrentLine, Column => 50);
             Add(Str => Natural'Image(CargoAmount));
             if BuyLetter /= ' ' then
@@ -209,7 +209,7 @@ package body Bases is
             Add(Str => "You have" & Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
                 " Charcollum.");
         else
-            Add(Str => "You don't have any charcollum to buy items.");
+            Add(Str => "You don't have any charcollum to buy Items_List.");
         end if;
         if Key /= KEY_NONE then -- start buying/selling items from/to base
             for I in BuyLetters'Range loop
@@ -222,7 +222,7 @@ package body Bases is
                 Set_Echo_Mode(True);
                 Set_Cursor_Visibility(Visibility);
                 Move_Cursor(Line => (Lines / 2), Column => 2);
-                Add(Str => "Enter amount of " & To_String(Items.Element(ItemIndex).Name)
+                Add(Str => "Enter amount of " & To_String(Items_List.Element(ItemIndex).Name)
                     & " to buy: ");
                 Get(Str => Amount, Len => 6);
                 BuyItems(ItemIndex, Amount);
@@ -239,7 +239,7 @@ package body Bases is
                     Set_Cursor_Visibility(Visibility);
                     Move_Cursor(Line => (Lines / 2), Column => 2);
                     Add(Str => "Enter amount of " &
-                        To_String(Items.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name)
+                        To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name)
                         & " to sell: ");
                     Get(Str => Amount, Len => 6);
                     SellItems(ItemIndex, Amount);

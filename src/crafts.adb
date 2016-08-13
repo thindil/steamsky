@@ -28,7 +28,7 @@ package body Crafts is
     begin
         -- Check for materials
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if Items.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Recipes(RecipeIndex).MaterialType and
+            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Recipes(RecipeIndex).MaterialType and
                 PlayerShip.Cargo.Element(I).Amount >= Recipes(RecipeIndex).MaterialAmount then
                 MaterialIndex := I;
                 exit;
@@ -36,7 +36,7 @@ package body Crafts is
         end loop;
         if MaterialIndex = 0 then
             ShowDialog("You don't have enough materials to start manufacturing " & 
-                To_String(Items.Element(Recipes(RecipeIndex).ResultIndex).Name) & ".");
+                To_String(Items_List.Element(Recipes(RecipeIndex).ResultIndex).Name) & ".");
             return;
         end if;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
@@ -48,16 +48,16 @@ package body Crafts is
         end loop;
         if ModuleIndex = 0 then
             ShowDialog("You don't have workplace for manufacture " & 
-                To_String(Items.Element(Recipes(RecipeIndex).ResultIndex).Name) & ".");
+                To_String(Items_List.Element(Recipes(RecipeIndex).ResultIndex).Name) & ".");
             return;
         end if;
-        if FreeCargo((Items.Element(MaterialIndex).Weight * Recipes(RecipeIndex).MaterialAmount) - 
-            (Items.Element(Recipes(RecipeIndex).ResultIndex).Weight * Recipes(RecipeIndex).ResultAmount)) < 0 then
+        if FreeCargo((Items_List.Element(MaterialIndex).Weight * Recipes(RecipeIndex).MaterialAmount) - 
+            (Items_List.Element(Recipes(RecipeIndex).ResultIndex).Weight * Recipes(RecipeIndex).ResultAmount)) < 0 then
             ShowDialog("You don't have that much free space in your ship cargo.");
             return;
         end if;
         PlayerShip.Craft := RecipeIndex;
-        AddMessage(To_String(Items.Element(Recipes(RecipeIndex).ResultIndex).Name) & " was set as manufacturing order.");
+        AddMessage(To_String(Items_List.Element(Recipes(RecipeIndex).ResultIndex).Name) & " was set as manufacturing order.");
         RecipeIndex := 0;
     end SetRecipe;
 
@@ -73,24 +73,24 @@ package body Crafts is
         Add(Str => "Recipes");
         for I in Recipes'Range loop
             Move_Cursor(Line => Line_Position(2 + I), Column => 2);
-            Add(Str => Character'Val(96 + I) & " " & To_String(Items.Element(Recipes(I).ResultIndex).Name));
+            Add(Str => Character'Val(96 + I) & " " & To_String(Items_List.Element(Recipes(I).ResultIndex).Name));
             Change_Attributes(Line => Line_Position(2 + I), Column => 2, Count => 1, Color => 1);
         end loop;
         if Key /= KEY_NONE then -- Show info about selected recipe
             if (Key >= Key_Code(96 + Recipes'First)) and (Key <= Key_Code(96 + Recipes'Last)) then
                 RecipeIndex := Integer(Key) - 96;
                 Move_Cursor(Line => 3, Column => (Columns / 2));
-                Add(Str => "Name: " & To_String(Items.Element(Recipes(RecipeIndex).ResultIndex).Name));
+                Add(Str => "Name: " & To_String(Items_List.Element(Recipes(RecipeIndex).ResultIndex).Name));
                 Move_Cursor(Line => 4, Column => (Columns / 2));
                 Add(Str => "Amount:" & Integer'Image(Recipes(RecipeIndex).ResultAmount));
                 Move_Cursor(Line => 5, Column => (Columns / 2));
                 Add(Str => "Material needed: ");
-                for I in Items.First_Index..Items.Last_Index loop
-                    if Items.Element(I).IType = Recipes(RecipeIndex).MaterialType then
+                for I in Items_List.First_Index..Items_List.Last_Index loop
+                    if Items_List.Element(I).IType = Recipes(RecipeIndex).MaterialType then
                         if MAmount > 0 then
                             Add(Str => " or ");
                         end if;
-                        Add(Str => To_String(Items.Element(I).Name));
+                        Add(Str => To_String(Items_List.Element(I).Name));
                         MAmount := MAmount + 1;
                     end if;
                 end loop;
