@@ -17,7 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 
-package body Prototypes is
+package body Items is
 
     procedure LoadItems is
         ItemsFile : File_Type;
@@ -25,7 +25,7 @@ package body Prototypes is
         EqualIndex, StartIndex, EndIndex : Natural;
         TempRecord : Object_Data;
     begin
-        if Items.Length > 0 then
+        if Items_List.Length > 0 then
             return;
         end if;
         TempRecord := (Name => Null_Unbounded_String, Weight => 1,
@@ -70,7 +70,7 @@ package body Prototypes is
                     end loop;
                 end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
-                Items.Append(New_Item => TempRecord);
+                Items_List.Append(New_Item => TempRecord);
                 TempRecord := (Name => Null_Unbounded_String, Weight => 1,
                     IType => Fuel, Prices => (0, 0, 0), Buyable => (False, False,
                     False));
@@ -79,4 +79,4 @@ package body Prototypes is
         Close(ItemsFile);
     end LoadItems;
 
-end Prototypes;
+end Items;

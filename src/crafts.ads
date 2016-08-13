@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
-with Prototypes; use Prototypes;
+with Items; use Items;
 with Ships; use Ships;
 with Game; use Game;
 

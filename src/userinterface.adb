@@ -26,7 +26,7 @@ with Messages; use Messages;
 with Combat; use Combat;
 with Crafts; use Crafts;
 with Help; use Help;
-with Prototypes; use Prototypes;
+with Items; use Items;
 
 package body UserInterface is
 
