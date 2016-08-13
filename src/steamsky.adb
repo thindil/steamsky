@@ -55,7 +55,7 @@ begin
 
     while GameState /= Quit loop
         Key := Get_Keystroke;
-        if GameState /= Main_Menu and GameState /= New_Game then
+        if GameState /= Main_Menu and GameState /= New_Game and GameState /= License_Info and GameState /= License_Full then
             if PlayerShip.Crew.Element(1).Health = 0 then -- Player is dead
                 ShowDialog("You are dead.");
                 Update_Panels;
@@ -116,6 +116,8 @@ begin
                 GameState := CombatOrdersKeys(Key);
             when Craft_View =>
                 GameState := CraftKeys(Key);
+            when License_Info =>
+                GameState := LicenseKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;

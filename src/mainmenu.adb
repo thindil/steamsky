@@ -50,13 +50,21 @@ package body MainMenu is
             Change_Attributes(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2,
                 Count => 1, Color => 1);
             Move_Cursor(Line => (Lines / 3) + 3, Column => (Columns - 12) / 2);
+            Add(Str => "License");
+            Change_Attributes(Line => (Lines / 3) + 3, Column => ((Columns - 12) / 2) + 1,
+                Count => 1, Color => 1);
+            Move_Cursor(Line => (Lines / 3) + 4, Column => (Columns - 12) / 2);
             Add(Str => "Quit game");
-            Change_Attributes(Line => (Lines / 3) + 3, Column => (Columns - 12) / 2,
+            Change_Attributes(Line => (Lines / 3) + 4, Column => (Columns - 12) / 2,
                 Count => 1, Color => 1);
         else
             Move_Cursor(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2);
+            Add(Str => "License");
+            Change_Attributes(Line => (Lines / 3) + 2, Column => ((Columns - 12) / 2) + 1,
+                Count => 1, Color => 1);
+            Move_Cursor(Line => (Lines / 3) + 3, Column => (Columns - 12) / 2);
             Add(Str => "Quit game");
-            Change_Attributes(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2,
+            Change_Attributes(Line => (Lines / 3) + 3, Column => (Columns - 12) / 2,
                 Count => 1, Color => 1);
         end if;
         -- Copyright
@@ -119,6 +127,27 @@ package body MainMenu is
         Refresh(NewGameWindow);
     end ShowNewGameMenu;
 
+    procedure ShowLicenseInfo is
+        InfoWindow : Window;
+        CurrentLine : Line_Position;
+        CurrentColumn : Column_Position;
+    begin
+        InfoWindow := Create(15, (Columns / 2), (Lines / 3), (Columns / 4));
+        Add(Win => InfoWindow, Str => "Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.");
+        Get_Cursor_Position(InfoWindow, CurrentLine, CurrentColumn);
+        Move_Cursor(Win => InfoWindow, Line => CurrentLine + 2, Column => 0);
+        Add(Win => InfoWindow, Str => "Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
+        Refresh(InfoWindow);
+        Move_Cursor(Line => (Lines - 2), Column => (Columns / 4));
+        Add(Str => "F for full license text, other keys back to main menu.");
+        Change_Attributes(Line => (Lines - 2), Column => (Columns / 4), Count => 1, Color => 1);
+    end ShowLicenseInfo;
+
+    procedure ShowFullLicense is
+    begin
+        null;
+    end ShowFullLicense;
+
     function MainMenuKeys(Key : Key_Code) return GameStates is
     begin
         case Key is
@@ -146,6 +175,12 @@ package body MainMenu is
                 else
                     return Main_Menu;
                 end if;
+            when Character'Pos('i') | Character'Pos('I') => -- Show license info
+                Erase;
+                Refresh_Without_Update;
+                ShowLicenseInfo;
+                Update_Screen;
+                return License_Info;
             when others => 
                 return Main_Menu;
         end case;
@@ -179,5 +214,21 @@ package body MainMenu is
                 return New_Game;
         end case;
     end NewGameKeys;
+
+    function LicenseKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when Character'Pos('f') | Character'Pos('F') => -- Show full license
+                Erase;
+                Refresh;
+                ShowFullLicense;
+                return License_Full;
+            when others => -- Back to main menu
+                Erase;
+                Refresh;
+                ShowMainMenu;
+                return Main_Menu;
+        end case;
+    end LicenseKeys;
 
 end MainMenu;
