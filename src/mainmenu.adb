@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Directories; use Ada.Directories;
+with Ada.Text_IO; use Ada.Text_IO;
 with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Help; use Help;
 with Items; use Items;
@@ -26,6 +27,8 @@ package body MainMenu is
 
     CharName : String(1..12);
     ShipName : String(1..12);
+    LicenseText : Unbounded_String := Null_Unbounded_String;
+    StartIndex : Integer := 1;
 
     procedure ShowMainMenu is
         Visibility : Cursor_Visibility := Invisible;
@@ -144,8 +147,27 @@ package body MainMenu is
     end ShowLicenseInfo;
 
     procedure ShowFullLicense is
+        LicenseFile : File_Type;
+        Index : Positive;
+        CurrentLine : Line_Position := 2;
+        CurrentColumn : Column_Position;
     begin
-        null;
+        if LicenseText = Null_Unbounded_String then
+            Open(LicenseFile, In_File, "COPYING");
+            while not End_Of_File(LicenseFile) loop
+                Append(LicenseText, Get_Line(LicenseFile));
+                Append(LicenseText, ASCII.LF);
+            end loop;
+            Close(LicenseFile);
+        end if;
+        Index := StartIndex;
+        Add(Str => "Up/down arrows to scroll, any other key - back to main menu.");
+        Move_Cursor(Line => 2, Column => 0);
+        while CurrentLine < (Lines - 1) and Index <= Length(LicenseText) loop
+            Add(Ch => Element(LicenseText, Index));
+            Index := Index + 1;
+            Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
+        end loop;
     end ShowFullLicense;
 
     function MainMenuKeys(Key : Key_Code) return GameStates is
@@ -219,6 +241,7 @@ package body MainMenu is
     begin
         case Key is
             when Character'Pos('f') | Character'Pos('F') => -- Show full license
+                StartIndex := 1;
                 Erase;
                 Refresh;
                 ShowFullLicense;
@@ -230,5 +253,44 @@ package body MainMenu is
                 return Main_Menu;
         end case;
     end LicenseKeys;
+
+    function FullLicenseKeys(Key : in out Key_Code) return GameStates is
+        TextLength : Positive := 80;
+    begin
+        if Key = 27 then
+            Key := Get_Keystroke;
+            if Key = 91 then
+                Key := Get_Keystroke;
+            end if;
+        end if;
+        case Key is
+            when 56 | 65 => -- Scroll license up
+                StartIndex := StartIndex - Positive(Columns);
+                if StartIndex < 1 then
+                    StartIndex := 1;
+                end if;
+                Erase;
+                Refresh;
+                ShowFullLicense;
+                return License_Full;
+            when 50 | 66 => -- Scroll license down
+                StartIndex := StartIndex + Positive(Columns);
+                if TextLength > Positive(Columns - 1) then
+                    TextLength := Positive(Columns - 1);
+                end if;
+                if (Length(LicenseText) - StartIndex) < (Positive(Lines - 7) * TextLength) then
+                    StartIndex := StartIndex - Positive(Columns);
+                end if;
+                Erase;
+                Refresh;
+                ShowFullLicense;
+                return License_Full;
+            when others => -- Back to main menu
+                Erase;
+                Refresh;
+                ShowMainMenu;
+                return Main_Menu;
+        end case;
+    end FullLicenseKeys;
 
 end MainMenu;
