@@ -18,14 +18,10 @@
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Game; use Game;
 
-package UserInterface is
-    
-    procedure ShowGameMenu(CurrentState : GameStates); -- Show in-game menu
-    procedure ShowDialog(Message : String); -- Show dialog window with message
-    function HideDialog return Boolean; -- Hide dialog if visible, return True if dialog was hidden
-    procedure DrawGame(CurrentState : GameStates); -- Draw game screen
-    function GameMenuKeys(CurrentState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in game menu
-    function SpeedMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in speed control menu
-    function ConfirmKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in confirm window
-    
-end UserInterface;
+package MainMenu is
+
+    procedure ShowMainMenu; -- Show main game menu
+    function MainMenuKeys(Key : Key_Code) return GameStates; -- Handle keys on main menu
+    function NewGameKeys(Key : Key_Code) return GameStates; -- Handle keys in new game window
+
+end MainMenu;
