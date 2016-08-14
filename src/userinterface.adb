@@ -26,6 +26,7 @@ with Combat; use Combat;
 with Crafts; use Crafts;
 with Help; use Help;
 with MainMenu; use MainMenu;
+with Events; use Events;
 
 package body UserInterface is
 
@@ -388,10 +389,12 @@ package body UserInterface is
 
     function WaitMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates is
         TimeNeeded : Natural := 0;
+        ReturnState : GameStates;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-                null;
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
             when Character'Pos('1') => -- Wait 1 minute
                 UpdateGame(1);
             when Character'Pos('2') => -- Wait 5 minutes
@@ -434,8 +437,9 @@ package body UserInterface is
             when others =>
                 return Wait_Order;
         end case;
-        DrawGame(Sky_Map_View);
-        return OldState;
+        ReturnState := CheckForEvent(OldState);
+        DrawGame(ReturnState);
+        return ReturnState;
     end WaitMenuKeys;
 
 end UserInterface;
