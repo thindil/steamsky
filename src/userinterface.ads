@@ -27,5 +27,6 @@ package UserInterface is
     function GameMenuKeys(CurrentState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in game menu
     function SpeedMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in speed control menu
     function ConfirmKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in confirm window
+    function WaitMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in wait orders menu
     
 end UserInterface;

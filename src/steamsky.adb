@@ -89,6 +89,9 @@ begin
                     when 2 =>
                         GameState := Control_Speed;
                         DrawGame(GameState);
+                    when 3 =>
+                        GameState := Wait_Order;
+                        DrawGame(GameState);
                     when others =>
                         DrawGame(GameState);
                 end case;
@@ -120,6 +123,8 @@ begin
                 GameState := LicenseKeys(Key);
             when License_Full =>
                 GameState := FullLicenseKeys(Key);
+            when Wait_Order =>
+                GameState := WaitMenuKeys(OldState, Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;

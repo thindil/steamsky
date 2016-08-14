@@ -35,8 +35,8 @@ package body UserInterface is
         Speed : Unbounded_String;
     begin
         case CurrentState is
-            when Sky_Map_View | Control_Speed =>
-                Add(Str => "[Ship] [Crew] [Orders] [Craft] [Messages] [Help] [Quit]");
+            when Sky_Map_View | Control_Speed | Wait_Order =>
+                Add(Str => "[Ship] [Crew] [Orders] [Craft] [Messages] [Wait] [Help] [Quit]");
                 Change_Attributes(Line => 0, Column => 1, Count => 1, Color => 1);
                 Change_Attributes(Line => 0, Column => 8, Count => 1, Color => 1);
                 Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
@@ -44,6 +44,7 @@ package body UserInterface is
                 Change_Attributes(Line => 0, Column => 32, Count => 1, Color => 1);
                 Change_Attributes(Line => 0, Column => 43, Count => 1, Color => 1);
                 Change_Attributes(Line => 0, Column => 50, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 57, Count => 1, Color => 1);
             when Ship_Info =>
                 Add(Str => "Ship Informations [Quit]");
                 Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
@@ -78,8 +79,8 @@ package body UserInterface is
                 when FULL_SPEED =>
                     Speed := To_Unbounded_String("Full Speed");
             end case;
-            Move_Cursor(Line => 0, Column => (Columns / 2));
-            Add(Str => FormatedTime & "     Speed: " & To_String(Speed));
+            Move_Cursor(Line => 0, Column => 63);
+            Add(Str => FormatedTime & " Speed: " & To_String(Speed));
         end if;
     end ShowGameMenu;
 
@@ -188,6 +189,66 @@ package body UserInterface is
         return False;
     end HideDialog;
 
+    procedure ShowWaitOrder is
+        WaitWindow : Window;
+        WaitLines : Line_Position := 11;
+        WaitColumns : Column_Position := 23;
+        NeedHealing, NeedRest : Boolean := False;
+        WaitOrders : constant array (1..6) of Unbounded_String :=
+            (To_Unbounded_String("Wait 1 minute"), To_Unbounded_String("Wait 5 minutes"), 
+            To_Unbounded_String("Wait 10 minutes"), To_Unbounded_String("Wait 15 minutes"), 
+            To_Unbounded_String("Wait 30 minutes"), To_Unbounded_String("Wait 1 hour"));
+        CurrentLine : Line_Position := 1;
+    begin
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Tired > 0 and PlayerShip.Crew.Element(I).Order = Rest then
+                NeedRest := True;
+            end if;
+            if PlayerShip.Crew.Element(I).Health < 100 and PlayerShip.Crew.Element(I).Health > 0 
+                and PlayerShip.Crew.Element(I).Order = Rest then
+                NeedHealing := True;
+            end if;
+        end loop;
+        if NeedRest then
+            WaitLines := WaitLines + 1;
+            WaitColumns := 32;
+        end if;
+        if NeedHealing then
+            WaitLines := WaitLines + 1;
+            WaitColumns := 32;
+        end if;
+        WaitWindow := Create(WaitLines, WaitColumns, (Lines / 2) - (WaitLines / 2), (Columns / 2) - (WaitColumns / 2));
+        Box(WaitWindow);
+        for I in WaitOrders'Range loop
+            CurrentLine := CurrentLine + 1;
+            Move_Cursor(Win => WaitWindow, Line => CurrentLine, Column => 2);
+            Add(Win => WaitWindow, Str => Integer'Image(I) & " " & To_String(WaitOrders(I)));
+            Change_Attributes(Win => WaitWindow, Line => CurrentLine, Column => 3, Count => 1,
+                Color => 1);
+        end loop;
+        if NeedRest then
+            Move_Cursor(Win => WaitWindow, Line => CurrentLine + 1, Column => 2);
+            Add(Win => WaitWindow, Str => Line_Position'Image(CurrentLine) & " " & 
+                "Wait until crew is rested");
+            Change_Attributes(Win => WaitWindow, Line => CurrentLine + 1, Column => 3, Count => 1,
+                Color => 1);
+            CurrentLine := CurrentLine + 2;
+        end if;
+        if NeedHealing then
+            CurrentLine := CurrentLine + 1;
+            Move_Cursor(Win => WaitWindow, Line => CurrentLine, Column => 2);
+            Add(Win => WaitWindow, Str => Line_Position'Image(CurrentLine) & " " & 
+                "Wait until crew is healed");
+            Change_Attributes(Win => WaitWindow, Line => CurrentLine, Column => 3, Count => 1,
+                Color => 1);
+        end if;
+        Move_Cursor(Win => WaitWindow, Line => WaitLines - 2, Column => 3);
+        Add(Win => WaitWindow, Str =>  "Quit");
+        Change_Attributes(Win => WaitWindow, Line => WaitLines - 2, Column => 3, Count => 1,
+            Color => 1);
+        Refresh(WaitWindow);
+    end ShowWaitOrder;
+
     procedure DrawGame(CurrentState : GameStates) is
     begin
         Erase;
@@ -218,6 +279,9 @@ package body UserInterface is
                 ShowCombat;
             when Craft_View =>
                 ShowCraft(KEY_NONE);
+            when Wait_Order =>
+                ShowSkyMap;
+                ShowWaitOrder;
             when others =>
                 null;
         end case;
@@ -321,5 +385,57 @@ package body UserInterface is
                 return OldState;
         end case;
     end ConfirmKeys;
+
+    function WaitMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates is
+        TimeNeeded : Natural := 0;
+    begin
+        case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                null;
+            when Character'Pos('1') => -- Wait 1 minute
+                UpdateGame(1);
+            when Character'Pos('2') => -- Wait 5 minutes
+                UpdateGame(5);
+            when Character'Pos('3') => -- Wait 10 minutes
+                UpdateGame(10);
+            when Character'Pos('4') => -- Wait 15 minutes
+                UpdateGame(15);
+            when Character'Pos('5') => -- Wait 30 minute
+                UpdateGame(30);
+            when Character'Pos('6') => -- Wait 1 hour
+                UpdateGame(60);
+            when Character'Pos('7') => -- Wait until crew is rested
+                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                    if PlayerShip.Crew.Element(I).Tired > 0 and PlayerShip.Crew.Element(I).Order = Rest then
+                        if TimeNeeded < PlayerShip.Crew.Element(I).Tired then
+                            TimeNeeded := PlayerShip.Crew.Element(I).Tired;
+                        end if;
+                    end if;
+                end loop;
+                if TimeNeeded > 0 then
+                    UpdateGame(TimeNeeded);
+                else
+                    return Wait_Order;
+                end if;
+            when Character'Pos('8') => -- Wait until crew is healed
+                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                    if PlayerShip.Crew.Element(I).Health < 100 and PlayerShip.Crew.Element(I).Health > 0  and
+                        PlayerShip.Crew.Element(I).Order = Rest then
+                        if TimeNeeded < (100 - PlayerShip.Crew.Element(I).Health) * 15 then
+                            TimeNeeded := (100 - PlayerShip.Crew.Element(I).Health) * 15;
+                        end if;
+                    end if;
+                end loop;
+                if TimeNeeded > 0 then
+                    UpdateGame(TimeNeeded);
+                else
+                    return Wait_Order;
+                end if;
+            when others =>
+                return Wait_Order;
+        end case;
+        DrawGame(Sky_Map_View);
+        return OldState;
+    end WaitMenuKeys;
 
 end UserInterface;

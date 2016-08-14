@@ -122,6 +122,8 @@ package body Maps is
                 MoveShip(0, 1, -1);
             when Character'Pos('o') | Character'Pos('O') => -- Ship orders menu
                 Result := 2;
+            when Character'Pos('w') | Character'Pos('W') => -- Wait order menu
+                Result := 3;
             when 53 => -- Wait 1 minute
                 UpdateGame(1);
             when 27 => -- Map moving
