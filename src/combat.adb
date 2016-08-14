@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ships; use Ships;
 with Crew; use Crew;
@@ -71,6 +70,7 @@ package body Combat is
         EngineerOrder := 3;
         GunnerOrder := 1;
         EndCombat := False;
+        EnemyName := Enemy.Name;
     end StartCombat;
 
     procedure CombatTurn is
