@@ -67,7 +67,7 @@ package body UserInterface is
             when others =>
                 null;
         end case;
-        if CurrentState /= Help_View then
+        if CurrentState /= Help_View and CurrentState /= Quit_Confirm then
             case PlayerShip.Speed is
                 when DOCKED =>
                     Speed := To_Unbounded_String("Docked");
