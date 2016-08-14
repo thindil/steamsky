@@ -275,7 +275,7 @@ package body UserInterface is
                 ShowConfirm("Are you sure want to quit game?");
             when Combat_Confirm =>
                 Refresh_Without_Update;
-                ShowConfirm("We are attacked, engage?");
+                ShowConfirm(To_String(EnemyName) & " is near, attack?");
             when Combat_State =>
                 ShowCombat;
             when Craft_View =>
