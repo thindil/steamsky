@@ -42,6 +42,7 @@ All notable changes to this project will be documented in this file.
 - Moved help text to separated text file
 - Raised price of basic rations
 - Moved items data to separated text file
+- Better world generation
 
 ### Fixed
 - Crash in save game when game was started from other directory
