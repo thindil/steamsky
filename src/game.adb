@@ -41,6 +41,8 @@ package body Game is
         ShipCargo : Cargo_Container.Vector; 
         ShipCrew : Crew_Container.Vector;
         PilotName, EngineerName, GunnerName : Unbounded_String;
+        ValidLocation : Boolean;
+        TempX, TempY : Integer;
     begin
         -- Set Game time
         GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
@@ -50,9 +52,38 @@ package body Game is
         SkyMap := (others => (others => (BaseIndex => 0)));
         for I in Rand_Range loop
             loop
+                ValidLocation := True;
                 PosX := Rand_Int.Random(Generator);
                 PosY := Rand_Int.Random(Generator);
-                exit when SkyMap(Integer(PosX), Integer(PosY)).BaseIndex = 0;
+                for J in -5..5 loop
+                    TempX := Integer(PosX) + J;
+                    if TempX < 1 then
+                        TempX := 1;
+                    end if;
+                    if TempX > Integer(Rand_Range'Last) then
+                        TempX := Integer(Rand_Range'Last);
+                    end if;
+                    for K in -5..5 loop
+                        TempY := Integer(PosY) + K;
+                        if TempY < 1 then
+                            TempY := 1;
+                        end if;
+                        if TempY > Integer(Rand_Range'Last) then
+                            TempY := Integer(Rand_Range'Last);
+                        end if;
+                        if SkyMap(TempX, TempY).BaseIndex > 0 then
+                            ValidLocation := False;
+                            exit;
+                        end if;
+                    end loop;
+                    if not ValidLocation then
+                        exit;
+                    end if;
+                end loop;
+                if SkyMap(Integer(PosX), Integer(PosY)).BaseIndex > 0 then
+                    ValidLocation := False;
+                end if;
+                exit when ValidLocation;
             end loop;
             BaseType := Rand_Base.Random(Generator2);
             SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I));
