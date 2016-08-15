@@ -49,8 +49,11 @@ package body Game is
         Rand_Base.Reset(Generator2);
         SkyMap := (others => (others => (BaseIndex => 0)));
         for I in Rand_Range loop
-            PosX := Rand_Int.Random(Generator);
-            PosY := Rand_Int.Random(Generator);
+            loop
+                PosX := Rand_Int.Random(Generator);
+                PosY := Rand_Int.Random(Generator);
+                exit when SkyMap(Integer(PosX), Integer(PosY)).BaseIndex = 0;
+            end loop;
             BaseType := Rand_Base.Random(Generator2);
             SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I));
             SkyBases(Integer(I)) := (Name => GenerateBaseName, Visited => False, 
