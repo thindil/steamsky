@@ -34,6 +34,6 @@ package ShipModules is
     package BaseModules_Container is new Vectors(Positive, BaseModule_Data);
     Modules_List : BaseModules_Container.Vector; -- Lost of ship modules available in game
 
-    procedure LoadModules; -- Load modules from file
+    procedure LoadShipModules; -- Load modules from file
 
 end ShipModules;

@@ -1,8 +1,64 @@
 [Shipmodule]
-Name = "Hawk Hull"
+Name = Hawk hull
 Type = Hull
 Weight = 4000
 Value = 0
 MaxValue = 10
 Durability = 100
+[Shipmodule]
+Name = Bronze armor
+Type = Armor
+Weight = 4000
+Value = 5
+MaxValue = 10
+Durability = 200
+[Shipmodule]
+Name = Small engine
+Type = Engine
+Weight = 1000
+Value = 0
+MaxValue = 2000
+Durability = 100
+[Shipmodule]
+Name = Cabin
+Type = Cabin
+Weight = 200
+Value = 20
+MaxValue = 20
+Durability = 100
+[Shipmodule]
+Name = Cocpit
+Type = Cocpit
+Weight = 200
+Value = 0
+MaxValue = 0
+Durability = 100
+[Shipmodule]
+Name = Alchemy Lab
+Type = Alchemy_lab
+Weight = 400
+Value = 0
+MaxValue = 0
+Durability = 100
+[Shipmodule]
+Name = Cargo space
+Type = Cargo
+Weight = 0
+Value = 0
+MaxValue = 0
+Durability = 10
+[Shipmodule]
+Name = Small turret
+Type = Turret
+Weight = 50
+Value = 0
+MaxValue = 0
+Durability = 100
+[Shipmodule]
+Name = 20mm gun
+Type = Gun
+Weight = 30
+Value = 4
+MaxValue = 10
+Durability = 20
 []

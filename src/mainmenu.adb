@@ -22,6 +22,7 @@ with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Help; use Help;
 with Items; use Items;
 with UserInterface; use UserInterface;
+with ShipModules; use ShipModules;
 
 package body MainMenu is
 
@@ -219,6 +220,7 @@ package body MainMenu is
                 if Exists("data/savegame.dat") then
                     LoadHelp;
                     LoadItems;
+                    LoadShipModules;
                     if LoadGame then
                         DrawGame(Sky_Map_View);
                         return Sky_Map_View;
@@ -267,6 +269,7 @@ package body MainMenu is
             when Character'Pos('s') | Character'Pos('S') => -- Start new game;
                 LoadHelp;
                 LoadItems;
+                LoadShipModules;
                 NewCharName := Trim(To_Unbounded_String(CharName), Ada.Strings.Both);
                 NewShipName := Trim(To_Unbounded_String(ShipName), Ada.Strings.Both);
                 NewGame(NewCharName, NewShipName);
