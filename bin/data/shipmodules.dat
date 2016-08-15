@@ -45,7 +45,7 @@ Name = Cargo space
 Type = Cargo
 Weight = 0
 Value = 0
-MaxValue = 0
+MaxValue = 5000
 Durability = 10
 [Shipmodule]
 Name = Small turret
