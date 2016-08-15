@@ -21,6 +21,7 @@ with Bases; use Bases;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Crafts; use Crafts;
+with ShipModules; use ShipModules;
 
 package body Ships is
 
@@ -185,22 +186,27 @@ package body Ships is
         end if;
     end UpdateCargo;
 
-    procedure UpdateModule(ModuleIndex : Positive; Field : String; Value : Integer) is
+    procedure UpdateModule(ModuleIndex : Positive; Field : String; Value : String) is
         NewDurability : Integer;
+        NewName : Unbounded_String;
         procedure UpdateMod(Module : in out ModuleData) is
         begin
             Module.Durability := NewDurability;
+            Module.Name := NewName;
         end UpdateMod;
     begin
         if ModuleIndex > Positive(PlayerShip.Modules.Length) then
             return;
         end if;
         NewDurability := PlayerShip.Modules.Element(ModuleIndex).Durability;
+        NewName := PlayerShip.Modules.Element(ModuleIndex).Name;
         if Field = "Durability" then
-            NewDurability := NewDurability + Value;
+            NewDurability := NewDurability + Integer'Value(Value);
             if NewDurability < 0 then
                 NewDurability := 0;
             end if;
+        elsif Field = "Name" then
+            NewName := To_Unbounded_String(Value);
         end if;
         PlayerShip.Modules.Update_Element(Index => ModuleIndex, Process => UpdateMod'Access);
     end UpdateModule;
@@ -209,7 +215,7 @@ package body Ships is
         FreeCargo : Integer := 0;
     begin
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Mtype = CARGO then
+            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).Mtype = CARGO then
                 FreeCargo := FreeCargo + PlayerShip.Modules.Element(I).Max_Value;
             end if;
         end loop;

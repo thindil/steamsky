@@ -165,7 +165,7 @@ package body Combat is
         end case;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if PlayerShip.Modules.Element(I).Durability > 0 then
-                case PlayerShip.Modules.Element(I).MType is
+                case Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType is
                     when GUN =>
                         WeaponIndex := I;
                     when ARMOR =>
@@ -247,7 +247,7 @@ package body Combat is
             if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
                 ShootMessage := ShootMessage & To_Unbounded_String("hits in ");
                 if ArmorIndex > 0 then
-                    UpdateModule(ArmorIndex, "Durability", (1 - Enemy.Damage));
+                    UpdateModule(ArmorIndex, "Durability", Integer'Image(1 - Enemy.Damage));
                     ShootMessage := ShootMessage & To_Unbounded_String("armor.");
                 else
                     HitLocation := Integer(Rand_Roll.Random(Generator)) / Integer(PlayerShip.Modules.Length);
@@ -259,9 +259,9 @@ package body Combat is
                     end loop;
                     ShootMessage := ShootMessage & PlayerShip.Modules.Element(HitLocation).Name &
                         To_Unbounded_String(".");
-                    UpdateModule(HitLocation, "Durability", (1 - Enemy.Damage));
-                    if (PlayerShip.Modules.Element(HitLocation).MType = HULL or
-                        PlayerShip.Modules.Element(HitLocation).MType = ENGINE)
+                    UpdateModule(HitLocation, "Durability", Integer'Image(1 - Enemy.Damage));
+                    if (Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType = HULL or
+                        Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType = ENGINE)
                     and PlayerShip.Modules.Element(HitLocation).Durability = 0 then
                         PlayerShip.Crew.Update_Element(Index => 1, Process => UpdatePlayer'Access);
                         AddMessage(To_String(ShootMessage));

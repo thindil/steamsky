@@ -44,6 +44,8 @@ package body Game is
         PilotName, EngineerName, GunnerName : Unbounded_String;
         ValidLocation : Boolean;
         TempX, TempY : Integer;
+        Modules : constant array(Positive range <>) of Positive := (1, 2, 3, 4, 4, 4, 4, 5,
+        6, 7, 7, 8, 9);
     begin
         -- Set Game time
         GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
@@ -98,45 +100,14 @@ package body Game is
         EngineerName := GenerateMemberName;
         GunnerName := GenerateMemberName;
         -- Create player ship with modules
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Hawk hull"), 
-            MType => HULL, Weight => 4000, Current_Value => 10,
-            Max_Value => 10, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Bronze armor"), 
-            MType => ARMOR, Weight => 4000, Current_Value => 5,
-            Max_Value => 10, Durability => 200, MaxDurability => 200));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Small engine"), 
-            MType => ENGINE, Weight => 1000, Current_Value => 0,
-            Max_Value => 2000, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => CharName & To_Unbounded_String("'s Cabin"), 
-            MTYPE => CABIN, Weight => 200, Current_Value => 20, Max_Value =>
-            20, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => PilotName & To_Unbounded_String("'s Cabin"), 
-            MTYPE => CABIN, Weight => 200, Current_Value => 20, Max_Value =>
-            20, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => EngineerName & To_Unbounded_String("'s Cabin"), 
-            MTYPE => CABIN, Weight => 200, Current_Value => 20, Max_Value =>
-            20, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => GunnerName & To_Unbounded_String("'s Cabin"), 
-            MTYPE => CABIN, Weight => 200, Current_Value => 20, Max_Value =>
-            20, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Cocpit"), 
-            MTYPE => COCPIT, Weight => 200, Current_Value => 0, Max_Value =>
-            0, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Alchemy Lab"), 
-            MTYPE => ALCHEMY_LAB, Weight => 400, Current_Value => 0, Max_Value =>
-            0, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Cargo space"), 
-            MTYPE => CARGO, Weight => 0, Current_Value => 0, Max_Value =>
-            5000, Durability => 10, MaxDurability => 10));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Cargo space"), 
-            MTYPE => CARGO, Weight => 0, Current_Value => 0, Max_Value =>
-            5000, Durability => 10, MaxDurability => 10));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("Turret"), 
-            MTYPE => TURRET, Weight => 50, Current_Value => 0, Max_Value =>
-            0, Durability => 100, MaxDurability => 100));
-        ShipModules.Append(New_Item => (Name => To_Unbounded_String("20mm gun"), 
-            MTYPE => GUN, Weight => 30, Current_Value => 4, Max_Value =>
-            10, Durability => 20, MaxDurability => 20));
+        for I in Modules'Range loop
+            ShipModules.Append(New_Item => (Name => Modules_List.Element(Modules(I)).Name,
+                ProtoIndex => Modules(I), Weight => Modules_List.Element(Modules(I)).Weight,
+                Current_Value => Modules_List.Element(Modules(I)).Value,
+                Max_Value => Modules_List.Element(Modules(I)).MaxValue,
+                Durability => Modules_List.Element(Modules(I)).Durability,
+                MaxDurability => Modules_List.Element(Modules(I)).Durability));
+        end loop;
         -- Add cargo to ship
         ShipCargo.Append(New_Item => (ProtoIndex => 1, Amount => 2000));
         ShipCargo.Append(New_Item => (ProtoIndex => 2, Amount => 100));
@@ -163,6 +134,10 @@ package body Game is
         PlayerShip := (Name => ShipName, SkyX => SkyBases(Integer(RandomBase)).SkyX, SkyY =>
             SkyBases(Integer(RandomBase)).SkyY, Speed => DOCKED, Craft => 0, Modules =>
             ShipModules, Cargo => ShipCargo, Crew => ShipCrew);
+        UpdateModule(4, "Name", To_String(CharName) & "'s Cabin");
+        UpdateModule(5, "Name", To_String(PilotName) & "'s Cabin");
+        UpdateModule(6, "Name", To_String(EngineerName) & "'s Cabin");
+        UpdateModule(7, "Name", To_String(GunnerName) & "'s Cabin");
         SkyBases(Integer(RandomBase)).Visited := True;
     end NewGame;
 
@@ -323,11 +298,11 @@ package body Game is
                             PlayerShip.Modules.Element(I).MaxDurability;
                         UpdateCargo(ProtoIndex, (PlayerShip.Modules.Element(I).Durability - 
                             PlayerShip.Modules.Element(I).MaxDurability));
-                        UpdateModule(I, "Durability", (PlayerShip.Modules.Element(I).MaxDurability - 
+                        UpdateModule(I, "Durability", Integer'Image(PlayerShip.Modules.Element(I).MaxDurability - 
                             PlayerShip.Modules.Element(I).Durability));
                     else
                         UpdateCargo(ProtoIndex, (0 - RepairPoints));
-                        UpdateModule(I, "Durability", RepairPoints);
+                        UpdateModule(I, "Durability", Integer'Image(RepairPoints));
                         RepairPoints := 0;
                     end if;
                     if RepairPoints = 0 then
@@ -348,7 +323,7 @@ package body Game is
         -- Craft items
         if CrafterIndex > 0 and TiredPoints > 0 then
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if PlayerShip.Modules.Element(I).MType = Recipes(PlayerShip.Craft).Workplace and
+                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes(PlayerShip.Craft).Workplace and
                     PlayerShip.Modules.ELement(I).Durability > 0 then
                     ModuleIndex := I;
                     exit;
@@ -450,7 +425,7 @@ package body Game is
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             Put(SaveGame, To_String(PlayerShip.Modules.Element(I).Name) & ";");
-            RawValue := To_Unbounded_String(Integer'Image(ModuleType'Pos(PlayerShip.Modules.Element(I).MType)));
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Modules.Element(I).ProtoIndex));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Modules.Element(I).Weight));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -564,8 +539,8 @@ package body Game is
         PlayerShip.Craft := Integer'Value(To_String(ReadData));
         VectorLength := Positive'Value(To_String(ReadData));
         for I in 1..VectorLength loop
-            ShipModules.Append(New_Item => (Name => ReadData, Mtype =>
-                ModuleType'Val(Integer'Value(To_String(ReadData))), Weight =>
+            ShipModules.Append(New_Item => (Name => ReadData, ProtoIndex =>
+                Integer'Value(To_String(ReadData)), Weight =>
                 Natural'Value(To_String(ReadData)), Current_Value =>
                 Integer'Value(To_String(ReadData)), Max_Value =>
                 Integer'Value(To_String(ReadData)), Durability =>
