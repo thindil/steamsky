@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Ability to move map without moving ship
 - Informations about license to main menu
 - Menu with commands to wait certain amount of time
+- Informations about in game changes to main menu
 
 ### Changed
 - Updated README.md
