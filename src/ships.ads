@@ -20,7 +20,6 @@ with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Crew; use Crew;
 with Game; use Game;
-with ShipModules; use ShipModules;
 
 package Ships is
     type ShipSpeed is (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED,
@@ -28,7 +27,7 @@ package Ships is
     type ModuleData is -- Data structure for ship modules
         record
             Name : Unbounded_String; -- Name of module
-            MType : ModuleType; -- Type of module
+            ProtoIndex : Positive; -- Index of module prototype
             Weight : Natural; -- Weight of module
             Current_Value : Integer; -- For engine, current power, depends on module
             Max_Value : Integer; -- For engine, max power, depends on module
@@ -60,7 +59,7 @@ package Ships is
     procedure DockShip(Docking : Boolean); -- Dock/Undock ship at base
     procedure ChangeShipSpeed(SpeedValue : ShipSpeed); -- Change speed of ship
     procedure UpdateCargo(ProtoIndex : Positive; Amount : Integer); -- Update selected item in ship cargo
-    procedure UpdateModule(ModuleIndex : Positive; Field : String; Value : Integer); -- Update selected module in ship
+    procedure UpdateModule(ModuleIndex : Positive; Field : String; Value : String); -- Update selected module in ship
     function FreeCargo(Amount : Integer) return Integer; -- Return available space in cargo after adding/extracting Amount
     procedure ShowShipInfo; -- Show informations about ship status and cargo
     function ShipInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in ship info menu

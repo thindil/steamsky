@@ -41,7 +41,7 @@ package body Crafts is
             return;
         end if;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Mtype = Recipes(RecipeIndex).Workplace and
+            if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).Mtype = Recipes(RecipeIndex).Workplace and
                 PlayerShip.Modules.Element(I).Durability > 0 then
                 ModuleIndex := I;
                 exit;

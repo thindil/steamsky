@@ -19,10 +19,10 @@ with Ada.Text_IO; use Ada.Text_IO;
 
 package body ShipModules is
 
-    procedure LoadModules is
+    procedure LoadShipModules is
         ModulesFile : File_Type;
         RawData, FieldName, Value : Unbounded_String;
-        EqualIndex, StartIndex, EndIndex : Natural;
+        EqualIndex : Natural;
         TempRecord : BaseModule_Data;
     begin
         if Modules_List.Length > 0 then
@@ -34,7 +34,22 @@ package body ShipModules is
         while not End_Of_File(ModulesFile) loop
             RawData := To_Unbounded_String(Get_Line(ModulesFile));
             if Element(RawData, 1) /= '[' then
-                null;
+                EqualIndex := Index(RawData, "=");
+                FieldName := Head(RawData, EqualIndex - 2);
+                Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
+                if FieldName = To_Unbounded_String("Name") then
+                    TempRecord.Name := Value;
+                elsif FieldName = To_Unbounded_String("Type") then
+                    TempRecord.MType := ModuleType'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Weight") then
+                    TempRecord.Weight := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Value") then
+                    TempRecord.Value := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("MaxValue") then
+                    TempRecord.MaxValue := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Durability") then
+                    TempRecord.Durability := Integer'Value(To_String(Value));
+                end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
                 Modules_List.Append(New_Item => TempRecord);
                 TempRecord := (Name => Null_Unbounded_String, MType => ENGINE, 
@@ -42,7 +57,6 @@ package body ShipModules is
             end if;
         end loop;
         Close(ModulesFile);
-
-    end LoadModules;
+    end LoadShipModules;
 
 end ShipModules;
