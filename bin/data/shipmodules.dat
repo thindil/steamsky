@@ -1,0 +1,8 @@
+[Shipmodule]
+Name = "Hawk Hull"
+Type = Hull
+Weight = 4000
+Value = 0
+MaxValue = 10
+Durability = 100
+[]
