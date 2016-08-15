@@ -24,6 +24,7 @@ with Crew; use Crew;
 with Messages; use Messages;
 with Items; use Items;
 with Crafts; use Crafts;
+with ShipModules; use ShipModules;
 
 package body Game is
 

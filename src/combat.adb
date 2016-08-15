@@ -20,6 +20,7 @@ with Ships; use Ships;
 with Crew; use Crew;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
+with ShipModules; use ShipModules;
 
 package body Combat is
     
