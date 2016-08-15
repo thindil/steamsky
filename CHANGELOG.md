@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - Raised price of basic rations
 - Moved items data to separated text file
 - Better world generation
+- Moved ship modules data to separated text file
 
 ### Fixed
 - Crash in save game when game was started from other directory
