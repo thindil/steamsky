@@ -53,12 +53,16 @@ package body MainMenu is
             Change_Attributes(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2,
                 Count => 1, Color => 1);
             Move_Cursor(Line => (Lines / 3) + 3, Column => (Columns - 12) / 2);
-            Add(Str => "License");
+            Add(Str => "News");
             Change_Attributes(Line => (Lines / 3) + 3, Column => ((Columns - 12) / 2) + 1,
                 Count => 1, Color => 1);
             Move_Cursor(Line => (Lines / 3) + 4, Column => (Columns - 12) / 2);
+            Add(Str => "License");
+            Change_Attributes(Line => (Lines / 3) + 4, Column => ((Columns - 12) / 2) + 1,
+                Count => 1, Color => 1);
+            Move_Cursor(Line => (Lines / 3) + 5, Column => (Columns - 12) / 2);
             Add(Str => "Quit game");
-            Change_Attributes(Line => (Lines / 3) + 4, Column => (Columns - 12) / 2,
+            Change_Attributes(Line => (Lines / 3) + 5, Column => (Columns - 12) / 2,
                 Count => 1, Color => 1);
         else
             Move_Cursor(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2);
@@ -66,8 +70,12 @@ package body MainMenu is
             Change_Attributes(Line => (Lines / 3) + 2, Column => ((Columns - 12) / 2) + 1,
                 Count => 1, Color => 1);
             Move_Cursor(Line => (Lines / 3) + 3, Column => (Columns - 12) / 2);
+            Add(Str => "License");
+            Change_Attributes(Line => (Lines / 3) + 3, Column => ((Columns - 12) / 2) + 1,
+                Count => 1, Color => 1);
+            Move_Cursor(Line => (Lines / 3) + 4, Column => (Columns - 12) / 2);
             Add(Str => "Quit game");
-            Change_Attributes(Line => (Lines / 3) + 3, Column => (Columns - 12) / 2,
+            Change_Attributes(Line => (Lines / 3) + 4, Column => (Columns - 12) / 2,
                 Count => 1, Color => 1);
         end if;
         -- Copyright
@@ -170,6 +178,32 @@ package body MainMenu is
         end loop;
     end ShowFullLicense;
 
+    procedure ShowNews is
+        CurrentLine : Line_Position := (Lines / 5) + 2;
+        CurrentColumn : Column_Position;
+        News : constant array (Positive range <>) of Unbounded_String :=
+            (To_Unbounded_String("* Savegames from previous version are not compatible with current!"), 
+            To_Unbounded_String("* Updated interface"), To_Unbounded_String("* Added combat between ships"),
+            To_Unbounded_String("* Added wait commands"), To_Unbounded_String("* Added manufacturing items"),
+            To_Unbounded_String("* Added fatigue, hunger, thirst and health for crew members"),
+            To_Unbounded_String("* Added few new items to buy/sell in bases"),
+            To_Unbounded_String("* Added random names for crew members and bases"),
+            To_Unbounded_String("* Added gaining experience and skills for crew members"));
+    begin
+        Move_Cursor(Line => (Lines / 5), Column => 10);
+        Add(Str => "Main changes since last release (0.1):");
+        for I in News'Range loop
+            Move_Cursor(Line => CurrentLine, Column => 10);
+            Add(Str => To_String(News(I)));
+            Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
+            CurrentLine := CurrentLine + 1;
+        end loop;
+        Move_Cursor(Line => (CurrentLine + 1), Column => 10);
+        Add(Str => "For more informations about changes, see CHANGELOG.md");
+        Move_Cursor(Line => (Lines - 2), Column => (Columns / 3));
+        Add(Str => "Press any key to back to main menu");
+    end ShowNews;
+
     function MainMenuKeys(Key : Key_Code) return GameStates is
     begin
         case Key is
@@ -203,6 +237,12 @@ package body MainMenu is
                 ShowLicenseInfo;
                 Update_Screen;
                 return License_Info;
+            when Character'Pos('e') | Character'Pos('E') => -- Show news screen
+                Erase;
+                Refresh_Without_Update;
+                ShowNews;
+                Update_Screen;
+                return News_View;
             when others => 
                 return Main_Menu;
         end case;
