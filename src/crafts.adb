@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
+with Ships; use Ships;
 
 package body Crafts is
 

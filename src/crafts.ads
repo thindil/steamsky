@@ -17,7 +17,7 @@
 
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Items; use Items;
-with Ships; use Ships;
+with ShipModules; use ShipModules;
 with Game; use Game;
 
 package Crafts is
