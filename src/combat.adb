@@ -227,7 +227,7 @@ package body Combat is
                     LootAmount := Integer(Rand_Roll.Random(Generator));
                     FreeSpace := FreeCargo((0 - LootAmount));
                     if FreeSpace < 0 then
-                        LootAmount := LootAmount - FreeSpace;
+                        LootAmount := LootAmount + FreeSpace;
                     end if;
                     if LootAmount > 0 then
                         AddMessage("You looted" & Integer'Image(LootAmount) & " Charcollum from " & 
