@@ -49,11 +49,11 @@ package body Ships is
                 end if;
             end loop;
             if PilotIndex = 0 then
-                ShowDialog("You dont have pilot on duty.");
+                ShowDialog("You don't have pilot on duty.");
                 return;
             end if;
             if EngineerIndex = 0 then
-                ShowDialog("You dont have engineer on duty.");
+                ShowDialog("You don't have engineer on duty.");
                 return;
             end if;
             case PlayerShip.Speed is
@@ -68,7 +68,7 @@ package body Ships is
             end case;
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop -- Check for fuel
                 if PlayerShip.Cargo.Element(I).ProtoIndex = 1 and PlayerShip.Cargo.Element(I).Amount < abs FuelNeeded then
-                    ShowDialog("You dont have enough fuel (charcollum).");
+                    ShowDialog("You don't have enough fuel (charcollum).");
                     return;
                 end if;
             end loop;
