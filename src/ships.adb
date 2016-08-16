@@ -186,7 +186,7 @@ package body Ships is
         end if;
     end UpdateCargo;
 
-    procedure UpdateModule(ModuleIndex : Positive; Field : String; Value : String) is
+    procedure UpdateModule(Ship : in out ShipRecord; ModuleIndex : Positive; Field : String; Value : String) is
         NewDurability : Integer;
         NewName : Unbounded_String;
         procedure UpdateMod(Module : in out ModuleData) is
@@ -195,11 +195,11 @@ package body Ships is
             Module.Name := NewName;
         end UpdateMod;
     begin
-        if ModuleIndex > Positive(PlayerShip.Modules.Length) then
+        if ModuleIndex > Positive(Ship.Modules.Length) then
             return;
         end if;
-        NewDurability := PlayerShip.Modules.Element(ModuleIndex).Durability;
-        NewName := PlayerShip.Modules.Element(ModuleIndex).Name;
+        NewDurability := Ship.Modules.Element(ModuleIndex).Durability;
+        NewName := Ship.Modules.Element(ModuleIndex).Name;
         if Field = "Durability" then
             NewDurability := NewDurability + Integer'Value(Value);
             if NewDurability < 0 then
@@ -208,7 +208,7 @@ package body Ships is
         elsif Field = "Name" then
             NewName := To_Unbounded_String(Value);
         end if;
-        PlayerShip.Modules.Update_Element(Index => ModuleIndex, Process => UpdateMod'Access);
+        Ship.Modules.Update_Element(Index => ModuleIndex, Process => UpdateMod'Access);
     end UpdateModule;
     
     function FreeCargo(Amount : Integer) return Integer is

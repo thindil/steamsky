@@ -99,6 +99,10 @@ package body Game is
         -- Create player ship with modules
         PlayerShip := CreateShip(Modules, ShipName, SkyBases(Integer(RandomBase)).SkyX,
             SkyBases(Integer(RandomBase)).SkyY, DOCKED);
+        UpdateModule(PlayerShip, 4, "Name", To_String(CharName) & "'s Cabin");
+        UpdateModule(PlayerShip, 5, "Name", To_String(PilotName) & "'s Cabin");
+        UpdateModule(PlayerShip, 6, "Name", To_String(EngineerName) & "'s Cabin");
+        UpdateModule(PlayerShip, 7, "Name", To_String(GunnerName) & "'s Cabin");
         -- Add cargo to ship
         PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 1, Amount => 2000));
         PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 2, Amount => 100));
@@ -122,10 +126,6 @@ package body Game is
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (5, 0), (0,
             0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest)); 
-        UpdateModule(4, "Name", To_String(CharName) & "'s Cabin");
-        UpdateModule(5, "Name", To_String(PilotName) & "'s Cabin");
-        UpdateModule(6, "Name", To_String(EngineerName) & "'s Cabin");
-        UpdateModule(7, "Name", To_String(GunnerName) & "'s Cabin");
         SkyBases(Integer(RandomBase)).Visited := True;
     end NewGame;
 
@@ -286,11 +286,11 @@ package body Game is
                             PlayerShip.Modules.Element(I).MaxDurability;
                         UpdateCargo(ProtoIndex, (PlayerShip.Modules.Element(I).Durability - 
                             PlayerShip.Modules.Element(I).MaxDurability));
-                        UpdateModule(I, "Durability", Integer'Image(PlayerShip.Modules.Element(I).MaxDurability - 
+                        UpdateModule(PlayerShip, I, "Durability", Integer'Image(PlayerShip.Modules.Element(I).MaxDurability - 
                             PlayerShip.Modules.Element(I).Durability));
                     else
                         UpdateCargo(ProtoIndex, (0 - RepairPoints));
-                        UpdateModule(I, "Durability", Integer'Image(RepairPoints));
+                        UpdateModule(PlayerShip, I, "Durability", Integer'Image(RepairPoints));
                         RepairPoints := 0;
                     end if;
                     if RepairPoints = 0 then
