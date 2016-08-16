@@ -38,13 +38,10 @@ package body Game is
         PosX, PosY : Rand_Range;
         RandomBase : Rand_Range;
         BaseType : Bases_Range;
-        ShipModules : Modules_Container.Vector;
-        ShipCargo : Cargo_Container.Vector; 
-        ShipCrew : Crew_Container.Vector;
         PilotName, EngineerName, GunnerName : Unbounded_String;
         ValidLocation : Boolean;
         TempX, TempY : Integer;
-        Modules : constant array(Positive range <>) of Positive := (1, 2, 3, 4, 4, 4, 4, 5,
+        Modules : constant Modules_Array := (1, 2, 3, 4, 4, 4, 4, 5,
         6, 7, 7, 8, 9);
     begin
         -- Set Game time
@@ -100,40 +97,31 @@ package body Game is
         EngineerName := GenerateMemberName;
         GunnerName := GenerateMemberName;
         -- Create player ship with modules
-        for I in Modules'Range loop
-            ShipModules.Append(New_Item => (Name => Modules_List.Element(Modules(I)).Name,
-                ProtoIndex => Modules(I), Weight => Modules_List.Element(Modules(I)).Weight,
-                Current_Value => Modules_List.Element(Modules(I)).Value,
-                Max_Value => Modules_List.Element(Modules(I)).MaxValue,
-                Durability => Modules_List.Element(Modules(I)).Durability,
-                MaxDurability => Modules_List.Element(Modules(I)).Durability));
-        end loop;
+        PlayerShip := CreateShip(Modules, ShipName, SkyBases(Integer(RandomBase)).SkyX,
+            SkyBases(Integer(RandomBase)).SkyY, DOCKED);
         -- Add cargo to ship
-        ShipCargo.Append(New_Item => (ProtoIndex => 1, Amount => 2000));
-        ShipCargo.Append(New_Item => (ProtoIndex => 2, Amount => 100));
-        ShipCargo.Append(New_Item => (ProtoIndex => 3, Amount => 200));
-        ShipCargo.Append(New_Item => (ProtoIndex => 4, Amount => 500));
-        ShipCargo.Append(New_Item => (ProtoIndex => 5, Amount => 100));
+        PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 1, Amount => 2000));
+        PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 2, Amount => 100));
+        PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 3, Amount => 200));
+        PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 4, Amount => 500));
+        PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 5, Amount => 100));
         -- Add crew to ship
-        ShipCrew.Append(New_Item => (Name => CharName,
+        PlayerShip.Crew.Append(New_Item => (Name => CharName,
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0),
             (5,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest)); 
-        ShipCrew.Append(New_Item => (Name => PilotName,
+        PlayerShip.Crew.Append(New_Item => (Name => PilotName,
             Health => 100, Tired => 0, Skills => ((5, 0), (0, 0), (0, 0),
             (0,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Pilot,
             PreviousOrder => Rest)); 
-        ShipCrew.Append(New_Item => (Name => EngineerName,
+        PlayerShip.Crew.Append(New_Item => (Name => EngineerName,
             Health => 100, Tired => 0, Skills => ((0, 0), (5, 0), (0, 0),
             (0,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Engineer,
             PreviousOrder => Rest)); 
-        ShipCrew.Append(New_Item => (Name => GunnerName,
+        PlayerShip.Crew.Append(New_Item => (Name => GunnerName,
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (5, 0), (0,
             0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest)); 
-        PlayerShip := (Name => ShipName, SkyX => SkyBases(Integer(RandomBase)).SkyX, SkyY =>
-            SkyBases(Integer(RandomBase)).SkyY, Speed => DOCKED, Craft => 0, Modules =>
-            ShipModules, Cargo => ShipCargo, Crew => ShipCrew);
         UpdateModule(4, "Name", To_String(CharName) & "'s Cabin");
         UpdateModule(5, "Name", To_String(PilotName) & "'s Cabin");
         UpdateModule(6, "Name", To_String(EngineerName) & "'s Cabin");

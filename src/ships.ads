@@ -53,6 +53,7 @@ package Ships is
             Cargo : Cargo_Container.Vector; -- List of ship cargo
             Crew : Crew_Container.Vector; -- List of ship crew
         end record;
+    type Modules_Array is array (Positive range <>) of Integer;
     PlayerShip : ShipRecord;
     
     procedure MoveShip(ShipIndex, X, Y : Integer); -- Move selected ship
@@ -61,6 +62,8 @@ package Ships is
     procedure UpdateCargo(ProtoIndex : Positive; Amount : Integer); -- Update selected item in ship cargo
     procedure UpdateModule(ModuleIndex : Positive; Field : String; Value : String); -- Update selected module in ship
     function FreeCargo(Amount : Integer) return Integer; -- Return available space in cargo after adding/extracting Amount
+    function CreateShip(Modules : Modules_Array; Name : Unbounded_String; X, Y:
+        Integer; Speed : ShipSpeed ) return ShipRecord; -- Create new ship
     procedure ShowShipInfo; -- Show informations about ship status and cargo
     function ShipInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in ship info menu
 
