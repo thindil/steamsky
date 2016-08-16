@@ -26,14 +26,11 @@ package body Combat is
     
     type Enemy_Record is -- Data structure for enemies
         record
-            Name : Unbounded_String;
-            Durability : Integer;
-            MaxDurability : Natural;
+            Ship : ShipRecord;
             Damage : Positive;
             DamageRange : Natural;
             Accuracy : Positive;
             Distance : Natural;
-            Speed : ShipSpeed; 
         end record;
     Enemy : Enemy_Record;
     PilotOrder, EngineerOrder, GunnerOrder : Positive;
@@ -52,26 +49,34 @@ package body Combat is
     EndCombat : Boolean;
 
     procedure StartCombat(EnemyType : Enemy_Types) is
+        EnemyShip : ShipRecord;
+        Modules : Modules_Array (1..4);
     begin
         case EnemyType is
             when SmallPirateShip =>
-                Enemy := (Name => To_Unbounded_String("Small pirates ship"),
-                    Durability => 100, Damage => 5, DamageRange => 2, Accuracy
-                    => 1, MaxDurability => 100, Distance => 4, Speed => HALF_SPEED);
+                Modules := (1, 3, 8, 9);
+                EnemyShip := CreateShip(Modules, To_Unbounded_String("Small pirates ship"),
+                    PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
+                Enemy := (Ship => EnemyShip, Damage => 5, DamageRange => 2, Accuracy
+                    => 1, Distance => 4);
             when SmallUndeadShip =>
-                Enemy := (Name => To_Unbounded_String("Small undead ship"),
-                    Durability => 100, Damage => 10, DamageRange => 1, Accuracy
-                    => 1, MaxDurability => 100, Distance => 4, Speed => HALF_SPEED);
+                Modules := (1, 3, 8, 9);
+                EnemyShip := CreateShip(Modules, To_Unbounded_String("Small undead ship"),
+                    PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
+                Enemy := (Ship => EnemyShip, Damage => 10, DamageRange => 1, Accuracy
+                    => 1, Distance => 4);
             when SmallDrone =>
-                Enemy := (Name => To_Unbounded_String("Small clockwork drone"),
-                    Durability => 50, Damage => 5, DamageRange => 1, Accuracy
-                    => 1, MaxDurability => 50, Distance => 4, Speed => HALF_SPEED);
+                Modules := (10, 3, 8, 9);
+                EnemyShip := CreateShip(Modules, To_Unbounded_String("Small clockwork drone"),
+                    PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
+                Enemy := (Ship => EnemyShip, Damage => 5, DamageRange => 1, Accuracy
+                    => 1, Distance => 4);
         end case;
         PilotOrder := 2;
         EngineerOrder := 3;
         GunnerOrder := 1;
         EndCombat := False;
-        EnemyName := Enemy.Name;
+        EnemyName := Enemy.Ship.Name;
     end StartCombat;
 
     procedure CombatTurn is
@@ -157,7 +162,7 @@ package body Combat is
                 AccuracyBonus := AccuracyBonus - 10;
                 EvadeBonus := EvadeBonus + 10;
             when 5 =>
-                AddMessage("You escaped from " & To_String(Enemy.Name));
+                AddMessage("You escaped from " & To_String(EnemyName));
                 EndCombat := True;
                 return;
             when others =>
@@ -211,19 +216,34 @@ package body Combat is
             HitChance := AccuracyBonus + PlayerShip.Crew.Element(GunnerIndex).Skills(3, 1);
             for I in 1..Shoots loop
                 ShootMessage := PlayerShip.Crew.Element(GunnerIndex).Name & To_Unbounded_String(" shoots to ") & 
-                    Enemy.Name;
+                    EnemyName;
                 if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
-                    Enemy.Durability := Enemy.Durability - PlayerShip.Modules.Element(WeaponIndex).Max_Value;
-                    ShootMessage := ShootMessage & To_Unbounded_String(" and hit.");
+                    ShootMessage := ShootMessage & To_Unbounded_String(" and hit in ");
+                    HitLocation := Integer(Rand_Roll.Random(Generator)) / Integer(Enemy.Ship.Modules.Length);
+                    if HitLocation = 0 then
+                        HitLocation := 1;
+                    end if;
+                    -- FIXME: something wrong is with modules
+                    while Enemy.Ship.Modules.Element(HitLocation).Durability = 0 loop
+                            HitLocation := HitLocation - 1;
+                    end loop;
+                    ShootMessage := ShootMessage & PlayerShip.Modules.Element(HitLocation).Name &
+                        To_Unbounded_String(".");
+                    UpdateModule(Enemy.Ship, HitLocation, "Durability", 
+                        Integer'Image(0 - PlayerShip.Modules.Element(WeaponIndex).Max_Value));
+                    if (Modules_List.Element(Enemy.Ship.Modules.Element(HitLocation).ProtoIndex).MType = HULL or
+                        Modules_List.Element(Enemy.Ship.Modules.Element(HitLocation).ProtoIndex).MType = ENGINE)
+                    and Enemy.Ship.Modules.Element(HitLocation).Durability = 0 then
+                        EndCombat := True;
+                    end if;
                 else
                     ShootMessage := ShootMessage & To_Unbounded_String(" and miss.");
                 end if;
                 AddMessage(To_String(ShootMessage));
-                if Enemy.Durability < 1 then
-                    Enemy.Durability := 0;
-                    Enemy.Speed := FULL_STOP;
+                if EndCombat then
                     Shoots := I;
-                    AddMessage(To_String(Enemy.Name) & " is destroyed!");
+                    UpdateModule(Enemy.Ship, 1, "Durability", "0");
+                    AddMessage(To_String(EnemyName) & " is destroyed!");
                     LootAmount := Integer(Rand_Roll.Random(Generator));
                     FreeSpace := FreeCargo((0 - LootAmount));
                     if FreeSpace < 0 then
@@ -231,23 +251,22 @@ package body Combat is
                     end if;
                     if LootAmount > 0 then
                         AddMessage("You looted" & Integer'Image(LootAmount) & " Charcollum from " & 
-                            To_String(Enemy.Name) & ".");
+                            To_String(EnemyName) & ".");
                         UpdateCargo(1, LootAmount);
                     end if;
-                    EndCombat := True;
                     exit;
                 end if;
             end loop;
             UpdateCargo(PlayerShip.Cargo.Element(AmmoIndex).ProtoIndex, (1 - Shoots));
             GainExp(Shoots, 3, GunnerIndex);
         end if;
-        if Enemy.Durability > 0 and Enemy.Distance <= Enemy.DamageRange then -- Enemy attack
+        if not EndCombat and Enemy.Distance <= Enemy.DamageRange then -- Enemy attack
             HitChance := Enemy.Accuracy - EvadeBonus;
-            ShootMessage := Enemy.Name & To_Unbounded_String(" attacks you and ");
+            ShootMessage := EnemyName & To_Unbounded_String(" attacks you and ");
             if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
                 ShootMessage := ShootMessage & To_Unbounded_String("hits in ");
                 if ArmorIndex > 0 then
-                    UpdateModule(ArmorIndex, "Durability", Integer'Image(1 - Enemy.Damage));
+                    UpdateModule(PlayerShip, ArmorIndex, "Durability", Integer'Image(0 - Enemy.Damage));
                     ShootMessage := ShootMessage & To_Unbounded_String("armor.");
                 else
                     HitLocation := Integer(Rand_Roll.Random(Generator)) / Integer(PlayerShip.Modules.Length);
@@ -259,7 +278,7 @@ package body Combat is
                     end loop;
                     ShootMessage := ShootMessage & PlayerShip.Modules.Element(HitLocation).Name &
                         To_Unbounded_String(".");
-                    UpdateModule(HitLocation, "Durability", Integer'Image(1 - Enemy.Damage));
+                    UpdateModule(PlayerShip, HitLocation, "Durability", Integer'Image(0 - Enemy.Damage));
                     if (Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType = HULL or
                         Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType = ENGINE)
                     and PlayerShip.Modules.Element(HitLocation).Durability = 0 then
@@ -397,15 +416,15 @@ package body Combat is
         Move_Cursor(Line => 5, Column => (Columns / 2));
         Add(Str => "Enemy status:");
         Move_Cursor(Line => 7, Column => (Columns / 2));
-        Add(Str => "Enemy: " & To_String(Enemy.Name));
+        Add(Str => "Enemy: " & To_String(EnemyName));
         Move_Cursor(Line => 8, Column => (Columns / 2));
         Add(Str => "Distance: " & To_String(DistanceNames(Enemy.Distance)));
         Move_Cursor(Line => 9, Column => (Columns / 2));
         Add(Str => "Status: ");
         if Enemy.Distance < 5 then
-            if Enemy.Durability = Enemy.MaxDurability then
+            if Enemy.Ship.Modules.Element(1).Durability = Enemy.Ship.Modules.Element(1).MaxDurability then
                 Add(Str => "Ok");
-            elsif Enemy.Durability > 0 then
+            elsif Enemy.Ship.Modules.Element(1).Durability > 0 then
                 Add(Str => "Damaged");
             else
                 Add(Str => "Destroyed");
@@ -416,7 +435,7 @@ package body Combat is
         Move_Cursor(Line => 10, Column => (Columns / 2));
         Add(Str => "Speed: ");
         if Enemy.Distance < 5 then
-            case Enemy.Speed is
+            case Enemy.Ship.Speed is
                 when FULL_STOP =>
                     Add(Str => "Stopped");
                 when QUARTER_SPEED =>

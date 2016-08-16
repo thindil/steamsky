@@ -61,4 +61,11 @@ Weight = 30
 Value = 4
 MaxValue = 10
 Durability = 20
+[Shipmodule]
+Name = Clockwork drone hull
+Type = Hull
+Weight = 2000
+Value = 0
+MaxValue = 10
+Durability = 50
 []
