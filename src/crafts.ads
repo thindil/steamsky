@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Containers.Vectors; use Ada.Containers;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Items; use Items;
 with ShipModules; use ShipModules;
@@ -30,11 +31,10 @@ package Crafts is
             ResultAmount : Positive; -- Amount of products
             Workplace : ModuleType; -- Ship module needed for crafting
         end record;
-    Recipes : constant array(1..2) of Craft_Data := ((MaterialType =>
-    FoodMaterial, MaterialAmount => 1, ResultIndex => 2, ResultAmount => 1,
-    Workplace => ALCHEMY_LAB), (MaterialType => FuelMaterial, MaterialAmount =>
-    1, ResultIndex => 1, ResultAmount => 5, Workplace => ALCHEMY_LAB));
+    package Recipes_Container is new Vectors(Positive, Craft_Data);
+    Recipes_List : Recipes_Container.Vector; -- List of recipes available in game 
 
+    procedure LoadRecipes; -- Load recipes from file
     procedure ShowCraft(Key : Key_Code); -- Show crafting screen
     function CraftKeys(Key : Key_Code) return GameStates; -- Handle keys in craft screen
 

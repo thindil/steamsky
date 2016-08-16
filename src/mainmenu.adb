@@ -23,6 +23,7 @@ with Help; use Help;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
+with Crafts; use Crafts;
 
 package body MainMenu is
 
@@ -221,6 +222,7 @@ package body MainMenu is
                     LoadHelp;
                     LoadItems;
                     LoadShipModules;
+                    LoadRecipes;
                     if LoadGame then
                         DrawGame(Sky_Map_View);
                         return Sky_Map_View;
@@ -270,6 +272,7 @@ package body MainMenu is
                 LoadHelp;
                 LoadItems;
                 LoadShipModules;
+                LoadRecipes;
                 NewCharName := Trim(To_Unbounded_String(CharName), Ada.Strings.Both);
                 NewShipName := Trim(To_Unbounded_String(ShipName), Ada.Strings.Both);
                 NewGame(NewCharName, NewShipName);
