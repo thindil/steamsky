@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Text_IO; use Ada.Text_IO;
 with Maps; use Maps;
 with Messages; use Messages;
 with Bases; use Bases;
@@ -227,24 +228,81 @@ package body Ships is
         return FreeCargo;
     end FreeCargo;
 
-    function CreateShip(Modules : Modules_Array; Name : Unbounded_String; X, Y: Integer; Speed : ShipSpeed) return ShipRecord is
+    function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y: Integer; Speed : ShipSpeed) return ShipRecord is
         TmpShip : ShipRecord;
         ShipModules : Modules_Container.Vector;
         ShipCargo : Cargo_Container.Vector;
         ShipCrew : Crew_Container.Vector;
+        NewName : Unbounded_String;
     begin
-        for I in Modules'Range loop
-            ShipModules.Append(New_Item => (Name => Modules_List.Element(Modules(I)).Name,
-                ProtoIndex => Modules(I), Weight => Modules_List.Element(Modules(I)).Weight,
-                Current_Value => Modules_List.Element(Modules(I)).Value,
-                Max_Value => Modules_List.Element(Modules(I)).MaxValue,
-                Durability => Modules_List.Element(Modules(I)).Durability,
-                MaxDurability => Modules_List.Element(Modules(I)).Durability));
+        for I in ProtoShips_List.Element(ProtoIndex).Modules.First_Index..ProtoShips_List.Element(ProtoIndex).Modules.Last_Index loop
+            ShipModules.Append(New_Item => (Name => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Name,
+                ProtoIndex => ProtoShips_List.Element(ProtoIndex).Modules(I), 
+                Weight => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Weight,
+                Current_Value => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Value,
+                Max_Value => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).MaxValue,
+                Durability => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Durability,
+                MaxDurability => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Durability));
         end loop;
-        TmpShip := (Name => Name, SkyX => X, SkyY => Y, Speed => Speed, Craft => 0,
+        if Name = Null_Unbounded_String then
+            NewName := ProtoShips_List.Element(ProtoIndex).Name;
+        else
+            NewName := Name;
+        end if;
+        TmpShip := (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed, Craft => 0,
             Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew);
         return TmpShip;
     end CreateShip;
+
+    procedure LoadShips is
+        ShipsFile : File_Type;
+        RawData, FieldName, Value : Unbounded_String;
+        EqualIndex, StartIndex, EndIndex, Amount : Natural;
+        TempRecord : ProtoShipData;
+        TempModules : ProtoModules_Container.Vector;
+    begin
+        if ProtoShips_List.Length > 0 then
+            return;
+        end if;
+        TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
+            Damage => 1, DamageRange => 1, Accuracy => 1);
+        Open(ShipsFile, In_File, "data/ships.dat");
+        Amount := 1;
+        while not End_Of_File(ShipsFile) loop
+            RawData := To_Unbounded_String(Get_Line(ShipsFile));
+            if Element(RawData, 1) /= '[' then
+                EqualIndex := Index(RawData, "=");
+                FieldName := Head(RawData, EqualIndex - 2);
+                Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
+                if FieldName = To_Unbounded_String("Name") then
+                    TempRecord.Name := Value;
+                elsif FieldName = To_Unbounded_String("Amount") then
+                    Amount := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Modules") then
+                    StartIndex := 1;
+                    for I in 1..Amount loop
+                        EndIndex := Index(Value, ", ", StartIndex);
+                        if EndIndex = 0 then
+                            EndIndex := StartIndex + 1;
+                        end if;
+                        TempRecord.Modules.Append(New_Item => Integer'Value(Slice(Value, StartIndex, EndIndex - 1)));
+                        StartIndex := EndIndex + 2;
+                    end loop;
+                elsif FieldName = To_Unbounded_String("Damage") then
+                    TempRecord.Damage := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("DamageRange") then
+                    TempRecord.DamageRange := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Accuracy") then
+                    TempRecord.Accuracy := Integer'Value(To_String(Value));
+                end if;
+            elsif TempRecord.Name /= Null_Unbounded_String then
+                ProtoShips_List.Append(New_Item => TempRecord);
+                TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
+                    Damage => 1, DamageRange => 1, Accuracy => 1);
+            end if;
+        end loop;
+        Close(ShipsFile);
+    end LoadShips;
 
     procedure ShowShipInfo is
         Weight : Integer;
