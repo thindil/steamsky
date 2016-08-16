@@ -51,6 +51,7 @@ package body Combat is
     procedure StartCombat(EnemyType : Enemy_Types) is
         EnemyShip : ShipRecord;
         Modules : Modules_Array (1..4);
+        Modules2 : Modules_Array (1..2);
     begin
         case EnemyType is
             when SmallPirateShip =>
@@ -60,14 +61,14 @@ package body Combat is
                 Enemy := (Ship => EnemyShip, Damage => 5, DamageRange => 2, Accuracy
                     => 1, Distance => 4);
             when SmallUndeadShip =>
-                Modules := (1, 3, 8, 9);
-                EnemyShip := CreateShip(Modules, To_Unbounded_String("Small undead ship"),
+                Modules2 := (1, 3);
+                EnemyShip := CreateShip(Modules2, To_Unbounded_String("Small undead ship"),
                     PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
                 Enemy := (Ship => EnemyShip, Damage => 10, DamageRange => 1, Accuracy
                     => 1, Distance => 4);
             when SmallDrone =>
-                Modules := (10, 3, 8, 9);
-                EnemyShip := CreateShip(Modules, To_Unbounded_String("Small clockwork drone"),
+                Modules2 := (10, 3);
+                EnemyShip := CreateShip(Modules2, To_Unbounded_String("Small clockwork drone"),
                     PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
                 Enemy := (Ship => EnemyShip, Damage => 5, DamageRange => 1, Accuracy
                     => 1, Distance => 4);
@@ -81,8 +82,14 @@ package body Combat is
 
     procedure CombatTurn is
         type Roll_Range is range 1..100;
+        subtype PlayerMod_Range is Positive range PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index;
+        subtype EnemyMod_Range is Positive range Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index;
         package Rand_Roll is new Discrete_Random(Roll_Range);
+        package PlayerMod_Roll is new Discrete_Random(PlayerMod_Range);
+        package EnemyMod_Roll is new Discrete_Random(EnemyMod_Range);
         Generator : Rand_Roll.Generator;
+        Generator2 : PlayerMod_Roll.Generator;
+        Generator3 : EnemyMod_Roll.Generator;
         AccuracyBonus, EvadeBonus : Integer := 0;
         PilotIndex, EngineerIndex, GunnerIndex, WeaponIndex, AmmoIndex,
             ArmorIndex : Natural := 0;
@@ -98,6 +105,8 @@ package body Combat is
         end UpdatePlayer;
     begin
         Rand_Roll.Reset(Generator);
+        PlayerMod_Roll.Reset(Generator2);
+        EnemyMod_Roll.Reset(Generator3);
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             case PlayerShip.Crew.Element(I).Order is
                 when Pilot =>
@@ -219,15 +228,11 @@ package body Combat is
                     EnemyName;
                 if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
                     ShootMessage := ShootMessage & To_Unbounded_String(" and hit in ");
-                    HitLocation := Integer(Rand_Roll.Random(Generator)) / Integer(Enemy.Ship.Modules.Length);
-                    if HitLocation = 0 then
-                        HitLocation := 1;
-                    end if;
-                    -- FIXME: something wrong is with modules
+                    HitLocation := Integer(EnemyMod_Roll.Random(Generator3));
                     while Enemy.Ship.Modules.Element(HitLocation).Durability = 0 loop
                             HitLocation := HitLocation - 1;
                     end loop;
-                    ShootMessage := ShootMessage & PlayerShip.Modules.Element(HitLocation).Name &
+                    ShootMessage := ShootMessage & Enemy.Ship.Modules.Element(HitLocation).Name &
                         To_Unbounded_String(".");
                     UpdateModule(Enemy.Ship, HitLocation, "Durability", 
                         Integer'Image(0 - PlayerShip.Modules.Element(WeaponIndex).Max_Value));
@@ -257,7 +262,7 @@ package body Combat is
                     exit;
                 end if;
             end loop;
-            UpdateCargo(PlayerShip.Cargo.Element(AmmoIndex).ProtoIndex, (1 - Shoots));
+            UpdateCargo(PlayerShip.Cargo.Element(AmmoIndex).ProtoIndex, (0 - Shoots));
             GainExp(Shoots, 3, GunnerIndex);
         end if;
         if not EndCombat and Enemy.Distance <= Enemy.DamageRange then -- Enemy attack
@@ -269,10 +274,7 @@ package body Combat is
                     UpdateModule(PlayerShip, ArmorIndex, "Durability", Integer'Image(0 - Enemy.Damage));
                     ShootMessage := ShootMessage & To_Unbounded_String("armor.");
                 else
-                    HitLocation := Integer(Rand_Roll.Random(Generator)) / Integer(PlayerShip.Modules.Length);
-                    if HitLocation = 0 then
-                        HitLocation := 1;
-                    end if;
+                    HitLocation := Integer(PlayerMod_Roll.Random(Generator2));
                     while PlayerShip.Modules.Element(HitLocation).Durability = 0 loop
                             HitLocation := HitLocation - 1;
                     end loop;
