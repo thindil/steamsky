@@ -1,0 +1,13 @@
+[Recipe]
+Material = FoodMaterial
+Amount = 1
+Result = 2
+Crafted = 1
+Workplace = Alchemy_Lab
+[Recipe]
+Material = FuelMaterial
+Amount = 1
+Result = 1
+Crafted = 5
+Workplace = Alchemy_Lab
+[]
