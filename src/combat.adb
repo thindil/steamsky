@@ -54,16 +54,19 @@ package body Combat is
         case EnemyType is
             when SmallPirateShip =>
                 EnemyShip := CreateShip(2, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
-                Enemy := (Ship => EnemyShip, Damage => 5, DamageRange => 2, Accuracy
-                    => 1, Distance => 4);
+                Enemy := (Ship => EnemyShip, Damage => ProtoShips_List.Element(2).Damage, 
+                    DamageRange => ProtoShips_List.Element(2).DamageRange, Accuracy
+                    => ProtoShips_List.Element(2).Accuracy, Distance => 4);
             when SmallUndeadShip =>
                 EnemyShip := CreateShip(3, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
-                Enemy := (Ship => EnemyShip, Damage => 10, DamageRange => 1, Accuracy
-                    => 1, Distance => 4);
+                Enemy := (Ship => EnemyShip, Damage => ProtoShips_List.Element(3).Damage, 
+                    DamageRange => ProtoShips_List.Element(3).DamageRange, Accuracy
+                    => ProtoShips_List.Element(3).Accuracy, Distance => 4);
             when SmallDrone =>
                 EnemyShip := CreateShip(4, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
-                Enemy := (Ship => EnemyShip, Damage => 5, DamageRange => 1, Accuracy
-                    => 1, Distance => 4);
+                Enemy := (Ship => EnemyShip, Damage => ProtoShips_List.Element(4).Damage, 
+                    DamageRange => ProtoShips_List.Element(4).DamageRange, Accuracy
+                    => ProtoShips_List.Element(4).Accuracy, Distance => 4);
         end case;
         PilotOrder := 2;
         EngineerOrder := 3;
