@@ -330,7 +330,9 @@ package body Game is
                 end if;
             end loop;
             if ModuleIndex = 0 then
-                AddMessage("You don't have workplace for manufacturing selected Items_List.");
+                AddMessage("You don't have workplace for manufacturing selected " & 
+                        To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
+                        ".");
                 GiveOrders(CrafterIndex, Rest);
                 PlayerShip.Craft := 0;
                 return;
@@ -344,7 +346,9 @@ package body Game is
                     end if;
                 end loop;
                 if MaterialIndex = 0 then
-                    AddMessage("You don't have any crafting materials for manufacturing Items_List.");
+                    AddMessage("You don't have any crafting materials for manufacturing " & 
+                        To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
+                        ".");
                     GiveOrders(CrafterIndex, Rest);
                     PlayerShip.Craft := 0;
                     exit;
@@ -356,13 +360,17 @@ package body Game is
                     (Float(PlayerShip.Crew.Element(CrafterIndex).Skills(5, 1)) / 100.0)));
                 Amount := Amount - (Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Weight * ResultAmount);
                 if FreeCargo(Amount) < 0 then
-                    AddMessage("You don't have free cargo space for manufacturing Items_List.");
+                    AddMessage("You don't have free cargo space for manufacturing " & 
+                        To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
+                        ".");
                     GiveOrders(CrafterIndex, Rest);
                     PlayerShip.Craft := 0;
                     exit;
                 end if;
                 if PlayerShip.Cargo.Element(MaterialIndex).Amount < Recipes_List.Element(PlayerShip.Craft).MaterialAmount then
-                    AddMessage("You don't have enough crafting materials for manufacturing Items_List.");
+                    AddMessage("You don't have enough crafting materials for manufacturing " & 
+                        To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
+                        ".");
                     GiveOrders(CrafterIndex, Rest);
                     PlayerShip.Craft := 0;
                     exit;
