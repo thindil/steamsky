@@ -50,26 +50,18 @@ package body Combat is
 
     procedure StartCombat(EnemyType : Enemy_Types) is
         EnemyShip : ShipRecord;
-        Modules : Modules_Array (1..4);
-        Modules2 : Modules_Array (1..2);
     begin
         case EnemyType is
             when SmallPirateShip =>
-                Modules := (1, 3, 8, 9);
-                EnemyShip := CreateShip(Modules, To_Unbounded_String("Small pirates ship"),
-                    PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
+                EnemyShip := CreateShip(2, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
                 Enemy := (Ship => EnemyShip, Damage => 5, DamageRange => 2, Accuracy
                     => 1, Distance => 4);
             when SmallUndeadShip =>
-                Modules2 := (1, 3);
-                EnemyShip := CreateShip(Modules2, To_Unbounded_String("Small undead ship"),
-                    PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
+                EnemyShip := CreateShip(3, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
                 Enemy := (Ship => EnemyShip, Damage => 10, DamageRange => 1, Accuracy
                     => 1, Distance => 4);
             when SmallDrone =>
-                Modules2 := (10, 3);
-                EnemyShip := CreateShip(Modules2, To_Unbounded_String("Small clockwork drone"),
-                    PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
+                EnemyShip := CreateShip(4, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
                 Enemy := (Ship => EnemyShip, Damage => 5, DamageRange => 1, Accuracy
                     => 1, Distance => 4);
         end case;

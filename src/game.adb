@@ -41,8 +41,6 @@ package body Game is
         PilotName, EngineerName, GunnerName : Unbounded_String;
         ValidLocation : Boolean;
         TempX, TempY : Integer;
-        Modules : constant Modules_Array := (1, 2, 3, 4, 4, 4, 4, 5,
-        6, 7, 7, 8, 9);
     begin
         -- Set Game time
         GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
@@ -97,7 +95,7 @@ package body Game is
         EngineerName := GenerateMemberName;
         GunnerName := GenerateMemberName;
         -- Create player ship with modules
-        PlayerShip := CreateShip(Modules, ShipName, SkyBases(Integer(RandomBase)).SkyX,
+        PlayerShip := CreateShip(1, ShipName, SkyBases(Integer(RandomBase)).SkyX,
             SkyBases(Integer(RandomBase)).SkyY, DOCKED);
         UpdateModule(PlayerShip, 4, "Name", To_String(CharName) & "'s Cabin");
         UpdateModule(PlayerShip, 5, "Name", To_String(PilotName) & "'s Cabin");

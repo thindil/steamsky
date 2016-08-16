@@ -53,7 +53,17 @@ package Ships is
             Cargo : Cargo_Container.Vector; -- List of ship cargo
             Crew : Crew_Container.Vector; -- List of ship crew
         end record;
-    type Modules_Array is array (Positive range <>) of Integer;
+    package ProtoModules_Container is new Vectors(Positive, Positive);
+    type ProtoShipData is -- Data structure for ship prototypes
+        record
+            Name : Unbounded_String; -- Prototype name
+            Modules : ProtoModules_Container.Vector; -- List of ship modules
+            Damage : Positive; -- Damage done by ship
+            DamageRange : Positive; -- Maximum range from which ship attack
+            Accuracy : Positive; -- Bonus to hit for ship
+        end record;
+    package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
+    ProtoShips_List : ProtoShips_Container.Vector;
     PlayerShip : ShipRecord;
     
     procedure MoveShip(ShipIndex, X, Y : Integer); -- Move selected ship
@@ -62,8 +72,9 @@ package Ships is
     procedure UpdateCargo(ProtoIndex : Positive; Amount : Integer); -- Update selected item in ship cargo
     procedure UpdateModule(Ship : in out ShipRecord; ModuleIndex : Positive; Field : String; Value : String); -- Update selected module
     function FreeCargo(Amount : Integer) return Integer; -- Return available space in cargo after adding/extracting Amount
-    function CreateShip(Modules : Modules_Array; Name : Unbounded_String; X, Y:
+    function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y:
         Integer; Speed : ShipSpeed ) return ShipRecord; -- Create new ship
+    procedure LoadShips; -- Load ships from file
     procedure ShowShipInfo; -- Show informations about ship status and cargo
     function ShipInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in ship info menu
 
