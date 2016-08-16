@@ -323,7 +323,7 @@ package body Game is
         -- Craft items
         if CrafterIndex > 0 and TiredPoints > 0 then
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes(PlayerShip.Craft).Workplace and
+                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List.Element(PlayerShip.Craft).Workplace and
                     PlayerShip.Modules.ELement(I).Durability > 0 then
                     ModuleIndex := I;
                     exit;
@@ -338,7 +338,7 @@ package body Game is
             for I in 1..TiredPoints loop
                 MaterialIndex := 0;
                 for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Recipes(PlayerShip.Craft).MaterialType then
+                    if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Recipes_List.Element(PlayerShip.Craft).MaterialType then
                         MaterialIndex := I;
                         exit;
                     end if;
@@ -350,28 +350,28 @@ package body Game is
                     exit;
                 end if;
                 Amount := Items_List.Element(PlayerShip.Cargo.Element(MaterialIndex).ProtoIndex).Weight * 
-                Recipes(PlayerShip.Craft).MaterialAmount;
-                ResultAmount := Recipes(PlayerShip.Craft).ResultAmount +
-                    Integer(Float'Floor(Float(Recipes(PlayerShip.Craft).ResultAmount) *
+                Recipes_List.Element(PlayerShip.Craft).MaterialAmount;
+                ResultAmount := Recipes_List.Element(PlayerShip.Craft).ResultAmount +
+                    Integer(Float'Floor(Float(Recipes_List.Element(PlayerShip.Craft).ResultAmount) *
                     (Float(PlayerShip.Crew.Element(CrafterIndex).Skills(5, 1)) / 100.0)));
-                Amount := Amount - (Items_List.Element(Recipes(PlayerShip.Craft).ResultIndex).Weight * ResultAmount);
+                Amount := Amount - (Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Weight * ResultAmount);
                 if FreeCargo(Amount) < 0 then
                     AddMessage("You don't have free cargo space for manufacturing Items_List.");
                     GiveOrders(CrafterIndex, Rest);
                     PlayerShip.Craft := 0;
                     exit;
                 end if;
-                if PlayerShip.Cargo.Element(MaterialIndex).Amount < Recipes(PlayerShip.Craft).MaterialAmount then
+                if PlayerShip.Cargo.Element(MaterialIndex).Amount < Recipes_List.Element(PlayerShip.Craft).MaterialAmount then
                     AddMessage("You don't have enough crafting materials for manufacturing Items_List.");
                     GiveOrders(CrafterIndex, Rest);
                     PlayerShip.Craft := 0;
                     exit;
                 end if;
                 GainExp(1, 5, CrafterIndex);
-                UpdateCargo(PlayerShip.Cargo.Element(MaterialIndex).ProtoIndex, (0 - Recipes(PlayerShip.Craft).MaterialAmount));
-                UpdateCargo(Recipes(PlayerShip.Craft).ResultIndex, ResultAmount);
+                UpdateCargo(PlayerShip.Cargo.Element(MaterialIndex).ProtoIndex, (0 - Recipes_List.Element(PlayerShip.Craft).MaterialAmount));
+                UpdateCargo(Recipes_List.Element(PlayerShip.Craft).ResultIndex, ResultAmount);
                 AddMessage(To_String(PlayerShip.Crew.Element(CrafterIndex).Name) & " was manufactured" & Integer'Image(ResultAmount) & 
-                    " " & To_String(Items_List.Element(Recipes(PlayerShip.Craft).ResultIndex).Name) & ".");
+                    " " & To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & ".");
             end loop;
         end if;
     end UpdateGame;

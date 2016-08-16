@@ -239,7 +239,7 @@ package body Ships is
         if PlayerShip.Craft = 0 then
             Add(Str => "Nothing");
         else
-            Add(Str => To_String(Items_List.Element(Recipes(PlayerShip.Craft).ResultIndex).Name));
+            Add(Str => To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name));
         end if;
         Move_Cursor(Line => 5, Column => 2);
         Add(Str => "STATUS:");

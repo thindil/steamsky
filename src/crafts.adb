@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO; use Ada.Text_IO;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Ships; use Ships;
@@ -24,24 +25,63 @@ package body Crafts is
 
     RecipeIndex : Natural;
 
+
+    procedure LoadRecipes is
+        RecipesFile : File_Type;
+        RawData, FieldName, Value : Unbounded_String;
+        EqualIndex : Natural;
+        TempRecord : Craft_Data;
+    begin
+        if Recipes_List.Length > 0 then
+            return;
+        end if;
+        TempRecord := (MaterialType => Fuel, MaterialAmount => 1,
+            ResultIndex => 1, ResultAmount => 10000, Workplace => ALCHEMY_LAB);
+        Open(RecipesFile, In_File, "data/recipes.dat");
+        while not End_Of_File(RecipesFile) loop
+            RawData := To_Unbounded_String(Get_Line(RecipesFile));
+            if Element(RawData, 1) /= '[' then
+                EqualIndex := Index(RawData, "=");
+                FieldName := Head(RawData, EqualIndex - 2);
+                Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
+                if FieldName = To_Unbounded_String("Material") then
+                    TempRecord.MaterialType := Items_Types'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Amount") then
+                    TempRecord.MaterialAmount := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Result") then
+                    TempRecord.ResultIndex := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Crafted") then
+                    TempRecord.ResultAmount := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Workplace") then
+                    TempRecord.Workplace := ModuleType'Value(To_String(Value));
+                end if;
+            elsif TempRecord.ResultAmount < 10000 then
+                Recipes_List.Append(New_Item => TempRecord);
+                TempRecord := (MaterialType => Fuel, MaterialAmount => 1,
+                    ResultIndex => 1, ResultAmount => 10000, Workplace => ALCHEMY_LAB);
+            end if;
+        end loop;
+        Close(RecipesFile);
+    end LoadRecipes;
+
     procedure SetRecipe is
         MaterialIndex, ModuleIndex : Natural := 0;
     begin
         -- Check for materials
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Recipes(RecipeIndex).MaterialType and
-                PlayerShip.Cargo.Element(I).Amount >= Recipes(RecipeIndex).MaterialAmount then
+            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Recipes_List.Element(RecipeIndex).MaterialType and
+                PlayerShip.Cargo.Element(I).Amount >= Recipes_List.Element(RecipeIndex).MaterialAmount then
                 MaterialIndex := I;
                 exit;
             end if;
         end loop;
         if MaterialIndex = 0 then
             ShowDialog("You don't have enough materials to start manufacturing " & 
-                To_String(Items_List.Element(Recipes(RecipeIndex).ResultIndex).Name) & ".");
+                To_String(Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Name) & ".");
             return;
         end if;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).Mtype = Recipes(RecipeIndex).Workplace and
+            if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).Mtype = Recipes_List.Element(RecipeIndex).Workplace and
                 PlayerShip.Modules.Element(I).Durability > 0 then
                 ModuleIndex := I;
                 exit;
@@ -49,16 +89,16 @@ package body Crafts is
         end loop;
         if ModuleIndex = 0 then
             ShowDialog("You don't have workplace for manufacture " & 
-                To_String(Items_List.Element(Recipes(RecipeIndex).ResultIndex).Name) & ".");
+                To_String(Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Name) & ".");
             return;
         end if;
-        if FreeCargo((Items_List.Element(MaterialIndex).Weight * Recipes(RecipeIndex).MaterialAmount) - 
-            (Items_List.Element(Recipes(RecipeIndex).ResultIndex).Weight * Recipes(RecipeIndex).ResultAmount)) < 0 then
+        if FreeCargo((Items_List.Element(MaterialIndex).Weight * Recipes_List.Element(RecipeIndex).MaterialAmount) - 
+            (Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Weight * Recipes_List.Element(RecipeIndex).ResultAmount)) < 0 then
             ShowDialog("You don't have that much free space in your ship cargo.");
             return;
         end if;
         PlayerShip.Craft := RecipeIndex;
-        AddMessage(To_String(Items_List.Element(Recipes(RecipeIndex).ResultIndex).Name) & " was set as manufacturing order.");
+        AddMessage(To_String(Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Name) & " was set as manufacturing order.");
         RecipeIndex := 0;
     end SetRecipe;
 
@@ -72,22 +112,22 @@ package body Crafts is
         end if;
         Move_Cursor(Line => 2, Column => 2);
         Add(Str => "Recipes");
-        for I in Recipes'Range loop
+        for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
             Move_Cursor(Line => Line_Position(2 + I), Column => 2);
-            Add(Str => Character'Val(96 + I) & " " & To_String(Items_List.Element(Recipes(I).ResultIndex).Name));
+            Add(Str => Character'Val(96 + I) & " " & To_String(Items_List.Element(Recipes_List.Element(I).ResultIndex).Name));
             Change_Attributes(Line => Line_Position(2 + I), Column => 2, Count => 1, Color => 1);
         end loop;
         if Key /= KEY_NONE then -- Show info about selected recipe
-            if (Key >= Key_Code(96 + Recipes'First)) and (Key <= Key_Code(96 + Recipes'Last)) then
+            if (Key >= Key_Code(96 + Recipes_List.First_Index)) and (Key <= Key_Code(96 + Recipes_List.Last_Index)) then
                 RecipeIndex := Integer(Key) - 96;
                 Move_Cursor(Line => 3, Column => (Columns / 2));
-                Add(Str => "Name: " & To_String(Items_List.Element(Recipes(RecipeIndex).ResultIndex).Name));
+                Add(Str => "Name: " & To_String(Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Name));
                 Move_Cursor(Line => 4, Column => (Columns / 2));
-                Add(Str => "Amount:" & Integer'Image(Recipes(RecipeIndex).ResultAmount));
+                Add(Str => "Amount:" & Integer'Image(Recipes_List.Element(RecipeIndex).ResultAmount));
                 Move_Cursor(Line => 5, Column => (Columns / 2));
                 Add(Str => "Material needed: ");
                 for I in Items_List.First_Index..Items_List.Last_Index loop
-                    if Items_List.Element(I).IType = Recipes(RecipeIndex).MaterialType then
+                    if Items_List.Element(I).IType = Recipes_List.Element(RecipeIndex).MaterialType then
                         if MAmount > 0 then
                             Add(Str => " or ");
                         end if;
@@ -96,10 +136,10 @@ package body Crafts is
                     end if;
                 end loop;
                 Move_Cursor(Line => 6, Column => (Columns / 2));
-                Add(Str => "Material amount:" & Integer'Image(Recipes(RecipeIndex).MaterialAmount));
+                Add(Str => "Material amount:" & Integer'Image(Recipes_List.Element(RecipeIndex).MaterialAmount));
                 Move_Cursor(Line => 7, Column => (Columns / 2));
                 Add(Str => "Workplace: ");
-                case Recipes(RecipeIndex).Workplace is
+                case Recipes_List.Element(RecipeIndex).Workplace is
                     when ALCHEMY_LAB =>
                         Add(Str => "Alchemy lab");
                     when others =>
