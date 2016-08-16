@@ -227,6 +227,25 @@ package body Ships is
         return FreeCargo;
     end FreeCargo;
 
+    function CreateShip(Modules : Modules_Array; Name : Unbounded_String; X, Y: Integer; Speed : ShipSpeed) return ShipRecord is
+        TmpShip : ShipRecord;
+        ShipModules : Modules_Container.Vector;
+        ShipCargo : Cargo_Container.Vector;
+        ShipCrew : Crew_Container.Vector;
+    begin
+        for I in Modules'Range loop
+            ShipModules.Append(New_Item => (Name => Modules_List.Element(Modules(I)).Name,
+                ProtoIndex => Modules(I), Weight => Modules_List.Element(Modules(I)).Weight,
+                Current_Value => Modules_List.Element(Modules(I)).Value,
+                Max_Value => Modules_List.Element(Modules(I)).MaxValue,
+                Durability => Modules_List.Element(Modules(I)).Durability,
+                MaxDurability => Modules_List.Element(Modules(I)).Durability));
+        end loop;
+        TmpShip := (Name => Name, SkyX => X, SkyY => Y, Speed => Speed, Craft => 0,
+            Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew);
+        return TmpShip;
+    end CreateShip;
+
     procedure ShowShipInfo is
         Weight : Integer;
         CargoWeight : Positive;
