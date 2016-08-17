@@ -318,10 +318,10 @@ package body Ships is
         else
             Add(Str => To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name));
         end if;
-        Move_Cursor(Line => 5, Column => 2);
+        Move_Cursor(Line => 6, Column => 2);
         Add(Str => "STATUS:");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            Move_Cursor(Line => Line_Position(5 + I), Column => 2);
+            Move_Cursor(Line => Line_Position(6 + I), Column => 2);
             Add(Str => To_String(PlayerShip.Modules.Element(I).Name) & ": ");
             if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
                 Add(Str => "Damaged");
@@ -330,19 +330,25 @@ package body Ships is
             end if;
             Weight := Weight + PlayerShip.Modules.Element(I).Weight;
         end loop;
-        Move_Cursor(Line => 5, Column => (Columns / 2));
-        Add(Str => "CARGO:");
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
             CargoWeight := PlayerShip.Cargo.Element(I).Amount * Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Weight;
-            Move_Cursor(Line => Line_Position(5 + I), Column => (Columns / 2));
+            Weight := Weight + CargoWeight;
+        end loop;
+        Move_Cursor(Line => 4, Column => 2);
+        Add(Str => "Weight:" & Integer'Image(Weight) & "kg");
+    end ShowShipInfo;
+
+    procedure ShowCargoInfo is
+        CargoWeight : Positive;
+    begin
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            CargoWeight := PlayerShip.Cargo.Element(I).Amount * Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Weight;
+            Move_Cursor(Line => Line_Position(1 + I), Column => 2);
             Add(Str => Positive'Image(PlayerShip.Cargo.Element(I).Amount) & "x" &
                 To_String(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name) & " (" &
                 Positive'Image(CargoWeight) & "kg )");
-            Weight := Weight + CargoWeight;
         end loop;
-        Move_Cursor(Line => 2, Column => (Columns / 2));
-        Add(Str => "Weight:" & Integer'Image(Weight) & "kg");
-    end ShowShipInfo;
+    end ShowCargoInfo;
 
     function ShipInfoKeys(Key : Key_Code) return GameStates is
     begin
