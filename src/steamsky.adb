@@ -98,7 +98,7 @@ begin
                 end case;
             when Control_Speed =>
                 GameState := SpeedMenuKeys(OldState, Key);
-            when Ship_Info =>
+            when Ship_Info | Cargo_Info =>
                 GameState := ShipInfoKeys(Key);
             when Crew_Info =>
                 GameState := CrewInfoKeys(Key);
