@@ -201,7 +201,7 @@ package body Crew is
         if Key /= KEY_NONE then
             Erase;
             Refresh;
-            ShowGameMenu(Crew_Info);
+            ShowGameHeader(Crew_Info);
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             Move_Cursor(Line => Line_Position(2 + I), Column => 2);
