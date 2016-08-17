@@ -45,6 +45,7 @@ All notable changes to this project will be documented in this file.
 - Better world generation
 - Moved ship modules data to separated text file
 - Moved ships data to separated text file
+- Moved ship cargo informations to separate screen
 
 ### Fixed
 - Crash in save game when game was started from other directory
