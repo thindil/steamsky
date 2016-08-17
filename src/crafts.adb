@@ -108,7 +108,7 @@ package body Crafts is
         if Key /= KEY_NONE then
             Erase;
             Refresh;
-            ShowGameMenu(Craft_View);
+            ShowGameHeader(Craft_View);
         end if;
         Move_Cursor(Line => 2, Column => 2);
         Add(Str => "Recipes");

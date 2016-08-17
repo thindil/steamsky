@@ -161,7 +161,7 @@ package body Bases is
         if Key /= KEY_NONE then
             Erase;
             Refresh;
-            ShowGameMenu(Trade_View);
+            ShowGameHeader(Trade_View);
         end if;
         Move_Cursor(Line => 2, Column => 2);
         Add(Str => "BUY SELL     NAME");
