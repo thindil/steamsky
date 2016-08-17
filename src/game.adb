@@ -28,25 +28,30 @@ with ShipModules; use ShipModules;
 
 package body Game is
 
-    procedure NewGame(CharName, ShipName : Unbounded_String) is
+    procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character) is
         type Rand_Range is range 1..1024;
         type Bases_Range is range 0..2;
+        type Gender_Range is range 1..2;
         package Rand_Int is new Discrete_Random(Rand_Range);
         package Rand_Base is new Discrete_Random(Bases_Range);
+        package Rand_Gender is new Discrete_Random(Gender_Range);
         Generator : Rand_Int.Generator;
         Generator2 : Rand_Base.Generator;
+        Generator3 : Rand_Gender.Generator;
         PosX, PosY : Rand_Range;
         RandomBase : Rand_Range;
         BaseType : Bases_Range;
         PilotName, EngineerName, GunnerName : Unbounded_String;
         ValidLocation : Boolean;
         TempX, TempY : Integer;
+        PilotGender, EngineerGender, GunnerGender : Character;
     begin
         -- Set Game time
         GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
         -- Generate world
         Rand_Int.Reset(Generator);
         Rand_Base.Reset(Generator2);
+        Rand_Gender.Reset(Generator3);
         SkyMap := (others => (others => (BaseIndex => 0)));
         for I in Rand_Range loop
             loop
@@ -91,9 +96,24 @@ package body Game is
         -- Place player ship in random base
         RandomBase := Rand_Int.Random(Generator);
         -- Generate names for crew
-        PilotName := GenerateMemberName;
-        EngineerName := GenerateMemberName;
-        GunnerName := GenerateMemberName;
+        if Rand_Gender.Random(Generator3) = 1 then
+            PilotGender := 'M';
+        else
+            PilotGender := 'F';
+        end if;
+        PilotName := GenerateMemberName(PilotGender);
+        if Rand_Gender.Random(Generator3) = 1 then
+            EngineerGender := 'M';
+        else
+            EngineerGender := 'F';
+        end if;
+        EngineerName := GenerateMemberName(EngineerGender);
+        if Rand_Gender.Random(Generator3) = 1 then
+            GunnerGender := 'M';
+        else
+            GunnerGender := 'F';
+        end if;
+        GunnerName := GenerateMemberName(GunnerGender);
         -- Create player ship with modules
         PlayerShip := CreateShip(1, ShipName, SkyBases(Integer(RandomBase)).SkyX,
             SkyBases(Integer(RandomBase)).SkyY, DOCKED);
@@ -108,19 +128,19 @@ package body Game is
         PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 4, Amount => 500));
         PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 5, Amount => 100));
         -- Add crew to ship
-        PlayerShip.Crew.Append(New_Item => (Name => CharName,
+        PlayerShip.Crew.Append(New_Item => (Name => CharName, Gender => Gender,
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0),
             (5,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest)); 
-        PlayerShip.Crew.Append(New_Item => (Name => PilotName,
+        PlayerShip.Crew.Append(New_Item => (Name => PilotName, Gender => PilotGender,
             Health => 100, Tired => 0, Skills => ((5, 0), (0, 0), (0, 0),
             (0,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Pilot,
             PreviousOrder => Rest)); 
-        PlayerShip.Crew.Append(New_Item => (Name => EngineerName,
+        PlayerShip.Crew.Append(New_Item => (Name => EngineerName, Gender => EngineerGender,
             Health => 100, Tired => 0, Skills => ((0, 0), (5, 0), (0, 0),
             (0,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Engineer,
             PreviousOrder => Rest)); 
-        PlayerShip.Crew.Append(New_Item => (Name => GunnerName,
+        PlayerShip.Crew.Append(New_Item => (Name => GunnerName, Gender => GunnerGender,
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (5, 0), (0,
             0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest)); 
@@ -444,6 +464,7 @@ package body Game is
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             Put(SaveGame, To_String(PlayerShip.Crew.Element(I).Name) & ";");
+            Put(SaveGame, PlayerShip.Crew.Element(I).Gender & ";");
             RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Health));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Tired));
@@ -551,8 +572,8 @@ package body Game is
         PlayerShip.Cargo := ShipCargo;
         VectorLength := Positive'Value(To_String(ReadData));
         for I in 1..VectorLength loop
-            ShipCrew.Append(New_Item => (Name => ReadData, Health =>
-                Natural'Value(To_String(ReadData)), Tired =>
+            ShipCrew.Append(New_Item => (Name => ReadData, Gender => ReadData, 
+                Health => Natural'Value(To_String(ReadData)), Tired =>
                 Natural'Value(To_String(ReadData)), Skills => Skills, Hunger => 
                 Natural'Value(To_String(ReadData)), Thirst =>
                 Natural'Value(To_String(ReadData)), Order =>
