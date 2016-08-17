@@ -30,6 +30,7 @@ package body MainMenu is
 
     CharName : String(1..12);
     ShipName : String(1..12);
+    CharGender : Character;
     LicenseText : Unbounded_String := Null_Unbounded_String;
     StartIndex : Integer := 1;
 
@@ -89,27 +90,45 @@ package body MainMenu is
     procedure ShowNewGameMenu(Key : Key_Code) is
         NewGameWindow : Window;
         Visibility : Cursor_Visibility := Normal;
+        GenderKey : Key_Code;
     begin
         if Key = Character'Pos('c') or Key = Character'Pos('C') then
             CharName := "            ";
         elsif Key = Character'Pos('h') or Key = Character'Pos('H') then
             ShipName := "            ";
         end if;
-        NewGameWindow := Create(6, 31, (Lines / 3), (Columns / 3));
+        NewGameWindow := Create(7, 31, (Lines / 3), (Columns / 3));
         Box(NewGameWindow);
         Move_Cursor(Win => NewGameWindow, Line => 1, Column => 1);
         Add(Win => NewGameWindow, Str => "Character Name: " & CharName);
         Change_Attributes(Win => NewGameWindow, Line => 1, Column => 1,
             Count => 1, Color => 1);
         Move_Cursor(Win => NewGameWindow, Line => 2, Column => 1);
+        Add(Win => NewGameWindow, Str => "Character Gender: ");
+        if Key /= Character'Pos('g') and Key /= Character'Pos('G') then
+            if CharGender = 'M' then
+                Add(Win => NewGameWindow, Str => "Male");
+            else
+                Add(Win => NewGameWindow, Str => "Female");
+            end if;
+        else
+            Add(Win => NewGameWindow, Str => "Male/Female");
+            Change_Attributes(Win => NewGameWindow, Line => 2, Column => 19,
+                Count => 1, Color => 1);
+            Change_Attributes(Win => NewGameWindow, Line => 2, Column => 24,
+                Count => 1, Color => 1);
+        end if;
+        Change_Attributes(Win => NewGameWindow, Line => 2, Column => 11,
+            Count => 1, Color => 1);
+        Move_Cursor(Win => NewGameWindow, Line => 3, Column => 1);
         Add(Win => NewGameWindow, Str => "Ship Name: " & ShipName);
-        Change_Attributes(Win => NewGameWindow, Line => 2, Column => 2,
+        Change_Attributes(Win => NewGameWindow, Line => 3, Column => 2,
             Count => 1, Color => 1);
-        Move_Cursor(Win => NewGameWindow, Line => 4, Column => 5);
+        Move_Cursor(Win => NewGameWindow, Line => 5, Column => 5);
         Add(Win => NewGameWindow, Str => "[Quit] [Start]");
-        Change_Attributes(Win => NewGameWindow, Line => 4, Column => 6,
+        Change_Attributes(Win => NewGameWindow, Line => 5, Column => 6,
             Count => 1, Color => 1);
-        Change_Attributes(Win => NewGameWindow, Line => 4, Column => 13,
+        Change_Attributes(Win => NewGameWindow, Line => 5, Column => 13,
             Count => 1, Color => 1);
         if Key /= KEY_NONE then
             if Key = Character'Pos('c') or Key = Character'Pos('C') then
@@ -123,13 +142,22 @@ package body MainMenu is
             elsif Key = Character'Pos('h') or Key = Character'Pos('H') then
                 Set_Echo_Mode(True);
                 Set_Cursor_Visibility(Visibility);
-                Move_Cursor(Win => NewGameWindow, Line => 2, Column => 12);
+                Move_Cursor(Win => NewGameWindow, Line => 3, Column => 12);
                 Get(Win => NewGameWindow, Str => ShipName, Len => 12);
                 if ShipName = "            " then
                     ShipName := "Hawk        ";
                 end if;
+            elsif Key = Character'Pos('g') or Key = Character'Pos('G') then
+                Refresh(NewGameWindow);
+                GenderKey := Get_KeyStroke;
+                if GenderKey = Character'Pos('m') or GenderKey = Character'Pos('M') then
+                    CharGender := 'M';
+                elsif GenderKey = Character'Pos('f') or GenderKey = Character'Pos('F') then
+                    CharGender := 'F';
+                end if;
             end if;
-            if Key = Character'Pos('c') or Key = Character'Pos('C') or Key = Character'Pos('h') or Key = Character'Pos('H') then
+            if Key = Character'Pos('c') or Key = Character'Pos('C') or Key = Character'Pos('h') or Key = Character'Pos('H') 
+                or Key = Character'Pos('g') or Key = Character'Pos('G') then
                 Erase;
                 ShowMainMenu;
                 Refresh_Without_Update;
@@ -215,6 +243,7 @@ package body MainMenu is
             when Character'Pos('n') | Character'Pos('N') => -- New game
                 CharName := "Laeran      ";
                 ShipName := "Hawk        ";
+                CharGender := 'M';
                 ShowNewGameMenu(KEY_NONE);
                 Update_Screen;
                 return New_Game;
@@ -263,7 +292,8 @@ package body MainMenu is
                 Refresh;
                 ShowMainMenu;
                 return Main_Menu;
-            when Character'Pos('c') | Character'Pos('C') | Character'Pos('h') | Character'Pos('H') => -- Change character/ship name
+            when Character'Pos('c') | Character'Pos('C') | Character'Pos('h') | Character'Pos('H') | 
+            Character'Pos('g') | Character'Pos('G') => -- Change character/ship name
                 Erase;
                 ShowMainMenu;
                 Refresh_Without_Update;
@@ -278,7 +308,7 @@ package body MainMenu is
                 LoadShips;
                 NewCharName := Trim(To_Unbounded_String(CharName), Ada.Strings.Both);
                 NewShipName := Trim(To_Unbounded_String(ShipName), Ada.Strings.Both);
-                NewGame(NewCharName, NewShipName, 'M');
+                NewGame(NewCharName, NewShipName, CharGender);
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when others =>
