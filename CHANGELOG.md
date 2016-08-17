@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - Check for free cargo space during trade items
 - End game on player death
 - Confirmation dialog for quit to main menu
-- New game window with ability to set player and ship names
+- New game window with ability to set player and ship names and player gender
 - Version to savegame file which made saves from 0.1 incompatible
 - Window with informations about current location
 - Gaining experience in skill by crew members
@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Informations about license to main menu
 - Menu with commands to wait certain amount of time
 - Informations about in game changes to main menu
+- Random gender to crew members
 
 ### Changed
 - Updated README.md
