@@ -1,6 +1,6 @@
 At this moment, help is under heavy development (as whole game). Below you can find few useful tips.
 * You can scroll this help window with arrow keys.
-* Your ship starts docked to base. To move it, you must first undock from base. Hit 'o' key for open orders menu.
+* Your ship starts docked to base. To move it, you must first undock from base. Press'o' key for open orders menu.
 * To move your ship, you need to set it speed, have fuel (charcollum, which works as moneys too) and pilot and engineer on duty.
 * To buy/sell items from bases you must first dock to base. All bases buy all items, but which items are sold, depends on base type.
 * As you dock to stations, you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are white.
@@ -15,3 +15,4 @@ At this moment, help is under heavy development (as whole game). Below you can f
 * To start manufacturing items, first you must have enough material and proper module installed on ship. Then you must set proper crafting order in Craft menu and give crew member order to start crafting.
 * To move map without moving ship, hold SHIFT and use keypad keys this same which are used for moving ship. Hit SPACE to center map on ship.
 * Every member of crew getting tired when have assigned order other than On break. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
+* All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press 'h' key on sky map (no need to press 'e' first to show menu).
