@@ -20,7 +20,7 @@ with Game; use Game;
 
 package UserInterface is
     
-    procedure ShowGameMenu(CurrentState : GameStates); -- Show in-game menu
+    procedure ShowGameHeader(CurrentState : GameStates); -- Show in-game header
     procedure ShowDialog(Message : String); -- Show dialog window with message
     function HideDialog return Boolean; -- Hide dialog if visible, return True if dialog was hidden
     procedure DrawGame(CurrentState : GameStates); -- Draw game screen

@@ -32,20 +32,13 @@ package body UserInterface is
 
     DialogPanel : Panel := Null_Panel;
 
-    procedure ShowGameMenu(CurrentState : GameStates) is
+    procedure ShowGameHeader(CurrentState : GameStates) is
         Speed : Unbounded_String;
     begin
         case CurrentState is
             when Sky_Map_View | Control_Speed | Wait_Order =>
-                Add(Str => "[Ship] [Crew] [Orders] [Craft] [Messages] [Wait] [Help] [Quit]");
-                Change_Attributes(Line => 0, Column => 1, Count => 1, Color => 1);
-                Change_Attributes(Line => 0, Column => 8, Count => 1, Color => 1);
-                Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
-                Change_Attributes(Line => 0, Column => 25, Count => 1, Color => 1);
-                Change_Attributes(Line => 0, Column => 32, Count => 1, Color => 1);
-                Change_Attributes(Line => 0, Column => 43, Count => 1, Color => 1);
-                Change_Attributes(Line => 0, Column => 50, Count => 1, Color => 1);
-                Change_Attributes(Line => 0, Column => 57, Count => 1, Color => 1);
+                Add(Str => "[Menu]");
+                Change_Attributes(Line => 0, Column => 2, Count => 1, Color => 1);
             when Ship_Info =>
                 Add(Str => "Ship Informations [Quit]");
                 Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
@@ -80,10 +73,10 @@ package body UserInterface is
                 when FULL_SPEED =>
                     Speed := To_Unbounded_String("Full Speed");
             end case;
-            Move_Cursor(Line => 0, Column => 63);
+            Move_Cursor(Line => 0, Column => (Columns / 3));
             Add(Str => FormatedTime & " Speed: " & To_String(Speed));
         end if;
-    end ShowGameMenu;
+    end ShowGameHeader;
 
     procedure ShowSpeedControl is
         SpeedWindow : Window;
@@ -250,10 +243,44 @@ package body UserInterface is
         Refresh(WaitWindow);
     end ShowWaitOrder;
 
+    procedure ShowGameMenu is
+        MenuWindow : Window;
+    begin
+        MenuWindow := Create(13, 32, (Lines / 3), (Columns / 2) - 16);
+        Box(MenuWindow);
+        Move_Cursor(Win => MenuWindow, Line => 2, Column => 7);
+        Add(Win => MenuWindow, Str => "Ship informations");
+        Change_Attributes(Win => MenuWindow, Line => 2, Column => 7, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 3, Column => 7);
+        Add(Win => MenuWindow, Str => "Crew informations");
+        Change_Attributes(Win => MenuWindow, Line => 3, Column => 7, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 4, Column => 7);
+        Add(Win => MenuWindow, Str => "Ship orders");
+        Change_Attributes(Win => MenuWindow, Line => 4, Column => 12, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 5, Column => 7);
+        Add(Win => MenuWindow, Str => "Crafting");
+        Change_Attributes(Win => MenuWindow, Line => 5, Column => 8, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 6, Column => 7);
+        Add(Win => MenuWindow, Str => "Last messages");
+        Change_Attributes(Win => MenuWindow, Line => 6, Column => 12, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 7, Column => 7);
+        Add(Win => MenuWindow, Str => "Wait orders");
+        Change_Attributes(Win => MenuWindow, Line => 7, Column => 7, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 8, Column => 7);
+        Add(Win => MenuWindow, Str => "Help");
+        Change_Attributes(Win => MenuWindow, Line => 8, Column => 7, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 9, Column => 7);
+        Add(Win => MenuWindow, Str => "Quit from game");
+        Change_Attributes(Win => MenuWindow, Line => 9, Column => 7, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 11, Column => 2);
+        Add(Win => MenuWindow, Str => "Any other key hide this menu");
+        Refresh(MenuWindow);
+    end ShowGameMenu;
+
     procedure DrawGame(CurrentState : GameStates) is
     begin
         Erase;
-        ShowGameMenu(CurrentState);
+        ShowGameHeader(CurrentState);
         case CurrentState is
             when Sky_Map_View =>
                 ShowSkyMap;
@@ -316,7 +343,12 @@ package body UserInterface is
             when Character'Pos('h') | Character'Pos('H') => -- Help screen
                 DrawGame(Help_View);
                 return Help_View;
+            when Character'Pos('e') | Character'Pos('E') => -- Show game menu
+                DrawGame(CurrentState);
+                ShowGameMenu;
+                return CurrentState;
             when others =>
+                DrawGame(CurrentState);
                 return CurrentState;
         end case;
     end GameMenuKeys;
