@@ -75,7 +75,8 @@ package Ships is
     function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y:
         Integer; Speed : ShipSpeed ) return ShipRecord; -- Create new ship
     procedure LoadShips; -- Load ships from file
-    procedure ShowShipInfo; -- Show informations about ship status and cargo
+    procedure ShowShipInfo; -- Show informations about ship status
+    procedure ShowCargoInfo; -- Show informations about ship cargo
     function ShipInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in ship info menu
 
 end Ships;
