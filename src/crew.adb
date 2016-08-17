@@ -136,7 +136,7 @@ package body Crew is
         PlayerShip.Crew.Update_Element(Index => CrewIndex, Process => UpdateSkill'Access);
     end GainExp;
 
-    function GenerateMemberName return Unbounded_String is -- based on name generator from libtcod
+    function GenerateMemberName(Gender : Character) return Unbounded_String is -- based on name generator from libtcod
         type Short_Range is range 1..2;
         type Start_Range is range 1..36;
         type Mid_Range is range 1..9;
@@ -171,6 +171,12 @@ package body Crew is
             To_Unbounded_String("en"), To_Unbounded_String("eo"),
             To_Unbounded_String("is"), To_Unbounded_String("u"),
             To_Unbounded_String("or"));
+        EndSyllFemale : constant array(Mid_Range) of Unbounded_String :=
+            (To_Unbounded_String("a"), To_Unbounded_String("ae"),
+            To_Unbounded_String("aelle"), To_Unbounded_String("ai"),
+            To_Unbounded_String("ea"), To_Unbounded_String("i"),
+            To_Unbounded_String("ia"), To_Unbounded_String("u"),
+            To_Unbounded_String("wen"));
         package Rand_Start is new Discrete_Random(Start_Range);
         package Rand_Mid is new Discrete_Random(Mid_Range);
         package Rand_Short is new Discrete_Random(Short_Range);
@@ -183,10 +189,19 @@ package body Crew is
         Rand_Mid.Reset(Generator2);
         Rand_Short.Reset(Generator3);
         if Rand_Short.Random(Generator3) = 1 then
-            NewName := StartSyllMale(Rand_Start.Random(Generator)) & MiddleSyllMale(Rand_Mid.Random(Generator2)) &
-                EndSyllMale(Rand_Mid.Random(Generator2));
+            if Gender = 'M' then
+                NewName := StartSyllMale(Rand_Start.Random(Generator)) & MiddleSyllMale(Rand_Mid.Random(Generator2)) &
+                    EndSyllMale(Rand_Mid.Random(Generator2));
+            else
+                NewName := StartSyllMale(Rand_Start.Random(Generator)) & MiddleSyllMale(Rand_Mid.Random(Generator2)) &
+                    EndSyllFemale(Rand_Mid.Random(Generator2));
+            end if;
         else
-            NewName := StartSyllMale(Rand_Start.Random(Generator)) & EndSyllMale(Rand_Mid.Random(Generator2));
+            if Gender = 'M' then
+                NewName := StartSyllMale(Rand_Start.Random(Generator)) & EndSyllMale(Rand_Mid.Random(Generator2));
+            else
+                NewName := StartSyllMale(Rand_Start.Random(Generator)) & EndSyllFemale(Rand_Mid.Random(Generator2));
+            end if;
         end if;
         return NewName;
     end GenerateMemberName;

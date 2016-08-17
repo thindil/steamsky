@@ -278,7 +278,7 @@ package body MainMenu is
                 LoadShips;
                 NewCharName := Trim(To_Unbounded_String(CharName), Ada.Strings.Both);
                 NewShipName := Trim(To_Unbounded_String(ShipName), Ada.Strings.Both);
-                NewGame(NewCharName, NewShipName);
+                NewGame(NewCharName, NewShipName, 'M');
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when others =>

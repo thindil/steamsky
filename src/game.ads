@@ -34,7 +34,7 @@ package Game is
         end record;
     GameDate : Date_Record;
     
-    procedure NewGame(CharName, ShipName : Unbounded_String); -- Start new game: create map, place ship, crew, etc
+    procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character); -- Start new game: create map, place ship, crew, etc
     procedure UpdateGame(Minutes : Positive); -- Game ticks (update time, crew, ship, etc)
     procedure SaveGame; -- Save game to file
     function LoadGame return Boolean; -- Load game from file, return false if save can't be loaded
