@@ -572,7 +572,7 @@ package body Game is
         PlayerShip.Cargo := ShipCargo;
         VectorLength := Positive'Value(To_String(ReadData));
         for I in 1..VectorLength loop
-            ShipCrew.Append(New_Item => (Name => ReadData, Gender => ReadData, 
+            ShipCrew.Append(New_Item => (Name => ReadData, Gender => Element(ReadData, 1), 
                 Health => Natural'Value(To_String(ReadData)), Tired =>
                 Natural'Value(To_String(ReadData)), Skills => Skills, Hunger => 
                 Natural'Value(To_String(ReadData)), Thirst =>
