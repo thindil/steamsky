@@ -211,7 +211,7 @@ package body Crew is
         Skills_Names : constant array (1..5) of Unbounded_String := (To_Unbounded_String("Piloting"), 
             To_Unbounded_String("Engineering"), To_Unbounded_String("Gunnery"), 
             To_Unbounded_String("Bartering"), To_Unbounded_String("Alchemy"));
-        SkillLine : Line_Position := 3;
+        SkillLine : Line_Position := 4;
     begin
         if Key /= KEY_NONE then
             Erase;
@@ -266,6 +266,13 @@ package body Crew is
                 MemberIndex := Integer(Key) - 96;
                 Move_Cursor(Line => 2, Column => (Columns / 2));
                 Add(Str => "Name: " & To_String(PlayerShip.Crew.Element(MemberIndex).Name));
+                Move_Cursor(Line => 3, Column => (Columns / 2));
+                Add(Str => "Gender: ");
+                if PlayerShip.Crew.Element(MemberIndex).Gender = 'M' then
+                    Add(Str => "Male");
+                else
+                    Add(Str => "Female");
+                end if;
                 for J in PlayerShip.Crew.Element(MemberIndex).Skills'Range loop
                     SkillLevel := To_Unbounded_String("");
                     if PlayerShip.Crew.Element(MemberIndex).Skills(J, 1) > 0 and 
