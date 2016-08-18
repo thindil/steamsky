@@ -309,12 +309,43 @@ package body Ships is
         return True;
     end LoadShips;
 
+    function CountShipWeight(Ship : ShipRecord) return Positive is
+        Weight : Natural := 0;
+        CargoWeight : Positive;
+    begin
+        for I in Ship.Modules.First_Index..Ship.Modules.Last_Index loop
+            Weight := Weight + Ship.Modules.Element(I).Weight;
+        end loop;
+        for I in Ship.Cargo.First_Index..Ship.Cargo.Last_Index loop
+            CargoWeight := Ship.Cargo.Element(I).Amount * Items_List.Element(Ship.Cargo.Element(I).ProtoIndex).Weight;
+            Weight := Weight + CargoWeight;
+        end loop;
+        return Weight;
+    end CountShipWeight;
+
+    function DistanceTraveled(Ship : ShipRecord; Minutes : Positive) return Natural is
+        Weight : Positive;
+        Speed : Integer := 0;
+    begin
+        Weight := CountShipWeight(Ship) / 500;
+        for I in Ship.Modules.First_Index..Ship.Modules.Last_Index loop
+            if Modules_List.Element(Ship.Modules.Element(I).ProtoIndex).Mtype = ENGINE then
+                Speed := Ship.Modules.Element(I).Max_Value / 10;
+                exit;
+            end if;
+        end loop;
+        Speed := Speed - Integer((Float(Weight) / 100.0) * Float(Speed));
+        if Speed < 0 then
+            Speed := 0;
+        end if;
+        return Speed;
+    end DistanceTraveled;
+
     procedure ShowShipInfo is
         Weight : Integer;
-        CargoWeight : Positive;
         DamagePercent : Natural;
     begin
-        Weight := 0;
+        Weight := CountShipWeight(PlayerShip);
         Move_Cursor(Line => 2, Column => 2);
         Add(Str => "Name: " & To_String(PlayerShip.Name));
         Move_Cursor(Line => 3, Column => 2);
@@ -344,11 +375,6 @@ package body Ships is
             else
                 Add(Str => "Destroyed");
             end if;
-            Weight := Weight + PlayerShip.Modules.Element(I).Weight;
-        end loop;
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            CargoWeight := PlayerShip.Cargo.Element(I).Amount * Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Weight;
-            Weight := Weight + CargoWeight;
         end loop;
         Move_Cursor(Line => 4, Column => 2);
         Add(Str => "Weight:" & Integer'Image(Weight) & "kg");

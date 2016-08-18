@@ -75,6 +75,8 @@ package Ships is
     function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y:
         Integer; Speed : ShipSpeed ) return ShipRecord; -- Create new ship
     function LoadShips return Boolean; -- Load ships from file, returns False if file not found
+    function DistanceTraveled(Ship : ShipRecord; Minutes : Positive) return
+        Natural; -- Return distance traveled by ship in selected period of  time
     procedure ShowShipInfo; -- Show informations about ship status
     procedure ShowCargoInfo; -- Show informations about ship cargo
     function ShipInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in ship info menu
