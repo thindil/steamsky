@@ -1,52 +1,52 @@
-[ITEM]
+[1]
 Name = Charcollum
 Weight = 1
 Type = Fuel
 Prices = 0, 0, 0
 Buyable = N, N, N
-[ITEM]
+[2]
 Name = Basic Rations
 Weight = 1
 Type = Food
 Prices = 3, 2, 3
 Buyable = N, Y, N
-[ITEM]
+[3]
 Name = Water
 Weight = 1
 Type = Drink
 Prices = 2, 1, 2
 Buyable = N, Y, N
-[ITEM]
+[4]
 Name = 20mm ammo
 Weight = 1
 Type = Ammo
 Prices = 3, 5, 5
 Buyable = Y, N, N
-[ITEM]
+[5]
 Name = Bronze plates
 Weight = 5
 Type = RepairMaterial
 Prices = 2, 4, 4
 Buyable = Y, N, N
-[ITEM]
+[6]
 Name = Fresh vegetables
 Weight = 1
 Type = FoodMaterial
 Prices = 2, 1, 2
 Buyable = N, Y, N
-[ITEM]
+[7]
 Name = Fresh fruits
 Weight = 1
 Type = FoodMaterial
 Prices = 2, 1, 2
 Buyable = N, Y, N
-[ITEM]
+[8]
 Name = Fresh meat
 Weight = 1
 Type = FoodMaterial
 Prices = 2, 1, 2
 Buyable = N, Y, N
-[ITEM]
+[9]
 Name = Andrae logs
 Weight = 5
 Type = FuelMaterial
