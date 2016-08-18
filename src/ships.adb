@@ -325,19 +325,40 @@ package body Ships is
 
     function DistanceTraveled(Ship : ShipRecord; Minutes : Positive) return Natural is
         Weight : Positive;
+        BaseSpeed : Natural := 0;
         Speed : Integer := 0;
+        type DamageFactor is digits 2 range 0.0..1.0;
+        Damage : DamageFactor := 0.0;
     begin
         Weight := CountShipWeight(Ship) / 500;
         for I in Ship.Modules.First_Index..Ship.Modules.Last_Index loop
             if Modules_List.Element(Ship.Modules.Element(I).ProtoIndex).Mtype = ENGINE then
-                Speed := Ship.Modules.Element(I).Max_Value / 10;
+                BaseSpeed := Ship.Modules.Element(I).Max_Value * 10;
+                Damage := 1.0 - DamageFactor(Float(Ship.Modules.Element(I).Durability) / Float(Ship.Modules.Element(I).MaxDurability));
                 exit;
             end if;
         end loop;
-        Speed := Speed - Integer((Float(Weight) / 100.0) * Float(Speed));
+        Speed := BaseSpeed - Integer(Float(BaseSpeed) * Float(Damage));
+        Speed := Speed - Integer((Float(Weight) / 100.0) * Float(BaseSpeed));
+        for I in Ship.Crew.First_Index..Ship.Crew.Last_Index loop
+            if Ship.Crew.Element(I).Order = Pilot then
+                Speed := Speed + Integer(Float(BaseSpeed) * (Float(Ship.Crew.Element(I).Skills(2, 1)) / 200.0));
+            end if;
+        end loop;
+        case Ship.Speed is
+            when QUARTER_SPEED =>
+                Speed := Integer(Float(Speed) * 0.25);
+            when HALF_SPEED =>
+                Speed := Integer(Float(Speed) * 0.5);
+            when FULL_SPEED =>
+                null;
+            when others =>
+                Speed := 0;
+        end case;
         if Speed < 0 then
             Speed := 0;
         end if;
+        Speed := (Speed / 60) * Minutes;
         return Speed;
     end DistanceTraveled;
 

@@ -30,7 +30,7 @@ package body Combat is
             Damage : Positive;
             DamageRange : Natural;
             Accuracy : Positive;
-            Distance : Natural;
+            Distance : Integer;
         end record;
     Enemy : Enemy_Record;
     PilotOrder, EngineerOrder, GunnerOrder : Positive;
@@ -42,9 +42,6 @@ package body Combat is
         To_Unbounded_String("Full speed"));
     GunnerOrders : constant array (1..3) of Unbounded_String := (To_Unbounded_String("Don't shoot"),
         To_Unbounded_String("Precise fire"), To_Unbounded_String("Fire at will"));
-    DistanceNames : constant array (1..5) of Unbounded_String := (To_Unbounded_String("Close"),
-        To_Unbounded_String("Short"), To_Unbounded_String("Medium"),
-        To_Unbounded_String("Long"), To_Unbounded_String("Escaped"));
     Order : Crew_Orders;
     EndCombat : Boolean;
 
@@ -56,17 +53,17 @@ package body Combat is
                 EnemyShip := CreateShip(2, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
                 Enemy := (Ship => EnemyShip, Damage => ProtoShips_List.Element(2).Damage, 
                     DamageRange => ProtoShips_List.Element(2).DamageRange, Accuracy
-                    => ProtoShips_List.Element(2).Accuracy, Distance => 4);
+                    => ProtoShips_List.Element(2).Accuracy, Distance => 1000);
             when SmallUndeadShip =>
                 EnemyShip := CreateShip(3, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
                 Enemy := (Ship => EnemyShip, Damage => ProtoShips_List.Element(3).Damage, 
                     DamageRange => ProtoShips_List.Element(3).DamageRange, Accuracy
-                    => ProtoShips_List.Element(3).Accuracy, Distance => 4);
+                    => ProtoShips_List.Element(3).Accuracy, Distance => 1000);
             when SmallDrone =>
                 EnemyShip := CreateShip(4, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
                 Enemy := (Ship => EnemyShip, Damage => ProtoShips_List.Element(4).Damage, 
                     DamageRange => ProtoShips_List.Element(4).DamageRange, Accuracy
-                    => ProtoShips_List.Element(4).Accuracy, Distance => 4);
+                    => ProtoShips_List.Element(4).Accuracy, Distance => 1000);
         end case;
         PilotOrder := 2;
         EngineerOrder := 3;
@@ -148,30 +145,31 @@ package body Combat is
             end case;
             ChangeShipSpeed(ShipSpeed'Val(EngineerOrder));
         end if;
+        Enemy.Distance := Enemy.Distance - DistanceTraveled(Enemy.Ship, 1);
         if PilotIndex > 0 and EngineerIndex > 0 then
             if PilotOrder < 4 and EngineerOrder < 4 and Enemy.Distance > 1 then
-                Enemy.Distance := Enemy.Distance - 1;
+                Enemy.Distance := Enemy.Distance - DistanceTraveled(PlayerShip, 1);
             end if;
             if PilotOrder = 4 and EngineerOrder = 4 and Enemy.Distance < 5 then
-                Enemy.Distance := Enemy.Distance + 1;
+                Enemy.Distance := Enemy.Distance + DistanceTraveled(PlayerShip, 1);
             end if;
         end if;
-        case Enemy.Distance is
-            when 1 =>
-                AccuracyBonus := AccuracyBonus + 20;
-                EvadeBonus := EvadeBonus - 10;
-            when 2 =>
-                AccuracyBonus := AccuracyBonus + 10;
-            when 4 =>
-                AccuracyBonus := AccuracyBonus - 10;
-                EvadeBonus := EvadeBonus + 10;
-            when 5 =>
-                AddMessage("You escaped from " & To_String(EnemyName));
-                EndCombat := True;
-                return;
-            when others =>
-                null;
-        end case;
+        if Enemy.Distance < 10 then
+            Enemy.Distance := 10;
+        end if;
+        if Enemy.Distance >= 1500 then
+            AddMessage("You escaped from " & To_String(EnemyName));
+            EndCombat := True;
+            return;
+        elsif Enemy.Distance < 1500 and Enemy.Distance >= 1000 then
+            AccuracyBonus := AccuracyBonus - 10;
+            EvadeBonus := EvadeBonus + 10;
+        elsif Enemy.Distance < 500 and Enemy.Distance >= 100 then
+            AccuracyBonus := AccuracyBonus + 10;
+        elsif Enemy.Distance < 100 then    
+            AccuracyBonus := AccuracyBonus + 20;
+            EvadeBonus := EvadeBonus - 10;
+        end if;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if PlayerShip.Modules.Element(I).Durability > 0 then
                 case Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType is
@@ -415,7 +413,18 @@ package body Combat is
         Move_Cursor(Line => 7, Column => (Columns / 2));
         Add(Str => "Enemy: " & To_String(EnemyName));
         Move_Cursor(Line => 8, Column => (Columns / 2));
-        Add(Str => "Distance: " & To_String(DistanceNames(Enemy.Distance)));
+        Add(Str => "Distance: ");
+        if Enemy.Distance >= 1500 then
+            Add(Str => "Escaped");
+        elsif Enemy.Distance < 1500 and Enemy.Distance >= 1000 then
+            Add(Str => "Long");
+        elsif Enemy.Distance < 1000 and Enemy.Distance >= 500 then
+            Add(Str => "Medium");
+        elsif Enemy.Distance < 500 and Enemy.Distance >= 100 then
+            Add(Str => "Short");
+        else
+            Add(Str => "Close");
+        end if;
         Move_Cursor(Line => 9, Column => (Columns / 2));
         Add(Str => "Status: ");
         if Enemy.Distance < 5 then
