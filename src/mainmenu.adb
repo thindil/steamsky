@@ -36,6 +36,7 @@ package body MainMenu is
 
     procedure ShowMainMenu is
         Visibility : Cursor_Visibility := Invisible;
+        CurrentLine : Line_Position := 1;
     begin
         Set_Echo_Mode(False);
         Set_Cursor_Visibility(Visibility);
@@ -43,45 +44,36 @@ package body MainMenu is
         -- Game logo
         Move_Cursor(Line => Lines / 5, Column => (Columns - 15) / 2);
         Add(Str => "STEAM SKY");
-        Move_Cursor(Line => (Lines / 5) + 1, Column => (Columns - 12) / 2);
         -- Game version
+        Move_Cursor(Line => (Lines / 5) + 1, Column => (Columns - 12) / 2);
         Add(Str => "ver 0.2");
-        Move_Cursor(Line => (Lines / 3) + 1, Column => (Columns - 12) / 2);
         -- Game menu
+        Move_Cursor(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2);
         Add(Str => "New game");
-        Change_Attributes(Line => (Lines / 3) + 1, Column => (Columns - 12) / 2,
+        Change_Attributes(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2,
             Count => 1, Color => 1);
+        CurrentLine := CurrentLine + 1;
         if Exists("data/savegame.dat") then
-            Move_Cursor(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2);
+            Move_Cursor(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2);
             Add(Str => "Load game");
-            Change_Attributes(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2,
+            Change_Attributes(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2,
                 Count => 1, Color => 1);
-            Move_Cursor(Line => (Lines / 3) + 3, Column => (Columns - 12) / 2);
-            Add(Str => "News");
-            Change_Attributes(Line => (Lines / 3) + 3, Column => ((Columns - 12) / 2) + 1,
-                Count => 1, Color => 1);
-            Move_Cursor(Line => (Lines / 3) + 4, Column => (Columns - 12) / 2);
-            Add(Str => "License");
-            Change_Attributes(Line => (Lines / 3) + 4, Column => ((Columns - 12) / 2) + 1,
-                Count => 1, Color => 1);
-            Move_Cursor(Line => (Lines / 3) + 5, Column => (Columns - 12) / 2);
-            Add(Str => "Quit game");
-            Change_Attributes(Line => (Lines / 3) + 5, Column => (Columns - 12) / 2,
-                Count => 1, Color => 1);
-        else
-            Move_Cursor(Line => (Lines / 3) + 2, Column => (Columns - 12) / 2);
-            Add(Str => "License");
-            Change_Attributes(Line => (Lines / 3) + 2, Column => ((Columns - 12) / 2) + 1,
-                Count => 1, Color => 1);
-            Move_Cursor(Line => (Lines / 3) + 3, Column => (Columns - 12) / 2);
-            Add(Str => "License");
-            Change_Attributes(Line => (Lines / 3) + 3, Column => ((Columns - 12) / 2) + 1,
-                Count => 1, Color => 1);
-            Move_Cursor(Line => (Lines / 3) + 4, Column => (Columns - 12) / 2);
-            Add(Str => "Quit game");
-            Change_Attributes(Line => (Lines / 3) + 4, Column => (Columns - 12) / 2,
-                Count => 1, Color => 1);
+            CurrentLine := CurrentLine + 1;
         end if;
+        Move_Cursor(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2);
+        Add(Str => "News");
+        Change_Attributes(Line => (Lines / 3) + CurrentLine, Column => ((Columns - 12) / 2) + 1,
+            Count => 1, Color => 1);
+        CurrentLine := CurrentLine + 1;
+        Move_Cursor(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2);
+        Add(Str => "License");
+        Change_Attributes(Line => (Lines / 3) + CurrentLine, Column => ((Columns - 12) / 2) + 1,
+            Count => 1, Color => 1);
+        CurrentLine := CurrentLine + 1;
+        Move_Cursor(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2);
+        Add(Str => "Quit game");
+        Change_Attributes(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2,
+            Count => 1, Color => 1);
         -- Copyright
         Move_Cursor(Line => Lines - 1, Column => (Columns - 20) / 2);
         Add(Str => "2016 Bartek thindil Jasicki");
