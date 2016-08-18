@@ -427,7 +427,7 @@ package body Combat is
         end if;
         Move_Cursor(Line => 9, Column => (Columns / 2));
         Add(Str => "Status: ");
-        if Enemy.Distance < 5 then
+        if Enemy.Distance < 1500 then
             if Enemy.Ship.Modules.Element(1).Durability = Enemy.Ship.Modules.Element(1).MaxDurability then
                 Add(Str => "Ok");
             elsif Enemy.Ship.Modules.Element(1).Durability > 0 then
@@ -440,7 +440,7 @@ package body Combat is
         end if;
         Move_Cursor(Line => 10, Column => (Columns / 2));
         Add(Str => "Speed: ");
-        if Enemy.Distance < 5 then
+        if Enemy.Distance < 1500 then
             case Enemy.Ship.Speed is
                 when FULL_STOP =>
                     Add(Str => "Stopped");
