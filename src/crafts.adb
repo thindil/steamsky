@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Directories; use Ada.Directories;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Ships; use Ships;
@@ -26,14 +27,17 @@ package body Crafts is
     RecipeIndex : Natural;
 
 
-    procedure LoadRecipes is
+    function LoadRecipes return Boolean is
         RecipesFile : File_Type;
         RawData, FieldName, Value : Unbounded_String;
         EqualIndex : Natural;
         TempRecord : Craft_Data;
     begin
         if Recipes_List.Length > 0 then
-            return;
+            return True;
+        end if;
+        if not Exists("data/recipes.dat") then
+            return False;
         end if;
         TempRecord := (MaterialType => Fuel, MaterialAmount => 1,
             ResultIndex => 1, ResultAmount => 10000, Workplace => ALCHEMY_LAB);
@@ -62,6 +66,7 @@ package body Crafts is
             end if;
         end loop;
         Close(RecipesFile);
+        return True;
     end LoadRecipes;
 
     procedure SetRecipe is

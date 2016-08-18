@@ -74,7 +74,7 @@ package Ships is
     function FreeCargo(Amount : Integer) return Integer; -- Return available space in cargo after adding/extracting Amount
     function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y:
         Integer; Speed : ShipSpeed ) return ShipRecord; -- Create new ship
-    procedure LoadShips; -- Load ships from file
+    function LoadShips return Boolean; -- Load ships from file, returns False if file not found
     procedure ShowShipInfo; -- Show informations about ship status
     procedure ShowCargoInfo; -- Show informations about ship cargo
     function ShipInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in ship info menu

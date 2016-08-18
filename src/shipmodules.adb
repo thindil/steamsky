@@ -16,17 +16,21 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Directories; use Ada.Directories;
 
 package body ShipModules is
 
-    procedure LoadShipModules is
+    function LoadShipModules return Boolean is
         ModulesFile : File_Type;
         RawData, FieldName, Value : Unbounded_String;
         EqualIndex : Natural;
         TempRecord : BaseModule_Data;
     begin
         if Modules_List.Length > 0 then
-            return;
+            return True;
+        end if;
+        if not Exists("data/shipmodules.dat") then
+            return False;
         end if;
         TempRecord := (Name => Null_Unbounded_String, MType => ENGINE, 
             Weight => 0, Value => 0, MaxValue => 0, Durability => 0);
@@ -57,6 +61,7 @@ package body ShipModules is
             end if;
         end loop;
         Close(ModulesFile);
+        return True;
     end LoadShipModules;
 
 end ShipModules;

@@ -35,6 +35,6 @@ package Items is
     package Objects_Container is new Vectors(Positive, Object_Data);
     Items_List : Objects_Container.Vector; -- List of item available in game
 
-    procedure LoadItems; -- Load items from file
+    function LoadItems return Boolean; -- Load items from file, returns False if file not found 
 
 end Items;
