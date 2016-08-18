@@ -147,10 +147,9 @@ package body Combat is
         end if;
         Enemy.Distance := Enemy.Distance - DistanceTraveled(Enemy.Ship, 1);
         if PilotIndex > 0 and EngineerIndex > 0 then
-            if PilotOrder < 4 and EngineerOrder < 4 and Enemy.Distance > 1 then
+            if PilotOrder < 4 then
                 Enemy.Distance := Enemy.Distance - DistanceTraveled(PlayerShip, 1);
-            end if;
-            if PilotOrder = 4 and EngineerOrder = 4 and Enemy.Distance < 5 then
+            else
                 Enemy.Distance := Enemy.Distance + DistanceTraveled(PlayerShip, 1);
             end if;
         end if;
