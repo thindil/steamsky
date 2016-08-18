@@ -1,10 +1,10 @@
-[Recipe]
+[1]
 Material = FoodMaterial
 Amount = 1
 Result = 2
 Crafted = 1
 Workplace = Alchemy_Lab
-[Recipe]
+[2]
 Material = FuelMaterial
 Amount = 1
 Result = 1
