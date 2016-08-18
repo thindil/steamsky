@@ -7,20 +7,20 @@ Name = Small pirates ship
 Amount = 4
 Modules = 1, 3, 8, 9
 Damage = 5
-DamageRange = 2
+DamageRange = 500
 Accuracy = 1
 [3]
 Name = Small undead ship
 Amount = 2
 Modules = 1, 3
 Damage = 10
-DamageRange = 1
+DamageRange = 100
 Accuracy = 1
 [4]
 Name = Small clockwork drone
 Amount = 2
 Modules = 10, 3
 Damage = 5
-DamageRange = 1
+DamageRange = 100
 Accuracy = 1
 []
