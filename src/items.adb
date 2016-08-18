@@ -16,17 +16,21 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Directories; use Ada.Directories;
 
 package body Items is
 
-    procedure LoadItems is
+    function LoadItems return Boolean is
         ItemsFile : File_Type;
         RawData, FieldName, Value : Unbounded_String;
         EqualIndex, StartIndex, EndIndex : Natural;
         TempRecord : Object_Data;
     begin
         if Items_List.Length > 0 then
-            return;
+            return True;
+        end if;
+        if not Exists("data/items.dat") then
+            return False;
         end if;
         TempRecord := (Name => Null_Unbounded_String, Weight => 1,
             IType => Fuel, Prices => (0, 0, 0), Buyable => (False, False,
@@ -77,6 +81,7 @@ package body Items is
             end if;
         end loop;
         Close(ItemsFile);
+        return True;
     end LoadItems;
 
 end Items;

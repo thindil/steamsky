@@ -34,7 +34,7 @@ package Crafts is
     package Recipes_Container is new Vectors(Positive, Craft_Data);
     Recipes_List : Recipes_Container.Vector; -- List of recipes available in game 
 
-    procedure LoadRecipes; -- Load recipes from file
+    function LoadRecipes return Boolean; -- Load recipes from file, return False if file not exists
     procedure ShowCraft(Key : Key_Code); -- Show crafting screen
     function CraftKeys(Key : Key_Code) return GameStates; -- Handle keys in craft screen
 
