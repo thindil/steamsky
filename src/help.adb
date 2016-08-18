@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Directories; use Ada.Directories;
 with UserInterface; use UserInterface;
 
 package body Help is
@@ -24,17 +25,21 @@ package body Help is
     HelpText : Unbounded_String := Null_Unbounded_String;
     StartIndex : Integer := 1;
 
-    procedure LoadHelp is
+    function LoadHelp return Boolean is
         HelpFile : File_Type;
     begin
         if HelpText /= Null_Unbounded_String then
-            return;
+            return True;
+        end if;
+        if not Exists("data/help.dat") then
+            return False;
         end if;
         Open(HelpFile, In_File, "data/help.dat");
         while not End_Of_File(HelpFile) loop
             Append(HelpText, Get_Line(HelpFile));
         end loop;
         Close(HelpFile);
+        return True;
     end LoadHelp;
 
     procedure ShowHelp is

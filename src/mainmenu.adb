@@ -192,12 +192,16 @@ package body MainMenu is
         CurrentColumn : Column_Position;
     begin
         if LicenseText = Null_Unbounded_String then
-            Open(LicenseFile, In_File, "COPYING");
-            while not End_Of_File(LicenseFile) loop
-                Append(LicenseText, Get_Line(LicenseFile));
-                Append(LicenseText, ASCII.LF);
-            end loop;
-            Close(LicenseFile);
+            if not Exists("COPYING") then
+                LicenseText := To_Unbounded_String("Can't find license file. Did COPYING file is in this same directory where executable is?");
+            else
+                Open(LicenseFile, In_File, "COPYING");
+                while not End_Of_File(LicenseFile) loop
+                    Append(LicenseText, Get_Line(LicenseFile));
+                    Append(LicenseText, ASCII.LF);
+                end loop;
+                Close(LicenseFile);
+            end if;
         end if;
         Index := StartIndex;
         Add(Str => "Up/down arrows to scroll, any other key - back to main menu.");
@@ -235,6 +239,13 @@ package body MainMenu is
         Add(Str => "Press any key to back to main menu");
     end ShowNews;
 
+    procedure LoadGameError(Message : String) is
+    begin
+        ShowDialog(Message);
+        Update_Panels;
+        Update_Screen;
+    end LoadGameError;
+
     function MainMenuKeys(Key : Key_Code) return GameStates is
     begin
         case Key is
@@ -249,18 +260,31 @@ package body MainMenu is
                 return New_Game;
             when Character'Pos('l') | Character'Pos('L') => -- Load game
                 if Exists("data/savegame.dat") then
-                    LoadHelp;
-                    LoadItems;
-                    LoadShipModules;
-                    LoadRecipes;
-                    LoadShips;
+                    if not LoadHelp then
+                        LoadGameError("Can't load help system. Probably missing file data/help.dat");
+                        return Main_Menu;
+                    end if;
+                    if not LoadItems then
+                        LoadGameError("Can't load items. Probably missing file data/items.dat");
+                        return Main_Menu;
+                    end if;
+                    if not LoadShipModules then
+                        LoadGameError("Can't load ship modules. Probably missing file data/shipmodules.dat");
+                        return Main_Menu;
+                    end if;
+                    if not LoadRecipes then
+                        LoadGameError("Can't load crafting recipes. Probably missing file data/recipes.dat");
+                        return Main_Menu;
+                    end if;
+                    if not LoadShips then
+                        LoadGameError("Can't load ship. Probably missing file data/ships.dat");
+                        return Main_Menu;
+                    end if;
                     if LoadGame then
                         DrawGame(Sky_Map_View);
                         return Sky_Map_View;
                     else
-                        ShowDialog("This saved game is incompatible with this version of game and can't be loaded.");
-                        Update_Panels;
-                        Update_Screen;
+                        LoadGameError("This saved game is incompatible with this version of game and can't be loaded.");
                         return Main_Menu;
                     end if;
                 else
@@ -282,6 +306,16 @@ package body MainMenu is
                 return Main_Menu;
         end case;
     end MainMenuKeys;
+
+    procedure NewGameError(Message : String) is
+    begin
+        Erase;
+        ShowMainMenu;
+        Refresh_Without_Update;
+        ShowDialog(Message);
+        Update_Panels;
+        Update_Screen;
+    end NewGameError;
     
     function NewGameKeys(Key : Key_Code) return GameStates is
         NewCharName, NewShipName : Unbounded_String;
@@ -301,11 +335,26 @@ package body MainMenu is
                 Update_Screen;
                 return New_Game;
             when Character'Pos('s') | Character'Pos('S') => -- Start new game;
-                LoadHelp;
-                LoadItems;
-                LoadShipModules;
-                LoadRecipes;
-                LoadShips;
+                if not LoadHelp then
+                    NewGameError("Can't load help system. Probably missing file data/help.dat");
+                    return Main_Menu;
+                end if;
+                if not LoadItems then
+                    NewGameError("Can't load items. Probably missing file data/items.dat");
+                    return Main_Menu;
+                end if;
+                if not LoadShipModules then
+                    NewGameError("Can't load ship modules. Probably missing file data/shipmodules.dat");
+                    return Main_Menu;
+                end if;
+                if not LoadRecipes then
+                    NewGameError("Can't load crafting recipes. Probably missing file data/recipes.dat");
+                    return Main_Menu;
+                end if;
+                if not LoadShips then
+                    NewGameError("Can't load ship. Probably missing file data/ships.dat");
+                    return Main_Menu;
+                end if;
                 NewCharName := Trim(To_Unbounded_String(CharName), Ada.Strings.Both);
                 NewShipName := Trim(To_Unbounded_String(ShipName), Ada.Strings.Both);
                 NewGame(NewCharName, NewShipName, CharGender);

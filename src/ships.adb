@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Directories; use Ada.Directories;
 with Maps; use Maps;
 with Messages; use Messages;
 with Bases; use Bases;
@@ -254,7 +255,7 @@ package body Ships is
         return TmpShip;
     end CreateShip;
 
-    procedure LoadShips is
+    function LoadShips return Boolean is
         ShipsFile : File_Type;
         RawData, FieldName, Value : Unbounded_String;
         EqualIndex, StartIndex, EndIndex, Amount : Natural;
@@ -262,7 +263,10 @@ package body Ships is
         TempModules : ProtoModules_Container.Vector;
     begin
         if ProtoShips_List.Length > 0 then
-            return;
+            return True;
+        end if;
+        if not Exists("data/ships.dat") then
+            return False;
         end if;
         TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
             Damage => 1, DamageRange => 1, Accuracy => 1);
@@ -302,6 +306,7 @@ package body Ships is
             end if;
         end loop;
         Close(ShipsFile);
+        return True;
     end LoadShips;
 
     procedure ShowShipInfo is
