@@ -53,7 +53,7 @@ package body Items is
                     for I in 1..3 loop
                         EndIndex := Index(Value, ", ", StartIndex);
                         if EndIndex = 0 then
-                            EndIndex := StartIndex + 1;
+                            EndIndex := Length(Value) + 1;
                         end if;
                         TempRecord.Prices(I) := Integer'Value(Slice(Value, StartIndex, EndIndex - 1));
                         StartIndex := EndIndex + 2;
@@ -63,7 +63,7 @@ package body Items is
                     for I in 1..3 loop
                         EndIndex := Index(Value, ", ", StartIndex);
                         if EndIndex = 0 then
-                            EndIndex := StartIndex + 1;
+                            EndIndex := Length(Value) + 1;
                         end if;
                         if Slice(Value, StartIndex, EndIndex - 1) = "Y" then
                             TempRecord.Buyable(I) := True;

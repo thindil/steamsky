@@ -287,7 +287,7 @@ package body Ships is
                     for I in 1..Amount loop
                         EndIndex := Index(Value, ", ", StartIndex);
                         if EndIndex = 0 then
-                            EndIndex := StartIndex + 1;
+                            EndIndex := Length(Value) + 1;
                         end if;
                         TempRecord.Modules.Append(New_Item => Integer'Value(Slice(Value, StartIndex, EndIndex - 1)));
                         StartIndex := EndIndex + 2;
