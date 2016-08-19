@@ -394,6 +394,7 @@ package body Combat is
     procedure ShowCombat is
         PilotName, EngineerName, GunnerName : Unbounded_String :=
             To_Unbounded_String("Vacant");
+        DamagePercent : Natural;
     begin
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             case PlayerShip.Crew.Element(I).Order is
@@ -433,10 +434,18 @@ package body Combat is
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             Move_Cursor(Line => Line_Position(6 + I), Column => 2);
             Add(Str => To_String(PlayerShip.Modules.Element(I).Name) & ": ");
-            if PlayerShip.Modules.Element(I).Durability = PlayerShip.Modules.Element(I).MaxDurability then
+            DamagePercent := 100 -  Natural((Float(PlayerShip.Modules.Element(I).Durability) /
+                Float(PlayerShip.Modules.Element(I).MaxDurability)) * 100.0);
+            if DamagePercent = 0 then
                 Add(Str => "Ok");
-            elsif PlayerShip.Modules.Element(I).Durability > 0 then
+            elsif DamagePercent > 0 and DamagePercent < 20 then
+                Add(Str => "Slighty damaged");
+            elsif DamagePercent > 19 and DamagePercent < 50 then
                 Add(Str => "Damaged");
+            elsif DamagePercent > 49 and DamagePercent < 80 then
+                Add(Str => "Heavily damaged");
+            elsif DamagePercent > 79 and DamagePercent < 100 then
+                Add(Str => "Almost destroyed");
             else
                 Add(Str => "Destroyed");
             end if;
