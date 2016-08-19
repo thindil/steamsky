@@ -249,7 +249,7 @@ package body Combat is
                 AddMessage(To_String(ShootMessage));
                 if EndCombat then
                     Shoots := I;
-                    UpdateModule(Enemy.Ship, 1, "Durability", "0");
+                    UpdateModule(Enemy.Ship, 1, "Durability", Integer'Image(0 - Enemy.Ship.Modules.Element(1).MaxDurability));
                     AddMessage(To_String(EnemyName) & " is destroyed!");
                     LootAmount := Integer(Rand_Roll.Random(Generator));
                     FreeSpace := FreeCargo((0 - LootAmount));
