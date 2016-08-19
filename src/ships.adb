@@ -323,7 +323,7 @@ package body Ships is
         return Weight;
     end CountShipWeight;
 
-    function DistanceTraveled(Ship : ShipRecord; Minutes : Positive) return Natural is
+    function RealSpeed(Ship : ShipRecord) return Natural is
         Weight : Positive;
         BaseSpeed : Natural := 0;
         Speed : Integer := 0;
@@ -358,9 +358,9 @@ package body Ships is
         if Speed < 0 then
             Speed := 0;
         end if;
-        Speed := (Speed / 60) * Minutes;
+        Speed := (Speed / 60);
         return Speed;
-    end DistanceTraveled;
+    end RealSpeed;
 
     procedure ShowShipInfo is
         Weight : Integer;

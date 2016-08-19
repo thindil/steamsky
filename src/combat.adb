@@ -145,12 +145,12 @@ package body Combat is
             end case;
             ChangeShipSpeed(ShipSpeed'Val(EngineerOrder));
         end if;
-        Enemy.Distance := Enemy.Distance - DistanceTraveled(Enemy.Ship, 1);
+        Enemy.Distance := Enemy.Distance - RealSpeed(Enemy.Ship);
         if PilotIndex > 0 and EngineerIndex > 0 then
             if PilotOrder < 4 then
-                Enemy.Distance := Enemy.Distance - DistanceTraveled(PlayerShip, 1);
+                Enemy.Distance := Enemy.Distance - RealSpeed(PlayerShip);
             else
-                Enemy.Distance := Enemy.Distance + DistanceTraveled(PlayerShip, 1);
+                Enemy.Distance := Enemy.Distance + RealSpeed(PlayerShip);
             end if;
         end if;
         if Enemy.Distance < 10 then
