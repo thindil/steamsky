@@ -341,7 +341,15 @@ package body Combat is
                         AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
                             " was set on: " & To_String(PilotOrders(PilotOrder)));
                     else
-                        GiveOrders((OrderIndex - PilotOrders'Length), Order);
+                        if (OrderIndex - PilotOrders'Length) < MemberIndex then
+                            GiveOrders((OrderIndex - PilotOrders'Length), Order);
+                        else
+                            if (OrderIndex - PilotOrders'Length + 1) <= PlayerShip.Crew.Last_Index then
+                                GiveOrders((OrderIndex - PilotOrders'Length + 1), Order);
+                            else
+                                return Combat_Orders;
+                            end if;
+                        end if;
                     end if;
                 when Engineer =>
                     if OrderIndex <= EngineerOrders'Length then
@@ -349,7 +357,15 @@ package body Combat is
                         AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
                             " was set on: " & To_String(EngineerOrders(EngineerOrder)));
                     else
-                        GiveOrders((OrderIndex - EngineerOrders'Length), Order);
+                        if (OrderIndex - EngineerOrders'Length) < MemberIndex then
+                            GiveOrders((OrderIndex - EngineerOrders'Length), Order);
+                        else
+                            if (OrderIndex - EngineerOrders'Length + 1) <= PlayerShip.Crew.Last_Index then
+                                GiveOrders((OrderIndex - EngineerOrders'Length + 1), Order);
+                            else
+                                return Combat_Orders;
+                            end if;
+                        end if;
                     end if;
                 when Gunner =>
                     if OrderIndex <= GunnerOrders'Length then
@@ -357,7 +373,15 @@ package body Combat is
                         AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
                             " was set on: " & To_String(GunnerOrders(GunnerOrder)));
                     else
-                        GiveOrders((OrderIndex - GunnerOrders'Length), Order);
+                        if (OrderIndex - GunnerOrders'Length) < MemberIndex then
+                            GiveOrders((OrderIndex - GunnerOrders'Length), Order);
+                        else
+                            if (OrderIndex - PilotOrders'Length + 1) <= PlayerShip.Crew.Last_Index then
+                                GiveOrders((OrderIndex - GunnerOrders'Length + 1), Order);
+                            else
+                                return Combat_Orders;
+                            end if;
+                        end if;
                     end if;
                 when others =>
                     null;
