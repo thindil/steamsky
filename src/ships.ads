@@ -58,7 +58,6 @@ package Ships is
         record
             Name : Unbounded_String; -- Prototype name
             Modules : ProtoModules_Container.Vector; -- List of ship modules
-            Damage : Positive; -- Damage done by ship
             DamageRange : Positive; -- Maximum range from which ship attack
             Accuracy : Positive; -- Bonus to hit for ship
         end record;

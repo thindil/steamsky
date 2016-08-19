@@ -269,7 +269,7 @@ package body Ships is
             return False;
         end if;
         TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
-            Damage => 1, DamageRange => 1, Accuracy => 1);
+            DamageRange => 1, Accuracy => 1);
         Open(ShipsFile, In_File, "data/ships.dat");
         Amount := 1;
         while not End_Of_File(ShipsFile) loop
@@ -292,8 +292,6 @@ package body Ships is
                         TempRecord.Modules.Append(New_Item => Integer'Value(Slice(Value, StartIndex, EndIndex - 1)));
                         StartIndex := EndIndex + 2;
                     end loop;
-                elsif FieldName = To_Unbounded_String("Damage") then
-                    TempRecord.Damage := Integer'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("DamageRange") then
                     TempRecord.DamageRange := Integer'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Accuracy") then
@@ -302,7 +300,7 @@ package body Ships is
             elsif TempRecord.Name /= Null_Unbounded_String then
                 ProtoShips_List.Append(New_Item => TempRecord);
                 TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
-                    Damage => 1, DamageRange => 1, Accuracy => 1);
+                    DamageRange => 1, Accuracy => 1);
             end if;
         end loop;
         Close(ShipsFile);
