@@ -91,6 +91,7 @@ package body Combat is
         HitLocation : Integer;
         LootAmount : Integer;
         FreeSpace : Integer := 0;
+        DistanceTraveled : Integer;
         procedure UpdatePlayer(Player : in out Member_Data) is
         begin
             Player.Health := 0;
@@ -145,14 +146,23 @@ package body Combat is
             end case;
             ChangeShipSpeed(ShipSpeed'Val(EngineerOrder));
         end if;
-        Enemy.Distance := Enemy.Distance - RealSpeed(Enemy.Ship);
+        DistanceTraveled := 0 - RealSpeed(Enemy.Ship);
         if PilotIndex > 0 and EngineerIndex > 0 then
-            if PilotOrder < 4 then
-                Enemy.Distance := Enemy.Distance - RealSpeed(PlayerShip);
-            else
-                Enemy.Distance := Enemy.Distance + RealSpeed(PlayerShip);
-            end if;
+            case PilotOrder is
+                when 1 | 3 =>
+                    DistanceTraveled := DistanceTraveled - RealSpeed(PlayerShip);
+                when 2 =>
+                    DistanceTraveled := DistanceTraveled + RealSpeed(PlayerShip);
+                    if DistanceTraveled > 0 then
+                        DistanceTraveled := 0;
+                    end if;
+                when 4 =>
+                    DistanceTraveled := DistanceTraveled + RealSpeed(PlayerShip);
+                when others =>
+                    null;
+            end case;
         end if;
+        Enemy.Distance := Enemy.Distance + DistanceTraveled;
         if Enemy.Distance < 10 then
             Enemy.Distance := 10;
         end if;
