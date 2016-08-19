@@ -68,4 +68,25 @@ Weight = 2000
 Value = 0
 MaxValue = 10
 Durability = 50
+[11]
+Name = 10mm gun
+Type = Gun
+Weight = 20
+Value = 0
+MaxValue = 5
+Durability = 20
+[12]
+Name = Battering ram
+Type = Gun
+Weight = 200
+Value = 0
+MaxValue = 10
+Durability = 100
+[13]
+Name = Small battering ram
+Type = Gun
+Weight = 100
+Value = 0
+MaxValue = 5
+Durability = 50
 []
