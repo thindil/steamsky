@@ -280,10 +280,9 @@ package body Ships is
                 Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
                 if FieldName = To_Unbounded_String("Name") then
                     TempRecord.Name := Value;
-                elsif FieldName = To_Unbounded_String("Amount") then
-                    Amount := Integer'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Modules") then
                     StartIndex := 1;
+                    Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
                     for I in 1..Amount loop
                         EndIndex := Index(Value, ", ", StartIndex);
                         if EndIndex = 0 then
