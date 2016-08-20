@@ -178,7 +178,7 @@ package body Combat is
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if PlayerShip.Modules.Element(I).Durability > 0 then
                 case Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType is
-                    when GUN =>
+                    when GUN | BATTERING_RAM =>
                         WeaponIndex := I;
                     when ARMOR =>
                         ArmorIndex := I;
@@ -189,7 +189,8 @@ package body Combat is
         end loop;
         for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
             if Enemy.Ship.Modules.Element(I).Durability > 0 and 
-                Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).Mtype = GUN then
+                (Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).Mtype = GUN or 
+                Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).Mtype = BATTERING_RAM) then
                 EnemyWeaponIndex := I;
                 exit;
             end if;
@@ -235,7 +236,7 @@ package body Combat is
                     ShootMessage := ShootMessage & To_Unbounded_String(" and hit in ");
                     HitLocation := Integer(EnemyMod_Roll.Random(Generator3));
                     while Enemy.Ship.Modules.Element(HitLocation).Durability = 0 loop
-                            HitLocation := HitLocation - 1;
+                        HitLocation := HitLocation - 1;
                     end loop;
                     ShootMessage := ShootMessage & Enemy.Ship.Modules.Element(HitLocation).Name &
                         To_Unbounded_String(".");
@@ -282,7 +283,7 @@ package body Combat is
                 else
                     HitLocation := Integer(PlayerMod_Roll.Random(Generator2));
                     while PlayerShip.Modules.Element(HitLocation).Durability = 0 loop
-                            HitLocation := HitLocation - 1;
+                        HitLocation := HitLocation - 1;
                     end loop;
                     ShootMessage := ShootMessage & PlayerShip.Modules.Element(HitLocation).Name &
                         To_Unbounded_String(".");
