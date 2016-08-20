@@ -525,7 +525,7 @@ package body Combat is
         Line : Line_Position := 0;
         MemberIndex : Natural := 0;
     begin
-        OrdersWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
+        OrdersWindow := Create(10, 26, (Lines / 2) - 5, (Columns / 2) - 13);
         Box(OrdersWindow);
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Order then
