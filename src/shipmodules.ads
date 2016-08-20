@@ -21,7 +21,7 @@ with Ada.Containers.Vectors; use Ada.Containers;
 package ShipModules is
     
     type ModuleType is (ENGINE, CABIN, COCPIT, TURRET, GUN, CARGO, ALCHEMY_LAB,
-        HULL, ARMOR);
+        HULL, ARMOR, BATTERING_RAM);
     type BaseModule_Data is -- Data structure for prototypes of ship modules
         record
             Name : Unbounded_String; -- Name of module
