@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Menu with commands to wait certain amount of time
 - Informations about in game changes to main menu
 - Random gender to crew members
+- New ship weapon type - battering ram
 
 ### Changed
 - Updated README.md
