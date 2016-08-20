@@ -78,14 +78,14 @@ Durability = 20
 [12]
 Name = Battering ram
 Type = Battering_ram
-Weight = 200
+Weight = 500
 Value = 0
 MaxValue = 10
 Durability = 100
 [13]
 Name = Small battering ram
 Type = Battering_ram
-Weight = 100
+Weight = 200
 Value = 0
 MaxValue = 5
 Durability = 50
