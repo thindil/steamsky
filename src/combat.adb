@@ -39,8 +39,10 @@ package body Combat is
     EngineerOrders : constant array (1..4) of Unbounded_String := (To_Unbounded_String("Full stop"), 
         To_Unbounded_String("Quarter speed"), To_Unbounded_String("Half speed"),
         To_Unbounded_String("Full speed"));
-    GunnerOrders : constant array (1..3) of Unbounded_String := (To_Unbounded_String("Don't shoot"),
-        To_Unbounded_String("Precise fire"), To_Unbounded_String("Fire at will"));
+    GunnerOrders : constant array (1..6) of Unbounded_String := (To_Unbounded_String("Don't shoot"),
+        To_Unbounded_String("Precise fire"), To_Unbounded_String("Fire at will"), 
+        To_Unbounded_String("Aim for engine"), To_Unbounded_String("Aim in weapon"), 
+        To_Unbounded_String("Aim in hull"));
     Order : Crew_Orders;
     EndCombat : Boolean;
 
@@ -204,6 +206,14 @@ package body Combat is
                     Shoots := 2;
                 when 3 =>
                     Shoots := 4;
+                when 4 =>
+                    AccuracyBonus := AccuracyBonus - 10;
+                    Shoots := 2;
+                when 5 =>
+                    AccuracyBonus := AccuracyBonus - 20;
+                    Shoots := 2;
+                when 6 =>
+                    Shoots := 2;
                 when others =>
                     Shoots := 0;
             end case;
@@ -234,7 +244,23 @@ package body Combat is
                     EnemyName;
                 if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
                     ShootMessage := ShootMessage & To_Unbounded_String(" and hit in ");
-                    HitLocation := Integer(EnemyMod_Roll.Random(Generator3));
+                    if GunnerOrder > 3 and GunnerOrder < 7 then -- aim for part of enemy ship
+                        HitLocation := 1;
+                        for J in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
+                            if (GunnerOrder = 4 and
+                                Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = ENGINE) or
+                                (GunnerOrder = 5 and
+                                (Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = GUN or 
+                                    Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM)) or
+                                (GunnerOrder = 6 and
+                                Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = HULL) then
+                                HitLocation := J;
+                                exit;
+                            end if;
+                        end loop;
+                    else
+                        HitLocation := Integer(EnemyMod_Roll.Random(Generator3));
+                    end if;
                     while Enemy.Ship.Modules.Element(HitLocation).Durability = 0 loop
                         HitLocation := HitLocation - 1;
                     end loop;
@@ -525,15 +551,31 @@ package body Combat is
         OrdersWindow : Window;
         Line : Line_Position := 0;
         MemberIndex : Natural := 0;
-    begin
-        OrdersWindow := Create(10, 26, (Lines / 2) - 5, (Columns / 2) - 13);
-        Box(OrdersWindow);
+        Height : Line_Position;
+    begin   
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Order then
                 MemberIndex := I;
                 exit;
             end if;
         end loop;
+        if MemberIndex > 0 then
+            case Order is
+                when Pilot =>
+                    Height := PilotOrders'Length;
+                when Engineer =>
+                    Height := EngineerOrders'Length;
+                when Gunner =>
+                    Height := GunnerOrders'Length;
+                when others =>
+                    null;
+            end case;
+        else
+            Height := 1;
+        end if;
+        Height := Height + 3 + Line_Position(PlayerShip.Crew.Last_Index);
+        OrdersWindow := Create(Height, 26, (Lines / 2) - 5, (Columns / 2) - 13);
+        Box(OrdersWindow);
         if MemberIndex > 0 then
             case Order is
                 when Pilot =>
@@ -577,9 +619,9 @@ package body Combat is
                     Count => 1, Color => 1);
             end if;
         end loop;
-        Move_Cursor(Win => OrdersWindow, Line => 8, Column => 1);
+        Move_Cursor(Win => OrdersWindow, Line => (Height - 2), Column => 1);
         Add(Win => OrdersWindow, Str => "Quit");
-        Change_Attributes(Win => OrdersWindow, Line => 8, Column => 1, 
+        Change_Attributes(Win => OrdersWindow, Line => (Height - 2), Column => 1, 
             Count => 1, Color => 1);
         Refresh(OrdersWindow);
     end ShowOrdersMenu;
