@@ -1,6 +1,6 @@
 At this moment, help is under heavy development (as whole game). Below you can find few useful tips.
 * You can scroll this help window with arrow keys.
-* Your ship starts docked to base. To move it, you must first undock from base. Press'o' key for open orders menu.
+* Your ship starts docked to base. To move it, you must first undock from base. Press 'o' key for open orders menu.
 * To move your ship, you need to set it speed, have fuel (charcollum, which works as moneys too) and pilot and engineer on duty.
 * To buy/sell items from bases you must first dock to base. All bases buy all items, but which items are sold, depends on base type.
 * As you dock to stations, you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are white.
@@ -9,6 +9,7 @@ At this moment, help is under heavy development (as whole game). Below you can f
 * Game ends when your character die.
 * Travel time depends on skills of Pilot and Engineer (current members on this positions). Prices in bases depends on skill Bartering - with higher skill you can sell items for more and buy for less. Crafting skill determine amount of manufactured items. Gunnery affects chance to hit with gun in combat.
 * In combat, first you must set crew members to selected position and give each orders then hit space for made one combat turn. Each combat turn take 1 minute of game time.
+* If you give order to aim for selected part of enemy ship, your Gunner will be shoot as often as for precise fire, just chance on hit will depends on part of enemy ship. If selected enemy part will be destroyed, Gunner will be shooting in random part of enemy ship, as usual.
 * To escape from fight, you must set Pilot order on Escape, after few turns (depends how far enemy was) you should escape.
 * Real ship speed (at this moment only in combat) depends on engine power, ship weight (with cargo) and bit on Engineer experience.
 * Slow speed in combat helps your gunner hits enemies but also helps enemies hits you. If you want to have more chances to evade enemy attack, set speed to full speed. That same is with pilot orders - evade or escape order helps avoids attacks but also reduce your chance to hit enemies.
