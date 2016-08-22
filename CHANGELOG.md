@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New enemy ship
+- Support for enemy armor in combat
 
 ### Changed
 - Renamed old enemies from small to tiny
