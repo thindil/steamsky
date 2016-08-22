@@ -24,29 +24,17 @@ package body Events is
 
     function CheckForEvent (OldState : GameStates) return GameStates is
         type Percent_Range is range 1..100;
-        type Events_Range is range 1..3;
+        subtype Combat_Range is Positive range 2..ProtoShips_List.Last_Index; 
         package Rand_Roll is new Discrete_Random(Percent_Range);
-        package Rand_Event is new Discrete_Random(Events_Range);
+        package Rand_Combat is new Discrete_Random(Combat_Range);
         Generator : Rand_Roll.Generator;
-        Generator2 : Rand_Event.Generator;
-        Event : Events_Types;
+        Generator2 : Rand_Combat.Generator;
     begin
-        Event := No_Event;
         Rand_Roll.Reset(Generator);
-        Rand_Event.Reset(Generator2);
+        Rand_Combat.Reset(Generator2);
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
             if Rand_Roll.Random(Generator) < 7 then -- Combat
-                Event := Events_Types'Val(Rand_Event.Random(Generator2));
-                case Event is
-                    when Combat_Pirates =>
-                        StartCombat(SmallPirateShip);
-                    when Combat_Undead =>
-                        StartCombat(SmallUndeadShip);
-                    when Combat_ClockWork =>
-                        StartCombat(SmallDrone);
-                    when others =>
-                        null;
-                end case;
+                StartCombat(Rand_Combat.Random(Generator2));
                 return Combat_Confirm;
             end if;
         end if;
