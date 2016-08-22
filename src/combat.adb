@@ -71,7 +71,7 @@ package body Combat is
         Generator3 : EnemyMod_Roll.Generator;
         AccuracyBonus, EvadeBonus : Integer := 0;
         PilotIndex, EngineerIndex, GunnerIndex, WeaponIndex, AmmoIndex,
-            ArmorIndex, EnemyWeaponIndex : Natural := 0;
+            ArmorIndex, EnemyWeaponIndex, EnemyArmorIndex : Natural := 0;
         Shoots : Integer;
         HitChance : Integer;
         ShootMessage : Unbounded_String;
@@ -179,11 +179,15 @@ package body Combat is
             end if;
         end loop;
         for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
-            if Enemy.Ship.Modules.Element(I).Durability > 0 and 
-                (Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).Mtype = GUN or 
-                Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).Mtype = BATTERING_RAM) then
-                EnemyWeaponIndex := I;
-                exit;
+            if Enemy.Ship.Modules.Element(I).Durability > 0 then
+                case Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).MType is
+                    when GUN | BATTERING_RAM =>
+                        EnemyWeaponIndex := I;
+                    when ARMOR =>
+                        EnemyArmorIndex := I;
+                    when others =>
+                        null;
+                end case;
             end if;
         end loop;
         if GunnerIndex = 0 then
@@ -233,26 +237,30 @@ package body Combat is
                     EnemyName;
                 if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
                     ShootMessage := ShootMessage & To_Unbounded_String(" and hit in ");
-                    if GunnerOrder > 3 and GunnerOrder < 7 then -- aim for part of enemy ship
-                        HitLocation := 1;
-                        for J in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
-                            if (GunnerOrder = 4 and
-                                Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = ENGINE) or
-                                (GunnerOrder = 5 and
-                                (Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = GUN or 
-                                    Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM)) or
-                                (GunnerOrder = 6 and
-                                Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = HULL) then
-                                HitLocation := J;
-                                exit;
-                            end if;
-                        end loop;
+                    if EnemyArmorIndex > 0 then
+                        HitLocation := EnemyArmorIndex;
                     else
-                        HitLocation := Integer(EnemyMod_Roll.Random(Generator3));
+                        if GunnerOrder > 3 and GunnerOrder < 7 then -- aim for part of enemy ship
+                            HitLocation := 1;
+                            for J in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
+                                if (GunnerOrder = 4 and
+                                    Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = ENGINE) or
+                                        (GunnerOrder = 5 and
+                                            (Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = GUN or 
+                                            Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM)) or
+                                                (GunnerOrder = 6 and
+                                                Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = HULL) then
+                                                HitLocation := J;
+                                            exit;
+                                end if;
+                            end loop;
+                        else
+                            HitLocation := Integer(EnemyMod_Roll.Random(Generator3));
+                        end if;
+                        while Enemy.Ship.Modules.Element(HitLocation).Durability = 0 loop
+                            HitLocation := HitLocation - 1;
+                        end loop;
                     end if;
-                    while Enemy.Ship.Modules.Element(HitLocation).Durability = 0 loop
-                        HitLocation := HitLocation - 1;
-                    end loop;
                     ShootMessage := ShootMessage & Enemy.Ship.Modules.Element(HitLocation).Name &
                         To_Unbounded_String(".");
                     UpdateModule(Enemy.Ship, HitLocation, "Durability", 
