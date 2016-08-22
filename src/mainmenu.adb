@@ -45,8 +45,8 @@ package body MainMenu is
         Move_Cursor(Line => Lines / 5, Column => (Columns - 15) / 2);
         Add(Str => "STEAM SKY");
         -- Game version
-        Move_Cursor(Line => (Lines / 5) + 1, Column => (Columns - 12) / 2);
-        Add(Str => "ver 0.2");
+        Move_Cursor(Line => (Lines / 5) + 2, Column => (Columns - 17) / 2);
+        Add(Str => GameVersion);
         -- Game menu
         Move_Cursor(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2);
         Add(Str => "New game");
