@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Renamed old enemies from small to tiny
+
 ## [0.2] - 2016-08-21
 
 ### Added
