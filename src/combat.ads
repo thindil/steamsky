@@ -21,10 +21,9 @@ with Game; use Game;
 
 package Combat is
     
-    type Enemy_Types is (SmallPirateShip, SmallUndeadShip, SmallDrone); -- Types of enemies
     EnemyName : Unbounded_String; -- Name of enemy;
 
-    procedure StartCombat(EnemyType : Enemy_Types); -- Generate enemy and start battle
+    procedure StartCombat(EnemyIndex : Positive); -- Generate enemy and start battle
     procedure ShowCombat; -- Show combat screen
     function CombatKeys(Key : Key_Code) return GameStates; -- Handle keys on combat screen
     function CombatOrdersKeys(Key : Key_Code) return GameStates; -- Handle keys in combat orders menu

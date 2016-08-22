@@ -46,23 +46,12 @@ package body Combat is
     Order : Crew_Orders;
     EndCombat : Boolean;
 
-    procedure StartCombat(EnemyType : Enemy_Types) is
+    procedure StartCombat(EnemyIndex : Positive) is
         EnemyShip : ShipRecord;
     begin
-        case EnemyType is
-            when SmallPirateShip =>
-                EnemyShip := CreateShip(2, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
-                Enemy := (Ship => EnemyShip, DamageRange => ProtoShips_List.Element(2).DamageRange, Accuracy
-                    => ProtoShips_List.Element(2).Accuracy, Distance => 1000);
-            when SmallUndeadShip =>
-                EnemyShip := CreateShip(3, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
-                Enemy := (Ship => EnemyShip, DamageRange => ProtoShips_List.Element(3).DamageRange, Accuracy
-                    => ProtoShips_List.Element(3).Accuracy, Distance => 1000);
-            when SmallDrone =>
-                EnemyShip := CreateShip(4, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
-                Enemy := (Ship => EnemyShip, DamageRange => ProtoShips_List.Element(4).DamageRange, Accuracy
-                    => ProtoShips_List.Element(4).Accuracy, Distance => 1000);
-        end case;
+        EnemyShip := CreateShip(EnemyIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
+            Enemy := (Ship => EnemyShip, DamageRange => ProtoShips_List.Element(EnemyIndex).DamageRange, Accuracy
+            => ProtoShips_List.Element(EnemyIndex).Accuracy, Distance => 1000);
         PilotOrder := 2;
         EngineerOrder := 3;
         GunnerOrder := 1;

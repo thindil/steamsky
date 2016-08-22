@@ -19,8 +19,6 @@ with Game; use Game;
 
 package Events is
     
-    type Events_Types is (No_Event, Combat_Pirates, Combat_Undead, Combat_Clockwork); -- Types of events
-
     function CheckForEvent(OldState : GameStates) return GameStates; -- Check if event happen
 
 end Events;
