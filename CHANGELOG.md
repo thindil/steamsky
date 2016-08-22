@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- New enemy ship
+
 ### Changed
 - Renamed old enemies from small to tiny
 
