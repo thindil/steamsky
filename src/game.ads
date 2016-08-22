@@ -33,6 +33,7 @@ package Game is
             Minutes : Natural;
         end record;
     GameDate : Date_Record;
+    GameVersion : constant String := "Version: 0.3";
     
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character); -- Start new game: create map, place ship, crew, etc
     procedure UpdateGame(Minutes : Positive); -- Game ticks (update time, crew, ship, etc)
