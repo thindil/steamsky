@@ -27,7 +27,8 @@ package body Messages is
         end record;
     package Messages_Container is new Vectors(Positive, Message_Data);
     Messages_List : Messages_Container.Vector;
-    StartIndex : Integer := 0;
+    StartIndex : Integer := 1;
+    MessagesType : Message_Type := Default;
 
     function FormatedTime return String is
         Result : Unbounded_String := To_Unbounded_String("");
@@ -125,28 +126,30 @@ package body Messages is
     end GetMessageType;
 
     procedure ShowMessages is
-        LoopEnd : Integer;
-        LinePos : Line_Position := 2;
+        Index : Integer;
     begin
         if Messages_List.Length = 0 then
             Move_Cursor(Line => (Lines / 2), Column => (Columns / 2) - 8);
             Add(Str => "No messages yet.");
             return;
         end if;
-        if StartIndex = 0 then
-            StartIndex := Messages_List.Last_Index - Positive(Lines - 4);
-            if StartIndex < 0 then
-                StartIndex := 1;
-            end if;
+        Index := StartIndex;
+        Move_Cursor(Line => 2, Column => 2);
+        Add(Str => "[All] [Combat] [Trade] [Orders] [Crafts] [Others]");
+        Change_Attributes(Line => 2, Column => 3, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 9, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 18, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 26, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 36, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 47, Count => 1, Color => 1);
+        if Index < 1 then
+            Index := 1;
         end if;
-        LoopEnd := StartIndex + Positive(Lines - 4);
-        if LoopEnd > Messages_List.Last_Index then
-            LoopEnd := Messages_List.Last_Index;
-        end if;
-        for I in StartIndex..LoopEnd loop
-            Move_Cursor(Line => LinePos, Column => 2);
-            Add(Str => To_String(Messages_List.Element(I).Message));
-            LinePos := LinePos + 1;
+        for I in 4..(Lines - 6) loop
+            Move_Cursor(Line => I, Column => 2);
+            Add(Str => GetMessage(Index, MessagesType));
+            Index := Index + 1;
+            exit when Index > Integer(Messages_List.Length);
         end loop;
     end ShowMessages;
 
@@ -154,7 +157,8 @@ package body Messages is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-                StartIndex := 0;
+                StartIndex := 1;
+                MessagesType := Default;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when 56 | 65 => -- Scroll messages up
@@ -166,9 +170,39 @@ package body Messages is
                 return Messages_View;
             when 50 | 66 => -- Scroll messages down
                 StartIndex := StartIndex + 1;
-                if StartIndex > Messages_List.Last_Index - Positive(Lines - 4) then
-                    StartIndex := Messages_List.Last_Index - Positive(Lines - 4);
+                if StartIndex > Messages_List.Last_Index then
+                    StartIndex := StartIndex - 1;
                 end if;
+                DrawGame(Messages_View);
+                return Messages_View;
+            when Character'Pos('a') => -- Show all messages
+                StartIndex := 1;
+                MessagesType := Default;
+                DrawGame(Messages_View);
+                return Messages_View;
+            when Character'Pos('c') | Character'Pos('C') => -- Show combat messages
+                StartIndex := 1;
+                MessagesType := CombatMessage;
+                DrawGame(Messages_View);
+                return Messages_View;
+            when Character'Pos('t') | Character'Pos('T') => -- Show trade messages
+                StartIndex := 1;
+                MessagesType := TradeMessage;
+                DrawGame(Messages_View);
+                return Messages_View;
+            when Character'Pos('o') | Character'Pos('O') => -- Show orders messages
+                StartIndex := 1;
+                MessagesType := OrderMessage;
+                DrawGame(Messages_View);
+                return Messages_View;
+            when Character'Pos('r') | Character'Pos('R') => -- Show craft messages
+                StartIndex := 1;
+                MessagesType := CraftMessage;
+                DrawGame(Messages_View);
+                return Messages_View;
+            when Character'Pos('e') | Character'Pos('E') => -- Show others messages
+                StartIndex := 1;
+                MessagesType := OtherMessage;
                 DrawGame(Messages_View);
                 return Messages_View;
             when others =>
