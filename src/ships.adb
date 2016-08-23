@@ -140,11 +140,13 @@ package body Ships is
             if not SkyBases(BaseIndex).Visited then
                 SkyBases(BaseIndex).Visited := True;
             end if;
-            AddMessage("Ship docked to base " & To_String(SkyBases(BaseIndex).Name));
+            AddMessage("Ship docked to base " &
+                To_String(SkyBases(BaseIndex).Name), OrderMessage);
             UpdateGame(10);
         else
             PlayerShip.Speed := QUARTER_SPEED;
-            AddMessage("Ship undocked from base " & To_String(SkyBases(BaseIndex).Name));
+            AddMessage("Ship undocked from base " &
+                To_String(SkyBases(BaseIndex).Name), OrderMessage);
             UpdateGame(5);
         end if;
     end DockShip;

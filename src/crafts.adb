@@ -103,7 +103,8 @@ package body Crafts is
             return;
         end if;
         PlayerShip.Craft := RecipeIndex;
-        AddMessage(To_String(Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Name) & " was set as manufacturing order.");
+        AddMessage(To_String(Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Name)
+        & " was set as manufacturing order.", CraftMessage);
         RecipeIndex := 0;
     end SetRecipe;
 

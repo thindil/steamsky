@@ -55,7 +55,7 @@ package body Messages is
         return To_String(Result);
     end FormatedTime;
 
-    procedure AddMessage(Message : String; MType : Message_Type := Default) is
+    procedure AddMessage(Message : String; MType : Message_Type) is
     begin
         Messages_List.Append(New_Item => (Message => To_Unbounded_String(FormatedTime) & ": " &
             To_Unbounded_String(Message), MType => MType));

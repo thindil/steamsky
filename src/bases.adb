@@ -61,7 +61,8 @@ package body Bases is
         UpdateCargo(1, (0 - Cost));
         UpdateCargo(ItemIndex, BuyAmount);
         GainExp(1, 4, 1);
-        AddMessage("You bought" & Positive'Image(BuyAmount) & " " & ItemName & " for" & Positive'Image(Cost) & " Charcollum.");
+        AddMessage("You bought" & Positive'Image(BuyAmount) & " " & ItemName &
+            " for" & Positive'Image(Cost) & " Charcollum.", TradeMessage);
         UpdateGame(5);
     exception
         when CONSTRAINT_ERROR =>
@@ -91,7 +92,8 @@ package body Bases is
         UpdateCargo(ProtoIndex, (0 - SellAmount));
         UpdateCargo(1, Profit);
         GainExp(1, 4, 1);
-        AddMessage("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" & Positive'Image(Profit) & " Charcollum.");
+        AddMessage("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" & 
+            Positive'Image(Profit) & " Charcollum.", TradeMessage);
         UpdateGame(5);
     exception
         when CONSTRAINT_ERROR =>
