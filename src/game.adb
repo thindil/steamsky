@@ -171,14 +171,14 @@ package body Game is
                 end if;
                 if BackToWork then
                     Member.Order := Member.PreviousOrder;
-                    AddMessage(To_String(Member.Name) & " back to work, fully rested.");
+                    AddMessage(To_String(Member.Name) & " back to work, fully rested.", OrderMessage);
                 end if;
                 Member.PreviousOrder := Rest;
             end if;
             if TiredLevel > 80 and Member.Order /= Rest then
                 Member.PreviousOrder := Member.Order;
                 Member.Order := Rest;
-                AddMessage(To_String(Member.Name) & " is too tired to work, going rest.");
+                AddMessage(To_String(Member.Name) & " is too tired to work, going rest.", OrderMessage);
             end if;
             if HungerLevel > 80 then
                 if Consume(Food) then
@@ -187,7 +187,7 @@ package body Game is
                         HungerLevel := 0;
                     end if;
                 else
-                    AddMessage(To_String(Member.Name) & " is hungry, but can't find anything to eat.");
+                    AddMessage(To_String(Member.Name) & " is hungry, but can't find anything to eat.", OtherMessage);
                 end if;
             end if;
             Member.Hunger := HungerLevel;
@@ -198,7 +198,7 @@ package body Game is
                         ThirstLevel := 0;
                     end if;
                 else
-                    AddMessage(To_String(Member.Name) & " is thirsty, but can't find anything to drink.");
+                    AddMessage(To_String(Member.Name) & " is thirsty, but can't find anything to drink.", OtherMessage);
                 end if;
             end if;
             Member.Thirst := ThirstLevel;
@@ -318,7 +318,7 @@ package body Game is
             end loop;
             -- Send repair team on break if all is ok
             if RepairPoints > 0 then
-                AddMessage("All repairs are finished.");
+                AddMessage("All repairs are finished.", OrderMessage);
                 for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                     if PlayerShip.Crew.Element(I).Order = Repair then
                         GiveOrders(I, Rest);
@@ -338,7 +338,7 @@ package body Game is
             if ModuleIndex = 0 then
                 AddMessage("You don't have workplace for manufacturing selected " & 
                         To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
-                        ".");
+                        ".", CraftMessage);
                 GiveOrders(CrafterIndex, Rest);
                 PlayerShip.Craft := 0;
                 return;
@@ -354,7 +354,7 @@ package body Game is
                 if MaterialIndex = 0 then
                     AddMessage("You don't have any crafting materials for manufacturing " & 
                         To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
-                        ".");
+                        ".", CraftMessage);
                     GiveOrders(CrafterIndex, Rest);
                     PlayerShip.Craft := 0;
                     exit;
@@ -368,7 +368,7 @@ package body Game is
                 if FreeCargo(Amount) < 0 then
                     AddMessage("You don't have free cargo space for manufacturing " & 
                         To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
-                        ".");
+                        ".", CraftMessage);
                     GiveOrders(CrafterIndex, Rest);
                     PlayerShip.Craft := 0;
                     exit;
@@ -376,7 +376,7 @@ package body Game is
                 if PlayerShip.Cargo.Element(MaterialIndex).Amount < Recipes_List.Element(PlayerShip.Craft).MaterialAmount then
                     AddMessage("You don't have enough crafting materials for manufacturing " & 
                         To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
-                        ".");
+                        ".", CraftMessage);
                     GiveOrders(CrafterIndex, Rest);
                     PlayerShip.Craft := 0;
                     exit;
@@ -385,7 +385,8 @@ package body Game is
                 UpdateCargo(PlayerShip.Cargo.Element(MaterialIndex).ProtoIndex, (0 - Recipes_List.Element(PlayerShip.Craft).MaterialAmount));
                 UpdateCargo(Recipes_List.Element(PlayerShip.Craft).ResultIndex, ResultAmount);
                 AddMessage(To_String(PlayerShip.Crew.Element(CrafterIndex).Name) & " was manufactured" & Integer'Image(ResultAmount) & 
-                    " " & To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & ".");
+                    " " & To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
+                    ".", CraftMessage);
             end loop;
         end if;
     end UpdateGame;
