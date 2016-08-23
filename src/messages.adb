@@ -20,7 +20,12 @@ with UserInterface; use UserInterface;
 
 package body Messages is
 
-    package Messages_Container is new Vectors(Positive, Unbounded_String);
+    type Message_Data is -- Data structure for messages
+        record
+            Message : Unbounded_String;
+            MType : Message_Type;
+        end record;
+    package Messages_Container is new Vectors(Positive, Message_Data);
     Messages_List : Messages_Container.Vector;
     StartIndex : Integer := 0;
 
@@ -50,25 +55,41 @@ package body Messages is
         return To_String(Result);
     end FormatedTime;
 
-    procedure AddMessage(Message : String) is
+    procedure AddMessage(Message : String; MType : Message_Type := Default) is
     begin
-        Messages_List.Append(New_Item => To_Unbounded_String(FormatedTime) & ": " & To_Unbounded_String(Message));
+        Messages_List.Append(New_Item => (Message => To_Unbounded_String(FormatedTime) & ": " &
+            To_Unbounded_String(Message), MType => MType));
         LastMessage := To_Unbounded_String(Message);
     end AddMessage;
 
-    function GetMessage(MessageIndex : Integer) return String is
+    function GetMessage(MessageIndex : Integer; MType : Message_Type := Default) return String is
+        Index : Integer := 0;
     begin
         if MessageIndex > Integer(Messages_List.Length) then
             return "";
         end if;
         if MessageIndex < 1 then
-            if Integer(Messages_List.Length) + MessageIndex < 1 then
-                return "";
-            else
-                return To_String(Messages_List.Element(Integer(Messages_List.Length) + MessageIndex));
+            if Integer(Messages_List.Length) + MessageIndex > 0 then
+                for I in reverse Messages_List.First_Index..Messages_List.Last_Index loop
+                    if Messages_List.Element(I).MType = MType or MType = Default then
+                        Index := Index - 1;
+                    end if;
+                    if Index = MessageIndex then
+                        return To_String(Messages_List.Element(I).Message);
+                    end if;
+                end loop;
             end if;
+            return "";
         end if;
-        return To_String(Messages_List.Element(MessageIndex));
+        for I in Messages_List.First_Index..Messages_List.Last_Index loop
+            if Messages_List.Element(I).MType = MType or MType = Default then
+                Index := Index + 1;
+            end if;
+            if Index = MessageIndex then
+                return To_String(Messages_List.Element(I).Message);
+            end if;
+        end loop;
+        return "";
     end GetMessage;
 
     procedure ClearMessages is
@@ -81,10 +102,25 @@ package body Messages is
         return Natural(Messages_List.Length);
     end MessagesAmount;
 
-    procedure RestoreMessage(Message : Unbounded_String) is
+    procedure RestoreMessage(Message : Unbounded_String; MType : Message_Type := Default) is
     begin
-        Messages_List.Append(New_Item => Message);
+        Messages_List.Append(New_Item => (Message => Message, MType => MType));
     end RestoreMessage;
+
+    function GetMessageType(MessageIndex : Integer) return Message_Type is
+    begin
+        if MessageIndex > Integer(Messages_List.Length) then
+            return Default;
+        end if;
+        if MessageIndex < 1 then
+            if Integer(Messages_List.Length) + MessageIndex < 1 then
+                return Default;
+            else
+                return Messages_List.Element(Integer(Messages_List.Length) + MessageIndex).MType;
+            end if;
+        end if;
+        return Messages_List.Element(MessageIndex).MType;
+    end GetMessageType;
 
     procedure ShowMessages is
         LoopEnd : Integer;
@@ -107,7 +143,7 @@ package body Messages is
         end if;
         for I in StartIndex..LoopEnd loop
             Move_Cursor(Line => LinePos, Column => 2);
-            Add(Str => To_String(Messages_List.Element(I)));
+            Add(Str => To_String(Messages_List.Element(I).Message));
             LinePos := LinePos + 1;
         end loop;
     end ShowMessages;
