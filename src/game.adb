@@ -398,7 +398,7 @@ package body Game is
     begin
         Create(SaveGame, Out_File, "data/savegame.dat");
         -- Save version
-        Put(SaveGame, "0.2;");
+        Put(SaveGame, "0.3;");
         -- Save game date
         RawValue := To_Unbounded_String(Integer'Image(GameDate.Year));
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -492,7 +492,8 @@ package body Game is
         if Messages > 0 then
             StartLoop := MessagesAmount - Messages + 1;
             for I in StartLoop..MessagesAmount loop
-                Put(SaveGame, GetMessage(I) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(Message_Type'Pos(GetMessageType(I))));
+                Put(SaveGame, GetMessage(I) & ";" & To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             end loop;
         end if;
         Close(SaveGame);
@@ -506,6 +507,8 @@ package body Game is
         ShipCargo : Cargo_Container.Vector; 
         ShipCrew : Crew_Container.Vector;
         Messages : Natural;
+        Message : Unbounded_String;
+        MType : Message_Type;
         function ReadData return Unbounded_String is
             RawData : Unbounded_String := To_Unbounded_String("");
             Char : Character;
@@ -524,7 +527,7 @@ package body Game is
     begin
         Open(SaveGame, In_File, "data/savegame.dat");
         -- Check save version
-        if ReadData /= "0.2" then
+        if ReadData /= "0.3" then
             Close(SaveGame);
             return False;
         end if;
@@ -589,7 +592,9 @@ package body Game is
         PlayerShip.Crew := ShipCrew;
         Messages := Integer'Value(To_String(ReadData));
         for I in 1..Messages loop
-            RestoreMessage(ReadData);
+            Message := ReadData;
+            MType := Message_Type'Val(Integer'Value(To_String(ReadData)));
+            RestoreMessage(Message, MType);
         end loop;
         Close(SaveGame);
         return True;
