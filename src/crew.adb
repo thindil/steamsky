@@ -78,7 +78,7 @@ package body Crew is
                 if PlayerShip.Crew.Element(I).Order = GivenOrder and PlayerShip.Crew.Element(I).Order /= Rest then
                     NewOrder := Rest;
                     PlayerShip.Crew.Update_Element(Index => I, Process => UpdateOrder'Access);
-                    AddMessage(To_String(PlayerShip.Crew.Element(I).Name) & " going on break.");
+                    AddMessage(To_String(PlayerShip.Crew.Element(I).Name) & " going on break.", OrderMessage);
                 end if;
             end loop;
         end if;
@@ -86,17 +86,23 @@ package body Crew is
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
         case GivenOrder is
             when Pilot =>
-                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " starts piloting.");
+                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name)
+                & " starts piloting.", OrderMessage);
             when Engineer =>
-                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " starts engineers duty.");
+                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name)
+                & " starts engineers duty.", OrderMessage);
             when Gunner =>
-                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " starts operating gun.");
+                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name)
+                & " starts operating gun.", OrderMessage);
             when Rest =>
-                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " going on break.");
+                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name)
+                & " going on break.", OrderMessage);
             when Repair =>
-                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " starts repair ship.");
+                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name)
+                & " starts repair ship.", OrderMessage);
             when Craft =>
-                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " starts manufacturing.");
+                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name)
+                & " starts manufacturing.", OrderMessage);
         end case;
     end GiveOrders;
 
