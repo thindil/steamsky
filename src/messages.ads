@@ -21,13 +21,16 @@ with Game; use Game;
 
 package Messages is
 
+    type Message_Type is (Default, CombatMessage, Trade, Order, CraftMessage); -- Types of messages
+
     LastMessage : Unbounded_String := To_Unbounded_String(""); -- Last message received
     function FormatedTime return String; -- Format game time
-    procedure AddMessage(Message : String); -- Add new message to list
-    function GetMessage(MessageIndex : Integer) return String; -- Return selected message
+    procedure AddMessage(Message : String; MType : Message_Type := Default); -- Add new message to list
+    function GetMessage(MessageIndex : Integer; MType : Message_Type := Default) return String; -- Return selected message
     procedure ClearMessages; -- Remove all messages;
     function MessagesAmount return Natural; -- Return amount of messages
-    procedure RestoreMessage(Message : Unbounded_String); -- Restore message from save file
+    procedure RestoreMessage(Message : Unbounded_String; MType : Message_Type := Default); -- Restore message from save file
+    function GetMessageType(MessageIndex : Integer) return Message_Type; -- Return type of selected message
     procedure ShowMessages; -- Show messages list
     function MessagesKeys(Key : Key_Code) return GameStates; -- Handle keys in messages list
 
