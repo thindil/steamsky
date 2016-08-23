@@ -63,12 +63,13 @@ package body Messages is
     end AddMessage;
 
     function GetMessage(MessageIndex : Integer; MType : Message_Type := Default) return String is
-        Index : Integer := 0;
+        Index : Integer;
     begin
         if MessageIndex > Integer(Messages_List.Length) then
             return "";
         end if;
         if MessageIndex < 1 then
+            Index := 1;
             if Integer(Messages_List.Length) + MessageIndex > 0 then
                 for I in reverse Messages_List.First_Index..Messages_List.Last_Index loop
                     if Messages_List.Element(I).MType = MType or MType = Default then
@@ -81,6 +82,7 @@ package body Messages is
             end if;
             return "";
         end if;
+        Index := 0;
         for I in Messages_List.First_Index..Messages_List.Last_Index loop
             if Messages_List.Element(I).MType = MType or MType = Default then
                 Index := Index + 1;
