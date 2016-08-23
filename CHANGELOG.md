@@ -6,9 +6,11 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New enemy ship
 - Support for enemy armor in combat
+- Types of messages (combat/crafting/etc)
 
 ### Changed
 - Renamed old enemies from small to tiny
+- Saving messages to savegame file which made saves from 0.2 incompatible
 
 ## [0.2] - 2016-08-21
 
