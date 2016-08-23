@@ -154,7 +154,7 @@ package body Combat is
             Enemy.Distance := 10;
         end if;
         if Enemy.Distance >= 1500 then
-            AddMessage("You escaped from " & To_String(EnemyName));
+            AddMessage("You escaped from " & To_String(EnemyName), CombatMessage);
             EndCombat := True;
             return;
         elsif Enemy.Distance < 1500 and Enemy.Distance >= 1000 then
@@ -227,9 +227,9 @@ package body Combat is
             Shoots := PlayerShip.Cargo.Element(AmmoIndex).Amount;
         end if;
         if Shoots = -3 then
-            AddMessage("You don't have gun to shoot!");
+            AddMessage("You don't have gun to shoot!", CombatMessage);
         elsif Shoots = -2 then
-            AddMessage("You don't have ammo to your gun!");
+            AddMessage("You don't have ammo to your gun!", CombatMessage);
         elsif Shoots > 0 then -- Player attacks
             HitChance := AccuracyBonus + PlayerShip.Crew.Element(GunnerIndex).Skills(3, 1);
             for I in 1..Shoots loop
@@ -273,11 +273,11 @@ package body Combat is
                 else
                     ShootMessage := ShootMessage & To_Unbounded_String(" and miss.");
                 end if;
-                AddMessage(To_String(ShootMessage));
+                AddMessage(To_String(ShootMessage), CombatMessage);
                 if EndCombat then
                     Shoots := I;
                     UpdateModule(Enemy.Ship, 1, "Durability", Integer'Image(0 - Enemy.Ship.Modules.Element(1).MaxDurability));
-                    AddMessage(To_String(EnemyName) & " is destroyed!");
+                    AddMessage(To_String(EnemyName) & " is destroyed!", CombatMessage);
                     LootAmount := Integer(Rand_Roll.Random(Generator));
                     FreeSpace := FreeCargo((0 - LootAmount));
                     if FreeSpace < 0 then
@@ -285,7 +285,7 @@ package body Combat is
                     end if;
                     if LootAmount > 0 then
                         AddMessage("You looted" & Integer'Image(LootAmount) & " Charcollum from " & 
-                            To_String(EnemyName) & ".");
+                            To_String(EnemyName) & ".", CombatMessage);
                         UpdateCargo(1, LootAmount);
                     end if;
                     exit;
@@ -316,8 +316,8 @@ package body Combat is
                         Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType = ENGINE)
                     and PlayerShip.Modules.Element(HitLocation).Durability = 0 then
                         PlayerShip.Crew.Update_Element(Index => 1, Process => UpdatePlayer'Access);
-                        AddMessage(To_String(ShootMessage));
-                        AddMessage("You died in ship explosion!");
+                        AddMessage(To_String(ShootMessage), CombatMessage);
+                        AddMessage("You died in ship explosion!", CombatMessage);
                         EndCombat := True;
                         DrawGame(Combat_State);
                         return;
@@ -326,7 +326,7 @@ package body Combat is
             else
                 ShootMessage := ShootMessage & To_Unbounded_String("miss.");
             end if;
-            AddMessage(To_String(ShootMessage));
+            AddMessage(To_String(ShootMessage), CombatMessage);
         end if;
         UpdateGame(1);
     end CombatTurn;
@@ -368,7 +368,7 @@ package body Combat is
                     if OrderIndex <= PilotOrders'Length then
                         PilotOrder := OrderIndex;
                         AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
-                            " was set on: " & To_String(PilotOrders(PilotOrder)));
+                            " was set on: " & To_String(PilotOrders(PilotOrder)), CombatMessage);
                     else
                         if (OrderIndex - PilotOrders'Length) < MemberIndex then
                             GiveOrders((OrderIndex - PilotOrders'Length), Order);
@@ -384,7 +384,8 @@ package body Combat is
                     if OrderIndex <= EngineerOrders'Length then
                         EngineerOrder := OrderIndex;
                         AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
-                            " was set on: " & To_String(EngineerOrders(EngineerOrder)));
+                            " was set on: " & To_String(EngineerOrders(EngineerOrder)),
+                            CombatMessage);
                     else
                         if (OrderIndex - EngineerOrders'Length) < MemberIndex then
                             GiveOrders((OrderIndex - EngineerOrders'Length), Order);
@@ -400,7 +401,7 @@ package body Combat is
                     if OrderIndex <= GunnerOrders'Length then
                         GunnerOrder := OrderIndex;
                         AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
-                            " was set on: " & To_String(GunnerOrders(GunnerOrder)));
+                            " was set on: " & To_String(GunnerOrders(GunnerOrder)), CombatMessage);
                     else
                         if (OrderIndex - GunnerOrders'Length) < MemberIndex then
                             GiveOrders((OrderIndex - GunnerOrders'Length), Order);
@@ -539,7 +540,7 @@ package body Combat is
         end if;
         for I in -10..-1 loop
             Move_Cursor(Line => Lines + Line_Position(I), Column => 2);
-            Add(Str => GetMessage((I + 1)));
+            Add(Str => GetMessage((I + 1), CombatMessage));
         end loop;
         LastMessage := To_Unbounded_String("");
     end ShowCombat;
