@@ -180,6 +180,9 @@ package body Messages is
                 return Messages_View;
             when 50 | 66 => -- Scroll messages down
                 StartIndex := StartIndex - 1;
+                if MessagesAmount(MessagesType) < Natural(Lines - 6) then
+                    StartIndex := 0;
+                end if;
                 if abs StartIndex > MessagesAmount(MessagesType) then
                     StartIndex := 0 - (MessagesAmount(MessagesType) - Natural(Lines) + 6);
                     if StartIndex > 0 then
