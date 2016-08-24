@@ -155,7 +155,7 @@ package body Messages is
         if Index > 0 then
             Index := 0;
         end if;
-        for I in 4..(Lines - 6) loop
+        for I in 4..(Lines - 2) loop
             Move_Cursor(Line => I, Column => 2);
             Add(Str => GetMessage(Index, MessagesType));
             Index := Index - 1;
@@ -180,11 +180,11 @@ package body Messages is
                 return Messages_View;
             when 50 | 66 => -- Scroll messages down
                 StartIndex := StartIndex - 1;
-                if MessagesAmount(MessagesType) < Natural(Lines - 6) then
+                if MessagesAmount(MessagesType) < Natural(Lines - 5) then
                     StartIndex := 0;
                 end if;
-                if abs StartIndex > MessagesAmount(MessagesType) then
-                    StartIndex := 0 - (MessagesAmount(MessagesType) - Natural(Lines) + 6);
+                if (abs StartIndex) + Natural(Lines - 5) > MessagesAmount(MessagesType) then
+                    StartIndex := 0 - (MessagesAmount(MessagesType) - Natural(Lines) + 5);
                     if StartIndex > 0 then
                         StartIndex := 0;
                     end if;
