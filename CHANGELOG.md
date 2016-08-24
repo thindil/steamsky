@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Renamed old enemies from small to tiny
 - Saving new messages format to savegame file which made saves from 0.2 incompatible
+- Show last messages as first on last messages screen
 
 ### Fixed
 - On combat screen showing messages from previous combat
