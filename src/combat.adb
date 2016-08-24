@@ -45,6 +45,7 @@ package body Combat is
         To_Unbounded_String("Aim in hull"));
     Order : Crew_Orders;
     EndCombat : Boolean;
+    MessagesStarts : Natural;
 
     procedure StartCombat(EnemyIndex : Positive) is
         EnemyShip : ShipRecord;
@@ -57,6 +58,7 @@ package body Combat is
         GunnerOrder := 1;
         EndCombat := False;
         EnemyName := Enemy.Ship.Name;
+        MessagesStarts := MessagesAmount(CombatMessage);
     end StartCombat;
 
     procedure CombatTurn is
@@ -425,6 +427,7 @@ package body Combat is
         PilotName, EngineerName, GunnerName : Unbounded_String :=
             To_Unbounded_String("Vacant");
         DamagePercent : Natural;
+        LoopStart : Integer;
     begin
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             case PlayerShip.Crew.Element(I).Order is
@@ -538,10 +541,16 @@ package body Combat is
             Change_Attributes(Line => 13, Column => (Columns / 2),
                 Count => 3, Color => 1);
         end if;
-        for I in -10..-1 loop
-            Move_Cursor(Line => Lines + Line_Position(I), Column => 2);
-            Add(Str => GetMessage((I + 1), CombatMessage));
-        end loop;
+        if MessagesStarts < MessagesAmount(CombatMessage) then
+            LoopStart := MessagesStarts - MessagesAmount(CombatMessage);
+            if LoopStart < -10 then
+                LoopStart := -10;
+            end if;
+            for I in LoopStart..-1 loop
+                Move_Cursor(Line => Lines + Line_Position(I), Column => 2);
+                Add(Str => GetMessage((I + 1), CombatMessage));
+            end loop;
+        end if;
         LastMessage := To_Unbounded_String("");
     end ShowCombat;
 
