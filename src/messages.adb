@@ -100,9 +100,19 @@ package body Messages is
         Messages_List.Clear;
     end ClearMessages;
 
-    function MessagesAmount return Natural is
+    function MessagesAmount(MType : Message_Type := Default) return Natural is
+        Amount : Natural := 0;
     begin
-        return Natural(Messages_List.Length);
+        if MType = Default then
+            return Natural(Messages_List.Length);
+        else
+            for I in Messages_List.First_Index..Messages_List.Last_Index loop
+                if Messages_List.Element(I).MType = MType then
+                    Amount := Amount + 1;
+                end if;
+            end loop;
+            return Amount;
+        end if;
     end MessagesAmount;
 
     procedure RestoreMessage(Message : Unbounded_String; MType : Message_Type := Default) is

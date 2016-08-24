@@ -29,7 +29,7 @@ package Messages is
     procedure AddMessage(Message : String; MType : Message_Type); -- Add new message to list
     function GetMessage(MessageIndex : Integer; MType : Message_Type := Default) return String; -- Return selected message
     procedure ClearMessages; -- Remove all messages;
-    function MessagesAmount return Natural; -- Return amount of messages
+    function MessagesAmount(MType : Message_Type := Default) return Natural; -- Return amount of selected type messages
     procedure RestoreMessage(Message : Unbounded_String; MType : Message_Type := Default); -- Restore message from save file
     function GetMessageType(MessageIndex : Integer) return Message_Type; -- Return type of selected message
     procedure ShowMessages; -- Show messages list
