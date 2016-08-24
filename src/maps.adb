@@ -104,13 +104,13 @@ package body Maps is
         NewKey : Key_Code;
     begin
         case Key is
-            when 56 | 65 => -- Move up
+            when 56 => -- Move up
                 MoveShip(0, 0, -1);
-            when 50 | 66 => -- Move down
+            when 50 => -- Move down
                 MoveShip(0, 0, 1); 
-            when 54 | 67 => -- Move right
+            when 54 => -- Move right
                 MoveShip(0, 1, 0);
-            when 52 | 68 => -- Move left
+            when 52 => -- Move left
                 MoveShip(0, -1, 0);
             when 49 => -- Move down/left
                 MoveShip(0, -1, 1);
@@ -126,11 +126,19 @@ package body Maps is
                 Result := 3;
             when 53 => -- Wait 1 minute
                 UpdateGame(1);
-            when 27 => -- Map moving
+            when 27 => -- Map moving and ship moving with arrows keys
                 NewKey := Get_KeyStroke;
                 if NewKey = 91 then
                     NewKey := Get_KeyStroke;
                     case NewKey is
+                        when 65 => -- Move up
+                            MoveShip(0, 0, -1);
+                        when 66 => -- Move down
+                            MoveShip(0, 0, 1); 
+                        when 67 => -- Move right
+                            MoveShip(0, 1, 0);
+                        when 68 => -- Move left
+                            MoveShip(0, -1, 0);
                         when 97 => -- Move map up
                             MoveY := MoveY - 1;
                         when 98 => -- Move map down
