@@ -52,4 +52,16 @@ Weight = 5
 Type = Wood
 Prices = 5, 5, 3
 Buyable = N, N, Y
+[10]
+Name = Illandru logs
+Weight = 3
+Type = Wood
+Prices = 6, 6, 4
+Buyable = N, N, Y
+[11]
+Name = Fine Rations
+Weight = 1
+Type = Food
+Prices = 5, 3, 5
+Buyable = N, Y, N
 []
