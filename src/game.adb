@@ -154,8 +154,10 @@ package body Game is
         HealthLevel : Integer := 100;
         RepairPoints : Natural := 0;
         ProtoIndex : Positive;
-        CrafterIndex, MaterialIndex, ModuleIndex, ResultAmount : Natural := 0;
+        CrafterIndex, ModuleIndex, ResultAmount : Natural := 0;
         Amount : Integer;
+        Recipe : Craft_Data;
+        MaterialIndexes : array(1..10) of Natural := (others => 0);
         procedure UpdateMember(Member : in out Member_Data) is
             BackToWork : Boolean := True;
         begin
@@ -328,8 +330,9 @@ package body Game is
         end if;
         -- Craft items
         if CrafterIndex > 0 and TiredPoints > 0 then
+            Recipe := Recipes_List.Element(PlayerShip.Craft);
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List.Element(PlayerShip.Craft).Workplace and
+                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipe.Workplace and
                     PlayerShip.Modules.ELement(I).Durability > 0 then
                     ModuleIndex := I;
                     exit;
@@ -337,57 +340,65 @@ package body Game is
             end loop;
             if ModuleIndex = 0 then
                 AddMessage("You don't have workplace for manufacturing selected " & 
-                        To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
-                        ".", CraftMessage);
+                        To_String(Items_List.Element(Recipe.ResultIndex).Name) & ".", CraftMessage);
                 GiveOrders(CrafterIndex, Rest);
                 PlayerShip.Craft := 0;
                 return;
             end if;
+            Craft_Loop:
             for I in 1..TiredPoints loop
-                MaterialIndex := 0;
-                for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Recipes_List.Element(PlayerShip.Craft).MaterialType then
-                        MaterialIndex := I;
-                        exit;
+                MaterialIndexes := (others => 0);
+                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    for K in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
+                        if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = Recipe.MaterialTypes(K) then
+                            MaterialIndexes(K) := J;
+                        end if;
+                    end loop;
+                end loop;
+                for J in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
+                    if MaterialIndexes(J) = 0 then
+                        AddMessage("You don't have any crafting materials for manufacturing " & 
+                        To_String(Items_List.Element(Recipe.ResultIndex).Name) & ".", CraftMessage);
+                        GiveOrders(CrafterIndex, Rest);
+                        PlayerShip.Craft := 0;
+                        exit Craft_Loop;
                     end if;
                 end loop;
-                if MaterialIndex = 0 then
-                    AddMessage("You don't have any crafting materials for manufacturing " & 
-                        To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
-                        ".", CraftMessage);
-                    GiveOrders(CrafterIndex, Rest);
-                    PlayerShip.Craft := 0;
-                    exit;
-                end if;
-                Amount := Items_List.Element(PlayerShip.Cargo.Element(MaterialIndex).ProtoIndex).Weight * 
-                Recipes_List.Element(PlayerShip.Craft).MaterialAmount;
-                ResultAmount := Recipes_List.Element(PlayerShip.Craft).ResultAmount +
-                    Integer(Float'Floor(Float(Recipes_List.Element(PlayerShip.Craft).ResultAmount) *
+                Amount := 0;
+                for J in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
+                    Amount := Amount + Items_List.Element(PlayerShip.Cargo.Element(MaterialIndexes(J)).ProtoIndex).Weight * 
+                        Recipe.MaterialAmounts.Element(J);
+                end loop;
+                ResultAmount := Recipe.ResultAmount + Integer(Float'Floor(Float(Recipe.ResultAmount) *
                     (Float(PlayerShip.Crew.Element(CrafterIndex).Skills(5, 1)) / 100.0)));
-                Amount := Amount - (Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Weight * ResultAmount);
+                Amount := Amount - (Items_List.Element(Recipe.ResultIndex).Weight * ResultAmount);
                 if FreeCargo(Amount) < 0 then
                     AddMessage("You don't have free cargo space for manufacturing " & 
-                        To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
-                        ".", CraftMessage);
+                        To_String(Items_List.Element(Recipe.ResultIndex).Name) & ".", CraftMessage);
                     GiveOrders(CrafterIndex, Rest);
                     PlayerShip.Craft := 0;
-                    exit;
+                    exit Craft_Loop;
                 end if;
-                if PlayerShip.Cargo.Element(MaterialIndex).Amount < Recipes_List.Element(PlayerShip.Craft).MaterialAmount then
-                    AddMessage("You don't have enough crafting materials for manufacturing " & 
-                        To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
+                for J in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
+                    if PlayerShip.Cargo.Element(MaterialIndexes(J)).Amount < Recipe.MaterialAmounts.Element(J) then
+                        AddMessage("You don't have enough crafting materials for manufacturing " & 
+                        To_String(Items_List.Element(Recipe.ResultIndex).Name) & 
                         ".", CraftMessage);
-                    GiveOrders(CrafterIndex, Rest);
-                    PlayerShip.Craft := 0;
-                    exit;
-                end if;
+                        GiveOrders(CrafterIndex, Rest);
+                        PlayerShip.Craft := 0;
+                        exit Craft_Loop;
+                    end if;
+                end loop;
                 GainExp(1, 5, CrafterIndex);
-                UpdateCargo(PlayerShip.Cargo.Element(MaterialIndex).ProtoIndex, (0 - Recipes_List.Element(PlayerShip.Craft).MaterialAmount));
+                Amount := 0;
+                for J in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
+                    UpdateCargo(PlayerShip.Cargo.Element(MaterialIndexes(J)).ProtoIndex, (0 - Recipe.MaterialAmounts.Element(J)));
+                end loop;
                 UpdateCargo(Recipes_List.Element(PlayerShip.Craft).ResultIndex, ResultAmount);
                 AddMessage(To_String(PlayerShip.Crew.Element(CrafterIndex).Name) & " was manufactured" & Integer'Image(ResultAmount) & 
-                    " " & To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name) & 
+                    " " & To_String(Items_List.Element(Recipe.ResultIndex).Name) & 
                     ".", CraftMessage);
-            end loop;
+            end loop Craft_Loop;
         end if;
     end UpdateGame;
 

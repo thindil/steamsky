@@ -173,7 +173,7 @@ package body Crafts is
                             if MAmount > 0 then
                                 Add(Str => " or");
                             end if;
-                            Add(Str => Integer'Image(Recipe.MaterialAmounts(I)) & "x" & To_String(Items_List.Element(I).Name));
+                            Add(Str => Integer'Image(Recipe.MaterialAmounts(I)) & "x" & To_String(Items_List.Element(J).Name));
                             MAmount := MAmount + 1;
                         end if;
                     end loop;
