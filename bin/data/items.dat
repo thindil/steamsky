@@ -49,7 +49,7 @@ Buyable = N, Y, N
 [9]
 Name = Andrae logs
 Weight = 5
-Type = FuelMaterial
+Type = Wood
 Prices = 5, 5, 3
 Buyable = N, N, Y
 []
