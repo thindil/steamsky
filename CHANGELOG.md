@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Support for enemy armor in combat
 - Types of messages (combat/crafting/etc.)
 - Option to sort messages by types on messages screen
+- New items to game: illandru logs and fine rations
 
 ### Changed
 - Renamed old enemies from small to tiny
