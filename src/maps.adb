@@ -141,24 +141,32 @@ package body Maps is
                             MoveShip(0, -1, 0);
                         when 97 => -- Move map up
                             MoveY := MoveY - 1;
+                            Result := 4;
                         when 98 => -- Move map down
                             MoveY := MoveY + 1;
+                            Result := 4;
                         when 99 => -- Move map right
                             MoveX := MoveX + 1;
+                            Result := 4;
                         when 100 => -- Move map left
                             MoveX := MoveX - 1;
+                            Result := 4;
                         when 55 => -- Move map up/left
                             MoveX := MoveX - 1;
                             MoveY := MoveY - 1;
+                            Result := 4;
                         when 53 => -- Move map up/right
                             MoveX := MoveX + 1;
                             MoveY := MoveY - 1;
+                            Result := 4;
                         when 56 => -- Move map down/left
                             MoveX := MoveX - 1;
                             MoveY := MoveY + 1;
+                            Result := 4;
                         when 54 => -- Move map down/right
                             MoveX := MoveX + 1;
                             MoveY := MoveY + 1;
+                            Result := 4;
                         when others =>
                             Result := 0;
                     end case;
