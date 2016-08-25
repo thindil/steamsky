@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - On combat screen showing messages from previous combat
 - Moving ship with arrows keys
+- Starting random events on map moving
 
 ## [0.2] - 2016-08-21
 
