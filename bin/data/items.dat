@@ -64,4 +64,10 @@ Weight = 1
 Type = Food
 Prices = 5, 3, 5
 Buyable = N, Y, N
+[12]
+Name = Gunpowder
+Weight = 1
+Type = Gunpowder
+Prices = 1, 2, 2
+Buyable = Y, N, N
 []
