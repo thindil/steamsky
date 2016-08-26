@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Saving new messages format to savegame file which made saves from 0.2 incompatible
 - Show last messages as first on last messages screen
 - Item type FuelMaterial on Wood
+- Crafting recipes now can have more than one material needed to craft
 
 ### Fixed
 - On combat screen showing messages from previous combat
