@@ -21,7 +21,7 @@ with Items; use Items;
 
 package ShipModules is
     
-    type ModuleType is (ENGINE, CABIN, COCPIT, TURRET, GUN, CARGO, ALCHEMY_LAB,
+    type ModuleType is (ENGINE, CABIN, COCKPIT, TURRET, GUN, CARGO, ALCHEMY_LAB,
         HULL, ARMOR, BATTERING_RAM);
     type BaseModule_Data is -- Data structure for prototypes of ship modules
         record
