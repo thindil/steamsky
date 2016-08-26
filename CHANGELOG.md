@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 - Support for enemy armor in combat
 - Types of messages (combat/crafting/etc.)
 - Option to sort messages by types on messages screen
-- New items to game: illandru logs, fine rations, gunpowder
+- New items to game: illandru logs, fine rations, gunpowder, iron plates
 - New types of items: gunpowder, iron
 
 ### Changed
