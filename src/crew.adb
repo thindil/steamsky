@@ -19,6 +19,7 @@ with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ships; use Ships;
 with Messages; use Messages;
 with UserInterface; use UserInterface;
+with ShipModules; use ShipModules;
 
 package body Crew is
 
@@ -53,24 +54,25 @@ package body Crew is
             return;
         end if;
         if GivenOrder = Repair then
-            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = RepairMaterial then
-                    HaveMaterial := True;
-                    exit;
-                end if;
-            end loop;
-            if not HaveMaterial then
-                ShowDialog("You don't have repair materials.");
-                return;
-            end if;
+            Repair_Loop:
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                 if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
                     RepairNeeded := True;
-                    exit;
+                    for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                        if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = 
+                            Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial then
+                            HaveMaterial := True;
+                            exit Repair_Loop;
+                        end if;
+                    end loop;
                 end if;
-            end loop;
+            end loop Repair_Loop;
             if not RepairNeeded then
                 ShowDialog("Your ship don't need repair.");
+                return;
+            end if;
+            if not HaveMaterial then
+                ShowDialog("You don't have repair materials.");
                 return;
             end if;
         else
