@@ -331,17 +331,16 @@ package body Game is
                     end if;
                     exit Repair_Loop when RepairPoints = 0;
                 end if;
-                -- Send repair team on break if all is ok
-                if RepairPoints > 0 then
-                    AddMessage("All repairs are finished.", OrderMessage);
-                    for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                        if PlayerShip.Crew.Element(I).Order = Repair then
-                            GiveOrders(I, Rest);
-                        end if;
-                    end loop;
-                    exit Repair_Loop;
-                end if;
             end loop Repair_Loop;
+            -- Send repair team on break if all is ok
+            if RepairPoints > 0 then
+                AddMessage("All repairs are finished.", OrderMessage);
+                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                    if PlayerShip.Crew.Element(I).Order = Repair then
+                        GiveOrders(I, Rest);
+                    end if;
+                end loop;
+            end if;
         end if;
         -- Craft items
         if CrafterIndex > 0 and TiredPoints > 0 then
