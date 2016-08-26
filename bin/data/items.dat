@@ -25,7 +25,7 @@ Buyable = Y, N, N
 [5]
 Name = Bronze plates
 Weight = 5
-Type = RepairMaterial
+Type = Bronze
 Prices = 2, 4, 4
 Buyable = Y, N, N
 [6]
