@@ -5,6 +5,7 @@ Weight = 4000
 Value = 0
 MaxValue = 10
 Durability = 100
+Material = Bronze
 [2]
 Name = Bronze armor
 Type = Armor
@@ -12,6 +13,7 @@ Weight = 4000
 Value = 5
 MaxValue = 10
 Durability = 200
+Material = Bronze
 [3]
 Name = Small engine
 Type = Engine
@@ -19,6 +21,7 @@ Weight = 1000
 Value = 0
 MaxValue = 2000
 Durability = 100
+Material = Bronze
 [4]
 Name = Cabin
 Type = Cabin
@@ -26,13 +29,15 @@ Weight = 200
 Value = 20
 MaxValue = 20
 Durability = 100
+Material = Bronze
 [5]
-Name = Cocpit
-Type = Cocpit
+Name = Cockpit
+Type = Cockpit
 Weight = 200
 Value = 0
 MaxValue = 0
 Durability = 100
+Material = Bronze
 [6]
 Name = Alchemy Lab
 Type = Alchemy_lab
@@ -40,6 +45,7 @@ Weight = 400
 Value = 0
 MaxValue = 0
 Durability = 100
+Material = Bronze
 [7]
 Name = Cargo space
 Type = Cargo
@@ -47,6 +53,7 @@ Weight = 0
 Value = 0
 MaxValue = 5000
 Durability = 10
+Material = Bronze
 [8]
 Name = Small turret
 Type = Turret
@@ -54,6 +61,7 @@ Weight = 50
 Value = 0
 MaxValue = 0
 Durability = 100
+Material = Bronze
 [9]
 Name = 20mm gun
 Type = Gun
@@ -61,6 +69,7 @@ Weight = 30
 Value = 4
 MaxValue = 10
 Durability = 20
+Material = Bronze
 [10]
 Name = Clockwork drone hull
 Type = Hull
