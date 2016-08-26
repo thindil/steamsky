@@ -20,7 +20,7 @@ with Ada.Containers.Vectors; use Ada.Containers;
 
 package Items is
 
-    type Items_Types is (Fuel, Food, Drink, Ammo, RepairMaterial, FoodMaterial,
+    type Items_Types is (Fuel, Food, Drink, Ammo, Bronze, FoodMaterial,
         Wood, Gunpowder); -- Types of items
     type Object_Prices is array(1..3) of Natural; -- Prices of item in bases
     type Object_Buyable is array(1..3) of Boolean; -- Did item is buyable in bases
