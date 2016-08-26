@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Types of messages (combat/crafting/etc.)
 - Option to sort messages by types on messages screen
 - New items to game: illandru logs, fine rations, gunpowder
+- New types of items: gunpowder, iron
 
 ### Changed
 - Renamed old enemies from small to tiny
@@ -16,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Show last messages as first on last messages screen
 - Item type FuelMaterial on Wood and RepairMaterial on Bronze
 - Crafting recipes now can have more than one material needed to craft
+- All ship modules have own repair materials
 
 ### Fixed
 - On combat screen showing messages from previous combat
