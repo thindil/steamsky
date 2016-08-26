@@ -70,4 +70,10 @@ Weight = 1
 Type = Gunpowder
 Prices = 1, 2, 2
 Buyable = Y, N, N
+[13]
+Name = Iron plates
+Weight = 5
+Type = Iron
+Prices = 4, 6, 6
+Buyable = Y, N, N
 []
