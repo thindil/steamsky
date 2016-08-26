@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 - Renamed old enemies from small to tiny
 - Saving new messages format to savegame file which made saves from 0.2 incompatible
 - Show last messages as first on last messages screen
-- Item type FuelMaterial on Wood
+- Item type FuelMaterial on Wood and RepairMaterial on Bronze
 - Crafting recipes now can have more than one material needed to craft
 
 ### Fixed
