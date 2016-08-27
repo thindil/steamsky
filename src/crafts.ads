@@ -32,6 +32,7 @@ package Crafts is
             ResultIndex : Positive; -- Prototype index of crafted item
             ResultAmount : Positive; -- Amount of products
             Workplace : ModuleType; -- Ship module needed for crafting
+            Skill : Positive; -- Skill used in crafting item
         end record;
     package Recipes_Container is new Vectors(Positive, Craft_Data);
     Recipes_List : Recipes_Container.Vector; -- List of recipes available in game 

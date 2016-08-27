@@ -384,7 +384,7 @@ package body Game is
                         Recipe.MaterialAmounts.Element(J);
                 end loop;
                 ResultAmount := Recipe.ResultAmount + Integer(Float'Floor(Float(Recipe.ResultAmount) *
-                    (Float(PlayerShip.Crew.Element(CrafterIndex).Skills(5, 1)) / 100.0)));
+                    (Float(PlayerShip.Crew.Element(CrafterIndex).Skills(Recipe.Skill, 1)) / 100.0)));
                 Amount := Amount - (Items_List.Element(Recipe.ResultIndex).Weight * ResultAmount);
                 if FreeCargo(Amount) < 0 then
                     AddMessage("You don't have free cargo space for manufacturing " & 
@@ -403,7 +403,7 @@ package body Game is
                         exit Craft_Loop;
                     end if;
                 end loop;
-                GainExp(1, 5, CrafterIndex);
+                GainExp(1, Recipe.Skill, CrafterIndex);
                 Amount := 0;
                 for J in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
                     UpdateCargo(PlayerShip.Cargo.Element(MaterialIndexes(J)).ProtoIndex, (0 - Recipe.MaterialAmounts.Element(J)));
