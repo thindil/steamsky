@@ -130,19 +130,19 @@ package body Game is
         -- Add crew to ship
         PlayerShip.Crew.Append(New_Item => (Name => CharName, Gender => Gender,
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0),
-            (5,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
+            (5,0), (0, 0), (0, 0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest)); 
         PlayerShip.Crew.Append(New_Item => (Name => PilotName, Gender => PilotGender,
             Health => 100, Tired => 0, Skills => ((5, 0), (0, 0), (0, 0),
-            (0,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Pilot,
+            (0,0), (0, 0), (0, 0), (0, 0)), Hunger => 0, Thirst => 0, Order => Pilot,
             PreviousOrder => Rest)); 
         PlayerShip.Crew.Append(New_Item => (Name => EngineerName, Gender => EngineerGender,
             Health => 100, Tired => 0, Skills => ((0, 0), (5, 0), (0, 0),
-            (0,0), (0, 0)), Hunger => 0, Thirst => 0, Order => Engineer,
+            (0,0), (0, 0), (0, 0), (0, 0)), Hunger => 0, Thirst => 0, Order => Engineer,
             PreviousOrder => Rest)); 
         PlayerShip.Crew.Append(New_Item => (Name => GunnerName, Gender => GunnerGender,
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (5, 0), (0,
-            0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
+            0), (0, 0), (0, 0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest)); 
         SkyBases(Integer(RandomBase)).Visited := True;
     end NewGame;
@@ -528,7 +528,7 @@ package body Game is
     function LoadGame return Boolean is
         SaveGame : File_Type;
         VectorLength : Positive;
-        Skills : Skills_Array := ((0, 0), (0, 0), (0, 0), (0 ,0), (0, 0));
+        Skills : Skills_Array := (others => (0, 0));
         ShipModules : Modules_Container.Vector;
         ShipCargo : Cargo_Container.Vector; 
         ShipCrew : Crew_Container.Vector;
