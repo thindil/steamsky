@@ -42,7 +42,8 @@ package body Crafts is
             return False;
         end if;
         TempRecord := (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
-            ResultIndex => 1, ResultAmount => 10000, Workplace => ALCHEMY_LAB);
+            ResultIndex => 1, ResultAmount => 10000, Workplace => ALCHEMY_LAB,
+            Skill => 1);
         Open(RecipesFile, In_File, "data/recipes.dat");
         while not End_Of_File(RecipesFile) loop
             RawData := To_Unbounded_String(Get_Line(RecipesFile));
@@ -78,11 +79,19 @@ package body Crafts is
                     TempRecord.ResultAmount := Integer'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Workplace") then
                     TempRecord.Workplace := ModuleType'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Skill") then
+                    if Value = "Alchemy" then
+                        TempRecord.Skill := 5;
+                    elsif Value = "Cooking" then
+                        TempRecord.Skill := 6;
+                    elsif Value = "Gunsmith" then
+                        TempRecord.Skill := 7;
+                    end if;
                 end if;
             elsif TempRecord.ResultAmount < 10000 then
                 Recipes_List.Append(New_Item => TempRecord);
                 TempRecord := (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
-                    ResultIndex => 1, ResultAmount => 10000, Workplace => ALCHEMY_LAB);
+                    ResultIndex => 1, ResultAmount => 10000, Workplace => ALCHEMY_LAB, Skill => 1);
             end if;
         end loop;
         Close(RecipesFile);
