@@ -10,4 +10,16 @@ Amount = 1
 Result = 1
 Crafted = 5
 Workplace = Alchemy_Lab
+[3]
+Material = FoodMaterial
+Amount = 2
+Result = 11
+Crafted = 1
+Workplace = Alchemy_Lab
+[4]
+Material = Iron, Gunpowder
+Amount = 1, 1
+Result = 4
+Crafted = 5
+Workplace = Alchemy_Lab
 []
