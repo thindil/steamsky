@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Item type FuelMaterial on Wood and RepairMaterial on Bronze
 - Crafting recipes now can have more than one material needed to craft
 - All ship modules have own repair materials
+- Each crafting recipe use separated skill
 
 ### Fixed
 - On combat screen showing messages from previous combat
