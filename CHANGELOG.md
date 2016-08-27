@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - New items to game: illandru logs, fine rations, gunpowder, iron plates
 - New types of items: gunpowder, iron
 - New crafting recipes: 20mm ammo and fine rations
+- New skills: cooking and gunsmith
 
 ### Changed
 - Renamed old enemies from small to tiny
