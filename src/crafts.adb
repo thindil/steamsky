@@ -168,6 +168,7 @@ package body Crafts is
                 for I in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
                     Move_Cursor(Line => CurrentLine, Column => (Columns / 2) + 2);
                     Add(Str => "-");
+                    MAmount := 0;
                     for J in Items_List.First_Index..Items_List.Last_Index loop
                         if Items_List.Element(J).IType = Recipe.MaterialTypes(I) then
                             if MAmount > 0 then
