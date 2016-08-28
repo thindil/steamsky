@@ -35,6 +35,7 @@ package Bases is
     procedure SellItems(ItemIndex : Positive; Amount : String); -- Sell items from bases
     function GenerateBaseName return Unbounded_String; -- Generate random name for base
     procedure ShowTrade(Key : Key_Code); -- Show trade window
+    procedure ShowTrade2; -- Show trade window
     function TradeKeys(Key : Key_Code) return GameStates; -- Handle keys in bases trades
 
 end Bases;

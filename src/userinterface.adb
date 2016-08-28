@@ -300,7 +300,7 @@ package body UserInterface is
             when Messages_View =>
                 ShowMessages;
             when Trade_View =>
-                ShowTrade(KEY_NONE);
+                ShowTrade2;
             when Help_View =>
                 ShowHelp;
             when Quit_Confirm =>

@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
+with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Ships; use Ships;
 with Maps; use Maps;
 with Messages; use Messages;
@@ -146,6 +147,27 @@ package body Bases is
         NewName := StartSyllabes(Rand_Syllabe.Random(Generator)) & EndSyllabes(Rand_Syllabe.Random(Generator));
         return NewName;
     end GenerateBaseName;
+
+    procedure ShowTrade2 is
+        Trade_Items: constant Item_Array_Access := new Item_Array(1..Items_List.Last_Index);
+        TradeMenu : Menu;
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        MenuWindow : Window;
+    begin
+        for I in 1..(Items_List.Last_Index - 1) loop
+            Trade_Items.all(I) := New_Item(To_String(Items_List.Element(I).Name));
+        end loop;
+        Trade_Items.all(Items_List.Last_Index) := Null_Item;
+        TradeMenu := New_Menu(Trade_Items);
+        Set_Format(TradeMenu, 10, 1);
+        Scale(TradeMenu, MenuHeight, MenuLength);
+        MenuWindow := Create(MenuHeight + 2, MenuLength + 2, 2, 1);
+        Box(MenuWindow);
+        Set_Window(TradeMenu, MenuWindow);
+        Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+        Post(TradeMenu);
+    end ShowTrade2;
 
     procedure ShowTrade(Key : Key_Code) is
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
