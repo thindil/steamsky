@@ -25,6 +25,9 @@ with UserInterface; use UserInterface;
 with Crew; use Crew;
 
 package body Bases is
+    
+    TradeMenu : Menu;
+    MenuWindow : Window;
 
     procedure BuyItems(ItemIndex : Positive; Amount : String) is
         BuyAmount : Positive;
@@ -148,27 +151,64 @@ package body Bases is
         return NewName;
     end GenerateBaseName;
 
+    procedure ShowItemInfo is
+        ItemIndex : constant Positive := Get_Index(Current(TradeMenu)) + 1;
+        InfoWindow : Window;
+        BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
+            PlayerShip.SkyY).BaseIndex).BaseType) + 1;
+    begin
+        InfoWindow := Create(5, (Columns / 2), 2, (Columns / 2));
+        Add(Win => InfoWindow, Str => "Price:" & Integer'Image(Items_List.Element(ItemIndex).Prices(BaseType)) & " Charcollum");
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if PlayerShip.Cargo.Element(I).ProtoIndex = ItemIndex then
+                Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+                Add(Win => InfoWindow, Str => "Owned:" & Integer'Image(PlayerShip.Cargo.Element(I).Amount));
+                exit;
+            end if;
+        end loop;
+        Refresh;
+        Refresh(InfoWindow);
+    end ShowItemInfo;
+
     procedure ShowTrade2 is
         Trade_Items: constant Item_Array_Access := new Item_Array(1..Items_List.Last_Index);
-        TradeMenu : Menu;
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
-        MenuWindow : Window;
+        MoneyIndex : Natural := 0;
     begin
-        for I in 1..(Items_List.Last_Index - 1) loop
-            Trade_Items.all(I) := New_Item(To_String(Items_List.Element(I).Name));
+        for I in 2..(Items_List.Last_Index) loop
+            Trade_Items.all(I - 1) := New_Item(To_String(Items_List.Element(I).Name));
         end loop;
         Trade_Items.all(Items_List.Last_Index) := Null_Item;
         TradeMenu := New_Menu(Trade_Items);
-        Set_Format(TradeMenu, 10, 1);
+        Set_Format(TradeMenu, Lines - 10, 1);
+        Set_Mark(TradeMenu, "");
         Scale(TradeMenu, MenuHeight, MenuLength);
-        MenuWindow := Create(MenuHeight + 2, MenuLength + 2, 2, 1);
-        Box(MenuWindow);
+        MenuWindow := Create(MenuHeight, MenuLength, 2, 2);
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
+                MoneyIndex := I;
+                exit;
+            end if;
+        end loop;
+        Move_Cursor(Line => (MenuHeight + 3), Column => 2);
+        if MoneyIndex > 0 then
+            Add(Str => "You have" & Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
+                " Charcollum.");
+        else
+            Add(Str => "You don't have any Charcollum to buy anything.");
+        end if;
+        Move_Cursor(Line => (Lines - 1), Column => 2);
+        Add(Str => "ENTER to buy selected item, SPACE for sell.");
+        Change_Attributes(Line => (Lines - 1), Column => 2, Count => 5, Color => 1);
+        Change_Attributes(Line => (Lines - 1), Column => 30, Count => 5, Color => 1);
+        ShowItemInfo;
+        Refresh(MenuWindow);
     end ShowTrade2;
-
+    
     procedure ShowTrade(Key : Key_Code) is
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
@@ -280,15 +320,47 @@ package body Bases is
     end ShowTrade;
 
     function TradeKeys(Key : Key_Code) return GameStates is
+        Result : Driver_Result;
+        NewKey : Key_Code;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
+            when 56 => -- Select previous item to trade
+                Result := Driver(TradeMenu, M_Up_Item);
+                if Result = Menu_Ok then
+                    ShowItemInfo;
+                    Refresh(MenuWindow);
+                end if;
+            when 50 => -- Select next item to trade
+                Result := Driver(TradeMenu, M_Down_Item);
+                if Result = Menu_Ok then
+                    ShowItemInfo;
+                    Refresh(MenuWindow);
+                end if;
+            when 27 => 
+                NewKey := Get_KeyStroke;
+                if NewKey = 91 then
+                    NewKey := Get_KeyStroke;
+                    if NewKey = 65 then
+                        Result := Driver(TradeMenu, M_Up_Item);
+                        if Result = Menu_Ok then
+                            ShowItemInfo;
+                            Refresh(MenuWindow);
+                        end if;
+                    elsif NewKey = 66 then
+                        Result := Driver(TradeMenu, M_Down_Item);
+                        if Result = Menu_Ok then
+                            ShowItemInfo;
+                            Refresh(MenuWindow);
+                        end if;
+                    end if;
+                end if;
             when others =>
-                ShowTrade(Key);
-                return Trade_View;
+                null;
         end case;
+        return Trade_View;
     end TradeKeys;
 
 end Bases;
