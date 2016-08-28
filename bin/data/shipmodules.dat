@@ -69,7 +69,7 @@ Weight = 30
 Value = 4
 MaxValue = 10
 Durability = 20
-Material = Bronze
+Material = Iron
 [10]
 Name = Clockwork drone hull
 Type = Hull
