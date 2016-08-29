@@ -159,9 +159,12 @@ package body Bases is
     begin
         InfoWindow := Create(5, (Columns / 2), 2, (Columns / 2));
         Add(Win => InfoWindow, Str => "Price:" & Integer'Image(Items_List.Element(ItemIndex).Prices(BaseType)) & " Charcollum");
+        Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+        Add(Win => InfoWindow, Str => "Weight:" & Integer'Image(Items_List.Element(ItemIndex).Weight) & 
+            " kg");
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
             if PlayerShip.Cargo.Element(I).ProtoIndex = ItemIndex then
-                Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+                Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
                 Add(Win => InfoWindow, Str => "Owned:" & Integer'Image(PlayerShip.Cargo.Element(I).Amount));
                 exit;
             end if;
