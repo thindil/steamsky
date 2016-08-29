@@ -158,7 +158,12 @@ package body Bases is
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
     begin
         InfoWindow := Create(5, (Columns / 2), 2, (Columns / 2));
-        Add(Win => InfoWindow, Str => "Price:" & Integer'Image(Items_List.Element(ItemIndex).Prices(BaseType)) & " Charcollum");
+        if Items_List.Element(ItemIndex).Buyable(BaseType) then
+            Add(Win => InfoWindow, Str => "Buy/Sell price:");
+        else
+            Add(Win => InfoWindow, Str => "Sell price:");
+        end if;
+        Add(Win => InfoWindow, Str => Integer'Image(Items_List.Element(ItemIndex).Prices(BaseType)) & " Charcollum");
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         Add(Win => InfoWindow, Str => "Weight:" & Integer'Image(Items_List.Element(ItemIndex).Weight) & 
             " kg");
@@ -211,6 +216,57 @@ package body Bases is
         ShowItemInfo;
         Refresh(MenuWindow);
     end ShowTrade2;
+
+    procedure ShowForm(Buy : Boolean := False) is
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        ItemIndex : constant Positive := Get_Index(Current(TradeMenu)) + 1;
+        CargoIndex : Natural := 0;
+        Amount : String(1..6);
+        Visibility : Cursor_Visibility := Normal;
+        BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
+            PlayerShip.SkyY).BaseIndex).BaseType) + 1;
+    begin
+        Scale(TradeMenu, MenuHeight, MenuLength);
+        Move_Cursor(Line => (MenuHeight + 6), Column => 2);
+        Add(Str => "Enter amount of " & To_String(Items_List.Element(ItemIndex).Name) &
+            " to ");
+        if Buy then
+            Add(Str => "buy: ");
+            if not Items_List.Element(ItemIndex).Buyable(BaseType) then
+                ShowDialog("You can't buy " & To_String(Items_List.Element(ItemIndex).Name) &
+                    " in this base.");
+                DrawGame(Trade_View);
+                return;
+            end if;
+        else
+            Add(Str => "sell: ");
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if PlayerShip.Cargo.Element(I).ProtoIndex = ItemIndex then
+                    CargoIndex := I;
+                    exit;
+                end if;
+            end loop;
+            if CargoIndex = 0 then
+                ShowDialog("You don't have any " & To_String(Items_List.Element(ItemIndex).Name) &
+                    " for sale.");
+                DrawGame(Trade_View);
+                return;
+            end if;
+        end if;
+        Set_Echo_Mode(True);
+        Set_Cursor_Visibility(Visibility);
+        Get(Str => Amount, Len => 6);
+        if Buy then
+            BuyItems(ItemIndex, Amount);
+        else
+            SellItems(ItemIndex, Amount);
+        end if;
+        Visibility := Invisible;
+        Set_Echo_Mode(False);
+        Set_Cursor_Visibility(Visibility);
+        DrawGame(Trade_View);
+    end ShowForm;
     
     procedure ShowTrade(Key : Key_Code) is
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
@@ -346,13 +402,13 @@ package body Bases is
                 NewKey := Get_KeyStroke;
                 if NewKey = 91 then
                     NewKey := Get_KeyStroke;
-                    if NewKey = 65 then
+                    if NewKey = 65 then -- Select previous item to trade
                         Result := Driver(TradeMenu, M_Up_Item);
                         if Result = Menu_Ok then
                             ShowItemInfo;
                             Refresh(MenuWindow);
                         end if;
-                    elsif NewKey = 66 then
+                    elsif NewKey = 66 then -- Select next item to trade
                         Result := Driver(TradeMenu, M_Down_Item);
                         if Result = Menu_Ok then
                             ShowItemInfo;
@@ -360,6 +416,10 @@ package body Bases is
                         end if;
                     end if;
                 end if;
+            when 32 => -- Sell item
+                ShowForm;
+            when 10 => -- Buy item
+                ShowForm(True);
             when others =>
                 null;
         end case;
