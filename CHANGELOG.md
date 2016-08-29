@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Crafting recipes now can have more than one material needed to craft
 - All ship modules have own repair materials
 - Each crafting recipe use separated skill
+- Updated trade interface
 
 ### Fixed
 - On combat screen showing messages from previous combat
