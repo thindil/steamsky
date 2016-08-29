@@ -178,7 +178,7 @@ package body Bases is
         Refresh(InfoWindow);
     end ShowItemInfo;
 
-    procedure ShowTrade2 is
+    procedure ShowTrade is
         Trade_Items: constant Item_Array_Access := new Item_Array(1..Items_List.Last_Index);
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
@@ -215,7 +215,7 @@ package body Bases is
         Change_Attributes(Line => (Lines - 1), Column => 30, Count => 5, Color => 1);
         ShowItemInfo;
         Refresh(MenuWindow);
-    end ShowTrade2;
+    end ShowTrade;
 
     procedure ShowForm(Buy : Boolean := False) is
         MenuHeight : Line_Position;
@@ -268,116 +268,6 @@ package body Bases is
         DrawGame(Trade_View);
     end ShowForm;
     
-    procedure ShowTrade(Key : Key_Code) is
-        BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
-            PlayerShip.SkyY).BaseIndex).BaseType) + 1;
-        BuyLetter, SellLetter : Character;
-        BuyLetters : array (2..Items_List.Last_Index) of Character;
-        SellLetters : array (1..PlayerShip.Cargo.Last_Index) of Character := (others => ' ');
-        Visibility : Cursor_Visibility := Normal;
-        Amount : String(1..6);
-        ItemIndex : Natural := 0;
-        CargoAmount : Natural;
-        CurrentLine : Line_Position := 2;
-        MoneyIndex: Natural := 0;
-    begin
-        if Key /= KEY_NONE then
-            Erase;
-            Refresh;
-            ShowGameHeader(Trade_View);
-        end if;
-        Move_Cursor(Line => 2, Column => 2);
-        Add(Str => "BUY SELL     NAME");
-        Move_Cursor(Line => 2, Column => 35);
-        Add(Str => "PRICE");
-        Move_Cursor(Line => 2, Column => 50);
-        Add(Str => "OWNED");
-        for I in 2..Items_List.Last_Index loop
-            if Items_List.Element(I).Buyable(BaseType) then
-                BuyLetter := Character'Val(95 + I);
-            else
-                BuyLetter := ' ';
-            end if;
-            BuyLetters(I) := BuyLetter;
-            SellLetter := ' ';
-            CargoAmount := 0;
-            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if PlayerShip.Cargo.Element(J).ProtoIndex = I then
-                    SellLetter := Character'Val(63 + I);
-                    SellLetters(J) := SellLetter;
-                    CargoAmount := PlayerShip.Cargo.Element(J).Amount;
-                    exit;
-                end if;
-                if PlayerShip.Cargo.Element(J).ProtoIndex = 1 then
-                    MoneyIndex := J;
-                end if;
-            end loop;
-            CurrentLine := CurrentLine + 1;
-            Move_Cursor(Line => CurrentLine, Column => 3);
-            Add(Str => BuyLetter & "   " & SellLetter & "   " &
-                To_String(Items_List.Element(I).Name));
-            Move_Cursor(Line => CurrentLine, Column => 30);
-            Add(Str => Positive'Image(Items_List.Element(I).Prices(BaseType)) & " charcollum");
-            Move_Cursor(Line => CurrentLine, Column => 50);
-            Add(Str => Natural'Image(CargoAmount));
-            if BuyLetter /= ' ' then
-                Change_Attributes(Line => CurrentLine, Column => 3, Count => 1, Color => 1);
-            end if;
-            if SellLetter /= ' ' then
-                Change_Attributes(Line => CurrentLine, Column => 7, Count => 1, Color => 1);
-            end if;
-        end loop;
-        Move_Cursor(Line => (CurrentLine + 2), Column => 1);
-        if MoneyIndex > 0 then
-            Add(Str => "You have" & Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
-                " Charcollum.");
-        else
-            Add(Str => "You don't have any charcollum to buy Items_List.");
-        end if;
-        if Key /= KEY_NONE then -- start buying/selling items from/to base
-            for I in BuyLetters'Range loop
-                if Key = Character'Pos(BuyLetters(I)) and BuyLetters(I) /= ' ' then
-                    ItemIndex := I;
-                    exit;
-                end if;
-            end loop;
-            if ItemIndex > 0 then -- Buy item from base
-                Set_Echo_Mode(True);
-                Set_Cursor_Visibility(Visibility);
-                Move_Cursor(Line => (Lines / 2), Column => 2);
-                Add(Str => "Enter amount of " & To_String(Items_List.Element(ItemIndex).Name)
-                    & " to buy: ");
-                Get(Str => Amount, Len => 6);
-                BuyItems(ItemIndex, Amount);
-                ItemIndex := 0;
-            else
-                for I in SellLetters'Range loop
-                    if Key = Character'Pos(SellLetters(I)) and SellLetters(I) /= ' ' then
-                        ItemIndex := I;
-                        exit;
-                    end if;
-                end loop;
-                if ItemIndex > 0 then -- Sell item to base
-                    Set_Echo_Mode(True);
-                    Set_Cursor_Visibility(Visibility);
-                    Move_Cursor(Line => (Lines / 2), Column => 2);
-                    Add(Str => "Enter amount of " &
-                        To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name)
-                        & " to sell: ");
-                    Get(Str => Amount, Len => 6);
-                    SellItems(ItemIndex, Amount);
-                    ItemIndex := 0;
-                end if;
-            end if;
-            if ItemIndex = 0 then
-                Visibility := Invisible;
-                Set_Echo_Mode(False);
-                Set_Cursor_Visibility(Visibility);
-                DrawGame(Trade_View);
-            end if;
-        end if;
-    end ShowTrade;
-
     function TradeKeys(Key : Key_Code) return GameStates is
         Result : Driver_Result;
         NewKey : Key_Code;
