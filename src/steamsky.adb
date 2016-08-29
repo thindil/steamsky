@@ -98,7 +98,7 @@ begin
                 end case;
             when Control_Speed =>
                 GameState := SpeedMenuKeys(OldState, Key);
-            when Ship_Info | Cargo_Info =>
+            when Ship_Info =>
                 GameState := ShipInfoKeys(Key);
             when Crew_Info =>
                 GameState := CrewInfoKeys(Key);
@@ -131,6 +131,8 @@ begin
                 Refresh;
                 ShowMainMenu;
                 GameState := Main_Menu;
+            when Cargo_Info =>
+                GameState := CargoInfoKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;

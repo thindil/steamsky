@@ -17,6 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Maps; use Maps;
 with Messages; use Messages;
 with Bases; use Bases;
@@ -26,6 +27,9 @@ with Crafts; use Crafts;
 with ShipModules; use ShipModules;
 
 package body Ships is
+
+    ModulesMenu : Menu;
+    MenuWindow : Window;
 
     procedure MoveShip(ShipIndex, X, Y: Integer) is
         NewX, NewY : Integer;
@@ -365,7 +369,9 @@ package body Ships is
 
     procedure ShowShipInfo is
         Weight : Integer;
-        DamagePercent : Natural;
+        Modules_Items: constant Item_Array_Access := new Item_Array(1..(PlayerShip.Modules.Last_Index + 1));
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
     begin
         Weight := CountShipWeight(PlayerShip);
         Move_Cursor(Line => 2, Column => 2);
@@ -377,30 +383,64 @@ package body Ships is
         else
             Add(Str => To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name));
         end if;
-        Move_Cursor(Line => 6, Column => 2);
-        Add(Str => "STATUS:");
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            Move_Cursor(Line => Line_Position(6 + I), Column => 2);
-            Add(Str => To_String(PlayerShip.Modules.Element(I).Name) & ": ");
-            DamagePercent := 100 -  Natural((Float(PlayerShip.Modules.Element(I).Durability) /
-                Float(PlayerShip.Modules.Element(I).MaxDurability)) * 100.0);
-            if DamagePercent = 0 then
-                Add(Str => "Ok");
-            elsif DamagePercent > 0 and DamagePercent < 20 then
-                Add(Str => "Slighty damaged");
-            elsif DamagePercent > 19 and DamagePercent < 50 then
-                Add(Str => "Damaged");
-            elsif DamagePercent > 49 and DamagePercent < 80 then
-                Add(Str => "Heavily damaged");
-            elsif DamagePercent > 79 and DamagePercent < 100 then
-                Add(Str => "Almost destroyed");
-            else
-                Add(Str => "Destroyed");
-            end if;
-        end loop;
         Move_Cursor(Line => 4, Column => 2);
         Add(Str => "Weight:" & Integer'Image(Weight) & "kg");
+        Move_Cursor(Line => 6, Column => 2);
+        Add(Str => "Modules:");
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            Modules_Items.all(I) := New_Item(To_String(PlayerShip.Modules.Element(I).Name));
+        end loop;
+        Modules_Items.all(Modules_Items'Last) := Null_Item;
+        ModulesMenu := New_Menu(Modules_Items);
+        Set_Format(ModulesMenu, Lines - 10, 1);
+        Set_Mark(ModulesMenu, "");
+        Scale(ModulesMenu, MenuHeight, MenuLength);
+        MenuWindow := Create(MenuHeight, MenuLength, 8, 2);
+        Set_Window(ModulesMenu, MenuWindow);
+        Set_Sub_Window(ModulesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+        Post(ModulesMenu);
+        Refresh;
+        Refresh(MenuWindow);
     end ShowShipInfo;
+
+   -- procedure ShowShipInfo2 is
+   --     Weight : Integer;
+   --     DamagePercent : Natural;
+   -- begin
+   --     Weight := CountShipWeight(PlayerShip);
+   --     Move_Cursor(Line => 2, Column => 2);
+   --     Add(Str => "Name: " & To_String(PlayerShip.Name));
+   --     Move_Cursor(Line => 3, Column => 2);
+   --     Add(Str => "Manufacturing: ");
+   --     if PlayerShip.Craft = 0 then
+   --         Add(Str => "Nothing");
+   --     else
+   --         Add(Str => To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name));
+   --     end if;
+   --     Move_Cursor(Line => 6, Column => 2);
+   --     Add(Str => "STATUS:");
+   --     for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+   --         Move_Cursor(Line => Line_Position(6 + I), Column => 2);
+   --         Add(Str => To_String(PlayerShip.Modules.Element(I).Name) & ": ");
+   --         DamagePercent := 100 -  Natural((Float(PlayerShip.Modules.Element(I).Durability) /
+   --             Float(PlayerShip.Modules.Element(I).MaxDurability)) * 100.0);
+   --         if DamagePercent = 0 then
+   --             Add(Str => "Ok");
+   --         elsif DamagePercent > 0 and DamagePercent < 20 then
+   --             Add(Str => "Slighty damaged");
+   --         elsif DamagePercent > 19 and DamagePercent < 50 then
+   --             Add(Str => "Damaged");
+   --         elsif DamagePercent > 49 and DamagePercent < 80 then
+   --             Add(Str => "Heavily damaged");
+   --         elsif DamagePercent > 79 and DamagePercent < 100 then
+   --             Add(Str => "Almost destroyed");
+   --         else
+   --             Add(Str => "Destroyed");
+   --         end if;
+   --     end loop;
+   --     Move_Cursor(Line => 4, Column => 2);
+   --     Add(Str => "Weight:" & Integer'Image(Weight) & "kg");
+   -- end ShowShipInfo2;
 
     procedure ShowCargoInfo is
         CargoWeight : Positive;
@@ -424,5 +464,16 @@ package body Ships is
                 return Ship_Info;
         end case;
     end ShipInfoKeys;
+
+    function CargoInfoKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
+            when others =>
+                return Cargo_Info;
+        end case;
+    end CargoInfoKeys;
 
 end Ships;
