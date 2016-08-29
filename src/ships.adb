@@ -446,45 +446,6 @@ package body Ships is
         Refresh(MenuWindow);
     end ShowShipInfo;
 
-   -- procedure ShowShipInfo2 is
-   --     Weight : Integer;
-   --     DamagePercent : Natural;
-   -- begin
-   --     Weight := CountShipWeight(PlayerShip);
-   --     Move_Cursor(Line => 2, Column => 2);
-   --     Add(Str => "Name: " & To_String(PlayerShip.Name));
-   --     Move_Cursor(Line => 3, Column => 2);
-   --     Add(Str => "Manufacturing: ");
-   --     if PlayerShip.Craft = 0 then
-   --         Add(Str => "Nothing");
-   --     else
-   --         Add(Str => To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name));
-   --     end if;
-   --     Move_Cursor(Line => 6, Column => 2);
-   --     Add(Str => "STATUS:");
-   --     for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-   --         Move_Cursor(Line => Line_Position(6 + I), Column => 2);
-   --         Add(Str => To_String(PlayerShip.Modules.Element(I).Name) & ": ");
-   --         DamagePercent := 100 -  Natural((Float(PlayerShip.Modules.Element(I).Durability) /
-   --             Float(PlayerShip.Modules.Element(I).MaxDurability)) * 100.0);
-   --         if DamagePercent = 0 then
-   --             Add(Str => "Ok");
-   --         elsif DamagePercent > 0 and DamagePercent < 20 then
-   --             Add(Str => "Slighty damaged");
-   --         elsif DamagePercent > 19 and DamagePercent < 50 then
-   --             Add(Str => "Damaged");
-   --         elsif DamagePercent > 49 and DamagePercent < 80 then
-   --             Add(Str => "Heavily damaged");
-   --         elsif DamagePercent > 79 and DamagePercent < 100 then
-   --             Add(Str => "Almost destroyed");
-   --         else
-   --             Add(Str => "Destroyed");
-   --         end if;
-   --     end loop;
-   --     Move_Cursor(Line => 4, Column => 2);
-   --     Add(Str => "Weight:" & Integer'Image(Weight) & "kg");
-   -- end ShowShipInfo2;
-
     procedure ShowCargoInfo is
         CargoWeight : Positive;
     begin
