@@ -78,5 +78,6 @@ package Ships is
     procedure ShowShipInfo; -- Show informations about ship status
     procedure ShowCargoInfo; -- Show informations about ship cargo
     function ShipInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in ship info menu
+    function CargoInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in cargo info menu
 
 end Ships;
