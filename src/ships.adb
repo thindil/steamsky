@@ -367,6 +367,49 @@ package body Ships is
         return Speed;
     end RealSpeed;
 
+    procedure ShowModuleInfo is
+        InfoWindow : Window;
+        ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
+        DamagePercent : Natural;
+        MAmount : Natural := 0;
+    begin
+        InfoWindow := Create(5, (Columns / 2), 8, (Columns / 2));
+        Add(Win => InfoWindow, Str => "Status: ");
+        DamagePercent := 100 -
+            Natural((Float(PlayerShip.Modules.Element(ModuleIndex).Durability) /
+            Float(PlayerShip.Modules.Element(ModuleIndex).MaxDurability)) * 100.0);
+        if DamagePercent = 0 then
+            Add(Win => InfoWindow, Str => "Ok");
+        elsif DamagePercent > 0 and DamagePercent < 20 then
+            Add(Win => InfoWindow, Str => "Slighty damaged");
+        elsif DamagePercent > 19 and DamagePercent < 50 then
+            Add(Win => InfoWindow, Str => "Damaged");
+        elsif DamagePercent > 49 and DamagePercent < 80 then
+            Add(Win => InfoWindow, Str => "Heavily damaged");
+        elsif DamagePercent > 79 and DamagePercent < 100 then
+            Add(Win => InfoWindow, Str => "Almost destroyed");
+        else
+            Add(Win => InfoWindow, Str => "Destroyed");
+        end if;
+        Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+        Add(Win => InfoWindow, Str => "Weight:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Weight) &
+            " kg");
+        Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+        Add(Win => InfoWindow, Str => "Repair material: ");
+        for I in Items_List.First_Index..Items_List.Last_Index loop
+            if Items_List.Element(I).IType = Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).RepairMaterial
+                then
+                if MAmount > 0 then
+                    Add(Win => InfoWindow, Str => " or ");
+                end if;
+                Add(Win => InfoWindow, Str => To_String(Items_List.Element(I).Name));
+                MAmount := MAmount + 1;
+            end if;
+        end loop;
+        Refresh;
+        Refresh(InfoWindow);
+    end ShowModuleInfo;
+
     procedure ShowShipInfo is
         Weight : Integer;
         Modules_Items: constant Item_Array_Access := new Item_Array(1..(PlayerShip.Modules.Last_Index + 1));
@@ -399,7 +442,7 @@ package body Ships is
         Set_Window(ModulesMenu, MenuWindow);
         Set_Sub_Window(ModulesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(ModulesMenu);
-        Refresh;
+        ShowModuleInfo;
         Refresh(MenuWindow);
     end ShowShipInfo;
 
@@ -455,14 +498,47 @@ package body Ships is
     end ShowCargoInfo;
 
     function ShipInfoKeys(Key : Key_Code) return GameStates is
+        Result : Driver_Result;
+        NewKey : Key_Code;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
+            when 56 => -- Select previous module
+                Result := Driver(ModulesMenu, M_Up_Item);
+                if Result = Menu_Ok then
+                    ShowModuleInfo;
+                    Refresh(MenuWindow);
+                end if;
+            when 50 => -- Select next module
+                Result := Driver(ModulesMenu, M_Down_Item);
+                if Result = Menu_Ok then
+                    ShowModuleInfo;
+                    Refresh(MenuWindow);
+                end if;
+            when 27 => 
+                NewKey := Get_KeyStroke;
+                if NewKey = 91 then
+                    NewKey := Get_KeyStroke;
+                    if NewKey = 65 then -- Select previous module
+                        Result := Driver(ModulesMenu, M_Up_Item);
+                        if Result = Menu_Ok then
+                            ShowModuleInfo;
+                            Refresh(MenuWindow);
+                        end if;
+                    elsif NewKey = 66 then -- Select next module
+                        Result := Driver(ModulesMenu, M_Down_Item);
+                        if Result = Menu_Ok then
+                            ShowModuleInfo;
+                            Refresh(MenuWindow);
+                        end if;
+                    end if;
+                end if;
             when others =>
-                return Ship_Info;
+                null;
         end case;
+        return Ship_Info;
     end ShipInfoKeys;
 
     function CargoInfoKeys(Key : Key_Code) return GameStates is
