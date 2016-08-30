@@ -126,8 +126,8 @@ package body Combat is
         if EngineerIndex > 0 then
             case EngineerOrder is
                 when 1 =>
-                    AccuracyBonus := 40;
-                    EvadeBonus := -40;
+                    AccuracyBonus := AccuracyBonus + 40;
+                    EvadeBonus := EvadeBonus - 40;
                 when 2 =>
                     AccuracyBonus := AccuracyBonus + 10;
                     EvadeBonus := EvadeBonus - 10;
@@ -182,6 +182,19 @@ package body Combat is
             when 4 =>
                 AccuracyBonus := AccuracyBonus - 20;
                 EvadeBonus := EvadeBonus + 20;
+            when others =>
+                null;
+        end case;
+        case Enemy.Ship.Speed is
+            when FULL_STOP =>
+                AccuracyBonus := AccuracyBonus + 40;
+                EvadeBonus := EvadeBonus - 40;
+            when QUARTER_SPEED =>
+                AccuracyBonus := AccuracyBonus + 10;
+                EvadeBonus := EvadeBonus - 10;
+            when FULL_SPEED =>
+                AccuracyBonus := AccuracyBonus - 10;
+                EvadeBonus := EvadeBonus + 10;
             when others =>
                 null;
         end case;
