@@ -145,7 +145,7 @@ package body Combat is
                     Enemy.Ship.Speed := ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) + 1);
                     AddMessage(To_String(EnemyName) & " increases speed.", CombatMessage);
                     EnemyPilotOrder := 1;
-                elsif Enemy.Ship.Speed /= HALF_SPEED then
+                elsif Enemy.Distance <= 10 and Enemy.Ship.Speed /= HALF_SPEED then
                     Enemy.Ship.Speed := ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) - 1);
                     AddMessage(To_String(EnemyName) & " decreases speed.", CombatMessage);
                     EnemyPilotOrder := 2;
@@ -155,7 +155,7 @@ package body Combat is
                     Enemy.Ship.Speed := ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) + 1);
                     AddMessage(To_String(EnemyName) & " increases speed.", CombatMessage);
                     EnemyPilotOrder := 1;
-                elsif Enemy.Ship.Speed /= QUARTER_SPEED then
+                elsif Enemy.Distance < Enemy.DamageRange and Enemy.Ship.Speed /= QUARTER_SPEED then
                     Enemy.Ship.Speed := ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) - 1);
                     AddMessage(To_String(EnemyName) & " decreases speed.", CombatMessage);
                     EnemyPilotOrder := 2;
