@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - New skills: cooking and gunsmith
 - Some iron to starting cargo
 - Info which ships are enemies
+- Very simple enemy AI in combat
 
 ### Changed
 - Renamed old enemies from small to tiny
