@@ -24,6 +24,7 @@ with Game; use Game;
 package Ships is
     type ShipSpeed is (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED,
         FULL_SPEED);
+    type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD);
     type ModuleData is -- Data structure for ship modules
         record
             Name : Unbounded_String; -- Name of module
@@ -60,6 +61,7 @@ package Ships is
             Modules : ProtoModules_Container.Vector; -- List of ship modules
             DamageRange : Positive; -- Maximum range from which ship attack
             Accuracy : Positive; -- Bonus to hit for ship
+            CombatAI : ShipCombatAi; -- Behaviour of ship in combat
         end record;
     package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
     ProtoShips_List : ProtoShips_Container.Vector;
