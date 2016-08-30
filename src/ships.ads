@@ -63,6 +63,7 @@ package Ships is
         end record;
     package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
     ProtoShips_List : ProtoShips_Container.Vector;
+    Enemies_List : ProtoShips_Container.Vector;
     PlayerShip : ShipRecord;
     
     procedure MoveShip(ShipIndex, X, Y : Integer); -- Move selected ship
@@ -72,7 +73,7 @@ package Ships is
     procedure UpdateModule(Ship : in out ShipRecord; ModuleIndex : Positive; Field : String; Value : String); -- Update selected module
     function FreeCargo(Amount : Integer) return Integer; -- Return available space in cargo after adding/extracting Amount
     function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y:
-        Integer; Speed : ShipSpeed ) return ShipRecord; -- Create new ship
+        Integer; Speed : ShipSpeed; Enemy : Boolean := False) return ShipRecord; -- Create new ship
     function LoadShips return Boolean; -- Load ships from file, returns False if file not found
     function RealSpeed(Ship : ShipRecord) return Natural; -- Return real ship speed in meters per minute
     procedure ShowShipInfo; -- Show informations about ship status

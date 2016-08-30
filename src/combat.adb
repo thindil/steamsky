@@ -50,9 +50,10 @@ package body Combat is
     procedure StartCombat(EnemyIndex : Positive) is
         EnemyShip : ShipRecord;
     begin
-        EnemyShip := CreateShip(EnemyIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED);
-            Enemy := (Ship => EnemyShip, DamageRange => ProtoShips_List.Element(EnemyIndex).DamageRange, Accuracy
-            => ProtoShips_List.Element(EnemyIndex).Accuracy, Distance => 1000);
+        EnemyShip := CreateShip(EnemyIndex, Null_Unbounded_String,
+            PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED, True);
+            Enemy := (Ship => EnemyShip, DamageRange => Enemies_List.Element(EnemyIndex).DamageRange, Accuracy
+            => Enemies_List.Element(EnemyIndex).Accuracy, Distance => 1000);
         PilotOrder := 2;
         EngineerOrder := 3;
         GunnerOrder := 1;
