@@ -235,26 +235,44 @@ package body Ships is
         return FreeCargo;
     end FreeCargo;
 
-    function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y: Integer; Speed : ShipSpeed) return ShipRecord is
+    function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y:
+        Integer; Speed : ShipSpeed; Enemy : Boolean := False) return ShipRecord is
         TmpShip : ShipRecord;
         ShipModules : Modules_Container.Vector;
         ShipCargo : Cargo_Container.Vector;
         ShipCrew : Crew_Container.Vector;
         NewName : Unbounded_String;
     begin
-        for I in ProtoShips_List.Element(ProtoIndex).Modules.First_Index..ProtoShips_List.Element(ProtoIndex).Modules.Last_Index loop
-            ShipModules.Append(New_Item => (Name => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Name,
+        if not Enemy then
+            for I in ProtoShips_List.Element(ProtoIndex).Modules.First_Index..ProtoShips_List.Element(ProtoIndex).Modules.Last_Index loop
+                ShipModules.Append(New_Item => (Name => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Name,
                 ProtoIndex => ProtoShips_List.Element(ProtoIndex).Modules(I), 
                 Weight => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Weight,
                 Current_Value => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Value,
                 Max_Value => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).MaxValue,
                 Durability => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Durability,
                 MaxDurability => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Durability));
-        end loop;
-        if Name = Null_Unbounded_String then
-            NewName := ProtoShips_List.Element(ProtoIndex).Name;
+            end loop;
+            if Name = Null_Unbounded_String then
+                NewName := ProtoShips_List.Element(ProtoIndex).Name;
+            else
+                NewName := Name;
+            end if;
         else
-            NewName := Name;
+            for I in Enemies_List.Element(ProtoIndex).Modules.First_Index..Enemies_List.Element(ProtoIndex).Modules.Last_Index loop
+                ShipModules.Append(New_Item => (Name => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Name,
+                ProtoIndex => Enemies_List.Element(ProtoIndex).Modules(I), 
+                Weight => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Weight,
+                Current_Value => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Value,
+                Max_Value => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).MaxValue,
+                Durability => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Durability,
+                MaxDurability => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Durability));
+            end loop;
+            if Name = Null_Unbounded_String then
+                NewName := Enemies_List.Element(ProtoIndex).Name;
+            else
+                NewName := Name;
+            end if;
         end if;
         TmpShip := (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed, Craft => 0,
             Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew);
@@ -267,6 +285,7 @@ package body Ships is
         EqualIndex, StartIndex, EndIndex, Amount : Natural;
         TempRecord : ProtoShipData;
         TempModules : ProtoModules_Container.Vector;
+        Enemy : Boolean := False;
     begin
         if ProtoShips_List.Length > 0 then
             return True;
@@ -301,9 +320,16 @@ package body Ships is
                     TempRecord.DamageRange := Integer'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Accuracy") then
                     TempRecord.Accuracy := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Enemy") then
+                    Enemy := True;
                 end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
-                ProtoShips_List.Append(New_Item => TempRecord);
+                if not Enemy then
+                    ProtoShips_List.Append(New_Item => TempRecord);
+                else
+                    Enemies_List.Append(New_Item => TempRecord);
+                    Enemy := False;
+                end if;
                 TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
                     DamageRange => 1, Accuracy => 1);
             end if;

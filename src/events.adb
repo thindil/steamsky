@@ -24,7 +24,7 @@ package body Events is
 
     function CheckForEvent (OldState : GameStates) return GameStates is
         type Percent_Range is range 1..100;
-        subtype Combat_Range is Positive range 2..ProtoShips_List.Last_Index; 
+        subtype Combat_Range is Positive range Enemies_List.First_Index..Enemies_List.Last_Index; 
         package Rand_Roll is new Discrete_Random(Percent_Range);
         package Rand_Combat is new Discrete_Random(Combat_Range);
         Generator : Rand_Roll.Generator;
