@@ -30,6 +30,7 @@ package body Combat is
             DamageRange : Natural;
             Accuracy : Positive;
             Distance : Integer;
+            CombatAI : ShipCombatAI;
         end record;
     Enemy : Enemy_Record;
     PilotOrder, EngineerOrder, GunnerOrder : Positive;
@@ -53,7 +54,8 @@ package body Combat is
         EnemyShip := CreateShip(EnemyIndex, Null_Unbounded_String,
             PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED, True);
             Enemy := (Ship => EnemyShip, DamageRange => Enemies_List.Element(EnemyIndex).DamageRange, Accuracy
-            => Enemies_List.Element(EnemyIndex).Accuracy, Distance => 1000);
+            => Enemies_List.Element(EnemyIndex).Accuracy, Distance => 1000,
+            CombatAI => Enemies_List.Element(EnemyIndex).CombatAI);
         PilotOrder := 2;
         EngineerOrder := 3;
         GunnerOrder := 1;
@@ -82,6 +84,7 @@ package body Combat is
         LootAmount : Integer;
         FreeSpace : Integer := 0;
         DistanceTraveled : Integer;
+        EnemyPilotOrder : Positive := 2;
         procedure UpdatePlayer(Player : in out Member_Data) is
         begin
             Player.Health := 0;
@@ -136,6 +139,52 @@ package body Combat is
             end case;
             ChangeShipSpeed(ShipSpeed'Val(EngineerOrder));
         end if;
+        case Enemy.CombatAI is
+            when BERSERKER =>
+                if Enemy.Distance > 10 and Enemy.Ship.Speed /= FULL_SPEED then
+                    Enemy.Ship.Speed := ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) + 1);
+                    AddMessage(To_String(EnemyName) & " increases speed.", CombatMessage);
+                    EnemyPilotOrder := 1;
+                elsif Enemy.Ship.Speed /= HALF_SPEED then
+                    Enemy.Ship.Speed := ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) - 1);
+                    AddMessage(To_String(EnemyName) & " decreases speed.", CombatMessage);
+                    EnemyPilotOrder := 2;
+                end if;
+            when ATTACKER =>
+                if Enemy.Distance > Enemy.DamageRange  and Enemy.Ship.Speed /= FULL_SPEED then
+                    Enemy.Ship.Speed := ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) + 1);
+                    AddMessage(To_String(EnemyName) & " increases speed.", CombatMessage);
+                    EnemyPilotOrder := 1;
+                elsif Enemy.Ship.Speed /= QUARTER_SPEED then
+                    Enemy.Ship.Speed := ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) - 1);
+                    AddMessage(To_String(EnemyName) & " decreases speed.", CombatMessage);
+                    EnemyPilotOrder := 2;
+                end if;
+            when COWARD =>
+                if Enemy.Distance < 1500 and Enemy.Ship.Speed /= FULL_SPEED then
+                    Enemy.Ship.Speed := ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) + 1);
+                    AddMessage(To_String(EnemyName) & " increases speed.", CombatMessage);
+                end if;
+                EnemyPilotOrder := 4;
+            when others =>
+                null;
+        end case;
+        case EnemyPilotOrder is
+            when 1 =>
+                AccuracyBonus := AccuracyBonus + 20;
+                EvadeBonus := EvadeBonus - 20;
+            when 2 =>
+                AccuracyBonus := AccuracyBonus + 10;
+                EvadeBonus := EvadeBonus - 10;
+            when 3 =>
+                AccuracyBonus := AccuracyBonus - 10;
+                EvadeBonus := EvadeBonus + 10;
+            when 4 =>
+                AccuracyBonus := AccuracyBonus - 20;
+                EvadeBonus := EvadeBonus + 20;
+            when others =>
+                null;
+        end case;
         DistanceTraveled := 0 - RealSpeed(Enemy.Ship);
         if PilotIndex > 0 and EngineerIndex > 0 then
             case PilotOrder is
