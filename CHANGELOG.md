@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: 20mm ammo and fine rations
 - New skills: cooking and gunsmith
 - Some iron to starting cargo
+- Info which ships are enemies
 
 ### Changed
 - Renamed old enemies from small to tiny
