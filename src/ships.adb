@@ -364,7 +364,7 @@ package body Ships is
         Weight := CountShipWeight(Ship) / 500;
         for I in Ship.Modules.First_Index..Ship.Modules.Last_Index loop
             if Modules_List.Element(Ship.Modules.Element(I).ProtoIndex).Mtype = ENGINE then
-                BaseSpeed := Ship.Modules.Element(I).Max_Value * 10;
+                BaseSpeed := Ship.Modules.Element(I).Max_Value * 100;
                 Damage := 1.0 - DamageFactor(Float(Ship.Modules.Element(I).Durability) / Float(Ship.Modules.Element(I).MaxDurability));
                 exit;
             end if;

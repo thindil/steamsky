@@ -54,7 +54,7 @@ package body Combat is
         EnemyShip := CreateShip(EnemyIndex, Null_Unbounded_String,
             PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED, True);
             Enemy := (Ship => EnemyShip, DamageRange => Enemies_List.Element(EnemyIndex).DamageRange, Accuracy
-            => Enemies_List.Element(EnemyIndex).Accuracy, Distance => 1000,
+            => Enemies_List.Element(EnemyIndex).Accuracy, Distance => 10000,
             CombatAI => Enemies_List.Element(EnemyIndex).CombatAI);
         PilotOrder := 2;
         EngineerOrder := 3;
@@ -161,7 +161,7 @@ package body Combat is
                     EnemyPilotOrder := 2;
                 end if;
             when COWARD =>
-                if Enemy.Distance < 1500 and Enemy.Ship.Speed /= FULL_SPEED then
+                if Enemy.Distance < 15000 and Enemy.Ship.Speed /= FULL_SPEED then
                     Enemy.Ship.Speed := ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) + 1);
                     AddMessage(To_String(EnemyName) & " increases speed.", CombatMessage);
                 end if;
@@ -218,16 +218,16 @@ package body Combat is
         if Enemy.Distance < 10 then
             Enemy.Distance := 10;
         end if;
-        if Enemy.Distance >= 1500 then
+        if Enemy.Distance >= 15000 then
             AddMessage("You escaped from " & To_String(EnemyName), CombatMessage);
             EndCombat := True;
             return;
-        elsif Enemy.Distance < 1500 and Enemy.Distance >= 1000 then
+        elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
             AccuracyBonus := AccuracyBonus - 10;
             EvadeBonus := EvadeBonus + 10;
-        elsif Enemy.Distance < 500 and Enemy.Distance >= 100 then
+        elsif Enemy.Distance < 5000 and Enemy.Distance >= 1000 then
             AccuracyBonus := AccuracyBonus + 10;
-        elsif Enemy.Distance < 100 then    
+        elsif Enemy.Distance < 1000 then    
             AccuracyBonus := AccuracyBonus + 20;
             EvadeBonus := EvadeBonus - 10;
         end if;
@@ -552,20 +552,20 @@ package body Combat is
         Add(Str => "Enemy: " & To_String(EnemyName));
         Move_Cursor(Line => 8, Column => (Columns / 2));
         Add(Str => "Distance: ");
-        if Enemy.Distance >= 1500 then
+        if Enemy.Distance >= 15000 then
             Add(Str => "Escaped");
-        elsif Enemy.Distance < 1500 and Enemy.Distance >= 1000 then
+        elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
             Add(Str => "Long");
-        elsif Enemy.Distance < 1000 and Enemy.Distance >= 500 then
+        elsif Enemy.Distance < 10000 and Enemy.Distance >= 5000 then
             Add(Str => "Medium");
-        elsif Enemy.Distance < 500 and Enemy.Distance >= 100 then
+        elsif Enemy.Distance < 5000 and Enemy.Distance >= 1000 then
             Add(Str => "Short");
         else
             Add(Str => "Close");
         end if;
         Move_Cursor(Line => 9, Column => (Columns / 2));
         Add(Str => "Status: ");
-        if Enemy.Distance < 1500 then
+        if Enemy.Distance < 15000 then
             if Enemy.Ship.Modules.Element(1).Durability = Enemy.Ship.Modules.Element(1).MaxDurability then
                 Add(Str => "Ok");
             elsif Enemy.Ship.Modules.Element(1).Durability > 0 then
@@ -578,7 +578,7 @@ package body Combat is
         end if;
         Move_Cursor(Line => 10, Column => (Columns / 2));
         Add(Str => "Speed: ");
-        if Enemy.Distance < 1500 then
+        if Enemy.Distance < 15000 then
             case Enemy.Ship.Speed is
                 when FULL_STOP =>
                     Add(Str => "Stopped");
