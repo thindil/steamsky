@@ -52,13 +52,13 @@ package body Help is
                 Append(TmpHelp.Text, RawData);
                 Append(TmpHelp.Text, ASCII.LF);                
             else
-                if Length(RawData) > 3 then 
-                    TmpHelp.Title := To_Unbounded_String(Slice(RawData, 2, Length(RawData) - 1));
-                end if;
                 if TmpHelp.Text /= Null_Unbounded_String then
                     Help_List.Append(New_Item => TmpHelp);
                     TmpHelp := (Title => Null_Unbounded_String, Text =>
                         Null_Unbounded_String);
+                end if;
+                if Length(RawData) > 2 then 
+                    TmpHelp.Title := To_Unbounded_String(Slice(RawData, 2, Length(RawData) - 1));
                 end if;
             end if;
         end loop;
