@@ -109,7 +109,7 @@ begin
             when Trade_View =>
                 GameState := TradeKeys(Key);
             when Help_View =>
-                GameState := HelpKeys(Key);
+                GameState := HelpMenuKeys(Key);
             when Quit_Confirm | Combat_Confirm =>
                 GameState := ConfirmKeys(GameState, Key);
             when New_Game =>
@@ -133,6 +133,8 @@ begin
                 GameState := Main_Menu;
             when Cargo_Info =>
                 GameState := CargoInfoKeys(Key);
+            when Help_Topic =>
+                GameState := HelpKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;

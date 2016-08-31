@@ -23,7 +23,7 @@ package Game is
         Ship_Info, Crew_Info, Giving_Orders, Messages_View, Trade_View,
         Help_View, Quit_Confirm, New_Game, Combat_Confirm, Combat_State,
         Combat_Orders, Craft_View, License_Info, License_Full, Wait_Order,
-        News_View, Cargo_Info); -- Game states
+        News_View, Cargo_Info, Help_Topic); -- Game states
     type Date_Record is -- Data for game date/time
         record
             Year : Natural;
