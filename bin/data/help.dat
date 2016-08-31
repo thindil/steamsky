@@ -1,3 +1,4 @@
+[Tips]
 At this moment, help is under heavy development (as whole game). Below you can find few useful tips.
 * You can scroll this help window with arrow keys.
 * Your ship starts docked to base. To move it, you must first undock from base. Press 'o' key for open orders menu.
@@ -18,3 +19,4 @@ At this moment, help is under heavy development (as whole game). Below you can f
 * To move map without moving ship, hold SHIFT and use keypad keys this same which are used for moving ship. Hit SPACE to center map on ship.
 * Every member of crew getting tired when have assigned order other than On break. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
 * All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press 'h' key on sky map (no need to press 'e' first to show menu).
+[]
