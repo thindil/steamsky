@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Split help on topics
 - Updated help
+- Raised ships speed
 
 ### Fixed
 - On combat screen showing messages from previous combat
