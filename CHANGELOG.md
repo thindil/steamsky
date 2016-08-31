@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Each crafting recipe use separated skill
 - Updated interface
 - Split help on topics
+- Updated help
 
 ### Fixed
 - On combat screen showing messages from previous combat
