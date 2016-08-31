@@ -52,18 +52,23 @@ package body UserInterface is
                 Add(Str => "Trade with base [Quit]");
                 Change_Attributes(Line => 0, Column => 17, Count => 1, Color => 1);
             when Help_View =>
-                Add(Str => "Help [Quit]");
-                Change_Attributes(Line => 0, Column => 6, Count => 1, Color => 1);
+                Add(Str => "Help Index [Quit]");
+                Change_Attributes(Line => 0, Column => 12, Count => 1, Color => 1);
             when Craft_View =>
                 Add(Str => "Manufacturing [Quit]");
                 Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
             when Cargo_Info =>
                 Add(Str => "Ship Cargo [Quit]");
                 Change_Attributes(Line => 0, Column => 12, Count => 1, Color => 1);
+            when Help_Topic =>
+                Add(Str => "Help [Menu] [Quit]");
+                Change_Attributes(Line => 0, Column => 6, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 13, Count => 1, Color => 1);
             when others =>
                 null;
         end case;
-        if CurrentState /= Help_View and CurrentState /= Quit_Confirm then
+        if CurrentState /= Help_View and CurrentState /= Quit_Confirm and
+            CurrentState /= Help_Topic then
             case PlayerShip.Speed is
                 when DOCKED =>
                     Speed := To_Unbounded_String("Docked");
@@ -302,7 +307,7 @@ package body UserInterface is
             when Trade_View =>
                 ShowTrade;
             when Help_View =>
-                ShowHelp;
+                ShowHelpMenu;
             when Quit_Confirm =>
                 Refresh_Without_Update;
                 ShowConfirm("Are you sure want to quit game?");
@@ -318,6 +323,8 @@ package body UserInterface is
                 ShowWaitOrder;
             when Cargo_Info =>
                 ShowCargoInfo;
+            when Help_Topic =>
+                ShowHelp;
             when others =>
                 null;
         end case;
