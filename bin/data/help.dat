@@ -1,5 +1,8 @@
+[General Informations]
+SteamSky is roguelike game where you command small flying ship with crew. You must take care about ship and crew. You can trade items between sky bases, fight with enemies or manufacturing items.
+Whole game interface is keyboard based. Most options/menus are accessible by keyboard shortcuts. All shortcuts are case insensitive, for example, to access help, you can use 'h' or 'shift+h' key. That same is with arrows keys - you can use normal arrows and keypad arrows (after enabling Num Lock at your keyboard).
+At this moment, help is under heavy development (as whole game).
 [Tips]
-At this moment, help is under heavy development (as whole game). Below you can find few useful tips.
 * You can scroll this help window with arrow keys.
 * Your ship starts docked to base. To move it, you must first undock from base. Press 'o' key for open orders menu.
 * To move your ship, you need to set it speed, have fuel (charcollum, which works as moneys too) and pilot and engineer on duty.
