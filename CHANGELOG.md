@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - All ship modules have own repair materials
 - Each crafting recipe use separated skill
 - Updated interface
+- Split help on topics
 
 ### Fixed
 - On combat screen showing messages from previous combat
