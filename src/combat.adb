@@ -198,14 +198,18 @@ package body Combat is
             when others =>
                 null;
         end case;
-        DistanceTraveled := 0 - RealSpeed(Enemy.Ship);
+        if EnemyPilotOrder < 4 then
+            DistanceTraveled := 0 - RealSpeed(Enemy.Ship);
+        else
+            DistanceTraveled := RealSpeed(Enemy.Ship);
+        end if;
         if PilotIndex > 0 and EngineerIndex > 0 then
             case PilotOrder is
                 when 1 | 3 =>
                     DistanceTraveled := DistanceTraveled - RealSpeed(PlayerShip);
                 when 2 =>
                     DistanceTraveled := DistanceTraveled + RealSpeed(PlayerShip);
-                    if DistanceTraveled > 0 then
+                    if DistanceTraveled > 0 and EnemyPilotOrder /= 4 then
                         DistanceTraveled := 0;
                     end if;
                 when 4 =>
@@ -219,7 +223,11 @@ package body Combat is
             Enemy.Distance := 10;
         end if;
         if Enemy.Distance >= 15000 then
-            AddMessage("You escaped from " & To_String(EnemyName), CombatMessage);
+            if PilotOrder = 4 then
+                AddMessage("You escaped from " & To_String(EnemyName) & ".", CombatMessage);
+            else
+                AddMessage(To_String(EnemyName) & " escaped from you.", CombatMessage);
+            end if;
             EndCombat := True;
             return;
         elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
