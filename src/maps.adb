@@ -174,6 +174,7 @@ package body Maps is
             when Character'Pos(' ') => -- Center on ship
                 MoveX := 0;
                 MoveY := 0;
+                Result := 4;
             when others =>
                 Result := 0;
         end case;
