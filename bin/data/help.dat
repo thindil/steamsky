@@ -1,21 +1,26 @@
 [General Informations]
 SteamSky is roguelike game where you command small flying ship with crew. You must take care about ship and crew. You can trade items between sky bases, fight with enemies or manufacturing items.
 Whole game interface is keyboard based. Most options/menus are accessible by keyboard shortcuts. All shortcuts are case insensitive, for example, to access help, you can use 'h' or 'shift+h' key. That same is with arrows keys - you can use normal arrows and keypad arrows (after enabling Num Lock at your keyboard).
+Most texts in game, can be scrolled with arrow keys.
 At this moment, help is under heavy development (as whole game).
+[Ship movement]
+Your ship starts docked to base. To move it, you must first give order "Undock" from base. Press 'o' key (or first 'e' key for see game menu) for open orders menu.
+When you undocked from base, in this same menu, you can set ship speed or dock again. Faster speed means you travel faster but you use more fuel too.
+To move your ship, you must set it speed, have fuel (called Charcollum, which works as moneys too), and someone from ship crew assigned to pilot and engineer role. To assign crew members to selected role, open crew menu - key 'c', select desired crew member and give order by press key 'o'.
+Travel time depends on skills of Pilot and Engineer (current members on this positions) and selected ship speed. 
+To move ship in desired direction, use arrow keys (or better) keys on keypad (with enabled Num Lock at your keyboard).
+During travel you may encounter various events (at this moment you can be only attacked by hostile ships).
 [Tips]
-* You can scroll this help window with arrow keys.
-* Your ship starts docked to base. To move it, you must first undock from base. Press 'o' key for open orders menu.
-* To move your ship, you need to set it speed, have fuel (charcollum, which works as moneys too) and pilot and engineer on duty.
 * To buy/sell items from bases you must first dock to base. All bases buy all items, but which items are sold, depends on base type.
 * As you dock to stations, you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are white.
 * You can wait a moment without doing anything, by hit key 5 on keypad.
 * You and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation.
 * Game ends when your character die.
-* Travel time depends on skills of Pilot and Engineer (current members on this positions). Prices in bases depends on skill Bartering - with higher skill you can sell items for more and buy for less. Crafting skill determine amount of manufactured items. Gunnery affects chance to hit with gun in combat.
+* Prices in bases depends on skill Bartering - with higher skill you can sell items for more and buy for less. Crafting skills determine amount of manufactured items. Gunnery affects chance to hit with gun in combat.
 * In combat, first you must set crew members to selected position and give each orders then hit space for made one combat turn. Each combat turn take 1 minute of game time.
 * If you give order to aim for selected part of enemy ship, your Gunner will be shoot as often as for precise fire, just chance on hit will depends on part of enemy ship. If selected enemy part will be destroyed, Gunner will be shooting in random part of enemy ship, as usual.
 * To escape from fight, you must set Pilot order on Escape, after few turns (depends how far enemy was) you should escape.
-* Real ship speed (at this moment only in combat) depends on engine power, ship weight (with cargo) and bit on Engineer experience.
+* Real ship speed (at this moment only in combat) depends on engine power, engine damage, ship weight (with cargo) and bit on Engineer and Pilot experience.
 * Slow speed in combat helps your gunner hits enemies but also helps enemies hits you. If you want to have more chances to evade enemy attack, set speed to full speed. That same is with pilot orders - evade or escape order helps avoids attacks but also reduce your chance to hit enemies.
 * Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too and you die.
 * To start manufacturing items, first you must have enough material and proper module installed on ship. Then you must set proper crafting order in Craft menu and give crew member order to start crafting.
