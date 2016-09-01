@@ -471,7 +471,7 @@ package body Combat is
                         if (OrderIndex - GunnerOrders'Length) < MemberIndex then
                             GiveOrders((OrderIndex - GunnerOrders'Length), Order);
                         else
-                            if (OrderIndex - PilotOrders'Length + 1) <= PlayerShip.Crew.Last_Index then
+                            if (OrderIndex - GunnerOrders'Length + 1) <= PlayerShip.Crew.Last_Index then
                                 GiveOrders((OrderIndex - GunnerOrders'Length + 1), Order);
                             else
                                 return Combat_Orders;
