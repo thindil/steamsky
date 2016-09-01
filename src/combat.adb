@@ -696,6 +696,22 @@ package body Combat is
                 Move_Cursor(Win => OrdersWindow, Line => Line, Column => 1);
                 Add(Win => OrdersWindow, Str => Character'Val(96 + Integer(Line)) & 
                     " assign " & To_String(PlayerShip.Crew.Element(I).Name));
+                case Order is
+                    when Pilot =>
+                        if PlayerShip.Crew.Element(I).Skills(1, 1) > 0 then
+                            Add(Win => OrdersWindow, Str => " +");
+                        end if;
+                    when Engineer =>
+                        if PlayerShip.Crew.Element(I).Skills(2, 1) > 0 then
+                            Add(Win => OrdersWindow, Str => " +");
+                        end if;
+                    when Gunner =>
+                        if PlayerShip.Crew.Element(I).Skills(3, 1) > 0 then
+                            Add(Win => OrdersWindow, Str => " +");
+                        end if;
+                    when others =>
+                        null;
+                end case;
                 Change_Attributes(Win => OrdersWindow, Line => Line, Column => 1, 
                     Count => 1, Color => 1);
             end if;
