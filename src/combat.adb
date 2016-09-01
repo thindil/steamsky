@@ -139,6 +139,21 @@ package body Combat is
             end case;
             ChangeShipSpeed(ShipSpeed'Val(EngineerOrder));
         end if;
+        for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
+            if Enemy.Ship.Modules.Element(I).Durability > 0 then
+                case Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).MType is
+                    when GUN | BATTERING_RAM =>
+                        EnemyWeaponIndex := I;
+                    when ARMOR =>
+                        EnemyArmorIndex := I;
+                    when others =>
+                        null;
+                end case;
+            end if;
+        end loop;
+        if EnemyWeaponIndex = 0 and Enemy.CombatAI = ATTACKER then
+            Enemy.CombatAI := COWARD;
+        end if;
         case Enemy.CombatAI is
             when BERSERKER =>
                 if Enemy.Distance > 10 and Enemy.Ship.Speed /= FULL_SPEED then
@@ -246,18 +261,6 @@ package body Combat is
                         WeaponIndex := I;
                     when ARMOR =>
                         ArmorIndex := I;
-                    when others =>
-                        null;
-                end case;
-            end if;
-        end loop;
-        for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
-            if Enemy.Ship.Modules.Element(I).Durability > 0 then
-                case Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).MType is
-                    when GUN | BATTERING_RAM =>
-                        EnemyWeaponIndex := I;
-                    when ARMOR =>
-                        EnemyArmorIndex := I;
                     when others =>
                         null;
                 end case;
