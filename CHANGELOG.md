@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - On combat screen showing messages from previous combat
 - Moving ship with arrows keys
 - Starting random events on map moving
+- Giving orders to gunner during combat
 
 ## [0.2] - 2016-08-21
 
