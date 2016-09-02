@@ -409,7 +409,7 @@ package body Ships is
         if DamagePercent = 0 then
             Add(Win => InfoWindow, Str => "Ok");
         elsif DamagePercent > 0 and DamagePercent < 20 then
-            Add(Win => InfoWindow, Str => "Slighty damaged");
+            Add(Win => InfoWindow, Str => "Slightly damaged");
         elsif DamagePercent > 19 and DamagePercent < 50 then
             Add(Win => InfoWindow, Str => "Damaged");
         elsif DamagePercent > 49 and DamagePercent < 80 then
