@@ -633,6 +633,7 @@ package body Combat is
         Line : Line_Position := 0;
         MemberIndex : Natural := 0;
         Height : Line_Position;
+        SkillIndex, SkillValue : Natural := 0;
     begin   
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Order then
@@ -691,6 +692,27 @@ package body Combat is
             end case;
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            case Order is
+                when Pilot =>
+                    if PlayerShip.Crew.Element(I).Skills(1, 1) > SkillValue then
+                        SkillIndex := I;
+                        SkillValue := PlayerShip.Crew.Element(I).Skills(1, 1);
+                    end if;
+                when Engineer =>
+                    if PlayerShip.Crew.Element(I).Skills(2, 1) > SkillValue then
+                        SkillIndex := I;
+                        SkillValue := PlayerShip.Crew.Element(I).Skills(2, 1);
+                    end if;
+                when Gunner =>
+                    if PlayerShip.Crew.Element(I).Skills(3, 1) > SkillValue then
+                        SkillIndex := I;
+                        SkillValue := PlayerShip.Crew.Element(I).Skills(3, 1);
+                    end if;
+                when others =>
+                    null;
+            end case;
+        end loop;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if I /= MemberIndex then
                 Line := Line + 1;
                 Move_Cursor(Win => OrdersWindow, Line => Line, Column => 1);
@@ -712,6 +734,9 @@ package body Combat is
                     when others =>
                         null;
                 end case;
+                if I = SkillIndex then
+                    Add(Win => OrdersWindow, Str => "+");
+                end if;
                 Change_Attributes(Win => OrdersWindow, Line => Line, Column => 1, 
                     Count => 1, Color => 1);
             end if;
