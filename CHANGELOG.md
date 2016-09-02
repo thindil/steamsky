@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Some iron to starting cargo
 - Info which ships are enemies
 - Very simple enemy AI in combat
+- Option to rename player ship modules
 
 ### Changed
 - Renamed old enemies from small to tiny
