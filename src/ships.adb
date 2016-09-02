@@ -434,6 +434,10 @@ package body Ships is
                 MAmount := MAmount + 1;
             end if;
         end loop;
+        Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
+        Add(Win => InfoWindow, Str => "Rename module");
+        Change_Attributes(Win => InfoWindow, Line => 4, Column => 2, 
+            Count => 1, Color => 1);
         Refresh;
         Refresh(InfoWindow);
     end ShowModuleInfo;
@@ -486,6 +490,27 @@ package body Ships is
         end loop;
     end ShowCargoInfo;
 
+    procedure ShowForm is
+        ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
+        Visibility : Cursor_Visibility := Normal;
+        ModuleName : String(1..20);
+        NewName : Unbounded_String;
+    begin
+        Move_Cursor(Line => 15, Column => (Columns / 2));
+        Add(Str => "New name: ");
+        Set_Echo_Mode(True);
+        Set_Cursor_Visibility(Visibility);
+        Get(Str => ModuleName, Len => 20);
+        NewName := Trim(To_Unbounded_String(ModuleName), Ada.Strings.Both);
+        if Length(NewName) > 0 then
+            UpdateModule(PlayerShip, ModuleIndex, "Name", To_String(NewName));
+        end if;
+        Visibility := Invisible;
+        Set_Echo_Mode(False);
+        Set_Cursor_Visibility(Visibility);
+        DrawGame(Ship_Info);
+    end ShowForm;
+
     function ShipInfoKeys(Key : Key_Code) return GameStates is
         Result : Driver_Result;
         NewKey : Key_Code;
@@ -524,6 +549,8 @@ package body Ships is
                         end if;
                     end if;
                 end if;
+            when Character'Pos('n') | Character'Pos('N') => -- Rename selected module
+                ShowForm;
             when others =>
                 null;
         end case;
