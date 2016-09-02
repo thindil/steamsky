@@ -434,6 +434,16 @@ package body Ships is
                 MAmount := MAmount + 1;
             end if;
         end loop;
+        Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
+        case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+            when ENGINE =>
+                Add(Win => InfoWindow, Str => "Max power:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
+            when CARGO =>
+                Add(Win => InfoWindow, Str => "Max cargo:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value) &
+                    " kg");
+            when others =>
+                null;
+        end case;
         Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
         Add(Win => InfoWindow, Str => "Rename module");
         Change_Attributes(Win => InfoWindow, Line => 4, Column => 2, 
