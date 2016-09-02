@@ -546,7 +546,7 @@ package body Combat is
             if DamagePercent = 0 then
                 Add(Str => "Ok");
             elsif DamagePercent > 0 and DamagePercent < 20 then
-                Add(Str => "Slighty damaged");
+                Add(Str => "Slightly damaged");
             elsif DamagePercent > 19 and DamagePercent < 50 then
                 Add(Str => "Damaged");
             elsif DamagePercent > 49 and DamagePercent < 80 then
