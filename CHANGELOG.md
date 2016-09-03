@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Split help on topics
 - Updated help
 - Raised ships speed
+- Counting ships speed on sky map
 
 ### Fixed
 - On combat screen showing messages from previous combat
