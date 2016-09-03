@@ -487,14 +487,18 @@ package body Ships is
 
     procedure ShowCargoInfo is
         CargoWeight : Positive;
+        CurrentLine : Line_Position := 1;
     begin
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            CurrentLine := CurrentLine + 1;
             CargoWeight := PlayerShip.Cargo.Element(I).Amount * Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Weight;
-            Move_Cursor(Line => Line_Position(1 + I), Column => 2);
+            Move_Cursor(Line => CurrentLine, Column => 2);
             Add(Str => Positive'Image(PlayerShip.Cargo.Element(I).Amount) & "x" &
                 To_String(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name) & " (" &
                 Positive'Image(CargoWeight) & "kg )");
         end loop;
+        Move_Cursor(Line => CurrentLine + 2, Column => 2);
+        Add(Str => "Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg");
     end ShowCargoInfo;
 
     procedure ShowForm is
