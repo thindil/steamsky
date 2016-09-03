@@ -431,6 +431,9 @@ package body Ships is
             when CARGO =>
                 Add(Win => InfoWindow, Str => "Max cargo:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value) &
                     " kg");
+            when HULL =>
+                Add(Win => InfoWindow, Str => "Modules:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Current_Value) &
+                " /" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
             when others =>
                 null;
         end case;
