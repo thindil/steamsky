@@ -185,12 +185,13 @@ package body Ships is
     end UpdateCargo;
 
     procedure UpdateModule(Ship : in out ShipRecord; ModuleIndex : Positive; Field : String; Value : String) is
-        NewDurability : Integer;
+        NewDurability, NewValue : Integer;
         NewName : Unbounded_String;
         procedure UpdateMod(Module : in out ModuleData) is
         begin
             Module.Durability := NewDurability;
             Module.Name := NewName;
+            Module.Current_Value := NewValue;
         end UpdateMod;
     begin
         if ModuleIndex > Positive(Ship.Modules.Length) then
@@ -198,6 +199,7 @@ package body Ships is
         end if;
         NewDurability := Ship.Modules.Element(ModuleIndex).Durability;
         NewName := Ship.Modules.Element(ModuleIndex).Name;
+        NewValue := Ship.Modules.Element(ModuleIndex).Current_Value;
         if Field = "Durability" then
             NewDurability := NewDurability + Integer'Value(Value);
             if NewDurability < 0 then
@@ -205,6 +207,8 @@ package body Ships is
             end if;
         elsif Field = "Name" then
             NewName := To_Unbounded_String(Value);
+        elsif Field = "Current_Value" then
+            NewValue := Integer'Value(Value);
         end if;
         Ship.Modules.Update_Element(Index => ModuleIndex, Process => UpdateMod'Access);
     end UpdateModule;
