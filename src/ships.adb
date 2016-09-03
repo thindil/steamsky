@@ -36,6 +36,8 @@ package body Ships is
         PilotIndex, EngineerIndex : Natural := 0;
         FuelNeeded : Integer;
         TimePassed : Integer := 0;
+        type SpeedType is digits 2;
+        Speed : SpeedType;
     begin
         if ShipIndex = 0 then
             if PlayerShip.Speed = DOCKED then
@@ -88,21 +90,9 @@ package body Ships is
             PlayerShip.SkyX := NewX;
             PlayerShip.SkyY := NewY;
             UpdateCargo(1, FuelNeeded);
-            case PlayerShip.Speed is
-                when QUARTER_SPEED =>
-                    TimePassed := 120;
-                when HALF_SPEED =>
-                    TimePassed := 60;
-                when FULL_SPEED =>
-                    TimePassed := 30;
-                when others =>
-                    null;
-            end case;
+            Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
+            TimePassed := Integer(100.0 / Speed);
             if TimePassed > 0 then
-                TimePassed := TimePassed - Integer(Float'Floor(Float(TimePassed) *
-                    (Float(PlayerShip.Crew.Element(PilotIndex).Skills(1, 1)) / 200.0)));
-                TimePassed := TimePassed - Integer(Float'Floor(Float(TimePassed) *
-                    (Float(PlayerShip.Crew.Element(EngineerIndex).Skills(2, 1)) / 200.0)));
                 case PlayerShip.Speed is
                     when QUARTER_SPEED =>
                         if TimePassed < 60 then
