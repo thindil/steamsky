@@ -18,16 +18,18 @@ To move map without moving ship, hold SHIFT and use keypad keys this same which 
 To buy/sell items from bases you must first dock to base. All bases buy all items, but which items are sold, depends on base type.
 Prices in bases depends on skill Bartering - with higher skill you can sell items for more and buy for less. Crafting skills determine amount of manufactured items. Gunnery affects chance to hit with gun in combat.
 To buy/sell items from bases, open orders menu (key 'o') and then select option Trade (key 't'), you will see trading screen. Use arrows keys to select desired material to buy/sell, then press 'Enter' key to buy or 'Space' key to start trading selected item. Next, enter amount of items which you want to buy or sell and press 'Enter'. To buy/sell items you must have enough free cargo space on your ship ("moneys" aka Charcollum needs free cargo space too).
+[Combat]
+In combat, first you must set crew members to selected position and give each orders then hit space for made one combat turn. Each combat turn take 1 minute of game time.
+If you give order to aim for selected part of enemy ship, your Gunner will be shoot as often as for precise fire, just chance on hit will depends on part of enemy ship. If selected enemy part will be destroyed, Gunner will be shooting in random part of enemy ship, as usual.
+To escape from fight, you must set Pilot order on Escape, after few turns (depends how far and fast enemy was) you should escape.
+Slow speed in combat helps your gunner hits enemies but also helps enemies hits you. If you want to have more chances to evade enemy attack, set speed to full speed. That same is with pilot orders - evade or escape order helps avoids attacks but also reduce your chance to hit enemies.
+Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too and you die.
+You (or enemy) starts hitting other parts of ship after destroying armor.
+Sign "plus" after crew member name in combat orders menu means that this member know something about selected role (have suitable skill).
+Double sign "plus" after crew name in combat orders menu means that this member have highest skill needed for selected role.
 [Tips]
 * You and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation.
-* In combat, first you must set crew members to selected position and give each orders then hit space for made one combat turn. Each combat turn take 1 minute of game time.
-* If you give order to aim for selected part of enemy ship, your Gunner will be shoot as often as for precise fire, just chance on hit will depends on part of enemy ship. If selected enemy part will be destroyed, Gunner will be shooting in random part of enemy ship, as usual.
-* To escape from fight, you must set Pilot order on Escape, after few turns (depends how far enemy was) you should escape.
-* Slow speed in combat helps your gunner hits enemies but also helps enemies hits you. If you want to have more chances to evade enemy attack, set speed to full speed. That same is with pilot orders - evade or escape order helps avoids attacks but also reduce your chance to hit enemies.
-* Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too and you die.
-* Sign "plus" after crew member name in combat orders menu means that this member know something about selected role (have suitable skill).
-* Double sign "plus" after crew name in combat orders menu means that this member have highest skill needed for selected role.
+* All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press 'h' key on sky map (no need to press 'e' first to show menu).
 * To start manufacturing items, first you must have enough material and proper module installed on ship. Then you must set proper crafting order in Craft menu and give crew member order to start crafting.
 * Every member of crew getting tired when have assigned order other than On break. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
-* All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press 'h' key on sky map (no need to press 'e' first to show menu).
 []
