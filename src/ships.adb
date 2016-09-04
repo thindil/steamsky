@@ -446,6 +446,9 @@ package body Ships is
             when HULL =>
                 Add(Win => InfoWindow, Str => "Modules:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Current_Value) &
                 " /" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
+            when CABIN =>
+                Add(Win => InfoWindow, Str => "Owner: " &
+                    To_String(PlayerShip.Crew.Element(PlayerShip.Modules.Element(ModuleIndex).Owner).Name));
             when others =>
                 null;
         end case;
