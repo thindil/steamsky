@@ -34,6 +34,7 @@ package Ships is
             Max_Value : Integer; -- For engine, max power, depends on module
             Durability : Integer; -- 0 = destroyed
             MaxDurability : Integer; -- Base durability
+            Owner : Natural; -- Crew member owner of module (mostly for cabins)
         end record;
     package Modules_Container is new Vectors(Positive, ModuleData); 
     type CargoData is -- Data structure for ship cargo
