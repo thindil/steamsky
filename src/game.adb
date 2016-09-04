@@ -119,9 +119,13 @@ package body Game is
             SkyBases(Integer(RandomBase)).SkyY, DOCKED);
         UpdateModule(PlayerShip, 1, "Current_Value", "10");
         UpdateModule(PlayerShip, 4, "Name", To_String(CharName) & "'s Cabin");
+        UpdateModule(PlayerShip, 4, "Owner", "1");
         UpdateModule(PlayerShip, 5, "Name", To_String(PilotName) & "'s Cabin");
+        UpdateModule(PlayerShip, 5, "Owner", "2");
         UpdateModule(PlayerShip, 6, "Name", To_String(EngineerName) & "'s Cabin");
+        UpdateModule(PlayerShip, 6, "Owner", "3");
         UpdateModule(PlayerShip, 7, "Name", To_String(GunnerName) & "'s Cabin");
+        UpdateModule(PlayerShip, 7, "Owner", "4");
         -- Add cargo to ship
         PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 1, Amount => 2000));
         PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 2, Amount => 100));
@@ -479,6 +483,8 @@ package body Game is
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Modules.Element(I).MaxDurability));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Modules.Element(I).Owner));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         end loop;
         RawValue := To_Unbounded_String(PlayerShip.Cargo.Length'Img);
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -591,6 +597,7 @@ package body Game is
                 Integer'Value(To_String(ReadData)), Max_Value =>
                 Integer'Value(To_String(ReadData)), Durability =>
                 Integer'Value(To_String(ReadData)), MaxDurability =>
+                Integer'Value(To_String(ReadData)), Owner =>
                 Integer'Value(To_String(ReadData))));
         end loop;
         PlayerShip.Modules := ShipModules;
