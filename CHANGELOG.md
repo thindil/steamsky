@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New enemy ship
+- New enemy ships - small pirate ship and small undead ship
 - Support for enemy armor in combat
 - Types of messages (combat/crafting/etc.)
 - Option to sort messages by types on messages screen
