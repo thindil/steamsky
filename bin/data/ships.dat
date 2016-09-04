@@ -29,4 +29,11 @@ DamageRange = 5000
 Accuracy = 5
 Enemy = Yes
 CombatAI = Attacker
+[6]
+Name = Small undead ship
+Modules = 1, 2, 3, 5, 7, 7, 12 
+DamageRange = 100
+Accuracy = 5
+Enemy = Yes
+CombatAI = Berserker
 []
