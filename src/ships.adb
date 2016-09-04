@@ -187,21 +187,25 @@ package body Ships is
     procedure UpdateModule(Ship : in out ShipRecord; ModuleIndex : Positive; Field : String; Value : String) is
         NewDurability, NewValue : Integer;
         NewName : Unbounded_String;
+        NewOwner : Natural;
         procedure UpdateMod(Module : in out ModuleData) is
         begin
-            Module.Durability := NewDurability;
-            Module.Name := NewName;
-            Module.Current_Value := NewValue;
+            if Field = "Durability" then
+                Module.Durability := NewDurability;
+            elsif Field = "Name" then
+                Module.Name := NewName;
+            elsif Field = "Current_Value" then
+                Module.Current_Value := NewValue;
+            elsif Field = "Owner" then
+                Module.Owner := NewOwner;
+            end if;
         end UpdateMod;
     begin
         if ModuleIndex > Positive(Ship.Modules.Length) then
             return;
         end if;
-        NewDurability := Ship.Modules.Element(ModuleIndex).Durability;
-        NewName := Ship.Modules.Element(ModuleIndex).Name;
-        NewValue := Ship.Modules.Element(ModuleIndex).Current_Value;
         if Field = "Durability" then
-            NewDurability := NewDurability + Integer'Value(Value);
+            NewDurability := Ship.Modules.Element(ModuleIndex).Durability + Integer'Value(Value);
             if NewDurability < 0 then
                 NewDurability := 0;
             end if;
@@ -209,6 +213,8 @@ package body Ships is
             NewName := To_Unbounded_String(Value);
         elsif Field = "Current_Value" then
             NewValue := Integer'Value(Value);
+        elsif Field = "Owner" then
+            NewOwner := Natural'Value(Value);
         end if;
         Ship.Modules.Update_Element(Index => ModuleIndex, Process => UpdateMod'Access);
     end UpdateModule;
@@ -245,7 +251,8 @@ package body Ships is
                 Current_Value => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Value,
                 Max_Value => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).MaxValue,
                 Durability => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Durability,
-                MaxDurability => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Durability));
+                MaxDurability => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Durability,
+                Owner => 0));
             end loop;
             if Name = Null_Unbounded_String then
                 NewName := ProtoShips_List.Element(ProtoIndex).Name;
@@ -260,7 +267,8 @@ package body Ships is
                 Current_Value => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Value,
                 Max_Value => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).MaxValue,
                 Durability => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Durability,
-                MaxDurability => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Durability));
+                MaxDurability => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Durability,
+                Owner => 0));
             end loop;
             if Name = Null_Unbounded_String then
                 NewName := Enemies_List.Element(ProtoIndex).Name;
