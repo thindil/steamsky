@@ -578,7 +578,7 @@ package body Ships is
         end if;
         DropAmount := Natural'Value(Amount);
         if DropAmount > 0 and DropAmount <= PlayerShip.Cargo.Element(ItemIndex).Amount then
-            UpdateCargo(ItemIndex, (0 - DropAmount));
+            UpdateCargo(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex, (0 - DropAmount));
             AddMessage("You dropped" & Positive'Image(DropAmount) & " " & ItemName, OtherMessage);
         elsif DropAmount > PlayerShip.Cargo.Element(ItemIndex).Amount then
             ShowDialog("You can't drop more " & ItemName & " than you have.");
