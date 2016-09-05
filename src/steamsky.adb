@@ -115,6 +115,7 @@ begin
             when New_Game =>
                 GameState := NewGameKeys(Key);
             when Combat_State =>
+                OldState := GameState;
                 GameState := CombatKeys(Key);
             when Combat_Orders =>
                 GameState := CombatOrdersKeys(Key);
@@ -132,7 +133,7 @@ begin
                 ShowMainMenu;
                 GameState := Main_Menu;
             when Cargo_Info =>
-                GameState := CargoInfoKeys(Key);
+                GameState := CargoInfoKeys(Key, OldState);
             when Help_Topic =>
                 GameState := HelpKeys(Key);
             when others =>

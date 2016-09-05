@@ -536,7 +536,11 @@ package body Combat is
         end if;
         Change_Attributes(Line => 3, Column => 2,
             Count => 1, Color => 1);
-        Move_Cursor(Line => 5, Column => 2);
+        Move_Cursor(Line => 4, Column => 2);
+        Add(Str => "Ship cargo");
+        Change_Attributes(Line => 4, Column => 8,
+            Count => 1, Color => 1);
+        Move_Cursor(Line => 6, Column => 2);
         Add(Str => "Ship status:");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             Move_Cursor(Line => Line_Position(6 + I), Column => 2);
@@ -774,6 +778,9 @@ package body Combat is
                     CombatTurn;
                     DrawGame(Combat_State);
                     return Combat_State;
+                when Character'Pos('a') | Character'Pos('A') => -- Show ship cargo
+                    DrawGame(Cargo_Info);
+                    return Cargo_Info;
                 when others =>
                     return Combat_State;
             end case;
