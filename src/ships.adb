@@ -496,19 +496,43 @@ package body Ships is
         Refresh(MenuWindow);
     end ShowShipInfo;
 
+    procedure ShowItemInfo is
+        InfoWindow : Window;
+        ItemIndex : constant Positive := Get_Index(Current(ModulesMenu));
+        ItemWeight : constant Positive := PlayerShip.Cargo.Element(ItemIndex).Amount * 
+            Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Weight;
+    begin
+        InfoWindow := Create(5, (Columns / 2), 2, (Columns / 2));
+        Add(Win => InfoWindow, Str => "Amount:" & Positive'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
+        Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+        Add(Win => InfoWindow, Str => "Weight:" &
+            Positive'Image(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Weight) & " kg");
+        Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+        Add(Win => InfoWindow, Str => "Total weight:" & Positive'Image(ItemWeight) & " kg");
+        Refresh;
+        Refresh(InfoWindow);
+    end ShowItemInfo;
+
     procedure ShowCargoInfo is
-        CargoWeight : Positive;
-        CurrentLine : Line_Position := 1;
+        Cargo_Items: constant Item_Array_Access := new Item_Array(1..(PlayerShip.Cargo.Last_Index + 1));
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
     begin
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            CurrentLine := CurrentLine + 1;
-            CargoWeight := PlayerShip.Cargo.Element(I).Amount * Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Weight;
-            Move_Cursor(Line => CurrentLine, Column => 2);
-            Add(Str => Positive'Image(PlayerShip.Cargo.Element(I).Amount) & "x" &
-                To_String(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name) & " (" &
-                Positive'Image(CargoWeight) & "kg )");
+            Cargo_Items.all(I) := New_Item(To_String(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name));
         end loop;
-        Move_Cursor(Line => CurrentLine + 2, Column => 2);
+        Cargo_Items.all(Cargo_Items'Last) := Null_Item;
+        ModulesMenu := New_Menu(Cargo_Items);
+        Set_Format(ModulesMenu, Lines - 10, 1);
+        Set_Mark(ModulesMenu, "");
+        Scale(ModulesMenu, MenuHeight, MenuLength);
+        MenuWindow := Create(MenuHeight, MenuLength, 2, 2);
+        Set_Window(ModulesMenu, MenuWindow);
+        Set_Sub_Window(ModulesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+        Post(ModulesMenu);
+        ShowItemInfo;
+        Refresh(MenuWindow);
+        Move_Cursor(Line => MenuHeight + 4, Column => 2);
         Add(Str => "Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg");
     end ShowCargoInfo;
 
@@ -580,14 +604,47 @@ package body Ships is
     end ShipInfoKeys;
 
     function CargoInfoKeys(Key : Key_Code) return GameStates is
+        Result : Driver_Result;
+        NewKey : Key_Code;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
+            when 56 => -- Select previous item
+                Result := Driver(ModulesMenu, M_Up_Item);
+                if Result = Menu_Ok then
+                    ShowItemInfo;
+                    Refresh(MenuWindow);
+                end if;
+            when 50 => -- Select next item
+                Result := Driver(ModulesMenu, M_Down_Item);
+                if Result = Menu_Ok then
+                    ShowItemInfo;
+                    Refresh(MenuWindow);
+                end if;
+            when 27 => 
+                NewKey := Get_KeyStroke;
+                if NewKey = 91 then
+                    NewKey := Get_KeyStroke;
+                    if NewKey = 65 then -- Select previous item
+                        Result := Driver(ModulesMenu, M_Up_Item);
+                        if Result = Menu_Ok then
+                            ShowItemInfo;
+                            Refresh(MenuWindow);
+                        end if;
+                    elsif NewKey = 66 then -- Select next item
+                        Result := Driver(ModulesMenu, M_Down_Item);
+                        if Result = Menu_Ok then
+                            ShowItemInfo;
+                            Refresh(MenuWindow);
+                        end if;
+                    end if;
+                end if;
             when others =>
-                return Cargo_Info;
+                null;
         end case;
+        return Cargo_Info;
     end CargoInfoKeys;
 
 end Ships;
