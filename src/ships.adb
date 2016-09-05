@@ -642,14 +642,14 @@ package body Ships is
         return Ship_Info;
     end ShipInfoKeys;
 
-    function CargoInfoKeys(Key : Key_Code) return GameStates is
+    function CargoInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Driver_Result;
         NewKey : Key_Code;
     begin
         case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-                DrawGame(Sky_Map_View);
-                return Sky_Map_View;
+            when Character'Pos('q') | Character'Pos('Q') => -- Back sky map or combat screen
+                DrawGame(OldState);
+                return OldState;
             when 56 => -- Select previous item
                 Result := Driver(ModulesMenu, M_Up_Item);
                 if Result = Menu_Ok then
