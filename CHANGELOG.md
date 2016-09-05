@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Info which ships are enemies
 - Very simple enemy AI in combat
 - Option to rename player ship modules
+- Option to drop selected item from ship cargo
 
 ### Changed
 - Renamed old enemies from small to tiny
