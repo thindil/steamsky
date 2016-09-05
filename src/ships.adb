@@ -606,12 +606,18 @@ package body Ships is
                 return Sky_Map_View;
             when 56 => -- Select previous module
                 Result := Driver(ModulesMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(ModulesMenu, M_Last_Item);
+                end if;
                 if Result = Menu_Ok then
                     ShowModuleInfo;
                     Refresh(MenuWindow);
                 end if;
             when 50 => -- Select next module
                 Result := Driver(ModulesMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(ModulesMenu, M_First_Item);
+                end if;
                 if Result = Menu_Ok then
                     ShowModuleInfo;
                     Refresh(MenuWindow);
@@ -622,12 +628,18 @@ package body Ships is
                     NewKey := Get_KeyStroke;
                     if NewKey = 65 then -- Select previous module
                         Result := Driver(ModulesMenu, M_Up_Item);
+                        if Result = Request_Denied then
+                            Result := Driver(ModulesMenu, M_Last_Item);
+                        end if;
                         if Result = Menu_Ok then
                             ShowModuleInfo;
                             Refresh(MenuWindow);
                         end if;
                     elsif NewKey = 66 then -- Select next module
                         Result := Driver(ModulesMenu, M_Down_Item);
+                        if Result = Request_Denied then
+                            Result := Driver(ModulesMenu, M_First_Item);
+                        end if;
                         if Result = Menu_Ok then
                             ShowModuleInfo;
                             Refresh(MenuWindow);
@@ -652,12 +664,18 @@ package body Ships is
                 return OldState;
             when 56 => -- Select previous item
                 Result := Driver(ModulesMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(ModulesMenu, M_Last_Item);
+                end if;
                 if Result = Menu_Ok then
                     ShowItemInfo;
                     Refresh(MenuWindow);
                 end if;
             when 50 => -- Select next item
                 Result := Driver(ModulesMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(ModulesMenu, M_First_Item);
+                end if;
                 if Result = Menu_Ok then
                     ShowItemInfo;
                     Refresh(MenuWindow);
@@ -668,12 +686,18 @@ package body Ships is
                     NewKey := Get_KeyStroke;
                     if NewKey = 65 then -- Select previous item
                         Result := Driver(ModulesMenu, M_Up_Item);
+                        if Result = Request_Denied then
+                            Result := Driver(ModulesMenu, M_Last_Item);
+                        end if;
                         if Result = Menu_Ok then
                             ShowItemInfo;
                             Refresh(MenuWindow);
                         end if;
                     elsif NewKey = 66 then -- Select next item
                         Result := Driver(ModulesMenu, M_Down_Item);
+                        if Result = Request_Denied then
+                            Result := Driver(ModulesMenu, M_First_Item);
+                        end if;
                         if Result = Menu_Ok then
                             ShowItemInfo;
                             Refresh(MenuWindow);

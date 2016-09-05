@@ -278,12 +278,18 @@ package body Bases is
                 return Sky_Map_View;
             when 56 => -- Select previous item to trade
                 Result := Driver(TradeMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(TradeMenu, M_Last_Item);
+                end if;
                 if Result = Menu_Ok then
                     ShowItemInfo;
                     Refresh(MenuWindow);
                 end if;
             when 50 => -- Select next item to trade
                 Result := Driver(TradeMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(TradeMenu, M_First_Item);
+                end if;
                 if Result = Menu_Ok then
                     ShowItemInfo;
                     Refresh(MenuWindow);
@@ -294,12 +300,18 @@ package body Bases is
                     NewKey := Get_KeyStroke;
                     if NewKey = 65 then -- Select previous item to trade
                         Result := Driver(TradeMenu, M_Up_Item);
+                        if Result = Request_Denied then
+                            Result := Driver(TradeMenu, M_Last_Item);
+                        end if;
                         if Result = Menu_Ok then
                             ShowItemInfo;
                             Refresh(MenuWindow);
                         end if;
                     elsif NewKey = 66 then -- Select next item to trade
                         Result := Driver(TradeMenu, M_Down_Item);
+                        if Result = Request_Denied then
+                            Result := Driver(TradeMenu, M_First_Item);
+                        end if;
                         if Result = Menu_Ok then
                             ShowItemInfo;
                             Refresh(MenuWindow);
