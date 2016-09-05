@@ -509,6 +509,10 @@ package body Ships is
             Positive'Image(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Weight) & " kg");
         Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
         Add(Win => InfoWindow, Str => "Total weight:" & Positive'Image(ItemWeight) & " kg");
+        Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
+        Add(Win => InfoWindow, Str => "Drop cargo");
+        Change_Attributes(Win => InfoWindow, Line => 4, Column => 0, 
+            Count => 1, Color => 1);
         Refresh;
         Refresh(InfoWindow);
     end ShowItemInfo;
@@ -536,7 +540,7 @@ package body Ships is
         Add(Str => "Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg");
     end ShowCargoInfo;
 
-    procedure ShowForm is
+    procedure ShowModuleForm is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         Visibility : Cursor_Visibility := Normal;
         ModuleName : String(1..20);
@@ -555,7 +559,42 @@ package body Ships is
         Set_Echo_Mode(False);
         Set_Cursor_Visibility(Visibility);
         DrawGame(Ship_Info);
-    end ShowForm;
+    end ShowModuleForm;
+
+    procedure ShowCargoForm is
+        ItemIndex : constant Positive := Get_Index(Current(ModulesMenu));
+        Visibility : Cursor_Visibility := Normal;
+        ItemName : constant String := To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name);
+        Amount : String(1..6);
+        DropAmount : Natural;
+    begin
+        Move_Cursor(Line => 12, Column => (Columns / 2));
+        Add(Str => "Amount of " & ItemName & " to drop: ");
+        Set_Echo_Mode(True);
+        Set_Cursor_Visibility(Visibility);
+        Get(Str => Amount, Len => 6);
+        if Amount = "      " then
+            Amount := "0     ";
+        end if;
+        DropAmount := Natural'Value(Amount);
+        if DropAmount > 0 and DropAmount <= PlayerShip.Cargo.Element(ItemIndex).Amount then
+            UpdateCargo(ItemIndex, (0 - DropAmount));
+            AddMessage("You dropped" & Positive'Image(DropAmount) & " " & ItemName, OtherMessage);
+        elsif DropAmount > PlayerShip.Cargo.Element(ItemIndex).Amount then
+            ShowDialog("You can't drop more " & ItemName & " than you have.");
+        end if;
+        Visibility := Invisible;
+        Set_Echo_Mode(False);
+        Set_Cursor_Visibility(Visibility);
+        DrawGame(Cargo_Info);
+    exception
+        when CONSTRAINT_ERROR =>
+            Visibility := Invisible;
+            Set_Echo_Mode(False);
+            Set_Cursor_Visibility(Visibility);
+            ShowDialog("You must enter number as an amount to drop.");
+            DrawGame(Cargo_Info);
+    end ShowCargoForm;
 
     function ShipInfoKeys(Key : Key_Code) return GameStates is
         Result : Driver_Result;
@@ -596,7 +635,7 @@ package body Ships is
                     end if;
                 end if;
             when Character'Pos('n') | Character'Pos('N') => -- Rename selected module
-                ShowForm;
+                ShowModuleForm;
             when others =>
                 null;
         end case;
@@ -641,6 +680,8 @@ package body Ships is
                         end if;
                     end if;
                 end if;
+            when Character'Pos('d') | Character'Pos('D') => -- Drop selected cargo
+                ShowCargoForm;
             when others =>
                 null;
         end case;
