@@ -20,6 +20,7 @@ with Ships; use Ships;
 with Messages; use Messages;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
+with Crafts; use Crafts;
 
 package body Crew is
 
@@ -122,6 +123,12 @@ package body Crew is
             when Craft =>
                 AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name)
                 & " starts manufacturing.", OrderMessage);
+                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                    if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List(PlayerShip.Craft).Workplace then
+                        UpdateModule(PlayerShip, I, "Owner", Positive'Image(MemberIndex));
+                        exit;
+                    end if;
+                end loop;
         end case;
         NewOrder := GivenOrder;
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
