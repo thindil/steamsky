@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Option to drop selected item from ship cargo
 - Show ship cargo on combat screen
 - Better handling crew members deaths
+- Owners for ship modules
 
 ### Changed
 - Renamed old enemies from small to tiny
