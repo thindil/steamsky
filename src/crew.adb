@@ -214,6 +214,23 @@ package body Crew is
         return NewName;
     end GenerateMemberName;
 
+    procedure Death(MemberIndex : Positive; Reason : Unbounded_String) is
+        procedure UpdateDeath(Member : in out Member_Data) is
+        begin
+            Member.Order := Rest;
+        end UpdateDeath;
+    begin
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if PlayerShip.Modules.Element(I).Owner = MemberIndex then
+                UpdateModule(PlayerShip, I, "Owner", "0");
+            end if;
+        end loop;
+        PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateDeath'Access);
+        AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " died from " &
+            To_String(Reason) & ".", OtherMessage);
+        PlayerShip.Crew.Delete(Index => MemberIndex, Count => 1);
+    end Death;
+
     procedure ShowCrewInfo(Key : Key_Code) is
         Health, Tired, Hungry, Thirsty, SkillLevel, OrderName : Unbounded_String;
         Skills_Names : constant array (Skills_Array'Range) of Unbounded_String := (To_Unbounded_String("Piloting"), 
