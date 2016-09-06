@@ -449,6 +449,9 @@ package body Ships is
             when CABIN =>
                 Add(Win => InfoWindow, Str => "Owner: " &
                     To_String(PlayerShip.Crew.Element(PlayerShip.Modules.Element(ModuleIndex).Owner).Name));
+            when GUN =>
+                Add(Win => InfoWindow, Str => "Ammunition: " &  
+                    To_String(Items_List.Element(PlayerShip.Modules.Element(ModuleIndex).Current_Value).Name));
             when others =>
                 null;
         end case;
