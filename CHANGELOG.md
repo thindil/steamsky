@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - Moving ship with arrows keys
 - Starting random events on map moving or centering map
 - Giving orders to gunner during combat
+- Healing dead crew members
 
 ## [0.2] - 2016-08-21
 
