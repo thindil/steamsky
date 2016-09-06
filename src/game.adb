@@ -159,7 +159,7 @@ package body Game is
         TiredPoints : Natural := 0;
         HealthLevel : Integer := 100;
         RepairPoints : Natural := 0;
-        ProtoIndex : Positive;
+        ProtoIndex, I : Positive;
         CrafterIndex, ModuleIndex, ResultAmount : Natural := 0;
         Amount : Integer;
         Recipe : Craft_Data;
@@ -241,8 +241,8 @@ package body Game is
             GameDate.Year := GameDate.Year + 1;
         end if;
         -- Update crew
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            exit when I > PlayerShip.Crew.Last_Index;
+        I := PlayerShip.Crew.First_Index;
+        while I <= PlayerShip.Crew.Last_Index loop
             HealthLevel := PlayerShip.Crew.Element(I).Health;
             if PlayerShip.Crew.Element(I).Order = Rest then
                 TiredLevel := 0;
@@ -301,6 +301,8 @@ package body Game is
             PlayerShip.Crew.Update_Element(Index => I, Process => UpdateMember'Access);
             if HealthLevel = 0 then
                 Death(I, DeathReason);
+            else
+                I := I + 1;
             end if;
         end loop;
         -- Repair ship (if needed)
