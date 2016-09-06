@@ -40,6 +40,7 @@ package Crew is
     function Consume(ItemType : Items_Types) return Boolean; -- Eat/drink by crew member. Returns true if all ok, otherwise false
     procedure GainExp(Amount : Natural; SkillNumber, CrewIndex : Positive); -- Gain experience in selected skill.
     function GenerateMemberName(Gender : Character) return Unbounded_String; -- Generate random name for crew member
+    procedure Death(MemberIndex : Positive; Reason : Unbounded_String); -- Handle crew member death
     procedure ShowCrewInfo(Key : Key_Code); -- Show crew info
     procedure ShowOrdersMenu; -- Show menu with orders for crew
     function CrewInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in crew info menu

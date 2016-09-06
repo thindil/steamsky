@@ -165,6 +165,7 @@ package body Game is
         Recipe : Craft_Data;
         MaterialIndexes : array(1..10) of Natural := (others => 0);
         RepairMaterial : Natural := 0;
+        DeathReason : Unbounded_String;
         procedure UpdateMember(Member : in out Member_Data) is
             BackToWork : Boolean := True;
         begin
@@ -241,6 +242,7 @@ package body Game is
         end if;
         -- Update crew
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            exit when I > PlayerShip.Crew.Last_Index;
             HealthLevel := PlayerShip.Crew.Element(I).Health;
             if PlayerShip.Crew.Element(I).Order = Rest then
                 TiredLevel := 0;
@@ -280,6 +282,10 @@ package body Game is
             end if;
             if PlayerShip.Crew.Element(I).Hunger = 100 then
                 HealthLevel := HealthLevel - TiredPoints;
+                if HealthLevel < 1 then
+                    HealthLevel := 0;
+                    DeathReason := To_Unbounded_String("starvation");
+                end if;
             end if;
             ThirstLevel := PlayerShip.Crew.Element(I).Thirst + TiredPoints;
             if ThirstLevel > 100 then
@@ -287,11 +293,15 @@ package body Game is
             end if;
             if PlayerShip.Crew.Element(I).Thirst = 100 then
                 HealthLevel := HealthLevel - TiredPoints;
-            end if;
-            if HealthLevel < 0 then
-                HealthLevel := 0;
+                if HealthLevel < 1 then
+                    HealthLevel := 0;
+                    DeathReason := To_Unbounded_String("dehydration");
+                end if;
             end if;
             PlayerShip.Crew.Update_Element(Index => I, Process => UpdateMember'Access);
+            if HealthLevel = 0 then
+                Death(I, DeathReason);
+            end if;
         end loop;
         -- Repair ship (if needed)
         if RepairPoints > 0 then
