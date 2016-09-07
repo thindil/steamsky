@@ -24,6 +24,7 @@ with Crew; use Crew;
 with Bases; use Bases;
 with Messages; use Messages;
 with Combat; use Combat;
+with Combat.UI; use Combat.UI;
 with Crafts; use Crafts;
 with Help; use Help;
 with MainMenu; use MainMenu;
