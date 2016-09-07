@@ -28,6 +28,7 @@ with Game; use Game;
 with Messages; use Messages;
 with Crew; use Crew;
 with Ships; use Ships;
+with Ships.UI; use Ships.UI;
 with Bases; use Bases;
 with Events; use Events;
 with Combat; use Combat;
