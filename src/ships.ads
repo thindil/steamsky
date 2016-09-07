@@ -15,11 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Crew; use Crew;
-with Game; use Game;
 
 package Ships is
     type ShipSpeed is (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED,
@@ -78,10 +76,7 @@ package Ships is
     function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y:
         Integer; Speed : ShipSpeed; Enemy : Boolean := False) return ShipRecord; -- Create new ship
     function LoadShips return Boolean; -- Load ships from file, returns False if file not found
+    function CountShipWeight(Ship : ShipRecord) return Positive; -- Count weight of ship (with modules and cargo)
     function RealSpeed(Ship : ShipRecord) return Natural; -- Return real ship speed in meters per minute
-    procedure ShowShipInfo; -- Show informations about ship status
-    procedure ShowCargoInfo; -- Show informations about ship cargo
-    function ShipInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in ship info menu
-    function CargoInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in cargo info menu
 
 end Ships;

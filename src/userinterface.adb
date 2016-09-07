@@ -19,6 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Maps; use Maps;
 with Ships; use Ships;
+with Ships.UI; use Ships.UI;
 with Crew; use Crew;
 with Bases; use Bases;
 with Messages; use Messages;
