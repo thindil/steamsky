@@ -16,16 +16,25 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
-with Game; use Game;
+with Ships; use Ships;
 
 package Combat is
     
     EnemyName : Unbounded_String; -- Name of enemy;
+    PilotOrder, EngineerOrder, GunnerOrder : Positive; -- Orders for crew members
+    type Enemy_Record is -- Data structure for enemies
+        record
+            Ship : ShipRecord;
+            DamageRange : Natural;
+            Accuracy : Positive;
+            Distance : Integer;
+            CombatAI : ShipCombatAI;
+        end record;
+    Enemy : Enemy_Record; -- Enemy informations
+    EndCombat : Boolean; -- True if combat ends
+    MessagesStarts : Natural; -- Start index for showing messages
 
     procedure StartCombat(EnemyIndex : Positive); -- Generate enemy and start battle
-    procedure ShowCombat; -- Show combat screen
-    function CombatKeys(Key : Key_Code) return GameStates; -- Handle keys on combat screen
-    function CombatOrdersKeys(Key : Key_Code) return GameStates; -- Handle keys in combat orders menu
+    procedure CombatTurn; -- Count damage/ships actions, etc
 
 end Combat;
