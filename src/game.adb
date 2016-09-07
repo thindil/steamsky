@@ -27,6 +27,8 @@ with Crafts; use Crafts;
 with ShipModules; use ShipModules;
 
 package body Game is
+    
+    SaveVersion : constant String := "0.3";
 
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character) is
         type Rand_Range is range 1..1024;
@@ -442,7 +444,7 @@ package body Game is
     begin
         Create(SaveGame, Out_File, "data/savegame.dat");
         -- Save version
-        Put(SaveGame, "0.3;");
+        Put(SaveGame, SaveVersion & ";");
         -- Save game date
         RawValue := To_Unbounded_String(Integer'Image(GameDate.Year));
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -573,7 +575,7 @@ package body Game is
     begin
         Open(SaveGame, In_File, "data/savegame.dat");
         -- Check save version
-        if ReadData /= "0.3" then
+        if ReadData /= SaveVersion then
             Close(SaveGame);
             return False;
         end if;
