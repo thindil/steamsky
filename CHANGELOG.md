@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Show ship cargo on combat screen
 - Better handling crew members deaths
 - Owners for ship modules
+- Assign ship guns to turrets
 
 ### Changed
 - Renamed old enemies from small to tiny
