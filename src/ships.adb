@@ -551,6 +551,7 @@ package body Ships is
         Visibility : Cursor_Visibility := Normal;
         ModuleName : String(1..20);
         NewName : Unbounded_String;
+        SemicolonIndex : Natural;
     begin
         Move_Cursor(Line => 15, Column => (Columns / 2));
         Add(Str => "New name: ");
@@ -559,6 +560,11 @@ package body Ships is
         Get(Str => ModuleName, Len => 20);
         NewName := Trim(To_Unbounded_String(ModuleName), Ada.Strings.Both);
         if Length(NewName) > 0 then
+            SemicolonIndex := Index(NewName, ";");
+            while SemicolonIndex > 0 loop
+                Delete(NewName, SemicolonIndex, SemicolonIndex);
+                SemicolonIndex := Index(NewName, ";");
+            end loop;
             UpdateModule(PlayerShip, ModuleIndex, "Name", To_String(NewName));
         end if;
         Visibility := Invisible;
