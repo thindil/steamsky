@@ -452,6 +452,9 @@ package body Ships is
             when GUN =>
                 Add(Win => InfoWindow, Str => "Ammunition: " &  
                     To_String(Items_List.Element(PlayerShip.Modules.Element(ModuleIndex).Current_Value).Name));
+            when TURRET =>
+                Add(Win => InfoWindow, Str => "Weapon: " &
+                    To_String(PlayerShip.Modules.Element(PlayerShip.Modules.Element(ModuleIndex).Current_Value).Name));
             when others =>
                 null;
         end case;
