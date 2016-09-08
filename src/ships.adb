@@ -238,6 +238,7 @@ package body Ships is
         ShipCargo : Cargo_Container.Vector;
         ShipCrew : Crew_Container.Vector;
         NewName : Unbounded_String;
+        TurretIndex, GunIndex : Natural := 0;
     begin
         if not Enemy then
             for I in ProtoShips_List.Element(ProtoIndex).Modules.First_Index..ProtoShips_List.Element(ProtoIndex).Modules.Last_Index loop
@@ -274,6 +275,21 @@ package body Ships is
         end if;
         TmpShip := (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed, Craft => 0,
             Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew);
+        for I in TmpShip.Modules.First_Index..TmpShip.Modules.Last_Index loop
+            case Modules_List.Element(TmpShip.Modules.Element(I).ProtoIndex).MType is
+                when TURRET =>
+                    TurretIndex := I;
+                when GUN =>
+                    GunIndex := I;
+                when others =>
+                    null;
+            end case;
+            if TurretIndex > 0 and GunIndex > 0 then
+                UpdateModule(TmpShip, TurretIndex, "Current_Value", Positive'Image(GunIndex));
+                TurretIndex := 0;
+                GunIndex := 0;
+            end if;
+        end loop;
         return TmpShip;
     end CreateShip;
 
