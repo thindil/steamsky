@@ -295,15 +295,12 @@ package body Combat is
                         if GunnerOrder > 3 and GunnerOrder < 7 then -- aim for part of enemy ship
                             HitLocation := 1;
                             for J in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
-                                if (GunnerOrder = 4 and
-                                    Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = ENGINE) or
-                                        (GunnerOrder = 5 and
-                                            (Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = GUN or 
-                                            Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM)) or
-                                                (GunnerOrder = 6 and
-                                                Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = HULL) then
-                                                HitLocation := J;
-                                            exit;
+                                if (GunnerOrder = 4 and Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = ENGINE) or
+                                    (GunnerOrder = 5 and (Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = GUN or 
+                                    Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM)) or
+                                    (GunnerOrder = 6 and Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = HULL) then
+                                        HitLocation := J;
+                                        exit;
                                 end if;
                             end loop;
                         else
@@ -317,10 +314,16 @@ package body Combat is
                         To_Unbounded_String(".");
                     UpdateModule(Enemy.Ship, HitLocation, "Durability", 
                         Integer'Image(0 - PlayerShip.Modules.Element(WeaponIndex).Max_Value));
-                    if (Modules_List.Element(Enemy.Ship.Modules.Element(HitLocation).ProtoIndex).MType = HULL or
-                        Modules_List.Element(Enemy.Ship.Modules.Element(HitLocation).ProtoIndex).MType = ENGINE)
-                    and Enemy.Ship.Modules.Element(HitLocation).Durability = 0 then
-                        EndCombat := True;
+                    if Enemy.Ship.Modules.Element(HitLocation).Durability = 0 then
+                        case Modules_List.Element(Enemy.Ship.Modules.Element(HitLocation).ProtoIndex).MType is
+                            when HULL | ENGINE =>
+                                EndCombat := True;
+                            when TURRET =>
+                                UpdateModule(Enemy.Ship, Enemy.Ship.Modules.Element(HitLocation).Current_Value,
+                                    "Durability", "-1000");
+                            when others =>
+                                null;
+                        end case;
                     end if;
                 else
                     ShootMessage := ShootMessage & To_Unbounded_String(" and miss.");
@@ -364,15 +367,21 @@ package body Combat is
                         To_Unbounded_String(".");
                     UpdateModule(PlayerShip, HitLocation, "Durability", Integer'Image(0 - 
                         Enemy.Ship.Modules(EnemyWeaponIndex).Max_Value));
-                    if (Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType = HULL or
-                        Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType = ENGINE)
-                    and PlayerShip.Modules.Element(HitLocation).Durability = 0 then
-                        PlayerShip.Crew.Update_Element(Index => 1, Process => UpdatePlayer'Access);
-                        AddMessage(To_String(ShootMessage), CombatMessage);
-                        AddMessage("You died in ship explosion!", CombatMessage);
-                        EndCombat := True;
-                        DrawGame(Combat_State);
-                        return;
+                    if PlayerShip.Modules.Element(HitLocation).Durability = 0 then
+                        case Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType is
+                            when HULL | ENGINE =>
+                                PlayerShip.Crew.Update_Element(Index => 1, Process => UpdatePlayer'Access);
+                                AddMessage(To_String(ShootMessage), CombatMessage);
+                                AddMessage("You died in ship explosion!", CombatMessage);
+                                EndCombat := True;
+                                DrawGame(Combat_State);
+                                return;
+                            when TURRET =>
+                                UpdateModule(PlayerShip, PlayerShip.Modules.Element(HitLocation).Current_Value, 
+                                    "Durability", "-1000");
+                            when others =>
+                                null;
+                        end case;
                     end if;
                 end if;
             else
