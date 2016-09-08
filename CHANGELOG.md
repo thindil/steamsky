@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Owners for ship modules
 - Assign ship guns to turrets
 - Destruction of guns after destroying turrets
+- Killing crew member when selected ship module is destroyed
 
 ### Changed
 - Renamed old enemies from small to tiny
