@@ -24,6 +24,7 @@ If you give order to aim for selected part of enemy ship, your Gunner will be sh
 To escape from fight, you must set Pilot order on Escape, after few turns (depends how far and fast enemy was) you should escape.
 Slow speed in combat helps your gunner hits enemies but also helps enemies hits you. If you want to have more chances to evade enemy attack, set speed to full speed. That same is with pilot orders - evade or escape order helps avoids attacks but also reduce your chance to hit enemies.
 Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too and you die.
+If your turret with gun will be destroyed, gun in this turret will be destroyed too.
 You (or enemy) starts hitting other parts of ship after destroying armor.
 Sign "plus" after crew member name in combat orders menu means that this member know something about selected role (have suitable skill).
 Double sign "plus" after crew name in combat orders menu means that this member have highest skill needed for selected role.
