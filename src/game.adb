@@ -128,7 +128,6 @@ package body Game is
         UpdateModule(PlayerShip, 6, "Owner", "3");
         UpdateModule(PlayerShip, 7, "Name", To_String(GunnerName) & "'s Cabin");
         UpdateModule(PlayerShip, 7, "Owner", "4");
-        UpdateModule(PlayerShip, 12, "Current_Value", "13");
         -- Add cargo to ship
         PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 1, Amount => 2000));
         PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 2, Amount => 100));
