@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Better handling crew members deaths
 - Owners for ship modules
 - Assign ship guns to turrets
+- Destruction of guns after destroying turrets
 
 ### Changed
 - Renamed old enemies from small to tiny
