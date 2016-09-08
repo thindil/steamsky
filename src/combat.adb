@@ -379,6 +379,13 @@ package body Combat is
                             when TURRET =>
                                 UpdateModule(PlayerShip, PlayerShip.Modules.Element(HitLocation).Current_Value, 
                                     "Durability", "-1000");
+                                if GunnerIndex > 0 then
+                                    Death(GunnerIndex, To_Unbounded_String("enemy fire"));
+                                end if;
+                            when COCKPIT =>
+                                if PilotIndex > 0 then
+                                    Death(PilotIndex, To_Unbounded_String("enemy fire"));
+                                end if;
                             when others =>
                                 null;
                         end case;
