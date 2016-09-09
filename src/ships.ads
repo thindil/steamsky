@@ -61,6 +61,7 @@ package Ships is
             DamageRange : Positive; -- Maximum range from which ship attack
             Accuracy : Positive; -- Bonus to hit for ship
             CombatAI : ShipCombatAi; -- Behaviour of ship in combat
+            Evasion : Positive; -- Bonus to evade attacks
         end record;
     package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
     ProtoShips_List : ProtoShips_Container.Vector;
