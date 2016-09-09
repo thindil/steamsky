@@ -252,12 +252,13 @@ package body Crew is
                 UpdateModule(PlayerShip, I, "Owner", "0");
             end if;
         end loop;
-        AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " died from " &
-            To_String(Reason) & ".", OtherMessage);
         if MemberIndex > 1 then
             PlayerShip.Crew.Delete(Index => MemberIndex, Count => 1);
+            AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " died from " &
+                To_String(Reason) & ".", CombatMessage);
         else
             PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateDeath'Access);
+            AddMessage("You died from " & To_String(Reason) & ".", CombatMessage);
         end if;
     end Death;
 
