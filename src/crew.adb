@@ -244,6 +244,7 @@ package body Crew is
         procedure UpdateDeath(Member : in out Member_Data) is
         begin
             Member.Order := Rest;
+            Member.Health := 0;
         end UpdateDeath;
     begin
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
@@ -251,10 +252,13 @@ package body Crew is
                 UpdateModule(PlayerShip, I, "Owner", "0");
             end if;
         end loop;
-        PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateDeath'Access);
         AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " died from " &
             To_String(Reason) & ".", OtherMessage);
-        PlayerShip.Crew.Delete(Index => MemberIndex, Count => 1);
+        if MemberIndex > 1 then
+            PlayerShip.Crew.Delete(Index => MemberIndex, Count => 1);
+        else
+            PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateDeath'Access);
+        end if;
     end Death;
 
     procedure ShowCrewInfo(Key : Key_Code) is
