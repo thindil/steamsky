@@ -45,6 +45,7 @@ All notable changes to this project will be documented in this file.
 - Starting random events on map moving or centering map
 - Giving orders to gunner during combat
 - Healing dead crew members
+- Information about no weapon on ship in combat
 
 ## [0.2] - 2016-08-21
 
