@@ -31,7 +31,8 @@ package body Combat is
             PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED, True);
             Enemy := (Ship => EnemyShip, DamageRange => Enemies_List.Element(EnemyIndex).DamageRange, Accuracy
             => Enemies_List.Element(EnemyIndex).Accuracy, Distance => 10000,
-            CombatAI => Enemies_List.Element(EnemyIndex).CombatAI);
+            CombatAI => Enemies_List.Element(EnemyIndex).CombatAI, Evasion =>
+            Enemies_List.Element(EnemyIndex).Evasion);
         PilotOrder := 2;
         EngineerOrder := 3;
         GunnerOrder := 1;
@@ -282,7 +283,7 @@ package body Combat is
         elsif Shoots = -2 then
             AddMessage("You don't have ammo to your gun!", CombatMessage);
         elsif Shoots > 0 then -- Player attacks
-            HitChance := AccuracyBonus + PlayerShip.Crew.Element(GunnerIndex).Skills(3, 1);
+            HitChance := AccuracyBonus + PlayerShip.Crew.Element(GunnerIndex).Skills(3, 1) - Enemy.Evasion;
             for I in 1..Shoots loop
                 ShootMessage := PlayerShip.Crew.Element(GunnerIndex).Name & To_Unbounded_String(" shoots to ") & 
                     EnemyName;
