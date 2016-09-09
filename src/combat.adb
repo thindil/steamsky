@@ -61,10 +61,7 @@ package body Combat is
         FreeSpace : Integer := 0;
         DistanceTraveled : Integer;
         EnemyPilotOrder : Positive := 2;
-        procedure UpdatePlayer(Player : in out Member_Data) is
-        begin
-            Player.Health := 0;
-        end UpdatePlayer;
+        DeathReason : Unbounded_String;
     begin
         Rand_Roll.Reset(Generator);
         PlayerMod_Roll.Reset(Generator2);
@@ -370,25 +367,29 @@ package body Combat is
                     if PlayerShip.Modules.Element(HitLocation).Durability = 0 then
                         case Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType is
                             when HULL | ENGINE =>
-                                PlayerShip.Crew.Update_Element(Index => 1, Process => UpdatePlayer'Access);
                                 AddMessage(To_String(ShootMessage), CombatMessage);
-                                AddMessage("You died in ship explosion!", CombatMessage);
-                                EndCombat := True;
-                                DrawGame(Combat_State);
-                                return;
+                                DeathReason := To_Unbounded_String("ship explosion");
+                                Death(1, DeathReason);
                             when TURRET =>
                                 UpdateModule(PlayerShip, PlayerShip.Modules.Element(HitLocation).Current_Value, 
                                     "Durability", "-1000");
                                 if GunnerIndex > 0 then
-                                    Death(GunnerIndex, To_Unbounded_String("enemy fire"));
+                                    DeathReason := To_Unbounded_String("enemy fire");
+                                    Death(GunnerIndex, DeathReason);
                                 end if;
                             when COCKPIT =>
                                 if PilotIndex > 0 then
-                                    Death(PilotIndex, To_Unbounded_String("enemy fire"));
+                                    DeathReason := To_Unbounded_String("enemy fire");
+                                    Death(PilotIndex, DeathReason);
                                 end if;
                             when others =>
                                 null;
                         end case;
+                    end if;
+                    if PlayerShip.Crew.Element(1).Health = 0 then -- player is dead
+                        EndCombat := True;
+                        DrawGame(Combat_State);
+                        return;
                     end if;
                 end if;
             else
