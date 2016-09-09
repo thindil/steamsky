@@ -271,12 +271,14 @@ package body Combat is
             end loop;
         end if;
         if AmmoIndex = 0 then
-            Shoots := -2;
+            if WeaponIndex > 0 then
+                Shoots := -2;
+            end if;
         elsif PlayerShip.Cargo.Element(AmmoIndex).Amount < Shoots then
             Shoots := PlayerShip.Cargo.Element(AmmoIndex).Amount;
         end if;
         if Shoots = -3 then
-            AddMessage("You don't have gun to shoot!", CombatMessage);
+            AddMessage("You don't have weapon to attack!", CombatMessage);
         elsif Shoots = -2 then
             AddMessage("You don't have ammo to your gun!", CombatMessage);
         elsif Shoots > 0 then -- Player attacks
