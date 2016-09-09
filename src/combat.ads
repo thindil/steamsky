@@ -24,11 +24,12 @@ package Combat is
     PilotOrder, EngineerOrder, GunnerOrder : Positive; -- Orders for crew members
     type Enemy_Record is -- Data structure for enemies
         record
-            Ship : ShipRecord;
-            DamageRange : Natural;
-            Accuracy : Positive;
-            Distance : Integer;
-            CombatAI : ShipCombatAI;
+            Ship : ShipRecord; -- Ship data for enemy
+            DamageRange : Natural; -- Range from which enemy starts attack
+            Accuracy : Positive; -- Bonus to accuracy
+            Distance : Integer; -- Current distance to enemy
+            CombatAI : ShipCombatAI; -- Enemy in combat AI type
+            Evasion : Positive; -- Bonus to evasion
         end record;
     Enemy : Enemy_Record; -- Enemy informations
     EndCombat : Boolean; -- True if combat ends
