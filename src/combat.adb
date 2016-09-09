@@ -333,7 +333,7 @@ package body Combat is
                     Shoots := I;
                     UpdateModule(Enemy.Ship, 1, "Durability", Integer'Image(0 - Enemy.Ship.Modules.Element(1).MaxDurability));
                     AddMessage(To_String(EnemyName) & " is destroyed!", CombatMessage);
-                    LootAmount := Integer(Rand_Roll.Random(Generator));
+                    LootAmount := (Integer(Rand_Roll.Random(Generator))) * 2;
                     FreeSpace := FreeCargo((0 - LootAmount));
                     if FreeSpace < 0 then
                         LootAmount := LootAmount + FreeSpace;
