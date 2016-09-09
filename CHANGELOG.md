@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Raised ships speed
 - Counting ships speed on sky map
 - Raised durability of cockpit and turret
+- Raised amount of loot from combat
 
 ### Fixed
 - On combat screen showing messages from previous combat
