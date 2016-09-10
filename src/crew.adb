@@ -96,18 +96,18 @@ package body Crew is
                 when Craft =>
                     MType := Recipes_List(PlayerShip.Craft).Workplace;
                 when Rest =>
-                    null;
+                    MType := CABIN;
                 when others =>
                     exit;
             end case;
-            if MType /= ENGINE then
+            if MType /= CABIN then
                 if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = MType and 
                     PlayerShip.Modules.Element(I).Durability > 0 then
                     ModuleIndex := I;
                     exit;
                 end if;
             else
-                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = MType and 
+                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = CABIN and 
                     PlayerShip.Modules.Element(I).Durability > 0 and
                     PlayerShip.Modules.Element(I).Owner = MemberIndex then
                     ModuleIndex := I;
