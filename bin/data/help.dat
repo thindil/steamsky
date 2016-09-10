@@ -36,4 +36,5 @@ To start manufacturing items, first you must have enough material and proper mod
 * Each ship hull have maximum limit of module which can be installed on it. Armors and weapons are not count to hull modules limit.
 * Every member of crew getting tired when have assigned order other than On break. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
 * If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to cargo information screen, select desired item and press key 'd'.
+* Each crew member need proper module for work (even for rest). If that module is destroyed, member cannot start selected work (for example, can't start piloting when cockpit is destroyed).
 []
