@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Destruction of guns after destroying turrets
 - Killing crew member when selected ship module is destroyed
 - Evasion bonus for enemies
+- Check for modules when giving orders to crew members
 
 ### Changed
 - Renamed old enemies from small to tiny
