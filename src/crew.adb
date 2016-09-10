@@ -83,6 +83,10 @@ package body Crew is
                 end if;
             end loop;
         end if;
+        if GivenOrder = Craft and PlayerShip.Craft = 0 then
+            ShowDialog("You can't set crew member for manufacturing, because you don't set item to manufacture.");
+            return;
+        end if;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             case GivenOrder is
                 when Pilot =>
