@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 - Giving orders to gunner during combat
 - Healing dead crew members
 - Information about no weapon on ship in combat
+- Crash on giving manufacturing order when ship manufacturing order isn't set
 
 ## [0.2] - 2016-08-21
 
