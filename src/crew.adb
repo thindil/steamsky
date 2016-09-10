@@ -30,16 +30,14 @@ package body Crew is
         NewOrder : Crew_Orders;
         MemberName : constant String := To_String(PlayerShip.Crew.Element(MemberIndex).Name);
         HaveMaterial, RepairNeeded : Boolean := False;
+        ModuleIndex : Natural := 0;
+        MType : ModuleType := ENGINE;
         procedure UpdateOrder(Member : in out Member_Data) is
         begin
             Member.Order := NewOrder;
         end UpdateOrder;
     begin
         if GivenOrder = PlayerShip.Crew.Element(MemberIndex).Order then
-            return;
-        end if;
-        if PlayerShip.Crew.Element(MemberIndex).Health = 0 then
-            ShowDialog("You can't give orders to dead crew.");
             return;
         end if;
         if PlayerShip.Crew.Element(MemberIndex).Tired = 100 then
@@ -85,31 +83,63 @@ package body Crew is
                 end if;
             end loop;
         end if;
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            case GivenOrder is
+                when Pilot =>
+                    MType := COCKPIT;
+                when Gunner =>
+                    MType := TURRET;
+                when Craft =>
+                    MType := Recipes_List(PlayerShip.Craft).Workplace;
+                when Rest =>
+                    null;
+                when others =>
+                    exit;
+            end case;
+            if MType /= ENGINE then
+                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = MType and 
+                    PlayerShip.Modules.Element(I).Durability > 0 then
+                    ModuleIndex := I;
+                    exit;
+                end if;
+            else
+                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = MType and 
+                    PlayerShip.Modules.Element(I).Durability > 0 and
+                    PlayerShip.Modules.Element(I).Owner = MemberIndex then
+                    ModuleIndex := I;
+                    exit;
+                end if;
+            end if;
+        end loop;
+        if ModuleIndex = 0 then
+            case GivenOrder is
+                when Pilot =>
+                    ShowDialog(MemberName & " can't starts piloting because cockpit is destroyed.");
+                    return;
+                when Gunner =>
+                    ShowDialog(MemberName & " can't starts operating gun because turret is destroyed.");
+                    return;
+                when Craft =>
+                    ShowDialog(MemberName & " can't starts manufacturing because workshop is destroyed.");
+                    return;
+                when Rest =>
+                    ShowDialog(MemberName & " can't rest because his/her cabin is destroyed.");
+                    return;
+                when others =>
+                    null;
+            end case;
+        end if;
         case GivenOrder is
             when Pilot =>
-                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name)
-                & " starts piloting.", OrderMessage);
-                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                    if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = COCKPIT then
-                        UpdateModule(PlayerShip, I, "Owner", Positive'Image(MemberIndex));
-                        exit;
-                    end if;
-                end loop;
+                AddMessage(MemberName & " starts piloting.", OrderMessage);
+                UpdateModule(PlayerShip, ModuleIndex, "Owner", Positive'Image(MemberIndex));
             when Engineer =>
-                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name)
-                & " starts engineers duty.", OrderMessage);
+                AddMessage(MemberName & " starts engineers duty.", OrderMessage);
             when Gunner =>
-                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name)
-                & " starts operating gun.", OrderMessage);
-                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                    if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = TURRET then
-                        UpdateModule(PlayerShip, I, "Owner", Positive'Image(MemberIndex));
-                        exit;
-                    end if;
-                end loop;
+                AddMessage(MemberName & " starts operating gun.", OrderMessage);
+                UpdateModule(PlayerShip, ModuleIndex, "Owner", Positive'Image(MemberIndex));
             when Rest =>
-                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name)
-                & " going on break.", OrderMessage);
+                AddMessage(MemberName & " going on break.", OrderMessage);
                 for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                     if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType /= CABIN and 
                         PlayerShip.Modules.Element(I).Owner = MemberIndex then
@@ -118,17 +148,10 @@ package body Crew is
                     end if;
                 end loop;
             when Repair =>
-                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name)
-                & " starts repair ship.", OrderMessage);
+                AddMessage(MemberName & " starts repair ship.", OrderMessage);
             when Craft =>
-                AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name)
-                & " starts manufacturing.", OrderMessage);
-                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                    if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List(PlayerShip.Craft).Workplace then
-                        UpdateModule(PlayerShip, I, "Owner", Positive'Image(MemberIndex));
-                        exit;
-                    end if;
-                end loop;
+                AddMessage(MemberName & " starts manufacturing.", OrderMessage);
+                UpdateModule(PlayerShip, ModuleIndex, "Owner", Positive'Image(MemberIndex));
         end case;
         NewOrder := GivenOrder;
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
