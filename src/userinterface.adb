@@ -359,7 +359,7 @@ package body UserInterface is
             when Combat_State =>
                 ShowCombat;
             when Craft_View =>
-                ShowCraft(KEY_NONE);
+                ShowRecipes;
             when Wait_Order =>
                 ShowSkyMap;
                 ShowWaitOrder;

@@ -38,7 +38,7 @@ package Crafts is
     Recipes_List : Recipes_Container.Vector; -- List of recipes available in game 
 
     function LoadRecipes return Boolean; -- Load recipes from file, return False if file not exists
-    procedure ShowCraft(Key : Key_Code); -- Show crafting screen
+    procedure ShowRecipes; -- Show crafting screen
     function CraftKeys(Key : Key_Code) return GameStates; -- Handle keys in craft screen
 
 end Crafts;
