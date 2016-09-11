@@ -368,6 +368,7 @@ package body Combat is
                     UpdateModule(PlayerShip, HitLocation, "Durability", Integer'Image(0 - 
                         Enemy.Ship.Modules(EnemyWeaponIndex).Max_Value));
                     if PlayerShip.Modules.Element(HitLocation).Durability = 0 then
+                        DeathReason := To_Unbounded_String("enemy fire");
                         case Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType is
                             when HULL | ENGINE =>
                                 AddMessage(To_String(ShootMessage), CombatMessage);
@@ -376,18 +377,16 @@ package body Combat is
                             when TURRET =>
                                 UpdateModule(PlayerShip, PlayerShip.Modules.Element(HitLocation).Current_Value, 
                                     "Durability", "-1000");
-                                if GunnerIndex > 0 then
-                                    DeathReason := To_Unbounded_String("enemy fire");
-                                    Death(GunnerIndex, DeathReason);
-                                end if;
-                            when COCKPIT =>
-                                if PilotIndex > 0 then
-                                    DeathReason := To_Unbounded_String("enemy fire");
-                                    Death(PilotIndex, DeathReason);
-                                end if;
                             when others =>
                                 null;
                         end case;
+                        if PlayerShip.Modules.Element(HitLocation).Owner > 0 then
+                            if (Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType = CABIN and
+                            PlayerShip.Crew.Element(PlayerShip.Modules.Element(HitLocation).Owner).Order = Rest) or
+                            (Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType /= CABIN) then
+                                Death(PlayerShip.Modules.Element(HitLocation).Owner, DeathReason);
+                            end if;
+                        end if;
                     end if;
                     if PlayerShip.Crew.Element(1).Health = 0 then -- player is dead
                         EndCombat := True;
