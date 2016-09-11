@@ -168,6 +168,7 @@ package body Game is
         MaterialIndexes : array(1..10) of Natural := (others => 0);
         RepairMaterial : Natural := 0;
         DeathReason : Unbounded_String;
+        HaveCabin : Boolean;
         procedure UpdateMember(Member : in out Member_Data) is
             BackToWork : Boolean := True;
         begin
@@ -248,8 +249,20 @@ package body Game is
             HealthLevel := PlayerShip.Crew.Element(I).Health;
             if PlayerShip.Crew.Element(I).Order = Rest then
                 TiredLevel := 0;
+                HaveCabin := False;
+                for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                    if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
+                        PlayerShip.Modules.Element(J).Owner = I then
+                        HaveCabin := True;
+                        exit;
+                    end if;
+                end loop;
                 if PlayerShip.Crew.Element(I).Tired > 0 then
-                    TiredLevel := PlayerShip.Crew.Element(I).Tired - Minutes;
+                    if HaveCabin then
+                        TiredLevel := PlayerShip.Crew.Element(I).Tired - Minutes;
+                    else
+                        TiredLevel := PlayerShip.Crew.Element(I).Tired - TiredPoints;
+                    end if;
                     if TiredLevel < 0 then
                         TiredLevel := 0;
                     end if;
