@@ -18,14 +18,15 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Ships; use Ships;
 
 package body Crafts is
 
-    RecipeIndex : Natural;
-
+    RecipesMenu : Menu;
+    MenuWindow : Window;
 
     function LoadRecipes return Boolean is
         RecipesFile : File_Type;
@@ -100,6 +101,7 @@ package body Crafts is
 
     procedure SetRecipe is
         ModuleIndex : Natural := 0;
+        RecipeIndex : constant Positive := Get_Index(Current(RecipesMenu));
         Recipe : constant Craft_Data := Recipes_List.Element(RecipeIndex);
         SpaceNeeded : Integer := 0;
         MaterialIndexes : array (Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index) of
@@ -136,90 +138,135 @@ package body Crafts is
         for I in MaterialIndexes'Range loop
             SpaceNeeded := SpaceNeeded + Items_List.Element(MaterialIndexes(I)).Weight * Recipe.MaterialAmounts.Element(I);
         end loop;
-        if FreeCargo(SpaceNeeded - 
-            (Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Weight * 
-            Recipes_List.Element(RecipeIndex).ResultAmount)) < 0 then
+        if FreeCargo(SpaceNeeded - (Items_List.Element(Recipe.ResultIndex).Weight * Recipe.ResultAmount)) < 0 then
             ShowDialog("You don't have that much free space in your ship cargo.");
             return;
         end if;
         PlayerShip.Craft := RecipeIndex;
         AddMessage(To_String(Items_List.Element(Recipe.ResultIndex).Name) & " was set as manufacturing order.", CraftMessage);
-        RecipeIndex := 0;
     end SetRecipe;
 
-    procedure ShowCraft(Key : Key_Code) is
+    procedure ShowRecipeInfo is
+        InfoWindow : Window;
+        Recipe : constant Craft_Data := Recipes_List.Element(Get_Index(Current(RecipesMenu)));
+        CurrentLine : Line_Position := 3;
         MAmount : Natural := 0;
-        Recipe : Craft_Data;
-        CurrentLine : Line_Position := 6;
     begin
-        if Key /= KEY_NONE then
-            Erase;
-            Refresh;
-            ShowGameHeader(Craft_View);
-        end if;
-        Move_Cursor(Line => 2, Column => 2);
-        Add(Str => "Recipes");
-        for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
-            Move_Cursor(Line => Line_Position(2 + I), Column => 2);
-            Add(Str => Character'Val(96 + I) & " " & To_String(Items_List.Element(Recipes_List.Element(I).ResultIndex).Name));
-            Change_Attributes(Line => Line_Position(2 + I), Column => 2, Count => 1, Color => 1);
+        InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
+        Add(Win => InfoWindow, Str => "Name: " & To_String(Items_List.Element(Recipe.ResultIndex).Name));
+        Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+        Add(Win => InfoWindow, Str => "Amount:" & Integer'Image(Recipe.ResultAmount));
+        Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+        Add(Win => InfoWindow, Str => "Materials needed: ");
+        for I in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
+            Add(Win => InfoWindow, Str => "-");
+            MAmount := 0;
+            for J in Items_List.First_Index..Items_List.Last_Index loop
+                if Items_List.Element(J).IType = Recipe.MaterialTypes(I) then
+                    if MAmount > 0 then
+                        Add(Win => InfoWindow, Str => " or");
+                    end if;
+                    Add(Win => InfoWindow, Str => Integer'Image(Recipe.MaterialAmounts(I)) & "x" & To_String(Items_List.Element(J).Name));
+                    MAmount := MAmount + 1;
+                end if;
+            end loop;
+            CurrentLine := CurrentLine + 1;
         end loop;
-        if Key /= KEY_NONE then -- Show info about selected recipe
-            if (Key >= Key_Code(96 + Recipes_List.First_Index)) and (Key <= Key_Code(96 + Recipes_List.Last_Index)) then
-                RecipeIndex := Integer(Key) - 96;
-                Recipe := Recipes_List.Element(RecipeIndex);
-                Move_Cursor(Line => 3, Column => (Columns / 2));
-                Add(Str => "Name: " & To_String(Items_List.Element(Recipe.ResultIndex).Name));
-                Move_Cursor(Line => 4, Column => (Columns / 2));
-                Add(Str => "Amount:" & Integer'Image(Recipe.ResultAmount));
-                Move_Cursor(Line => 5, Column => (Columns / 2));
-                Add(Str => "Materials needed: ");
-                for I in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
-                    Move_Cursor(Line => CurrentLine, Column => (Columns / 2) + 2);
-                    Add(Str => "-");
-                    MAmount := 0;
-                    for J in Items_List.First_Index..Items_List.Last_Index loop
-                        if Items_List.Element(J).IType = Recipe.MaterialTypes(I) then
-                            if MAmount > 0 then
-                                Add(Str => " or");
-                            end if;
-                            Add(Str => Integer'Image(Recipe.MaterialAmounts(I)) & "x" & To_String(Items_List.Element(J).Name));
-                            MAmount := MAmount + 1;
-                        end if;
-                    end loop;
-                    CurrentLine := CurrentLine + 1;
-                end loop;
-                Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
-                Add(Str => "Workplace: ");
-                case Recipes_List.Element(RecipeIndex).Workplace is
-                    when ALCHEMY_LAB =>
-                        Add(Str => "Alchemy lab");
-                    when others =>
-                        null;
-                end case;
-                Move_Cursor(Line => (CurrentLine + 2), Column => (Columns / 2));
-                Add(Str => "SPACE for set manufacturing order");
-                Change_Attributes(Line => (CurrentLine + 2), Column => (Columns / 2), Count => 5, Color => 1);
-            end if;
-        end if;
-    end ShowCraft;
+        Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+        Add(Win => InfoWindow, Str => "Workplace: ");
+        case Recipe.Workplace is
+            when ALCHEMY_LAB =>
+                Add(Win => InfoWindow, Str => "Alchemy lab");
+            when others =>
+                null;
+        end case;
+        Move_Cursor(Win => InfoWindow, Line => (CurrentLine + 2), Column => 0);
+        Add(Win => InfoWindow, Str => "SPACE for set manufacturing order");
+        Change_Attributes(Win => InfoWindow, Line => (CurrentLine + 2), Column => 0, Count => 5, Color => 1);
+        Refresh;
+        Refresh(InfoWindow);
+    end ShowRecipeInfo;
 
+    procedure ShowRecipes is
+        Recipes_Items: constant Item_Array_Access := new Item_Array(1..(Recipes_List.Last_Index + 1));
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+    begin
+        Move_Cursor(Line => 3, Column => 2);
+        for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
+            Recipes_Items.all(I) := New_Item(To_String(Items_List.Element(Recipes_List.Element(I).ResultIndex).Name));
+        end loop;
+        Recipes_Items.all(Recipes_Items'Last) := Null_Item;
+        RecipesMenu := New_Menu(Recipes_Items);
+        Set_Format(RecipesMenu, Lines - 10, 1);
+        Set_Mark(RecipesMenu, "");
+        Scale(RecipesMenu, MenuHeight, MenuLength);
+        MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
+        Set_Window(RecipesMenu, MenuWindow);
+        Set_Sub_Window(RecipesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+        Post(RecipesMenu);
+        ShowRecipeInfo;
+        Refresh(MenuWindow);
+    end ShowRecipes;
+    
     function CraftKeys(Key : Key_Code) return GameStates is
+        Result : Driver_Result;
+        NewKey : Key_Code;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when Character'Pos(' ') => -- Set selected manufacturing order
-                if RecipeIndex > 0 then
-                    SetRecipe;
-                    DrawGame(Craft_View);
+                SetRecipe;
+                DrawGame(Craft_View);
+            when 56 => -- Select previous recipe
+                Result := Driver(RecipesMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(RecipesMenu, M_Last_Item);
                 end if;
-                return Craft_View;
+                if Result = Menu_Ok then
+                    ShowRecipeInfo;
+                    Refresh(MenuWindow);
+                end if;
+            when 50 => -- Select next recipe
+                Result := Driver(RecipesMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(RecipesMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    ShowRecipeInfo;
+                    Refresh(MenuWindow);
+                end if;
+            when 27 => 
+                NewKey := Get_KeyStroke;
+                if NewKey = 91 then
+                    NewKey := Get_KeyStroke;
+                    if NewKey = 65 then -- Select previous recipe
+                        Result := Driver(RecipesMenu, M_Up_Item);
+                        if Result = Request_Denied then
+                            Result := Driver(RecipesMenu, M_Last_Item);
+                        end if;
+                        if Result = Menu_Ok then
+                            ShowRecipeInfo;
+                            Refresh(MenuWindow);
+                        end if;
+                    elsif NewKey = 66 then -- Select next recipe
+                        Result := Driver(RecipesMenu, M_Down_Item);
+                        if Result = Request_Denied then
+                            Result := Driver(RecipesMenu, M_First_Item);
+                        end if;
+                        if Result = Menu_Ok then
+                            ShowRecipeInfo;
+                            Refresh(MenuWindow);
+                        end if;
+                    end if;
+                end if;
             when others =>
-                ShowCraft(Key);
-                return Craft_View;
+                null;
         end case;
+        return Craft_View;
     end CraftKeys;
 
 end Crafts;
