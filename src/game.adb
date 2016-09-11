@@ -267,7 +267,7 @@ package body Game is
                         TiredLevel := 0;
                     end if;
                 end if;
-                if HealthLevel > 0 and HealthLevel < 100 then
+                if HealthLevel > 0 and HealthLevel < 100 and HaveCabin then
                     HealthLevel := HealthLevel + TiredPoints;
                 end if;
             else
