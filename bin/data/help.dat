@@ -42,4 +42,5 @@ To start manufacturing items, first you must have enough material and proper mod
 * Each crew member need proper module for work. If that module is destroyed, member cannot start selected work (for example, can't start piloting when cockpit is destroyed).
 * If your resting crew member don't have assigned cabin, he/she will be resting much slower.
 * Crew members can regenerate health over time but only when they are on break and have assigned cabin.
+* If crew member cabin is destroyed and he/she going on break, he/she will try find empty cabin as a new own to rest.
 []
