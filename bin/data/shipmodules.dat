@@ -47,7 +47,7 @@ MaxValue = 0
 Durability = 100
 Material = Bronze
 [7]
-Name = Cargo space
+Name = Cargo bay
 Type = Cargo
 Weight = 0
 Value = 0
