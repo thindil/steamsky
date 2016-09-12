@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - Raised amount of loot from combat
 - Speed of rest depends on did crew member have cabin
 - Don't recover health if crew member don't have cabin
+- Name of ship module from cargo space to cargo bay
 
 ### Fixed
 - On combat screen showing messages from previous combat
