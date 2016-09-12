@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Killing crew member when selected ship module is destroyed
 - Evasion bonus for enemies
 - Check for modules when giving orders to crew members
+- Crew member will search for empty cabin when going on break
 
 ### Changed
 - Renamed old enemies from small to tiny
