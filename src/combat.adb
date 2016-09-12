@@ -96,6 +96,9 @@ package body Combat is
                 when others =>
                     null;
             end case;
+        else
+            AccuracyBonus := 20;
+            EvadeBonus := -10;
         end if;
         if EngineerIndex > 0 then
             case EngineerOrder is
@@ -112,6 +115,12 @@ package body Combat is
                     null;
             end case;
             ChangeShipSpeed(ShipSpeed'Val(EngineerOrder));
+        else
+            AccuracyBonus := AccuracyBonus + 40;
+            EvadeBonus := EvadeBonus - 40;
+            if PlayerShip.Speed /= FULL_STOP then
+                ChangeShipSpeed(FULL_STOP);
+            end if;
         end if;
         for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
             if Enemy.Ship.Modules.Element(I).Durability > 0 then
