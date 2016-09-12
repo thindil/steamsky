@@ -21,6 +21,7 @@ with UserInterface; use UserInterface;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Game; use Game;
+with Items; use Items;
 
 package body Combat is
     
@@ -63,6 +64,7 @@ package body Combat is
         DistanceTraveled : Integer;
         EnemyPilotOrder : Positive := 2;
         DeathReason : Unbounded_String;
+        HaveFuel : Boolean := False;
     begin
         Rand_Roll.Reset(Generator);
         PlayerMod_Roll.Reset(Generator2);
@@ -79,6 +81,16 @@ package body Combat is
                     null;
             end case;
         end loop;
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = FUEL then
+                HaveFuel := True;
+                exit;
+            end if;
+        end loop;
+        if not HaveFuel then
+            PilotOrder := 1;
+            EngineerOrder := 1;
+        end if;
         if PilotIndex > 0 then
             case PilotOrder is
                 when 1 =>
