@@ -127,8 +127,16 @@ package body Crew is
                     ShowDialog(MemberName & " can't starts manufacturing because workshop is destroyed.");
                     return;
                 when Rest =>
-                    ShowDialog(MemberName & " can't rest because his/her cabin is destroyed.");
-                    return;
+                    for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                        if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = CABIN and 
+                            PlayerShip.Modules.Element(I).Durability > 0 and
+                            PlayerShip.Modules.Element(I).Owner = 0 then
+                            UpdateModule(PlayerShip, I, "Owner", Positive'Image(MemberIndex));
+                            AddMessage(MemberName & " take " & To_String(PlayerShip.Modules.Element(I).Name) &
+                                " as own cabin.", OtherMessage);
+                            exit;
+                        end if;
+                    end loop;
                 when others =>
                     null;
             end case;
