@@ -94,6 +94,7 @@ package body Ships.UI is
             Count => 1, Color => 1);
         Refresh;
         Refresh(InfoWindow);
+        Delete(InfoWindow);
     end ShowModuleInfo;
 
     procedure ShowShipInfo is
@@ -151,6 +152,7 @@ package body Ships.UI is
             Count => 1, Color => 1);
         Refresh;
         Refresh(InfoWindow);
+        Delete(InfoWindow);
     end ShowItemInfo;
 
     procedure ShowCargoInfo is
