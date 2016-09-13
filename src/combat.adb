@@ -30,10 +30,12 @@ package body Combat is
     begin
         EnemyShip := CreateShip(EnemyIndex, Null_Unbounded_String,
             PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED, True);
-            Enemy := (Ship => EnemyShip, DamageRange => Enemies_List.Element(EnemyIndex).DamageRange, Accuracy
+        Enemy := (Ship => EnemyShip, DamageRange => Enemies_List.Element(EnemyIndex).DamageRange, Accuracy
             => Enemies_List.Element(EnemyIndex).Accuracy, Distance => 10000,
             CombatAI => Enemies_List.Element(EnemyIndex).CombatAI, Evasion =>
-            Enemies_List.Element(EnemyIndex).Evasion);
+            Enemies_List.Element(EnemyIndex).Evasion, LootMin =>
+            Enemies_List.Element(EnemyIndex).LootMin, LootMax =>
+            Enemies_List.Element(EnemyIndex).LootMax);
         PilotOrder := 2;
         EngineerOrder := 3;
         GunnerOrder := 1;
@@ -46,12 +48,15 @@ package body Combat is
         type Roll_Range is range 1..100;
         subtype PlayerMod_Range is Positive range PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index;
         subtype EnemyMod_Range is Positive range Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index;
+        subtype Loot_Range is Positive range Enemy.LootMin..Enemy.LootMax;
         package Rand_Roll is new Discrete_Random(Roll_Range);
         package PlayerMod_Roll is new Discrete_Random(PlayerMod_Range);
         package EnemyMod_Roll is new Discrete_Random(EnemyMod_Range);
+        package Loot_Roll is new Discrete_Random(Loot_Range);
         Generator : Rand_Roll.Generator;
         Generator2 : PlayerMod_Roll.Generator;
         Generator3 : EnemyMod_Roll.Generator;
+        Generator4 : Loot_Roll.Generator;
         AccuracyBonus, EvadeBonus : Integer := 0;
         PilotIndex, EngineerIndex, GunnerIndex, WeaponIndex, AmmoIndex,
             ArmorIndex, EnemyWeaponIndex, EnemyArmorIndex : Natural := 0;
@@ -69,6 +74,7 @@ package body Combat is
         Rand_Roll.Reset(Generator);
         PlayerMod_Roll.Reset(Generator2);
         EnemyMod_Roll.Reset(Generator3);
+        Loot_Roll.Reset(Generator4);
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             case PlayerShip.Crew.Element(I).Order is
                 when Pilot =>
@@ -355,7 +361,7 @@ package body Combat is
                     Shoots := I;
                     UpdateModule(Enemy.Ship, 1, "Durability", Integer'Image(0 - Enemy.Ship.Modules.Element(1).MaxDurability));
                     AddMessage(To_String(EnemyName) & " is destroyed!", CombatMessage);
-                    LootAmount := (Integer(Rand_Roll.Random(Generator))) * 2;
+                    LootAmount := Integer(Loot_Roll.Random(Generator4));
                     FreeSpace := FreeCargo((0 - LootAmount));
                     if FreeSpace < 0 then
                         LootAmount := LootAmount + FreeSpace;
