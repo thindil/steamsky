@@ -176,6 +176,7 @@ package body Bases is
         end loop;
         Refresh;
         Refresh(InfoWindow);
+        Delete(InfoWindow);
     end ShowItemInfo;
 
     procedure ShowTrade is

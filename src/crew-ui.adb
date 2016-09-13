@@ -132,6 +132,7 @@ package body Crew.UI is
         end if;
         Refresh;
         Refresh(InfoWindow);
+        Delete(InfoWindow);
     end ShowMemberInfo;
 
     procedure ShowCrewInfo is

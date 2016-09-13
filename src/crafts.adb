@@ -186,6 +186,7 @@ package body Crafts is
         Change_Attributes(Win => InfoWindow, Line => (CurrentLine + 2), Column => 0, Count => 5, Color => 1);
         Refresh;
         Refresh(InfoWindow);
+        Delete(InfoWindow);
     end ShowRecipeInfo;
 
     procedure ShowRecipes is
