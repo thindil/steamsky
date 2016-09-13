@@ -26,7 +26,7 @@ with UserInterface; use UserInterface;
 with Maps; use Maps;
 with Game; use Game;
 with Messages; use Messages;
-with Crew; use Crew;
+with Crew.UI; use Crew.UI;
 with Ships; use Ships;
 with Ships.UI; use Ships.UI;
 with Bases; use Bases;

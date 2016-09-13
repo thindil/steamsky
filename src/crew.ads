@@ -16,8 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
-with Game; use Game;
 with Items; use Items;
 
 package Crew is
@@ -41,9 +39,5 @@ package Crew is
     procedure GainExp(Amount : Natural; SkillNumber, CrewIndex : Positive); -- Gain experience in selected skill.
     function GenerateMemberName(Gender : Character) return Unbounded_String; -- Generate random name for crew member
     procedure Death(MemberIndex : Positive; Reason : Unbounded_String); -- Handle crew member death
-    procedure ShowCrewInfo(Key : Key_Code); -- Show crew info
-    procedure ShowOrdersMenu; -- Show menu with orders for crew
-    function CrewInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in crew info menu
-    function CrewOrdersKeys(Key : Key_Code) return GameStates; -- Handle keys in crew orders menu
 
 end Crew;
