@@ -108,6 +108,7 @@ package body Combat is
                 when others =>
                     null;
             end case;
+            EvadeBonus := EvadeBonus + PlayerShip.Crew.Element(PilotIndex).Skills(1, 1);
         else
             AccuracyBonus := 20;
             EvadeBonus := -10;
