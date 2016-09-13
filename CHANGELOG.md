@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Check for modules when giving orders to crew members
 - Crew member will search for empty cabin when going on break
 - Pilot skill to evade chance in combat
+- Separated loot amount for each enemy
 
 ### Changed
 - Renamed old enemies from small to tiny
