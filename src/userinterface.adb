@@ -21,6 +21,7 @@ with Maps; use Maps;
 with Ships; use Ships;
 with Ships.UI; use Ships.UI;
 with Crew; use Crew;
+with Crew.UI; use Crew.UI;
 with Bases; use Bases;
 with Messages; use Messages;
 with Combat; use Combat;
