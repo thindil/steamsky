@@ -30,6 +30,8 @@ package Combat is
             Distance : Integer; -- Current distance to enemy
             CombatAI : ShipCombatAI; -- Enemy in combat AI type
             Evasion : Positive; -- Bonus to evasion
+            LootMin : Positive; -- Minimal amount of loot from ship
+            LootMax : Positive; -- Maximum amount of loot from ship
         end record;
     Enemy : Enemy_Record; -- Enemy informations
     EndCombat : Boolean; -- True if combat ends
