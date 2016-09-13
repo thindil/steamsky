@@ -20,7 +20,7 @@ with Game; use Game;
 
 package Crew.UI is
 
-    procedure ShowCrewInfo(Key : Key_Code); -- Show crew info
+    procedure ShowCrewInfo; -- Show crew info
     procedure ShowOrdersMenu; -- Show menu with orders for crew
     function CrewInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in crew info menu
     function CrewOrdersKeys(Key : Key_Code) return GameStates; -- Handle keys in crew orders menu

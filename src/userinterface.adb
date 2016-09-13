@@ -344,7 +344,7 @@ package body UserInterface is
             when Ship_Info =>
                 ShowShipInfo;
             when Crew_Info =>
-                ShowCrewInfo(KEY_NONE);
+                ShowCrewInfo;
             when Messages_View =>
                 ShowMessages;
             when Trade_View =>
