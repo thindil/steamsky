@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
 - Very simple enemy AI in combat
 - Option to rename player ship modules
 - Option to drop selected item from ship cargo
-- Show ship cargo/info on combat screen
+- Show information about ship/cargo/crew on combat screen
 - Better handling crew members deaths
 - Owners for ship modules
 - Assign ship guns to turrets
