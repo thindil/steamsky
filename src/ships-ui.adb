@@ -240,14 +240,14 @@ package body Ships.UI is
             DrawGame(Cargo_Info);
     end ShowCargoForm;
 
-    function ShipInfoKeys(Key : Key_Code) return GameStates is
+    function ShipInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Driver_Result;
         NewKey : Key_Code;
     begin
         case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-                DrawGame(Sky_Map_View);
-                return Sky_Map_View;
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map or combat screen
+                DrawGame(OldState);
+                return OldState;
             when 56 => -- Select previous module
                 Result := Driver(ModulesMenu, M_Up_Item);
                 if Result = Request_Denied then

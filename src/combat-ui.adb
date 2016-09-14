@@ -172,6 +172,7 @@ package body Combat.UI is
             Count => 1, Color => 1);
         Move_Cursor(Line => 6, Column => 2);
         Add(Str => "Ship status:");
+        Change_Attributes(Line => 6, Column => 2, Count => 1, Color => 1);
         Modules_Loop:
         while I <= PlayerShip.Modules.Last_Index loop
             Move_Cursor(Line => CurrentLine, Column => 2);
@@ -430,6 +431,9 @@ package body Combat.UI is
                 when Character'Pos('a') | Character'Pos('A') => -- Show ship cargo
                     DrawGame(Cargo_Info);
                     return Cargo_Info;
+                when Character'Pos('s') | Character'Pos('S') => -- Show ship info
+                    DrawGame(Ship_Info);
+                    return Ship_Info;
                 when others =>
                     return Combat_State;
             end case;
