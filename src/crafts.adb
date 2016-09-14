@@ -151,6 +151,9 @@ package body Crafts is
         Recipe : constant Craft_Data := Recipes_List.Element(Get_Index(Current(RecipesMenu)));
         CurrentLine : Line_Position := 3;
         MAmount : Natural := 0;
+        HaveMaterial : Boolean := False;
+        CursorLine : Line_Position;
+        CursorColumn : Column_Position;
     begin
         InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
         Add(Win => InfoWindow, Str => "Name: " & To_String(Items_List.Element(Recipe.ResultIndex).Name));
@@ -171,6 +174,19 @@ package body Crafts is
                     MAmount := MAmount + 1;
                 end if;
             end loop;
+            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = Recipe.MaterialTypes(I) then
+                    HaveMaterial := True;
+                    exit;
+                end if;
+            end loop;
+            if not HaveMaterial then
+                Get_Cursor_Position(Win => InfoWindow, Line => CursorLine,
+                    Column => CursorColumn);
+                Change_Attributes(Win => InfoWindow, Line => CurrentLine,
+                    Column => 3, Count => Integer(CursorColumn - 3), Color => 3);
+            end if;
+            HaveMaterial := False;
             CurrentLine := CurrentLine + 1;
         end loop;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
