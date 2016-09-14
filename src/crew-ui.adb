@@ -177,15 +177,15 @@ package body Crew.UI is
         Refresh(OrdersWindow);
     end ShowOrdersMenu;
 
-    function CrewInfoKeys(Key : Key_Code) return GameStates is
+    function CrewInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Driver_Result;
         NewKey : Key_Code;
         MemberIndex : constant Positive := Get_Index(Current(CrewMenu));
     begin
         case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-                DrawGame(Sky_Map_View);
-                return Sky_Map_View;
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map or combat screen
+                DrawGame(OldState);
+                return OldState;
             when Character'Pos('o') | Character'Pos('O') => -- Give orders to selected crew member
                 if PlayerShip.Crew.Element(MemberIndex).Tired < 100 and PlayerShip.Crew.Element(MemberIndex).Hunger < 100 and 
                     PlayerShip.Crew.Element(MemberIndex).Thirst < 100 then
