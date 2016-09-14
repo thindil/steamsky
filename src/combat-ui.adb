@@ -128,7 +128,7 @@ package body Combat.UI is
         PilotName, EngineerName, GunnerName : Unbounded_String :=
             To_Unbounded_String("Vacant");
         LoopStart : Integer;
-        CurrentLine : Line_Position := 7;
+        CurrentLine : Line_Position := 8;
         CurrentColumn : Column_Position;
         I : Positive := PlayerShip.Modules.First_Index;
         DamagePercent : Natural;
@@ -150,29 +150,28 @@ package body Combat.UI is
         if PilotName /= To_Unbounded_String("Vacant") then
             Add(Str => " -> " & To_String(PilotOrders(PilotOrder)));
         end if;
-        Change_Attributes(Line => 1, Column => 2,
-            Count => 1, Color => 1);
+        Change_Attributes(Line => 1, Column => 2, Count => 1, Color => 1);
         Move_Cursor(Line => 2, Column => 2);
         Add(Str => "Engineer: " & To_String(EngineerName));
         if EngineerName /= To_Unbounded_String("Vacant") then
             Add(Str => " -> " & To_String(EngineerOrders(EngineerOrder)));
         end if;
-        Change_Attributes(Line => 2, Column => 2,
-            Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 2, Count => 1, Color => 1);
         Move_Cursor(Line => 3, Column => 2);
         Add(Str => "Gunner: " & To_String(GunnerName));
         if GunnerName /= To_Unbounded_String("Vacant") then
             Add(Str => " -> " & To_String(GunnerOrders(GunnerOrder)));
         end if;
-        Change_Attributes(Line => 3, Column => 2,
-            Count => 1, Color => 1);
+        Change_Attributes(Line => 3, Column => 2, Count => 1, Color => 1);
         Move_Cursor(Line => 4, Column => 2);
+        Add(Str => "Crew Info");
+        Change_Attributes(Line => 4, Column => 2, Count => 1, Color => 1);
+        Move_Cursor(Line => 5, Column => 2);
         Add(Str => "Ship cargo");
-        Change_Attributes(Line => 4, Column => 8,
-            Count => 1, Color => 1);
-        Move_Cursor(Line => 6, Column => 2);
+        Change_Attributes(Line => 5, Column => 8, Count => 1, Color => 1);
+        Move_Cursor(Line => 7, Column => 2);
         Add(Str => "Ship status:");
-        Change_Attributes(Line => 6, Column => 2, Count => 1, Color => 1);
+        Change_Attributes(Line => 7, Column => 2, Count => 1, Color => 1);
         Modules_Loop:
         while I <= PlayerShip.Modules.Last_Index loop
             Move_Cursor(Line => CurrentLine, Column => 2);
@@ -434,6 +433,9 @@ package body Combat.UI is
                 when Character'Pos('s') | Character'Pos('S') => -- Show ship info
                     DrawGame(Ship_Info);
                     return Ship_Info;
+                when Character'Pos('c') | Character'Pos('C') => -- Show crew info
+                    DrawGame(Crew_Info);
+                    return Crew_Info;
                 when others =>
                     return Combat_State;
             end case;

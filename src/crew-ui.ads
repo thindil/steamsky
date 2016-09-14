@@ -22,7 +22,7 @@ package Crew.UI is
 
     procedure ShowCrewInfo; -- Show crew info
     procedure ShowOrdersMenu; -- Show menu with orders for crew
-    function CrewInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in crew info menu
+    function CrewInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in crew info menu
     function CrewOrdersKeys(Key : Key_Code) return GameStates; -- Handle keys in crew orders menu
 
 end Crew.UI;

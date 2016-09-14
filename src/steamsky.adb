@@ -102,7 +102,7 @@ begin
             when Ship_Info =>
                 GameState := ShipInfoKeys(Key, OldState);
             when Crew_Info =>
-                GameState := CrewInfoKeys(Key);
+                GameState := CrewInfoKeys(Key, OldState);
             when Giving_Orders =>
                 GameState := CrewOrdersKeys(Key);
             when Messages_View =>
