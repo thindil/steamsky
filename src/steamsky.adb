@@ -100,7 +100,7 @@ begin
             when Control_Speed =>
                 GameState := SpeedMenuKeys(OldState, Key);
             when Ship_Info =>
-                GameState := ShipInfoKeys(Key);
+                GameState := ShipInfoKeys(Key, OldState);
             when Crew_Info =>
                 GameState := CrewInfoKeys(Key);
             when Giving_Orders =>
