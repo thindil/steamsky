@@ -191,12 +191,12 @@ package body Crafts is
         end loop;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Workplace: ");
-        case Recipe.Workplace is
-            when ALCHEMY_LAB =>
-                Add(Win => InfoWindow, Str => "Alchemy lab");
-            when others =>
-                null;
-        end case;
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipe.Workplace then
+                Add(Win => InfoWindow, Str => To_String(PlayerShip.Modules.Element(I).Name));
+                exit;
+            end if;
+        end loop;
         Move_Cursor(Win => InfoWindow, Line => (CurrentLine + 2), Column => 0);
         Add(Win => InfoWindow, Str => "SPACE for set manufacturing order");
         Change_Attributes(Win => InfoWindow, Line => (CurrentLine + 2), Column => 0, Count => 5, Color => 1);
