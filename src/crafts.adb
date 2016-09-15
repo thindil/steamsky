@@ -151,9 +151,10 @@ package body Crafts is
         Recipe : constant Craft_Data := Recipes_List.Element(Get_Index(Current(RecipesMenu)));
         CurrentLine : Line_Position := 3;
         MAmount : Natural := 0;
-        HaveMaterial : Boolean := False;
+        HaveMaterial, HaveWorkplace : Boolean := False;
         CursorLine : Line_Position;
         CursorColumn : Column_Position;
+        WorkplaceName : Unbounded_String := Null_Unbounded_String;
     begin
         InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
         Add(Win => InfoWindow, Str => "Name: " & To_String(Items_List.Element(Recipe.ResultIndex).Name));
@@ -193,10 +194,26 @@ package body Crafts is
         Add(Win => InfoWindow, Str => "Workplace: ");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipe.Workplace then
-                Add(Win => InfoWindow, Str => To_String(PlayerShip.Modules.Element(I).Name));
+                if PlayerShip.Modules.Element(I).Durability > 0 then
+                    HaveWorkplace := True;
+                end if;
+                WorkplaceName := PlayerShip.Modules.Element(I).Name;
                 exit;
             end if;
         end loop;
+        if WorkplaceName = Null_Unbounded_String then
+            for I in Modules_List.First_Index..Modules_List.Last_Index loop
+                if Modules_List.Element(I).MType = Recipe.Workplace then
+                    WorkplaceName := Modules_List.Element(I).Name;
+                    exit;
+                end if;
+            end loop;
+        end if;
+        Add(Win => InfoWindow, Str => To_String(WorkplaceName));
+        if not HaveWorkplace then
+            Change_Attributes(Win => InfoWindow, Line => CurrentLine,
+                Column => 11, Count => Length(WorkplaceName), Color => 3);
+        end if;
         Move_Cursor(Win => InfoWindow, Line => (CurrentLine + 2), Column => 0);
         Add(Win => InfoWindow, Str => "SPACE for set manufacturing order");
         Change_Attributes(Win => InfoWindow, Line => (CurrentLine + 2), Column => 0, Count => 5, Color => 1);
