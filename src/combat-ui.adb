@@ -18,7 +18,6 @@
 with Crew; use Crew;
 with Messages; use Messages;
 with UserInterface; use UserInterface;
-with ShipModules; use ShipModules;
 
 package body Combat.UI is
 
@@ -128,10 +127,8 @@ package body Combat.UI is
         PilotName, EngineerName, GunnerName : Unbounded_String :=
             To_Unbounded_String("Vacant");
         LoopStart : Integer;
-        CurrentLine : Line_Position := 8;
-        CurrentColumn : Column_Position;
-        I : Positive := PlayerShip.Modules.First_Index;
         DamagePercent : Natural;
+        CurrentLine : Line_Position := 9;
     begin
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             case PlayerShip.Crew.Element(I).Order is
@@ -169,47 +166,37 @@ package body Combat.UI is
         Move_Cursor(Line => 5, Column => 2);
         Add(Str => "Ship cargo");
         Change_Attributes(Line => 5, Column => 8, Count => 1, Color => 1);
-        Move_Cursor(Line => 7, Column => 2);
-        Add(Str => "Ship status:");
-        Change_Attributes(Line => 7, Column => 2, Count => 1, Color => 1);
-        Modules_Loop:
-        while I <= PlayerShip.Modules.Last_Index loop
-            Move_Cursor(Line => CurrentLine, Column => 2);
-            for J in 0..3 loop
-                if (I + J) > PlayerShip.Modules.Last_Index then
-                    exit Modules_Loop;
-                end if;
-                Add(Str => "[");
-                Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
-                Add(Str => ModuleType'Image(Modules_List.Element(PlayerShip.Modules.Element(I +
-                    J).ProtoIndex).MType));
-                DamagePercent := 100 - Natural((Float(PlayerShip.Modules.Element(I + J).Durability) /
-                    Float(PlayerShip.Modules.Element(I + J).MaxDurability)) * 100.0);
-                if DamagePercent = 0 then
-                    Change_Attributes(Line => CurrentLine, Column => CurrentColumn,
-                        Count => ModuleType'Image(Modules_List.Element(PlayerShip.Modules.Element(I + J).ProtoIndex).MType)'Length, 
+        Move_Cursor(Line => 6, Column => 2);
+        Add(Str => "Ship modules");
+        Change_Attributes(Line => 6, Column => 2, Count => 1, Color => 1);
+        Move_Cursor(Line => 8, Column => 2);
+        Add(Str => "Damage:");
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            DamagePercent := 100 - Natural((Float(PlayerShip.Modules.Element(I).Durability) /
+                Float(PlayerShip.Modules.Element(I).MaxDurability)) * 100.0);
+            if DamagePercent > 0 then
+                Move_Cursor(Line => CurrentLine, Column => 2);
+                Add(Str => To_String(PlayerShip.Modules.Element(I).Name));
+                if DamagePercent > 19 and DamagePercent < 50 then
+                    Change_Attributes(Line => CurrentLine, Column => 2,
+                        Count => Length(PlayerShip.Modules.Element(I).Name), 
                         Color => 2);
-                elsif DamagePercent > 0 and DamagePercent < 75 then
-                    Change_Attributes(Line => CurrentLine, Column => CurrentColumn,
-                        Count => ModuleType'Image(Modules_List.Element(PlayerShip.Modules.Element(I + J).ProtoIndex).MType)'Length, 
+                elsif DamagePercent > 49 and DamagePercent < 80 then
+                    Change_Attributes(Line => CurrentLine, Column => 2,
+                        Count => Length(PlayerShip.Modules.Element(I).Name), 
                         Color => 1);
-                elsif DamagePercent > 74 and DamagePercent < 100 then
-                    Change_Attributes(Line => CurrentLine, Column => CurrentColumn,
-                        Count => ModuleType'Image(Modules_List.Element(PlayerShip.Modules.Element(I + J).ProtoIndex).MType)'Length, 
+                elsif DamagePercent > 79 and DamagePercent < 100 then
+                    Change_Attributes(Line => CurrentLine, Column => 2,
+                        Count => Length(PlayerShip.Modules.Element(I).Name), 
                         Color => 3);
-                else
-                    Change_Attributes(Line => CurrentLine, Column => CurrentColumn,
-                        Count => ModuleType'Image(Modules_List.Element(PlayerShip.Modules.Element(I + J).ProtoIndex).MType)'Length, 
+                elsif DamagePercent = 100 then
+                    Change_Attributes(Line => CurrentLine, Column => 2,
+                        Count => Length(PlayerShip.Modules.Element(I).Name), 
                         Color => 4);
                 end if;
-                Move_Cursor(Line => CurrentLine, Column => CurrentColumn +
-                    Column_Position(ModuleType'Image(Modules_List.Element(PlayerShip.Modules.Element(I
-                    + J).ProtoIndex).MType)'Length));
-                Add(Str => "] ");
-            end loop;
-            I := I + 4;
-            CurrentLine := CurrentLine + 1;
-        end loop Modules_Loop;
+                CurrentLine := CurrentLine + 1;
+            end if;
+        end loop;
         Move_Cursor(Line => 5, Column => (Columns / 2));
         Add(Str => "Enemy status:");
         Move_Cursor(Line => 7, Column => (Columns / 2));
