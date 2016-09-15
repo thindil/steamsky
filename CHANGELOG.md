@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 - Speed of rest depends on did crew member have cabin
 - Don't recover health if crew member don't have cabin
 - Name of ship module from cargo space to cargo bay
+- Bonus to hit/evade in combat depends on ships real speed not on engineer orders
 
 ### Fixed
 - On combat screen showing messages from previous combat
