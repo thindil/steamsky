@@ -70,6 +70,7 @@ package body Combat is
         EnemyPilotOrder : Positive := 2;
         DeathReason : Unbounded_String;
         HaveFuel : Boolean := False;
+        SpeedBonus : Integer;
     begin
         Rand_Roll.Reset(Generator);
         PlayerMod_Roll.Reset(Generator2);
@@ -120,27 +121,16 @@ package body Combat is
             EvadeBonus := -10;
         end if;
         if EngineerIndex > 0 then
-            case EngineerOrder is
-                when 1 =>
-                    AccuracyBonus := AccuracyBonus + 40;
-                    EvadeBonus := EvadeBonus - 40;
-                when 2 =>
-                    AccuracyBonus := AccuracyBonus + 10;
-                    EvadeBonus := EvadeBonus - 10;
-                when 4 =>
-                    AccuracyBonus := AccuracyBonus - 10;
-                    EvadeBonus := EvadeBonus + 10;
-                when others =>
-                    null;
-            end case;
             ChangeShipSpeed(ShipSpeed'Val(EngineerOrder));
         else
-            AccuracyBonus := AccuracyBonus + 40;
-            EvadeBonus := EvadeBonus - 40;
-            if PlayerShip.Speed /= FULL_STOP then
-                ChangeShipSpeed(FULL_STOP);
-            end if;
+            ChangeShipSpeed(FULL_STOP);
         end if;
+        SpeedBonus := 20 - (RealSpeed(PlayerShip) / 100);
+        if SpeedBonus < -10 then
+            SpeedBonus := -10;
+        end if;
+        AccuracyBonus := AccuracyBonus + SpeedBonus;
+        EvadeBonus := EvadeBonus - SpeedBonus;
         for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
             if Enemy.Ship.Modules.Element(I).Durability > 0 then
                 case Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).MType is
@@ -202,19 +192,12 @@ package body Combat is
             when others =>
                 null;
         end case;
-        case Enemy.Ship.Speed is
-            when FULL_STOP =>
-                AccuracyBonus := AccuracyBonus + 40;
-                EvadeBonus := EvadeBonus - 40;
-            when QUARTER_SPEED =>
-                AccuracyBonus := AccuracyBonus + 10;
-                EvadeBonus := EvadeBonus - 10;
-            when FULL_SPEED =>
-                AccuracyBonus := AccuracyBonus - 10;
-                EvadeBonus := EvadeBonus + 10;
-            when others =>
-                null;
-        end case;
+        SpeedBonus := 20 - (RealSpeed(Enemy.Ship) / 100);
+        if SpeedBonus < -10 then
+            SpeedBonus := -10;
+        end if;
+        AccuracyBonus := AccuracyBonus + SpeedBonus;
+        EvadeBonus := EvadeBonus - SpeedBonus;
         if EnemyPilotOrder < 4 then
             DistanceTraveled := 0 - RealSpeed(Enemy.Ship);
         else
