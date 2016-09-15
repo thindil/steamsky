@@ -33,10 +33,11 @@ Sign "plus" after crew member name in combat orders menu means that this member 
 Double sign "plus" after crew name in combat orders menu means that this member have highest skill needed for selected role.
 Amount of loot from enemies depends on each enemy. Stronger enemies gives more amount of Charcollum.
 You can see detailed ship/crew/cargo status during combat by pressing corresponding key ('c' for crew, 's' for ship, 'a' for cargo). There you can give normal orders to crew (even starts repairing during combat) or dropping cargo.
-Colors on your ship modules list show how much damaged module is:
-- Green: module is in perfect state
-- Yellow : module is damaged
-- Red : module is heavy damaged
+On combat screen you can see only damaged modules. Colors on your ship modules list show how much damaged module is:
+- White : module slightly damaged
+- Green: module is damaged
+- Yellow : module is heavily damaged
+- Red : module is almost destroyed
 - Blue : module is destroyed
 [Crafting]
 To start manufacturing items, first you must have enough material and proper module installed on ship. Then you must set proper crafting order in Craft menu and give crew member order to start crafting. What ship module and which items are needed for crafting, you can check in crafting menu (key 'r'). If you don't have items or workplace needed for crafting, they will be written in red in selected recipe information. At this moment, each manufacturing order take 15 minutes of game time. If after creating item, you don't have enough materials to craft next item, crew member going on break and crafting order is reseted.
