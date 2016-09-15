@@ -152,11 +152,17 @@ package body Bases is
     end GenerateBaseName;
 
     procedure ShowItemInfo is
-        ItemIndex : constant Positive := Get_Index(Current(TradeMenu)) + 1;
+        ItemIndex : Positive;
         InfoWindow : Window;
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
     begin
+        for I in Items_List.First_Index..Items_List.Last_Index loop
+            if To_String(Items_List.Element(I).Name) = Name(Current(TradeMenu)) then
+                ItemIndex := I;
+                exit;
+            end if;
+        end loop;
         InfoWindow := Create(5, (Columns / 2), 2, (Columns / 2));
         if Items_List.Element(ItemIndex).Buyable(BaseType) then
             Add(Win => InfoWindow, Str => "Buy/Sell price:");
@@ -181,14 +187,33 @@ package body Bases is
 
     procedure ShowTrade is
         Trade_Items: constant Item_Array_Access := new Item_Array(1..Items_List.Last_Index);
+        BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
+            PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         MoneyIndex : Natural := 0;
+        ShowItem : Boolean := False;
+        MenuIndex : Integer := 1;
     begin
         for I in 2..(Items_List.Last_Index) loop
-            Trade_Items.all(I - 1) := New_Item(To_String(Items_List.Element(I).Name));
+            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if PlayerShip.Cargo.Element(J).ProtoIndex = I then
+                    ShowItem := True;
+                    exit;
+                end if;
+            end loop;
+            if Items_List.Element(I).Buyable(BaseType) then
+                ShowItem := True;
+            end if;
+            if ShowItem then
+                Trade_Items.all(MenuIndex) := New_Item(To_String(Items_List.Element(I).Name));
+                MenuIndex := MenuIndex + 1;
+            end if;
+            ShowItem := False;
         end loop;
-        Trade_Items.all(Items_List.Last_Index) := Null_Item;
+        for I in MenuIndex..Items_List.Last_Index loop
+            Trade_Items.all(I) := Null_Item;
+        end loop;
         TradeMenu := New_Menu(Trade_Items);
         Set_Format(TradeMenu, Lines - 10, 1);
         Set_Mark(TradeMenu, "");
@@ -221,13 +246,19 @@ package body Bases is
     procedure ShowForm(Buy : Boolean := False) is
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
-        ItemIndex : constant Positive := Get_Index(Current(TradeMenu)) + 1;
+        ItemIndex : Positive;
         CargoIndex : Natural := 0;
         Amount : String(1..6);
         Visibility : Cursor_Visibility := Normal;
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
     begin
+        for I in Items_List.First_Index..Items_List.Last_Index loop
+            if To_String(Items_List.Element(I).Name) = Name(Current(TradeMenu)) then
+                ItemIndex := I;
+                exit;
+            end if;
+        end loop;
         Scale(TradeMenu, MenuHeight, MenuLength);
         Move_Cursor(Line => (MenuHeight + 6), Column => 2);
         Add(Str => "Enter amount of " & To_String(Items_List.Element(ItemIndex).Name) &
