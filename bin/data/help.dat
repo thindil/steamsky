@@ -39,7 +39,7 @@ Colors on your ship modules list show how much damaged module is:
 - Red : module is heavy damaged
 - Blue : module is destroyed
 [Crafting]
-To start manufacturing items, first you must have enough material and proper module installed on ship. Then you must set proper crafting order in Craft menu and give crew member order to start crafting. What ship module and which items are needed for crafting, you can check in crafting menu (key 'r'). At this moment, each manufacturing order take 15 minutes of game time. If after creating item, you don't have enough materials to craft next item, crew member going on break and crafting order is reseted.
+To start manufacturing items, first you must have enough material and proper module installed on ship. Then you must set proper crafting order in Craft menu and give crew member order to start crafting. What ship module and which items are needed for crafting, you can check in crafting menu (key 'r'). If you don't have items needed for crafting, they will be written in red in selected recipe information. At this moment, each manufacturing order take 15 minutes of game time. If after creating item, you don't have enough materials to craft next item, crew member going on break and crafting order is reseted.
 [Tips]
 * You and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation.
 * All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press 'h' key on sky map (no need to press 'e' first to show menu).
