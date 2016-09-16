@@ -139,7 +139,7 @@ package body Ships.UI is
         ItemWeight : constant Positive := PlayerShip.Cargo.Element(ItemIndex).Amount * 
             Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Weight;
     begin
-        InfoWindow := Create(5, (Columns / 2), 2, (Columns / 2));
+        InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
         Add(Win => InfoWindow, Str => "Amount:" & Positive'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         Add(Win => InfoWindow, Str => "Weight:" &
@@ -168,7 +168,7 @@ package body Ships.UI is
         Set_Format(ModulesMenu, Lines - 10, 1);
         Set_Mark(ModulesMenu, "");
         Scale(ModulesMenu, MenuHeight, MenuLength);
-        MenuWindow := Create(MenuHeight, MenuLength, 2, 2);
+        MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
         Set_Window(ModulesMenu, MenuWindow);
         Set_Sub_Window(ModulesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(ModulesMenu);
