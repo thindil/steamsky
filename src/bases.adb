@@ -246,14 +246,15 @@ package body Bases is
     end ShowTrade;
 
     procedure ShowForm(Buy : Boolean := False) is
-        MenuHeight : Line_Position;
-        MenuLength : Column_Position;
+        FormWindow : Window;
         ItemIndex : Positive;
         CargoIndex : Natural := 0;
         Amount : String(1..6);
         Visibility : Cursor_Visibility := Normal;
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
+        FormText : Unbounded_String := To_Unbounded_String("Enter amount of ");
+        Width : Column_Position;
     begin
         for I in Items_List.First_Index..Items_List.Last_Index loop
             if To_String(Items_List.Element(I).Name) = Name(Current(TradeMenu)) then
@@ -261,20 +262,16 @@ package body Bases is
                 exit;
             end if;
         end loop;
-        Scale(TradeMenu, MenuHeight, MenuLength);
-        Move_Cursor(Line => (MenuHeight + 7), Column => 2);
-        Add(Str => "Enter amount of " & To_String(Items_List.Element(ItemIndex).Name) &
-            " to ");
+        Append(FormText, Items_List.Element(ItemIndex).Name);
         if Buy then
-            Add(Str => "buy: ");
             if not Items_List.Element(ItemIndex).Buyable(BaseType) then
                 ShowDialog("You can't buy " & To_String(Items_List.Element(ItemIndex).Name) &
                     " in this base.");
                 DrawGame(Trade_View);
                 return;
             end if;
+            Append(FormText, " to buy: ");
         else
-            Add(Str => "sell: ");
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                 if PlayerShip.Cargo.Element(I).ProtoIndex = ItemIndex then
                     CargoIndex := I;
@@ -287,15 +284,22 @@ package body Bases is
                 DrawGame(Trade_View);
                 return;
             end if;
+            Append(FormText, " to sell: ");
         end if;
+        Width := Column_Position(Length(FormText) + 10);
+        FormWindow := Create(3, Width, ((Lines / 2) - 1), ((Columns / 2) - Column_Position(Width / 2)));
+        Box(FormWindow);
         Set_Echo_Mode(True);
         Set_Cursor_Visibility(Visibility);
-        Get(Str => Amount, Len => 6);
+        Move_Cursor(Win => FormWindow, Line => 1, Column => 2);
+        Add(Win => FormWindow, Str => To_String(FormText));
+        Get(Win => FormWindow, Str => Amount, Len => 6);
         if Buy then
             BuyItems(ItemIndex, Amount);
         else
             SellItems(ItemIndex, Amount);
         end if;
+        Delete(FormWindow);
         Visibility := Invisible;
         Set_Echo_Mode(False);
         Set_Cursor_Visibility(Visibility);
