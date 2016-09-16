@@ -186,7 +186,6 @@ package body Ships.UI is
         NewName : Unbounded_String;
         SemicolonIndex : Natural;
     begin
-        Move_Cursor(Line => 15, Column => (Columns / 2));
         FormWindow := Create(3, 34, ((Lines / 2) - 1), ((Columns / 2) - 17));
         Box(FormWindow);
         Set_Echo_Mode(True);
@@ -211,17 +210,22 @@ package body Ships.UI is
     end ShowModuleForm;
 
     procedure ShowCargoForm is
+        FormWindow : Window;
         ItemIndex : constant Positive := Get_Index(Current(ModulesMenu));
         Visibility : Cursor_Visibility := Normal;
         ItemName : constant String := To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name);
         Amount : String(1..6);
         DropAmount : Natural;
+        FormText : constant String := "Amount of " & ItemName & " to drop: ";
     begin
-        Move_Cursor(Line => 12, Column => (Columns / 2));
-        Add(Str => "Amount of " & ItemName & " to drop: ");
+        FormWindow := Create(3, Column_Position(FormText'Length + 10), ((Lines / 2) - 1), 
+            ((Columns / 2) - (Column_Position(FormText'Length + 10) / 2)));
+        Box(FormWindow);
         Set_Echo_Mode(True);
         Set_Cursor_Visibility(Visibility);
-        Get(Str => Amount, Len => 6);
+        Move_Cursor(Win => FormWindow, Line => 1, Column => 2);
+        Add(Win => FormWindow, Str => FormText);
+        Get(Win => FormWindow, Str => Amount, Len => 6);
         if Amount = "      " then
             Amount := "0     ";
         end if;
@@ -232,6 +236,7 @@ package body Ships.UI is
         elsif DropAmount > PlayerShip.Cargo.Element(ItemIndex).Amount then
             ShowDialog("You can't drop more " & ItemName & " than you have.");
         end if;
+        Delete(FormWindow);
         Visibility := Invisible;
         Set_Echo_Mode(False);
         Set_Cursor_Visibility(Visibility);
