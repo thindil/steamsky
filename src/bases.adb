@@ -235,6 +235,8 @@ package body Bases is
         else
             Add(Str => "You don't have any Charcollum to buy anything.");
         end if;
+        Move_Cursor(Line => (MenuHeight + 5), Column => 2);
+        Add(Str => "Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg");
         Move_Cursor(Line => (Lines - 1), Column => 2);
         Add(Str => "ENTER to buy selected item, SPACE for sell.");
         Change_Attributes(Line => (Lines - 1), Column => 2, Count => 5, Color => 1);
@@ -260,7 +262,7 @@ package body Bases is
             end if;
         end loop;
         Scale(TradeMenu, MenuHeight, MenuLength);
-        Move_Cursor(Line => (MenuHeight + 6), Column => 2);
+        Move_Cursor(Line => (MenuHeight + 7), Column => 2);
         Add(Str => "Enter amount of " & To_String(Items_List.Element(ItemIndex).Name) &
             " to ");
         if Buy then
