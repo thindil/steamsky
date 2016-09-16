@@ -255,6 +255,7 @@ package body Bases is
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         FormText : Unbounded_String := To_Unbounded_String("Enter amount of ");
         Width : Column_Position;
+        MaxAmount : Natural := 0;
     begin
         for I in Items_List.First_Index..Items_List.Last_Index loop
             if To_String(Items_List.Element(I).Name) = Name(Current(TradeMenu)) then
@@ -270,11 +271,18 @@ package body Bases is
                 DrawGame(Trade_View);
                 return;
             end if;
-            Append(FormText, " to buy: ");
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
+                    MaxAmount := PlayerShip.Cargo.Element(I).Amount / Items_List.Element(ItemIndex).Prices(BaseType);
+                    exit;
+                end if;
+            end loop;
+            Append(FormText, " to buy");
         else
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                 if PlayerShip.Cargo.Element(I).ProtoIndex = ItemIndex then
                     CargoIndex := I;
+                    MaxAmount := PlayerShip.Cargo.Element(I).Amount;
                     exit;
                 end if;
             end loop;
@@ -284,8 +292,9 @@ package body Bases is
                 DrawGame(Trade_View);
                 return;
             end if;
-            Append(FormText, " to sell: ");
+            Append(FormText, " to sell");
         end if;
+        Append(FormText, " (max" & Natural'Image(MaxAmount) & "): ");
         Width := Column_Position(Length(FormText) + 10);
         FormWindow := Create(3, Width, ((Lines / 2) - 1), ((Columns / 2) - Column_Position(Width / 2)));
         Box(FormWindow);
