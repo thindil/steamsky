@@ -57,7 +57,7 @@ package body Maps is
                     Move_Cursor(Line => Line_Position(Y), Column =>
                         Column_Position(X - 1));
                     Add(Ch => 'o');
-                    if SkyBases(BaseIndex).Visited then
+                    if SkyBases(BaseIndex).Visited.Year > 0 then
                         case SkyBases(BaseIndex).BaseType is
                             when Industrial =>
                                 Change_Attributes(Line => Line_Position(Y), Column =>
@@ -91,7 +91,7 @@ package body Maps is
             BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
             Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
             Add(Win => InfoWindow, Str => To_String(SkyBases(BaseIndex).Name));
-            if SkyBases(BaseIndex).Visited then
+            if SkyBases(BaseIndex).Visited.Year > 0 then
                 Move_Cursor(Win => InfoWindow, Line => 4, Column => 2);
                 Add(Win => InfoWindow, Str => To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
             end if;

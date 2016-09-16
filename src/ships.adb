@@ -127,9 +127,6 @@ package body Ships is
         end if;
         if Docking then
             PlayerShip.Speed := DOCKED;
-            if not SkyBases(BaseIndex).Visited then
-                SkyBases(BaseIndex).Visited := True;
-            end if;
             AddMessage("Ship docked to base " &
                 To_String(SkyBases(BaseIndex).Name), OrderMessage);
             UpdateGame(10);
