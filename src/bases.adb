@@ -163,7 +163,7 @@ package body Bases is
                 exit;
             end if;
         end loop;
-        InfoWindow := Create(5, (Columns / 2), 2, (Columns / 2));
+        InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
         if Items_List.Element(ItemIndex).Buyable(BaseType) then
             Add(Win => InfoWindow, Str => "Buy/Sell price:");
         else
@@ -218,7 +218,7 @@ package body Bases is
         Set_Format(TradeMenu, Lines - 10, 1);
         Set_Mark(TradeMenu, "");
         Scale(TradeMenu, MenuHeight, MenuLength);
-        MenuWindow := Create(MenuHeight, MenuLength, 2, 2);
+        MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
@@ -228,7 +228,7 @@ package body Bases is
                 exit;
             end if;
         end loop;
-        Move_Cursor(Line => (MenuHeight + 3), Column => 2);
+        Move_Cursor(Line => (MenuHeight + 4), Column => 2);
         if MoneyIndex > 0 then
             Add(Str => "You have" & Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
                 " Charcollum.");
