@@ -179,6 +179,7 @@ package body Ships.UI is
     end ShowCargoInfo;
 
     procedure ShowModuleForm is
+        FormWindow : Window;
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         Visibility : Cursor_Visibility := Normal;
         ModuleName : String(1..20);
@@ -186,10 +187,13 @@ package body Ships.UI is
         SemicolonIndex : Natural;
     begin
         Move_Cursor(Line => 15, Column => (Columns / 2));
-        Add(Str => "New name: ");
+        FormWindow := Create(3, 34, ((Lines / 2) - 1), ((Columns / 2) - 17));
+        Box(FormWindow);
         Set_Echo_Mode(True);
         Set_Cursor_Visibility(Visibility);
-        Get(Str => ModuleName, Len => 20);
+        Move_Cursor(Win => FormWindow, Line => 1, Column => 2);
+        Add(Win => FormWindow, Str => "New name: ");
+        Get(Win => FormWindow, Str => ModuleName, Len => 20);
         NewName := Trim(To_Unbounded_String(ModuleName), Ada.Strings.Both);
         if Length(NewName) > 0 then
             SemicolonIndex := Index(NewName, ";");
@@ -199,6 +203,7 @@ package body Ships.UI is
             end loop;
             UpdateModule(PlayerShip, ModuleIndex, "Name", To_String(NewName));
         end if;
+        Delete(FormWindow);
         Visibility := Invisible;
         Set_Echo_Mode(False);
         Set_Cursor_Visibility(Visibility);
