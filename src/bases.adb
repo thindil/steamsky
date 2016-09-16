@@ -306,7 +306,7 @@ package body Bases is
         if Buy then
             BuyItems(ItemIndex, Amount);
         else
-            SellItems(ItemIndex, Amount);
+            SellItems(CargoIndex, Amount);
         end if;
         Delete(FormWindow);
         Visibility := Invisible;
