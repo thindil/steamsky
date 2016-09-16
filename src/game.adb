@@ -92,7 +92,7 @@ package body Game is
             end loop;
             BaseType := Rand_Base.Random(Generator2);
             SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I));
-            SkyBases(Integer(I)) := (Name => GenerateBaseName, Visited => False, 
+            SkyBases(Integer(I)) := (Name => GenerateBaseName, Visited => (0, 0, 0, 0, 0), 
                 SkyX => Integer(PosX), SkyY => Integer(PosY), BaseType => Bases_Types'Val(BaseType));
         end loop;
         -- Place player ship in random base
@@ -152,7 +152,7 @@ package body Game is
             Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (5, 0), (0,
             0), (0, 0), (0, 0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest)); 
-        SkyBases(Integer(RandomBase)).Visited := True;
+        SkyBases(Integer(RandomBase)).Visited := GameDate;
     end NewGame;
 
     procedure UpdateGame(Minutes : Positive) is
@@ -169,6 +169,7 @@ package body Game is
         RepairMaterial : Natural := 0;
         DeathReason : Unbounded_String;
         HaveCabin : Boolean;
+        BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         procedure UpdateMember(Member : in out Member_Data) is
             BackToWork : Boolean := True;
         begin
@@ -447,6 +448,10 @@ package body Game is
                     ".", CraftMessage);
             end loop Craft_Loop;
         end if;
+        -- Update base
+        if BaseIndex > 0 then
+            SkyBases(BaseIndex).Visited := GameDate;
+        end if;
     end UpdateGame;
 
     procedure SaveGame is
@@ -472,11 +477,16 @@ package body Game is
         -- Save bases
         for I in SkyBases'Range loop
             Put(SaveGame, To_String(SkyBases(I).Name) & ";");
-            if SkyBases(I).Visited then
-                Put(SaveGame, "1;");
-            else
-                Put(SaveGame, "0;");
-            end if;
+            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Year));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Month));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Day));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Hour));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Minutes));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).SkyX));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).SkyY));
@@ -600,11 +610,13 @@ package body Game is
         GameDate.Minutes := Natural'Value(To_String(ReadData));
         -- Load sky bases
         for I in SkyBases'Range loop
-            SkyBases(I) := (Name => ReadData, Visited => False, SkyX => 0, SkyY => 0,
+            SkyBases(I) := (Name => ReadData, Visited => (0, 0, 0, 0, 0), SkyX => 0, SkyY => 0,
                 BaseType => Industrial);
-            if To_String(ReadData) = "1" then
-                SkyBases(I).Visited := True;
-            end if;
+            SkyBases(I).Visited.Year := Natural'Value(To_String(ReadData));
+            SkyBases(I).Visited.Month := Natural'Value(To_String(ReadData));
+            SkyBases(I).Visited.Day := Natural'Value(To_String(ReadData));
+            SkyBases(I).Visited.Hour := Natural'Value(To_String(ReadData));
+            SkyBases(I).Visited.Minutes := Natural'Value(To_String(ReadData));
             SkyBases(I).SkyX := Integer'Value(To_String(ReadData));
             SkyBases(I).SkyY := Integer'Value(To_String(ReadData));
             SkyBases(I).BaseType := Bases_Types'Val(Integer'Value(To_String(ReadData)));

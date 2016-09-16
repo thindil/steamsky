@@ -25,7 +25,7 @@ package Bases is
     type BaseRecord is -- Data structure for bases
         record
             Name : Unbounded_String; -- Base name
-            Visited : Boolean; -- Did player visited base ealier
+            Visited : Date_Record; -- Time when player last visited base
             SkyX : Integer; -- X coordinate on sky map
             SkyY : Integer; -- Y coordinate on sky map
             BaseType : Bases_Types; -- Type of base
