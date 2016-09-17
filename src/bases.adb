@@ -105,49 +105,18 @@ package body Bases is
     end SellItems;
 
     function GenerateBaseName return Unbounded_String is -- based on name generator from libtcod
-        type Syllabes_Range is range 1..34;
-        StartSyllabes : constant array (Syllabes_Range) of Unbounded_String := 
-            (To_Unbounded_String("Ael"), To_Unbounded_String("Ash"),
-            To_Unbounded_String("Barrow"), To_Unbounded_String("Bel"),
-            To_Unbounded_String("Black"), To_Unbounded_String("Clear"),
-            To_Unbounded_String("Cold"), To_Unbounded_String("Crystal"),
-            To_Unbounded_String("Deep"), To_Unbounded_String("Edge"),
-            To_Unbounded_String("Falcon"), To_Unbounded_String("Fair"),
-            To_Unbounded_String("Fall"), To_Unbounded_String("Glass"),
-            To_Unbounded_String("Gold"), To_Unbounded_String("Ice"),
-            To_Unbounded_String("Iron"), To_Unbounded_String("Mill"),
-            To_Unbounded_String("Moon"), To_Unbounded_String("Moor"),
-            To_Unbounded_String("Ray"), To_Unbounded_String("Red"),
-            To_Unbounded_String("Rock"), To_Unbounded_String("Rose"),
-            To_Unbounded_String("Shadow"), To_Unbounded_String("Silver"),
-            To_Unbounded_String("Spell"), To_Unbounded_String("Spring"),
-            To_Unbounded_String("Stone"), To_Unbounded_String("Strong"),
-            To_Unbounded_String("Summer"), To_Unbounded_String("Swyn"),
-            To_Unbounded_String("Wester"), To_Unbounded_String("Winter"));
-        EndSyllabes : constant array (Syllabes_Range) of Unbounded_String :=
-            (To_Unbounded_String("ash"), To_Unbounded_String("burn"),
-            To_Unbounded_String("barrow"), To_Unbounded_String("bridge"),
-            To_Unbounded_String("castle"), To_Unbounded_String("cliff"),
-            To_Unbounded_String("coast"), To_Unbounded_String("crest"),
-            To_Unbounded_String("dale"), To_Unbounded_String("dell"),
-            To_Unbounded_String("dor"), To_Unbounded_String("fall"),
-            To_Unbounded_String("field"), To_Unbounded_String("ford"),
-            To_Unbounded_String("fort"), To_Unbounded_String("gate"),
-            To_Unbounded_String("haven"), To_Unbounded_String("hill"),
-            To_Unbounded_String("hold"), To_Unbounded_String("hollow"),
-            To_Unbounded_String("iron"), To_Unbounded_String("lake"),
-            To_Unbounded_String("marsh"), To_Unbounded_String("mill"),
-            To_Unbounded_String("mist"), To_Unbounded_String("mount"),
-            To_Unbounded_String("moor"), To_Unbounded_String("pond"),
-            To_Unbounded_String("shade"), To_Unbounded_String("shore"),
-            To_Unbounded_String("summer"), To_Unbounded_String("town"),
-            To_Unbounded_String("wick"), To_Unbounded_String("berg"));
-        package Rand_Syllabe is new Discrete_Random(Syllabes_Range);
-        Generator : Rand_Syllabe.Generator;
+        subtype StartSyllabes_Range is Positive range BaseSyllabesStart.First_Index..BaseSyllabesStart.Last_Index;
+        subtype EndSyllabes_Range is Positive range BaseSyllabesEnd.First_Index..BaseSyllabesEnd.Last_Index;
+        package Rand_StartSyllabe is new Discrete_Random(StartSyllabes_Range);
+        package Rand_EndSyllabe is new Discrete_Random(EndSyllabes_Range);
+        Generator : Rand_StartSyllabe.Generator;
+        Generator2 : Rand_EndSyllabe.Generator;
         NewName : Unbounded_String;
     begin
-        Rand_Syllabe.Reset(Generator);
-        NewName := StartSyllabes(Rand_Syllabe.Random(Generator)) & EndSyllabes(Rand_Syllabe.Random(Generator));
+        Rand_StartSyllabe.Reset(Generator);
+        Rand_EndSyllabe.Reset(Generator2);
+        NewName := BaseSyllabesStart.Element(Rand_StartSyllabe.Random(Generator)) & 
+            BaseSyllabesEnd(Rand_EndSyllabe.Random(Generator2));
         return NewName;
     end GenerateBaseName;
 

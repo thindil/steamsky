@@ -258,6 +258,10 @@ package body MainMenu is
                         LoadGameError("Can't load help system. Probably missing file data/help.dat");
                         return Main_Menu;
                     end if;
+                    if not LoadData then
+                        LoadGameError("Can't load game data. Probably missing file data/game.dat");
+                        return Main_Menu;
+                    end if;
                     if not LoadItems then
                         LoadGameError("Can't load items. Probably missing file data/items.dat");
                         return Main_Menu;
@@ -331,6 +335,10 @@ package body MainMenu is
             when Character'Pos('s') | Character'Pos('S') => -- Start new game;
                 if not LoadHelp then
                     NewGameError("Can't load help system. Probably missing file data/help.dat");
+                    return Main_Menu;
+                end if;
+                if not LoadData then
+                    NewGameError("Can't load game data. Probably missing file data/game.dat");
                     return Main_Menu;
                 end if;
                 if not LoadItems then
