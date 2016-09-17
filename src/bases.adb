@@ -105,18 +105,18 @@ package body Bases is
     end SellItems;
 
     function GenerateBaseName return Unbounded_String is -- based on name generator from libtcod
-        subtype StartSyllabes_Range is Positive range BaseSyllabesStart.First_Index..BaseSyllabesStart.Last_Index;
-        subtype EndSyllabes_Range is Positive range BaseSyllabesEnd.First_Index..BaseSyllabesEnd.Last_Index;
-        package Rand_StartSyllabe is new Discrete_Random(StartSyllabes_Range);
-        package Rand_EndSyllabe is new Discrete_Random(EndSyllabes_Range);
-        Generator : Rand_StartSyllabe.Generator;
-        Generator2 : Rand_EndSyllabe.Generator;
+        subtype StartSyllabes_Range is Positive range BaseSyllablesStart.First_Index..BaseSyllablesStart.Last_Index;
+        subtype EndSyllabes_Range is Positive range BaseSyllablesEnd.First_Index..BaseSyllablesEnd.Last_Index;
+        package Rand_StartSyllable is new Discrete_Random(StartSyllabes_Range);
+        package Rand_EndSyllable is new Discrete_Random(EndSyllabes_Range);
+        Generator : Rand_StartSyllable.Generator;
+        Generator2 : Rand_EndSyllable.Generator;
         NewName : Unbounded_String;
     begin
-        Rand_StartSyllabe.Reset(Generator);
-        Rand_EndSyllabe.Reset(Generator2);
-        NewName := BaseSyllabesStart.Element(Rand_StartSyllabe.Random(Generator)) & 
-            BaseSyllabesEnd(Rand_EndSyllabe.Random(Generator2));
+        Rand_StartSyllable.Reset(Generator);
+        Rand_EndSyllable.Reset(Generator2);
+        NewName := BaseSyllablesStart.Element(Rand_StartSyllable.Random(Generator)) & 
+            BaseSyllablesEnd(Rand_EndSyllable.Random(Generator2));
         return NewName;
     end GenerateBaseName;
 
