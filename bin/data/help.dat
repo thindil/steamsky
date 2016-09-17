@@ -12,7 +12,7 @@ Travel time depends on skills of Pilot and Engineer (current members on this pos
 To move ship in desired direction, use arrow keys (or better) keys on keypad (with enabled Num Lock at your keyboard).
 During travel you may encounter various events (at this moment you can be only attacked by hostile ships).
 Ship speed depends on engine power, engine damage, ship weight (with cargo) and bit on Engineer and Pilot experience.
-As you dock to stations, you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are white.
+As you fly near bases (you are in this same cell where base is), you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are white.
 You can wait a moment without doing anything, by hit key 5 on keypad.
 To move map without moving ship, hold SHIFT and use keypad keys this same which are used for moving ship. Hit SPACE to center map on ship.
 [Trading]
