@@ -17,6 +17,7 @@
 
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Directories; use Ada.Directories;
 with Bases; use Bases;
 with Maps; use Maps;
 with Ships; use Ships;
@@ -673,4 +674,49 @@ package body Game is
         Close(SaveGame);
         return True;
     end LoadGame;
+
+    function LoadData return Boolean is
+        DataFile : File_Type;
+        RawData, FieldName, Value : Unbounded_String;
+        EqualIndex, StartIndex, EndIndex, Amount : Natural;
+    begin
+        if BaseSyllabesStart.Length > 0 then
+            return True;
+        end if;
+        if not Exists("data/game.dat") then
+            return False;
+        end if;
+        Open(DataFile, In_File, "data/game.dat");
+        while not End_Of_File(DataFile) loop
+            RawData := To_Unbounded_String(Get_Line(DataFile));
+            EqualIndex := Index(RawData, "=");
+            FieldName := Head(RawData, EqualIndex - 2);
+            Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
+            if FieldName = To_Unbounded_String("BasesSyllabesStart") then
+                StartIndex := 1;
+                Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                for I in 1..Amount loop
+                    EndIndex := Index(Value, ", ", StartIndex);
+                    if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                    end if;
+                    BaseSyllabesStart.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                    StartIndex := EndIndex + 2;
+                end loop;
+            elsif FieldName = To_Unbounded_String("BasesSyllabesEnd") then
+                StartIndex := 1;
+                Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                for I in 1..Amount loop
+                    EndIndex := Index(Value, ", ", StartIndex);
+                    if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                    end if;
+                    BaseSyllabesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                    StartIndex := EndIndex + 2;
+                end loop;
+            end if;
+        end loop;
+        Close(DataFile);
+        return True;
+    end LoadData;
 end Game;
