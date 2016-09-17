@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Containers.Vectors; use Ada.Containers;
 
 package Game is
 
@@ -34,10 +35,14 @@ package Game is
         end record;
     GameDate : Date_Record;
     GameVersion : constant String := "Version: 0.3";
+    package UnboundedString_Container is new Vectors(Positive, Unbounded_String);
+    BaseSyllabesStart : UnboundedString_Container.Vector;
+    BaseSyllabesEnd : UnboundedString_Container.Vector;
     
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character); -- Start new game: create map, place ship, crew, etc
     procedure UpdateGame(Minutes : Positive); -- Game ticks (update time, crew, ship, etc)
     procedure SaveGame; -- Save game to file
     function LoadGame return Boolean; -- Load game from file, return false if save can't be loaded
+    function LoadData return Boolean; -- Load game data from file, return false if file not found
 
 end Game;
