@@ -21,6 +21,7 @@ with Messages; use Messages;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
 with Crafts; use Crafts;
+with Game; use Game;
 
 package body Crew is
 
@@ -204,70 +205,45 @@ package body Crew is
     end GainExp;
 
     function GenerateMemberName(Gender : Character) return Unbounded_String is -- based on name generator from libtcod
+        subtype MaleStart_Range is Positive range MaleSyllablesStart.First_Index..MaleSyllablesStart.Last_Index;
+        subtype MaleMiddle_Range is Positive range MaleSyllablesMiddle.First_Index..MaleSyllablesMiddle.Last_Index;
+        subtype MaleEnd_Range is Positive range MaleSyllablesEnd.First_Index..MaleSyllablesEnd.Last_Index;
+        subtype FemaleEnd_Range is Positive range FemaleSyllablesEnd.First_Index..FemaleSyllablesEnd.Last_Index;
         type Short_Range is range 1..2;
-        type Start_Range is range 1..36;
-        type Mid_Range is range 1..9;
-        StartSyllMale : constant array(Start_Range) of Unbounded_String :=
-            (To_Unbounded_String("Aer"), To_Unbounded_String("An"),
-            To_Unbounded_String("Ar"), To_Unbounded_String("Ban"),
-            To_Unbounded_String("Ber"), To_Unbounded_String("Beth"),
-            To_Unbounded_String("Cut"), To_Unbounded_String("Dan"),
-            To_Unbounded_String("Dar"), To_Unbounded_String("Dell"),
-            To_Unbounded_String("Der"), To_Unbounded_String("Edr"),
-            To_Unbounded_String("Er"), To_Unbounded_String("Eth"),
-            To_Unbounded_String("Ett"), To_Unbounded_String("Fin"),
-            To_Unbounded_String("Ian"), To_Unbounded_String("Iarr"),
-            To_Unbounded_String("Ill"), To_Unbounded_String("Jed"),
-            To_Unbounded_String("Kan"), To_Unbounded_String("Kar"),
-            To_Unbounded_String("Ker"), To_Unbounded_String("Kurr"),
-            To_Unbounded_String("Kyr"), To_Unbounded_String("Man"),
-            To_Unbounded_String("Mar"), To_Unbounded_String("Mer"),
-            To_Unbounded_String("Mir"), To_Unbounded_String("Tsal"),
-            To_Unbounded_String("Tser"), To_Unbounded_String("Tsir"),
-            To_Unbounded_String("Van"), To_Unbounded_String("Var"),
-            To_Unbounded_String("Yur"), To_Unbounded_String("Yyr"));
-        MiddleSyllMale : constant array(Mid_Range) of Unbounded_String :=
-            (To_Unbounded_String("al"), To_Unbounded_String("an"),
-            To_Unbounded_String("ar"), To_Unbounded_String("el"),
-            To_Unbounded_String("en"), To_Unbounded_String("ess"),
-            To_Unbounded_String("ian"), To_Unbounded_String("onn"),
-            To_Unbounded_String("or"));
-        EndSyllMale : constant array(Mid_Range) of Unbounded_String :=
-            (To_Unbounded_String("ai"), To_Unbounded_String("an"),
-            To_Unbounded_String("ar"), To_Unbounded_String("ath"),
-            To_Unbounded_String("en"), To_Unbounded_String("eo"),
-            To_Unbounded_String("is"), To_Unbounded_String("u"),
-            To_Unbounded_String("or"));
-        EndSyllFemale : constant array(Mid_Range) of Unbounded_String :=
-            (To_Unbounded_String("a"), To_Unbounded_String("ae"),
-            To_Unbounded_String("aelle"), To_Unbounded_String("ai"),
-            To_Unbounded_String("ea"), To_Unbounded_String("i"),
-            To_Unbounded_String("ia"), To_Unbounded_String("u"),
-            To_Unbounded_String("wen"));
-        package Rand_Start is new Discrete_Random(Start_Range);
-        package Rand_Mid is new Discrete_Random(Mid_Range);
-        package Rand_Short is new Discrete_Random(Short_Range);
-        Generator : Rand_Start.Generator;
-        Generator2 : Rand_Mid.Generator;
-        Generator3 : Rand_Short.Generator;
+        package Rand_MaleStart is new Discrete_Random(MaleStart_Range);
+        package Rand_MaleMid is new Discrete_Random(MaleMiddle_Range);
+        package Rand_MaleEnd is new Discrete_Random(MaleEnd_Range);
+        package Rand_FemaleEnd is new Discrete_Random(FemaleEnd_Range);
+        package Rand_Short is new  Discrete_Random(Short_Range);
+        Generator : Rand_MaleStart.Generator;
+        Generator2 : Rand_MaleMid.Generator;
+        Generator3 : Rand_MaleEnd.Generator;
+        Generator4 : Rand_FemaleEnd.Generator;
+        Generator5 : Rand_Short.Generator;
         NewName : Unbounded_String;
     begin
-        Rand_Start.Reset(Generator);
-        Rand_Mid.Reset(Generator2);
-        Rand_Short.Reset(Generator3);
-        if Rand_Short.Random(Generator3) = 1 then
+        Rand_MaleStart.Reset(Generator);
+        Rand_MaleMid.Reset(Generator2);
+        Rand_MaleEnd.Reset(Generator3);
+        Rand_FemaleEnd.Reset(Generator4);
+        Rand_Short.Reset(Generator5);
+        if Rand_Short.Random(Generator5) = 1 then
             if Gender = 'M' then
-                NewName := StartSyllMale(Rand_Start.Random(Generator)) & MiddleSyllMale(Rand_Mid.Random(Generator2)) &
-                    EndSyllMale(Rand_Mid.Random(Generator2));
+                NewName := MaleSyllablesStart.Element(Rand_MaleStart.Random(Generator)) & 
+                    MaleSyllablesMiddle.Element(Rand_MaleMid.Random(Generator2)) &
+                    MaleSyllablesEnd.Element(Rand_MaleEnd.Random(Generator3));
             else
-                NewName := StartSyllMale(Rand_Start.Random(Generator)) & MiddleSyllMale(Rand_Mid.Random(Generator2)) &
-                    EndSyllFemale(Rand_Mid.Random(Generator2));
+                NewName := MaleSyllablesStart.Element(Rand_MaleStart.Random(Generator)) & 
+                    MaleSyllablesMiddle.Element(Rand_MaleMid.Random(Generator2)) &
+                    FemaleSyllablesEnd.Element(Rand_FemaleEnd.Random(Generator4));
             end if;
         else
             if Gender = 'M' then
-                NewName := StartSyllMale(Rand_Start.Random(Generator)) & EndSyllMale(Rand_Mid.Random(Generator2));
+                NewName := MaleSyllablesStart.Element(Rand_MaleStart.Random(Generator)) & 
+                    MaleSyllablesEnd.Element(Rand_MaleMid.Random(Generator2));
             else
-                NewName := StartSyllMale(Rand_Start.Random(Generator)) & EndSyllFemale(Rand_Mid.Random(Generator2));
+                NewName := MaleSyllablesStart.Element(Rand_MaleStart.Random(Generator)) & 
+                    FemaleSyllablesEnd(Rand_FemaleEnd.Random(Generator4));
             end if;
         end if;
         return NewName;

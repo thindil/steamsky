@@ -38,6 +38,10 @@ package Game is
     package UnboundedString_Container is new Vectors(Positive, Unbounded_String);
     BaseSyllabesStart : UnboundedString_Container.Vector;
     BaseSyllabesEnd : UnboundedString_Container.Vector;
+    MaleSyllablesStart : UnboundedString_Container.Vector;
+    MaleSyllablesMiddle : UnboundedString_Container.Vector;
+    MaleSyllablesEnd : UnboundedString_Container.Vector;
+    FemaleSyllablesEnd : UnboundedString_Container.Vector;
     
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character); -- Start new game: create map, place ship, crew, etc
     procedure UpdateGame(Minutes : Positive); -- Game ticks (update time, crew, ship, etc)
