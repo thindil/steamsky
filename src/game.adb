@@ -680,7 +680,7 @@ package body Game is
         RawData, FieldName, Value : Unbounded_String;
         EqualIndex, StartIndex, EndIndex, Amount : Natural;
     begin
-        if BaseSyllabesStart.Length > 0 then
+        if BaseSyllablesStart.Length > 0 then
             return True;
         end if;
         if not Exists("data/game.dat") then
@@ -700,7 +700,7 @@ package body Game is
                     if EndIndex = 0 then
                         EndIndex := Length(Value) + 1;
                     end if;
-                    BaseSyllabesStart.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                    BaseSyllablesStart.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
                     StartIndex := EndIndex + 2;
                 end loop;
             elsif FieldName = To_Unbounded_String("BasesSyllablesEnd") then
@@ -711,7 +711,7 @@ package body Game is
                     if EndIndex = 0 then
                         EndIndex := Length(Value) + 1;
                     end if;
-                    BaseSyllabesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                    BaseSyllablesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
                     StartIndex := EndIndex + 2;
                 end loop;
             elsif FieldName = To_Unbounded_String("MaleSyllablesStart") then
