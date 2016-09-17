@@ -1,2 +1,6 @@
-BasesSyllabesStart = Ael, Ash, Barrow, Bel, Black, Clear, Cold, Crystal, Deep, Edge, Falcon, Fair, Fall, Glass, Gold, Ice, Iron, Mill, Moon, Mor, Ray, Red, Rock, Rose, Shadow, Silver, Spell, Spring, Stone, Strong, Summer, Swyn, Wester, Winter
-BasesSyllabesEnd = ash, burn, barrow, bridge, castle, cliff, coast, crest, dale, dell, dor, fall, field, ford, fort, gate, haven, hill, hold, hollow, iron, lake, marsh, mill, mist, mount, moor, pond, shade, shore, summer, town, wick
+BasesSyllablesStart = Ael, Ash, Barrow, Bel, Black, Clear, Cold, Crystal, Deep, Edge, Falcon, Fair, Fall, Glass, Gold, Ice, Iron, Mill, Moon, Mor, Ray, Red, Rock, Rose, Shadow, Silver, Spell, Spring, Stone, Strong, Summer, Swyn, Wester, Winter
+BasesSyllablesEnd = ash, burn, barrow, bridge, castle, cliff, coast, crest, dale, dell, dor, fall, field, ford, fort, gate, haven, hill, hold, hollow, iron, lake, marsh, mill, mist, mount, moor, pond, shade, shore, summer, town, wick
+MaleSyllablesStart = Aer, An, Ar, Ban, Bar, Ber, Beth, Bett, Cut, Dan, Dar, Dell, Der, Edr, Er, Eth, Ett, Fin, Ian, Iarr, Ill, Jed, Kan, Kar, Ker, Kurr, Kyr, Man, Mar, Mer, Mir, Tsal, Tser, Tsir, Van, Var, Yur, Yyr
+MaleSyllablesMiddle = al, an, ar, el, en, ess, ian, onn, or
+MaleSyllablesEnd = ai, an, ar, ath, en, eo, ian, is, u, or
+FemaleSyllablesEnd = a, ae, aelle, ai, ea, i, ia, u, wen, wyn
