@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 - Name of ship module from cargo space to cargo bay
 - Bonus to hit/evade in combat depends on ships real speed not on engineer orders
 - Removed need for dock to base to discover its type
+- Moved syllabes for bases names to separated text file
 
 ### Fixed
 - On combat screen showing messages from previous combat
