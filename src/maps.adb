@@ -31,6 +31,7 @@ package body Maps is
         BaseIndex : Natural;
         InfoWindow : Window;
         WindowHeight : Line_Position := 3;
+        WindowWidth : Column_Position := 20;
     begin
         StartX := PlayerShip.SkyX - Integer(Columns / 2);
         StartX := StartX + MoveX;
@@ -80,15 +81,19 @@ package body Maps is
         end loop;
         Refresh_Without_Update;
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+            BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
             WindowHeight := WindowHeight + 3;
+            WindowWidth := 4 + Column_Position(Length(SkyBases(BaseIndex).Name));
+            if WindowWidth < 20 then
+                WindowWidth := 20;
+            end if;
         end if;
-        InfoWindow := Create(WindowHeight, 20, 1, (Columns - 21));
+        InfoWindow := Create(WindowHeight, WindowWidth, 1, (Columns - WindowWidth - 1));
         Box(InfoWindow);
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 3);
         Add(Win => InfoWindow, Str => "X:" & Positive'Image(PlayerShip.SkyX) & 
             " Y:" & Positive'Image(PlayerShip.SkyY));
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
-            BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
             Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
             Add(Win => InfoWindow, Str => To_String(SkyBases(BaseIndex).Name));
             if SkyBases(BaseIndex).Visited.Year > 0 then
@@ -97,6 +102,7 @@ package body Maps is
             end if;
         end if;
         Refresh(InfoWindow);
+        Delete(InfoWindow);
     end ShowSkyMap;
 
     function SkyMapKeys(Key : Key_Code) return Integer is
