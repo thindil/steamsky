@@ -217,7 +217,11 @@ package body MainMenu is
                 To_Unbounded_String("* Added few new manufacturing recipes"),
                 To_Unbounded_String("* Updated interface"),
                 To_Unbounded_String("* Updated help"),
-                To_Unbounded_String("* Rename old enemies from small to tiny"));
+                To_Unbounded_String("* Rename old enemies from small to tiny"),
+                To_Unbounded_String("* Better bases names generator"),
+                To_Unbounded_String("* All ship modules have own repair materials"),
+                To_Unbounded_String("* Options to drop cargo, rename modules"),
+                To_Unbounded_String("* Fixed few bugs"));
     begin
         Move_Cursor(Line => (Lines / 5), Column => 10);
         Add(Str => "Main changes since last release (0.2):");
