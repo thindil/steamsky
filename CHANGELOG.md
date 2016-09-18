@@ -51,6 +51,7 @@ All notable changes to this project will be documented in this file.
 - Removed need for dock to base to discover its type
 - Moved syllabes for bases and crew names to separated text file
 - Better bases names generator
+- Updated in-game news
 
 ### Fixed
 - On combat screen showing messages from previous combat
