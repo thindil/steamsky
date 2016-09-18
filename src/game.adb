@@ -692,7 +692,18 @@ package body Game is
             EqualIndex := Index(RawData, "=");
             FieldName := Head(RawData, EqualIndex - 2);
             Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
-            if FieldName = To_Unbounded_String("BasesSyllablesStart") then
+            if FieldName = To_Unbounded_String("BasesSyllablesPre") then
+                StartIndex := 1;
+                Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                for I in 1..Amount loop
+                    EndIndex := Index(Value, ", ", StartIndex);
+                    if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                    end if;
+                    BaseSyllablesPre.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                    StartIndex := EndIndex + 2;
+                end loop;
+            elsif FieldName = To_Unbounded_String("BasesSyllablesStart") then
                 StartIndex := 1;
                 Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
                 for I in 1..Amount loop
@@ -712,6 +723,17 @@ package body Game is
                         EndIndex := Length(Value) + 1;
                     end if;
                     BaseSyllablesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                    StartIndex := EndIndex + 2;
+                end loop;
+            elsif FieldName = To_Unbounded_String("BasesSyllablesPost") then
+                StartIndex := 1;
+                Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                for I in 1..Amount loop
+                    EndIndex := Index(Value, ", ", StartIndex);
+                    if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                    end if;
+                    BaseSyllablesPost.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
                     StartIndex := EndIndex + 2;
                 end loop;
             elsif FieldName = To_Unbounded_String("MaleSyllablesStart") then
