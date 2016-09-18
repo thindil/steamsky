@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.3] - 2016-09-18
 
 ### Added
 - New enemy ships - small pirate ship and small undead ship
