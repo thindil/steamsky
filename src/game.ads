@@ -36,8 +36,10 @@ package Game is
     GameDate : Date_Record;
     GameVersion : constant String := "Version: 0.3";
     package UnboundedString_Container is new Vectors(Positive, Unbounded_String);
+    BaseSyllablesPre : UnboundedString_Container.Vector;
     BaseSyllablesStart : UnboundedString_Container.Vector;
     BaseSyllablesEnd : UnboundedString_Container.Vector;
+    BaseSyllablesPost : UnboundedString_Container.Vector;
     MaleSyllablesStart : UnboundedString_Container.Vector;
     MaleSyllablesMiddle : UnboundedString_Container.Vector;
     MaleSyllablesEnd : UnboundedString_Container.Vector;
