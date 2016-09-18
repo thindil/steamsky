@@ -105,18 +105,37 @@ package body Bases is
     end SellItems;
 
     function GenerateBaseName return Unbounded_String is -- based on name generator from libtcod
-        subtype StartSyllabes_Range is Positive range BaseSyllablesStart.First_Index..BaseSyllablesStart.Last_Index;
-        subtype EndSyllabes_Range is Positive range BaseSyllablesEnd.First_Index..BaseSyllablesEnd.Last_Index;
-        package Rand_StartSyllable is new Discrete_Random(StartSyllabes_Range);
-        package Rand_EndSyllable is new Discrete_Random(EndSyllabes_Range);
-        Generator : Rand_StartSyllable.Generator;
-        Generator2 : Rand_EndSyllable.Generator;
+        subtype PreSyllables_Range is Positive range BaseSyllablesPre.First_Index..BaseSyllablesPre.Last_Index;
+        subtype StartSyllables_Range is Positive range BaseSyllablesStart.First_Index..BaseSyllablesStart.Last_Index;
+        subtype EndSyllables_Range is Positive range BaseSyllablesEnd.First_Index..BaseSyllablesEnd.Last_Index;
+        subtype PostSyllables_Range is Positive range BaseSyllablesPost.First_Index..BaseSyllablesPost.Last_Index;
+        type Percent_Range is range 1..100;
+        package Rand_PreSyllable is new Discrete_Random(PreSyllables_Range);
+        package Rand_StartSyllable is new Discrete_Random(StartSyllables_Range);
+        package Rand_EndSyllable is new Discrete_Random(EndSyllables_Range);
+        package Rand_PostSyllable is new Discrete_Random(PostSyllables_Range);
+        package Rand_Percent is new Discrete_Random(Percent_Range);
+        Generator : Rand_PreSyllable.Generator;
+        Generator2 : Rand_StartSyllable.Generator;
+        Generator3 : Rand_EndSyllable.Generator;
+        Generator4 : Rand_PostSyllable.Generator;
+        Generator5 : Rand_Percent.Generator;
         NewName : Unbounded_String;
     begin
-        Rand_StartSyllable.Reset(Generator);
-        Rand_EndSyllable.Reset(Generator2);
-        NewName := BaseSyllablesStart.Element(Rand_StartSyllable.Random(Generator)) & 
-            BaseSyllablesEnd(Rand_EndSyllable.Random(Generator2));
+        Rand_PreSyllable.Reset(Generator);
+        Rand_StartSyllable.Reset(Generator2);
+        Rand_EndSyllable.Reset(Generator3);
+        Rand_PostSyllable.Reset(Generator4);
+        Rand_Percent.Reset(Generator5);
+        NewName := Null_Unbounded_String;
+        if Rand_Percent.Random(Generator5) < 16 then
+            NewName := BaseSyllablesPre(Rand_PreSyllable.Random(Generator)) & " ";
+        end if;
+        NewName := NewName & BaseSyllablesStart.Element(Rand_StartSyllable.Random(Generator2)) & 
+            BaseSyllablesEnd(Rand_EndSyllable.Random(Generator3));
+        if Rand_Percent.Random(Generator5) < 16 then
+            NewName := NewName & " " & BaseSyllablesPost(Rand_PostSyllable.Random(Generator4));
+        end if;
         return NewName;
     end GenerateBaseName;
 
