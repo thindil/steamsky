@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated help
+
 ### Fixed
 - Crash on invalid data in save game file
 
