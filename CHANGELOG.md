@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash on invalid data in save game file
+- Adding destroyed cargo bay to free cargo space
 
 ## [0.3] - 2016-09-18
 
