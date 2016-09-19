@@ -18,6 +18,8 @@
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with Terminal_Interface.Curses; use Terminal_Interface.Curses;
+with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Bases; use Bases;
 with Maps; use Maps;
 with Ships; use Ships;
@@ -26,6 +28,7 @@ with Messages; use Messages;
 with Items; use Items;
 with Crafts; use Crafts;
 with ShipModules; use ShipModules;
+with UserInterface; use UserInterface;
 
 package body Game is
     
@@ -601,6 +604,9 @@ package body Game is
         -- Check save version
         if ReadData /= SaveVersion then
             Close(SaveGame);
+            ShowDialog("This saved game is incompatible with this version of game and can't be loaded.");
+            Update_Panels;
+            Update_Screen;
             return False;
         end if;
         -- Load game date
@@ -673,6 +679,13 @@ package body Game is
         end loop;
         Close(SaveGame);
         return True;
+    exception
+        when CONSTRAINT_ERROR =>
+            Close(SaveGame);
+            ShowDialog("Can't load savegame file. Invalid data.");
+            Update_Panels;
+            Update_Screen;
+            return False;
     end LoadGame;
 
     function LoadData return Boolean is

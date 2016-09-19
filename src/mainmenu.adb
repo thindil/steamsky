@@ -286,7 +286,6 @@ package body MainMenu is
                         DrawGame(Sky_Map_View);
                         return Sky_Map_View;
                     else
-                        LoadGameError("This saved game is incompatible with this version of game and can't be loaded.");
                         return Main_Menu;
                     end if;
                 else
