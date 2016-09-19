@@ -216,7 +216,8 @@ package body Ships is
         FreeCargo : Integer := 0;
     begin
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).Mtype = CARGO then
+            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).Mtype = CARGO 
+                and PlayerShip.Modules.Element(I).Durability > 0 then
                 FreeCargo := FreeCargo + PlayerShip.Modules.Element(I).Max_Value;
             end if;
         end loop;
