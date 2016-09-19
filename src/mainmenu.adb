@@ -83,6 +83,19 @@ package body MainMenu is
         NewGameWindow : Window;
         Visibility : Cursor_Visibility := Normal;
         GenderKey : Key_Code;
+        procedure RemoveSemicolons(Name : in out String) is
+            NewName : Unbounded_String;
+            SemicolonIndex : Natural;
+        begin
+            NewName := To_Unbounded_String(Name);
+            SemicolonIndex := Index(NewName, ";");
+            while SemicolonIndex > 0 loop
+                Delete(NewName, SemicolonIndex, SemicolonIndex);
+                NewName := NewName & " ";
+                SemicolonIndex := Index(NewName, ";");
+            end loop;
+            Name := To_String(NewName);
+        end RemoveSemicolons;
     begin
         if Key = Character'Pos('c') or Key = Character'Pos('C') then
             CharName := "            ";
@@ -131,6 +144,7 @@ package body MainMenu is
                 if CharName = "            " then
                     CharName := "Laeran      ";
                 end if;
+                RemoveSemicolons(CharName);
             elsif Key = Character'Pos('h') or Key = Character'Pos('H') then
                 Set_Echo_Mode(True);
                 Set_Cursor_Visibility(Visibility);
@@ -139,6 +153,7 @@ package body MainMenu is
                 if ShipName = "            " then
                     ShipName := "Hawk        ";
                 end if;
+                RemoveSemicolons(ShipName);
             elsif Key = Character'Pos('g') or Key = Character'Pos('G') then
                 Refresh(NewGameWindow);
                 GenderKey := Get_KeyStroke;
