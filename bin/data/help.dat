@@ -2,7 +2,7 @@
 SteamSky is roguelike game where you command small flying ship with crew. You must take care about ship and crew. You can trade items between sky bases, fight with enemies or manufacturing items. Game ends when your character die.
 Whole game interface is keyboard based. Most options/menus are accessible by keyboard shortcuts. All shortcuts are case insensitive, for example, to access help, you can use 'h' or 'shift+h' key. That same is with arrows keys - you can use normal arrows and keypad arrows (after enabling Num Lock at your keyboard).
 Most texts in game, can be scrolled with arrow keys.
-On mosts screens you can see in top right corner informations about needed crew positions in ship. P means pilot, E - engineer, G - gunner, R - repairs, M - manufacturing. If you have someone on this position, letters will be green, if you don't have and you need any, letters will be red, when you don't have anyone on that position and you don't need anyone there, letter will be white.
+On mosts screens you can see in top right corner informations about needed crew positions in ship. P means pilot, E - engineer, G - gunner, R - repairs, M - manufacturing. If you have someone on this position, letters will be green, if you don't have and you need any, letters will be red, when you don't have anyone on that position and you don't need anyone there, letter will be in default text color.
 At this moment, help is under heavy development (as whole game).
 [Ship movement]
 Your ship starts docked to base. To move it, you must first give order "Undock" from base. Press 'o' key (or first 'e' key for see game menu) for open orders menu.
@@ -12,7 +12,7 @@ Travel time depends on skills of Pilot and Engineer (current members on this pos
 To move ship in desired direction, use arrow keys (or better) keys on keypad (with enabled Num Lock at your keyboard).
 During travel you may encounter various events (at this moment you can be only attacked by hostile ships).
 Ship speed depends on engine power, engine damage, ship weight (with cargo) and bit on Engineer and Pilot experience.
-As you fly near bases (you are in this same cell where base is), you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are white.
+As you fly near bases (you are in this same cell where base is), you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are in default text color. 
 You can wait a moment without doing anything, by hit key 5 on keypad.
 To move map without moving ship, hold SHIFT and use keypad keys this same which are used for moving ship. Hit SPACE to center map on ship.
 [Trading]
@@ -34,7 +34,7 @@ Double sign "plus" after crew name in combat orders menu means that this member 
 Amount of loot from enemies depends on each enemy. Stronger enemies gives more amount of Charcollum.
 You can see detailed ship/crew/cargo status during combat by pressing corresponding key ('c' for crew, 's' for ship, 'a' for cargo). There you can give normal orders to crew (even starts repairing during combat) or dropping cargo.
 On combat screen you can see only damaged modules. Colors on your ship modules list show how much damaged module is:
-- White : module slightly damaged
+- Default text color : module slightly damaged
 - Green: module is damaged
 - Yellow : module is heavily damaged
 - Red : module is almost destroyed
