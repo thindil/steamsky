@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash on invalid data in save game file
+
 ## [0.3] - 2016-09-18
 
 ### Added
