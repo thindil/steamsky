@@ -133,48 +133,48 @@ package body UserInterface is
         SpeedWindow : Window;
     begin
         if PlayerShip.Speed = DOCKED then
-            SpeedWindow := Create(7, 16, (Lines / 2) - 5, (Columns / 2) - 8);
+            SpeedWindow := Create(5, 10, (Lines / 3), (Columns / 2) - 5);
             Box(SpeedWindow);
-            Move_Cursor(Win => SpeedWindow, Line => 2, Column => 5);
+            Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
             Add(Win => SpeedWindow, Str => "Undock");
-            Change_Attributes(Win => SpeedWindow, Line => 2, Column => 5, 
+            Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
                 Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 3, Column => 5);
+            Move_Cursor(Win => SpeedWindow, Line => 2, Column => 2);
             Add(Win => SpeedWindow, Str => "Trade");
-            Change_Attributes(Win => SpeedWindow, Line => 3, Column => 5, 
+            Change_Attributes(Win => SpeedWindow, Line => 2, Column => 2, 
                 Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 5, Column => 5);
+            Move_Cursor(Win => SpeedWindow, Line => 3, Column => 2);
             Add(Win => SpeedWindow, Str => "Quit");
-            Change_Attributes(Win => SpeedWindow, Line => 5, Column => 5, Count => 1,
+            Change_Attributes(Win => SpeedWindow, Line => 3, Column => 2, Count => 1,
                 Color => 1);
         else
-            SpeedWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
+            SpeedWindow := Create(8, 17, (Lines / 3), (Columns / 2) - 8);
             Box(SpeedWindow);
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
-                Move_Cursor(Win => SpeedWindow, Line => 2, Column => 5);
+                Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
                 Add(Win => SpeedWindow, Str => "Dock");
-                Change_Attributes(Win => SpeedWindow, Line => 2, Column => 5, 
+                Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
                     Count => 1, Color => 1);
             end if;
-            Move_Cursor(Win => SpeedWindow, Line => 3, Column => 5);
+            Move_Cursor(Win => SpeedWindow, Line => 2, Column => 2);
             Add(Win => SpeedWindow, Str => "Full stop");
-            Change_Attributes(Win => SpeedWindow, Line => 3, Column => 5, 
+            Change_Attributes(Win => SpeedWindow, Line => 2, Column => 2, 
                 Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 4, Column => 5);
+            Move_Cursor(Win => SpeedWindow, Line => 3, Column => 2);
             Add(Win => SpeedWindow, Str => "Quarter speed");
-            Change_Attributes(Win => SpeedWindow, Line => 4, Column => 7, 
+            Change_Attributes(Win => SpeedWindow, Line => 3, Column => 4, 
                 Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 5, Column => 5);
+            Move_Cursor(Win => SpeedWindow, Line => 4, Column => 2);
             Add(Win => SpeedWindow, Str => "Half speed");
-            Change_Attributes(Win => SpeedWindow, Line => 5, Column => 5, 
+            Change_Attributes(Win => SpeedWindow, Line => 4, Column => 2, 
                 Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 6, Column => 5);
+            Move_Cursor(Win => SpeedWindow, Line => 5, Column => 2);
             Add(Win => SpeedWindow, Str => "Full speed");
-            Change_Attributes(Win => SpeedWindow, Line => 6, Column => 7, 
+            Change_Attributes(Win => SpeedWindow, Line => 5, Column => 4, 
                 Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 8, Column => 5);
+            Move_Cursor(Win => SpeedWindow, Line => 6, Column => 2);
             Add(Win => SpeedWindow, Str => "Quit");
-            Change_Attributes(Win => SpeedWindow, Line => 8, Column => 5, Count => 1,
+            Change_Attributes(Win => SpeedWindow, Line => 6, Column => 2, Count => 1,
                 Color => 1);
         end if;
         Refresh(SpeedWindow);
