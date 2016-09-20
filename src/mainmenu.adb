@@ -31,8 +31,9 @@ package body MainMenu is
     CharName : String(1..12);
     ShipName : String(1..12);
     CharGender : Character;
-    LicenseText : Unbounded_String := Null_Unbounded_String;
-    StartIndex : Integer := 1;
+    StartIndex : Integer := 0;
+    EndIndex : Integer;
+    LicensePad : Window := Null_Window;
 
     procedure ShowMainMenu is
         Visibility : Cursor_Visibility := Invisible;
@@ -194,30 +195,38 @@ package body MainMenu is
 
     procedure ShowFullLicense is
         LicenseFile : File_Type;
-        Index : Positive;
-        CurrentLine : Line_Position := 2;
-        CurrentColumn : Column_Position;
+        LinesAmount, TmpLinesAmount : Line_Position;
+        LicenseText : Unbounded_String := Null_Unbounded_String;
     begin
-        if LicenseText = Null_Unbounded_String then
+        if LicensePad = Null_Window then
             if not Exists("COPYING") then
                 LicenseText := To_Unbounded_String("Can't find license file. Did COPYING file is in this same directory where executable is?");
             else
                 Open(LicenseFile, In_File, "COPYING");
+                LinesAmount := 0;
                 while not End_Of_File(LicenseFile) loop
                     Append(LicenseText, Get_Line(LicenseFile));
                     Append(LicenseText, ASCII.LF);
+                    LinesAmount := LinesAmount + 1;
                 end loop;
                 Close(LicenseFile);
             end if;
+            TmpLinesAmount := Line_Position(Length(LicenseText)) / Line_Position(Columns - 2);
+            if TmpLinesAmount < 1 then
+                TmpLinesAmount := 1;
+            end if;
+            if TmpLinesAmount > LinesAmount then
+                LinesAmount := TmpLinesAmount;
+            end if;
+            LicensePad := New_Pad(LinesAmount + 1, (Columns - 2));
+            Add(Win => LicensePad, Str => To_String(LicenseText));
+            EndIndex := Integer(LinesAmount - (Lines - 2));
+            if EndIndex < 0 then
+                EndIndex := 0;
+            end if;
+            Add(Str => "Up/down arrows to scroll, any other key - back to main menu.");
         end if;
-        Index := StartIndex;
-        Add(Str => "Up/down arrows to scroll, any other key - back to main menu.");
-        Move_Cursor(Line => 2, Column => 0);
-        while CurrentLine < (Lines - 1) and Index <= Length(LicenseText) loop
-            Add(Ch => Element(LicenseText, Index));
-            Index := Index + 1;
-            Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
-        end loop;
+        Refresh(LicensePad, Line_Position(StartIndex), 0, 2, 1, (Lines - 1), (Columns - 1));
     end ShowFullLicense;
 
     procedure ShowNews is
@@ -403,7 +412,6 @@ package body MainMenu is
     end LicenseKeys;
 
     function FullLicenseKeys(Key : in out Key_Code) return GameStates is
-        TextLength : Positive := 80;
     begin
         if Key = 27 then
             Key := Get_Keystroke;
@@ -413,24 +421,17 @@ package body MainMenu is
         end if;
         case Key is
             when 56 | 65 => -- Scroll license up
-                StartIndex := StartIndex - Positive(Columns);
-                if StartIndex < 1 then
-                    StartIndex := 1;
+                StartIndex := StartIndex - 1;
+                if StartIndex < 0 then
+                    StartIndex := 0;
                 end if;
-                Erase;
-                Refresh;
                 ShowFullLicense;
                 return License_Full;
             when 50 | 66 => -- Scroll license down
-                StartIndex := StartIndex + Positive(Columns);
-                if TextLength > Positive(Columns - 1) then
-                    TextLength := Positive(Columns - 1);
+                StartIndex := StartIndex + 1;
+                if StartIndex > EndIndex then
+                    StartIndex := EndIndex;
                 end if;
-                if (Length(LicenseText) - StartIndex) < (Positive(Lines - 7) * TextLength) then
-                    StartIndex := StartIndex - Positive(Columns);
-                end if;
-                Erase;
-                Refresh;
                 ShowFullLicense;
                 return License_Full;
             when others => -- Back to main menu
