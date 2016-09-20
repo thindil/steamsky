@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated help
+- Updated interface
 
 ### Fixed
 - Crash on invalid data in save game file
