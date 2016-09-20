@@ -220,12 +220,12 @@ package body MainMenu is
             end if;
             LicensePad := New_Pad(LinesAmount + 1, Columns);
             Add(Win => LicensePad, Str => To_String(LicenseText));
-            EndIndex := Integer(LinesAmount - (Lines - 2));
+            EndIndex := Integer(LinesAmount - (Lines - 3));
             if EndIndex < 0 then
                 EndIndex := 0;
             end if;
         end if;
-        Refresh(LicensePad, Line_Position(StartIndex), 0, 2, 0, (Lines - 1), Columns);
+        Refresh(LicensePad, Line_Position(StartIndex), 0, 3, 0, (Lines - 1), Columns);
     end ShowFullLicense;
 
     procedure ShowNews is
@@ -400,7 +400,7 @@ package body MainMenu is
                 StartIndex := 0;
                 Erase;
                 Refresh;
-                Add(Str => "Up/down arrows to scroll, any other key - back to main menu.");
+                Add(Str => "Up/down arrows to scroll on line, PgUp/PgDown to scroll one screen, Home/End to go begining or end, any other key - back to main menu.");
                 ShowFullLicense;
                 return License_Full;
             when others => -- Back to main menu
@@ -416,24 +416,30 @@ package body MainMenu is
         case Key is
             when 56 | KEY_UP => -- Scroll license up one line
                 StartIndex := StartIndex - 1;
-                if StartIndex < 0 then
-                    StartIndex := 0;
-                end if;
-                ShowFullLicense;
-                return License_Full;
             when 50 | KEY_DOWN => -- Scroll license down one line
                 StartIndex := StartIndex + 1;
-                if StartIndex > EndIndex then
-                    StartIndex := EndIndex;
-                end if;
-                ShowFullLicense;
-                return License_Full;
+            when 51 | KEY_NPAGE => -- Scroll license down one page
+                StartIndex := StartIndex + Integer(Lines - 3);
+            when 57 | KEY_PPAGE => -- Scroll license up one page
+                StartIndex := StartIndex - Integer(Lines - 3);
+            when 55 | KEY_HOME => -- Scroll license to start
+                StartIndex := 0;
+            when 49 | KEY_END => -- Scroll license to end
+                StartIndex := EndIndex;
             when others => -- Back to main menu
                 Erase;
                 Refresh;
                 ShowMainMenu;
                 return Main_Menu;
         end case;
+        if StartIndex < 0 then
+            StartIndex := 0;
+        end if;
+        if StartIndex > EndIndex then
+            StartIndex := EndIndex;
+        end if;
+        ShowFullLicense;
+        return License_Full;
     end FullLicenseKeys;
 
 end MainMenu;
