@@ -367,7 +367,7 @@ package body UserInterface is
             when Cargo_Info =>
                 ShowCargoInfo;
             when Help_Topic =>
-                ShowHelp;
+                ShowHelp(True);
             when others =>
                 null;
         end case;
