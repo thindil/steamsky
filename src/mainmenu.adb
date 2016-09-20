@@ -199,11 +199,11 @@ package body MainMenu is
         LicenseText : Unbounded_String := Null_Unbounded_String;
     begin
         if LicensePad = Null_Window then
+            LinesAmount := 0;
             if not Exists("COPYING") then
                 LicenseText := To_Unbounded_String("Can't find license file. Did COPYING file is in this same directory where executable is?");
             else
                 Open(LicenseFile, In_File, "COPYING");
-                LinesAmount := 0;
                 while not End_Of_File(LicenseFile) loop
                     Append(LicenseText, Get_Line(LicenseFile));
                     Append(LicenseText, ASCII.LF);
@@ -397,7 +397,7 @@ package body MainMenu is
     begin
         case Key is
             when Character'Pos('f') | Character'Pos('F') => -- Show full license
-                StartIndex := 1;
+                StartIndex := 0;
                 Erase;
                 Refresh;
                 Add(Str => "Up/down arrows to scroll, any other key - back to main menu.");
