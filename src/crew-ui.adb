@@ -164,16 +164,16 @@ package body Crew.UI is
             To_Unbounded_String("On break"), To_Unbounded_String("Repair ship"), 
             To_Unbounded_String("Manufacturing"));
     begin
-        OrdersWindow := Create(10, 20, (Lines / 2) - 5, (Columns / 2) - 10);
+        OrdersWindow := Create(9, 17, (Lines / 3), (Columns / 2) - 8);
         Box(OrdersWindow);
         for I in OrdersNames'Range loop
-            Move_Cursor(OrdersWindow, Line => Line_Position(I + 1), Column => 5);
+            Move_Cursor(OrdersWindow, Line => Line_Position(I), Column => 2);
             Add(OrdersWindow, Str => To_String(OrdersNames(I)));
-            Change_Attributes(OrdersWindow, Line => Line_Position(I + 1), Column => 5, Count => 1, Color => 1);
+            Change_Attributes(OrdersWindow, Line => Line_Position(I), Column => 2, Count => 1, Color => 1);
         end loop;
-        Move_Cursor(OrdersWindow, Line => 8, Column => 5);
+        Move_Cursor(OrdersWindow, Line => 7, Column => 2);
         Add(OrdersWindow, Str => "Quit");
-        Change_Attributes(OrdersWindow, Line => 8, Column => 5, Count => 1, Color => 1);
+        Change_Attributes(OrdersWindow, Line => 7, Column => 2, Count => 1, Color => 1);
         Refresh(OrdersWindow);
     end ShowOrdersMenu;
 
