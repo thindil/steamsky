@@ -110,13 +110,13 @@ package body Maps is
         NewKey : Key_Code;
     begin
         case Key is
-            when 56 => -- Move up
+            when 56 | KEY_UP => -- Move up
                 MoveShip(0, 0, -1);
-            when 50 => -- Move down
+            when 50 | KEY_DOWN => -- Move down
                 MoveShip(0, 0, 1); 
-            when 54 => -- Move right
+            when 54 | KEY_RIGHT => -- Move right
                 MoveShip(0, 1, 0);
-            when 52 => -- Move left
+            when 52 | KEY_LEFT => -- Move left
                 MoveShip(0, -1, 0);
             when 49 => -- Move down/left
                 MoveShip(0, -1, 1);
@@ -132,45 +132,37 @@ package body Maps is
                 Result := 3;
             when 53 => -- Wait 1 minute
                 UpdateGame(1);
-            when 27 => -- Map moving and ship moving with arrows keys
+            when KEY_SRIGHT =>
+                MoveX := MoveX + 1;
+                Result := 4;
+            when KEY_SLEFT =>
+                MoveX := MoveX - 1;
+                Result := 4;
+            when KEY_SHOME => -- Move map up/left
+                MoveX := MoveX - 1;
+                MoveY := MoveY - 1;
+                Result := 4;
+            when KEY_SPREVIOUS => -- Move map up/right
+                MoveX := MoveX + 1;
+                MoveY := MoveY - 1;
+                Result := 4;
+            when KEY_SEND => -- Move map down/left
+                MoveX := MoveX - 1;
+                MoveY := MoveY + 1;
+                Result := 4;
+            when KEY_SNEXT => -- Move map down/right
+                MoveX := MoveX + 1;
+                MoveY := MoveY + 1;
+                Result := 4;
+            when 27 => -- Map moving with arrows keys
                 NewKey := Get_KeyStroke;
                 if NewKey = 91 then
                     NewKey := Get_KeyStroke;
                     case NewKey is
-                        when 65 => -- Move up
-                            MoveShip(0, 0, -1);
-                        when 66 => -- Move down
-                            MoveShip(0, 0, 1); 
-                        when 67 => -- Move right
-                            MoveShip(0, 1, 0);
-                        when 68 => -- Move left
-                            MoveShip(0, -1, 0);
                         when 97 => -- Move map up
                             MoveY := MoveY - 1;
                             Result := 4;
                         when 98 => -- Move map down
-                            MoveY := MoveY + 1;
-                            Result := 4;
-                        when 99 => -- Move map right
-                            MoveX := MoveX + 1;
-                            Result := 4;
-                        when 100 => -- Move map left
-                            MoveX := MoveX - 1;
-                            Result := 4;
-                        when 55 => -- Move map up/left
-                            MoveX := MoveX - 1;
-                            MoveY := MoveY - 1;
-                            Result := 4;
-                        when 53 => -- Move map up/right
-                            MoveX := MoveX + 1;
-                            MoveY := MoveY - 1;
-                            Result := 4;
-                        when 56 => -- Move map down/left
-                            MoveX := MoveX - 1;
-                            MoveY := MoveY + 1;
-                            Result := 4;
-                        when 54 => -- Move map down/right
-                            MoveX := MoveX + 1;
                             MoveY := MoveY + 1;
                             Result := 4;
                         when others =>
