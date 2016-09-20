@@ -218,15 +218,14 @@ package body MainMenu is
             if TmpLinesAmount > LinesAmount then
                 LinesAmount := TmpLinesAmount;
             end if;
-            LicensePad := New_Pad(LinesAmount + 1, (Columns - 2));
+            LicensePad := New_Pad(LinesAmount + 1, Columns);
             Add(Win => LicensePad, Str => To_String(LicenseText));
             EndIndex := Integer(LinesAmount - (Lines - 2));
             if EndIndex < 0 then
                 EndIndex := 0;
             end if;
-            Add(Str => "Up/down arrows to scroll, any other key - back to main menu.");
         end if;
-        Refresh(LicensePad, Line_Position(StartIndex), 0, 2, 1, (Lines - 1), (Columns - 1));
+        Refresh(LicensePad, Line_Position(StartIndex), 0, 2, 0, (Lines - 1), Columns);
     end ShowFullLicense;
 
     procedure ShowNews is
@@ -401,6 +400,7 @@ package body MainMenu is
                 StartIndex := 1;
                 Erase;
                 Refresh;
+                Add(Str => "Up/down arrows to scroll, any other key - back to main menu.");
                 ShowFullLicense;
                 return License_Full;
             when others => -- Back to main menu
@@ -411,23 +411,17 @@ package body MainMenu is
         end case;
     end LicenseKeys;
 
-    function FullLicenseKeys(Key : in out Key_Code) return GameStates is
+    function FullLicenseKeys(Key : Key_Code) return GameStates is
     begin
-        if Key = 27 then
-            Key := Get_Keystroke;
-            if Key = 91 then
-                Key := Get_Keystroke;
-            end if;
-        end if;
         case Key is
-            when 56 | 65 => -- Scroll license up
+            when 56 | KEY_UP => -- Scroll license up one line
                 StartIndex := StartIndex - 1;
                 if StartIndex < 0 then
                     StartIndex := 0;
                 end if;
                 ShowFullLicense;
                 return License_Full;
-            when 50 | 66 => -- Scroll license down
+            when 50 | KEY_DOWN => -- Scroll license down one line
                 StartIndex := StartIndex + 1;
                 if StartIndex > EndIndex then
                     StartIndex := EndIndex;
