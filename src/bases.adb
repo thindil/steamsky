@@ -305,13 +305,12 @@ package body Bases is
     
     function TradeKeys(Key : Key_Code) return GameStates is
         Result : Driver_Result;
-        NewKey : Key_Code;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
-            when 56 => -- Select previous item to trade
+            when 56 | KEY_UP => -- Select previous item to trade
                 Result := Driver(TradeMenu, M_Up_Item);
                 if Result = Request_Denied then
                     Result := Driver(TradeMenu, M_Last_Item);
@@ -320,7 +319,7 @@ package body Bases is
                     ShowItemInfo;
                     Refresh(MenuWindow);
                 end if;
-            when 50 => -- Select next item to trade
+            when 50 | KEY_DOWN => -- Select next item to trade
                 Result := Driver(TradeMenu, M_Down_Item);
                 if Result = Request_Denied then
                     Result := Driver(TradeMenu, M_First_Item);
@@ -328,30 +327,6 @@ package body Bases is
                 if Result = Menu_Ok then
                     ShowItemInfo;
                     Refresh(MenuWindow);
-                end if;
-            when 27 => 
-                NewKey := Get_KeyStroke;
-                if NewKey = 91 then
-                    NewKey := Get_KeyStroke;
-                    if NewKey = 65 then -- Select previous item to trade
-                        Result := Driver(TradeMenu, M_Up_Item);
-                        if Result = Request_Denied then
-                            Result := Driver(TradeMenu, M_Last_Item);
-                        end if;
-                        if Result = Menu_Ok then
-                            ShowItemInfo;
-                            Refresh(MenuWindow);
-                        end if;
-                    elsif NewKey = 66 then -- Select next item to trade
-                        Result := Driver(TradeMenu, M_Down_Item);
-                        if Result = Request_Denied then
-                            Result := Driver(TradeMenu, M_First_Item);
-                        end if;
-                        if Result = Menu_Ok then
-                            ShowItemInfo;
-                            Refresh(MenuWindow);
-                        end if;
-                    end if;
                 end if;
             when 32 => -- Sell item
                 ShowForm;

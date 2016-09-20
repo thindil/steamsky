@@ -179,7 +179,6 @@ package body Crew.UI is
 
     function CrewInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Driver_Result;
-        NewKey : Key_Code;
         MemberIndex : constant Positive := Get_Index(Current(CrewMenu));
     begin
         case Key is
@@ -193,7 +192,7 @@ package body Crew.UI is
                     Update_Screen;
                     return Giving_Orders;
                 end if;
-            when 56 => -- Select previous crew member
+            when 56 | KEY_UP => -- Select previous crew member
                 Result := Driver(CrewMenu, M_Up_Item);
                 if Result = Request_Denied then
                     Result := Driver(CrewMenu, M_Last_Item);
@@ -202,7 +201,7 @@ package body Crew.UI is
                     ShowMemberInfo;
                     Refresh(MenuWindow);
                 end if;
-            when 50 => -- Select next crew member
+            when 50 | KEY_DOWN => -- Select next crew member
                 Result := Driver(CrewMenu, M_Down_Item);
                 if Result = Request_Denied then
                     Result := Driver(CrewMenu, M_First_Item);
@@ -210,30 +209,6 @@ package body Crew.UI is
                 if Result = Menu_Ok then
                     ShowMemberInfo;
                     Refresh(MenuWindow);
-                end if;
-            when 27 => 
-                NewKey := Get_KeyStroke;
-                if NewKey = 91 then
-                    NewKey := Get_KeyStroke;
-                    if NewKey = 65 then -- Select previous crew member
-                        Result := Driver(CrewMenu, M_Up_Item);
-                        if Result = Request_Denied then
-                            Result := Driver(CrewMenu, M_Last_Item);
-                        end if;
-                        if Result = Menu_Ok then
-                            ShowMemberInfo;
-                            Refresh(MenuWindow);
-                        end if;
-                    elsif NewKey = 66 then -- Select next crew member
-                        Result := Driver(CrewMenu, M_Down_Item);
-                        if Result = Request_Denied then
-                            Result := Driver(CrewMenu, M_First_Item);
-                        end if;
-                        if Result = Menu_Ok then
-                            ShowMemberInfo;
-                            Refresh(MenuWindow);
-                        end if;
-                    end if;
                 end if;
             when others =>
                 null;
