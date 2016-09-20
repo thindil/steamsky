@@ -246,7 +246,6 @@ package body Crafts is
     
     function CraftKeys(Key : Key_Code) return GameStates is
         Result : Driver_Result;
-        NewKey : Key_Code;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -255,7 +254,7 @@ package body Crafts is
             when Character'Pos(' ') => -- Set selected manufacturing order
                 SetRecipe;
                 DrawGame(Craft_View);
-            when 56 => -- Select previous recipe
+            when 56 | KEY_UP => -- Select previous recipe
                 Result := Driver(RecipesMenu, M_Up_Item);
                 if Result = Request_Denied then
                     Result := Driver(RecipesMenu, M_Last_Item);
@@ -264,7 +263,7 @@ package body Crafts is
                     ShowRecipeInfo;
                     Refresh(MenuWindow);
                 end if;
-            when 50 => -- Select next recipe
+            when 50 | KEY_DOWN => -- Select next recipe
                 Result := Driver(RecipesMenu, M_Down_Item);
                 if Result = Request_Denied then
                     Result := Driver(RecipesMenu, M_First_Item);
@@ -272,30 +271,6 @@ package body Crafts is
                 if Result = Menu_Ok then
                     ShowRecipeInfo;
                     Refresh(MenuWindow);
-                end if;
-            when 27 => 
-                NewKey := Get_KeyStroke;
-                if NewKey = 91 then
-                    NewKey := Get_KeyStroke;
-                    if NewKey = 65 then -- Select previous recipe
-                        Result := Driver(RecipesMenu, M_Up_Item);
-                        if Result = Request_Denied then
-                            Result := Driver(RecipesMenu, M_Last_Item);
-                        end if;
-                        if Result = Menu_Ok then
-                            ShowRecipeInfo;
-                            Refresh(MenuWindow);
-                        end if;
-                    elsif NewKey = 66 then -- Select next recipe
-                        Result := Driver(RecipesMenu, M_Down_Item);
-                        if Result = Request_Denied then
-                            Result := Driver(RecipesMenu, M_First_Item);
-                        end if;
-                        if Result = Menu_Ok then
-                            ShowRecipeInfo;
-                            Refresh(MenuWindow);
-                        end if;
-                    end if;
                 end if;
             when others =>
                 null;
