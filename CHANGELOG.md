@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated help
 - Updated interface
+- Showing more messages on combat screen
 
 ### Fixed
 - Crash on invalid data in save game file
