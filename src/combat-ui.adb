@@ -129,7 +129,7 @@ package body Combat.UI is
         LoopStart : Integer;
         DamagePercent : Natural;
         CurrentLine : Line_Position := 9;
-        CurrentColumn : Column_Position := 2;
+        Message : Unbounded_String;
     begin
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             case PlayerShip.Crew.Element(I).Order is
@@ -261,12 +261,16 @@ package body Combat.UI is
             if LoopStart < -10 then
                 LoopStart := -10;
             end if;
-            Move_Cursor(Line => Lines - 10, Column => 2);
+            CurrentLine := Lines - 10;
+            Move_Cursor(Line => CurrentLine, Column => 2);
             for I in LoopStart..-1 loop
-                Add(Str => GetMessage((I + 1), Default));
-                Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
+                Message := To_Unbounded_String(GetMessage((I + 1), Default));
                 CurrentLine := CurrentLine + 1;
-                exit when CurrentLine = Lines;
+                if Length(Message) > Integer(Columns - 2) then
+                    CurrentLine := CurrentLine + (Line_Position(Length(Message)) / Line_Position(Columns - 2));
+                end if;
+                exit when CurrentLine >= Lines;
+                Add(Str => To_String(Message));
                 Move_Cursor(Line => CurrentLine, Column => 2);
             end loop;
         end if;
