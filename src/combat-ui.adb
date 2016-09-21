@@ -255,14 +255,14 @@ package body Combat.UI is
             Change_Attributes(Line => 13, Column => (Columns / 2),
                 Count => 3, Color => 1);
         end if;
-        if MessagesStarts < MessagesAmount(CombatMessage) then
-            LoopStart := MessagesStarts - MessagesAmount(CombatMessage);
+        if MessagesStarts < MessagesAmount then
+            LoopStart := MessagesStarts - MessagesAmount;
             if LoopStart < -10 then
                 LoopStart := -10;
             end if;
             for I in LoopStart..-1 loop
                 Move_Cursor(Line => Lines + Line_Position(I), Column => 2);
-                Add(Str => GetMessage((I + 1), CombatMessage));
+                Add(Str => GetMessage((I + 1), Default));
             end loop;
         end if;
         LastMessage := To_Unbounded_String("");

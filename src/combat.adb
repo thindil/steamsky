@@ -41,7 +41,7 @@ package body Combat is
         GunnerOrder := 1;
         EndCombat := False;
         EnemyName := Enemy.Ship.Name;
-        MessagesStarts := MessagesAmount(CombatMessage);
+        MessagesStarts := MessagesAmount(Default);
     end StartCombat;
 
     procedure CombatTurn is
