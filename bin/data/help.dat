@@ -51,4 +51,5 @@ To start manufacturing items, first you must have enough material and proper mod
 * If your resting crew member don't have assigned cabin, he/she will be resting much slower.
 * Crew members can regenerate health over time but only when they are on break and have assigned cabin.
 * If crew member cabin is destroyed and he/she going on break, he/she will try find empty cabin as a new own to rest.
+* If you want to stop renaming modules or dropping cargo, just left field with name/amount of items to drop empty. That same works for stopping buying or selling items.
 []
