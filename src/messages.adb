@@ -27,8 +27,9 @@ package body Messages is
         end record;
     package Messages_Container is new Vectors(Positive, Message_Data);
     Messages_List : Messages_Container.Vector;
-    StartIndex : Integer := 0;
+    StartIndex, EndIndex : Integer := 0;
     MessagesType : Message_Type := Default;
+    MessagesPad : Window := Null_Window;
 
     function FormatedTime return String is
         Result : Unbounded_String := To_Unbounded_String("");
@@ -136,31 +137,47 @@ package body Messages is
     end GetMessageType;
 
     procedure ShowMessages is
-        Index : Integer;
+        LinesAmount : Line_Position := 0;
+        TextMessages : Unbounded_String;
     begin
         if Messages_List.Length = 0 then
             Move_Cursor(Line => (Lines / 2), Column => (Columns / 2) - 8);
             Add(Str => "No messages yet.");
             return;
         end if;
-        Index := StartIndex;
-        Move_Cursor(Line => 2, Column => 2);
-        Add(Str => "[All] [Combat] [Trade] [Orders] [Crafts] [Others]");
-        Change_Attributes(Line => 2, Column => 3, Count => 1, Color => 1);
-        Change_Attributes(Line => 2, Column => 9, Count => 1, Color => 1);
-        Change_Attributes(Line => 2, Column => 18, Count => 1, Color => 1);
-        Change_Attributes(Line => 2, Column => 26, Count => 1, Color => 1);
-        Change_Attributes(Line => 2, Column => 36, Count => 1, Color => 1);
-        Change_Attributes(Line => 2, Column => 47, Count => 1, Color => 1);
-        if Index > 0 then
-            Index := 0;
+        if MessagesPad = Null_Window then
+            Move_Cursor(Line => 2, Column => 2);
+            Add(Str => "[All] [Combat] [Trade] [Orders] [Crafts] [Others]");
+            Change_Attributes(Line => 2, Column => 3, Count => 1, Color => 1);
+            Change_Attributes(Line => 2, Column => 9, Count => 1, Color => 1);
+            Change_Attributes(Line => 2, Column => 18, Count => 1, Color => 1);
+            Change_Attributes(Line => 2, Column => 26, Count => 1, Color => 1);
+            Change_Attributes(Line => 2, Column => 36, Count => 1, Color => 1);
+            Change_Attributes(Line => 2, Column => 47, Count => 1, Color => 1);
+            for I in reverse Messages_List.First_Index..Messages_List.Last_Index loop
+                if Messages_List.Element(I).MType = MessagesType or MessagesType = Default then
+                    Append(TextMessages, Messages_List.Element(I).Message);
+                    Append(TextMessages, ASCII.LF);
+                    LinesAmount := LinesAmount + 1;
+                    if Length(Messages_List.Element(I).Message) > Positive(Columns - 2) then
+                        LinesAmount := LinesAmount + (Line_Position(Length(Messages_List.Element(I).Message)) / 
+                            Line_Position(Columns - 2));
+                    end if;
+                end if;
+            end loop;
+            if LinesAmount < 1 then
+                LinesAmount := 1;
+                TextMessages := To_Unbounded_String("There no messages of that type.");
+            end if;
+            MessagesPad := New_Pad(LinesAmount + 1, Columns - 2);
+            Add(Win => MessagesPad, Str => To_String(TextMessages));
+            EndIndex := Integer(LinesAmount - (Lines - 4));
+            if EndIndex < 0 then
+                EndIndex := 0;
+            end if;
+            Refresh;
         end if;
-        for I in 4..(Lines - 2) loop
-            Move_Cursor(Line => I, Column => 2);
-            Add(Str => GetMessage(Index, MessagesType));
-            Index := Index - 1;
-            exit when Index > Integer(Messages_List.Length);
-        end loop;
+        Refresh(MessagesPad, Line_Position(StartIndex), 0, 4, 2, (Lines - 1), (Columns - 2));
     end ShowMessages;
 
     function MessagesKeys(Key : Key_Code) return GameStates is
@@ -169,61 +186,73 @@ package body Messages is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 StartIndex := 0;
                 MessagesType := Default;
+                MessagesPad := Null_Window;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
-            when 56 | 65 => -- Scroll messages up
-                StartIndex := StartIndex + 1;
-                if StartIndex > 0 then
-                    StartIndex := 0;
-                end if;
-                DrawGame(Messages_View);
-                return Messages_View;
-            when 50 | 66 => -- Scroll messages down
+            when 56 | KEY_UP => -- Scroll messages one line up
                 StartIndex := StartIndex - 1;
-                if MessagesAmount(MessagesType) < Natural(Lines - 5) then
+                if StartIndex < 0 then
                     StartIndex := 0;
                 end if;
-                if (abs StartIndex) + Natural(Lines - 5) > MessagesAmount(MessagesType) then
-                    StartIndex := 0 - (MessagesAmount(MessagesType) - Natural(Lines) + 5);
-                    if StartIndex > 0 then
-                        StartIndex := 0;
-                    end if;
+                ShowMessages;
+            when 50 | KEY_DOWN => -- Scroll messages one line down
+                StartIndex := StartIndex + 1;
+                if StartIndex > EndIndex then
+                    StartIndex := EndIndex;
                 end if;
-                DrawGame(Messages_View);
-                return Messages_View;
+                ShowMessages;
+            when 51 | KEY_NPAGE => -- Scroll messages one screen down
+                StartIndex := StartIndex + Integer(Lines - 4);
+                if StartIndex > EndIndex then
+                    StartIndex := EndIndex;
+                end if;
+                ShowMessages;
+            when 57 | KEY_PPAGE => -- Scroll messages one screen up
+                StartIndex := StartIndex - Integer(Lines - 4);
+                if StartIndex < 0 then
+                    StartIndex := 0;
+                end if;
+                ShowMessages;
+            when 55 | KEY_HOME => -- Scroll messages to start
+                StartIndex := 0;
+                ShowMessages;
+            when 49 | KEY_END => -- Scroll messages to end
+                StartIndex := EndIndex;
+                ShowMessages;
             when Character'Pos('a') => -- Show all messages
                 StartIndex := 0;
                 MessagesType := Default;
+                MessagesPad := Null_Window;
                 DrawGame(Messages_View);
-                return Messages_View;
             when Character'Pos('c') | Character'Pos('C') => -- Show combat messages
                 StartIndex := 0;
                 MessagesType := CombatMessage;
+                MessagesPad := Null_Window;
                 DrawGame(Messages_View);
-                return Messages_View;
             when Character'Pos('t') | Character'Pos('T') => -- Show trade messages
                 StartIndex := 0;
                 MessagesType := TradeMessage;
+                MessagesPad := Null_Window;
                 DrawGame(Messages_View);
-                return Messages_View;
             when Character'Pos('o') | Character'Pos('O') => -- Show orders messages
                 StartIndex := 0;
                 MessagesType := OrderMessage;
+                MessagesPad := Null_Window;
                 DrawGame(Messages_View);
-                return Messages_View;
             when Character'Pos('r') | Character'Pos('R') => -- Show craft messages
                 StartIndex := 0;
                 MessagesType := CraftMessage;
+                MessagesPad := Null_Window;
                 DrawGame(Messages_View);
-                return Messages_View;
             when Character'Pos('e') | Character'Pos('E') => -- Show others messages
                 StartIndex := 0;
                 MessagesType := OtherMessage;
+                MessagesPad := Null_Window;
                 DrawGame(Messages_View);
-                return Messages_View;
             when others =>
-                return Messages_View;
+                null;
         end case;
+        return Messages_View;
     end MessagesKeys;
 
 end Messages;
