@@ -1,7 +1,7 @@
 [General Informations]
 SteamSky is roguelike game where you command small flying ship with crew. You must take care about ship and crew. You can trade items between sky bases, fight with enemies or manufacturing items. Game ends when your character die.
 Whole game interface is keyboard based. Most options/menus are accessible by keyboard shortcuts. All shortcuts are case insensitive, for example, to access help, you can use 'h' or 'shift+h' key. That same is with arrows keys - you can use normal arrows and keypad arrows (after enabling Num Lock at your keyboard).
-Most texts in game, can be scrolled with arrow keys.
+Most texts in game, can be scrolled with arrow keys by one line, by one screen with PageUp/PageDown keys or to begining by Home key and end to End key.
 On mosts screens you can see in top right corner informations about needed crew positions in ship. P means pilot, E - engineer, G - gunner, R - repairs, M - manufacturing. If you have someone on this position, letters will be green, if you don't have and you need any, letters will be red, when you don't have anyone on that position and you don't need anyone there, letter will be in default text color.
 At this moment, help is under heavy development (as whole game).
 [Ship movement]
