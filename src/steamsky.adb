@@ -57,6 +57,29 @@ begin
 
     while GameState /= Quit loop
         Key := Get_Keystroke;
+        if Key = Terminal_Interface.Curses.KEY_RESIZE then
+            Erase;
+            case GameState is
+                when Main_Menu =>
+                    ShowMainMenu;
+                when New_Game =>
+                    ShowMainMenu;
+                    Refresh;
+                    GameState := Main_Menu;
+                    Key := Character'Pos('n');
+                when License_Info =>
+                    GameState := Main_Menu;
+                    Key := Character'Pos('i');
+                when License_Full =>
+                    GameState := License_Info;
+                    Key := Character'Pos('f');
+                when News_View =>
+                    GameState := Main_Menu;
+                    Key := Character'Pos('e');
+                when others =>
+                    DrawGame(GameState);
+            end case;
+        end if;
         if GameState /= Main_Menu and GameState /= New_Game and GameState /= License_Info 
             and GameState /= License_Full and GameState /= News_View then
             if PlayerShip.Crew.Element(1).Health = 0 then -- Player is dead
