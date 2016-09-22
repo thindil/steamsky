@@ -159,6 +159,7 @@ package body Ships.UI is
         Cargo_Items: constant Item_Array_Access := new Item_Array(1..(PlayerShip.Cargo.Last_Index + 1));
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
+        FreeSpace : Integer;
     begin
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
             Cargo_Items.all(I) := New_Item(To_String(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name));
@@ -175,7 +176,11 @@ package body Ships.UI is
         ShowItemInfo;
         Refresh(MenuWindow);
         Move_Cursor(Line => MenuHeight + 4, Column => 2);
-        Add(Str => "Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg");
+        FreeSpace := FreeCargo(0);
+        if FreeSpace < 0 then
+            FreeSpace := 0;
+        end if;
+        Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
     end ShowCargoInfo;
 
     procedure ShowModuleForm is

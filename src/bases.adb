@@ -182,6 +182,7 @@ package body Bases is
         MoneyIndex : Natural := 0;
         ShowItem : Boolean := False;
         MenuIndex : Integer := 1;
+        FreeSpace : Integer;
     begin
         for I in 2..(Items_List.Last_Index) loop
             for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
@@ -224,7 +225,11 @@ package body Bases is
             Add(Str => "You don't have any Charcollum to buy anything.");
         end if;
         Move_Cursor(Line => (MenuHeight + 5), Column => 2);
-        Add(Str => "Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg");
+        FreeSpace := FreeCargo(0);
+        if FreeSpace < 0 then
+            FreeSpace := 0;
+        end if;
+        Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
         Move_Cursor(Line => (Lines - 1), Column => 2);
         Add(Str => "ENTER to buy selected item, SPACE for sell.");
         Change_Attributes(Line => (Lines - 1), Column => 2, Count => 5, Color => 1);
