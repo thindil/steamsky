@@ -150,12 +150,11 @@ package body Crafts is
         InfoWindow : Window;
         Recipe : constant Craft_Data := Recipes_List.Element(Get_Index(Current(RecipesMenu)));
         CurrentLine : Line_Position := 3;
-        MAmount : Natural := 0;
+        MAmount, TextLength : Natural := 0;
         HaveMaterial, HaveWorkplace : Boolean := False;
         StartLine : Line_Position;
         StartColumn, EndColumn : Column_Position;
         WorkplaceName : Unbounded_String := Null_Unbounded_String;
-        TextLength : Positive;
     begin
         InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
         Add(Win => InfoWindow, Str => "Name: " & To_String(Items_List.Element(Recipe.ResultIndex).Name));
@@ -183,9 +182,15 @@ package body Crafts is
                     end loop;
                     if not HaveMaterial then
                         if StartLine = CurrentLine then
-                            TextLength := Positive(EndColumn - StartColumn);
+                            TextLength := Natural(EndColumn - StartColumn);
                             Change_Attributes(Win => InfoWindow, Line => StartLine,
                                 Column => StartColumn, Count => Integer(StartColumn) + TextLength, Color => 3);
+                        else
+                            TextLength := Natural((Columns / 2) - StartColumn);
+                            Change_Attributes(Win => InfoWindow, Line => StartLine,
+                                Column => StartColumn, Count => Integer(StartColumn) + TextLength, Color => 3);
+                            Change_Attributes(Win => InfoWindow, Line => CurrentLine,
+                                Column => 0, Count => Integer(EndColumn), Color => 3);
                         end if;
                         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
                     end if;
