@@ -692,6 +692,11 @@ package body Game is
         DataFile : File_Type;
         RawData, FieldName, Value : Unbounded_String;
         EqualIndex, StartIndex, EndIndex, Amount : Natural;
+        FieldsNames : constant array (1..8) of Unbounded_String := (To_Unbounded_String("BasesSyllablesPre"),
+            To_Unbounded_String("BasesSyllablesStart"), To_Unbounded_String("BasesSyllablesEnd"), 
+            To_Unbounded_String("BasesSyllablesPost"), To_Unbounded_String("MaleSyllablesStart"), 
+            To_Unbounded_String("MaleSyllablesMiddle"), To_Unbounded_String("MaleSyllablesEnd"), 
+            To_Unbounded_String("FemaleSyllablesEnd"));
     begin
         if BaseSyllablesStart.Length > 0 then
             return True;
@@ -705,95 +710,38 @@ package body Game is
             EqualIndex := Index(RawData, "=");
             FieldName := Head(RawData, EqualIndex - 2);
             Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
-            if FieldName = To_Unbounded_String("BasesSyllablesPre") then
-                StartIndex := 1;
-                Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                for I in 1..Amount loop
-                    EndIndex := Index(Value, ", ", StartIndex);
-                    if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                    end if;
-                    BaseSyllablesPre.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
-                    StartIndex := EndIndex + 2;
-                end loop;
-            elsif FieldName = To_Unbounded_String("BasesSyllablesStart") then
-                StartIndex := 1;
-                Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                for I in 1..Amount loop
-                    EndIndex := Index(Value, ", ", StartIndex);
-                    if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                    end if;
-                    BaseSyllablesStart.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
-                    StartIndex := EndIndex + 2;
-                end loop;
-            elsif FieldName = To_Unbounded_String("BasesSyllablesEnd") then
-                StartIndex := 1;
-                Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                for I in 1..Amount loop
-                    EndIndex := Index(Value, ", ", StartIndex);
-                    if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                    end if;
-                    BaseSyllablesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
-                    StartIndex := EndIndex + 2;
-                end loop;
-            elsif FieldName = To_Unbounded_String("BasesSyllablesPost") then
-                StartIndex := 1;
-                Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                for I in 1..Amount loop
-                    EndIndex := Index(Value, ", ", StartIndex);
-                    if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                    end if;
-                    BaseSyllablesPost.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
-                    StartIndex := EndIndex + 2;
-                end loop;
-            elsif FieldName = To_Unbounded_String("MaleSyllablesStart") then
-                StartIndex := 1;
-                Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                for I in 1..Amount loop
-                    EndIndex := Index(Value, ", ", StartIndex);
-                    if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                    end if;
-                    MaleSyllablesStart.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
-                    StartIndex := EndIndex + 2;
-                end loop;
-            elsif FieldName = To_Unbounded_String("MaleSyllablesMiddle") then
-                StartIndex := 1;
-                Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                for I in 1..Amount loop
-                    EndIndex := Index(Value, ", ", StartIndex);
-                    if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                    end if;
-                    MaleSyllablesMiddle.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
-                    StartIndex := EndIndex + 2;
-                end loop;
-            elsif FieldName = To_Unbounded_String("MaleSyllablesEnd") then
-                StartIndex := 1;
-                Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                for I in 1..Amount loop
-                    EndIndex := Index(Value, ", ", StartIndex);
-                    if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                    end if;
-                    MaleSyllablesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
-                    StartIndex := EndIndex + 2;
-                end loop;
-            elsif FieldName = To_Unbounded_String("FemaleSyllablesEnd") then
-                StartIndex := 1;
-                Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                for I in 1..Amount loop
-                    EndIndex := Index(Value, ", ", StartIndex);
-                    if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                    end if;
-                    FemaleSyllablesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
-                    StartIndex := EndIndex + 2;
-                end loop;
-            end if;
+            for I in FieldsNames'Range loop
+                if FieldName = FieldsNames(I) then
+                    StartIndex := 1;
+                    Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                    for J in 1..Amount loop
+                        EndIndex := Index(Value, ", ", StartIndex);
+                        if EndIndex = 0 then
+                            EndIndex := Length(Value) + 1;
+                        end if;
+                        case I is
+                            when 1 =>
+                                BaseSyllablesPre.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                            when 2 =>
+                                BaseSyllablesStart.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                            when 3 =>
+                                BaseSyllablesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                            when 4 =>
+                                BaseSyllablesPost.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                            when 5 =>
+                                MaleSyllablesStart.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                            when 6 =>
+                                MaleSyllablesMiddle.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                            when 7 =>
+                                MaleSyllablesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                            when 8 =>
+                                FemaleSyllablesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                        end case;
+                        StartIndex := EndIndex + 2;
+                    end loop;
+                    exit;
+                end if;
+            end loop;
         end loop;
         Close(DataFile);
         return True;
