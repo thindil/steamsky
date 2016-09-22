@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Adding destroyed cargo bay to free cargo space
 - Crash in combat on small screens
 - Coloring missing materials on recipes screen
+- Showing negative free cargo space
 
 ## [0.3] - 2016-09-18
 
