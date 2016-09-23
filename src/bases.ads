@@ -29,6 +29,7 @@ package Bases is
             SkyX : Integer; -- X coordinate on sky map
             SkyY : Integer; -- Y coordinate on sky map
             BaseType : Bases_Types; -- Type of base
+            Population : Natural; -- Amount of people in base
         end record;
     SkyBases : array (1..1024) of BaseRecord; -- List of sky bases
     procedure BuyItems(ItemIndex : Positive; Amount : String); -- Buy items from bases
