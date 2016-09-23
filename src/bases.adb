@@ -139,6 +139,93 @@ package body Bases is
         end if;
         return NewName;
     end GenerateBaseName;
+    
+    procedure RepairCost(Cost, Time, ModuleIndex : in out Natural) is
+        BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
+            PlayerShip.SkyY).BaseIndex).BaseType) + 1;
+    begin
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if To_String(PlayerShip.Modules.Element(I).Name) = Name(Current(TradeMenu)) then
+                Time := PlayerShip.Modules.Element(I).MaxDurability - PlayerShip.Modules.Element(I).Durability;
+                for J in Items_List.First_Index..Items_List.Last_Index loop
+                   if Items_List.Element(J).IType = Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial then
+                       Cost := Time * Items_List.Element(J).Prices(BaseType);
+                       ModuleIndex := I;
+                       exit;
+                   end if;
+                end loop;
+                exit;
+            end if;
+        end loop;
+        if Cost = 0 then
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                    Time := Time + PlayerShip.Modules.Element(I).MaxDurability - PlayerShip.Modules.Element(I).Durability;
+                    for J in Items_List.First_Index..Items_List.Last_Index loop
+                        if Items_List.Element(J).IType = Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial
+                        then
+                            Cost := Cost + ((PlayerShip.Modules.Element(I).MaxDurability - PlayerShip.Modules.Element(I).Durability) *
+                                Items_List.Element(J).Prices(BaseType));
+                            exit;
+                        end if;
+                    end loop;
+                end if;
+            end loop;
+            if Name(Current(TradeMenu))(1) = 'R' then
+                Cost := Cost * 2;
+                Time := Time / 2;
+            elsif Name(Current(TradeMenu))(1) = 'F' then
+                Cost := Cost * 4;
+                Time := Time / 4;
+            end if;
+        end if;
+    end RepairCost;
+
+    procedure RepairShip is
+        Cost, Time, ModuleIndex, MoneyIndex, RepairValue : Natural := 0;
+    begin
+        RepairCost(Cost, Time, ModuleIndex);
+        if Cost = 0 then
+            return;
+        end if;
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
+                MoneyIndex := I;
+                exit;
+            end if;
+        end loop;
+        if MoneyIndex = 0 then
+            ShowDialog("You don't have Charcollum to pay for repairs.");
+            DrawGame(Repairs_View);
+            return;
+        end if;
+        if PlayerShip.Cargo.Element(MoneyIndex).Amount < Cost then
+            ShowDialog("You don't have enough Charcollum to pay for repairs.");
+            return;
+        end if;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Repair then
+                GiveOrders(I, Rest);
+            end if;
+        end loop;
+        if ModuleIndex > 0 then
+            RepairValue := PlayerShip.Modules.Element(ModuleIndex).MaxDurability - PlayerShip.Modules.Element(ModuleIndex).Durability;
+            UpdateModule(PlayerShip, ModuleIndex, "Durability", Positive'Image(RepairValue));
+            AddMessage("You bought " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & " repair for" & 
+                Positive'Image(Cost) & " Charcollum.", TradeMessage);
+        else
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                    RepairValue := PlayerShip.Modules.Element(I).MaxDurability - PlayerShip.Modules.Element(I).Durability;
+                    UpdateModule(PlayerShip, I, "Durability", Positive'Image(RepairValue));
+                end if;
+            end loop;
+            AddMessage("You bought whole ship repair for" & Positive'Image(Cost) & " Charcollum.", TradeMessage);
+        end if;
+        UpdateCargo(1, (0 - Cost));
+        UpdateGame(Time);
+        DrawGame(Repairs_View);
+    end RepairShip;
 
     procedure ShowItemInfo is
         ItemIndex : Positive;
@@ -310,28 +397,17 @@ package body Bases is
     end ShowForm;
 
     procedure ShowRepairInfo is
-        ModuleIndex, Cost, Time : Natural := 0;
+        Cost, Time, ModuleIndex : Natural := 0;
         InfoWindow : Window;
-        BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
-            PlayerShip.SkyY).BaseIndex).BaseType) + 1;
     begin
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if To_String(PlayerShip.Modules.Element(I).Name) = Name(Current(TradeMenu)) then
-                Time := PlayerShip.Modules.Element(I).MaxDurability - PlayerShip.Modules.Element(I).Durability;
-                for J in Items_List.First_Index..Items_List.Last_Index loop
-                   if Items_List.Element(J).IType = Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial then
-                       Cost := Time * Items_List.Element(J).Prices(BaseType);
-                       exit;
-                   end if;
-                end loop;
-                ModuleIndex := I;
-                exit;
-            end if;
-        end loop;
+        RepairCost(Cost, Time, ModuleIndex);
         InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
-        Add(Win => InfoWindow, Str => "Repair cost:" & Natural'Image(Cost) & " charcollum");
+        Add(Win => InfoWindow, Str => "Repair cost:" & Natural'Image(Cost) & " Charcollum");
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         Add(Win => InfoWindow, Str => "Repair time:" & Natural'Image(Time) & " minutes");
+        Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
+        Add(Win => InfoWindow, Str => "Press Enter to start repairing");
+        Change_Attributes(Win => InfoWindow, Line => 3, Column => 6, Count => 5, Color => 1);
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
@@ -344,6 +420,7 @@ package body Bases is
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         MenuIndex : Integer := 1;
+        MoneyIndex : Natural := 0;
     begin
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
@@ -366,6 +443,10 @@ package body Bases is
             MenuIndex := MenuIndex + 1;
             Repair_Items.all(MenuIndex) := New_Item("Fast repair whole ship");
         end if;
+        MenuIndex := MenuIndex + 1;
+        for I in MenuIndex..Repair_Items'Last loop
+            Repair_Items.all(I) := Null_Item;
+        end loop;
         Repair_Items.all(MenuIndex + 1) := Null_Item;
         TradeMenu := New_Menu(Repair_Items);
         Set_Format(TradeMenu, Lines - 10, 1);
@@ -375,6 +456,19 @@ package body Bases is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
+                MoneyIndex := I;
+                exit;
+            end if;
+        end loop;
+        Move_Cursor(Line => (MenuHeight + 4), Column => 2);
+        if MoneyIndex > 0 then
+            Add(Str => "You have" & Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
+                " Charcollum.");
+        else
+            Add(Str => "You don't have any Charcollum to repair anything.");
+        end if;
         ShowRepairInfo;
         Refresh(MenuWindow);
     end ShowRepair;
@@ -439,6 +533,8 @@ package body Bases is
                     ShowRepairInfo;
                     Refresh(MenuWindow);
                 end if;
+            when 10 => -- Repair ship
+                RepairShip;
             when others =>
                 null;
         end case;
