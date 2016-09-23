@@ -161,6 +161,8 @@ begin
                 GameState := CargoInfoKeys(Key, OldState);
             when Help_Topic =>
                 GameState := HelpKeys(Key);
+            when Repairs_View =>
+                GameState := RepairKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
