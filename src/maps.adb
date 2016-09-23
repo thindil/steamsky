@@ -82,7 +82,7 @@ package body Maps is
         Refresh_Without_Update;
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
             BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-            WindowHeight := WindowHeight + 3;
+            WindowHeight := WindowHeight + 4;
             WindowWidth := 4 + Column_Position(Length(SkyBases(BaseIndex).Name));
             if WindowWidth < 20 then
                 WindowWidth := 20;
@@ -99,6 +99,14 @@ package body Maps is
             if SkyBases(BaseIndex).Visited.Year > 0 then
                 Move_Cursor(Win => InfoWindow, Line => 4, Column => 2);
                 Add(Win => InfoWindow, Str => To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
+                Move_Cursor(Win => InfoWindow, Line => 5, Column => 2);
+                if SkyBases(BaseIndex).Population < 150 then
+                    Add(Win => InfoWindow, Str => "small");
+                elsif SkyBases(BaseIndex).Population > 149 and SkyBases(BaseIndex).Population < 300 then
+                    Add(Win => InfoWindow, Str => "medium");
+                else
+                    Add(Win => InfoWindow, Str => "large");
+                end if;
             end if;
         end if;
         Refresh(InfoWindow);
