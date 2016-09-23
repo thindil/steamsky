@@ -308,32 +308,75 @@ package body Bases is
         Set_Cursor_Visibility(Visibility);
         DrawGame(Trade_View);
     end ShowForm;
-    
-    procedure ShowRepair is
-        Cost, Time : Natural := 0;
+
+    procedure ShowRepairInfo is
+        ModuleIndex, Cost, Time : Natural := 0;
+        InfoWindow : Window;
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
-        RepairModule : ModuleData;
-        MaterialCost : Positive;
     begin
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            RepairModule := PlayerShip.Modules.Element(I);
-            if RepairModule.Durability < RepairModule.MaxDurability then
-                MaterialCost := 1000;
+            if To_String(PlayerShip.Modules.Element(I).Name) = Name(Current(TradeMenu)) then
+                Time := PlayerShip.Modules.Element(I).MaxDurability - PlayerShip.Modules.Element(I).Durability;
                 for J in Items_List.First_Index..Items_List.Last_Index loop
-                    if Items_List.Element(I).IType = Modules_List.Element(RepairModule.ProtoIndex).RepairMaterial and
-                        MaterialCost > Items_List.Element(I).Prices(BaseType) then
-                        MaterialCost := Items_List.Element(I).Prices(BaseType);
-                    end if;
+                   if Items_List.Element(J).IType = Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial then
+                       Cost := Time * Items_List.Element(J).Prices(BaseType);
+                       exit;
+                   end if;
                 end loop;
-                Cost := Cost + ((RepairModule.MaxDurability - RepairModule.Durability) * MaterialCost);
-                Time := Time + (RepairModule.MaxDurability - RepairModule.Durability);
+                ModuleIndex := I;
+                exit;
             end if;
         end loop;
-        Move_Cursor(Line => 3, Column => 2);
-        Add(Str => "a Slowly repair whole ship. Cost:" & Natural'Image(Cost) & " charcollum, repair time:" &
-            Natural'Image(Time) & " minutes.");
-        Change_Attributes(Line => 3, Column => 2, Count => 1, Color => 1);
+        InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
+        Add(Win => InfoWindow, Str => "Repair cost:" & Natural'Image(Cost) & " charcollum");
+        Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+        Add(Win => InfoWindow, Str => "Repair time:" & Natural'Image(Time) & " minutes");
+        Refresh;
+        Refresh(InfoWindow);
+        Delete(InfoWindow);
+    end ShowRepairInfo;
+    
+    procedure ShowRepair is
+        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        Repair_Items: constant Item_Array_Access := new Item_Array(PlayerShip.Modules.First_Index..(PlayerShip.Modules.Last_Index
+            + 4));
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        MenuIndex : Integer := 1;
+    begin
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                Repair_Items.all(MenuIndex) := New_Item(To_String(PlayerShip.Modules.Element(I).Name));
+                MenuIndex := MenuIndex + 1;
+            end if;
+        end loop;
+        if MenuIndex = 1 then
+            Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
+            Add(Str => "You have nothing to repair.");
+            Refresh;
+            return;
+        end if;
+        Repair_Items.all(MenuIndex) := New_Item("Slowly repair whole ship");
+        if SkyBases(BaseIndex).Population > 149 then
+            MenuIndex := MenuIndex + 1;
+            Repair_Items.all(MenuIndex) := New_Item("Repair whole ship");
+        end if;
+        if SkyBases(BaseIndex).Population > 299 then
+            MenuIndex := MenuIndex + 1;
+            Repair_Items.all(MenuIndex) := New_Item("Fast repair whole ship");
+        end if;
+        Repair_Items.all(MenuIndex + 1) := Null_Item;
+        TradeMenu := New_Menu(Repair_Items);
+        Set_Format(TradeMenu, Lines - 10, 1);
+        Set_Mark(TradeMenu, "");
+        Scale(TradeMenu, MenuHeight, MenuLength);
+        MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
+        Set_Window(TradeMenu, MenuWindow);
+        Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+        Post(TradeMenu);
+        ShowRepairInfo;
+        Refresh(MenuWindow);
     end ShowRepair;
     
     function TradeKeys(Key : Key_Code) return GameStates is
@@ -372,11 +415,30 @@ package body Bases is
     end TradeKeys;
 
     function RepairKeys(Key : Key_Code) return GameStates is
+        Result : Driver_Result;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
+            when 56 | KEY_UP => -- Select previous repair option
+                Result := Driver(TradeMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(TradeMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    ShowRepairInfo;
+                    Refresh(MenuWindow);
+                end if;
+            when 50 | KEY_DOWN => -- Select next repair option
+                Result := Driver(TradeMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(TradeMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    ShowRepairInfo;
+                    Refresh(MenuWindow);
+                end if;
             when others =>
                 null;
         end case;
