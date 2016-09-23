@@ -68,6 +68,9 @@ package body UserInterface is
                 Add(Str => "Help [Menu] [Quit]");
                 Change_Attributes(Line => 0, Column => 6, Count => 1, Color => 1);
                 Change_Attributes(Line => 0, Column => 13, Count => 1, Color => 1);
+            when Repairs_View =>
+                Add(Str => "Ship repairs [Quit]");
+                Change_Attributes(Line => 0, Column => 14, Count => 1, Color => 1);
             when others =>
                 null;
         end case;
@@ -131,9 +134,20 @@ package body UserInterface is
 
     procedure ShowSpeedControl is
         SpeedWindow : Window;
+        WindowHeight : Line_Position := 5;
+        NeedRepair : Boolean := False;
+        QuitLine : Line_Position := 3;
     begin
         if PlayerShip.Speed = DOCKED then
-            SpeedWindow := Create(5, 10, (Lines / 3), (Columns / 2) - 5);
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                    NeedRepair := True;
+                    WindowHeight := 6;
+                    QuitLine := 4;
+                    exit;
+                end if;
+            end loop;
+            SpeedWindow := Create(WindowHeight, 10, (Lines / 3), (Columns / 2) - 5);
             Box(SpeedWindow);
             Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
             Add(Win => SpeedWindow, Str => "Undock");
@@ -143,9 +157,15 @@ package body UserInterface is
             Add(Win => SpeedWindow, Str => "Trade");
             Change_Attributes(Win => SpeedWindow, Line => 2, Column => 2, 
                 Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 3, Column => 2);
+            if NeedRepair then
+                Move_Cursor(Win => SpeedWindow, Line => 3, Column => 2);
+                Add(Win => SpeedWindow, Str => "Repair");
+                Change_Attributes(Win => SpeedWindow, Line => 3, Column => 2, 
+                    Count => 1, Color => 1);
+            end if;
+            Move_Cursor(Win => SpeedWindow, Line => QuitLine, Column => 2);
             Add(Win => SpeedWindow, Str => "Quit");
-            Change_Attributes(Win => SpeedWindow, Line => 3, Column => 2, Count => 1,
+            Change_Attributes(Win => SpeedWindow, Line => QuitLine, Column => 2, Count => 1,
                 Color => 1);
         else
             SpeedWindow := Create(8, 17, (Lines / 3), (Columns / 2) - 8);
@@ -368,6 +388,8 @@ package body UserInterface is
                 ShowCargoInfo;
             when Help_Topic =>
                 ShowHelp(True);
+            when Repairs_View =>
+                ShowRepair;
             when others =>
                 null;
         end case;
@@ -424,6 +446,13 @@ package body UserInterface is
                 if PlayerShip.Speed = DOCKED then
                     DrawGame(Trade_View);
                     return Trade_View;
+                else
+                    return Control_Speed;
+                end if;
+            when Character'Pos('r') | Character'Pos('R') => -- Repair ship in base
+                if PlayerShip.Speed = DOCKED then
+                    DrawGame(Repairs_View);
+                    return Repairs_View;
                 else
                     return Control_Speed;
                 end if;

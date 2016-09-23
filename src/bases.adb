@@ -23,6 +23,7 @@ with Messages; use Messages;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Crew; use Crew;
+with ShipModules; use ShipModules;
 
 package body Bases is
     
@@ -308,6 +309,33 @@ package body Bases is
         DrawGame(Trade_View);
     end ShowForm;
     
+    procedure ShowRepair is
+        Cost, Time : Natural := 0;
+        BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
+            PlayerShip.SkyY).BaseIndex).BaseType) + 1;
+        RepairModule : ModuleData;
+        MaterialCost : Positive;
+    begin
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            RepairModule := PlayerShip.Modules.Element(I);
+            if RepairModule.Durability < RepairModule.MaxDurability then
+                MaterialCost := 1000;
+                for J in Items_List.First_Index..Items_List.Last_Index loop
+                    if Items_List.Element(I).IType = Modules_List.Element(RepairModule.ProtoIndex).RepairMaterial and
+                        MaterialCost > Items_List.Element(I).Prices(BaseType) then
+                        MaterialCost := Items_List.Element(I).Prices(BaseType);
+                    end if;
+                end loop;
+                Cost := Cost + ((RepairModule.MaxDurability - RepairModule.Durability) * MaterialCost);
+                Time := Time + (RepairModule.MaxDurability - RepairModule.Durability);
+            end if;
+        end loop;
+        Move_Cursor(Line => 3, Column => 2);
+        Add(Str => "a Slowly repair whole ship. Cost:" & Natural'Image(Cost) & " charcollum, repair time:" &
+            Natural'Image(Time) & " minutes.");
+        Change_Attributes(Line => 3, Column => 2, Count => 1, Color => 1);
+    end ShowRepair;
+    
     function TradeKeys(Key : Key_Code) return GameStates is
         Result : Driver_Result;
     begin
@@ -342,5 +370,17 @@ package body Bases is
         end case;
         return Trade_View;
     end TradeKeys;
+
+    function RepairKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
+            when others =>
+                null;
+        end case;
+        return Repairs_View;
+    end RepairKeys;
 
 end Bases;
