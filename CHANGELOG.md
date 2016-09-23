@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Auto-resize game screen on resize console
+- Population to bases
 
 ### Changed
 - Updated help
