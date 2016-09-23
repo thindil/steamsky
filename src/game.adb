@@ -32,21 +32,23 @@ with UserInterface; use UserInterface;
 
 package body Game is
     
-    SaveVersion : constant String := "0.3";
+    SaveVersion : constant String := "0.4";
 
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character) is
         type Rand_Range is range 1..1024;
         type Bases_Range is range 0..2;
         type Gender_Range is range 1..2;
+        type Population_Range is range 10..500;
         package Rand_Int is new Discrete_Random(Rand_Range);
         package Rand_Base is new Discrete_Random(Bases_Range);
         package Rand_Gender is new Discrete_Random(Gender_Range);
+        package Rand_Population is new Discrete_Random(Population_Range);
         Generator : Rand_Int.Generator;
         Generator2 : Rand_Base.Generator;
         Generator3 : Rand_Gender.Generator;
+        Generator4 : Rand_Population.Generator;
         PosX, PosY : Rand_Range;
         RandomBase : Rand_Range;
-        BaseType : Bases_Range;
         PilotName, EngineerName, GunnerName : Unbounded_String;
         ValidLocation : Boolean;
         TempX, TempY : Integer;
@@ -58,6 +60,7 @@ package body Game is
         Rand_Int.Reset(Generator);
         Rand_Base.Reset(Generator2);
         Rand_Gender.Reset(Generator3);
+        Rand_Population.Reset(Generator4);
         SkyMap := (others => (others => (BaseIndex => 0)));
         for I in Rand_Range loop
             loop
@@ -94,10 +97,11 @@ package body Game is
                 end if;
                 exit when ValidLocation;
             end loop;
-            BaseType := Rand_Base.Random(Generator2);
             SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I));
             SkyBases(Integer(I)) := (Name => GenerateBaseName, Visited => (0, 0, 0, 0, 0), 
-                SkyX => Integer(PosX), SkyY => Integer(PosY), BaseType => Bases_Types'Val(BaseType));
+                SkyX => Integer(PosX), SkyY => Integer(PosY), BaseType =>
+                Bases_Types'Val(Rand_Base.Random(Generator2)), Population =>
+                Natural(Rand_Population.Random(Generator4)));
         end loop;
         -- Place player ship in random base
         RandomBase := Rand_Int.Random(Generator);
@@ -497,6 +501,8 @@ package body Game is
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(Bases_Types'Pos(SkyBases(I).BaseType)));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Population));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         end loop;
         -- Save player ship
         Put(SaveGame, To_String(PlayerShip.Name) & ";");
@@ -618,7 +624,7 @@ package body Game is
         -- Load sky bases
         for I in SkyBases'Range loop
             SkyBases(I) := (Name => ReadData, Visited => (0, 0, 0, 0, 0), SkyX => 0, SkyY => 0,
-                BaseType => Industrial);
+                BaseType => Industrial, Population => 0);
             SkyBases(I).Visited.Year := Natural'Value(To_String(ReadData));
             SkyBases(I).Visited.Month := Natural'Value(To_String(ReadData));
             SkyBases(I).Visited.Day := Natural'Value(To_String(ReadData));
@@ -627,6 +633,7 @@ package body Game is
             SkyBases(I).SkyX := Integer'Value(To_String(ReadData));
             SkyBases(I).SkyY := Integer'Value(To_String(ReadData));
             SkyBases(I).BaseType := Bases_Types'Val(Integer'Value(To_String(ReadData)));
+            SkyBases(I).Population := Natural'Value(To_String(ReadData));
             SkyMap(SkyBases(I).SkyX, SkyBases(I).SkyY).BaseIndex := I;
         end loop;
         -- Load player ship
