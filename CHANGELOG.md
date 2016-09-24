@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Crash in combat on small screens
 - Coloring missing materials on recipes screen
 - Showing negative free cargo space
+- Some memory leaks
 
 ## [0.3] - 2016-09-18
 
