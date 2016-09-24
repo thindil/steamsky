@@ -51,6 +51,7 @@ begin
     Init_Pair(2, Color_Green, Color_Black);
     Init_Pair(3, Color_Red, Color_Black);
     Init_Pair(4, Color_Blue, Color_Black);
+    Init_Pair(5, Color_Cyan, Color_Black);
     Set_KeyPad_Mode(SwitchOn => True);
 
     ShowMainMenu;
