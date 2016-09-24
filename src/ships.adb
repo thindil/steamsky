@@ -415,4 +415,15 @@ package body Ships is
         return Speed;
     end RealSpeed;
 
+    function FindMoney return Natural is
+        MoneyIndex : Natural := 0;
+    begin
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
+                MoneyIndex := I;
+                exit;
+            end if;
+        end loop;
+        return MoneyIndex;
+    end FindMoney;
 end Ships;

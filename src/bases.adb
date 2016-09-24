@@ -36,7 +36,7 @@ package body Bases is
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         ItemName : constant String := To_String(Items_List.Element(ItemIndex).Name);
         Cost : Positive;
-        MoneyIndex : Natural := 0;
+        MoneyIndex : Natural;
     begin
         BuyAmount := Positive'Value(Amount);
         if not Items_List.Element(ItemIndex).Buyable(BaseType) then
@@ -46,11 +46,7 @@ package body Bases is
         Cost := BuyAmount * Items_List.Element(ItemIndex).Prices(BaseType);
         Cost := Cost - Integer(Float'Floor(Float(Cost) *
                 (Float(PlayerShip.Crew.Element(1).Skills(4, 1)) / 200.0)));
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
-                MoneyIndex := I;
-            end if;
-        end loop;
+        MoneyIndex := FindMoney;
         if FreeCargo(Cost - (Items_List.Element(ItemIndex).Weight * BuyAmount)) < 0 then
             ShowDialog("You don't have that much free space in your ship cargo.");
             return;
@@ -188,12 +184,7 @@ package body Bases is
         if Cost = 0 then
             return;
         end if;
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
-                MoneyIndex := I;
-                exit;
-            end if;
-        end loop;
+        MoneyIndex := FindMoney;
         if MoneyIndex = 0 then
             ShowDialog("You don't have Charcollum to pay for repairs.");
             DrawGame(Repairs_View);
@@ -299,12 +290,7 @@ package body Bases is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
-                MoneyIndex := I;
-                exit;
-            end if;
-        end loop;
+        MoneyIndex := FindMoney;
         Move_Cursor(Line => (MenuHeight + 4), Column => 2);
         if MoneyIndex > 0 then
             Add(Str => "You have" & Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
@@ -456,12 +442,7 @@ package body Bases is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
-                MoneyIndex := I;
-                exit;
-            end if;
-        end loop;
+        MoneyIndex := FindMoney;
         Move_Cursor(Line => (MenuHeight + 4), Column => 2);
         if MoneyIndex > 0 then
             Add(Str => "You have" & Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
