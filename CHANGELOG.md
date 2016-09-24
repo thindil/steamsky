@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Auto-resize game screen on resize console
 - Population to bases
 - Option to repair ship in bases
+- New type of bases - shipyards
 
 ### Changed
 - Updated help
