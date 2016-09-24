@@ -21,7 +21,7 @@ with Game; use Game;
 
 package Bases is
 
-    type Bases_Types is (Industrial, Agricultural, Refinery);
+    type Bases_Types is (Industrial, Agricultural, Refinery, Shipyard);
     type BaseRecord is -- Data structure for bases
         record
             Name : Unbounded_String; -- Base name
