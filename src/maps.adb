@@ -69,6 +69,9 @@ package body Maps is
                             when Refinery =>
                                 Change_Attributes(Line => Line_Position(Y), Column =>
                                 Column_Position(X - 1), Count => 1, Color => 4);
+                            when Shipyard =>
+                                Change_Attributes(Line => Line_Position(Y), Column =>
+                                Column_Position(X - 1), Count => 1, Color => 5);
                         end case;
                     end if;
                 end if;

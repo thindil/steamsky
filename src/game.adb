@@ -36,7 +36,7 @@ package body Game is
 
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character) is
         type Rand_Range is range 1..1024;
-        type Bases_Range is range 0..2;
+        type Bases_Range is range 0..3;
         type Gender_Range is range 1..2;
         type Population_Range is range 10..500;
         package Rand_Int is new Discrete_Random(Rand_Range);
