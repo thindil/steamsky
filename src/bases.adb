@@ -175,6 +175,9 @@ package body Bases is
                 Time := Time / 4;
             end if;
         end if;
+        if Bases_Types'Val(BaseType - 1) = Shipyard then
+            Cost := Cost / 2;
+        end if;
     end RepairCost;
 
     procedure RepairShip is
