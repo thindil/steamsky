@@ -50,7 +50,7 @@ package body Items is
                     TempRecord.IType := Items_Types'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Prices") then
                     StartIndex := 1;
-                    for I in 1..3 loop
+                    for I in TempRecord.Prices'Range loop
                         EndIndex := Index(Value, ", ", StartIndex);
                         if EndIndex = 0 then
                             EndIndex := Length(Value) + 1;
@@ -60,7 +60,7 @@ package body Items is
                     end loop;
                 elsif FieldName = To_Unbounded_String("Buyable") then
                     StartIndex := 1;
-                    for I in 1..3 loop
+                    for I in TempRecord.Prices'Range loop
                         EndIndex := Index(Value, ", ", StartIndex);
                         if EndIndex = 0 then
                             EndIndex := Length(Value) + 1;
