@@ -186,7 +186,9 @@ package body Messages is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 StartIndex := 0;
                 MessagesType := Default;
-                MessagesPad := Null_Window;
+                if MessagesPad /= Null_Window then
+                    Delete(MessagesPad);
+                end if;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when 56 | KEY_UP => -- Scroll messages one line up
@@ -222,32 +224,44 @@ package body Messages is
             when Character'Pos('a') => -- Show all messages
                 StartIndex := 0;
                 MessagesType := Default;
-                MessagesPad := Null_Window;
+                if MessagesPad /= Null_Window then
+                    Delete(MessagesPad);
+                end if;
                 DrawGame(Messages_View);
             when Character'Pos('c') | Character'Pos('C') => -- Show combat messages
                 StartIndex := 0;
                 MessagesType := CombatMessage;
-                MessagesPad := Null_Window;
+                if MessagesPad /= Null_Window then
+                    Delete(MessagesPad);
+                end if;
                 DrawGame(Messages_View);
             when Character'Pos('t') | Character'Pos('T') => -- Show trade messages
                 StartIndex := 0;
                 MessagesType := TradeMessage;
-                MessagesPad := Null_Window;
+                if MessagesPad /= Null_Window then
+                    Delete(MessagesPad);
+                end if;
                 DrawGame(Messages_View);
             when Character'Pos('o') | Character'Pos('O') => -- Show orders messages
                 StartIndex := 0;
                 MessagesType := OrderMessage;
-                MessagesPad := Null_Window;
+                if MessagesPad /= Null_Window then
+                    Delete(MessagesPad);
+                end if;
                 DrawGame(Messages_View);
             when Character'Pos('r') | Character'Pos('R') => -- Show craft messages
                 StartIndex := 0;
                 MessagesType := CraftMessage;
-                MessagesPad := Null_Window;
+                if MessagesPad /= Null_Window then
+                    Delete(MessagesPad);
+                end if;
                 DrawGame(Messages_View);
             when Character'Pos('e') | Character'Pos('E') => -- Show others messages
                 StartIndex := 0;
                 MessagesType := OtherMessage;
-                MessagesPad := Null_Window;
+                if MessagesPad /= Null_Window then
+                    Delete(MessagesPad);
+                end if;
                 DrawGame(Messages_View);
             when others =>
                 null;
