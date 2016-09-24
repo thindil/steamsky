@@ -2,78 +2,78 @@
 Name = Charcollum
 Weight = 1
 Type = Fuel
-Prices = 0, 0, 0
-Buyable = N, N, N
+Prices = 0, 0, 0, 0
+Buyable = N, N, N, N
 [2]
 Name = Basic Rations
 Weight = 1
 Type = Food
-Prices = 3, 2, 3
-Buyable = N, Y, N
+Prices = 3, 2, 3, 3
+Buyable = N, Y, N, N
 [3]
 Name = Water
 Weight = 1
 Type = Drink
-Prices = 2, 1, 2
-Buyable = N, Y, N
+Prices = 2, 1, 2, 2
+Buyable = N, Y, N, N
 [4]
 Name = 20mm ammo
 Weight = 1
 Type = Ammo
-Prices = 3, 5, 5
-Buyable = Y, N, N
+Prices = 3, 5, 5, 5
+Buyable = Y, N, N, N
 [5]
 Name = Bronze plates
 Weight = 5
 Type = Bronze
-Prices = 2, 4, 4
-Buyable = Y, N, N
+Prices = 2, 4, 4, 4
+Buyable = Y, N, N, N
 [6]
 Name = Fresh vegetables
 Weight = 1
 Type = FoodMaterial
-Prices = 2, 1, 2
-Buyable = N, Y, N
+Prices = 2, 1, 2, 2
+Buyable = N, Y, N, N
 [7]
 Name = Fresh fruits
 Weight = 1
 Type = FoodMaterial
-Prices = 2, 1, 2
-Buyable = N, Y, N
+Prices = 2, 1, 2, 2
+Buyable = N, Y, N, N
 [8]
 Name = Fresh meat
 Weight = 1
 Type = FoodMaterial
-Prices = 2, 1, 2
-Buyable = N, Y, N
+Prices = 2, 1, 2, 2
+Buyable = N, Y, N, N
 [9]
 Name = Andrae logs
 Weight = 5
 Type = Wood
-Prices = 5, 5, 3
-Buyable = N, N, Y
+Prices = 5, 5, 3, 5
+Buyable = N, N, Y, N
 [10]
 Name = Illandru logs
 Weight = 3
 Type = Wood
-Prices = 6, 6, 4
-Buyable = N, N, Y
+Prices = 6, 6, 4, 6
+Buyable = N, N, Y, N
 [11]
 Name = Fine Rations
 Weight = 1
 Type = Food
-Prices = 5, 3, 5
-Buyable = N, Y, N
+Prices = 5, 3, 5, 5
+Buyable = N, Y, N, N
 [12]
 Name = Gunpowder
 Weight = 1
 Type = Gunpowder
-Prices = 1, 2, 2
-Buyable = Y, N, N
+Prices = 1, 2, 2, 2
+Buyable = Y, N, N, N
 [13]
 Name = Iron plates
 Weight = 5
 Type = Iron
-Prices = 4, 6, 6
-Buyable = Y, N, N
+Prices = 4, 6, 6, 6
+Buyable = Y, N, N, N
 []
