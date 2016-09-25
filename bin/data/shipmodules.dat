@@ -6,6 +6,7 @@ Value = 0
 MaxValue = 10
 Durability = 100
 Material = Bronze
+Skill = Engineering
 [2]
 Name = Bronze armor
 Type = Armor
@@ -14,6 +15,7 @@ Value = 5
 MaxValue = 10
 Durability = 200
 Material = Bronze
+Skill = Engineering
 [3]
 Name = Small engine
 Type = Engine
@@ -22,6 +24,7 @@ Value = 0
 MaxValue = 2000
 Durability = 100
 Material = Bronze
+Skill = Engineering
 [4]
 Name = Cabin
 Type = Cabin
@@ -30,6 +33,7 @@ Value = 20
 MaxValue = 20
 Durability = 100
 Material = Bronze
+Skill = Engineering
 [5]
 Name = Cockpit
 Type = Cockpit
@@ -38,6 +42,7 @@ Value = 0
 MaxValue = 0
 Durability = 200
 Material = Bronze
+Skill = Engineering
 [6]
 Name = Alchemy Lab
 Type = Alchemy_lab
@@ -46,6 +51,7 @@ Value = 0
 MaxValue = 0
 Durability = 100
 Material = Bronze
+Skill = Engineering
 [7]
 Name = Cargo bay
 Type = Cargo
@@ -54,6 +60,7 @@ Value = 0
 MaxValue = 5000
 Durability = 10
 Material = Bronze
+Skill = Engineering
 [8]
 Name = Small turret
 Type = Turret
@@ -62,6 +69,7 @@ Value = 0
 MaxValue = 0
 Durability = 200
 Material = Bronze
+Skill = Engineering
 [9]
 Name = 20mm gun
 Type = Gun
@@ -70,6 +78,7 @@ Value = 4
 MaxValue = 10
 Durability = 20
 Material = Iron
+Skill = Gunsmith
 [10]
 Name = Clockwork drone hull
 Type = Hull
