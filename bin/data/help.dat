@@ -46,6 +46,7 @@ Crafting skills determine amount of manufactured items.
 [Repair ship]
 To start repairing ship, you must assign crew member to repair duty. You may assign more than one crew member. Each additional member assigned made repair faster. Each damaged (or destroyed) module need specific material to repair. You can check which material is needed in ship info screen. Ship is repaired every 15 minutes.
 Additional, you can buy repairs of ship in bases. Available options depends on size of base. In all bases you can select one module to repair or order slow repair of whole ship. In medium bases, you can order normal repair of whole ship and in large bases, fast repair. Normal and fast repairs cost more Charcollum. Base cost of repair depends on how much damaged is module and price of repair material in selected base.
+Cost of repairs is much lower in shipyard type bases.
 [Tips]
 * You and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation.
 * All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press 'h' key on sky map (no need to press 'e' first to show menu).
