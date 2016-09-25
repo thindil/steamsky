@@ -338,7 +338,7 @@ package body Game is
                     for J in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                         if PlayerShip.Crew.Element(J).Order = Repair then
                             RepairPoints := RepairPoints +
-                            (PlayerShip.Crew.Element(I).Skills(Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairSkill, 
+                            (PlayerShip.Crew.Element(J).Skills(Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairSkill, 
                             1) / 10);
                         end if;
                     end loop;
