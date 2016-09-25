@@ -32,8 +32,12 @@ package body Ships.UI is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         DamagePercent : Natural;
         MAmount : Natural := 0;
+        Skills_Names : constant array (1..7) of Unbounded_String := (To_Unbounded_String("Piloting"), 
+            To_Unbounded_String("Engineering"), To_Unbounded_String("Gunnery"), 
+            To_Unbounded_String("Bartering"), To_Unbounded_String("Alchemy"),
+            To_Unbounded_String("Cooking"), To_Unbounded_String("Gunsmith"));
     begin
-        InfoWindow := Create(5, (Columns / 2), 8, (Columns / 2));
+        InfoWindow := Create(6, (Columns / 2), 8, (Columns / 2));
         Add(Win => InfoWindow, Str => "Status: ");
         DamagePercent := 100 -
             Natural((Float(PlayerShip.Modules.Element(ModuleIndex).Durability) /
@@ -67,6 +71,9 @@ package body Ships.UI is
             end if;
         end loop;
         Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
+        Add(Win => InfoWindow, Str => "Repair skill: " &
+            To_String(Skills_Names(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).RepairSkill)));
+        Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
         case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
             when ENGINE =>
                 Add(Win => InfoWindow, Str => "Max power:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
@@ -88,9 +95,9 @@ package body Ships.UI is
             when others =>
                 null;
         end case;
-        Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
+        Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
         Add(Win => InfoWindow, Str => "Rename module");
-        Change_Attributes(Win => InfoWindow, Line => 4, Column => 2, 
+        Change_Attributes(Win => InfoWindow, Line => 5, Column => 2, 
             Count => 1, Color => 1);
         Refresh;
         Refresh(InfoWindow);
