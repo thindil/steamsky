@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Population to bases
 - Option to repair ship in bases
 - New type of bases - shipyards
+- Separated repair skill for each module
 
 ### Changed
 - Updated help
