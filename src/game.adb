@@ -293,7 +293,6 @@ package body Game is
                         if TiredPoints > 0 then
                             RepairPoints := RepairPoints + TiredPoints;
                         end if;
-                        GainExp(TiredPoints, 2, I);
                     when Craft =>
                         CrafterIndex := I;
                     when others =>
@@ -340,6 +339,7 @@ package body Game is
                             RepairPoints := RepairPoints +
                             (PlayerShip.Crew.Element(J).Skills(Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairSkill, 
                             1) / 10);
+                            GainExp(TiredPoints, Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairSkill, J);
                         end if;
                     end loop;
                     Material_Loop:
