@@ -29,10 +29,6 @@ package body Crew.UI is
         Member : constant Member_Data := PlayerShip.Crew.Element(Get_Index(Current(CrewMenu)));
         CurrentLine : Line_Position := 7;
         Health, Tired, Hungry, Thirsty, SkillLevel, OrderName : Unbounded_String;
-        Skills_Names : constant array (Skills_Array'Range) of Unbounded_String := (To_Unbounded_String("Piloting"), 
-            To_Unbounded_String("Engineering"), To_Unbounded_String("Gunnery"), 
-            To_Unbounded_String("Bartering"), To_Unbounded_String("Alchemy"),
-            To_Unbounded_String("Cooking"), To_Unbounded_String("Gunsmith"));
     begin
         InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
         Add(Win => InfoWindow, Str => "Gender: ");

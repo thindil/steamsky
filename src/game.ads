@@ -44,6 +44,10 @@ package Game is
     MaleSyllablesMiddle : UnboundedString_Container.Vector;
     MaleSyllablesEnd : UnboundedString_Container.Vector;
     FemaleSyllablesEnd : UnboundedString_Container.Vector;
+    Skills_Names : constant array (1..7) of Unbounded_String := (To_Unbounded_String("Piloting"), 
+        To_Unbounded_String("Engineering"), To_Unbounded_String("Gunnery"), 
+        To_Unbounded_String("Bartering"), To_Unbounded_String("Alchemy"),
+        To_Unbounded_String("Cooking"), To_Unbounded_String("Gunsmith"));
     
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character); -- Start new game: create map, place ship, crew, etc
     procedure UpdateGame(Minutes : Positive); -- Game ticks (update time, crew, ship, etc)
