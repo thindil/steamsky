@@ -17,6 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with Game; use Game;
 
 package body ShipModules is
 
@@ -57,11 +58,12 @@ package body ShipModules is
                 elsif FieldName = To_Unbounded_String("Material") then
                     TempRecord.RepairMaterial := Items_Types'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Skill") then
-                    if Value = "Engineering" then
-                        TempRecord.RepairSkill := 2;
-                    elsif Value = "Gunsmith" then
-                        TempRecord.RepairSkill := 7;
-                    end if;
+                    for I in Skills_Names'Range loop
+                        if Value = To_String(Skills_Names(I)) then
+                            TempRecord.RepairSkill := I;
+                            exit;
+                        end if;
+                    end loop;
                 end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
                 Modules_List.Append(New_Item => TempRecord);
