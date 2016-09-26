@@ -32,10 +32,6 @@ package body Ships.UI is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         DamagePercent : Natural;
         MAmount : Natural := 0;
-        Skills_Names : constant array (1..7) of Unbounded_String := (To_Unbounded_String("Piloting"), 
-            To_Unbounded_String("Engineering"), To_Unbounded_String("Gunnery"), 
-            To_Unbounded_String("Bartering"), To_Unbounded_String("Alchemy"),
-            To_Unbounded_String("Cooking"), To_Unbounded_String("Gunsmith"));
     begin
         InfoWindow := Create(6, (Columns / 2), 8, (Columns / 2));
         Add(Win => InfoWindow, Str => "Status: ");
