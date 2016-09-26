@@ -454,10 +454,21 @@ package body Game is
                 end loop;
                 CraftedAmount := CraftedAmount + ResultAmount;
                 GainExp(1, Recipe.Skill, CrafterIndex);
-                Amount := 0;
                 for J in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
+                    Amount := Integer(PlayerShip.Cargo.Length);
                     UpdateCargo(PlayerShip.Cargo.Element(MaterialIndexes(J)).ProtoIndex, (0 - Recipe.MaterialAmounts.Element(J)));
+                    if Integer(PlayerShip.Cargo.Length) /= Amount then
+                        MaterialIndexes := (others => 0);
+                        for L in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                            for K in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
+                                if Items_List.Element(PlayerShip.Cargo.Element(L).ProtoIndex).IType = Recipe.MaterialTypes(K) then
+                                    MaterialIndexes(K) := L;
+                                end if;
+                            end loop;
+                        end loop;
+                    end if;
                 end loop;
+                Amount := 0;
                 UpdateCargo(Recipes_List.Element(PlayerShip.Craft).ResultIndex, ResultAmount);
             end loop Craft_Loop;
             if CraftedAmount > 0 then
