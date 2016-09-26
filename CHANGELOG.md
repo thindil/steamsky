@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Coloring missing materials on recipes screen
 - Showing negative free cargo space
 - Some memory leaks
+- Crash on updating cargo during manufacturing
 
 ## [0.3] - 2016-09-18
 
