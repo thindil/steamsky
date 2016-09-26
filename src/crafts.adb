@@ -81,13 +81,12 @@ package body Crafts is
                 elsif FieldName = To_Unbounded_String("Workplace") then
                     TempRecord.Workplace := ModuleType'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Skill") then
-                    if Value = "Alchemy" then
-                        TempRecord.Skill := 5;
-                    elsif Value = "Cooking" then
-                        TempRecord.Skill := 6;
-                    elsif Value = "Gunsmith" then
-                        TempRecord.Skill := 7;
-                    end if;
+                    for I in Skills_Names'Range loop
+                        if Value = To_String(Skills_Names(I)) then
+                            TempRecord.Skill := I;
+                            exit;
+                        end if;
+                    end loop;
                 end if;
             elsif TempRecord.ResultAmount < 10000 then
                 Recipes_List.Append(New_Item => TempRecord);
