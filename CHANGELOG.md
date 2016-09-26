@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Updated interface
 - Showing more messages on combat screen
+- Add only one crafting message with summary of manufacturing
 
 ### Fixed
 - Crash on invalid data in save game file
