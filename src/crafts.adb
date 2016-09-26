@@ -223,6 +223,9 @@ package body Crafts is
             Change_Attributes(Win => InfoWindow, Line => CurrentLine,
                 Column => 11, Count => Length(WorkplaceName), Color => 3);
         end if;
+        CurrentLine := CurrentLine + 1;
+        Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+        Add(Win => InfoWindow, Str => "Skill: " & To_String(Skills_Names(Recipe.Skill)));
         Move_Cursor(Win => InfoWindow, Line => (CurrentLine + 2), Column => 0);
         Add(Win => InfoWindow, Str => "SPACE for set manufacturing order");
         Change_Attributes(Win => InfoWindow, Line => (CurrentLine + 2), Column => 0, Count => 5, Color => 1);
