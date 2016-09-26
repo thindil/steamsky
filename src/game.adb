@@ -174,7 +174,7 @@ package body Game is
         Amount : Integer;
         Recipe : Craft_Data;
         MaterialIndexes : array(1..10) of Natural := (others => 0);
-        RepairMaterial : Natural := 0;
+        RepairMaterial, CraftedAmount : Natural := 0;
         DeathReason : Unbounded_String;
         HaveCabin : Boolean;
         BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -452,16 +452,19 @@ package body Game is
                         exit Craft_Loop;
                     end if;
                 end loop;
+                CraftedAmount := CraftedAmount + ResultAmount;
                 GainExp(1, Recipe.Skill, CrafterIndex);
                 Amount := 0;
                 for J in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
                     UpdateCargo(PlayerShip.Cargo.Element(MaterialIndexes(J)).ProtoIndex, (0 - Recipe.MaterialAmounts.Element(J)));
                 end loop;
                 UpdateCargo(Recipes_List.Element(PlayerShip.Craft).ResultIndex, ResultAmount);
-                AddMessage(To_String(PlayerShip.Crew.Element(CrafterIndex).Name) & " was manufactured" & Integer'Image(ResultAmount) & 
+            end loop Craft_Loop;
+            if CraftedAmount > 0 then
+                AddMessage(To_String(PlayerShip.Crew.Element(CrafterIndex).Name) & " was manufactured" & Integer'Image(CraftedAmount) & 
                     " " & To_String(Items_List.Element(Recipe.ResultIndex).Name) & 
                     ".", CraftMessage);
-            end loop Craft_Loop;
+            end if;
         end if;
         -- Update base
         if BaseIndex > 0 then
