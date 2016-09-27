@@ -120,6 +120,8 @@ package body Crew.UI is
                 OrderName := To_Unbounded_String("Repair ship");
             when Craft =>
                 OrderName := To_Unbounded_String("Manufacturing");
+            when Upgrading =>
+                OrderName := To_Unbounded_String("Upgrading module");
         end case;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Order: " & To_String(OrderName));
@@ -155,21 +157,21 @@ package body Crew.UI is
 
     procedure ShowOrdersMenu is
         OrdersWindow : Window;
-        OrdersNames : constant array (1..6) of Unbounded_String := (To_Unbounded_String("Piloting"), 
+        OrdersNames : constant array (1..7) of Unbounded_String := (To_Unbounded_String("Piloting"), 
             To_Unbounded_String("Engineering"), To_Unbounded_String("Gunner"),
             To_Unbounded_String("On break"), To_Unbounded_String("Repair ship"), 
-            To_Unbounded_String("Manufacturing"));
+            To_Unbounded_String("Manufacturing"), To_Unbounded_String("Upgrade module"));
     begin
-        OrdersWindow := Create(9, 17, (Lines / 3), (Columns / 2) - 8);
+        OrdersWindow := Create(10, 17, (Lines / 3), (Columns / 2) - 8);
         Box(OrdersWindow);
         for I in OrdersNames'Range loop
             Move_Cursor(OrdersWindow, Line => Line_Position(I), Column => 2);
             Add(OrdersWindow, Str => To_String(OrdersNames(I)));
             Change_Attributes(OrdersWindow, Line => Line_Position(I), Column => 2, Count => 1, Color => 1);
         end loop;
-        Move_Cursor(OrdersWindow, Line => 7, Column => 2);
+        Move_Cursor(OrdersWindow, Line => 8, Column => 2);
         Add(OrdersWindow, Str => "Quit");
-        Change_Attributes(OrdersWindow, Line => 7, Column => 2, Count => 1, Color => 1);
+        Change_Attributes(OrdersWindow, Line => 8, Column => 2, Count => 1, Color => 1);
         Refresh(OrdersWindow);
     end ShowOrdersMenu;
 
@@ -230,6 +232,8 @@ package body Crew.UI is
                 GiveOrders(MemberIndex, Repair);
             when Character'Pos('m') | Character'Pos('M') => -- Give order manufacturing
                 GiveOrders(MemberIndex, Craft);
+            when Character'Pos('u') | Character'Pos('U') => -- Give order upgrading
+                GiveOrders(MemberIndex, Upgrading);
             when others =>
                 return Giving_Orders;
         end case;
