@@ -33,7 +33,7 @@ package body Ships.UI is
         DamagePercent : Natural;
         MAmount : Natural := 0;
     begin
-        InfoWindow := Create(6, (Columns / 2), 8, (Columns / 2));
+        InfoWindow := Create(8, (Columns / 2), 8, (Columns / 2));
         Add(Win => InfoWindow, Str => "Status: ");
         DamagePercent := 100 -
             Natural((Float(PlayerShip.Modules.Element(ModuleIndex).Durability) /
@@ -91,9 +91,13 @@ package body Ships.UI is
             when others =>
                 null;
         end case;
-        Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+        Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
+        Add(Win => InfoWindow, Str => "Upgrade module");
+        Change_Attributes(Win => InfoWindow, Line => 6, Column => 0, 
+            Count => 1, Color => 1);
+        Move_Cursor(Win => InfoWindow, Line => 7, Column => 0);
         Add(Win => InfoWindow, Str => "Rename module");
-        Change_Attributes(Win => InfoWindow, Line => 5, Column => 2, 
+        Change_Attributes(Win => InfoWindow, Line => 7, Column => 2, 
             Count => 1, Color => 1);
         Refresh;
         Refresh(InfoWindow);
@@ -258,6 +262,27 @@ package body Ships.UI is
             DrawGame(Cargo_Info);
     end ShowCargoForm;
 
+    procedure ShowUpgradeMenu is
+        ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
+        UpgradeWindow : Window;
+        UpgradeAvailable : Boolean := False;
+        MaxValue : Positive;
+    begin
+        MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Durability) * 1.5);
+        if PlayerShip.Modules.Element(ModuleIndex).MaxDurability < MaxValue then
+            UpgradeAvailable := True;
+        end if;
+        if not UpgradeAvailable then
+            ShowDialog("This module don't have available upgrades.");
+            return;
+        end if;
+        UpgradeWindow := Create(6, 20, ((Lines / 2) - 3), ((Columns / 2) - 10));
+        Box(UpgradeWindow);
+        Refresh;
+        Refresh(UpgradeWindow);
+        Delete(UpgradeWindow);
+    end ShowUpgradeMenu;
+
     function ShipInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Driver_Result;
     begin
@@ -285,6 +310,8 @@ package body Ships.UI is
                 end if;
             when Character'Pos('n') | Character'Pos('N') => -- Rename selected module
                 ShowModuleForm;
+            when Character'Pos('u') | Character'Pos('U') => -- Start upgrading selected module
+                ShowUpgradeMenu;
             when others =>
                 null;
         end case;

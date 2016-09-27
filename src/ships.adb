@@ -272,7 +272,8 @@ package body Ships is
             end if;
         end if;
         TmpShip := (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed, Craft => 0,
-            Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew);
+            Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew,
+            UpgradeModule => 0, UpgradeAction => NONE);
         for I in TmpShip.Modules.First_Index..TmpShip.Modules.Last_Index loop
             case Modules_List.Element(TmpShip.Modules.Element(I).ProtoIndex).MType is
                 when TURRET =>

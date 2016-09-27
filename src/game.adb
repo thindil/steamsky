@@ -586,6 +586,10 @@ package body Game is
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             end loop;
         end loop;
+        RawValue := To_Unbounded_String(Integer'Image(PlayerShip.UpgradeModule));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Integer'Image(ShipUpgrade'Pos(PlayerShip.UpgradeAction)));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         if Messages > MessagesAmount then
             Messages := MessagesAmount;
         end if;
@@ -699,6 +703,8 @@ package body Game is
                 Process => UpdateMember'Access);
         end loop;
         PlayerShip.Crew := ShipCrew;
+        PlayerShip.UpgradeModule := Integer'Value(To_String(ReadData));
+        PlayerShip.UpgradeAction := ShipUpgrade'Val(Integer'Value(To_String(ReadData)));
         Messages := Integer'Value(To_String(ReadData));
         for I in 1..Messages loop
             Message := ReadData;
