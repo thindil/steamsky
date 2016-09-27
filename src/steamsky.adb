@@ -19,6 +19,8 @@ with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Ada.Command_Line; use Ada.Command_Line;
+with Ada.Calendar; use Ada.Calendar;
+with Ada.Calendar.Formatting;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Terminal_Interface.Curses_Constants; use Terminal_Interface.Curses_Constants;
@@ -180,6 +182,7 @@ exception
         else
             Create(ErrorFile, Append_File, "data/error.log");
         end if;
+        Put_Line(Ada.Calendar.Formatting.Image(Clock));
         Put_Line(ErrorFile, GameVersion); 
         Put_Line(ErrorFile, Exception_Information(An_Exception));
         Close(ErrorFile);
