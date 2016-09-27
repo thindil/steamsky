@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
 
@@ -35,9 +34,6 @@ package Bases is
     procedure BuyItems(ItemIndex : Positive; Amount : String); -- Buy items from bases
     procedure SellItems(ItemIndex : Positive; Amount : String); -- Sell items from bases
     function GenerateBaseName return Unbounded_String; -- Generate random name for base
-    procedure ShowTrade; -- Show trade window
-    procedure ShowRepair; -- Show repair window
-    function TradeKeys(Key : Key_Code) return GameStates; -- Handle keys in bases trades
-    function RepairKeys(Key : Key_Code) return GameStates; -- Handle keys in ship repairs
+    procedure RepairShip; -- Repairs playership in bases
 
 end Bases;
