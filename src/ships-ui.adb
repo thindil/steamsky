@@ -121,8 +121,36 @@ package body Ships.UI is
             Add(Str => To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name));
         end if;
         Move_Cursor(Line => 4, Column => 2);
+        Add(Str => "Upgrading: ");
+        if PlayerShip.UpgradeModule = 0 then
+            Add(Str => "Nothing");
+        else
+            Add(Str => To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name) & " " );
+            case PlayerShip.UpgradeAction is
+                when REPAIR =>
+                    Add(Str => "(repairing)");
+                when DURABILITY => 
+                    Add(Str => "(durability)");
+                when MAX_VALUE =>
+                    case Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType is
+                        when ENGINE =>
+                            Add(Str => "(power)");
+                        when CABIN =>
+                            Add(Str => "(quality)");
+                        when GUN | BATTERING_RAM =>
+                            Add(Str => "(damage)");
+                        when HULL =>
+                            Add(Str => "(enlarge)");
+                        when others =>
+                            null;
+                    end case;
+                when others =>
+                    null;
+            end case;
+        end if;
+        Move_Cursor(Line => 5, Column => 2);
         Add(Str => "Weight:" & Integer'Image(Weight) & "kg");
-        Move_Cursor(Line => 6, Column => 2);
+        Move_Cursor(Line => 7, Column => 2);
         Add(Str => "Modules:");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             Modules_Items.all(I) := New_Item(To_String(PlayerShip.Modules.Element(I).Name));
@@ -132,7 +160,7 @@ package body Ships.UI is
         Set_Format(ModulesMenu, Lines - 10, 1);
         Set_Mark(ModulesMenu, "");
         Scale(ModulesMenu, MenuHeight, MenuLength);
-        MenuWindow := Create(MenuHeight, MenuLength, 8, 2);
+        MenuWindow := Create(MenuHeight, MenuLength, 9, 2);
         Set_Window(ModulesMenu, MenuWindow);
         Set_Sub_Window(ModulesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(ModulesMenu);
@@ -265,17 +293,17 @@ package body Ships.UI is
     procedure ShowUpgradeMenu is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         UpgradeWindow : Window;
-        MaxValue : Positive;
+        MaxValue : Natural;
         WindowHeight : Line_Position := 3;
         UpgradeDurability, UpgradeMaxValue : Unbounded_String := Null_Unbounded_String;
         CurrentLine : Line_Position := 1;
     begin
-        MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Durability) * 1.5);
+        MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Durability) * 1.5);
         if PlayerShip.Modules.Element(ModuleIndex).MaxDurability < MaxValue then
             UpgradeDurability := To_Unbounded_String("1 Upgrade durability");
             WindowHeight := WindowHeight + 1;
         end if;
-        MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
+        MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
         case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
             when ENGINE =>
                 if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
@@ -287,7 +315,7 @@ package body Ships.UI is
                     UpgradeMaxValue := To_Unbounded_String("2 Upgrade quality");
                     WindowHeight := WindowHeight + 1;
                 end if;
-            when GUN =>
+            when GUN | BATTERING_RAM =>
                 if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
                     UpgradeMaxValue := To_Unbounded_String("2 Upgrade damage");
                     WindowHeight := WindowHeight + 1;
@@ -297,17 +325,15 @@ package body Ships.UI is
                     UpgradeMaxValue := To_Unbounded_String("2 Enlarge hull");
                     WindowHeight := WindowHeight + 1;
                 end if;
-            when BATTERING_RAM =>
-                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
-                    UpgradeMaxValue := To_Unbounded_String("2 Upgrade damage");
-                    WindowHeight := WindowHeight + 1;
-                end if;
             when others =>
                 null;
         end case;
         if UpgradeDurability = Null_Unbounded_String and UpgradeMaxValue = Null_Unbounded_String then
             ShowDialog("This module don't have available upgrades.");
             return;
+        end if;
+        if PlayerShip.UpgradeModule > 0 then
+            WindowHeight := WindowHeight + 1;
         end if;
         UpgradeWindow := Create(WindowHeight, 24, ((Lines / 2) - 3), ((Columns / 2) - 12));
         Box(UpgradeWindow);
@@ -321,6 +347,13 @@ package body Ships.UI is
         if UpgradeMaxValue /= Null_Unbounded_String then
             Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
             Add(Win => UpgradeWindow, Str => To_String(UpgradeMaxValue));
+            Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
+                Count => 1, Color => 1);
+            CurrentLine := CurrentLine + 1;
+        end if;
+        if PlayerShip.UpgradeModule > 0 then
+            Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
+            Add(Win => UpgradeWindow, Str => "3 Stop upgrading");
             Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
                 Count => 1, Color => 1);
             CurrentLine := CurrentLine + 1;
@@ -363,6 +396,7 @@ package body Ships.UI is
                 ShowModuleForm;
             when Character'Pos('u') | Character'Pos('U') => -- Start upgrading selected module
                 ShowUpgradeMenu;
+                return Upgrade_Module;
             when others =>
                 null;
         end case;
@@ -402,8 +436,16 @@ package body Ships.UI is
         return Cargo_Info;
     end CargoInfoKeys;
 
-    function ShipUpgradeKeys(Key : Key_Code; OldState : GameStates) return GameStates is
+    function ShipUpgradeKeys(Key : Key_Code) return GameStates is
     begin
+        case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Close upgrade menu
+                null;
+            when Character'Pos('1') | Character'Pos('2') | Character'Pos('3') => -- Give upgrade orders
+                StartUpgrading(Get_Index(Current(ModulesMenu)), Positive(Key - 48));
+            when others =>
+                return Upgrade_Module;
+        end case;
         DrawGame(Ship_Info);
         return Ship_Info;
     end ShipUpgradeKeys;

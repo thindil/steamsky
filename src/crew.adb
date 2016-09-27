@@ -86,6 +86,10 @@ package body Crew is
             ShowDialog("You can't set crew member for manufacturing, because you don't set item to manufacture.");
             return;
         end if;
+        if GivenOrder = Upgrading and PlayerShip.UpgradeModule = 0 then
+            ShowDialog("You don't set yet module to upgrade.");
+            return;
+        end if;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             case GivenOrder is
                 when Pilot =>
@@ -163,6 +167,9 @@ package body Crew is
             when Craft =>
                 AddMessage(MemberName & " starts manufacturing.", OrderMessage);
                 UpdateModule(PlayerShip, ModuleIndex, "Owner", Positive'Image(MemberIndex));
+            when Upgrading =>
+                AddMessage(MemberName & " starts upgrading " & To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
+                    & ".", OrderMessage);
         end case;
         NewOrder := GivenOrder;
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);

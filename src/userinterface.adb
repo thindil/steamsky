@@ -37,7 +37,7 @@ package body UserInterface is
 
     procedure ShowGameHeader(CurrentState : GameStates) is
         Speed : Unbounded_String;
-        HavePilot, HaveEngineer, HaveRepair, HaveCraft : Boolean := False;
+        HavePilot, HaveEngineer, HaveRepair, HaveCraft, HaveUpgrade : Boolean := False;
     begin
         case CurrentState is
             when Sky_Map_View | Control_Speed | Wait_Order =>
@@ -90,43 +90,49 @@ package body UserInterface is
             end case;
             Move_Cursor(Line => 0, Column => (Columns / 3));
             Add(Str => FormatedTime & " Speed: " & To_String(Speed));
-            Move_Cursor(Line => 0, Column => (Columns - 16));
-            Add(Str => "[P][E][G][R][M]");
+            Move_Cursor(Line => 0, Column => (Columns - 19));
+            Add(Str => "[P][E][G][R][M][U]");
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                 case PlayerShip.Crew.Element(I).Order is
                     when Pilot =>
                         HavePilot := True;
-                        Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 2);
+                        Change_Attributes(Line => 0, Column => (Columns - 18), Count => 1, Color => 2);
                     when Engineer =>
                         HaveEngineer := True;
-                        Change_Attributes(Line => 0, Column => (Columns - 12), Count => 1, Color => 2);
+                        Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 2);
                     when Gunner => 
-                        Change_Attributes(Line => 0, Column => (Columns - 9), Count => 1, Color => 2);
+                        Change_Attributes(Line => 0, Column => (Columns - 12), Count => 1, Color => 2);
                     when Repair =>
                         HaveRepair := True;
-                        Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 2);
+                        Change_Attributes(Line => 0, Column => (Columns - 9), Count => 1, Color => 2);
                     when Craft =>
                         HaveCraft := True;
+                        Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 2);
+                    when Upgrading =>
+                        HaveUpgrade := True;
                         Change_Attributes(Line => 0, Column => (Columns - 3), Count => 1, Color => 2);
                     when others =>
                         null;
                 end case;
             end loop;
             if not HavePilot then
-                Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => (Columns - 18), Count => 1, Color => 1);
             end if;
             if not HaveEngineer then
-                Change_Attributes(Line => 0, Column => (Columns - 12), Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 1);
             end if;
             if not HaveRepair then
                 for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                     if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
-                        Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 1);
+                        Change_Attributes(Line => 0, Column => (Columns - 9), Count => 1, Color => 1);
                         exit;
                     end if;
                 end loop;
             end if;
             if not HaveCraft and PlayerShip.Craft > 0 then
+                Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 1);
+            end if;
+            if not HaveUpgrade and PlayerShip.UpgradeModule > 0 then
                 Change_Attributes(Line => 0, Column => (Columns - 3), Count => 1, Color => 1);
             end if;
         end if;

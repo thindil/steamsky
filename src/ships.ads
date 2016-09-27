@@ -85,5 +85,6 @@ package Ships is
     function CountShipWeight(Ship : ShipRecord) return Positive; -- Count weight of ship (with modules and cargo)
     function RealSpeed(Ship : ShipRecord) return Natural; -- Return real ship speed in meters per minute
     function FindMoney return Natural; -- Return index of moneys, 0 if no moneys on ship
+    procedure StartUpgrading(ModuleIndex, UpgradeType : Positive); -- Set upgrading order
 
 end Ships;
