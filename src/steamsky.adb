@@ -29,7 +29,7 @@ with Messages; use Messages;
 with Crew.UI; use Crew.UI;
 with Ships; use Ships;
 with Ships.UI; use Ships.UI;
-with Bases; use Bases;
+with Bases.UI; use Bases.UI;
 with Events; use Events;
 with Combat.UI; use Combat.UI;
 with Crafts; use Crafts;
