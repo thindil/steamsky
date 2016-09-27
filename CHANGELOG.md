@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - New type of bases - shipyards
 - Separated repair skill for each module
 - Maximum amount of messages - 500
+- Option to delete all messages
 
 ### Changed
 - Updated help
