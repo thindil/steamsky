@@ -23,6 +23,7 @@ package Ships is
     type ShipSpeed is (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED,
         FULL_SPEED);
     type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD);
+    type ShipUpgrade is (NONE, REPAIR, DURABILITY, VALUE, MAX_VALUE);
     type ModuleData is -- Data structure for ship modules
         record
             Name : Unbounded_String; -- Name of module
@@ -52,6 +53,8 @@ package Ships is
             Modules : Modules_Container.Vector; -- List of ship modules
             Cargo : Cargo_Container.Vector; -- List of ship cargo
             Crew : Crew_Container.Vector; -- List of ship crew
+            UpgradeModule : Natural; -- Number of module to upgrade
+            UpgradeAction : ShipUpgrade; -- Type of module upgrade
         end record;
     package ProtoModules_Container is new Vectors(Positive, Positive);
     type ProtoShipData is -- Data structure for ship prototypes
