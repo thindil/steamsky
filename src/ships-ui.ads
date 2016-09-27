@@ -24,5 +24,6 @@ package Ships.UI is
     procedure ShowCargoInfo; -- Show informations about ship cargo
     function ShipInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in ship info menu
     function CargoInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in cargo info menu
+    function ShipUpgradeKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in upgrade menu
 
 end Ships.UI;

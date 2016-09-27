@@ -265,19 +265,70 @@ package body Ships.UI is
     procedure ShowUpgradeMenu is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         UpgradeWindow : Window;
-        UpgradeAvailable : Boolean := False;
         MaxValue : Positive;
+        WindowHeight : Line_Position := 3;
+        UpgradeDurability, UpgradeMaxValue : Unbounded_String := Null_Unbounded_String;
+        CurrentLine : Line_Position := 1;
     begin
         MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Durability) * 1.5);
         if PlayerShip.Modules.Element(ModuleIndex).MaxDurability < MaxValue then
-            UpgradeAvailable := True;
+            UpgradeDurability := To_Unbounded_String("1 Upgrade durability");
+            WindowHeight := WindowHeight + 1;
         end if;
-        if not UpgradeAvailable then
+        MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
+        case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+            when ENGINE =>
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
+                    UpgradeMaxValue := To_Unbounded_String("2 Upgrade engine power");
+                    WindowHeight := WindowHeight + 1;
+                end if;
+            when CABIN =>
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
+                    UpgradeMaxValue := To_Unbounded_String("2 Upgrade quality");
+                    WindowHeight := WindowHeight + 1;
+                end if;
+            when GUN =>
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
+                    UpgradeMaxValue := To_Unbounded_String("2 Upgrade damage");
+                    WindowHeight := WindowHeight + 1;
+                end if;
+            when HULL =>
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
+                    UpgradeMaxValue := To_Unbounded_String("2 Enlarge hull");
+                    WindowHeight := WindowHeight + 1;
+                end if;
+            when BATTERING_RAM =>
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
+                    UpgradeMaxValue := To_Unbounded_String("2 Upgrade damage");
+                    WindowHeight := WindowHeight + 1;
+                end if;
+            when others =>
+                null;
+        end case;
+        if UpgradeDurability = Null_Unbounded_String and UpgradeMaxValue = Null_Unbounded_String then
             ShowDialog("This module don't have available upgrades.");
             return;
         end if;
-        UpgradeWindow := Create(6, 20, ((Lines / 2) - 3), ((Columns / 2) - 10));
+        UpgradeWindow := Create(WindowHeight, 24, ((Lines / 2) - 3), ((Columns / 2) - 12));
         Box(UpgradeWindow);
+        if UpgradeDurability /= Null_Unbounded_String then
+            Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
+            Add(Win => UpgradeWindow, Str => To_String(UpgradeDurability));
+            Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
+                Count => 1, Color => 1);
+            CurrentLine := CurrentLine + 1;
+        end if;
+        if UpgradeMaxValue /= Null_Unbounded_String then
+            Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
+            Add(Win => UpgradeWindow, Str => To_String(UpgradeMaxValue));
+            Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
+                Count => 1, Color => 1);
+            CurrentLine := CurrentLine + 1;
+        end if;
+        Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
+        Add(Win => UpgradeWindow, Str => "Quit");
+        Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
+            Count => 1, Color => 1);
         Refresh;
         Refresh(UpgradeWindow);
         Delete(UpgradeWindow);
@@ -351,4 +402,9 @@ package body Ships.UI is
         return Cargo_Info;
     end CargoInfoKeys;
 
+    function ShipUpgradeKeys(Key : Key_Code; OldState : GameStates) return GameStates is
+    begin
+        DrawGame(Ship_Info);
+        return Ship_Info;
+    end ShipUpgradeKeys;
 end Ships.UI;
