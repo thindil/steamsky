@@ -182,7 +182,7 @@ exception
         else
             Create(ErrorFile, Append_File, "data/error.log");
         end if;
-        Put_Line(Ada.Calendar.Formatting.Image(Clock));
+        Put_Line(ErrorFile, Ada.Calendar.Formatting.Image(Clock));
         Put_Line(ErrorFile, GameVersion); 
         Put_Line(ErrorFile, Exception_Information(An_Exception));
         Close(ErrorFile);
