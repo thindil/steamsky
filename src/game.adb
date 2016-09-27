@@ -170,7 +170,7 @@ package body Game is
         HealthLevel : Integer := 100;
         RepairPoints : Natural := 0;
         ProtoIndex, I : Positive;
-        CrafterIndex, ModuleIndex, ResultAmount : Natural := 0;
+        CrafterIndex, ModuleIndex, ResultAmount, UpgradeIndex : Natural := 0;
         Amount : Integer;
         Recipe : Craft_Data;
         MaterialIndexes : array(1..10) of Natural := (others => 0);
@@ -178,6 +178,7 @@ package body Game is
         DeathReason : Unbounded_String;
         HaveCabin : Boolean;
         BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        MaxValue : Positive;
         procedure UpdateMember(Member : in out Member_Data) is
             BackToWork : Boolean := True;
         begin
@@ -290,11 +291,11 @@ package body Game is
                     when Engineer =>
                         GainExp(TiredPoints, 2, I);
                     when Repair =>
-                        if TiredPoints > 0 then
-                            RepairPoints := RepairPoints + TiredPoints;
-                        end if;
+                        RepairPoints := RepairPoints + TiredPoints;
                     when Craft =>
                         CrafterIndex := I;
+                    when Upgrading =>
+                        UpgradeIndex := I;
                     when others =>
                         null;
                 end case;
@@ -475,6 +476,111 @@ package body Game is
                 AddMessage(To_String(PlayerShip.Crew.Element(CrafterIndex).Name) & " was manufactured" & Integer'Image(CraftedAmount) & 
                     " " & To_String(Items_List.Element(Recipe.ResultIndex).Name) & 
                     ".", CraftMessage);
+            end if;
+        end if;
+        -- Upgrade ship module
+        if PlayerShip.UpgradeModule > 0 and UpgradeIndex > 0 and TiredPoints > 0 then
+            ResultAmount := 0;
+            Amount := 10;
+            if PlayerShip.UpgradeAction = MAX_VALUE then
+                case Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType is
+                    when CABIN | GUN | BATTERING_RAM =>
+                        Amount := 100;
+                    when HULL =>
+                        Amount := 500;
+                    when others =>
+                        null;
+                end case;
+            end if;
+            Upgrade_Loop:
+            for J in 1..TiredPoints loop
+                RepairMaterial := 0;
+                for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if Items_List(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
+                        Modules_List(PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex).RepairMaterial
+                        and PlayerShip.Cargo.Element(I).Amount >= Amount then
+                        RepairMaterial := I;
+                        exit;
+                    end if;
+                end loop;
+                if RepairMaterial = 0 then
+                    AddMessage("You don't have enough materials to upgrade " &
+                    To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name),
+                    OrderMessage);
+                    StartUpgrading(PlayerShip.UpgradeModule, 3);
+                    exit Upgrade_Loop;
+                end if;
+                case PlayerShip.UpgradeAction is
+                    when DURABILITY =>
+                        UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "MaxDurability", "1");
+                        GainExp(1, 
+                            Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).RepairSkill,
+                            UpgradeIndex);
+                        ResultAmount := PlayerShip.UpgradeModule;
+                    when MAX_VALUE =>
+                        UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "Max_Value", "1");
+                        GainExp(1, 
+                            Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).RepairSkill,
+                            UpgradeIndex);
+                        ResultAmount := PlayerShip.UpgradeModule;
+                    when others =>
+                        null;
+                end case;
+                for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if Items_List(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
+                        Modules_List(PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex).RepairMaterial
+                        and PlayerShip.Cargo.Element(I).Amount >= Amount then
+                        UpdateCargo(I, (0 - Amount));
+                        exit;
+                    end if;
+                end loop;
+                RepairMaterial := 0;
+                for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if Items_List(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
+                        Modules_List(PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex).RepairMaterial
+                        and PlayerShip.Cargo.Element(I).Amount >= Amount then
+                        RepairMaterial := I;
+                        exit;
+                    end if;
+                end loop;
+                if RepairMaterial = 0 then
+                    AddMessage("You don't have enough materials to upgrade " &
+                    To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name),
+                    OrderMessage);
+                    StartUpgrading(PlayerShip.UpgradeModule, 3);
+                    exit Upgrade_Loop;
+                end if;
+                case PlayerShip.UpgradeAction is
+                    when DURABILITY =>
+                        MaxValue := 
+                            Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).Durability) 
+                            * 1.5);
+                            if PlayerShip.Modules.Element(PlayerShip.UpgradeModule).MaxDurability = MaxValue then
+                                AddMessage("You reached maximum durability for " &
+                                To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
+                                & ".", OrderMessage);
+                                StartUpgrading(PlayerShip.UpgradeModule, 3);
+                                exit Upgrade_Loop;
+                            end if;
+                    when MAX_VALUE =>
+                        MaxValue :=
+                            Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MaxValue) 
+                            * 1.5);
+                            if PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Max_Value = MaxValue then
+                                AddMessage("You reached maximum upgrade for " &
+                                To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
+                                & ".", OrderMessage);
+                                StartUpgrading(PlayerShip.UpgradeModule, 3);
+                                exit Upgrade_Loop;
+                            end if;
+                    when others =>
+                        null;
+                end case;
+            end loop Upgrade_Loop;
+            if ResultAmount > 0 then
+                AddMessage(To_String(PlayerShip.Crew.Element(UpgradeIndex).Name)
+                    & " was upgraded " & To_String(PlayerShip.Modules.Element(ResultAmount).Name)
+                    & ".", OrderMessage);
             end if;
         end if;
         -- Update base
