@@ -59,6 +59,9 @@ package body Messages is
 
     procedure AddMessage(Message : String; MType : Message_Type) is
     begin
+        if Messages_List.Length = 500 then
+            Messages_List.Delete(Index => 1, Count => 1);
+        end if;
         Messages_List.Append(New_Item => (Message => To_Unbounded_String(FormatedTime) & ": " &
             To_Unbounded_String(Message), MType => MType));
         LastMessage := To_Unbounded_String(Message);
