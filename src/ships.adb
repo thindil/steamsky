@@ -281,7 +281,7 @@ package body Ships is
         end if;
         TmpShip := (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed, Craft => 0,
             Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew,
-            UpgradeModule => 0, UpgradeAction => NONE);
+            UpgradeModule => 0, UpgradeAction => NONE, UpgradeProgress => 0);
         for I in TmpShip.Modules.First_Index..TmpShip.Modules.Last_Index loop
             case Modules_List.Element(TmpShip.Modules.Element(I).ProtoIndex).MType is
                 when TURRET =>
@@ -438,7 +438,6 @@ package body Ships is
 
     procedure StartUpgrading(ModuleIndex, UpgradeType : Positive) is
         MaxValue : Natural;
-        Cost : Positive := 10;
         HaveMaterials : Boolean := False;
         MaterialIndex : Positive;
     begin
@@ -456,6 +455,7 @@ package body Ships is
                     return;
                 end if;
                 PlayerShip.UpgradeAction := DURABILITY;
+                PlayerShip.UpgradeProgress := 10;
             when 2 => -- Upgrade various stats of selected module
                 MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
                 case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
@@ -465,27 +465,28 @@ package body Ships is
                                 To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ".");
                             return;
                         end if;
+                        PlayerShip.UpgradeProgress := 10;
                     when CABIN =>
                         if PlayerShip.Modules.Element(ModuleIndex).Max_Value = MaxValue then
                             ShowDialog("You can't improve more quality of " &
                                 To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ".");
                             return;
                         end if;
-                        Cost := 100;
+                        PlayerShip.UpgradeProgress := 100;
                     when GUN | BATTERING_RAM =>
                         if PlayerShip.Modules.Element(ModuleIndex).Max_Value = MaxValue then
                             ShowDialog("You can't improve more damage of " &
                                 To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ".");
                             return;
                         end if;
-                        Cost := 100;
+                        PlayerShip.UpgradeProgress := 100;
                     when HULL =>
                         if PlayerShip.Modules.Element(ModuleIndex).Max_Value = MaxValue then
                             ShowDialog("You can't enlarge more " &
                                 To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ".");
                             return;
                         end if;
-                        Cost := 500;
+                        PlayerShip.UpgradeProgress := 500;
                     when others =>
                         ShowDialog(To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & 
                             " can't be upgraded in that way.");
@@ -498,7 +499,7 @@ package body Ships is
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
             if Items_List(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
                 Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).RepairMaterial
-            and PlayerShip.Cargo.Element(I).Amount >= Cost then
+            then
                 HaveMaterials := True;
                 MaterialIndex := PlayerShip.Cargo.Element(I).ProtoIndex;
                 exit;
@@ -511,11 +512,11 @@ package body Ships is
                     exit;
                 end if;
             end loop;
-            ShowDialog("You don't have enough materials for upgrading " &
-                To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ". You need at least" & Positive'Image(Cost) & " " &
-                    To_String(Items_List(MaterialIndex).Name) & ".");
+            ShowDialog("You don't have " & To_String(Items_List(MaterialIndex).Name) & " for upgrading " &
+                To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ".");
             PlayerShip.UpgradeAction := NONE;
             PlayerShip.UpgradeModule := 0;
+            PlayerShip.UpgradeProgress := 0;
         else
             PlayerShip.UpgradeModule := ModuleIndex;
             AddMessage("You set " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) &

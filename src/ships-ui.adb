@@ -294,7 +294,7 @@ package body Ships.UI is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         UpgradeWindow : Window;
         MaxValue : Natural;
-        WindowHeight : Line_Position := 2;
+        WindowHeight : Line_Position := 3;
         UpgradeDurability, UpgradeMaxValue : Unbounded_String := Null_Unbounded_String;
         CurrentLine : Line_Position := 1;
     begin
