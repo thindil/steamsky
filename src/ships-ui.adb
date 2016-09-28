@@ -294,7 +294,7 @@ package body Ships.UI is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         UpgradeWindow : Window;
         MaxValue : Natural;
-        WindowHeight : Line_Position := 3;
+        WindowHeight : Line_Position := 2;
         UpgradeDurability, UpgradeMaxValue : Unbounded_String := Null_Unbounded_String;
         CurrentLine : Line_Position := 1;
     begin
@@ -347,13 +347,6 @@ package body Ships.UI is
         if UpgradeMaxValue /= Null_Unbounded_String then
             Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
             Add(Win => UpgradeWindow, Str => To_String(UpgradeMaxValue));
-            Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
-                Count => 1, Color => 1);
-            CurrentLine := CurrentLine + 1;
-        end if;
-        if PlayerShip.UpgradeModule > 0 then
-            Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
-            Add(Win => UpgradeWindow, Str => "3 Stop upgrading");
             Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
                 Count => 1, Color => 1);
             CurrentLine := CurrentLine + 1;
@@ -441,7 +434,7 @@ package body Ships.UI is
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Close upgrade menu
                 null;
-            when Character'Pos('1') | Character'Pos('2') | Character'Pos('3') => -- Give upgrade orders
+            when Character'Pos('1') | Character'Pos('2') => -- Give upgrade orders
                 StartUpgrading(Get_Index(Current(ModulesMenu)), Positive(Key - 48));
             when others =>
                 return Upgrade_Module;
