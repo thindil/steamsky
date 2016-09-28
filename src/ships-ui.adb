@@ -332,9 +332,6 @@ package body Ships.UI is
             ShowDialog("This module don't have available upgrades.");
             return;
         end if;
-        if PlayerShip.UpgradeModule > 0 then
-            WindowHeight := WindowHeight + 1;
-        end if;
         UpgradeWindow := Create(WindowHeight, 24, ((Lines / 2) - 3), ((Columns / 2) - 12));
         Box(UpgradeWindow);
         if UpgradeDurability /= Null_Unbounded_String then
