@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Separated repair skill for each module
 - Maximum amount of messages - 500
 - Option to delete all messages
+- Upgrading ship modules
 
 ### Changed
 - Updated help
