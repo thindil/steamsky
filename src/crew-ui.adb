@@ -60,7 +60,7 @@ package body Crew.UI is
         end if;
         Add(Win => InfoWindow, Str => To_String(Tired));
         Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
-        Add(Win => InfoWindow, Str => "Thirts: ");
+        Add(Win => InfoWindow, Str => "Thirst: ");
         if Member.Thirst < 40 then
             Thirsty := To_Unbounded_String("None");
         elsif Member.Thirst > 40 and Member.Thirst < 81 then
