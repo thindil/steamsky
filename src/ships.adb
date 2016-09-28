@@ -492,17 +492,6 @@ package body Ships is
                         return;
                 end case;
                 PlayerShip.UpgradeAction := MAX_VALUE;
-            when 3 => -- Stop upgrading
-                AddMessage("You stopped upgrading " & To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name) 
-                    & ".", OrderMessage);
-                PlayerShip.UpgradeAction := NONE;
-                PlayerShip.UpgradeModule := 0;
-                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                    if PlayerShip.Crew.Element(I).Order = Upgrading then
-                        GiveOrders(I, Rest);
-                    end if;
-                end loop;
-                return;
             when others =>
                 return;
         end case;

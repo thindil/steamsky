@@ -507,7 +507,7 @@ package body Game is
                     AddMessage("You don't have enough materials to upgrade " &
                     To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name),
                     OrderMessage);
-                    StartUpgrading(PlayerShip.UpgradeModule, 3);
+                    GiveOrders(UpgradeIndex, Rest);
                     exit Upgrade_Loop;
                 end if;
                 case PlayerShip.UpgradeAction is
@@ -547,7 +547,7 @@ package body Game is
                     AddMessage("You don't have enough materials to upgrade " &
                     To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name),
                     OrderMessage);
-                    StartUpgrading(PlayerShip.UpgradeModule, 3);
+                    GiveOrders(UpgradeIndex, Rest);
                     exit Upgrade_Loop;
                 end if;
                 case PlayerShip.UpgradeAction is
@@ -559,7 +559,7 @@ package body Game is
                                 AddMessage("You reached maximum durability for " &
                                 To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
                                 & ".", OrderMessage);
-                                StartUpgrading(PlayerShip.UpgradeModule, 3);
+                                GiveOrders(UpgradeIndex, Rest);
                                 exit Upgrade_Loop;
                             end if;
                     when MAX_VALUE =>
@@ -570,7 +570,7 @@ package body Game is
                                 AddMessage("You reached maximum upgrade for " &
                                 To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
                                 & ".", OrderMessage);
-                                StartUpgrading(PlayerShip.UpgradeModule, 3);
+                                GiveOrders(UpgradeIndex, Rest);
                                 exit Upgrade_Loop;
                             end if;
                     when others =>
