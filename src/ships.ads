@@ -34,6 +34,8 @@ package Ships is
             Durability : Integer; -- 0 = destroyed
             MaxDurability : Integer; -- Base durability
             Owner : Natural; -- Crew member owner of module (mostly for cabins)
+            UpgradeProgress : Integer; -- Progress of module upgrade
+            UpgradeAction : ShipUpgrade; -- Type of module upgrade
         end record;
     package Modules_Container is new Vectors(Positive, ModuleData); 
     type CargoData is -- Data structure for ship cargo
@@ -54,8 +56,6 @@ package Ships is
             Cargo : Cargo_Container.Vector; -- List of ship cargo
             Crew : Crew_Container.Vector; -- List of ship crew
             UpgradeModule : Natural; -- Number of module to upgrade
-            UpgradeAction : ShipUpgrade; -- Type of module upgrade
-            UpgradeProgress : Integer; -- Progress of module upgrade
         end record;
     package ProtoModules_Container is new Vectors(Positive, Positive);
     type ProtoShipData is -- Data structure for ship prototypes
