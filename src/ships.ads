@@ -55,6 +55,7 @@ package Ships is
             Crew : Crew_Container.Vector; -- List of ship crew
             UpgradeModule : Natural; -- Number of module to upgrade
             UpgradeAction : ShipUpgrade; -- Type of module upgrade
+            UpgradeProgress : Integer; -- Progress of module upgrade
         end record;
     package ProtoModules_Container is new Vectors(Positive, Positive);
     type ProtoShipData is -- Data structure for ship prototypes
