@@ -23,7 +23,7 @@ package Ships is
     type ShipSpeed is (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED,
         FULL_SPEED);
     type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD);
-    type ShipUpgrade is (NONE, REPAIR, DURABILITY, VALUE, MAX_VALUE);
+    type ShipUpgrade is (NONE, DURABILITY, MAX_VALUE);
     type ModuleData is -- Data structure for ship modules
         record
             Name : Unbounded_String; -- Name of module
