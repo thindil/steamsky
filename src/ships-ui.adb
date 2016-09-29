@@ -32,8 +32,10 @@ package body Ships.UI is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         DamagePercent : Natural;
         MAmount : Natural := 0;
+        CurrentLine : Line_Position := 6;
+        MaxUpgrade, UpgradePercent : Natural;
     begin
-        InfoWindow := Create(8, (Columns / 2), 8, (Columns / 2));
+        InfoWindow := Create(10, (Columns / 2), 8, (Columns / 2));
         Add(Win => InfoWindow, Str => "Status: ");
         DamagePercent := 100 -
             Natural((Float(PlayerShip.Modules.Element(ModuleIndex).Durability) /
@@ -91,13 +93,57 @@ package body Ships.UI is
             when others =>
                 null;
         end case;
-        Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
+        if PlayerShip.Modules.Element(ModuleIndex).UpgradeAction /= NONE then
+            Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+            Add(Win => InfoWindow, Str => "Upgrading: ");
+            case PlayerShip.Modules.Element(ModuleIndex).UpgradeAction is
+                when DURABILITY => 
+                    Add(Win => InfoWindow, Str => "durability");
+                    MaxUpgrade := 10;
+                when MAX_VALUE =>
+                    case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+                        when ENGINE =>
+                            Add(Win => InfoWindow, Str => "power");
+                            MaxUpgrade := 10;
+                        when CABIN =>
+                            Add(Win => InfoWindow, Str => "quality");
+                            MaxUpgrade := 100;
+                        when GUN | BATTERING_RAM =>
+                            Add(Win => InfoWindow, Str => "damage");
+                            MaxUpgrade := 100;
+                        when HULL =>
+                            Add(Win => InfoWindow, Str => "enlarge");
+                            MaxUpgrade := 500;
+                        when others =>
+                            null;
+                    end case;
+                when others =>
+                    null;
+            end case;
+            Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
+            Add(Win => InfoWindow, Str => "Upgrade progress: ");
+            UpgradePercent :=  100 - Natural((Float(PlayerShip.Modules.Element(ModuleIndex).UpgradeProgress) /
+                Float(MaxUpgrade)) * 100.0);
+            if UpgradePercent < 11 then
+                Add(Win => InfoWindow, Str => "started");
+            elsif UpgradePercent < 31 then
+                Add(Win => InfoWindow, Str => "designing");
+            elsif UpgradePercent < 51 then
+                Add(Win => InfoWindow, Str => "base upgrades");
+            elsif UpgradePercent < 80 then
+                Add(Win => InfoWindow, Str => "advanced upgrades");
+            else
+                Add(Win => InfoWindow, Str => "final upgrades");
+            end if;
+            CurrentLine := 8;
+        end if;
+        Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Upgrade module");
-        Change_Attributes(Win => InfoWindow, Line => 6, Column => 0, 
+        Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 0, 
             Count => 1, Color => 1);
-        Move_Cursor(Win => InfoWindow, Line => 7, Column => 0);
+        Move_Cursor(Win => InfoWindow, Line => (CurrentLine + 1), Column => 0);
         Add(Win => InfoWindow, Str => "Rename module");
-        Change_Attributes(Win => InfoWindow, Line => 7, Column => 2, 
+        Change_Attributes(Win => InfoWindow, Line => (CurrentLine + 1), Column => 2, 
             Count => 1, Color => 1);
         Refresh;
         Refresh(InfoWindow);
@@ -107,8 +153,9 @@ package body Ships.UI is
     procedure ShowShipInfo is
         Weight : Integer;
         Modules_Items: constant Item_Array_Access := new Item_Array(1..(PlayerShip.Modules.Last_Index + 1));
-        MenuHeight : Line_Position;
+        MenuHeight, CurrentLine : Line_Position;
         MenuLength : Column_Position;
+        UpgradePercent, MaxUpgrade : Natural;
     begin
         Weight := CountShipWeight(PlayerShip);
         Move_Cursor(Line => 2, Column => 2);
@@ -124,32 +171,52 @@ package body Ships.UI is
         Add(Str => "Upgrading: ");
         if PlayerShip.UpgradeModule = 0 then
             Add(Str => "Nothing");
+            CurrentLine := 5;
         else
             Add(Str => To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name) & " " );
             case PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeAction is
                 when DURABILITY => 
                     Add(Str => "(durability)");
+                    MaxUpgrade := 10;
                 when MAX_VALUE =>
                     case Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType is
                         when ENGINE =>
                             Add(Str => "(power)");
+                            MaxUpgrade := 10;
                         when CABIN =>
                             Add(Str => "(quality)");
+                            MaxUpgrade := 100;
                         when GUN | BATTERING_RAM =>
                             Add(Str => "(damage)");
+                            MaxUpgrade := 100;
                         when HULL =>
                             Add(Str => "(enlarge)");
+                            MaxUpgrade := 500;
                         when others =>
                             null;
                     end case;
                 when others =>
                     null;
             end case;
+            Move_Cursor(Line => 5, Column => 2);
+            Add(Str => "Upgrade progress: ");
+            UpgradePercent :=  100 - Natural((Float(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeProgress) /
+                Float(MaxUpgrade)) * 100.0);
+            if UpgradePercent < 11 then
+                Add(Str => "started");
+            elsif UpgradePercent < 31 then
+                Add(Str => "designing");
+            elsif UpgradePercent < 51 then
+                Add(Str => "base upgrades");
+            elsif UpgradePercent < 80 then
+                Add(Str => "advanced upgrades");
+            else
+                Add(Str => "final upgrades");
+            end if;
+            CurrentLine := 6;
         end if;
-        Move_Cursor(Line => 5, Column => 2);
+        Move_Cursor(Line => CurrentLine, Column => 2);
         Add(Str => "Weight:" & Integer'Image(Weight) & "kg");
-        Move_Cursor(Line => 7, Column => 2);
-        Add(Str => "Modules:");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             Modules_Items.all(I) := New_Item(To_String(PlayerShip.Modules.Element(I).Name));
         end loop;
@@ -158,7 +225,7 @@ package body Ships.UI is
         Set_Format(ModulesMenu, Lines - 10, 1);
         Set_Mark(ModulesMenu, "");
         Scale(ModulesMenu, MenuHeight, MenuLength);
-        MenuWindow := Create(MenuHeight, MenuLength, 9, 2);
+        MenuWindow := Create(MenuHeight, MenuLength, (CurrentLine + 2), 2);
         Set_Window(ModulesMenu, MenuWindow);
         Set_Sub_Window(ModulesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(ModulesMenu);
