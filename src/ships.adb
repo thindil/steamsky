@@ -504,6 +504,13 @@ package body Ships is
                         return;
                 end case;
                 UpgradeAction := MAX_VALUE;
+            when 3 => -- Continue previous upgrade
+                if PlayerShip.Modules.Element(ModuleIndex).UpgradeAction = NONE then
+                    ShowDialog(To_String(PlayerShip.Modules.Element(ModuleIndex).Name)
+                        & " don't have set any upgrade yet.");
+                    return;
+                end if;
+                UpgradeAction := PlayerShip.Modules.Element(ModuleIndex).UpgradeAction;
             when others =>
                 return;
         end case;
