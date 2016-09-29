@@ -360,7 +360,7 @@ package body Ships.UI is
         UpgradeWindow : Window;
         MaxValue : Natural;
         WindowHeight : Line_Position := 3;
-        UpgradeDurability, UpgradeMaxValue : Unbounded_String := Null_Unbounded_String;
+        UpgradeDurability, UpgradeMaxValue, UpgradeContinue : Unbounded_String := Null_Unbounded_String;
         CurrentLine : Line_Position := 1;
     begin
         MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Durability) * 1.5);
@@ -393,7 +393,12 @@ package body Ships.UI is
             when others =>
                 null;
         end case;
-        if UpgradeDurability = Null_Unbounded_String and UpgradeMaxValue = Null_Unbounded_String then
+        if PlayerShip.Modules.Element(ModuleIndex).UpgradeAction /= NONE then
+            UpgradeContinue := To_Unbounded_String("3 Continue upgrading");
+            WindowHeight := WindowHeight + 1;
+        end if;
+        if UpgradeDurability = Null_Unbounded_String and UpgradeMaxValue = Null_Unbounded_String and 
+            UpgradeContinue = Null_Unbounded_String then
             ShowDialog("This module don't have available upgrades.");
             return;
         end if;
@@ -409,6 +414,13 @@ package body Ships.UI is
         if UpgradeMaxValue /= Null_Unbounded_String then
             Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
             Add(Win => UpgradeWindow, Str => To_String(UpgradeMaxValue));
+            Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
+                Count => 1, Color => 1);
+            CurrentLine := CurrentLine + 1;
+        end if;
+        if UpgradeContinue /= Null_Unbounded_String then
+            Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
+            Add(Win => UpgradeWindow, Str => To_String(UpgradeContinue));
             Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
                 Count => 1, Color => 1);
             CurrentLine := CurrentLine + 1;
@@ -496,7 +508,7 @@ package body Ships.UI is
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Close upgrade menu
                 null;
-            when Character'Pos('1') | Character'Pos('2') => -- Give upgrade orders
+            when Character'Pos('1') | Character'Pos('2') | Character'Pos('3') => -- Give upgrade orders
                 StartUpgrading(Get_Index(Current(ModulesMenu)), Positive(Key - 48));
             when others =>
                 return Upgrade_Module;
