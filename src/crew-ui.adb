@@ -27,64 +27,70 @@ package body Crew.UI is
     procedure ShowMemberInfo is
         InfoWindow : Window;
         Member : constant Member_Data := PlayerShip.Crew.Element(Get_Index(Current(CrewMenu)));
-        CurrentLine : Line_Position := 7;
-        Health, Tired, Hungry, Thirsty, SkillLevel, OrderName : Unbounded_String;
+        CurrentLine : Line_Position := 1;
+        Health, Tired, Hungry, Thirsty, SkillLevel, OrderName : Unbounded_String := Null_Unbounded_String;
     begin
+        if Member.Health < 100 and Member.Health > 80 then
+            Health := To_Unbounded_String("Slightly wounded");
+        elsif Member.Health < 81 and Member.Health > 50 then
+            Health := To_Unbounded_String("Wounded");
+        elsif Member.Health < 51 then
+            Health := To_Unbounded_String("Heavily Wounded");
+        end if;
+        if Member.Tired > 20 and Member.Tired < 41 then
+            Tired := To_Unbounded_String("Bit tired");
+        elsif Member.Tired > 40 and Member.Tired < 81 then
+            Tired := To_Unbounded_String("Tired");
+        elsif Member.Tired > 80 and Member.Tired < 100 then
+            Tired := To_Unbounded_String("Very tired");
+        elsif Member.Tired = 100 then
+            Tired := To_Unbounded_String("Unconscious");
+        end if;
+        if Member.Thirst > 20 and Member.Thirst < 41 then
+            Thirsty := To_Unbounded_String("Bit thirsty");
+        elsif Member.Thirst > 40 and Member.Thirst < 81 then
+            Thirsty := To_Unbounded_String("Thirsty");
+        elsif Member.Thirst > 80 and Member.Thirst < 100 then
+            Thirsty := To_Unbounded_String("Very thirsty");
+        elsif Member.Thirst = 100 then
+            Thirsty := To_Unbounded_String("Dehydrated");
+        end if;
+        if Member.Hunger > 20 and Member.Hunger < 41 then
+            Hungry := To_Unbounded_String("Bit hungry");
+        elsif Member.Hunger > 40 and Member.Hunger < 81 then
+            Hungry := To_Unbounded_String("Hungry");
+        elsif Member.Hunger > 80 and Member.Hunger < 100 then
+            Hungry := To_Unbounded_String("Very hungry");
+        elsif Member.Hunger = 100 then
+            Hungry := To_Unbounded_String("Starving");
+        end if;
         InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
-        Add(Win => InfoWindow, Str => "Gender: ");
         if Member.Gender = 'M' then
             Add(Win => InfoWindow, Str => "Male");
         else
             Add(Win => InfoWindow, Str => "Female");
         end if;
-        Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
-        Add(Win => InfoWindow, Str => "Health: ");
-        if Member.Health = 100 then
-            Health := To_Unbounded_String("Ok");
-        elsif Member.Health < 100 and Member.Health > 50 then
-            Health := To_Unbounded_String("Wounded");
-        elsif Member.Health < 51 then
-            Health := To_Unbounded_String("Heavily Wounded");
+        if Health /= Null_Unbounded_String then
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => To_String(Health));
+            CurrentLine := CurrentLine + 1;
         end if;
-        Add(Win => InfoWindow, Str => To_String(Health));
-        Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
-        Add(Win => InfoWindow, Str => "Fatigue: ");
-        if Member.Tired < 41 then
-            Tired := To_Unbounded_String("None");
-        elsif Member.Tired > 40 and Member.Tired < 81 then
-            Tired := To_Unbounded_String("Tired");
-        elsif Member.Tired > 80 and Member.Tired < 100 then
-            Tired := To_Unbounded_String("Very tired");
-        else
-            Tired := To_Unbounded_String("Unconscious");
+        if Tired /= Null_Unbounded_String then
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => To_String(Tired));
+            CurrentLine := CurrentLine + 1;
         end if;
-        Add(Win => InfoWindow, Str => To_String(Tired));
-        Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
-        Add(Win => InfoWindow, Str => "Thirst: ");
-        if Member.Thirst < 40 then
-            Thirsty := To_Unbounded_String("None");
-        elsif Member.Thirst > 40 and Member.Thirst < 81 then
-            Thirsty := To_Unbounded_String("Thirsty");
-        elsif Member.Thirst > 80 and Member.Thirst < 100 then
-            Thirsty := To_Unbounded_String("Very thirsty");
-        else
-            Thirsty := To_Unbounded_String("Dehydrated");
+        if Thirsty /= Null_Unbounded_String then
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => To_String(Thirsty));
+            CurrentLine := CurrentLine + 1;
         end if;
-        Add(Win => InfoWindow, Str => To_String(Thirsty));
-        Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
-        Add(Win => InfoWindow, Str => "Hunger: ");
-        if Member.Hunger < 41 then
-            Hungry := To_Unbounded_String("None");
-        elsif Member.Hunger > 40 and Member.Hunger < 81 then
-            Hungry := To_Unbounded_String("Hungry");
-        elsif Member.Hunger > 80 and Member.Hunger < 100 then
-            Hungry := To_Unbounded_String("Very hungry");
-        else
-            Hungry := To_Unbounded_String("Starving");
+        if Hungry /= Null_Unbounded_String then
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => To_String(Hungry));
+            CurrentLine := CurrentLine + 1;
         end if;
-        Add(Win => InfoWindow, Str => To_String(Hungry));
-        Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
-        Add(Win => InfoWindow, Str => "SKILLS:");
+        CurrentLine := CurrentLine + 1;
         for I in Member.Skills'Range loop
             SkillLevel := To_Unbounded_String("");
             if Member.Skills(I, 1) > 0 and Member.Skills(I, 1) < 20 then
