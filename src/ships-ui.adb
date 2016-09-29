@@ -127,8 +127,6 @@ package body Ships.UI is
         else
             Add(Str => To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name) & " " );
             case PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeAction is
-                when REPAIR =>
-                    Add(Str => "(repairing)");
                 when DURABILITY => 
                     Add(Str => "(durability)");
                 when MAX_VALUE =>
