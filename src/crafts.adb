@@ -151,6 +151,9 @@ package body Crafts is
         Recipe : constant Craft_Data := Recipes_List.Element(PlayerShip.Craft);
         MaterialIndexes : array(1..10) of Natural := (others => 0);
     begin
+        if Times = 0 then
+            return;
+        end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Craft then
                 CrafterIndex := I;
