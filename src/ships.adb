@@ -623,9 +623,14 @@ package body Ships is
                         end if;
                     when MAX_VALUE =>
                         UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "Max_Value", "1");
-                        if Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType = HULL then
-                            WeightGain := WeightGain * 10;
-                        end if;
+                        case Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType is
+                            when HULL =>
+                                WeightGain := WeightGain * 10;
+                            when ENGINE =>
+                                WeightGain := 1;
+                            when others =>
+                                null;
+                        end case;
                         UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "Weight", Natural'Image(WeightGain));
                         AddMessage(To_String(PlayerShip.Crew.Element(WorkerIndex).Name)
                             & " was upgraded " & To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name) & 
