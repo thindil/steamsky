@@ -278,7 +278,7 @@ package body Crew is
         end if;
     end Death;
 
-    procedure UpgradeCrew(Times : Natural) is
+    procedure UpgradeCrew(Times : Positive) is
         TiredLevel, HungerLevel, ThirstLevel : Integer := 0;
         HealthLevel : Integer := 100;
         I : Positive;

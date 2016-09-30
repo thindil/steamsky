@@ -543,13 +543,10 @@ package body Ships is
         end if;
     end StartUpgrading;
 
-    procedure UpgradeShip(Times : Natural) is
+    procedure UpgradeShip(Times : Positive) is
         ResultAmount, UpgradePoints, WorkerIndex, UpgradeMaterial, UpgradeProgress : Natural := 0;
         MaxValue : Positive;
     begin
-        if Times = 0 then
-            return;
-        end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Upgrading then
                 WorkerIndex := I;
@@ -667,7 +664,7 @@ package body Ships is
         end loop;
     end UpgradeShip;
 
-    procedure RepairShip(Times : Natural) is
+    procedure RepairShip(Times : Positive) is
         RepairPoints : Natural := 0;
         RepairMaterial : Natural;
         ProtoIndex : Positive;

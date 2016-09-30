@@ -191,14 +191,16 @@ package body Game is
             GameDate.Month := 1;
             GameDate.Year := GameDate.Year + 1;
         end if;
-        -- Update crew
-        UpgradeCrew(TiredPoints);
-        -- Repair ship (if needed)
-        RepairShip(TiredPoints);
-        -- Craft items
-        Manufacturing(TiredPoints);
-        -- Upgrade ship module
-        UpgradeShip(TiredPoints);
+        if TiredPoints > 0 then
+            -- Update crew
+            UpgradeCrew(TiredPoints);
+            -- Repair ship (if needed)
+            RepairShip(TiredPoints);
+            -- Craft items
+            Manufacturing(TiredPoints);
+            -- Upgrade ship module
+            UpgradeShip(TiredPoints);
+        end if;
         -- Update base
         if BaseIndex > 0 then
             SkyBases(BaseIndex).Visited := GameDate;

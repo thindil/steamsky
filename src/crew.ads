@@ -39,6 +39,6 @@ package Crew is
     procedure GainExp(Amount : Natural; SkillNumber, CrewIndex : Positive); -- Gain experience in selected skill.
     function GenerateMemberName(Gender : Character) return Unbounded_String; -- Generate random name for crew member
     procedure Death(MemberIndex : Positive; Reason : Unbounded_String); -- Handle crew member death
-    procedure UpgradeCrew(Times : Natural); -- Upgrade ship crew
+    procedure UpgradeCrew(Times : Positive); -- Upgrade ship crew
 
 end Crew;
