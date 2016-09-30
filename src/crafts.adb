@@ -146,14 +146,11 @@ package body Crafts is
         AddMessage(To_String(Items_List.Element(Recipe.ResultIndex).Name) & " was set as manufacturing order.", CraftMessage);
     end SetRecipe;
 
-    procedure Manufacturing(Times : Natural) is
+    procedure Manufacturing(Times : Positive) is
         CrafterIndex, ModuleIndex, Amount, ResultAmount, CraftedAmount : Natural := 0;
         Recipe : constant Craft_Data := Recipes_List.Element(PlayerShip.Craft);
         MaterialIndexes : array(1..10) of Natural := (others => 0);
     begin
-        if Times = 0 then
-            return;
-        end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Craft then
                 CrafterIndex := I;
