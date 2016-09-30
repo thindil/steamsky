@@ -148,9 +148,13 @@ package body Crafts is
 
     procedure Manufacturing(Times : Positive) is
         CrafterIndex, ModuleIndex, Amount, ResultAmount, CraftedAmount : Natural := 0;
-        Recipe : constant Craft_Data := Recipes_List.Element(PlayerShip.Craft);
+        Recipe : Craft_Data;
         MaterialIndexes : array(1..10) of Natural := (others => 0);
     begin
+        if PlayerShip.Craft = 0 then
+            return;
+        end if;
+        Recipe := Recipes_List.Element(PlayerShip.Craft);
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Craft then
                 CrafterIndex := I;
