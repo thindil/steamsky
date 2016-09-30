@@ -168,9 +168,7 @@ package body Game is
         AddedHours, AddedMinutes : Natural;
         TiredPoints : Natural := 0;
         HealthLevel : Integer := 100;
-        RepairPoints : Natural := 0;
-        ProtoIndex, I : Positive;
-        RepairMaterial : Natural := 0;
+        I : Positive;
         DeathReason : Unbounded_String;
         HaveCabin : Boolean;
         BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -285,8 +283,6 @@ package body Game is
                         GainExp(TiredPoints, 1, I);
                     when Engineer =>
                         GainExp(TiredPoints, 2, I);
-                    when Repair =>
-                        RepairPoints := RepairPoints + TiredPoints;
                     when others =>
                         null;
                 end case;
@@ -321,68 +317,7 @@ package body Game is
             end if;
         end loop;
         -- Repair ship (if needed)
-        if RepairPoints > 0 then
-            Repair_Loop:
-            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                RepairMaterial := 0;
-                if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
-                    for J in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                        if PlayerShip.Crew.Element(J).Order = Repair then
-                            RepairPoints := RepairPoints +
-                            (PlayerShip.Crew.Element(J).Skills(Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairSkill, 
-                            1) / 10);
-                            GainExp(TiredPoints, Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairSkill, J);
-                        end if;
-                    end loop;
-                    Material_Loop:
-                    for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                        if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = 
-                            Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial then
-                            ProtoIndex := PlayerShip.Cargo.Element(J).ProtoIndex;
-                            RepairMaterial := J;
-                            -- Limit repair point depends on amount of repair materials
-                            if PlayerShip.Cargo.Element(J).Amount < RepairPoints then
-                                RepairPoints := PlayerShip.Cargo.Element(J).Amount;
-                            end if;
-                            exit Material_Loop;
-                        end if;
-                    end loop Material_Loop;
-                    if RepairMaterial = 0 then
-                        AddMessage("You don't have repair materials to continue repairs.",
-                            OrderMessage);
-                        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                            if PlayerShip.Crew.Element(I).Order = Repair then
-                                GiveOrders(I, Rest);
-                            end if;
-                        end loop;
-                        exit Repair_Loop;
-                    end if;
-                    -- Repair module
-                    if PlayerShip.Modules.Element(I).Durability + RepairPoints > PlayerShip.Modules.Element(I).MaxDurability then
-                        RepairPoints := (PlayerShip.Modules.Element(I).Durability + RepairPoints) - 
-                            PlayerShip.Modules.Element(I).MaxDurability;
-                        UpdateCargo(ProtoIndex, (PlayerShip.Modules.Element(I).Durability - 
-                            PlayerShip.Modules.Element(I).MaxDurability));
-                        UpdateModule(PlayerShip, I, "Durability", Integer'Image(PlayerShip.Modules.Element(I).MaxDurability - 
-                            PlayerShip.Modules.Element(I).Durability));
-                    else
-                        UpdateCargo(ProtoIndex, (0 - RepairPoints));
-                        UpdateModule(PlayerShip, I, "Durability", Integer'Image(RepairPoints));
-                        RepairPoints := 0;
-                    end if;
-                    exit Repair_Loop when RepairPoints = 0;
-                end if;
-            end loop Repair_Loop;
-            -- Send repair team on break if all is ok
-            if RepairPoints > 0 then
-                AddMessage("All repairs are finished.", OrderMessage);
-                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                    if PlayerShip.Crew.Element(I).Order = Repair then
-                        GiveOrders(I, Rest);
-                    end if;
-                end loop;
-            end if;
-        end if;
+        RepairShip(TiredPoints);
         -- Craft items
         Manufacturing(TiredPoints);
         -- Upgrade ship module
