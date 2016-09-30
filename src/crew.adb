@@ -278,4 +278,130 @@ package body Crew is
         end if;
     end Death;
 
+    procedure UpgradeCrew(Times : Natural) is
+        TiredLevel, HungerLevel, ThirstLevel : Integer := 0;
+        HealthLevel : Integer := 100;
+        I : Positive;
+        DeathReason : Unbounded_String;
+        HaveCabin : Boolean;
+        procedure UpdateMember(Member : in out Member_Data) is
+            BackToWork : Boolean := True;
+        begin
+            Member.Tired := TiredLevel;
+            if TiredLevel = 0 and Member.Order = Rest and Member.PreviousOrder /= Rest then
+                if Member.PreviousOrder /= Repair then
+                    for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                        if PlayerShip.Crew.Element(I).Order = Member.PreviousOrder then
+                            BackToWork := False;
+                            exit;
+                        end if;
+                    end loop;
+                end if;
+                if BackToWork then
+                    Member.Order := Member.PreviousOrder;
+                    AddMessage(To_String(Member.Name) & " back to work, fully rested.", OrderMessage);
+                end if;
+                Member.PreviousOrder := Rest;
+            end if;
+            if TiredLevel > 80 and Member.Order /= Rest then
+                Member.PreviousOrder := Member.Order;
+                Member.Order := Rest;
+                AddMessage(To_String(Member.Name) & " is too tired to work, going rest.", OrderMessage);
+            end if;
+            if HungerLevel > 80 then
+                if Consume(Food) then
+                    HungerLevel := HungerLevel - 80;
+                    if HungerLevel < 0 then
+                        HungerLevel := 0;
+                    end if;
+                else
+                    AddMessage(To_String(Member.Name) & " is hungry, but can't find anything to eat.", OtherMessage);
+                end if;
+            end if;
+            Member.Hunger := HungerLevel;
+            if ThirstLevel > 40 then
+                if Consume(Drink) then
+                    ThirstLevel := ThirstLevel - 40;
+                    if ThirstLevel < 0 then
+                        ThirstLevel := 0;
+                    end if;
+                else
+                    AddMessage(To_String(Member.Name) & " is thirsty, but can't find anything to drink.", OtherMessage);
+                end if;
+            end if;
+            Member.Thirst := ThirstLevel;
+            Member.Health := HealthLevel;
+        end UpdateMember;
+    begin
+        I := PlayerShip.Crew.First_Index;
+        while I <= PlayerShip.Crew.Last_Index loop
+            HealthLevel := PlayerShip.Crew.Element(I).Health;
+            if PlayerShip.Crew.Element(I).Order = Rest then
+                TiredLevel := 0;
+                HaveCabin := False;
+                for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                    if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
+                        PlayerShip.Modules.Element(J).Owner = I then
+                        HaveCabin := True;
+                        exit;
+                    end if;
+                end loop;
+                if PlayerShip.Crew.Element(I).Tired > 0 then
+                    if HaveCabin then
+                        TiredLevel := PlayerShip.Crew.Element(I).Tired - (Times * 20);
+                    else
+                        TiredLevel := PlayerShip.Crew.Element(I).Tired - Times;
+                    end if;
+                    if TiredLevel < 0 then
+                        TiredLevel := 0;
+                    end if;
+                end if;
+                if HealthLevel > 0 and HealthLevel < 100 and HaveCabin then
+                    HealthLevel := HealthLevel + Times;
+                end if;
+            else
+                TiredLevel := PlayerShip.Crew.Element(I).Tired + Times;
+                if TiredLevel > 100 then
+                    TiredLevel := 100;
+                end if;
+                case PlayerShip.Crew.Element(I).Order is
+                    when Pilot =>
+                        GainExp(Times, 1, I);
+                    when Engineer =>
+                        GainExp(Times, 2, I);
+                    when others =>
+                        null;
+                end case;
+            end if;
+            HungerLevel := PlayerShip.Crew.Element(I).Hunger + Times;
+            if HungerLevel > 100 then
+                HungerLevel := 100;
+            end if;
+            if PlayerShip.Crew.Element(I).Hunger = 100 then
+                HealthLevel := HealthLevel - Times;
+                if HealthLevel < 1 then
+                    HealthLevel := 0;
+                    DeathReason := To_Unbounded_String("starvation");
+                end if;
+            end if;
+            ThirstLevel := PlayerShip.Crew.Element(I).Thirst + Times;
+            if ThirstLevel > 100 then
+                ThirstLevel := 100;
+            end if;
+            if PlayerShip.Crew.Element(I).Thirst = 100 then
+                HealthLevel := HealthLevel - Times;
+                if HealthLevel < 1 then
+                    HealthLevel := 0;
+                    DeathReason := To_Unbounded_String("dehydration");
+                end if;
+            end if;
+            PlayerShip.Crew.Update_Element(Index => I, Process => UpdateMember'Access);
+            if HealthLevel = 0 then
+                Death(I, DeathReason);
+            else
+                I := I + 1;
+            end if;
+        end loop;
+    end UpgradeCrew;
+
 end Crew;
