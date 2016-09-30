@@ -180,7 +180,7 @@ package body Ships is
     procedure UpdateModule(Ship : in out ShipRecord; ModuleIndex : Positive; Field : String; Value : String) is
         NewDurability, NewValue, NewMaxDurability, NewMaxValue, NewUpgradeProgress : Integer;
         NewName : Unbounded_String;
-        NewOwner : Natural;
+        NewOwner, NewWeight : Natural;
         NewUpgradeAction : ShipUpgrade;
         procedure UpdateMod(Module : in out ModuleData) is
         begin
@@ -200,6 +200,8 @@ package body Ships is
                 Module.UpgradeProgress := NewUpgradeProgress;
             elsif Field = "UpgradeAction" then
                 Module.UpgradeAction := NewUpgradeAction;
+            elsif Field = "Weight" then
+                Module.Weight := NewWeight;
             end if;
         end UpdateMod;
     begin
@@ -225,6 +227,8 @@ package body Ships is
             NewUpgradeProgress := Integer'Value(Value);
         elsif Field = "UpgradeAction" then
             NewUpgradeAction := ShipUpgrade'Value(Value);
+        elsif Field = "Weight" then
+            NewWeight := Ship.Modules.Element(ModuleIndex).Weight + Natural'Value(Value);
         end if;
         Ship.Modules.Update_Element(Index => ModuleIndex, Process => UpdateMod'Access);
     end UpdateModule;
@@ -546,6 +550,7 @@ package body Ships is
     procedure UpgradeShip(Times : Positive) is
         ResultAmount, UpgradePoints, WorkerIndex, UpgradeMaterial, UpgradeProgress : Natural := 0;
         MaxValue : Positive;
+        WeightGain : Natural;
     begin
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Upgrading then
@@ -589,9 +594,15 @@ package body Ships is
             UpgradePoints := UpgradePoints - ResultAmount;
             UpdateCargo(UpgradeMaterial, (0 - ResultAmount));
             if UpgradeProgress = 0 then
+                WeightGain := Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).Weight
+                    / 100;
+                if WeightGain < 1 then
+                    WeightGain := 1;
+                end if;
                 case PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeAction is
                     when DURABILITY =>
                         UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "MaxDurability", "1");
+                        UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "Weight", Natural'Image(WeightGain));
                         AddMessage(To_String(PlayerShip.Crew.Element(WorkerIndex).Name)
                             & " was upgraded durability of " & 
                             To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name) & 
@@ -612,6 +623,10 @@ package body Ships is
                         end if;
                     when MAX_VALUE =>
                         UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "Max_Value", "1");
+                        if Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType = HULL then
+                            WeightGain := WeightGain * 10;
+                        end if;
+                        UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "Weight", Natural'Image(WeightGain));
                         AddMessage(To_String(PlayerShip.Crew.Element(WorkerIndex).Name)
                             & " was upgraded " & To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name) & 
                             ".", OrderMessage);
