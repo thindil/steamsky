@@ -674,6 +674,9 @@ package body Ships is
                 RepairPoints := RepairPoints + Times;
             end if;
         end loop;
+        if RepairPoints = 0 then
+            return;
+        end if;
         Repair_Loop:
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             RepairMaterial := 0;
