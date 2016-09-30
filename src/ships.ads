@@ -88,5 +88,6 @@ package Ships is
     function FindMoney return Natural; -- Return index of moneys, 0 if no moneys on ship
     procedure StartUpgrading(ModuleIndex, UpgradeType : Positive); -- Set upgrading order
     procedure UpgradeShip(Times : Natural); -- Upgrade selected module on ship
+    procedure RepairShip(Times : Natural); -- Repair ship modules
 
 end Ships;
