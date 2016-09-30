@@ -193,7 +193,7 @@ package body Game is
         end if;
         if TiredPoints > 0 then
             -- Update crew
-            UpgradeCrew(TiredPoints);
+            UpdateCrew(TiredPoints);
             -- Repair ship (if needed)
             RepairShip(TiredPoints);
             -- Craft items
