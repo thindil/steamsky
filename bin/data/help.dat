@@ -61,5 +61,6 @@ Each upgraded module gains some weight. Amount of gain depends on base module we
 * If your resting crew member don't have assigned cabin, he/she will be resting much slower.
 * Crew members can regenerate health over time but only when they are on break and have assigned cabin.
 * If crew member cabin is destroyed and he/she going on break, he/she will try find empty cabin as a new own to rest.
+* Speed of rest of crew members depends on quality of cabin which they owned. Without cabin, they rest very slow.
 * If you want to stop renaming modules or dropping cargo, just left field with name/amount of items to drop empty. That same works for stopping buying or selling items.
 []
