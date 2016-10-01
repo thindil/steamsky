@@ -22,7 +22,9 @@ package Bases.UI is
     procedure RepairCost(Cost, Time, ModuleIndex : in out Natural); -- Count cost/time of repairs of ship
     procedure ShowTrade; -- Show trade window
     procedure ShowRepair; -- Show repair window
+    procedure ShowShipyard(Install : Boolean := True); -- Show shipyard window
     function TradeKeys(Key : Key_Code) return GameStates; -- Handle keys in bases trades
     function RepairKeys(Key : Key_Code) return GameStates; -- Handle keys in ship repairs
+    function ShipyardKeys(Key : Key_Code) return GameStates; -- Handle keys in shipyards
 
 end Bases.UI;
