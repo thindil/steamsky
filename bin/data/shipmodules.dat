@@ -1,5 +1,5 @@
 [1]
-Name = Hawk hull
+Name = Small bronze hull
 Type = Hull
 Weight = 4000
 Value = 0
@@ -17,7 +17,7 @@ Durability = 200
 Material = Bronze
 Skill = Engineering
 [3]
-Name = Small engine
+Name = Small bronze engine
 Type = Engine
 Weight = 1000
 Value = 0
@@ -26,7 +26,7 @@ Durability = 100
 Material = Bronze
 Skill = Engineering
 [4]
-Name = Cabin
+Name = Basic bronze cabin
 Type = Cabin
 Weight = 200
 Value = 20
@@ -35,7 +35,7 @@ Durability = 100
 Material = Bronze
 Skill = Engineering
 [5]
-Name = Cockpit
+Name = Bronze cockpit
 Type = Cockpit
 Weight = 200
 Value = 0
@@ -44,7 +44,7 @@ Durability = 200
 Material = Bronze
 Skill = Engineering
 [6]
-Name = Alchemy Lab
+Name = Small alchemy Lab
 Type = Alchemy_lab
 Weight = 400
 Value = 0
@@ -53,7 +53,7 @@ Durability = 100
 Material = Bronze
 Skill = Engineering
 [7]
-Name = Cargo bay
+Name = Bronze cargo bay
 Type = Cargo
 Weight = 0
 Value = 0
@@ -62,7 +62,7 @@ Durability = 10
 Material = Bronze
 Skill = Engineering
 [8]
-Name = Small turret
+Name = Small bronze turret
 Type = Turret
 Weight = 50
 Value = 0
@@ -71,7 +71,7 @@ Durability = 200
 Material = Bronze
 Skill = Engineering
 [9]
-Name = 20mm gun
+Name = Iron 20mm gun
 Type = Gun
 Weight = 30
 Value = 4
