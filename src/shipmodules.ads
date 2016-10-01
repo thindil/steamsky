@@ -33,6 +33,7 @@ package ShipModules is
             Durability : Integer; -- Base durability of module
             RepairMaterial : Items_Types; -- Material needed for repair module
             RepairSkill : Positive; -- Skill needed for repair module
+            Price : Natural; -- Price for module in shipyards
         end record;
     package BaseModules_Container is new Vectors(Positive, BaseModule_Data);
     Modules_List : BaseModules_Container.Vector; -- Lost of ship modules available in game

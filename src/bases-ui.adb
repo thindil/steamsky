@@ -306,6 +306,14 @@ package body Bases.UI is
         ShowRepairInfo;
         Refresh(MenuWindow);
     end ShowRepair;
+
+    procedure ShowShipyard(Install : Boolean := True) is
+    begin
+        if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).BaseType /= SHIPYARD then
+            ShowDialog("This base don't have shipyard.");
+            return;
+        end if;
+    end ShowShipyard;
     
     function TradeKeys(Key : Key_Code) return GameStates is
         Result : Driver_Result;
@@ -374,5 +382,16 @@ package body Bases.UI is
         end case;
         return Repairs_View;
     end RepairKeys;
+
+    function ShipyardKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
+            when others =>
+                return Shipyard_View;
+        end case;
+    end ShipyardKeys;
 
 end Bases.UI;

@@ -35,7 +35,7 @@ package body ShipModules is
         end if;
         TempRecord := (Name => Null_Unbounded_String, MType => ENGINE, 
             Weight => 0, Value => 0, MaxValue => 0, Durability => 0,
-            RepairMaterial => Fuel, RepairSkill => 2);
+            RepairMaterial => Fuel, RepairSkill => 2, Price => 0);
         Open(ModulesFile, In_File, "data/shipmodules.dat");
         while not End_Of_File(ModulesFile) loop
             RawData := To_Unbounded_String(Get_Line(ModulesFile));
@@ -64,12 +64,14 @@ package body ShipModules is
                             exit;
                         end if;
                     end loop;
+                elsif FieldName = To_Unbounded_String("Price") then
+                    TempRecord.Price := Integer'Value(To_String(Value));
                 end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
                 Modules_List.Append(New_Item => TempRecord);
                 TempRecord := (Name => Null_Unbounded_String, MType => ENGINE, 
                     Weight => 0, Value => 0, MaxValue => 0, Durability => 0,
-                    RepairMaterial => Fuel, RepairSkill => 2);
+                    RepairMaterial => Fuel, RepairSkill => 2, Price => 0);
             end if;
         end loop;
         Close(ModulesFile);
