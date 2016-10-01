@@ -283,7 +283,7 @@ package body Crew is
         HealthLevel : Integer := 100;
         I : Positive;
         DeathReason : Unbounded_String;
-        HaveCabin : Boolean;
+        CabinIndex : Natural;
         procedure UpdateMember(Member : in out Member_Data) is
             BackToWork : Boolean := True;
         begin
@@ -338,17 +338,18 @@ package body Crew is
             HealthLevel := PlayerShip.Crew.Element(I).Health;
             if PlayerShip.Crew.Element(I).Order = Rest then
                 TiredLevel := 0;
-                HaveCabin := False;
+                CabinIndex := 0;
                 for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                     if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
                         PlayerShip.Modules.Element(J).Owner = I then
-                        HaveCabin := True;
+                        CabinIndex := I;
                         exit;
                     end if;
                 end loop;
                 if PlayerShip.Crew.Element(I).Tired > 0 then
-                    if HaveCabin then
-                        TiredLevel := PlayerShip.Crew.Element(I).Tired - (Times * 20);
+                    if CabinIndex > 0 then
+                        TiredLevel := PlayerShip.Crew.Element(I).Tired - (Times
+                        * PlayerShip.Modules.Element(CabinIndex).Current_Value);
                     else
                         TiredLevel := PlayerShip.Crew.Element(I).Tired - Times;
                     end if;
@@ -356,7 +357,7 @@ package body Crew is
                         TiredLevel := 0;
                     end if;
                 end if;
-                if HealthLevel > 0 and HealthLevel < 100 and HaveCabin then
+                if HealthLevel > 0 and HealthLevel < 100 and CabinIndex > 0 then
                     HealthLevel := HealthLevel + Times;
                 end if;
             else
