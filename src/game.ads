@@ -25,7 +25,7 @@ package Game is
         Help_View, Quit_Confirm, New_Game, Combat_Confirm, Combat_State,
         Combat_Orders, Craft_View, License_Info, License_Full, Wait_Order,
         News_View, Cargo_Info, Help_Topic, Repairs_View, Clear_Confirm,
-        Upgrade_Module); -- Game states
+        Upgrade_Module, Shipyard_View); -- Game states
     type Date_Record is -- Data for game date/time
         record
             Year : Natural;

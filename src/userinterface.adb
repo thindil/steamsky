@@ -22,6 +22,7 @@ with Ships; use Ships;
 with Ships.UI; use Ships.UI;
 with Crew; use Crew;
 with Crew.UI; use Crew.UI;
+with Bases; use Bases;
 with Bases.UI; use Bases.UI;
 with Messages; use Messages;
 with Combat; use Combat;
@@ -71,6 +72,9 @@ package body UserInterface is
             when Repairs_View =>
                 Add(Str => "Ship repairs [Quit]");
                 Change_Attributes(Line => 0, Column => 14, Count => 1, Color => 1);
+            when Shipyard_View =>
+                Add(Str => "Shipyard [Quit]");
+                Change_Attributes(Line => 0, Column => 10, Count => 1, Color => 1);
             when others =>
                 null;
         end case;
@@ -141,7 +145,7 @@ package body UserInterface is
     procedure ShowSpeedControl is
         SpeedWindow : Window;
         WindowHeight : Line_Position := 5;
-        NeedRepair : Boolean := False;
+        NeedRepair, IsShipyard : Boolean := False;
         QuitLine : Line_Position := 3;
     begin
         if PlayerShip.Speed = DOCKED then
@@ -153,7 +157,12 @@ package body UserInterface is
                     exit;
                 end if;
             end loop;
-            SpeedWindow := Create(WindowHeight, 10, (Lines / 3), (Columns / 2) - 5);
+            if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).BaseType = SHIPYARD then
+                QuitLine := QuitLine + 1;
+                WindowHeight := WindowHeight + 1;
+                IsShipyard := True;
+            end if;
+            SpeedWindow := Create(WindowHeight, 12, (Lines / 3), (Columns / 2) - 5);
             Box(SpeedWindow);
             Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
             Add(Win => SpeedWindow, Str => "Undock");
@@ -166,6 +175,12 @@ package body UserInterface is
             if NeedRepair then
                 Move_Cursor(Win => SpeedWindow, Line => 3, Column => 2);
                 Add(Win => SpeedWindow, Str => "Repair");
+                Change_Attributes(Win => SpeedWindow, Line => 3, Column => 2, 
+                    Count => 1, Color => 1);
+            end if;
+            if IsShipyard then
+                Move_Cursor(Win =>SpeedWindow, Line => (QuitLine - 1), Column => 2);
+                Add(Win => SpeedWindow, Str => "Shipyard");
                 Change_Attributes(Win => SpeedWindow, Line => 3, Column => 2, 
                     Count => 1, Color => 1);
             end if;
@@ -399,6 +414,8 @@ package body UserInterface is
             when Clear_Confirm => 
                 Refresh_Without_Update;
                 ShowConfirm("Are you sure want to clear all messages?");
+            when Shipyard_View =>
+                ShowShipyard;
             when others =>
                 null;
         end case;
@@ -462,6 +479,13 @@ package body UserInterface is
                 if PlayerShip.Speed = DOCKED then
                     DrawGame(Repairs_View);
                     return Repairs_View;
+                else
+                    return Control_Speed;
+                end if;
+            when Character'Pos('s') | Character'Pos('S') => -- Shipyard in base
+                if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).BaseType = SHIPYARD then
+                    DrawGame(Shipyard_View);
+                    return Shipyard_View;
                 else
                     return Control_Speed;
                 end if;

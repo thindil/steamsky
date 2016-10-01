@@ -168,6 +168,8 @@ begin
                 GameState := RepairKeys(Key);
             when Upgrade_Module =>
                 GameState := ShipUpgradeKeys(Key);
+            when Shipyard_View =>
+                GameState := ShipyardKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
