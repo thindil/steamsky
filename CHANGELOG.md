@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Maximum amount of messages - 500
 - Option to delete all messages
 - Upgrading ship modules
+- Cabin quality to speed of rest
 
 ### Changed
 - Updated help
