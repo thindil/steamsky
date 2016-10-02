@@ -26,6 +26,7 @@ package body Bases.UI is
     
     TradeMenu : Menu;
     MenuWindow : Window;
+    InstallView : Boolean := True;
 
     procedure RepairCost(Cost, Time, ModuleIndex : in out Natural) is
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
@@ -307,12 +308,46 @@ package body Bases.UI is
         Refresh(MenuWindow);
     end ShowRepair;
 
-    procedure ShowShipyard(Install : Boolean := True) is
+    procedure ShowShipyard is
+        Modules_Items: Item_Array_Access;
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        MenuIndex : Integer := 1;
     begin
-        if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).BaseType /= SHIPYARD then
-            ShowDialog("This base don't have shipyard.");
-            return;
+        Move_Cursor(Line => 2, Column => 2);
+        Add(Str => "[Install] [Remove]");
+        Change_Attributes(Line => 2, Column => 3, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 13, Count => 1, Color => 1);
+        if InstallView then
+            Modules_Items := new Item_Array(Modules_List.First_Index..(Modules_List.Last_Index + 1));
+            for I in Modules_List.First_Index..Modules_List.Last_Index loop
+                if Modules_List.Element(I).Price > 0 then
+                    Modules_Items.all(MenuIndex) := New_Item(To_String(Modules_List.Element(I).Name));
+                    MenuIndex := MenuIndex + 1;
+                end if;
+            end loop;
+        else
+            Modules_Items := new Item_Array(PlayerShip.Modules.First_Index..(PlayerShip.Modules.Last_Index + 1));
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType /= HULL then
+                    Modules_Items.all(MenuIndex) := New_Item(To_String(PlayerShip.Modules.Element(I).Name));
+                    MenuIndex := MenuIndex + 1;
+                end if;
+            end loop;
         end if;
+        for I in MenuIndex..Modules_Items'Last loop
+            Modules_Items.all(I) := Null_Item;
+        end loop;
+        TradeMenu := New_Menu(Modules_Items);
+        Set_Format(TradeMenu, Lines - 10, 1);
+        Set_Mark(TradeMenu, "");
+        Scale(TradeMenu, MenuHeight, MenuLength);
+        MenuWindow := Create(MenuHeight, MenuLength, 4, 2);
+        Set_Window(TradeMenu, MenuWindow);
+        Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+        Post(TradeMenu);
+        Refresh;
+        Refresh(MenuWindow);
     end ShowShipyard;
     
     function TradeKeys(Key : Key_Code) return GameStates is
@@ -384,14 +419,38 @@ package body Bases.UI is
     end RepairKeys;
 
     function ShipyardKeys(Key : Key_Code) return GameStates is
+        Result : Driver_Result;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
+            when 56 | KEY_UP => -- Select previous repair option
+                Result := Driver(TradeMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(TradeMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow);
+                end if;
+            when 50 | KEY_DOWN => -- Select next repair option
+                Result := Driver(TradeMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(TradeMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow);
+                end if;
+            when Character'Pos('i') | Character'Pos('I') => -- Show modules to install
+                InstallView := True;
+                DrawGame(Shipyard_View);
+            when Character'Pos('r') | Character'Pos('R') => -- Show modules to remove
+                InstallView := False;
+                DrawGame(Shipyard_View);
             when others =>
-                return Shipyard_View;
+                null;
         end case;
+        return Shipyard_View;
     end ShipyardKeys;
 
 end Bases.UI;
