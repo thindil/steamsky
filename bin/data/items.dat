@@ -76,4 +76,10 @@ Weight = 5
 Type = Iron
 Prices = 4, 6, 6, 6
 Buyable = Y, N, N, N
+[14]
+Name = 10mm ammo
+Weight = 1
+Type = Ammo
+Prices = 1, 3, 3, 3
+Buyable = Y, N, N, N
 []
