@@ -308,11 +308,64 @@ package body Bases.UI is
         Refresh(MenuWindow);
     end ShowRepair;
 
+    procedure ShowModuleInfo is
+        ModuleIndex : constant Positive := Positive'Value(Description(Current(TradeMenu)));
+        InfoWindow : Window;
+        TextCost : Unbounded_String;
+    begin
+        if InstallView then
+            TextCost := To_Unbounded_String("Install cost:");
+        else
+            TextCost := To_Unbounded_String("Remove gain:");
+        end if;
+        InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
+        Add(Win => InfoWindow, Str => To_String(TextCost) &
+            Positive'Image(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price) &
+            " Charcollum");
+        Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+        if InstallView then
+            case Modules_List.Element(ModuleIndex).MType is
+                when HULL =>
+                    Add(Win => InfoWindow, Str => "Ship hull can be only replaced.");
+                    Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+                    Add(Win => InfoWindow, Str => "Modules allowed:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue));
+                    Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
+                when ENGINE =>
+                    Add(Win => InfoWindow, Str => "Max power:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue));
+                    Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+                when CARGO =>
+                    Add(Win => InfoWindow, Str => "Max cargo:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue) & " kg");
+                    Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+                when GUN =>
+                    Add(Win => InfoWindow, Str => "You will need empty turret for install new gun.");
+                    Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+                when others =>
+                    null;
+            end case;
+        else
+            case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+                when ENGINE =>
+                    Add(Win => InfoWindow, Str => "Max power:" & Positive'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
+                    Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+                when CARGO =>
+                    Add(Win => InfoWindow, Str => "Max cargo:" & Positive'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value)
+                        & " kg");
+                    Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+                when others =>
+                    null;
+            end case;
+        end if;
+        Refresh;
+        Refresh(InfoWindow);
+        Delete(InfoWindow);
+    end ShowModuleInfo;
+
     procedure ShowShipyard is
         Modules_Items: Item_Array_Access;
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         MenuIndex : Integer := 1;
+        MenuOptions : Menu_Option_Set;
     begin
         Move_Cursor(Line => 2, Column => 2);
         Add(Str => "[Install] [Remove]");
@@ -322,7 +375,8 @@ package body Bases.UI is
             Modules_Items := new Item_Array(Modules_List.First_Index..(Modules_List.Last_Index + 1));
             for I in Modules_List.First_Index..Modules_List.Last_Index loop
                 if Modules_List.Element(I).Price > 0 then
-                    Modules_Items.all(MenuIndex) := New_Item(To_String(Modules_List.Element(I).Name));
+                    Modules_Items.all(MenuIndex) := New_Item(To_String(Modules_List.Element(I).Name), 
+                        Positive'Image(I));
                     MenuIndex := MenuIndex + 1;
                 end if;
             end loop;
@@ -330,7 +384,8 @@ package body Bases.UI is
             Modules_Items := new Item_Array(PlayerShip.Modules.First_Index..(PlayerShip.Modules.Last_Index + 1));
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                 if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType /= HULL then
-                    Modules_Items.all(MenuIndex) := New_Item(To_String(PlayerShip.Modules.Element(I).Name));
+                    Modules_Items.all(MenuIndex) := New_Item(To_String(PlayerShip.Modules.Element(I).Name), 
+                        Positive'Image(I));
                     MenuIndex := MenuIndex + 1;
                 end if;
             end loop;
@@ -339,6 +394,9 @@ package body Bases.UI is
             Modules_Items.all(I) := Null_Item;
         end loop;
         TradeMenu := New_Menu(Modules_Items);
+        MenuOptions := Get_Options(TradeMenu);
+        MenuOptions.Show_Descriptions := False;
+        Set_Options(TradeMenu, MenuOptions);
         Set_Format(TradeMenu, Lines - 10, 1);
         Set_Mark(TradeMenu, "");
         Scale(TradeMenu, MenuHeight, MenuLength);
@@ -346,7 +404,7 @@ package body Bases.UI is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
-        Refresh;
+        ShowModuleInfo;
         Refresh(MenuWindow);
     end ShowShipyard;
     
@@ -431,6 +489,7 @@ package body Bases.UI is
                     Result := Driver(TradeMenu, M_Last_Item);
                 end if;
                 if Result = Menu_Ok then
+                    ShowModuleInfo;
                     Refresh(MenuWindow);
                 end if;
             when 50 | KEY_DOWN => -- Select next repair option
@@ -439,6 +498,7 @@ package body Bases.UI is
                     Result := Driver(TradeMenu, M_First_Item);
                 end if;
                 if Result = Menu_Ok then
+                    ShowModuleInfo;
                     Refresh(MenuWindow);
                 end if;
             when Character'Pos('i') | Character'Pos('I') => -- Show modules to install
