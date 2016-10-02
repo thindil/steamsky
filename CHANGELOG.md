@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Option to delete all messages
 - Upgrading ship modules
 - Cabin quality to speed of rest
+- New item to game: 10mm ammo
 
 ### Changed
 - Updated help
