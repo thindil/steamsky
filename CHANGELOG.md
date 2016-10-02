@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Auto-resize game screen on resize console
-- Population to bases
+- Population to bases which made saves from 0.3 incompatible
 - Option to repair ship in bases
 - New type of bases - shipyards
 - Separated repair skill for each module
