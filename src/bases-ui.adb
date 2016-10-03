@@ -371,6 +371,7 @@ package body Bases.UI is
         MenuLength : Column_Position;
         MenuIndex : Integer := 1;
         MenuOptions : Menu_Option_Set;
+        MoneyIndex : Natural;
     begin
         Move_Cursor(Line => 2, Column => 2);
         Add(Str => "[Install] [Remove]");
@@ -409,6 +410,13 @@ package body Bases.UI is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
+        MoneyIndex := FindMoney;
+        Move_Cursor(Line => (MenuHeight + 5), Column => 2);
+        if MoneyIndex > 0 then
+            Add(Str => "You have" & Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) & " Charcollum.");
+        elsif InstallView then
+            Add(Str => "You don't have any Charcollum to install anything.");
+        end if;
         ShowModuleInfo;
         Refresh(MenuWindow);
     end ShowShipyard;
