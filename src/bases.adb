@@ -179,31 +179,32 @@ package body Bases is
         MoneyIndex : constant Natural := FindMoney;
         HullIndex, ModulesAmount : Positive;
         ArmorIndex, FreeTurretIndex : Natural := 0;
+        ModuleName : Unbounded_String;
     begin
         if MoneyIndex = 0 then
             ShowDialog("You don't have Charcollum to pay for modules.");
             return;
         end if;
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                when HULL =>
+                    HullIndex := I;
+                    ModulesAmount := PlayerShip.Modules.Element(I).Current_Value;
+                when ARMOR =>
+                    ArmorIndex := I;
+                when TURRET =>
+                    if PlayerShip.Modules.Element(I).Current_Value = 0 then
+                        FreeTurretIndex := I;
+                    end if;
+                when others =>
+                    null;
+            end case;
+        end loop;
         if Install then
             if PlayerShip.Cargo.Element(MoneyIndex).Amount < Modules_List.Element(ModuleIndex).Price then
                 ShowDialog("You don't have enough Charcollum to pay for " & To_String(Modules_List.Element(ModuleIndex).Name) & ".");
                 return;
             end if;
-            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
-                    when HULL =>
-                        HullIndex := I;
-                        ModulesAmount := PlayerShip.Modules.Element(I).Current_Value;
-                    when ARMOR =>
-                        ArmorIndex := I;
-                    when TURRET =>
-                        if PlayerShip.Modules.Element(I).Current_Value = 0 then
-                            FreeTurretIndex := I;
-                        end if;
-                    when others =>
-                        null;
-                end case;
-            end loop;
             if Modules_List.Element(ModuleIndex).MType /= HULL then
                 if ModulesAmount = PlayerShip.Modules.Element(HullIndex).Max_Value and
                     Modules_List.Element(ModuleIndex).MType /= GUN then
@@ -224,6 +225,9 @@ package body Bases is
                     when others =>
                         null;
                 end case;
+                if Modules_List.Element(ModuleIndex).MType /= ARMOR then
+                    ModulesAmount := ModulesAmount + 1;
+                end if;
             else
                 if PlayerShip.Modules.Element(HullIndex).Current_Value > Modules_List(ModuleIndex).MaxValue then
                     ShowDialog("This hull is too small for your ship. Remove some modules first.");
@@ -246,7 +250,7 @@ package body Bases is
                 when HULL =>
                     UpdateModule(PlayerShip, PlayerShip.Modules.Last_Index, "Current_Value", Positive'Image(ModulesAmount));
                 when others =>
-                    null;
+                    UpdateModule(PlayerShip, HullIndex, "Current_Value", Positive'Image(ModulesAmount));
             end case;
             UpdateGame(60);
             AddMessage("You installed " & To_String(Modules_List.Element(ModuleIndex).Name) & " on your ship for" &
@@ -270,10 +274,21 @@ package body Bases is
                     end if;
                 end loop;
             end if;
+            if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType /= GUN and
+                Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType /= ARMOR then
+                ModulesAmount := ModulesAmount - 1;
+            end if;
             UpdateCargo(1, Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price);
+            ModuleName := PlayerShip.Modules.Element(ModuleIndex).Name;
             PlayerShip.Modules.Delete(ModuleIndex, 1);
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = HULL then
+                    UpdateModule(PlayerShip, I, "Current_Value", Positive'Image(ModulesAmount));
+                    exit;
+                end if;
+            end loop;
             UpdateGame(60);
-            AddMessage("You removed " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & " from your ship and earned" &
+            AddMessage("You removed " & To_String(ModuleName) & " from your ship and earned" &
                 Positive'Image(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price) & " Charcollum.", 
                 TradeMessage);
         end if;
