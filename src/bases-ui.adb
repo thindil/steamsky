@@ -417,6 +417,14 @@ package body Bases.UI is
         elsif InstallView then
             Add(Str => "You don't have any Charcollum to install anything.");
         end if;
+        Move_Cursor(Line => (MenuHeight + 6), Column => 2);
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = HULL then
+                Add(Str => "You have installed" & Natural'Image(PlayerShip.Modules.Element(I).Current_Value) & " modules from max" &
+                Natural'Image(PlayerShip.Modules.Element(I).Current_Value) & " allowed modules");
+                exit;
+            end if;
+        end loop;
         ShowModuleInfo;
         Refresh(MenuWindow);
     end ShowShipyard;
