@@ -179,7 +179,6 @@ package body Bases is
         MoneyIndex : constant Natural := FindMoney;
         HullIndex, ModulesAmount : Positive;
         ArmorIndex, FreeTurretIndex : Natural := 0;
-        ModuleName : Unbounded_String;
     begin
         if MoneyIndex = 0 then
             ShowDialog("You don't have Charcollum to pay for modules.");
@@ -235,6 +234,7 @@ package body Bases is
                 end if;
                 PlayerShip.Modules.Delete(HullIndex, 1);
             end if;
+            UpdateGame(60);
             UpdateCargo(1, (0 - Modules_List(ModuleIndex).Price));
             PlayerShip.Modules.Append(New_Item => (Name =>  Modules_List.Element(ModuleIndex).Name,
                 ProtoIndex => ModuleIndex, 
@@ -252,7 +252,6 @@ package body Bases is
                 when others =>
                     UpdateModule(PlayerShip, HullIndex, "Current_Value", Positive'Image(ModulesAmount));
             end case;
-            UpdateGame(60);
             AddMessage("You installed " & To_String(Modules_List.Element(ModuleIndex).Name) & " on your ship for" &
                 Positive'Image(Modules_List.Element(ModuleIndex).Price) & " Charcollum.", TradeMessage);
         else
@@ -278,9 +277,6 @@ package body Bases is
                 Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType /= ARMOR then
                 ModulesAmount := ModulesAmount - 1;
             end if;
-            UpdateCargo(1, Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price);
-            ModuleName := PlayerShip.Modules.Element(ModuleIndex).Name;
-            PlayerShip.Modules.Delete(ModuleIndex, 1);
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                 if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = HULL then
                     UpdateModule(PlayerShip, I, "Current_Value", Positive'Image(ModulesAmount));
@@ -288,9 +284,11 @@ package body Bases is
                 end if;
             end loop;
             UpdateGame(60);
-            AddMessage("You removed " & To_String(ModuleName) & " from your ship and earned" &
+            UpdateCargo(1, Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price);
+            AddMessage("You removed " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & " from your ship and earned" &
                 Positive'Image(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price) & " Charcollum.", 
                 TradeMessage);
+            PlayerShip.Modules.Delete(ModuleIndex, 1);
         end if;
     end UpgradeShip;
 
