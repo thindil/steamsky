@@ -82,8 +82,12 @@ package body Ships.UI is
                 Add(Win => InfoWindow, Str => "Modules:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Current_Value) &
                 " /" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
             when CABIN =>
-                Add(Win => InfoWindow, Str => "Owner: " &
-                    To_String(PlayerShip.Crew.Element(PlayerShip.Modules.Element(ModuleIndex).Owner).Name));
+                if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
+                    Add(Win => InfoWindow, Str => "Owner: " &
+                        To_String(PlayerShip.Crew.Element(PlayerShip.Modules.Element(ModuleIndex).Owner).Name));
+                else
+                    Add(Win => InfoWindow, Str => "Owner: none");
+                end if;
             when GUN =>
                 Add(Win => InfoWindow, Str => "Ammunition: " &  
                     To_String(Items_List.Element(PlayerShip.Modules.Element(ModuleIndex).Current_Value).Name));
