@@ -313,16 +313,17 @@ package body Bases.UI is
         InfoWindow : Window;
         TextCost : Unbounded_String;
         CurrentLine : Line_Position := 2;
+        Cost : Positive;
     begin
         if InstallView then
             TextCost := To_Unbounded_String("Install cost:");
+            Cost := Modules_List(ModuleIndex).Price;
         else
             TextCost := To_Unbounded_String("Remove gain:");
+            Cost := Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price;
         end if;
         InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
-        Add(Win => InfoWindow, Str => To_String(TextCost) &
-            Positive'Image(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price) &
-            " Charcollum");
+        Add(Win => InfoWindow, Str => To_String(TextCost) & Positive'Image(Cost) & " Charcollum");
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         if InstallView then
             case Modules_List.Element(ModuleIndex).MType is
