@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Showing negative free cargo space
 - Some memory leaks
 - Crash on updating cargo during manufacturing
+- Crash on show info about empty cabin
 
 ## [0.3] - 2016-09-18
 
