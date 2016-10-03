@@ -255,24 +255,32 @@ package body Bases is
             AddMessage("You installed " & To_String(Modules_List.Element(ModuleIndex).Name) & " on your ship for" &
                 Positive'Image(Modules_List.Element(ModuleIndex).Price) & " Charcollum.", TradeMessage);
         else
-            if FreeCargo(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price) < 0 then
+            if FreeCargo((0 - Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price)) < 0 then
                 ShowDialog("You don't have enough free space for Charcollum in ship cargo.");
                 return;
             end if;
-            if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType = TURRET and
-                PlayerShip.Modules.Element(ModuleIndex).Current_Value > 0 then
-                ShowDialog("You have installed gun in this turret, remove it before you remove this turret.");
-                return;
-            end if;
-            if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType = GUN then
-                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                    if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = TURRET and
-                        PlayerShip.Modules.Element(I).Current_Value = ModuleIndex then
-                        UpdateModule(PlayerShip, I, "Current_Value", "0");
-                        exit;
+            case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+                when TURRET =>
+                    if PlayerShip.Modules.Element(ModuleIndex).Current_Value > 0 then
+                        ShowDialog("You have installed gun in this turret, remove it before you remove this turret.");
+                        return;
                     end if;
-                end loop;
-            end if;
+                when GUN =>
+                    for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                        if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = TURRET and
+                            PlayerShip.Modules.Element(I).Current_Value = ModuleIndex then
+                            UpdateModule(PlayerShip, I, "Current_Value", "0");
+                            exit;
+                        end if;
+                    end loop;
+                when CARGO =>
+                    if FreeCargo((0 - PlayerShip.Modules.Element(ModuleIndex).Max_Value)) < 0 then
+                        ShowDialog("You can't sell this cargo bay, because you have items in it.");
+                        return;
+                    end if;
+                when others =>
+                    null;
+            end case;
             if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType /= GUN and
                 Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType /= ARMOR then
                 ModulesAmount := ModulesAmount - 1;
