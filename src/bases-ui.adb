@@ -513,6 +513,7 @@ package body Bases.UI is
                 DrawGame(Shipyard_View);
             when 10 => -- Install/remove module
                 Bases.UpgradeShip(InstallView, Positive'Value(Description(Current(TradeMenu))));
+                DrawGame(Shipyard_View);
             when others =>
                 null;
         end case;

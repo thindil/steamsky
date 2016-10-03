@@ -23,6 +23,7 @@ with Items; use Items;
 with UserInterface; use UserInterface;
 with Crew; use Crew;
 with Bases.UI; use Bases.UI;
+with ShipModules; use ShipModules;
 
 package body Bases is
     
@@ -147,6 +148,7 @@ package body Bases is
         end if;
         if PlayerShip.Cargo.Element(MoneyIndex).Amount < Cost then
             ShowDialog("You don't have enough Charcollum to pay for repairs.");
+            DrawGame(Repairs_View);
             return;
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
@@ -174,8 +176,107 @@ package body Bases is
     end RepairShip;
 
     procedure UpgradeShip(Install : Boolean; ModuleIndex : Positive) is
+        MoneyIndex : constant Natural := FindMoney;
+        HullIndex, ModulesAmount : Positive;
+        ArmorIndex, FreeTurretIndex : Natural := 0;
     begin
-        null;
+        if MoneyIndex = 0 then
+            ShowDialog("You don't have Charcollum to pay for modules.");
+            return;
+        end if;
+        if Install then
+            if PlayerShip.Cargo.Element(MoneyIndex).Amount < Modules_List.Element(ModuleIndex).Price then
+                ShowDialog("You don't have enough Charcollum to pay for " & To_String(Modules_List.Element(ModuleIndex).Name) & ".");
+                return;
+            end if;
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                    when HULL =>
+                        HullIndex := I;
+                        ModulesAmount := PlayerShip.Modules.Element(I).Current_Value;
+                    when ARMOR =>
+                        ArmorIndex := I;
+                    when TURRET =>
+                        if PlayerShip.Modules.Element(I).Current_Value = 0 then
+                            FreeTurretIndex := I;
+                        end if;
+                    when others =>
+                        null;
+                end case;
+            end loop;
+            if Modules_List.Element(ModuleIndex).MType /= HULL then
+                if ModulesAmount = PlayerShip.Modules.Element(HullIndex).Max_Value and
+                    Modules_List.Element(ModuleIndex).MType /= GUN then
+                    ShowDialog("You don't have free space for more modules.");
+                    return;
+                end if;
+                case Modules_List.Element(ModuleIndex).MType is
+                    when ARMOR =>
+                        if ArmorIndex > 0 then
+                            ShowDialog("You have installed armor now. Remove it first, before install new.");
+                            return;
+                        end if;
+                    when GUN =>
+                        if FreeTurretIndex = 0 then
+                            ShowDialog("You don't have free turret for next gun. Install new turret or remove old gun first.");
+                            return;
+                        end if;
+                    when others =>
+                        null;
+                end case;
+            else
+                if PlayerShip.Modules.Element(HullIndex).Current_Value > Modules_List(ModuleIndex).MaxValue then
+                    ShowDialog("This hull is too small for your ship. Remove some modules first.");
+                    return;
+                end if;
+                PlayerShip.Modules.Delete(HullIndex, 1);
+            end if;
+            UpdateCargo(1, (0 - Modules_List(ModuleIndex).Price));
+            PlayerShip.Modules.Append(New_Item => (Name =>  Modules_List.Element(ModuleIndex).Name,
+                ProtoIndex => ModuleIndex, 
+                Weight => Modules_List.Element(ModuleIndex).Weight,
+                Current_Value => Modules_List.Element(ModuleIndex).Value,
+                Max_Value => Modules_List.Element(ModuleIndex).MaxValue,
+                Durability => Modules_List.Element(ModuleIndex).Durability,
+                MaxDurability => Modules_List.Element(ModuleIndex).Durability,
+                Owner => 0, UpgradeProgress => 0, UpgradeAction => NONE));
+            case Modules_List.Element(ModuleIndex).MType is
+                when GUN =>
+                    UpdateModule(PlayerShip, FreeTurretIndex, "Current_Value", Positive'Image(PlayerShip.Modules.Last_Index));
+                when HULL =>
+                    UpdateModule(PlayerShip, PlayerShip.Modules.Last_Index, "Current_Value", Positive'Image(ModulesAmount));
+                when others =>
+                    null;
+            end case;
+            UpdateGame(60);
+            AddMessage("You installed " & To_String(Modules_List.Element(ModuleIndex).Name) & " on your ship for" &
+                Positive'Image(Modules_List.Element(ModuleIndex).Price) & " Charcollum.", TradeMessage);
+        else
+            if FreeCargo(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price) < 0 then
+                ShowDialog("You don't have enough free space for Charcollum in ship cargo.");
+                return;
+            end if;
+            if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType = TURRET and
+                PlayerShip.Modules.Element(ModuleIndex).Current_Value > 0 then
+                ShowDialog("You have installed gun in this turret, remove it before you remove this turret.");
+                return;
+            end if;
+            if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType = GUN then
+                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                    if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = TURRET and
+                        PlayerShip.Modules.Element(I).Current_Value = ModuleIndex then
+                        UpdateModule(PlayerShip, I, "Current_Value", "0");
+                        exit;
+                    end if;
+                end loop;
+            end if;
+            UpdateCargo(1, Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price);
+            PlayerShip.Modules.Delete(ModuleIndex, 1);
+            UpdateGame(60);
+            AddMessage("You removed " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & " from your ship and earned" &
+                Positive'Image(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price) & " Charcollum.", 
+                TradeMessage);
+        end if;
     end UpgradeShip;
 
 end Bases;
