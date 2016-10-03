@@ -35,5 +35,6 @@ package Bases is
     procedure SellItems(ItemIndex : Positive; Amount : String); -- Sell items from bases
     function GenerateBaseName return Unbounded_String; -- Generate random name for base
     procedure RepairShip; -- Repairs playership in bases
+    procedure UpgradeShip(Install : Boolean; ModuleIndex : Positive); -- Install/remove modules on ship
 
 end Bases;
