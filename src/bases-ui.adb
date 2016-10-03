@@ -312,6 +312,7 @@ package body Bases.UI is
         ModuleIndex : constant Positive := Positive'Value(Description(Current(TradeMenu)));
         InfoWindow : Window;
         TextCost : Unbounded_String;
+        CurrentLine : Line_Position := 2;
     begin
         if InstallView then
             TextCost := To_Unbounded_String("Install cost:");
@@ -329,31 +330,34 @@ package body Bases.UI is
                     Add(Win => InfoWindow, Str => "Ship hull can be only replaced.");
                     Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
                     Add(Win => InfoWindow, Str => "Modules allowed:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue));
-                    Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
+                    CurrentLine := 4;
                 when ENGINE =>
                     Add(Win => InfoWindow, Str => "Max power:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue));
-                    Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+                    CurrentLine := 3;
                 when CARGO =>
                     Add(Win => InfoWindow, Str => "Max cargo:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue) & " kg");
-                    Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
-                when GUN =>
-                    Add(Win => InfoWindow, Str => "You will need empty turret for install new gun.");
-                    Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+                    CurrentLine := 3;
                 when others =>
                     null;
             end case;
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => "Press ENTER to install module");
+            Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
         else
             case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
                 when ENGINE =>
                     Add(Win => InfoWindow, Str => "Max power:" & Positive'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
-                    Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+                    CurrentLine := 3;
                 when CARGO =>
                     Add(Win => InfoWindow, Str => "Max cargo:" & Positive'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value)
                         & " kg");
-                    Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+                    CurrentLine := 3;
                 when others =>
                     null;
             end case;
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => "Press ENTER to remove module");
+            Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
         end if;
         Refresh;
         Refresh(InfoWindow);
@@ -507,6 +511,8 @@ package body Bases.UI is
             when Character'Pos('r') | Character'Pos('R') => -- Show modules to remove
                 InstallView := False;
                 DrawGame(Shipyard_View);
+            when 10 => -- Install/remove module
+                Bases.UpgradeShip(InstallView, Positive'Value(Description(Current(TradeMenu))));
             when others =>
                 null;
         end case;

@@ -173,4 +173,9 @@ package body Bases is
         DrawGame(Repairs_View);
     end RepairShip;
 
+    procedure UpgradeShip(Install : Boolean; ModuleIndex : Positive) is
+    begin
+        null;
+    end UpgradeShip;
+
 end Bases;
