@@ -178,7 +178,7 @@ package body Bases is
     procedure UpgradeShip(Install : Boolean; ModuleIndex : Positive) is
         MoneyIndex : constant Natural := FindMoney;
         HullIndex, ModulesAmount : Positive;
-        ArmorIndex, FreeTurretIndex : Natural := 0;
+        ArmorIndex, FreeTurretIndex, CockpitIndex : Natural := 0;
     begin
         if MoneyIndex = 0 then
             ShowDialog("You don't have Charcollum to pay for modules.");
@@ -191,6 +191,8 @@ package body Bases is
                     ModulesAmount := PlayerShip.Modules.Element(I).Current_Value;
                 when ARMOR =>
                     ArmorIndex := I;
+                when COCKPIT =>
+                    CockpitIndex := I;
                 when TURRET =>
                     if PlayerShip.Modules.Element(I).Current_Value = 0 then
                         FreeTurretIndex := I;
@@ -214,6 +216,11 @@ package body Bases is
                     when ARMOR =>
                         if ArmorIndex > 0 then
                             ShowDialog("You have installed armor now. Remove it first, before install new.");
+                            return;
+                        end if;
+                    when COCKPIT =>
+                        if CockpitIndex > 0 then
+                            ShowDialog("You can have only one cockpit on ship. Remove old first, if you want install new.");
                             return;
                         end if;
                     when GUN =>
