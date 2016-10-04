@@ -311,33 +311,39 @@ package body Bases.UI is
     procedure ShowModuleInfo is
         ModuleIndex : constant Positive := Positive'Value(Description(Current(TradeMenu)));
         InfoWindow : Window;
-        TextCost : Unbounded_String;
-        CurrentLine : Line_Position := 2;
-        Cost : Positive;
+        TextCost, TextTime : Unbounded_String;
+        CurrentLine : Line_Position := 3;
+        Cost, MTime : Positive;
     begin
         if InstallView then
             TextCost := To_Unbounded_String("Install cost:");
+            TextTime := To_Unbounded_String("Installation time:");
             Cost := Modules_List(ModuleIndex).Price;
+            MTime := Modules_List(ModuleIndex).InstallTime;
         else
             TextCost := To_Unbounded_String("Remove gain:");
+            TextTime := To_Unbounded_String("Removing time:");
             Cost := Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price;
+            MTime := Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).InstallTime;
         end if;
-        InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
+        InfoWindow := Create(6, (Columns / 2), 3, (Columns / 2));
         Add(Win => InfoWindow, Str => To_String(TextCost) & Positive'Image(Cost) & " Charcollum");
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+        Add(Win => InfoWindow, Str => To_String(TextTime) & Positive'Image(MTime) & " minutes");
+        Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
         if InstallView then
             case Modules_List.Element(ModuleIndex).MType is
                 when HULL =>
                     Add(Win => InfoWindow, Str => "Ship hull can be only replaced.");
-                    Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+                    Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
                     Add(Win => InfoWindow, Str => "Modules allowed:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue));
-                    CurrentLine := 4;
+                    CurrentLine := 5;
                 when ENGINE =>
                     Add(Win => InfoWindow, Str => "Max power:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue));
-                    CurrentLine := 3;
+                    CurrentLine := 4;
                 when CARGO =>
                     Add(Win => InfoWindow, Str => "Max cargo:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue) & " kg");
-                    CurrentLine := 3;
+                    CurrentLine := 4;
                 when others =>
                     null;
             end case;
@@ -348,11 +354,11 @@ package body Bases.UI is
             case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
                 when ENGINE =>
                     Add(Win => InfoWindow, Str => "Max power:" & Positive'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
-                    CurrentLine := 3;
+                    CurrentLine := 4;
                 when CARGO =>
                     Add(Win => InfoWindow, Str => "Max cargo:" & Positive'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value)
                         & " kg");
-                    CurrentLine := 3;
+                    CurrentLine := 4;
                 when others =>
                     null;
             end case;
