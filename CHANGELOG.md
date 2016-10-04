@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Cabin quality to speed of rest
 - New item to game: 10mm ammo
 - New crafting recipe: 10mm ammo
+- Installing/removing modules from ship
 
 ### Changed
 - Updated help
