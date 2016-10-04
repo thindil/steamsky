@@ -502,6 +502,7 @@ package body Bases.UI is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                InstallView := True;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when 56 | KEY_UP => -- Select previous repair option
