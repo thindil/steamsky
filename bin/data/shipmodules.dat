@@ -8,6 +8,7 @@ Durability = 100
 Material = Bronze
 Skill = Engineering
 Price = 5000 
+InstallTime = 180
 [2]
 Name = Bronze armor
 Type = Armor
@@ -18,6 +19,7 @@ Durability = 200
 Material = Bronze
 Skill = Engineering
 Price = 5000
+InstallTime = 180
 [3]
 Name = Small bronze engine
 Type = Engine
@@ -28,6 +30,7 @@ Durability = 100
 Material = Bronze
 Skill = Engineering
 Price = 4000
+InstallTime = 120
 [4]
 Name = Basic bronze cabin
 Type = Cabin
@@ -38,6 +41,7 @@ Durability = 100
 Material = Bronze
 Skill = Engineering
 Price = 500
+InstallTime = 60
 [5]
 Name = Bronze cockpit
 Type = Cockpit
@@ -48,6 +52,7 @@ Durability = 200
 Material = Bronze
 Skill = Engineering
 Price = 750
+InstallTime = 60
 [6]
 Name = Small alchemy Lab
 Type = Alchemy_lab
@@ -58,6 +63,7 @@ Durability = 100
 Material = Bronze
 Skill = Engineering
 Price = 1000
+InstallTime = 60
 [7]
 Name = Bronze cargo bay
 Type = Cargo
@@ -68,6 +74,7 @@ Durability = 10
 Material = Bronze
 Skill = Engineering
 Price = 300
+InstallTime = 60
 [8]
 Name = Small bronze turret
 Type = Turret
@@ -78,6 +85,7 @@ Durability = 200
 Material = Bronze
 Skill = Engineering
 Price = 500
+InstallTime = 60
 [9]
 Name = Iron 20mm gun
 Type = Gun
@@ -88,6 +96,7 @@ Durability = 20
 Material = Iron
 Skill = Gunsmith
 Price = 500
+InstallTime = 30
 [10]
 Name = Clockwork drone hull
 Type = Hull
@@ -105,6 +114,7 @@ Durability = 20
 Material = Iron
 Skill = Gunsmith
 Price = 250
+InstallTime = 30
 [12]
 Name = Battering ram
 Type = Battering_ram
