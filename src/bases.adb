@@ -241,8 +241,8 @@ package body Bases is
                 end if;
                 PlayerShip.Modules.Delete(HullIndex, 1);
             end if;
-            UpdateGame(60);
-            UpdateCargo(1, (0 - Modules_List(ModuleIndex).Price));
+            UpdateGame(Modules_List.Element(ModuleIndex).InstallTime);
+            UpdateCargo(1, (0 - Modules_List.Element(ModuleIndex).Price));
             PlayerShip.Modules.Append(New_Item => (Name =>  Modules_List.Element(ModuleIndex).Name,
                 ProtoIndex => ModuleIndex, 
                 Weight => Modules_List.Element(ModuleIndex).Weight,
@@ -301,7 +301,7 @@ package body Bases is
             if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
                 GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest);
             end if;
-            UpdateGame(60);
+            UpdateGame(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).InstallTime);
             UpdateCargo(1, Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price);
             AddMessage("You removed " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & " from your ship and earned" &
                 Positive'Image(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price) & " Charcollum.", 
