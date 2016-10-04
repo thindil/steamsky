@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Some memory leaks
 - Crash on updating cargo during manufacturing
 - Crash on show info about empty cabin
+- Crash on show info about empty turret
 
 ## [0.3] - 2016-09-18
 
