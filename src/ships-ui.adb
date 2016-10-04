@@ -92,8 +92,12 @@ package body Ships.UI is
                 Add(Win => InfoWindow, Str => "Ammunition: " &  
                     To_String(Items_List.Element(PlayerShip.Modules.Element(ModuleIndex).Current_Value).Name));
             when TURRET =>
-                Add(Win => InfoWindow, Str => "Weapon: " &
-                    To_String(PlayerShip.Modules.Element(PlayerShip.Modules.Element(ModuleIndex).Current_Value).Name));
+                if PlayerShip.Modules.Element(ModuleIndex).Current_Value > 0 then
+                    Add(Win => InfoWindow, Str => "Weapon: " &
+                        To_String(PlayerShip.Modules.Element(PlayerShip.Modules.Element(ModuleIndex).Current_Value).Name));
+                else
+                    Add(Win => InfoWindow, Str => "Weapon: none");
+                end if;
             when others =>
                 null;
         end case;
