@@ -298,6 +298,9 @@ package body Bases is
                     exit;
                 end if;
             end loop;
+            if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
+                GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest);
+            end if;
             UpdateGame(60);
             UpdateCargo(1, Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price);
             AddMessage("You removed " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & " from your ship and earned" &
