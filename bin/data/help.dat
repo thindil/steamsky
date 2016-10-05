@@ -2,7 +2,10 @@
 SteamSky is roguelike game where you command small flying ship with crew. You must take care about ship and crew. You can trade items between sky bases, fight with enemies or manufacturing items. Game ends when your character die.
 Whole game interface is keyboard based. Most options/menus are accessible by keyboard shortcuts. All shortcuts are case insensitive, for example, to access help, you can use 'h' or 'shift+h' key. That same is with arrows keys - you can use normal arrows and keypad arrows (after enabling Num Lock at your keyboard).
 Most texts in game, can be scrolled with arrow keys by one line, by one screen with PageUp/PageDown keys or to begining by Home key and end to End key.
-On mosts screens you can see in top right corner informations about needed crew positions in ship. P means pilot, E - engineer, G - gunner, R - repairs, M - manufacturing, U - upgrading ship module. If you have someone on this position, letters will be green, if you don't have and you need any, letters will be red, when you don't have anyone on that position and you don't need anyone there, letter will be in white.
+On mosts screens you can see in top right corner informations about needed crew positions in ship. P means pilot, E - engineer, G - gunner, R - repairs, M - manufacturing, U - upgrading ship module. 
+For pilot and engineer if letter is green, position is taken by crew member, red means you don't have anyone assigned to this position.
+For gunners and manufacturing - green letter mean all positions are taken (all guns, all crafting modules), red letter mean you have free positions (not all guns/crafting modules are taken), white letter mean, you don't have or no need anyone assigned to this positions.
+For repairs and upgrading ship modules, green you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white letter means you don't have anyone assigned to this position and you don't need anyone.
 At this moment, help is under heavy development (as whole game).
 [Ship movement]
 Your ship starts docked to base. To move it, you must first give order "Undock" from base. Press 'o' key (or first 'e' key for see game menu) for open orders menu.
