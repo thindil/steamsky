@@ -143,12 +143,10 @@ package body Bases is
         MoneyIndex := FindMoney;
         if MoneyIndex = 0 then
             ShowDialog("You don't have Charcollum to pay for repairs.");
-            DrawGame(Repairs_View);
             return;
         end if;
         if PlayerShip.Cargo.Element(MoneyIndex).Amount < Cost then
             ShowDialog("You don't have enough Charcollum to pay for repairs.");
-            DrawGame(Repairs_View);
             return;
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
@@ -172,7 +170,6 @@ package body Bases is
         end if;
         UpdateCargo(1, (0 - Cost));
         UpdateGame(Time);
-        DrawGame(Repairs_View);
     end RepairShip;
 
     procedure UpgradeShip(Install : Boolean; ModuleIndex : Positive) is
