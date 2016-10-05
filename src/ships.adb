@@ -111,7 +111,7 @@ package body Ships is
     end MoveShip;
 
     function HaveOrderRequirements return Boolean is
-        HaveCockpit, HaveEngine : Boolean := False;
+        HaveCockpit, HaveEngine, HavePilot, HaveEngineer : Boolean := False;
     begin
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = COCKPIT and PlayerShip.Modules.Element(I).Durability > 0 then
@@ -130,6 +130,24 @@ package body Ships is
         end if;
         if not HaveCockpit then
             ShowDialog("You don't have cockpit on ship or cockpit is destroyed.");
+            return False;
+        end if;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Pilot then
+                HavePilot := True;
+            elsif PlayerShip.Crew.Element(I).Order = Engineer then
+                HaveEngineer := True;
+            end if;
+            if HavePilot and HaveEngineer then
+                exit;
+            end if;
+        end loop;
+        if not HavePilot then
+            ShowDialog("You don't have pilot on duty.");
+            return False;
+        end if;
+        if not HaveEngineer then
+            ShowDialog("You don't have enginner on duty.");
             return False;
         end if;
         return True;
