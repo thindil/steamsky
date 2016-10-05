@@ -99,7 +99,7 @@ package body UserInterface is
             Move_Cursor(Line => 0, Column => (Columns - 19));
             Add(Str => "[P][E][G][R][M][U]");
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = TURRET then
+                if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = GUN then
                     if PlayerShip.Modules.Element(I).Owner > 0 and GunnersCheck = 0 then
                         GunnersCheck := 1;
                     elsif PlayerShip.Modules.Element(I).Owner = 0 and GunnersCheck = 1 then

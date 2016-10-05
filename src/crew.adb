@@ -28,7 +28,7 @@ package body Crew is
     procedure GiveOrders(MemberIndex : Positive; GivenOrder : Crew_Orders) is
         NewOrder : Crew_Orders;
         MemberName : constant String := To_String(PlayerShip.Crew.Element(MemberIndex).Name);
-        HaveMaterial, RepairNeeded : Boolean := False;
+        HaveMaterial, RepairNeeded, FreeWorkplace : Boolean := False;
         ModuleIndex : Natural := 0;
         MType : ModuleType := ENGINE;
         procedure UpdateOrder(Member : in out Member_Data) is
@@ -49,6 +49,14 @@ package body Crew is
         end if;
         if PlayerShip.Crew.Element(MemberIndex).Thirst = 100 then
             ShowDialog(MemberName & " is too thirsty to work.");
+            return;
+        end if;
+        if GivenOrder = Craft and PlayerShip.Craft = 0 then
+            ShowDialog("You can't set crew member for manufacturing, because you don't set item to manufacture.");
+            return;
+        end if;
+        if GivenOrder = Upgrading and PlayerShip.UpgradeModule = 0 then
+            ShowDialog("You don't set yet module to upgrade.");
             return;
         end if;
         if GivenOrder = Repair then
@@ -73,29 +81,43 @@ package body Crew is
                 ShowDialog("You don't have repair materials.");
                 return;
             end if;
-        else
+        elsif GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Upgrading then
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                 if PlayerShip.Crew.Element(I).Order = GivenOrder and PlayerShip.Crew.Element(I).Order /= Rest then
-                    NewOrder := Rest;
-                    PlayerShip.Crew.Update_Element(Index => I, Process => UpdateOrder'Access);
-                    AddMessage(To_String(PlayerShip.Crew.Element(I).Name) & " going on break.", OrderMessage);
+                    GiveOrders(I, Rest);
                 end if;
             end loop;
-        end if;
-        if GivenOrder = Craft and PlayerShip.Craft = 0 then
-            ShowDialog("You can't set crew member for manufacturing, because you don't set item to manufacture.");
-            return;
-        end if;
-        if GivenOrder = Upgrading and PlayerShip.UpgradeModule = 0 then
-            ShowDialog("You don't set yet module to upgrade.");
-            return;
+        elsif GivenOrder = Gunner or GivenOrder = Craft then
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if GivenOrder = Gunner and Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = GUN and
+                    PlayerShip.Modules.Element(I).Owner = 0 then
+                    FreeWorkplace := True;
+                    exit;
+                elsif GivenOrder = Craft then
+                    if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List(PlayerShip.Craft).Workplace and
+                        PlayerShip.Modules.Element(I).Owner = 0 then
+                        FreeWorkplace := True;
+                        exit;
+                    end if;
+                end if;
+            end loop;
+            if not FreeWorkplace then
+                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                    if PlayerShip.Crew.Element(I).Order = GivenOrder and PlayerShip.Crew.Element(I).Order /= Rest then
+                        GiveOrders(I, Rest);
+                        exit;
+                    end if;
+                end loop;
+            end if;
         end if;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             case GivenOrder is
                 when Pilot =>
                     MType := COCKPIT;
+                when Engineer =>
+                    MType := ENGINE;
                 when Gunner =>
-                    MType := TURRET;
+                    MType := GUN;
                 when Craft =>
                     MType := Recipes_List(PlayerShip.Craft).Workplace;
                 when Rest =>
@@ -105,7 +127,7 @@ package body Crew is
             end case;
             if MType /= CABIN then
                 if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = MType and 
-                    PlayerShip.Modules.Element(I).Durability > 0 then
+                    PlayerShip.Modules.Element(I).Durability > 0 and PlayerShip.Modules.Element(I).Owner = 0 then
                     ModuleIndex := I;
                     exit;
                 end if;
@@ -121,13 +143,16 @@ package body Crew is
         if ModuleIndex = 0 then
             case GivenOrder is
                 when Pilot =>
-                    ShowDialog(MemberName & " can't starts piloting because cockpit is destroyed.");
+                    ShowDialog(MemberName & " can't starts piloting because cockpit is destroyed or you don't have cockpit.");
+                    return;
+                when Engineer =>
+                    ShowDialog(MemberName & " can't starts engineers duty because all engines are destroyed or you don't have engine.");
                     return;
                 when Gunner =>
-                    ShowDialog(MemberName & " can't starts operating gun because turret is destroyed.");
+                    ShowDialog(MemberName & " can't starts operating gun because all turrets are destroyed or you don't have installed any.");
                     return;
                 when Craft =>
-                    ShowDialog(MemberName & " can't starts manufacturing because workshop is destroyed.");
+                    ShowDialog(MemberName & " can't starts manufacturing because all workshops are destroyed or you don't have installed any.");
                     return;
                 when Rest =>
                     for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
