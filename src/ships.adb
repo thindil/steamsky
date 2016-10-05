@@ -27,9 +27,59 @@ with Game; use Game;
 
 package body Ships is
 
+    function HaveOrderRequirements(ShowInfo : Boolean := True) return Boolean is
+        HaveCockpit, HaveEngine, HavePilot, HaveEngineer : Boolean := False;
+    begin
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = COCKPIT and PlayerShip.Modules.Element(I).Durability > 0 then
+                HaveCockpit := True;
+            elsif Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = ENGINE and PlayerShip.Modules.Element(I).Durability > 0 
+            then
+                HaveEngine := True;
+            end if;
+            if HaveEngine and HaveCockpit then
+                exit;
+            end if;
+        end loop;
+        if not HaveEngine then
+            if ShowInfo then
+                ShowDialog("You don't have working engine on ship or all engines are destroyed.");
+            end if;
+            return False;
+        end if;
+        if not HaveCockpit then
+            if ShowInfo then
+                ShowDialog("You don't have cockpit on ship or cockpit is destroyed.");
+            end if;
+            return False;
+        end if;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Pilot then
+                HavePilot := True;
+            elsif PlayerShip.Crew.Element(I).Order = Engineer then
+                HaveEngineer := True;
+            end if;
+            if HavePilot and HaveEngineer then
+                exit;
+            end if;
+        end loop;
+        if not HavePilot then
+            if ShowInfo then
+                ShowDialog("You don't have pilot on duty.");
+            end if;
+            return False;
+        end if;
+        if not HaveEngineer then
+            if ShowInfo then
+                ShowDialog("You don't have enginner on duty.");
+            end if;
+            return False;
+        end if;
+        return True;
+    end HaveOrderRequirements;
+
     procedure MoveShip(ShipIndex, X, Y: Integer) is
         NewX, NewY : Integer;
-        PilotIndex, EngineerIndex : Natural := 0;
         FuelNeeded : Integer;
         TimePassed : Integer := 0;
         type SpeedType is digits 2;
@@ -44,20 +94,7 @@ package body Ships is
                 ShowDialog("First you must set speed for ship.");
                 return;
             end if;
-            for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                if PlayerShip.Crew.Element(I).Order = Pilot then
-                    PilotIndex := I;
-                end if;
-                if PlayerShip.Crew.Element(I).Order = Engineer then
-                    EngineerIndex := I;
-                end if;
-            end loop;
-            if PilotIndex = 0 then
-                ShowDialog("You don't have pilot on duty.");
-                return;
-            end if;
-            if EngineerIndex = 0 then
-                ShowDialog("You don't have engineer on duty.");
+            if not HaveOrderRequirements then
                 return;
             end if;
             case PlayerShip.Speed is
@@ -109,49 +146,6 @@ package body Ships is
             end if;
         end if;
     end MoveShip;
-
-    function HaveOrderRequirements return Boolean is
-        HaveCockpit, HaveEngine, HavePilot, HaveEngineer : Boolean := False;
-    begin
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = COCKPIT and PlayerShip.Modules.Element(I).Durability > 0 then
-                HaveCockpit := True;
-            elsif Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = ENGINE and PlayerShip.Modules.Element(I).Durability > 0 
-            then
-                HaveEngine := True;
-            end if;
-            if HaveEngine and HaveCockpit then
-                exit;
-            end if;
-        end loop;
-        if not HaveEngine then
-            ShowDialog("You don't have working engine on ship or all engines are destroyed.");
-            return False;
-        end if;
-        if not HaveCockpit then
-            ShowDialog("You don't have cockpit on ship or cockpit is destroyed.");
-            return False;
-        end if;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Pilot then
-                HavePilot := True;
-            elsif PlayerShip.Crew.Element(I).Order = Engineer then
-                HaveEngineer := True;
-            end if;
-            if HavePilot and HaveEngineer then
-                exit;
-            end if;
-        end loop;
-        if not HavePilot then
-            ShowDialog("You don't have pilot on duty.");
-            return False;
-        end if;
-        if not HaveEngineer then
-            ShowDialog("You don't have enginner on duty.");
-            return False;
-        end if;
-        return True;
-    end HaveOrderRequirements;
 
     procedure DockShip(Docking : Boolean) is
         BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -452,6 +446,11 @@ package body Ships is
         type DamageFactor is digits 2 range 0.0..1.0;
         Damage : DamageFactor := 0.0;
     begin
+        if Ship = PlayerShip then
+            if not HaveOrderRequirements(False) then
+                return 0;
+            end if;
+        end if;
         Weight := CountShipWeight(Ship) / 500;
         for I in Ship.Modules.First_Index..Ship.Modules.Last_Index loop
             if Modules_List.Element(Ship.Modules.Element(I).ProtoIndex).Mtype = ENGINE then
