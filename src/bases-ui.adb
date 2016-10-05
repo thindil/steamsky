@@ -497,6 +497,7 @@ package body Bases.UI is
                 end if;
             when 10 => -- Repair ship
                 RepairShip;
+                DrawGame(Repairs_View);
             when others =>
                 null;
         end case;
