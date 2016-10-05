@@ -31,6 +31,7 @@ with Crafts; use Crafts;
 with Help; use Help;
 with MainMenu; use MainMenu;
 with Events; use Events;
+with ShipModules; use ShipModules;
 
 package body UserInterface is
 
@@ -38,7 +39,8 @@ package body UserInterface is
 
     procedure ShowGameHeader(CurrentState : GameStates) is
         Speed : Unbounded_String;
-        HavePilot, HaveEngineer, HaveRepair, HaveCraft, HaveUpgrade : Boolean := False;
+        HavePilot, HaveEngineer, HaveRepair, HaveUpgrade : Boolean := False;
+        GunnersCheck, CraftersCheck : Natural := 0;
     begin
         case CurrentState is
             when Sky_Map_View | Control_Speed | Wait_Order =>
@@ -96,6 +98,26 @@ package body UserInterface is
             Add(Str => FormatedTime & " Speed: " & To_String(Speed));
             Move_Cursor(Line => 0, Column => (Columns - 19));
             Add(Str => "[P][E][G][R][M][U]");
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = TURRET then
+                    if PlayerShip.Modules.Element(I).Owner > 0 and GunnersCheck = 0 then
+                        GunnersCheck := 1;
+                    elsif PlayerShip.Modules.Element(I).Owner = 0 and GunnersCheck = 1 then
+                        GunnersCheck := 2;
+                    end if;
+                elsif PlayerShip.Craft > 0 then 
+                    if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List.Element(PlayerShip.Craft).Workplace then
+                        if PlayerShip.Modules.Element(I).Owner > 0 and CraftersCheck = 0 then
+                            CraftersCheck := 1;
+                        elsif PlayerShip.Modules.Element(I).Owner = 0 and CraftersCheck = 1 then
+                            CraftersCheck := 2;
+                        end if;
+                    end if;
+                end if;
+            end loop;
+            if PlayerShip.Craft > 0 and CraftersCheck = 0 then
+                CraftersCheck := 2;
+            end if;
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                 case PlayerShip.Crew.Element(I).Order is
                     when Pilot =>
@@ -104,14 +126,9 @@ package body UserInterface is
                     when Engineer =>
                         HaveEngineer := True;
                         Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 2);
-                    when Gunner => 
-                        Change_Attributes(Line => 0, Column => (Columns - 12), Count => 1, Color => 2);
                     when Repair =>
                         HaveRepair := True;
                         Change_Attributes(Line => 0, Column => (Columns - 9), Count => 1, Color => 2);
-                    when Craft =>
-                        HaveCraft := True;
-                        Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 2);
                     when Upgrading =>
                         HaveUpgrade := True;
                         Change_Attributes(Line => 0, Column => (Columns - 3), Count => 1, Color => 2);
@@ -125,6 +142,11 @@ package body UserInterface is
             if not HaveEngineer then
                 Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 1);
             end if;
+            if GunnersCheck = 1 then
+                Change_Attributes(Line => 0, Column => (Columns - 12), Count => 1, Color => 2);
+            elsif GunnersCheck = 2 then
+                Change_Attributes(Line => 0, Column => (Columns - 12), Count => 1, Color => 1);
+            end if;
             if not HaveRepair then
                 for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                     if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
@@ -133,7 +155,9 @@ package body UserInterface is
                     end if;
                 end loop;
             end if;
-            if not HaveCraft and PlayerShip.Craft > 0 then
+            if CraftersCheck = 1 then
+                Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 2);
+            elsif CraftersCheck = 2 then
                 Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 1);
             end if;
             if not HaveUpgrade and PlayerShip.UpgradeModule > 0 then
