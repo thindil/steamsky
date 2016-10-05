@@ -110,6 +110,31 @@ package body Ships is
         end if;
     end MoveShip;
 
+    function HaveOrderRequirements return Boolean is
+        HaveCockpit, HaveEngine : Boolean := False;
+    begin
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = COCKPIT and PlayerShip.Modules.Element(I).Durability > 0 then
+                HaveCockpit := True;
+            elsif Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = ENGINE and PlayerShip.Modules.Element(I).Durability > 0 
+            then
+                HaveEngine := True;
+            end if;
+            if HaveEngine and HaveCockpit then
+                exit;
+            end if;
+        end loop;
+        if not HaveEngine then
+            ShowDialog("You don't have working engine on ship or all engines are destroyed.");
+            return False;
+        end if;
+        if not HaveCockpit then
+            ShowDialog("You don't have cockpit on ship or cockpit is destroyed.");
+            return False;
+        end if;
+        return True;
+    end HaveOrderRequirements;
+
     procedure DockShip(Docking : Boolean) is
         BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
     begin
@@ -123,6 +148,9 @@ package body Ships is
         end if;
         if not Docking and PlayerShip.Speed > DOCKED then
             ShowDialog("Ship isn't docked to base.");
+            return;
+        end if;
+        if not HaveOrderRequirements then
             return;
         end if;
         if Docking then
@@ -142,6 +170,9 @@ package body Ships is
     begin
         if PlayerShip.Speed = DOCKED then
             ShowDialog("First undock from base before you set ship speed.");
+            return;
+        end if;
+        if not HaveOrderRequirements then
             return;
         end if;
         if PlayerShip.Speed = SpeedValue then
