@@ -205,7 +205,7 @@ package body UserInterface is
             if IsShipyard then
                 Move_Cursor(Win =>SpeedWindow, Line => (QuitLine - 1), Column => 2);
                 Add(Win => SpeedWindow, Str => "Shipyard");
-                Change_Attributes(Win => SpeedWindow, Line => 3, Column => 2, 
+                Change_Attributes(Win => SpeedWindow, Line => (QuitLine - 1), Column => 2, 
                     Count => 1, Color => 1);
             end if;
             Move_Cursor(Win => SpeedWindow, Line => QuitLine, Column => 2);
