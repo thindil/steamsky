@@ -456,16 +456,15 @@ package body Ships is
             if Modules_List.Element(Ship.Modules.Element(I).ProtoIndex).Mtype = ENGINE then
                 BaseSpeed := Ship.Modules.Element(I).Max_Value * 100;
                 Damage := 1.0 - DamageFactor(Float(Ship.Modules.Element(I).Durability) / Float(Ship.Modules.Element(I).MaxDurability));
-                exit;
+                Speed := Speed + (BaseSpeed - Integer(Float(BaseSpeed) * Float(Damage)));
             end if;
         end loop;
-        Speed := BaseSpeed - Integer(Float(BaseSpeed) * Float(Damage));
-        Speed := Speed - Integer((Float(Weight) / 100.0) * Float(BaseSpeed));
+        Speed := Speed - Integer((Float(Weight) / 100.0) * Float(Speed));
         for I in Ship.Crew.First_Index..Ship.Crew.Last_Index loop
             if Ship.Crew.Element(I).Order = Pilot then
-                Speed := Speed + Integer(Float(BaseSpeed) * (Float(Ship.Crew.Element(I).Skills(1, 1)) / 300.0));
+                Speed := Speed + Integer(Float(Speed) * (Float(Ship.Crew.Element(I).Skills(1, 1)) / 300.0));
             elsif Ship.Crew.Element(I).Order = Engineer then
-                Speed := Speed + Integer(Float(BaseSpeed) * (Float(Ship.Crew.Element(I).Skills(2, 1)) / 300.0));
+                Speed := Speed + Integer(Float(Speed) * (Float(Ship.Crew.Element(I).Skills(2, 1)) / 300.0));
             end if;
         end loop;
         case Ship.Speed is
