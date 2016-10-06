@@ -175,7 +175,9 @@ package body Bases is
     procedure UpgradeShip(Install : Boolean; ModuleIndex : Positive) is
         MoneyIndex : constant Natural := FindMoney;
         HullIndex, ModulesAmount : Positive;
-        ArmorIndex, FreeTurretIndex, CockpitIndex : Natural := 0;
+        ArmorIndex, FreeTurretIndex, CockpitIndex, Price : Natural := 0;
+        type DamageFactor is digits 2 range 0.0..1.0;
+        Damage : DamageFactor := 0.0;
     begin
         if MoneyIndex = 0 then
             ShowDialog("You don't have Charcollum to pay for modules.");
@@ -299,9 +301,14 @@ package body Bases is
                 GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest);
             end if;
             UpdateGame(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).InstallTime);
-            UpdateCargo(1, Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price);
+            Damage := 1.0 - DamageFactor(Float(PlayerShip.Modules.Element(ModuleIndex).Durability) / 
+                Float(PlayerShip.Modules.Element(ModuleIndex).MaxDurability));
+            Price := Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price -
+                Integer(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price) * 
+                Float(Damage));
+            UpdateCargo(1, Price);
             AddMessage("You removed " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & " from your ship and earned" &
-                Positive'Image(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price) & " Charcollum.", 
+                Positive'Image(Price) & " Charcollum.", 
                 TradeMessage);
             PlayerShip.Modules.Delete(ModuleIndex, 1);
         end if;
