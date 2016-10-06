@@ -85,6 +85,7 @@ package body Crew is
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                 if PlayerShip.Crew.Element(I).Order = GivenOrder and PlayerShip.Crew.Element(I).Order /= Rest then
                     GiveOrders(I, Rest);
+                    exit;
                 end if;
             end loop;
         elsif GivenOrder = Gunner or GivenOrder = Craft then
