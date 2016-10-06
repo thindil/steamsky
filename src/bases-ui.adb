@@ -314,6 +314,8 @@ package body Bases.UI is
         TextCost, TextTime : Unbounded_String;
         CurrentLine : Line_Position := 3;
         Cost, MTime : Positive;
+        type DamageFactor is digits 2 range 0.0..1.0;
+        Damage : DamageFactor := 0.0;
     begin
         if InstallView then
             TextCost := To_Unbounded_String("Install cost:");
@@ -323,7 +325,11 @@ package body Bases.UI is
         else
             TextCost := To_Unbounded_String("Remove gain:");
             TextTime := To_Unbounded_String("Removing time:");
-            Cost := Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price;
+            Damage := 1.0 - DamageFactor(Float(PlayerShip.Modules.Element(ModuleIndex).Durability) / 
+                Float(PlayerShip.Modules.Element(ModuleIndex).MaxDurability));
+            Cost := Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price -
+                Integer(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price) * 
+                Float(Damage));
             MTime := Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).InstallTime;
         end if;
         InfoWindow := Create(6, (Columns / 2), 3, (Columns / 2));
