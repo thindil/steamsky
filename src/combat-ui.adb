@@ -386,6 +386,9 @@ package body Combat.UI is
                 if I = SkillIndex then
                     Add(Win => OrdersWindow, Str => "+");
                 end if;
+                if PlayerShip.Crew.Element(I).Order /= Rest then
+                    Add(Win => OrdersWindow, Str => " -");
+                end if;
                 Change_Attributes(Win => OrdersWindow, Line => Line, Column => 1, 
                     Count => 1, Color => 1);
             end if;
