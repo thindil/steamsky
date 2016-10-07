@@ -40,13 +40,23 @@ package body Combat.UI is
         KeyMax : Key_Code;
         MemberIndex : Natural := 0;
         OrderIndex : Positive;
+        ModuleIndex : Natural := 0;
+        procedure UpdateGun(Gun : in out GunsInfoArray) is
+        begin
+            Gun(2) := OrderIndex;
+        end UpdateGun;
     begin
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Order then
-                MemberIndex := I;
-                exit;
-            end if;
-        end loop;
+        if Order = Pilot or Order = Engineer then
+            for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                if PlayerShip.Crew.Element(I).Order = Order then
+                    MemberIndex := I;
+                    exit;
+                end if;
+            end loop;
+        else
+            ModuleIndex := Guns.Element(Positive'Value(Description(Current(CrewMenu))))(1);
+            MemberIndex := PlayerShip.Modules.Element(ModuleIndex).Owner;
+        end if;
         if MemberIndex > 0 then
             case Order is
                 when Pilot =>
@@ -66,7 +76,7 @@ package body Combat.UI is
         end if;
         OrderIndex := Positive(Key - 96);
         if MemberIndex = 0 then -- assign someone to position
-            GiveOrders(OrderIndex, Order);
+            GiveOrders(OrderIndex, Order, ModuleIndex);
         else
             case Order is
                 when Pilot =>
@@ -104,15 +114,16 @@ package body Combat.UI is
                     end if;
                 when Gunner =>
                     if OrderIndex <= GunnerOrders'Length then
-                        GunnerOrder := OrderIndex;
+                        Guns.Update_Element(Index => Positive'Value(Description(Current(CrewMenu))), 
+                            Process => UpdateGun'Access);
                         AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
                             " was set on: " & To_String(GunnerOrders(GunnerOrder)), CombatMessage);
                     else
                         if (OrderIndex - GunnerOrders'Length) < MemberIndex then
-                            GiveOrders((OrderIndex - GunnerOrders'Length), Order);
+                            GiveOrders((OrderIndex - GunnerOrders'Length), Order, ModuleIndex);
                         else
                             if (OrderIndex - GunnerOrders'Length + 1) <= PlayerShip.Crew.Last_Index then
-                                GiveOrders((OrderIndex - GunnerOrders'Length + 1), Order);
+                                GiveOrders((OrderIndex - GunnerOrders'Length + 1), Order, ModuleIndex);
                             else
                                 return Combat_Orders;
                             end if;
@@ -135,6 +146,7 @@ package body Combat.UI is
         Crew_Items : Item_Array_Access;
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
+        MenuOptions : Menu_Option_Set;
     begin
         Crew_Items := new Item_Array(1..Natural(Guns.Length) + 3);
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
@@ -160,7 +172,7 @@ package body Combat.UI is
         else
             EngineerName := To_Unbounded_String("Engineer: ") & EngineerName;
         end if;
-        Crew_Items.all(2) := New_Item(To_String(EngineerName));
+        Crew_Items.all(2) := New_Item(To_String(EngineerName), "0");
         for I in Guns.First_Index..Guns.Last_Index loop
             GunnerName := PlayerShip.Modules.Element(Guns.Element(I)(1)).Name & ": ";
             if PlayerShip.Modules.Element(Guns.Element(I)(1)).Owner = 0 then
@@ -169,11 +181,14 @@ package body Combat.UI is
                 GunnerName := GunnerName & PlayerShip.Crew.Element(PlayerShip.Modules.Element(Guns.Element(I)(1)).Owner).Name & 
                     " -> " & GunnerOrders(Guns.Element(I)(2));
             end if;
-            Crew_Items.all(I + 2) := New_Item(To_String(GunnerName));
+            Crew_Items.all(I + 2) := New_Item(To_String(GunnerName), Positive'Image(I));
         end loop;
         Crew_Items.all(Crew_Items'Last) := Null_Item;
         CrewMenu := New_Menu(Crew_Items);
         Set_Format(CrewMenu, 4, 1);
+        MenuOptions := Get_Options(CrewMenu);
+        MenuOptions.Show_Descriptions := False;
+        Set_Options(CrewMenu, MenuOptions);
         Set_Mark(CrewMenu, "");
         Scale(CrewMenu, MenuHeight, MenuLength);
         MenuWindow := Create(MenuHeight, MenuLength, 1, 2);
@@ -305,15 +320,19 @@ package body Combat.UI is
         OrdersWindow : Window;
         Line : Line_Position := 0;
         MemberIndex : Natural := 0;
-        Height : Line_Position;
+        Height : Line_Position := 1;
         SkillIndex, SkillValue : Natural := 0;
     begin   
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Order then
-                MemberIndex := I;
-                exit;
-            end if;
-        end loop;
+        if Order = Pilot or Order = Engineer then
+            for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                if PlayerShip.Crew.Element(I).Order = Order then
+                    MemberIndex := I;
+                    exit;
+                end if;
+            end loop;
+        else
+            MemberIndex := PlayerShip.Modules.Element(Guns.Element(Positive'Value(Description(Current(CrewMenu))))(1)).Owner;
+        end if;
         if MemberIndex > 0 then
             case Order is
                 when Pilot =>
@@ -325,8 +344,6 @@ package body Combat.UI is
                 when others =>
                     null;
             end case;
-        else
-            Height := 1;
         end if;
         Height := Height + 3 + Line_Position(PlayerShip.Crew.Last_Index);
         OrdersWindow := Create(Height, 26, (Lines / 2) - 5, (Columns / 2) - 13);
@@ -447,20 +464,15 @@ package body Combat.UI is
                         Refresh(MenuWindow);
                     end if;
                     return Combat_State;
-                when Character'Pos('p') | Character'Pos('P') => -- Give orders to pilot
-                    Order := Pilot;
-                    Refresh_Without_Update;
-                    ShowOrdersMenu;
-                    Update_Screen;
-                    return Combat_Orders;
-                when Character'Pos('e') | Character'Pos('E') => -- Give orders to engineer
-                    Order := Engineer;
-                    Refresh_Without_Update;
-                    ShowOrdersMenu;
-                    Update_Screen;
-                    return Combat_Orders;
-                when Character'Pos('g') | Character'Pos('G') => -- Give orders to gunner
-                    Order := Gunner;
+                when 10 => -- Give orders to selected position
+                    case Get_Index(Current(CrewMenu)) is
+                        when 1 =>
+                            Order := Pilot;
+                        when 2 =>
+                            Order := Engineer;
+                        when others =>
+                            Order := Gunner;
+                    end case;
                     Refresh_Without_Update;
                     ShowOrdersMenu;
                     Update_Screen;

@@ -44,7 +44,8 @@ package body Combat is
         MessagesStarts := MessagesAmount(Default);
         Guns.Clear;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = GUN then
+            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = GUN and 
+                PlayerShip.Modules.Element(I).Durability > 0 then
                 Guns.Append(New_Item => (I, 1));
             end if;
         end loop;
