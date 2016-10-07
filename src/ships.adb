@@ -84,6 +84,7 @@ package body Ships is
         TimePassed : Integer := 0;
         type SpeedType is digits 2;
         Speed : SpeedType;
+        EnginesAmount : Natural := 0;
     begin
         if ShipIndex = 0 then
             if PlayerShip.Speed = DOCKED then
@@ -107,9 +108,15 @@ package body Ships is
                 when others =>
                     return;
             end case;
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = ENGINE then
+                    EnginesAmount := EnginesAmount + 1;
+                end if;
+            end loop;
+            FuelNeeded := FuelNeeded * EnginesAmount;
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop -- Check for fuel
                 if PlayerShip.Cargo.Element(I).ProtoIndex = 1 and PlayerShip.Cargo.Element(I).Amount < abs FuelNeeded then
-                    ShowDialog("You don't have enough fuel (charcollum).");
+                    ShowDialog("You don't have enough fuel (Charcollum).");
                     return;
                 end if;
             end loop;
