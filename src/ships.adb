@@ -23,7 +23,6 @@ with Bases; use Bases;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
-with Game; use Game;
 
 package body Ships is
 
@@ -368,7 +367,7 @@ package body Ships is
         RawData, FieldName, Value : Unbounded_String;
         EqualIndex, StartIndex, EndIndex, Amount : Natural;
         TempRecord : ProtoShipData;
-        TempModules : ProtoModules_Container.Vector;
+        TempModules : Positive_Container.Vector;
         Enemy : Boolean := False;
     begin
         if ProtoShips_List.Length > 0 then
