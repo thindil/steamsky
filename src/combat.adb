@@ -256,13 +256,14 @@ package body Combat is
                 end case;
             end if;
         end loop;
-        for I in Guns.First_Index..Guns.Last_Index loop
-            WeaponIndex := Guns.Element(I)(1);
+        Player_Loop:
+        for K in Guns.First_Index..Guns.Last_Index loop
+            WeaponIndex := Guns.Element(K)(1);
             if PlayerShip.Modules.Element(WeaponIndex).Owner = 0 then
                 Shoots := -1;
             else
                 GunnerIndex := PlayerShip.Modules.Element(WeaponIndex).Owner;
-                GunnerOrder := Guns.Element(I)(2);
+                GunnerOrder := Guns.Element(K)(2);
                 case GunnerOrder is
                     when 2 =>
                         AccuracyBonus := AccuracyBonus + 20;
@@ -325,14 +326,14 @@ package body Combat is
                         ShootMessage := ShootMessage & Enemy.Ship.Modules.Element(HitLocation).Name &
                         To_Unbounded_String(".");
                         UpdateModule(Enemy.Ship, HitLocation, "Durability", 
-                        Integer'Image(0 - PlayerShip.Modules.Element(WeaponIndex).Max_Value));
+                            Integer'Image(0 - PlayerShip.Modules.Element(WeaponIndex).Max_Value));
                         if Enemy.Ship.Modules.Element(HitLocation).Durability = 0 then
                             case Modules_List.Element(Enemy.Ship.Modules.Element(HitLocation).ProtoIndex).MType is
                                 when HULL | ENGINE =>
                                     EndCombat := True;
                                 when TURRET =>
                                     UpdateModule(Enemy.Ship, Enemy.Ship.Modules.Element(HitLocation).Current_Value,
-                                    "Durability", "-1000");
+                                        "Durability", "-1000");
                                 when others =>
                                     null;
                             end case;
@@ -355,13 +356,13 @@ package body Combat is
                             To_String(EnemyName) & ".", CombatMessage);
                             UpdateCargo(1, LootAmount);
                         end if;
-                        exit;
+                        exit Player_Loop;
                     end if;
                 end loop;
                 UpdateCargo(PlayerShip.Cargo.Element(AmmoIndex).ProtoIndex, (0 - Shoots));
                 GainExp(Shoots, 3, GunnerIndex);
             end if;
-        end loop;
+        end loop Player_loop;
         if not EndCombat and Enemy.Distance <= Enemy.DamageRange and EnemyWeaponIndex > 0 then -- Enemy attack
             HitChance := Enemy.Accuracy - EvadeBonus;
             ShootMessage := EnemyName & To_Unbounded_String(" attacks you and ");
@@ -394,11 +395,18 @@ package body Combat is
                                     Death(PlayerShip.Modules.Element(WeaponIndex).Owner, DeathReason);
                                     for I in Guns.First_Index..Guns.Last_Index loop
                                         if Guns.Element(I)(1) = WeaponIndex then
-                                            Guns.Delete(Index => WeaponIndex, Count => 1);
+                                            Guns.Delete(Index => I, Count => 1);
                                             exit;
                                         end if;
                                     end loop;
                                 end if;
+                            when GUN =>
+                                for I in Guns.First_Index..Guns.Last_Index loop
+                                    if Guns.Element(I)(1) = HitLocation then
+                                        Guns.Delete(Index => I, Count => 1);
+                                        exit;
+                                    end if;
+                                end loop;
                             when others =>
                                 null;
                         end case;
