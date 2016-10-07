@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - New item to game: 10mm ammo
 - New crafting recipe: 10mm ammo
 - Installing/removing modules from ship
+- Fuel usage during movement depends on amount of engines installed on ship
 
 ### Changed
 - Updated help
