@@ -305,12 +305,12 @@ package body Crew is
             end if;
         end loop;
         if MemberIndex > 1 then
-            PlayerShip.Crew.Delete(Index => MemberIndex, Count => 1);
             AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " died from " &
                 To_String(Reason) & ".", CombatMessage);
+            PlayerShip.Crew.Delete(Index => MemberIndex, Count => 1);
         else
-            PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateDeath'Access);
             AddMessage("You died from " & To_String(Reason) & ".", CombatMessage);
+            PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateDeath'Access);
         end if;
     end Death;
 
