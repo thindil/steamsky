@@ -33,7 +33,7 @@ package body Events is
         Rand_Roll.Reset(Generator);
         Rand_Combat.Reset(Generator2);
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
-            if Rand_Roll.Random(Generator) < 7 then -- Combat
+            if Rand_Roll.Random(Generator) < 70 then -- Combat
                 StartCombat(Rand_Combat.Random(Generator2));
                 return Combat_Confirm;
             end if;
