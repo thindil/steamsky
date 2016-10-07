@@ -117,7 +117,7 @@ package body Combat.UI is
                         Guns.Update_Element(Index => Positive'Value(Description(Current(CrewMenu))), 
                             Process => UpdateGun'Access);
                         AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
-                            " was set on: " & To_String(GunnerOrders(GunnerOrder)), CombatMessage);
+                            " was set on: " & To_String(GunnerOrders(OrderIndex)), CombatMessage);
                     else
                         if (OrderIndex - GunnerOrders'Length) < MemberIndex then
                             GiveOrders((OrderIndex - GunnerOrders'Length), Order, ModuleIndex);

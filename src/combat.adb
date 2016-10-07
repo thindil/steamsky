@@ -38,7 +38,6 @@ package body Combat is
             Enemies_List.Element(EnemyIndex).LootMax);
         PilotOrder := 2;
         EngineerOrder := 3;
-        GunnerOrder := 1;
         EndCombat := False;
         EnemyName := Enemy.Ship.Name;
         MessagesStarts := MessagesAmount(Default);
@@ -65,8 +64,8 @@ package body Combat is
         Generator3 : EnemyMod_Roll.Generator;
         Generator4 : Loot_Roll.Generator;
         AccuracyBonus, EvadeBonus : Integer := 0;
-        PilotIndex, EngineerIndex, GunnerIndex, WeaponIndex, AmmoIndex,
-            ArmorIndex, EnemyWeaponIndex, EnemyArmorIndex : Natural := 0;
+        PilotIndex, EngineerIndex, AmmoIndex, ArmorIndex, EnemyWeaponIndex,
+        EnemyArmorIndex, GunnerIndex, WeaponIndex : Natural := 0;
         Shoots : Integer;
         HitChance : Integer;
         ShootMessage : Unbounded_String;
@@ -78,6 +77,7 @@ package body Combat is
         DeathReason : Unbounded_String;
         HaveFuel : Boolean := False;
         SpeedBonus : Integer;
+        GunnerOrder : Positive;
     begin
         Rand_Roll.Reset(Generator);
         PlayerMod_Roll.Reset(Generator2);
@@ -89,8 +89,6 @@ package body Combat is
                     PilotIndex := I;
                 when Engineer =>
                     EngineerIndex := I;
-                when Gunner =>
-                    GunnerIndex := I;
                 when others =>
                     null;
             end case;
@@ -258,115 +256,112 @@ package body Combat is
                 end case;
             end if;
         end loop;
-        if GunnerIndex = 0 then
-            Shoots := -1;
-        else
-            case GunnerOrder is
-                when 2 =>
-                    AccuracyBonus := AccuracyBonus + 20;
-                    Shoots := 2;
-                when 3 =>
-                    Shoots := 4;
-                when 4 =>
-                    AccuracyBonus := AccuracyBonus - 10;
-                    Shoots := 2;
-                when 5 =>
-                    AccuracyBonus := AccuracyBonus - 20;
-                    Shoots := 2;
-                when 6 =>
-                    Shoots := 2;
-                when others =>
-                    Shoots := 0;
-            end case;
-        end if;
-        if WeaponIndex = 0 then
-            Shoots := -3;
-        else
+        for I in Guns.First_Index..Guns.Last_Index loop
+            WeaponIndex := Guns.Element(I)(1);
+            if PlayerShip.Modules.Element(WeaponIndex).Owner = 0 then
+                Shoots := -1;
+            else
+                GunnerIndex := PlayerShip.Modules.Element(WeaponIndex).Owner;
+                GunnerOrder := Guns.Element(I)(2);
+                case GunnerOrder is
+                    when 2 =>
+                        AccuracyBonus := AccuracyBonus + 20;
+                        Shoots := 2;
+                    when 3 =>
+                        Shoots := 4;
+                    when 4 =>
+                        AccuracyBonus := AccuracyBonus - 10;
+                        Shoots := 2;
+                    when 5 =>
+                        AccuracyBonus := AccuracyBonus - 20;
+                        Shoots := 2;
+                    when 6 =>
+                        Shoots := 2;
+                    when others =>
+                        Shoots := 0;
+                end case;
+            end if;
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                 if PlayerShip.Cargo.Element(I).ProtoIndex = PlayerShip.Modules.Element(WeaponIndex).Current_Value then
                     AmmoIndex := I;
                     exit;
                 end if;
             end loop;
-        end if;
-        if AmmoIndex = 0 then
-            if WeaponIndex > 0 then
+            if AmmoIndex = 0 then
                 Shoots := -2;
+            elsif PlayerShip.Cargo.Element(AmmoIndex).Amount < Shoots then
+                Shoots := PlayerShip.Cargo.Element(AmmoIndex).Amount;
             end if;
-        elsif PlayerShip.Cargo.Element(AmmoIndex).Amount < Shoots then
-            Shoots := PlayerShip.Cargo.Element(AmmoIndex).Amount;
-        end if;
-        if Shoots = -3 then
-            AddMessage("You don't have weapon to attack!", CombatMessage);
-        elsif Shoots = -2 then
-            AddMessage("You don't have ammo to your gun!", CombatMessage);
-        elsif Shoots > 0 then -- Player attacks
-            HitChance := AccuracyBonus + PlayerShip.Crew.Element(GunnerIndex).Skills(3, 1) - Enemy.Evasion;
-            for I in 1..Shoots loop
-                ShootMessage := PlayerShip.Crew.Element(GunnerIndex).Name & To_Unbounded_String(" shoots to ") & 
+            if Shoots = -2 then
+                AddMessage("You don't have ammo to " & To_String(PlayerShip.Modules.Element(WeaponIndex).Name) & "!", CombatMessage);
+            elsif Shoots > 0 then -- Player attacks
+                HitChance := AccuracyBonus + PlayerShip.Crew.Element(GunnerIndex).Skills(3, 1) - Enemy.Evasion;
+                for I in 1..Shoots loop
+                    ShootMessage := PlayerShip.Crew.Element(GunnerIndex).Name & To_Unbounded_String(" shoots to ") & 
                     EnemyName;
-                if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
-                    ShootMessage := ShootMessage & To_Unbounded_String(" and hit in ");
-                    if EnemyArmorIndex > 0 then
-                        HitLocation := EnemyArmorIndex;
-                    else
-                        if GunnerOrder > 3 and GunnerOrder < 7 then -- aim for part of enemy ship
-                            HitLocation := 1;
-                            for J in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
-                                if (GunnerOrder = 4 and Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = ENGINE) or
-                                    (GunnerOrder = 5 and (Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = GUN or 
-                                    Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM)) or
-                                    (GunnerOrder = 6 and Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = HULL) then
-                                        HitLocation := J;
-                                        exit;
-                                end if;
-                            end loop;
+                    if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
+                        ShootMessage := ShootMessage & To_Unbounded_String(" and hit in ");
+                        if EnemyArmorIndex > 0 then
+                            HitLocation := EnemyArmorIndex;
                         else
-                            HitLocation := Integer(EnemyMod_Roll.Random(Generator3));
+                            if GunnerOrder > 3 and GunnerOrder < 7 then -- aim for part of enemy ship
+                                HitLocation := 1;
+                                for J in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
+                                    if (GunnerOrder = 4 and Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = ENGINE) or
+                                        (GunnerOrder = 5 and (Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = GUN or 
+                                        Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM)) or
+                                            (GunnerOrder = 6 and Modules_List.Element(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = HULL) then
+                                            HitLocation := J;
+                                        exit;
+                                    end if;
+                                end loop;
+                            else
+                                HitLocation := Integer(EnemyMod_Roll.Random(Generator3));
+                            end if;
+                            while Enemy.Ship.Modules.Element(HitLocation).Durability = 0 loop
+                                HitLocation := HitLocation - 1;
+                            end loop;
                         end if;
-                        while Enemy.Ship.Modules.Element(HitLocation).Durability = 0 loop
-                            HitLocation := HitLocation - 1;
-                        end loop;
-                    end if;
-                    ShootMessage := ShootMessage & Enemy.Ship.Modules.Element(HitLocation).Name &
+                        ShootMessage := ShootMessage & Enemy.Ship.Modules.Element(HitLocation).Name &
                         To_Unbounded_String(".");
-                    UpdateModule(Enemy.Ship, HitLocation, "Durability", 
+                        UpdateModule(Enemy.Ship, HitLocation, "Durability", 
                         Integer'Image(0 - PlayerShip.Modules.Element(WeaponIndex).Max_Value));
-                    if Enemy.Ship.Modules.Element(HitLocation).Durability = 0 then
-                        case Modules_List.Element(Enemy.Ship.Modules.Element(HitLocation).ProtoIndex).MType is
-                            when HULL | ENGINE =>
-                                EndCombat := True;
-                            when TURRET =>
-                                UpdateModule(Enemy.Ship, Enemy.Ship.Modules.Element(HitLocation).Current_Value,
+                        if Enemy.Ship.Modules.Element(HitLocation).Durability = 0 then
+                            case Modules_List.Element(Enemy.Ship.Modules.Element(HitLocation).ProtoIndex).MType is
+                                when HULL | ENGINE =>
+                                    EndCombat := True;
+                                when TURRET =>
+                                    UpdateModule(Enemy.Ship, Enemy.Ship.Modules.Element(HitLocation).Current_Value,
                                     "Durability", "-1000");
-                            when others =>
-                                null;
-                        end case;
+                                when others =>
+                                    null;
+                            end case;
+                        end if;
+                    else
+                        ShootMessage := ShootMessage & To_Unbounded_String(" and miss.");
                     end if;
-                else
-                    ShootMessage := ShootMessage & To_Unbounded_String(" and miss.");
-                end if;
-                AddMessage(To_String(ShootMessage), CombatMessage);
-                if EndCombat then
-                    Shoots := I;
-                    UpdateModule(Enemy.Ship, 1, "Durability", Integer'Image(0 - Enemy.Ship.Modules.Element(1).MaxDurability));
-                    AddMessage(To_String(EnemyName) & " is destroyed!", CombatMessage);
-                    LootAmount := Integer(Loot_Roll.Random(Generator4));
-                    FreeSpace := FreeCargo((0 - LootAmount));
-                    if FreeSpace < 0 then
-                        LootAmount := LootAmount + FreeSpace;
-                    end if;
-                    if LootAmount > 0 then
-                        AddMessage("You looted" & Integer'Image(LootAmount) & " Charcollum from " & 
+                    AddMessage(To_String(ShootMessage), CombatMessage);
+                    if EndCombat then
+                        Shoots := I;
+                        UpdateModule(Enemy.Ship, 1, "Durability", Integer'Image(0 - Enemy.Ship.Modules.Element(1).MaxDurability));
+                        AddMessage(To_String(EnemyName) & " is destroyed!", CombatMessage);
+                        LootAmount := Integer(Loot_Roll.Random(Generator4));
+                        FreeSpace := FreeCargo((0 - LootAmount));
+                        if FreeSpace < 0 then
+                            LootAmount := LootAmount + FreeSpace;
+                        end if;
+                        if LootAmount > 0 then
+                            AddMessage("You looted" & Integer'Image(LootAmount) & " Charcollum from " & 
                             To_String(EnemyName) & ".", CombatMessage);
-                        UpdateCargo(1, LootAmount);
+                            UpdateCargo(1, LootAmount);
+                        end if;
+                        exit;
                     end if;
-                    exit;
-                end if;
-            end loop;
-            UpdateCargo(PlayerShip.Cargo.Element(AmmoIndex).ProtoIndex, (0 - Shoots));
-            GainExp(Shoots, 3, GunnerIndex);
-        end if;
+                end loop;
+                UpdateCargo(PlayerShip.Cargo.Element(AmmoIndex).ProtoIndex, (0 - Shoots));
+                GainExp(Shoots, 3, GunnerIndex);
+            end if;
+        end loop;
         if not EndCombat and Enemy.Distance <= Enemy.DamageRange and EnemyWeaponIndex > 0 then -- Enemy attack
             HitChance := Enemy.Accuracy - EvadeBonus;
             ShootMessage := EnemyName & To_Unbounded_String(" attacks you and ");
@@ -393,8 +388,17 @@ package body Combat is
                                 DeathReason := To_Unbounded_String("ship explosion");
                                 Death(1, DeathReason);
                             when TURRET =>
-                                UpdateModule(PlayerShip, PlayerShip.Modules.Element(HitLocation).Current_Value, 
-                                    "Durability", "-1000");
+                                WeaponIndex := PlayerShip.Modules.Element(HitLocation).Current_Value;
+                                UpdateModule(PlayerShip, WeaponIndex, "Durability", "-1000");
+                                if PlayerShip.Modules.Element(WeaponIndex).Owner > 0 then
+                                    Death(PlayerShip.Modules.Element(WeaponIndex).Owner, DeathReason);
+                                    for I in Guns.First_Index..Guns.Last_Index loop
+                                        if Guns.Element(I)(1) = WeaponIndex then
+                                            Guns.Delete(Index => WeaponIndex, Count => 1);
+                                            exit;
+                                        end if;
+                                    end loop;
+                                end if;
                             when others =>
                                 null;
                         end case;

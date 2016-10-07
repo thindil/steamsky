@@ -22,7 +22,7 @@ with Ships; use Ships;
 package Combat is
     
     EnemyName : Unbounded_String; -- Name of enemy;
-    PilotOrder, EngineerOrder, GunnerOrder : Positive; -- Orders for crew members
+    PilotOrder, EngineerOrder : Positive; -- Orders for crew members
     type GunsInfoArray is array (1..2) of Positive; -- Data structure for guns informations 
     package Guns_Container is new Vectors(Positive, GunsInfoArray);
     Guns : Guns_Container.Vector; -- List of guns installed on player ship
