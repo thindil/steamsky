@@ -18,6 +18,7 @@
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Crew; use Crew;
+with Game; use Game;
 
 package Ships is
     type ShipSpeed is (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED,
@@ -57,11 +58,10 @@ package Ships is
             Crew : Crew_Container.Vector; -- List of ship crew
             UpgradeModule : Natural; -- Number of module to upgrade
         end record;
-    package ProtoModules_Container is new Vectors(Positive, Positive);
     type ProtoShipData is -- Data structure for ship prototypes
         record
             Name : Unbounded_String; -- Prototype name
-            Modules : ProtoModules_Container.Vector; -- List of ship modules
+            Modules : Positive_Container.Vector; -- List of ship modules
             DamageRange : Positive; -- Maximum range from which ship attack
             Accuracy : Positive; -- Bonus to hit for ship
             CombatAI : ShipCombatAi; -- Behaviour of ship in combat

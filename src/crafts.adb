@@ -35,7 +35,7 @@ package body Crafts is
         EqualIndex, StartIndex, EndIndex, Amount : Natural;
         TempRecord : Craft_Data;
         TempMaterials : MaterialTypes_Container.Vector;
-        TempAmount : MaterialAmounts_Container.Vector;
+        TempAmount : Positive_Container.Vector;
     begin
         if Recipes_List.Length > 0 then
             return True;
