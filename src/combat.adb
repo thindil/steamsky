@@ -42,6 +42,7 @@ package body Combat is
         EndCombat := False;
         EnemyName := Enemy.Ship.Name;
         MessagesStarts := MessagesAmount(Default);
+        Guns.Clear;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = GUN then
                 Guns.Append(New_Item => (I, 1));

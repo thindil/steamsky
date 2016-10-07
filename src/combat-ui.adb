@@ -130,9 +130,11 @@ package body Combat.UI is
         PilotName, EngineerName, GunnerName : Unbounded_String := To_Unbounded_String("Vacant");
         LoopStart : Integer;
         DamagePercent : Natural;
-        CurrentLine : Line_Position := 10;
+        CurrentLine : Line_Position := 12;
         Message : Unbounded_String;
         Crew_Items : Item_Array_Access;
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
     begin
         Crew_Items := new Item_Array(1..Natural(Guns.Length) + 3);
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
@@ -170,34 +172,27 @@ package body Combat.UI is
             Crew_Items.all(I + 2) := New_Item(To_String(GunnerName));
         end loop;
         Crew_Items.all(Crew_Items'Last) := Null_Item;
-        Move_Cursor(Line => 1, Column => 2);
-        Add(Str => "Pilot: " & To_String(PilotName));
-        if PilotName /= To_Unbounded_String("Vacant") then
-            Add(Str => " -> " & To_String(PilotOrders(PilotOrder)));
-        end if;
-        Change_Attributes(Line => 1, Column => 2, Count => 1, Color => 1);
-        Move_Cursor(Line => 2, Column => 2);
-        Add(Str => "Engineer: " & To_String(EngineerName));
-        if EngineerName /= To_Unbounded_String("Vacant") then
-            Add(Str => " -> " & To_String(EngineerOrders(EngineerOrder)));
-        end if;
-        Change_Attributes(Line => 2, Column => 2, Count => 1, Color => 1);
-        Move_Cursor(Line => 3, Column => 2);
-        Add(Str => "Gunner: " & To_String(GunnerName));
-        if GunnerName /= To_Unbounded_String("Vacant") then
-            Add(Str => " -> " & To_String(GunnerOrders(GunnerOrder)));
-        end if;
-        Change_Attributes(Line => 3, Column => 2, Count => 1, Color => 1);
+        CrewMenu := New_Menu(Crew_Items);
+        Set_Format(CrewMenu, 4, 1);
+        Set_Mark(CrewMenu, "");
+        Scale(CrewMenu, MenuHeight, MenuLength);
+        MenuWindow := Create(MenuHeight, MenuLength, 1, 2);
+        Set_Window(CrewMenu, MenuWindow);
+        Set_Sub_Window(CrewMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+        Post(CrewMenu);
         Move_Cursor(Line => 5, Column => 2);
-        Add(Str => "Crew Info");
-        Change_Attributes(Line => 5, Column => 2, Count => 1, Color => 1);
-        Move_Cursor(Line => 6, Column => 2);
-        Add(Str => "Ship cargo");
-        Change_Attributes(Line => 6, Column => 8, Count => 1, Color => 1);
+        Add(Str => "ENTER to give orders");
+        Change_Attributes(Line => 5, Column => 2, Count => 5, Color => 1);
         Move_Cursor(Line => 7, Column => 2);
-        Add(Str => "Ship modules");
+        Add(Str => "Crew Info");
         Change_Attributes(Line => 7, Column => 2, Count => 1, Color => 1);
+        Move_Cursor(Line => 8, Column => 2);
+        Add(Str => "Ship cargo");
+        Change_Attributes(Line => 8, Column => 8, Count => 1, Color => 1);
         Move_Cursor(Line => 9, Column => 2);
+        Add(Str => "Ship modules");
+        Change_Attributes(Line => 9, Column => 2, Count => 1, Color => 1);
+        Move_Cursor(Line => 11, Column => 2);
         Add(Str => "Damage:");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             DamagePercent := 100 - Natural((Float(PlayerShip.Modules.Element(I).Durability) /
@@ -302,6 +297,8 @@ package body Combat.UI is
             end loop;
         end if;
         LastMessage := To_Unbounded_String("");
+        Refresh;
+        Refresh(MenuWindow);
     end ShowCombat;
 
     procedure ShowOrdersMenu is
@@ -428,9 +425,28 @@ package body Combat.UI is
     end ShowOrdersMenu;
 
     function CombatKeys(Key : Key_Code) return GameStates is
+        Result : Driver_Result;
     begin
         if not EndCombat then
             case Key is
+                when 56 | KEY_UP => -- Select previous item to trade
+                    Result := Driver(CrewMenu, M_Up_Item);
+                    if Result = Request_Denied then
+                        Result := Driver(CrewMenu, M_Last_Item);
+                    end if;
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow);
+                    end if;
+                    return Combat_State;
+                when 50 | KEY_DOWN => -- Select next item to trade
+                    Result := Driver(CrewMenu, M_Down_Item);
+                    if Result = Request_Denied then
+                        Result := Driver(CrewMenu, M_First_Item);
+                    end if;
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow);
+                    end if;
+                    return Combat_State;
                 when Character'Pos('p') | Character'Pos('P') => -- Give orders to pilot
                     Order := Pilot;
                     Refresh_Without_Update;
