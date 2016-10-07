@@ -24,11 +24,10 @@ with Game; use Game;
 package Crafts is
 
     package MaterialTypes_Container is new Vectors(Positive, Items_Types);
-    package MaterialAmounts_Container is new Vectors(Positive, Positive);
     type Craft_Data is -- Data structure for recipes
         record
             MaterialTypes : MaterialTypes_Container.Vector; -- Types of material needed for recipe
-            MaterialAmounts : MaterialAmounts_Container.Vector; -- Amounts of material needed for recipe
+            MaterialAmounts : Positive_Container.Vector; -- Amounts of material needed for recipe
             ResultIndex : Positive; -- Prototype index of crafted item
             ResultAmount : Positive; -- Amount of products
             Workplace : ModuleType; -- Ship module needed for crafting
