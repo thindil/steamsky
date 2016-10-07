@@ -25,11 +25,11 @@ with Game; use Game;
 
 package body Crew is
 
-    procedure GiveOrders(MemberIndex : Positive; GivenOrder : Crew_Orders) is
+    procedure GiveOrders(MemberIndex : Positive; GivenOrder : Crew_Orders; ModuleIndex : Natural := 0) is
         NewOrder : Crew_Orders;
         MemberName : constant String := To_String(PlayerShip.Crew.Element(MemberIndex).Name);
         HaveMaterial, RepairNeeded, FreeWorkplace : Boolean := False;
-        ModuleIndex : Natural := 0;
+        ModuleIndex2 : Natural := 0;
         MType : ModuleType := ENGINE;
         procedure UpdateOrder(Member : in out Member_Data) is
         begin
@@ -89,59 +89,69 @@ package body Crew is
                 end if;
             end loop;
         elsif GivenOrder = Gunner or GivenOrder = Craft then
-            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if GivenOrder = Gunner and Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = GUN and
-                    PlayerShip.Modules.Element(I).Owner = 0 then
-                    FreeWorkplace := True;
-                    exit;
-                elsif GivenOrder = Craft then
-                    if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List(PlayerShip.Craft).Workplace and
+            if ModuleIndex = 0 then
+                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                    if GivenOrder = Gunner and Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = GUN and
                         PlayerShip.Modules.Element(I).Owner = 0 then
                         FreeWorkplace := True;
+                        exit;
+                    elsif GivenOrder = Craft then
+                        if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List(PlayerShip.Craft).Workplace and
+                            PlayerShip.Modules.Element(I).Owner = 0 then
+                            FreeWorkplace := True;
+                            exit;
+                        end if;
+                    end if;
+                end loop;
+                if not FreeWorkplace then
+                    for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                        if PlayerShip.Crew.Element(I).Order = GivenOrder and PlayerShip.Crew.Element(I).Order /= Rest then
+                            GiveOrders(I, Rest);
+                            exit;
+                        end if;
+                    end loop;
+                end if;
+            else
+                if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
+                    GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest);
+                end if;
+            end if;
+        end if;
+        if ModuleIndex = 0 then
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                case GivenOrder is
+                    when Pilot =>
+                        MType := COCKPIT;
+                    when Engineer =>
+                        MType := ENGINE;
+                    when Gunner =>
+                        MType := GUN;
+                    when Craft =>
+                        MType := Recipes_List(PlayerShip.Craft).Workplace;
+                    when Rest =>
+                        MType := CABIN;
+                    when others =>
+                        exit;
+                end case;
+                if MType /= CABIN then
+                    if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = MType and 
+                        PlayerShip.Modules.Element(I).Durability > 0 and PlayerShip.Modules.Element(I).Owner = 0 then
+                        ModuleIndex2 := I;
+                        exit;
+                    end if;
+                else
+                    if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = CABIN and 
+                        PlayerShip.Modules.Element(I).Durability > 0 and
+                        PlayerShip.Modules.Element(I).Owner = MemberIndex then
+                        ModuleIndex2 := I;
                         exit;
                     end if;
                 end if;
             end loop;
-            if not FreeWorkplace then
-                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                    if PlayerShip.Crew.Element(I).Order = GivenOrder and PlayerShip.Crew.Element(I).Order /= Rest then
-                        GiveOrders(I, Rest);
-                        exit;
-                    end if;
-                end loop;
-            end if;
+        else
+            ModuleIndex2 := ModuleIndex;
         end if;
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            case GivenOrder is
-                when Pilot =>
-                    MType := COCKPIT;
-                when Engineer =>
-                    MType := ENGINE;
-                when Gunner =>
-                    MType := GUN;
-                when Craft =>
-                    MType := Recipes_List(PlayerShip.Craft).Workplace;
-                when Rest =>
-                    MType := CABIN;
-                when others =>
-                    exit;
-            end case;
-            if MType /= CABIN then
-                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = MType and 
-                    PlayerShip.Modules.Element(I).Durability > 0 and PlayerShip.Modules.Element(I).Owner = 0 then
-                    ModuleIndex := I;
-                    exit;
-                end if;
-            else
-                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = CABIN and 
-                    PlayerShip.Modules.Element(I).Durability > 0 and
-                    PlayerShip.Modules.Element(I).Owner = MemberIndex then
-                    ModuleIndex := I;
-                    exit;
-                end if;
-            end if;
-        end loop;
-        if ModuleIndex = 0 then
+        if ModuleIndex2 = 0 then
             case GivenOrder is
                 when Pilot =>
                     ShowDialog(MemberName & " can't starts piloting because cockpit is destroyed or you don't have cockpit.");
@@ -173,12 +183,12 @@ package body Crew is
         case GivenOrder is
             when Pilot =>
                 AddMessage(MemberName & " starts piloting.", OrderMessage);
-                UpdateModule(PlayerShip, ModuleIndex, "Owner", Positive'Image(MemberIndex));
+                UpdateModule(PlayerShip, ModuleIndex2, "Owner", Positive'Image(MemberIndex));
             when Engineer =>
                 AddMessage(MemberName & " starts engineers duty.", OrderMessage);
             when Gunner =>
                 AddMessage(MemberName & " starts operating gun.", OrderMessage);
-                UpdateModule(PlayerShip, ModuleIndex, "Owner", Positive'Image(MemberIndex));
+                UpdateModule(PlayerShip, ModuleIndex2, "Owner", Positive'Image(MemberIndex));
             when Rest =>
                 AddMessage(MemberName & " going on break.", OrderMessage);
                 for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
@@ -192,7 +202,7 @@ package body Crew is
                 AddMessage(MemberName & " starts repair ship.", OrderMessage);
             when Craft =>
                 AddMessage(MemberName & " starts manufacturing.", OrderMessage);
-                UpdateModule(PlayerShip, ModuleIndex, "Owner", Positive'Image(MemberIndex));
+                UpdateModule(PlayerShip, ModuleIndex2, "Owner", Positive'Image(MemberIndex));
             when Upgrading =>
                 AddMessage(MemberName & " starts upgrading " & To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
                     & ".", OrderMessage);
