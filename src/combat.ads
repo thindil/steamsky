@@ -16,12 +16,16 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Containers.Vectors; use Ada.Containers;
 with Ships; use Ships;
 
 package Combat is
     
     EnemyName : Unbounded_String; -- Name of enemy;
     PilotOrder, EngineerOrder, GunnerOrder : Positive; -- Orders for crew members
+    type GunsInfoArray is array (1..2) of Positive; -- Data structure for guns informations 
+    package Guns_Container is new Vectors(Positive, GunsInfoArray);
+    Guns : Guns_Container.Vector; -- List of guns installed on player ship
     type Enemy_Record is -- Data structure for enemies
         record
             Ship : ShipRecord; -- Ship data for enemy

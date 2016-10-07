@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Crew; use Crew;
 with Messages; use Messages;
 with UserInterface; use UserInterface;
@@ -32,6 +33,8 @@ package body Combat.UI is
         To_Unbounded_String("Aim for engine"), To_Unbounded_String("Aim in weapon"), 
         To_Unbounded_String("Aim in hull"));
     Order : Crew_Orders;
+    CrewMenu : Menu;
+    MenuWindow : Window;
 
     function CombatOrders(Key : Key_Code) return GameStates is
         KeyMax : Key_Code;
@@ -124,25 +127,49 @@ package body Combat.UI is
     end CombatOrders;
 
     procedure ShowCombat is
-        PilotName, EngineerName, GunnerName : Unbounded_String :=
-            To_Unbounded_String("Vacant");
+        PilotName, EngineerName, GunnerName : Unbounded_String := To_Unbounded_String("Vacant");
         LoopStart : Integer;
         DamagePercent : Natural;
-        CurrentLine : Line_Position := 9;
+        CurrentLine : Line_Position := 10;
         Message : Unbounded_String;
+        Crew_Items : Item_Array_Access;
     begin
+        Crew_Items := new Item_Array(1..Natural(Guns.Length) + 3);
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             case PlayerShip.Crew.Element(I).Order is
                 when Pilot =>
                     PilotName := PlayerShip.Crew.Element(I).Name;
                 when Engineer =>
                     EngineerName := PlayerShip.Crew.Element(I).Name;
-                when Gunner =>
-                    GunnerName := PlayerShip.Crew.Element(I).Name;
                 when others =>
                     null;
             end case;
         end loop;
+        if PilotName /= To_Unbounded_String("Vacant") then
+            PilotName := To_Unbounded_String("Pilot: ") & PilotName & To_Unbounded_String(" -> ") & 
+                PilotOrders(PilotOrder);
+        else
+            PilotName := To_Unbounded_String("Pilot: ") & PilotName;
+        end if;
+        Crew_Items.all(1) := New_Item(To_String(PilotName));
+        if EngineerName /= To_Unbounded_String("Vacant") then
+            EngineerName := To_Unbounded_String("Engineer: ") & EngineerName & To_Unbounded_String(" -> ") & 
+                EngineerOrders(EngineerOrder);
+        else
+            EngineerName := To_Unbounded_String("Engineer: ") & EngineerName;
+        end if;
+        Crew_Items.all(2) := New_Item(To_String(EngineerName));
+        for I in Guns.First_Index..Guns.Last_Index loop
+            GunnerName := PlayerShip.Modules.Element(Guns.Element(I)(1)).Name & ": ";
+            if PlayerShip.Modules.Element(Guns.Element(I)(1)).Owner = 0 then
+                GunnerName := GunnerName & To_Unbounded_String("Vacant");
+            else
+                GunnerName := GunnerName & PlayerShip.Crew.Element(PlayerShip.Modules.Element(Guns.Element(I)(1)).Owner).Name & 
+                    " -> " & GunnerOrders(Guns.Element(I)(2));
+            end if;
+            Crew_Items.all(I + 2) := New_Item(To_String(GunnerName));
+        end loop;
+        Crew_Items.all(Crew_Items'Last) := Null_Item;
         Move_Cursor(Line => 1, Column => 2);
         Add(Str => "Pilot: " & To_String(PilotName));
         if PilotName /= To_Unbounded_String("Vacant") then
@@ -161,16 +188,16 @@ package body Combat.UI is
             Add(Str => " -> " & To_String(GunnerOrders(GunnerOrder)));
         end if;
         Change_Attributes(Line => 3, Column => 2, Count => 1, Color => 1);
-        Move_Cursor(Line => 4, Column => 2);
-        Add(Str => "Crew Info");
-        Change_Attributes(Line => 4, Column => 2, Count => 1, Color => 1);
         Move_Cursor(Line => 5, Column => 2);
-        Add(Str => "Ship cargo");
-        Change_Attributes(Line => 5, Column => 8, Count => 1, Color => 1);
+        Add(Str => "Crew Info");
+        Change_Attributes(Line => 5, Column => 2, Count => 1, Color => 1);
         Move_Cursor(Line => 6, Column => 2);
+        Add(Str => "Ship cargo");
+        Change_Attributes(Line => 6, Column => 8, Count => 1, Color => 1);
+        Move_Cursor(Line => 7, Column => 2);
         Add(Str => "Ship modules");
-        Change_Attributes(Line => 6, Column => 2, Count => 1, Color => 1);
-        Move_Cursor(Line => 8, Column => 2);
+        Change_Attributes(Line => 7, Column => 2, Count => 1, Color => 1);
+        Move_Cursor(Line => 9, Column => 2);
         Add(Str => "Damage:");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             DamagePercent := 100 - Natural((Float(PlayerShip.Modules.Element(I).Durability) /
