@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Installing/removing modules from ship
 - Fuel usage during movement depends on amount of engines installed on ship
 - New ship modules: small advanced bronze engine and medium bronze engine
+- Info about unique ship modules
 
 ### Changed
 - Updated help
