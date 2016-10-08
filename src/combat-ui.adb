@@ -298,7 +298,7 @@ package body Combat.UI is
             if LoopStart < -10 then
                 LoopStart := -10;
             end if;
-            CurrentLine := Lines - 10;
+            CurrentLine := Lines - 11;
             Move_Cursor(Line => CurrentLine, Column => 2);
             for I in LoopStart..-1 loop
                 Message := To_Unbounded_String(GetMessage((I + 1), Default));
