@@ -20,6 +20,7 @@ Material = Bronze
 Skill = Engineering
 Price = 5000
 InstallTime = 180
+Unique = Yes
 [3]
 Name = Small bronze engine
 Type = Engine
@@ -53,6 +54,7 @@ Material = Bronze
 Skill = Engineering
 Price = 750
 InstallTime = 60
+Unique = Yes
 [6]
 Name = Small alchemy Lab
 Type = Alchemy_lab
