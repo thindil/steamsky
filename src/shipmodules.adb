@@ -36,7 +36,7 @@ package body ShipModules is
         TempRecord := (Name => Null_Unbounded_String, MType => ENGINE, 
             Weight => 0, Value => 0, MaxValue => 0, Durability => 0,
             RepairMaterial => Fuel, RepairSkill => 2, Price => 0, 
-            InstallTime => 60);
+            InstallTime => 60, Unique => False);
         Open(ModulesFile, In_File, "data/shipmodules.dat");
         while not End_Of_File(ModulesFile) loop
             RawData := To_Unbounded_String(Get_Line(ModulesFile));
@@ -69,13 +69,19 @@ package body ShipModules is
                     TempRecord.Price := Integer'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("InstallTime") then
                     TempRecord.InstallTime := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Unique") then
+                    if Value = To_Unbounded_String("Yes") then
+                        TempRecord.Unique := True;
+                    else
+                        TempRecord.Unique := False;
+                    end if;
                 end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
                 Modules_List.Append(New_Item => TempRecord);
                 TempRecord := (Name => Null_Unbounded_String, MType => ENGINE, 
                     Weight => 0, Value => 0, MaxValue => 0, Durability => 0,
                     RepairMaterial => Fuel, RepairSkill => 2, Price => 0,
-                    InstallTime => 60);
+                    InstallTime => 60, Unique => False);
             end if;
         end loop;
         Close(ModulesFile);
