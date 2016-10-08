@@ -378,7 +378,7 @@ package body Crew is
                 for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                     if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
                         PlayerShip.Modules.Element(J).Owner = I then
-                        CabinIndex := I;
+                        CabinIndex := J;
                         exit;
                     end if;
                 end loop;
