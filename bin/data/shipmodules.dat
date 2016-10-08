@@ -129,4 +129,26 @@ Weight = 200
 Value = 0
 MaxValue = 5
 Durability = 50
+[14]
+Name = Small advanced bronze engine
+Type = Engine
+Weight = 1200
+Value = 0
+MaxValue = 3000
+Durability = 100
+Material = Bronze
+Skill = Engineering
+Price = 6000
+InstallTime = 120
+[15]
+Name = Medium bronze engine
+Type = Engine
+Weight = 1700
+Value = 0
+MaxValue = 5000
+Durability = 150
+Material = Bronze
+Skill = Engineering
+Price = 8000
+InstallTime = 150
 []
