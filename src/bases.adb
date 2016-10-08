@@ -175,7 +175,7 @@ package body Bases is
     procedure UpgradeShip(Install : Boolean; ModuleIndex : Positive) is
         MoneyIndex : constant Natural := FindMoney;
         HullIndex, ModulesAmount : Positive;
-        ArmorIndex, FreeTurretIndex, CockpitIndex, Price : Natural := 0;
+        FreeTurretIndex, Price : Natural := 0;
         type DamageFactor is digits 2 range 0.0..1.0;
         Damage : DamageFactor := 0.0;
     begin
@@ -188,10 +188,6 @@ package body Bases is
                 when HULL =>
                     HullIndex := I;
                     ModulesAmount := PlayerShip.Modules.Element(I).Current_Value;
-                when ARMOR =>
-                    ArmorIndex := I;
-                when COCKPIT =>
-                    CockpitIndex := I;
                 when TURRET =>
                     if PlayerShip.Modules.Element(I).Current_Value = 0 then
                         FreeTurretIndex := I;
@@ -205,6 +201,14 @@ package body Bases is
                 ShowDialog("You don't have enough Charcollum to pay for " & To_String(Modules_List.Element(ModuleIndex).Name) & ".");
                 return;
             end if;
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Modules_List.Element(ModuleIndex).MType and
+                    Modules_List.Element(ModuleIndex).Unique then
+                    ShowDialog("You can't install another " & To_String(Modules_List.Element(ModuleIndex).Name) & 
+                        " because you have installed one module that type. Remove old first.");
+                    return;
+                end if;
+            end loop;
             if Modules_List.Element(ModuleIndex).MType /= HULL then
                 if ModulesAmount = PlayerShip.Modules.Element(HullIndex).Max_Value and
                     Modules_List.Element(ModuleIndex).MType /= GUN then
@@ -212,16 +216,6 @@ package body Bases is
                     return;
                 end if;
                 case Modules_List.Element(ModuleIndex).MType is
-                    when ARMOR =>
-                        if ArmorIndex > 0 then
-                            ShowDialog("You have installed armor now. Remove it first, before install new.");
-                            return;
-                        end if;
-                    when COCKPIT =>
-                        if CockpitIndex > 0 then
-                            ShowDialog("You can have only one cockpit on ship. Remove old first, if you want install new.");
-                            return;
-                        end if;
                     when GUN =>
                         if FreeTurretIndex = 0 then
                             ShowDialog("You don't have free turret for next gun. Install new turret or remove old gun first.");
