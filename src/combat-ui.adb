@@ -303,7 +303,7 @@ package body Combat.UI is
             end if;
             CurrentLine := Lines - 11;
             Move_Cursor(Line => CurrentLine, Column => 2);
-            for I in LoopStart..-1 loop
+            for I in reverse LoopStart..-1 loop
                 Message := To_Unbounded_String(GetMessage((I + 1), Default));
                 CurrentLine := CurrentLine + 1;
                 if Length(Message) > Integer(Columns - 2) then
