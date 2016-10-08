@@ -133,7 +133,7 @@ begin
             when Giving_Orders =>
                 GameState := CrewOrdersKeys(Key);
             when Messages_View =>
-                GameState := MessagesKeys(Key);
+                GameState := MessagesKeys(Key, OldState);
             when Trade_View =>
                 GameState := TradeKeys(Key);
             when Help_View =>

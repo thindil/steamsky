@@ -184,7 +184,7 @@ package body Messages is
         Refresh(MessagesPad, Line_Position(StartIndex), 0, 4, 2, (Lines - 1), (Columns - 2));
     end ShowMessages;
 
-    function MessagesKeys(Key : Key_Code) return GameStates is
+    function MessagesKeys(Key : Key_Code; OldState : GameStates) return GameStates is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -193,8 +193,8 @@ package body Messages is
                 if MessagesPad /= Null_Window then
                     Delete(MessagesPad);
                 end if;
-                DrawGame(Sky_Map_View);
-                return Sky_Map_View;
+                DrawGame(OldState);
+                return OldState;
             when 56 | KEY_UP => -- Scroll messages one line up
                 StartIndex := StartIndex - 1;
                 if StartIndex < 0 then

@@ -141,7 +141,7 @@ package body Combat.UI is
         PilotName, EngineerName, GunnerName : Unbounded_String := To_Unbounded_String("Vacant");
         LoopStart : Integer;
         DamagePercent : Natural;
-        CurrentLine : Line_Position := 12;
+        CurrentLine : Line_Position := 13;
         Message : Unbounded_String;
         Crew_Items : Item_Array_Access;
         MenuHeight : Line_Position;
@@ -207,7 +207,10 @@ package body Combat.UI is
         Move_Cursor(Line => 9, Column => 2);
         Add(Str => "Ship modules");
         Change_Attributes(Line => 9, Column => 2, Count => 1, Color => 1);
-        Move_Cursor(Line => 11, Column => 2);
+        Move_Cursor(Line => 10, Column => 2);
+        Add(Str => "Messages");
+        Change_Attributes(Line => 10, Column => 2, Count => 1, Color => 1);
+        Move_Cursor(Line => 12, Column => 2);
         Add(Str => "Damage:");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             DamagePercent := 100 - Natural((Float(PlayerShip.Modules.Element(I).Durability) /
@@ -490,6 +493,9 @@ package body Combat.UI is
                 when Character'Pos('c') | Character'Pos('C') => -- Show crew info
                     DrawGame(Crew_Info);
                     return Crew_Info;
+                when Character'Pos('m') | Character'Pos('M') => -- Show messages list
+                    DrawGame(Messages_View);
+                    return Messages_View;
                 when others =>
                     return Combat_State;
             end case;

@@ -33,6 +33,6 @@ package Messages is
     procedure RestoreMessage(Message : Unbounded_String; MType : Message_Type := Default); -- Restore message from save file
     function GetMessageType(MessageIndex : Integer) return Message_Type; -- Return type of selected message
     procedure ShowMessages; -- Show messages list
-    function MessagesKeys(Key : Key_Code) return GameStates; -- Handle keys in messages list
+    function MessagesKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in messages list
 
 end Messages;
