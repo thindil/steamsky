@@ -51,6 +51,7 @@ package body Game is
         ValidLocation : Boolean;
         TempX, TempY : Integer;
         PilotGender, EngineerGender, GunnerGender : Character;
+        TmpSkills : Skills_Container.Vector;
     begin
         -- Set Game time
         GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
@@ -142,21 +143,21 @@ package body Game is
         PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 5, Amount => 100));
         PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 13, Amount => 20));
         -- Add crew to ship
+        TmpSkills.Append(New_Item => (4, 5, 0));
         PlayerShip.Crew.Append(New_Item => (Name => CharName, Gender => Gender,
-            Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (0, 0),
-            (5,0), (0, 0), (0, 0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
+            Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest)); 
+        TmpSkills.Replace_Element(Index => 1, New_Item => (1, 5, 0));
         PlayerShip.Crew.Append(New_Item => (Name => PilotName, Gender => PilotGender,
-            Health => 100, Tired => 0, Skills => ((5, 0), (0, 0), (0, 0),
-            (0,0), (0, 0), (0, 0), (0, 0)), Hunger => 0, Thirst => 0, Order => Pilot,
+            Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Pilot,
             PreviousOrder => Rest)); 
+        TmpSkills.Replace_Element(Index => 1, New_Item => (2, 5, 0));
         PlayerShip.Crew.Append(New_Item => (Name => EngineerName, Gender => EngineerGender,
-            Health => 100, Tired => 0, Skills => ((0, 0), (5, 0), (0, 0),
-            (0,0), (0, 0), (0, 0), (0, 0)), Hunger => 0, Thirst => 0, Order => Engineer,
+            Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Engineer,
             PreviousOrder => Rest)); 
+        TmpSkills.Replace_Element(Index => 1, New_Item => (3, 5, 0));
         PlayerShip.Crew.Append(New_Item => (Name => GunnerName, Gender => GunnerGender,
-            Health => 100, Tired => 0, Skills => ((0, 0), (0, 0), (5, 0), (0,
-            0), (0, 0), (0, 0), (0, 0)), Hunger => 0, Thirst => 0, Order => Rest,
+            Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest)); 
         SkyBases(Integer(RandomBase)).Visited := GameDate;
     end NewGame;
@@ -307,10 +308,14 @@ package body Game is
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(Crew_Orders'Pos(PlayerShip.Crew.Element(I).PreviousOrder)));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            for J in Skills_Array'Range loop
-                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Skills(J, 1)));
+            RawValue := To_Unbounded_String(PlayerShip.Crew.Element(I).Skills.Length'Img);
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            for J in PlayerShip.Crew.Element(I).Skills.First_Index..PlayerShip.Crew.Element(I).Skills.Last_Index loop
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Skills.Element(J)(1)));
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Skills(J, 2)));
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Skills.Element(J)(2)));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Skills.Element(J)(3)));
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             end loop;
         end loop;
@@ -333,8 +338,8 @@ package body Game is
 
     function LoadGame return Boolean is
         SaveGame : File_Type;
-        VectorLength : Positive;
-        Skills : Skills_Array := (others => (0, 0));
+        VectorLength, SkillsLength : Positive;
+        Skills : Skills_Container.Vector;
         ShipModules : Modules_Container.Vector;
         ShipCargo : Cargo_Container.Vector; 
         ShipCrew : Crew_Container.Vector;
@@ -416,6 +421,7 @@ package body Game is
         PlayerShip.Cargo := ShipCargo;
         VectorLength := Positive'Value(To_String(ReadData));
         for I in 1..VectorLength loop
+            Skills.Clear;
             ShipCrew.Append(New_Item => (Name => ReadData, Gender => Element(ReadData, 1), 
                 Health => Natural'Value(To_String(ReadData)), Tired =>
                 Natural'Value(To_String(ReadData)), Skills => Skills, Hunger => 
@@ -423,9 +429,10 @@ package body Game is
                 Natural'Value(To_String(ReadData)), Order =>
                 Crew_Orders'Val(Integer'Value(To_String(ReadData))), 
                 PreviousOrder => Crew_Orders'Val(Integer'Value(To_String(ReadData)))));
-            for J in Skills_Array'Range loop
-                Skills(J, 1) := Natural'Value(To_String(ReadData));
-                Skills(J, 2) := Natural'Value(To_String(ReadData));
+            SkillsLength := Positive'Value(To_String(ReadData));
+            for J in 1..SkillsLength loop
+                Skills.Append(New_Item => (Natural'Value(To_String(ReadData)),
+                    Natural'Value(To_String(ReadData)), Natural'Value(To_String(ReadData))));
             end loop;
             ShipCrew.Update_Element(Index => ShipCrew.Last_Index,
                 Process => UpdateMember'Access);
