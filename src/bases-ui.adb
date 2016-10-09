@@ -117,9 +117,9 @@ package body Bases.UI is
         MenuIndex : Integer := 1;
         FreeSpace : Integer;
     begin
-        for I in 2..(Items_List.Last_Index) loop
+        for I in 1..(Items_List.Last_Index) loop
             for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if PlayerShip.Cargo.Element(J).ProtoIndex = I then
+                if PlayerShip.Cargo.Element(J).ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
                     ShowItem := True;
                     exit;
                 end if;
