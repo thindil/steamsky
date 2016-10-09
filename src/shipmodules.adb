@@ -59,8 +59,8 @@ package body ShipModules is
                 elsif FieldName = To_Unbounded_String("Material") then
                     TempRecord.RepairMaterial := Items_Types'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Skill") then
-                    for I in Skills_Names'Range loop
-                        if Value = To_String(Skills_Names(I)) then
+                    for I in Skills_Names.First_Index..Skills_Names.Last_Index loop
+                        if Value = To_String(Skills_Names.Element(I)) then
                             TempRecord.RepairSkill := I;
                             exit;
                         end if;
