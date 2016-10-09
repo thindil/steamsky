@@ -120,7 +120,7 @@ package body Combat is
                 when others =>
                     null;
             end case;
-            EvadeBonus := EvadeBonus + PlayerShip.Crew.Element(PilotIndex).Skills(1, 1);
+            EvadeBonus := EvadeBonus + GetSkillLevel(PilotIndex, 1);
         else
             AccuracyBonus := 20;
             EvadeBonus := -10;
@@ -296,7 +296,7 @@ package body Combat is
             if Shoots = -2 then
                 AddMessage("You don't have ammo to " & To_String(PlayerShip.Modules.Element(WeaponIndex).Name) & "!", CombatMessage);
             elsif Shoots > 0 then -- Player attacks
-                HitChance := AccuracyBonus + PlayerShip.Crew.Element(GunnerIndex).Skills(3, 1) - Enemy.Evasion;
+                HitChance := AccuracyBonus + GetSkillLevel(GunnerIndex, 3) - Enemy.Evasion;
                 for I in 1..Shoots loop
                     ShootMessage := PlayerShip.Crew.Element(GunnerIndex).Name & To_Unbounded_String(" shoots to ") & 
                     EnemyName;

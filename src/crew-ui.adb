@@ -26,7 +26,8 @@ package body Crew.UI is
 
     procedure ShowMemberInfo is
         InfoWindow : Window;
-        Member : constant Member_Data := PlayerShip.Crew.Element(Get_Index(Current(CrewMenu)));
+        MemberIndex : constant Positive := Get_Index(Current(CrewMenu));
+        Member : constant Member_Data := PlayerShip.Crew.Element(MemberIndex);
         CurrentLine : Line_Position := 1;
         Health, Tired, Hungry, Thirsty, SkillLevel, OrderName : Unbounded_String := Null_Unbounded_String;
     begin
@@ -91,26 +92,23 @@ package body Crew.UI is
             CurrentLine := CurrentLine + 1;
         end if;
         CurrentLine := CurrentLine + 1;
-        for I in Member.Skills'Range loop
-            SkillLevel := To_Unbounded_String("");
-            if Member.Skills(I, 1) > 0 and Member.Skills(I, 1) < 20 then
+        for I in Member.Skills.First_Index..Member.Skills.Last_Index loop
+            if GetSkillLevel(MemberIndex, I) > 0 and GetSkillLevel(MemberIndex, I) < 20 then
                 SkillLevel := To_Unbounded_String("Novice");
-            elsif Member.Skills(I, 1) > 21 and Member.Skills(I, 1) < 40 then
+            elsif GetSkillLevel(MemberIndex, I) > 21 and GetSkillLevel(MemberIndex, I) < 40 then
                 SkillLevel := To_Unbounded_String("Beginner");
-            elsif Member.Skills(I, 1) > 41 and Member.Skills(I, 1) < 60 then
+            elsif GetSkillLevel(MemberIndex, I) > 41 and GetSkillLevel(MemberIndex, I) < 60 then
                 SkillLevel := To_Unbounded_String("Competent");
-            elsif Member.Skills(I, 1) > 61 and Member.Skills(I, 1) < 80 then
+            elsif GetSkillLevel(MemberIndex, I) > 61 and GetSkillLevel(MemberIndex, I) < 80 then
                 SkillLevel := To_Unbounded_String("Expert");
-            elsif Member.Skills(I, 1) > 81 and Member.Skills(I, 1) < 100 then
+            elsif GetSkillLevel(MemberIndex, I) > 81 and GetSkillLevel(MemberIndex, I) < 100 then
                 SkillLevel := To_Unbounded_String("Master");
-            elsif Member.Skills(I, 1) > 99 then
+            elsif GetSkillLevel(MemberIndex, I) > 99 then
                 SkillLevel := To_Unbounded_String("Grandmaster");
             end if;
-            if SkillLevel /= "" then
-                Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-                Add(Win => InfoWindow, Str => To_String(Skills_Names.Element(I)) & ": " & To_String(SkillLevel));
-                CurrentLine := CurrentLine + 1;
-            end if;
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => To_String(Skills_Names.Element(Member.Skills.Element(I)(1))) & ": " & To_String(SkillLevel));
+            CurrentLine := CurrentLine + 1;
         end loop;
         CurrentLine := CurrentLine + 1;
         case Member.Order is

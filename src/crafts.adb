@@ -206,7 +206,7 @@ package body Crafts is
                         Recipe.MaterialAmounts.Element(J);
                     end loop;
                     ResultAmount := Recipe.ResultAmount + Integer(Float'Floor(Float(Recipe.ResultAmount) *
-                    (Float(PlayerShip.Crew.Element(CrafterIndex).Skills(Recipe.Skill, 1)) / 100.0)));
+                    (Float(GetSkillLevel(CrafterIndex, Recipe.Skill)) / 100.0)));
                     Amount := Amount - (Items_List.Element(Recipe.ResultIndex).Weight * ResultAmount);
                     if FreeCargo(Amount) < 0 then
                         AddMessage("You don't have free cargo space for manufacturing " & 

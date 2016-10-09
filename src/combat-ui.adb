@@ -387,19 +387,19 @@ package body Combat.UI is
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             case Order is
                 when Pilot =>
-                    if PlayerShip.Crew.Element(I).Skills(1, 1) > SkillValue then
+                    if GetSkillLevel(I, 1) > SkillValue then
                         SkillIndex := I;
-                        SkillValue := PlayerShip.Crew.Element(I).Skills(1, 1);
+                        SkillValue := GetSkillLevel(I, 1);
                     end if;
                 when Engineer =>
-                    if PlayerShip.Crew.Element(I).Skills(2, 1) > SkillValue then
+                    if GetSkillLevel(I, 2) > SkillValue then
                         SkillIndex := I;
-                        SkillValue := PlayerShip.Crew.Element(I).Skills(2, 1);
+                        SkillValue := GetSkillLevel(I, 2);
                     end if;
                 when Gunner =>
-                    if PlayerShip.Crew.Element(I).Skills(3, 1) > SkillValue then
+                    if GetSkillLevel(I, 3) > SkillValue then
                         SkillIndex := I;
-                        SkillValue := PlayerShip.Crew.Element(I).Skills(3, 1);
+                        SkillValue := GetSkillLevel(I, 3);
                     end if;
                 when others =>
                     null;
@@ -413,15 +413,15 @@ package body Combat.UI is
                     " assign " & To_String(PlayerShip.Crew.Element(I).Name));
                 case Order is
                     when Pilot =>
-                        if PlayerShip.Crew.Element(I).Skills(1, 1) > 0 then
+                        if GetSkillLevel(I, 1) > 0 then
                             Add(Win => OrdersWindow, Str => " +");
                         end if;
                     when Engineer =>
-                        if PlayerShip.Crew.Element(I).Skills(2, 1) > 0 then
+                        if GetSkillLevel(I, 2) > 0 then
                             Add(Win => OrdersWindow, Str => " +");
                         end if;
                     when Gunner =>
-                        if PlayerShip.Crew.Element(I).Skills(3, 1) > 0 then
+                        if GetSkillLevel(I, 3) > 0 then
                             Add(Win => OrdersWindow, Str => " +");
                         end if;
                     when others =>
