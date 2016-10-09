@@ -228,23 +228,39 @@ package body Crew is
     end Consume;
 
     procedure GainExp(Amount : Natural; SkillNumber, CrewIndex : Positive) is
-        SkillExp, SkillLevel : Natural;
-        procedure UpdateSkill(Member : in out Member_Data) is
+        SkillExp, SkillLevel, SkillIndex : Natural := 0;
+        procedure UpdateSkill(Skill : in out Skill_Array) is
         begin
-            Member.Skills(SkillNumber, 1) := SkillLevel;
-            Member.Skills(SkillNumber, 2) := SkillExp;
+            Skill(2) := SkillLevel;
+            Skill(3) := SkillExp;
         end UpdateSkill;
+        procedure UpdateSkills(Member : in out Member_Data) is
+        begin
+            if SkillIndex > 0 then
+                Member.Skills.Update_Element(Index => SkillIndex, Process => UpdateSkill'Access);
+            else
+                Member.Skills.Append(New_Item => (SkillNumber, SkillLevel, SkillExp));
+            end if;
+        end UpdateSkills;
     begin
-        if PlayerShip.Crew.Element(CrewIndex).Skills(SkillNumber, 1) = 100 then
-            return;
+        for I in PlayerShip.Crew.Element(CrewIndex).Skills.First_Index..PlayerShip.Crew.Element(CrewIndex).Skills.Last_Index loop
+            if PlayerShip.Crew.Element(CrewIndex).Skills.Element(I)(1) = SkillNumber then
+                SkillIndex := I;
+                exit;
+            end if;
+        end loop;
+        if SkillIndex > 0 then
+            if PlayerShip.Crew.Element(CrewIndex).Skills.Element(SkillIndex)(2) = 100 then
+                return;
+            end if;
+            SkillLevel := PlayerShip.Crew.Element(CrewIndex).Skills.Element(SkillIndex)(2);
+            SkillExp := PlayerShip.Crew.Element(CrewIndex).Skills.Element(SkillIndex)(3) + Amount;
         end if;
-        SkillLevel := PlayerShip.Crew.Element(CrewIndex).Skills(SkillNumber, 1);
-        SkillExp := PlayerShip.Crew.Element(CrewIndex).Skills(SkillNumber, 2) + Amount;
         if SkillExp >= (SkillLevel * 100) then
             SkillExp := SkillExp - (SkillLevel * 100);
             SkillLevel := SkillLevel + 1;
         end if;
-        PlayerShip.Crew.Update_Element(Index => CrewIndex, Process => UpdateSkill'Access);
+        PlayerShip.Crew.Update_Element(Index => CrewIndex, Process => UpdateSkills'Access);
     end GainExp;
 
     function GenerateMemberName(Gender : Character) return Unbounded_String is -- based on name generator from libtcod
@@ -440,5 +456,15 @@ package body Crew is
             end if;
         end loop;
     end UpdateCrew;
+
+    function GetSkillLevel(MemberIndex, SkillIndex : Positive) return Natural is
+    begin
+        for I in PlayerShip.Crew.Element(MemberIndex).Skills.First_Index..PlayerShip.Crew.Element(MemberIndex).Skills.Last_Index loop
+            if PlayerShip.Crew.Element(MemberIndex).Skills.Element(I)(1) = SkillIndex then
+                return PlayerShip.Crew.Element(MemberIndex).Skills.Element(I)(2);
+            end if;
+        end loop;
+        return 0;
+    end GetSkillLevel;
 
 end Crew;
