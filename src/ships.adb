@@ -468,9 +468,9 @@ package body Ships is
         Speed := Speed - Integer((Float(Weight) / 100.0) * Float(Speed));
         for I in Ship.Crew.First_Index..Ship.Crew.Last_Index loop
             if Ship.Crew.Element(I).Order = Pilot then
-                Speed := Speed + Integer(Float(Speed) * (Float(Ship.Crew.Element(I).Skills(1, 1)) / 300.0));
+                Speed := Speed + Integer(Float(Speed) * (Float(GetSkillLevel(I, 1)) / 300.0));
             elsif Ship.Crew.Element(I).Order = Engineer then
-                Speed := Speed + Integer(Float(Speed) * (Float(Ship.Crew.Element(I).Skills(2, 1)) / 300.0));
+                Speed := Speed + Integer(Float(Speed) * (Float(GetSkillLevel(I, 2)) / 300.0));
             end if;
         end loop;
         case Ship.Speed is
@@ -615,7 +615,7 @@ package body Ships is
             return;
         end if;
         UpgradePoints := 
-            ((PlayerShip.Crew.Element(WorkerIndex).Skills(Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).RepairSkill, 1) / 10) * Times) + Times;
+            ((GetSkillLevel(WorkerIndex, Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).RepairSkill) / 10) * Times) + Times;
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
             if Items_List(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
                 Modules_List(PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex).RepairMaterial and
@@ -757,8 +757,7 @@ package body Ships is
                 for J in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                     if PlayerShip.Crew.Element(J).Order = Repair then
                         RepairPoints := RepairPoints +
-                        (PlayerShip.Crew.Element(J).Skills(Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairSkill, 
-                        1) / 10);
+                        (GetSkillLevel(J, Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairSkill) / 10);
                         GainExp(Times, Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairSkill, J);
                     end if;
                 end loop;
