@@ -108,7 +108,7 @@ package body Crew.UI is
             end if;
             if SkillLevel /= "" then
                 Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-                Add(Win => InfoWindow, Str => To_String(Skills_Names(I)) & ": " & To_String(SkillLevel));
+                Add(Win => InfoWindow, Str => To_String(Skills_Names.Element(I)) & ": " & To_String(SkillLevel));
                 CurrentLine := CurrentLine + 1;
             end if;
         end loop;

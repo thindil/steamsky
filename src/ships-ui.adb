@@ -70,7 +70,7 @@ package body Ships.UI is
         end loop;
         Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
         Add(Win => InfoWindow, Str => "Repair skill: " &
-            To_String(Skills_Names(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).RepairSkill)));
+            To_String(Skills_Names.Element(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).RepairSkill)));
         Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
         case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
             when ENGINE =>

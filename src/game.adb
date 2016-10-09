@@ -453,11 +453,11 @@ package body Game is
         DataFile : File_Type;
         RawData, FieldName, Value : Unbounded_String;
         EqualIndex, StartIndex, EndIndex, Amount : Natural;
-        FieldsNames : constant array (1..8) of Unbounded_String := (To_Unbounded_String("BasesSyllablesPre"),
+        FieldsNames : constant array (1..9) of Unbounded_String := (To_Unbounded_String("BasesSyllablesPre"),
             To_Unbounded_String("BasesSyllablesStart"), To_Unbounded_String("BasesSyllablesEnd"), 
             To_Unbounded_String("BasesSyllablesPost"), To_Unbounded_String("MaleSyllablesStart"), 
             To_Unbounded_String("MaleSyllablesMiddle"), To_Unbounded_String("MaleSyllablesEnd"), 
-            To_Unbounded_String("FemaleSyllablesEnd"));
+            To_Unbounded_String("FemaleSyllablesEnd"), To_Unbounded_String("SkillsNames"));
     begin
         if BaseSyllablesStart.Length > 0 then
             return True;
@@ -497,6 +497,8 @@ package body Game is
                                 MaleSyllablesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
                             when 8 =>
                                 FemaleSyllablesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                            when 9 =>
+                                Skills_Names.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
                         end case;
                         StartIndex := EndIndex + 2;
                     end loop;
