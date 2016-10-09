@@ -41,8 +41,7 @@ package body Bases is
             return;
         end if;
         Cost := BuyAmount * Items_List.Element(ItemIndex).Prices(BaseType);
-        Cost := Cost - Integer(Float'Floor(Float(Cost) *
-                (Float(PlayerShip.Crew.Element(1).Skills(4, 1)) / 200.0)));
+        Cost := Cost - Integer(Float'Floor(Float(Cost) * (Float(GetSkillLevel(1, 4)) / 200.0)));
         MoneyIndex := FindMoney;
         if FreeCargo(Cost - (Items_List.Element(ItemIndex).Weight * BuyAmount)) < 0 then
             ShowDialog("You don't have that much free space in your ship cargo.");
@@ -81,8 +80,7 @@ package body Bases is
             return;
         end if;
         Profit := Items_List.Element(ProtoIndex).Prices(BaseType) * SellAmount;
-        Profit := Profit + Integer(Float'Floor(Float(Profit) *
-                (Float(PlayerShip.Crew.Element(1).Skills(4, 1)) / 200.0)));
+        Profit := Profit + Integer(Float'Floor(Float(Profit) * (Float(GetSkillLevel(4, 1)) / 200.0)));
         if FreeCargo((Items_List.Element(ProtoIndex).Weight * SellAmount) - Profit) < 0 then
             ShowDialog("You don't have enough free cargo space in your ship for Charcollum.");
             return;

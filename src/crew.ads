@@ -16,11 +16,13 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Containers.Vectors; use Ada.Containers;
 with Items; use Items;
 
 package Crew is
 
-    type Skills_Array is array(1..7, 1..2) of Natural;
+    type Skill_Array is array(1..3) of Natural;
+    package Skills_Container is new Vectors(Positive, Skill_Array);
     type Crew_Orders is (Pilot, Engineer, Gunner, Rest, Repair, Craft, Upgrading);
     type Member_Data is -- Data structure for ship crew member
         record
@@ -28,17 +30,19 @@ package Crew is
             Gender : Character; -- Gender of member
             Health : Natural; -- Level of health of member
             Tired : Natural; -- Tiredness of member
-            Skills: Skills_Array; -- Levels and experience in skills of member
+            Skills: Skills_Container.Vector; -- Names indexes, levels and experience in skills of member
             Hunger : Natural; -- Hunger level of member
             Thirst : Natural; -- Thirst level of member
             Order : Crew_Orders; -- Current order for member
             PreviousOrder : Crew_Orders; -- Previous order for member
         end record;
+
     procedure GiveOrders(MemberIndex : Positive; GivenOrder: Crew_Orders; ModuleIndex : Natural := 0); -- Change order for selected crew member
     function Consume(ItemType : Items_Types) return Boolean; -- Eat/drink by crew member. Returns true if all ok, otherwise false
     procedure GainExp(Amount : Natural; SkillNumber, CrewIndex : Positive); -- Gain experience in selected skill.
     function GenerateMemberName(Gender : Character) return Unbounded_String; -- Generate random name for crew member
     procedure Death(MemberIndex : Positive; Reason : Unbounded_String); -- Handle crew member death
     procedure UpdateCrew(Times : Positive); -- Update ship crew
+    function GetSkillLevel(MemberIndex, SkillIndex : Positive) return Natural; -- Get level of skill of selected crew member
 
 end Crew;
