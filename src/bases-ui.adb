@@ -441,9 +441,84 @@ package body Bases.UI is
         Refresh(MenuWindow);
     end ShowShipyard;
 
-    procedure ShowRecruits is
+    procedure ShowRecruitInfo is
+        InfoWindow : Window;
+        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        RecruitIndex : constant Positive := Get_Index(Current(TradeMenu));
+        Recruit : constant Recruit_Data := SkyBases(BaseIndex).Recruits.Element(RecruitIndex);
+        CurrentLine : Line_Position := 1;
+        SkillLevel : Unbounded_String;
     begin
-        null;
+        InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
+        if Recruit.Gender = 'M' then
+            Add(Win => InfoWindow, Str => "Male");
+        else
+            Add(Win => InfoWindow, Str => "Female");
+        end if;
+        CurrentLine := CurrentLine + 1;
+        for I in Recruit.Skills.First_Index..Recruit.Skills.Last_Index loop
+            if Recruit.Skills.Element(I)(2) > 0 and Recruit.Skills.Element(I)(2) < 20 then
+                SkillLevel := To_Unbounded_String("Novice");
+            elsif Recruit.Skills.Element(I)(2) > 19 and Recruit.Skills.Element(I)(2) < 40 then
+                SkillLevel := To_Unbounded_String("Beginner");
+            elsif Recruit.Skills.Element(I)(2) > 39 and Recruit.Skills.Element(I)(2) < 60 then
+                SkillLevel := To_Unbounded_String("Competent");
+            elsif Recruit.Skills.Element(I)(2) > 59 and Recruit.Skills.Element(I)(2) < 80 then
+                SkillLevel := To_Unbounded_String("Expert");
+            elsif Recruit.Skills.Element(I)(2) > 79 and Recruit.Skills.Element(I)(2) < 100 then
+                SkillLevel := To_Unbounded_String("Master");
+            elsif Recruit.Skills.Element(I)(2) > 99 then
+                SkillLevel := To_Unbounded_String("Grandmaster");
+            end if;
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => To_String(Skills_Names.Element(Recruit.Skills.Element(I)(1))) & ": " & To_String(SkillLevel));
+            CurrentLine := CurrentLine + 1;
+        end loop;
+        CurrentLine := CurrentLine + 1;
+        Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+        Add(Win => InfoWindow, Str => "Hire for" & Positive'Image(Recruit.Price) & " Charcollum.");
+        Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 0, Count => 1, Color => 1);
+        Refresh;
+        Refresh(InfoWindow);
+        Delete(InfoWindow);
+    end ShowRecruitInfo;
+
+    procedure ShowRecruits is
+        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        Recruits_Items : Item_Array_Access;
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        MoneyIndex : Natural := 0;
+    begin
+        if SkyBases(BaseIndex).Recruits.Length = 0 then
+            Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
+            Add(Str => "Here no recruits to hire.");
+            Refresh;
+            return;
+        end if;
+        Recruits_Items := new Item_Array(SkyBases(BaseIndex).Recruits.First_Index..(SkyBases(BaseIndex).Recruits.Last_Index + 1));
+        for I in SkyBases(BaseIndex).Recruits.First_Index..SkyBases(BaseIndex).Recruits.Last_Index loop
+            Recruits_Items.all(I) := New_Item(To_String(SkyBases(BaseIndex).Recruits.Element(I).Name));
+        end loop;
+        Recruits_Items.all(Recruits_Items'Last) := Null_Item;
+        TradeMenu := New_Menu(Recruits_Items);
+        Set_Format(TradeMenu, Lines - 10, 1);
+        Set_Mark(TradeMenu, "");
+        Scale(TradeMenu, MenuHeight, MenuLength);
+        MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
+        Set_Window(TradeMenu, MenuWindow);
+        Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+        Post(TradeMenu);
+        MoneyIndex := FindMoney;
+        Move_Cursor(Line => (MenuHeight + 4), Column => 2);
+        if MoneyIndex > 0 then
+            Add(Str => "You have" & Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
+                " Charcollum.");
+        else
+            Add(Str => "You don't have any Charcollum to hire anyone.");
+        end if;
+        ShowRecruitInfo;
+        Refresh(MenuWindow);
     end ShowRecruits;
     
     function TradeKeys(Key : Key_Code) return GameStates is
@@ -557,15 +632,37 @@ package body Bases.UI is
     end ShipyardKeys;
 
     function RecruitKeys(Key : Key_Code) return GameStates is
+        Result : Driver_Result;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 InstallView := True;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
+            when 56 | KEY_UP => -- Select previous recruit to hire
+                Result := Driver(TradeMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(TradeMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    ShowRecruitInfo;
+                    Refresh(MenuWindow);
+                end if;
+            when 50 | KEY_DOWN => -- Select next recruit to hire
+                Result := Driver(TradeMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(TradeMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    ShowRecruitInfo;
+                    Refresh(MenuWindow);
+                end if;
+            when Character'Pos('h') | Character'Pos('H') => -- Show modules to install
+                HireRecruit(Get_Index(Current(TradeMenu)));
             when others =>
-                return Recruits_View;
+                null;
         end case;
+        return Recruits_View;
     end RecruitKeys;
 
 end Bases.UI;

@@ -49,5 +49,6 @@ package Bases is
     procedure RepairShip; -- Repairs playership in bases
     procedure UpgradeShip(Install : Boolean; ModuleIndex : Positive); -- Install/remove modules on ship
     procedure GenerateRecruits(BaseIndex : Positive); -- Generate if needed new recruits in base
+    procedure HireRecruit(RecruitIndex : Positive); -- Hire selected recruit from bases
 
 end Bases;
