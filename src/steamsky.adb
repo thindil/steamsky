@@ -170,6 +170,8 @@ begin
                 GameState := ShipUpgradeKeys(Key);
             when Shipyard_View =>
                 GameState := ShipyardKeys(Key);
+            when Recruits_View =>
+                GameState := RecruitKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
