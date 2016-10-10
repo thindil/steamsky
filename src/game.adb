@@ -52,6 +52,7 @@ package body Game is
         TempX, TempY : Integer;
         PilotGender, EngineerGender, GunnerGender : Character;
         TmpSkills : Skills_Container.Vector;
+        TmpRecruits : Recruit_Container.Vector;
     begin
         -- Set Game time
         GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
@@ -100,7 +101,8 @@ package body Game is
             SkyBases(Integer(I)) := (Name => GenerateBaseName, Visited => (0, 0, 0, 0, 0), 
                 SkyX => Integer(PosX), SkyY => Integer(PosY), BaseType =>
                 Bases_Types'Val(Rand_Base.Random(Generator2)), Population =>
-                Natural(Rand_Population.Random(Generator4)));
+                Natural(Rand_Population.Random(Generator4)), RecruitDate => 
+                (0, 0, 0, 0, 0), Recruits => TmpRecruits);
         end loop;
         -- Place player ship in random base
         RandomBase := Rand_Int.Random(Generator);
@@ -249,6 +251,36 @@ package body Game is
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Population));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Year));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Month));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Day));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Hour));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Minutes));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(SkyBases(I).Recruits.Length'Img);
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            if SkyBases(I).Recruits.Length > 0 then
+                for J in SkyBases(I).Recruits.First_Index..SkyBases(I).Recruits.Last_Index loop
+                    Put(SaveGame, To_String(SkyBases(I).Recruits.Element(J).Name) & ";");
+                    Put(SaveGame, SkyBases(I).Recruits.Element(J).Gender & ";");
+                    RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Recruits.Element(J).Price));
+                    Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                    RawValue := To_Unbounded_String(SkyBases(I).Recruits.Element(J).Skills.Length'Img);
+                    Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                    for K in SkyBases(I).Recruits.Element(J).Skills.First_Index..SkyBases(I).Recruits.Element(J).Skills.Last_Index loop
+                        RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Recruits.Element(J).Skills.Element(K)(1)));
+                        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                        RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Recruits.Element(J).Skills.Element(K)(2)));
+                        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                        RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Recruits.Element(J).Skills.Element(K)(3)));
+                        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                    end loop;
+                end loop;
+            end if;
         end loop;
         -- Save player ship
         Put(SaveGame, To_String(PlayerShip.Name) & ";");
@@ -338,7 +370,7 @@ package body Game is
 
     function LoadGame return Boolean is
         SaveGame : File_Type;
-        VectorLength, SkillsLength : Positive;
+        VectorLength, SkillsLength : Natural;
         Skills : Skills_Container.Vector;
         ShipModules : Modules_Container.Vector;
         ShipCargo : Cargo_Container.Vector; 
@@ -346,6 +378,7 @@ package body Game is
         Messages : Natural;
         Message : Unbounded_String;
         MType : Message_Type;
+        BaseRecruits : Recruit_Container.Vector;
         function ReadData return Unbounded_String is
             RawData : Unbounded_String := To_Unbounded_String("");
             Char : Character;
@@ -361,6 +394,10 @@ package body Game is
         begin
             Member.Skills := Skills;
         end UpdateMember;
+        procedure UpdateRecruit(Recruit : in out Recruit_Data) is
+        begin
+            Recruit.Skills := Skills;
+        end UpdateRecruit;
     begin
         Open(SaveGame, In_File, "data/savegame.dat");
         -- Check save version
@@ -380,7 +417,8 @@ package body Game is
         -- Load sky bases
         for I in SkyBases'Range loop
             SkyBases(I) := (Name => ReadData, Visited => (0, 0, 0, 0, 0), SkyX => 0, SkyY => 0,
-                BaseType => Industrial, Population => 0);
+                BaseType => Industrial, Population => 0, RecruitDate => (0, 0, 0, 0, 0), 
+                Recruits => BaseRecruits);
             SkyBases(I).Visited.Year := Natural'Value(To_String(ReadData));
             SkyBases(I).Visited.Month := Natural'Value(To_String(ReadData));
             SkyBases(I).Visited.Day := Natural'Value(To_String(ReadData));
@@ -390,6 +428,28 @@ package body Game is
             SkyBases(I).SkyY := Integer'Value(To_String(ReadData));
             SkyBases(I).BaseType := Bases_Types'Val(Integer'Value(To_String(ReadData)));
             SkyBases(I).Population := Natural'Value(To_String(ReadData));
+            SkyBases(I).RecruitDate.Year := Natural'Value(To_String(ReadData));
+            SkyBases(I).RecruitDate.Month := Natural'Value(To_String(ReadData));
+            SkyBases(I).RecruitDate.Day := Natural'Value(To_String(ReadData));
+            SkyBases(I).RecruitDate.Hour := Natural'Value(To_String(ReadData));
+            SkyBases(I).RecruitDate.Minutes := Natural'Value(To_String(ReadData));
+            VectorLength := Natural'Value(To_String(ReadData));
+            if VectorLength > 0 then
+                for J in 1..VectorLength loop
+                    Skills.Clear;
+                    BaseRecruits.Append(New_Item => (Name => ReadData, Gender => Element(ReadData, 1), 
+                        Price => Positive'Value(To_String(ReadData)), Skills => Skills));
+                    SkillsLength := Positive'Value(To_String(ReadData));
+                    for K in 1..SkillsLength loop
+                        Skills.Append(New_Item => (Natural'Value(To_String(ReadData)),
+                            Natural'Value(To_String(ReadData)), Natural'Value(To_String(ReadData))));
+                    end loop;
+                    BaseRecruits.Update_Element(Index => BaseRecruits.Last_Index,
+                        Process => UpdateRecruit'Access);
+                end loop;
+                SkyBases(I).Recruits := BaseRecruits;
+                BaseRecruits.Clear;
+            end if;
             SkyMap(SkyBases(I).SkyX, SkyBases(I).SkyY).BaseIndex := I;
         end loop;
         -- Load player ship
