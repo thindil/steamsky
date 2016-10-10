@@ -305,10 +305,9 @@ package body Bases is
         end if;
     end UpgradeShip;
 
-    procedure GenerateRecruits is
-        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+    procedure GenerateRecruits(BaseIndex : Positive) is
         TimeDiff : Natural;
-        MaxRecruits, RecruitsAmount, SkillsAmount : Positive;
+        MaxRecruits, RecruitsAmount, SkillsAmount, SkillNumber, SkillLevel : Positive;
         subtype Recruits_Range is Positive range 1..15;
         subtype Gender_Range is Positive range 1..2;
         subtype SkillsAmount_Range is Positive range Skills_Names.First_Index..Skills_Names.Last_Index;
@@ -324,6 +323,12 @@ package body Bases is
         BaseRecruits : Recruit_Container.Vector;
         Skills : Skills_Container.Vector;
         Gender : Character;
+        Price : Natural;
+        procedure UpdateRecruit(Recruit : in out Recruit_Data) is
+        begin
+            Recruit.Skills := Skills;
+            Recruit.Price := Price;
+        end UpdateRecruit;
     begin
         TimeDiff := (((GameDate.Day * 30) * GameDate.Month) * GameDate.Year) -
             (((SkyBases(BaseIndex).RecruitDate.Day * 30) * SkyBases(BaseIndex).RecruitDate.Month) * SkyBases(BaseIndex).RecruitDate.Year);
@@ -347,6 +352,7 @@ package body Bases is
         end loop;
         for I in 1..RecruitsAmount loop
             Skills.Clear;
+            Price := 0;
             if Rand_Gender.Random(Generator2) = 1 then
                 Gender := 'M';
             else
@@ -355,8 +361,18 @@ package body Bases is
             BaseRecruits.Append(New_Item => (Name => GenerateMemberName(Gender), Gender => Gender, 
                 Price => 1, Skills => Skills));
             SkillsAmount := Rand_Skills.Random(Generator3);
+            for J in 1..SkillsAmount loop
+                SkillNumber := Rand_Skills.Random(Generator3);
+                SkillLevel := Rand_Value.Random(Generator4);
+                Skills.Append(New_Item => (SkillNumber, SkillLevel, 0));
+                Price := Price + SkillLevel;
+            end loop;
+            Price := Price * 100;
+            BaseRecruits.Update_Element(Index => BaseRecruits.Last_Index,
+                Process => UpdateRecruit'Access);
         end loop;
         SkyBases(BaseIndex).RecruitDate := GameDate;
+        SkyBases(BaseIndex).Recruits := BaseRecruits;
     end GenerateRecruits;
 
 end Bases;
