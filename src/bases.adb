@@ -16,14 +16,13 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
-with Ships; use Ships;
 with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
 with UserInterface; use UserInterface;
-with Crew; use Crew;
 with Bases.UI; use Bases.UI;
 with ShipModules; use ShipModules;
+with Ships; use Ships;
 
 package body Bases is
     
@@ -305,5 +304,59 @@ package body Bases is
             PlayerShip.Modules.Delete(ModuleIndex, 1);
         end if;
     end UpgradeShip;
+
+    procedure GenerateRecruits is
+        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        TimeDiff : Natural;
+        MaxRecruits, RecruitsAmount, SkillsAmount : Positive;
+        subtype Recruits_Range is Positive range 1..15;
+        subtype Gender_Range is Positive range 1..2;
+        subtype SkillsAmount_Range is Positive range Skills_Names.First_Index..Skills_Names.Last_Index;
+        subtype SkillValue_Range is Positive range 1..100;
+        package Rand_Recruits is new Discrete_Random(Recruits_Range);
+        package Rand_Gender is new Discrete_Random(Gender_Range);
+        package Rand_Skills is new Discrete_Random(SkillsAmount_Range);
+        package Rand_Value is new Discrete_Random(SkillValue_Range);
+        Generator : Rand_Recruits.Generator;
+        Generator2 : Rand_Gender.Generator;
+        Generator3 : Rand_Skills.Generator;
+        Generator4 : Rand_Value.Generator;
+        BaseRecruits : Recruit_Container.Vector;
+        Skills : Skills_Container.Vector;
+        Gender : Character;
+    begin
+        TimeDiff := (((GameDate.Day * 30) * GameDate.Month) * GameDate.Year) -
+            (((SkyBases(BaseIndex).RecruitDate.Day * 30) * SkyBases(BaseIndex).RecruitDate.Month) * SkyBases(BaseIndex).RecruitDate.Year);
+        if TimeDiff < 30 then
+            return;
+        end if;
+        Rand_Recruits.Reset(Generator);
+        Rand_Gender.Reset(Generator2);
+        Rand_Skills.Reset(Generator3);
+        Rand_Value.Reset(Generator4);
+        if SkyBases(BaseIndex).Population < 150 then
+            MaxRecruits := 5;
+        elsif SkyBases(BaseIndex).Population > 149 and SkyBases(BaseIndex).Population < 300 then
+            MaxRecruits := 10;
+        else
+            MaxRecruits := 15;
+        end if;
+        loop
+            RecruitsAmount := Rand_Recruits.Random(Generator);
+            exit when RecruitsAmount < MaxRecruits;
+        end loop;
+        for I in 1..RecruitsAmount loop
+            Skills.Clear;
+            if Rand_Gender.Random(Generator2) = 1 then
+                Gender := 'M';
+            else
+                Gender := 'F';
+            end if;
+            BaseRecruits.Append(New_Item => (Name => GenerateMemberName(Gender), Gender => Gender, 
+                Price => 1, Skills => Skills));
+            SkillsAmount := Rand_Skills.Random(Generator3);
+        end loop;
+        SkyBases(BaseIndex).RecruitDate := GameDate;
+    end GenerateRecruits;
 
 end Bases;

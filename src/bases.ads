@@ -16,11 +16,21 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Containers.Vectors; use Ada.Containers;
 with Game; use Game;
+with Crew; use Crew;
 
 package Bases is
 
     type Bases_Types is (Industrial, Agricultural, Refinery, Shipyard);
+    type Recruit_Data is -- Data structure for recruits
+        record
+            Name : Unbounded_String; -- Name of recruit
+            Gender : Character; -- Gender of recruit
+            Skills: Skills_Container.Vector; -- Names indexes, levels and experience in skills of recruit
+            Price : Positive; -- Cost of enlist of recruit
+        end record;
+    package Recruit_Container is new Vectors(Positive, Recruit_Data);
     type BaseRecord is -- Data structure for bases
         record
             Name : Unbounded_String; -- Base name
@@ -29,6 +39,8 @@ package Bases is
             SkyY : Integer; -- Y coordinate on sky map
             BaseType : Bases_Types; -- Type of base
             Population : Natural; -- Amount of people in base
+            RecruitDate : Date_Record; -- Time when recruits was generated
+            Recruits : Recruit_Container.Vector; -- List of available recruits
         end record;
     SkyBases : array (1..1024) of BaseRecord; -- List of sky bases
     procedure BuyItems(ItemIndex : Positive; Amount : String); -- Buy items from bases

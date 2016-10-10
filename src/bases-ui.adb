@@ -16,11 +16,11 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
-with Ships; use Ships;
 with Maps; use Maps;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
+with Ships; use Ships;
 
 package body Bases.UI is
     
