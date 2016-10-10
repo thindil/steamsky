@@ -324,6 +324,7 @@ package body Bases is
         Skills : Skills_Container.Vector;
         Gender : Character;
         Price : Natural;
+        SkillIndex : Integer;
         procedure UpdateRecruit(Recruit : in out Recruit_Data) is
         begin
             Recruit.Skills := Skills;
@@ -364,8 +365,25 @@ package body Bases is
             for J in 1..SkillsAmount loop
                 SkillNumber := Rand_Skills.Random(Generator3);
                 SkillLevel := Rand_Value.Random(Generator4);
-                Skills.Append(New_Item => (SkillNumber, SkillLevel, 0));
-                Price := Price + SkillLevel;
+                SkillIndex := 0;
+                for K in Skills.First_Index..Skills.Last_Index loop
+                    if Skills.Element(K)(1) = SkillNumber then
+                        if Skills.Element(K)(2) < SkillLevel then
+                            SkillIndex := K;
+                        else
+                            SkillIndex := -1;
+                        end if;
+                        exit;
+                    end if;
+                end loop;
+                if SkillIndex = 0 then
+                    Skills.Append(New_Item => (SkillNumber, SkillLevel, 0));
+                elsif SkillIndex > 0 then
+                    Skills.Replace_Element(Index => SkillIndex, New_Item => (SkillNumber, SkillLevel, 0));
+                end if;
+            end loop;
+            for J in Skills.First_Index..Skills.Last_Index loop
+                Price := Price + Skills.Element(J)(2);
             end loop;
             Price := Price * 100;
             BaseRecruits.Update_Element(Index => BaseRecruits.Last_Index,
