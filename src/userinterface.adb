@@ -77,6 +77,9 @@ package body UserInterface is
             when Shipyard_View =>
                 Add(Str => "Shipyard [Quit]");
                 Change_Attributes(Line => 0, Column => 10, Count => 1, Color => 1);
+            when Recruits_View =>
+                Add(Str => "Recruit new crew members [Quit]");
+                Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
             when others =>
                 null;
         end case;
@@ -168,16 +171,16 @@ package body UserInterface is
 
     procedure ShowSpeedControl is
         SpeedWindow : Window;
-        WindowHeight : Line_Position := 5;
+        WindowHeight : Line_Position := 6;
         NeedRepair, IsShipyard : Boolean := False;
-        QuitLine : Line_Position := 3;
+        QuitLine : Line_Position := 4;
     begin
         if PlayerShip.Speed = DOCKED then
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                 if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
                     NeedRepair := True;
-                    WindowHeight := 6;
-                    QuitLine := 4;
+                    WindowHeight := WindowHeight + 1;
+                    QuitLine := QuitLine + 1;
                     exit;
                 end if;
             end loop;
@@ -196,10 +199,14 @@ package body UserInterface is
             Add(Win => SpeedWindow, Str => "Trade");
             Change_Attributes(Win => SpeedWindow, Line => 2, Column => 2, 
                 Count => 1, Color => 1);
+            Move_Cursor(Win => SpeedWindow, Line => 3, Column => 2);
+            Add(Win => SpeedWindow, Str => "Recruit");
+            Change_Attributes(Win => SpeedWindow, Line => 3, Column => 3, 
+                Count => 1, Color => 1);
             if NeedRepair then
-                Move_Cursor(Win => SpeedWindow, Line => 3, Column => 2);
+                Move_Cursor(Win => SpeedWindow, Line => 4, Column => 2);
                 Add(Win => SpeedWindow, Str => "Repair");
-                Change_Attributes(Win => SpeedWindow, Line => 3, Column => 2, 
+                Change_Attributes(Win => SpeedWindow, Line => 4, Column => 2, 
                     Count => 1, Color => 1);
             end if;
             if IsShipyard then
@@ -440,6 +447,8 @@ package body UserInterface is
                 ShowConfirm("Are you sure want to clear all messages?");
             when Shipyard_View =>
                 ShowShipyard;
+            when Recruits_View =>
+                ShowRecruits;
             when others =>
                 null;
         end case;
@@ -496,6 +505,13 @@ package body UserInterface is
                 if PlayerShip.Speed = DOCKED then
                     DrawGame(Trade_View);
                     return Trade_View;
+                else
+                    return Control_Speed;
+                end if;
+            when Character'Pos('e') | Character'Pos('E') => -- Recruit new crew members in base
+                if PlayerShip.Speed = DOCKED then
+                    DrawGame(Recruits_View);
+                    return Recruits_View;
                 else
                     return Control_Speed;
                 end if;

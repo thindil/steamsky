@@ -162,6 +162,7 @@ package body Game is
             Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest)); 
         SkyBases(Integer(RandomBase)).Visited := GameDate;
+        GenerateRecruits(Integer(RandomBase));
     end NewGame;
 
     procedure UpdateGame(Minutes : Positive) is
