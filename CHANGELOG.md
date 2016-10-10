@@ -17,7 +17,8 @@ All notable changes to this project will be documented in this file.
 - New crafting recipe: 10mm ammo
 - Installing/removing modules from ship
 - Fuel usage during movement depends on amount of engines installed on ship
-- New ship modules: small advanced bronze engine and medium bronze engine
+- New ship modules: small advanced bronze engine, medium bronze engine, small
+  advanced bronze hull and medium bronze hull
 - Info about unique ship modules
 
 ### Changed
