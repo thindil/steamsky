@@ -394,8 +394,26 @@ package body Bases is
     end GenerateRecruits;
 
     procedure HireRecruit(RecruitIndex : Positive) is
+        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        MoneyIndex : Natural;
+        Recruit : constant Recruit_Data := SkyBases(BaseIndex).Recruits.Element(RecruitIndex);
     begin
-        null;
+        MoneyIndex := FindMoney;
+        if MoneyIndex = 0 then
+            ShowDialog("You don't have Charcollum to hire anyone.");
+            return;
+        end if;
+        if PlayerShip.Cargo.Element(MoneyIndex).Amount < Recruit.Price then
+            ShowDialog("You don't have enough Charcollum to hire " & To_String(Recruit.Name) & ".");
+            return;
+        end if;
+        PlayerShip.Crew.Append(New_Item => (Name => Recruit.Name, Gender =>
+            Recruit.Gender, Health => 100, Tired => 0, Skills =>
+            Recruit.Skills, Hunger => 0, Thirst => 0, Order => Rest,
+            PreviousOrder => Rest)); 
+        UpdateCargo(1, (0 - Recruit.Price));
+        AddMessage("You hired " & To_String(Recruit.Name) & " for" & Positive'Image(Recruit.Price) & " Charcollum.", TradeMessage);
+        SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex, Count => 1);
     end HireRecruit;
 
 end Bases;
