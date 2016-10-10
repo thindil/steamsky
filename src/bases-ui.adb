@@ -659,6 +659,7 @@ package body Bases.UI is
                 end if;
             when Character'Pos('h') | Character'Pos('H') => -- Show modules to install
                 HireRecruit(Get_Index(Current(TradeMenu)));
+                DrawGame(Recruits_View);
             when others =>
                 null;
         end case;
