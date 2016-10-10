@@ -375,4 +375,9 @@ package body Bases is
         SkyBases(BaseIndex).Recruits := BaseRecruits;
     end GenerateRecruits;
 
+    procedure HireRecruit(RecruitIndex : Positive) is
+    begin
+        null;
+    end HireRecruit;
+
 end Bases;
