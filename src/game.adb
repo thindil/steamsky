@@ -207,6 +207,7 @@ package body Game is
         -- Update base
         if BaseIndex > 0 then
             SkyBases(BaseIndex).Visited := GameDate;
+            GenerateRecruits(BaseIndex);
         end if;
     end UpdateGame;
 

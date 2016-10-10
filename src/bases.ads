@@ -48,5 +48,6 @@ package Bases is
     function GenerateBaseName return Unbounded_String; -- Generate random name for base
     procedure RepairShip; -- Repairs playership in bases
     procedure UpgradeShip(Install : Boolean; ModuleIndex : Positive); -- Install/remove modules on ship
+    procedure GenerateRecruits(BaseIndex : Positive); -- Generate if needed new recruits in base
 
 end Bases;
