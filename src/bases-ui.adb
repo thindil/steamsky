@@ -440,6 +440,11 @@ package body Bases.UI is
         ShowModuleInfo;
         Refresh(MenuWindow);
     end ShowShipyard;
+
+    procedure ShowRecruits is
+    begin
+        null;
+    end ShowRecruits;
     
     function TradeKeys(Key : Key_Code) return GameStates is
         Result : Driver_Result;
@@ -550,5 +555,17 @@ package body Bases.UI is
         end case;
         return Shipyard_View;
     end ShipyardKeys;
+
+    function RecruitKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                InstallView := True;
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
+            when others =>
+                return Recruits_View;
+        end case;
+    end RecruitKeys;
 
 end Bases.UI;

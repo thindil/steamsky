@@ -23,8 +23,10 @@ package Bases.UI is
     procedure ShowTrade; -- Show trade window
     procedure ShowRepair; -- Show repair window
     procedure ShowShipyard; -- Show shipyard window
+    procedure ShowRecruits; -- Show recruits window
     function TradeKeys(Key : Key_Code) return GameStates; -- Handle keys in bases trades
     function RepairKeys(Key : Key_Code) return GameStates; -- Handle keys in ship repairs
     function ShipyardKeys(Key : Key_Code) return GameStates; -- Handle keys in shipyards
+    function RecruitKeys(Key : Key_Code) return GameStates; -- Handle keys in recruit new crew members in bases
 
 end Bases.UI;
