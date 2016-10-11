@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - New ship modules: small advanced bronze engine, medium bronze engine, small
   advanced bronze hull and medium bronze hull
 - Info about unique ship modules
+- Recruitment new crew members in bases
 
 ### Changed
 - Updated help
