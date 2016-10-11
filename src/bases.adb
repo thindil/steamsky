@@ -347,6 +347,9 @@ package body Bases is
         else
             MaxRecruits := 15;
         end if;
+        if MaxRecruits > (SkyBases(BaseIndex).Population / 10) then
+            MaxRecruits := (SkyBases(BaseIndex).Population / 10) + 1;
+        end if;
         loop
             RecruitsAmount := Rand_Recruits.Random(Generator);
             exit when RecruitsAmount < MaxRecruits;
