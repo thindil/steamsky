@@ -95,13 +95,13 @@ package body Crew.UI is
         for I in Member.Skills.First_Index..Member.Skills.Last_Index loop
             if Member.Skills.Element(I)(2) > 0 and Member.Skills.Element(I)(2) < 20 then
                 SkillLevel := To_Unbounded_String("Novice");
-            elsif Member.Skills.Element(I)(2) > 21 and Member.Skills.Element(I)(2) < 40 then
+            elsif Member.Skills.Element(I)(2) > 19 and Member.Skills.Element(I)(2) < 40 then
                 SkillLevel := To_Unbounded_String("Beginner");
-            elsif Member.Skills.Element(I)(2) > 41 and Member.Skills.Element(I)(2) < 60 then
+            elsif Member.Skills.Element(I)(2) > 39 and Member.Skills.Element(I)(2) < 60 then
                 SkillLevel := To_Unbounded_String("Competent");
-            elsif Member.Skills.Element(I)(2) > 61 and Member.Skills.Element(I)(2) < 80 then
+            elsif Member.Skills.Element(I)(2) > 59 and Member.Skills.Element(I)(2) < 80 then
                 SkillLevel := To_Unbounded_String("Expert");
-            elsif Member.Skills.Element(I)(2) > 81 and Member.Skills.Element(I)(2) < 100 then
+            elsif Member.Skills.Element(I)(2) > 79 and Member.Skills.Element(I)(2) < 100 then
                 SkillLevel := To_Unbounded_String("Master");
             elsif Member.Skills.Element(I)(2) > 99 then
                 SkillLevel := To_Unbounded_String("Grandmaster");
