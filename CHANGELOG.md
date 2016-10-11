@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
   advanced bronze hull and medium bronze hull
 - Info about unique ship modules
 - Recruitment new crew members in bases
+- Dismissing crew members
 
 ### Changed
 - Updated help
@@ -40,7 +41,7 @@ All notable changes to this project will be documented in this file.
 - Crash on updating cargo during manufacturing
 - Crash on show info about empty cabin
 - Crash on show info about empty turret
-- Informations about crew members skils levels
+- Informations about crew members skills levels
 
 ## [0.3] - 2016-09-18
 
