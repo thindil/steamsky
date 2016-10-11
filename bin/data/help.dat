@@ -58,16 +58,18 @@ You can always change which module and what is upgrading on it. If you change mo
 Each upgraded module gains some weight. Amount of gain depends on base module weight and upgrade type.
 In shipyard bases you can install new modules or remove old from ship. Each installation/removing take some time. Installation cost Charcollum, removing modules gives you Charcollum. There is some limitations to installation/removing modules: you can only replace ship hull module, you can have only one armor and cockpit module installed on your ship. If you want replace armor or cockpit, first you must remove old module from ship.
 How much you get Charcollum from removing module depends on damage of selected module. If is it destroyed, removing will take only time and give no Charcollum.
+[Ship crew]
+You and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation.
+Every member of crew getting tired when have assigned order other than On break. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
+If your resting crew member don't have assigned cabin, he/she will be resting much slower.
+Crew members can regenerate health over time but only when they are on break and have assigned cabin.
+If crew member cabin is destroyed and he/she going on break, he/she will try find empty cabin as a new own to rest.
+Speed of rest of crew members depends on quality of cabin which they owned. Without cabin, they rest very slow.
+You can hire new crew members in bases. First you must dock to base, then you choice Recruit option from orders menu. Amount of available recruits depends on size of base. They hire cost depends on amount of knowledge (skills and level of skills). Here no limit how much crew members you can have on ship, just remember, all of them needs food, drinks and place to rest.
 [Tips]
-* You and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation.
 * All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press 'h' key on sky map (no need to press 'e' first to show menu).
 * Each ship hull have maximum limit of module which can be installed on it. Armors and weapons are not count to hull modules limit.
-* Every member of crew getting tired when have assigned order other than On break. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
 * If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to cargo information screen, select desired item and press key 'd'.
 * Each crew member need proper module for work. If that module is destroyed, member cannot start selected work (for example, can't start piloting when cockpit is destroyed).
-* If your resting crew member don't have assigned cabin, he/she will be resting much slower.
-* Crew members can regenerate health over time but only when they are on break and have assigned cabin.
-* If crew member cabin is destroyed and he/she going on break, he/she will try find empty cabin as a new own to rest.
-* Speed of rest of crew members depends on quality of cabin which they owned. Without cabin, they rest very slow.
 * If you want to stop renaming modules or dropping cargo, just left field with name/amount of items to drop empty. That same works for stopping buying or selling items.
 []
