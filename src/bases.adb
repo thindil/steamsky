@@ -417,6 +417,7 @@ package body Bases is
         UpdateCargo(1, (0 - Recruit.Price));
         AddMessage("You hired " & To_String(Recruit.Name) & " for" & Positive'Image(Recruit.Price) & " Charcollum.", TradeMessage);
         SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex, Count => 1);
+        SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population - 1;
     end HireRecruit;
 
 end Bases;
