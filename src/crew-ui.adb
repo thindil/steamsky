@@ -18,6 +18,9 @@
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
+with Messages; use Messages;
+with Bases; use Bases;
+with Maps; use Maps;
 
 package body Crew.UI is
 
@@ -132,6 +135,12 @@ package body Crew.UI is
         if Member.Tired < 100 and Member.Hunger < 100 and Member.Thirst < 100 then
             Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 0, Count => 1, Color => 1);
         end if;
+        if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
+            CurrentLine := CurrentLine + 1;
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => "Dismiss");
+            Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 0, Count => 1, Color => 1);
+        end if;
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
@@ -179,6 +188,28 @@ package body Crew.UI is
         Refresh(OrdersWindow);
     end ShowOrdersMenu;
 
+    procedure DismissMember is
+        MemberIndex : constant Positive := Get_Index(Current(CrewMenu));
+        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+    begin
+        if PlayerShip.Speed /= DOCKED then
+            ShowDialog("You can't dismiss crew members if you are not docked to base.");
+            return;
+        end if;
+        if MemberIndex = 1 then
+            ShowDialog("You can't dismiss self.");
+            return;
+        end if;
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if PlayerShip.Modules.Element(I).Owner = MemberIndex then
+                UpdateModule(PlayerShip, I, "Owner", "0");
+            end if;
+        end loop;
+        AddMessage("You dismissed " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & ".", OrderMessage);
+        PlayerShip.Crew.Delete(Index => MemberIndex, Count => 1);
+        SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
+    end DismissMember;
+
     function CrewInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Driver_Result;
         MemberIndex : constant Positive := Get_Index(Current(CrewMenu));
@@ -193,6 +224,11 @@ package body Crew.UI is
                     ShowOrdersMenu;
                     Update_Screen;
                     return Giving_Orders;
+                end if;
+            when Character'Pos('d') | Character'Pos('D') => -- Dismiss selected crew member
+                if PlayerShip.Speed = Docked then
+                    DrawGame(Dismiss_Confirm);
+                    return Dismiss_Confirm;
                 end if;
             when 56 | KEY_UP => -- Select previous crew member
                 Result := Driver(CrewMenu, M_Up_Item);
