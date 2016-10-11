@@ -449,6 +449,9 @@ package body UserInterface is
                 ShowShipyard;
             when Recruits_View =>
                 ShowRecruits;
+            when Dismiss_Confirm =>
+                Refresh_Without_Update;
+                ShowConfirm("Are you sure want to dismiss this crew member?");
             when others =>
                 null;
         end case;
@@ -562,12 +565,15 @@ package body UserInterface is
     begin
         case Key is
             when Character'Pos('n') | Character'Pos('N') => -- Back to old screen
-                if OldState /= Clear_Confirm then
-                    DrawGame(Sky_Map_View);
-                    return Sky_Map_View;
-                else
+                if OldState = Clear_Confirm then
                     DrawGame(Messages_View);
                     return Messages_View;
+                elsif OldState = Dismiss_Confirm then
+                    DrawGame(Crew_Info);
+                    return Crew_Info;
+                else
+                    DrawGame(Sky_Map_View);
+                    return Sky_Map_View;
                 end if;
             when Character'Pos('y') | Character'Pos('Y') => -- Confirm action
                 if OldState = Quit_Confirm then
@@ -580,10 +586,14 @@ package body UserInterface is
                 elsif OldState = Combat_Confirm then
                     DrawGame(Combat_State);
                     return Combat_State;
-                else 
+                elsif OldState = Clear_Confirm then 
                     ClearMessages;
                     DrawGame(Messages_View);
                     return Messages_View;
+                else
+                    DismissMember;
+                    DrawGame(Crew_Info);
+                    return Crew_Info;
                 end if;
             when others =>
                 DrawGame(OldState);
