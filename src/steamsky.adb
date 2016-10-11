@@ -138,7 +138,7 @@ begin
                 GameState := TradeKeys(Key);
             when Help_View =>
                 GameState := HelpMenuKeys(Key);
-            when Quit_Confirm | Combat_Confirm | Clear_Confirm =>
+            when Quit_Confirm | Combat_Confirm | Clear_Confirm | Dismiss_Confirm =>
                 GameState := ConfirmKeys(GameState, Key);
             when New_Game =>
                 GameState := NewGameKeys(Key);
