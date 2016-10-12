@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Add only one crafting message with summary of manufacturing
 - Names of some ship modules
 - Moved skills names to separated text file
+- Fuel usage during fly depends on engine
 
 ### Fixed
 - Crash on invalid data in save game file
