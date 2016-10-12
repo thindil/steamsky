@@ -12,7 +12,7 @@ Your ship starts docked to base. To move it, you must first give order "Undock" 
 When you undocked from base, in this same menu, you can set ship speed or dock again. Faster speed means you travel faster but you use more fuel too.
 To move your ship, you must set it speed, have fuel (called Charcollum, which works as moneys too), and someone from ship crew assigned to pilot and engineer role. To assign crew members to selected role, open crew menu - key 'c', select desired crew member and give order by press key 'o'.
 Travel time depends on skills of Pilot and Engineer (current members on this positions) and selected ship speed. 
-Fuel cost of travel depends on selected speed (faster = more fuel usage) and amount of engines installed on ship.
+Fuel cost of travel depends on selected speed (faster = more fuel usage) and each engine fuel usage installed on ship.
 To move ship in desired direction, use arrow keys (or better) keys on keypad (with enabled Num Lock at your keyboard).
 During travel you may encounter various events (at this moment you can be only attacked by hostile ships).
 Ship speed depends on engine power, engine damage, ship weight (with cargo) and bit on Engineer and Pilot experience.
