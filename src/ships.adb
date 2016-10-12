@@ -79,44 +79,45 @@ package body Ships is
 
     procedure MoveShip(ShipIndex, X, Y: Integer) is
         NewX, NewY : Integer;
-        FuelNeeded : Integer;
-        TimePassed : Integer := 0;
+        TimePassed, FuelNeeded : Integer := 0;
         type SpeedType is digits 2;
         Speed : SpeedType;
-        EnginesAmount : Natural := 0;
     begin
         if ShipIndex = 0 then
-            if PlayerShip.Speed = DOCKED then
-                ShowDialog("First you must undock ship from base.");
-                return;
-            end if;
-            if PlayerShip.Speed = FULL_STOP then
-                ShowDialog("First you must set speed for ship.");
-                return;
-            end if;
+            case PlayerShip.Speed is
+                when DOCKED =>
+                    ShowDialog("First you must undock ship from base.");
+                    return;
+                when FULL_STOP =>
+                    ShowDialog("First you must set speed for ship.");
+                    return;
+                when others =>
+                    null;
+            end case;
             if not HaveOrderRequirements then
                 return;
             end if;
-            case PlayerShip.Speed is
-                when QUARTER_SPEED =>
-                    FuelNeeded := -1;
-                when HALF_SPEED =>
-                    FuelNeeded := -2;
-                when FULL_SPEED =>
-                    FuelNeeded := -4;
-                when others =>
-                    return;
-            end case;
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                 if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = ENGINE then
-                    EnginesAmount := EnginesAmount + 1;
+                    case PlayerShip.Speed is
+                        when QUARTER_SPEED =>
+                            FuelNeeded := FuelNeeded - (PlayerShip.Modules.Element(I).Current_Value / 4);
+                        when HALF_SPEED =>
+                            FuelNeeded := FuelNeeded - (PlayerShip.Modules.Element(I).Current_Value / 2);
+                        when FULL_SPEED =>
+                            FuelNeeded := FuelNeeded - PlayerShip.Modules.Element(I).Current_Value;
+                        when others =>
+                            null;
+                    end case;
                 end if;
             end loop;
-            FuelNeeded := FuelNeeded * EnginesAmount;
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop -- Check for fuel
-                if PlayerShip.Cargo.Element(I).ProtoIndex = 1 and PlayerShip.Cargo.Element(I).Amount < abs FuelNeeded then
-                    ShowDialog("You don't have enough fuel (Charcollum).");
-                    return;
+                if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then 
+                    if PlayerShip.Cargo.Element(I).Amount < abs FuelNeeded then
+                        ShowDialog("You don't have enough fuel (Charcollum).");
+                        return;
+                    end if;
+                    exit;
                 end if;
             end loop;
             NewX := PlayerShip.SkyX + X;
