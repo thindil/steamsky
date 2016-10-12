@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Info about unique ship modules
 - Recruitment new crew members in bases
 - Dismissing crew members
+- New enemy ship - small clockwork drone
 
 ### Changed
 - Updated help
