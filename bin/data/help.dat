@@ -65,8 +65,8 @@ If your resting crew member don't have assigned cabin, he/she will be resting mu
 Crew members can regenerate health over time but only when they are on break and have assigned cabin.
 If crew member cabin is destroyed and he/she going on break, he/she will try find empty cabin as a new own to rest.
 Speed of rest of crew members depends on quality of cabin which they owned. Without cabin, they rest very slow.
-You can hire new crew members in bases. First you must dock to base, then you choice Recruit option from orders menu. Amount of available recruits depends on size of base. They hire cost depends on amount of knowledge (skills and level of skills). Here no limit how much crew members you can have on ship, just remember, all of them needs food, drinks and place to rest.
-If your ship is docked to base, you can dismiss crew members. Go to crew info screen and use Dismiss option on selected crew member.
+You can hire new crew members in bases. First you must dock to base, then you choice Recruit option from orders menu. Amount of available recruits depends on size of base. They hire cost depends on amount of knowledge (skills and level of skills). Here no limit how much crew members you can have on ship, just remember, all of them needs food, drinks and place to rest. Hiring new crew members reduce population of base. New recruits are available every 30 days between visits of base. 
+If your ship is docked to base, you can dismiss crew members. Go to crew info screen and use Dismiss option on selected crew member. Dismissed crew members joins to base population.
 [Tips]
 * All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press 'h' key on sky map (no need to press 'e' first to show menu).
 * Each ship hull have maximum limit of module which can be installed on it. Armors and weapons are not count to hull modules limit.
