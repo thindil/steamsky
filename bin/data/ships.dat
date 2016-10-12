@@ -51,4 +51,14 @@ CombatAI = Berserker
 Evasion = 1
 LootMin = 20
 LootMax = 200
+[7]
+Name = Small clockwork drone
+Modules = 1, 3, 7, 7, 12
+DamageRange = 100
+Accuracy = 5
+Enemy = Yes
+CombatAI = Berserker
+Evasion = 5
+LootMin = 10
+LootMax = 100
 []
