@@ -128,6 +128,14 @@ package body Ships.UI is
                         when others =>
                             null;
                     end case;
+                when VALUE =>
+                    case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+                        when ENGINE =>
+                            Add(Win => InfoWindow, Str => "fuel usage");
+                            MaxUpgrade := 100;
+                        when others =>
+                            null;
+                    end case;
                 when others =>
                     null;
             end case;
@@ -205,6 +213,14 @@ package body Ships.UI is
                         when HULL =>
                             Add(Str => "(enlarge)");
                             MaxUpgrade := 500;
+                        when others =>
+                            null;
+                    end case;
+                when VALUE =>
+                    case Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType is
+                        when ENGINE =>
+                            Add(Str => "(fuel usage)");
+                            MaxUpgrade := 100;
                         when others =>
                             null;
                     end case;
@@ -371,9 +387,9 @@ package body Ships.UI is
     procedure ShowUpgradeMenu is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         UpgradeWindow : Window;
-        MaxValue : Natural;
+        MaxValue, Value : Natural;
         WindowHeight : Line_Position := 3;
-        UpgradeDurability, UpgradeMaxValue, UpgradeContinue : Unbounded_String := Null_Unbounded_String;
+        UpgradeDurability, UpgradeMaxValue, UpgradeContinue, UpgradeValue : Unbounded_String := Null_Unbounded_String;
         CurrentLine : Line_Position := 1;
     begin
         MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Durability) * 1.5);
@@ -382,10 +398,16 @@ package body Ships.UI is
             WindowHeight := WindowHeight + 1;
         end if;
         MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
+        Value :=
+            Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Value) / 2.0);
         case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
             when ENGINE =>
                 if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
                     UpgradeMaxValue := To_Unbounded_String("2 Upgrade engine power");
+                    WindowHeight := WindowHeight + 1;
+                end if;
+                if PlayerShip.Modules.Element(ModuleIndex).Current_Value > Value then
+                    UpgradeValue := To_Unbounded_String("3 Reduce fuel usage");
                     WindowHeight := WindowHeight + 1;
                 end if;
             when CABIN =>
@@ -407,7 +429,7 @@ package body Ships.UI is
                 null;
         end case;
         if PlayerShip.Modules.Element(ModuleIndex).UpgradeAction /= NONE then
-            UpgradeContinue := To_Unbounded_String("3 Continue upgrading");
+            UpgradeContinue := To_Unbounded_String("4 Continue upgrading");
             WindowHeight := WindowHeight + 1;
         end if;
         if UpgradeDurability = Null_Unbounded_String and UpgradeMaxValue = Null_Unbounded_String and 
@@ -427,6 +449,13 @@ package body Ships.UI is
         if UpgradeMaxValue /= Null_Unbounded_String then
             Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
             Add(Win => UpgradeWindow, Str => To_String(UpgradeMaxValue));
+            Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
+                Count => 1, Color => 1);
+            CurrentLine := CurrentLine + 1;
+        end if;
+        if UpgradeValue /= Null_Unbounded_String then
+            Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
+            Add(Win => UpgradeWindow, Str => To_String(UpgradeValue));
             Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
                 Count => 1, Color => 1);
             CurrentLine := CurrentLine + 1;
@@ -521,7 +550,7 @@ package body Ships.UI is
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Close upgrade menu
                 null;
-            when Character'Pos('1') | Character'Pos('2') | Character'Pos('3') => -- Give upgrade orders
+            when Character'Pos('1')..Character'Pos('4') => -- Give upgrade orders
                 StartUpgrading(Get_Index(Current(ModulesMenu)), Positive(Key - 48));
             when others =>
                 return Upgrade_Module;
