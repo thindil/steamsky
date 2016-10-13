@@ -346,7 +346,9 @@ package body Bases.UI is
                     CurrentLine := 5;
                 when ENGINE =>
                     Add(Win => InfoWindow, Str => "Max power:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue));
-                    CurrentLine := 4;
+                    Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
+                    Add(Win => InfoWindow, Str => "Fuel usage:" & Positive'Image(Modules_List.Element(ModuleIndex).Value));
+                    CurrentLine := 5;
                 when CARGO =>
                     Add(Win => InfoWindow, Str => "Max cargo:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue) & " kg");
                     CurrentLine := 4;
