@@ -633,33 +633,33 @@ package body Ships is
         end if;
         UpgradePoints := 
             ((GetSkillLevel(WorkerIndex, Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).RepairSkill) / 10) * Times) + Times;
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if Items_List(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
-                Modules_List(PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex).RepairMaterial and
-                PlayerShip.Cargo.Element(I).Amount >= UpgradePoints
-            then
-                UpgradeMaterial := I;
-                exit;
-            end if;
-        end loop;
-        if UpgradeMaterial = 0 then
-            AddMessage("You don't have enough materials to upgrade " &
-            To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name),
-                OrderMessage);
-            GiveOrders(WorkerIndex, Rest);
-            return;
-        end if;
-        GainExp(Times, Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).RepairSkill,
-            WorkerIndex);
-        while UpgradePoints > 0 and PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeProgress > 0 and UpgradeMaterial > 0 
-        loop
+        while UpgradePoints > 0 and PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeProgress > 0 loop
             ResultAmount := UpgradePoints;
             if ResultAmount > PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeProgress then
                 ResultAmount := PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeProgress;
             end if;
+            UpgradeMaterial := 0;
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if Items_List(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
+                    Modules_List(PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex).RepairMaterial and
+                    PlayerShip.Cargo.Element(I).Amount >= ResultAmount
+                then
+                    UpgradeMaterial := I;
+                    exit;
+                end if;
+            end loop;
+            if UpgradeMaterial = 0 then
+                AddMessage("You don't have enough materials to upgrade " &
+                To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name),
+                    OrderMessage);
+                GiveOrders(WorkerIndex, Rest);
+                exit;
+            end if;
             if ResultAmount > PlayerShip.Cargo.Element(UpgradeMaterial).Amount then
                 ResultAmount := PlayerShip.Cargo.Element(UpgradeMaterial).Amount;
             end if;
+            GainExp(ResultAmount, Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).RepairSkill,
+                WorkerIndex);
             UpgradeProgress := PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeProgress - ResultAmount;
             UpgradePoints := UpgradePoints - ResultAmount;
             UpdateCargo(UpgradeMaterial, (0 - ResultAmount));
@@ -767,21 +767,6 @@ package body Ships is
                 end case;
             else
                 UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", Integer'Image(UpgradeProgress));
-            end if;
-            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if Items_List(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
-                    Modules_List(PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex).RepairMaterial and
-                    PlayerShip.Cargo.Element(I).Amount >= UpgradePoints
-                then
-                    UpgradeMaterial := I;
-                    exit;
-                end if;
-            end loop;
-            if UpgradeMaterial = 0 then
-                AddMessage("You don't have enough materials to upgrade " &
-                To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name),
-                    OrderMessage);
-                GiveOrders(WorkerIndex, Rest);
             end if;
         end loop;
     end UpgradeShip;
