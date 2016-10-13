@@ -525,7 +525,7 @@ package body Ships is
                 end if;
                 UpgradeAction := DURABILITY;
                 UpgradeProgress := 10;
-            when 2 => -- Upgrade various stats of selected module
+            when 2 => -- Upgrade various max value of selected module
                 MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
                 case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
                     when ENGINE =>
@@ -562,7 +562,23 @@ package body Ships is
                         return;
                 end case;
                 UpgradeAction := MAX_VALUE;
-            when 3 => -- Continue previous upgrade
+            when 3 => -- Upgrade various value of selected module
+                MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Value) * 1.5);
+                case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+                    when ENGINE =>
+                        if PlayerShip.Modules.Element(ModuleIndex).Current_Value = MaxValue then
+                            ShowDialog("You can't reduce more fuel usage of " &
+                                To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ".");
+                            return;
+                        end if;
+                        UpgradeProgress := 100;
+                    when others =>
+                        ShowDialog(To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & 
+                            " can't be upgraded in that way.");
+                        return;
+                end case;
+                UpgradeAction := VALUE;
+            when 4 => -- Continue previous upgrade
                 if PlayerShip.Modules.Element(ModuleIndex).UpgradeAction = NONE then
                     ShowDialog(To_String(PlayerShip.Modules.Element(ModuleIndex).Name)
                         & " don't have set any upgrade yet.");
@@ -710,6 +726,38 @@ package body Ships is
                                     UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", "100");
                                 when HULL =>
                                     UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", "500");
+                                when others =>
+                                    null;
+                            end case;
+                        end if;
+                    when VALUE =>
+                        UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "Current_Value",
+                            Integer'Image(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Current_Value - 1));
+                        case Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType is
+                            when ENGINE =>
+                                WeightGain := WeightGain * 10;
+                            when others =>
+                                null;
+                        end case;
+                        UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "Weight", Natural'Image(WeightGain));
+                        AddMessage(To_String(PlayerShip.Crew.Element(WorkerIndex).Name)
+                            & " was upgraded " & To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name) & 
+                            ".", OrderMessage);
+                        MaxValue :=
+                            Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).Value) 
+                            / 2.0);
+                        if PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Current_Value = MaxValue then
+                            AddMessage("You reached maximum upgrade for " &
+                                To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
+                                & ".", OrderMessage);
+                            GiveOrders(WorkerIndex, Rest);
+                            PlayerShip.UpgradeModule := 0;
+                            UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", "0");
+                            UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeAction", "NONE");
+                        else
+                            case Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType is
+                                when ENGINE =>
+                                    UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", "100");
                                 when others =>
                                     null;
                             end case;
