@@ -62,7 +62,6 @@ package Ships is
         record
             Name : Unbounded_String; -- Prototype name
             Modules : Positive_Container.Vector; -- List of ship modules
-            DamageRange : Positive; -- Maximum range from which ship attack
             Accuracy : Positive; -- Bonus to hit for ship
             CombatAI : ShipCombatAi; -- Behaviour of ship in combat
             Evasion : Positive; -- Bonus to evade attacks
