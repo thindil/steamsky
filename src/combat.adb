@@ -30,10 +30,9 @@ package body Combat is
     begin
         EnemyShip := CreateShip(EnemyIndex, Null_Unbounded_String,
             PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED, True);
-        Enemy := (Ship => EnemyShip, DamageRange => Enemies_List.Element(EnemyIndex).DamageRange, Accuracy
-            => Enemies_List.Element(EnemyIndex).Accuracy, Distance => 10000,
-            CombatAI => Enemies_List.Element(EnemyIndex).CombatAI, Evasion =>
-            Enemies_List.Element(EnemyIndex).Evasion, LootMin =>
+        Enemy := (Ship => EnemyShip, Accuracy => Enemies_List.Element(EnemyIndex).Accuracy, 
+            Distance => 10000, CombatAI => Enemies_List.Element(EnemyIndex).CombatAI, 
+            Evasion => Enemies_List.Element(EnemyIndex).Evasion, LootMin =>
             Enemies_List.Element(EnemyIndex).LootMin, LootMax =>
             Enemies_List.Element(EnemyIndex).LootMax);
         PilotOrder := 2;
@@ -63,20 +62,15 @@ package body Combat is
         Generator2 : PlayerMod_Roll.Generator;
         Generator3 : EnemyMod_Roll.Generator;
         Generator4 : Loot_Roll.Generator;
-        AccuracyBonus, EvadeBonus : Integer := 0;
+        AccuracyBonus, EvadeBonus, FreeSpace : Integer := 0;
         PilotIndex, EngineerIndex, AmmoIndex, ArmorIndex, EnemyWeaponIndex,
-        EnemyArmorIndex, GunnerIndex, WeaponIndex : Natural := 0;
-        Shoots : Integer;
-        HitChance : Integer;
+            EnemyArmorIndex, GunnerIndex, WeaponIndex, DamageRange : Natural := 0;
+        Shoots, HitChance, HitLocation, LootAmount, DistanceTraveled,
+            SpeedBonus : Integer;
         ShootMessage : Unbounded_String;
-        HitLocation : Integer;
-        LootAmount : Integer;
-        FreeSpace : Integer := 0;
-        DistanceTraveled : Integer;
         EnemyPilotOrder : Positive := 2;
         DeathReason : Unbounded_String;
         HaveFuel : Boolean := False;
-        SpeedBonus : Integer;
         GunnerOrder : Positive;
     begin
         Rand_Roll.Reset(Generator);
@@ -139,7 +133,11 @@ package body Combat is
         for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
             if Enemy.Ship.Modules.Element(I).Durability > 0 then
                 case Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).MType is
-                    when GUN | BATTERING_RAM =>
+                    when GUN =>
+                        DamageRange := 5000;
+                        EnemyWeaponIndex := I;
+                    when BATTERING_RAM =>
+                        DamageRange := 100;
                         EnemyWeaponIndex := I;
                     when ARMOR =>
                         EnemyArmorIndex := I;
@@ -163,11 +161,11 @@ package body Combat is
                     EnemyPilotOrder := 2;
                 end if;
             when ATTACKER =>
-                if Enemy.Distance > Enemy.DamageRange  and Enemy.Ship.Speed /= FULL_SPEED then
+                if Enemy.Distance > DamageRange  and Enemy.Ship.Speed /= FULL_SPEED then
                     Enemy.Ship.Speed := ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) + 1);
                     AddMessage(To_String(EnemyName) & " increases speed.", CombatMessage);
                     EnemyPilotOrder := 1;
-                elsif Enemy.Distance < Enemy.DamageRange and Enemy.Ship.Speed /= QUARTER_SPEED then
+                elsif Enemy.Distance < DamageRange and Enemy.Ship.Speed /= QUARTER_SPEED then
                     Enemy.Ship.Speed := ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) - 1);
                     AddMessage(To_String(EnemyName) & " decreases speed.", CombatMessage);
                     EnemyPilotOrder := 2;
@@ -363,7 +361,7 @@ package body Combat is
                 GainExp(Shoots, 3, GunnerIndex);
             end if;
         end loop Player_loop;
-        if not EndCombat and Enemy.Distance <= Enemy.DamageRange and EnemyWeaponIndex > 0 then -- Enemy attack
+        if not EndCombat and Enemy.Distance <= DamageRange and EnemyWeaponIndex > 0 then -- Enemy attack
             HitChance := Enemy.Accuracy - EvadeBonus;
             ShootMessage := EnemyName & To_Unbounded_String(" attacks you and ");
             if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
