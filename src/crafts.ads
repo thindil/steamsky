@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors; use Ada.Containers;
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Items; use Items;
 with ShipModules; use ShipModules;
 with Game; use Game;
@@ -38,7 +37,6 @@ package Crafts is
 
     function LoadRecipes return Boolean; -- Load recipes from file, return False if file not exists
     procedure Manufacturing(Times : Positive); -- Craft selected items
-    procedure ShowRecipes; -- Show crafting screen
-    function CraftKeys(Key : Key_Code) return GameStates; -- Handle keys in craft screen
+    procedure SetRecipe(RecipeIndex : Positive); -- Set recipe to craft
 
 end Crafts;

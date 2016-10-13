@@ -34,7 +34,7 @@ with Ships.UI; use Ships.UI;
 with Bases.UI; use Bases.UI;
 with Events; use Events;
 with Combat.UI; use Combat.UI;
-with Crafts; use Crafts;
+with Crafts.UI; use Crafts.UI;
 with Help; use Help;
 with MainMenu; use MainMenu;
 
