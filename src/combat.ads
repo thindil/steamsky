@@ -29,7 +29,6 @@ package Combat is
     type Enemy_Record is -- Data structure for enemies
         record
             Ship : ShipRecord; -- Ship data for enemy
-            DamageRange : Natural; -- Range from which enemy starts attack
             Accuracy : Positive; -- Bonus to accuracy
             Distance : Integer; -- Current distance to enemy
             CombatAI : ShipCombatAI; -- Enemy in combat AI type
