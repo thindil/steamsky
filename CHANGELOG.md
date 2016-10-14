@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
 - Fuel usage during fly depends on engine
 - Enemy attack range depends on weapon type not on ship
 - Limit player ship attacks distance
+- Amount of enemies attacks depends on weapon type
 
 ### Fixed
 - Crash on invalid data in save game file
