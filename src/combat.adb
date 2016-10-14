@@ -272,13 +272,15 @@ package body Combat is
                 end if;
             end loop;
             if AmmoIndex = 0 then
-                Shoots := -2;
+                AddMessage("You don't have ammo to " & To_String(PlayerShip.Modules.Element(WeaponIndex).Name) & "!", CombatMessage);
+                Shoots := 0;
             elsif PlayerShip.Cargo.Element(AmmoIndex).Amount < Shoots then
                 Shoots := PlayerShip.Cargo.Element(AmmoIndex).Amount;
             end if;
-            if Shoots = -2 then
-                AddMessage("You don't have ammo to " & To_String(PlayerShip.Modules.Element(WeaponIndex).Name) & "!", CombatMessage);
-            elsif Shoots > 0 then -- Player attacks
+            if Enemy.Distance > 5000 then
+                Shoots := 0;
+            end if;
+            if Shoots > 0 then -- Player attacks
                 HitChance := AccuracyBonus + GetSkillLevel(GunnerIndex, 3) - Enemy.Evasion;
                 for I in 1..Shoots loop
                     ShootMessage := PlayerShip.Crew.Element(GunnerIndex).Name & To_Unbounded_String(" shoots to ") & 
@@ -349,7 +351,7 @@ package body Combat is
         if not EndCombat then -- Enemy attack
             HitChance := Enemy.Accuracy - EvadeBonus;
             for J in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
-                if Enemy.Ship.Modules.Element(j).Durability > 0 and (Modules_List(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = GUN or
+                if Enemy.Ship.Modules.Element(J).Durability > 0 and (Modules_List(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = GUN or
                     Modules_List(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM)
                 then
                     if Modules_List(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = GUN 
