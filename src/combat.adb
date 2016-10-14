@@ -131,19 +131,16 @@ package body Combat is
         AccuracyBonus := AccuracyBonus + SpeedBonus;
         EvadeBonus := EvadeBonus - SpeedBonus;
         for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
-            if Enemy.Ship.Modules.Element(I).Durability > 0 then
-                case Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).MType is
-                    when GUN =>
-                        DamageRange := 5000;
-                        EnemyWeaponIndex := I;
-                    when BATTERING_RAM =>
-                        DamageRange := 100;
-                        EnemyWeaponIndex := I;
-                    when ARMOR =>
-                        EnemyArmorIndex := I;
-                    when others =>
-                        null;
-                end case;
+            if Enemy.Ship.Modules.Element(I).Durability > 0 and Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).MType = ARMOR then
+                EnemyArmorIndex := I;
+                exit;
+            end if;
+        end loop;
+        for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
+            if Enemy.Ship.Modules.Element(I).Durability > 0 and (Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).MType = GUN or
+                Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).MType = BATTERING_RAM) then
+                EnemyWeaponIndex := I;
+                exit;
             end if;
         end loop;
         if EnemyWeaponIndex = 0 and Enemy.CombatAI = ATTACKER then
@@ -242,18 +239,6 @@ package body Combat is
             AccuracyBonus := AccuracyBonus + 20;
             EvadeBonus := EvadeBonus - 10;
         end if;
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Durability > 0 then
-                case Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType is
-                    when GUN | BATTERING_RAM =>
-                        WeaponIndex := I;
-                    when ARMOR =>
-                        ArmorIndex := I;
-                    when others =>
-                        null;
-                end case;
-            end if;
-        end loop;
         Player_Loop:
         for K in Guns.First_Index..Guns.Last_Index loop
             WeaponIndex := Guns.Element(K)(1);
@@ -361,71 +346,95 @@ package body Combat is
                 GainExp(Shoots, 3, GunnerIndex);
             end if;
         end loop Player_loop;
-        if not EndCombat and Enemy.Distance <= DamageRange and EnemyWeaponIndex > 0 then -- Enemy attack
+        if not EndCombat then -- Enemy attack
             HitChance := Enemy.Accuracy - EvadeBonus;
-            ShootMessage := EnemyName & To_Unbounded_String(" attacks you and ");
-            if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
-                ShootMessage := ShootMessage & To_Unbounded_String("hits in ");
-                if ArmorIndex > 0 then
-                    UpdateModule(PlayerShip, ArmorIndex, "Durability", Integer'Image(0 - 
-                        Enemy.Ship.Modules(EnemyWeaponIndex).Max_Value));
-                    ShootMessage := ShootMessage & To_Unbounded_String("armor.");
-                else
-                    HitLocation := Integer(PlayerMod_Roll.Random(Generator2));
-                    while PlayerShip.Modules.Element(HitLocation).Durability = 0 loop
-                        HitLocation := HitLocation - 1;
-                    end loop;
-                    ShootMessage := ShootMessage & PlayerShip.Modules.Element(HitLocation).Name &
-                        To_Unbounded_String(".");
-                    UpdateModule(PlayerShip, HitLocation, "Durability", Integer'Image(0 - 
-                        Enemy.Ship.Modules(EnemyWeaponIndex).Max_Value));
-                    if PlayerShip.Modules.Element(HitLocation).Durability = 0 then
-                        DeathReason := To_Unbounded_String("enemy fire");
-                        case Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType is
-                            when HULL | ENGINE =>
-                                AddMessage(To_String(ShootMessage), CombatMessage);
-                                DeathReason := To_Unbounded_String("ship explosion");
-                                Death(1, DeathReason);
-                            when TURRET =>
-                                WeaponIndex := PlayerShip.Modules.Element(HitLocation).Current_Value;
-                                UpdateModule(PlayerShip, WeaponIndex, "Durability", "-1000");
-                                if PlayerShip.Modules.Element(WeaponIndex).Owner > 0 then
-                                    Death(PlayerShip.Modules.Element(WeaponIndex).Owner, DeathReason);
-                                    for I in Guns.First_Index..Guns.Last_Index loop
-                                        if Guns.Element(I)(1) = WeaponIndex then
-                                            Guns.Delete(Index => I, Count => 1);
-                                            exit;
-                                        end if;
-                                    end loop;
-                                end if;
-                            when GUN =>
-                                for I in Guns.First_Index..Guns.Last_Index loop
-                                    if Guns.Element(I)(1) = HitLocation then
-                                        Guns.Delete(Index => I, Count => 1);
-                                        exit;
-                                    end if;
-                                end loop;
-                            when others =>
-                                null;
-                        end case;
-                        if PlayerShip.Modules.Element(HitLocation).Owner > 0 then
-                            if (Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType = CABIN and
-                            PlayerShip.Crew.Element(PlayerShip.Modules.Element(HitLocation).Owner).Order = Rest) or
-                            (Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType /= CABIN) then
-                                Death(PlayerShip.Modules.Element(HitLocation).Owner, DeathReason);
-                            end if;
-                        end if;
+            for J in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
+                if Enemy.Ship.Modules.Element(j).Durability > 0 and (Modules_List(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = GUN or
+                    Modules_List(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM)
+                then
+                    if Modules_List(Enemy.Ship.Modules.Element(J).ProtoIndex).MType = GUN 
+                    then
+                        DamageRange := 5000;
+                    else
+                        DamageRange := 100;
                     end if;
-                    if PlayerShip.Crew.Element(1).Health = 0 then -- player is dead
-                        EndCombat := True;
-                        DrawGame(Combat_State);
-                        return;
+                    if Enemy.Distance <= DamageRange then
+                        ArmorIndex := 0;
+                        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                            if PlayerShip.Modules.Element(I).Durability > 0 and 
+                                Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = ARMOR 
+                            then
+                                ArmorIndex := I;
+                                exit;
+                            end if;
+                        end loop;
+                        ShootMessage := EnemyName & To_Unbounded_String(" attacks you and ");
+                        if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
+                            ShootMessage := ShootMessage & To_Unbounded_String("hits in ");
+                            if ArmorIndex > 0 then
+                                UpdateModule(PlayerShip, ArmorIndex, "Durability", Integer'Image(0 - 
+                                    Enemy.Ship.Modules(J).Max_Value));
+                                ShootMessage := ShootMessage & To_Unbounded_String("armor.");
+                            else
+                                HitLocation := Integer(PlayerMod_Roll.Random(Generator2));
+                                while PlayerShip.Modules.Element(HitLocation).Durability = 0 loop
+                                    HitLocation := HitLocation - 1;
+                                end loop;
+                                ShootMessage := ShootMessage & PlayerShip.Modules.Element(HitLocation).Name &
+                                To_Unbounded_String(".");
+                                UpdateModule(PlayerShip, HitLocation, "Durability", Integer'Image(0 - 
+                                    Enemy.Ship.Modules(J).Max_Value));
+                                if PlayerShip.Modules.Element(HitLocation).Durability = 0 then
+                                    DeathReason := To_Unbounded_String("enemy fire");
+                                    case Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType is
+                                        when HULL | ENGINE =>
+                                            AddMessage(To_String(ShootMessage), CombatMessage);
+                                            DeathReason := To_Unbounded_String("ship explosion");
+                                            Death(1, DeathReason);
+                                        when TURRET =>
+                                            WeaponIndex := PlayerShip.Modules.Element(HitLocation).Current_Value;
+                                            UpdateModule(PlayerShip, WeaponIndex, "Durability", "-1000");
+                                            if PlayerShip.Modules.Element(WeaponIndex).Owner > 0 then
+                                                Death(PlayerShip.Modules.Element(WeaponIndex).Owner, DeathReason);
+                                                for I in Guns.First_Index..Guns.Last_Index loop
+                                                    if Guns.Element(I)(1) = WeaponIndex then
+                                                        Guns.Delete(Index => I, Count => 1);
+                                                        exit;
+                                                    end if;
+                                                end loop;
+                                            end if;
+                                        when GUN =>
+                                            for I in Guns.First_Index..Guns.Last_Index loop
+                                                if Guns.Element(I)(1) = HitLocation then
+                                                    Guns.Delete(Index => I, Count => 1);
+                                                    exit;
+                                                end if;
+                                            end loop;
+                                        when others =>
+                                            null;
+                                    end case;
+                                    if PlayerShip.Modules.Element(HitLocation).Owner > 0 then
+                                        if (Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType = CABIN and
+                                            PlayerShip.Crew.Element(PlayerShip.Modules.Element(HitLocation).Owner).Order = Rest) or
+                                                (Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType /= CABIN) 
+                                        then
+                                                Death(PlayerShip.Modules.Element(HitLocation).Owner, DeathReason);
+                                        end if;
+                                    end if;
+                                end if;
+                                if PlayerShip.Crew.Element(1).Health = 0 then -- player is dead
+                                    EndCombat := True;
+                                    DrawGame(Combat_State);
+                                    return;
+                                end if;
+                            end if;
+                        else
+                            ShootMessage := ShootMessage & To_Unbounded_String("miss.");
+                        end if;
+                        AddMessage(To_String(ShootMessage), CombatMessage);
                     end if;
                 end if;
-            else
-                ShootMessage := ShootMessage & To_Unbounded_String("miss.");
-            end if;
-            AddMessage(To_String(ShootMessage), CombatMessage);
+            end loop;
         end if;
         UpdateGame(1);
     end CombatTurn;
