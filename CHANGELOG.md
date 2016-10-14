@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Dismissing crew members
 - New enemy ship - small clockwork drone
 - Support for many weapons for enemies
+- Option to install battering ram on player ship
 
 ### Changed
 - Updated help
