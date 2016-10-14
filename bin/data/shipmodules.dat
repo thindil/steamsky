@@ -118,19 +118,29 @@ Skill = Gunsmith
 Price = 250
 InstallTime = 30
 [12]
-Name = Battering ram
+Name = Bronze battering ram
 Type = Battering_ram
 Weight = 500
 Value = 0
 MaxValue = 10
 Durability = 100
+Material = Bronze
+Skill = Engineering
+Price = 500
+InstallTime = 100
+Unique = Yes
 [13]
-Name = Small battering ram
+Name = Small bronze battering ram
 Type = Battering_ram
 Weight = 200
 Value = 0
 MaxValue = 5
 Durability = 50
+Material = Bronze
+Skill = Engineering
+Price = 250
+InstallTime = 60
+Unique = Yes
 [14]
 Name = Small advanced bronze engine
 Type = Engine
