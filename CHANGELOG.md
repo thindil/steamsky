@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Moved skills names to separated text file
 - Fuel usage during fly depends on engine
 - Enemy attack range depends on weapon type not on ship
+- Limit player ship attacks distance
 
 ### Fixed
 - Crash on invalid data in save game file
