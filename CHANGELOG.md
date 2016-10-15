@@ -23,8 +23,9 @@ All notable changes to this project will be documented in this file.
 - Recruitment new crew members in bases
 - Dismissing crew members
 - New enemy ship - small clockwork drone
-- Support for many weapons for enemies
+- Support for many weapons for ships in combat
 - Option to install battering ram on player ship
+- Attack with battering ram by player
 
 ### Changed
 - Updated help
