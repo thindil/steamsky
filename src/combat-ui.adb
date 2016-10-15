@@ -34,12 +34,14 @@ package body Combat.UI is
         To_Unbounded_String("Aim in hull"));
     Order : Crew_Orders;
     CrewMenu : Menu;
+    OrdersMenu : Menu;
     MenuWindow : Window;
+    MenuWindow2 : Window;
 
-    function CombatOrders(Key : Key_Code) return GameStates is
-        KeyMax : Key_Code;
+    procedure CombatOrders is
         MemberIndex : Natural := 0;
-        OrderIndex : Positive;
+        CrewIndex : constant Natural := Positive'Value(Description(Current(OrdersMenu)));
+        OrderIndex : constant Positive := Get_Index(Current(OrdersMenu));
         ModuleIndex : Natural := 0;
         procedure UpdateGun(Gun : in out GunsInfoArray) is
         begin
@@ -57,84 +59,30 @@ package body Combat.UI is
             ModuleIndex := Guns.Element(Positive'Value(Description(Current(CrewMenu))))(1);
             MemberIndex := PlayerShip.Modules.Element(ModuleIndex).Owner;
         end if;
-        if MemberIndex > 0 then
-            case Order is
-                when Pilot =>
-                    KeyMax := Key_Code(PlayerShip.Crew.Length) + PilotOrders'Length + 96;
-                when Engineer =>
-                    KeyMax := Key_Code(PlayerShip.Crew.Length) + EngineerOrders'Length + 96;
-                when Gunner =>
-                    KeyMax := Key_Code(PlayerShip.Crew.Length) + GunnerOrders'Length + 96;
-                when others =>
-                    null;
-            end case;
-        else
-            KeyMax := Key_Code(PlayerShip.Crew.Length) + 96;
-        end if;
-        if Key < 97 or Key > KeyMax then -- check if key is valid
-            return Combat_Orders;
-        end if;
-        OrderIndex := Positive(Key - 96);
-        if MemberIndex = 0 then -- assign someone to position
+        if CrewIndex > 0 then
             GiveOrders(OrderIndex, Order, ModuleIndex);
         else
+            if Name(Current(OrdersMenu)) = "Quit" then
+                return;
+            end if;
             case Order is
                 when Pilot =>
-                    if OrderIndex <= PilotOrders'Length then
-                        PilotOrder := OrderIndex;
-                        AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
-                            " was set on: " & To_String(PilotOrders(PilotOrder)), CombatMessage);
-                    else
-                        if (OrderIndex - PilotOrders'Length) < MemberIndex then
-                            GiveOrders((OrderIndex - PilotOrders'Length), Order);
-                        else
-                            if (OrderIndex - PilotOrders'Length + 1) <= PlayerShip.Crew.Last_Index then
-                                GiveOrders((OrderIndex - PilotOrders'Length + 1), Order);
-                            else
-                                return Combat_Orders;
-                            end if;
-                        end if;
-                    end if;
+                    PilotOrder := OrderIndex;
+                    AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
+                        " was set on: " & To_String(PilotOrders(PilotOrder)), CombatMessage);
                 when Engineer =>
-                    if OrderIndex <= EngineerOrders'Length then
-                        EngineerOrder := OrderIndex;
-                        AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
-                            " was set on: " & To_String(EngineerOrders(EngineerOrder)),
-                            CombatMessage);
-                    else
-                        if (OrderIndex - EngineerOrders'Length) < MemberIndex then
-                            GiveOrders((OrderIndex - EngineerOrders'Length), Order);
-                        else
-                            if (OrderIndex - EngineerOrders'Length + 1) <= PlayerShip.Crew.Last_Index then
-                                GiveOrders((OrderIndex - EngineerOrders'Length + 1), Order);
-                            else
-                                return Combat_Orders;
-                            end if;
-                        end if;
-                    end if;
+                    EngineerOrder := OrderIndex;
+                    AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
+                        " was set on: " & To_String(EngineerOrders(EngineerOrder)), CombatMessage);
                 when Gunner =>
-                    if OrderIndex <= GunnerOrders'Length then
-                        Guns.Update_Element(Index => Positive'Value(Description(Current(CrewMenu))), 
-                            Process => UpdateGun'Access);
-                        AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
-                            " was set on: " & To_String(GunnerOrders(OrderIndex)), CombatMessage);
-                    else
-                        if (OrderIndex - GunnerOrders'Length) < MemberIndex then
-                            GiveOrders((OrderIndex - GunnerOrders'Length), Order, ModuleIndex);
-                        else
-                            if (OrderIndex - GunnerOrders'Length + 1) <= PlayerShip.Crew.Last_Index then
-                                GiveOrders((OrderIndex - GunnerOrders'Length + 1), Order, ModuleIndex);
-                            else
-                                return Combat_Orders;
-                            end if;
-                        end if;
-                    end if;
+                    Guns.Update_Element(Index => Positive'Value(Description(Current(CrewMenu))), 
+                        Process => UpdateGun'Access);
+                    AddMessage("Order for " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & 
+                        " was set on: " & To_String(GunnerOrders(OrderIndex)), CombatMessage);
                 when others =>
                     null;
             end case;
         end if;
-        DrawGame(Combat_State);
-        return Combat_State;
     end CombatOrders;
 
     procedure ShowCombat is
@@ -320,11 +268,14 @@ package body Combat.UI is
     end ShowCombat;
 
     procedure ShowOrdersMenu is
-        OrdersWindow : Window;
-        Line : Line_Position := 0;
+        Orders_Items : Item_Array_Access;
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        MenuOptions : Menu_Option_Set;
         MemberIndex : Natural := 0;
-        Height : Line_Position := 1;
         SkillIndex, SkillValue : Natural := 0;
+        MenuIndex : Positive := 1;
+        SkillString : Unbounded_String;
     begin   
         if Order = Pilot or Order = Engineer then
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
@@ -339,50 +290,28 @@ package body Combat.UI is
         if MemberIndex > 0 then
             case Order is
                 when Pilot =>
-                    Height := PilotOrders'Length;
-                when Engineer =>
-                    Height := EngineerOrders'Length;
-                when Gunner =>
-                    Height := GunnerOrders'Length;
-                when others =>
-                    null;
-            end case;
-        end if;
-        Height := Height + 3 + Line_Position(PlayerShip.Crew.Last_Index);
-        OrdersWindow := Create(Height, 26, (Lines / 2) - 5, (Columns / 2) - 13);
-        Box(OrdersWindow);
-        if MemberIndex > 0 then
-            case Order is
-                when Pilot =>
+                    Orders_Items := new Item_Array(1..(PilotOrders'Length + 1 + PlayerShip.Crew.Last_Index));
                     for I in PilotOrders'Range loop
-                        Move_Cursor(Win => OrdersWindow, Line => Line_Position(I), Column => 1);
-                        Add(Win => OrdersWindow, Str => Character'Val(96 + I) &
-                            " " & To_String(PilotOrders(I)));
-                        Change_Attributes(Win => OrdersWindow, Line => Line_Position(I), Column => 1, 
-                            Count => 1, Color => 1);
+                        Orders_Items.all(I) := New_Item(To_String(PilotOrders(I)), "0");
+                        MenuIndex := MenuIndex + 1;
                     end loop;
-                    Line := PilotOrders'Length;
                 when Engineer =>
+                    Orders_Items := new Item_Array(1..(EngineerOrders'Length + 1 + PlayerShip.Crew.Last_Index));
                     for I in EngineerOrders'Range loop
-                        Move_Cursor(Win => OrdersWindow, Line => Line_Position(I), Column => 1);
-                        Add(Win => OrdersWindow, Str => Character'Val(96 + I) &
-                            " " & To_String(EngineerOrders(I)));
-                        Change_Attributes(Win => OrdersWindow, Line => Line_Position(I), Column => 1, 
-                            Count => 1, Color => 1);
+                        Orders_Items.all(I) := New_Item(To_String(EngineerOrders(I)), "0");
+                        MenuIndex := MenuIndex + 1;
                     end loop;
-                    Line := EngineerOrders'Length;
                 when Gunner =>
+                    Orders_Items := new Item_Array(1..(GunnerOrders'Length + 1 + PlayerShip.Crew.Last_Index));
                     for I in GunnerOrders'Range loop
-                        Move_Cursor(Win => OrdersWindow, Line => Line_Position(I), Column => 1);
-                        Add(Win => OrdersWindow, Str => Character'Val(96 + I) &
-                            " " & To_String(GunnerOrders(I)));
-                        Change_Attributes(Win => OrdersWindow, Line => Line_Position(I), Column => 1, 
-                            Count => 1, Color => 1);
+                        Orders_Items.all(I) := New_Item(To_String(GunnerOrders(I)), "0");
+                        MenuIndex := MenuIndex + 1;
                     end loop;
-                    Line := GunnerOrders'Length;
                 when others =>
                     null;
             end case;
+        else
+            Orders_Items := new Item_Array(1..(PlayerShip.Crew.Last_Index + 2));
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             case Order is
@@ -407,41 +336,49 @@ package body Combat.UI is
         end loop;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if I /= MemberIndex then
-                Line := Line + 1;
-                Move_Cursor(Win => OrdersWindow, Line => Line, Column => 1);
-                Add(Win => OrdersWindow, Str => Character'Val(96 + Integer(Line)) & 
-                    " assign " & To_String(PlayerShip.Crew.Element(I).Name));
+                SkillString := Null_Unbounded_String;
                 case Order is
                     when Pilot =>
                         if GetSkillLevel(I, 1) > 0 then
-                            Add(Win => OrdersWindow, Str => " +");
+                            SkillString := To_Unbounded_String(" +");
                         end if;
                     when Engineer =>
                         if GetSkillLevel(I, 2) > 0 then
-                            Add(Win => OrdersWindow, Str => " +");
+                            SkillString := To_Unbounded_String(" +");
                         end if;
                     when Gunner =>
                         if GetSkillLevel(I, 3) > 0 then
-                            Add(Win => OrdersWindow, Str => " +");
+                            SkillString := To_Unbounded_String(" +");
                         end if;
                     when others =>
                         null;
                 end case;
                 if I = SkillIndex then
-                    Add(Win => OrdersWindow, Str => "+");
+                    SkillString := SkillString & To_Unbounded_String("+");
                 end if;
                 if PlayerShip.Crew.Element(I).Order /= Rest then
-                    Add(Win => OrdersWindow, Str => " -");
+                    SkillString := SkillString & To_Unbounded_String(" -");
                 end if;
-                Change_Attributes(Win => OrdersWindow, Line => Line, Column => 1, 
-                    Count => 1, Color => 1);
+                Orders_Items.all(MenuIndex) := New_Item("Assign " & To_String(PlayerShip.Crew.Element(I).Name) & 
+                To_String(SkillString), Positive'Image(I));
+                MenuIndex := MenuIndex + 1;
             end if;
         end loop;
-        Move_Cursor(Win => OrdersWindow, Line => (Height - 2), Column => 1);
-        Add(Win => OrdersWindow, Str => "Quit");
-        Change_Attributes(Win => OrdersWindow, Line => (Height - 2), Column => 1, 
-            Count => 1, Color => 1);
-        Refresh(OrdersWindow);
+        Orders_Items.all(Orders_Items'Last - 1) := New_Item("Quit", "0");
+        Orders_Items.all(Orders_Items'Last) := Null_Item;
+        OrdersMenu := New_Menu(Orders_Items);
+        MenuOptions := Get_Options(OrdersMenu);
+        MenuOptions.Show_Descriptions := False;
+        Set_Options(OrdersMenu, MenuOptions);
+        Set_Mark(OrdersMenu, "");
+        Scale(OrdersMenu, MenuHeight, MenuLength);
+        MenuWindow2 := Create(MenuHeight + 2, MenuLength + 2, ((Lines / 3) - (MenuHeight / 2)), ((Columns / 2) - (MenuLength / 2)));
+        Box(MenuWindow2);
+        Set_Window(OrdersMenu, MenuWindow2);
+        Set_Sub_Window(OrdersMenu, Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
+        Post(OrdersMenu);
+        Refresh;
+        Refresh(MenuWindow2);
     end ShowOrdersMenu;
 
     function CombatKeys(Key : Key_Code) return GameStates is
@@ -449,7 +386,7 @@ package body Combat.UI is
     begin
         if not EndCombat then
             case Key is
-                when 56 | KEY_UP => -- Select previous item to trade
+                when 56 | KEY_UP => -- Select previous crew position
                     Result := Driver(CrewMenu, M_Up_Item);
                     if Result = Request_Denied then
                         Result := Driver(CrewMenu, M_Last_Item);
@@ -458,7 +395,7 @@ package body Combat.UI is
                         Refresh(MenuWindow);
                     end if;
                     return Combat_State;
-                when 50 | KEY_DOWN => -- Select next item to trade
+                when 50 | KEY_DOWN => -- Select next crew position
                     Result := Driver(CrewMenu, M_Down_Item);
                     if Result = Request_Denied then
                         Result := Driver(CrewMenu, M_First_Item);
@@ -476,9 +413,7 @@ package body Combat.UI is
                         when others =>
                             Order := Gunner;
                     end case;
-                    Refresh_Without_Update;
                     ShowOrdersMenu;
-                    Update_Screen;
                     return Combat_Orders;
                 when Character'Pos(' ') => -- Next combat turn or back to sky map if end combat
                     CombatTurn;
@@ -506,14 +441,33 @@ package body Combat.UI is
     end CombatKeys;
 
     function CombatOrdersKeys(Key : Key_Code) return GameStates is
+        Result : Driver_Result;
     begin
         case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Dont give any new order
+            when 56 | KEY_UP => -- Select previous order
+                Result := Driver(OrdersMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OrdersMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 50 | KEY_DOWN => -- Select next order
+                Result := Driver(OrdersMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OrdersMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 10 => -- Give order
+                CombatOrders;
                 DrawGame(Combat_State);
                 return Combat_State;
             when others =>
-                return CombatOrders(Key);
+                null;
         end case;
+        return Combat_Orders;
     end CombatOrdersKeys;
 
 end Combat.UI;
