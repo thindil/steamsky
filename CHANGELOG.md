@@ -18,7 +18,8 @@ All notable changes to this project will be documented in this file.
 - Installing/removing modules from ship
 - Fuel usage during movement depends on amount of engines installed on ship
 - New ship modules: small advanced bronze engine, medium bronze engine, small
-  advanced bronze hull and medium bronze hull
+  advanced bronze hull and medium bronze hull, medium advanced bronze engine,
+  large bronze engine, large advanced bronze engine
 - Info about unique ship modules
 - Recruitment new crew members in bases
 - Dismissing crew members
