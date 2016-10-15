@@ -441,8 +441,8 @@ package body Bases.UI is
         Move_Cursor(Line => (MenuHeight + 6), Column => 2);
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = HULL then
-                Add(Str => "You have installed" & Natural'Image(PlayerShip.Modules.Element(I).Current_Value) & " modules from max" &
-                Natural'Image(PlayerShip.Modules.Element(I).Max_Value) & " allowed modules.");
+                Add(Str => "You have used" & Natural'Image(PlayerShip.Modules.Element(I).Current_Value) & " modules space from max" &
+                    Natural'Image(PlayerShip.Modules.Element(I).Max_Value) & " allowed.");
                 exit;
             end if;
         end loop;
