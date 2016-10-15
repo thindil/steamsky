@@ -102,7 +102,7 @@ package body Ships.UI is
                     Add(Win => InfoWindow, Str => "Weapon: none");
                 end if;
             when others =>
-                null;
+                CurrentLine := CurrentLine - 1;
         end case;
         if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Size > 0 then
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
