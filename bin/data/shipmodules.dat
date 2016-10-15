@@ -185,4 +185,37 @@ Material = Bronze
 Skill = Engineering
 Price = 10000 
 InstallTime = 220
+[18]
+Name = Medium advanced bronze engine
+Type = Engine
+Weight = 2000
+Value = 6
+MaxValue = 7500
+Durability = 150
+Material = Bronze
+Skill = Engineering
+Price = 10000
+InstallTime = 180
+[19]
+Name = Large bronze engine
+Type = Engine
+Weight = 2500
+Value = 6
+MaxValue = 12000
+Durability = 200
+Material = Bronze
+Skill = Engineering
+Price = 15000
+InstallTime = 200
+[20]
+Name = Large advanced bronze engine
+Type = Engine
+Weight = 2700
+Value = 6
+MaxValue = 18000
+Durability = 200
+Material = Bronze
+Skill = Engineering
+Price = 20000
+InstallTime = 220
 []
