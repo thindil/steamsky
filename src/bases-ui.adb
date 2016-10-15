@@ -393,12 +393,14 @@ package body Bases.UI is
         Change_Attributes(Line => 2, Column => 13, Count => 1, Color => 1);
         if InstallView then
             Modules_Items := new Item_Array(Modules_List.First_Index..(Modules_List.Last_Index + 1));
-            for I in Modules_List.First_Index..Modules_List.Last_Index loop
-                if Modules_List.Element(I).Price > 0 then
-                    Modules_Items.all(MenuIndex) := New_Item(To_String(Modules_List.Element(I).Name), 
+            for J in ModuleType'Range loop
+                for I in Modules_List.First_Index..Modules_List.Last_Index loop
+                    if Modules_List.Element(I).Price > 0 and Modules_List.Element(I).MType = J then
+                        Modules_Items.all(MenuIndex) := New_Item(To_String(Modules_List.Element(I).Name), 
                         Positive'Image(I));
-                    MenuIndex := MenuIndex + 1;
-                end if;
+                        MenuIndex := MenuIndex + 1;
+                    end if;
+                end loop;
             end loop;
         else
             Modules_Items := new Item_Array(PlayerShip.Modules.First_Index..(PlayerShip.Modules.Last_Index + 1));
