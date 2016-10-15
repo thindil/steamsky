@@ -32,6 +32,7 @@ Material = Bronze
 Skill = Engineering
 Price = 4000
 InstallTime = 120
+Size = 1
 [4]
 Name = Basic bronze cabin
 Type = Cabin
@@ -43,6 +44,7 @@ Material = Bronze
 Skill = Engineering
 Price = 500
 InstallTime = 60
+Size = 1
 [5]
 Name = Bronze cockpit
 Type = Cockpit
@@ -55,6 +57,7 @@ Skill = Engineering
 Price = 750
 InstallTime = 60
 Unique = Yes
+Size = 1
 [6]
 Name = Small alchemy Lab
 Type = Alchemy_lab
@@ -66,6 +69,7 @@ Material = Bronze
 Skill = Engineering
 Price = 1000
 InstallTime = 60
+Size = 1
 [7]
 Name = Bronze cargo bay
 Type = Cargo
@@ -77,6 +81,7 @@ Material = Bronze
 Skill = Engineering
 Price = 300
 InstallTime = 60
+Size = 1
 [8]
 Name = Small bronze turret
 Type = Turret
@@ -88,6 +93,7 @@ Material = Bronze
 Skill = Engineering
 Price = 500
 InstallTime = 60
+Size = 1
 [9]
 Name = Iron 20mm gun
 Type = Gun
@@ -129,6 +135,7 @@ Skill = Engineering
 Price = 500
 InstallTime = 100
 Unique = Yes
+Size = 1
 [13]
 Name = Small bronze battering ram
 Type = Battering_ram
@@ -141,6 +148,7 @@ Skill = Engineering
 Price = 250
 InstallTime = 60
 Unique = Yes
+Size = 1
 [14]
 Name = Small advanced bronze engine
 Type = Engine
@@ -152,6 +160,7 @@ Material = Bronze
 Skill = Engineering
 Price = 6000
 InstallTime = 120
+Size = 1
 [15]
 Name = Medium bronze engine
 Type = Engine
@@ -163,6 +172,7 @@ Material = Bronze
 Skill = Engineering
 Price = 8000
 InstallTime = 150
+Size = 2
 [16]
 Name = Small advanced bronze hull
 Type = Hull
@@ -196,6 +206,7 @@ Material = Bronze
 Skill = Engineering
 Price = 10000
 InstallTime = 180
+Size = 2
 [19]
 Name = Large bronze engine
 Type = Engine
@@ -207,6 +218,7 @@ Material = Bronze
 Skill = Engineering
 Price = 15000
 InstallTime = 200
+Size = 3
 [20]
 Name = Large advanced bronze engine
 Type = Engine
@@ -218,4 +230,5 @@ Material = Bronze
 Skill = Engineering
 Price = 20000
 InstallTime = 220
+Size = 3
 []
