@@ -210,25 +210,17 @@ package body Bases is
                 end if;
             end loop;
             if Modules_List.Element(ModuleIndex).MType /= HULL then
-                if ModulesAmount = PlayerShip.Modules.Element(HullIndex).Max_Value and
-                    Modules_List.Element(ModuleIndex).MType /= GUN then
-                    ShowDialog("You don't have free space for more modules.");
+                ModulesAmount := ModulesAmount + Modules_List(ModuleIndex).Size;
+                if ModulesAmount > PlayerShip.Modules.Element(HullIndex).Max_Value then
+                    ShowDialog("You don't have free modules space for more modules.");
                     return;
                 end if;
-                case Modules_List.Element(ModuleIndex).MType is
-                    when GUN =>
-                        if FreeTurretIndex = 0 then
-                            ShowDialog("You don't have free turret for next gun. Install new turret or remove old gun first.");
-                            return;
-                        end if;
-                    when others =>
-                        null;
-                end case;
-                if Modules_List.Element(ModuleIndex).MType /= ARMOR then
-                    ModulesAmount := ModulesAmount + 1;
+                if Modules_List.Element(ModuleIndex).MType = GUN and FreeTurretIndex = 0 then
+                    ShowDialog("You don't have free turret for next gun. Install new turret or remove old gun first.");
+                    return;
                 end if;
             else
-                if PlayerShip.Modules.Element(HullIndex).Current_Value > Modules_List(ModuleIndex).MaxValue then
+                if Modules_List(ModuleIndex).MaxValue < ModulesAmount then
                     ShowDialog("This hull is too small for your ship. Remove some modules first.");
                     return;
                 end if;
@@ -287,16 +279,8 @@ package body Bases is
                 when others =>
                     null;
             end case;
-            if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType /= GUN and
-                Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType /= ARMOR then
-                ModulesAmount := ModulesAmount - 1;
-            end if;
-            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = HULL then
-                    UpdateModule(PlayerShip, I, "Current_Value", Positive'Image(ModulesAmount));
-                    exit;
-                end if;
-            end loop;
+            ModulesAmount := ModulesAmount - Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Size;
+            UpdateModule(PlayerShip, HullIndex, "Current_Value", Positive'Image(ModulesAmount));
             if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
                 GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest);
             end if;

@@ -36,6 +36,7 @@ package ShipModules is
             Price : Natural; -- Price for module in shipyards
             InstallTime : Positive; -- Amount of minutes needed for install/remove module 
             Unique : Boolean; -- Did ship can have installed only one that module
+            Size : Natural; -- How many space in ship this module take
         end record;
     package BaseModules_Container is new Vectors(Positive, BaseModule_Data);
     Modules_List : BaseModules_Container.Vector; -- Lost of ship modules available in game

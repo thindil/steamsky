@@ -332,7 +332,7 @@ package body Bases.UI is
                 Float(Damage));
             MTime := Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).InstallTime;
         end if;
-        InfoWindow := Create(6, (Columns / 2), 3, (Columns / 2));
+        InfoWindow := Create(8, (Columns / 2), 3, (Columns / 2));
         Add(Win => InfoWindow, Str => To_String(TextCost) & Positive'Image(Cost) & " Charcollum");
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         Add(Win => InfoWindow, Str => To_String(TextTime) & Positive'Image(MTime) & " minutes");
@@ -342,7 +342,7 @@ package body Bases.UI is
                 when HULL =>
                     Add(Win => InfoWindow, Str => "Ship hull can be only replaced.");
                     Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
-                    Add(Win => InfoWindow, Str => "Modules allowed:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue));
+                    Add(Win => InfoWindow, Str => "Modules space:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue));
                     CurrentLine := 5;
                 when ENGINE =>
                     Add(Win => InfoWindow, Str => "Max power:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue));
@@ -355,6 +355,11 @@ package body Bases.UI is
                 when others =>
                     null;
             end case;
+            if Modules_List.Element(ModuleIndex).Size > 0 then
+                Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+                Add(Win => InfoWindow, Str => "Size:" & Natural'Image(Modules_List.Element(ModuleIndex).Size));
+                CurrentLine := CurrentLine + 1;
+            end if;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Press ENTER to install module");
             Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
