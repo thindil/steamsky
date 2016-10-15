@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Support for many weapons for ships in combat
 - Option to install battering ram on player ship
 - Attack with battering ram by player
+- Ship modules size
 
 ### Changed
 - Updated help
