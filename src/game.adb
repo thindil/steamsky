@@ -128,7 +128,6 @@ package body Game is
         -- Create player ship with modules
         PlayerShip := CreateShip(1, ShipName, SkyBases(Integer(RandomBase)).SkyX,
             SkyBases(Integer(RandomBase)).SkyY, DOCKED);
-        UpdateModule(PlayerShip, 1, "Current_Value", "10");
         UpdateModule(PlayerShip, 4, "Name", To_String(CharName) & "'s Cabin");
         UpdateModule(PlayerShip, 4, "Owner", "1");
         UpdateModule(PlayerShip, 5, "Name", To_String(PilotName) & "'s Cabin");

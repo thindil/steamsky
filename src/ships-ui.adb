@@ -35,7 +35,7 @@ package body Ships.UI is
         CurrentLine : Line_Position := 5;
         MaxUpgrade, UpgradePercent : Natural;
     begin
-        InfoWindow := Create(15, (Columns / 2), 8, (Columns / 2));
+        InfoWindow := Create(20, (Columns / 2), 8, (Columns / 2));
         Add(Win => InfoWindow, Str => "Status: ");
         DamagePercent := 100 -
             Natural((Float(PlayerShip.Modules.Element(ModuleIndex).Durability) /
@@ -82,7 +82,7 @@ package body Ships.UI is
                 Add(Win => InfoWindow, Str => "Max cargo:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value) &
                     " kg");
             when HULL =>
-                Add(Win => InfoWindow, Str => "Modules:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Current_Value) &
+                Add(Win => InfoWindow, Str => "Modules space:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Current_Value) &
                 " /" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
             when CABIN =>
                 if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
@@ -104,6 +104,12 @@ package body Ships.UI is
             when others =>
                 null;
         end case;
+        if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Size > 0 then
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => "Size:" & 
+                Natural'Image(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Size));
+            CurrentLine := CurrentLine + 1;
+        end if;
         if PlayerShip.Modules.Element(ModuleIndex).UpgradeAction /= NONE then
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Upgrading: ");
