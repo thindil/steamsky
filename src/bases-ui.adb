@@ -356,7 +356,7 @@ package body Bases.UI is
                     null;
             end case;
             if Modules_List.Element(ModuleIndex).Size > 0 then
-                Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+                Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
                 Add(Win => InfoWindow, Str => "Size:" & Natural'Image(Modules_List.Element(ModuleIndex).Size));
                 CurrentLine := CurrentLine + 1;
             end if;
