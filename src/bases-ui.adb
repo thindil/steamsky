@@ -375,6 +375,12 @@ package body Bases.UI is
                 when others =>
                     null;
             end case;
+            if  Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Size > 0 then
+                Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
+                Add(Win => InfoWindow, Str => "Size:" & 
+                    Natural'Image(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Size));
+                CurrentLine := CurrentLine + 1;
+            end if;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Press ENTER to remove module");
             Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
