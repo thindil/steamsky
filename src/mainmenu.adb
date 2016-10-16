@@ -233,21 +233,21 @@ package body MainMenu is
         CurrentColumn : Column_Position;
         News : constant array (Positive range <>) of Unbounded_String :=
             (To_Unbounded_String("* Savegames from previous version are not compatible with current!"), 
-                To_Unbounded_String("* Added few new enemies ships"),
+                To_Unbounded_String("* Added new enemy ship"),
                 To_Unbounded_String("* Added few new items to buy/sell in bases"),
-                To_Unbounded_String("* Added few new skills"),
+                To_Unbounded_String("* Added few new ship modules"),
                 To_Unbounded_String("* Updated combat between ships"),
                 To_Unbounded_String("* Added few new manufacturing recipes"),
                 To_Unbounded_String("* Updated interface"),
                 To_Unbounded_String("* Updated help"),
-                To_Unbounded_String("* Rename old enemies from small to tiny"),
-                To_Unbounded_String("* Better bases names generator"),
-                To_Unbounded_String("* All ship modules have own repair materials"),
-                To_Unbounded_String("* Options to drop cargo, rename modules"),
+                To_Unbounded_String("* Added hiring/dismiss crew members"),
+                To_Unbounded_String("* Added ability to upgrade ship modules"),
+                To_Unbounded_String("* Added ability to install/remove ship modules"),
+                To_Unbounded_String("* Changed names of some ship modules"),
                 To_Unbounded_String("* Fixed few bugs"));
     begin
         Move_Cursor(Line => (Lines / 5), Column => 10);
-        Add(Str => "Main changes since last release (0.2):");
+        Add(Str => "Main changes since last release (0.3):");
         for I in News'Range loop
             Move_Cursor(Line => CurrentLine, Column => 10);
             Add(Str => To_String(News(I)));
