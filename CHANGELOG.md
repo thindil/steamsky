@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file.
 - Enemy attack range depends on weapon type not on ship
 - Limit player ship attacks distance
 - Amount of enemies attacks depends on weapon type
+- Updated in-game news
 
 ### Fixed
 - Crash on invalid data in save game file
