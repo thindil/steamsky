@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.4] - 2016-10-16
 
 ### Added
 - Auto-resize game screen on resize console
