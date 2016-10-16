@@ -57,8 +57,9 @@ To start upgrading ship modules you must first set which module you want to upgr
 Speed of module upgrade depends on skill of assigned crew member (it is this same skill which is used to repair module). 
 You can always change which module and what is upgrading on it. If you change module to upgrade, all your progress is saved and can be continued later. If you change only what to upgrade (for example, from damage to durability) you will lose all previous upgrade progress.
 Each upgraded module gains some weight. Amount of gain depends on base module weight and upgrade type.
-In shipyard bases you can install new modules or remove old from ship. Each installation/removing take some time. Installation cost Charcollum, removing modules gives you Charcollum. There is some limitations to installation/removing modules: you can only replace ship hull module, you can have only one armor and cockpit module installed on your ship. If you want replace armor or cockpit, first you must remove old module from ship.
+In shipyard bases you can install new modules or remove old from ship. Each installation/removing take some time. Installation cost Charcollum, removing modules gives you Charcollum. There is some limitations to installation/removing modules: you can only replace ship hull module, you can have only one armor, cockpit, battering ram module installed on your ship. If you want replace armor, cockpit or battering ram, first you must remove old module from ship. 
 How much you get Charcollum from removing module depends on damage of selected module. If is it destroyed, removing will take only time and give no Charcollum.
+Each ship hull have maximum module space, which limit what and how much modules can be installed on it. Armor and weapons don't count to this limit. Most of basic modules use only one module space, but this most expensive modules, may use a lot of space. You can check how much each module space use on ship info screen or in shipyard screen.
 [Ship crew]
 You and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation.
 Every member of crew getting tired when have assigned order other than On break. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
@@ -70,7 +71,6 @@ You can hire new crew members in bases. First you must dock to base, then you ch
 If your ship is docked to base, you can dismiss crew members. Go to crew info screen and use Dismiss option on selected crew member. Dismissed crew members joins to base population.
 [Tips]
 * All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press 'h' key on sky map (no need to press 'e' first to show menu).
-* Each ship hull have maximum limit of module which can be installed on it. Armors and weapons are not count to hull modules limit.
 * If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to cargo information screen, select desired item and press key 'd'.
 * Each crew member need proper module for work. If that module is destroyed, member cannot start selected work (for example, can't start piloting when cockpit is destroyed).
 * If you want to stop renaming modules or dropping cargo, just left field with name/amount of items to drop empty. That same works for stopping buying or selling items.
