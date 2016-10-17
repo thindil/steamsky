@@ -617,10 +617,16 @@ package body Ships is
         end if;
     end StartUpgrading;
 
-    procedure UpgradeShip(Times : Positive) is
+    procedure UpgradeShip(Minutes : Positive) is
         ResultAmount, UpgradePoints, WorkerIndex, UpgradeMaterial, UpgradeProgress : Natural := 0;
         MaxValue : Positive;
         WeightGain : Natural;
+        Times : Natural := 0;
+        OrderTime, CurrentMinutes : Integer;
+        procedure UpdateMember(Member : in out Member_Data) is
+        begin
+            Member.OrderTime := OrderTime;
+        end UpdateMember;
     begin
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Upgrading then
@@ -629,6 +635,21 @@ package body Ships is
             end if;
         end loop;
         if WorkerIndex = 0 then
+            return;
+        end if;
+        CurrentMinutes := Minutes;
+        OrderTime := PlayerShip.Crew.Element(WorkerIndex).OrderTime;
+        while CurrentMinutes > 0 loop
+            if CurrentMinutes >= OrderTime then
+                CurrentMinutes := CurrentMinutes - OrderTime;
+                Times := Times + 1;
+            else
+                OrderTime := OrderTime - CurrentMinutes;
+                CurrentMinutes := 0;
+            end if;
+        end loop;
+        PlayerShip.Crew.Update_Element(Index => WorkerIndex, Process => UpdateMember'Access);
+        if Times = 0 then
             return;
         end if;
         UpgradePoints := 

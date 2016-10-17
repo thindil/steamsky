@@ -86,7 +86,7 @@ package Ships is
     function RealSpeed(Ship : ShipRecord) return Natural; -- Return real ship speed in meters per minute
     function FindMoney return Natural; -- Return index of moneys, 0 if no moneys on ship
     procedure StartUpgrading(ModuleIndex, UpgradeType : Positive); -- Set upgrading order
-    procedure UpgradeShip(Times : Positive); -- Upgrade selected module on ship
+    procedure UpgradeShip(Minutes : Positive); -- Upgrade selected module on ship
     procedure RepairShip(Times : Positive); -- Repair ship modules
 
 end Ships;
