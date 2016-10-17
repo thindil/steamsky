@@ -167,7 +167,13 @@ package body Game is
     procedure UpdateGame(Minutes : Positive) is
         AddedHours, AddedMinutes : Natural;
         BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        TiredPoints : Natural := 0;
     begin
+        for I in 1..Minutes loop
+            if ((GameDate.Minutes + I) rem 15) = 0 then
+                TiredPoints := TiredPoints + 1;
+            end if;
+        end loop;
         -- Update game time
         AddedMinutes := Minutes rem 60;
         AddedHours := Minutes / 60;
@@ -190,7 +196,7 @@ package body Game is
             GameDate.Year := GameDate.Year + 1;
         end if;
         -- Update crew
-        UpdateCrew(Minutes);
+        UpdateCrew(Minutes, TiredPoints);
         -- Repair ship (if needed)
         RepairShip(Minutes);
         -- Craft items

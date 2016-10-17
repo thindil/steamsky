@@ -643,6 +643,7 @@ package body Ships is
             if CurrentMinutes >= OrderTime then
                 CurrentMinutes := CurrentMinutes - OrderTime;
                 Times := Times + 1;
+                OrderTime := 15;
             else
                 OrderTime := OrderTime - CurrentMinutes;
                 CurrentMinutes := 0;

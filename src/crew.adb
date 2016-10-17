@@ -331,7 +331,7 @@ package body Crew is
         end if;
     end Death;
 
-    procedure UpdateCrew(Minutes : Positive) is
+    procedure UpdateCrew(Minutes : Positive; TiredPoints : Natural) is
         TiredLevel, HungerLevel, ThirstLevel : Integer := 0;
         HealthLevel : Integer := 100;
         I : Natural;
@@ -402,13 +402,14 @@ package body Crew is
                 if CurrentMinutes >= OrderTime then
                     CurrentMinutes := CurrentMinutes - OrderTime;
                     Times := Times + 1;
+                    OrderTime := 15;
                 else
                     OrderTime := OrderTime - CurrentMinutes;
                     CurrentMinutes := 0;
                 end if;
             end loop;
+            HealthLevel := PlayerShip.Crew.Element(I).Health;
             if Times > 0 then
-                HealthLevel := PlayerShip.Crew.Element(I).Health;
                 if PlayerShip.Crew.Element(I).Order = Rest then
                     TiredLevel := 0;
                     CabinIndex := 0;
@@ -447,35 +448,38 @@ package body Crew is
                             null;
                     end case;
                 end if;
-                HungerLevel := PlayerShip.Crew.Element(I).Hunger + Times;
+            end if;
+            if TiredPoints > 0 then
+                HungerLevel := PlayerShip.Crew.Element(I).Hunger + TiredPoints;
                 if HungerLevel > 100 then
                     HungerLevel := 100;
                 end if;
                 if PlayerShip.Crew.Element(I).Hunger = 100 then
-                    HealthLevel := HealthLevel - Times;
+                    HealthLevel := HealthLevel - TiredPoints;
                     if HealthLevel < 1 then
                         HealthLevel := 0;
                         DeathReason := To_Unbounded_String("starvation");
                     end if;
                 end if;
-                ThirstLevel := PlayerShip.Crew.Element(I).Thirst + Times;
+                ThirstLevel := PlayerShip.Crew.Element(I).Thirst + TiredPoints;
                 if ThirstLevel > 100 then
                     ThirstLevel := 100;
                 end if;
                 if PlayerShip.Crew.Element(I).Thirst = 100 then
-                    HealthLevel := HealthLevel - Times;
+                    HealthLevel := HealthLevel - TiredPoints;
                     if HealthLevel < 1 then
                         HealthLevel := 0;
                         DeathReason := To_Unbounded_String("dehydration");
                     end if;
                 end if;
-                PlayerShip.Crew.Update_Element(Index => I, Process => UpdateMember'Access);
                 if HealthLevel = 0 then
                     Death(I, DeathReason);
-                    I := I - 1;
                 end if;
             end if;
-            I := I + 1;
+            if HealthLevel > 0 then
+                PlayerShip.Crew.Update_Element(Index => I, Process => UpdateMember'Access);
+                I := I + 1;
+            end if;
         end loop;
     end UpdateCrew;
 
