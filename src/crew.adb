@@ -334,7 +334,7 @@ package body Crew is
     procedure UpdateCrew(Minutes : Positive) is
         TiredLevel, HungerLevel, ThirstLevel : Integer := 0;
         HealthLevel : Integer := 100;
-        I : Positive;
+        I : Natural;
         DeathReason : Unbounded_String;
         CabinIndex : Natural;
         Times : Natural;
@@ -354,7 +354,7 @@ package body Crew is
                 end if;
                 if BackToWork then
                     Member.Order := Member.PreviousOrder;
-                    OrderTime := 15;
+                    Member.OrderTime := 15;
                     AddMessage(To_String(Member.Name) & " back to work, fully rested.", OrderMessage);
                 end if;
                 Member.PreviousOrder := Rest;
@@ -362,7 +362,7 @@ package body Crew is
             if TiredLevel > 80 and Member.Order /= Rest then
                 Member.PreviousOrder := Member.Order;
                 Member.Order := Rest;
-                OrderTime := 15;
+                Member.OrderTime := 15;
                 AddMessage(To_String(Member.Name) & " is too tired to work, going rest.", OrderMessage);
             end if;
             if HungerLevel > 80 then
@@ -388,11 +388,10 @@ package body Crew is
             end if;
             Member.Thirst := ThirstLevel;
             Member.Health := HealthLevel;
+            if Member.Order /= Repair and Member.Order /= Craft and Member.Order /= Upgrading then
+                Member.OrderTime := OrderTime;
+            end if;
         end UpdateMember;
-        procedure UpdateTime(Member : in out Member_Data) is
-        begin
-            Member.OrderTime := OrderTime;
-        end UpdateTime;
     begin
         I := PlayerShip.Crew.First_Index;
         while I <= PlayerShip.Crew.Last_Index loop
@@ -471,15 +470,12 @@ package body Crew is
                     end if;
                 end if;
                 PlayerShip.Crew.Update_Element(Index => I, Process => UpdateMember'Access);
-                PlayerShip.Crew.Update_Element(Index => I, Process => UpdateTime'Access);
                 if HealthLevel = 0 then
                     Death(I, DeathReason);
-                else
-                    I := I + 1;
+                    I := I - 1;
                 end if;
-            else
-                PlayerShip.Crew.Update_Element(Index => I, Process => UpdateTime'Access);
             end if;
+            I := I + 1;
         end loop;
     end UpdateCrew;
 
