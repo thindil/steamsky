@@ -843,8 +843,6 @@ package body Ships is
                             PointsBonus := (GetSkillLevel(J, Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairSkill) / 
                                 10) * CrewRepairPoints(PointsIndex);
                             RepairPoints := CrewRepairPoints(PointsIndex) + PointsBonus;
-                            AddMessage(Integer'Image(RepairPoints),
-                            OtherMessage);
                             for K in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                                 if Items_List.Element(PlayerShip.Cargo.Element(K).ProtoIndex).IType = 
                                     Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial then
@@ -859,7 +857,7 @@ package body Ships is
                             end loop;
                             if RepairMaterial = 0 then
                                 AddMessage("You don't have repair materials to continue repairs.",
-                                OrderMessage);
+                                    OrderMessage);
                                 for K in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                                     if PlayerShip.Crew.Element(K).Order = Repair then
                                         GiveOrders(K, Rest);
