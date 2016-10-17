@@ -403,7 +403,7 @@ package body Bases is
         PlayerShip.Crew.Append(New_Item => (Name => Recruit.Name, Gender =>
             Recruit.Gender, Health => 100, Tired => 0, Skills =>
             Recruit.Skills, Hunger => 0, Thirst => 0, Order => Rest,
-            PreviousOrder => Rest)); 
+            PreviousOrder => Rest, OrderTime => 15)); 
         UpdateCargo(1, (0 - Price));
         AddMessage("You hired " & To_String(Recruit.Name) & " for" & Positive'Image(Price) & " Charcollum.", TradeMessage);
         SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex, Count => 1);
