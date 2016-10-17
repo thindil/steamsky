@@ -30,7 +30,7 @@ with UserInterface; use UserInterface;
 
 package body Game is
     
-    SaveVersion : constant String := "0.4";
+    SaveVersion : constant String := "0.5";
 
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character) is
         type Rand_Range is range 1..1024;
@@ -147,33 +147,28 @@ package body Game is
         TmpSkills.Append(New_Item => (4, 5, 0));
         PlayerShip.Crew.Append(New_Item => (Name => CharName, Gender => Gender,
             Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Rest,
-            PreviousOrder => Rest)); 
+            PreviousOrder => Rest, OrderTime => 15)); 
         TmpSkills.Replace_Element(Index => 1, New_Item => (1, 5, 0));
         PlayerShip.Crew.Append(New_Item => (Name => PilotName, Gender => PilotGender,
             Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Pilot,
-            PreviousOrder => Rest)); 
+            PreviousOrder => Rest, OrderTime => 15)); 
         TmpSkills.Replace_Element(Index => 1, New_Item => (2, 5, 0));
         PlayerShip.Crew.Append(New_Item => (Name => EngineerName, Gender => EngineerGender,
             Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Engineer,
-            PreviousOrder => Rest)); 
+            PreviousOrder => Rest, OrderTime => 15)); 
         TmpSkills.Replace_Element(Index => 1, New_Item => (3, 5, 0));
         PlayerShip.Crew.Append(New_Item => (Name => GunnerName, Gender => GunnerGender,
             Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Rest,
-            PreviousOrder => Rest)); 
+            PreviousOrder => Rest, OrderTime => 15)); 
         SkyBases(Integer(RandomBase)).Visited := GameDate;
         GenerateRecruits(Integer(RandomBase));
     end NewGame;
 
     procedure UpdateGame(Minutes : Positive) is
         AddedHours, AddedMinutes : Natural;
-        TiredPoints : Natural := 0;
         BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
     begin
-        for I in 1..Minutes loop
-            if ((GameDate.Minutes + I) rem 15) = 0 then
-                TiredPoints := TiredPoints + 1;
-            end if;
-        end loop;
+        -- Update game time
         AddedMinutes := Minutes rem 60;
         AddedHours := Minutes / 60;
         GameDate.Minutes := GameDate.Minutes + AddedMinutes;
@@ -194,16 +189,14 @@ package body Game is
             GameDate.Month := 1;
             GameDate.Year := GameDate.Year + 1;
         end if;
-        if TiredPoints > 0 then
-            -- Update crew
-            UpdateCrew(TiredPoints);
-            -- Repair ship (if needed)
-            RepairShip(TiredPoints);
-            -- Craft items
-            Manufacturing(TiredPoints);
-            -- Upgrade ship module
-            UpgradeShip(TiredPoints);
-        end if;
+        -- Update crew
+        UpdateCrew(Minutes);
+        -- Repair ship (if needed)
+        RepairShip(Minutes);
+        -- Craft items
+        Manufacturing(Minutes);
+        -- Upgrade ship module
+        UpgradeShip(Minutes);
         -- Update base
         if BaseIndex > 0 then
             SkyBases(BaseIndex).Visited := GameDate;
@@ -340,6 +333,8 @@ package body Game is
             RawValue := To_Unbounded_String(Integer'Image(Crew_Orders'Pos(PlayerShip.Crew.Element(I).Order)));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(Crew_Orders'Pos(PlayerShip.Crew.Element(I).PreviousOrder)));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).OrderTime));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(PlayerShip.Crew.Element(I).Skills.Length'Img);
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -489,7 +484,8 @@ package body Game is
                 Natural'Value(To_String(ReadData)), Thirst =>
                 Natural'Value(To_String(ReadData)), Order =>
                 Crew_Orders'Val(Integer'Value(To_String(ReadData))), 
-                PreviousOrder => Crew_Orders'Val(Integer'Value(To_String(ReadData)))));
+                PreviousOrder => Crew_Orders'Val(Integer'Value(To_String(ReadData))), 
+                OrderTime => Integer'Value(To_String(ReadData))));
             SkillsLength := Positive'Value(To_String(ReadData));
             for J in 1..SkillsLength loop
                 Skills.Append(New_Item => (Natural'Value(To_String(ReadData)),

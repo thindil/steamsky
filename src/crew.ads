@@ -35,6 +35,7 @@ package Crew is
             Thirst : Natural; -- Thirst level of member
             Order : Crew_Orders; -- Current order for member
             PreviousOrder : Crew_Orders; -- Previous order for member
+            OrderTime : Integer; -- Minutes to next check for order result
         end record;
 
     procedure GiveOrders(MemberIndex : Positive; GivenOrder: Crew_Orders; ModuleIndex : Natural := 0); -- Change order for selected crew member
@@ -42,7 +43,7 @@ package Crew is
     procedure GainExp(Amount : Natural; SkillNumber, CrewIndex : Positive); -- Gain experience in selected skill.
     function GenerateMemberName(Gender : Character) return Unbounded_String; -- Generate random name for crew member
     procedure Death(MemberIndex : Positive; Reason : Unbounded_String); -- Handle crew member death
-    procedure UpdateCrew(Times : Positive); -- Update ship crew
+    procedure UpdateCrew(Minutes : Positive); -- Update ship crew
     function GetSkillLevel(MemberIndex, SkillIndex : Positive) return Natural; -- Get level of skill of selected crew member
 
 end Crew;
