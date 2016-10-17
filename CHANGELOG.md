@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Each crew member have separate work timer
+
 ## [0.4] - 2016-10-16
 
 ### Added
