@@ -409,9 +409,11 @@ package body Crew is
                 end if;
             end loop;
             HealthLevel := PlayerShip.Crew.Element(I).Health;
+            HungerLevel := PlayerShip.Crew.Element(I).Hunger;
+            ThirstLevel := PlayerShip.Crew.Element(I).Thirst;
+            TiredLevel := PlayerShip.Crew.Element(I).Tired;
             if Times > 0 then
                 if PlayerShip.Crew.Element(I).Order = Rest then
-                    TiredLevel := 0;
                     CabinIndex := 0;
                     for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                         if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
@@ -422,10 +424,9 @@ package body Crew is
                     end loop;
                     if PlayerShip.Crew.Element(I).Tired > 0 then
                         if CabinIndex > 0 then
-                            TiredLevel := PlayerShip.Crew.Element(I).Tired - (Times
-                                * PlayerShip.Modules.Element(CabinIndex).Current_Value);
+                            TiredLevel := TiredLevel - (Times * PlayerShip.Modules.Element(CabinIndex).Current_Value);
                         else
-                            TiredLevel := PlayerShip.Crew.Element(I).Tired - Times;
+                            TiredLevel := TiredLevel - Times;
                         end if;
                         if TiredLevel < 0 then
                             TiredLevel := 0;
@@ -435,7 +436,7 @@ package body Crew is
                         HealthLevel := HealthLevel + Times;
                     end if;
                 else
-                    TiredLevel := PlayerShip.Crew.Element(I).Tired + Times;
+                    TiredLevel := TiredLevel + Times;
                     if TiredLevel > 100 then
                         TiredLevel := 100;
                     end if;
@@ -450,7 +451,7 @@ package body Crew is
                 end if;
             end if;
             if TiredPoints > 0 then
-                HungerLevel := PlayerShip.Crew.Element(I).Hunger + TiredPoints;
+                HungerLevel := HungerLevel + TiredPoints;
                 if HungerLevel > 100 then
                     HungerLevel := 100;
                 end if;
@@ -461,7 +462,7 @@ package body Crew is
                         DeathReason := To_Unbounded_String("starvation");
                     end if;
                 end if;
-                ThirstLevel := PlayerShip.Crew.Element(I).Thirst + TiredPoints;
+                ThirstLevel := ThirstLevel + TiredPoints;
                 if ThirstLevel > 100 then
                     ThirstLevel := 100;
                 end if;
