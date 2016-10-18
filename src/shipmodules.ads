@@ -22,7 +22,7 @@ with Items; use Items;
 package ShipModules is
     
     type ModuleType is (ENGINE, CABIN, COCKPIT, TURRET, GUN, CARGO, ALCHEMY_LAB,
-        HULL, ARMOR, BATTERING_RAM);
+        HULL, ARMOR, BATTERING_RAM, FURNACE);
     type BaseModule_Data is -- Data structure for prototypes of ship modules
         record
             Name : Unbounded_String; -- Name of module
