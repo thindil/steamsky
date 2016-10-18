@@ -172,6 +172,8 @@ begin
                 GameState := ShipyardKeys(Key);
             when Recruits_View =>
                 GameState := RecruitKeys(Key);
+            when Rename_Module =>
+                GameState := RenameModuleKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;

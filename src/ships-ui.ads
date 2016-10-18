@@ -24,5 +24,6 @@ package Ships.UI is
     function ShipInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in ship info menu
     function CargoInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in cargo info menu
     function ShipUpgradeKeys(Key : Key_Code) return GameStates; -- Handle keys in upgrade menu
+    function RenameModuleKeys(Key : Key_Code) return GameStates; -- Handle keys in upgrade menu
 
 end Ships.UI;
