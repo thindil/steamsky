@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- New type of ship modules - furnaces
+
 ### Changed
 - Each crew member have separate work timer
 - Updated help
