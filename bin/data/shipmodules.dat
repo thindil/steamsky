@@ -59,7 +59,7 @@ InstallTime = 60
 Unique = Yes
 Size = 1
 [6]
-Name = Small alchemy Lab
+Name = Small alchemy lab
 Type = Alchemy_lab
 Weight = 400
 Value = 0
@@ -231,4 +231,16 @@ Skill = Engineering
 Price = 20000
 InstallTime = 220
 Size = 3
+[21]
+Name = Small bronze furnace
+Type = Furnace
+Weight = 800
+Value = 0
+MaxValue = 0
+Durability = 100
+Material = Bronze
+Skill = Metalsmith
+Price = 1000
+InstallTime = 60
+Size = 1
 []
