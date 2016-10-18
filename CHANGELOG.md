@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Each crew member have separate work timer
+- Updated help
 
 ## [0.4] - 2016-10-16
 
