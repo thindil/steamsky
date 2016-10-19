@@ -248,17 +248,17 @@ package body Crafts is
                         end loop;
                         Amount := 0;
                         UpdateCargo(Recipes_List.Element(PlayerShip.Craft).ResultIndex, ResultAmount);
-                        if CraftedAmount > 0 then
-                            AddMessage(To_String(PlayerShip.Crew.Element(CrafterIndex).Name) & " was manufactured" & 
-                                Integer'Image(CraftedAmount) &  " " & To_String(Items_List.Element(Recipe.ResultIndex).Name) & 
-                             ".", CraftMessage);
-                        end if;
-                        CraftedAmount := 0;
                     else
                         OrderTime := OrderTime - CurrentMinutes;
                         CurrentMinutes := 0;
                     end if;
                 end loop;
+                if CraftedAmount > 0 then
+                    AddMessage(To_String(PlayerShip.Crew.Element(CrafterIndex).Name) & " was manufactured" & 
+                    Integer'Image(CraftedAmount) &  " " & To_String(Items_List.Element(Recipe.ResultIndex).Name) & 
+                    ".", CraftMessage);
+                end if;
+                CraftedAmount := 0;
                 if PlayerShip.Crew.Element(CrafterIndex).Order = Craft then
                     PlayerShip.Crew.Update_Element(Index => CrafterIndex, Process => UpdateMember'Access);
                 end if;
