@@ -9,12 +9,14 @@ All notable changes to this project will be documented in this file.
 - New ship module: Small bronze furnace
 
 ### Changed
-- Each crew member have separate work timer
+- Each crew member have separate work timer which made saves from 0.4
+  incompatible
 - Updated help
 - Updated interface
 
 ### Fixed
 - Crash on updating modules
+- Crash on check for new recruits in bases
 
 ## [0.4] - 2016-10-16
 
