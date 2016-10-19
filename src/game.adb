@@ -257,10 +257,6 @@ package body Game is
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Day));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Hour));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Minutes));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(SkyBases(I).Recruits.Length'Img);
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             if SkyBases(I).Recruits.Length > 0 then
@@ -433,8 +429,6 @@ package body Game is
             SkyBases(I).RecruitDate.Year := Natural'Value(To_String(ReadData));
             SkyBases(I).RecruitDate.Month := Natural'Value(To_String(ReadData));
             SkyBases(I).RecruitDate.Day := Natural'Value(To_String(ReadData));
-            SkyBases(I).RecruitDate.Hour := Natural'Value(To_String(ReadData));
-            SkyBases(I).RecruitDate.Minutes := Natural'Value(To_String(ReadData));
             VectorLength := Natural'Value(To_String(ReadData));
             if VectorLength > 0 then
                 for J in 1..VectorLength loop
