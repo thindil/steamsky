@@ -13,6 +13,9 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Updated interface
 
+### Fixed
+- Crash on updating modules
+
 ## [0.4] - 2016-10-16
 
 ### Added
