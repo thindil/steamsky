@@ -684,7 +684,7 @@ package body Ships is
                 WorkerIndex);
             UpgradeProgress := PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeProgress - ResultAmount;
             UpgradePoints := UpgradePoints - ResultAmount;
-            UpdateCargo(UpgradeMaterial, (0 - ResultAmount));
+            UpdateCargo(PlayerShip.Cargo.Element(UpgradeMaterial).ProtoIndex, (0 - ResultAmount));
             if UpgradeProgress = 0 then
                 WeightGain := Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).Weight
                     / 100;
@@ -773,9 +773,9 @@ package body Ships is
                                 To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
                                 & ".", OrderMessage);
                             GiveOrders(WorkerIndex, Rest);
-                            PlayerShip.UpgradeModule := 0;
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", "0");
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeAction", "NONE");
+                            PlayerShip.UpgradeModule := 0;
                         else
                             case Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType is
                                 when ENGINE =>
