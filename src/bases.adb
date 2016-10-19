@@ -319,8 +319,8 @@ package body Bases is
             Recruit.Price := Price;
         end UpdateRecruit;
     begin
-        TimeDiff := (((GameDate.Day * 30) * GameDate.Month) * GameDate.Year) -
-            (((SkyBases(BaseIndex).RecruitDate.Day * 30) * SkyBases(BaseIndex).RecruitDate.Month) * SkyBases(BaseIndex).RecruitDate.Year);
+        TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+            (SkyBases(BaseIndex).RecruitDate.Day + ((30 * SkyBases(BaseIndex).RecruitDate.Month) * SkyBases(BaseIndex).RecruitDate.Year));
         if TimeDiff < 30 then
             return;
         end if;
