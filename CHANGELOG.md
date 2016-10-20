@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
   incompatible
 - Updated help
 - Updated interface
+- Price of bronze plates
 
 ### Fixed
 - Crash on updating modules
