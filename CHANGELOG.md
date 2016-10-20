@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - New type of ship modules - furnaces
 - New skill: metalsmith
 - New ship module: Small bronze furnace
+- Minimum fuel usage during fly
 
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
