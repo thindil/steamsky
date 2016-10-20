@@ -111,6 +111,9 @@ package body Ships is
                     end case;
                 end if;
             end loop;
+            if FuelNeeded = 0 then
+                FuelNeeded := -1;
+            end if;
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop -- Check for fuel
                 if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then 
                     if PlayerShip.Cargo.Element(I).Amount < abs FuelNeeded then
