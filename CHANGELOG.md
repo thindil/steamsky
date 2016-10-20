@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - New skill: metalsmith
 - New ship module: Small bronze furnace
 - Minimum fuel usage during fly
+- New types of items: copper, tin, copperore and tinore
 
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
