@@ -26,7 +26,7 @@ Buyable = Y, N, N, N
 Name = Bronze plates
 Weight = 5
 Type = Bronze
-Prices = 2, 4, 4, 4
+Prices = 3, 5, 5, 5
 Buyable = Y, N, N, N
 [6]
 Name = Fresh vegetables
