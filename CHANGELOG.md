@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - New ship module: Small bronze furnace
 - Minimum fuel usage during fly
 - New types of items: copper, tin, copperore and tinore
+- New items: copper plates, tin plates, copper ore and tin ore
 
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
