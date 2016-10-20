@@ -82,4 +82,28 @@ Weight = 1
 Type = Ammo
 Prices = 1, 3, 3, 3
 Buyable = Y, N, N, N
+[15]
+Name = Copper ore
+Weight = 7
+Type = Copperore
+Prices = 2, 2, 1, 2
+Buyable = N, N, Y, N
+[16]
+Name = Tin ore
+Weight = 7
+Type = Tinore
+Prices = 2, 2, 1, 2
+Buyable = N, N, Y, N
+[17]
+Name = Copper plates
+Weight = 5
+Type = Copper
+Prices = 2, 4, 4, 4
+Buyable = Y, N, N, N
+[18]
+Name = Tin plates
+Weight = 5
+Type = Tin
+Prices = 2, 4, 4, 4
+Buyable = Y, N, N, N
 []
