@@ -610,9 +610,6 @@ package body Ships.UI is
         case Key is
             when 56 | KEY_UP => -- Select previous field
                 Result := Driver(RenameForm, F_Previous_Field);
-                if Result = Request_Denied then
-                    Result := Driver(RenameForm, F_Last_Field);
-                end if;
                 FieldIndex := Get_Index(Current(RenameForm));
                 if FieldIndex = 2 then
                     Result := Driver(RenameForm, F_End_Line);
@@ -622,9 +619,6 @@ package body Ships.UI is
                 end if;
             when 50 | KEY_DOWN => -- Select next field
                 Result := Driver(RenameForm, F_Next_Field);
-                if Result = Request_Denied then
-                    Result := Driver(RenameForm, F_First_Field);
-                end if;
                 FieldIndex := Get_Index(Current(RenameForm));
                 if FieldIndex = 2 then
                     Result := Driver(RenameForm, F_End_Line);
