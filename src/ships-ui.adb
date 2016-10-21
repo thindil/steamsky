@@ -608,13 +608,13 @@ package body Ships.UI is
         FieldIndex : Positive := Get_Index(Current(RenameForm));
     begin
         case Key is
-            when 56 | KEY_UP => -- Select previous field
+            when KEY_UP => -- Select previous field
                 Result := Driver(RenameForm, F_Previous_Field);
                 FieldIndex := Get_Index(Current(RenameForm));
                 if FieldIndex = 2 then
                     Result := Driver(RenameForm, F_End_Line);
                 end if;
-            when 50 | KEY_DOWN => -- Select next field
+            when KEY_DOWN => -- Select next field
                 Result := Driver(RenameForm, F_Next_Field);
                 FieldIndex := Get_Index(Current(RenameForm));
                 if FieldIndex = 2 then
@@ -640,11 +640,11 @@ package body Ships.UI is
                 if FieldIndex = 2 then
                     Result := Driver(RenameForm, F_Delete_Char);
                 end if;
-            when 54 | KEY_RIGHT => -- Move cursor right
+            when KEY_RIGHT => -- Move cursor right
                 if FieldIndex = 2 then
                     Result := Driver(RenameForm, F_Right_Char);
                 end if;
-            when 52 | KEY_LEFT => -- Move cursor left
+            when KEY_LEFT => -- Move cursor left
                 if FieldIndex = 2 then
                     Result := Driver(RenameForm, F_Left_Char);
                 end if;
