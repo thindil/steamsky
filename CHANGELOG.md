@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Minimum fuel usage during fly
 - New types of items: copper, tin, copperore and tinore
 - New items: copper plates, tin plates, copper ore and tin ore
+- New crafting recipes: copper plates, tin plates, bronze plates
 
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
