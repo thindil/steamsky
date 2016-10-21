@@ -17,6 +17,7 @@
 
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
+with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Crafts; use Crafts;
 with Items; use Items;
 with ShipModules; use ShipModules;
@@ -321,7 +322,7 @@ package body Ships.UI is
         Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
     end ShowCargoInfo;
 
-    procedure ShowShipForm(OptionText : String) is
+    procedure ShowShipForm(OptionText : String; MaxRange : Natural := 0) is
         Rename_Fields : constant Field_Array_Access := new Field_Array(1..5);
         FieldOptions : Field_Option_Set;
         FormHeight : Line_Position;
@@ -339,6 +340,10 @@ package body Ships.UI is
             FieldOptions := Get_Options(Rename_Fields.all(2));
             FieldOptions.Auto_Skip := False;
             Set_Options(Rename_Fields.all(2), FieldOptions);
+            Set_Background(Rename_Fields.all(2), (Reverse_Video => True, others => False));
+            if MaxRange > 0 then
+                Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type(Rename_Fields.all(2), (0, 0, MaxRange));
+            end if;
             Rename_Fields.all(3) := New_Field(1, 8, 2, (OptionText'Length / 2), 0, 0);
             Set_Buffer(Rename_Fields.all(3), 0, "[Cancel]");
             FieldOptions := Get_Options(Rename_Fields.all(3));
@@ -492,12 +497,8 @@ package body Ships.UI is
             return Drop_Cargo;
         elsif FieldIndex = 4 then
             DropAmount := Natural'Value(Get_Buffer(Fields(RenameForm, 2)));
-            if DropAmount > 0 and DropAmount <= PlayerShip.Cargo.Element(ItemIndex).Amount then
-                UpdateCargo(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex, (0 - DropAmount));
-                AddMessage("You dropped" & Positive'Image(DropAmount) & " " & ItemName, OtherMessage);
-            elsif DropAmount > PlayerShip.Cargo.Element(ItemIndex).Amount then
-                ShowDialog("You can't drop more " & ItemName & " than you have.");
-            end if;
+            UpdateCargo(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex, (0 - DropAmount));
+            AddMessage("You dropped" & Positive'Image(DropAmount) & " " & ItemName, OtherMessage);
         end if;
         Set_Cursor_Visibility(Visibility);
         Post(RenameForm, False);
@@ -506,7 +507,6 @@ package body Ships.UI is
         return Cargo_Info;
     exception
         when CONSTRAINT_ERROR =>
-            ShowDialog("You must enter number as an amount to drop.");
             Set_Cursor_Visibility(Visibility);
             Post(RenameForm, False);
             Delete(RenameForm);
@@ -581,7 +581,7 @@ package body Ships.UI is
                     Refresh(MenuWindow);
                 end if;
             when Character'Pos('d') | Character'Pos('D') => -- Drop selected cargo
-                ShowShipForm("Amount of " & ItemName & " to drop:");
+                ShowShipForm("Amount of " & ItemName & " to drop:", PlayerShip.Cargo.Element(ItemIndex).Amount);
                 return Drop_Cargo;
             when others =>
                 null;
@@ -652,6 +652,11 @@ package body Ships.UI is
                 Result := Driver(RenameForm, Key);
         end case;
         if Result = Form_Ok then
+            if FieldIndex = 2 then
+                Set_Background(Current(RenameForm), (Reverse_Video => True, others => False));
+            else
+                Set_Background(Fields(RenameForm, 2), (others => False));
+            end if;
             Refresh(FormWindow);
         end if;
         return CurrentState;
