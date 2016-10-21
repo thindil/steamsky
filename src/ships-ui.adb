@@ -605,12 +605,17 @@ package body Ships.UI is
 
     function ShipFormKeys(Key : Key_Code; CurrentState : GameStates) return GameStates is
         Result : Forms.Driver_Result;
+        FieldIndex : Positive := Get_Index(Current(RenameForm));
     begin
         case Key is
             when 56 | KEY_UP => -- Select previous field
                 Result := Driver(RenameForm, F_Previous_Field);
                 if Result = Request_Denied then
                     Result := Driver(RenameForm, F_Last_Field);
+                end if;
+                FieldIndex := Get_Index(Current(RenameForm));
+                if FieldIndex = 2 then
+                    Result := Driver(RenameForm, F_End_Line);
                 end if;
                 if Result = Form_Ok then
                     Refresh(FormWindow);
@@ -619,6 +624,10 @@ package body Ships.UI is
                 Result := Driver(RenameForm, F_Next_Field);
                 if Result = Request_Denied then
                     Result := Driver(RenameForm, F_First_Field);
+                end if;
+                FieldIndex := Get_Index(Current(RenameForm));
+                if FieldIndex = 2 then
+                    Result := Driver(RenameForm, F_End_Line);
                 end if;
                 if Result = Form_Ok then
                     Refresh(FormWindow);
@@ -629,6 +638,40 @@ package body Ships.UI is
                 else
                     return DropCargoResult;
                 end if;
+            when KEY_BACKSPACE => -- delete last character
+                if FieldIndex = 2 then
+                    Result := Driver(RenameForm, F_Delete_Previous);
+                    if Result = Form_Ok then
+                        FieldIndex := Get_Index(Current(RenameForm));
+                        if FieldIndex /= 2 then
+                            Set_Current(RenameForm, Fields(RenameForm, 2));
+                        end if;
+                        Refresh(FormWindow);
+                    end if;
+                end if;
+            when KEY_DC => -- delete character at cursor
+                if FieldIndex = 2 then
+                    Result := Driver(RenameForm, F_Delete_Char);
+                    if Result = Form_Ok then
+                        Refresh(FormWindow);
+                    end if;
+                end if;
+            when 54 | KEY_RIGHT => -- Move cursor right
+                if FieldIndex = 2 then
+                    Result := Driver(RenameForm, F_Next_Char);
+                    if Result = Form_Ok then
+                        Refresh(FormWindow);
+                    end if;
+                end if;
+                MoveShip(0, 1, 0);
+            when 52 | KEY_LEFT => -- Move cursor left
+                if FieldIndex = 2 then
+                    Result := Driver(RenameForm, F_Previous_Char);
+                    if Result = Form_Ok then
+                        Refresh(FormWindow);
+                    end if;
+                end if;
+                MoveShip(0, -1, 0);
             when others =>
                 if Driver(RenameForm, Key) = Form_Ok then
                     Refresh(FormWindow);
