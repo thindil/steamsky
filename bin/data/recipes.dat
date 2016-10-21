@@ -33,4 +33,25 @@ Result = 14
 Crafted = 10
 Workplace = Alchemy_Lab
 Skill = Gunsmith
+[6]
+Material = CopperOre
+Amount = 1
+Result = 17
+Crafted = 1
+Workplace = Furnace
+Skill = Metalsmith
+[7]
+Material = TinOre
+Amount = 1
+Result = 18
+Crafted = 1
+Workplace = Furnace
+Skill = Metalsmith
+[8]
+Material = Copper, Tin
+Amount = 1, 1
+Result = 5
+Crafted = 1
+Workplace = Furnace
+Skill = Metalsmith
 []
