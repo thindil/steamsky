@@ -321,7 +321,7 @@ package body Ships.UI is
         Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
     end ShowCargoInfo;
 
-    procedure ShowRenameForm is
+    procedure ShowShipForm(OptionText : String) is
         Rename_Fields : constant Field_Array_Access := new Field_Array(1..5);
         FieldOptions : Field_Option_Set;
         FormHeight : Line_Position;
@@ -330,21 +330,21 @@ package body Ships.UI is
     begin
         if RenameForm = Null_Form then
             Set_Cursor_Visibility(Visibility);
-            Rename_Fields.all(1) := New_Field(1, 10, 0, 0, 0, 0);
+            Rename_Fields.all(1) := New_Field(1, OptionText'Length, 0, 0, 0, 0);
             FieldOptions := Get_Options(Rename_Fields.all(1));
-            Set_Buffer(Rename_Fields.all(1), 0, "New name:");
+            Set_Buffer(Rename_Fields.all(1), 0, OptionText);
             FieldOptions.Active := False;
             Set_Options(Rename_Fields.all(1), FieldOptions);
-            Rename_Fields.all(2) := New_Field(1, 20, 0, 10, 0, 0);
+            Rename_Fields.all(2) := New_Field(1, 20, 0, OptionText'Length, 0, 0);
             FieldOptions := Get_Options(Rename_Fields.all(2));
             FieldOptions.Auto_Skip := False;
             Set_Options(Rename_Fields.all(2), FieldOptions);
-            Rename_Fields.all(3) := New_Field(1, 8, 2, 5, 0, 0);
+            Rename_Fields.all(3) := New_Field(1, 8, 2, (OptionText'Length / 2), 0, 0);
             Set_Buffer(Rename_Fields.all(3), 0, "[Cancel]");
             FieldOptions := Get_Options(Rename_Fields.all(3));
             FieldOptions.Edit := False;
             Set_Options(Rename_Fields.all(3), FieldOptions);
-            Rename_Fields.all(4) := New_Field(1, 4, 2, 15, 0, 0);
+            Rename_Fields.all(4) := New_Field(1, 4, 2, (OptionText'Length / 2) + 10, 0, 0);
             FieldOptions := Get_Options(Rename_Fields.all(4));
             FieldOptions.Edit := False;
             Set_Options(Rename_Fields.all(4), FieldOptions);
@@ -360,48 +360,7 @@ package body Ships.UI is
         end if;
         Refresh;
         Refresh(FormWindow);
-    end ShowRenameForm;
-
-    procedure ShowCargoForm is
-        FormWindow : Window;
-        ItemIndex : constant Positive := Get_Index(Current(ModulesMenu));
-        Visibility : Cursor_Visibility := Normal;
-        ItemName : constant String := To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name);
-        Amount : String(1..6);
-        DropAmount : Natural;
-        FormText : constant String := "Amount of " & ItemName & " to drop: ";
-    begin
-        FormWindow := Create(3, Column_Position(FormText'Length + 10), ((Lines / 2) - 1), 
-            ((Columns / 2) - (Column_Position(FormText'Length + 10) / 2)));
-        Box(FormWindow);
-        Set_Echo_Mode(True);
-        Set_Cursor_Visibility(Visibility);
-        Move_Cursor(Win => FormWindow, Line => 1, Column => 2);
-        Add(Win => FormWindow, Str => FormText);
-        Get(Win => FormWindow, Str => Amount, Len => 6);
-        if Amount = "      " then
-            Amount := "0     ";
-        end if;
-        DropAmount := Natural'Value(Amount);
-        if DropAmount > 0 and DropAmount <= PlayerShip.Cargo.Element(ItemIndex).Amount then
-            UpdateCargo(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex, (0 - DropAmount));
-            AddMessage("You dropped" & Positive'Image(DropAmount) & " " & ItemName, OtherMessage);
-        elsif DropAmount > PlayerShip.Cargo.Element(ItemIndex).Amount then
-            ShowDialog("You can't drop more " & ItemName & " than you have.");
-        end if;
-        Delete(FormWindow);
-        Visibility := Invisible;
-        Set_Echo_Mode(False);
-        Set_Cursor_Visibility(Visibility);
-        DrawGame(Cargo_Info);
-    exception
-        when CONSTRAINT_ERROR =>
-            Visibility := Invisible;
-            Set_Echo_Mode(False);
-            Set_Cursor_Visibility(Visibility);
-            ShowDialog("You must enter number as an amount to drop.");
-            DrawGame(Cargo_Info);
-    end ShowCargoForm;
+    end ShowShipForm;
 
     procedure ShowUpgradeMenu is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
@@ -521,10 +480,44 @@ package body Ships.UI is
         DrawGame(Ship_Info);
         return Ship_Info;
     end RenameModuleResult;
-        
+
+    function DropCargoResult return GameStates is
+        ItemIndex : constant Positive := Get_Index(Current(ModulesMenu));
+        ItemName : constant String := To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name);
+        DropAmount : Natural;
+        Visibility : Cursor_Visibility := Invisible;
+        FieldIndex : constant Positive := Get_Index(Current(RenameForm));
+    begin
+        if FieldIndex < 3 then
+            return Drop_Cargo;
+        elsif FieldIndex = 4 then
+            DropAmount := Natural'Value(Get_Buffer(Fields(RenameForm, 2)));
+            if DropAmount > 0 and DropAmount <= PlayerShip.Cargo.Element(ItemIndex).Amount then
+                UpdateCargo(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex, (0 - DropAmount));
+                AddMessage("You dropped" & Positive'Image(DropAmount) & " " & ItemName, OtherMessage);
+            elsif DropAmount > PlayerShip.Cargo.Element(ItemIndex).Amount then
+                ShowDialog("You can't drop more " & ItemName & " than you have.");
+            end if;
+        end if;
+        Set_Cursor_Visibility(Visibility);
+        Post(RenameForm, False);
+        Delete(RenameForm);
+        DrawGame(Cargo_Info);
+        return Cargo_Info;
+    exception
+        when CONSTRAINT_ERROR =>
+            ShowDialog("You must enter number as an amount to drop.");
+            Set_Cursor_Visibility(Visibility);
+            Post(RenameForm, False);
+            Delete(RenameForm);
+            DrawGame(Cargo_Info);
+            return Cargo_Info;
+    end DropCargoResult;
 
     function ShipInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Menus.Driver_Result;
+        ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
+        ModuleName : constant String := To_String(PlayerShip.Modules.Element(ModuleIndex).Name);
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map or combat screen
@@ -549,7 +542,7 @@ package body Ships.UI is
                     Refresh(MenuWindow);
                 end if;
             when Character'Pos('n') | Character'Pos('N') => -- Rename selected module
-                ShowRenameForm;
+                ShowShipForm("New name for " & ModuleName & ":");
                 return Rename_Module;
             when Character'Pos('u') | Character'Pos('U') => -- Start upgrading selected module
                 ShowUpgradeMenu;
@@ -562,6 +555,8 @@ package body Ships.UI is
 
     function CargoInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Menus.Driver_Result;
+        ItemIndex : constant Positive := Get_Index(Current(ModulesMenu));
+        ItemName : constant String := To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name);
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back sky map or combat screen
@@ -586,7 +581,8 @@ package body Ships.UI is
                     Refresh(MenuWindow);
                 end if;
             when Character'Pos('d') | Character'Pos('D') => -- Drop selected cargo
-                ShowCargoForm;
+                ShowShipForm("Amount of " & ItemName & " to drop:");
+                return Drop_Cargo;
             when others =>
                 null;
         end case;
@@ -607,7 +603,7 @@ package body Ships.UI is
         return Ship_Info;
     end ShipUpgradeKeys;
 
-    function RenameModuleKeys(Key : Key_Code) return GameStates is
+    function ShipFormKeys(Key : Key_Code; CurrentState : GameStates) return GameStates is
         Result : Forms.Driver_Result;
     begin
         case Key is
@@ -627,14 +623,18 @@ package body Ships.UI is
                 if Result = Form_Ok then
                     Refresh(FormWindow);
                 end if;
-            when 10 => -- quit/rename module
-                return RenameModuleResult;
+            when 10 => -- quit/rename module/drop cargo
+                if CurrentState = Rename_Module then
+                    return RenameModuleResult;
+                else
+                    return DropCargoResult;
+                end if;
             when others =>
                 if Driver(RenameForm, Key) = Form_Ok then
                     Refresh(FormWindow);
                 end if;
         end case;
-        return Rename_Module;
-    end RenameModuleKeys;
+        return CurrentState;
+    end ShipFormKeys;
 
 end Ships.UI;
