@@ -614,17 +614,11 @@ package body Ships.UI is
                 if FieldIndex = 2 then
                     Result := Driver(RenameForm, F_End_Line);
                 end if;
-                if Result = Form_Ok then
-                    Refresh(FormWindow);
-                end if;
             when 50 | KEY_DOWN => -- Select next field
                 Result := Driver(RenameForm, F_Next_Field);
                 FieldIndex := Get_Index(Current(RenameForm));
                 if FieldIndex = 2 then
                     Result := Driver(RenameForm, F_End_Line);
-                end if;
-                if Result = Form_Ok then
-                    Refresh(FormWindow);
                 end if;
             when 10 => -- quit/rename module/drop cargo
                 if CurrentState = Rename_Module then
@@ -640,37 +634,26 @@ package body Ships.UI is
                         if FieldIndex /= 2 then
                             Set_Current(RenameForm, Fields(RenameForm, 2));
                         end if;
-                        Refresh(FormWindow);
                     end if;
                 end if;
             when KEY_DC => -- delete character at cursor
                 if FieldIndex = 2 then
                     Result := Driver(RenameForm, F_Delete_Char);
-                    if Result = Form_Ok then
-                        Refresh(FormWindow);
-                    end if;
                 end if;
             when 54 | KEY_RIGHT => -- Move cursor right
                 if FieldIndex = 2 then
-                    Result := Driver(RenameForm, F_Next_Char);
-                    if Result = Form_Ok then
-                        Refresh(FormWindow);
-                    end if;
+                    Result := Driver(RenameForm, F_Right_Char);
                 end if;
-                MoveShip(0, 1, 0);
             when 52 | KEY_LEFT => -- Move cursor left
                 if FieldIndex = 2 then
-                    Result := Driver(RenameForm, F_Previous_Char);
-                    if Result = Form_Ok then
-                        Refresh(FormWindow);
-                    end if;
+                    Result := Driver(RenameForm, F_Left_Char);
                 end if;
-                MoveShip(0, -1, 0);
             when others =>
-                if Driver(RenameForm, Key) = Form_Ok then
-                    Refresh(FormWindow);
-                end if;
+                Result := Driver(RenameForm, Key);
         end case;
+        if Result = Form_Ok then
+            Refresh(FormWindow);
+        end if;
         return CurrentState;
     end ShipFormKeys;
 
