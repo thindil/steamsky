@@ -197,7 +197,7 @@ exception
         Erase;
         Refresh;
         Move_Cursor(Line => (Lines / 2), Column => 2);
-        Add(Str => "Oops, something bad happens and game crashed. Game should save your progress, but better check it. Also, please, remember what you done before crash, report bug at https://github.com/thindil/steamsky/issues and attach (if possible) file error.log from data directory. Hit any key to quit game.");
+        Add(Str => "Oops, something bad happens and game crashed. Game should save your progress, but better check it. Also, please, remember what you done before crash and report this problem at https://github.com/thindil/steamsky/issues (or if you prefer, on mail thindil@laeran.pl) and attach (if possible) file error.log from data directory. Hit any key to quit game.");
         Key := Get_Keystroke;
         End_Windows;
 end SteamSky;
