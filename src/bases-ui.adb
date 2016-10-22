@@ -16,6 +16,8 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
+with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
+with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Maps; use Maps;
 with Items; use Items;
 with UserInterface; use UserInterface;
@@ -27,6 +29,9 @@ package body Bases.UI is
     TradeMenu : Menu;
     MenuWindow : Window;
     InstallView : Boolean := True;
+    Buy : Boolean;
+    TradeForm : Form;
+    FormWindow : Window;
 
     procedure RepairCost(Cost, Time, ModuleIndex : in out Natural) is
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
@@ -166,17 +171,17 @@ package body Bases.UI is
         Refresh(MenuWindow);
     end ShowTrade;
 
-    procedure ShowForm(Buy : Boolean := False) is
-        FormWindow : Window;
-        ItemIndex : Positive;
-        CargoIndex : Natural := 0;
-        Amount : String(1..6);
-        Visibility : Cursor_Visibility := Normal;
+    function ShowTradeForm return GameStates is
+        Trade_Fields : constant Field_Array_Access := new Field_Array(1..5);
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
-        FormText : Unbounded_String := To_Unbounded_String("Enter amount of ");
-        Width : Column_Position;
-        MaxAmount : Natural := 0;
+        FieldOptions : Field_Option_Set;
+        FormHeight : Line_Position;
+        FormLength : Column_Position;
+        Visibility : Cursor_Visibility := Normal;
+        ItemIndex : Positive;
+        CargoIndex, MaxAmount : Natural := 0;
+        FieldText : Unbounded_String := To_Unbounded_String("Enter amount of ");
     begin
         for I in Items_List.First_Index..Items_List.Last_Index loop
             if To_String(Items_List.Element(I).Name) = Name(Current(TradeMenu)) then
@@ -184,13 +189,13 @@ package body Bases.UI is
                 exit;
             end if;
         end loop;
-        Append(FormText, Items_List.Element(ItemIndex).Name);
+        Append(FieldText, Items_List.Element(ItemIndex).Name);
         if Buy then
             if not Items_List.Element(ItemIndex).Buyable(BaseType) then
                 ShowDialog("You can't buy " & To_String(Items_List.Element(ItemIndex).Name) &
                     " in this base.");
                 DrawGame(Trade_View);
-                return;
+                return Trade_View;
             end if;
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                 if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
@@ -198,7 +203,7 @@ package body Bases.UI is
                     exit;
                 end if;
             end loop;
-            Append(FormText, " to buy");
+            Append(FieldText, " to buy");
         else
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                 if PlayerShip.Cargo.Element(I).ProtoIndex = ItemIndex then
@@ -211,30 +216,47 @@ package body Bases.UI is
                 ShowDialog("You don't have any " & To_String(Items_List.Element(ItemIndex).Name) &
                     " for sale.");
                 DrawGame(Trade_View);
-                return;
+                return Trade_View;
             end if;
-            Append(FormText, " to sell");
+            Append(FieldText, " to sell");
         end if;
-        Append(FormText, " (max" & Natural'Image(MaxAmount) & "): ");
-        Width := Column_Position(Length(FormText) + 10);
-        FormWindow := Create(3, Width, ((Lines / 2) - 1), ((Columns / 2) - Column_Position(Width / 2)));
-        Box(FormWindow);
-        Set_Echo_Mode(True);
-        Set_Cursor_Visibility(Visibility);
-        Move_Cursor(Win => FormWindow, Line => 1, Column => 2);
-        Add(Win => FormWindow, Str => To_String(FormText));
-        Get(Win => FormWindow, Str => Amount, Len => 6);
-        if Buy then
-            BuyItems(ItemIndex, Amount);
-        else
-            SellItems(CargoIndex, Amount);
+        Append(FieldText, " (max" & Natural'Image(MaxAmount) & "): ");
+        if TradeForm = Null_Form then
+            Set_Cursor_Visibility(Visibility);
+            Trade_Fields.all(1) := New_Field(1, Column_Position(Length(FieldText)), 0, 0, 0, 0);
+            FieldOptions := Get_Options(Trade_Fields.all(1));
+            Set_Buffer(Trade_Fields.all(1), 0, To_String(FieldText));
+            FieldOptions.Active := False;
+            Set_Options(Trade_Fields.all(1), FieldOptions);
+            Trade_Fields.all(2) := New_Field(1, 20, 0, Column_Position(Length(FieldText)), 0, 0);
+            FieldOptions := Get_Options(Trade_Fields.all(2));
+            FieldOptions.Auto_Skip := False;
+            Set_Options(Trade_Fields.all(2), FieldOptions);
+            Set_Background(Trade_Fields.all(2), (Reverse_Video => True, others => False));
+            Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type(Trade_Fields.all(2), (0, 0, MaxAmount));
+            Trade_Fields.all(3) := New_Field(1, 8, 2, (Column_Position(Length(FieldText)) / 2), 0, 0);
+            Set_Buffer(Trade_Fields.all(3), 0, "[Cancel]");
+            FieldOptions := Get_Options(Trade_Fields.all(3));
+            FieldOptions.Edit := False;
+            Set_Options(Trade_Fields.all(3), FieldOptions);
+            Trade_Fields.all(4) := New_Field(1, 4, 2, (Column_Position(Length(FieldText)) / 2) + 10, 0, 0);
+            FieldOptions := Get_Options(Trade_Fields.all(4));
+            FieldOptions.Edit := False;
+            Set_Options(Trade_Fields.all(4), FieldOptions);
+            Set_Buffer(Trade_Fields.all(4), 0, "[Ok]");
+            Trade_Fields.all(5) := Null_Field;
+            TradeForm := New_Form(Trade_Fields);
+            Scale(TradeForm, FormHeight, FormLength);
+            FormWindow := Create(FormHeight + 2, FormLength + 2, ((Lines / 3) - (FormHeight / 2)), ((Columns / 2) - (FormLength / 2)));
+            Box(FormWindow);
+            Set_Window(TradeForm, FormWindow);
+            Set_Sub_Window(TradeForm, Derived_Window(FormWindow, FormHeight, FormLength, 1, 1));
+            Post(TradeForm);
         end if;
-        Delete(FormWindow);
-        Visibility := Invisible;
-        Set_Echo_Mode(False);
-        Set_Cursor_Visibility(Visibility);
-        DrawGame(Trade_View);
-    end ShowForm;
+        Refresh;
+        Refresh(FormWindow);
+        return Trade_Form;
+    end ShowTradeForm;
 
     procedure ShowRepairInfo is
         Cost, Time, ModuleIndex : Natural := 0;
@@ -535,9 +557,43 @@ package body Bases.UI is
         ShowRecruitInfo;
         Refresh(MenuWindow);
     end ShowRecruits;
+
+    function TradeResult return GameStates is
+        ItemIndex : Positive;
+        CargoIndex : Natural := 0;
+        Visibility : Cursor_Visibility := Invisible;
+        FieldIndex : constant Positive := Get_Index(Current(TradeForm));
+    begin
+        if FieldIndex < 3 then
+            return Trade_Form;
+        elsif FieldIndex = 4 then
+            for I in Items_List.First_Index..Items_List.Last_Index loop
+                if To_String(Items_List.Element(I).Name) = Name(Current(TradeMenu)) then
+                    ItemIndex := I;
+                    exit;
+                end if;
+            end loop;
+            if not Buy then
+                for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if PlayerShip.Cargo.Element(I).ProtoIndex = ItemIndex then
+                        CargoIndex := I;
+                        exit;
+                    end if;
+                end loop;
+                SellItems(CargoIndex, Get_Buffer(Fields(TradeForm, 2)));
+            else
+                BuyItems(ItemIndex, Get_Buffer(Fields(TradeForm, 2)));
+            end if;
+        end if;
+        Set_Cursor_Visibility(Visibility);
+        Post(TradeForm, False);
+        Delete(TradeForm);
+        DrawGame(Trade_View);
+        return Trade_View;
+    end TradeResult;
     
     function TradeKeys(Key : Key_Code) return GameStates is
-        Result : Driver_Result;
+        Result : Menus.Driver_Result;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -562,9 +618,11 @@ package body Bases.UI is
                     Refresh(MenuWindow);
                 end if;
             when 32 => -- Sell item
-                ShowForm;
+                Buy := False;
+                return ShowTradeForm;
             when 10 => -- Buy item
-                ShowForm(True);
+                Buy := True;
+                return ShowTradeForm;
             when others =>
                 null;
         end case;
@@ -572,7 +630,7 @@ package body Bases.UI is
     end TradeKeys;
 
     function RepairKeys(Key : Key_Code) return GameStates is
-        Result : Driver_Result;
+        Result : Menus.Driver_Result;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -606,7 +664,7 @@ package body Bases.UI is
     end RepairKeys;
 
     function ShipyardKeys(Key : Key_Code) return GameStates is
-        Result : Driver_Result;
+        Result : Menus.Driver_Result;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -647,7 +705,7 @@ package body Bases.UI is
     end ShipyardKeys;
 
     function RecruitKeys(Key : Key_Code) return GameStates is
-        Result : Driver_Result;
+        Result : Menus.Driver_Result;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -680,5 +738,60 @@ package body Bases.UI is
         end case;
         return Recruits_View;
     end RecruitKeys;
+
+    function TradeFormKeys(Key : Key_Code) return GameStates is
+        Result : Forms.Driver_Result;
+        FieldIndex : Positive := Get_Index(Current(TradeForm));
+    begin
+        case Key is
+            when KEY_UP => -- Select previous field
+                Result := Driver(TradeForm, F_Previous_Field);
+                FieldIndex := Get_Index(Current(TradeForm));
+                if FieldIndex = 2 then
+                    Result := Driver(TradeForm, F_End_Line);
+                end if;
+            when KEY_DOWN => -- Select next field
+                Result := Driver(TradeForm, F_Next_Field);
+                FieldIndex := Get_Index(Current(TradeForm));
+                if FieldIndex = 2 then
+                    Result := Driver(TradeForm, F_End_Line);
+                end if;
+            when 10 => -- quit/buy/sell
+                return TradeResult;
+            when KEY_BACKSPACE => -- delete last character
+                if FieldIndex = 2 then
+                    Result := Driver(TradeForm, F_Delete_Previous);
+                    if Result = Form_Ok then
+                        FieldIndex := Get_Index(Current(TradeForm));
+                        if FieldIndex /= 2 then
+                            Set_Current(TradeForm, Fields(TradeForm, 2));
+                        end if;
+                    end if;
+                end if;
+            when KEY_DC => -- delete character at cursor
+                if FieldIndex = 2 then
+                    Result := Driver(TradeForm, F_Delete_Char);
+                end if;
+            when KEY_RIGHT => -- Move cursor right
+                if FieldIndex = 2 then
+                    Result := Driver(TradeForm, F_Right_Char);
+                end if;
+            when KEY_LEFT => -- Move cursor left
+                if FieldIndex = 2 then
+                    Result := Driver(TradeForm, F_Left_Char);
+                end if;
+            when others =>
+                Result := Driver(TradeForm, Key);
+        end case;
+        if Result = Form_Ok then
+            if FieldIndex = 2 then
+                Set_Background(Current(TradeForm), (Reverse_Video => True, others => False));
+            else
+                Set_Background(Fields(TradeForm, 2), (others => False));
+            end if;
+            Refresh(FormWindow);
+        end if;
+        return Trade_Form;
+    end TradeFormKeys;
 
 end Bases.UI;
