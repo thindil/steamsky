@@ -174,7 +174,7 @@ package body Ships.UI is
             Count => 1, Color => 1);
         Move_Cursor(Win => InfoWindow, Line => (CurrentLine + 1), Column => 0);
         Add(Win => InfoWindow, Str => "Rename module");
-        Change_Attributes(Win => InfoWindow, Line => (CurrentLine + 1), Column => 2, 
+        Change_Attributes(Win => InfoWindow, Line => (CurrentLine + 1), Column => 0, 
             Count => 1, Color => 1);
         Refresh;
         Refresh(InfoWindow);
@@ -541,7 +541,7 @@ package body Ships.UI is
                     ShowModuleInfo;
                     Refresh(MenuWindow);
                 end if;
-            when Character'Pos('n') | Character'Pos('N') => -- Rename selected module
+            when Character'Pos('r') | Character'Pos('R') => -- Rename selected module
                 ShowShipForm("New name for " & ModuleName & ":");
                 return Rename_Module;
             when Character'Pos('u') | Character'Pos('U') => -- Start upgrading selected module
