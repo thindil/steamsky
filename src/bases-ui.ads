@@ -28,5 +28,6 @@ package Bases.UI is
     function RepairKeys(Key : Key_Code) return GameStates; -- Handle keys in ship repairs
     function ShipyardKeys(Key : Key_Code) return GameStates; -- Handle keys in shipyards
     function RecruitKeys(Key : Key_Code) return GameStates; -- Handle keys in recruit new crew members in bases
+    function TradeFormKeys(Key : Key_Code) return GameStates; -- Handle keys in trade form
 
 end Bases.UI;

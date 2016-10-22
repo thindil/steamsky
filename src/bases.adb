@@ -62,7 +62,7 @@ package body Bases is
         UpdateGame(5);
     exception
         when CONSTRAINT_ERROR =>
-            ShowDialog("You must enter number as an amount to buy.");
+            return;
     end BuyItems;
 
     procedure SellItems(ItemIndex : Positive; Amount : String) is
@@ -92,7 +92,7 @@ package body Bases is
         UpdateGame(5);
     exception
         when CONSTRAINT_ERROR =>
-            ShowDialog("You must enter number as an amount to sell.");
+            return;
     end SellItems;
 
     function GenerateBaseName return Unbounded_String is -- based on name generator from libtcod

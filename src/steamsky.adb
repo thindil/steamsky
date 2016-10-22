@@ -174,6 +174,8 @@ begin
                 GameState := RecruitKeys(Key);
             when Rename_Module | Drop_Cargo =>
                 GameState := ShipFormKeys(Key, GameState);
+            when Trade_Form =>
+                GameState := TradeFormKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
