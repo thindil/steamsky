@@ -710,9 +710,10 @@ package body Ships is
                                 To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
                                 & ".", OrderMessage);
                             GiveOrders(WorkerIndex, Rest);
-                            PlayerShip.UpgradeModule := 0;
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", "0");
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeAction", "NONE");
+                            PlayerShip.UpgradeModule := 0;
+                            return;
                         else
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", "10");
                         end if;
@@ -738,9 +739,10 @@ package body Ships is
                                 To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
                                 & ".", OrderMessage);
                             GiveOrders(WorkerIndex, Rest);
-                            PlayerShip.UpgradeModule := 0;
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", "0");
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeAction", "NONE");
+                            PlayerShip.UpgradeModule := 0;
+                            return;
                         else
                             case Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType is
                                 when ENGINE =>
@@ -779,6 +781,7 @@ package body Ships is
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", "0");
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeAction", "NONE");
                             PlayerShip.UpgradeModule := 0;
+                            return;
                         else
                             case Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType is
                                 when ENGINE =>
