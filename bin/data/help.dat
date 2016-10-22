@@ -74,5 +74,5 @@ If your ship is docked to base, you can dismiss crew members. Go to crew info sc
 * All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press 'h' key on sky map (no need to press 'e' first to show menu).
 * If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to cargo information screen, select desired item and press key 'd'.
 * Each crew member need proper module for work. If that module is destroyed, member cannot start selected work (for example, can't start piloting when cockpit is destroyed).
-* If you want to stop renaming modules or dropping cargo, just left field with name/amount of items to drop empty. That same works for stopping buying or selling items.
+* If you want to stop buying or selling items just left amount fields empty and press Enter.
 []
