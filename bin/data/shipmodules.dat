@@ -243,4 +243,37 @@ Skill = Metalsmith
 Price = 1000
 InstallTime = 60
 Size = 1
+[22]
+Name = Advanced medium bronze hull
+Type = Hull
+Weight = 7000
+Value = 0
+MaxValue = 25
+Durability = 150
+Material = Bronze
+Skill = Engineering
+Price = 12500 
+InstallTime = 240
+[23]
+Name = Large bronze hull
+Type = Hull
+Weight = 8000
+Value = 0
+MaxValue = 30
+Durability = 200
+Material = Bronze
+Skill = Engineering
+Price = 15000 
+InstallTime = 260
+[24]
+Name = Advanced large bronze hull
+Type = Hull
+Weight = 9000
+Value = 0
+MaxValue = 35
+Durability = 200
+Material = Bronze
+Skill = Engineering
+Price = 17500 
+InstallTime = 280
 []
