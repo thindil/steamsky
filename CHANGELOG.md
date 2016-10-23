@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Crash on updating modules
 - Crash on check for new recruits in bases
 - Clearing module owner on change crew member order
+- Time needed for rest in wait command
 
 ## [0.4] - 2016-10-16
 
