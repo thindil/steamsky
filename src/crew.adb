@@ -181,6 +181,13 @@ package body Crew is
                     null;
             end case;
         end if;
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType /= CABIN and 
+                PlayerShip.Modules.Element(I).Owner = MemberIndex then
+                UpdateModule(PlayerShip, I, "Owner", "0");
+                exit;
+            end if;
+        end loop;
         case GivenOrder is
             when Pilot =>
                 AddMessage(MemberName & " starts piloting.", OrderMessage);
@@ -192,13 +199,6 @@ package body Crew is
                 UpdateModule(PlayerShip, ModuleIndex2, "Owner", Positive'Image(MemberIndex));
             when Rest =>
                 AddMessage(MemberName & " going on break.", OrderMessage);
-                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                    if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType /= CABIN and 
-                        PlayerShip.Modules.Element(I).Owner = MemberIndex then
-                        UpdateModule(PlayerShip, I, "Owner", "0");
-                        exit;
-                    end if;
-                end loop;
             when Repair =>
                 AddMessage(MemberName & " starts repair ship.", OrderMessage);
             when Craft =>
