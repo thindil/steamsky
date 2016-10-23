@@ -309,14 +309,14 @@ package body UserInterface is
 
     procedure ShowWaitOrder is
         WaitWindow : Window;
-        WaitLines : Line_Position := 11;
+        WaitLines : Line_Position := 9;
         WaitColumns : Column_Position := 23;
         NeedHealing, NeedRest : Boolean := False;
         WaitOrders : constant array (1..6) of Unbounded_String :=
             (To_Unbounded_String("Wait 1 minute"), To_Unbounded_String("Wait 5 minutes"), 
             To_Unbounded_String("Wait 10 minutes"), To_Unbounded_String("Wait 15 minutes"), 
             To_Unbounded_String("Wait 30 minutes"), To_Unbounded_String("Wait 1 hour"));
-        CurrentLine : Line_Position := 1;
+        CurrentLine : Line_Position := 0;
     begin
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Tired > 0 and PlayerShip.Crew.Element(I).Order = Rest then
@@ -329,40 +329,40 @@ package body UserInterface is
         end loop;
         if NeedRest then
             WaitLines := WaitLines + 1;
-            WaitColumns := 32;
+            WaitColumns := 31;
         end if;
         if NeedHealing then
             WaitLines := WaitLines + 1;
-            WaitColumns := 32;
+            WaitColumns := 31;
         end if;
         WaitWindow := Create(WaitLines, WaitColumns, (Lines / 2) - (WaitLines / 2), (Columns / 2) - (WaitColumns / 2));
         Box(WaitWindow);
         for I in WaitOrders'Range loop
             CurrentLine := CurrentLine + 1;
-            Move_Cursor(Win => WaitWindow, Line => CurrentLine, Column => 2);
+            Move_Cursor(Win => WaitWindow, Line => CurrentLine, Column => 1);
             Add(Win => WaitWindow, Str => Integer'Image(I) & " " & To_String(WaitOrders(I)));
-            Change_Attributes(Win => WaitWindow, Line => CurrentLine, Column => 3, Count => 1,
+            Change_Attributes(Win => WaitWindow, Line => CurrentLine, Column => 2, Count => 1,
                 Color => 1);
         end loop;
         if NeedRest then
-            Move_Cursor(Win => WaitWindow, Line => CurrentLine + 1, Column => 2);
+            CurrentLine := CurrentLine + 1;
+            Move_Cursor(Win => WaitWindow, Line => CurrentLine, Column => 1);
             Add(Win => WaitWindow, Str => Line_Position'Image(CurrentLine) & " " & 
                 "Wait until crew is rested");
-            Change_Attributes(Win => WaitWindow, Line => CurrentLine + 1, Column => 3, Count => 1,
+            Change_Attributes(Win => WaitWindow, Line => CurrentLine, Column => 2, Count => 1,
                 Color => 1);
-            CurrentLine := CurrentLine + 2;
         end if;
         if NeedHealing then
             CurrentLine := CurrentLine + 1;
-            Move_Cursor(Win => WaitWindow, Line => CurrentLine, Column => 2);
+            Move_Cursor(Win => WaitWindow, Line => CurrentLine, Column => 1);
             Add(Win => WaitWindow, Str => Line_Position'Image(CurrentLine) & " " & 
                 "Wait until crew is healed");
-            Change_Attributes(Win => WaitWindow, Line => CurrentLine, Column => 3, Count => 1,
+            Change_Attributes(Win => WaitWindow, Line => CurrentLine, Column => 2, Count => 1,
                 Color => 1);
         end if;
-        Move_Cursor(Win => WaitWindow, Line => WaitLines - 2, Column => 3);
+        Move_Cursor(Win => WaitWindow, Line => WaitLines - 2, Column => 2);
         Add(Win => WaitWindow, Str =>  "Quit");
-        Change_Attributes(Win => WaitWindow, Line => WaitLines - 2, Column => 3, Count => 1,
+        Change_Attributes(Win => WaitWindow, Line => WaitLines - 2, Column => 2, Count => 1,
             Color => 1);
         Refresh(WaitWindow);
     end ShowWaitOrder;
