@@ -172,7 +172,7 @@ begin
                 GameState := ShipyardKeys(Key);
             when Recruits_View =>
                 GameState := RecruitKeys(Key);
-            when Rename_Module | Drop_Cargo =>
+            when Rename_Module | Drop_Cargo | Rename_Ship =>
                 GameState := ShipFormKeys(Key, GameState);
             when Trade_Form =>
                 GameState := TradeFormKeys(Key);

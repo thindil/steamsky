@@ -191,6 +191,7 @@ package body Ships.UI is
         Weight := CountShipWeight(PlayerShip);
         Move_Cursor(Line => 2, Column => 2);
         Add(Str => "Name: " & To_String(PlayerShip.Name));
+        Change_Attributes(Line => 2, Column => 2, Count => 1, Color => 1);
         Move_Cursor(Line => 3, Column => 2);
         Add(Str => "Manufacturing: ");
         if PlayerShip.Craft = 0 then
@@ -459,7 +460,7 @@ package body Ships.UI is
         Delete(UpgradeWindow);
     end ShowUpgradeMenu;
 
-    function RenameModuleResult return GameStates is
+    function RenameResult(CurrentState : GameStates) return GameStates is
         Visibility : Cursor_Visibility := Invisible;
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         FieldIndex : constant Positive := Get_Index(Current(RenameForm));
@@ -467,7 +468,7 @@ package body Ships.UI is
         SemicolonIndex : Natural;
     begin
         if FieldIndex < 3 then
-            return Rename_Module;
+            return CurrentState;
         elsif FieldIndex = 4 then
             NewName := Trim(To_Unbounded_String(Get_Buffer(Fields(RenameForm, 2))), Ada.Strings.Both);
             if Length(NewName) > 0 then
@@ -476,7 +477,11 @@ package body Ships.UI is
                     Delete(NewName, SemicolonIndex, SemicolonIndex);
                     SemicolonIndex := Index(NewName, ";");
                 end loop;
-                UpdateModule(PlayerShip, ModuleIndex, "Name", To_String(NewName));
+                if CurrentState = Rename_Module then
+                    UpdateModule(PlayerShip, ModuleIndex, "Name", To_String(NewName));
+                else
+                    PlayerShip.Name := NewName;
+                end if;
             end if;
         end if;
         Set_Cursor_Visibility(Visibility);
@@ -484,7 +489,7 @@ package body Ships.UI is
         Delete(RenameForm);
         DrawGame(Ship_Info);
         return Ship_Info;
-    end RenameModuleResult;
+    end RenameResult;
 
     function DropCargoResult return GameStates is
         ItemIndex : constant Positive := Get_Index(Current(ModulesMenu));
@@ -547,6 +552,9 @@ package body Ships.UI is
             when Character'Pos('u') | Character'Pos('U') => -- Start upgrading selected module
                 ShowUpgradeMenu;
                 return Upgrade_Module;
+            when Character'Pos('n') | Character'Pos('N') => -- Rename ship
+                ShowShipForm("New name for ship:");
+                return Rename_Ship;
             when others =>
                 null;
         end case;
@@ -621,10 +629,10 @@ package body Ships.UI is
                     Result := Driver(RenameForm, F_End_Line);
                 end if;
             when 10 => -- quit/rename module/drop cargo
-                if CurrentState = Rename_Module then
-                    return RenameModuleResult;
-                else
+                if CurrentState = Drop_Cargo then
                     return DropCargoResult;
+                else
+                    return RenameResult(CurrentState);
                 end if;
             when KEY_BACKSPACE => -- delete last character
                 if FieldIndex = 2 then
