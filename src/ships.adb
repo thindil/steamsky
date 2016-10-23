@@ -666,8 +666,7 @@ package body Ships is
             UpgradeMaterial := 0;
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                 if Items_List(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
-                    Modules_List(PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex).RepairMaterial and
-                    PlayerShip.Cargo.Element(I).Amount >= ResultAmount
+                    Modules_List(PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex).RepairMaterial
                 then
                     UpgradeMaterial := I;
                     exit;
