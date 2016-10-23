@@ -323,8 +323,16 @@ package body UserInterface is
                 NeedRest := True;
             end if;
             if PlayerShip.Crew.Element(I).Health < 100 and PlayerShip.Crew.Element(I).Health > 0 
-                and PlayerShip.Crew.Element(I).Order = Rest then
-                NeedHealing := True;
+                and PlayerShip.Crew.Element(I).Order = Rest 
+            then
+                for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                    if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
+                        PlayerShip.Modules.Element(J).Owner = I 
+                    then
+                        NeedHealing := True;
+                        exit;
+                    end if;
+                end loop;
             end if;
         end loop;
         if NeedRest then
@@ -603,7 +611,7 @@ package body UserInterface is
     end ConfirmKeys;
 
     function WaitMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates is
-        TimeNeeded : Natural := 0;
+        TimeNeeded, CabinIndex, TempTimeNeeded : Natural := 0;
         ReturnState : GameStates;
     begin
         case Key is
@@ -625,8 +633,27 @@ package body UserInterface is
             when Character'Pos('7') => -- Wait until crew is rested
                 for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                     if PlayerShip.Crew.Element(I).Tired > 0 and PlayerShip.Crew.Element(I).Order = Rest then
-                        if TimeNeeded < PlayerShip.Crew.Element(I).Tired then
-                            TimeNeeded := PlayerShip.Crew.Element(I).Tired;
+                        CabinIndex := 0;
+                        TempTimeNeeded := 0;
+                        for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                            if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
+                                PlayerShip.Modules.Element(J).Owner = I then
+                                CabinIndex := J;
+                                exit;
+                            end if;
+                        end loop;
+                        if CabinIndex > 0 then
+                            TempTimeNeeded := (PlayerShip.Crew.Element(I).Tired / PlayerShip.Modules.Element(CabinIndex).Current_Value) * 
+                                15;
+                            if TempTimeNeeded = 0 then
+                                TempTimeNeeded := 15;
+                            end if;
+                        else
+                            TempTimeNeeded := PlayerShip.Crew.Element(I).Tired * 15;
+                        end if;
+                        TempTimeNeeded := TempTimeNeeded + 15;
+                        if TempTimeNeeded > TimeNeeded then
+                            TimeNeeded := TempTimeNeeded;
                         end if;
                     end if;
                 end loop;
@@ -638,10 +665,18 @@ package body UserInterface is
             when Character'Pos('8') => -- Wait until crew is healed
                 for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                     if PlayerShip.Crew.Element(I).Health < 100 and PlayerShip.Crew.Element(I).Health > 0  and
-                        PlayerShip.Crew.Element(I).Order = Rest then
-                        if TimeNeeded < (100 - PlayerShip.Crew.Element(I).Health) * 15 then
-                            TimeNeeded := (100 - PlayerShip.Crew.Element(I).Health) * 15;
-                        end if;
+                        PlayerShip.Crew.Element(I).Order = Rest 
+                    then
+                        for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                            if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
+                                PlayerShip.Modules.Element(J).Owner = I 
+                            then
+                                if TimeNeeded < (100 - PlayerShip.Crew.Element(I).Health) * 15 then
+                                    TimeNeeded := (100 - PlayerShip.Crew.Element(I).Health) * 15;
+                                end if;
+                                exit;
+                            end if;
+                        end loop;
                     end if;
                 end loop;
                 if TimeNeeded > 0 then
