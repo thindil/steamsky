@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash on updating modules
 - Crash on check for new recruits in bases
+- Clearing module owner on change crew member order
 
 ## [0.4] - 2016-10-16
 
