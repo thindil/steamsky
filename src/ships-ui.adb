@@ -272,10 +272,15 @@ package body Ships.UI is
         Set_Format(ModulesMenu, Lines - 10, 1);
         Set_Mark(ModulesMenu, "");
         Scale(ModulesMenu, MenuHeight, MenuLength);
-        MenuWindow := Create(MenuHeight, MenuLength, (CurrentLine + 2), 2);
+        CurrentLine := CurrentLine + 2;
+        MenuWindow := Create(MenuHeight, MenuLength, CurrentLine, 2);
+        CurrentLine := CurrentLine + MenuHeight + 1;
         Set_Window(ModulesMenu, MenuWindow);
         Set_Sub_Window(ModulesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(ModulesMenu);
+        Move_Cursor(Line => CurrentLine, Column => 2);
+        Add(Str => "Press Enter to see selected module options");
+        Change_Attributes(Line => CurrentLine, Column => 8, Count => 5, Color => 1);
         ShowModuleInfo;
         Refresh(MenuWindow);
     end ShowShipInfo;
