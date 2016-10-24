@@ -73,7 +73,7 @@ package Ships is
     Enemies_List : ProtoShips_Container.Vector;
     PlayerShip : ShipRecord;
     
-    procedure MoveShip(ShipIndex, X, Y : Integer); -- Move selected ship
+    function MoveShip(ShipIndex, X, Y : Integer) return Natural; -- Move selected ship
     procedure DockShip(Docking : Boolean); -- Dock/Undock ship at base
     procedure ChangeShipSpeed(SpeedValue : ShipSpeed); -- Change speed of ship
     procedure UpdateCargo(ProtoIndex : Positive; Amount : Integer); -- Update selected item in ship cargo

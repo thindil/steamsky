@@ -77,7 +77,7 @@ package body Ships is
         return True;
     end HaveOrderRequirements;
 
-    procedure MoveShip(ShipIndex, X, Y: Integer) is
+    function MoveShip(ShipIndex, X, Y: Integer) return Natural is
         NewX, NewY : Integer;
         TimePassed, FuelNeeded : Integer := 0;
         type SpeedType is digits 2;
@@ -87,15 +87,15 @@ package body Ships is
             case PlayerShip.Speed is
                 when DOCKED =>
                     ShowDialog("First you must undock ship from base.");
-                    return;
+                    return 0;
                 when FULL_STOP =>
                     ShowDialog("First you must set speed for ship.");
-                    return;
+                    return 0;
                 when others =>
                     null;
             end case;
             if not HaveOrderRequirements then
-                return;
+                return 0;
             end if;
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                 if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = ENGINE then
@@ -118,7 +118,7 @@ package body Ships is
                 if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then 
                     if PlayerShip.Cargo.Element(I).Amount < abs FuelNeeded then
                         ShowDialog("You don't have enough fuel (Charcollum).");
-                        return;
+                        return 0;
                     end if;
                     exit;
                 end if;
@@ -127,7 +127,7 @@ package body Ships is
             NewY := PlayerShip.SkyY + Y;
         end if;
         if NewX < 1 or NewX > 1024 or NewY < 1 or NewY > 1024 then
-            return;
+            return 0;
         end if;
         if ShipIndex = 0 then
             PlayerShip.SkyX := NewX;
@@ -155,6 +155,7 @@ package body Ships is
                 UpdateGame(TimePassed);
             end if;
         end if;
+        return 1;
     end MoveShip;
 
     procedure DockShip(Docking : Boolean) is
