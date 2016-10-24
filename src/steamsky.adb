@@ -166,8 +166,8 @@ begin
                 GameState := HelpKeys(Key);
             when Repairs_View =>
                 GameState := RepairKeys(Key);
-            when Upgrade_Module =>
-                GameState := ShipUpgradeKeys(Key);
+            when Module_Options =>
+                GameState := ModuleOptionsKeys(Key);
             when Shipyard_View =>
                 GameState := ShipyardKeys(Key);
             when Recruits_View =>
