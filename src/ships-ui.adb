@@ -26,8 +26,8 @@ with Messages; use Messages;
 
 package body Ships.UI is
 
-    ModulesMenu : Menu;
-    MenuWindow : Window;
+    ModulesMenu, OptionsMenu : Menu;
+    MenuWindow, MenuWindow2 : Window;
     RenameForm : Form;
     FormWindow : Window;
 
@@ -90,7 +90,7 @@ package body Ships.UI is
                 end if;
                 Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
                 Add(Win => InfoWindow, Str => "Fuel usage:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Current_Value));
-                MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Value) * 1.5);
+                MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Value) / 2.0);
                 if PlayerShip.Modules.Element(ModuleIndex).Current_Value = MaxValue then
                     Add(Win => InfoWindow, Str => " (max upgrade)");
                 end if;
@@ -182,17 +182,7 @@ package body Ships.UI is
             else
                 Add(Win => InfoWindow, Str => "final upgrades");
             end if;
-            CurrentLine := CurrentLine + 1;
         end if;
-        CurrentLine := CurrentLine + 1;
-        Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-        Add(Win => InfoWindow, Str => "Upgrade module");
-        Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 0, 
-            Count => 1, Color => 1);
-        Move_Cursor(Win => InfoWindow, Line => (CurrentLine + 1), Column => 0);
-        Add(Win => InfoWindow, Str => "Rename module");
-        Change_Attributes(Win => InfoWindow, Line => (CurrentLine + 1), Column => 0, 
-            Count => 1, Color => 1);
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
@@ -385,98 +375,6 @@ package body Ships.UI is
         Refresh(FormWindow);
     end ShowShipForm;
 
-    procedure ShowUpgradeMenu is
-        ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
-        UpgradeWindow : Window;
-        MaxValue, Value : Natural;
-        WindowHeight : Line_Position := 3;
-        UpgradeDurability, UpgradeMaxValue, UpgradeContinue, UpgradeValue : Unbounded_String := Null_Unbounded_String;
-        CurrentLine : Line_Position := 1;
-    begin
-        MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Durability) * 1.5);
-        if PlayerShip.Modules.Element(ModuleIndex).MaxDurability < MaxValue then
-            UpgradeDurability := To_Unbounded_String("1 Upgrade durability");
-            WindowHeight := WindowHeight + 1;
-        end if;
-        MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
-        Value :=
-            Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Value) / 2.0);
-        case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
-            when ENGINE =>
-                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
-                    UpgradeMaxValue := To_Unbounded_String("2 Upgrade engine power");
-                    WindowHeight := WindowHeight + 1;
-                end if;
-                if PlayerShip.Modules.Element(ModuleIndex).Current_Value > Value then
-                    UpgradeValue := To_Unbounded_String("3 Reduce fuel usage");
-                    WindowHeight := WindowHeight + 1;
-                end if;
-            when CABIN =>
-                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
-                    UpgradeMaxValue := To_Unbounded_String("2 Upgrade quality");
-                    WindowHeight := WindowHeight + 1;
-                end if;
-            when GUN | BATTERING_RAM =>
-                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
-                    UpgradeMaxValue := To_Unbounded_String("2 Upgrade damage");
-                    WindowHeight := WindowHeight + 1;
-                end if;
-            when HULL =>
-                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
-                    UpgradeMaxValue := To_Unbounded_String("2 Enlarge hull");
-                    WindowHeight := WindowHeight + 1;
-                end if;
-            when others =>
-                null;
-        end case;
-        if PlayerShip.Modules.Element(ModuleIndex).UpgradeAction /= NONE then
-            UpgradeContinue := To_Unbounded_String("4 Continue upgrading");
-            WindowHeight := WindowHeight + 1;
-        end if;
-        if UpgradeDurability = Null_Unbounded_String and UpgradeMaxValue = Null_Unbounded_String and 
-            UpgradeContinue = Null_Unbounded_String then
-            ShowDialog("This module don't have available upgrades.");
-            return;
-        end if;
-        UpgradeWindow := Create(WindowHeight, 24, ((Lines / 2) - 3), ((Columns / 2) - 12));
-        Box(UpgradeWindow);
-        if UpgradeDurability /= Null_Unbounded_String then
-            Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
-            Add(Win => UpgradeWindow, Str => To_String(UpgradeDurability));
-            Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
-                Count => 1, Color => 1);
-            CurrentLine := CurrentLine + 1;
-        end if;
-        if UpgradeMaxValue /= Null_Unbounded_String then
-            Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
-            Add(Win => UpgradeWindow, Str => To_String(UpgradeMaxValue));
-            Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
-                Count => 1, Color => 1);
-            CurrentLine := CurrentLine + 1;
-        end if;
-        if UpgradeValue /= Null_Unbounded_String then
-            Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
-            Add(Win => UpgradeWindow, Str => To_String(UpgradeValue));
-            Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
-                Count => 1, Color => 1);
-            CurrentLine := CurrentLine + 1;
-        end if;
-        if UpgradeContinue /= Null_Unbounded_String then
-            Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
-            Add(Win => UpgradeWindow, Str => To_String(UpgradeContinue));
-            Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
-                Count => 1, Color => 1);
-            CurrentLine := CurrentLine + 1;
-        end if;
-        Move_Cursor(Win => UpgradeWindow, Line => CurrentLine, Column => 1);
-        Add(Win => UpgradeWindow, Str => "Quit");
-        Change_Attributes(Win => UpgradeWindow, Line => CurrentLine, Column => 1, 
-            Count => 1, Color => 1);
-        Refresh;
-        Refresh(UpgradeWindow);
-        Delete(UpgradeWindow);
-    end ShowUpgradeMenu;
-
     function RenameResult(CurrentState : GameStates) return GameStates is
         Visibility : Cursor_Visibility := Invisible;
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
@@ -536,10 +434,78 @@ package body Ships.UI is
             return Cargo_Info;
     end DropCargoResult;
 
+    procedure ShowModuleOptions is
+        ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
+        Options_Items : constant Item_Array_Access := new Item_Array(1..7);
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        MaxValue : Positive;
+        MenuIndex : Positive := 1;
+    begin
+        MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Durability) * 1.5);
+        if PlayerShip.Modules.Element(ModuleIndex).MaxDurability < MaxValue then
+            Options_Items.all(MenuIndex) := New_Item("Upgrade durability", "1");
+            MenuIndex := MenuIndex + 1;
+        end if;
+        case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+            when ENGINE =>
+                MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
+                    Options_Items.all(MenuIndex) := New_Item("Upgrade engine power", "2");
+                    MenuIndex := MenuIndex + 1;
+                end if;
+                MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Value) / 2.0);
+                if PlayerShip.Modules.Element(ModuleIndex).Current_Value > MaxValue then
+                    Options_Items.all(MenuIndex) := New_Item("Reduce fuel usage", "3");
+                    MenuIndex := MenuIndex + 1;
+                end if;
+            when CABIN =>
+                MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
+                    Options_Items.all(MenuIndex) := New_Item("Upgrade quality", "2");
+                    MenuIndex := MenuIndex + 1;
+                end if;
+            when GUN | BATTERING_RAM =>
+                MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
+                    Options_Items.all(MenuIndex) := New_Item("Upgrade damage", "2");
+                    MenuIndex := MenuIndex + 1;
+                end if;
+            when HULL =>
+                MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
+                    Options_Items.all(MenuIndex) := New_Item("Enlarge hull", "2");
+                    MenuIndex := MenuIndex + 1;
+                end if;
+            when others =>
+                null;
+        end case;
+        if PlayerShip.Modules.Element(ModuleIndex).UpgradeAction /= NONE then
+            Options_Items.all(MenuIndex) := New_Item("Continue upgrade", "4");
+            MenuIndex := MenuIndex + 1;
+        end if;
+        Options_Items.all(MenuIndex) := New_Item("Rename", "5");
+        MenuIndex := MenuIndex + 1;
+        Options_Items.all(MenuIndex) := New_Item("Quit", "6");
+        MenuIndex := MenuIndex + 1;
+        for I in MenuIndex..Options_Items'Last loop
+            Options_Items.all(I) := Null_Item;
+        end loop;
+        OptionsMenu := New_Menu(Options_Items);
+        Set_Mark(OptionsMenu, "");
+        Set_Options(OptionsMenu, (Show_Descriptions => False, others => True));
+        Scale(OptionsMenu, MenuHeight, MenuLength);
+        MenuWindow2 := Create(MenuHeight + 2, MenuLength + 2, ((Lines / 3) - (MenuHeight / 2)), ((Columns / 2) - (MenuLength / 2)));
+        Box(MenuWindow2);
+        Set_Window(OptionsMenu, MenuWindow2);
+        Set_Sub_Window(OptionsMenu, Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
+        Post(OptionsMenu);
+        Refresh;
+        Refresh(MenuWindow2);
+    end ShowModuleOptions;
+
     function ShipInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Menus.Driver_Result;
-        ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
-        ModuleName : constant String := To_String(PlayerShip.Modules.Element(ModuleIndex).Name);
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map or combat screen
@@ -563,12 +529,9 @@ package body Ships.UI is
                     ShowModuleInfo;
                     Refresh(MenuWindow);
                 end if;
-            when Character'Pos('r') | Character'Pos('R') => -- Rename selected module
-                ShowShipForm("New name for " & ModuleName & ":");
-                return Rename_Module;
-            when Character'Pos('u') | Character'Pos('U') => -- Start upgrading selected module
-                ShowUpgradeMenu;
-                return Upgrade_Module;
+            when 10 => -- Show module options menu
+                ShowModuleOptions;
+                return Module_Options;
             when Character'Pos('n') | Character'Pos('N') => -- Rename ship
                 ShowShipForm("New name for ship:");
                 return Rename_Ship;
@@ -614,19 +577,46 @@ package body Ships.UI is
         return Cargo_Info;
     end CargoInfoKeys;
 
-    function ShipUpgradeKeys(Key : Key_Code) return GameStates is
+    function ModuleOptionsKeys(Key : Key_Code) return GameStates is
+        Result : Menus.Driver_Result;
+        OptionIndex : constant Positive := Positive'Value(Description(Current(OptionsMenu)));
+        ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
+        ModuleName : constant String := To_String(PlayerShip.Modules.Element(ModuleIndex).Name);
     begin
         case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Close upgrade menu
-                null;
-            when Character'Pos('1')..Character'Pos('4') => -- Give upgrade orders
-                StartUpgrading(Get_Index(Current(ModulesMenu)), Positive(Key - 48));
+            when 56 | KEY_UP => -- Select previous item
+                Result := Driver(OptionsMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OptionsMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 50 | KEY_DOWN => -- Select next item
+                Result := Driver(OptionsMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OptionsMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 10 => -- Select option from menu
+                Post(OptionsMenu, False);
+                DrawGame(Ship_Info);
+                if OptionIndex /= 5 then
+                    if OptionIndex < 5 then
+                        StartUpgrading(ModuleIndex, OptionIndex);
+                    end if;
+                    return Ship_Info;
+                else
+                    ShowShipForm("New name for " & ModuleName & ":");
+                    return Rename_Module;
+                end if;
             when others =>
-                return Upgrade_Module;
+                null;
         end case;
-        DrawGame(Ship_Info);
-        return Ship_Info;
-    end ShipUpgradeKeys;
+        return Module_Options;
+    end ModuleOptionsKeys;
 
     function ShipFormKeys(Key : Key_Code; CurrentState : GameStates) return GameStates is
         Result : Forms.Driver_Result;
