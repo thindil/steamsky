@@ -38,6 +38,7 @@ package body Ships.UI is
         MAmount : Natural := 0;
         CurrentLine : Line_Position := 5;
         MaxUpgrade, UpgradePercent : Natural;
+        MaxValue : Positive;
     begin
         InfoWindow := Create(20, (Columns / 2), 8, (Columns / 2));
         Add(Win => InfoWindow, Str => "Status: ");
@@ -56,6 +57,10 @@ package body Ships.UI is
             Add(Win => InfoWindow, Str => "Almost destroyed");
         else
             Add(Win => InfoWindow, Str => "Destroyed");
+        end if;
+        MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Durability) * 1.5);
+        if PlayerShip.Modules.Element(ModuleIndex).MaxDurability = MaxValue then
+            Add(Win => InfoWindow, Str => " (max upgrade)");
         end if;
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         Add(Win => InfoWindow, Str => "Weight:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Weight) &
@@ -79,15 +84,27 @@ package body Ships.UI is
         case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
             when ENGINE =>
                 Add(Win => InfoWindow, Str => "Max power:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
+                MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value = MaxValue then
+                    Add(Win => InfoWindow, Str => " (max upgrade)");
+                end if;
                 Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
                 Add(Win => InfoWindow, Str => "Fuel usage:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Current_Value));
+                MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Value) * 1.5);
+                if PlayerShip.Modules.Element(ModuleIndex).Current_Value = MaxValue then
+                    Add(Win => InfoWindow, Str => " (max upgrade)");
+                end if;
                 CurrentLine := CurrentLine + 1;
             when CARGO =>
                 Add(Win => InfoWindow, Str => "Max cargo:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value) &
                     " kg");
             when HULL =>
                 Add(Win => InfoWindow, Str => "Modules space:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Current_Value) &
-                " /" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
+                    " /" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
+                MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value = MaxValue then
+                    Add(Win => InfoWindow, Str => " (max upgrade)");
+                end if;
             when CABIN =>
                 if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
                     Add(Win => InfoWindow, Str => "Owner: " &
