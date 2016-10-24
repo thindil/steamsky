@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Crash on check for new recruits in bases
 - Clearing module owner on change crew member order
 - Time needed for rest in wait command
+- Check for random events if there was no ship move
 
 ## [0.4] - 2016-10-16
 
