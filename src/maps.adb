@@ -122,21 +122,21 @@ package body Maps is
     begin
         case Key is
             when 56 | KEY_UP => -- Move up
-                MoveShip(0, 0, -1);
+                Result := MoveShip(0, 0, -1);
             when 50 | KEY_DOWN => -- Move down
-                MoveShip(0, 0, 1); 
+                Result := MoveShip(0, 0, 1); 
             when 54 | KEY_RIGHT => -- Move right
-                MoveShip(0, 1, 0);
+                Result := MoveShip(0, 1, 0);
             when 52 | KEY_LEFT => -- Move left
-                MoveShip(0, -1, 0);
+                Result := MoveShip(0, -1, 0);
             when 49 => -- Move down/left
-                MoveShip(0, -1, 1);
+                Result := MoveShip(0, -1, 1);
             when 51 => -- Move down/right
-                MoveShip(0, 1, 1);
+                Result := MoveShip(0, 1, 1);
             when 55 => -- Move up/left
-                MoveShip(0, -1, -1);
+                Result := MoveShip(0, -1, -1);
             when 57 => -- Move up/right
-                MoveShip(0, 1, -1);
+                Result := MoveShip(0, 1, -1);
             when Character'Pos('o') | Character'Pos('O') => -- Ship orders menu
                 Result := 2;
             when Character'Pos('w') | Character'Pos('W') => -- Wait order menu
