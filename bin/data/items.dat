@@ -106,4 +106,10 @@ Weight = 5
 Type = Tin
 Prices = 2, 4, 4, 4
 Buyable = Y, N, N, N
+[19]
+Name = Iron ore
+Weight = 8
+Type = Ironore
+Prices = 5, 5, 3, 5
+Buyable = N, N, Y, N
 []
