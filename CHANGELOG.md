@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 - New ship modules: Small bronze furnace, Advanced medium bronze hull, Large
   bronze hull, Advanced large bronze hull
 - Minimum fuel usage during fly
-- New types of items: copper, tin, copperore and tinore
+- New types of items: copper, tin, copperore, tinore and ironore
 - New items: copper plates, tin plates, copper ore and tin ore
 - New crafting recipes: copper plates, tin plates, bronze plates
 - Option to rename player ship
