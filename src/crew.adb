@@ -161,7 +161,7 @@ package body Crew is
                     ShowDialog(MemberName & " can't starts engineers duty because all engines are destroyed or you don't have engine.");
                     return;
                 when Gunner =>
-                    ShowDialog(MemberName & " can't starts operating gun because all turrets are destroyed or you don't have installed any.");
+                    ShowDialog(MemberName & " can't starts operating gun because all guns are destroyed or you don't have installed any.");
                     return;
                 when Craft =>
                     ShowDialog(MemberName & " can't starts manufacturing because all workshops are destroyed or you don't have installed any.");
