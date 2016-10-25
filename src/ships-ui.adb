@@ -607,13 +607,14 @@ package body Ships.UI is
                 end if;
             when 10 => -- Select option from menu
                 Post(OptionsMenu, False);
-                DrawGame(Ship_Info);
                 if OptionIndex /= 5 then
                     if OptionIndex < 5 then
                         StartUpgrading(ModuleIndex, OptionIndex);
                     end if;
+                    DrawGame(Ship_Info);
                     return Ship_Info;
                 else
+                    DrawGame(Ship_Info);
                     ShowShipForm("New name for " & ModuleName & ":");
                     return Rename_Module;
                 end if;
