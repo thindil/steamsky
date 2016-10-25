@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - New items: copper plates, tin plates, copper ore, tin ore and iron ore
 - New crafting recipes: copper plates, tin plates, bronze plates
 - Option to rename player ship
+- Impact of hunger/thirst/wounds on crew members skills
 
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
