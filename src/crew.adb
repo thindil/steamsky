@@ -485,13 +485,31 @@ package body Crew is
     end UpdateCrew;
 
     function GetSkillLevel(MemberIndex, SkillIndex : Positive) return Natural is
+        SkillLevel : Integer := 0;
+        type DamageFactor is digits 2 range 0.0..1.0;
+        Damage : DamageFactor := 0.0;
+        BaseSkillLevel : Natural;
     begin
         for I in PlayerShip.Crew.Element(MemberIndex).Skills.First_Index..PlayerShip.Crew.Element(MemberIndex).Skills.Last_Index loop
             if PlayerShip.Crew.Element(MemberIndex).Skills.Element(I)(1) = SkillIndex then
-                return PlayerShip.Crew.Element(MemberIndex).Skills.Element(I)(2);
+                BaseSkillLevel := PlayerShip.Crew.Element(MemberIndex).Skills.Element(I)(2);
+                Damage := 1.0 - DamageFactor(Float(PlayerShip.Crew.Element(MemberIndex).Health) / 100.0);
+                SkillLevel := SkillLevel + (BaseSkillLevel - Integer(Float(BaseSkillLevel) * Float(Damage)));
+                if PlayerShip.Crew.Element(MemberIndex).Thirst > 40 then
+                    Damage := 1.0 - DamageFactor(Float(PlayerShip.Crew.Element(MemberIndex).Thirst) / 100.0);
+                    SkillLevel := SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
+                end if;
+                if PlayerShip.Crew.Element(MemberIndex).Hunger > 80 then
+                    Damage := 1.0 - DamageFactor(Float(PlayerShip.Crew.Element(MemberIndex).Hunger) / 100.0);
+                    SkillLevel := SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
+                end if;
+                if SkillLevel < 0 then
+                    SkillLevel := 0;
+                end if;
+                return SkillLevel;
             end if;
         end loop;
-        return 0;
+        return SkillLevel;
     end GetSkillLevel;
 
 end Crew;
