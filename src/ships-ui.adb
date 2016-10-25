@@ -112,6 +112,24 @@ package body Ships.UI is
                 else
                     Add(Win => InfoWindow, Str => "Owner: none");
                 end if;
+                Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+                Add(Win => InfoWindow, Str => "Quality: ");
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < 30 then
+                    Add(Win => InfoWindow, Str => "Minimal");
+                elsif PlayerShip.Modules.Element(ModuleIndex).Max_Value > 29 and PlayerShip.Modules.Element(ModuleIndex).Max_Value < 60
+                then
+                    Add(Win => InfoWindow, Str => "Basic");
+                elsif PlayerShip.Modules.Element(ModuleIndex).Max_Value > 59 and PlayerShip.Modules.Element(ModuleIndex).Max_Value < 80
+                then
+                    Add(Win => InfoWindow, Str => "Extended");
+                else
+                    Add(Win => InfoWindow, Str => "Luxury");
+                end if;
+                MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value = MaxValue then
+                    Add(Win => InfoWindow, Str => " (max upgrade)");
+                end if;
+                CurrentLine := CurrentLine + 1;
             when GUN =>
                 Add(Win => InfoWindow, Str => "Ammunition: " &  
                     To_String(Items_List.Element(PlayerShip.Modules.Element(ModuleIndex).Current_Value).Name));
