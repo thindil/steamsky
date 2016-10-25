@@ -115,15 +115,15 @@ package body Ships.UI is
                 Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
                 Add(Win => InfoWindow, Str => "Quality: ");
                 if PlayerShip.Modules.Element(ModuleIndex).Max_Value < 30 then
-                    Add(Win => InfoWindow, Str => "Minimal");
+                    Add(Win => InfoWindow, Str => "minimal");
                 elsif PlayerShip.Modules.Element(ModuleIndex).Max_Value > 29 and PlayerShip.Modules.Element(ModuleIndex).Max_Value < 60
                 then
-                    Add(Win => InfoWindow, Str => "Basic");
+                    Add(Win => InfoWindow, Str => "basic");
                 elsif PlayerShip.Modules.Element(ModuleIndex).Max_Value > 59 and PlayerShip.Modules.Element(ModuleIndex).Max_Value < 80
                 then
-                    Add(Win => InfoWindow, Str => "Extended");
+                    Add(Win => InfoWindow, Str => "extended");
                 else
-                    Add(Win => InfoWindow, Str => "Luxury");
+                    Add(Win => InfoWindow, Str => "luxury");
                 end if;
                 MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
                 if PlayerShip.Modules.Element(ModuleIndex).Max_Value = MaxValue then
@@ -133,6 +133,14 @@ package body Ships.UI is
             when GUN =>
                 Add(Win => InfoWindow, Str => "Ammunition: " &  
                     To_String(Items_List.Element(PlayerShip.Modules.Element(ModuleIndex).Current_Value).Name));
+                Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+                if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
+                    Add(Win => InfoWindow, Str => "Gunner: " &
+                        To_String(PlayerShip.Crew.Element(PlayerShip.Modules.Element(ModuleIndex).Owner).Name));
+                else
+                    Add(Win => InfoWindow, Str => "Gunner: none");
+                end if;
+                CurrentLine := CurrentLine + 1;
             when TURRET =>
                 if PlayerShip.Modules.Element(ModuleIndex).Current_Value > 0 then
                     Add(Win => InfoWindow, Str => "Weapon: " &
