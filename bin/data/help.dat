@@ -70,6 +70,7 @@ If crew member cabin is destroyed and he/she going on break, he/she will try fin
 Speed of rest of crew members depends on quality of cabin which they owned. Without cabin, they rest very slow.
 You can hire new crew members in bases. First you must dock to base, then you choice Recruit option from orders menu. Amount of available recruits depends on size of base. They hire cost depends on amount of knowledge (skills and level of skills). Here no limit how much crew members you can have on ship, just remember, all of them needs food, drinks and place to rest. Hiring new crew members reduce population of base. New recruits are available every 30 days between visits of base. 
 If your ship is docked to base, you can dismiss crew members. Go to crew info screen and use Dismiss option on selected crew member. Dismissed crew members joins to base population.
+Hunger, thirst and wounds have impact on your crew members skills. Wounded or hungry crew members have penalties to their skills.
 [Tips]
 * All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press 'h' key on sky map (no need to press 'e' first to show menu).
 * If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to cargo information screen, select desired item and press key 'd'.
