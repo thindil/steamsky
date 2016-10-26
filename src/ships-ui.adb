@@ -647,7 +647,6 @@ package body Ships.UI is
                     DrawGame(Ship_Info);
                     return Ship_Info;
                 else
-                    DrawGame(Ship_Info);
                     ShowShipForm("New name for " & ModuleName & ":");
                     return Rename_Module;
                 end if;
