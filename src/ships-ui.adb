@@ -66,7 +66,7 @@ package body Ships.UI is
         Add(Win => InfoWindow, Str => "Weight:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Weight) &
             " kg");
         Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
-        Add(Win => InfoWindow, Str => "Repair material: ");
+        Add(Win => InfoWindow, Str => "Repair/Upgrade material: ");
         for I in Items_List.First_Index..Items_List.Last_Index loop
             if Items_List.Element(I).IType = Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).RepairMaterial
                 then
@@ -78,7 +78,7 @@ package body Ships.UI is
             end if;
         end loop;
         Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
-        Add(Win => InfoWindow, Str => "Repair skill: " &
+        Add(Win => InfoWindow, Str => "Repair/Upgrade skill: " &
             To_String(Skills_Names.Element(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).RepairSkill)));
         Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
         case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
