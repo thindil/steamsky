@@ -176,6 +176,8 @@ begin
                 GameState := ShipFormKeys(Key, GameState);
             when Trade_Form =>
                 GameState := TradeFormKeys(Key);
+            when Assign_Owner =>
+                GameState := AssignOwnerKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
