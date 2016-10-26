@@ -565,16 +565,17 @@ package body Ships.UI is
     begin   
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Modules.Element(ModuleIndex).Owner /= I then
-                Assign_Items.all(MenuIndex) := New_Item("Assign " & To_String(PlayerShip.Crew.Element(I).Name));
+                Assign_Items.all(MenuIndex) := New_Item("Assign " & To_String(PlayerShip.Crew.Element(I).Name), Positive'Image(I));
                 MenuIndex := MenuIndex + 1;
             end if;
         end loop;
-        Assign_Items.all(MenuIndex) := New_Item("Quit");
+        Assign_Items.all(MenuIndex) := New_Item("Quit", "0");
         MenuIndex := MenuIndex + 1;
         for I in MenuIndex..Assign_Items'Last loop
             Assign_Items.all(I) := Null_Item;
         end loop;
         OptionsMenu := New_Menu(Assign_Items);
+        Set_Options(OptionsMenu, (Show_Descriptions => False, others => True));
         Set_Mark(OptionsMenu, "");
         Scale(OptionsMenu, MenuHeight, MenuLength);
         MenuWindow2 := Create(MenuHeight + 2, MenuLength + 2, ((Lines / 3) - (MenuHeight / 2)), ((Columns / 2) - (MenuLength / 2)));
@@ -764,6 +765,9 @@ package body Ships.UI is
 
     function AssignOwnerKeys(Key : Key_Code) return GameStates is
         Result : Menus.Driver_Result;
+        ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
+        OptionIndex : constant Natural := Positive'Value(Description(Current(OptionsMenu)));
+        ModuleName : constant String := To_String(PlayerShip.Modules.Element(ModuleIndex).Name);
     begin
         case Key is
             when 56 | KEY_UP => -- Select previous item
@@ -784,6 +788,27 @@ package body Ships.UI is
                 end if;
             when 10 => -- Select new module owner
                 Post(OptionsMenu, False);
+                if OptionIndex /= 0 then
+                    case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+                        when CABIN =>
+                            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                                if PlayerShip.Modules.Element(I).Owner = OptionIndex and
+                                    Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = CABIN
+                                then
+                                    UpdateModule(PlayerShip, I, "Owner", "0");
+                                end if;
+                            end loop;
+                            UpdateModule(PlayerShip, ModuleIndex, "Owner", Positive'Image(OptionIndex));
+                            AddMessage("You assigned " & ModuleName & " to " & To_String(PlayerShip.Crew.Element(OptionIndex).Name)
+                                & ".", OrderMessage);
+                        when GUN =>
+                            GiveOrders(OptionIndex, Gunner, ModuleIndex);
+                        when ALCHEMY_LAB | FURNACE =>
+                            GiveOrders(OptionIndex, Craft, ModuleIndex);
+                        when others =>
+                            null;
+                    end case;
+                end if;
                 DrawGame(Ship_Info);
                 return Ship_Info;
             when others =>
