@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: copper plates, tin plates, bronze plates
 - Option to rename player ship
 - Impact of hunger/thirst/wounds on crew members skills
+- Option to assign crew members to selected module
 
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
