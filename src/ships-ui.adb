@@ -215,7 +215,12 @@ package body Ships.UI is
             else
                 Add(Win => InfoWindow, Str => "final upgrades");
             end if;
+            CurrentLine := CurrentLine + 1;
         end if;
+        CurrentLine := CurrentLine + 1;
+        Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+        Add(Win => InfoWindow, Str => "Press Enter to see selected module options");
+        Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
@@ -307,13 +312,9 @@ package body Ships.UI is
         Scale(ModulesMenu, MenuHeight, MenuLength);
         CurrentLine := CurrentLine + 2;
         MenuWindow := Create(MenuHeight, MenuLength, CurrentLine, 2);
-        CurrentLine := CurrentLine + MenuHeight + 1;
         Set_Window(ModulesMenu, MenuWindow);
         Set_Sub_Window(ModulesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(ModulesMenu);
-        Move_Cursor(Line => CurrentLine, Column => 2);
-        Add(Str => "Press Enter to see selected module options");
-        Change_Attributes(Line => CurrentLine, Column => 8, Count => 5, Color => 1);
         ShowModuleInfo;
         Refresh(MenuWindow);
     end ShowShipInfo;
