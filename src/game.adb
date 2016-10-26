@@ -215,6 +215,7 @@ package body Game is
         RawValue : Unbounded_String;
         Messages : Natural := 10;
         StartLoop : Positive;
+        Message : Message_Data;
     begin
         Create(SaveGame, Out_File, "data/savegame.dat");
         -- Save version
@@ -359,8 +360,9 @@ package body Game is
         if Messages > 0 then
             StartLoop := MessagesAmount - Messages + 1;
             for I in StartLoop..MessagesAmount loop
-                RawValue := To_Unbounded_String(Integer'Image(Message_Type'Pos(GetMessageType(I))));
-                Put(SaveGame, GetMessage(I) & ";" & To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                Message := GetMessage(I);
+                RawValue := To_Unbounded_String(Integer'Image(Message_Type'Pos(Message.MType)));
+                Put(SaveGame, To_String(Message.Message) & ";" & To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             end loop;
         end if;
         Close(SaveGame);

@@ -20,14 +20,9 @@ with UserInterface; use UserInterface;
 
 package body Messages is
 
-    type Message_Data is -- Data structure for messages
-        record
-            Message : Unbounded_String;
-            MType : Message_Type;
-        end record;
     package Messages_Container is new Vectors(Positive, Message_Data);
     Messages_List : Messages_Container.Vector;
-    StartIndex, EndIndex : Integer := 0;
+    StartIndex, EndIndex, LastIndex : Integer := 0;
     MessagesType : Message_Type := Default;
     MessagesPad : Window := Null_Window;
 
@@ -62,16 +57,17 @@ package body Messages is
         if Messages_List.Length = 500 then
             Messages_List.Delete(Index => 1, Count => 1);
         end if;
+        LastIndex := LastIndex + 1;
         Messages_List.Append(New_Item => (Message => To_Unbounded_String(FormatedTime) & ": " &
-            To_Unbounded_String(Message), MType => MType));
+            To_Unbounded_String(Message), MType => MType, MessageIndex => LastIndex));
         LastMessage := To_Unbounded_String(Message);
     end AddMessage;
 
-    function GetMessage(MessageIndex : Integer; MType : Message_Type := Default) return String is
+    function GetMessage(MessageIndex : Integer; MType : Message_Type := Default) return Message_Data is
         Index : Integer;
     begin
         if MessageIndex > Integer(Messages_List.Length) then
-            return "";
+            return (Message => Null_Unbounded_String, MType => Default, MessageIndex => 1);
         end if;
         if MessageIndex < 1 then
             Index := 1;
@@ -81,11 +77,11 @@ package body Messages is
                         Index := Index - 1;
                     end if;
                     if Index = MessageIndex then
-                        return To_String(Messages_List.Element(I).Message);
+                        return Messages_List.Element(I);
                     end if;
                 end loop;
             end if;
-            return "";
+            return (Message => Null_Unbounded_String, MType => Default, MessageIndex => 1);
         end if;
         Index := 0;
         for I in Messages_List.First_Index..Messages_List.Last_Index loop
@@ -93,14 +89,15 @@ package body Messages is
                 Index := Index + 1;
             end if;
             if Index = MessageIndex then
-                return To_String(Messages_List.Element(I).Message);
+                return Messages_List.Element(I);
             end if;
         end loop;
-        return "";
+        return (Message => Null_Unbounded_String, MType => Default, MessageIndex => 1);
     end GetMessage;
 
     procedure ClearMessages is
     begin
+        LastIndex := 0;
         Messages_List.Clear;
     end ClearMessages;
 
@@ -121,23 +118,14 @@ package body Messages is
 
     procedure RestoreMessage(Message : Unbounded_String; MType : Message_Type := Default) is
     begin
-        Messages_List.Append(New_Item => (Message => Message, MType => MType));
+        LastIndex := LastIndex + 1;
+        Messages_List.Append(New_Item => (Message => Message, MType => MType, MessageIndex => LastIndex));
     end RestoreMessage;
 
-    function GetMessageType(MessageIndex : Integer) return Message_Type is
+    function GetLastMessageIndex return Natural is
     begin
-        if MessageIndex > Integer(Messages_List.Length) then
-            return Default;
-        end if;
-        if MessageIndex < 1 then
-            if Integer(Messages_List.Length) + MessageIndex < 1 then
-                return Default;
-            else
-                return Messages_List.Element(Integer(Messages_List.Length) + MessageIndex).MType;
-            end if;
-        end if;
-        return Messages_List.Element(MessageIndex).MType;
-    end GetMessageType;
+        return LastIndex;
+    end GetLastMessageIndex;
 
     procedure ShowMessages is
         LinesAmount : Line_Position := 0;

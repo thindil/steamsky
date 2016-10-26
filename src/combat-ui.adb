@@ -90,7 +90,7 @@ package body Combat.UI is
         LoopStart : Integer;
         DamagePercent : Natural;
         CurrentLine : Line_Position := 13;
-        Message : Unbounded_String;
+        Message : Message_Data;
         Crew_Items : Item_Array_Access;
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
@@ -244,24 +244,25 @@ package body Combat.UI is
             Change_Attributes(Line => 13, Column => (Columns / 2),
                 Count => 3, Color => 1);
         end if;
-        if MessagesStarts < MessagesAmount then
-            LoopStart := MessagesStarts - MessagesAmount;
-            if LoopStart < -10 then
-                LoopStart := -10;
-            end if;
-            CurrentLine := Lines - 11;
-            Move_Cursor(Line => CurrentLine, Column => 2);
-            for I in reverse LoopStart..-1 loop
-                Message := To_Unbounded_String(GetMessage((I + 1), Default));
-                CurrentLine := CurrentLine + 1;
-                if Length(Message) > Integer(Columns - 2) then
-                    CurrentLine := CurrentLine + (Line_Position(Length(Message)) / Line_Position(Columns - 2));
-                end if;
-                exit when CurrentLine >= Lines;
-                Add(Str => To_String(Message));
-                Move_Cursor(Line => CurrentLine, Column => 2);
-            end loop;
+        LoopStart := 0 - MessagesAmount;
+        if LoopStart < -10 then
+            LoopStart := -10;
         end if;
+        CurrentLine := Lines - 11;
+        Move_Cursor(Line => CurrentLine, Column => 2);
+        for I in reverse LoopStart..-1 loop
+            Message := GetMessage((I + 1));
+            if Message.MessageIndex < MessagesStarts then
+                exit;
+            end if;
+            CurrentLine := CurrentLine + 1;
+            if Length(Message.Message) > Integer(Columns - 2) then
+                CurrentLine := CurrentLine + (Line_Position(Length(Message.Message)) / Line_Position(Columns - 2));
+            end if;
+            exit when CurrentLine >= Lines;
+            Add(Str => To_String(Message.Message));
+            Move_Cursor(Line => CurrentLine, Column => 2);
+        end loop;
         LastMessage := To_Unbounded_String("");
         Refresh;
         Refresh(MenuWindow);

@@ -39,7 +39,7 @@ package body Combat is
         EngineerOrder := 3;
         EndCombat := False;
         EnemyName := Enemy.Ship.Name;
-        MessagesStarts := MessagesAmount(Default);
+        MessagesStarts := GetLastMessageIndex + 1;
         Guns.Clear;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = GUN and 
