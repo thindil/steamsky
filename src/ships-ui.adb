@@ -475,7 +475,7 @@ package body Ships.UI is
 
     procedure ShowModuleOptions is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
-        Options_Items : constant Item_Array_Access := new Item_Array(1..7);
+        Options_Items : constant Item_Array_Access := new Item_Array(1..8);
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         MaxValue : Positive;
@@ -504,7 +504,17 @@ package body Ships.UI is
                     Options_Items.all(MenuIndex) := New_Item("Upgrade quality", "2");
                     MenuIndex := MenuIndex + 1;
                 end if;
-            when GUN | BATTERING_RAM =>
+                Options_Items.all(MenuIndex) := New_Item("Assign owner", "7");
+                MenuIndex := MenuIndex + 1;
+            when GUN =>
+                MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
+                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
+                    Options_Items.all(MenuIndex) := New_Item("Upgrade damage", "2");
+                    MenuIndex := MenuIndex + 1;
+                end if;
+                Options_Items.all(MenuIndex) := New_Item("Assign gunner", "7");
+                MenuIndex := MenuIndex + 1;
+            when BATTERING_RAM =>
                 MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
                 if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
                     Options_Items.all(MenuIndex) := New_Item("Upgrade damage", "2");
@@ -516,6 +526,9 @@ package body Ships.UI is
                     Options_Items.all(MenuIndex) := New_Item("Enlarge hull", "2");
                     MenuIndex := MenuIndex + 1;
                 end if;
+            when ALCHEMY_LAB | FURNACE =>
+                Options_Items.all(MenuIndex) := New_Item("Assign worker", "7");
+                MenuIndex := MenuIndex + 1;
             when others =>
                 null;
         end case;
@@ -542,6 +555,36 @@ package body Ships.UI is
         Refresh;
         Refresh(MenuWindow2);
     end ShowModuleOptions;
+
+    procedure ShowAssignMenu is
+        ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
+        Assign_Items : constant Item_Array_Access := new Item_Array(1..(PlayerShip.Crew.Last_Index + 2));
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        MenuIndex : Positive := 1;
+    begin   
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Modules.Element(ModuleIndex).Owner /= I then
+                Assign_Items.all(MenuIndex) := New_Item("Assign " & To_String(PlayerShip.Crew.Element(I).Name));
+                MenuIndex := MenuIndex + 1;
+            end if;
+        end loop;
+        Assign_Items.all(MenuIndex) := New_Item("Quit");
+        MenuIndex := MenuIndex + 1;
+        for I in MenuIndex..Assign_Items'Last loop
+            Assign_Items.all(I) := Null_Item;
+        end loop;
+        OptionsMenu := New_Menu(Assign_Items);
+        Set_Mark(OptionsMenu, "");
+        Scale(OptionsMenu, MenuHeight, MenuLength);
+        MenuWindow2 := Create(MenuHeight + 2, MenuLength + 2, ((Lines / 3) - (MenuHeight / 2)), ((Columns / 2) - (MenuLength / 2)));
+        Box(MenuWindow2);
+        Set_Window(OptionsMenu, MenuWindow2);
+        Set_Sub_Window(OptionsMenu, Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
+        Post(OptionsMenu);
+        Refresh;
+        Refresh(MenuWindow2);
+    end ShowAssignMenu;
 
     function ShipInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Menus.Driver_Result;
@@ -641,15 +684,18 @@ package body Ships.UI is
                 end if;
             when 10 => -- Select option from menu
                 Post(OptionsMenu, False);
-                if OptionIndex /= 5 then
+                if OptionIndex /= 5 and OptionIndex /= 7 then
                     if OptionIndex < 5 then
                         StartUpgrading(ModuleIndex, OptionIndex);
                     end if;
                     DrawGame(Ship_Info);
                     return Ship_Info;
-                else
+                elsif OptionIndex = 5 then
                     ShowShipForm("New name for " & ModuleName & ":");
                     return Rename_Module;
+                elsif OptionIndex = 7 then
+                    ShowAssignMenu;
+                    return Assign_Owner;
                 end if;
             when others =>
                 null;
@@ -715,5 +761,35 @@ package body Ships.UI is
         end if;
         return CurrentState;
     end ShipFormKeys;
+
+    function AssignOwnerKeys(Key : Key_Code) return GameStates is
+        Result : Menus.Driver_Result;
+    begin
+        case Key is
+            when 56 | KEY_UP => -- Select previous item
+                Result := Driver(OptionsMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OptionsMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 50 | KEY_DOWN => -- Select next item
+                Result := Driver(OptionsMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OptionsMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 10 => -- Select new module owner
+                Post(OptionsMenu, False);
+                DrawGame(Ship_Info);
+                return Ship_Info;
+            when others =>
+                null;
+        end case;
+        return Assign_Owner;
+    end AssignOwnerKeys;
 
 end Ships.UI;
