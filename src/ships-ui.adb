@@ -148,6 +148,13 @@ package body Ships.UI is
                 else
                     Add(Win => InfoWindow, Str => "Weapon: none");
                 end if;
+            when ALCHEMY_LAB | FURNACE =>
+                if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
+                    Add(Win => InfoWindow, Str => "Worker: " &
+                        To_String(PlayerShip.Crew.Element(PlayerShip.Modules.Element(ModuleIndex).Owner).Name));
+                else
+                    Add(Win => InfoWindow, Str => "Worker: none");
+                end if;
             when others =>
                 CurrentLine := CurrentLine - 1;
         end case;
