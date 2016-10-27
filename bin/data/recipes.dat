@@ -54,4 +54,11 @@ Result = 5
 Crafted = 1
 Workplace = Furnace
 Skill = Metalsmith
+[9]
+Material = IronOre
+Amount = 1
+Result = 13
+Crafted = 1
+Workplace = Furnace
+Skill = Metalsmith
 []
