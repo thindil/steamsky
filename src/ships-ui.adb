@@ -30,6 +30,7 @@ package body Ships.UI is
     MenuWindow, MenuWindow2 : Window;
     RenameForm : Form;
     FormWindow : Window;
+    CurrentMenuIndex : Positive := 1;
 
     procedure ShowModuleInfo is
         InfoWindow : Window;
@@ -315,6 +316,7 @@ package body Ships.UI is
         Set_Window(ModulesMenu, MenuWindow);
         Set_Sub_Window(ModulesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(ModulesMenu);
+        Set_Current(ModulesMenu, Modules_Items.all(CurrentMenuIndex));
         ShowModuleInfo;
         Refresh(MenuWindow);
     end ShowShipInfo;
@@ -359,6 +361,7 @@ package body Ships.UI is
         Set_Window(ModulesMenu, MenuWindow);
         Set_Sub_Window(ModulesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(ModulesMenu);
+        Set_Current(ModulesMenu, Cargo_Items.all(CurrentMenuIndex));
         ShowItemInfo;
         Refresh(MenuWindow);
         Move_Cursor(Line => MenuHeight + 4, Column => 2);
@@ -592,6 +595,7 @@ package body Ships.UI is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map or combat screen
+                CurrentMenuIndex := 1;
                 DrawGame(OldState);
                 return OldState;
             when 56 | KEY_UP => -- Select previous module
@@ -621,16 +625,17 @@ package body Ships.UI is
             when others =>
                 null;
         end case;
+        CurrentMenuIndex := Get_Index(Current(ModulesMenu));
         return Ship_Info;
     end ShipInfoKeys;
 
     function CargoInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Menus.Driver_Result;
-        ItemIndex : constant Positive := Get_Index(Current(ModulesMenu));
-        ItemName : constant String := To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name);
+        ItemName : constant String := To_String(Items_List.Element(PlayerShip.Cargo.Element(CurrentMenuIndex).ProtoIndex).Name);
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back sky map or combat screen
+                CurrentMenuIndex := 1;
                 DrawGame(OldState);
                 return OldState;
             when 56 | KEY_UP => -- Select previous item
@@ -652,19 +657,19 @@ package body Ships.UI is
                     Refresh(MenuWindow);
                 end if;
             when Character'Pos('d') | Character'Pos('D') => -- Drop selected cargo
-                ShowShipForm("Amount of " & ItemName & " to drop:", PlayerShip.Cargo.Element(ItemIndex).Amount);
+                ShowShipForm("Amount of " & ItemName & " to drop:", PlayerShip.Cargo.Element(CurrentMenuIndex).Amount);
                 return Drop_Cargo;
             when others =>
                 null;
         end case;
+        CurrentMenuIndex := Get_Index(Current(ModulesMenu));
         return Cargo_Info;
     end CargoInfoKeys;
 
     function ModuleOptionsKeys(Key : Key_Code) return GameStates is
         Result : Menus.Driver_Result;
         OptionIndex : constant Positive := Positive'Value(Description(Current(OptionsMenu)));
-        ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
-        ModuleName : constant String := To_String(PlayerShip.Modules.Element(ModuleIndex).Name);
+        ModuleName : constant String := To_String(PlayerShip.Modules.Element(CurrentMenuIndex).Name);
     begin
         case Key is
             when 56 | KEY_UP => -- Select previous item
@@ -687,14 +692,16 @@ package body Ships.UI is
                 Post(OptionsMenu, False);
                 if OptionIndex /= 5 and OptionIndex /= 7 then
                     if OptionIndex < 5 then
-                        StartUpgrading(ModuleIndex, OptionIndex);
+                        StartUpgrading(CurrentMenuIndex, OptionIndex);
                     end if;
                     DrawGame(Ship_Info);
                     return Ship_Info;
                 elsif OptionIndex = 5 then
+                    DrawGame(Ship_Info);
                     ShowShipForm("New name for " & ModuleName & ":");
                     return Rename_Module;
                 elsif OptionIndex = 7 then
+                    DrawGame(Ship_Info);
                     ShowAssignMenu;
                     return Assign_Owner;
                 end if;
@@ -765,9 +772,8 @@ package body Ships.UI is
 
     function AssignOwnerKeys(Key : Key_Code) return GameStates is
         Result : Menus.Driver_Result;
-        ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         OptionIndex : constant Natural := Positive'Value(Description(Current(OptionsMenu)));
-        ModuleName : constant String := To_String(PlayerShip.Modules.Element(ModuleIndex).Name);
+        ModuleName : constant String := To_String(PlayerShip.Modules.Element(CurrentMenuIndex).Name);
     begin
         case Key is
             when 56 | KEY_UP => -- Select previous item
@@ -789,7 +795,7 @@ package body Ships.UI is
             when 10 => -- Select new module owner
                 Post(OptionsMenu, False);
                 if OptionIndex /= 0 then
-                    case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+                    case Modules_List.Element(PlayerShip.Modules.Element(CurrentMenuIndex).ProtoIndex).MType is
                         when CABIN =>
                             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                                 if PlayerShip.Modules.Element(I).Owner = OptionIndex and
@@ -798,13 +804,13 @@ package body Ships.UI is
                                     UpdateModule(PlayerShip, I, "Owner", "0");
                                 end if;
                             end loop;
-                            UpdateModule(PlayerShip, ModuleIndex, "Owner", Positive'Image(OptionIndex));
+                            UpdateModule(PlayerShip, CurrentMenuIndex, "Owner", Positive'Image(OptionIndex));
                             AddMessage("You assigned " & ModuleName & " to " & To_String(PlayerShip.Crew.Element(OptionIndex).Name)
                                 & ".", OrderMessage);
                         when GUN =>
-                            GiveOrders(OptionIndex, Gunner, ModuleIndex);
+                            GiveOrders(OptionIndex, Gunner, CurrentMenuIndex);
                         when ALCHEMY_LAB | FURNACE =>
-                            GiveOrders(OptionIndex, Craft, ModuleIndex);
+                            GiveOrders(OptionIndex, Craft, CurrentMenuIndex);
                         when others =>
                             null;
                     end case;
