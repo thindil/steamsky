@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
   incompatible
+- Each crafting module have own separate crafting order
 - Updated help
 - Updated interface
 - Price of bronze plates
