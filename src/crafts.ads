@@ -37,6 +37,6 @@ package Crafts is
 
     function LoadRecipes return Boolean; -- Load recipes from file, return False if file not exists
     procedure Manufacturing(Minutes : Positive); -- Craft selected items
-    procedure SetRecipe(RecipeIndex : Positive); -- Set recipe to craft
+    procedure SetRecipe(RecipeIndex, ModuleIndex : Positive); -- Set recipe to craft
 
 end Crafts;

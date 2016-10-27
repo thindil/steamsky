@@ -18,7 +18,6 @@
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Terminal_Interface.Curses.Forms.Field_Types.IntField;
-with Crafts; use Crafts;
 with Items; use Items;
 with ShipModules; use ShipModules;
 with UserInterface; use UserInterface;

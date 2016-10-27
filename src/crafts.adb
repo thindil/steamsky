@@ -95,8 +95,7 @@ package body Crafts is
         return True;
     end LoadRecipes;
 
-    procedure SetRecipe(RecipeIndex : Positive) is
-        ModuleIndex : Natural := 0;
+    procedure SetRecipe(RecipeIndex, ModuleIndex : Positive) is
         Recipe : constant Craft_Data := Recipes_List.Element(RecipeIndex);
         SpaceNeeded : Integer := 0;
         MaterialIndexes : array (Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index) of
@@ -118,18 +117,6 @@ package body Crafts is
                 return;
             end if;
         end loop;
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).Mtype = Recipe.Workplace and
-                PlayerShip.Modules.Element(I).Durability > 0 then
-                ModuleIndex := I;
-                exit;
-            end if;
-        end loop;
-        if ModuleIndex = 0 then
-            ShowDialog("You don't have workplace for manufacture " & 
-                To_String(Items_List.Element(Recipe.ResultIndex).Name) & ".");
-            return;
-        end if;
         for I in MaterialIndexes'Range loop
             SpaceNeeded := SpaceNeeded + Items_List.Element(MaterialIndexes(I)).Weight * Recipe.MaterialAmounts.Element(I);
         end loop;
@@ -137,12 +124,13 @@ package body Crafts is
             ShowDialog("You don't have that much free space in your ship cargo.");
             return;
         end if;
-        --PlayerShip.Craft := RecipeIndex;
-        AddMessage(To_String(Items_List.Element(Recipe.ResultIndex).Name) & " was set as manufacturing order.", CraftMessage);
+        UpdateModule(PlayerShip, ModuleIndex, "Current_Value", Positive'Image(RecipeIndex));
+        AddMessage(To_String(Items_List.Element(Recipe.ResultIndex).Name) & " was set as manufacturing order in " & 
+            To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ".", CraftMessage);
     end SetRecipe;
 
     procedure Manufacturing(Minutes : Positive) is
-        CrafterIndex, ModuleIndex, Amount, ResultAmount, CraftedAmount : Natural := 0;
+        CrafterIndex, Amount, ResultAmount, CraftedAmount : Natural := 0;
         Recipe : Craft_Data;
         MaterialIndexes : array(1..10) of Natural := (others => 0);
         OrderTime, CurrentMinutes : Integer;

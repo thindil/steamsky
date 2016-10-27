@@ -103,25 +103,25 @@ package body UserInterface is
             Move_Cursor(Line => 0, Column => (Columns - 19));
             Add(Str => "[P][E][G][R][M][U]");
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = GUN then
-                    if PlayerShip.Modules.Element(I).Owner > 0 and GunnersCheck = 0 then
-                        GunnersCheck := 1;
-                    elsif PlayerShip.Modules.Element(I).Owner = 0 and GunnersCheck = 1 then
-                        GunnersCheck := 2;
-                    end if;
-                elsif PlayerShip.Craft > 0 then 
-                    if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List.Element(PlayerShip.Craft).Workplace then
-                        if PlayerShip.Modules.Element(I).Owner > 0 and CraftersCheck = 0 then
-                            CraftersCheck := 1;
-                        elsif PlayerShip.Modules.Element(I).Owner = 0 and CraftersCheck = 1 then
-                            CraftersCheck := 2;
+                case Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                    when GUN =>
+                        if PlayerShip.Modules.Element(I).Owner > 0 and GunnersCheck = 0 then
+                            GunnersCheck := 1;
+                        elsif PlayerShip.Modules.Element(I).Owner = 0 and GunnersCheck = 1 then
+                            GunnersCheck := 2;
                         end if;
-                    end if;
-                end if;
+                    when ALCHEMY_LAB | FURNACE =>
+                        if PlayerShip.Modules.Element(I).Current_Value > 0 then
+                            if PlayerShip.Modules.Element(I).Owner > 0 and CraftersCheck < 2 then
+                                CraftersCheck := 1;
+                            else
+                                CraftersCheck := 2;
+                            end if;
+                        end if;
+                    when others =>
+                        null;
+                end case;
             end loop;
-            if PlayerShip.Craft > 0 and CraftersCheck = 0 then
-                CraftersCheck := 2;
-            end if;
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                 case PlayerShip.Crew.Element(I).Order is
                     when Pilot =>
