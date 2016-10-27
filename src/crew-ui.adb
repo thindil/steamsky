@@ -26,6 +26,7 @@ package body Crew.UI is
 
     CrewMenu : Menu;
     MenuWindow : Window;
+    CurrentMenuIndex : Positive := 1;
 
     procedure ShowMemberInfo is
         InfoWindow : Window;
@@ -164,6 +165,7 @@ package body Crew.UI is
         Set_Window(CrewMenu, MenuWindow);
         Set_Sub_Window(CrewMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(CrewMenu);
+        Set_Current(CrewMenu, Crew_Items.all(CurrentMenuIndex));
         ShowMemberInfo;
         Refresh(MenuWindow);
     end ShowCrewInfo;
@@ -208,6 +210,7 @@ package body Crew.UI is
         AddMessage("You dismissed " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & ".", OrderMessage);
         PlayerShip.Crew.Delete(Index => MemberIndex, Count => 1);
         SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
+        CurrentMenuIndex := 1;
     end DismissMember;
 
     function CrewInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
@@ -216,6 +219,7 @@ package body Crew.UI is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map or combat screen
+                CurrentMenuIndex := 1;
                 DrawGame(OldState);
                 return OldState;
             when Character'Pos('o') | Character'Pos('O') => -- Give orders to selected crew member
@@ -251,6 +255,7 @@ package body Crew.UI is
             when others =>
                 null;
         end case;
+        CurrentMenuIndex := Get_Index(Current(CrewMenu));
         return Crew_Info;
     end CrewInfoKeys;
 
