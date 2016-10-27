@@ -151,7 +151,8 @@ package body Crafts.UI is
             end if;
         end loop;
         if ModulesAmount = 2 then
-            ShowDialog("You don't have proper workplace for this recipe");
+            ShowDialog("You don't have proper workplace for this recipe.");
+            DrawGame(Craft_View);
             return Craft_View;
         end if;
         Modules_Items := new Item_Array(1..ModulesAmount);
@@ -175,7 +176,7 @@ package body Crafts.UI is
         Post(ModulesMenu);
         Refresh;
         Refresh(MenuWindow2);
-        return Craft_View;
+        return Recipe_Setting;
     end ShowRecipeMenu;
     
     function CraftKeys(Key : Key_Code) return GameStates is
@@ -187,14 +188,14 @@ package body Crafts.UI is
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when 10 => -- Set selected manufacturing order
-                SetRecipe(Get_Index(Current(RecipesMenu)));
-                DrawGame(Craft_View);
+                return ShowRecipeMenu;
             when 56 | KEY_UP => -- Select previous recipe
                 Result := Driver(RecipesMenu, M_Up_Item);
                 if Result = Request_Denied then
                     Result := Driver(RecipesMenu, M_Last_Item);
                 end if;
                 if Result = Menu_Ok then
+                    RecipeIndex := Menus.Get_Index(Current(RecipesMenu));
                     ShowRecipeInfo;
                     Refresh(MenuWindow);
                 end if;
@@ -204,14 +205,47 @@ package body Crafts.UI is
                     Result := Driver(RecipesMenu, M_First_Item);
                 end if;
                 if Result = Menu_Ok then
+                    RecipeIndex := Menus.Get_Index(Current(RecipesMenu));
                     ShowRecipeInfo;
                     Refresh(MenuWindow);
                 end if;
             when others =>
                 null;
         end case;
-        RecipeIndex := Menus.Get_Index(Current(RecipesMenu));
         return Craft_View;
     end CraftKeys;
+
+    function RecipeSettingKeys(Key : Key_Code) return GameStates is
+        Result : Driver_Result;
+        ModuleIndex : constant Natural := Natural'Value(Description(Current(ModulesMenu)));
+    begin
+        case Key is
+            when 10 => -- Set selected manufacturing order
+                if ModuleIndex > 0 then
+                    SetRecipe(Get_Index(Current(RecipesMenu)), ModuleIndex);
+                end if;
+                DrawGame(Craft_View);
+                return Craft_View;
+            when 56 | KEY_UP => -- Select previous recipe
+                Result := Driver(ModulesMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(ModulesMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 50 | KEY_DOWN => -- Select next recipe
+                Result := Driver(ModulesMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(ModulesMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when others =>
+                null;
+        end case;
+        return Recipe_Setting;
+    end RecipeSettingKeys;
 
 end Crafts.UI;
