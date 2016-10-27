@@ -178,6 +178,8 @@ begin
                 GameState := TradeFormKeys(Key);
             when Assign_Owner =>
                 GameState := AssignOwnerKeys(Key);
+            when Recipe_Setting =>
+                GameState := RecipeSettingKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;

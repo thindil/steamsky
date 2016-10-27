@@ -26,7 +26,8 @@ package Game is
         Combat_Orders, Craft_View, License_Info, License_Full, Wait_Order,
         News_View, Cargo_Info, Help_Topic, Repairs_View, Clear_Confirm,
         Module_Options, Shipyard_View, Recruits_View, Dismiss_Confirm,
-        Rename_Module, Drop_Cargo, Trade_Form, Rename_Ship, Assign_Owner); -- Game states
+        Rename_Module, Drop_Cargo, Trade_Form, Rename_Ship, Assign_Owner,
+        Recipe_Setting); -- Game states
     type Date_Record is -- Data for game date/time
         record
             Year : Natural;
