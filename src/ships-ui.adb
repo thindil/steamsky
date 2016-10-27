@@ -239,17 +239,10 @@ package body Ships.UI is
         Add(Str => "Name: " & To_String(PlayerShip.Name));
         Change_Attributes(Line => 2, Column => 2, Count => 1, Color => 1);
         Move_Cursor(Line => 3, Column => 2);
-        Add(Str => "Manufacturing: ");
-        if PlayerShip.Craft = 0 then
-            Add(Str => "Nothing");
-        else
-            Add(Str => To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Craft).ResultIndex).Name));
-        end if;
-        Move_Cursor(Line => 4, Column => 2);
         Add(Str => "Upgrading: ");
         if PlayerShip.UpgradeModule = 0 then
             Add(Str => "Nothing");
-            CurrentLine := 5;
+            CurrentLine := 4;
         else
             Add(Str => To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name) & " " );
             case PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeAction is
@@ -284,7 +277,7 @@ package body Ships.UI is
                 when others =>
                     null;
             end case;
-            Move_Cursor(Line => 5, Column => 2);
+            Move_Cursor(Line => 4, Column => 2);
             Add(Str => "Upgrade progress: ");
             UpgradePercent :=  100 - Natural((Float(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeProgress) /
                 Float(MaxUpgrade)) * 100.0);
@@ -299,7 +292,7 @@ package body Ships.UI is
             else
                 Add(Str => "final upgrades");
             end if;
-            CurrentLine := 6;
+            CurrentLine := 5;
         end if;
         Move_Cursor(Line => CurrentLine, Column => 2);
         Add(Str => "Weight:" & Integer'Image(Weight) & "kg");

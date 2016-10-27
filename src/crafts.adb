@@ -137,7 +137,7 @@ package body Crafts is
             ShowDialog("You don't have that much free space in your ship cargo.");
             return;
         end if;
-        PlayerShip.Craft := RecipeIndex;
+        --PlayerShip.Craft := RecipeIndex;
         AddMessage(To_String(Items_List.Element(Recipe.ResultIndex).Name) & " was set as manufacturing order.", CraftMessage);
     end SetRecipe;
 
@@ -151,39 +151,15 @@ package body Crafts is
             Member.OrderTime := OrderTime;
         end UpdateMember;
     begin
-        if PlayerShip.Craft = 0 then
-            return;
-        end if;
-        Recipe := Recipes_List.Element(PlayerShip.Craft);
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Craft then
-                CrafterIndex := I;
-                exit;
-            end if;
-        end loop;
-        if CrafterIndex = 0 then
-            return;
-        end if;
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipe.Workplace and
-                PlayerShip.Modules.ELement(I).Durability > 0 then
-                ModuleIndex := I;
-                exit;
-            end if;
-        end loop;
-        if ModuleIndex = 0 then
-            AddMessage("You don't have workplace for manufacturing selected " & 
-                To_String(Items_List.Element(Recipe.ResultIndex).Name) & ".", CraftMessage);
-            GiveOrders(CrafterIndex, Rest);
-            PlayerShip.Craft := 0;
-            return;
-        end if;
-        Craft_Loop:
-        for L in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(L).Order = Craft then
-                CrafterIndex := L;
+        for L in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if PlayerShip.Modules.Element(L).Owner > 0 and (Modules_List.Element(PlayerShip.Modules.Element(L).ProtoIndex).MType = 
+                ALCHEMY_LAB or Modules_List.Element(PlayerShip.Modules.Element(L).ProtoIndex).MType = FURNACE) 
+            then
+                CrafterIndex := PlayerShip.Modules.Element(L).Owner;
                 CurrentMinutes := Minutes;
                 OrderTime := PlayerShip.Crew.Element(CrafterIndex).OrderTime;
+                Recipe := Recipes_List.Element(PlayerShip.Modules.Element(L).Current_Value);
+                Craft_Loop:
                 while CurrentMinutes > 0 loop
                     if CurrentMinutes >= OrderTime then
                         CurrentMinutes := CurrentMinutes - OrderTime;
@@ -201,7 +177,7 @@ package body Crafts is
                                 AddMessage("You don't have any crafting materials for manufacturing " & 
                                     To_String(Items_List.Element(Recipe.ResultIndex).Name) & ".", CraftMessage);
                                 GiveOrders(CrafterIndex, Rest);
-                                PlayerShip.Craft := 0;
+                                UpdateModule(PlayerShip, L, "Current_Value", "0");
                                 exit Craft_Loop;
                             end if;
                         end loop;
@@ -217,7 +193,7 @@ package body Crafts is
                             AddMessage("You don't have free cargo space for manufacturing " & 
                                 To_String(Items_List.Element(Recipe.ResultIndex).Name) & ".", CraftMessage);
                             GiveOrders(CrafterIndex, Rest);
-                            PlayerShip.Craft := 0;
+                            UpdateModule(PlayerShip, L, "Current_Value", "0");
                             exit Craft_Loop;
                         end if;
                         for J in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
@@ -226,7 +202,7 @@ package body Crafts is
                                     To_String(Items_List.Element(Recipe.ResultIndex).Name) & 
                                     ".", CraftMessage);
                                 GiveOrders(CrafterIndex, Rest);
-                                PlayerShip.Craft := 0;
+                                UpdateModule(PlayerShip, L, "Current_Value", "0");
                                 exit Craft_Loop;
                             end if;
                         end loop;
@@ -247,12 +223,12 @@ package body Crafts is
                             end if;
                         end loop;
                         Amount := 0;
-                        UpdateCargo(Recipes_List.Element(PlayerShip.Craft).ResultIndex, ResultAmount);
+                        UpdateCargo(Recipes_List.Element(PlayerShip.Modules.Element(L).Current_Value).ResultIndex, ResultAmount);
                     else
                         OrderTime := OrderTime - CurrentMinutes;
                         CurrentMinutes := 0;
                     end if;
-                end loop;
+                end loop Craft_Loop;
                 if CraftedAmount > 0 then
                     AddMessage(To_String(PlayerShip.Crew.Element(CrafterIndex).Name) & " was manufactured" & 
                     Integer'Image(CraftedAmount) &  " " & To_String(Items_List.Element(Recipe.ResultIndex).Name) & 
@@ -263,7 +239,7 @@ package body Crafts is
                     PlayerShip.Crew.Update_Element(Index => CrafterIndex, Process => UpdateMember'Access);
                 end if;
             end if;
-        end loop Craft_Loop;
+        end loop;
     end Manufacturing;
 
 end Crafts;

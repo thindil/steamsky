@@ -22,13 +22,13 @@ with Ships; use Ships;
 
 package body Crafts.UI is
 
-    RecipesMenu : Menu;
-    MenuWindow : Window;
-    CurrentMenuIndex : Positive := 1;
+    RecipesMenu, ModulesMenu : Menu;
+    MenuWindow, MenuWindow2 : Window;
+    RecipeIndex : Positive := 1;
 
     procedure ShowRecipeInfo is
         InfoWindow : Window;
-        Recipe : constant Craft_Data := Recipes_List.Element(Get_Index(Current(RecipesMenu)));
+        Recipe : constant Craft_Data := Recipes_List.Element(RecipeIndex);
         CurrentLine : Line_Position := 3;
         MAmount, TextLength : Natural := 0;
         HaveMaterial, HaveWorkplace : Boolean := False;
@@ -108,8 +108,8 @@ package body Crafts.UI is
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Skill: " & To_String(Skills_Names.Element(Recipe.Skill)));
         Move_Cursor(Win => InfoWindow, Line => (CurrentLine + 2), Column => 0);
-        Add(Win => InfoWindow, Str => "SPACE for set manufacturing order");
-        Change_Attributes(Win => InfoWindow, Line => (CurrentLine + 2), Column => 0, Count => 5, Color => 1);
+        Add(Win => InfoWindow, Str => "Press ENTER for set manufacturing order");
+        Change_Attributes(Win => InfoWindow, Line => (CurrentLine + 2), Column => 6, Count => 5, Color => 1);
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
@@ -133,20 +133,60 @@ package body Crafts.UI is
         Set_Window(RecipesMenu, MenuWindow);
         Set_Sub_Window(RecipesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(RecipesMenu);
-        Set_Current(RecipesMenu, Recipes_Items.all(CurrentMenuIndex));
+        Set_Current(RecipesMenu, Recipes_Items.all(RecipeIndex));
         ShowRecipeInfo;
         Refresh(MenuWindow);
     end ShowRecipes;
+
+    function ShowRecipeMenu return GameStates is
+        Modules_Items : Item_Array_Access;
+        ModulesAmount : Positive := 2;
+        MenuIndex : Positive := 1;
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+    begin
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List.Element(RecipeIndex).Workplace then
+                ModulesAmount := ModulesAmount + 1;
+            end if;
+        end loop;
+        if ModulesAmount = 2 then
+            ShowDialog("You don't have proper workplace for this recipe");
+            return Craft_View;
+        end if;
+        Modules_Items := new Item_Array(1..ModulesAmount);
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List.Element(RecipeIndex).Workplace then
+                Modules_Items.all(MenuIndex) := New_Item("Manufacture in " & To_String(PlayerShip.Modules.Element(I).Name), 
+                    Positive'Image(I));
+                MenuIndex := MenuIndex + 1;
+            end if;
+        end loop;
+        Modules_Items.all(Modules_Items'Last - 1) := New_Item("Quit", "0");
+        Modules_Items.all(Modules_Items'Last) := Null_Item;
+        ModulesMenu := New_Menu(Modules_Items);
+        Set_Mark(ModulesMenu, "");
+        Set_Options(ModulesMenu, (Show_Descriptions => False, others => True));
+        Scale(ModulesMenu, MenuHeight, MenuLength);
+        MenuWindow2 := Create(MenuHeight + 2, MenuLength + 2, ((Lines / 3) - (MenuHeight / 2)), ((Columns / 2) - (MenuLength / 2)));
+        Box(MenuWindow2);
+        Set_Window(ModulesMenu, MenuWindow2);
+        Set_Sub_Window(ModulesMenu, Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
+        Post(ModulesMenu);
+        Refresh;
+        Refresh(MenuWindow2);
+        return Craft_View;
+    end ShowRecipeMenu;
     
     function CraftKeys(Key : Key_Code) return GameStates is
         Result : Driver_Result;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-                CurrentMenuIndex := 1;
+                RecipeIndex := 1;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
-            when Character'Pos(' ') => -- Set selected manufacturing order
+            when 10 => -- Set selected manufacturing order
                 SetRecipe(Get_Index(Current(RecipesMenu)));
                 DrawGame(Craft_View);
             when 56 | KEY_UP => -- Select previous recipe
@@ -170,7 +210,7 @@ package body Crafts.UI is
             when others =>
                 null;
         end case;
-        CurrentMenuIndex := Menus.Get_Index(Current(RecipesMenu));
+        RecipeIndex := Menus.Get_Index(Current(RecipesMenu));
         return Craft_View;
     end CraftKeys;
 
