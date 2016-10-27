@@ -20,7 +20,6 @@ with Ships; use Ships;
 with Messages; use Messages;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
-with Crafts; use Crafts;
 with Game; use Game;
 
 package body Crew is
@@ -28,7 +27,7 @@ package body Crew is
     procedure GiveOrders(MemberIndex : Positive; GivenOrder : Crew_Orders; ModuleIndex : Natural := 0) is
         NewOrder : Crew_Orders;
         MemberName : constant String := To_String(PlayerShip.Crew.Element(MemberIndex).Name);
-        HaveMaterial, RepairNeeded, FreeWorkplace : Boolean := False;
+        HaveMaterial, RepairNeeded : Boolean := False;
         ModuleIndex2 : Natural := 0;
         MType : ModuleType := ENGINE;
         procedure UpdateOrder(Member : in out Member_Data) is
@@ -52,8 +51,18 @@ package body Crew is
             ShowDialog(MemberName & " is too thirsty to work.");
             return;
         end if;
-        if GivenOrder = Craft and PlayerShip.Craft = 0 then
-            ShowDialog("You can't set crew member for manufacturing, because you don't set item to manufacture.");
+        if GivenOrder = Craft then
+            if ModuleIndex = 0 then
+                ShowDialog("You must set which workplace you want to use.");
+                return;
+            end if;
+            if PlayerShip.Modules.Element(ModuleIndex).Current_Value = 0 then
+                ShowDialog("You can't set crew member for manufacturing, because you don't set item to manufacture in this module.");
+                return;
+            end if;
+        end if;
+        if GivenOrder = Gunner and ModuleIndex = 0 then
+            ShowDialog("You must set which workplace you want to use.");
             return;
         end if;
         if GivenOrder = Upgrading and PlayerShip.UpgradeModule = 0 then
@@ -90,32 +99,8 @@ package body Crew is
                 end if;
             end loop;
         elsif GivenOrder = Gunner or GivenOrder = Craft then
-            if ModuleIndex = 0 then
-                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                    if GivenOrder = Gunner and Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = GUN and
-                        PlayerShip.Modules.Element(I).Owner = 0 then
-                        FreeWorkplace := True;
-                        exit;
-                    elsif GivenOrder = Craft then
-                        if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List(PlayerShip.Craft).Workplace and
-                            PlayerShip.Modules.Element(I).Owner = 0 then
-                            FreeWorkplace := True;
-                            exit;
-                        end if;
-                    end if;
-                end loop;
-                if not FreeWorkplace then
-                    for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                        if PlayerShip.Crew.Element(I).Order = GivenOrder and PlayerShip.Crew.Element(I).Order /= Rest then
-                            GiveOrders(I, Rest);
-                            exit;
-                        end if;
-                    end loop;
-                end if;
-            else
-                if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
-                    GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest);
-                end if;
+            if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
+                GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest);
             end if;
         end if;
         if ModuleIndex = 0 then
@@ -125,10 +110,6 @@ package body Crew is
                         MType := COCKPIT;
                     when Engineer =>
                         MType := ENGINE;
-                    when Gunner =>
-                        MType := GUN;
-                    when Craft =>
-                        MType := Recipes_List(PlayerShip.Craft).Workplace;
                     when Rest =>
                         MType := CABIN;
                     when others =>

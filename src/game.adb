@@ -287,8 +287,6 @@ package body Game is
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         RawValue := To_Unbounded_String(Integer'Image(ShipSpeed'Pos(PlayerShip.Speed)));
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-        RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Craft));
-        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         RawValue := To_Unbounded_String(PlayerShip.Modules.Length'Img);
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
@@ -455,7 +453,6 @@ package body Game is
         PlayerShip.SkyX := Integer'Value(To_String(ReadData));
         PlayerShip.SkyY := Integer'Value(To_String(ReadData));
         PlayerShip.Speed := ShipSpeed'Val(Integer'Value(To_String(ReadData)));
-        PlayerShip.Craft := Integer'Value(To_String(ReadData));
         VectorLength := Positive'Value(To_String(ReadData));
         for I in 1..VectorLength loop
             ShipModules.Append(New_Item => (Name => ReadData, ProtoIndex =>
