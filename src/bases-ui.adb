@@ -32,6 +32,7 @@ package body Bases.UI is
     Buy : Boolean;
     TradeForm : Form;
     FormWindow : Window;
+    CurrentMenuIndex : Positive := 1;
 
     procedure RepairCost(Cost, Time, ModuleIndex : in out Natural) is
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
@@ -149,6 +150,7 @@ package body Bases.UI is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
+        Set_Current(TradeMenu, Trade_Items.all(CurrentMenuIndex));
         MoneyIndex := FindMoney;
         Move_Cursor(Line => (MenuHeight + 4), Column => 2);
         if MoneyIndex > 0 then
@@ -318,6 +320,7 @@ package body Bases.UI is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
+        Set_Current(TradeMenu, Repair_Items.all(CurrentMenuIndex));
         MoneyIndex := FindMoney;
         Move_Cursor(Line => (MenuHeight + 4), Column => 2);
         if MoneyIndex > 0 then
@@ -459,6 +462,7 @@ package body Bases.UI is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
+        Set_Current(TradeMenu, Modules_Items.all(CurrentMenuIndex));
         MoneyIndex := FindMoney;
         Move_Cursor(Line => (MenuHeight + 5), Column => 2);
         if MoneyIndex > 0 then
@@ -546,6 +550,7 @@ package body Bases.UI is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
+        Set_Current(TradeMenu, Recruits_Items.all(CurrentMenuIndex));
         MoneyIndex := FindMoney;
         Move_Cursor(Line => (MenuHeight + 4), Column => 2);
         if MoneyIndex > 0 then
@@ -597,6 +602,7 @@ package body Bases.UI is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                CurrentMenuIndex := 1;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when 56 | KEY_UP => -- Select previous item to trade
@@ -626,6 +632,7 @@ package body Bases.UI is
             when others =>
                 null;
         end case;
+        CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
         return Trade_View;
     end TradeKeys;
 
@@ -634,6 +641,7 @@ package body Bases.UI is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                CurrentMenuIndex := 1;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when 56 | KEY_UP => -- Select previous repair option
@@ -660,6 +668,7 @@ package body Bases.UI is
             when others =>
                 null;
         end case;
+        CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
         return Repairs_View;
     end RepairKeys;
 
@@ -668,6 +677,7 @@ package body Bases.UI is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                CurrentMenuIndex := 1;
                 InstallView := True;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
@@ -701,6 +711,7 @@ package body Bases.UI is
             when others =>
                 null;
         end case;
+        CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
         return Shipyard_View;
     end ShipyardKeys;
 
@@ -709,7 +720,7 @@ package body Bases.UI is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-                InstallView := True;
+                CurrentMenuIndex := 1;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when 56 | KEY_UP => -- Select previous recruit to hire
@@ -736,6 +747,7 @@ package body Bases.UI is
             when others =>
                 null;
         end case;
+        CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
         return Recruits_View;
     end RecruitKeys;
 
