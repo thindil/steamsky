@@ -37,6 +37,7 @@ package body Combat.UI is
     OrdersMenu : Menu;
     MenuWindow : Window;
     MenuWindow2 : Window;
+    CurrentMenuIndex : Positive := 1;
 
     procedure CombatOrders is
         MemberIndex : Natural := 0;
@@ -143,6 +144,7 @@ package body Combat.UI is
         Set_Window(CrewMenu, MenuWindow);
         Set_Sub_Window(CrewMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(CrewMenu);
+        Set_Current(CrewMenu, Crew_Items.all(CurrentMenuIndex));
         Move_Cursor(Line => 5, Column => 2);
         Add(Str => "ENTER to give orders");
         Change_Attributes(Line => 5, Column => 2, Count => 5, Color => 1);
@@ -395,6 +397,7 @@ package body Combat.UI is
                     if Result = Menu_Ok then
                         Refresh(MenuWindow);
                     end if;
+                    CurrentMenuIndex := Get_Index(Current(CrewMenu));
                     return Combat_State;
                 when 50 | KEY_DOWN => -- Select next crew position
                     Result := Driver(CrewMenu, M_Down_Item);
@@ -404,6 +407,7 @@ package body Combat.UI is
                     if Result = Menu_Ok then
                         Refresh(MenuWindow);
                     end if;
+                    CurrentMenuIndex := Get_Index(Current(CrewMenu));
                     return Combat_State;
                 when 10 => -- Give orders to selected position
                     case Get_Index(Current(CrewMenu)) is
@@ -436,6 +440,7 @@ package body Combat.UI is
                     return Combat_State;
             end case;
         else
+            CurrentMenuIndex := 1;
             DrawGame(Sky_Map_View);
             return Sky_Map_View;
         end if;
