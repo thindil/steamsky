@@ -21,16 +21,16 @@ with Ships; use Ships;
 with Messages; use Messages;
 with Bases; use Bases;
 with Maps; use Maps;
+with ShipModules; use ShipModules;
 
 package body Crew.UI is
 
-    CrewMenu : Menu;
-    MenuWindow : Window;
-    CurrentMenuIndex : Positive := 1;
+    CrewMenu, OrdersMenu : Menu;
+    MenuWindow, MenuWindow2 : Window;
+    MemberIndex : Positive := 1;
 
     procedure ShowMemberInfo is
         InfoWindow : Window;
-        MemberIndex : constant Positive := Get_Index(Current(CrewMenu));
         Member : constant Member_Data := PlayerShip.Crew.Element(MemberIndex);
         CurrentLine : Line_Position := 1;
         Health, Tired, Hungry, Thirsty, SkillLevel, OrderName : Unbounded_String := Null_Unbounded_String;
@@ -134,13 +134,10 @@ package body Crew.UI is
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Order: " & To_String(OrderName));
         if Member.Tired < 100 and Member.Hunger < 100 and Member.Thirst < 100 then
-            Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 0, Count => 1, Color => 1);
-        end if;
-        if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
-            CurrentLine := CurrentLine + 1;
+            CurrentLine := CurrentLine + 2;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-            Add(Win => InfoWindow, Str => "Dismiss");
-            Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 0, Count => 1, Color => 1);
+            Add(Win => InfoWindow, Str => "Press Enter to give orders to crew member");
+            Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
         end if;
         Refresh;
         Refresh(InfoWindow);
@@ -165,33 +162,94 @@ package body Crew.UI is
         Set_Window(CrewMenu, MenuWindow);
         Set_Sub_Window(CrewMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(CrewMenu);
-        Set_Current(CrewMenu, Crew_Items.all(CurrentMenuIndex));
+        Set_Current(CrewMenu, Crew_Items.all(MemberIndex));
         ShowMemberInfo;
         Refresh(MenuWindow);
     end ShowCrewInfo;
 
     procedure ShowOrdersMenu is
-        OrdersWindow : Window;
-        OrdersNames : constant array (1..7) of Unbounded_String := (To_Unbounded_String("Piloting"), 
-            To_Unbounded_String("Engineering"), To_Unbounded_String("Gunner"),
-            To_Unbounded_String("On break"), To_Unbounded_String("Repair ship"), 
-            To_Unbounded_String("Manufacturing"), To_Unbounded_String("Upgrade module"));
+        Orders_Items : Item_Array_Access;
+        OrdersAmount : Positive := 3;
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        MenuIndex : Positive := 3;
+        NeedRepairs : Boolean := False;
     begin
-        OrdersWindow := Create(10, 17, (Lines / 3), (Columns / 2) - 8);
-        Box(OrdersWindow);
-        for I in OrdersNames'Range loop
-            Move_Cursor(OrdersWindow, Line => Line_Position(I), Column => 2);
-            Add(OrdersWindow, Str => To_String(OrdersNames(I)));
-            Change_Attributes(OrdersWindow, Line => Line_Position(I), Column => 2, Count => 1, Color => 1);
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                when GUN | FURNACE | ALCHEMY_LAB =>
+                    if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
+                        OrdersAmount := OrdersAmount + 1;
+                    end if;
+                when others =>
+                    null;
+            end case;
+            if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                NeedRepairs := True;
+            end if;
         end loop;
-        Move_Cursor(OrdersWindow, Line => 8, Column => 2);
-        Add(OrdersWindow, Str => "Quit");
-        Change_Attributes(OrdersWindow, Line => 8, Column => 2, Count => 1, Color => 1);
-        Refresh(OrdersWindow);
+        if PlayerShip.Crew.Element(MemberIndex).Order /= Rest then
+            OrdersAmount := OrdersAmount + 1;
+        end if;
+        if PlayerShip.UpgradeModule > 0 then
+            OrdersAmount := OrdersAmount + 1;
+        end if;
+        if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
+            OrdersAmount := OrdersAmount + 1;
+        end if;
+        Orders_Items := new Item_Array(1..(OrdersAmount + 1));
+        Orders_Items.all(1) := New_Item("Piloting", "0");
+        Orders_Items.all(2) := New_Item("Engineering", "0");
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                when GUN =>
+                    if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
+                        Orders_Items.all(MenuIndex) := New_Item("Operate " & To_String(PlayerShip.Modules.Element(I).Name), 
+                            Positive'Image(I));
+                        MenuIndex := MenuIndex + 1;
+                    end if;
+                when ALCHEMY_LAB | FURNACE =>
+                    if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
+                        Orders_Items.all(MenuIndex) := New_Item("Work in " & To_String(PlayerShip.Modules.Element(I).Name), 
+                            Positive'Image(I));
+                        MenuIndex := MenuIndex + 1;
+                    end if;
+                when others =>
+                    null;
+            end case;
+        end loop;
+        if NeedRepairs then
+            Orders_Items.all(MenuIndex) := New_Item("Repair ship", "0");
+            MenuIndex := MenuIndex + 1;
+        end if;
+        if PlayerShip.UpgradeModule > 0 then
+            Orders_Items.all(MenuIndex) := New_Item("Upgrade module", "0");
+            MenuIndex := MenuIndex + 1;
+        end if;
+        if PlayerShip.Crew.Element(MemberIndex).Order /= Rest then
+            Orders_Items.all(MenuIndex) := New_Item("Go on break", "0");
+            MenuIndex := MenuIndex + 1;
+        end if;
+        if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
+            Orders_Items.all(MenuIndex) := New_Item("Dismiss", "0");
+            MenuIndex := MenuIndex + 1;
+        end if;
+        Orders_Items.all(MenuIndex) := New_Item("Quit", "0");
+        Orders_Items.all(Orders_Items'Last) := Null_Item;
+        OrdersMenu := New_Menu(Orders_Items);
+        Set_Mark(OrdersMenu, "");
+        Set_Options(OrdersMenu, (Show_Descriptions => False, others => True));
+        Scale(OrdersMenu, MenuHeight, MenuLength);
+        MenuWindow2 := Create(MenuHeight + 2, MenuLength + 2, ((Lines / 3) - (MenuHeight / 2)), ((Columns / 2) - (MenuLength / 2)));
+        Box(MenuWindow2);
+        Set_Window(OrdersMenu, MenuWindow2);
+        Set_Sub_Window(OrdersMenu, Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
+        Post(OrdersMenu);
+        Refresh;
+        Refresh(MenuWindow2);
     end ShowOrdersMenu;
 
     procedure DismissMember is
-        MemberIndex : constant Positive := Get_Index(Current(CrewMenu));
         BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
     begin
         if PlayerShip.Speed /= DOCKED then
@@ -210,36 +268,25 @@ package body Crew.UI is
         AddMessage("You dismissed " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & ".", OrderMessage);
         PlayerShip.Crew.Delete(Index => MemberIndex, Count => 1);
         SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
-        CurrentMenuIndex := 1;
+        MemberIndex := 1;
+        DrawGame(Crew_Info);
     end DismissMember;
 
     function CrewInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Driver_Result;
-        MemberIndex : constant Positive := Get_Index(Current(CrewMenu));
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map or combat screen
-                CurrentMenuIndex := 1;
+                MemberIndex := 1;
                 DrawGame(OldState);
                 return OldState;
-            when Character'Pos('o') | Character'Pos('O') => -- Give orders to selected crew member
-                if PlayerShip.Crew.Element(MemberIndex).Tired < 100 and PlayerShip.Crew.Element(MemberIndex).Hunger < 100 and 
-                    PlayerShip.Crew.Element(MemberIndex).Thirst < 100 then
-                    ShowOrdersMenu;
-                    Update_Screen;
-                    return Giving_Orders;
-                end if;
-            when Character'Pos('d') | Character'Pos('D') => -- Dismiss selected crew member
-                if PlayerShip.Speed = Docked then
-                    DrawGame(Dismiss_Confirm);
-                    return Dismiss_Confirm;
-                end if;
             when 56 | KEY_UP => -- Select previous crew member
                 Result := Driver(CrewMenu, M_Up_Item);
                 if Result = Request_Denied then
                     Result := Driver(CrewMenu, M_Last_Item);
                 end if;
                 if Result = Menu_Ok then
+                    MemberIndex := Get_Index(Current(CrewMenu));
                     ShowMemberInfo;
                     Refresh(MenuWindow);
                 end if;
@@ -249,41 +296,70 @@ package body Crew.UI is
                     Result := Driver(CrewMenu, M_First_Item);
                 end if;
                 if Result = Menu_Ok then
+                    MemberIndex := Get_Index(Current(CrewMenu));
                     ShowMemberInfo;
                     Refresh(MenuWindow);
                 end if;
+            when 10 => -- Give orders to selected crew member
+                ShowOrdersMenu;
+                return Giving_Orders;
             when others =>
                 null;
         end case;
-        CurrentMenuIndex := Get_Index(Current(CrewMenu));
         return Crew_Info;
     end CrewInfoKeys;
 
     function CrewOrdersKeys(Key : Key_Code) return GameStates is
-        MemberIndex : constant Positive := Get_Index(Current(CrewMenu));
+        Result : Driver_Result;
+        ModuleIndex : constant Natural := Positive'Value(Description(Current(OrdersMenu)));
+        OrderName : constant String := Name(Current(OrdersMenu));
     begin
         case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to crew info
-                null;
-            when Character'Pos('p') | Character'Pos('P') => -- Give order piloting
-                GiveOrders(MemberIndex, Pilot);
-            when Character'Pos('e') | Character'Pos('E') => -- Give order engineering
-                GiveOrders(MemberIndex, Engineer);
-            when Character'Pos('g') | Character'Pos('G') => -- Give order gunnery
-                GiveOrders(MemberIndex, Gunner);
-            when Character'Pos('o') | Character'Pos('O') => -- Give order rest
-                GiveOrders(MemberIndex, Rest);
-            when Character'Pos('r') | Character'Pos('R') => -- Give order repair
-                GiveOrders(MemberIndex, Repair);
-            when Character'Pos('m') | Character'Pos('M') => -- Give order manufacturing
-                GiveOrders(MemberIndex, Craft);
-            when Character'Pos('u') | Character'Pos('U') => -- Give order upgrading
-                GiveOrders(MemberIndex, Upgrading);
+            when 56 | KEY_UP => -- Select previous order
+                Result := Driver(OrdersMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OrdersMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 50 | KEY_DOWN => -- Select next order
+                Result := Driver(OrdersMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OrdersMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 10 => -- Select order
+                if OrderName = "Piloting" then
+                    GiveOrders(MemberIndex, Pilot);
+                elsif OrderName = "Engineering" then
+                    GiveOrders(MemberIndex, Engineer);
+                elsif OrderName = "Go on break" then
+                    GiveOrders(MemberIndex, Rest);
+                elsif OrderName = "Repair ship" then
+                    GiveOrders(MemberIndex, Repair);
+                elsif OrderName = "Upgrade module" then
+                    GiveOrders(MemberIndex, Upgrading);
+                elsif OrderName = "Dismiss" then
+                    if PlayerShip.Speed = Docked then
+                        DrawGame(Dismiss_Confirm);
+                        return Dismiss_Confirm;
+                    end if;
+                elsif OrderName /= "Quit" then
+                    if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType = GUN then
+                        GiveOrders(MemberIndex, Gunner, ModuleIndex);
+                    else
+                        GiveOrders(MemberIndex, Craft, ModuleIndex);
+                    end if;
+                end if;
+                DrawGame(Crew_Info);
+                return Crew_Info;
             when others =>
-                return Giving_Orders;
+                null;
         end case;
-        DrawGame(Crew_Info);
-        return Crew_Info;
+        return Giving_Orders;
     end CrewOrdersKeys;
 
 end Crew.UI;
