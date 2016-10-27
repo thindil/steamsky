@@ -24,6 +24,7 @@ package body Crafts.UI is
 
     RecipesMenu : Menu;
     MenuWindow : Window;
+    CurrentMenuIndex : Positive := 1;
 
     procedure ShowRecipeInfo is
         InfoWindow : Window;
@@ -132,6 +133,7 @@ package body Crafts.UI is
         Set_Window(RecipesMenu, MenuWindow);
         Set_Sub_Window(RecipesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(RecipesMenu);
+        Set_Current(RecipesMenu, Recipes_Items.all(CurrentMenuIndex));
         ShowRecipeInfo;
         Refresh(MenuWindow);
     end ShowRecipes;
@@ -141,6 +143,7 @@ package body Crafts.UI is
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                CurrentMenuIndex := 1;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when Character'Pos(' ') => -- Set selected manufacturing order
@@ -167,6 +170,7 @@ package body Crafts.UI is
             when others =>
                 null;
         end case;
+        CurrentMenuIndex := Menus.Get_Index(Current(RecipesMenu));
         return Craft_View;
     end CraftKeys;
 
