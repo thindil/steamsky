@@ -508,12 +508,23 @@ package body UserInterface is
     end GameMenuKeys;
 
     function SpeedMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates is
+        HaveTrader : Boolean := False;
     begin
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Trade then
+                HaveTrader := True;
+            end if;
+        end loop;
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 DrawGame(Sky_Map_View);
                 return OldState;
             when Character'Pos('t') | Character'Pos('T') => -- Trade with base
+                if not HaveTrader then
+                    ShowDialog("You don't have anyone assigned to trading.");
+                    DrawGame(Sky_Map_View);
+                    return OldState;
+                end if;
                 if PlayerShip.Speed = DOCKED then
                     DrawGame(Trade_View);
                     return Trade_View;
@@ -521,6 +532,11 @@ package body UserInterface is
                     return Control_Speed;
                 end if;
             when Character'Pos('e') | Character'Pos('E') => -- Recruit new crew members in base
+                if not HaveTrader then
+                    ShowDialog("You don't have anyone assigned to trading.");
+                    DrawGame(Sky_Map_View);
+                    return OldState;
+                end if;
                 if PlayerShip.Speed = DOCKED then
                     DrawGame(Recruits_View);
                     return Recruits_View;
@@ -528,6 +544,11 @@ package body UserInterface is
                     return Control_Speed;
                 end if;
             when Character'Pos('r') | Character'Pos('R') => -- Repair ship in base
+                if not HaveTrader then
+                    ShowDialog("You don't have anyone assigned to trading.");
+                    DrawGame(Sky_Map_View);
+                    return OldState;
+                end if;
                 if PlayerShip.Speed = DOCKED then
                     DrawGame(Repairs_View);
                     return Repairs_View;
@@ -535,6 +556,11 @@ package body UserInterface is
                     return Control_Speed;
                 end if;
             when Character'Pos('s') | Character'Pos('S') => -- Shipyard in base
+                if not HaveTrader then
+                    ShowDialog("You don't have anyone assigned to trading.");
+                    DrawGame(Sky_Map_View);
+                    return OldState;
+                end if;
                 if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).BaseType = SHIPYARD then
                     DrawGame(Shipyard_View);
                     return Shipyard_View;

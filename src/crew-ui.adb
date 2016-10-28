@@ -130,6 +130,8 @@ package body Crew.UI is
                 OrderName := To_Unbounded_String("Manufacturing");
             when Upgrading =>
                 OrderName := To_Unbounded_String("Upgrading module");
+            when Trade =>
+                OrderName := To_Unbounded_String("Assigned to trading");
         end case;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Order: " & To_String(OrderName));
@@ -203,6 +205,9 @@ package body Crew.UI is
         if PlayerShip.Crew.Element(MemberIndex).Order /= Engineer then
             OrdersAmount := OrdersAmount + 1;
         end if;
+        if PlayerShip.Crew.Element(MemberIndex).Order /= Trade then
+            OrdersAmount := OrdersAmount + 1;
+        end if;
         Orders_Items := new Item_Array(1..(OrdersAmount + 1));  
         if PlayerShip.Crew.Element(MemberIndex).Order /= Pilot then
             Orders_Items.all(MenuIndex) := New_Item("Piloting", "0");
@@ -236,6 +241,10 @@ package body Crew.UI is
         end if;
         if PlayerShip.UpgradeModule > 0 and PlayerShip.Crew.Element(MemberIndex).Order /= Upgrading then
             Orders_Items.all(MenuIndex) := New_Item("Upgrade module", "0");
+            MenuIndex := MenuIndex + 1;
+        end if;
+        if PlayerShip.Crew.Element(MemberIndex).Order /= Trade then
+            Orders_Items.all(MenuIndex) := New_Item("Trade with bases", "0");
             MenuIndex := MenuIndex + 1;
         end if;
         if PlayerShip.Crew.Element(MemberIndex).Order /= Rest then
@@ -354,6 +363,8 @@ package body Crew.UI is
                     GiveOrders(MemberIndex, Repair);
                 elsif OrderName = "Upgrade module" then
                     GiveOrders(MemberIndex, Upgrading);
+                elsif OrderName = "Trade with bases" then
+                    GiveOrders(MemberIndex, Trade);
                 elsif OrderName = "Dismiss" then
                     if PlayerShip.Speed = Docked then
                         DrawGame(Dismiss_Confirm);
