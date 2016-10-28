@@ -169,10 +169,10 @@ package body Crew.UI is
 
     procedure ShowOrdersMenu is
         Orders_Items : Item_Array_Access;
-        OrdersAmount : Positive := 3;
+        OrdersAmount : Positive := 1;
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
-        MenuIndex : Positive := 3;
+        MenuIndex : Positive := 1;
         NeedRepairs : Boolean := False;
     begin
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
@@ -191,15 +191,27 @@ package body Crew.UI is
         if PlayerShip.Crew.Element(MemberIndex).Order /= Rest then
             OrdersAmount := OrdersAmount + 1;
         end if;
-        if PlayerShip.UpgradeModule > 0 then
+        if PlayerShip.UpgradeModule > 0 and PlayerShip.Crew.Element(MemberIndex).Order /= Upgrading then
             OrdersAmount := OrdersAmount + 1;
         end if;
         if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
             OrdersAmount := OrdersAmount + 1;
         end if;
-        Orders_Items := new Item_Array(1..(OrdersAmount + 1));
-        Orders_Items.all(1) := New_Item("Piloting", "0");
-        Orders_Items.all(2) := New_Item("Engineering", "0");
+        if PlayerShip.Crew.Element(MemberIndex).Order /= Pilot then
+            OrdersAmount := OrdersAmount + 1;
+        end if;
+        if PlayerShip.Crew.Element(MemberIndex).Order /= Engineer then
+            OrdersAmount := OrdersAmount + 1;
+        end if;
+        Orders_Items := new Item_Array(1..(OrdersAmount + 1));  
+        if PlayerShip.Crew.Element(MemberIndex).Order /= Pilot then
+            Orders_Items.all(MenuIndex) := New_Item("Piloting", "0");
+            MenuIndex := MenuIndex + 1;
+        end if;
+        if PlayerShip.Crew.Element(MemberIndex).Order /= Engineer then
+            Orders_Items.all(MenuIndex) := New_Item("Engineering", "0");
+            MenuIndex := MenuIndex + 1;
+        end if;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
                 when GUN =>
@@ -222,7 +234,7 @@ package body Crew.UI is
             Orders_Items.all(MenuIndex) := New_Item("Repair ship", "0");
             MenuIndex := MenuIndex + 1;
         end if;
-        if PlayerShip.UpgradeModule > 0 then
+        if PlayerShip.UpgradeModule > 0 and PlayerShip.Crew.Element(MemberIndex).Order /= Upgrading then
             Orders_Items.all(MenuIndex) := New_Item("Upgrade module", "0");
             MenuIndex := MenuIndex + 1;
         end if;
