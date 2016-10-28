@@ -27,7 +27,7 @@ with Ships; use Ships;
 package body Bases is
     
     procedure BuyItems(ItemIndex : Positive; Amount : String) is
-        BuyAmount : Positive;
+        BuyAmount, TraderIndex : Positive;
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         ItemName : constant String := To_String(Items_List.Element(ItemIndex).Name);
@@ -39,8 +39,14 @@ package body Bases is
             ShowDialog("You can't buy " & ItemName & " in this base.");
             return;
         end if;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Trade then
+                TraderIndex := I;
+                exit;
+            end if;
+        end loop;
         Cost := BuyAmount * Items_List.Element(ItemIndex).Prices(BaseType);
-        Cost := Cost - Integer(Float'Floor(Float(Cost) * (Float(GetSkillLevel(1, 4)) / 200.0)));
+        Cost := Cost - Integer(Float'Floor(Float(Cost) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
         MoneyIndex := FindMoney;
         if FreeCargo(Cost - (Items_List.Element(ItemIndex).Weight * BuyAmount)) < 0 then
             ShowDialog("You don't have that much free space in your ship cargo.");
@@ -56,7 +62,7 @@ package body Bases is
         end if;
         UpdateCargo(1, (0 - Cost));
         UpdateCargo(ItemIndex, BuyAmount);
-        GainExp(1, 4, 1);
+        GainExp(1, 4, TraderIndex);
         AddMessage("You bought" & Positive'Image(BuyAmount) & " " & ItemName &
             " for" & Positive'Image(Cost) & " Charcollum.", TradeMessage);
         UpdateGame(5);
@@ -66,7 +72,7 @@ package body Bases is
     end BuyItems;
 
     procedure SellItems(ItemIndex : Positive; Amount : String) is
-        SellAmount : Positive;
+        SellAmount, TraderIndex : Positive;
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         ProtoIndex : constant Positive := PlayerShip.Cargo.Element(ItemIndex).ProtoIndex;
@@ -78,15 +84,21 @@ package body Bases is
             ShowDialog("You dont have that much " & ItemName & " in ship cargo.");
             return;
         end if;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Trade then
+                TraderIndex := I;
+                exit;
+            end if;
+        end loop;
         Profit := Items_List.Element(ProtoIndex).Prices(BaseType) * SellAmount;
-        Profit := Profit + Integer(Float'Floor(Float(Profit) * (Float(GetSkillLevel(4, 1)) / 200.0)));
+        Profit := Profit + Integer(Float'Floor(Float(Profit) * (Float(GetSkillLevel(4, TraderIndex)) / 200.0)));
         if FreeCargo((Items_List.Element(ProtoIndex).Weight * SellAmount) - Profit) < 0 then
             ShowDialog("You don't have enough free cargo space in your ship for Charcollum.");
             return;
         end if;
         UpdateCargo(ProtoIndex, (0 - SellAmount));
         UpdateCargo(1, Profit);
-        GainExp(1, 4, 1);
+        GainExp(1, 4, TraderIndex);
         AddMessage("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" & 
             Positive'Image(Profit) & " Charcollum.", TradeMessage);
         UpdateGame(5);
@@ -132,6 +144,7 @@ package body Bases is
 
     procedure RepairShip is
         Cost, Time, ModuleIndex, MoneyIndex, RepairValue : Natural := 0;
+        TraderIndex : Positive;
     begin
         RepairCost(Cost, Time, ModuleIndex);
         if Cost = 0 then
@@ -142,7 +155,13 @@ package body Bases is
             ShowDialog("You don't have Charcollum to pay for repairs.");
             return;
         end if;
-        Cost := Cost - Integer(Float'Floor(Float(Cost) * (Float(GetSkillLevel(1, 4)) / 200.0)));
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Trade then
+                TraderIndex := I;
+                exit;
+            end if;
+        end loop;
+        Cost := Cost - Integer(Float'Floor(Float(Cost) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
         if PlayerShip.Cargo.Element(MoneyIndex).Amount < Cost then
             ShowDialog("You don't have enough Charcollum to pay for repairs.");
             return;
@@ -167,12 +186,13 @@ package body Bases is
             AddMessage("You bought whole ship repair for" & Positive'Image(Cost) & " Charcollum.", TradeMessage);
         end if;
         UpdateCargo(1, (0 - Cost));
+        GainExp(1, 4, TraderIndex);
         UpdateGame(Time);
     end RepairShip;
 
     procedure UpgradeShip(Install : Boolean; ModuleIndex : Positive) is
         MoneyIndex : constant Natural := FindMoney;
-        HullIndex, ModulesAmount : Positive;
+        HullIndex, ModulesAmount, TraderIndex : Positive;
         FreeTurretIndex, Price : Natural := 0;
         type DamageFactor is digits 2 range 0.0..1.0;
         Damage : DamageFactor := 0.0;
@@ -194,9 +214,15 @@ package body Bases is
                     null;
             end case;
         end loop;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Trade then
+                TraderIndex := I;
+                exit;
+            end if;
+        end loop;
         if Install then
             Price := Modules_List.Element(ModuleIndex).Price;
-            Price := Price - Integer(Float'Floor(Float(Price) * (Float(GetSkillLevel(1, 4)) / 200.0)));
+            Price := Price - Integer(Float'Floor(Float(Price) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
             if PlayerShip.Cargo.Element(MoneyIndex).Amount < Price then
                 ShowDialog("You don't have enough Charcollum to pay for " & To_String(Modules_List.Element(ModuleIndex).Name) & ".");
                 return;
@@ -228,6 +254,7 @@ package body Bases is
             end if;
             UpdateGame(Modules_List.Element(ModuleIndex).InstallTime);
             UpdateCargo(1, (0 - Price));
+            GainExp(1, 4, TraderIndex);
             PlayerShip.Modules.Append(New_Item => (Name =>  Modules_List.Element(ModuleIndex).Name,
                 ProtoIndex => ModuleIndex, 
                 Weight => Modules_List.Element(ModuleIndex).Weight,
@@ -252,7 +279,7 @@ package body Bases is
             Price := Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price -
                 Integer(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price) * 
                 Float(Damage));
-            Price := Price + Integer(Float'Floor(Float(Price) * (Float(GetSkillLevel(1, 4)) / 200.0)));
+            Price := Price + Integer(Float'Floor(Float(Price) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
             if FreeCargo((0 - Price)) < 0 then
                 ShowDialog("You don't have enough free space for Charcollum in ship cargo.");
                 return;
@@ -286,6 +313,7 @@ package body Bases is
             end if;
             UpdateGame(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).InstallTime);
             UpdateCargo(1, Price);
+            GainExp(1, 4, TraderIndex);
             AddMessage("You removed " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & " from your ship and earned" &
                 Positive'Image(Price) & " Charcollum.", 
                 TradeMessage);
@@ -388,14 +416,21 @@ package body Bases is
         BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         MoneyIndex, Price : Natural;
         Recruit : constant Recruit_Data := SkyBases(BaseIndex).Recruits.Element(RecruitIndex);
+        TraderIndex : Positive;
     begin
         MoneyIndex := FindMoney;
         if MoneyIndex = 0 then
             ShowDialog("You don't have Charcollum to hire anyone.");
             return;
         end if;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Trade then
+                TraderIndex := I;
+                exit;
+            end if;
+        end loop;
         Price := Recruit.Price;
-        Price := Price - Integer(Float'Floor(Float(Price) * (Float(GetSkillLevel(1, 4)) / 200.0)));
+        Price := Price - Integer(Float'Floor(Float(Price) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
         if PlayerShip.Cargo.Element(MoneyIndex).Amount < Price then
             ShowDialog("You don't have enough Charcollum to hire " & To_String(Recruit.Name) & ".");
             return;
@@ -405,6 +440,7 @@ package body Bases is
             Recruit.Skills, Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest, OrderTime => 15)); 
         UpdateCargo(1, (0 - Price));
+        GainExp(1, 4, TraderIndex);
         AddMessage("You hired " & To_String(Recruit.Name) & " for" & Positive'Image(Price) & " Charcollum.", TradeMessage);
         SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex, Count => 1);
         SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population - 1;

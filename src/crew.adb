@@ -91,7 +91,7 @@ package body Crew is
                 ShowDialog("You don't have repair materials.");
                 return;
             end if;
-        elsif GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Upgrading then
+        elsif GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Upgrading or GivenOrder = Trade then
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                 if PlayerShip.Crew.Element(I).Order = GivenOrder and PlayerShip.Crew.Element(I).Order /= Rest then
                     GiveOrders(I, Rest);
@@ -188,6 +188,8 @@ package body Crew is
             when Upgrading =>
                 AddMessage(MemberName & " starts upgrading " & To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
                     & ".", OrderMessage);
+            when Trade =>
+                AddMessage(MemberName & " was assigned to trading.", OrderMessage);
         end case;
         NewOrder := GivenOrder;
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
@@ -417,7 +419,9 @@ package body Crew is
                         HealthLevel := HealthLevel + Times;
                     end if;
                 else
-                    TiredLevel := TiredLevel + Times;
+                    if PlayerShip.Crew.Element(I).Order /= Trade then
+                        TiredLevel := TiredLevel + Times;
+                    end if;
                     if TiredLevel > 100 then
                         TiredLevel := 100;
                     end if;
