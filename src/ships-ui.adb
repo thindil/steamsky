@@ -531,8 +531,10 @@ package body Ships.UI is
                     MenuIndex := MenuIndex + 1;
                 end if;
             when ALCHEMY_LAB | FURNACE =>
-                Options_Items.all(MenuIndex) := New_Item("Assign worker", "7");
-                MenuIndex := MenuIndex + 1;
+                if PlayerShip.Modules.Element(ModuleIndex).Current_Value > 0 then
+                    Options_Items.all(MenuIndex) := New_Item("Assign worker", "7");
+                    MenuIndex := MenuIndex + 1;
+                end if;
             when others =>
                 null;
         end case;
