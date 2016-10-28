@@ -21,8 +21,8 @@ As you fly near bases (you are in this same cell where base is), you discover th
 You can wait a moment without doing anything, by hit key 5 on keypad.
 To move map without moving ship, hold SHIFT and use keypad keys this same which are used for moving ship. Hit SPACE to center map on ship.
 [Trading]
-To buy/sell items from bases you must first dock to base. All bases buy all items, but which items are sold, depends on base type.
-Prices in bases depends on skill Bartering - with higher skill you can sell items for more and buy for less. 
+To buy/sell items from bases you must first dock to base and having assigned crew member to trading with bases. All bases buy all items, but which items are sold, depends on base type.
+Prices in bases depends on skill Bartering of assigned to trade crew member - with higher skill you can sell items for more and buy for less. 
 To buy/sell items from bases, open orders menu (key 'o') and then select option Trade (key 't'), you will see trading screen. Use arrows keys to select desired material to buy/sell, then press 'Enter' key to buy or 'Space' key to start trading selected item. Next, enter amount of items which you want to buy or sell and select button [Ok]. To buy/sell items you must have enough free cargo space on your ship ("moneys" aka Charcollum needs free cargo space too).
 [Combat]
 In combat, first you must set crew members to selected position and give each orders then hit space for made one combat turn. Each combat turn take 1 minute of game time. 
@@ -64,7 +64,7 @@ How much you get Charcollum from removing module depends on damage of selected m
 Each ship hull have maximum module space, which limit what and how much modules can be installed on it. Armor and weapons don't count to this limit. Most of basic modules use only one module space, but this most expensive modules, may use a lot of space. You can check how much each module space use on ship info screen or in shipyard screen.
 [Ship crew]
 You and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation.
-Every member of crew getting tired when have assigned order other than On break. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
+Every member of crew getting tired when have assigned order other than On break or Trading with bases. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
 If your resting crew member don't have assigned cabin, he/she will be resting much slower.
 Crew members can regenerate health over time but only when they are on break and have assigned cabin.
 If crew member cabin is destroyed and he/she going on break, he/she will try find empty cabin as a new own to rest.
