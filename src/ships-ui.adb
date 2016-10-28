@@ -22,6 +22,7 @@ with Items; use Items;
 with ShipModules; use ShipModules;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
+with Crafts; use Crafts;
 
 package body Ships.UI is
 
@@ -155,6 +156,14 @@ package body Ships.UI is
                 else
                     Add(Win => InfoWindow, Str => "Worker: none");
                 end if;
+                Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+                if PlayerShip.Modules.Element(ModuleIndex).Current_Value > 0 then
+                    Add(Win => InfoWIndow, Str => "Manufacturing: " &
+                        To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Modules.Element(ModuleIndex).Current_Value).ResultIndex).Name));
+                else
+                    Add(Win => InfoWindow, Str => "Manufacturing: nothing");
+                end if;
+                CurrentLine := CurrentLine + 1;
             when others =>
                 CurrentLine := CurrentLine - 1;
         end case;
