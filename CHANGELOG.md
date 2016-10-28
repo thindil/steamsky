@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Option to rename player ship
 - Impact of hunger/thirst/wounds on crew members skills
 - Option to assign crew members to selected module
+- Option to assign crew members to trade with bases
 
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
@@ -31,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Clearing module owner on change crew member order
 - Time needed for rest in wait command
 - Check for random events if there was no ship move
+- Gaining experience for trading
 
 ## [0.4] - 2016-10-16
 
