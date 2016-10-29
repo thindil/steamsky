@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Updated interface
 - Price of bronze plates
+- Name of ship module Bronze armor to Light bronze armor
 
 ### Fixed
 - Crash on updating modules
