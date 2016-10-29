@@ -339,6 +339,9 @@ package body MainMenu is
                 end if;
             when 10 => -- quit/start game
                 FieldIndex := Get_Index(Current(NewGameForm));
+                if FieldIndex < 7 then
+                    return New_Game;
+                end if;
                 if FieldIndex = 7 then
                     Set_Cursor_Visibility(Visibility);
                     Post(NewGameForm, False);
@@ -348,10 +351,6 @@ package body MainMenu is
                     ShowMainMenu;
                     return Main_Menu;
                 end if;
-                if FieldIndex /= 8 then
-                    return New_Game;
-                end if;
-                Set_Cursor_Visibility(Visibility);
                 if not LoadHelp then
                     NewGameError("Can't load help system. Probably missing file data/help.dat");
                     return Main_Menu;
@@ -393,6 +392,9 @@ package body MainMenu is
                 if Length(NewShipName) = 0 then
                     NewShipName := To_Unbounded_String("Hawk");
                 end if;
+                Set_Cursor_Visibility(Visibility);
+                Post(NewGameForm, False);
+                Delete(NewGameForm);
                 NewGame(NewCharName, NewShipName, CharGender);
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
