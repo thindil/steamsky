@@ -387,6 +387,12 @@ package body MainMenu is
                 RemoveSemicolons(NewShipName);
                 Trim(NewCharName, Ada.Strings.Both);
                 Trim(NewShipName, Ada.Strings.Both);
+                if Length(NewCharName) = 0 then
+                    NewCharName := To_Unbounded_String("Laeran");
+                end if;
+                if Length(NewShipName) = 0 then
+                    NewShipName := To_Unbounded_String("Hawk");
+                end if;
                 NewGame(NewCharName, NewShipName, CharGender);
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
