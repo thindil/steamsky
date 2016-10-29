@@ -10,7 +10,7 @@ Skill = Engineering
 Price = 5000 
 InstallTime = 180
 [2]
-Name = Bronze armor
+Name = Light bronze armor
 Type = Armor
 Weight = 4000
 Value = 5
