@@ -337,8 +337,11 @@ package body MainMenu is
                 if FieldIndex = 2 or FieldIndex = 6 then
                     Result := Driver(NewGameForm, F_End_Line);
                 end if;
-            when 10 => -- quit/start game
-                FieldIndex := Get_Index(Current(NewGameForm));
+            when 10 => -- quit/start game or change character gender, depends on form field
+                if FieldIndex = 4 then
+                    Result := Driver(NewGameForm, F_Next_Choice);
+                    Refresh(FormWindow);
+                end if;
                 if FieldIndex < 7 then
                     return New_Game;
                 end if;
@@ -434,7 +437,7 @@ package body MainMenu is
                 if FieldIndex = 2 or FieldIndex = 6 then
                     Result := Driver(NewGameForm, F_Left_Char);
                 elsif FieldIndex = 4 then
-                    Result := Driver(NewGameForm, F_Next_Choice);
+                    Result := Driver(NewGameForm, F_Previous_Choice);
                 end if;
             when others =>
                 Result := Driver(NewGameForm, Key);
