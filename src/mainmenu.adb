@@ -19,6 +19,8 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Directories; use Ada.Directories;
 with Ada.Text_IO; use Ada.Text_IO;
 with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
+with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
+with Terminal_Interface.Curses.Forms.Field_Types.Enumeration; use Terminal_Interface.Curses.Forms.Field_Types.Enumeration;
 with Help; use Help;
 with Items; use Items;
 with UserInterface; use UserInterface;
@@ -28,12 +30,11 @@ with Ships; use Ships;
 
 package body MainMenu is
 
-    CharName : String(1..12);
-    ShipName : String(1..12);
-    CharGender : Character;
     StartIndex : Integer := 0;
     EndIndex : Integer;
     LicensePad : Window := Null_Window;
+    NewGameForm : Forms.Form;
+    FormWindow : Window;
 
     procedure ShowMainMenu is
         Visibility : Cursor_Visibility := Invisible;
@@ -80,102 +81,71 @@ package body MainMenu is
         Add(Str => "2016 Bartek thindil Jasicki");
     end ShowMainMenu;
 
-    procedure ShowNewGameMenu(Key : Key_Code) is
-        NewGameWindow : Window;
+    procedure ShowNewGameForm is
+        NewGame_Fields : constant Field_Array_Access := new Field_Array(1..9);
+        FormHeight : Line_Position;
+        FormLength : Column_Position;
         Visibility : Cursor_Visibility := Normal;
-        GenderKey : Key_Code;
-        procedure RemoveSemicolons(Name : in out String) is
-            NewName : Unbounded_String;
-            SemicolonIndex : Natural;
-        begin
-            NewName := To_Unbounded_String(Name);
-            SemicolonIndex := Index(NewName, ";");
-            while SemicolonIndex > 0 loop
-                Delete(NewName, SemicolonIndex, SemicolonIndex);
-                NewName := NewName & " ";
-                SemicolonIndex := Index(NewName, ";");
-            end loop;
-            Name := To_String(NewName);
-        end RemoveSemicolons;
+        FieldOptions : Field_Option_Set;
+        Genders : constant Enumeration_Info := (C => 2, Names => (new String'("Male ->"), new String'("Female ->")),
+            Case_Sensitive => False, Match_Must_Be_Unique => False);
     begin
-        if Key = Character'Pos('c') or Key = Character'Pos('C') then
-            CharName := "            ";
-        elsif Key = Character'Pos('h') or Key = Character'Pos('H') then
-            ShipName := "            ";
+        if NewGameForm = Null_Form then
+            Set_Cursor_Visibility(Visibility);
+            NewGame_Fields.all(1) := New_Field(1, 18, 0, 0, 0, 0);
+            Set_Buffer(NewGame_Fields.all(1), 0, "Character Name: ");
+            FieldOptions := Get_Options(NewGame_Fields.all(1));
+            FieldOptions.Active := False;
+            Set_Options(NewGame_Fields.all(1),  FieldOptions);
+            NewGame_Fields.all(2) := New_Field(1, 12, 0, 18, 0, 0);
+            Set_Buffer(NewGame_Fields.all(2), 0, "Laeran");
+            FieldOptions := Get_Options(NewGame_Fields.all(2));
+            FieldOptions.Auto_Skip := False;
+            Set_Options(NewGame_Fields.all(2),  FieldOptions);
+            Set_Background(NewGame_Fields.all(2), (Reverse_Video => True, others => False));
+            NewGame_Fields.all(3) := New_Field(1, 18, 1, 0, 0, 0);
+            Set_Buffer(NewGame_Fields.all(3), 0, "Character Gender: ");
+            FieldOptions := Get_Options(NewGame_Fields.all(3));
+            FieldOptions.Active := False;
+            Set_Options(NewGame_Fields.all(3),  FieldOptions);
+            NewGame_Fields.all(4) := New_Field(1, 12, 1, 18, 0, 0);
+            Set_Field_Type(NewGame_Fields.all(4), Create(Genders, True));
+            Set_Buffer(NewGame_Fields.all(4), 0, "Male ->");
+            FieldOptions := Get_Options(NewGame_Fields.all(4));
+            FieldOptions.Edit := False;
+            Set_Options(NewGame_Fields.all(4), FieldOptions);
+            NewGame_Fields.all(5) := New_Field(1, 18, 2, 0, 0, 0);
+            Set_Buffer(NewGame_Fields.all(5), 0, "Ship Name: ");
+            FieldOptions := Get_Options(NewGame_Fields.all(5));
+            FieldOptions.Active := False;
+            Set_Options(NewGame_Fields.all(5),  FieldOptions);
+            NewGame_Fields.all(6) := New_Field(1, 12, 2, 18, 0, 0);
+            Set_Buffer(NewGame_Fields.all(6), 0, "Hawk");
+            FieldOptions := Get_Options(NewGame_Fields.all(6));
+            FieldOptions.Auto_Skip := False;
+            Set_Options(NewGame_Fields.all(6),  FieldOptions);
+            NewGame_Fields.all(7) := New_Field(1, 8, 4, 9, 0, 0);
+            Set_Buffer(NewGame_Fields.all(7), 0, "[Cancel]");
+            FieldOptions := Get_Options(NewGame_Fields.all(7));
+            FieldOptions.Edit := False;
+            Set_Options(NewGame_Fields.all(7), FieldOptions);
+            NewGame_Fields.all(8) := New_Field(1, 4, 4, 19, 0, 0);
+            FieldOptions := Get_Options(NewGame_Fields.all(8));
+            FieldOptions.Edit := False;
+            Set_Options(NewGame_Fields.all(8), FieldOptions);
+            Set_Buffer(NewGame_Fields.all(8), 0, "[Ok]");
+            NewGame_Fields.all(9) := Null_Field;
+            NewGameForm := New_Form(NewGame_Fields);
+            Scale(NewGameForm, FormHeight, FormLength);
+            FormWindow := Create(FormHeight + 2, FormLength + 2, ((Lines / 3) - (FormHeight / 2)), ((Columns / 2) - (FormLength / 2)));
+            Box(FormWindow);
+            Set_Window(NewGameForm, FormWindow);
+            Set_Sub_Window(NewGameForm, Derived_Window(FormWindow, FormHeight, FormLength, 1, 1));
+            Post(NewGameForm);
         end if;
-        NewGameWindow := Create(7, 31, (Lines / 3), (Columns / 3));
-        Box(NewGameWindow);
-        Move_Cursor(Win => NewGameWindow, Line => 1, Column => 1);
-        Add(Win => NewGameWindow, Str => "Character Name: " & CharName);
-        Change_Attributes(Win => NewGameWindow, Line => 1, Column => 1,
-            Count => 1, Color => 1);
-        Move_Cursor(Win => NewGameWindow, Line => 2, Column => 1);
-        Add(Win => NewGameWindow, Str => "Character Gender: ");
-        if Key /= Character'Pos('g') and Key /= Character'Pos('G') then
-            if CharGender = 'M' then
-                Add(Win => NewGameWindow, Str => "Male");
-            else
-                Add(Win => NewGameWindow, Str => "Female");
-            end if;
-        else
-            Add(Win => NewGameWindow, Str => "Male/Female");
-            Change_Attributes(Win => NewGameWindow, Line => 2, Column => 19,
-                Count => 1, Color => 1);
-            Change_Attributes(Win => NewGameWindow, Line => 2, Column => 24,
-                Count => 1, Color => 1);
-        end if;
-        Change_Attributes(Win => NewGameWindow, Line => 2, Column => 11,
-            Count => 1, Color => 1);
-        Move_Cursor(Win => NewGameWindow, Line => 3, Column => 1);
-        Add(Win => NewGameWindow, Str => "Ship Name: " & ShipName);
-        Change_Attributes(Win => NewGameWindow, Line => 3, Column => 2,
-            Count => 1, Color => 1);
-        Move_Cursor(Win => NewGameWindow, Line => 5, Column => 5);
-        Add(Win => NewGameWindow, Str => "[Quit] [Start]");
-        Change_Attributes(Win => NewGameWindow, Line => 5, Column => 6,
-            Count => 1, Color => 1);
-        Change_Attributes(Win => NewGameWindow, Line => 5, Column => 13,
-            Count => 1, Color => 1);
-        if Key /= KEY_NONE then
-            if Key = Character'Pos('c') or Key = Character'Pos('C') then
-                Set_Echo_Mode(True);
-                Set_Cursor_Visibility(Visibility);
-                Move_Cursor(Win => NewGameWindow, Line => 1, Column => 17);
-                Get(Win => NewGameWindow, Str => CharName, Len => 12);
-                if CharName = "            " then
-                    CharName := "Laeran      ";
-                end if;
-                RemoveSemicolons(CharName);
-            elsif Key = Character'Pos('h') or Key = Character'Pos('H') then
-                Set_Echo_Mode(True);
-                Set_Cursor_Visibility(Visibility);
-                Move_Cursor(Win => NewGameWindow, Line => 3, Column => 12);
-                Get(Win => NewGameWindow, Str => ShipName, Len => 12);
-                if ShipName = "            " then
-                    ShipName := "Hawk        ";
-                end if;
-                RemoveSemicolons(ShipName);
-            elsif Key = Character'Pos('g') or Key = Character'Pos('G') then
-                Refresh(NewGameWindow);
-                GenderKey := Get_KeyStroke;
-                if GenderKey = Character'Pos('m') or GenderKey = Character'Pos('M') then
-                    CharGender := 'M';
-                elsif GenderKey = Character'Pos('f') or GenderKey = Character'Pos('F') then
-                    CharGender := 'F';
-                end if;
-            end if;
-            if Key = Character'Pos('c') or Key = Character'Pos('C') or Key = Character'Pos('h') or Key = Character'Pos('H') 
-                or Key = Character'Pos('g') or Key = Character'Pos('G') then
-                Erase;
-                ShowMainMenu;
-                Refresh_Without_Update;
-                ShowNewGameMenu(KEY_NONE);
-                Update_Screen;
-                return;
-            end if;
-        end if;
-        Refresh(NewGameWindow);
-    end ShowNewGameMenu;
+        Refresh;
+        Refresh(FormWindow);
+    end ShowNewGameForm;
 
     procedure ShowLicenseInfo is
         InfoWindow : Window;
@@ -273,11 +243,7 @@ package body MainMenu is
             when Character'Pos('q') | Character'Pos('Q') => -- Quit game
                 return Quit;
             when Character'Pos('n') | Character'Pos('N') => -- New game
-                CharName := "Laeran      ";
-                ShipName := "Hawk        ";
-                CharGender := 'M';
-                ShowNewGameMenu(KEY_NONE);
-                Update_Screen;
+                ShowNewGameForm;
                 return New_Game;
             when Character'Pos('l') | Character'Pos('L') => -- Load game
                 if Exists("data/savegame.dat") then
@@ -343,22 +309,49 @@ package body MainMenu is
     
     function NewGameKeys(Key : Key_Code) return GameStates is
         NewCharName, NewShipName : Unbounded_String;
+        Result : Forms.Driver_Result;
+        FieldIndex : Positive := Get_Index(Current(NewGameForm));
+        Visibility : Cursor_Visibility := Invisible;
+        CharGender : Character;
+        procedure RemoveSemicolons(Name : in out Unbounded_String) is
+            SemicolonIndex : Natural;
+        begin
+            SemicolonIndex := Index(Name, ";");
+            while SemicolonIndex > 0 loop
+                Delete(Name, SemicolonIndex, SemicolonIndex);
+                Name := Name & " ";
+                SemicolonIndex := Index(Name, ";");
+            end loop;
+        end RemoveSemicolons;
     begin
         case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to main menu
-                Erase;
-                Refresh;
-                ShowMainMenu;
-                return Main_Menu;
-            when Character'Pos('c') | Character'Pos('C') | Character'Pos('h') | Character'Pos('H') | 
-            Character'Pos('g') | Character'Pos('G') => -- Change character/ship name
-                Erase;
-                ShowMainMenu;
-                Refresh_Without_Update;
-                ShowNewGameMenu(Key);
-                Update_Screen;
-                return New_Game;
-            when Character'Pos('s') | Character'Pos('S') => -- Start new game;
+            when KEY_UP => -- Select previous field
+                Result := Driver(NewGameForm, F_Previous_Field);
+                FieldIndex := Get_Index(Current(NewGameForm));
+                if FieldIndex = 2 or FieldIndex = 6 then
+                    Result := Driver(NewGameForm, F_End_Line);
+                end if;
+            when KEY_DOWN => -- Select next field
+                Result := Driver(NewGameForm, F_Next_Field);
+                FieldIndex := Get_Index(Current(NewGameForm));
+                if FieldIndex = 2 or FieldIndex = 6 then
+                    Result := Driver(NewGameForm, F_End_Line);
+                end if;
+            when 10 => -- quit/start game
+                FieldIndex := Get_Index(Current(NewGameForm));
+                if FieldIndex = 7 then
+                    Set_Cursor_Visibility(Visibility);
+                    Post(NewGameForm, False);
+                    Delete(NewGameForm);
+                    Erase;
+                    Refresh;
+                    ShowMainMenu;
+                    return Main_Menu;
+                end if;
+                if FieldIndex /= 8 then
+                    return New_Game;
+                end if;
+                Set_Cursor_Visibility(Visibility);
                 if not LoadHelp then
                     NewGameError("Can't load help system. Probably missing file data/help.dat");
                     return Main_Menu;
@@ -383,14 +376,71 @@ package body MainMenu is
                     NewGameError("Can't load ship. Probably missing file data/ships.dat");
                     return Main_Menu;
                 end if;
-                NewCharName := Trim(To_Unbounded_String(CharName), Ada.Strings.Both);
-                NewShipName := Trim(To_Unbounded_String(ShipName), Ada.Strings.Both);
+                NewCharName := To_Unbounded_String(Get_Buffer(Fields(NewGameForm, 2)));
+                NewShipName := To_Unbounded_String(Get_Buffer(Fields(NewGameForm, 6)));
+                if Get_Buffer(Fields(NewGameForm, 4)) = "Male ->" then
+                    CharGender := 'M';
+                else
+                    CharGender := 'F';
+                end if;
+                RemoveSemicolons(NewCharName);
+                RemoveSemicolons(NewShipName);
+                Trim(NewCharName, Ada.Strings.Both);
+                Trim(NewShipName, Ada.Strings.Both);
                 NewGame(NewCharName, NewShipName, CharGender);
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
+            when KEY_BACKSPACE => -- delete last character
+                if FieldIndex = 2 or FieldIndex = 6 then
+                    Result := Driver(NewGameForm, F_Delete_Previous);
+                    if Result = Form_Ok then
+                        FieldIndex := Get_Index(Current(NewGameForm));
+                        if FieldIndex /= 2 then
+                            Set_Current(NewGameForm, Fields(NewGameForm, 2));
+                        end if;
+                    end if;
+                end if;
+            when KEY_DC => -- delete character at cursor
+                if FieldIndex = 2 or FieldIndex = 6 then
+                    Result := Driver(NewGameForm, F_Delete_Char);
+                end if;
+            when KEY_RIGHT => -- Move cursor right
+                if FieldIndex = 2 or FieldIndex = 6 then
+                    Result := Driver(NewGameForm, F_Right_Char);
+                elsif FieldIndex = 4 then
+                    Result := Driver(NewGameForm, F_Next_Choice);
+                end if;
+            when Character'Pos('m') | Character'Pos('M') => -- Select male gender
+                if FieldIndex = 4 then
+                    Set_Buffer(Current(NewGameForm), 0, "Male ->");
+                else
+                    Result := Driver(NewGameForm, Key);
+                end if;
+            when Character'Pos('f') | Character'Pos('F') => -- Select female gender
+                if FieldIndex = 4 then
+                    Set_Buffer(Current(NewGameForm), 0, "Female ->");
+                else
+                    Result := Driver(NewGameForm, Key);
+                end if;
+            when KEY_LEFT => -- Move cursor left
+                if FieldIndex = 2 or FieldIndex = 6 then
+                    Result := Driver(NewGameForm, F_Left_Char);
+                elsif FieldIndex = 4 then
+                    Result := Driver(NewGameForm, F_Next_Choice);
+                end if;
             when others =>
-                return New_Game;
+                Result := Driver(NewGameForm, Key);
         end case;
+        if Result = Form_Ok then
+            if FieldIndex = 2 or FieldIndex = 6 then
+                Set_Background(Current(NewGameForm), (Reverse_Video => True, others => False));
+            else
+                Set_Background(Fields(NewGameForm, 2), (others => False));
+                Set_Background(Fields(NewGameForm, 6), (others => False));
+            end if;
+            Refresh(FormWindow);
+        end if;
+        return New_Game;
     end NewGameKeys;
 
     function LicenseKeys(Key : Key_Code) return GameStates is
