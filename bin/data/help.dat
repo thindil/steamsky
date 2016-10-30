@@ -10,6 +10,7 @@ For repairs, upgrading ship modules and trading with bases, green you have someo
 At this moment, help is under heavy development (as whole game).
 [Ship movement]
 Your ship starts docked to base. To move it, you must first give order "Undock" from base. Press 'o' key (or first 'e' key for see game menu) for open orders menu.
+At game start, you know only one base. You can discover others by flying on it or by asking for other bases in current base. To ask, press 'o' key and then select option 'Ask for bases' ('b' key). You can ask for other bases only once in each base. Each ask take 30 minutes of game time. Amount of discovered bases depends on current base size (in larger bases they know more other bases).
 When you undocked from base, in this same menu, you can set ship speed or dock again. Faster speed means you travel faster but you use more fuel too.
 To move your ship, you must set it speed, have fuel (called Charcollum, which works as moneys too), and someone from ship crew assigned to pilot and engineer role. To assign crew members to selected role, open crew menu - key 'c', select desired crew member and give order by press key 'o'.
 Travel time depends on skills of Pilot and Engineer (current members on this positions) and selected ship speed. 
