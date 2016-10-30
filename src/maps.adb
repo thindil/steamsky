@@ -55,24 +55,26 @@ package body Maps is
             for Y in 1..Integer(Lines) - 1 loop
                 BaseIndex := SkyMap(StartX + X, StartY + Y).BaseIndex;
                 if BaseIndex > 0 then
-                    Move_Cursor(Line => Line_Position(Y), Column =>
+                    if SkyBases(BaseIndex).Known then
+                        Move_Cursor(Line => Line_Position(Y), Column =>
                         Column_Position(X - 1));
-                    Add(Ch => 'o');
-                    if SkyBases(BaseIndex).Visited.Year > 0 then
-                        case SkyBases(BaseIndex).BaseType is
-                            when Industrial =>
-                                Change_Attributes(Line => Line_Position(Y), Column =>
-                                Column_Position(X - 1), Count => 1, Color => 3);
-                            when Agricultural =>
-                                Change_Attributes(Line => Line_Position(Y), Column =>
-                                Column_Position(X - 1), Count => 1, Color => 2);
-                            when Refinery =>
-                                Change_Attributes(Line => Line_Position(Y), Column =>
-                                Column_Position(X - 1), Count => 1, Color => 4);
-                            when Shipyard =>
-                                Change_Attributes(Line => Line_Position(Y), Column =>
-                                Column_Position(X - 1), Count => 1, Color => 5);
-                        end case;
+                        Add(Ch => 'o');
+                        if SkyBases(BaseIndex).Visited.Year > 0 then
+                            case SkyBases(BaseIndex).BaseType is
+                                when Industrial =>
+                                    Change_Attributes(Line => Line_Position(Y), Column =>
+                                    Column_Position(X - 1), Count => 1, Color => 3);
+                                when Agricultural =>
+                                    Change_Attributes(Line => Line_Position(Y), Column =>
+                                    Column_Position(X - 1), Count => 1, Color => 2);
+                                when Refinery =>
+                                    Change_Attributes(Line => Line_Position(Y), Column =>
+                                    Column_Position(X - 1), Count => 1, Color => 4);
+                                when Shipyard =>
+                                    Change_Attributes(Line => Line_Position(Y), Column =>
+                                    Column_Position(X - 1), Count => 1, Color => 5);
+                            end case;
+                        end if;
                     end if;
                 end if;
                 if StartX + X = PlayerShip.SkyX and StartY + Y = PlayerShip.SkyY then
