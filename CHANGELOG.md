@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Price of bronze plates
 - Name of ship module Bronze armor to Light bronze armor
+- Always start new game in large base
 
 ### Fixed
 - Crash on updating modules
