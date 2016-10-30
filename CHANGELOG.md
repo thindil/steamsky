@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Impact of hunger/thirst/wounds on crew members skills
 - Option to assign crew members to selected module
 - Option to assign crew members to trade with bases
+- Discovering bases
 
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
