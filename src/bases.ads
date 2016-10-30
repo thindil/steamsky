@@ -41,6 +41,8 @@ package Bases is
             Population : Natural; -- Amount of people in base
             RecruitDate : Date_Record; -- Time when recruits was generated
             Recruits : Recruit_Container.Vector; -- List of available recruits
+            Known : Boolean; -- Did base is know to player
+            AskedForBases : Boolean; -- Did player asked for bases in this base
         end record;
     SkyBases : array (1..1024) of BaseRecord; -- List of sky bases
     procedure BuyItems(ItemIndex : Positive; Amount : String); -- Buy items from bases
@@ -50,5 +52,6 @@ package Bases is
     procedure UpgradeShip(Install : Boolean; ModuleIndex : Positive); -- Install/remove modules on ship
     procedure GenerateRecruits(BaseIndex : Positive); -- Generate if needed new recruits in base
     procedure HireRecruit(RecruitIndex : Positive); -- Hire selected recruit from bases
+    procedure AskForBases; -- Ask in base for direction for other bases
 
 end Bases;

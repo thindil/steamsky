@@ -102,7 +102,8 @@ package body Game is
                 SkyX => Integer(PosX), SkyY => Integer(PosY), BaseType =>
                 Bases_Types'Val(Rand_Base.Random(Generator2)), Population =>
                 Natural(Rand_Population.Random(Generator4)), RecruitDate => 
-                (0, 0, 0, 0, 0), Recruits => TmpRecruits);
+                (0, 0, 0, 0, 0), Recruits => TmpRecruits, Known => False,
+                AskedForBases => False);
         end loop;
         -- Place player ship in random base
         RandomBase := Rand_Int.Random(Generator);
@@ -161,6 +162,7 @@ package body Game is
             Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest, OrderTime => 15)); 
         SkyBases(Integer(RandomBase)).Visited := GameDate;
+        SkyBases(Integer(RandomBase)).Known := True;
         GenerateRecruits(Integer(RandomBase));
     end NewGame;
 
@@ -206,6 +208,10 @@ package body Game is
         -- Update base
         if BaseIndex > 0 then
             SkyBases(BaseIndex).Visited := GameDate;
+            if not SkyBases(BaseIndex).Known then
+                SkyBases(BaseIndex).Known := True;
+                AddMessage("You discovered base " & To_String(SkyBases(BaseIndex).Name) & ".", OtherMessage);
+            end if;
             GenerateRecruits(BaseIndex);
         end if;
     end UpdateGame;
@@ -281,6 +287,16 @@ package body Game is
                         end loop;
                     end loop;
                 end if;
+                if SkyBases(I).AskedForBases then
+                    Put(SaveGame, "Y;");
+                else
+                    Put(SaveGame, "N;");
+                end if;
+            end if;
+            if SkyBases(I).Known then
+                Put(SaveGame, "Y;");
+            else
+                Put(SaveGame, "N;");
             end if;
         end loop;
         -- Save player ship
@@ -420,7 +436,7 @@ package body Game is
         for I in SkyBases'Range loop
             SkyBases(I) := (Name => ReadData, Visited => (0, 0, 0, 0, 0), SkyX => 0, SkyY => 0,
                 BaseType => Industrial, Population => 0, RecruitDate => (0, 0, 0, 0, 0), 
-                Recruits => BaseRecruits);
+                Recruits => BaseRecruits, Known => False, AskedForBases => False);
             SkyBases(I).Visited.Year := Natural'Value(To_String(ReadData));
             if SkyBases(I).Visited.Year > 0 then
                 SkyBases(I).Visited.Month := Natural'Value(To_String(ReadData));
@@ -453,6 +469,12 @@ package body Game is
                     SkyBases(I).Recruits := BaseRecruits;
                     BaseRecruits.Clear;
                 end if;
+                if ReadData = To_Unbounded_String("Y") then
+                    SkyBases(I).AskedForBases := True;
+                end if;
+            end if;
+            if ReadData = To_Unbounded_String("Y") then
+                SkyBases(I).Known := True;
             end if;
             SkyMap(SkyBases(I).SkyX, SkyBases(I).SkyY).BaseIndex := I;
         end loop;

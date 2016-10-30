@@ -446,4 +446,75 @@ package body Bases is
         SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population - 1;
     end HireRecruit;
 
+    procedure AskForBases is
+        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        Radius, TempX, TempY : Integer;
+        Amount, TmpBaseIndex : Natural;
+        subtype Bases_Range is Positive range 1..1024;
+        package Rand_Bases is new Discrete_Random(Bases_Range);
+        Generator : Rand_Bases.Generator;
+        TraderIndex : Positive;
+    begin
+        if SkyBases(BaseIndex).AskedForBases then
+            ShowDialog("You can't ask again for direction to other bases in this base.");
+            return;
+        end if;
+        if SkyBases(BaseIndex).Population < 150 then
+            Amount := 10;
+            Radius := 10;
+        elsif SkyBases(BaseIndex).Population > 149 and SkyBases(BaseIndex).Population < 300 then
+            Amount := 20;
+            Radius := 20;
+        else
+            Amount := 40;
+            Radius := 40;
+        end if;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Trade then
+                TraderIndex := I;
+                exit;
+            end if;
+        end loop;
+        Bases_Loop:
+        for X in -Radius..Radius loop
+            for Y in -Radius..Radius loop
+                TempX := PlayerShip.SkyX + X;
+                if TempX < 1 then
+                    TempX := 1;
+                elsif TempX > 1024 then
+                    TempX := 1024;
+                end if;
+                TempY := PlayerShip.SkyY + Y;
+                if TempY < 1 then
+                    TempY := 1;
+                elsif TempY > 1024 then
+                    TempY := 1024;
+                end if;
+                TmpBaseIndex := SkyMap(TempX, TempY).BaseIndex;
+                if TmpBaseIndex > 0 then
+                    if not SkyBases(TmpBaseIndex).Known then
+                        SkyBases(TmpBaseIndex).Known := True;
+                        Amount := Amount - 1;
+                        exit Bases_Loop when Amount = 0;
+                    end if;
+                end if;
+            end loop;
+        end loop Bases_Loop;
+        if Amount > 0 then
+            Rand_Bases.Reset(Generator);
+            loop
+                TmpBaseIndex := Rand_Bases.Random(Generator);
+                if not SkyBases(TmpBaseIndex).Known then
+                    SkyBases(TmpBaseIndex).Known := True;
+                    Amount := Amount - 1;
+                end if;
+                exit when Amount = 0;
+            end loop;
+        end if;
+        SkyBases(BaseIndex).AskedForBases := True;
+        AddMessage(To_String(PlayerShip.Crew.Element(TraderIndex).Name) & " asked for directions to other bases.", OrderMessage);
+        GainExp(1, 4, TraderIndex);
+        UpdateGame(30);
+    end AskForBases;
+
 end Bases;
