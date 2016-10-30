@@ -105,8 +105,11 @@ package body Game is
                 (0, 0, 0, 0, 0), Recruits => TmpRecruits, Known => False,
                 AskedForBases => False);
         end loop;
-        -- Place player ship in random base
-        RandomBase := Rand_Int.Random(Generator);
+        -- Place player ship in random large base
+        loop
+            RandomBase := Rand_Int.Random(Generator);
+            exit when SkyBases(Integer(RandomBase)).Population > 299;
+        end loop;
         -- Generate names for crew
         if Rand_Gender.Random(Generator3) = 1 then
             PilotGender := 'M';
