@@ -180,23 +180,26 @@ package body UserInterface is
         SpeedWindow : Window;
         WindowHeight : Line_Position := 6;
         NeedRepair, IsShipyard : Boolean := False;
-        QuitLine : Line_Position := 4;
+        AskedForBases : Boolean := True;
+        CurrentLine : Line_Position := 4;
     begin
         if PlayerShip.Speed = DOCKED then
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                 if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
                     NeedRepair := True;
                     WindowHeight := WindowHeight + 1;
-                    QuitLine := QuitLine + 1;
                     exit;
                 end if;
             end loop;
             if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).BaseType = SHIPYARD then
-                QuitLine := QuitLine + 1;
                 WindowHeight := WindowHeight + 1;
                 IsShipyard := True;
             end if;
-            SpeedWindow := Create(WindowHeight, 12, (Lines / 3), (Columns / 2) - 5);
+            if not SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).AskedForBases then
+                WindowHeight := WindowHeight + 1;
+                AskedForBases := False;
+            end if;
+            SpeedWindow := Create(WindowHeight, 17, (Lines / 3), (Columns / 2) - 9);
             Box(SpeedWindow);
             Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
             Add(Win => SpeedWindow, Str => "Undock");
@@ -210,21 +213,30 @@ package body UserInterface is
             Add(Win => SpeedWindow, Str => "Recruit");
             Change_Attributes(Win => SpeedWindow, Line => 3, Column => 3, 
                 Count => 1, Color => 1);
-            if NeedRepair then
+            if not AskedForBases then
                 Move_Cursor(Win => SpeedWindow, Line => 4, Column => 2);
-                Add(Win => SpeedWindow, Str => "Repair");
-                Change_Attributes(Win => SpeedWindow, Line => 4, Column => 2, 
+                Add(Win => SpeedWindow, Str => "Ask for bases");
+                Change_Attributes(Win => SpeedWindow, Line => 4, Column => 10, 
                     Count => 1, Color => 1);
+                CurrentLine := CurrentLine + 1;
+            end if;
+            if NeedRepair then
+                Move_Cursor(Win => SpeedWindow, Line => CurrentLine, Column => 2);
+                Add(Win => SpeedWindow, Str => "Repair");
+                Change_Attributes(Win => SpeedWindow, Line => CurrentLine, Column => 2, 
+                    Count => 1, Color => 1);
+                CurrentLine := CurrentLine + 1;
             end if;
             if IsShipyard then
-                Move_Cursor(Win =>SpeedWindow, Line => (QuitLine - 1), Column => 2);
+                Move_Cursor(Win =>SpeedWindow, Line => CurrentLine, Column => 2);
                 Add(Win => SpeedWindow, Str => "Shipyard");
-                Change_Attributes(Win => SpeedWindow, Line => (QuitLine - 1), Column => 2, 
+                Change_Attributes(Win => SpeedWindow, Line => CurrentLine, Column => 2, 
                     Count => 1, Color => 1);
+                CurrentLine := CurrentLine + 1;
             end if;
-            Move_Cursor(Win => SpeedWindow, Line => QuitLine, Column => 2);
+            Move_Cursor(Win => SpeedWindow, Line => CurrentLine, Column => 2);
             Add(Win => SpeedWindow, Str => "Quit");
-            Change_Attributes(Win => SpeedWindow, Line => QuitLine, Column => 2, Count => 1,
+            Change_Attributes(Win => SpeedWindow, Line => CurrentLine, Column => 2, Count => 1,
                 Color => 1);
         else
             SpeedWindow := Create(8, 17, (Lines / 3), (Columns / 2) - 8);
@@ -546,6 +558,19 @@ package body UserInterface is
                 if PlayerShip.Speed = DOCKED then
                     DrawGame(Recruits_View);
                     return Recruits_View;
+                else
+                    return Control_Speed;
+                end if;
+            when Character'Pos('b') | Character'Pos('B') => -- Ask for other bases
+                if not HaveTrader then
+                    ShowDialog("You don't have anyone assigned to trading.");
+                    DrawGame(Sky_Map_View);
+                    return OldState;
+                end if;
+                if PlayerShip.Speed = DOCKED then
+                    AskForBases;
+                    DrawGame(Sky_Map_View);
+                    return OldState;
                 else
                     return Control_Speed;
                 end if;
