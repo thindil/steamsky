@@ -24,7 +24,7 @@ package Crew is
     type Skill_Array is array(1..3) of Natural;
     package Skills_Container is new Vectors(Positive, Skill_Array);
     type Crew_Orders is (Pilot, Engineer, Gunner, Rest, Repair, Craft,
-        Upgrading, Trade);
+        Upgrading, Talk);
     type Member_Data is -- Data structure for ship crew member
         record
             Name : Unbounded_String; -- Name of member
