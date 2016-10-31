@@ -136,7 +136,7 @@ package body UserInterface is
                     when Upgrading =>
                         HaveUpgrade := True;
                         Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 2);
-                    when Trade =>
+                    when Talk =>
                         HaveTrader := True;
                         Change_Attributes(Line => 0, Column => (Columns - 3), Count => 1, Color => 2);
                     when others =>
@@ -529,7 +529,7 @@ package body UserInterface is
         HaveTrader : Boolean := False;
     begin
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Trade then
+            if PlayerShip.Crew.Element(I).Order = Talk then
                 HaveTrader := True;
             end if;
         end loop;
