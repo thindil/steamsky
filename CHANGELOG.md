@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - New type of ship modules - furnaces
 - New skill: metalsmith
 - New ship modules: Small bronze furnace, Advanced medium bronze hull, Large
-  bronze hull, Advanced large bronze hull
+  bronze hull, Advanced large bronze hull, Bronze armor, Heavy bronze armor
 - Minimum fuel usage during fly
 - New types of items: copper, tin, copperore, tinore and ironore
 - New items: copper plates, tin plates, copper ore, tin ore and iron ore
