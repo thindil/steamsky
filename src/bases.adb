@@ -444,6 +444,7 @@ package body Bases is
         AddMessage("You hired " & To_String(Recruit.Name) & " for" & Positive'Image(Price) & " Charcollum.", TradeMessage);
         SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex, Count => 1);
         SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population - 1;
+        UpdateGame(5);
     end HireRecruit;
 
     procedure AskForBases is
