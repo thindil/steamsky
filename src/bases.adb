@@ -40,7 +40,7 @@ package body Bases is
             return;
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Trade then
+            if PlayerShip.Crew.Element(I).Order = Talk then
                 TraderIndex := I;
                 exit;
             end if;
@@ -85,7 +85,7 @@ package body Bases is
             return;
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Trade then
+            if PlayerShip.Crew.Element(I).Order = Talk then
                 TraderIndex := I;
                 exit;
             end if;
@@ -156,7 +156,7 @@ package body Bases is
             return;
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Trade then
+            if PlayerShip.Crew.Element(I).Order = Talk then
                 TraderIndex := I;
                 exit;
             end if;
@@ -215,7 +215,7 @@ package body Bases is
             end case;
         end loop;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Trade then
+            if PlayerShip.Crew.Element(I).Order = Talk then
                 TraderIndex := I;
                 exit;
             end if;
@@ -424,7 +424,7 @@ package body Bases is
             return;
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Trade then
+            if PlayerShip.Crew.Element(I).Order = Talk then
                 TraderIndex := I;
                 exit;
             end if;
@@ -471,7 +471,7 @@ package body Bases is
             Radius := 40;
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Trade then
+            if PlayerShip.Crew.Element(I).Order = Talk then
                 TraderIndex := I;
                 exit;
             end if;
