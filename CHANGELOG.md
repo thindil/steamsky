@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Price of bronze plates
 - Name of ship module Bronze armor to Light bronze armor
 - Always start new game in large base
+- Skill name from Bartering to Rhetoric
 
 ### Fixed
 - Crash on updating modules
