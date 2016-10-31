@@ -454,6 +454,7 @@ package body Bases is
         package Rand_Bases is new Discrete_Random(Bases_Range);
         Generator : Rand_Bases.Generator;
         TraderIndex : Positive;
+        UnknownBases : Natural := 0;
     begin
         if SkyBases(BaseIndex).AskedForBases then
             ShowDialog("You can't ask again for direction to other bases in this base.");
@@ -501,15 +502,29 @@ package body Bases is
             end loop;
         end loop Bases_Loop;
         if Amount > 0 then
-            Rand_Bases.Reset(Generator);
-            loop
-                TmpBaseIndex := Rand_Bases.Random(Generator);
-                if not SkyBases(TmpBaseIndex).Known then
-                    SkyBases(TmpBaseIndex).Known := True;
-                    Amount := Amount - 1;
+            for I in SkyBases'Range loop
+                if not SkyBases(I).Known then
+                    UnknownBases := UnknownBases + 1;
                 end if;
-                exit when Amount = 0;
+                exit when UnknownBases >= Amount;
             end loop;
+            if UnknownBases >= Amount then
+                Rand_Bases.Reset(Generator);
+                loop
+                    TmpBaseIndex := Rand_Bases.Random(Generator);
+                    if not SkyBases(TmpBaseIndex).Known then
+                        SkyBases(TmpBaseIndex).Known := True;
+                        Amount := Amount - 1;
+                    end if;
+                    exit when Amount = 0;
+                end loop;
+            else
+                for I in SkyBases'Range loop
+                    if not SkyBases(I).Known then
+                        SkyBases(I).Known := True;
+                    end if;
+                end loop;
+            end if;
         end if;
         SkyBases(BaseIndex).AskedForBases := True;
         AddMessage(To_String(PlayerShip.Crew.Element(TraderIndex).Name) & " asked for directions to other bases.", OrderMessage);
