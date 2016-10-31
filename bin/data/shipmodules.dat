@@ -276,4 +276,28 @@ Material = Bronze
 Skill = Engineering
 Price = 17500 
 InstallTime = 280
+[25]
+Name = Bronze armor
+Type = Armor
+Weight = 6000
+Value = 5
+MaxValue = 10
+Durability = 300
+Material = Bronze
+Skill = Engineering
+Price = 7500
+InstallTime = 220
+Unique = Yes
+[26]
+Name = Heavy bronze armor
+Type = Armor
+Weight = 8000
+Value = 5
+MaxValue = 10
+Durability = 400
+Material = Bronze
+Skill = Engineering
+Price = 10000
+InstallTime = 240
+Unique = Yes
 []
