@@ -61,7 +61,7 @@ package body Game is
         Rand_Base.Reset(Generator2);
         Rand_Gender.Reset(Generator3);
         Rand_Population.Reset(Generator4);
-        SkyMap := (others => (others => (BaseIndex => 0)));
+        SkyMap := (others => (others => (BaseIndex => 0, Visited => False)));
         for I in Rand_Range loop
             loop
                 ValidLocation := True;
@@ -97,7 +97,7 @@ package body Game is
                 end if;
                 exit when ValidLocation;
             end loop;
-            SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I));
+            SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I), Visited => False);
             SkyBases(Integer(I)) := (Name => GenerateBaseName, Visited => (0, 0, 0, 0, 0), 
                 SkyX => Integer(PosX), SkyY => Integer(PosY), BaseType =>
                 Bases_Types'Val(Rand_Base.Random(Generator2)), Population =>
@@ -166,6 +166,7 @@ package body Game is
             PreviousOrder => Rest, OrderTime => 15)); 
         SkyBases(Integer(RandomBase)).Visited := GameDate;
         SkyBases(Integer(RandomBase)).Known := True;
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
         GenerateRecruits(Integer(RandomBase));
     end NewGame;
 
@@ -217,6 +218,8 @@ package body Game is
             end if;
             GenerateRecruits(BaseIndex);
         end if;
+        -- Update map cell
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
     end UpdateGame;
 
     procedure SaveGame is
@@ -225,6 +228,7 @@ package body Game is
         Messages : Natural := 10;
         StartLoop : Positive;
         Message : Message_Data;
+        VisitedFields : Natural := 0;
     begin
         Create(SaveGame, Out_File, "data/savegame.dat");
         -- Save version
@@ -240,6 +244,26 @@ package body Game is
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         RawValue := To_Unbounded_String(Integer'Image(GameDate.Minutes));
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        -- Save map
+        for X in 1..1024 loop
+            for Y in 1..1024 loop
+                if SkyMap(X, Y).Visited then
+                    VisitedFields := VisitedFields + 1;
+                end if;
+            end loop;
+        end loop;
+        RawValue := To_Unbounded_String(Integer'Image(VisitedFields));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        for X in 1..1024 loop
+            for Y in 1..1024 loop
+                if SkyMap(X, Y).Visited then
+                    RawValue := To_Unbounded_String(Integer'Image(X));
+                    Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                    RawValue := To_Unbounded_String(Integer'Image(Y));
+                    Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                end if;
+            end loop;
+        end loop;
         -- Save bases
         for I in SkyBases'Range loop
             Put(SaveGame, To_String(SkyBases(I).Name) & ";");
@@ -400,6 +424,7 @@ package body Game is
         Message : Unbounded_String;
         MType : Message_Type;
         BaseRecruits : Recruit_Container.Vector;
+        VisitedFields : Positive;
         function ReadData return Unbounded_String is
             RawData : Unbounded_String := To_Unbounded_String("");
             Char : Character;
@@ -435,6 +460,12 @@ package body Game is
         GameDate.Day := Natural'Value(To_String(ReadData));
         GameDate.Hour := Natural'Value(To_String(ReadData));
         GameDate.Minutes := Natural'Value(To_String(ReadData));
+        -- Load sky map
+        SkyMap := (others => (others => (BaseIndex => 0, Visited => False)));
+        VisitedFields := Positive'Value(To_String(ReadData));
+        for I in 1..VisitedFields loop
+            SkyMap(Positive'Value(To_String(ReadData)), Positive'Value(To_String(ReadData))).Visited := True;
+        end loop;
         -- Load sky bases
         for I in SkyBases'Range loop
             SkyBases(I) := (Name => ReadData, Visited => (0, 0, 0, 0, 0), SkyX => 0, SkyY => 0,
