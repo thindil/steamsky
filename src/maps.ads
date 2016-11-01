@@ -22,6 +22,7 @@ package Maps is
     type SkyCell is -- Data structure for cells in game map
         record
             BaseIndex : Integer;  -- If sky base is in cell > 0
+            Visited : Boolean; -- True if player was in this cell
         end record;
     SkyMap : array (1..1024, 1..1024) of SkyCell; -- Game map
 
