@@ -150,7 +150,7 @@ package body Game is
         -- Add crew to ship
         TmpSkills.Append(New_Item => (4, 5, 0));
         PlayerShip.Crew.Append(New_Item => (Name => CharName, Gender => Gender,
-            Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Rest,
+            Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Talk,
             PreviousOrder => Rest, OrderTime => 15)); 
         TmpSkills.Replace_Element(Index => 1, New_Item => (1, 5, 0));
         PlayerShip.Crew.Append(New_Item => (Name => PilotName, Gender => PilotGender,
