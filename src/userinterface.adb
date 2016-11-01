@@ -539,7 +539,7 @@ package body UserInterface is
                 return OldState;
             when Character'Pos('t') | Character'Pos('T') => -- Trade with base
                 if not HaveTrader then
-                    ShowDialog("You don't have anyone assigned to trading.");
+                    ShowDialog("You don't have anyone assigned to talks.");
                     DrawGame(Sky_Map_View);
                     return OldState;
                 end if;
@@ -551,7 +551,7 @@ package body UserInterface is
                 end if;
             when Character'Pos('e') | Character'Pos('E') => -- Recruit new crew members in base
                 if not HaveTrader then
-                    ShowDialog("You don't have anyone assigned to trading.");
+                    ShowDialog("You don't have anyone assigned to talks.");
                     DrawGame(Sky_Map_View);
                     return OldState;
                 end if;
@@ -563,7 +563,7 @@ package body UserInterface is
                 end if;
             when Character'Pos('b') | Character'Pos('B') => -- Ask for other bases
                 if not HaveTrader then
-                    ShowDialog("You don't have anyone assigned to trading.");
+                    ShowDialog("You don't have anyone assigned to talks.");
                     DrawGame(Sky_Map_View);
                     return OldState;
                 end if;
@@ -576,7 +576,7 @@ package body UserInterface is
                 end if;
             when Character'Pos('r') | Character'Pos('R') => -- Repair ship in base
                 if not HaveTrader then
-                    ShowDialog("You don't have anyone assigned to trading.");
+                    ShowDialog("You don't have anyone assigned to talks.");
                     DrawGame(Sky_Map_View);
                     return OldState;
                 end if;
@@ -588,7 +588,7 @@ package body UserInterface is
                 end if;
             when Character'Pos('s') | Character'Pos('S') => -- Shipyard in base
                 if not HaveTrader then
-                    ShowDialog("You don't have anyone assigned to trading.");
+                    ShowDialog("You don't have anyone assigned to talks.");
                     DrawGame(Sky_Map_View);
                     return OldState;
                 end if;
