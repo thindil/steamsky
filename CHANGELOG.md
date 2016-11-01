@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Name of ship module Bronze armor to Light bronze armor
 - Always start new game in large base
 - Skill name from Bartering to Rhetoric
+- Starting order for player from On break to Talking in bases
 
 ### Fixed
 - Crash on updating modules
