@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Time needed for rest in wait command
 - Check for random events if there was no ship move
 - Gaining experience for trading
+- Ammo for Iron 10mm gun
 
 ## [0.4] - 2016-10-16
 
