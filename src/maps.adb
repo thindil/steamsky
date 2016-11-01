@@ -57,7 +57,7 @@ package body Maps is
                 if BaseIndex > 0 then
                     if SkyBases(BaseIndex).Known then
                         Move_Cursor(Line => Line_Position(Y), Column =>
-                        Column_Position(X - 1));
+                            Column_Position(X - 1));
                         Add(Ch => 'o');
                         if SkyBases(BaseIndex).Visited.Year > 0 then
                             case SkyBases(BaseIndex).BaseType is
@@ -74,8 +74,19 @@ package body Maps is
                                     Change_Attributes(Line => Line_Position(Y), Column =>
                                     Column_Position(X - 1), Count => 1, Color => 5);
                             end case;
+                        else
+                            Change_Attributes(Line => Line_Position(Y), Column =>
+                                Column_Position(X - 1), Count => 1, Color => 7);
                         end if;
+                    else 
+                        Move_Cursor(Line => Line_Position(Y), Column =>
+                            Column_Position(X - 1));
+                        Change_Attributes(Line => Line_Position(Y), Column =>
+                            Column_Position(X - 1), Count => 1, Color => 6);
                     end if;
+                elsif not SkyMap(StartX + X, StartY + Y).Visited then
+                    Change_Attributes(Line => Line_Position(Y), Column =>
+                        Column_Position(X - 1), Count => 1, Color => 6);
                 end if;
                 if StartX + X = PlayerShip.SkyX and StartY + Y = PlayerShip.SkyY then
                     Move_Cursor(Line => Line_Position(Y), Column =>
