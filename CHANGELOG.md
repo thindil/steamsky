@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Discovering bases
 - Time passing to recruit new crew members in bases
 - Option to move sky map to selected coordinates
+- Show informations about selected map cell
 
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
