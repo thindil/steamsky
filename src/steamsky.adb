@@ -183,6 +183,8 @@ begin
                 GameState := AssignOwnerKeys(Key);
             when Recipe_Setting =>
                 GameState := RecipeSettingKeys(Key);
+            when Move_Map =>
+                GameState := MoveFormKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
