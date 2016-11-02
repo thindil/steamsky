@@ -36,24 +36,33 @@ package body Maps is
         InfoWindow : Window;
         WindowHeight : Line_Position := 3;
         WindowWidth : Column_Position := 20;
+        CurrentCell : Attributed_Character;
     begin
+        CurrentCell := ACS_Map(ACS_Solid_Block);
+        CurrentCell.Color := 0;
         StartX := PlayerShip.SkyX - Integer(Columns / 2);
         StartX := StartX + MoveX;
         if StartX < 0 then
             StartX := 0;
-            MoveX := MoveX + 1;
         elsif  (StartX + Integer(Columns)) > 1025 then
             StartX := 1025 - Integer(Columns);
-            MoveX := MoveX - 1;
+        end if;
+        if PlayerShip.SkyX + MoveX <= 1 then
+            MoveX := 1 - PlayerShip.SkyX;
+        elsif PlayerShip.SkyX + MoveX > 1024 then
+            MoveX := 1024 - PlayerShip.SkyX;
         end if;
         StartY := PlayerShip.SkyY - Integer(Lines / 2);
         StartY := StartY + MoveY;
         if StartY < 0 then
             StartY := 0;
-            MoveY := MoveY + 1;
         elsif (StartY + Integer(Lines)) > 1025 then
             StartY := 1025 - Integer(Lines);
-            MoveY := MoveY - 1;
+        end if;
+        if PlayerShip.SkyY + MoveY <= 1 then
+            MoveY := 1 - PlayerShip.SkyY;
+        elsif PlayerShip.SkyY + MoveY > 1024 then
+            MoveY := 1024 - PlayerShip.SkyY;
         end if;
         for X in 1..Integer(Columns) - 1 loop
             for Y in 1..Integer(Lines) - 1 loop
@@ -97,12 +106,23 @@ package body Maps is
                         Column_Position(X - 1));
                     Add(Ch => '+');
                 end if;
+                if (MoveX /= 0 or MoveY /= 0) and (StartX + X = PlayerShip.SkyX + MoveX and StartY + Y = PlayerShip.SkyY + MoveY) then
+                    if Peek(Line => Line_Position(Y), Column => Column_Position(X - 1)).Ch = ' ' then
+                        Move_Cursor(Line => Line_Position(Y), Column =>
+                            Column_Position(X - 1));
+                        Add(Ch => CurrentCell);
+                    end if;
+                end if;
             end loop;
         end loop;
         Refresh_Without_Update;
-        if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
-            BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-            WindowHeight := WindowHeight + 4;
+        if SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).BaseIndex > 0 then
+            BaseIndex := SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).BaseIndex;
+            if SkyBases(BaseIndex).Visited.Year > 0 then
+                WindowHeight := WindowHeight + 4;
+            else
+                WindowHeight := WindowHeight + 2;
+            end if;
             WindowWidth := 4 + Column_Position(Length(SkyBases(BaseIndex).Name));
             if WindowWidth < 20 then
                 WindowWidth := 20;
@@ -111,9 +131,9 @@ package body Maps is
         InfoWindow := Create(WindowHeight, WindowWidth, 1, (Columns - WindowWidth - 1));
         Box(InfoWindow);
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 3);
-        Add(Win => InfoWindow, Str => "X:" & Positive'Image(PlayerShip.SkyX) & 
-            " Y:" & Positive'Image(PlayerShip.SkyY));
-        if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+        Add(Win => InfoWindow, Str => "X:" & Positive'Image(PlayerShip.SkyX + MoveX) & 
+            " Y:" & Positive'Image(PlayerShip.SkyY + MoveY));
+        if SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).BaseIndex > 0 then
             Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
             Add(Win => InfoWindow, Str => To_String(SkyBases(BaseIndex).Name));
             if SkyBases(BaseIndex).Visited.Year > 0 then
