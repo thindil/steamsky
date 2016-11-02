@@ -398,27 +398,30 @@ package body UserInterface is
     begin
         MenuWindow := Create(14, 32, (Lines / 3), (Columns / 2) - 16);
         Box(MenuWindow);
-        Move_Cursor(Win => MenuWindow, Line => 2, Column => 7);
+        Move_Cursor(Win => MenuWindow, Line => 1, Column => 7);
         Add(Win => MenuWindow, Str => "Ship informations");
-        Change_Attributes(Win => MenuWindow, Line => 2, Column => 7, Count => 1, Color => 1);
-        Move_Cursor(Win => MenuWindow, Line => 3, Column => 7);
+        Change_Attributes(Win => MenuWindow, Line => 1, Column => 7, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 2, Column => 7);
         Add(Win => MenuWindow, Str => "Ship cargo");
-        Change_Attributes(Win => MenuWindow, Line => 3, Column => 13, Count => 1, Color => 1);
-        Move_Cursor(Win => MenuWindow, Line => 4, Column => 7);
+        Change_Attributes(Win => MenuWindow, Line => 2, Column => 13, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 3, Column => 7);
         Add(Win => MenuWindow, Str => "Crew informations");
-        Change_Attributes(Win => MenuWindow, Line => 4, Column => 7, Count => 1, Color => 1);
-        Move_Cursor(Win => MenuWindow, Line => 5, Column => 7);
+        Change_Attributes(Win => MenuWindow, Line => 3, Column => 7, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 4, Column => 7);
         Add(Win => MenuWindow, Str => "Ship orders");
-        Change_Attributes(Win => MenuWindow, Line => 5, Column => 12, Count => 1, Color => 1);
-        Move_Cursor(Win => MenuWindow, Line => 6, Column => 7);
+        Change_Attributes(Win => MenuWindow, Line => 4, Column => 12, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 5, Column => 7);
         Add(Win => MenuWindow, Str => "Crafting");
-        Change_Attributes(Win => MenuWindow, Line => 6, Column => 8, Count => 1, Color => 1);
-        Move_Cursor(Win => MenuWindow, Line => 7, Column => 7);
+        Change_Attributes(Win => MenuWindow, Line => 5, Column => 8, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 6, Column => 7);
         Add(Win => MenuWindow, Str => "Last messages");
-        Change_Attributes(Win => MenuWindow, Line => 7, Column => 12, Count => 1, Color => 1);
-        Move_Cursor(Win => MenuWindow, Line => 8, Column => 7);
+        Change_Attributes(Win => MenuWindow, Line => 6, Column => 12, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 7, Column => 7);
         Add(Win => MenuWindow, Str => "Wait orders");
-        Change_Attributes(Win => MenuWindow, Line => 8, Column => 7, Count => 1, Color => 1);
+        Change_Attributes(Win => MenuWindow, Line => 7, Column => 7, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 8, Column => 7);
+        Add(Win => MenuWindow, Str => "Move map to position");
+        Change_Attributes(Win => MenuWindow, Line => 8, Column => 9, Count => 1, Color => 1);
         Move_Cursor(Win => MenuWindow, Line => 9, Column => 7);
         Add(Win => MenuWindow, Str => "Help");
         Change_Attributes(Win => MenuWindow, Line => 9, Column => 7, Count => 1, Color => 1);
@@ -519,6 +522,10 @@ package body UserInterface is
             when Character'Pos('a') | Character'Pos('A') => -- Cargo info screen
                 DrawGame(Cargo_Info);
                 return Cargo_Info;
+            when Character'Pos('v') | Character'Pos('V') => -- Move map form
+                DrawGame(CurrentState);
+                ShowMoveMapForm;
+                return Move_Map;
             when others =>
                 DrawGame(CurrentState);
                 return CurrentState;

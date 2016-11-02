@@ -17,13 +17,17 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
+with Terminal_Interface.Curses.Forms.Field_Types.IntField; use Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Ships; use Ships;
 with Bases; use Bases;
-with Game; use Game;
+with UserInterface; use UserInterface;
 
 package body Maps is
 
     MoveX, MoveY : Integer := 0;
+    MoveForm : Form;
+    FormWindow : Window;
 
     procedure ShowSkyMap is
         StartX : Integer;
@@ -129,6 +133,64 @@ package body Maps is
         Delete(InfoWindow);
     end ShowSkyMap;
 
+    procedure ShowMoveMapForm is
+        Move_Fields : constant Field_Array_Access := new Field_Array(1..7);
+        FieldOptions : Field_Option_Set;
+        FormHeight : Line_Position;
+        FormLength : Column_Position;
+        Visibility : Cursor_Visibility := Normal;
+    begin
+        if MoveForm = Null_Form then
+            Set_Cursor_Visibility(Visibility);
+            Move_Fields.all(1) := New_Field(1, 2, 0, 0, 0, 0);
+            FieldOptions := Get_Options(Move_Fields.all(1));
+            Set_Buffer(Move_Fields.all(1), 0, "X:");
+            FieldOptions.Active := False;
+            Set_Options(Move_Fields.all(1), FieldOptions);
+            Move_Fields.all(2) := New_Field(1, 5, 0, 2, 0, 0);
+            FieldOptions := Get_Options(Move_Fields.all(2));
+            Set_Buffer(Move_Fields.all(2), 0, Natural'Image(PlayerShip.SkyX));
+            FieldOptions.Auto_Skip := False;
+            FieldOptions.Null_Ok := False;
+            Set_Options(Move_Fields.all(2), FieldOptions);
+            Set_Background(Move_Fields.all(2), (Reverse_Video => True, others => False));
+            Set_Field_Type(Move_Fields.all(2), (0, 1, 1024));
+            Move_Fields.all(3) := New_Field(1, 2, 1, 0, 0, 0);
+            FieldOptions := Get_Options(Move_Fields.all(3));
+            Set_Buffer(Move_Fields.all(3), 0, "Y:");
+            FieldOptions.Active := False;
+            Set_Options(Move_Fields.all(3), FieldOptions);
+            Move_Fields.all(4) := New_Field(1, 5, 1, 2, 0, 0);
+            FieldOptions := Get_Options(Move_Fields.all(4));
+            Set_Buffer(Move_Fields.all(4), 0, Natural'Image(PlayerShip.SkyY));
+            FieldOptions.Auto_Skip := False;
+            FieldOptions.Null_Ok := False;
+            Set_Options(Move_Fields.all(4), FieldOptions);
+            Set_Field_Type(Move_Fields.all(4), (0, 1, 1024));
+            Move_Fields.all(5) := New_Field(1, 8, 3, 1, 0, 0);
+            Set_Buffer(Move_Fields.all(5), 0, "[Cancel]");
+            FieldOptions := Get_Options(Move_Fields.all(5));
+            FieldOptions.Edit := False;
+            Set_Options(Move_Fields.all(5), FieldOptions);
+            Move_Fields.all(6) := New_Field(1, 4, 3, 11, 0, 0);
+            FieldOptions := Get_Options(Move_Fields.all(6));
+            FieldOptions.Edit := False;
+            Set_Options(Move_Fields.all(6), FieldOptions);
+            Set_Buffer(Move_Fields.all(6), 0, "[Ok]");
+            Move_Fields.all(7) := Null_Field;
+            MoveForm := New_Form(Move_Fields);
+            Set_Options(MoveForm, (others => False));
+            Scale(MoveForm, FormHeight, FormLength);
+            FormWindow := Create(FormHeight + 2, FormLength + 2, ((Lines / 3) - (FormHeight / 2)), ((Columns / 2) - (FormLength / 2)));
+            Box(FormWindow);
+            Set_Window(MoveForm, FormWindow);
+            Set_Sub_Window(MoveForm, Derived_Window(FormWindow, FormHeight, FormLength, 1, 1));
+            Post(MoveForm);
+        end if;
+        Refresh;
+        Refresh(FormWindow);
+    end ShowMoveMapForm;
+
     function SkyMapKeys(Key : Key_Code) return Integer is
         Result : Integer := 1;
         NewKey : Key_Code;
@@ -202,4 +264,63 @@ package body Maps is
         end case;
         return Result;
     end SkyMapKeys;
+
+    function MoveFormKeys(Key : Key_Code) return GameStates is
+        Result : Forms.Driver_Result;
+        FieldIndex : Positive := Get_Index(Current(MoveForm));
+        Visibility : Cursor_Visibility := Invisible;
+    begin
+        case Key is
+            when KEY_UP => -- Select previous field
+                Result := Driver(MoveForm, F_Previous_Field);
+                FieldIndex := Get_Index(Current(MoveForm));
+                if FieldIndex = 2 or FieldIndex = 4 then
+                    Result := Driver(MoveForm, F_End_Line);
+                end if;
+            when KEY_DOWN => -- Select next field
+                Result := Driver(MoveForm, F_Next_Field);
+                FieldIndex := Get_Index(Current(MoveForm));
+                if FieldIndex = 2  or FieldIndex = 4 then
+                    Result := Driver(MoveForm, F_End_Line);
+                end if;
+            when 10 => -- quit/move map
+                if FieldIndex = 6 then
+                    MoveX := Integer'Value(Get_Buffer(Fields(MoveForm, 2))) - PlayerShip.SkyX;
+                    MoveY := Integer'Value(Get_Buffer(Fields(MoveForm, 4))) - PlayerShip.SkyY;
+                end if;
+                Set_Cursor_Visibility(Visibility);
+                Post(MoveForm, False);
+                Delete(MoveForm);
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
+            when KEY_BACKSPACE => -- delete last character
+                if FieldIndex = 2 or FieldIndex = 4 then
+                    Result := Driver(MoveForm, F_Delete_Previous);
+                end if;
+            when KEY_DC => -- delete character at cursor
+                if FieldIndex = 2 or FieldIndex = 4 then
+                    Result := Driver(MoveForm, F_Delete_Char);
+                end if;
+            when KEY_RIGHT => -- Move cursor right
+                if FieldIndex = 2 or FieldIndex = 4 then
+                    Result := Driver(MoveForm, F_Right_Char);
+                end if;
+            when KEY_LEFT => -- Move cursor left
+                if FieldIndex = 2 or FieldIndex = 4 then
+                    Result := Driver(MoveForm, F_Left_Char);
+                end if;
+            when others =>
+                Result := Driver(MoveForm, Key);
+        end case;
+        if Result = Form_Ok then
+            Set_Background(Fields(MoveForm, 2), (others => False));
+            Set_Background(Fields(MoveForm, 4), (others => False));
+            if FieldIndex = 2 or FieldIndex = 4 then
+                Set_Background(Current(MoveForm), (Reverse_Video => True, others => False));
+            end if;
+            Refresh(FormWindow);
+        end if;
+        return Move_Map;
+    end MoveFormKeys;
+
 end Maps;
