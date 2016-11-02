@@ -116,11 +116,11 @@ package body Maps is
             end loop;
         end loop;
         Refresh_Without_Update;
-        if SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).BaseIndex > 0 then
-            BaseIndex := SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).BaseIndex;
+        BaseIndex := SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).BaseIndex;
+        if BaseIndex > 0 then
             if SkyBases(BaseIndex).Visited.Year > 0 then
                 WindowHeight := WindowHeight + 4;
-            else
+            elsif SkyBases(BaseIndex).Known then
                 WindowHeight := WindowHeight + 2;
             end if;
             WindowWidth := 4 + Column_Position(Length(SkyBases(BaseIndex).Name));
@@ -133,9 +133,11 @@ package body Maps is
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 3);
         Add(Win => InfoWindow, Str => "X:" & Positive'Image(PlayerShip.SkyX + MoveX) & 
             " Y:" & Positive'Image(PlayerShip.SkyY + MoveY));
-        if SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).BaseIndex > 0 then
-            Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
-            Add(Win => InfoWindow, Str => To_String(SkyBases(BaseIndex).Name));
+        if BaseIndex > 0 then
+            if SkyBases(BaseIndex).Known then
+                Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
+                Add(Win => InfoWindow, Str => To_String(SkyBases(BaseIndex).Name));
+            end if;
             if SkyBases(BaseIndex).Visited.Year > 0 then
                 Move_Cursor(Win => InfoWindow, Line => 4, Column => 2);
                 Add(Win => InfoWindow, Str => To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
