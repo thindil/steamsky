@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
+with Game; use Game;
 
 package Maps is
     
@@ -27,6 +28,8 @@ package Maps is
     SkyMap : array (1..1024, 1..1024) of SkyCell; -- Game map
 
     procedure ShowSkyMap; -- Show map of game
+    procedure ShowMoveMapForm; -- Show form to move map to selected location
     function SkyMapKeys(Key : Key_Code) return Integer; -- Handle keys on map screen, return 0 for lack of action, 1 ship movement, 2 ship speed control (change state)
+    function MoveFormKeys(Key : Key_Code) return GameStates; -- Handle keys in move map form
 
 end Maps;
