@@ -171,7 +171,7 @@ package body Maps is
             Set_Options(Move_Fields.all(1), FieldOptions);
             Move_Fields.all(2) := New_Field(1, 5, 0, 2, 0, 0);
             FieldOptions := Get_Options(Move_Fields.all(2));
-            Set_Buffer(Move_Fields.all(2), 0, Natural'Image(PlayerShip.SkyX));
+            Set_Buffer(Move_Fields.all(2), 0, Natural'Image(PlayerShip.SkyX + MoveX));
             FieldOptions.Auto_Skip := False;
             FieldOptions.Null_Ok := False;
             Set_Options(Move_Fields.all(2), FieldOptions);
@@ -184,7 +184,7 @@ package body Maps is
             Set_Options(Move_Fields.all(3), FieldOptions);
             Move_Fields.all(4) := New_Field(1, 5, 1, 2, 0, 0);
             FieldOptions := Get_Options(Move_Fields.all(4));
-            Set_Buffer(Move_Fields.all(4), 0, Natural'Image(PlayerShip.SkyY));
+            Set_Buffer(Move_Fields.all(4), 0, Natural'Image(PlayerShip.SkyY + MoveY));
             FieldOptions.Auto_Skip := False;
             FieldOptions.Null_Ok := False;
             Set_Options(Move_Fields.all(4), FieldOptions);
