@@ -7,6 +7,7 @@ On mosts screens you can see in top right corner informations about needed crew 
 For pilot and engineer if letter is green, position is taken by crew member, red means you don't have anyone assigned to this position.
 For gunners and manufacturing - green letter mean all positions are taken (all guns, all crafting modules), red letter mean you have free positions (not all guns/crafting modules are taken), white letter mean, you don't have or no need anyone assigned to this positions.
 For repairs, upgrading ship modules and talking in bases, green you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white letter means you don't have anyone assigned to this position and you don't need anyone.
+To move map without moving ship, hold SHIFT and use keypad keys this same which are used for moving ship. Hit SPACE to center map on ship. In that way, you can see informations about selected map cell (for example, bases info). Window in right up corner of screen always show info about your current map cell.
 At this moment, help is under heavy development (as whole game).
 [Ship movement]
 Your ship starts docked to base. To move it, you must first give order "Undock" from base. Press 'o' key (or first 'e' key for see game menu) for open orders menu.
@@ -21,7 +22,6 @@ During travel you may encounter various events (at this moment you can be only a
 Ship speed depends on engine power, engine damage, ship weight (with cargo) and bit on Engineer and Pilot experience.
 As you fly near bases (you are in this same cell where base is), you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are in default text color. 
 You can wait a moment without doing anything, by hit key 5 on keypad.
-To move map without moving ship, hold SHIFT and use keypad keys this same which are used for moving ship. Hit SPACE to center map on ship.
 [Trading]
 To buy/sell items from bases you must first dock to base and having assigned crew member to trading with bases. All bases buy all items, but which items are sold, depends on base type.
 Prices in bases depends on skill Bartering of assigned to trade crew member - with higher skill you can sell items for more and buy for less. 
