@@ -300,4 +300,15 @@ Skill = Engineering
 Price = 10000
 InstallTime = 240
 Unique = Yes
+[9]
+Name = Iron 40mm gun
+Type = Gun
+Weight = 60
+Value = 20
+MaxValue = 20
+Durability = 30
+Material = Iron
+Skill = Gunsmith
+Price = 1000
+InstallTime = 45
 []
