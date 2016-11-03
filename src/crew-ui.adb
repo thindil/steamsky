@@ -164,6 +164,9 @@ package body Crew.UI is
         Set_Window(CrewMenu, MenuWindow);
         Set_Sub_Window(CrewMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(CrewMenu);
+        if Crew_Items.all(MemberIndex) = Null_Item then
+            MemberIndex := 1;
+        end if;
         Set_Current(CrewMenu, Crew_Items.all(MemberIndex));
         ShowMemberInfo;
         Refresh(MenuWindow);
