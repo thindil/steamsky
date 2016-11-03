@@ -112,4 +112,10 @@ Weight = 8
 Type = Ironore
 Prices = 5, 5, 3, 5
 Buyable = N, N, Y, N
+[20]
+Name = 40mm ammo
+Weight = 2
+Type = Ammo
+Prices = 6, 8, 8, 8
+Buyable = Y, N, N, N
 []
