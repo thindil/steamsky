@@ -150,6 +150,9 @@ package body Bases.UI is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
+        if Trade_Items.all(CurrentMenuIndex) = Null_Item then
+            CurrentMenuIndex := 1;
+        end if;
         Set_Current(TradeMenu, Trade_Items.all(CurrentMenuIndex));
         MoneyIndex := FindMoney;
         Move_Cursor(Line => (MenuHeight + 4), Column => 2);
@@ -320,6 +323,9 @@ package body Bases.UI is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
+        if Repair_Items.all(CurrentMenuIndex) = Null_Item then
+            CurrentMenuIndex := 1;
+        end if;
         Set_Current(TradeMenu, Repair_Items.all(CurrentMenuIndex));
         MoneyIndex := FindMoney;
         Move_Cursor(Line => (MenuHeight + 4), Column => 2);
@@ -462,6 +468,9 @@ package body Bases.UI is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
+        if Modules_Items.all(CurrentMenuIndex) = Null_Item then
+            CurrentMenuIndex := 1;
+        end if;
         Set_Current(TradeMenu, Modules_Items.all(CurrentMenuIndex));
         MoneyIndex := FindMoney;
         Move_Cursor(Line => (MenuHeight + 5), Column => 2);
@@ -550,6 +559,9 @@ package body Bases.UI is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
+        if Recruits_Items.all(CurrentMenuIndex) = Null_Item then
+            CurrentMenuIndex := 1;
+        end if;
         Set_Current(TradeMenu, Recruits_Items.all(CurrentMenuIndex));
         MoneyIndex := FindMoney;
         Move_Cursor(Line => (MenuHeight + 4), Column => 2);
