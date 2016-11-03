@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
   bronze hull, Advanced large bronze hull, Bronze armor, Heavy bronze armor
 - Minimum fuel usage during fly
 - New types of items: copper, tin, copperore, tinore and ironore
-- New items: copper plates, tin plates, copper ore, tin ore and iron ore
+- New items: copper plates, tin plates, copper ore, tin ore, iron ore and 40mm
+  ammo
 - New crafting recipes: copper plates, tin plates, bronze plates and iron
   plates
 - Option to rename player ship
