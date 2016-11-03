@@ -362,6 +362,9 @@ package body Ships.UI is
         Set_Window(ModulesMenu, MenuWindow);
         Set_Sub_Window(ModulesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(ModulesMenu);
+        if Cargo_Items.all(CurrentMenuIndex) = Null_Item then
+            CurrentMenuIndex := 1;
+        end if;
         Set_Current(ModulesMenu, Cargo_Items.all(CurrentMenuIndex));
         ShowItemInfo;
         Refresh(MenuWindow);
