@@ -454,9 +454,11 @@ package body UserInterface is
             when Help_View =>
                 ShowHelpMenu;
             when Quit_Confirm =>
+                ShowSkyMap;
                 Refresh_Without_Update;
                 ShowConfirm("Are you sure want to quit game?");
             when Combat_Confirm =>
+                ShowSkyMap;
                 Refresh_Without_Update;
                 ShowConfirm(To_String(EnemyName) & " is near, attack?");
             when Combat_State =>
@@ -472,7 +474,8 @@ package body UserInterface is
                 ShowHelp(True);
             when Repairs_View =>
                 ShowRepair;
-            when Clear_Confirm => 
+            when Clear_Confirm =>
+                ShowMessages;
                 Refresh_Without_Update;
                 ShowConfirm("Are you sure want to clear all messages?");
             when Shipyard_View =>
@@ -480,6 +483,7 @@ package body UserInterface is
             when Recruits_View =>
                 ShowRecruits;
             when Dismiss_Confirm =>
+                ShowCrewInfo;
                 Refresh_Without_Update;
                 ShowConfirm("Are you sure want to dismiss this crew member?");
             when others =>
