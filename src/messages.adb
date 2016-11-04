@@ -136,16 +136,16 @@ package body Messages is
             Add(Str => "No messages yet.");
             return;
         end if;
+        Move_Cursor(Line => 2, Column => 2);
+        Add(Str => "[All] [Combat] [Trade] [Orders] [Crafts] [Others] [Delete all]");
+        Change_Attributes(Line => 2, Column => 3, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 9, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 18, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 26, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 36, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 47, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 53, Count => 1, Color => 1);
         if MessagesPad = Null_Window then
-            Move_Cursor(Line => 2, Column => 2);
-            Add(Str => "[All] [Combat] [Trade] [Orders] [Crafts] [Others] [Delete all]");
-            Change_Attributes(Line => 2, Column => 3, Count => 1, Color => 1);
-            Change_Attributes(Line => 2, Column => 9, Count => 1, Color => 1);
-            Change_Attributes(Line => 2, Column => 18, Count => 1, Color => 1);
-            Change_Attributes(Line => 2, Column => 26, Count => 1, Color => 1);
-            Change_Attributes(Line => 2, Column => 36, Count => 1, Color => 1);
-            Change_Attributes(Line => 2, Column => 47, Count => 1, Color => 1);
-            Change_Attributes(Line => 2, Column => 53, Count => 1, Color => 1);
             for I in reverse Messages_List.First_Index..Messages_List.Last_Index loop
                 if Messages_List.Element(I).MType = MessagesType or MessagesType = Default then
                     Append(TextMessages, Messages_List.Element(I).Message);
@@ -167,8 +167,8 @@ package body Messages is
             if EndIndex < 0 then
                 EndIndex := 0;
             end if;
-            Refresh;
         end if;
+        Refresh;
         Refresh(MessagesPad, Line_Position(StartIndex), 0, 4, 2, (Lines - 1), (Columns - 2));
     end ShowMessages;
 
