@@ -53,9 +53,13 @@ package body UserInterface is
             when Crew_Info | Giving_Orders =>
                 Add(Str => "Crew Informations [Quit]");
                 Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
+            when Dismiss_Confirm =>
+                Add(Str => "Crew Informations");
             when Messages_View =>
                 Add(Str => "Last Messages [Quit]");
                 Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
+            when Clear_Confirm =>
+                Add(Str => "Last Messages");
             when Trade_View =>
                 Add(Str => "Trade with base [Quit]");
                 Change_Attributes(Line => 0, Column => 17, Count => 1, Color => 1);
@@ -84,8 +88,7 @@ package body UserInterface is
             when others =>
                 null;
         end case;
-        if CurrentState /= Help_View and CurrentState /= Quit_Confirm and
-            CurrentState /= Help_Topic then
+        if CurrentState /= Help_View and CurrentState /= Help_Topic then
             case PlayerShip.Speed is
                 when DOCKED =>
                     Speed := To_Unbounded_String("Docked");
