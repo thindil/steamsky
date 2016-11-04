@@ -215,6 +215,12 @@ package body Maps is
         end if;
     end ShowMoveMapForm;
 
+    procedure MoveMap(NewX, NewY : Positive) is
+    begin
+        MoveX := NewX - PlayerShip.SkyX;
+        MoveY := NewY - PlayerShip.SkyY;
+    end MoveMap;
+
     function SkyMapKeys(Key : Key_Code) return Integer is
         Result : Integer := 1;
         NewKey : Key_Code;
@@ -309,8 +315,7 @@ package body Maps is
                 end if;
             when 10 => -- quit/move map
                 if FieldIndex = 6 then
-                    MoveX := Integer'Value(Get_Buffer(Fields(MoveForm, 2))) - PlayerShip.SkyX;
-                    MoveY := Integer'Value(Get_Buffer(Fields(MoveForm, 4))) - PlayerShip.SkyY;
+                    MoveMap(Integer'Value(Get_Buffer(Fields(MoveForm, 2))), Integer'Value(Get_Buffer(Fields(MoveForm, 4))));
                 end if;
                 Set_Cursor_Visibility(Visibility);
                 Post(MoveForm, False);
