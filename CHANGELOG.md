@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
 - Check for random events if there was no ship move
 - Gaining experience for trading
 - Ammo for Iron 10mm gun
+- Messed screen on deleting messages
 
 ## [0.4] - 2016-10-16
 
