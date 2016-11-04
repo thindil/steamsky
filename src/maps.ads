@@ -29,6 +29,7 @@ package Maps is
 
     procedure ShowSkyMap; -- Show map of game
     procedure ShowMoveMapForm; -- Show form to move map to selected location
+    procedure MoveMap(NewX, NewY : Positive); -- Move map to show selected map cell
     function SkyMapKeys(Key : Key_Code) return Integer; -- Handle keys on map screen, return 0 for lack of action, 1 ship movement, 2 ship speed control (change state)
     function MoveFormKeys(Key : Key_Code) return GameStates; -- Handle keys in move map form
 

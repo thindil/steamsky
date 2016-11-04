@@ -21,6 +21,7 @@ with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Bases; use Bases;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
+with Maps; use Maps;
 
 package body BasesList is
 
@@ -32,7 +33,7 @@ package body BasesList is
         InfoWindow : Window;
         BaseIndex : constant Positive := Positive'Value(Description(Current(BasesMenu)));
     begin
-        InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
+        InfoWindow := Create(6, (Columns / 2), 3, (Columns / 2));
         if SkyBases(BaseIndex).Visited.Year > 0 then
             Add(Win => InfoWindow, Str => "X:" & Positive'Image(SkyBases(BaseIndex).SkyX) & " Y:" &
                 Positive'Image(SkyBases(BaseIndex).SkyX));
@@ -52,6 +53,9 @@ package body BasesList is
         else
             Add(Win => InfoWindow, Str => "Not visited yet.");
         end if;
+        Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+        Add(Win => InfoWindow, Str => "Press SPACE to show base on map");
+        Change_Attributes(Win => InfoWindow, Line => 5, Column => 6, Count => 5, Color => 1);
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
@@ -88,6 +92,7 @@ package body BasesList is
 
     function BasesListKeys(Key : Key_Code) return GameStates is
         Result : Menus.Driver_Result;
+        BaseIndex : constant Positive := Positive'Value(Description(Current(BasesMenu)));
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -112,6 +117,10 @@ package body BasesList is
                 Result := Driver(BasesMenu, M_First_Item);
             when KEY_END => -- Scroll list to end
                 Result := Driver(BasesMenu, M_Last_Item);
+            when 32 => -- Show selected base on map
+                MoveMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
             when others =>
                 null;
         end case;
