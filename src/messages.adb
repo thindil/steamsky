@@ -26,11 +26,11 @@ package body Messages is
     MessagesType : Message_Type := Default;
     MessagesPad : Window := Null_Window;
 
-    function FormatedTime return String is
+    function FormatedTime(Time : Date_Record := GameDate) return String is
         Result : Unbounded_String := To_Unbounded_String("");
         RawImage : Unbounded_String;
-        TimeArray : constant array(1..5) of Natural := (GameDate.Year,
-            GameDate.Month, GameDate.Day, GameDate.Hour, GameDate.Minutes);
+        TimeArray : constant array(1..5) of Natural := (Time.Year, Time.Month,
+        Time.Day, Time.Hour, Time.Minutes);
     begin
         for I in TimeArray'Range loop
             RawImage := To_Unbounded_String(Natural'Image(TimeArray(I)));

@@ -33,6 +33,7 @@ with Help; use Help;
 with MainMenu; use MainMenu;
 with Events; use Events;
 with ShipModules; use ShipModules;
+with BasesList; use BasesList;
 
 package body UserInterface is
 
@@ -85,6 +86,9 @@ package body UserInterface is
             when Recruits_View =>
                 Add(Str => "Recruit new crew members [Quit]");
                 Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
+            when Bases_List =>
+                Add(Str => "List of know bases [Quit]");
+                Change_Attributes(Line => 0, Column => 20, Count => 1, Color => 1);
             when others =>
                 null;
         end case;
@@ -399,7 +403,7 @@ package body UserInterface is
     procedure ShowGameMenu is
         MenuWindow : Window;
     begin
-        MenuWindow := Create(14, 32, (Lines / 3), (Columns / 2) - 16);
+        MenuWindow := Create(15, 32, (Lines / 2) - 8, (Columns / 2) - 16);
         Box(MenuWindow);
         Move_Cursor(Win => MenuWindow, Line => 1, Column => 7);
         Add(Win => MenuWindow, Str => "Ship informations");
@@ -420,18 +424,21 @@ package body UserInterface is
         Add(Win => MenuWindow, Str => "Last messages");
         Change_Attributes(Win => MenuWindow, Line => 6, Column => 12, Count => 1, Color => 1);
         Move_Cursor(Win => MenuWindow, Line => 7, Column => 7);
-        Add(Win => MenuWindow, Str => "Wait orders");
-        Change_Attributes(Win => MenuWindow, Line => 7, Column => 7, Count => 1, Color => 1);
+        Add(Win => MenuWindow, Str => "List of known bases");
+        Change_Attributes(Win => MenuWindow, Line => 7, Column => 21, Count => 1, Color => 1);
         Move_Cursor(Win => MenuWindow, Line => 8, Column => 7);
-        Add(Win => MenuWindow, Str => "Move map to position");
-        Change_Attributes(Win => MenuWindow, Line => 8, Column => 9, Count => 1, Color => 1);
+        Add(Win => MenuWindow, Str => "Wait orders");
+        Change_Attributes(Win => MenuWindow, Line => 8, Column => 7, Count => 1, Color => 1);
         Move_Cursor(Win => MenuWindow, Line => 9, Column => 7);
-        Add(Win => MenuWindow, Str => "Help");
-        Change_Attributes(Win => MenuWindow, Line => 9, Column => 7, Count => 1, Color => 1);
+        Add(Win => MenuWindow, Str => "Move map to position");
+        Change_Attributes(Win => MenuWindow, Line => 9, Column => 9, Count => 1, Color => 1);
         Move_Cursor(Win => MenuWindow, Line => 10, Column => 7);
-        Add(Win => MenuWindow, Str => "Quit from game");
+        Add(Win => MenuWindow, Str => "Help");
         Change_Attributes(Win => MenuWindow, Line => 10, Column => 7, Count => 1, Color => 1);
-        Move_Cursor(Win => MenuWindow, Line => 12, Column => 2);
+        Move_Cursor(Win => MenuWindow, Line => 11, Column => 7);
+        Add(Win => MenuWindow, Str => "Quit from game");
+        Change_Attributes(Win => MenuWindow, Line => 11, Column => 7, Count => 1, Color => 1);
+        Move_Cursor(Win => MenuWindow, Line => 13, Column => 2);
         Add(Win => MenuWindow, Str => "Any other key hide this menu");
         Refresh(MenuWindow);
     end ShowGameMenu;
@@ -489,6 +496,8 @@ package body UserInterface is
                 ShowCrewInfo;
                 Refresh_Without_Update;
                 ShowConfirm("Are you sure want to dismiss this crew member?");
+            when Bases_List =>
+                ShowBasesList;
             when others =>
                 null;
         end case;
@@ -533,6 +542,9 @@ package body UserInterface is
                 DrawGame(CurrentState);
                 ShowMoveMapForm;
                 return Move_Map;
+            when Character'Pos('b') | Character'Pos('B') => -- List of bases screen
+                DrawGame(Bases_List);
+                return Bases_List;
             when others =>
                 DrawGame(CurrentState);
                 return CurrentState;
