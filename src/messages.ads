@@ -31,7 +31,7 @@ package Messages is
         end record;
 
     LastMessage : Unbounded_String := To_Unbounded_String(""); -- Last message received
-    function FormatedTime return String; -- Format game time
+    function FormatedTime(Time : Date_Record := GameDate) return String; -- Format game time
     procedure AddMessage(Message : String; MType : Message_Type); -- Add new message to list
     function GetMessage(MessageIndex : Integer; MType : Message_Type := Default) return Message_Data; -- Return selected message
     procedure ClearMessages; -- Remove all messages;
