@@ -32,8 +32,10 @@ package body BasesList is
     procedure ShowBaseInfo is
         InfoWindow : Window;
         BaseIndex : constant Positive := Positive'Value(Description(Current(BasesMenu)));
+        SearchPattern : String(1..250);
+        TrimedSearchPattern : Unbounded_String;
     begin
-        InfoWindow := Create(6, (Columns / 2), 3, (Columns / 2));
+        InfoWindow := Create(8, (Columns / 2), 3, (Columns / 2));
         if SkyBases(BaseIndex).Visited.Year > 0 then
             Add(Win => InfoWindow, Str => "X:" & Positive'Image(SkyBases(BaseIndex).SkyX) & " Y:" &
                 Positive'Image(SkyBases(BaseIndex).SkyX));
@@ -53,9 +55,15 @@ package body BasesList is
         else
             Add(Win => InfoWindow, Str => "Not visited yet.");
         end if;
-        Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+        Pattern(BasesMenu, SearchPattern);
+        TrimedSearchPattern := Trim(To_Unbounded_String(SearchPattern), Ada.Strings.Both);
+        if Length(TrimedSearchPattern) > 0 then
+            Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+            Add(Win => InfoWindow, Str => "Search: " & To_String(TrimedSearchPattern));
+        end if;
+        Move_Cursor(Win => InfoWindow, Line => 7, Column => 0);
         Add(Win => InfoWindow, Str => "Press SPACE to show base on map");
-        Change_Attributes(Win => InfoWindow, Line => 5, Column => 6, Count => 5, Color => 1);
+        Change_Attributes(Win => InfoWindow, Line => 7, Column => 6, Count => 5, Color => 1);
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
@@ -121,8 +129,12 @@ package body BasesList is
                 MoveMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
+            when KEY_BACKSPACE => -- Delete last searching character
+                Result := Driver(BasesMenu, M_BACK_PATTERN);
+            when KEY_DC => -- Clear whole searching string
+                Result := Driver(BasesMenu, M_CLEAR_PATTERN);
             when others =>
-                null;
+                Result := Driver(BasesMenu, Key);
         end case;
         if Result = Menu_Ok then
             ShowBaseInfo;
