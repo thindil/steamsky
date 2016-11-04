@@ -37,6 +37,7 @@ with Combat.UI; use Combat.UI;
 with Crafts.UI; use Crafts.UI;
 with Help; use Help;
 with MainMenu; use MainMenu;
+with BasesList; use BasesList;
 
 procedure SteamSky is
     GameState : GameStates := Main_Menu;
@@ -185,6 +186,8 @@ begin
                 GameState := RecipeSettingKeys(Key);
             when Move_Map =>
                 GameState := MoveFormKeys(Key);
+            when Bases_List =>
+                GameState := BasesListKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
