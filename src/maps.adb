@@ -22,6 +22,7 @@ with Terminal_Interface.Curses.Forms.Field_Types.IntField; use Terminal_Interfac
 with Ships; use Ships;
 with Bases; use Bases;
 with UserInterface; use UserInterface;
+with Messages; use Messages;
 
 package body Maps is
 
@@ -226,6 +227,7 @@ package body Maps is
     function SkyMapKeys(Key : Key_Code) return Integer is
         Result : Integer := 1;
         NewKey : Key_Code;
+        NewX, NewY : Integer := 0;
     begin
         case Key is
             when 56 | KEY_UP => -- Move up
@@ -248,8 +250,22 @@ package body Maps is
                 Result := 2;
             when Character'Pos('w') | Character'Pos('W') => -- Wait order menu
                 Result := 3;
-            when 53 => -- Wait 1 minute
-                UpdateGame(1);
+            when 53 => -- Wait 1 minute or travel to destination if set
+                if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
+                    UpdateGame(1);
+                else
+                    if PlayerShip.DestinationX > PlayerShip.DestinationX then
+                        NewX := -1;
+                    elsif PlayerShip.DestinationX > PlayerShip.DestinationX then
+                        NewX := 1;
+                    end if;
+                    if PlayerShip.DestinationY > PlayerShip.DestinationY then
+                        NewY := -1;
+                    elsif PlayerShip.DestinationY > PlayerShip.DestinationY then
+                        NewY := 1;
+                    end if;
+                    Result := MoveShip(0, NewX, NewY);
+                end if;
             when KEY_SRIGHT =>
                 MoveX := MoveX + 1;
                 Result := 4;
@@ -291,6 +307,14 @@ package body Maps is
                 MoveX := 0;
                 MoveY := 0;
                 Result := 4;
+            when 10 => -- Set base as destination point for ship
+                if  MoveX = 0 and MoveY = 0 then
+                    return 0;
+                end if;
+                PlayerShip.DestinationX := PlayerShip.SkyX + MoveX;
+                PlayerShip.DestinationY := PlayerShip.SkyX + MoveY;
+                AddMessage("You set travel destination for your ship.", OrderMessage);
+                return 4;
             when others =>
                 Result := 0;
         end case;
