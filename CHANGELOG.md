@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Option to move sky map to selected coordinates
 - Show informations about selected map cell
 - List of known bases
+- Option to set travel destination and auto travel to it
 
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
