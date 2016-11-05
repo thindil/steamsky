@@ -43,7 +43,7 @@ package body BasesList is
         CurrentLine : Line_Position := 2;
         Distance : Value_Type;
     begin
-        InfoWindow := Create(9, (Columns / 2), 3, (Columns / 2));
+        InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
         if SkyBases(BaseIndex).Visited.Year > 0 then
             Add(Win => InfoWindow, Str => "X:" & Positive'Image(SkyBases(BaseIndex).SkyX) & " Y:" &
                 Positive'Image(SkyBases(BaseIndex).SkyX));
@@ -77,7 +77,10 @@ package body BasesList is
         end if;
         Move_Cursor(Win => InfoWindow, Line => 8, Column => 0);
         Add(Win => InfoWindow, Str => "Press SPACE to show base on map");
-        Change_Attributes(Win => InfoWindow, Line => 7, Column => 6, Count => 5, Color => 1);
+        Change_Attributes(Win => InfoWindow, Line => 8, Column => 6, Count => 5, Color => 1);
+        Move_Cursor(Win => InfoWindow, Line => 9, Column => 0);
+        Add(Win => InfoWindow, Str => "Press ENTER to set base as a destination for ship");
+        Change_Attributes(Win => InfoWindow, Line => 9, Column => 6, Count => 5, Color => 1);
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
@@ -156,6 +159,17 @@ package body BasesList is
                     Result := Driver(BasesMenu, M_Last_Item);
                 when 32 => -- Show selected base on map
                     MoveMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
+                    DrawGame(Sky_Map_View);
+                    return Sky_Map_View;
+                when 10 => -- Set base as destination point for ship
+                    if SkyBases(BaseIndex).SkyX = PlayerShip.SkyX and SkyBases(BaseIndex).SkyY = PlayerShip.SkyY then
+                        ShowDialog("You are at this base now.");
+                        DrawGame(Bases_List);
+                        return Bases_List;
+                    end if;
+                    PlayerShip.DestinationX := SkyBases(BaseIndex).SkyX;
+                    PlayerShip.DestinationY := SkyBases(BaseIndex).SkyX;
+                    AddMessage("You set base " & To_String(SkyBases(BaseIndex).Name) & " as a destination for your ship.", OrderMessage);
                     DrawGame(Sky_Map_View);
                     return Sky_Map_View;
                 when KEY_BACKSPACE => -- Delete last searching character
