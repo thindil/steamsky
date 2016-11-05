@@ -23,6 +23,8 @@ with ShipModules; use ShipModules;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Crafts; use Crafts;
+with Maps; use Maps;
+with Bases; use Bases;
 
 package body Ships.UI is
 
@@ -302,6 +304,18 @@ package body Ships.UI is
             end if;
             CurrentLine := 5;
         end if;
+        Move_Cursor(Line => CurrentLine, Column => 2);
+        Add(Str => "Destination: ");
+        if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
+            Add(Str => "None");
+        else
+            if SkyMap(PlayerShip.DestinationX, PlayerShip.DestinationY).BaseIndex > 0 then
+                Add(Str => To_String(SkyBases(SkyMap(PlayerShip.DestinationX, PlayerShip.DestinationY).BaseIndex).Name));
+            else
+                Add(Str => "X:" & Positive'Image(PlayerShip.DestinationX) & " Y:" & Positive'Image(PlayerShip.DestinationY));
+            end if;
+        end if;
+        CurrentLine := CurrentLine + 1;
         Move_Cursor(Line => CurrentLine, Column => 2);
         Add(Str => "Weight:" & Integer'Image(Weight) & "kg");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
