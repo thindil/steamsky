@@ -17,11 +17,13 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Numerics.Generic_Elementary_Functions;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Bases; use Bases;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Maps; use Maps;
+with Ships; use Ships;
 
 package body BasesList is
 
@@ -35,8 +37,13 @@ package body BasesList is
         BaseIndex : constant Positive := Positive'Value(Description(Current(BasesMenu)));
         SearchPattern : String(1..250);
         TrimedSearchPattern : Unbounded_String;
+        type Value_Type is digits 2 range 0.0..9999999.0;
+        package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
+        DiffX, DiffY : Natural;
+        CurrentLine : Line_Position := 2;
+        Distance : Value_Type;
     begin
-        InfoWindow := Create(8, (Columns / 2), 3, (Columns / 2));
+        InfoWindow := Create(9, (Columns / 2), 3, (Columns / 2));
         if SkyBases(BaseIndex).Visited.Year > 0 then
             Add(Win => InfoWindow, Str => "X:" & Positive'Image(SkyBases(BaseIndex).SkyX) & " Y:" &
                 Positive'Image(SkyBases(BaseIndex).SkyX));
@@ -53,16 +60,22 @@ package body BasesList is
             end if;
             Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
             Add(Win => InfoWindow, Str => "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
+            CurrentLine := 4;
         else
             Add(Win => InfoWindow, Str => "Not visited yet.");
         end if;
+        DiffX := abs(PlayerShip.SkyX - SkyBases(BaseIndex).SkyX);
+        DiffY := abs(PlayerShip.SkyY - SkyBases(BaseIndex).SkyY);
+        Distance := Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2)));
+        Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+        Add(Win => InfoWindow, Str => "Distance:" & Integer'Image(Integer(Value_Type'Floor(Distance))));
         Pattern(BasesMenu, SearchPattern);
         TrimedSearchPattern := Trim(To_Unbounded_String(SearchPattern), Ada.Strings.Both);
         if Length(TrimedSearchPattern) > 0 then
-            Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
             Add(Win => InfoWindow, Str => "Search: " & To_String(TrimedSearchPattern));
         end if;
-        Move_Cursor(Win => InfoWindow, Line => 7, Column => 0);
+        Move_Cursor(Win => InfoWindow, Line => 8, Column => 0);
         Add(Win => InfoWindow, Str => "Press SPACE to show base on map");
         Change_Attributes(Win => InfoWindow, Line => 7, Column => 6, Count => 5, Color => 1);
         Refresh;
