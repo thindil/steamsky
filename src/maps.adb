@@ -254,17 +254,23 @@ package body Maps is
                 if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
                     UpdateGame(1);
                 else
-                    if PlayerShip.DestinationX > PlayerShip.DestinationX then
-                        NewX := -1;
-                    elsif PlayerShip.DestinationX > PlayerShip.DestinationX then
+                    if PlayerShip.DestinationX > PlayerShip.SkyX then
                         NewX := 1;
+                    elsif PlayerShip.DestinationX < PlayerShip.SkyX then
+                        NewX := -1;
                     end if;
-                    if PlayerShip.DestinationY > PlayerShip.DestinationY then
-                        NewY := -1;
-                    elsif PlayerShip.DestinationY > PlayerShip.DestinationY then
+                    if PlayerShip.DestinationY > PlayerShip.SkyY then
                         NewY := 1;
+                    elsif PlayerShip.DestinationY < PlayerShip.SkyY then
+                        NewY := -1;
                     end if;
                     Result := MoveShip(0, NewX, NewY);
+                    if PlayerShip.DestinationX = PlayerShip.SkyX and PlayerShip.DestinationY = PlayerShip.SkyY then
+                        AddMessage("You reached your travel destination.", OrderMessage);
+                        PlayerShip.DestinationX := 0;
+                        PlayerShip.DestinationY := 0;
+                        return 4;
+                    end if;
                 end if;
             when KEY_SRIGHT =>
                 MoveX := MoveX + 1;
@@ -312,7 +318,7 @@ package body Maps is
                     return 0;
                 end if;
                 PlayerShip.DestinationX := PlayerShip.SkyX + MoveX;
-                PlayerShip.DestinationY := PlayerShip.SkyX + MoveY;
+                PlayerShip.DestinationY := PlayerShip.SkyY + MoveY;
                 AddMessage("You set travel destination for your ship.", OrderMessage);
                 return 4;
             when others =>
