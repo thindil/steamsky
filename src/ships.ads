@@ -56,6 +56,8 @@ package Ships is
             Cargo : Cargo_Container.Vector; -- List of ship cargo
             Crew : Crew_Container.Vector; -- List of ship crew
             UpgradeModule : Natural; -- Number of module to upgrade
+            DestinationX : Integer; -- Destination X coordinate
+            DestinationY : Integer; -- Destination Y coordinate
         end record;
     type ProtoShipData is -- Data structure for ship prototypes
         record
