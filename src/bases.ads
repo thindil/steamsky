@@ -22,7 +22,7 @@ with Crew; use Crew;
 
 package Bases is
 
-    type Bases_Types is (Industrial, Agricultural, Refinery, Shipyard);
+    type Bases_Types is (Industrial, Agricultural, Refinery, Shipyard, Any);
     type Recruit_Data is -- Data structure for recruits
         record
             Name : Unbounded_String; -- Name of recruit

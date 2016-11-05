@@ -26,6 +26,7 @@ with Maps; use Maps;
 package body BasesList is
 
     BasesMenu : Menu;
+    BasesType : Bases_Types := Any;
     MenuWindow : Window;
     CurrentMenuIndex : Positive := 1;
 
@@ -77,70 +78,116 @@ package body BasesList is
     begin
         for I in SkyBases'Range loop
             if SkyBases(I).Known then
-                Bases_Items.all(MenuIndex) := New_Item(To_String(SkyBases(I).Name), Positive'Image(I));
-                MenuIndex := MenuIndex + 1;
+                if BasesType = Any or (BasesType /= Any and SkyBases(I).Visited.Year > 0 and SkyBases(I).BaseType = BasesType) then
+                    Bases_Items.all(MenuIndex) := New_Item(To_String(SkyBases(I).Name), Positive'Image(I));
+                    MenuIndex := MenuIndex + 1;
+                end if;
             end if;
         end loop;
         for I in MenuIndex..Bases_Items'Last loop
             Bases_Items.all(I) := Null_Item;
         end loop;
-        BasesMenu := New_Menu(Bases_Items);
-        Set_Options(BasesMenu, (Show_Descriptions => False, others => True));
-        Set_Format(BasesMenu, Lines - 10, 1);
-        Set_Mark(BasesMenu, "");
-        Scale(BasesMenu, MenuHeight, MenuLength);
-        MenuWindow := Create(MenuHeight, MenuLength, 4, 2);
-        Set_Window(BasesMenu, MenuWindow);
-        Set_Sub_Window(BasesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
-        Post(BasesMenu);
-        Set_Current(BasesMenu, Bases_Items.all(CurrentMenuIndex));
-        ShowBaseInfo;
-        Refresh(MenuWindow);
+        Move_Cursor(Line => 2, Column => 5);
+        Add(Str => "Types: " & To_Lower(Bases_Types'Image(BasesType)) & " ->");
+        if Bases_Items.all(1) /= Null_Item then
+            BasesMenu := New_Menu(Bases_Items);
+            Set_Options(BasesMenu, (Show_Descriptions => False, others => True));
+            Set_Format(BasesMenu, Lines - 10, 1);
+            Set_Mark(BasesMenu, "");
+            Scale(BasesMenu, MenuHeight, MenuLength);
+            MenuWindow := Create(MenuHeight, MenuLength, 4, 2);
+            Set_Window(BasesMenu, MenuWindow);
+            Set_Sub_Window(BasesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+            Post(BasesMenu);
+            Set_Current(BasesMenu, Bases_Items.all(CurrentMenuIndex));
+            ShowBaseInfo;
+            Refresh(MenuWindow);
+        else
+            Move_Cursor(Line => (Lines / 3), Column => (Columns / 2) - 21);
+            Add(Str => "You don't visited yet any base that type.");
+            Refresh;
+        end if;
     end ShowBasesList;
 
     function BasesListKeys(Key : Key_Code) return GameStates is
-        Result : Menus.Driver_Result;
-        BaseIndex : constant Positive := Positive'Value(Description(Current(BasesMenu)));
+        Result : Driver_Result;
+        BaseIndex : Positive;
     begin
-        case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-                CurrentMenuIndex := 1;
-                DrawGame(Sky_Map_View);
-                return Sky_Map_View;
-            when KEY_UP => -- Select previous item to Bases
-                Result := Driver(BasesMenu, M_Up_Item);
-                if Result = Request_Denied then
-                    Result := Driver(BasesMenu, M_Last_Item);
-                end if;
-            when KEY_DOWN => -- Select next item to Bases
-                Result := Driver(BasesMenu, M_Down_Item);
-                if Result = Request_Denied then
+        if BasesMenu /= Null_Menu then
+            BaseIndex := Positive'Value(Description(Current(BasesMenu)));
+            case Key is
+                when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                    CurrentMenuIndex := 1;
+                    BasesType := Any;
+                    Post(BasesMenu, False);
+                    Delete(BasesMenu);
+                    DrawGame(Sky_Map_View);
+                    return Sky_Map_View;
+                when KEY_UP => -- Select previous item to Bases
+                    Result := Driver(BasesMenu, M_Up_Item);
+                    if Result = Request_Denied then
+                        Result := Driver(BasesMenu, M_Last_Item);
+                    end if;
+                when KEY_DOWN => -- Select next item to Bases
+                    Result := Driver(BasesMenu, M_Down_Item);
+                    if Result = Request_Denied then
+                        Result := Driver(BasesMenu, M_First_Item);
+                    end if;
+                when KEY_NPAGE => -- Scroll list one screen down
+                    Result := Driver(BasesMenu, M_ScrollUp_Page);
+                when KEY_PPAGE => -- Scroll list one screen up
+                    Result := Driver(BasesMenu, M_ScrollDown_Page);
+                when KEY_HOME => -- Scroll list to start
                     Result := Driver(BasesMenu, M_First_Item);
-                end if;
-            when KEY_NPAGE => -- Scroll list one screen down
-                Result := Driver(BasesMenu, M_ScrollUp_Page);
-            when KEY_PPAGE => -- Scroll list one screen up
-                Result := Driver(BasesMenu, M_ScrollDown_Page);
-            when KEY_HOME => -- Scroll list to start
-                Result := Driver(BasesMenu, M_First_Item);
-            when KEY_END => -- Scroll list to end
-                Result := Driver(BasesMenu, M_Last_Item);
-            when 32 => -- Show selected base on map
-                MoveMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
-                DrawGame(Sky_Map_View);
-                return Sky_Map_View;
-            when KEY_BACKSPACE => -- Delete last searching character
-                Result := Driver(BasesMenu, M_BACK_PATTERN);
-            when KEY_DC => -- Clear whole searching string
-                Result := Driver(BasesMenu, M_CLEAR_PATTERN);
-            when others =>
-                Result := Driver(BasesMenu, Key);
-        end case;
-        if Result = Menu_Ok then
-            ShowBaseInfo;
-            Refresh(MenuWindow);
+                when KEY_END => -- Scroll list to end
+                    Result := Driver(BasesMenu, M_Last_Item);
+                when 32 => -- Show selected base on map
+                    MoveMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
+                    DrawGame(Sky_Map_View);
+                    return Sky_Map_View;
+                when KEY_BACKSPACE => -- Delete last searching character
+                    Result := Driver(BasesMenu, M_BACK_PATTERN);
+                when KEY_DC => -- Clear whole searching string
+                    Result := Driver(BasesMenu, M_CLEAR_PATTERN);
+                when KEY_RIGHT => -- Change bases type
+                    if BasesType = Bases_Types'Last then
+                        BasesType := Bases_Types'First;
+                    else
+                        BasesType := Bases_Types'Val(Bases_Types'Pos(BasesType) + 1);
+                    end if;
+                    CurrentMenuIndex := 1;
+                    Post(BasesMenu, False);
+                    Delete(BasesMenu);
+                    DrawGame(Bases_List);
+                    return Bases_List;
+                when others =>
+                    Result := Driver(BasesMenu, Key);
+            end case;
+            if Result = Menu_Ok then
+                ShowBaseInfo;
+                Refresh(MenuWindow);
+            end if;
+            CurrentMenuIndex := Get_Index(Current(BasesMenu));
+        else
+            case Key is
+                when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                    CurrentMenuIndex := 1;
+                    BasesType := Any;
+                    DrawGame(Sky_Map_View);
+                    return Sky_Map_View;
+                when KEY_RIGHT => -- Change bases type
+                    if BasesType = Bases_Types'Last then
+                        BasesType := Bases_Types'First;
+                    else
+                        BasesType := Bases_Types'Val(Bases_Types'Pos(BasesType) + 1);
+                    end if;
+                    CurrentMenuIndex := 1;
+                    DrawGame(Bases_List);
+                    return Bases_List;
+                when others =>
+                    null;
+            end case;
         end if;
-        CurrentMenuIndex := Get_Index(Current(BasesMenu));
         return Bases_List;
     end BasesListKeys;
 

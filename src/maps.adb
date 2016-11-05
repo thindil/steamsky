@@ -86,6 +86,8 @@ package body Maps is
                                 when Shipyard =>
                                     Change_Attributes(Line => Line_Position(Y), Column =>
                                     Column_Position(X - 1), Count => 1, Color => 5);
+                                when others =>
+                                    null;
                             end case;
                         else
                             Change_Attributes(Line => Line_Position(Y), Column =>
