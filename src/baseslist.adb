@@ -168,7 +168,7 @@ package body BasesList is
                         return Bases_List;
                     end if;
                     PlayerShip.DestinationX := SkyBases(BaseIndex).SkyX;
-                    PlayerShip.DestinationY := SkyBases(BaseIndex).SkyX;
+                    PlayerShip.DestinationY := SkyBases(BaseIndex).SkyY;
                     AddMessage("You set base " & To_String(SkyBases(BaseIndex).Name) & " as a destination for your ship.", OrderMessage);
                     DrawGame(Sky_Map_View);
                     return Sky_Map_View;
