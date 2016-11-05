@@ -21,7 +21,8 @@ To move ship in desired direction, use arrow keys (or better) keys on keypad (wi
 During travel you may encounter various events (at this moment you can be only attacked by hostile ships).
 Ship speed depends on engine power, engine damage, ship weight (with cargo) and bit on Engineer and Pilot experience.
 As you fly near bases (you are in this same cell where base is), you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are in default text color. 
-You can wait a moment without doing anything, by hit key 5 on keypad.
+You can set your destination travel point on map by selecting map cell (with SHIFT + arrow keys) and then press Enter.
+If you have set travel destination, press key 5 on keypad to auto travel. If destination is not set, pressing key 5 on keypad allow you to wait 1 game minute without moving.
 [Trading]
 To buy/sell items from bases you must first dock to base and having assigned crew member to trading with bases. All bases buy all items, but which items are sold, depends on base type.
 Prices in bases depends on skill Bartering of assigned to trade crew member - with higher skill you can sell items for more and buy for less. 
