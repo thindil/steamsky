@@ -61,4 +61,11 @@ Result = 13
 Crafted = 1
 Workplace = Furnace
 Skill = Metalsmith
+[10]
+Material = Iron, Gunpowder
+Amount = 1, 1
+Result = 20
+Crafted = 2
+Workplace = Alchemy_Lab
+Skill = Gunsmith
 []
