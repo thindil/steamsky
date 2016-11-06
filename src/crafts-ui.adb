@@ -29,7 +29,7 @@ package body Crafts.UI is
     procedure ShowRecipeInfo is
         InfoWindow : Window;
         Recipe : constant Craft_Data := Recipes_List.Element(RecipeIndex);
-        CurrentLine : Line_Position := 3;
+        CurrentLine : Line_Position := 2;
         MAmount, TextLength : Natural := 0;
         HaveMaterial, HaveWorkplace : Boolean := False;
         StartLine : Line_Position;
@@ -37,10 +37,8 @@ package body Crafts.UI is
         WorkplaceName : Unbounded_String := Null_Unbounded_String;
     begin
         InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
-        Add(Win => InfoWindow, Str => "Name: " & To_String(Items_List.Element(Recipe.ResultIndex).Name));
-        Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         Add(Win => InfoWindow, Str => "Amount:" & Integer'Image(Recipe.ResultAmount));
-        Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+        Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         Add(Win => InfoWindow, Str => "Materials needed: ");
         for I in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
