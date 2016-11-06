@@ -29,6 +29,7 @@ package body BasesList is
 
     BasesMenu : Menu;
     BasesType : Bases_Types := Any;
+    BasesStatus : Positive := 1;
     MenuWindow : Window;
     CurrentMenuIndex : Positive := 1;
 
@@ -91,12 +92,31 @@ package body BasesList is
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         MenuIndex : Positive := 1;
+        AddBase : Boolean := False;
     begin
         for I in SkyBases'Range loop
             if SkyBases(I).Known then
-                if BasesType = Any or (BasesType /= Any and SkyBases(I).Visited.Year > 0 and SkyBases(I).BaseType = BasesType) then
+                case BasesStatus is
+                    when 1 => -- All bases
+                        if BasesType = Any or (BasesType /= Any and SkyBases(I).Visited.Year > 0 and SkyBases(I).BaseType = BasesType) then
+                            AddBase := True;
+                        end if;
+                    when 2 => -- Only visited bases
+                        if (BasesType = Any or (BasesType /= Any and SkyBases(I).BaseType = BasesType)) and SkyBases(I).Visited.Year > 0 
+                        then
+                            AddBase := True;
+                        end if;
+                    when 3 => -- Only not visited bases
+                        if SkyBases(I).Visited.Year = 0 then
+                            AddBase := True;
+                        end if;
+                    when others =>
+                        null;
+                end case;
+                if AddBase then
                     Bases_Items.all(MenuIndex) := New_Item(To_String(SkyBases(I).Name), Positive'Image(I));
                     MenuIndex := MenuIndex + 1;
+                    AddBase := False;
                 end if;
             end if;
         end loop;
@@ -104,7 +124,19 @@ package body BasesList is
             Bases_Items.all(I) := Null_Item;
         end loop;
         Move_Cursor(Line => 2, Column => 5);
-        Add(Str => "Types: " & To_Lower(Bases_Types'Image(BasesType)) & " ->");
+        Add(Str => "Types: " & To_Lower(Bases_Types'Image(BasesType)));
+        Move_Cursor(Line => 2, Column => 30);
+        Add(Str => "Status: ");
+        case BasesStatus is
+            when 1 =>
+                Add(Str => "any");
+            when 2 =>
+                Add(Str => "only visited");
+            when 3 =>
+                Add(Str => "only not visited");
+            when others =>
+                null;
+        end case;
         if Bases_Items.all(1) /= Null_Item then
             BasesMenu := New_Menu(Bases_Items);
             Set_Options(BasesMenu, (Show_Descriptions => False, others => True));
@@ -134,6 +166,7 @@ package body BasesList is
             case Key is
                 when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                     CurrentMenuIndex := 1;
+                    BasesStatus := 1;
                     BasesType := Any;
                     Post(BasesMenu, False);
                     Delete(BasesMenu);
@@ -187,6 +220,16 @@ package body BasesList is
                     Delete(BasesMenu);
                     DrawGame(Bases_List);
                     return Bases_List;
+                when KEY_LEFT => -- Change bases status
+                    BasesStatus := BasesStatus + 1;
+                    if BasesStatus > 3 then
+                        BasesStatus := 1;
+                    end if;
+                    CurrentMenuIndex := 1;
+                    Post(BasesMenu, False);
+                    Delete(BasesMenu);
+                    DrawGame(Bases_List);
+                    return Bases_List;
                 when others =>
                     Result := Driver(BasesMenu, Key);
             end case;
@@ -200,6 +243,7 @@ package body BasesList is
                 when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                     CurrentMenuIndex := 1;
                     BasesType := Any;
+                    BasesStatus := 1;
                     DrawGame(Sky_Map_View);
                     return Sky_Map_View;
                 when KEY_RIGHT => -- Change bases type
@@ -209,6 +253,16 @@ package body BasesList is
                         BasesType := Bases_Types'Val(Bases_Types'Pos(BasesType) + 1);
                     end if;
                     CurrentMenuIndex := 1;
+                    DrawGame(Bases_List);
+                    return Bases_List;
+                when KEY_LEFT => -- Change bases status
+                    BasesStatus := BasesStatus + 1;
+                    if BasesStatus > 3 then
+                        BasesStatus := 1;
+                    end if;
+                    CurrentMenuIndex := 1;
+                    Post(BasesMenu, False);
+                    Delete(BasesMenu);
                     DrawGame(Bases_List);
                     return Bases_List;
                 when others =>
