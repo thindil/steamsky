@@ -44,7 +44,7 @@ package body BasesList is
         CurrentLine : Line_Position := 2;
         Distance : Value_Type;
     begin
-        InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
+        InfoWindow := Create(10, (Columns / 2), 4, (Columns / 2));
         if SkyBases(BaseIndex).Visited.Year > 0 then
             Add(Win => InfoWindow, Str => "X:" & Positive'Image(SkyBases(BaseIndex).SkyX) & " Y:" &
                 Positive'Image(SkyBases(BaseIndex).SkyX));
@@ -140,7 +140,7 @@ package body BasesList is
         if Bases_Items.all(1) /= Null_Item then
             BasesMenu := New_Menu(Bases_Items);
             Set_Options(BasesMenu, (Show_Descriptions => False, others => True));
-            Set_Format(BasesMenu, Lines - 10, 1);
+            Set_Format(BasesMenu, Lines - 4, 1);
             Set_Mark(BasesMenu, "");
             Scale(BasesMenu, MenuHeight, MenuLength);
             MenuWindow := Create(MenuHeight, MenuLength, 4, 2);
