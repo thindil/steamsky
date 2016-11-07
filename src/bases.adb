@@ -503,6 +503,19 @@ package body Bases is
             end loop;
         end loop Bases_Loop;
         if Amount > 0 then
+            if SkyBases(BaseIndex).Population < 150 then
+                if Amount > 1 then
+                    Amount := 1;
+                end if;
+            elsif SkyBases(BaseIndex).Population > 149 and SkyBases(BaseIndex).Population < 300 then
+                if Amount > 2 then
+                    Amount := 2;
+                end if;
+            else
+                if Amount > 4 then
+                    Amount := 4;
+                end if;
+            end if;
             for I in SkyBases'Range loop
                 if not SkyBases(I).Known then
                     UnknownBases := UnknownBases + 1;
