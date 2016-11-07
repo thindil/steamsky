@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 - Gaining experience for trading
 - Ammo for Iron 10mm gun
 - Messed screen on deleting messages
+- Info about lack of crew on selected position
 
 ## [0.4] - 2016-10-16
 
