@@ -17,7 +17,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
-with Items; use Items;
 
 package ShipModules is
     
@@ -31,7 +30,7 @@ package ShipModules is
             Value : Integer; -- For engine base power, depends on module
             MaxValue : Integer; -- For gun, damage, depends on module
             Durability : Integer; -- Base durability of module
-            RepairMaterial : Items_Types; -- Material needed for repair module
+            RepairMaterial : Unbounded_String; -- Material needed for repair module
             RepairSkill : Positive; -- Skill needed for repair module
             Price : Natural; -- Price for module in shipyards
             InstallTime : Positive; -- Amount of minutes needed for install/remove module 

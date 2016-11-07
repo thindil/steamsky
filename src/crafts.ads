@@ -16,16 +16,14 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors; use Ada.Containers;
-with Items; use Items;
 with ShipModules; use ShipModules;
 with Game; use Game;
 
 package Crafts is
 
-    package MaterialTypes_Container is new Vectors(Positive, Items_Types);
     type Craft_Data is -- Data structure for recipes
         record
-            MaterialTypes : MaterialTypes_Container.Vector; -- Types of material needed for recipe
+            MaterialTypes : UnboundedString_Container.Vector; -- Types of material needed for recipe
             MaterialAmounts : Positive_Container.Vector; -- Amounts of material needed for recipe
             ResultIndex : Positive; -- Prototype index of crafted item
             ResultAmount : Positive; -- Amount of products
