@@ -17,18 +17,18 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with Game; use Game;
 
 package Items is
 
-    type Items_Types is (Fuel, Food, Drink, Ammo, Bronze, FoodMaterial,
-        Wood, Gunpowder, Iron, Copper, Tin, CopperOre, TinOre, IronOre); -- Types of items
+    Items_Types : UnboundedString_Container.Vector; -- Types of items
     type Object_Prices is array(1..4) of Natural; -- Prices of item in bases
     type Object_Buyable is array(1..4) of Boolean; -- Did item is buyable in bases
     type Object_Data is -- Data structure for objects prototypes
         record
             Name : Unbounded_String; -- Name of item
             Weight : Positive; -- Weight of item
-            IType : Items_Types; -- Type of item
+            IType : Unbounded_String; -- Type of item
             Prices : Object_Prices; -- Prices of item in bases
             Buyable : Object_Buyable; -- Did item is buyable in selected bases
         end record;

@@ -27,6 +27,7 @@ with Crew; use Crew;
 with Messages; use Messages;
 with Crafts; use Crafts;
 with UserInterface; use UserInterface;
+with Items; use Items;
 
 package body Game is
     
@@ -586,11 +587,12 @@ package body Game is
         DataFile : File_Type;
         RawData, FieldName, Value : Unbounded_String;
         EqualIndex, StartIndex, EndIndex, Amount : Natural;
-        FieldsNames : constant array (1..9) of Unbounded_String := (To_Unbounded_String("BasesSyllablesPre"),
+        FieldsNames : constant array (1..10) of Unbounded_String := (To_Unbounded_String("BasesSyllablesPre"),
             To_Unbounded_String("BasesSyllablesStart"), To_Unbounded_String("BasesSyllablesEnd"), 
             To_Unbounded_String("BasesSyllablesPost"), To_Unbounded_String("MaleSyllablesStart"), 
             To_Unbounded_String("MaleSyllablesMiddle"), To_Unbounded_String("MaleSyllablesEnd"), 
-            To_Unbounded_String("FemaleSyllablesEnd"), To_Unbounded_String("SkillsNames"));
+            To_Unbounded_String("FemaleSyllablesEnd"), To_Unbounded_String("SkillsNames"),
+            To_Unbounded_String("ItemsTypes"));
     begin
         if BaseSyllablesStart.Length > 0 then
             return True;
@@ -632,6 +634,8 @@ package body Game is
                                 FemaleSyllablesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
                             when 9 =>
                                 Skills_Names.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                            when 10 =>
+                                Items_Types.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
                         end case;
                         StartIndex := EndIndex + 2;
                     end loop;

@@ -21,6 +21,7 @@ with Messages; use Messages;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
 with Game; use Game;
+with Items; use Items;
 
 package body Crew is
 
@@ -195,11 +196,11 @@ package body Crew is
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
     end GiveOrders;
 
-    function Consume(ItemType : Items_Types) return Boolean is
+    function Consume(ItemType : String) return Boolean is
         ProtoIndex : Natural := 0;
     begin
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = ItemType then
+            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = To_Unbounded_String(ItemType) then
                 ProtoIndex := PlayerShip.Cargo.Element(I).ProtoIndex;
                 exit;
             end if;
@@ -349,7 +350,7 @@ package body Crew is
                 AddMessage(To_String(Member.Name) & " is too tired to work, going rest.", OrderMessage);
             end if;
             if HungerLevel > 80 then
-                if Consume(Food) then
+                if Consume("Food") then
                     HungerLevel := HungerLevel - 80;
                     if HungerLevel < 0 then
                         HungerLevel := 0;
@@ -360,7 +361,7 @@ package body Crew is
             end if;
             Member.Hunger := HungerLevel;
             if ThirstLevel > 40 then
-                if Consume(Drink) then
+                if Consume("Drink") then
                     ThirstLevel := ThirstLevel - 40;
                     if ThirstLevel < 0 then
                         ThirstLevel := 0;

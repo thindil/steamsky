@@ -22,6 +22,7 @@ with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Ships; use Ships;
 with Crew; use Crew;
+with Items; use Items;
 
 package body Crafts is
 
@@ -30,7 +31,7 @@ package body Crafts is
         RawData, FieldName, Value : Unbounded_String;
         EqualIndex, StartIndex, EndIndex, Amount : Natural;
         TempRecord : Craft_Data;
-        TempMaterials : MaterialTypes_Container.Vector;
+        TempMaterials : UnboundedString_Container.Vector;
         TempAmount : Positive_Container.Vector;
     begin
         if Recipes_List.Length > 0 then
@@ -57,7 +58,7 @@ package body Crafts is
                         if EndIndex = 0 then
                             EndIndex := Length(Value) + 1;
                         end if;
-                        TempRecord.MaterialTypes.Append(New_Item => Items_Types'Value(Slice(Value, StartIndex, EndIndex - 1)));
+                        TempRecord.MaterialTypes.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
                         StartIndex := EndIndex + 2;
                     end loop;
                 elsif FieldName = To_Unbounded_String("Amount") then
