@@ -151,20 +151,20 @@ package body UserInterface is
                 end case;
             end loop;
             if not HavePilot then
-                Change_Attributes(Line => 0, Column => (Columns - 21), Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => (Columns - 21), Count => 1, Color => 3);
             end if;
             if not HaveEngineer then
-                Change_Attributes(Line => 0, Column => (Columns - 18), Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => (Columns - 18), Count => 1, Color => 3);
             end if;
             if GunnersCheck = 1 then
                 Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 2);
             elsif GunnersCheck = 2 then
-                Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 3);
             end if;
             if not HaveRepair then
                 for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                     if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
-                        Change_Attributes(Line => 0, Column => (Columns - 12), Count => 1, Color => 1);
+                        Change_Attributes(Line => 0, Column => (Columns - 12), Count => 1, Color => 3);
                         exit;
                     end if;
                 end loop;
@@ -172,13 +172,13 @@ package body UserInterface is
             if CraftersCheck = 1 then
                 Change_Attributes(Line => 0, Column => (Columns - 9), Count => 1, Color => 2);
             elsif CraftersCheck = 2 then
-                Change_Attributes(Line => 0, Column => (Columns - 9), Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => (Columns - 9), Count => 1, Color => 3);
             end if;
             if not HaveUpgrade and PlayerShip.UpgradeModule > 0 then
-                Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 3);
             end if;
             if not HaveTrader and PlayerShip.Speed = DOCKED then
-                Change_Attributes(Line => 0, Column => (Columns - 3), Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => (Columns - 3), Count => 1, Color => 3);
             end if;
         end if;
     end ShowGameHeader;
