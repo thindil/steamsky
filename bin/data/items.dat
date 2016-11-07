@@ -85,13 +85,13 @@ Buyable = Y, N, N, N
 [15]
 Name = Copper ore
 Weight = 7
-Type = Copperore
+Type = CopperOre
 Prices = 2, 2, 1, 2
 Buyable = N, N, Y, N
 [16]
 Name = Tin ore
 Weight = 7
-Type = Tinore
+Type = TinOre
 Prices = 2, 2, 1, 2
 Buyable = N, N, Y, N
 [17]
@@ -109,7 +109,7 @@ Buyable = Y, N, N, N
 [19]
 Name = Iron ore
 Weight = 8
-Type = Ironore
+Type = IronOre
 Prices = 5, 5, 3, 5
 Buyable = N, N, Y, N
 [20]
