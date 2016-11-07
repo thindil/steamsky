@@ -11,7 +11,12 @@ project steamsky is
     Mode : Mode_Type := external ("Mode", "debug");
 
     package Binder is
-        for Default_Switches("ada") use ("-E");
+        case Mode is
+            when "debug" =>
+                for Default_Switches("ada") use ("-E", "-shared");
+            when "release" =>
+                for Default_Switches("ada") use ("-E");
+        end case;
     end Binder;
 
     package Compiler is
@@ -19,13 +24,19 @@ project steamsky is
             when "debug" =>
                 for Default_Switches ("ada") use ("-gnatwa",
                     "-g",
-                    "-fstack-check");
+                    "-fstack-check",
+                    "-gnatVa");
             when "release" =>
-                for Default_Switches ("ada") use ("-gnatwa",
-                    "-O2",
-                    "-gnatn2",
-                    "-fstack-check");
+                for Default_Switches ("ada") use ("-O2",
+                    "-gnatn2");
         end case;
     end Compiler;
+
+    package Linker is
+        case Mode is
+            when "release" =>
+                for Default_Switches ("ada") use ("-s", "-Wl,--gc-sections");
+        end case;
+    end Linker;
 
 end steamsky;
