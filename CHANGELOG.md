@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Always start new game in large base
 - Skill name from Bartering to Rhetoric
 - Starting order for player from On break to Talking in bases
+- Moved items types to separated text file
 
 ### Fixed
 - Crash on updating modules
