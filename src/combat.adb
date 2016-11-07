@@ -88,7 +88,7 @@ package body Combat is
             end case;
         end loop;
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = FUEL then
+            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = To_Unbounded_String("Fuel") then
                 HaveFuel := True;
                 exit;
             end if;

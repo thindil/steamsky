@@ -33,7 +33,7 @@ package body Items is
             return False;
         end if;
         TempRecord := (Name => Null_Unbounded_String, Weight => 1,
-            IType => Fuel, Prices => (0, 0, 0, 0), Buyable => (False, False,
+            IType => Null_Unbounded_String, Prices => (0, 0, 0, 0), Buyable => (False, False,
             False, False));
         Open(ItemsFile, In_File, "data/items.dat");
         while not End_Of_File(ItemsFile) loop
@@ -47,7 +47,7 @@ package body Items is
                 elsif FieldName = To_Unbounded_String("Weight") then
                     TempRecord.Weight := Integer'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Type") then
-                    TempRecord.IType := Items_Types'Value(To_String(Value));
+                    TempRecord.IType := Value;
                 elsif FieldName = To_Unbounded_String("Prices") then
                     StartIndex := 1;
                     for I in TempRecord.Prices'Range loop
@@ -76,7 +76,7 @@ package body Items is
             elsif TempRecord.Name /= Null_Unbounded_String then
                 Items_List.Append(New_Item => TempRecord);
                 TempRecord := (Name => Null_Unbounded_String, Weight => 1,
-                    IType => Fuel, Prices => (0, 0, 0, 0), Buyable => (False, False,
+                    IType => Null_Unbounded_String, Prices => (0, 0, 0, 0), Buyable => (False, False,
                     False, False));
             end if;
         end loop;
