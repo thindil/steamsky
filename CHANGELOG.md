@@ -50,6 +50,7 @@ All notable changes to this project will be documented in this file.
 - Ammo for Iron 10mm gun
 - Messed screen on deleting messages
 - Info about lack of crew on selected position
+- Gaining experience for gunner for last round of combat
 
 ## [0.4] - 2016-10-16
 
