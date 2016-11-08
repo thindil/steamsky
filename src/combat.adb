@@ -20,22 +20,27 @@ with Crew; use Crew;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
-with Game; use Game;
 with Items; use Items;
 with Events; use Events;
 
 package body Combat is
     
-    procedure StartCombat(EnemyIndex : Positive) is
+    function StartCombat(EnemyIndex : Positive) return GameStates is
+        type Roll_Range is range 1..100;
         EnemyShip : ShipRecord;
+        PlayerPerception : Natural := 0;
+        package Rand_Roll is new Discrete_Random(Roll_Range);
+        Generator : Rand_Roll.Generator;
     begin
+        Rand_Roll.Reset(Generator);
         EnemyShip := CreateShip(EnemyIndex, Null_Unbounded_String,
-            PlayerShip.SkyX, PlayerShip.SkyY, HALF_SPEED, True);
+            PlayerShip.SkyX, PlayerShip.SkyY, FULL_SPEED, True);
         Enemy := (Ship => EnemyShip, Accuracy => Enemies_List.Element(EnemyIndex).Accuracy, 
             Distance => 10000, CombatAI => Enemies_List.Element(EnemyIndex).CombatAI, 
             Evasion => Enemies_List.Element(EnemyIndex).Evasion, LootMin =>
             Enemies_List.Element(EnemyIndex).LootMin, LootMax =>
-            Enemies_List.Element(EnemyIndex).LootMax);
+            Enemies_List.Element(EnemyIndex).LootMax, Perception =>
+            Enemies_List.Element(EnemyIndex).Perception);
         PilotOrder := 2;
         EngineerOrder := 3;
         EndCombat := False;
@@ -48,7 +53,26 @@ package body Combat is
                 Guns.Append(New_Item => (I, 1));
             end if;
         end loop;
-        AddMessage("You spotted " & To_String(EnemyName) & ".", OtherMessage);
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            case PlayerShip.Crew.Element(I).Order is
+                when Pilot =>
+                    PlayerPerception := PlayerPerception + GetSkillLevel(I, 1);
+                when Gunner =>
+                    PlayerPerception := PlayerPerception + GetSkillLevel(I, 3);
+                when others =>
+                    null;
+            end case;
+        end loop;
+        if (PlayerPerception + Integer(Rand_Roll.Random(Generator))) > (Enemy.Perception + Integer(Rand_Roll.Random(Generator))) then
+            AddMessage("You spotted " & To_String(EnemyName) & ".", OtherMessage);
+        else
+            if RealSpeed(PlayerShip) < RealSpeed(Enemy.Ship) then
+                ShowDialog("You was attacked by " & To_String(EnemyName) & ".");
+                return Combat_State;
+            end if;
+            AddMessage("You spotted " & To_String(EnemyName) & ".", OtherMessage);
+        end if;
+        return Sky_Map_View;
     end StartCombat;
 
     procedure CombatTurn is

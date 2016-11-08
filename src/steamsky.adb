@@ -117,7 +117,7 @@ begin
                     when 0 =>
                         GameState := GameMenuKeys(GameState, Key);
                     when 1 =>
-                        CheckForEvent;
+                        GameState := CheckForEvent(GameState);
                         DrawGame(GameState);
                     when 2 =>
                         GameState := Control_Speed;

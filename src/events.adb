@@ -23,7 +23,7 @@ with Combat; use Combat;
 
 package body Events is
 
-    procedure CheckForEvent is
+    function CheckForEvent(OldState : GameStates) return GameStates is
         type Percent_Range is range 1..100;
         subtype Combat_Range is Positive range Enemies_List.First_Index..Enemies_List.Last_Index; 
         package Rand_Roll is new Discrete_Random(Percent_Range);
@@ -39,9 +39,10 @@ package body Events is
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
             if Rand_Roll.Random(Generator) < 7 then -- Combat
                 Event := EnemyShip;
-                StartCombat(Rand_Combat.Random(Generator2));
+                return StartCombat(Rand_Combat.Random(Generator2));
             end if;
         end if;
+        return OldState;
     end CheckForEvent;
 
 end Events;

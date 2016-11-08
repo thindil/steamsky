@@ -15,11 +15,13 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Game; use Game;
+
 package Events is
 
     type Events_Types is (None, EnemyShip); -- Types of events
     Event : Events_Types := None; -- Type of current event
     
-    procedure CheckForEvent; -- Check if event happen
+    function CheckForEvent(OldState : GameStates) return GameStates; -- Check if event happen
 
 end Events;
