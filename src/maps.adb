@@ -23,6 +23,8 @@ with Ships; use Ships;
 with Bases; use Bases;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
+with Events; use Events;
+with Combat; use Combat;
 
 package body Maps is
 
@@ -35,8 +37,8 @@ package body Maps is
         StartY : Integer;
         BaseIndex : Natural;
         InfoWindow : Window;
-        WindowHeight : Line_Position := 3;
-        WindowWidth : Column_Position := 20;
+        WindowHeight, CurrentLine : Line_Position := 3;
+        WindowWidth, NewWindowWidth : Column_Position := 20;
         CurrentCell : Attributed_Character;
     begin
         CurrentCell := ACS_Map(ACS_Solid_Block);
@@ -131,6 +133,16 @@ package body Maps is
                 WindowWidth := 20;
             end if;
         end if;
+        if Event /= None and (MoveX = 0 and MoveY = 0) then
+            WindowHeight := WindowHeight + 2;
+            NewWindowWidth := 4 + Column_Position(Length(EnemyName));
+            if NewWindowWidth < 20 then
+                NewWindowWidth := 20;
+            end if;
+            if NewWindowWidth > WindowWidth then
+                WindowWidth := NewWindowWidth;
+            end if;
+        end if;
         InfoWindow := Create(WindowHeight, WindowWidth, 1, (Columns - WindowWidth - 1));
         Box(InfoWindow);
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 3);
@@ -152,7 +164,17 @@ package body Maps is
                 else
                     Add(Win => InfoWindow, Str => "large");
                 end if;
+                CurrentLine := 6;
             end if;
+        end if;
+        if Event /= None and (MoveX = 0 and MoveY = 0) then
+            case Event is
+                when EnemyShip =>
+                    Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
+                    Add(Win => InfoWindow, Str => To_String(EnemyName));
+                when others =>
+                    null;
+            end case;
         end if;
         Refresh(InfoWindow);
         Delete(InfoWindow);
