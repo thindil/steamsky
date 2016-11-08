@@ -16,13 +16,14 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ships; use Ships;
 with Maps; use Maps;
 with Combat; use Combat;
 
 package body Events is
 
-    function CheckForEvent (OldState : GameStates) return GameStates is
+    procedure CheckForEvent is
         type Percent_Range is range 1..100;
         subtype Combat_Range is Positive range Enemies_List.First_Index..Enemies_List.Last_Index; 
         package Rand_Roll is new Discrete_Random(Percent_Range);
@@ -32,13 +33,15 @@ package body Events is
     begin
         Rand_Roll.Reset(Generator);
         Rand_Combat.Reset(Generator2);
+        if Event /= None then
+            Event := None;
+        end if;
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
             if Rand_Roll.Random(Generator) < 7 then -- Combat
+                Event := EnemyShip;
                 StartCombat(Rand_Combat.Random(Generator2));
-                return Combat_Confirm;
             end if;
         end if;
-        return OldState;
     end CheckForEvent;
 
 end Events;

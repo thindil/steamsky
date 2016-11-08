@@ -254,13 +254,19 @@ package body UserInterface is
                 Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
                     Count => 1, Color => 1);
             end if;
+            if Event = EnemyShip then
+                Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
+                Add(Win => SpeedWindow, Str => "Attack");
+                Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
+                    Count => 1, Color => 1);
+            end if;
             Move_Cursor(Win => SpeedWindow, Line => 2, Column => 2);
             Add(Win => SpeedWindow, Str => "Full stop");
             Change_Attributes(Win => SpeedWindow, Line => 2, Column => 2, 
                 Count => 1, Color => 1);
             Move_Cursor(Win => SpeedWindow, Line => 3, Column => 2);
             Add(Win => SpeedWindow, Str => "Quarter speed");
-            Change_Attributes(Win => SpeedWindow, Line => 3, Column => 4, 
+            Change_Attributes(Win => SpeedWindow, Line => 3, Column => 3, 
                 Count => 1, Color => 1);
             Move_Cursor(Win => SpeedWindow, Line => 4, Column => 2);
             Add(Win => SpeedWindow, Str => "Half speed");
@@ -467,10 +473,6 @@ package body UserInterface is
                 ShowSkyMap;
                 Refresh_Without_Update;
                 ShowConfirm("Are you sure want to quit game?");
-            when Combat_Confirm =>
-                ShowSkyMap;
-                Refresh_Without_Update;
-                ShowConfirm(To_String(EnemyName) & " is near, attack?");
             when Combat_State =>
                 ShowCombat;
             when Craft_View =>
@@ -572,8 +574,6 @@ package body UserInterface is
                 if PlayerShip.Speed = DOCKED then
                     DrawGame(Trade_View);
                     return Trade_View;
-                else
-                    return Control_Speed;
                 end if;
             when Character'Pos('e') | Character'Pos('E') => -- Recruit new crew members in base
                 if not HaveTrader then
@@ -584,8 +584,6 @@ package body UserInterface is
                 if PlayerShip.Speed = DOCKED then
                     DrawGame(Recruits_View);
                     return Recruits_View;
-                else
-                    return Control_Speed;
                 end if;
             when Character'Pos('b') | Character'Pos('B') => -- Ask for other bases
                 if not HaveTrader then
@@ -597,8 +595,6 @@ package body UserInterface is
                     AskForBases;
                     DrawGame(Sky_Map_View);
                     return OldState;
-                else
-                    return Control_Speed;
                 end if;
             when Character'Pos('r') | Character'Pos('R') => -- Repair ship in base
                 if not HaveTrader then
@@ -609,8 +605,6 @@ package body UserInterface is
                 if PlayerShip.Speed = DOCKED then
                     DrawGame(Repairs_View);
                     return Repairs_View;
-                else
-                    return Control_Speed;
                 end if;
             when Character'Pos('s') | Character'Pos('S') => -- Shipyard in base
                 if not HaveTrader then
@@ -621,11 +615,13 @@ package body UserInterface is
                 if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).BaseType = SHIPYARD then
                     DrawGame(Shipyard_View);
                     return Shipyard_View;
-                else
-                    return Control_Speed;
                 end if;
-            when Character'Pos('u') | Character'Pos('U') => -- Undock ship from base
-                DockShip(False);
+            when Character'Pos('u') | Character'Pos('U') => -- Undock ship from base or quarter speed
+                if PlayerShip.Speed = DOCKED then
+                    DockShip(False);
+                else
+                    ChangeShipSpeed(QUARTER_SPEED);
+                end if;
                 DrawGame(Sky_Map_View);
                 return OldState;
             when Character'Pos('d') | Character'Pos('D') => -- Dock ship to base
@@ -636,10 +632,11 @@ package body UserInterface is
                 ChangeShipSpeed(FULL_STOP);
                 DrawGame(Sky_Map_View);
                 return OldState;
-            when Character'Pos('a') | Character'Pos('A') => -- Quarter speed
-                ChangeShipSpeed(QUARTER_SPEED);
-                DrawGame(Sky_Map_View);
-                return OldState;
+            when Character'Pos('a') | Character'Pos('A') => -- Attack other ship
+                if Event = EnemyShip then
+                    DrawGame(Combat_State);
+                    return Combat_State;
+                end if;
             when Character'Pos('h') | Character'Pos('H') => -- Half speed
                 ChangeShipSpeed(HALF_SPEED);
                 DrawGame(Sky_Map_View);
@@ -649,8 +646,9 @@ package body UserInterface is
                 DrawGame(Sky_Map_View);
                 return OldState;
             when others =>
-                return Control_Speed;
+                null;
         end case;
+        return Control_Speed;
     end SpeedMenuKeys;
 
     function ConfirmKeys(OldState : GameStates; Key : Key_Code) return GameStates is
@@ -675,9 +673,6 @@ package body UserInterface is
                     Refresh;
                     ShowMainMenu;
                     return Main_Menu;
-                elsif OldState = Combat_Confirm then
-                    DrawGame(Combat_State);
-                    return Combat_State;
                 elsif OldState = Clear_Confirm then 
                     ClearMessages;
                     DrawGame(Messages_View);
@@ -695,7 +690,6 @@ package body UserInterface is
 
     function WaitMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates is
         TimeNeeded, CabinIndex, TempTimeNeeded : Natural := 0;
-        ReturnState : GameStates;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -770,9 +764,9 @@ package body UserInterface is
             when others =>
                 return Wait_Order;
         end case;
-        ReturnState := CheckForEvent(OldState);
-        DrawGame(ReturnState);
-        return ReturnState;
+        CheckForEvent;
+        DrawGame(OldState);
+        return OldState;
     end WaitMenuKeys;
 
 end UserInterface;
