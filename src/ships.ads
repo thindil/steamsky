@@ -68,6 +68,7 @@ package Ships is
             Evasion : Positive; -- Bonus to evade attacks
             LootMin : Positive; -- Minimal amount of loot from ship
             LootMax : Positive; -- Maximum amount of loot from ship
+            Perception : Positive; -- Bonus to spot player ship first
         end record;
     package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
     ProtoShips_List : ProtoShips_Container.Vector;
