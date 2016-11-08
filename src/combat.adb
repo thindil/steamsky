@@ -357,6 +357,8 @@ package body Combat is
                             ShootMessage := ShootMessage & To_Unbounded_String(" and miss.");
                         end if;
                         AddMessage(To_String(ShootMessage), CombatMessage);
+                        UpdateCargo(PlayerShip.Cargo.Element(AmmoIndex).ProtoIndex, (0 - Shoots));
+                        GainExp(Shoots, 3, GunnerIndex);
                         if EndCombat then
                             Shoots := I;
                             UpdateModule(Enemy.Ship, 1, "Durability", Integer'Image(0 - Enemy.Ship.Modules.Element(1).MaxDurability));
@@ -375,10 +377,6 @@ package body Combat is
                             exit Player_Loop;
                         end if;
                     end loop;
-                    if GunnerIndex > 0 then
-                        UpdateCargo(PlayerShip.Cargo.Element(AmmoIndex).ProtoIndex, (0 - Shoots));
-                        GainExp(Shoots, 3, GunnerIndex);
-                    end if;
                 end if;
             end if;
         end loop Player_loop;
