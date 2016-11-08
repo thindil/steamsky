@@ -22,6 +22,7 @@ with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Game; use Game;
 with Items; use Items;
+with Events; use Events;
 
 package body Combat is
     
@@ -47,6 +48,7 @@ package body Combat is
                 Guns.Append(New_Item => (I, 1));
             end if;
         end loop;
+        AddMessage("You spotted " & To_String(EnemyName) & ".", OtherMessage);
     end StartCombat;
 
     procedure CombatTurn is
@@ -229,6 +231,7 @@ package body Combat is
                 AddMessage(To_String(EnemyName) & " escaped from you.", CombatMessage);
             end if;
             EndCombat := True;
+            Event := None;
             return;
         elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
             AccuracyBonus := AccuracyBonus - 10;
@@ -368,6 +371,7 @@ package body Combat is
                                 To_String(EnemyName) & ".", CombatMessage);
                                 UpdateCargo(1, LootAmount);
                             end if;
+                            Event := None;
                             exit Player_Loop;
                         end if;
                     end loop;
@@ -459,6 +463,7 @@ package body Combat is
                                     end if;
                                     if PlayerShip.Crew.Element(1).Health = 0 then -- player is dead
                                         EndCombat := True;
+                                        Event := None;
                                         DrawGame(Combat_State);
                                         return;
                                     end if;

@@ -117,7 +117,7 @@ begin
                     when 0 =>
                         GameState := GameMenuKeys(GameState, Key);
                     when 1 =>
-                        GameState := CheckForEvent(GameState);
+                        CheckForEvent;
                         DrawGame(GameState);
                     when 2 =>
                         GameState := Control_Speed;
@@ -142,7 +142,7 @@ begin
                 GameState := TradeKeys(Key);
             when Help_View =>
                 GameState := HelpMenuKeys(Key);
-            when Quit_Confirm | Combat_Confirm | Clear_Confirm | Dismiss_Confirm =>
+            when Quit_Confirm | Clear_Confirm | Dismiss_Confirm =>
                 GameState := ConfirmKeys(GameState, Key);
             when New_Game =>
                 GameState := NewGameKeys(Key);
