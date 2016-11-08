@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - Skill name from Bartering to Rhetoric
 - Starting order for player from On break to Talking in bases
 - Moved items types to separated text file
+- Starting combat with other ships
 
 ### Fixed
 - Crash on updating modules
