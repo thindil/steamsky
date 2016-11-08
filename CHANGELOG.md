@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Show informations about selected map cell
 - List of known bases
 - Option to set travel destination and auto travel to it
+- Ability to be auto attacked by enemy ship
 
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
