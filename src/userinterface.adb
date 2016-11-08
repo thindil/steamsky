@@ -690,6 +690,7 @@ package body UserInterface is
 
     function WaitMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates is
         TimeNeeded, CabinIndex, TempTimeNeeded : Natural := 0;
+        ReturnState : GameStates;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -764,9 +765,9 @@ package body UserInterface is
             when others =>
                 return Wait_Order;
         end case;
-        CheckForEvent;
-        DrawGame(OldState);
-        return OldState;
+        ReturnState := CheckForEvent(OldState);
+        DrawGame(ReturnState);
+        return ReturnState;
     end WaitMenuKeys;
 
 end UserInterface;

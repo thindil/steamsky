@@ -386,7 +386,8 @@ package body Ships is
             return False;
         end if;
         TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
-            Accuracy => 1, CombatAI => NONE, Evasion => 1, LootMin => 1, LootMax => 100);
+            Accuracy => 1, CombatAI => NONE, Evasion => 1, LootMin => 1,
+            LootMax => 100, Perception => 1);
         Open(ShipsFile, In_File, "data/ships.dat");
         Amount := 1;
         while not End_Of_File(ShipsFile) loop
@@ -420,6 +421,8 @@ package body Ships is
                     TempRecord.LootMin := Integer'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("LootMax") then
                     TempRecord.LootMax := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Perception") then
+                    TempRecord.Perception := Integer'Value(To_String(Value));
                 end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
                 if not Enemy then
@@ -429,7 +432,8 @@ package body Ships is
                     Enemy := False;
                 end if;
                 TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
-                    Accuracy => 1, CombatAI => NONE, Evasion => 1, LootMin => 1, LootMax => 100);
+                    Accuracy => 1, CombatAI => NONE, Evasion => 1, LootMin => 1, 
+                    LootMax => 100, Perception => 1);
             end if;
         end loop;
         Close(ShipsFile);

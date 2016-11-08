@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ships; use Ships;
+with Game; use Game;
 
 package Combat is
     
@@ -35,12 +36,13 @@ package Combat is
             Evasion : Positive; -- Bonus to evasion
             LootMin : Positive; -- Minimal amount of loot from ship
             LootMax : Positive; -- Maximum amount of loot from ship
+            Perception : Positive; -- Bonus to perception
         end record;
     Enemy : Enemy_Record; -- Enemy informations
     EndCombat : Boolean; -- True if combat ends
     MessagesStarts : Natural; -- Start index for showing messages
 
-    procedure StartCombat(EnemyIndex : Positive); -- Generate enemy and start battle
+    function StartCombat(EnemyIndex : Positive) return GameStates; -- Generate enemy and start battle
     procedure CombatTurn; -- Count damage/ships actions, etc
 
 end Combat;
