@@ -18,7 +18,7 @@ To move your ship, you must set it speed, have fuel (called Charcollum, which wo
 Travel time depends on skills of Pilot and Engineer (current members on this positions) and selected ship speed. 
 Fuel cost of travel depends on selected speed (faster = more fuel usage) and each engine fuel usage installed on ship. You can check fuel usage for each engine on ship information screen.
 To move ship in desired direction, use arrow keys (or better) keys on keypad (with enabled Num Lock at your keyboard).
-During travel you may encounter various events (at this moment you can be only attacked by hostile ships).
+During travel you may encounter various events (at this moment you can only meet hostile ships).
 Ship speed depends on engine power, engine damage, ship weight (with cargo) and bit on Engineer and Pilot experience.
 As you fly near bases (you are in this same cell where base is), you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are in default text color. 
 You can set your destination travel point on map by selecting map cell (with SHIFT + arrow keys) and then press Enter.
@@ -28,6 +28,7 @@ To buy/sell items from bases you must first dock to base and having assigned cre
 Prices in bases depends on skill Bartering of assigned to trade crew member - with higher skill you can sell items for more and buy for less. 
 To buy/sell items from bases, open orders menu (key 'o') and then select option Trade (key 't'), you will see trading screen. Use arrows keys to select desired material to buy/sell, then press 'Enter' key to buy or 'Space' key to start trading selected item. Next, enter amount of items which you want to buy or sell and select button [Ok]. To buy/sell items you must have enough free cargo space on your ship ("moneys" aka Charcollum needs free cargo space too).
 [Combat]
+To start combat, you must first be in this same map cell where desired target is. Then, from orders menu, select option Attack (key 'a'). 
 In combat, first you must set crew members to selected position and give each orders then hit space for made one combat turn. Each combat turn take 1 minute of game time. 
 If you give order to aim for selected part of enemy ship, your Gunners will be shoot as often as for precise fire, just chance on hit will depends on part of enemy ship. If selected enemy part will be destroyed, Gunners will be shooting in random part of enemy ship, as usual.
 To escape from fight, you must set Pilot order on Escape, after few turns (depends how far and fast enemy was) you should escape.
