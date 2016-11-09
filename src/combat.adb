@@ -56,9 +56,11 @@ package body Combat is
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             case PlayerShip.Crew.Element(I).Order is
                 when Pilot =>
-                    PlayerPerception := PlayerPerception + GetSkillLevel(I, 1);
+                    PlayerPerception := PlayerPerception + GetSkillLevel(I, 5);
+                    GainExp(1, 5, I);
                 when Gunner =>
-                    PlayerPerception := PlayerPerception + GetSkillLevel(I, 3);
+                    PlayerPerception := PlayerPerception + GetSkillLevel(I, 5);
+                    GainExp(1, 5, I);
                 when others =>
                     null;
             end case;
