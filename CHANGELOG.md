@@ -52,6 +52,7 @@ All notable changes to this project will be documented in this file.
 - Messed screen on deleting messages
 - Info about lack of crew on selected position
 - Gaining experience for gunner for last round of combat
+- Crash on assign crew members to positions during combat
 
 ## [0.4] - 2016-10-16
 
