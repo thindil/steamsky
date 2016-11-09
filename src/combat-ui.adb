@@ -61,7 +61,7 @@ package body Combat.UI is
             MemberIndex := PlayerShip.Modules.Element(ModuleIndex).Owner;
         end if;
         if CrewIndex > 0 then
-            GiveOrders(OrderIndex, Order, ModuleIndex);
+            GiveOrders(CrewIndex, Order, ModuleIndex);
         else
             if Name(Current(OrdersMenu)) = "Quit" then
                 return;
