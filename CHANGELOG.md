@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New type of ship modules - furnaces
-- New skill: metalsmith
+- New skills: metalsmith and perception
 - New ship modules: Small bronze furnace, Advanced medium bronze hull, Large
   bronze hull, Advanced large bronze hull, Bronze armor, Heavy bronze armor and
   Iron 40mm gun
