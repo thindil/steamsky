@@ -29,6 +29,7 @@ Prices in bases depends on skill Bartering of assigned to trade crew member - wi
 To buy/sell items from bases, open orders menu (key 'o') and then select option Trade (key 't'), you will see trading screen. Use arrows keys to select desired material to buy/sell, then press 'Enter' key to buy or 'Space' key to start trading selected item. Next, enter amount of items which you want to buy or sell and select button [Ok]. To buy/sell items you must have enough free cargo space on your ship ("moneys" aka Charcollum needs free cargo space too).
 [Combat]
 To start combat, you must first be in this same map cell where desired target is. Then, from orders menu, select option Attack (key 'a'). 
+Combat can start automatically if enemy ship spots your ship first and is faster than you. Your chance to see enemy first depends on your ship pilot and gunners.
 In combat, first you must set crew members to selected position and give each orders then hit space for made one combat turn. Each combat turn take 1 minute of game time. 
 If you give order to aim for selected part of enemy ship, your Gunners will be shoot as often as for precise fire, just chance on hit will depends on part of enemy ship. If selected enemy part will be destroyed, Gunners will be shooting in random part of enemy ship, as usual.
 To escape from fight, you must set Pilot order on Escape, after few turns (depends how far and fast enemy was) you should escape.
