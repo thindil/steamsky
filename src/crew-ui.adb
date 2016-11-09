@@ -193,6 +193,9 @@ package body Crew.UI is
                 NeedRepairs := True;
             end if;
         end loop;
+        if NeedRepairs then
+            OrdersAmount := OrdersAmount + 1;
+        end if;
         if PlayerShip.Crew.Element(MemberIndex).Order /= Rest then
             OrdersAmount := OrdersAmount + 1;
         end if;
