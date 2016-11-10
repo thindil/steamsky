@@ -34,6 +34,9 @@ package body Crew is
         procedure UpdateOrder(Member : in out Member_Data) is
         begin
             Member.Order := NewOrder;
+            if NewOrder = Rest then
+                Member.PreviousOrder := Rest;
+            end if;
             Member.OrderTime := 15;
         end UpdateOrder;
     begin
@@ -94,7 +97,7 @@ package body Crew is
             end if;
         elsif GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Upgrading or GivenOrder = Talk then
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                if PlayerShip.Crew.Element(I).Order = GivenOrder and PlayerShip.Crew.Element(I).Order /= Rest then
+                if PlayerShip.Crew.Element(I).Order = GivenOrder then
                     GiveOrders(I, Rest);
                     exit;
                 end if;
@@ -104,21 +107,25 @@ package body Crew is
                 GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest);
             end if;
         end if;
-        if ModuleIndex = 0 then
+        if ModuleIndex = 0 and (GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Rest) then
+            case GivenOrder is
+                when Pilot =>
+                    MType := COCKPIT;
+                when Engineer =>
+                    MType := ENGINE;
+                when Rest =>
+                    MType := CABIN;
+                when others =>
+                    null;
+            end case;
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                case GivenOrder is
-                    when Pilot =>
-                        MType := COCKPIT;
-                    when Engineer =>
-                        MType := ENGINE;
-                    when Rest =>
-                        MType := CABIN;
-                    when others =>
-                        exit;
-                end case;
                 if MType /= CABIN then
                     if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = MType and 
-                        PlayerShip.Modules.Element(I).Durability > 0 and PlayerShip.Modules.Element(I).Owner = 0 then
+                        PlayerShip.Modules.Element(I).Durability > 0 
+                    then
+                        if PlayerShip.Modules.Element(I).Owner /= 0 then
+                            GiveOrders(PlayerShip.Modules.Element(I).Owner, Rest);
+                        end if;
                         ModuleIndex2 := I;
                         exit;
                     end if;
