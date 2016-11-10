@@ -142,7 +142,8 @@ package body Crafts is
     begin
         for L in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if PlayerShip.Modules.Element(L).Owner > 0 and (Modules_List.Element(PlayerShip.Modules.Element(L).ProtoIndex).MType = 
-                ALCHEMY_LAB or Modules_List.Element(PlayerShip.Modules.Element(L).ProtoIndex).MType = FURNACE) 
+                ALCHEMY_LAB or Modules_List.Element(PlayerShip.Modules.Element(L).ProtoIndex).MType = FURNACE) and 
+                PlayerShip.Modules.Element(L).Current_Value > 0
             then
                 CrafterIndex := PlayerShip.Modules.Element(L).Owner;
                 CurrentMinutes := Minutes;
