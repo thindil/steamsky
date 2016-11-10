@@ -33,9 +33,7 @@ package body Events is
     begin
         Rand_Roll.Reset(Generator);
         Rand_Combat.Reset(Generator2);
-        if Event /= None then
-            Event := None;
-        end if;
+        Event := None;
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
             if Rand_Roll.Random(Generator) < 7 then -- Combat
                 Event := EnemyShip;
