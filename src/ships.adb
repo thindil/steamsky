@@ -843,7 +843,6 @@ package body Ships is
         end if;
         Repair_Loop:
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            RepairMaterial := 0;
             if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
                 PointsIndex := 0;
                 RepairNeeded := True;
@@ -854,6 +853,7 @@ package body Ships is
                             PointsBonus := (GetSkillLevel(J, Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairSkill) / 
                                 10) * CrewRepairPoints(PointsIndex);
                             RepairPoints := CrewRepairPoints(PointsIndex) + PointsBonus;
+                            RepairMaterial := 0;
                             for K in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                                 if Items_List.Element(PlayerShip.Cargo.Element(K).ProtoIndex).IType = 
                                     Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial then
@@ -877,7 +877,7 @@ package body Ships is
                                 exit Repair_Loop;
                             end if;
                             -- Repair module
-                            if PlayerShip.Modules.Element(I).Durability + RepairPoints > PlayerShip.Modules.Element(I).MaxDurability then
+                            if PlayerShip.Modules.Element(I).Durability + RepairPoints >= PlayerShip.Modules.Element(I).MaxDurability then
                                 RepairValue := PlayerShip.Modules.Element(I).MaxDurability - PlayerShip.Modules.Element(I).Durability;
                                 RepairNeeded := False;
                             else
