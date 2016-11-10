@@ -54,6 +54,7 @@ All notable changes to this project will be documented in this file.
 - Gaining experience for gunner for last round of combat
 - Crash on assign crew members to positions during combat
 - Assign new pilot when older is on break
+- Crash on repair ship modules
 
 ## [0.4] - 2016-10-16
 
