@@ -380,11 +380,7 @@ package body MainMenu is
                 end if;
                 NewCharName := To_Unbounded_String(Get_Buffer(Fields(NewGameForm, 2)));
                 NewShipName := To_Unbounded_String(Get_Buffer(Fields(NewGameForm, 6)));
-                if Get_Buffer(Fields(NewGameForm, 4)) = "Male ->" then
-                    CharGender := 'M';
-                else
-                    CharGender := 'F';
-                end if;
+                CharGender := Get_Buffer(Fields(NewGameForm, 4))(1);
                 RemoveSemicolons(NewCharName);
                 RemoveSemicolons(NewShipName);
                 Trim(NewCharName, Ada.Strings.Both);
