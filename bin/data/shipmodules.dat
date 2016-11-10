@@ -300,7 +300,7 @@ Skill = Engineering
 Price = 10000
 InstallTime = 240
 Unique = Yes
-[9]
+[27]
 Name = Iron 40mm gun
 Type = Gun
 Weight = 60
