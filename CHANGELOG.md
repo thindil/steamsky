@@ -53,6 +53,7 @@ All notable changes to this project will be documented in this file.
 - Info about lack of crew on selected position
 - Gaining experience for gunner for last round of combat
 - Crash on assign crew members to positions during combat
+- Assign new pilot when older is on break
 
 ## [0.4] - 2016-10-16
 
