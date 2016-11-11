@@ -441,6 +441,7 @@ package body Combat.UI is
             end case;
         else
             CurrentMenuIndex := 1;
+            PlayerShip.Speed := OldSpeed;
             DrawGame(Sky_Map_View);
             return Sky_Map_View;
         end if;

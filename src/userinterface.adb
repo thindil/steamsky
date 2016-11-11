@@ -635,6 +635,7 @@ package body UserInterface is
             when Character'Pos('a') | Character'Pos('A') => -- Attack other ship
                 if Event = EnemyShip then
                     DrawGame(Combat_State);
+                    OldSpeed := PlayerShip.Speed;
                     return Combat_State;
                 end if;
             when Character'Pos('h') | Character'Pos('H') => -- Half speed
