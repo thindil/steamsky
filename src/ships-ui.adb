@@ -496,7 +496,7 @@ package body Ships.UI is
 
     procedure ShowModuleOptions is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
-        Options_Items : constant Item_Array_Access := new Item_Array(1..8);
+        Options_Items : constant Item_Array_Access := new Item_Array(1..9);
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         MaxValue : Positive;
@@ -557,6 +557,10 @@ package body Ships.UI is
         end case;
         if PlayerShip.Modules.Element(ModuleIndex).UpgradeAction /= NONE then
             Options_Items.all(MenuIndex) := New_Item("Continue upgrade", "4");
+            MenuIndex := MenuIndex + 1;
+        end if;
+        if PlayerShip.UpgradeModule > 0 then
+            Options_Items.all(MenuIndex) := New_Item("Stop upgrading", "8");
             MenuIndex := MenuIndex + 1;
         end if;
         Options_Items.all(MenuIndex) := New_Item("Rename", "5");
@@ -713,6 +717,15 @@ package body Ships.UI is
                 if OptionIndex /= 5 and OptionIndex /= 7 then
                     if OptionIndex < 5 then
                         StartUpgrading(CurrentMenuIndex, OptionIndex);
+                    elsif OptionIndex = 8 then
+                        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                            if PlayerShip.Crew.Element(I).Order = Upgrading then
+                                GiveOrders(I, Rest);
+                                exit;
+                            end if;
+                        end loop;
+                        PlayerShip.UpgradeModule := 0;
+                        AddMessage("You stopped current upgrade.", OrderMessage);
                     end if;
                     DrawGame(Ship_Info);
                     return Ship_Info;
