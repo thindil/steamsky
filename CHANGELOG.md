@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - List of known bases
 - Option to set travel destination and auto travel to it
 - Ability to be auto attacked by enemy ship
+- Option to stop current module update
 
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
