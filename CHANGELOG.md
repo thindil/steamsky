@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Ability to be auto attacked by enemy ship
 - Option to stop current module update
 - Restore ship speed after fight
+- Gaining experience in fight for pilot and engineer
 
 ### Changed
 - Each crew member have separate work timer which made saves from 0.4
