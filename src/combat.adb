@@ -110,8 +110,10 @@ package body Combat is
             case PlayerShip.Crew.Element(I).Order is
                 when Pilot =>
                     PilotIndex := I;
+                    GainExp(1, 1, I);
                 when Engineer =>
                     EngineerIndex := I;
+                    GainExp(1, 2, I);
                 when others =>
                     null;
             end case;
