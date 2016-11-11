@@ -19,6 +19,7 @@ with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Crew; use Crew;
 with Messages; use Messages;
 with UserInterface; use UserInterface;
+with ShipModules; use ShipModules;
 
 package body Combat.UI is
 
@@ -96,6 +97,7 @@ package body Combat.UI is
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         MenuOptions : Menu_Option_Set;
+        EnemyStatus : Unbounded_String;
     begin
         Crew_Items := new Item_Array(1..Natural(Guns.Length) + 3);
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
@@ -208,12 +210,31 @@ package body Combat.UI is
         Move_Cursor(Line => 9, Column => (Columns / 2));
         Add(Str => "Status: ");
         if Enemy.Distance < 15000 then
-            if Enemy.Ship.Modules.Element(1).Durability = Enemy.Ship.Modules.Element(1).MaxDurability then
-                Add(Str => "Ok");
-            elsif Enemy.Ship.Modules.Element(1).Durability > 0 then
-                Add(Str => "Damaged");
-            else
+            if Enemy.Ship.Modules.Element(1).Durability = 0 then
                 Add(Str => "Destroyed");
+            else
+                EnemyStatus := To_Unbounded_String("Ok");
+                for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
+                    if Enemy.Ship.Modules.Element(I).Durability < Enemy.Ship.Modules.Element(I).MaxDurability then
+                        EnemyStatus := To_Unbounded_String("Damaged");
+                        exit;
+                    end if;
+                end loop;
+                Add(Str => To_String(EnemyStatus));
+                for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
+                    if Enemy.Ship.Modules.Element(I).Durability > 0 then
+                        case Modules_List.Element(Enemy.Ship.Modules.Element(I).ProtoIndex).MType is
+                            when ARMOR =>
+                                Add(Str => " (armored)");
+                            when GUN =>
+                                Add(Str => " (gun)");
+                            when BATTERING_RAM =>
+                                Add(Str => " (battering ram)");
+                            when others =>
+                                null;
+                        end case;
+                    end if;
+                end loop;
             end if;
         else
             Add(Str => "Unknown");
