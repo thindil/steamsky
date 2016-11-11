@@ -41,6 +41,7 @@ package Combat is
     Enemy : Enemy_Record; -- Enemy informations
     EndCombat : Boolean; -- True if combat ends
     MessagesStarts : Natural; -- Start index for showing messages
+    OldSpeed : ShipSpeed; -- Speed of player ship before combat
 
     function StartCombat(EnemyIndex : Positive) return GameStates; -- Generate enemy and start battle
     procedure CombatTurn; -- Count damage/ships actions, etc

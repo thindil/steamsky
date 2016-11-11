@@ -70,6 +70,7 @@ package body Combat is
         else
             if RealSpeed(PlayerShip) < RealSpeed(Enemy.Ship) then
                 ShowDialog("You was attacked by " & To_String(EnemyName) & ".");
+                OldSpeed := PlayerShip.Speed;
                 return Combat_State;
             end if;
             AddMessage("You spotted " & To_String(EnemyName) & ".", OtherMessage);
