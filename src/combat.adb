@@ -403,6 +403,7 @@ package body Combat is
                                 UpdateCargo(1, LootAmount);
                             end if;
                             Event := None;
+                            Enemy.Ship.Speed := FULL_STOP;
                             exit Player_Loop;
                         end if;
                     end loop;
