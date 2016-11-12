@@ -118,4 +118,10 @@ Weight = 2
 Type = Ammo40
 Prices = 6, 8, 8, 8
 Buyable = Y, N, N, N
+[21]
+Name = Steel plates
+Weight = 5
+Type = Iron
+Prices = 6, 8, 8, 8
+Buyable = Y, N, N, N
 []
