@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - Starting order for player from On break to Talking in bases
 - Moved items types to separated text file
 - Starting combat with other ships
+- Item type ammo on ammo10, ammo20, ammo40
 
 ### Fixed
 - Crash on updating modules
