@@ -11,8 +11,8 @@ All notable changes to this project will be documented in this file.
   Iron 40mm gun
 - Minimum fuel usage during fly
 - New types of items: copper, tin, copperore, tinore, ironore and steel
-- New items: copper plates, tin plates, copper ore, tin ore, iron ore and 40mm
-  ammo
+- New items: copper plates, tin plates, copper ore, tin ore, iron ore, 40mm
+  ammo and steel plates
 - New crafting recipes: copper plates, tin plates, bronze plates, iron plates
   and 40mm ammo
 - Option to rename player ship
