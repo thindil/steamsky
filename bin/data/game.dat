@@ -7,4 +7,4 @@ MaleSyllablesMiddle = al, an, ar, el, en, ess, ian, onn, or
 MaleSyllablesEnd = ai, an, ar, ath, en, eo, ian, is, u, or
 FemaleSyllablesEnd = a, ae, aelle, ai, ea, i, ia, u, wen, wyn
 SkillsNames = Piloting, Engineering, Gunnery, Rhetoric, Perception, Alchemy, Cooking, Gunsmith, Metalsmith
-ItemsTypes = Fuel, Food, Drink, Ammo, Bronze, FoodMaterial, Wood, Gunpowder, Iron, Copper, Tin, CopperOre, TinOre, IronOre
+ItemsTypes = Fuel, Food, Drink, Ammo10, Bronze, FoodMaterial, Wood, Gunpowder, Iron, Copper, Tin, CopperOre, TinOre, IronOre, Ammo20, Ammo40
