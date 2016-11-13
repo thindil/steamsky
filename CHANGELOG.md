@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.5] - 2016-11-13
 
 ### Added
 - New type of ship modules - furnaces
