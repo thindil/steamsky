@@ -13,8 +13,8 @@ All notable changes to this project will be documented in this file.
 - New types of items: copper, tin, copperore, tinore, ironore and steel
 - New items: copper plates, tin plates, copper ore, tin ore, iron ore, 40mm
   ammo and steel plates
-- New crafting recipes: copper plates, tin plates, bronze plates, iron plates
-  and 40mm ammo
+- New crafting recipes: copper plates, tin plates, bronze plates, iron plates,
+  40mm ammo and steel plates
 - Option to rename player ship
 - Impact of hunger/thirst/wounds on crew members skills
 - Option to assign crew members to selected module
