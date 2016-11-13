@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
 - Moved items types to separated text file
 - Starting combat with other ships
 - Item type ammo on ammo10, ammo20, ammo40
+- Updated in-game news
 
 ### Fixed
 - Crash on updating modules
