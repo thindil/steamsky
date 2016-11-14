@@ -55,7 +55,7 @@ On combat screen you can see only damaged modules. Colors on your ship modules l
 - Blue : module is destroyed
 [Crafting]
 To start manufacturing items, first you must have enough material and proper module installed on ship. Then you must set proper crafting order in Craft menu and give crew member order to start crafting. What ship module and which items are needed for crafting, you can check in crafting menu (key 'r'). If you don't have items or workplace needed for crafting, they will be written in red in selected recipe information. At this moment, each manufacturing order take 15 minutes of game time. If after creating item, you don't have enough materials to craft next item, crew member going on break and crafting order is reseted.
-Crafting skills determine amount of manufactured items.
+Crafting skills and level of damage of workplace determine amount of manufactured items. More damaged modules causes less crafted items.
 Each crafting module have separated crafting order. This mean, you can produce few types of items in this same time, if you have few crafting modules installed on ship and all have assigned work orders and workers.
 [Repair/Upgrade ship]
 To start repairing ship, you must assign crew member to repair duty. You may assign more than one crew member. Each additional member assigned made repair faster. Each damaged (or destroyed) module need specific material to repair. You can check which material is needed in ship info screen. Ship is repaired every 15 minutes of work of assigned crew members. Speed of repairs depends on skills of assigned crew. You can check which skills are used in ship info screen.
