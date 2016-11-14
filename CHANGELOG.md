@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - Weapon damage and crafted amount of items depends on how much ship module is
   damaged
 
+### Changed
+- Updated help
+
 ## [0.5] - 2016-11-13
 
 ### Added
