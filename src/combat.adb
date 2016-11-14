@@ -101,6 +101,9 @@ package body Combat is
         DeathReason : Unbounded_String;
         HaveFuel : Boolean := False;
         GunnerOrder : Positive;
+        type DamageFactor is digits 2 range 0.0..1.0;
+        Damage : DamageFactor := 0.0;
+        WeaponDamage : Natural;
     begin
         Rand_Roll.Reset(Generator);
         PlayerMod_Roll.Reset(Generator2);
@@ -369,8 +372,14 @@ package body Combat is
                             end if;
                             ShootMessage := ShootMessage & Enemy.Ship.Modules.Element(HitLocation).Name &
                                 To_Unbounded_String(".");
-                            UpdateModule(Enemy.Ship, HitLocation, "Durability", 
-                                Integer'Image(0 - PlayerShip.Modules.Element(K).Max_Value));
+                            Damage := 1.0 - DamageFactor(Float(PlayerShip.Modules.Element(K).Durability) / 
+                                Float(PlayerShip.Modules.Element(K).MaxDurability));
+                            WeaponDamage := PlayerShip.Modules.Element(K).Max_Value - 
+                                Natural(Float(PlayerShip.Modules.Element(K).Max_Value) * Float(Damage));
+                            if WeaponDamage = 0 then
+                                WeaponDamage := 1;
+                            end if;
+                            UpdateModule(Enemy.Ship, HitLocation, "Durability", Integer'Image(0 - WeaponDamage));
                             if Enemy.Ship.Modules.Element(HitLocation).Durability = 0 then
                                 case Modules_List.Element(Enemy.Ship.Modules.Element(HitLocation).ProtoIndex).MType is
                                     when HULL | ENGINE =>
@@ -438,9 +447,15 @@ package body Combat is
                             ShootMessage := EnemyName & To_Unbounded_String(" attacks you and ");
                             if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
                                 ShootMessage := ShootMessage & To_Unbounded_String("hits in ");
+                                Damage := 1.0 - DamageFactor(Float(Enemy.Ship.Modules.Element(J).Durability) / 
+                                    Float(Enemy.Ship.Modules.Element(J).MaxDurability));
+                                WeaponDamage := Enemy.Ship.Modules.Element(J).Max_Value - 
+                                    Natural(Float(Enemy.Ship.Modules.Element(J).Max_Value) * Float(Damage));
+                                if WeaponDamage = 0 then
+                                    WeaponDamage := 1;
+                                end if;
                                 if ArmorIndex > 0 then
-                                    UpdateModule(PlayerShip, ArmorIndex, "Durability", Integer'Image(0 - 
-                                        Enemy.Ship.Modules(J).Max_Value));
+                                    UpdateModule(PlayerShip, ArmorIndex, "Durability", Integer'Image(0 - WeaponDamage));
                                     ShootMessage := ShootMessage & To_Unbounded_String("armor.");
                                 else
                                     HitLocation := Integer(PlayerMod_Roll.Random(Generator2));
@@ -449,8 +464,7 @@ package body Combat is
                                     end loop;
                                     ShootMessage := ShootMessage & PlayerShip.Modules.Element(HitLocation).Name &
                                     To_Unbounded_String(".");
-                                    UpdateModule(PlayerShip, HitLocation, "Durability", Integer'Image(0 - 
-                                        Enemy.Ship.Modules(J).Max_Value));
+                                    UpdateModule(PlayerShip, HitLocation, "Durability", Integer'Image(0 - WeaponDamage));
                                     if PlayerShip.Modules.Element(HitLocation).Durability = 0 then
                                         DeathReason := To_Unbounded_String("enemy fire");
                                         case Modules_List.Element(PlayerShip.Modules.Element(HitLocation).ProtoIndex).MType is

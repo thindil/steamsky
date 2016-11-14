@@ -135,6 +135,8 @@ package body Crafts is
         Recipe : Craft_Data;
         MaterialIndexes : array(1..10) of Natural := (others => 0);
         OrderTime, CurrentMinutes : Integer;
+        type DamageFactor is digits 2 range 0.0..1.0;
+        Damage : DamageFactor := 0.0;
         procedure UpdateMember(Member : in out Member_Data) is
         begin
             Member.OrderTime := OrderTime;
@@ -178,6 +180,12 @@ package body Crafts is
                         end loop;
                         ResultAmount := Recipe.ResultAmount + Integer(Float'Floor(Float(Recipe.ResultAmount) *
                             (Float(GetSkillLevel(CrafterIndex, Recipe.Skill)) / 100.0)));
+                        Damage := 1.0 - DamageFactor(Float(PlayerShip.Modules.Element(L).Durability) / 
+                            Float(PlayerShip.Modules.Element(L).MaxDurability));
+                        ResultAmount := ResultAmount - Natural(Float(ResultAmount) * Float(Damage));
+                        if ResultAmount = 0 then
+                            ResultAmount := 1;
+                        end if;
                         Amount := Amount - (Items_List.Element(Recipe.ResultIndex).Weight * ResultAmount);
                         if FreeCargo(Amount) < 0 then
                             AddMessage("You don't have free cargo space for manufacturing " & 
