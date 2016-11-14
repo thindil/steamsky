@@ -325,11 +325,11 @@ package body Crew is
     procedure UpdateCrew(Minutes : Positive; TiredPoints : Natural) is
         TiredLevel, HungerLevel, ThirstLevel : Integer := 0;
         HealthLevel : Integer := 100;
-        I : Natural;
         DeathReason : Unbounded_String;
-        CabinIndex : Natural;
-        Times : Natural;
+        CabinIndex, Times, RestAmount, I : Natural;
         OrderTime, CurrentMinutes : Integer;
+        type DamageFactor is digits 2 range 0.0..1.0;
+        Damage : DamageFactor := 0.0;
         procedure UpdateMember(Member : in out Member_Data) is
             BackToWork : Boolean := True;
         begin
@@ -415,7 +415,14 @@ package body Crew is
                     end loop;
                     if PlayerShip.Crew.Element(I).Tired > 0 then
                         if CabinIndex > 0 then
-                            TiredLevel := TiredLevel - (Times * PlayerShip.Modules.Element(CabinIndex).Current_Value);
+                            Damage := 1.0 - DamageFactor(Float(PlayerShip.Modules.Element(CabinIndex).Durability) / 
+                                Float(PlayerShip.Modules.Element(CabinIndex).MaxDurability));
+                            RestAmount := PlayerShip.Modules.Element(CabinIndex).Current_Value - 
+                                Natural(Float(PlayerShip.Modules.Element(CabinIndex).Current_Value) * Float(Damage));
+                            if RestAmount = 0 then
+                                RestAmount := 1;
+                            end if;
+                            TiredLevel := TiredLevel - (Times * RestAmount);
                         else
                             TiredLevel := TiredLevel - Times;
                         end if;
