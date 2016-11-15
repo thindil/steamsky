@@ -18,7 +18,7 @@ To move your ship, you must set it speed, have fuel (called Charcollum, which wo
 Travel time depends on skills of Pilot and Engineer (current members on this positions) and selected ship speed. 
 Fuel cost of travel depends on selected speed (faster = more fuel usage) and each engine fuel usage installed on ship. You can check fuel usage for each engine on ship information screen.
 To move ship in desired direction, use arrow keys (or better) keys on keypad (with enabled Num Lock at your keyboard).
-During travel you may encounter various events (at this moment you can only meet hostile ships).
+During travel you may encounter various events.
 Ship speed depends on engine power, engine damage, ship weight (with cargo) and bit on Engineer and Pilot experience.
 As you fly near bases (you are in this same cell where base is), you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are in default text color. 
 You can set your destination travel point on map by selecting map cell (with SHIFT + arrow keys) and then press Enter.
