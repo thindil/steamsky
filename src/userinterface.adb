@@ -692,6 +692,9 @@ package body UserInterface is
     function WaitMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates is
         TimeNeeded, CabinIndex, TempTimeNeeded : Natural := 0;
         ReturnState : GameStates;
+        type DamageFactor is digits 2 range 0.0..1.0;
+        Damage : DamageFactor := 0.0;
+        CabinBonus : Natural;
     begin
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -722,8 +725,14 @@ package body UserInterface is
                             end if;
                         end loop;
                         if CabinIndex > 0 then
-                            TempTimeNeeded := (PlayerShip.Crew.Element(I).Tired / PlayerShip.Modules.Element(CabinIndex).Current_Value) * 
-                                15;
+                            Damage := 1.0 - DamageFactor(Float(PlayerShip.Modules.Element(CabinIndex).Durability) / 
+                                Float(PlayerShip.Modules.Element(CabinIndex).MaxDurability));
+                            CabinBonus := PlayerShip.Modules.Element(CabinIndex).Current_Value - 
+                                Natural(Float(PlayerShip.Modules.Element(CabinIndex).Current_Value) * Float(Damage));
+                            if CabinBonus = 0 then
+                                CabinBonus := 1;
+                            end if;
+                            TempTimeNeeded := (PlayerShip.Crew.Element(I).Tired / CabinBonus) * 15;
                             if TempTimeNeeded = 0 then
                                 TempTimeNeeded := 15;
                             end if;
