@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated help
 
+### Fixed
+- Don't craft items when worker is on break
+
 ## [0.5] - 2016-11-13
 
 ### Added
