@@ -72,10 +72,9 @@ Each ship hull have maximum module space, which limit what and how much modules 
 [Ship crew]
 You and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation.
 Every member of crew getting tired when have assigned order other than On break or Trading with bases. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
-If your resting crew member don't have assigned cabin, he/she will be resting much slower.
 Crew members can regenerate health over time but only when they are on break and have assigned cabin.
-If crew member cabin is destroyed and he/she going on break, he/she will try find empty cabin as a new own to rest.
-Speed of rest of crew members depends on quality of cabin which they owned. Without cabin, they rest very slow.
+If crew member cabin is destroyed (or don't have any) and he/she going on break, he/she will try find empty cabin as a new own to rest.
+Speed of rest of crew members depends on quality and damage level of cabin which they owned. Without cabin, they rest very slow.
 You can hire new crew members in bases. First you must dock to base, then you choice Recruit option from orders menu. Amount of available recruits depends on size of base. They hire cost depends on amount of knowledge (skills and level of skills). Here no limit how much crew members you can have on ship, just remember, all of them needs food, drinks and place to rest. Hiring new crew members reduce population of base. New recruits are available every 30 days between visits of base. 
 If your ship is docked to base, you can dismiss crew members. Go to crew info screen and use Dismiss option on selected crew member. Dismissed crew members joins to base population.
 Hunger, thirst and wounds have impact on your crew members skills. Wounded or hungry crew members have penalties to their skills.
