@@ -164,14 +164,16 @@ package body Maps is
                 else
                     Add(Win => InfoWindow, Str => "large");
                 end if;
-                CurrentLine := 6;
+                CurrentLine := 7;
             end if;
         end if;
         if Event /= None and (MoveX = 0 and MoveY = 0) then
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
             case Event is
                 when EnemyShip =>
-                    Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
                     Add(Win => InfoWindow, Str => To_String(EnemyName));
+                when FullDocks =>
+                    Add(Win => InfoWindow, Str => "Full docks");
                 when others =>
                     null;
             end case;
@@ -274,7 +276,9 @@ package body Maps is
                 Result := 3;
             when 53 => -- Wait 1 minute or travel to destination if set
                 if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
-                    UpdateGame(1);
+                    if Event /= FullDocks then
+                        UpdateGame(1);
+                    end if;
                 else
                     if PlayerShip.DestinationX > PlayerShip.SkyX then
                         NewX := 1;

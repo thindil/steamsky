@@ -19,7 +19,7 @@ with Game; use Game;
 
 package Events is
 
-    type Events_Types is (None, EnemyShip); -- Types of events
+    type Events_Types is (None, EnemyShip, FullDocks); -- Types of events
     Event : Events_Types := None; -- Type of current event
     
     function CheckForEvent(OldState : GameStates) return GameStates; -- Check if event happen

@@ -60,11 +60,15 @@ package body Events is
                             UpdateCargo(1, 1);
                             UpdateGame(TimePassed);
                         end if;
-                        return OldState;
                     when others => -- Combat
                         Event := EnemyShip;
                         return StartCombat(Rand_Combat.Random(Generator2));
                 end case;
+            else
+                if PlayerShip.Speed /= DOCKED then
+                    Event := FullDocks;
+                    AddMessage("You can't dock to base now, because its docks are full.", OtherMessage);
+                end if;
             end if;
         end if;
         return OldState;
