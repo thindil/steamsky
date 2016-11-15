@@ -248,7 +248,7 @@ package body UserInterface is
         else
             SpeedWindow := Create(8, 17, (Lines / 3), (Columns / 2) - 8);
             Box(SpeedWindow);
-            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 and Event /= FullDocks then
                 Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
                 Add(Win => SpeedWindow, Str => "Dock");
                 Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
@@ -348,7 +348,12 @@ package body UserInterface is
             To_Unbounded_String("Wait 10 minutes"), To_Unbounded_String("Wait 15 minutes"), 
             To_Unbounded_String("Wait 30 minutes"), To_Unbounded_String("Wait 1 hour"));
         CurrentLine : Line_Position := 0;
+        StartIndex : Positive := 1;
     begin
+        if Event = FullDocks then
+            StartIndex := 4;
+            WaitLines := WaitLines - 3;
+        end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Tired > 0 and PlayerShip.Crew.Element(I).Order = Rest then
                 NeedRest := True;
@@ -376,7 +381,7 @@ package body UserInterface is
         end if;
         WaitWindow := Create(WaitLines, WaitColumns, (Lines / 2) - (WaitLines / 2), (Columns / 2) - (WaitColumns / 2));
         Box(WaitWindow);
-        for I in WaitOrders'Range loop
+        for I in StartIndex..WaitOrders'Last loop
             CurrentLine := CurrentLine + 1;
             Move_Cursor(Win => WaitWindow, Line => CurrentLine, Column => 1);
             Add(Win => WaitWindow, Str => Integer'Image(I) & " " & To_String(WaitOrders(I)));
@@ -625,9 +630,11 @@ package body UserInterface is
                 DrawGame(Sky_Map_View);
                 return OldState;
             when Character'Pos('d') | Character'Pos('D') => -- Dock ship to base
-                DockShip(True);
-                DrawGame(Sky_Map_View);
-                return OldState;
+                if Event /= FullDocks then
+                    DockShip(True);
+                    DrawGame(Sky_Map_View);
+                    return OldState;
+                end if;
             when Character'Pos('f') | Character'Pos('F') => -- Full stop
                 ChangeShipSpeed(FULL_STOP);
                 DrawGame(Sky_Map_View);
@@ -701,11 +708,23 @@ package body UserInterface is
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when Character'Pos('1') => -- Wait 1 minute
-                UpdateGame(1);
+                if Event /= FullDocks then
+                    UpdateGame(1);
+                else
+                    return Wait_Order;
+                end if;
             when Character'Pos('2') => -- Wait 5 minutes
-                UpdateGame(5);
+                if Event /= FullDocks then
+                    UpdateGame(5);
+                else
+                    return Wait_Order;
+                end if;
             when Character'Pos('3') => -- Wait 10 minutes
-                UpdateGame(10);
+                if Event /= FullDocks then
+                    UpdateGame(10);
+                else
+                    return Wait_Order;
+                end if;
             when Character'Pos('4') => -- Wait 15 minutes
                 UpdateGame(15);
             when Character'Pos('5') => -- Wait 30 minute
