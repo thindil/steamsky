@@ -20,6 +20,8 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ships; use Ships;
 with Maps; use Maps;
 with Combat; use Combat;
+with Messages; use Messages;
+with Crew; use Crew;
 
 package body Events is
 
@@ -30,14 +32,39 @@ package body Events is
         package Rand_Combat is new Discrete_Random(Combat_Range);
         Generator : Rand_Roll.Generator;
         Generator2 : Rand_Combat.Generator;
+        Roll : Percent_Range;
+        TimePassed : Integer;
+        PilotIndex : Natural := 0;
     begin
         Rand_Roll.Reset(Generator);
         Rand_Combat.Reset(Generator2);
         Event := None;
-        if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
-            if Rand_Roll.Random(Generator) < 7 then -- Combat
-                Event := EnemyShip;
-                return StartCombat(Rand_Combat.Random(Generator2));
+        if Rand_Roll.Random(Generator) < 7 then -- Event happen
+            Roll := Rand_Roll.Random(Generator);
+            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
+                case Roll is
+                    when 1..20 => -- Bad weather
+                        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                            if PlayerShip.Crew.Element(I).Order = Pilot then
+                                PilotIndex := I;
+                                exit;
+                            end if;
+                        end loop;
+                        if PilotIndex > 0 then
+                            AddMessage("Sudden bad weather makes your travel takes longer.", OtherMessage);
+                            TimePassed := 60 - GetSkillLevel(PilotIndex, 1);
+                            if TimePassed < 1 then
+                                TimePassed := 1;
+                            end if;
+                            GainExp(1, 1, PilotIndex);
+                            UpdateCargo(1, 1);
+                            UpdateGame(TimePassed);
+                        end if;
+                        return OldState;
+                    when others => -- Combat
+                        Event := EnemyShip;
+                        return StartCombat(Rand_Combat.Random(Generator2));
+                end case;
             end if;
         end if;
         return OldState;
