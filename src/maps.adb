@@ -24,7 +24,6 @@ with Bases; use Bases;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Events; use Events;
-with Combat; use Combat;
 
 package body Maps is
 
@@ -120,6 +119,17 @@ package body Maps is
                 end if;
             end loop;
         end loop;
+        for I in Events_List.First_Index..Events_List.Last_Index loop
+            if (Events_List.Element(I).SkyX >= StartX and Events_List.Element(I).SkyX < StartX + Integer(Columns)) and
+                (Events_List.Element(I).SkyY >= StartX and Events_List.Element(I).SkyY < StartY + Integer(Lines)) and
+                Peek(Line => Line_Position(Events_List.Element(I).SkyY - StartY), Column => Column_Position(Events_List.Element(I).SkyX
+                - StartX - 1)).Ch /= '+' 
+            then
+                Move_Cursor(Line => Line_Position(Events_List.Element(I).SkyY - StartY), 
+                    Column => Column_Position(Events_List.Element(I).SkyX - StartX - 1));
+                Add(Ch => '?');
+            end if;
+        end loop;
         Refresh_Without_Update;
         BaseIndex := SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).BaseIndex;
         if BaseIndex > 0 then
@@ -137,7 +147,7 @@ package body Maps is
             if Events_List.Element(I).SkyX = PlayerShip.SkyX + MoveX and Events_List.Element(I).SkyY = PlayerShip.SkyY + MoveY then
                 WindowHeight := WindowHeight + 2;
                 if Events_List.Element(I).EType = EnemyShip then
-                    NewWindowWidth := 4 + Column_Position(Length(EnemyName));
+                    NewWindowWidth := 4 + Column_Position(Length(Enemies_List.Element(Events_List.Element(I).Data).Name));
                 end if;
                 if NewWindowWidth < 20 then
                     NewWindowWidth := 20;
