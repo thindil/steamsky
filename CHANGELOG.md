@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Weapon damage, crafted amount of items and speed of rest depends on how much
   ship module is damaged
 - New random events: bad weather and full docks in bases
+- Info about events on sky map
 
 ### Changed
 - Updated help
