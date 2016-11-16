@@ -189,6 +189,7 @@ package body UserInterface is
         NeedRepair, IsShipyard : Boolean := False;
         AskedForBases : Boolean := True;
         CurrentLine : Line_Position := 4;
+        Event : Events_Types := None;
     begin
         if PlayerShip.Speed = DOCKED then
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
@@ -248,7 +249,13 @@ package body UserInterface is
         else
             SpeedWindow := Create(8, 17, (Lines / 3), (Columns / 2) - 8);
             Box(SpeedWindow);
-            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 and Event /= FullDocks then
+            for I in Events_List.First_Index..Events_List.Last_Index loop
+                if Events_List.Element(I).SkyX = PlayerShip.SkyX and Events_List.Element(I).SkyY = PlayerShip.SkyY then
+                    Event := Events_List.Element(I).EType;
+                    exit;
+                end if;
+            end loop;
+            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 and Event = None then
                 Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
                 Add(Win => SpeedWindow, Str => "Dock");
                 Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
@@ -348,12 +355,7 @@ package body UserInterface is
             To_Unbounded_String("Wait 10 minutes"), To_Unbounded_String("Wait 15 minutes"), 
             To_Unbounded_String("Wait 30 minutes"), To_Unbounded_String("Wait 1 hour"));
         CurrentLine : Line_Position := 0;
-        StartIndex : Positive := 1;
     begin
-        if Event = FullDocks then
-            StartIndex := 4;
-            WaitLines := WaitLines - 3;
-        end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Tired > 0 and PlayerShip.Crew.Element(I).Order = Rest then
                 NeedRest := True;
@@ -381,7 +383,7 @@ package body UserInterface is
         end if;
         WaitWindow := Create(WaitLines, WaitColumns, (Lines / 2) - (WaitLines / 2), (Columns / 2) - (WaitColumns / 2));
         Box(WaitWindow);
-        for I in StartIndex..WaitOrders'Last loop
+        for I in WaitOrders'Range loop
             CurrentLine := CurrentLine + 1;
             Move_Cursor(Win => WaitWindow, Line => CurrentLine, Column => 1);
             Add(Win => WaitWindow, Str => Integer'Image(I) & " " & To_String(WaitOrders(I)));
@@ -560,10 +562,17 @@ package body UserInterface is
 
     function SpeedMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates is
         HaveTrader : Boolean := False;
+        Event : Events_Types := None;
     begin
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Talk then
                 HaveTrader := True;
+            end if;
+        end loop;
+        for I in Events_List.First_Index..Events_List.Last_Index loop
+            if Events_List.Element(I).SkyX = PlayerShip.SkyX and Events_List.Element(I).SkyY = PlayerShip.SkyY then
+                Event := Events_List.Element(I).EType;
+                exit;
             end if;
         end loop;
         case Key is
@@ -677,6 +686,7 @@ package body UserInterface is
                 if OldState = Quit_Confirm then
                     SaveGame;
                     ClearMessages;
+                    Events_List.Clear;
                     Erase;
                     Refresh;
                     ShowMainMenu;
@@ -708,23 +718,11 @@ package body UserInterface is
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when Character'Pos('1') => -- Wait 1 minute
-                if Event /= FullDocks then
-                    UpdateGame(1);
-                else
-                    return Wait_Order;
-                end if;
+                UpdateGame(1);
             when Character'Pos('2') => -- Wait 5 minutes
-                if Event /= FullDocks then
-                    UpdateGame(5);
-                else
-                    return Wait_Order;
-                end if;
+                UpdateGame(5);
             when Character'Pos('3') => -- Wait 10 minutes
-                if Event /= FullDocks then
-                    UpdateGame(10);
-                else
-                    return Wait_Order;
-                end if;
+                UpdateGame(10);
             when Character'Pos('4') => -- Wait 15 minutes
                 UpdateGame(15);
             when Character'Pos('5') => -- Wait 30 minute

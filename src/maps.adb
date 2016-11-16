@@ -133,16 +133,21 @@ package body Maps is
                 WindowWidth := 20;
             end if;
         end if;
-        if Event /= None and (MoveX = 0 and MoveY = 0) then
-            WindowHeight := WindowHeight + 2;
-            NewWindowWidth := 4 + Column_Position(Length(EnemyName));
-            if NewWindowWidth < 20 then
-                NewWindowWidth := 20;
+        for I in Events_List.First_Index..Events_List.Last_Index loop
+            if Events_List.Element(I).SkyX = PlayerShip.SkyX + MoveX and Events_List.Element(I).SkyY = PlayerShip.SkyY + MoveY then
+                WindowHeight := WindowHeight + 2;
+                if Events_List.Element(I).EType = EnemyShip then
+                    NewWindowWidth := 4 + Column_Position(Length(EnemyName));
+                end if;
+                if NewWindowWidth < 20 then
+                    NewWindowWidth := 20;
+                end if;
+                if NewWindowWidth > WindowWidth then
+                    WindowWidth := NewWindowWidth;
+                end if;
+                exit;
             end if;
-            if NewWindowWidth > WindowWidth then
-                WindowWidth := NewWindowWidth;
-            end if;
-        end if;
+        end loop;
         InfoWindow := Create(WindowHeight, WindowWidth, 1, (Columns - WindowWidth - 1));
         Box(InfoWindow);
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 3);
@@ -167,17 +172,20 @@ package body Maps is
                 CurrentLine := 7;
             end if;
         end if;
-        if Event /= None and (MoveX = 0 and MoveY = 0) then
-            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
-            case Event is
-                when EnemyShip =>
-                    Add(Win => InfoWindow, Str => To_String(EnemyName));
-                when FullDocks =>
-                    Add(Win => InfoWindow, Str => "Full docks");
-                when others =>
-                    null;
-            end case;
-        end if;
+        for I in Events_List.First_Index..Events_List.Last_Index loop
+            if Events_List.Element(I).SkyX = PlayerShip.SkyX + MoveX and Events_List.Element(I).SkyY = PlayerShip.SkyY + MoveY then
+                Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
+                case Events_List.Element(I).EType is
+                    when EnemyShip =>
+                        Add(Win => InfoWindow, Str => To_String(Enemies_List.Element(Events_List.Element(I).Data).Name));
+                    when FullDocks =>
+                        Add(Win => InfoWindow, Str => "Full docks");
+                    when others =>
+                        null;
+                end case;
+                exit;
+            end if;
+        end loop;
         Refresh(InfoWindow);
         Delete(InfoWindow);
     end ShowSkyMap;
@@ -276,9 +284,7 @@ package body Maps is
                 Result := 3;
             when 53 => -- Wait 1 minute or travel to destination if set
                 if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
-                    if Event /= FullDocks then
-                        UpdateGame(1);
-                    end if;
+                    UpdateGame(1);
                 else
                     if PlayerShip.DestinationX > PlayerShip.SkyX then
                         NewX := 1;

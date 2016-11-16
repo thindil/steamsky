@@ -263,7 +263,12 @@ package body Combat is
                 AddMessage(To_String(EnemyName) & " escaped from you.", CombatMessage);
             end if;
             EndCombat := True;
-            Event := None;
+            for I in Events_List.First_Index..Events_List.Last_Index loop
+                if Events_List.Element(I).SkyX = PlayerShip.SkyX and Events_List.Element(I).SkyY = PlayerShip.SkyY then
+                    Events_List.Delete(Index => I, Count => 1);
+                    exit;
+                end if;
+            end loop;
             return;
         elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
             AccuracyBonus := AccuracyBonus - 10;
@@ -411,7 +416,12 @@ package body Combat is
                                 To_String(EnemyName) & ".", CombatMessage);
                                 UpdateCargo(1, LootAmount);
                             end if;
-                            Event := None;
+                            for I in Events_List.First_Index..Events_List.Last_Index loop
+                                if Events_List.Element(I).SkyX = PlayerShip.SkyX and Events_List.Element(I).SkyY = PlayerShip.SkyY then
+                                    Events_List.Delete(Index => I, Count => 1);
+                                    exit;
+                                end if;
+                            end loop;
                             Enemy.Ship.Speed := FULL_STOP;
                             exit Player_Loop;
                         end if;
@@ -505,7 +515,14 @@ package body Combat is
                                     end if;
                                     if PlayerShip.Crew.Element(1).Health = 0 then -- player is dead
                                         EndCombat := True;
-                                        Event := None;
+                                        for I in Events_List.First_Index..Events_List.Last_Index loop
+                                            if Events_List.Element(I).SkyX = PlayerShip.SkyX and 
+                                                Events_List.Element(I).SkyY = PlayerShip.SkyY 
+                                            then
+                                                Events_List.Delete(Index => I, Count => 1);
+                                                exit;
+                                            end if;
+                                        end loop;
                                         DrawGame(Combat_State);
                                         return;
                                     end if;

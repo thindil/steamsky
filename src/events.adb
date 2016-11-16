@@ -36,9 +36,18 @@ package body Events is
         TimePassed : Integer;
         PilotIndex : Natural := 0;
     begin
+        for I in Events_List.First_Index..Events_List.Last_Index loop
+            if Events_List.Element(I).SkyX = PlayerShip.SkyX and Events_List.Element(I).SkyY = PlayerShip.SkyY then
+                case Events_List.Element(I).EType is
+                    when EnemyShip =>
+                        return StartCombat(Events_List.Element(I).Data);
+                    when others =>
+                        return OldState;
+                end case;
+            end if;
+        end loop;
         Rand_Roll.Reset(Generator);
         Rand_Combat.Reset(Generator2);
-        Event := None;
         if Rand_Roll.Random(Generator) < 7 then -- Event happen
             Roll := Rand_Roll.Random(Generator);
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
@@ -61,17 +70,39 @@ package body Events is
                             UpdateGame(TimePassed);
                         end if;
                     when others => -- Combat
-                        Event := EnemyShip;
-                        return StartCombat(Rand_Combat.Random(Generator2));
+                        Events_List.Append(New_Item => (EnemyShip, PlayerShip.SkyX, PlayerShip.SkyY, 30, Rand_Combat.Random(Generator2)));
+                        return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
                 end case;
             else
-                if PlayerShip.Speed /= DOCKED then
-                    Event := FullDocks;
+                if PlayerShip.Speed /= DOCKED then -- Full docks
+                    Events_List.Append(New_Item => (FullDocks, PlayerShip.SkyX, PlayerShip.SkyY, 15, Rand_Combat.Random(Generator2)));
                     AddMessage("You can't dock to base now, because its docks are full.", OtherMessage);
                 end if;
             end if;
         end if;
         return OldState;
     end CheckForEvent;
+
+    procedure UpdateEvents(Minutes : Positive) is
+        CurrentIndex : Positive := Events_List.First_Index;
+        NewTime : Integer;
+        procedure UpdateEvent(Event : in out EventData) is
+        begin
+            Event.Time := NewTime;
+        end UpdateEvent;
+    begin
+        if Events_List.Length = 0 then
+            return;
+        end if;
+        while CurrentIndex <= Events_List.Last_Index loop
+            NewTime := Events_List.Element(CurrentIndex).Time - Minutes;
+            if NewTime < 1 then
+                Events_List.Delete(Index => CurrentIndex, Count => 1);
+            else
+                Events_List.Update_Element(Index => CurrentIndex, Process => UpdateEvent'Access);
+                CurrentIndex := CurrentIndex + 1;
+            end if;
+        end loop;
+    end UpdateEvents;
 
 end Events;
