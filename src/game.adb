@@ -28,10 +28,11 @@ with Messages; use Messages;
 with Crafts; use Crafts;
 with UserInterface; use UserInterface;
 with Items; use Items;
+with Events; use Events;
 
 package body Game is
     
-    SaveVersion : constant String := "0.5";
+    SaveVersion : constant String := "0.6";
 
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character) is
         type Rand_Range is range 1..1024;
@@ -221,6 +222,8 @@ package body Game is
         end if;
         -- Update map cell
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
+        -- Update events
+        UpdateEvents(Minutes);
     end UpdateGame;
 
     procedure SaveGame is
@@ -415,6 +418,20 @@ package body Game is
                 Put(SaveGame, To_String(Message.Message) & ";" & To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             end loop;
         end if;
+        RawValue := To_Unbounded_String(Events_List.Length'Img);
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        for I in Events_List.First_Index..Events_List.Last_Index loop
+            RawValue := To_Unbounded_String(Integer'Image(Events_Types'Pos(Events_List.Element(I).Etype)));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(Events_List.Element(I).SkyX));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(Events_List.Element(I).SkyY));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(Events_List.Element(I).Time));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(Events_List.Element(I).Data));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        end loop;
         Close(SaveGame);
     end SaveGame;
 
@@ -425,7 +442,6 @@ package body Game is
         ShipModules : Modules_Container.Vector;
         ShipCargo : Cargo_Container.Vector; 
         ShipCrew : Crew_Container.Vector;
-        Messages : Natural;
         Message : Unbounded_String;
         MType : Message_Type;
         BaseRecruits : Recruit_Container.Vector;
@@ -566,11 +582,18 @@ package body Game is
         PlayerShip.UpgradeModule := Integer'Value(To_String(ReadData));
         PlayerShip.DestinationX := Integer'Value(To_String(ReadData));
         PlayerShip.DestinationY := Integer'Value(To_String(ReadData));
-        Messages := Integer'Value(To_String(ReadData));
-        for I in 1..Messages loop
+        VectorLength := Integer'Value(To_String(ReadData));
+        for I in 1..VectorLength loop
             Message := ReadData;
             MType := Message_Type'Val(Integer'Value(To_String(ReadData)));
             RestoreMessage(Message, MType);
+        end loop;
+        VectorLength := Positive'Value(To_String(ReadData));
+        for I in 1..VectorLength loop
+            Events_List.Append(New_Item => (Etype =>
+                Events_Types'Val(Integer'Value(To_String(ReadData))), SkyX =>
+                Integer'Value(To_String(ReadData)), SkyY => Integer'Value(To_String(ReadData)), 
+                Time => Integer'Value(To_String(ReadData)), Data => Integer'Value(To_String(ReadData))));
         end loop;
         Close(SaveGame);
         return True;
