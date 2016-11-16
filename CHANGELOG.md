@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated help
+- Most of random events have duration time, they are saved to savegame which
+  made saves from version 0.5 incompatible
 
 ### Fixed
 - Don't craft items when worker is on break
