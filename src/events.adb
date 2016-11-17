@@ -80,9 +80,17 @@ package body Events is
                         return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
                 end case;
             else
-                if PlayerShip.Speed /= DOCKED then -- Full docks
-                    Events_List.Append(New_Item => (FullDocks, PlayerShip.SkyX, PlayerShip.SkyY, 15, Rand_Combat.Random(Generator2)));
-                    AddMessage("You can't dock to base now, because its docks are full.", OtherMessage);
+                if PlayerShip.Speed /= DOCKED then
+                    case Roll is
+                        when 1..20 => -- Base is attacked
+                            Events_List.Append(New_Item => (AttackOnBase, PlayerShip.SkyX, PlayerShip.SkyY, 60, 
+                                Rand_Combat.Random(Generator2)));
+                            AddMessage("You can't dock to base now, because base is under attack. You can help defend it.", OtherMessage);
+                            return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
+                        when others => -- Full docks
+                            Events_List.Append(New_Item => (FullDocks, PlayerShip.SkyX, PlayerShip.SkyY, 15, 1));
+                            AddMessage("You can't dock to base now, because its docks are full.", OtherMessage);
+                    end case;
                 end if;
             end if;
         end if;
@@ -122,7 +130,7 @@ package body Events is
         case Events_List.Element(EventIndex).EType is
             when EnemyShip =>
                 Add(Win => InfoWindow, Str => To_String(Enemies_List.Element(Events_List.Element(EventIndex).Data).Name));
-            when FullDocks =>
+            when FullDocks | AttackOnBase =>
                 Add(Win => InfoWindow, Str => To_String(SkyBases(SkyMap(Events_List.Element(EventIndex).SkyX,
                     Events_List.Element(EventIndex).SkyY).BaseIndex).Name));
             when others =>
@@ -150,6 +158,8 @@ package body Events is
                     Events_Items.all(I) := New_Item("Enemy ship spotted");
                 when FullDocks =>
                     Events_Items.all(I) := New_Item("Full docks in base");
+                when AttackOnBase =>
+                    Events_Items.all(I) := New_Item("Base is under attack");
                 when others =>
                     null;
             end case;
