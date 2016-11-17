@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   ship module is damaged
 - New random events: bad weather and full docks in bases
 - Info about events on sky map
+- List of know events
 
 ### Changed
 - Updated help
