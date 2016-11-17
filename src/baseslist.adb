@@ -44,7 +44,7 @@ package body BasesList is
         CurrentLine : Line_Position := 2;
         Distance : Value_Type;
     begin
-        InfoWindow := Create(10, (Columns / 2), 4, (Columns / 2));
+        InfoWindow := Create(12, (Columns / 2), 4, (Columns / 2));
         if SkyBases(BaseIndex).Visited.Year > 0 then
             Add(Win => InfoWindow, Str => "X:" & Positive'Image(SkyBases(BaseIndex).SkyX) & " Y:" &
                 Positive'Image(SkyBases(BaseIndex).SkyX));
