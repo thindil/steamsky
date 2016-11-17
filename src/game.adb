@@ -142,6 +142,7 @@ package body Game is
         UpdateModule(PlayerShip, 6, "Owner", "3");
         UpdateModule(PlayerShip, 7, "Name", To_String(GunnerName) & "'s Cabin");
         UpdateModule(PlayerShip, 7, "Owner", "4");
+        UpdateModule(PlayerShip, 13, "Owner", "4");
         -- Add cargo to ship
         PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 1, Amount => 2000));
         PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 2, Amount => 100));
@@ -164,7 +165,7 @@ package body Game is
             PreviousOrder => Rest, OrderTime => 15)); 
         TmpSkills.Replace_Element(Index => 1, New_Item => (3, 5, 0));
         PlayerShip.Crew.Append(New_Item => (Name => GunnerName, Gender => GunnerGender,
-            Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Rest,
+            Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Gunner,
             PreviousOrder => Rest, OrderTime => 15)); 
         SkyBases(Integer(RandomBase)).Visited := GameDate;
         SkyBases(Integer(RandomBase)).Known := True;
