@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors; use Ada.Containers;
+with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Game; use Game;
 
 package Events is
@@ -34,5 +35,7 @@ package Events is
     
     function CheckForEvent(OldState : GameStates) return GameStates; -- Check if event happen
     procedure UpdateEvents(Minutes : Positive); -- Update all events timers
+    procedure ShowEvents; -- Show list of current events
+    function ShowEventsKeys(Key : Key_Code) return GameStates; -- Handle keys on events list screen
 
 end Events;

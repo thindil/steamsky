@@ -188,6 +188,8 @@ begin
                 GameState := MoveFormKeys(Key);
             when Bases_List =>
                 GameState := BasesListKeys(Key);
+            when Events_View =>
+                GameState := ShowEventsKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
