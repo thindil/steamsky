@@ -264,12 +264,25 @@ package body UserInterface is
                 Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
                     Count => 1, Color => 1);
             end if;
-            if Event = EnemyShip then
-                Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
-                Add(Win => SpeedWindow, Str => "Attack");
-                Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
-                    Count => 1, Color => 1);
-            end if;
+            case Event is
+                when EnemyShip =>
+                    Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
+                    Add(Win => SpeedWindow, Str => "Attack");
+                    Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
+                        Count => 1, Color => 1);
+                when FullDocks =>
+                    Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
+                    Add(Win => SpeedWindow, Str => "Wait");
+                    Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
+                        Count => 1, Color => 1);
+                when AttackOnBase =>
+                    Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
+                    Add(Win => SpeedWindow, Str => "Defend");
+                    Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
+                        Count => 1, Color => 1);
+                when others =>
+                    null;
+            end case;
             Move_Cursor(Win => SpeedWindow, Line => 2, Column => 2);
             Add(Win => SpeedWindow, Str => "Full stop");
             Change_Attributes(Win => SpeedWindow, Line => 2, Column => 2, 
@@ -649,11 +662,20 @@ package body UserInterface is
                 end if;
                 DrawGame(Sky_Map_View);
                 return OldState;
-            when Character'Pos('d') | Character'Pos('D') => -- Dock ship to base
-                if Event /= FullDocks then
-                    DockShip(True);
-                    DrawGame(Sky_Map_View);
-                    return OldState;
+            when Character'Pos('d') | Character'Pos('D') => -- Dock ship to base or defend base during attack
+                if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+                    case Event is
+                        when None => -- Dock ship to base
+                            DockShip(True);
+                            DrawGame(Sky_Map_View);
+                            return OldState;
+                        when AttackOnBase => -- Defend base during attack
+                            OldSpeed := PlayerShip.Speed;
+                            DrawGame(Combat_State);
+                            return Combat_State;
+                        when others =>
+                            null;
+                    end case;
                 end if;
             when Character'Pos('f') | Character'Pos('F') => -- Full stop
                 ChangeShipSpeed(FULL_STOP);
@@ -673,6 +695,11 @@ package body UserInterface is
                 ChangeShipSpeed(FULL_SPEED);
                 DrawGame(Sky_Map_View);
                 return OldState;
+            when Character'Pos('w') | Character'Pos('W') => -- Wait menu
+                if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 and Event = FullDocks then
+                    DrawGame(Wait_Order);
+                    return Wait_Order;
+                end if;
             when others =>
                 null;
         end case;

@@ -21,7 +21,7 @@ with Game; use Game;
 
 package Events is
 
-    type Events_Types is (None, EnemyShip, FullDocks); -- Types of events
+    type Events_Types is (None, EnemyShip, FullDocks, AttackOnBase); -- Types of events
     type EventData is -- Data structure for random events
         record
             EType : Events_Types; -- Type of event

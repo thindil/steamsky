@@ -148,6 +148,8 @@ package body Maps is
                 WindowHeight := WindowHeight + 2;
                 if Events_List.Element(I).EType = EnemyShip then
                     NewWindowWidth := 4 + Column_Position(Length(Enemies_List.Element(Events_List.Element(I).Data).Name));
+                elsif Events_List.Element(I).EType = AttackOnBase then
+                    NewWindowWidth := 21;
                 end if;
                 if NewWindowWidth < 20 then
                     NewWindowWidth := 20;
@@ -190,6 +192,8 @@ package body Maps is
                         Add(Win => InfoWindow, Str => To_String(Enemies_List.Element(Events_List.Element(I).Data).Name));
                     when FullDocks =>
                         Add(Win => InfoWindow, Str => "Full docks");
+                    when AttackOnBase =>
+                        Add(Win => InfoWindow, Str => "Base under attack");
                     when others =>
                         null;
                 end case;
