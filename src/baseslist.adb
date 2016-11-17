@@ -172,12 +172,12 @@ package body BasesList is
                     Delete(BasesMenu);
                     DrawGame(Sky_Map_View);
                     return Sky_Map_View;
-                when KEY_UP => -- Select previous item to Bases
+                when KEY_UP => -- Select previous base
                     Result := Driver(BasesMenu, M_Up_Item);
                     if Result = Request_Denied then
                         Result := Driver(BasesMenu, M_Last_Item);
                     end if;
-                when KEY_DOWN => -- Select next item to Bases
+                when KEY_DOWN => -- Select next base
                     Result := Driver(BasesMenu, M_Down_Item);
                     if Result = Request_Denied then
                         Result := Driver(BasesMenu, M_First_Item);
