@@ -38,43 +38,55 @@ package body MainMenu is
 
     procedure ShowMainMenu is
         Visibility : Cursor_Visibility := Invisible;
-        CurrentLine : Line_Position := 1;
+        CurrentLine : Line_Position := 14;
     begin
         Set_Echo_Mode(False);
         Set_Cursor_Visibility(Visibility);
 
         -- Game logo
-        Move_Cursor(Line => Lines / 5, Column => (Columns - 15) / 2);
-        Add(Str => "STEAM SKY");
+        Move_Cursor(Line => 3, Column => (Columns / 2) - 25);
+        Add(Str => "  ______                            ______ _");
+        Move_Cursor(Line => 4, Column => (Columns / 2) - 25);
+        Add(Str => " / _____) _                        / _____) |");
+        Move_Cursor(Line => 5, Column => (Columns / 2) - 25);
+        Add(Str => "( (____ _| |_ _____ _____ ____    ( (____ | |  _ _   _");
+        Move_Cursor(Line => 6, Column => (Columns / 2) - 25);
+        Add(Str => " \____ (_   _) ___ (____ |    \    \____ \| |_/ ) | | |");
+        Move_Cursor(Line => 7, Column => (Columns / 2) - 25);
+        Add(Str => " _____) )| |_| ____/ ___ | | | |   _____) )  _ (| |_| |");
+        Move_Cursor(Line => 8, Column => (Columns / 2) - 25);
+        Add(Str => "(______/  \__)_____)_____|_|_|_|  (______/|_| \_)\__  |");
+        Move_Cursor(Line => 9, Column => (Columns / 2) - 25);
+        Add(Str => "                                                (____/ ");
         -- Game version
-        Move_Cursor(Line => (Lines / 5) + 2, Column => (Columns - 17) / 2);
+        Move_Cursor(Line => 10, Column => (Columns - 17) / 2);
         Add(Str => GameVersion);
         -- Game menu
-        Move_Cursor(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2);
+        Move_Cursor(Line => 14, Column => (Columns - 12) / 2);
         Add(Str => "New game");
-        Change_Attributes(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2,
+        Change_Attributes(Line => 14, Column => (Columns - 12) / 2,
             Count => 1, Color => 1);
         CurrentLine := CurrentLine + 1;
         if Exists("data/savegame.dat") then
-            Move_Cursor(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2);
+            Move_Cursor(Line => CurrentLine, Column => (Columns - 12) / 2);
             Add(Str => "Load game");
-            Change_Attributes(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2,
+            Change_Attributes(Line => CurrentLine, Column => (Columns - 12) / 2,
                 Count => 1, Color => 1);
             CurrentLine := CurrentLine + 1;
         end if;
-        Move_Cursor(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2);
+        Move_Cursor(Line => CurrentLine, Column => (Columns - 12) / 2);
         Add(Str => "News");
-        Change_Attributes(Line => (Lines / 3) + CurrentLine, Column => ((Columns - 12) / 2) + 1,
+        Change_Attributes(Line => CurrentLine, Column => ((Columns - 12) / 2) + 1,
             Count => 1, Color => 1);
         CurrentLine := CurrentLine + 1;
-        Move_Cursor(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2);
+        Move_Cursor(Line => CurrentLine, Column => (Columns - 12) / 2);
         Add(Str => "License");
-        Change_Attributes(Line => (Lines / 3) + CurrentLine, Column => ((Columns - 12) / 2) + 1,
+        Change_Attributes(Line => CurrentLine, Column => ((Columns - 12) / 2) + 1,
             Count => 1, Color => 1);
         CurrentLine := CurrentLine + 1;
-        Move_Cursor(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2);
+        Move_Cursor(Line => CurrentLine, Column => (Columns - 12) / 2);
         Add(Str => "Quit game");
-        Change_Attributes(Line => (Lines / 3) + CurrentLine, Column => (Columns - 12) / 2,
+        Change_Attributes(Line => CurrentLine, Column => (Columns - 12) / 2,
             Count => 1, Color => 1);
         -- Copyright
         Move_Cursor(Line => Lines - 1, Column => (Columns - 20) / 2);
