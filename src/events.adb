@@ -133,7 +133,7 @@ package body Events is
         case Events_List.Element(EventIndex).EType is
             when EnemyShip =>
                 Add(Win => InfoWindow, Str => To_String(Enemies_List.Element(Events_List.Element(EventIndex).Data).Name));
-            when FullDocks | AttackOnBase =>
+            when FullDocks | AttackOnBase | Disease =>
                 Add(Win => InfoWindow, Str => To_String(SkyBases(SkyMap(Events_List.Element(EventIndex).SkyX,
                     Events_List.Element(EventIndex).SkyY).BaseIndex).Name));
             when others =>
@@ -163,6 +163,8 @@ package body Events is
                     Events_Items.all(I) := New_Item("Full docks in base");
                 when AttackOnBase =>
                     Events_Items.all(I) := New_Item("Base is under attack");
+                when Disease =>
+                    Events_Items.all(I) := New_Item("Disease in base");
                 when others =>
                     null;
             end case;
