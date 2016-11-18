@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - New random events: bad weather, full docks in bases and attacks on bases
 - Info about events on sky map
 - List of know events
+- New game logo
 
 ### Changed
 - Updated help
