@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Weapon damage, crafted amount of items and speed of rest depends on how much
   ship module is damaged
-- New random events: bad weather, full docks in bases and attacks on bases
+- New random events: bad weather, full docks in bases, attacks on bases and
+  disease in bases
 - Info about events on sky map
 - List of know events
 - New game logo
