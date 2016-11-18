@@ -21,18 +21,16 @@ with UserInterface; use UserInterface;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Items; use Items;
-with Events; use Events;
 
 package body Combat is
     
-    function StartCombat(EnemyIndex : Positive) return GameStates is
+    function StartCombat(EnemyIndex : Positive; NewCombat : Boolean := True) return GameStates is
         type Roll_Range is range 1..100;
         EnemyShip : ShipRecord;
         PlayerPerception : Natural := 0;
         package Rand_Roll is new Discrete_Random(Roll_Range);
         Generator : Rand_Roll.Generator;
     begin
-        Rand_Roll.Reset(Generator);
         EnemyShip := CreateShip(EnemyIndex, Null_Unbounded_String,
             PlayerShip.SkyX, PlayerShip.SkyY, FULL_SPEED, True);
         Enemy := (Ship => EnemyShip, Accuracy => Enemies_List.Element(EnemyIndex).Accuracy, 
@@ -53,29 +51,33 @@ package body Combat is
                 Guns.Append(New_Item => (I, 1));
             end if;
         end loop;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            case PlayerShip.Crew.Element(I).Order is
-                when Pilot =>
-                    PlayerPerception := PlayerPerception + GetSkillLevel(I, 5);
-                    GainExp(1, 5, I);
-                when Gunner =>
-                    PlayerPerception := PlayerPerception + GetSkillLevel(I, 5);
-                    GainExp(1, 5, I);
-                when others =>
-                    null;
-            end case;
-        end loop;
-        if (PlayerPerception + Integer(Rand_Roll.Random(Generator))) > (Enemy.Perception + Integer(Rand_Roll.Random(Generator))) then
-            AddMessage("You spotted " & To_String(EnemyName) & ".", OtherMessage);
-        else
-            if RealSpeed(PlayerShip) < RealSpeed(Enemy.Ship) then
-                ShowDialog("You was attacked by " & To_String(EnemyName) & ".");
-                OldSpeed := PlayerShip.Speed;
-                return Combat_State;
+        if NewCombat then
+            Rand_Roll.Reset(Generator);
+            for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                case PlayerShip.Crew.Element(I).Order is
+                    when Pilot =>
+                        PlayerPerception := PlayerPerception + GetSkillLevel(I, 5);
+                        GainExp(1, 5, I);
+                    when Gunner =>
+                        PlayerPerception := PlayerPerception + GetSkillLevel(I, 5);
+                        GainExp(1, 5, I);
+                    when others =>
+                        null;
+                end case;
+            end loop;
+            if (PlayerPerception + Integer(Rand_Roll.Random(Generator))) > (Enemy.Perception + Integer(Rand_Roll.Random(Generator))) then
+                AddMessage("You spotted " & To_String(EnemyName) & ".", OtherMessage);
+            else
+                if RealSpeed(PlayerShip) < RealSpeed(Enemy.Ship) then
+                    ShowDialog("You was attacked by " & To_String(EnemyName) & ".");
+                    OldSpeed := PlayerShip.Speed;
+                    return Combat_State;
+                end if;
+                AddMessage("You spotted " & To_String(EnemyName) & ".", OtherMessage);
             end if;
-            AddMessage("You spotted " & To_String(EnemyName) & ".", OtherMessage);
+            return Sky_Map_View;
         end if;
-        return Sky_Map_View;
+        return Combat_State;
     end StartCombat;
 
     procedure CombatTurn is
@@ -263,12 +265,6 @@ package body Combat is
                 AddMessage(To_String(EnemyName) & " escaped from you.", CombatMessage);
             end if;
             EndCombat := True;
-            for I in Events_List.First_Index..Events_List.Last_Index loop
-                if Events_List.Element(I).SkyX = PlayerShip.SkyX and Events_List.Element(I).SkyY = PlayerShip.SkyY then
-                    Events_List.Delete(Index => I, Count => 1);
-                    exit;
-                end if;
-            end loop;
             return;
         elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
             AccuracyBonus := AccuracyBonus - 10;
@@ -416,12 +412,6 @@ package body Combat is
                                 To_String(EnemyName) & ".", CombatMessage);
                                 UpdateCargo(1, LootAmount);
                             end if;
-                            for I in Events_List.First_Index..Events_List.Last_Index loop
-                                if Events_List.Element(I).SkyX = PlayerShip.SkyX and Events_List.Element(I).SkyY = PlayerShip.SkyY then
-                                    Events_List.Delete(Index => I, Count => 1);
-                                    exit;
-                                end if;
-                            end loop;
                             Enemy.Ship.Speed := FULL_STOP;
                             exit Player_Loop;
                         end if;
@@ -515,14 +505,6 @@ package body Combat is
                                     end if;
                                     if PlayerShip.Crew.Element(1).Health = 0 then -- player is dead
                                         EndCombat := True;
-                                        for I in Events_List.First_Index..Events_List.Last_Index loop
-                                            if Events_List.Element(I).SkyX = PlayerShip.SkyX and 
-                                                Events_List.Element(I).SkyY = PlayerShip.SkyY 
-                                            then
-                                                Events_List.Delete(Index => I, Count => 1);
-                                                exit;
-                                            end if;
-                                        end loop;
                                         DrawGame(Combat_State);
                                         return;
                                     end if;

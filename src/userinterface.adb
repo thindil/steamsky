@@ -587,6 +587,8 @@ package body UserInterface is
     function SpeedMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates is
         HaveTrader : Boolean := False;
         Event : Events_Types := None;
+        EventIndex : Natural := 0;
+        NewState : GameStates;
     begin
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Talk then
@@ -596,6 +598,7 @@ package body UserInterface is
         for I in Events_List.First_Index..Events_List.Last_Index loop
             if Events_List.Element(I).SkyX = PlayerShip.SkyX and Events_List.Element(I).SkyY = PlayerShip.SkyY then
                 Event := Events_List.Element(I).EType;
+                EventIndex := I;
                 exit;
             end if;
         end loop;
@@ -671,8 +674,12 @@ package body UserInterface is
                             return OldState;
                         when AttackOnBase => -- Defend base during attack
                             OldSpeed := PlayerShip.Speed;
-                            DrawGame(Combat_State);
-                            return Combat_State;
+                            NewState := Combat_State;
+                            if EnemyName = Null_Unbounded_String then
+                                NewState := StartCombat(Events_List.Element(EventIndex).Data, False);
+                            end if;
+                            DrawGame(NewState);
+                            return NewState;
                         when others =>
                             null;
                     end case;
@@ -683,9 +690,12 @@ package body UserInterface is
                 return OldState;
             when Character'Pos('a') | Character'Pos('A') => -- Attack other ship
                 if Event = EnemyShip then
-                    DrawGame(Combat_State);
-                    OldSpeed := PlayerShip.Speed;
-                    return Combat_State;
+                    NewState := Combat_State;
+                    if EnemyName = Null_Unbounded_String then
+                        NewState := StartCombat(Events_List.Element(EventIndex).Data, False);
+                    end if;
+                    DrawGame(NewState);
+                    return NewState;
                 end if;
             when Character'Pos('h') | Character'Pos('H') => -- Half speed
                 ChangeShipSpeed(HALF_SPEED);
