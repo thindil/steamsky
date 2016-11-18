@@ -87,6 +87,9 @@ package body Events is
                                 Rand_Combat.Random(Generator2)));
                             AddMessage("You can't dock to base now, because base is under attack. You can help defend it.", OtherMessage);
                             return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
+                        when 21 => -- Disease in base
+                            Events_List.Append(New_Item => (Disease, PlayerShip.SkyX, PlayerShip.SkyY, 10080, 1));
+                            AddMessage("You can't dock to base now, it is closed due to disease.", OtherMessage);
                         when others => -- Full docks
                             Events_List.Append(New_Item => (FullDocks, PlayerShip.SkyX, PlayerShip.SkyY, 15, 1));
                             AddMessage("You can't dock to base now, because its docks are full.", OtherMessage);
