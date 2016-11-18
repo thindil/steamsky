@@ -22,7 +22,7 @@ with Game; use Game;
 
 package Combat is
     
-    EnemyName : Unbounded_String; -- Name of enemy;
+    EnemyName : Unbounded_String := Null_Unbounded_String; -- Name of enemy;
     PilotOrder, EngineerOrder : Positive; -- Orders for crew members
     type GunsInfoArray is array (1..2) of Positive; -- Data structure for guns informations 
     package Guns_Container is new Vectors(Positive, GunsInfoArray);
@@ -43,7 +43,7 @@ package Combat is
     MessagesStarts : Natural; -- Start index for showing messages
     OldSpeed : ShipSpeed; -- Speed of player ship before combat
 
-    function StartCombat(EnemyIndex : Positive) return GameStates; -- Generate enemy and start battle
+    function StartCombat(EnemyIndex : Positive; NewCombat : Boolean := True) return GameStates; -- Generate enemy and start battle
     procedure CombatTurn; -- Count damage/ships actions, etc
 
 end Combat;
