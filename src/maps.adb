@@ -194,6 +194,8 @@ package body Maps is
                         Add(Win => InfoWindow, Str => "Full docks");
                     when AttackOnBase =>
                         Add(Win => InfoWindow, Str => "Base under attack");
+                    when Disease => 
+                        Add(Win => InfoWindow, Str => "Disease");
                     when others =>
                         null;
                 end case;
