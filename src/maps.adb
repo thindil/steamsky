@@ -120,8 +120,8 @@ package body Maps is
             end loop;
         end loop;
         for I in Events_List.First_Index..Events_List.Last_Index loop
-            if (Events_List.Element(I).SkyX >= StartX and Events_List.Element(I).SkyX < StartX + Integer(Columns)) and
-                (Events_List.Element(I).SkyY >= StartX and Events_List.Element(I).SkyY < StartY + Integer(Lines)) and
+            if (Events_List.Element(I).SkyX > StartX and Events_List.Element(I).SkyX < StartX + Integer(Columns)) and
+                (Events_List.Element(I).SkyY > StartY and Events_List.Element(I).SkyY < StartY + Integer(Lines)) and
                 Peek(Line => Line_Position(Events_List.Element(I).SkyY - StartY), Column => Column_Position(Events_List.Element(I).SkyX
                 - StartX - 1)).Ch /= '+' 
             then
