@@ -36,8 +36,8 @@ To escape from fight, you must set Pilot order on Escape, after few turns (depen
 Slow speed in combat helps your Gunners hits enemies but also helps enemies hits you. If you want to have more chances to evade enemy attack, set speed to full speed. That same is with Pilot orders - evade or escape order helps avoids attacks but also reduce your chance to hit enemies.
 Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too and you die.
 If your turret with gun will be destroyed, gun in this turret will be destroyed too and your gunner will be killed. When your cockpit will be destroyed, it kills pilot too.
-If you don't have anyone assigned as a pilot, it is consider as a "go closer" order.
-When you don't have anyone assigned as a engineer, ship will stop (same as "full stop order").
+If you don't have anyone assigned as a Pilot, it is consider as a "go closer" order.
+When you don't have anyone assigned as a Engineer, you can't change ship speed.
 You (or enemy) starts hitting other parts of ship after destroying armor.
 Sign "plus" after crew member name in combat orders menu means that this member know something about selected role (have suitable skill).
 Double sign "plus" after crew name in combat orders menu means that this member have highest skill needed for selected role.
