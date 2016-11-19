@@ -17,6 +17,7 @@
 
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Numerics.Generic_Elementary_Functions;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Ships; use Ships;
 with Maps; use Maps;
@@ -125,6 +126,10 @@ package body Events is
     procedure ShowEventInfo is
         InfoWindow : Window;
         EventIndex : constant Positive := Get_Index(Current(EventsMenu));
+        type Value_Type is digits 2 range 0.0..9999999.0;
+        package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
+        DiffX, DiffY : Natural;
+        Distance : Value_Type;
     begin
         InfoWindow := Create(10, (Columns / 2), 4, (Columns / 2));
         Add(Win => InfoWindow, Str => "X:" & Positive'Image(Events_List.Element(EventIndex).SkyX) & " Y:" &
@@ -139,6 +144,11 @@ package body Events is
             when others =>
                 null;
         end case;
+        DiffX := abs(PlayerShip.SkyX - Events_List.Element(EventIndex).SkyX);
+        DiffY := abs(PlayerShip.SkyY - Events_List.Element(EventIndex).SkyY);
+        Distance := Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2)));
+        Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+        Add(Win => InfoWindow, Str => "Distance:" & Integer'Image(Integer(Value_Type'Floor(Distance))));
         Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
         Add(Win => InfoWindow, Str => "Press SPACE to show event on map");
         Change_Attributes(Win => InfoWindow, Line => 4, Column => 6, Count => 5, Color => 1);
