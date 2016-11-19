@@ -132,6 +132,9 @@ package body Combat is
         if not HaveFuel then
             PilotOrder := 1;
             EngineerOrder := 1;
+            if EngineerIndex = 0 and PlayerShip.Speed /= FULL_STOP then
+                PlayerShip.Speed := FULL_STOP;
+            end if;
         end if;
         if PilotIndex > 0 then
             case PilotOrder is
@@ -155,10 +158,8 @@ package body Combat is
             AccuracyBonus := 20;
             EvadeBonus := -10;
         end if;
-        if EngineerIndex > 0 then
-            ChangeShipSpeed(ShipSpeed'Val(EngineerOrder));
-        else
-            ChangeShipSpeed(FULL_STOP);
+        if EngineerIndex > 0 and HaveFuel then
+            ChangeShipSpeed(ShipSpeed'Val(EngineerOrder), False);
         end if;
         SpeedBonus := 20 - (RealSpeed(PlayerShip) / 100);
         if SpeedBonus < -10 then
@@ -239,7 +240,7 @@ package body Combat is
         else
             DistanceTraveled := RealSpeed(Enemy.Ship);
         end if;
-        if PilotIndex > 0 and EngineerIndex > 0 then
+        if PilotIndex > 0 then
             case PilotOrder is
                 when 1 | 3 =>
                     DistanceTraveled := DistanceTraveled - RealSpeed(PlayerShip);
@@ -253,6 +254,8 @@ package body Combat is
                 when others =>
                     null;
             end case;
+        else
+            DistanceTraveled := DistanceTraveled - RealSpeed(PlayerShip);
         end if;
         Enemy.Distance := Enemy.Distance + DistanceTraveled;
         if Enemy.Distance < 10 then
