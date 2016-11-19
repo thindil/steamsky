@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Most of random events have duration time, they are saved to savegame which
   made saves from version 0.5 incompatible
 - Starting order for gunner from On break to Operate gun
+- Don't change ship speed in fight when no engineer on duty
 
 ### Fixed
 - Don't craft items when worker is on break
