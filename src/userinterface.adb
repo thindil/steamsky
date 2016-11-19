@@ -190,11 +190,14 @@ package body UserInterface is
         SpeedWindow : Window;
         WindowHeight : Line_Position := 6;
         NeedRepair, IsShipyard : Boolean := False;
-        AskedForBases : Boolean := True;
+        AskedForBases, AskedForEvents : Boolean := True;
         CurrentLine : Line_Position := 4;
         Event : Events_Types := None;
+        TimeDiff : Natural;
+        BaseIndex : Positive;
     begin
         if PlayerShip.Speed = DOCKED then
+            BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                 if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
                     NeedRepair := True;
@@ -202,15 +205,21 @@ package body UserInterface is
                     exit;
                 end if;
             end loop;
-            if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).BaseType = SHIPYARD then
+            if SkyBases(BaseIndex).BaseType = SHIPYARD then
                 WindowHeight := WindowHeight + 1;
                 IsShipyard := True;
             end if;
-            if not SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).AskedForBases then
+            if not SkyBases(BaseIndex).AskedForBases then
                 WindowHeight := WindowHeight + 1;
                 AskedForBases := False;
             end if;
-            SpeedWindow := Create(WindowHeight, 17, (Lines / 3), (Columns / 2) - 9);
+            TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).AskedForEvents.Day + ((30 *
+                SkyBases(BaseIndex).AskedForEvents.Month) * SkyBases(BaseIndex).AskedForEvents.Year));
+            if TimeDiff > 7 then
+                WindowHeight := WindowHeight + 1;
+                AskedForEvents := False;
+            end if;
+            SpeedWindow := Create(WindowHeight, 18, (Lines / 3), (Columns / 2) - 9);
             Box(SpeedWindow);
             Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
             Add(Win => SpeedWindow, Str => "Undock");
@@ -224,10 +233,17 @@ package body UserInterface is
             Add(Win => SpeedWindow, Str => "Recruit");
             Change_Attributes(Win => SpeedWindow, Line => 3, Column => 3, 
                 Count => 1, Color => 1);
+            if not AskedForEvents then
+                Move_Cursor(Win => SpeedWindow, Line => CurrentLine, Column => 2);
+                Add(Win => SpeedWindow, Str => "Ask for events");
+                Change_Attributes(Win => SpeedWindow, Line => CurrentLine, Column => 13, 
+                    Count => 1, Color => 1);
+                CurrentLine := CurrentLine + 1;
+            end if;
             if not AskedForBases then
-                Move_Cursor(Win => SpeedWindow, Line => 4, Column => 2);
+                Move_Cursor(Win => SpeedWindow, Line => CurrentLine, Column => 2);
                 Add(Win => SpeedWindow, Str => "Ask for bases");
-                Change_Attributes(Win => SpeedWindow, Line => 4, Column => 10, 
+                Change_Attributes(Win => SpeedWindow, Line => CurrentLine, Column => 10, 
                     Count => 1, Color => 1);
                 CurrentLine := CurrentLine + 1;
             end if;
@@ -625,6 +641,17 @@ package body UserInterface is
                 if PlayerShip.Speed = DOCKED then
                     DrawGame(Recruits_View);
                     return Recruits_View;
+                end if;
+            when Character'Pos('n') | Character'Pos('N') => -- Ask for events
+                if not HaveTrader then
+                    ShowDialog("You don't have anyone assigned to talks.");
+                    DrawGame(Sky_Map_View);
+                    return OldState;
+                end if;
+                if PlayerShip.Speed = DOCKED then
+                    AskForEvents;
+                    DrawGame(Sky_Map_View);
+                    return OldState;
                 end if;
             when Character'Pos('b') | Character'Pos('B') => -- Ask for other bases
                 if not HaveTrader then
