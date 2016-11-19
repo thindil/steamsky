@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Info about events on sky map
 - List of know events
 - New game logo
+- Option to ask for events in bases
 
 ### Changed
 - Updated help
