@@ -43,6 +43,7 @@ package Bases is
             Recruits : Recruit_Container.Vector; -- List of available recruits
             Known : Boolean; -- Did base is know to player
             AskedForBases : Boolean; -- Did player asked for bases in this base
+            AskedForEvents : Date_Record; -- Time when players asked for events in this base
         end record;
     SkyBases : array (1..1024) of BaseRecord; -- List of sky bases
     procedure BuyItems(ItemIndex : Positive; Amount : String); -- Buy items from bases
@@ -53,5 +54,6 @@ package Bases is
     procedure GenerateRecruits(BaseIndex : Positive); -- Generate if needed new recruits in base
     procedure HireRecruit(RecruitIndex : Positive); -- Hire selected recruit from bases
     procedure AskForBases; -- Ask in base for direction for other bases
+    procedure AskForEvents; -- Ask in base for direction for random events
 
 end Bases;
