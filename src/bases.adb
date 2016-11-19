@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
+with Ada.Numerics.Generic_Elementary_Functions;
 with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
@@ -23,6 +24,7 @@ with UserInterface; use UserInterface;
 with Bases.UI; use Bases.UI;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
+with Events; use Events;
 
 package body Bases is
     
@@ -545,5 +547,111 @@ package body Bases is
         GainExp(1, 4, TraderIndex);
         UpdateGame(30);
     end AskForBases;
+
+    procedure AskForEvents is
+        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        TimeDiff : Natural;
+        MaxEvents, EventsAmount, TmpBaseIndex, TraderIndex : Positive;
+        Event : Events_Types;
+        EventX, EventY, EventTime, DiffX, DiffY : Positive;
+        MinX, MinY, MaxX, MaxY : Integer;
+        type Value_Type is digits 2 range 0.0..9999999.0;
+        package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
+        AddEvent : Boolean;
+        function GetRandom(Min, Max : Positive) return Positive is
+            subtype Rand_Range is Positive range Min..Max;
+            package Rand_Roll is new Discrete_Random(Rand_Range);
+            Generator : Rand_Roll.Generator;
+        begin
+            Rand_Roll.Reset(Generator);
+            return Rand_Roll.Random(Generator);
+        end GetRandom;
+    begin
+        TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).AskedForEvents.Day + ((30 *
+            SkyBases(BaseIndex).AskedForEvents.Month) * SkyBases(BaseIndex).AskedForEvents.Year));
+        if TimeDiff < 7 then
+            ShowDialog("You asked for know events in this base not so long ago.");
+            return;
+        end if;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Talk then
+                TraderIndex := I;
+                exit;
+            end if;
+        end loop;
+        if SkyBases(BaseIndex).Population < 150 then
+            MaxEvents := 5;
+        elsif SkyBases(BaseIndex).Population > 149 and SkyBases(BaseIndex).Population < 300 then
+            MaxEvents := 10;
+        else
+            MaxEvents := 15;
+        end if;
+        EventsAmount := GetRandom(1, MaxEvents);
+        MinX := PlayerShip.SkyX - 100;
+        if MinX < 1 then
+            MinX := 1;
+        end if;
+        MaxX := PlayerShip.SkyX + 100;
+        if MaxX > 1024 then
+            MaxX := 1024;
+        end if;
+        MinY := PlayerShip.SkyY - 100;
+        if MinY < 1 then
+            MinY := 1;
+        end if;
+        MaxY := PlayerShip.SkyY + 100;
+        if MaxY > 1024 then
+            MaxY := 1024;
+        end if;
+        for I in 1..EventsAmount loop
+            Event := Events_Types'Val(GetRandom(1, 4));
+            if Event = EnemyShip or Event = AttackOnBase or Event = Disease then
+                loop
+                    if Event = EnemyShip then
+                        EventX := GetRandom(MinX, MaxX);
+                        EventY := GetRandom(MinY, MaxY);
+                        exit when SkyMap(EventX, EventY).BaseIndex = 0 and EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY;
+                    else
+                        TmpBaseIndex := GetRandom(1, 1024);
+                        EventX := SkyBases(TmpBaseIndex).SkyX;
+                        EventY := SkyBases(TmpBaseIndex).SkyY;
+                        exit when EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY;
+                    end if;
+                end loop;
+                AddEvent := True;
+                for J in Events_List.First_Index..Events_List.Last_Index loop
+                    if Events_List.Element(J).SkyX = EventX and Events_List.Element(J).SkyY = EventY then
+                        AddEvent := False;
+                        exit;
+                    end if;
+                end loop;
+                if AddEvent then
+                    DiffX := abs(PlayerShip.SkyX - EventX);
+                    DiffY := abs(PlayerShip.SkyY - EventY);
+                    EventTime := Positive(Value_Type(60) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
+                    case Event is
+                        when EnemyShip =>
+                            Events_List.Append(New_Item => (EnemyShip, EventX, EventY, EventTime, 
+                            GetRandom(Enemies_List.First_Index, Enemies_List.Last_Index)));
+                        when AttackOnBase =>
+                            if SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
+                                Events_List.Append(New_Item => (AttackOnBase, EventX, EventY, EventTime,
+                                GetRandom(Enemies_List.First_Index, Enemies_List.Last_Index)));
+                            end if;
+                        when Disease =>
+                            if SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
+                                Events_List.Append(New_Item => (Disease, EventX, EventY, 10080, 1));
+                            end if;
+                        when others =>
+                            null;
+                    end case;
+                end if;
+            end if;
+        end loop;
+        SkyBases(BaseIndex).AskedForEvents := GameDate;
+        AddMessage(To_String(PlayerShip.Crew.Element(TraderIndex).Name) & " asked for events in base.", OrderMessage);
+        GainExp(1, 4, TraderIndex);
+        UpdateGame(30);
+    end AskForEvents;
 
 end Bases;
