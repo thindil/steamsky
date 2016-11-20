@@ -20,6 +20,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Maps; use Ada.Strings.Maps;
+with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 
 package body Help is
@@ -31,9 +32,11 @@ package body Help is
         end record;
     package Help_Container is new Vectors(Positive, Help_Data);
     Help_List : Help_Container.Vector;
-    StartIndex, EndIndex : Integer := 1;
+    StartIndex, EndIndex : Integer := 0;
     TopicIndex : Integer := 1;
     HelpPad : Window;
+    HelpMenu : Menu;
+    MenuWindow : Window;
 
     function LoadHelp return Boolean is
         HelpFile : File_Type;
@@ -70,12 +73,25 @@ package body Help is
     end LoadHelp;
 
     procedure ShowHelpMenu is
+        Help_Items : constant Item_Array_Access := new Item_Array(Help_List.First_Index..(Help_List.Last_Index + 1));
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
     begin
         for I in Help_List.First_Index..Help_List.Last_Index loop
-            Move_Cursor(Line => Line_Position(I + 2), Column => (Columns / 3));
-            Add(Str => Character'Val(96 + I) & " " & To_String(Help_List.Element(I).Title));
-            Change_Attributes(Line => Line_Position(2 + I), Column => (Columns / 3), Count => 1, Color => 1);
+            Help_Items.all(I) := New_Item(To_String(Help_List.Element(I).Title));
         end loop;
+        Help_Items.all(Help_Items'Last) := Null_Item;
+        HelpMenu := New_Menu(Help_Items);
+        Set_Format(HelpMenu, Lines - 5, 1);
+        Set_Mark(HelpMenu, "");
+        Scale(HelpMenu, MenuHeight, MenuLength);
+        MenuWindow := Create(MenuHeight, MenuLength, 2, (Columns / 3));
+        Set_Window(HelpMenu, MenuWindow);
+        Set_Sub_Window(HelpMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+        Post(HelpMenu);
+        Set_Current(HelpMenu, Help_Items.all(TopicIndex));
+        Refresh;
+        Refresh(MenuWindow);
     end ShowHelpMenu;
 
     procedure ShowHelp(NewHelp : Boolean := False) is
@@ -106,35 +122,35 @@ package body Help is
     end ShowHelp;
 
     function HelpMenuKeys(Key : Key_Code) return GameStates is
+        Result : Menus.Driver_Result;
     begin
+        TopicIndex := Menus.Get_Index(Current(HelpMenu));
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                TopicIndex := 1;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
-            when 56 | KEY_UP => -- Move help up
-                StartIndex := StartIndex - 1;
-                if StartIndex < 1 then
-                    StartIndex := 1;
+            when 56 | KEY_UP => -- Select previous help topic
+                Result := Driver(HelpMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(HelpMenu, M_Last_Item);
                 end if;
-                DrawGame(Help_View);
-            when 50 | KEY_DOWN => -- Move help down
-                StartIndex := StartIndex + 1;
-                if Integer(Help_List.Length) < Integer(Lines - 5) then
-                    StartIndex := 1;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow);
                 end if;
-                DrawGame(Help_View);
+            when 50 | KEY_DOWN => -- Select next help topic
+                Result := Driver(HelpMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(HelpMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow);
+                end if;
+            when 10 => -- Select topic to read
+                DrawGame(Help_Topic);
+                return Help_Topic;
             when others =>
-                if (Key > 96 and Key <= Key_Code(96 + Help_List.Length)) or
-                    (Key > 65 and Key <= Key_Code(65 + Help_List.Length)) then
-                    if Key > 96 then
-                        TopicIndex := Positive(Key - 96);
-                    else
-                        TopicIndex := Positive(Key - 65);
-                    end if;
-                    StartIndex := 0;
-                    DrawGame(Help_Topic);
-                    return Help_Topic;
-                end if;
+                null;
         end case;
         return Help_View;
     end HelpMenuKeys;
@@ -146,7 +162,7 @@ package body Help is
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when Character'Pos('m') | Character'Pos('M') => -- Back to help menu
-                StartIndex := 1;
+                StartIndex := 0;
                 DrawGame(Help_View);
                 return Help_View;
             when 56 | KEY_UP => -- Scroll help one line up
