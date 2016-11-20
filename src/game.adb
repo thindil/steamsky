@@ -63,7 +63,7 @@ package body Game is
         Rand_Base.Reset(Generator2);
         Rand_Gender.Reset(Generator3);
         Rand_Population.Reset(Generator4);
-        SkyMap := (others => (others => (BaseIndex => 0, Visited => False)));
+        SkyMap := (others => (others => (BaseIndex => 0, Visited => False, EventIndex => 0)));
         for I in Rand_Range loop
             loop
                 ValidLocation := True;
@@ -99,7 +99,7 @@ package body Game is
                 end if;
                 exit when ValidLocation;
             end loop;
-            SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I), Visited => False);
+            SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I), Visited => False, EventIndex => 0);
             SkyBases(Integer(I)) := (Name => GenerateBaseName, Visited => (0, 0, 0, 0, 0), 
                 SkyX => Integer(PosX), SkyY => Integer(PosY), BaseType =>
                 Bases_Types'Val(Rand_Base.Random(Generator2)), Population =>
@@ -489,7 +489,7 @@ package body Game is
         GameDate.Hour := Natural'Value(To_String(ReadData));
         GameDate.Minutes := Natural'Value(To_String(ReadData));
         -- Load sky map
-        SkyMap := (others => (others => (BaseIndex => 0, Visited => False)));
+        SkyMap := (others => (others => (BaseIndex => 0, Visited => False, EventIndex => 0)));
         VisitedFields := Positive'Value(To_String(ReadData));
         for I in 1..VisitedFields loop
             SkyMap(Positive'Value(To_String(ReadData)), Positive'Value(To_String(ReadData))).Visited := True;
@@ -605,6 +605,7 @@ package body Game is
                 Events_Types'Val(Integer'Value(To_String(ReadData))), SkyX =>
                 Integer'Value(To_String(ReadData)), SkyY => Integer'Value(To_String(ReadData)), 
                 Time => Integer'Value(To_String(ReadData)), Data => Integer'Value(To_String(ReadData))));
+            SkyMap(Events_List.Element(I).SkyX, Events_List.Element(I).SkyY).EventIndex := I;
         end loop;
         Close(SaveGame);
         return True;

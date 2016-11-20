@@ -268,12 +268,9 @@ package body UserInterface is
         else
             SpeedWindow := Create(8, 17, (Lines / 3), (Columns / 2) - 8);
             Box(SpeedWindow);
-            for I in Events_List.First_Index..Events_List.Last_Index loop
-                if Events_List.Element(I).SkyX = PlayerShip.SkyX and Events_List.Element(I).SkyY = PlayerShip.SkyY then
-                    Event := Events_List.Element(I).EType;
-                    exit;
-                end if;
-            end loop;
+            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+                Event := Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType;
+            end if;
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 and Event = None then
                 Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
                 Add(Win => SpeedWindow, Str => "Dock");
@@ -611,13 +608,10 @@ package body UserInterface is
                 HaveTrader := True;
             end if;
         end loop;
-        for I in Events_List.First_Index..Events_List.Last_Index loop
-            if Events_List.Element(I).SkyX = PlayerShip.SkyX and Events_List.Element(I).SkyY = PlayerShip.SkyY then
-                Event := Events_List.Element(I).EType;
-                EventIndex := I;
-                exit;
-            end if;
-        end loop;
+        if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+            EventIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+            Event := Events_List.Element(EventIndex).Etype;
+        end if;
         case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 DrawGame(Sky_Map_View);
@@ -717,6 +711,7 @@ package body UserInterface is
                 return OldState;
             when Character'Pos('a') | Character'Pos('A') => -- Attack other ship
                 if Event = EnemyShip then
+                    OldSpeed := PlayerShip.Speed;
                     NewState := Combat_State;
                     if EnemyName = Null_Unbounded_String then
                         NewState := StartCombat(Events_List.Element(EventIndex).Data, False);

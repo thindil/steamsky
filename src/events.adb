@@ -43,16 +43,14 @@ package body Events is
         TimePassed : Integer;
         PilotIndex : Natural := 0;
     begin
-        for I in Events_List.First_Index..Events_List.Last_Index loop
-            if Events_List.Element(I).SkyX = PlayerShip.SkyX and Events_List.Element(I).SkyY = PlayerShip.SkyY then
-                case Events_List.Element(I).EType is
-                    when EnemyShip =>
-                        return StartCombat(Events_List.Element(I).Data);
-                    when others =>
-                        return OldState;
-                end case;
-            end if;
-        end loop;
+        if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+            case Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType is
+                when EnemyShip =>
+                    return StartCombat(Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).Data);
+                when others =>
+                    return OldState;
+            end case;
+        end if;
         Rand_Roll.Reset(Generator);
         Rand_Combat.Reset(Generator2);
         if Rand_Roll.Random(Generator) < 7 then -- Event happen
@@ -78,6 +76,7 @@ package body Events is
                         end if;
                     when others => -- Combat
                         Events_List.Append(New_Item => (EnemyShip, PlayerShip.SkyX, PlayerShip.SkyY, 30, Rand_Combat.Random(Generator2)));
+                        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := Events_List.Last_Index;
                         return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
                 end case;
             else
@@ -95,6 +94,7 @@ package body Events is
                             Events_List.Append(New_Item => (FullDocks, PlayerShip.SkyX, PlayerShip.SkyY, 15, 1));
                             AddMessage("You can't dock to base now, because its docks are full.", OtherMessage);
                     end case;
+                    SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := Events_List.Last_Index;
                 end if;
             end if;
         end if;
@@ -115,6 +115,7 @@ package body Events is
         while CurrentIndex <= Events_List.Last_Index loop
             NewTime := Events_List.Element(CurrentIndex).Time - Minutes;
             if NewTime < 1 then
+                SkyMap(Events_List.Element(CurrentIndex).SkyX, Events_List.Element(CurrentIndex).SkyY).EventIndex := 0;
                 Events_List.Delete(Index => CurrentIndex, Count => 1);
             else
                 Events_List.Update_Element(Index => CurrentIndex, Process => UpdateEvent'Access);
