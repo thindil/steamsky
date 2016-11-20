@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Starting order for gunner from On break to Operate gun
 - Don't change ship speed in fight when no engineer on duty
 - When change ship speed outside combat, check only for engine and engineer
+- Updated interface
 
 ### Fixed
 - Don't craft items when worker is on break
