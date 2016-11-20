@@ -189,16 +189,38 @@ package body Ships is
         end if;
     end DockShip;
 
-    procedure ChangeShipSpeed(SpeedValue : ShipSpeed) is
+    procedure ChangeShipSpeed(SpeedValue : ShipSpeed; ShowInfo : Boolean := True) is
+        HaveEngine, HaveEngineer : Boolean := False;
     begin
         if PlayerShip.Speed = DOCKED then
-            ShowDialog("First undock from base before you set ship speed.");
+            if ShowInfo then
+                ShowDialog("First undock from base before you set ship speed.");
+            end if;
             return;
         end if;
-        if not HaveOrderRequirements then
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = ENGINE and PlayerShip.Modules.Element(I).Durability > 0 
+            then
+                HaveEngine := True;
+                exit;
+            end if;
+        end loop;
+        if not HaveEngine then
+            if ShowInfo then
+                ShowDialog("You don't have working engine on ship or all engines are destroyed.");
+            end if;
             return;
         end if;
-        if PlayerShip.Speed = SpeedValue then
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Engineer then
+                HaveEngineer := True;
+                exit;
+            end if;
+        end loop;
+        if not HaveEngineer then
+            if ShowInfo then
+                ShowDialog("You don't have enginner on duty.");
+            end if;
             return;
         end if;
         PlayerShip.Speed := SpeedValue;
