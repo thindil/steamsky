@@ -21,6 +21,7 @@ with Messages; use Messages;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
 with Events; use Events;
+with Maps; use Maps;
 
 package body Combat.UI is
 
@@ -465,12 +466,10 @@ package body Combat.UI is
             CurrentMenuIndex := 1;
             PlayerShip.Speed := OldSpeed;
             EnemyName := Null_Unbounded_String;
-            for I in Events_List.First_Index..Events_List.Last_Index loop
-                if Events_List.Element(I).SkyX = PlayerShip.SkyX and Events_List.Element(I).SkyY = PlayerShip.SkyY then
-                    Events_List.Delete(Index => I, Count => 1);
-                    exit;
-                end if;
-            end loop;
+            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+                Events_List.Delete(Index => SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex, Count => 1);
+                SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := 0;
+            end if;
             DrawGame(Sky_Map_View);
             return Sky_Map_View;
         end if;
