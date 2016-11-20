@@ -43,8 +43,9 @@ package body BasesList is
         DiffX, DiffY : Natural;
         CurrentLine : Line_Position := 2;
         Distance : Value_Type;
+        TimeDiff : Integer;
     begin
-        InfoWindow := Create(12, (Columns / 2), 4, (Columns / 2));
+        InfoWindow := Create(20, (Columns / 2), 4, (Columns / 2));
         if SkyBases(BaseIndex).Visited.Year > 0 then
             Add(Win => InfoWindow, Str => "X:" & Positive'Image(SkyBases(BaseIndex).SkyX) & " Y:" &
                 Positive'Image(SkyBases(BaseIndex).SkyX));
@@ -61,7 +62,25 @@ package body BasesList is
             end if;
             Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
             Add(Win => InfoWindow, Str => "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
-            CurrentLine := 4;
+            TimeDiff := 31 - ((GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+                (SkyBases(BaseIndex).RecruitDate.Day + ((30 * SkyBases(BaseIndex).RecruitDate.Month) * 
+                SkyBases(BaseIndex).RecruitDate.Year)));
+            Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
+            if TimeDiff > 0 then
+                Add(Win => InfoWindow, Str => "New recruits available in" & Natural'Image(TimeDiff) & " days.");
+            else
+                Add(Win => InfoWindow, Str => "New recruits available now.");
+            end if;
+            TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+                (SkyBases(BaseIndex).AskedForEvents.Day + ((30 * SkyBases(BaseIndex).AskedForEvents.Month) * 
+                SkyBases(BaseIndex).AskedForEvents.Year));
+            Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+            if TimeDiff < 8 then
+                Add(Win => InfoWindow, Str => "You asked for events" & Natural'Image(TimeDiff) & " days ago.");
+            else
+                Add(Win => InfoWindow, Str => "You can ask for events again.");
+            end if;
+            CurrentLine := 7;
         else
             Add(Win => InfoWindow, Str => "Not visited yet.");
         end if;
@@ -69,19 +88,22 @@ package body BasesList is
         DiffY := abs(PlayerShip.SkyY - SkyBases(BaseIndex).SkyY);
         Distance := Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2)));
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+        CurrentLine := CurrentLine + 2;
         Add(Win => InfoWindow, Str => "Distance:" & Integer'Image(Integer(Value_Type'Floor(Distance))));
         Pattern(BasesMenu, SearchPattern);
         TrimedSearchPattern := Trim(To_Unbounded_String(SearchPattern), Ada.Strings.Both);
         if Length(TrimedSearchPattern) > 0 then
-            Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Search: " & To_String(TrimedSearchPattern));
+            CurrentLine := CurrentLine + 2;
         end if;
-        Move_Cursor(Win => InfoWindow, Line => 8, Column => 0);
+        Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Press SPACE to show base on map");
-        Change_Attributes(Win => InfoWindow, Line => 8, Column => 6, Count => 5, Color => 1);
-        Move_Cursor(Win => InfoWindow, Line => 9, Column => 0);
+        Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
+        CurrentLine := CurrentLine + 1;
+        Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Press ENTER to set base as a destination for ship");
-        Change_Attributes(Win => InfoWindow, Line => 9, Column => 6, Count => 5, Color => 1);
+        Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
