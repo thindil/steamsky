@@ -21,6 +21,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Terminal_Interface.Curses.Forms.Field_Types.Enumeration; use Terminal_Interface.Curses.Forms.Field_Types.Enumeration;
+with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Help; use Help;
 with Items; use Items;
 with UserInterface; use UserInterface;
@@ -35,14 +36,18 @@ package body MainMenu is
     LicensePad : Window := Null_Window;
     NewGameForm : Forms.Form;
     FormWindow : Window;
+    GameMenu : Menu;
+    MenuWindow : Window;
 
     procedure ShowMainMenu is
         Visibility : Cursor_Visibility := Invisible;
-        CurrentLine : Line_Position := 14;
+        Menu_Items : constant Item_Array_Access := new Item_Array(1..6);
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        MenuIndex : Positive := 2;
     begin
         Set_Echo_Mode(False);
         Set_Cursor_Visibility(Visibility);
-
         -- Game logo
         Move_Cursor(Line => 3, Column => (Columns / 2) - 25);
         Add(Str => "  ______                            ______ _");
@@ -62,35 +67,33 @@ package body MainMenu is
         Move_Cursor(Line => 10, Column => (Columns - 17) / 2);
         Add(Str => GameVersion);
         -- Game menu
-        Move_Cursor(Line => 14, Column => (Columns - 12) / 2);
-        Add(Str => "New game");
-        Change_Attributes(Line => 14, Column => (Columns - 12) / 2,
-            Count => 1, Color => 1);
-        CurrentLine := CurrentLine + 1;
+        Menu_Items.all(1) := New_Item("New game");
         if Exists("data/savegame.dat") then
-            Move_Cursor(Line => CurrentLine, Column => (Columns - 12) / 2);
-            Add(Str => "Load game");
-            Change_Attributes(Line => CurrentLine, Column => (Columns - 12) / 2,
-                Count => 1, Color => 1);
-            CurrentLine := CurrentLine + 1;
+            Menu_Items.all(2) := New_Item("Load game");
+            MenuIndex := 3;
         end if;
-        Move_Cursor(Line => CurrentLine, Column => (Columns - 12) / 2);
-        Add(Str => "News");
-        Change_Attributes(Line => CurrentLine, Column => ((Columns - 12) / 2) + 1,
-            Count => 1, Color => 1);
-        CurrentLine := CurrentLine + 1;
-        Move_Cursor(Line => CurrentLine, Column => (Columns - 12) / 2);
-        Add(Str => "License");
-        Change_Attributes(Line => CurrentLine, Column => ((Columns - 12) / 2) + 1,
-            Count => 1, Color => 1);
-        CurrentLine := CurrentLine + 1;
-        Move_Cursor(Line => CurrentLine, Column => (Columns - 12) / 2);
-        Add(Str => "Quit game");
-        Change_Attributes(Line => CurrentLine, Column => (Columns - 12) / 2,
-            Count => 1, Color => 1);
+        Menu_Items.all(MenuIndex) := New_Item("News");
+        MenuIndex := MenuIndex + 1;
+        Menu_Items.all(MenuIndex) := New_Item("License");
+        MenuIndex := MenuIndex + 1;
+        Menu_Items.all(MenuIndex) := New_Item("Quit game");
+        MenuIndex := MenuIndex + 1;
+        for I in MenuIndex..Menu_Items'Last loop
+            Menu_Items.all(I) := Null_Item;
+        end loop;
+        GameMenu := New_Menu(Menu_Items);
+        Set_Format(GameMenu, Lines - 5, 1);
+        Set_Mark(GameMenu, "");
+        Scale(GameMenu, MenuHeight, MenuLength);
+        MenuWindow := Create(MenuHeight, MenuLength, 14, (Columns - 17) / 2);
+        Set_Window(GameMenu, MenuWindow);
+        Set_Sub_Window(GameMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+        Post(GameMenu);
         -- Copyright
-        Move_Cursor(Line => Lines - 1, Column => (Columns - 20) / 2);
+        Move_Cursor(Line => Lines - 1, Column => (Columns / 2) - 14);
         Add(Str => "2016 Bartek thindil Jasicki");
+        Refresh;
+        Refresh(MenuWindow);
     end ShowMainMenu;
 
     procedure ShowNewGameForm is
@@ -249,15 +252,31 @@ package body MainMenu is
     end LoadGameError;
 
     function MainMenuKeys(Key : Key_Code) return GameStates is
+        Result : Menus.Driver_Result;
+        Option : constant String := Name(Current(GameMenu));
     begin
         case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Quit game
-                return Quit;
-            when Character'Pos('n') | Character'Pos('N') => -- New game
-                ShowNewGameForm;
-                return New_Game;
-            when Character'Pos('l') | Character'Pos('L') => -- Load game
-                if Exists("data/savegame.dat") then
+            when 56 | KEY_UP => -- Select previous option
+                Result := Driver(GameMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(GameMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow);
+                end if;
+            when 50 | KEY_DOWN => -- Select next option
+                Result := Driver(GameMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(GameMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow);
+                end if;
+            when 10 => -- Select option
+                if Option = "New game" then
+                    ShowNewGameForm;
+                    return New_Game;
+                elsif Option = "Load game" then
                     if not LoadHelp then
                         LoadGameError("Can't load help system. Probably missing file data/help.dat");
                         return Main_Menu;
@@ -288,24 +307,25 @@ package body MainMenu is
                     else
                         return Main_Menu;
                     end if;
+                elsif Option = "News" then
+                    Erase;
+                    Refresh_Without_Update;
+                    ShowNews;
+                    Update_Screen;
+                    return News_View;
+                elsif Option = "License" then
+                    Erase;
+                    Refresh_Without_Update;
+                    ShowLicenseInfo;
+                    Update_Screen;
+                    return License_Info;
                 else
-                    return Main_Menu;
+                    return Quit;
                 end if;
-            when Character'Pos('i') | Character'Pos('I') => -- Show license info
-                Erase;
-                Refresh_Without_Update;
-                ShowLicenseInfo;
-                Update_Screen;
-                return License_Info;
-            when Character'Pos('e') | Character'Pos('E') => -- Show news screen
-                Erase;
-                Refresh_Without_Update;
-                ShowNews;
-                Update_Screen;
-                return News_View;
-            when others => 
-                return Main_Menu;
+            when others =>
+                null;
         end case;
+        return Main_Menu;
     end MainMenuKeys;
 
     procedure NewGameError(Message : String) is
