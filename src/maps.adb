@@ -34,7 +34,7 @@ package body Maps is
     procedure ShowSkyMap is
         StartX : Integer;
         StartY : Integer;
-        BaseIndex : Natural;
+        BaseIndex, EventIndex : Natural;
         InfoWindow : Window;
         WindowHeight, CurrentLine : Line_Position := 3;
         WindowWidth, NewWindowWidth : Column_Position := 20;
@@ -105,6 +105,10 @@ package body Maps is
                     Change_Attributes(Line => Line_Position(Y), Column =>
                         Column_Position(X - 1), Count => 1, Color => 6);
                 end if;
+                if SkyMap(StartX + X, StartY + Y).EventIndex > 0 then
+                    Move_Cursor(Line => Line_Position(Y), Column => Column_Position(X - 1));
+                    Add(Ch => '?');
+                end if;
                 if StartX + X = PlayerShip.SkyX and StartY + Y = PlayerShip.SkyY then
                     Move_Cursor(Line => Line_Position(Y), Column =>
                         Column_Position(X - 1));
@@ -119,17 +123,6 @@ package body Maps is
                 end if;
             end loop;
         end loop;
-        for I in Events_List.First_Index..Events_List.Last_Index loop
-            if (Events_List.Element(I).SkyX > StartX and Events_List.Element(I).SkyX < StartX + Integer(Columns)) and
-                (Events_List.Element(I).SkyY > StartY and Events_List.Element(I).SkyY < StartY + Integer(Lines)) and
-                Peek(Line => Line_Position(Events_List.Element(I).SkyY - StartY), Column => Column_Position(Events_List.Element(I).SkyX
-                - StartX - 1)).Ch /= '+' 
-            then
-                Move_Cursor(Line => Line_Position(Events_List.Element(I).SkyY - StartY), 
-                    Column => Column_Position(Events_List.Element(I).SkyX - StartX - 1));
-                Add(Ch => '?');
-            end if;
-        end loop;
         Refresh_Without_Update;
         BaseIndex := SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).BaseIndex;
         if BaseIndex > 0 then
@@ -143,23 +136,21 @@ package body Maps is
                 WindowWidth := 20;
             end if;
         end if;
-        for I in Events_List.First_Index..Events_List.Last_Index loop
-            if Events_List.Element(I).SkyX = PlayerShip.SkyX + MoveX and Events_List.Element(I).SkyY = PlayerShip.SkyY + MoveY then
-                WindowHeight := WindowHeight + 2;
-                if Events_List.Element(I).EType = EnemyShip then
-                    NewWindowWidth := 4 + Column_Position(Length(Enemies_List.Element(Events_List.Element(I).Data).Name));
-                elsif Events_List.Element(I).EType = AttackOnBase then
-                    NewWindowWidth := 21;
-                end if;
-                if NewWindowWidth < 20 then
-                    NewWindowWidth := 20;
-                end if;
-                if NewWindowWidth > WindowWidth then
-                    WindowWidth := NewWindowWidth;
-                end if;
-                exit;
+        EventIndex := SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).EventIndex;
+        if EventIndex > 0 then
+            WindowHeight := WindowHeight + 2;
+            if Events_List.Element(EventIndex).EType = EnemyShip then
+                NewWindowWidth := 4 + Column_Position(Length(Enemies_List.Element(Events_List.Element(EventIndex).Data).Name));
+            elsif Events_List.Element(EventIndex).EType = AttackOnBase then
+                NewWindowWidth := 21;
             end if;
-        end loop;
+            if NewWindowWidth < 20 then
+                NewWindowWidth := 20;
+            end if;
+            if NewWindowWidth > WindowWidth then
+                WindowWidth := NewWindowWidth;
+            end if;
+        end if;
         InfoWindow := Create(WindowHeight, WindowWidth, 1, (Columns - WindowWidth - 1));
         Box(InfoWindow);
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 3);
@@ -184,24 +175,21 @@ package body Maps is
                 CurrentLine := 7;
             end if;
         end if;
-        for I in Events_List.First_Index..Events_List.Last_Index loop
-            if Events_List.Element(I).SkyX = PlayerShip.SkyX + MoveX and Events_List.Element(I).SkyY = PlayerShip.SkyY + MoveY then
-                Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
-                case Events_List.Element(I).EType is
-                    when EnemyShip =>
-                        Add(Win => InfoWindow, Str => To_String(Enemies_List.Element(Events_List.Element(I).Data).Name));
-                    when FullDocks =>
-                        Add(Win => InfoWindow, Str => "Full docks");
-                    when AttackOnBase =>
-                        Add(Win => InfoWindow, Str => "Base under attack");
-                    when Disease => 
-                        Add(Win => InfoWindow, Str => "Disease");
-                    when others =>
-                        null;
-                end case;
-                exit;
-            end if;
-        end loop;
+        if EventIndex > 0 then
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
+            case Events_List.Element(EventIndex).EType is
+                when EnemyShip =>
+                    Add(Win => InfoWindow, Str => To_String(Enemies_List.Element(Events_List.Element(EventIndex).Data).Name));
+                when FullDocks =>
+                    Add(Win => InfoWindow, Str => "Full docks");
+                when AttackOnBase =>
+                    Add(Win => InfoWindow, Str => "Base under attack");
+                when Disease => 
+                    Add(Win => InfoWindow, Str => "Disease");
+                when others =>
+                    null;
+            end case;
+        end if;
         Refresh(InfoWindow);
         Delete(InfoWindow);
     end ShowSkyMap;
