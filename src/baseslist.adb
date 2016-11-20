@@ -62,7 +62,7 @@ package body BasesList is
             end if;
             Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
             Add(Win => InfoWindow, Str => "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
-            TimeDiff := 31 - ((GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+            TimeDiff := 30 - ((GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
                 (SkyBases(BaseIndex).RecruitDate.Day + ((30 * SkyBases(BaseIndex).RecruitDate.Month) * 
                 SkyBases(BaseIndex).RecruitDate.Year)));
             Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
@@ -75,7 +75,7 @@ package body BasesList is
                 (SkyBases(BaseIndex).AskedForEvents.Day + ((30 * SkyBases(BaseIndex).AskedForEvents.Month) * 
                 SkyBases(BaseIndex).AskedForEvents.Year));
             Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
-            if TimeDiff < 8 then
+            if TimeDiff < 7 then
                 Add(Win => InfoWindow, Str => "You asked for events" & Natural'Image(TimeDiff) & " days ago.");
             else
                 Add(Win => InfoWindow, Str => "You can ask for events again.");

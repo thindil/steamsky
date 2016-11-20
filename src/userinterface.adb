@@ -215,7 +215,7 @@ package body UserInterface is
             end if;
             TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).AskedForEvents.Day + ((30 *
                 SkyBases(BaseIndex).AskedForEvents.Month) * SkyBases(BaseIndex).AskedForEvents.Year));
-            if TimeDiff > 7 then
+            if TimeDiff > 6 then
                 WindowHeight := WindowHeight + 1;
                 AskedForEvents := False;
             end if;
