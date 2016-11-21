@@ -300,7 +300,7 @@ package body Combat is
                             end if;
                             AddMessage(To_String(ShootMessage), CombatMessage);
                             if Ship = PlayerShip then
-                                UpdateCargo(Ship.Cargo.Element(AmmoIndex).ProtoIndex, -1);
+                                UpdateCargo(Ship, Ship.Cargo.Element(AmmoIndex).ProtoIndex, -1);
                                 GainExp(1, 3, GunnerIndex);
                             end if;
                             if PlayerShip.Crew.Element(1).Health = 0 then -- player is dead
@@ -318,7 +318,7 @@ package body Combat is
                                     if LootAmount > 0 then
                                         AddMessage("You looted" & Integer'Image(LootAmount) & " Charcollum from " & 
                                             To_String(EnemyName) & ".", CombatMessage);
-                                        UpdateCargo(1, LootAmount);
+                                        UpdateCargo(Ship, 1, LootAmount);
                                     end if;
                                     EnemyShip.Speed := FULL_STOP;
                                 else

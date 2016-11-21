@@ -215,7 +215,7 @@ package body Crew is
         if ProtoIndex = 0 then
             return False;
         end if;
-        UpdateCargo(ProtoIndex, (0 - 1));
+        UpdateCargo(PlayerShip, ProtoIndex, (0 - 1));
         return True;
     end Consume;
 

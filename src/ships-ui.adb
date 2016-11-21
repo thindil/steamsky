@@ -477,7 +477,7 @@ package body Ships.UI is
             return Drop_Cargo;
         elsif FieldIndex = 4 then
             DropAmount := Natural'Value(Get_Buffer(Fields(RenameForm, 2)));
-            UpdateCargo(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex, (0 - DropAmount));
+            UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex, (0 - DropAmount));
             AddMessage("You dropped" & Positive'Image(DropAmount) & " " & ItemName, OtherMessage);
         end if;
         Set_Cursor_Visibility(Visibility);

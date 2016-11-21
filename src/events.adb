@@ -71,7 +71,7 @@ package body Events is
                                 TimePassed := 1;
                             end if;
                             GainExp(1, 1, PilotIndex);
-                            UpdateCargo(1, 1);
+                            UpdateCargo(PlayerShip, 1, -1);
                             UpdateGame(TimePassed);
                         end if;
                     when others => -- Combat
