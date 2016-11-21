@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - List of know events
 - New game logo
 - Option to ask for events in bases
+- Cargo to all ships
 
 ### Changed
 - Updated help
