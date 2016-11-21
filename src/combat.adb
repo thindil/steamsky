@@ -120,6 +120,7 @@ package body Combat is
                     Modules_List(Ship.Modules.Element(K).ProtoIndex).MType = BATTERING_RAM)
                 then
                     GunnerIndex := 0;
+                    AmmoIndex := 0;
                     if Modules_List(Ship.Modules.Element(K).ProtoIndex).MType = GUN then
                         if Ship = PlayerShip then
                             if Ship.Modules.Element(K).Owner = 0 then
@@ -153,7 +154,6 @@ package body Combat is
                         else
                             Shoots := 2;
                         end if;
-                        AmmoIndex := 0;
                         for I in Ship.Cargo.First_Index..Ship.Cargo.Last_Index loop
                             if Ship.Cargo.Element(I).ProtoIndex = Ship.Modules.Element(K).Current_Value then
                                 AmmoIndex := I;
@@ -299,8 +299,10 @@ package body Combat is
                                 ShootMessage := ShootMessage & To_Unbounded_String(" and miss.");
                             end if;
                             AddMessage(To_String(ShootMessage), CombatMessage);
-                            if Ship = PlayerShip then
+                            if AmmoIndex > 0 then
                                 UpdateCargo(Ship, Ship.Cargo.Element(AmmoIndex).ProtoIndex, -1);
+                            end if;
+                            if Ship = PlayerShip then
                                 GainExp(1, 3, GunnerIndex);
                             end if;
                             if PlayerShip.Crew.Element(1).Health = 0 then -- player is dead
