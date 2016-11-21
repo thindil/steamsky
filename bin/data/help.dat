@@ -35,7 +35,7 @@ If you give order to aim for selected part of enemy ship, your Gunners will be s
 To escape from fight, you must set Pilot order on Escape, after few turns (depends how far and fast enemy was) you should escape.
 Slow speed in combat helps your Gunners hits enemies but also helps enemies hits you. If you want to have more chances to evade enemy attack, set speed to full speed. That same is with Pilot orders - evade or escape order helps avoids attacks but also reduce your chance to hit enemies.
 Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too and you die.
-If your turret with gun will be destroyed, gun in this turret will be destroyed too and your gunner will be killed. When your cockpit will be destroyed, it kills pilot too.
+If any ship module in your ship will be destroyed, it kill crew member which is in this module too. Destroyed turret destroys mounted gun too and kill gunner which operate it, destroyed cocpit kills pilot, cabin kills resting inside crew member and workshops worker.
 If you don't have anyone assigned as a Pilot, it is consider as a "go closer" order.
 When you don't have anyone assigned as a Engineer, you can't change ship speed.
 You (or enemy) starts hitting other parts of ship after destroying armor.
