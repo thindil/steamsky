@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - New game logo
 - Option to ask for events in bases
 - Cargo to all ships
+- Need and using ammo in combat by npc ships
 
 ### Changed
 - Updated help
