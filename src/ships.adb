@@ -351,6 +351,7 @@ package body Ships is
             else
                 NewName := Name;
             end if;
+            ShipCargo := ProtoShips_List.Element(ProtoIndex).Cargo;
         else
             for I in Enemies_List.Element(ProtoIndex).Modules.First_Index..Enemies_List.Element(ProtoIndex).Modules.Last_Index loop
                 ShipModules.Append(New_Item => (Name => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Name,
@@ -367,6 +368,7 @@ package body Ships is
             else
                 NewName := Name;
             end if;
+            ShipCargo := Enemies_List.Element(ProtoIndex).Cargo;
         end if;
         TmpShip := (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed,
             Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew,
@@ -396,10 +398,11 @@ package body Ships is
     function LoadShips return Boolean is
         ShipsFile : File_Type;
         RawData, FieldName, Value : Unbounded_String;
-        EqualIndex, StartIndex, EndIndex, Amount : Natural;
+        EqualIndex, StartIndex, EndIndex, Amount, XIndex : Natural;
         TempRecord : ProtoShipData;
         TempModules : Positive_Container.Vector;
         Enemy : Boolean := False;
+        TempCargo : Cargo_Container.Vector;
     begin
         if ProtoShips_List.Length > 0 then
             return True;
@@ -409,9 +412,8 @@ package body Ships is
         end if;
         TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
             Accuracy => 1, CombatAI => NONE, Evasion => 1, LootMin => 1,
-            LootMax => 100, Perception => 1);
+            LootMax => 100, Perception => 1, Cargo => TempCargo);
         Open(ShipsFile, In_File, "data/ships.dat");
-        Amount := 1;
         while not End_Of_File(ShipsFile) loop
             RawData := To_Unbounded_String(Get_Line(ShipsFile));
             if Element(RawData, 1) /= '[' then
@@ -445,6 +447,19 @@ package body Ships is
                     TempRecord.LootMax := Integer'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Perception") then
                     TempRecord.Perception := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Cargo") then
+                    StartIndex := 1;
+                    Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                    for I in 1..Amount loop
+                        EndIndex := Index(Value, ", ", StartIndex);
+                        if EndIndex = 0 then
+                            EndIndex := Length(Value) + 1;
+                        end if;
+                        XIndex := Index(Value, "x", StartIndex);
+                        TempRecord.Cargo.Append(New_Item => (Amount => Integer'Value(Slice(Value, StartIndex, XIndex - 1)),
+                            ProtoIndex => Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1))));
+                        StartIndex := EndIndex + 2;
+                    end loop;
                 end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
                 if not Enemy then
@@ -455,7 +470,7 @@ package body Ships is
                 end if;
                 TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
                     Accuracy => 1, CombatAI => NONE, Evasion => 1, LootMin => 1, 
-                    LootMax => 100, Perception => 1);
+                    LootMax => 100, Perception => 1, Cargo => TempCargo);
             end if;
         end loop;
         Close(ShipsFile);
