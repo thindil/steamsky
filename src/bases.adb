@@ -62,8 +62,8 @@ package body Bases is
             ShowDialog("You don't have enough charcollum to buy so much " & ItemName & ".");
             return;
         end if;
-        UpdateCargo(1, (0 - Cost));
-        UpdateCargo(ItemIndex, BuyAmount);
+        UpdateCargo(PlayerShip, 1, (0 - Cost));
+        UpdateCargo(PlayerShip, ItemIndex, BuyAmount);
         GainExp(1, 4, TraderIndex);
         AddMessage("You bought" & Positive'Image(BuyAmount) & " " & ItemName &
             " for" & Positive'Image(Cost) & " Charcollum.", TradeMessage);
@@ -98,8 +98,8 @@ package body Bases is
             ShowDialog("You don't have enough free cargo space in your ship for Charcollum.");
             return;
         end if;
-        UpdateCargo(ProtoIndex, (0 - SellAmount));
-        UpdateCargo(1, Profit);
+        UpdateCargo(PlayerShip, ProtoIndex, (0 - SellAmount));
+        UpdateCargo(PlayerShip, 1, Profit);
         GainExp(1, 4, TraderIndex);
         AddMessage("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" & 
             Positive'Image(Profit) & " Charcollum.", TradeMessage);
@@ -187,7 +187,7 @@ package body Bases is
             end loop;
             AddMessage("You bought whole ship repair for" & Positive'Image(Cost) & " Charcollum.", TradeMessage);
         end if;
-        UpdateCargo(1, (0 - Cost));
+        UpdateCargo(PlayerShip, 1, (0 - Cost));
         GainExp(1, 4, TraderIndex);
         UpdateGame(Time);
     end RepairShip;
@@ -255,7 +255,7 @@ package body Bases is
                 PlayerShip.Modules.Delete(HullIndex, 1);
             end if;
             UpdateGame(Modules_List.Element(ModuleIndex).InstallTime);
-            UpdateCargo(1, (0 - Price));
+            UpdateCargo(PlayerShip, 1, (0 - Price));
             GainExp(1, 4, TraderIndex);
             PlayerShip.Modules.Append(New_Item => (Name =>  Modules_List.Element(ModuleIndex).Name,
                 ProtoIndex => ModuleIndex, 
@@ -314,7 +314,7 @@ package body Bases is
                 GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest);
             end if;
             UpdateGame(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).InstallTime);
-            UpdateCargo(1, Price);
+            UpdateCargo(PlayerShip, 1, Price);
             GainExp(1, 4, TraderIndex);
             AddMessage("You removed " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & " from your ship and earned" &
                 Positive'Image(Price) & " Charcollum.", 
@@ -441,7 +441,7 @@ package body Bases is
             Recruit.Gender, Health => 100, Tired => 0, Skills =>
             Recruit.Skills, Hunger => 0, Thirst => 0, Order => Rest,
             PreviousOrder => Rest, OrderTime => 15)); 
-        UpdateCargo(1, (0 - Price));
+        UpdateCargo(PlayerShip, 1, (0 - Price));
         GainExp(1, 4, TraderIndex);
         AddMessage("You hired " & To_String(Recruit.Name) & " for" & Positive'Image(Price) & " Charcollum.", TradeMessage);
         SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex, Count => 1);

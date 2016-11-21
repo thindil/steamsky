@@ -132,7 +132,7 @@ package body Ships is
         if ShipIndex = 0 then
             PlayerShip.SkyX := NewX;
             PlayerShip.SkyY := NewY;
-            UpdateCargo(1, FuelNeeded);
+            UpdateCargo(PlayerShip, 1, FuelNeeded);
             Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
             TimePassed := Integer(100.0 / Speed);
             if TimePassed > 0 then
@@ -226,7 +226,7 @@ package body Ships is
         PlayerShip.Speed := SpeedValue;
     end ChangeShipSpeed;
 
-    procedure UpdateCargo(ProtoIndex : Positive; Amount : Integer) is
+    procedure UpdateCargo(Ship : in out ShipRecord; ProtoIndex : Positive; Amount : Integer) is
         ItemIndex : Natural := 0;
         NewAmount : Natural;
         procedure UpdateItem(Item : in out CargoData) is
@@ -234,21 +234,20 @@ package body Ships is
             Item.Amount := NewAmount;
         end UpdateItem;
     begin
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).ProtoIndex = ProtoIndex then
+        for I in Ship.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if Ship.Cargo.Element(I).ProtoIndex = ProtoIndex then
                 ItemIndex := I;
                 exit;
             end if;
         end loop;
         if ItemIndex = 0 then
-            PlayerShip.Cargo.Append(New_Item => (ProtoIndex => ProtoIndex, Amount =>
-                Amount));
+            Ship.Cargo.Append(New_Item => (ProtoIndex => ProtoIndex, Amount => Amount));
         else
-            NewAmount := PlayerShip.Cargo.Element(ItemIndex).Amount + Amount;
+            NewAmount := Ship.Cargo.Element(ItemIndex).Amount + Amount;
             if NewAmount < 1 then
-                PlayerShip.Cargo.Delete(Index => ItemIndex, Count => 1);
+                Ship.Cargo.Delete(Index => ItemIndex, Count => 1);
             else
-                PlayerShip.Cargo.Update_Element(Index => ItemIndex, Process => UpdateItem'Access);
+                Ship.Cargo.Update_Element(Index => ItemIndex, Process => UpdateItem'Access);
             end if;
         end if;
     end UpdateCargo;
@@ -728,7 +727,7 @@ package body Ships is
                 WorkerIndex);
             UpgradeProgress := PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeProgress - ResultAmount;
             UpgradePoints := UpgradePoints - ResultAmount;
-            UpdateCargo(PlayerShip.Cargo.Element(UpgradeMaterial).ProtoIndex, (0 - ResultAmount));
+            UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(UpgradeMaterial).ProtoIndex, (0 - ResultAmount));
             if UpgradeProgress = 0 then
                 WeightGain := Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).Weight
                     / 100;
@@ -920,7 +919,7 @@ package body Ships is
                             else
                                 RepairValue := RepairPoints;
                             end if;
-                            UpdateCargo(ProtoIndex, (0 - RepairValue));
+                            UpdateCargo(PlayerShip, ProtoIndex, (0 - RepairValue));
                             UpdateModule(PlayerShip, I, "Durability", Integer'Image(RepairValue));
                             if RepairValue > CrewRepairPoints(PointsIndex) then
                                 RepairValue := CrewRepairPoints(PointsIndex);
