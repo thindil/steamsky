@@ -69,6 +69,7 @@ package Ships is
             LootMin : Positive; -- Minimal amount of loot from ship
             LootMax : Positive; -- Maximum amount of loot from ship
             Perception : Positive; -- Bonus to spot player ship first
+            Cargo : Cargo_Container.Vector; -- List of ship cargo
         end record;
     package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
     ProtoShips_List : ProtoShips_Container.Vector;
