@@ -1,9 +1,10 @@
 [1]
 Name = Player Ship
 Modules = 1, 2, 3, 4, 4, 4, 4, 5, 6, 7, 7, 8, 9
+Cargo = 2000x1, 100x2, 200x3, 500x4, 100x5, 20x13
 [2]
 Name = Tiny pirates ship
-Modules = 1, 3, 8, 11
+Modules = 1, 3, 7, 8, 11
 Accuracy = 1
 Enemy = Yes
 CombatAI = Attacker
@@ -11,9 +12,10 @@ Evasion = 1
 LootMin = 10
 LootMax = 100
 Perception = 2
+Cargo = 1000x1, 100x2, 200x3, 500x14
 [3]
 Name = Tiny undead ship
-Modules = 1, 3, 12
+Modules = 1, 3, 7, 12
 Accuracy = 1
 Enemy = Yes
 CombatAI = Berserker
@@ -21,9 +23,10 @@ Evasion = 1
 LootMin = 10
 LootMax = 100
 Perception = 1
+Cargo = 1000x1
 [4]
 Name = Tiny clockwork drone
-Modules = 10, 3, 13
+Modules = 10, 3, 7, 13
 Accuracy = 1
 Enemy = Yes
 CombatAI = Berserker
@@ -31,6 +34,7 @@ Evasion = 1
 LootMin = 5
 LootMax = 50
 Perception = 5
+Cargo = 1000x1
 [5]
 Name = Small pirates ship
 Modules = 1, 3, 4, 4, 4, 4, 5, 7, 7, 8, 9
@@ -41,6 +45,7 @@ Evasion = 5
 LootMin = 20
 LootMax = 200
 Perception = 5
+Cargo = 2000x1, 100x2, 200x3, 500x4, 100x5, 20x13
 [6]
 Name = Small undead ship
 Modules = 1, 2, 3, 5, 7, 7, 12 
@@ -51,9 +56,10 @@ Evasion = 1
 LootMin = 20
 LootMax = 200
 Perception = 3
+Cargo = 2000x1, 100x5
 [7]
 Name = Small clockwork drone
-Modules = 1, 3, 7, 7, 12
+Modules = 1, 3, 7, 12
 Accuracy = 5
 Enemy = Yes
 CombatAI = Berserker
@@ -61,4 +67,5 @@ Evasion = 5
 LootMin = 10
 LootMax = 100
 Perception = 10
+Cargo = 1000x1
 []
