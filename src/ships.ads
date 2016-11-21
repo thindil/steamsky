@@ -79,7 +79,7 @@ package Ships is
     function MoveShip(ShipIndex, X, Y : Integer) return Natural; -- Move selected ship
     procedure DockShip(Docking : Boolean); -- Dock/Undock ship at base
     procedure ChangeShipSpeed(SpeedValue : ShipSpeed; ShowInfo : Boolean := True); -- Change speed of ship
-    procedure UpdateCargo(ProtoIndex : Positive; Amount : Integer); -- Update selected item in ship cargo
+    procedure UpdateCargo(Ship : in out ShipRecord; ProtoIndex : Positive; Amount : Integer); -- Update selected item in ship cargo
     procedure UpdateModule(Ship : in out ShipRecord; ModuleIndex : Positive; Field : String; Value : String); -- Update selected module
     function FreeCargo(Amount : Integer) return Integer; -- Return available space in cargo after adding/extracting Amount
     function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y:

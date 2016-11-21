@@ -209,7 +209,7 @@ package body Crafts is
                             GainExp(1, Recipe.Skill, CrafterIndex);
                             for J in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
                                 Amount := Integer(PlayerShip.Cargo.Length);
-                                UpdateCargo(PlayerShip.Cargo.Element(MaterialIndexes(J)).ProtoIndex, (0 - Recipe.MaterialAmounts.Element(J)));
+                                UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(MaterialIndexes(J)).ProtoIndex, (0 - Recipe.MaterialAmounts.Element(J)));
                                 if Integer(PlayerShip.Cargo.Length) /= Amount then
                                     MaterialIndexes := (others => 0);
                                     for L in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
@@ -222,7 +222,7 @@ package body Crafts is
                                 end if;
                             end loop;
                             Amount := 0;
-                            UpdateCargo(Recipes_List.Element(PlayerShip.Modules.Element(L).Current_Value).ResultIndex, ResultAmount);
+                            UpdateCargo(PlayerShip, Recipes_List.Element(PlayerShip.Modules.Element(L).Current_Value).ResultIndex, ResultAmount);
                         else
                             OrderTime := OrderTime - CurrentMinutes;
                             CurrentMinutes := 0;
