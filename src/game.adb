@@ -105,7 +105,8 @@ package body Game is
                 Bases_Types'Val(Rand_Base.Random(Generator2)), Population =>
                 Natural(Rand_Population.Random(Generator4)), RecruitDate => 
                 (0, 0, 0, 0, 0), Recruits => TmpRecruits, Known => False,
-                AskedForBases => False, AskedForEvents => (0, 0, 0, 0, 0));
+                AskedForBases => False, AskedForEvents => (0, 0, 0, 0, 0),
+                Reputation => (0, 0));
         end loop;
         -- Place player ship in random large base
         loop
@@ -323,6 +324,10 @@ package body Game is
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
                 RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).AskedForEvents.Day));
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(1)));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(2)));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             end if;
             if SkyBases(I).Known then
                 Put(SaveGame, "Y;");
@@ -492,7 +497,7 @@ package body Game is
             SkyBases(I) := (Name => ReadData, Visited => (0, 0, 0, 0, 0), SkyX => 0, SkyY => 0,
                 BaseType => Industrial, Population => 0, RecruitDate => (0, 0, 0, 0, 0), 
                 Recruits => BaseRecruits, Known => False, AskedForBases => False, 
-                AskedForEvents => (0, 0, 0, 0, 0));
+                AskedForEvents => (0, 0, 0, 0, 0), Reputation => (0, 0));
             SkyBases(I).Visited.Year := Natural'Value(To_String(ReadData));
             if SkyBases(I).Visited.Year > 0 then
                 SkyBases(I).Visited.Month := Natural'Value(To_String(ReadData));
@@ -531,6 +536,8 @@ package body Game is
                 SkyBases(I).AskedForEvents.Year := Natural'Value(To_String(ReadData));
                 SkyBases(I).AskedForEvents.Month := Natural'Value(To_String(ReadData));
                 SkyBases(I).AskedForEvents.Day := Natural'Value(To_String(ReadData));
+                SkyBases(I).Reputation(1) := Integer'Value(To_String(ReadData));
+                SkyBases(I).Reputation(2) := Integer'Value(To_String(ReadData));
             end if;
             if ReadData = To_Unbounded_String("Y") then
                 SkyBases(I).Known := True;

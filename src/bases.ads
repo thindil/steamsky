@@ -31,6 +31,7 @@ package Bases is
             Price : Positive; -- Cost of enlist of recruit
         end record;
     package Recruit_Container is new Vectors(Positive, Recruit_Data);
+    type Reputation_Array is array (1..2) of Integer; -- Data structure for reputation, 1 = level, 2 = points to next level
     type BaseRecord is -- Data structure for bases
         record
             Name : Unbounded_String; -- Base name
@@ -44,8 +45,10 @@ package Bases is
             Known : Boolean; -- Did base is know to player
             AskedForBases : Boolean; -- Did player asked for bases in this base
             AskedForEvents : Date_Record; -- Time when players asked for events in this base
+            Reputation : Reputation_Array; -- Reputation level and progress of player
         end record;
     SkyBases : array (1..1024) of BaseRecord; -- List of sky bases
+    procedure GainRep(BaseIndex : Positive; Points : Integer); -- Gain reputation in selected base
     procedure BuyItems(ItemIndex : Positive; Amount : String); -- Buy items from bases
     procedure SellItems(ItemIndex : Positive; Amount : String); -- Sell items from bases
     function GenerateBaseName return Unbounded_String; -- Generate random name for base
