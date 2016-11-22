@@ -41,7 +41,7 @@ package body BasesList is
         type Value_Type is digits 2 range 0.0..9999999.0;
         package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
         DiffX, DiffY : Natural;
-        CurrentLine : Line_Position := 2;
+        CurrentLine : Line_Position := 1;
         Distance : Value_Type;
         TimeDiff : Integer;
     begin
@@ -80,6 +80,30 @@ package body BasesList is
             else
                 Add(Win => InfoWindow, Str => "You can ask for events again.");
             end if;
+            Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
+            Add(Win => InfoWindow, Str => "Reputation: ");
+            case SkyBases(BaseIndex).Reputation(1) is
+                when -100..-75 =>
+                    Add(Win => InfoWindow, Str => "Hated");
+                when -74..-50 =>
+                    Add(Win => InfoWindow, Str => "Outlaw");
+                when -49..-25 =>
+                    Add(Win => InfoWindow, Str => "Hostile");
+                when -24..-1 =>
+                    Add(Win => InfoWindow, Str => "Unfriendly");
+                when 0 =>
+                    Add(Win => InfoWindow, Str => "Unknown");
+                when 1..25 =>
+                    Add(Win => InfoWindow, Str => "Visitor");
+                when 26..50 =>
+                    Add(Win => InfoWindow, Str => "Trader");
+                when 51..75 =>
+                    Add(Win => InfoWindow, Str => "Friend");
+                when 76..100 =>
+                    Add(Win => InfoWindow, Str => "Well known");
+                when others =>
+                    null;
+            end case;
             CurrentLine := 7;
         else
             Add(Win => InfoWindow, Str => "Not visited yet.");
@@ -88,8 +112,8 @@ package body BasesList is
         DiffY := abs(PlayerShip.SkyY - SkyBases(BaseIndex).SkyY);
         Distance := Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2)));
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-        CurrentLine := CurrentLine + 2;
         Add(Win => InfoWindow, Str => "Distance:" & Integer'Image(Integer(Value_Type'Floor(Distance))));
+        CurrentLine := CurrentLine + 2;
         Pattern(BasesMenu, SearchPattern);
         TrimedSearchPattern := Trim(To_Unbounded_String(SearchPattern), Ada.Strings.Both);
         if Length(TrimedSearchPattern) > 0 then

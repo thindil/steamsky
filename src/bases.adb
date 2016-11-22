@@ -27,6 +27,25 @@ with Ships; use Ships;
 with Events; use Events;
 
 package body Bases is
+
+    procedure GainRep(BaseIndex : Positive; Points : Integer) is
+        NewPoints : Integer;
+    begin
+        if SkyBases(BaseIndex).Reputation(1) = -100 or SkyBases(BaseIndex).Reputation(1) = 100 then
+            return;
+        end if;
+        NewPoints := SkyBases(BaseIndex).Reputation(2) + Points;
+        if NewPoints < 0 then
+            SkyBases(BaseIndex).Reputation(1) := SkyBases(BaseIndex).Reputation(1) - 1;
+            SkyBases(BaseIndex).Reputation(2) := abs(SkyBases(BaseIndex).Reputation(1) * 50) + NewPoints;
+            return;
+        end if;
+        if NewPoints > SkyBases(BaseIndex).Reputation(1) * 50 then
+            NewPoints := NewPoints - (SkyBases(BaseIndex).Reputation(1) * 50);
+            SkyBases(BaseIndex).Reputation(1) := SkyBases(BaseIndex).Reputation(1) + 1;
+        end if;
+        SkyBases(BaseIndex).Reputation(2) := NewPoints;
+    end GainRep;
     
     procedure BuyItems(ItemIndex : Positive; Amount : String) is
         BuyAmount, TraderIndex : Positive;
@@ -65,6 +84,7 @@ package body Bases is
         UpdateCargo(PlayerShip, 1, (0 - Cost));
         UpdateCargo(PlayerShip, ItemIndex, BuyAmount);
         GainExp(1, 4, TraderIndex);
+        GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
         AddMessage("You bought" & Positive'Image(BuyAmount) & " " & ItemName &
             " for" & Positive'Image(Cost) & " Charcollum.", TradeMessage);
         UpdateGame(5);
@@ -101,6 +121,7 @@ package body Bases is
         UpdateCargo(PlayerShip, ProtoIndex, (0 - SellAmount));
         UpdateCargo(PlayerShip, 1, Profit);
         GainExp(1, 4, TraderIndex);
+        GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
         AddMessage("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" & 
             Positive'Image(Profit) & " Charcollum.", TradeMessage);
         UpdateGame(5);
@@ -189,6 +210,7 @@ package body Bases is
         end if;
         UpdateCargo(PlayerShip, 1, (0 - Cost));
         GainExp(1, 4, TraderIndex);
+        GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
         UpdateGame(Time);
     end RepairShip;
 
@@ -257,6 +279,7 @@ package body Bases is
             UpdateGame(Modules_List.Element(ModuleIndex).InstallTime);
             UpdateCargo(PlayerShip, 1, (0 - Price));
             GainExp(1, 4, TraderIndex);
+            GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
             PlayerShip.Modules.Append(New_Item => (Name =>  Modules_List.Element(ModuleIndex).Name,
                 ProtoIndex => ModuleIndex, 
                 Weight => Modules_List.Element(ModuleIndex).Weight,
@@ -316,6 +339,7 @@ package body Bases is
             UpdateGame(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).InstallTime);
             UpdateCargo(PlayerShip, 1, Price);
             GainExp(1, 4, TraderIndex);
+            GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
             AddMessage("You removed " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & " from your ship and earned" &
                 Positive'Image(Price) & " Charcollum.", 
                 TradeMessage);
@@ -443,6 +467,7 @@ package body Bases is
             PreviousOrder => Rest, OrderTime => 15)); 
         UpdateCargo(PlayerShip, 1, (0 - Price));
         GainExp(1, 4, TraderIndex);
+        GainRep(BaseIndex, 1);
         AddMessage("You hired " & To_String(Recruit.Name) & " for" & Positive'Image(Price) & " Charcollum.", TradeMessage);
         SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex, Count => 1);
         SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population - 1;
@@ -545,6 +570,7 @@ package body Bases is
         SkyBases(BaseIndex).AskedForBases := True;
         AddMessage(To_String(PlayerShip.Crew.Element(TraderIndex).Name) & " asked for directions to other bases.", OrderMessage);
         GainExp(1, 4, TraderIndex);
+        GainRep(BaseIndex, 1);
         UpdateGame(30);
     end AskForBases;
 
@@ -644,6 +670,7 @@ package body Bases is
         SkyBases(BaseIndex).AskedForEvents := GameDate;
         AddMessage(To_String(PlayerShip.Crew.Element(TraderIndex).Name) & " asked for events in base.", OrderMessage);
         GainExp(1, 4, TraderIndex);
+        GainRep(BaseIndex, 1);
         UpdateGame(30);
     end AskForEvents;
 
