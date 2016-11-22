@@ -25,7 +25,7 @@ package UserInterface is
     function HideDialog return Boolean; -- Hide dialog if visible, return True if dialog was hidden
     procedure DrawGame(CurrentState : GameStates); -- Draw game screen
     function GameMenuKeys(CurrentState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in game menu
-    function SpeedMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in speed control menu
+    function OrdersMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in orders menu
     function ConfirmKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in confirm window
     function WaitMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in wait orders menu
     

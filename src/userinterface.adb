@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
+with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Maps; use Maps;
 with Ships; use Ships;
 with Ships.UI; use Ships.UI;
@@ -38,6 +39,8 @@ with BasesList; use BasesList;
 package body UserInterface is
 
     DialogPanel : Panel := Null_Panel;
+    OrdersMenu : Menu;
+    MenuWindow : Window;
 
     procedure ShowGameHeader(CurrentState : GameStates) is
         Speed : Unbounded_String;
@@ -186,139 +189,98 @@ package body UserInterface is
         end if;
     end ShowGameHeader;
 
-    procedure ShowSpeedControl is
-        SpeedWindow : Window;
-        WindowHeight : Line_Position := 6;
-        NeedRepair, IsShipyard : Boolean := False;
-        AskedForBases, AskedForEvents : Boolean := True;
-        CurrentLine : Line_Position := 4;
+    procedure ShowOrdersMenu is
+        Orders_Items : Item_Array_Access;
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
         Event : Events_Types := None;
         TimeDiff : Natural;
         BaseIndex : Positive;
+        MenuIndex : Positive;
     begin
-        if PlayerShip.Speed = DOCKED then
+        if PlayerShip.Speed = DOCKED then 
             BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
-                    NeedRepair := True;
-                    WindowHeight := WindowHeight + 1;
+            MenuIndex := 2;
+            Orders_Items := new Item_Array(1..9);
+            Orders_Items.all(1) := New_Item("Undock");
+            for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                if PlayerShip.Crew.Element(I).Order = Talk then
+                    Orders_Items.all(2) := New_Item("Trade");
+                    Orders_Items.all(3) := New_Item("Recruit");
+                    MenuIndex := 4;
+                    TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).AskedForEvents.Day + ((30 *
+                    SkyBases(BaseIndex).AskedForEvents.Month) * SkyBases(BaseIndex).AskedForEvents.Year));
+                    if TimeDiff > 6 then
+                        Orders_Items.all(MenuIndex) := New_Item("Ask for events");
+                        MenuIndex := MenuIndex + 1;
+                    end if;
+                    if not SkyBases(BaseIndex).AskedForBases then
+                        Orders_Items.all(MenuIndex) := New_Item("Ask for bases");
+                        MenuIndex := MenuIndex + 1;
+                    end if;
+                    for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                        if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                            Orders_Items.all(MenuIndex) := New_Item("Repair");
+                            MenuIndex := MenuIndex + 1;
+                            exit;
+                        end if;
+                    end loop;
+                    if SkyBases(BaseIndex).BaseType = SHIPYARD then
+                        Orders_Items.all(MenuIndex) := New_Item("Shipyard");
+                        MenuIndex := MenuIndex + 1;
+                    end if;
                     exit;
                 end if;
             end loop;
-            if SkyBases(BaseIndex).BaseType = SHIPYARD then
-                WindowHeight := WindowHeight + 1;
-                IsShipyard := True;
-            end if;
-            if not SkyBases(BaseIndex).AskedForBases then
-                WindowHeight := WindowHeight + 1;
-                AskedForBases := False;
-            end if;
-            TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).AskedForEvents.Day + ((30 *
-                SkyBases(BaseIndex).AskedForEvents.Month) * SkyBases(BaseIndex).AskedForEvents.Year));
-            if TimeDiff > 6 then
-                WindowHeight := WindowHeight + 1;
-                AskedForEvents := False;
-            end if;
-            SpeedWindow := Create(WindowHeight, 18, (Lines / 3), (Columns / 2) - 9);
-            Box(SpeedWindow);
-            Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
-            Add(Win => SpeedWindow, Str => "Undock");
-            Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
-                Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 2, Column => 2);
-            Add(Win => SpeedWindow, Str => "Trade");
-            Change_Attributes(Win => SpeedWindow, Line => 2, Column => 2, 
-                Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 3, Column => 2);
-            Add(Win => SpeedWindow, Str => "Recruit");
-            Change_Attributes(Win => SpeedWindow, Line => 3, Column => 3, 
-                Count => 1, Color => 1);
-            if not AskedForEvents then
-                Move_Cursor(Win => SpeedWindow, Line => CurrentLine, Column => 2);
-                Add(Win => SpeedWindow, Str => "Ask for events");
-                Change_Attributes(Win => SpeedWindow, Line => CurrentLine, Column => 13, 
-                    Count => 1, Color => 1);
-                CurrentLine := CurrentLine + 1;
-            end if;
-            if not AskedForBases then
-                Move_Cursor(Win => SpeedWindow, Line => CurrentLine, Column => 2);
-                Add(Win => SpeedWindow, Str => "Ask for bases");
-                Change_Attributes(Win => SpeedWindow, Line => CurrentLine, Column => 10, 
-                    Count => 1, Color => 1);
-                CurrentLine := CurrentLine + 1;
-            end if;
-            if NeedRepair then
-                Move_Cursor(Win => SpeedWindow, Line => CurrentLine, Column => 2);
-                Add(Win => SpeedWindow, Str => "Repair");
-                Change_Attributes(Win => SpeedWindow, Line => CurrentLine, Column => 2, 
-                    Count => 1, Color => 1);
-                CurrentLine := CurrentLine + 1;
-            end if;
-            if IsShipyard then
-                Move_Cursor(Win =>SpeedWindow, Line => CurrentLine, Column => 2);
-                Add(Win => SpeedWindow, Str => "Shipyard");
-                Change_Attributes(Win => SpeedWindow, Line => CurrentLine, Column => 2, 
-                    Count => 1, Color => 1);
-                CurrentLine := CurrentLine + 1;
-            end if;
-            Move_Cursor(Win => SpeedWindow, Line => CurrentLine, Column => 2);
-            Add(Win => SpeedWindow, Str => "Quit");
-            Change_Attributes(Win => SpeedWindow, Line => CurrentLine, Column => 2, Count => 1,
-                Color => 1);
         else
-            SpeedWindow := Create(8, 17, (Lines / 3), (Columns / 2) - 8);
-            Box(SpeedWindow);
+            MenuIndex := 1;
+            Orders_Items := new Item_Array(1..7);
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
                 Event := Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType;
             end if;
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 and Event = None then
-                Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
-                Add(Win => SpeedWindow, Str => "Dock");
-                Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
-                    Count => 1, Color => 1);
+                Orders_Items.all(MenuIndex) := New_Item("Dock");
+                MenuIndex := MenuIndex + 1;
             end if;
             case Event is
                 when EnemyShip =>
-                    Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
-                    Add(Win => SpeedWindow, Str => "Attack");
-                    Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
-                        Count => 1, Color => 1);
+                    Orders_Items.all(MenuIndex) := New_Item("Attack");
+                    MenuIndex := MenuIndex + 1;
                 when FullDocks =>
-                    Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
-                    Add(Win => SpeedWindow, Str => "Wait");
-                    Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
-                        Count => 1, Color => 1);
+                    Orders_Items.all(MenuIndex) := New_Item("Wait");
+                    MenuIndex := MenuIndex + 1;
                 when AttackOnBase =>
-                    Move_Cursor(Win => SpeedWindow, Line => 1, Column => 2);
-                    Add(Win => SpeedWindow, Str => "Defend");
-                    Change_Attributes(Win => SpeedWindow, Line => 1, Column => 2, 
-                        Count => 1, Color => 1);
+                    Orders_Items.all(MenuIndex) := New_Item("Defend");
+                    MenuIndex := MenuIndex + 1;
                 when others =>
                     null;
             end case;
-            Move_Cursor(Win => SpeedWindow, Line => 2, Column => 2);
-            Add(Win => SpeedWindow, Str => "Full stop");
-            Change_Attributes(Win => SpeedWindow, Line => 2, Column => 2, 
-                Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 3, Column => 2);
-            Add(Win => SpeedWindow, Str => "Quarter speed");
-            Change_Attributes(Win => SpeedWindow, Line => 3, Column => 3, 
-                Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 4, Column => 2);
-            Add(Win => SpeedWindow, Str => "Half speed");
-            Change_Attributes(Win => SpeedWindow, Line => 4, Column => 2, 
-                Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 5, Column => 2);
-            Add(Win => SpeedWindow, Str => "Full speed");
-            Change_Attributes(Win => SpeedWindow, Line => 5, Column => 4, 
-                Count => 1, Color => 1);
-            Move_Cursor(Win => SpeedWindow, Line => 6, Column => 2);
-            Add(Win => SpeedWindow, Str => "Quit");
-            Change_Attributes(Win => SpeedWindow, Line => 6, Column => 2, Count => 1,
-                Color => 1);
+            Orders_Items.all(MenuIndex) := New_Item("Full stop");
+            MenuIndex := MenuIndex + 1;
+            Orders_Items.all(MenuIndex) := New_Item("Quarter speed");
+            MenuIndex := MenuIndex + 1;
+            Orders_Items.all(MenuIndex) := New_Item("Half speed");
+            MenuIndex := MenuIndex + 1;
+            Orders_Items.all(MenuIndex) := New_Item("Full speed");
+            MenuIndex := MenuIndex + 1;
         end if;
-        Refresh(SpeedWindow);
-    end ShowSpeedControl;
+        Orders_Items.all(MenuIndex) := New_Item("Quit");
+        MenuIndex := MenuIndex + 1;
+        for I in MenuIndex..Orders_Items'Last loop
+            Orders_Items.all(I) := Null_Item;
+        end loop;
+        OrdersMenu := New_Menu(Orders_Items);
+        Set_Format(OrdersMenu, Lines - 4, 1);
+        Set_Mark(OrdersMenu, "");
+        Scale(OrdersMenu, MenuHeight, MenuLength);
+        MenuWindow := Create(MenuHeight + 2, MenuLength + 2, ((Lines / 3) - (MenuHeight / 2)), ((Columns / 2) - (MenuLength / 2)));
+        Box(MenuWindow);
+        Set_Window(OrdersMenu, MenuWindow);
+        Set_Sub_Window(OrdersMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 1, 1));
+        Post(OrdersMenu);
+        Refresh;
+        Refresh(MenuWindow);
+    end ShowOrdersMenu;
 
     procedure ShowConfirm(Message : String) is
         ConfirmWindow : Window;
@@ -497,7 +459,7 @@ package body UserInterface is
                 ShowSkyMap;
             when Control_Speed =>
                 ShowSkyMap;
-                ShowSpeedControl;
+                ShowOrdersMenu;
             when Ship_Info =>
                 ShowShipInfo;
             when Crew_Info =>
@@ -597,120 +559,71 @@ package body UserInterface is
         end case;
     end GameMenuKeys;
 
-    function SpeedMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates is
-        HaveTrader : Boolean := False;
-        Event : Events_Types := None;
+    function OrdersMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates is
         EventIndex : Natural := 0;
         NewState : GameStates;
+        Order : constant String := Name(Current(OrdersMenu));
+        Result : Driver_Result;
     begin
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Talk then
-                HaveTrader := True;
-            end if;
-        end loop;
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             EventIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-            Event := Events_List.Element(EventIndex).Etype;
         end if;
         case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-                DrawGame(Sky_Map_View);
-                return OldState;
-            when Character'Pos('t') | Character'Pos('T') => -- Trade with base
-                if not HaveTrader then
-                    ShowDialog("You don't have anyone assigned to talks.");
+            when KEY_UP => -- Select previous order
+                Result := Driver(OrdersMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OrdersMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow);
+                end if;
+            when KEY_DOWN => -- Select next order
+                Result := Driver(OrdersMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OrdersMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow);
+                end if;
+            when 10 => -- Select current order
+                if Order = "Quit" then
+                    Post(OrdersMenu, False);
+                    Delete(OrdersMenu);
                     DrawGame(Sky_Map_View);
                     return OldState;
-                end if;
-                if PlayerShip.Speed = DOCKED then
+                elsif Order = "Trade" then
                     DrawGame(Trade_View);
                     return Trade_View;
-                end if;
-            when Character'Pos('e') | Character'Pos('E') => -- Recruit new crew members in base
-                if not HaveTrader then
-                    ShowDialog("You don't have anyone assigned to talks.");
-                    DrawGame(Sky_Map_View);
-                    return OldState;
-                end if;
-                if PlayerShip.Speed = DOCKED then
+                elsif Order = "Recruit" then
                     DrawGame(Recruits_View);
                     return Recruits_View;
-                end if;
-            when Character'Pos('n') | Character'Pos('N') => -- Ask for events
-                if not HaveTrader then
-                    ShowDialog("You don't have anyone assigned to talks.");
-                    DrawGame(Sky_Map_View);
-                    return OldState;
-                end if;
-                if PlayerShip.Speed = DOCKED then
+                elsif Order = "Ask for events" then
                     AskForEvents;
                     DrawGame(Sky_Map_View);
                     return OldState;
-                end if;
-            when Character'Pos('b') | Character'Pos('B') => -- Ask for other bases
-                if not HaveTrader then
-                    ShowDialog("You don't have anyone assigned to talks.");
-                    DrawGame(Sky_Map_View);
-                    return OldState;
-                end if;
-                if PlayerShip.Speed = DOCKED then
+                elsif Order = "Ask for bases" then
                     AskForBases;
                     DrawGame(Sky_Map_View);
                     return OldState;
-                end if;
-            when Character'Pos('r') | Character'Pos('R') => -- Repair ship in base
-                if not HaveTrader then
-                    ShowDialog("You don't have anyone assigned to talks.");
-                    DrawGame(Sky_Map_View);
-                    return OldState;
-                end if;
-                if PlayerShip.Speed = DOCKED then
+                elsif Order = "Repair" then
                     DrawGame(Repairs_View);
                     return Repairs_View;
-                end if;
-            when Character'Pos('s') | Character'Pos('S') => -- Shipyard in base
-                if not HaveTrader then
-                    ShowDialog("You don't have anyone assigned to talks.");
-                    DrawGame(Sky_Map_View);
-                    return OldState;
-                end if;
-                if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).BaseType = SHIPYARD then
+                elsif Order = "Shipyard" then
                     DrawGame(Shipyard_View);
                     return Shipyard_View;
-                end if;
-            when Character'Pos('u') | Character'Pos('U') => -- Undock ship from base or quarter speed
-                if PlayerShip.Speed = DOCKED then
+                elsif Order = "Undock" then
                     DockShip(False);
-                else
+                    DrawGame(Sky_Map_View);
+                    return OldState;
+                elsif Order = "Quarter speed" then
                     ChangeShipSpeed(QUARTER_SPEED);
-                end if;
-                DrawGame(Sky_Map_View);
-                return OldState;
-            when Character'Pos('d') | Character'Pos('D') => -- Dock ship to base or defend base during attack
-                if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
-                    case Event is
-                        when None => -- Dock ship to base
-                            DockShip(True);
-                            DrawGame(Sky_Map_View);
-                            return OldState;
-                        when AttackOnBase => -- Defend base during attack
-                            OldSpeed := PlayerShip.Speed;
-                            NewState := Combat_State;
-                            if EnemyName = Null_Unbounded_String then
-                                NewState := StartCombat(Events_List.Element(EventIndex).Data, False);
-                            end if;
-                            DrawGame(NewState);
-                            return NewState;
-                        when others =>
-                            null;
-                    end case;
-                end if;
-            when Character'Pos('f') | Character'Pos('F') => -- Full stop
-                ChangeShipSpeed(FULL_STOP);
-                DrawGame(Sky_Map_View);
-                return OldState;
-            when Character'Pos('a') | Character'Pos('A') => -- Attack other ship
-                if Event = EnemyShip then
+                    DrawGame(Sky_Map_View);
+                    return OldState;
+                elsif Order = "Dock" then
+                    DockShip(True);
+                    DrawGame(Sky_Map_View);
+                    return OldState;
+                elsif Order = "Defend" then
                     OldSpeed := PlayerShip.Speed;
                     NewState := Combat_State;
                     if EnemyName = Null_Unbounded_String then
@@ -718,17 +631,27 @@ package body UserInterface is
                     end if;
                     DrawGame(NewState);
                     return NewState;
-                end if;
-            when Character'Pos('h') | Character'Pos('H') => -- Half speed
-                ChangeShipSpeed(HALF_SPEED);
-                DrawGame(Sky_Map_View);
-                return OldState;
-            when Character'Pos('l') | Character'Pos('L') => -- Full speed
-                ChangeShipSpeed(FULL_SPEED);
-                DrawGame(Sky_Map_View);
-                return OldState;
-            when Character'Pos('w') | Character'Pos('W') => -- Wait menu
-                if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 and Event = FullDocks then
+                elsif Order = "Full stop" then
+                    ChangeShipSpeed(FULL_STOP);
+                    DrawGame(Sky_Map_View);
+                    return OldState;
+                elsif Order = "Attack" then
+                    OldSpeed := PlayerShip.Speed;
+                    NewState := Combat_State;
+                    if EnemyName = Null_Unbounded_String then
+                        NewState := StartCombat(Events_List.Element(EventIndex).Data, False);
+                    end if;
+                    DrawGame(NewState);
+                    return NewState;
+                elsif Order = "Half speed" then
+                    ChangeShipSpeed(HALF_SPEED);
+                    DrawGame(Sky_Map_View);
+                    return OldState;
+                elsif Order = "Full speed" then
+                    ChangeShipSpeed(FULL_SPEED);
+                    DrawGame(Sky_Map_View);
+                    return OldState;
+                elsif Order = "Wait" then
                     DrawGame(Wait_Order);
                     return Wait_Order;
                 end if;
@@ -736,7 +659,7 @@ package body UserInterface is
                 null;
         end case;
         return Control_Speed;
-    end SpeedMenuKeys;
+    end OrdersMenuKeys;
 
     function ConfirmKeys(OldState : GameStates; Key : Key_Code) return GameStates is
     begin
