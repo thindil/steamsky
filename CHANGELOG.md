@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Cargo to all ships
 - Need and using ammo in combat by npc ships
 - Player reputation in bases
+- More detailed informations about skills levels
 
 ### Changed
 - Updated help
