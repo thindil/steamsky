@@ -507,19 +507,30 @@ package body Bases.UI is
         end if;
         CurrentLine := CurrentLine + 1;
         for I in Recruit.Skills.First_Index..Recruit.Skills.Last_Index loop
-            if Recruit.Skills.Element(I)(2) > 0 and Recruit.Skills.Element(I)(2) < 20 then
-                SkillLevel := To_Unbounded_String("Novice");
-            elsif Recruit.Skills.Element(I)(2) > 19 and Recruit.Skills.Element(I)(2) < 40 then
-                SkillLevel := To_Unbounded_String("Beginner");
-            elsif Recruit.Skills.Element(I)(2) > 39 and Recruit.Skills.Element(I)(2) < 60 then
-                SkillLevel := To_Unbounded_String("Competent");
-            elsif Recruit.Skills.Element(I)(2) > 59 and Recruit.Skills.Element(I)(2) < 80 then
-                SkillLevel := To_Unbounded_String("Expert");
-            elsif Recruit.Skills.Element(I)(2) > 79 and Recruit.Skills.Element(I)(2) < 100 then
-                SkillLevel := To_Unbounded_String("Master");
-            elsif Recruit.Skills.Element(I)(2) > 99 then
-                SkillLevel := To_Unbounded_String("Grandmaster");
-            end if;
+            case Recruit.Skills.Element(I)(2) is
+                when 1..10 =>
+                    SkillLevel := To_Unbounded_String("Beginner");
+                when 11..20 =>
+                    SkillLevel := To_Unbounded_String("Novice");
+                when 21..30 =>
+                    SkillLevel := To_Unbounded_String("Apprentice");
+                when 31..40 =>
+                    SkillLevel := To_Unbounded_String("Practitioner");
+                when 41..50 =>
+                    SkillLevel := To_Unbounded_String("Competent");
+                when 51..60 =>
+                    SkillLevel := To_Unbounded_String("Respected");
+                when 61..70 =>
+                    SkillLevel := To_Unbounded_String("Renowed");
+                when 71..80 =>
+                    SkillLevel := To_Unbounded_String("Master");
+                when 81..90 =>
+                    SkillLevel := To_Unbounded_String("Grand-Master");
+                when 91..99 =>
+                    SkillLevel := To_Unbounded_String("Legendary");
+                when others =>
+                    SkillLevel := To_Unbounded_String("Ultimate");
+            end case;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => To_String(Skills_Names.Element(Recruit.Skills.Element(I)(1))) & ": " & To_String(SkillLevel));
             CurrentLine := CurrentLine + 1;
