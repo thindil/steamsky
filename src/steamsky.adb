@@ -129,7 +129,7 @@ begin
                         DrawGame(GameState);
                 end case;
             when Control_Speed =>
-                GameState := SpeedMenuKeys(OldState, Key);
+                GameState := OrdersMenuKeys(OldState, Key);
             when Ship_Info =>
                 GameState := ShipInfoKeys(Key, OldState);
             when Crew_Info =>
