@@ -60,6 +60,14 @@ begin
     Init_Pair(7, Color_White, 8);
     Set_KeyPad_Mode(SwitchOn => True);
 
+    if Columns < 60 or Lines < 24 then
+        Move_Cursor(Line => (Lines / 2), Column => 2);
+        Add(Str => "Your terminal size is too small for game. Minimal size is 40x24. Press any key, to exit from game.");
+        Key := Get_Keystroke;
+        End_Windows;
+        return;
+    end if;
+
     ShowMainMenu;
 
     while GameState /= Quit loop
