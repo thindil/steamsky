@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Player reputation in bases and it impact on some player actions
 - More detailed informations about skills levels
 - Check for minimal console size
+- New item type: medicines
 
 ### Changed
 - Updated help
