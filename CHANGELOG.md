@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 - Option to ask for events in bases
 - Cargo to all ships
 - Need and using ammo in combat by npc ships
-- Player reputation in bases
+- Player reputation in bases and it impact on some player actions
 - More detailed informations about skills levels
 
 ### Changed
