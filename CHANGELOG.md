@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Need and using ammo in combat by npc ships
 - Player reputation in bases and it impact on some player actions
 - More detailed informations about skills levels
+- Check for minimal console size
 
 ### Changed
 - Updated help
