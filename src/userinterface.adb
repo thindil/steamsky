@@ -195,11 +195,11 @@ package body UserInterface is
         MenuLength : Column_Position;
         Event : Events_Types := None;
         TimeDiff : Natural;
-        BaseIndex : Positive;
+        BaseIndex : Natural;
         MenuIndex : Positive;
     begin
+        BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         if PlayerShip.Speed = DOCKED then 
-            BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
             MenuIndex := 2;
             Orders_Items := new Item_Array(1..9);
             Orders_Items.all(1) := New_Item("Undock");
@@ -238,9 +238,11 @@ package body UserInterface is
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
                 Event := Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType;
             end if;
-            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 and Event = None then
-                Orders_Items.all(MenuIndex) := New_Item("Dock");
-                MenuIndex := MenuIndex + 1;
+            if BaseIndex > 0 and Event = None then
+                if SkyBases(BaseIndex).Reputation(1) > -25 then
+                    Orders_Items.all(MenuIndex) := New_Item("Dock");
+                    MenuIndex := MenuIndex + 1;
+                end if;
             end if;
             case Event is
                 when EnemyShip =>
