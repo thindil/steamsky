@@ -52,8 +52,7 @@ package body Bases is
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         ItemName : constant String := To_String(Items_List.Element(ItemIndex).Name);
-        Cost : Positive;
-        MoneyIndex : Natural;
+        Cost, MoneyIndex : Natural;
     begin
         BuyAmount := Positive'Value(Amount);
         if not Items_List.Element(ItemIndex).Buyable(BaseType) then
@@ -68,6 +67,21 @@ package body Bases is
         end loop;
         Cost := BuyAmount * Items_List.Element(ItemIndex).Prices(BaseType);
         Cost := Cost - Integer(Float'Floor(Float(Cost) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
+        case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Reputation(1) is
+            when -24..-1 =>
+                Cost := Cost + Integer(Float'Floor(Float(Cost) * 0.05));
+            when 26..50 =>
+                Cost := Cost - Integer(Float'Floor(Float(Cost) * 0.05));
+            when 51..75 =>
+                Cost := Cost - Integer(Float'Floor(Float(Cost) * 0.1));
+            when 76..100 =>
+                Cost := Cost - Integer(Float'Floor(Float(Cost) * 0.15));
+            when others =>
+                null;
+        end case;
+        if Cost < 1 then
+            Cost := 1;
+        end if;
         MoneyIndex := FindMoney;
         if FreeCargo(Cost - (Items_List.Element(ItemIndex).Weight * BuyAmount)) < 0 then
             ShowDialog("You don't have that much free space in your ship cargo.");
@@ -114,6 +128,18 @@ package body Bases is
         end loop;
         Profit := Items_List.Element(ProtoIndex).Prices(BaseType) * SellAmount;
         Profit := Profit + Integer(Float'Floor(Float(Profit) * (Float(GetSkillLevel(4, TraderIndex)) / 200.0)));
+        case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Reputation(1) is
+            when -24..-1 =>
+                Profit := Profit - Integer(Float'Floor(Float(Profit) * 0.05));
+            when 26..50 =>
+                Profit := Profit + Integer(Float'Floor(Float(Profit) * 0.05));
+            when 51..75 =>
+                Profit := Profit + Integer(Float'Floor(Float(Profit) * 0.1));
+            when 76..100 =>
+                Profit := Profit + Integer(Float'Floor(Float(Profit) * 0.15));
+            when others =>
+                null;
+        end case;
         if FreeCargo((Items_List.Element(ProtoIndex).Weight * SellAmount) - Profit) < 0 then
             ShowDialog("You don't have enough free cargo space in your ship for Charcollum.");
             return;
@@ -185,6 +211,21 @@ package body Bases is
             end if;
         end loop;
         Cost := Cost - Integer(Float'Floor(Float(Cost) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
+        case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Reputation(1) is
+            when -24..-1 =>
+                Cost := Cost + Integer(Float'Floor(Float(Cost) * 0.05));
+            when 26..50 =>
+                Cost := Cost - Integer(Float'Floor(Float(Cost) * 0.05));
+            when 51..75 =>
+                Cost := Cost - Integer(Float'Floor(Float(Cost) * 0.1));
+            when 76..100 =>
+                Cost := Cost - Integer(Float'Floor(Float(Cost) * 0.15));
+            when others =>
+                null;
+        end case;
+        if Cost < 1 then
+            Cost := 1;
+        end if;
         if PlayerShip.Cargo.Element(MoneyIndex).Amount < Cost then
             ShowDialog("You don't have enough Charcollum to pay for repairs.");
             return;
@@ -247,6 +288,21 @@ package body Bases is
         if Install then
             Price := Modules_List.Element(ModuleIndex).Price;
             Price := Price - Integer(Float'Floor(Float(Price) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
+            case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Reputation(1) is
+                when -24..-1 =>
+                    Price := Price + Integer(Float'Floor(Float(Price) * 0.05));
+                when 26..50 =>
+                    Price := Price - Integer(Float'Floor(Float(Price) * 0.05));
+                when 51..75 =>
+                    Price := Price - Integer(Float'Floor(Float(Price) * 0.1));
+                when 76..100 =>
+                    Price := Price - Integer(Float'Floor(Float(Price) * 0.15));
+                when others =>
+                    null;
+            end case;
+            if Price < 1 then
+                Price := 1;
+            end if;
             if PlayerShip.Cargo.Element(MoneyIndex).Amount < Price then
                 ShowDialog("You don't have enough Charcollum to pay for " & To_String(Modules_List.Element(ModuleIndex).Name) & ".");
                 return;
@@ -305,6 +361,18 @@ package body Bases is
                 Integer(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Price) * 
                 Float(Damage));
             Price := Price + Integer(Float'Floor(Float(Price) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
+            case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Reputation(1) is
+                when -24..-1 =>
+                    Price := Price - Integer(Float'Floor(Float(Price) * 0.05));
+                when 26..50 =>
+                    Price := Price + Integer(Float'Floor(Float(Price) * 0.05));
+                when 51..75 =>
+                    Price := Price + Integer(Float'Floor(Float(Price) * 0.1));
+                when 76..100 =>
+                    Price := Price + Integer(Float'Floor(Float(Price) * 0.15));
+                when others =>
+                    null;
+            end case;
             if FreeCargo((0 - Price)) < 0 then
                 ShowDialog("You don't have enough free space for Charcollum in ship cargo.");
                 return;
@@ -457,6 +525,21 @@ package body Bases is
         end loop;
         Price := Recruit.Price;
         Price := Price - Integer(Float'Floor(Float(Price) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
+        case SkyBases(BaseIndex).Reputation(1) is
+            when -24..-1 =>
+                Price := Price + Integer(Float'Floor(Float(Price) * 0.05));
+            when 26..50 =>
+                Price := Price - Integer(Float'Floor(Float(Price) * 0.05));
+            when 51..75 =>
+                Price := Price - Integer(Float'Floor(Float(Price) * 0.1));
+            when 76..100 =>
+                Price := Price - Integer(Float'Floor(Float(Price) * 0.15));
+            when others =>
+                null;
+        end case;
+        if Price < 1 then
+            Price := 1;
+        end if;
         if PlayerShip.Cargo.Element(MoneyIndex).Amount < Price then
             ShowDialog("You don't have enough Charcollum to hire " & To_String(Recruit.Name) & ".");
             return;
