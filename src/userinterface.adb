@@ -694,7 +694,16 @@ package body UserInterface is
                 DrawGame(Sky_Map_View);
                 return OldState;
             when others =>
-                null;
+                Result := Driver(OrdersMenu, Key);
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow);
+                else
+                    Result := Driver(OrdersMenu, M_CLEAR_PATTERN);
+                    Result := Driver(OrdersMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow);
+                    end if;
+                end if;
         end case;
         return Control_Speed;
     end OrdersMenuKeys;
