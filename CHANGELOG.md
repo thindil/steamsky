@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - More detailed informations about skills levels
 - Check for minimal console size
 - New item type: medicines
+- New item: medical supplies
 
 ### Changed
 - Updated help
