@@ -35,6 +35,7 @@ with MainMenu; use MainMenu;
 with Events; use Events;
 with ShipModules; use ShipModules;
 with BasesList; use BasesList;
+with Items; use Items;
 
 package body UserInterface is
 
@@ -197,44 +198,48 @@ package body UserInterface is
         TimeDiff : Natural;
         BaseIndex : Natural;
         MenuIndex : Positive;
+        HaveTrader : Boolean := False;
     begin
         BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Talk then
+                HaveTrader := True;
+                exit;
+            end if;
+        end loop;
         if PlayerShip.Speed = DOCKED then 
             MenuIndex := 2;
             Orders_Items := new Item_Array(1..9);
             Orders_Items.all(1) := New_Item("Undock");
-            for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                if PlayerShip.Crew.Element(I).Order = Talk then
-                    Orders_Items.all(2) := New_Item("Trade");
-                    Orders_Items.all(3) := New_Item("Recruit");
-                    MenuIndex := 4;
-                    TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).AskedForEvents.Day + ((30 *
-                    SkyBases(BaseIndex).AskedForEvents.Month) * SkyBases(BaseIndex).AskedForEvents.Year));
-                    if TimeDiff > 6 then
-                        Orders_Items.all(MenuIndex) := New_Item("Ask for events");
-                        MenuIndex := MenuIndex + 1;
-                    end if;
-                    if not SkyBases(BaseIndex).AskedForBases then
-                        Orders_Items.all(MenuIndex) := New_Item("Ask for bases");
-                        MenuIndex := MenuIndex + 1;
-                    end if;
-                    for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                        if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
-                            Orders_Items.all(MenuIndex) := New_Item("Repair");
-                            MenuIndex := MenuIndex + 1;
-                            exit;
-                        end if;
-                    end loop;
-                    if SkyBases(BaseIndex).BaseType = SHIPYARD then
-                        Orders_Items.all(MenuIndex) := New_Item("Shipyard");
-                        MenuIndex := MenuIndex + 1;
-                    end if;
-                    exit;
+            if HaveTrader then
+                Orders_Items.all(2) := New_Item("Trade");
+                Orders_Items.all(3) := New_Item("Recruit");
+                MenuIndex := 4;
+                TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).AskedForEvents.Day + ((30 *
+                SkyBases(BaseIndex).AskedForEvents.Month) * SkyBases(BaseIndex).AskedForEvents.Year));
+                if TimeDiff > 6 then
+                    Orders_Items.all(MenuIndex) := New_Item("Ask for events");
+                    MenuIndex := MenuIndex + 1;
                 end if;
-            end loop;
+                if not SkyBases(BaseIndex).AskedForBases then
+                    Orders_Items.all(MenuIndex) := New_Item("Ask for bases");
+                    MenuIndex := MenuIndex + 1;
+                end if;
+                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                    if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                        Orders_Items.all(MenuIndex) := New_Item("Repair");
+                        MenuIndex := MenuIndex + 1;
+                        exit;
+                    end if;
+                end loop;
+                if SkyBases(BaseIndex).BaseType = SHIPYARD then
+                    Orders_Items.all(MenuIndex) := New_Item("Shipyard");
+                    MenuIndex := MenuIndex + 1;
+                end if;
+            end if;
         else
             MenuIndex := 1;
-            Orders_Items := new Item_Array(1..7);
+            Orders_Items := new Item_Array(1..9);
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
                 Event := Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType;
             end if;
@@ -254,6 +259,18 @@ package body UserInterface is
                 when AttackOnBase =>
                     Orders_Items.all(MenuIndex) := New_Item("Defend");
                     MenuIndex := MenuIndex + 1;
+                when Disease =>
+                    if HaveTrader then
+                        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name = To_Unbounded_String("Medical supplies") then
+                                Orders_Items.all(MenuIndex) := New_Item("Deliver medical supplies for free");
+                                MenuIndex := MenuIndex + 1;
+                                Orders_Items.all(MenuIndex) := New_Item("Deliver medical suppplies for price");
+                                MenuIndex := MenuIndex + 1;
+                                exit;
+                            end if;
+                        end loop;
+                    end if;
                 when others =>
                     null;
             end case;
@@ -566,6 +583,11 @@ package body UserInterface is
         NewState : GameStates;
         Order : constant String := Name(Current(OrdersMenu));
         Result : Driver_Result;
+        NewTime : Integer;
+        procedure UpdateEvent(Event : in out EventData) is
+        begin
+            Event.Time := NewTime;
+        end UpdateEvent;
     begin
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             EventIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
@@ -588,12 +610,9 @@ package body UserInterface is
                     Refresh(MenuWindow);
                 end if;
             when 10 => -- Select current order
-                if Order = "Quit" then
-                    Post(OrdersMenu, False);
-                    Delete(OrdersMenu);
-                    DrawGame(Sky_Map_View);
-                    return OldState;
-                elsif Order = "Trade" then
+                Post(OrdersMenu, False);
+                Delete(OrdersMenu);
+                if Order = "Trade" then
                     DrawGame(Trade_View);
                     return Trade_View;
                 elsif Order = "Recruit" then
@@ -601,12 +620,8 @@ package body UserInterface is
                     return Recruits_View;
                 elsif Order = "Ask for events" then
                     AskForEvents;
-                    DrawGame(Sky_Map_View);
-                    return OldState;
                 elsif Order = "Ask for bases" then
                     AskForBases;
-                    DrawGame(Sky_Map_View);
-                    return OldState;
                 elsif Order = "Repair" then
                     DrawGame(Repairs_View);
                     return Repairs_View;
@@ -615,16 +630,10 @@ package body UserInterface is
                     return Shipyard_View;
                 elsif Order = "Undock" then
                     DockShip(False);
-                    DrawGame(Sky_Map_View);
-                    return OldState;
                 elsif Order = "Quarter speed" then
                     ChangeShipSpeed(QUARTER_SPEED);
-                    DrawGame(Sky_Map_View);
-                    return OldState;
                 elsif Order = "Dock" then
                     DockShip(True);
-                    DrawGame(Sky_Map_View);
-                    return OldState;
                 elsif Order = "Defend" then
                     OldSpeed := PlayerShip.Speed;
                     NewState := Combat_State;
@@ -635,8 +644,6 @@ package body UserInterface is
                     return NewState;
                 elsif Order = "Full stop" then
                     ChangeShipSpeed(FULL_STOP);
-                    DrawGame(Sky_Map_View);
-                    return OldState;
                 elsif Order = "Attack" then
                     OldSpeed := PlayerShip.Speed;
                     NewState := Combat_State;
@@ -647,16 +654,45 @@ package body UserInterface is
                     return NewState;
                 elsif Order = "Half speed" then
                     ChangeShipSpeed(HALF_SPEED);
-                    DrawGame(Sky_Map_View);
-                    return OldState;
                 elsif Order = "Full speed" then
                     ChangeShipSpeed(FULL_SPEED);
-                    DrawGame(Sky_Map_View);
-                    return OldState;
                 elsif Order = "Wait" then
                     DrawGame(Wait_Order);
                     return Wait_Order;
+                elsif Order = "Deliver medical supplies for free" then
+                    for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                        if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name = To_Unbounded_String("Medical supplies") then
+                            NewTime := Events_List.Element(EventIndex).Time - PlayerShip.Cargo.Element(I).Amount;
+                            if NewTime < 1 then
+                                Events_List.Delete(Index => EventIndex, Count => 1);
+                                SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := 0;
+                            else
+                                Events_List.Update_Element(Index => EventIndex, Process => UpdateEvent'Access);
+                            end if;
+                            UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(I).ProtoIndex, (0 - PlayerShip.Cargo.Element(I).Amount));
+                            GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 10);
+                            AddMessage("You gave medical supplies for free to base.", TradeMessage);
+                            exit;
+                        end if;
+                    end loop;
+                elsif Order = "Deliver medical supplies for price" then
+                    for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                        if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name = To_Unbounded_String("Medical supplies") then
+                            NewTime := Events_List.Element(EventIndex).Time - PlayerShip.Cargo.Element(I).Amount;
+                            if NewTime < 1 then
+                                Events_List.Delete(Index => EventIndex, Count => 1);
+                                SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := 0;
+                            else
+                                Events_List.Update_Element(Index => EventIndex, Process => UpdateEvent'Access);
+                            end if;
+                            SellItems(I, Integer'Image(PlayerShip.Cargo.Element(I).Amount));
+                            GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, -2);
+                            exit;
+                        end if;
+                    end loop;
                 end if;
+                DrawGame(Sky_Map_View);
+                return OldState;
             when others =>
                 null;
         end case;
