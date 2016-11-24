@@ -323,7 +323,16 @@ package body MainMenu is
                     return Quit;
                 end if;
             when others =>
-                null;
+                Result := Driver(GameMenu, Key);
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow);
+                else
+                    Result := Driver(GameMenu, M_CLEAR_PATTERN);
+                    Result := Driver(GameMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow);
+                    end if;
+                end if;
         end case;
         return Main_Menu;
     end MainMenuKeys;
