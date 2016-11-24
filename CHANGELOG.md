@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Don't craft items when worker is on break
 - Crash in bases list on small screens
+- Item type for steel plates
 
 ## [0.5] - 2016-11-13
 
