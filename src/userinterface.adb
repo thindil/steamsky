@@ -184,7 +184,7 @@ package body UserInterface is
             if not HaveUpgrade and PlayerShip.UpgradeModule > 0 then
                 Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 3);
             end if;
-            if not HaveTrader and PlayerShip.Speed = DOCKED then
+            if not HaveTrader and SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
                 Change_Attributes(Line => 0, Column => (Columns - 3), Count => 1, Color => 3);
             end if;
         end if;
