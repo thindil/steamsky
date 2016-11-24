@@ -121,7 +121,7 @@ Buyable = Y, N, N, N
 [21]
 Name = Steel plates
 Weight = 5
-Type = Iron
+Type = Steel
 Prices = 6, 8, 8, 8
 Buyable = Y, N, N, N
 [22]
