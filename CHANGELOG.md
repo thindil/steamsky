@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Check for minimal console size
 - New item type: medicines
 - New item: medical supplies
+- More possible ammo for this same gun types
 
 ### Changed
 - Updated help
