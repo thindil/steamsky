@@ -38,10 +38,13 @@ package body Ships.UI is
         InfoWindow : Window;
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         DamagePercent : Natural;
-        MAmount : Natural := 0;
+        MAmount, TextLength : Natural := 0;
         CurrentLine : Line_Position := 5;
         MaxUpgrade, UpgradePercent : Natural;
         MaxValue : Positive;
+        HaveAmmo : Boolean := False;
+        StartLine : Line_Position;
+        StartColumn, EndColumn : Column_Position;
     begin
         InfoWindow := Create(20, (Columns / 2), 8, (Columns / 2));
         Add(Win => InfoWindow, Str => "Status: ");
@@ -134,9 +137,44 @@ package body Ships.UI is
                 end if;
                 CurrentLine := CurrentLine + 1;
             when GUN =>
-                Add(Win => InfoWindow, Str => "Ammunition: " &  
-                    To_String(Items_List.Element(PlayerShip.Modules.Element(ModuleIndex).Current_Value).Name));
-                Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+                Add(Win => InfoWindow, Str => "Ammunition: "); 
+                MAmount := 0;
+                for I in Items_List.First_Index..Items_List.Last_Index loop
+                    if Items_List.Element(I).IType =
+                        Items_Types.Element(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Value) 
+                    then
+                        if MAmount > 0 then
+                            Add(Win => InfoWindow, Str => " or ");
+                        end if;
+                        Get_Cursor_Position(Win => InfoWindow, Line => StartLine, Column => StartColumn);
+                        Add(Win => InfoWindow, Str => To_String(Items_List.Element(I).Name));
+                        Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
+                        for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                            if PlayerShip.Cargo.Element(J).ProtoIndex = I then
+                                HaveAmmo := True;
+                                exit;
+                            end if;
+                        end loop;
+                        if not HaveAmmo then
+                            if StartLine = CurrentLine then
+                                TextLength := Natural(EndColumn - StartColumn);
+                                Change_Attributes(Win => InfoWindow, Line => StartLine,
+                                Column => StartColumn, Count => Integer(StartColumn) + TextLength, Color => 3);
+                            else
+                                TextLength := Natural((Columns / 2) - StartColumn);
+                                Change_Attributes(Win => InfoWindow, Line => StartLine,
+                                Column => StartColumn, Count => Integer(StartColumn) + TextLength, Color => 3);
+                                Change_Attributes(Win => InfoWindow, Line => CurrentLine,
+                                Column => 0, Count => Integer(EndColumn), Color => 3);
+                            end if;
+                            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
+                        end if;
+                        HaveAmmo := False;
+                        MAmount := MAmount + 1;
+                    end if;
+                end loop;
+                CurrentLine := CurrentLine + 1;
+                Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
                 if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
                     Add(Win => InfoWindow, Str => "Gunner: " &
                         To_String(PlayerShip.Crew.Element(PlayerShip.Modules.Element(ModuleIndex).Owner).Name));

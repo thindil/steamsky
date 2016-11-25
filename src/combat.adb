@@ -154,9 +154,16 @@ package body Combat is
                         else
                             Shoots := 2;
                         end if;
-                        for I in Ship.Cargo.First_Index..Ship.Cargo.Last_Index loop
-                            if Ship.Cargo.Element(I).ProtoIndex = Ship.Modules.Element(K).Current_Value then
-                                AmmoIndex := I;
+                        for I in Items_List.First_Index..Items_List.Last_Index loop
+                            if Items_List.Element(I).IType =
+                                Items_Types.Element(Modules_List.Element(Ship.Modules.Element(K).ProtoIndex).Value)
+                            then
+                                for J in Ship.Cargo.First_Index..Ship.Cargo.Last_Index loop
+                                    if Ship.Cargo.Element(J).ProtoIndex = I then
+                                        AmmoIndex := J;
+                                        exit;
+                                    end if;
+                                end loop;
                                 exit;
                             end if;
                         end loop;
