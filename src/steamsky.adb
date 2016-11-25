@@ -168,10 +168,7 @@ begin
             when Wait_Order =>
                 GameState := WaitMenuKeys(OldState, Key);
             when News_View =>
-                Erase;
-                Refresh;
-                ShowMainMenu;
-                GameState := Main_Menu;
+                GameState := NewsKeys(Key);
             when Cargo_Info =>
                 GameState := CargoInfoKeys(Key, OldState);
             when Help_Topic =>
