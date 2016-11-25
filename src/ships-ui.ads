@@ -26,5 +26,6 @@ package Ships.UI is
     function ModuleOptionsKeys(Key : Key_Code) return GameStates; -- Handle keys in modules options menu
     function ShipFormKeys(Key : Key_Code; CurrentState : GameStates) return GameStates; -- Handle keys in rename/drop cargo form
     function AssignOwnerKeys(Key : Key_Code) return GameStates; -- Handle keys in assign module owner menu
+    function AssignAmmoKeys(Key : Key_Code) return GameStates; -- Handle keys in assign gun ammo menu
 
 end Ships.UI;

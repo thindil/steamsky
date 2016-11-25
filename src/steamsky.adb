@@ -195,6 +195,8 @@ begin
                 GameState := BasesListKeys(Key);
             when Events_View =>
                 GameState := ShowEventsKeys(Key);
+            when Assign_Ammo =>
+                GameState := AssignAmmoKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;

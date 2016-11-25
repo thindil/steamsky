@@ -154,19 +154,30 @@ package body Combat is
                         else
                             Shoots := 2;
                         end if;
-                        for I in Items_List.First_Index..Items_List.Last_Index loop
-                            if Items_List.Element(I).IType =
-                                Items_Types.Element(Modules_List.Element(Ship.Modules.Element(K).ProtoIndex).Value)
+                        if Ship.Modules.Element(K).Current_Value >= Ship.Cargo.First_Index and Ship.Modules.Element(K).Current_Value 
+                            <= Ship.Cargo.Last_Index 
+                        then
+                            if Items_List.Element(Ship.Cargo.Element(Ship.Modules.Element(K).Current_Value).ProtoIndex).IType = 
+                                Items_Types.Element(Modules_List.Element(Ship.Modules.Element(K).ProtoIndex).Value) 
                             then
-                                for J in Ship.Cargo.First_Index..Ship.Cargo.Last_Index loop
-                                    if Ship.Cargo.Element(J).ProtoIndex = I then
-                                        AmmoIndex := J;
-                                        exit;
-                                    end if;
-                                end loop;
-                                exit;
+                                AmmoIndex := Ship.Modules.Element(K).Current_Value;
                             end if;
-                        end loop;
+                        end if;
+                        if AmmoIndex = 0 then
+                            for I in Items_List.First_Index..Items_List.Last_Index loop
+                                if Items_List.Element(I).IType =
+                                    Items_Types.Element(Modules_List.Element(Ship.Modules.Element(K).ProtoIndex).Value)
+                                then
+                                    for J in Ship.Cargo.First_Index..Ship.Cargo.Last_Index loop
+                                        if Ship.Cargo.Element(J).ProtoIndex = I then
+                                            AmmoIndex := J;
+                                            exit;
+                                        end if;
+                                    end loop;
+                                    exit;
+                                end if;
+                            end loop;
+                        end if;
                         if AmmoIndex = 0 then
                             if Ship = PlayerShip then
                                 AddMessage("You don't have ammo to " & To_String(Ship.Modules.Element(K).Name) & "!", CombatMessage);
