@@ -49,6 +49,7 @@ Amount of loot from enemies depends on each enemy. Stronger enemies gives more a
 You can see detailed ship/crew/cargo/messages status during combat by pressing corresponding key ('c' for crew, 's' for ship, 'a' for cargo, 'm' for messages). There you can give normal orders to crew (even starts repairing during combat) or dropping cargo.
 Battering ram don't need operator to attack, it attack automatically when enemy is in close range and it always attack only one per combat round. You can't set hit location for battering ram too.
 Damage from weapon depends on level of damage itself. If weapon is more damaged, it do less damage. It works for player ship and enemy ship weapons.
+You can assign (during combat or outside combat) which ammunition to use with selected gun in ship info screen. If you don't assign ammo to gun, gunner will be using first available ammo from cargo which works with selected gun.
 On combat screen you can see only damaged modules. Colors on your ship modules list show how much damaged module is:
 - White : module slightly damaged
 - Green: module is damaged
