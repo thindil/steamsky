@@ -25,5 +25,6 @@ package MainMenu is
     function NewGameKeys(Key : Key_Code) return GameStates; -- Handle keys in new game window
     function LicenseKeys(Key : Key_Code) return GameStates; -- Handle keys on license screen
     function FullLicenseKeys(Key : Key_Code) return GameStates; -- Handle keys on full license screen
+    function NewsKeys(Key : Key_Code) return GameStates; -- Handle keys on news screen
 
 end MainMenu;
