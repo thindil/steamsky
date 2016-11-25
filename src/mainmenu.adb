@@ -33,7 +33,7 @@ package body MainMenu is
 
     StartIndex : Integer := 0;
     EndIndex : Integer;
-    LicensePad : Window := Null_Window;
+    LicensePad, NewsPad : Window := Null_Window;
     NewGameForm : Forms.Form;
     FormWindow : Window;
     GameMenu : Menu;
@@ -214,34 +214,45 @@ package body MainMenu is
     end ShowFullLicense;
 
     procedure ShowNews is
-        CurrentLine : Line_Position := (Lines / 5) + 2;
-        CurrentColumn : Column_Position;
-        News : constant array (Positive range <>) of Unbounded_String :=
-            (To_Unbounded_String("* Savegames from previous version are not compatible with current!"), 
-                To_Unbounded_String("* Added new skills: metalsmisth and perception"),
-                To_Unbounded_String("* Added few new items to buy/sell in bases"),
-                To_Unbounded_String("* Added few new ship modules"),
-                To_Unbounded_String("* Added discovering bases"),
-                To_Unbounded_String("* Added few new manufacturing recipes"),
-                To_Unbounded_String("* Updated interface"),
-                To_Unbounded_String("* Updated help"),
-                To_Unbounded_String("* Added option to auto ship travel"),
-                To_Unbounded_String("* Added list of known bases"),
-                To_Unbounded_String("* Added ability to craft few things in this same time"),
-                To_Unbounded_String("* Fixed few bugs"));
+        ChangesFile : File_Type;
+        LinesAmount, TmpLinesAmount : Line_Position;
+        NewsText : Unbounded_String := Null_Unbounded_String;
+        FileText : Unbounded_String;
     begin
-        Move_Cursor(Line => (Lines / 5), Column => 10);
-        Add(Str => "Main changes since last release (0.4):");
-        for I in News'Range loop
-            Move_Cursor(Line => CurrentLine, Column => 10);
-            Add(Str => To_String(News(I)));
-            Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
-            CurrentLine := CurrentLine + 1;
-        end loop;
-        Move_Cursor(Line => (CurrentLine + 1), Column => 10);
-        Add(Str => "For more informations about changes, see CHANGELOG.md");
-        Move_Cursor(Line => (Lines - 2), Column => (Columns / 3));
-        Add(Str => "Press any key to back to main menu");
+        if NewsPad = Null_Window then
+            LinesAmount := 0;
+            if not Exists("CHANGELOG.md") then
+                NewsText := To_Unbounded_String("Can't find changelog file. Did CHANGELOG.md file is in this same directory where executable is?");
+            else
+                Open(ChangesFile, In_File, "CHANGELOG.md");
+                Set_Line(ChangesFile, 6);
+                loop
+                    FileText := To_Unbounded_String(Get_Line(ChangesFile));
+                    if Length(FileText) > 1 then
+                        exit when Slice(FileText, 1, 3) = "## ";
+                    end if;
+                    Append(NewsText, FileText);
+                    Append(NewsText, ASCII.LF);
+                    LinesAmount := LinesAmount + 1;
+                end loop;
+                Close(ChangesFile);
+                Append(NewsText, "For more informations about changes, see CHANGELOG.md");
+            end if;
+            TmpLinesAmount := Line_Position(Length(NewsText)) / Line_Position(Columns - 2);
+            if TmpLinesAmount < 1 then
+                TmpLinesAmount := 1;
+            end if;
+            if TmpLinesAmount > LinesAmount then
+                LinesAmount := TmpLinesAmount;
+            end if;
+            NewsPad := New_Pad(LinesAmount + 1, Columns);
+            Add(Win => NewsPad, Str => To_String(NewsText));
+            EndIndex := Integer(LinesAmount - (Lines - 3));
+            if EndIndex < 0 then
+                EndIndex := 0;
+            end if;
+        end if;
+        Refresh(NewsPad, Line_Position(StartIndex), 0, 3, 0, (Lines - 1), Columns);
     end ShowNews;
 
     procedure LoadGameError(Message : String) is
@@ -308,7 +319,9 @@ package body MainMenu is
                         return Main_Menu;
                     end if;
                 elsif Option = "News" then
+                    StartIndex := 0;
                     Erase;
+                    Add(Str => "Up/down arrows to scroll on line, PgUp/PgDown to scroll one screen, Home/End to go begining or end, any other key - back to main menu.");
                     Refresh_Without_Update;
                     ShowNews;
                     Update_Screen;
@@ -492,17 +505,15 @@ package body MainMenu is
 
     function LicenseKeys(Key : Key_Code) return GameStates is
     begin
+        Erase;
+        Refresh;
         case Key is
             when Character'Pos('f') | Character'Pos('F') => -- Show full license
                 StartIndex := 0;
-                Erase;
-                Refresh;
                 Add(Str => "Up/down arrows to scroll on line, PgUp/PgDown to scroll one screen, Home/End to go begining or end, any other key - back to main menu.");
                 ShowFullLicense;
                 return License_Full;
             when others => -- Back to main menu
-                Erase;
-                Refresh;
                 ShowMainMenu;
                 return Main_Menu;
         end case;
@@ -538,5 +549,36 @@ package body MainMenu is
         ShowFullLicense;
         return License_Full;
     end FullLicenseKeys;
+
+    function NewsKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when 56 | KEY_UP => -- Scroll news up one line
+                StartIndex := StartIndex - 1;
+            when 50 | KEY_DOWN => -- Scroll news down one line
+                StartIndex := StartIndex + 1;
+            when 51 | KEY_NPAGE => -- Scroll news down one page
+                StartIndex := StartIndex + Integer(Lines - 3);
+            when 57 | KEY_PPAGE => -- Scroll news up one page
+                StartIndex := StartIndex - Integer(Lines - 3);
+            when 55 | KEY_HOME => -- Scroll news to start
+                StartIndex := 0;
+            when 49 | KEY_END => -- Scroll news to end
+                StartIndex := EndIndex;
+            when others => -- Back to main menu
+                Erase;
+                Refresh;
+                ShowMainMenu;
+                return Main_Menu;
+        end case;
+        if StartIndex < 0 then
+            StartIndex := 0;
+        end if;
+        if StartIndex > EndIndex then
+            StartIndex := EndIndex;
+        end if;
+        ShowNews;
+        return News_View;
+    end NewsKeys;
 
 end MainMenu;
