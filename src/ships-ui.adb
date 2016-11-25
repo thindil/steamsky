@@ -685,7 +685,16 @@ package body Ships.UI is
                 ShowShipForm("New name for ship:");
                 return Rename_Ship;
             when others =>
-                null;
+                Result := Driver(ModulesMenu, Key);
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow);
+                else
+                    Result := Driver(ModulesMenu, M_CLEAR_PATTERN);
+                    Result := Driver(ModulesMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow);
+                    end if;
+                end if;
         end case;
         CurrentMenuIndex := Get_Index(Current(ModulesMenu));
         return Ship_Info;
@@ -722,7 +731,16 @@ package body Ships.UI is
                 ShowShipForm("Amount of " & ItemName & " to drop:", PlayerShip.Cargo.Element(CurrentMenuIndex).Amount);
                 return Drop_Cargo;
             when others =>
-                null;
+                Result := Driver(ModulesMenu, Key);
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow);
+                else
+                    Result := Driver(ModulesMenu, M_CLEAR_PATTERN);
+                    Result := Driver(ModulesMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow);
+                    end if;
+                end if;
         end case;
         CurrentMenuIndex := Get_Index(Current(ModulesMenu));
         return Cargo_Info;
@@ -777,7 +795,16 @@ package body Ships.UI is
                     return Assign_Owner;
                 end if;
             when others =>
-                null;
+                Result := Driver(OptionsMenu, Key);
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                else
+                    Result := Driver(OptionsMenu, M_CLEAR_PATTERN);
+                    Result := Driver(OptionsMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow2);
+                    end if;
+                end if;
         end case;
         return Module_Options;
     end ModuleOptionsKeys;
