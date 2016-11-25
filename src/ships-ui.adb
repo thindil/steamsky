@@ -45,12 +45,11 @@ package body Ships.UI is
         HaveAmmo : Boolean := False;
         StartLine : Line_Position;
         StartColumn, EndColumn : Column_Position;
+        Module : constant ModuleData := PlayerShip.Modules.Element(ModuleIndex);
     begin
         InfoWindow := Create(20, (Columns / 2), 8, (Columns / 2));
         Add(Win => InfoWindow, Str => "Status: ");
-        DamagePercent := 100 -
-            Natural((Float(PlayerShip.Modules.Element(ModuleIndex).Durability) /
-            Float(PlayerShip.Modules.Element(ModuleIndex).MaxDurability)) * 100.0);
+        DamagePercent := 100 - Natural((Float(Module.Durability) / Float(Module.MaxDurability)) * 100.0);
         if DamagePercent = 0 then
             Add(Win => InfoWindow, Str => "Ok");
         elsif DamagePercent > 0 and DamagePercent < 20 then
@@ -64,17 +63,16 @@ package body Ships.UI is
         else
             Add(Win => InfoWindow, Str => "Destroyed");
         end if;
-        MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Durability) * 1.5);
-        if PlayerShip.Modules.Element(ModuleIndex).MaxDurability = MaxValue then
+        MaxValue := Positive(Float(Modules_List.Element(Module.ProtoIndex).Durability) * 1.5);
+        if Module.MaxDurability = MaxValue then
             Add(Win => InfoWindow, Str => " (max upgrade)");
         end if;
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
-        Add(Win => InfoWindow, Str => "Weight:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Weight) &
-            " kg");
+        Add(Win => InfoWindow, Str => "Weight:" & Integer'Image(Module.Weight) & " kg");
         Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
         Add(Win => InfoWindow, Str => "Repair/Upgrade material: ");
         for I in Items_List.First_Index..Items_List.Last_Index loop
-            if Items_List.Element(I).IType = Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).RepairMaterial
+            if Items_List.Element(I).IType = Modules_List.Element(Module.ProtoIndex).RepairMaterial
                 then
                 if MAmount > 0 then
                     Add(Win => InfoWindow, Str => " or ");
@@ -85,121 +83,129 @@ package body Ships.UI is
         end loop;
         Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
         Add(Win => InfoWindow, Str => "Repair/Upgrade skill: " &
-            To_String(Skills_Names.Element(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).RepairSkill)));
+            To_String(Skills_Names.Element(Modules_List.Element(Module.ProtoIndex).RepairSkill)));
         Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
-        case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+        case Modules_List.Element(Module.ProtoIndex).MType is
             when ENGINE =>
-                Add(Win => InfoWindow, Str => "Max power:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
-                MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
-                if PlayerShip.Modules.Element(ModuleIndex).Max_Value = MaxValue then
+                Add(Win => InfoWindow, Str => "Max power:" & Integer'Image(Module.Max_Value));
+                MaxValue := Positive(Float(Modules_List.Element(Module.ProtoIndex).MaxValue) * 1.5);
+                if Module.Max_Value = MaxValue then
                     Add(Win => InfoWindow, Str => " (max upgrade)");
                 end if;
                 Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
-                Add(Win => InfoWindow, Str => "Fuel usage:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Current_Value));
-                MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Value) / 2.0);
-                if PlayerShip.Modules.Element(ModuleIndex).Current_Value = MaxValue then
+                Add(Win => InfoWindow, Str => "Fuel usage:" & Integer'Image(Module.Current_Value));
+                MaxValue := Positive(Float(Modules_List.Element(Module.ProtoIndex).Value) / 2.0);
+                if Module.Current_Value = MaxValue then
                     Add(Win => InfoWindow, Str => " (max upgrade)");
                 end if;
                 CurrentLine := CurrentLine + 1;
             when CARGO =>
-                Add(Win => InfoWindow, Str => "Max cargo:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value) &
+                Add(Win => InfoWindow, Str => "Max cargo:" & Integer'Image(Module.Max_Value) &
                     " kg");
             when HULL =>
-                Add(Win => InfoWindow, Str => "Modules space:" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Current_Value) &
-                    " /" & Integer'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
-                MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
-                if PlayerShip.Modules.Element(ModuleIndex).Max_Value = MaxValue then
+                Add(Win => InfoWindow, Str => "Modules space:" & Integer'Image(Module.Current_Value) &
+                    " /" & Integer'Image(Module.Max_Value));
+                MaxValue := Positive(Float(Modules_List.Element(Module.ProtoIndex).MaxValue) * 1.5);
+                if Module.Max_Value = MaxValue then
                     Add(Win => InfoWindow, Str => " (max upgrade)");
                 end if;
             when CABIN =>
-                if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
+                if Module.Owner > 0 then
                     Add(Win => InfoWindow, Str => "Owner: " &
-                        To_String(PlayerShip.Crew.Element(PlayerShip.Modules.Element(ModuleIndex).Owner).Name));
+                        To_String(PlayerShip.Crew.Element(Module.Owner).Name));
                 else
                     Add(Win => InfoWindow, Str => "Owner: none");
                 end if;
                 Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
                 Add(Win => InfoWindow, Str => "Quality: ");
-                if PlayerShip.Modules.Element(ModuleIndex).Max_Value < 30 then
+                if Module.Max_Value < 30 then
                     Add(Win => InfoWindow, Str => "minimal");
-                elsif PlayerShip.Modules.Element(ModuleIndex).Max_Value > 29 and PlayerShip.Modules.Element(ModuleIndex).Max_Value < 60
-                then
+                elsif Module.Max_Value > 29 and Module.Max_Value < 60 then
                     Add(Win => InfoWindow, Str => "basic");
-                elsif PlayerShip.Modules.Element(ModuleIndex).Max_Value > 59 and PlayerShip.Modules.Element(ModuleIndex).Max_Value < 80
-                then
+                elsif Module.Max_Value > 59 and Module.Max_Value < 80 then
                     Add(Win => InfoWindow, Str => "extended");
                 else
                     Add(Win => InfoWindow, Str => "luxury");
                 end if;
-                MaxValue := Positive(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
-                if PlayerShip.Modules.Element(ModuleIndex).Max_Value = MaxValue then
+                MaxValue := Positive(Float(Modules_List.Element(Module.ProtoIndex).MaxValue) * 1.5);
+                if Module.Max_Value = MaxValue then
                     Add(Win => InfoWindow, Str => " (max upgrade)");
                 end if;
                 CurrentLine := CurrentLine + 1;
             when GUN =>
-                Add(Win => InfoWindow, Str => "Ammunition: "); 
-                MAmount := 0;
-                for I in Items_List.First_Index..Items_List.Last_Index loop
-                    if Items_List.Element(I).IType =
-                        Items_Types.Element(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Value) 
+                Add(Win => InfoWindow, Str => "Ammunition: ");
+                if Module.Current_Value >= PlayerShip.Cargo.First_Index and Module.Current_Value <= PlayerShip.Cargo.Last_Index then
+                    if Items_List.Element(PlayerShip.Cargo.Element(Module.Current_Value).ProtoIndex).IType = 
+                        Items_Types.Element(Modules_List.Element(Module.ProtoIndex).Value) 
                     then
-                        if MAmount > 0 then
-                            Add(Win => InfoWindow, Str => " or ");
-                        end if;
-                        Get_Cursor_Position(Win => InfoWindow, Line => StartLine, Column => StartColumn);
-                        Add(Win => InfoWindow, Str => To_String(Items_List.Element(I).Name));
-                        Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
-                        for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                            if PlayerShip.Cargo.Element(J).ProtoIndex = I then
-                                HaveAmmo := True;
-                                exit;
-                            end if;
-                        end loop;
-                        if not HaveAmmo then
-                            if StartLine = CurrentLine then
-                                TextLength := Natural(EndColumn - StartColumn);
-                                Change_Attributes(Win => InfoWindow, Line => StartLine,
-                                Column => StartColumn, Count => Integer(StartColumn) + TextLength, Color => 3);
-                            else
-                                TextLength := Natural((Columns / 2) - StartColumn);
-                                Change_Attributes(Win => InfoWindow, Line => StartLine,
-                                Column => StartColumn, Count => Integer(StartColumn) + TextLength, Color => 3);
-                                Change_Attributes(Win => InfoWindow, Line => CurrentLine,
-                                Column => 0, Count => Integer(EndColumn), Color => 3);
-                            end if;
-                            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
-                        end if;
-                        HaveAmmo := False;
-                        MAmount := MAmount + 1;
+                        Add(Win => InfoWindow, Str => 
+                            To_String(Items_List.Element(PlayerShip.Cargo.Element(Module.Current_Value).ProtoIndex).Name)
+                            & " (assigned)");
+                        HaveAmmo := True;
                     end if;
-                end loop;
+                end if;
+                if not HaveAmmo then
+                    MAmount := 0;
+                    for I in Items_List.First_Index..Items_List.Last_Index loop
+                        if Items_List.Element(I).IType = Items_Types.Element(Modules_List.Element(Module.ProtoIndex).Value) then
+                            if MAmount > 0 then
+                                Add(Win => InfoWindow, Str => " or ");
+                            end if;
+                            Get_Cursor_Position(Win => InfoWindow, Line => StartLine, Column => StartColumn);
+                            Add(Win => InfoWindow, Str => To_String(Items_List.Element(I).Name));
+                            Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
+                            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                                if PlayerShip.Cargo.Element(J).ProtoIndex = I then
+                                    HaveAmmo := True;
+                                    exit;
+                                end if;
+                            end loop;
+                            if not HaveAmmo then
+                                if StartLine = CurrentLine then
+                                    TextLength := Natural(EndColumn - StartColumn);
+                                    Change_Attributes(Win => InfoWindow, Line => StartLine,
+                                    Column => StartColumn, Count => Integer(StartColumn) + TextLength, Color => 3);
+                                else
+                                    TextLength := Natural((Columns / 2) - StartColumn);
+                                    Change_Attributes(Win => InfoWindow, Line => StartLine,
+                                    Column => StartColumn, Count => Integer(StartColumn) + TextLength, Color => 3);
+                                    Change_Attributes(Win => InfoWindow, Line => CurrentLine,
+                                    Column => 0, Count => Integer(EndColumn), Color => 3);
+                                end if;
+                                Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
+                            end if;
+                            HaveAmmo := False;
+                            MAmount := MAmount + 1;
+                        end if;
+                    end loop;
+                end if;
                 CurrentLine := CurrentLine + 1;
                 Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-                if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
+                if Module.Owner > 0 then
                     Add(Win => InfoWindow, Str => "Gunner: " &
-                        To_String(PlayerShip.Crew.Element(PlayerShip.Modules.Element(ModuleIndex).Owner).Name));
+                        To_String(PlayerShip.Crew.Element(Module.Owner).Name));
                 else
                     Add(Win => InfoWindow, Str => "Gunner: none");
                 end if;
                 CurrentLine := CurrentLine + 1;
             when TURRET =>
-                if PlayerShip.Modules.Element(ModuleIndex).Current_Value > 0 then
+                if Module.Current_Value > 0 then
                     Add(Win => InfoWindow, Str => "Weapon: " &
-                        To_String(PlayerShip.Modules.Element(PlayerShip.Modules.Element(ModuleIndex).Current_Value).Name));
+                        To_String(PlayerShip.Modules.Element(Module.Current_Value).Name));
                 else
                     Add(Win => InfoWindow, Str => "Weapon: none");
                 end if;
             when ALCHEMY_LAB | FURNACE =>
-                if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
+                if Module.Owner > 0 then
                     Add(Win => InfoWindow, Str => "Worker: " &
-                        To_String(PlayerShip.Crew.Element(PlayerShip.Modules.Element(ModuleIndex).Owner).Name));
+                        To_String(PlayerShip.Crew.Element(Module.Owner).Name));
                 else
                     Add(Win => InfoWindow, Str => "Worker: none");
                 end if;
                 Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
-                if PlayerShip.Modules.Element(ModuleIndex).Current_Value > 0 then
+                if Module.Current_Value > 0 then
                     Add(Win => InfoWIndow, Str => "Manufacturing: " &
-                        To_String(Items_List.Element(Recipes_List.Element(PlayerShip.Modules.Element(ModuleIndex).Current_Value).ResultIndex).Name));
+                        To_String(Items_List.Element(Recipes_List.Element(Module.Current_Value).ResultIndex).Name));
                 else
                     Add(Win => InfoWindow, Str => "Manufacturing: nothing");
                 end if;
@@ -207,21 +213,21 @@ package body Ships.UI is
             when others =>
                 CurrentLine := CurrentLine - 1;
         end case;
-        if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Size > 0 then
+        if Modules_List.Element(Module.ProtoIndex).Size > 0 then
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Size:" & 
-                Natural'Image(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Size));
+                Natural'Image(Modules_List.Element(Module.ProtoIndex).Size));
             CurrentLine := CurrentLine + 1;
         end if;
-        if PlayerShip.Modules.Element(ModuleIndex).UpgradeAction /= NONE then
+        if Module.UpgradeAction /= NONE then
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Upgrading: ");
-            case PlayerShip.Modules.Element(ModuleIndex).UpgradeAction is
+            case Module.UpgradeAction is
                 when DURABILITY => 
                     Add(Win => InfoWindow, Str => "durability");
                     MaxUpgrade := 10;
                 when MAX_VALUE =>
-                    case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+                    case Modules_List.Element(Module.ProtoIndex).MType is
                         when ENGINE =>
                             Add(Win => InfoWindow, Str => "power");
                             MaxUpgrade := 10;
@@ -238,7 +244,7 @@ package body Ships.UI is
                             null;
                     end case;
                 when VALUE =>
-                    case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+                    case Modules_List.Element(Module.ProtoIndex).MType is
                         when ENGINE =>
                             Add(Win => InfoWindow, Str => "fuel usage");
                             MaxUpgrade := 100;
@@ -251,7 +257,7 @@ package body Ships.UI is
             CurrentLine := CurrentLine + 1;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Upgrade progress: ");
-            UpgradePercent :=  100 - Natural((Float(PlayerShip.Modules.Element(ModuleIndex).UpgradeProgress) /
+            UpgradePercent :=  100 - Natural((Float(Module.UpgradeProgress) /
                 Float(MaxUpgrade)) * 100.0);
             if UpgradePercent < 11 then
                 Add(Win => InfoWindow, Str => "started");
@@ -573,6 +579,8 @@ package body Ships.UI is
                 end if;
                 Options_Items.all(MenuIndex) := New_Item("Assign gunner", "7");
                 MenuIndex := MenuIndex + 1;
+                Options_Items.all(MenuIndex) := New_Item("Assign ammo", "9");
+                MenuIndex := MenuIndex + 1;
             when BATTERING_RAM =>
                 MaxValue := Natural(Float(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MaxValue) * 1.5);
                 if PlayerShip.Modules.Element(ModuleIndex).Max_Value < MaxValue then
@@ -651,6 +659,47 @@ package body Ships.UI is
         Refresh;
         Refresh(MenuWindow2);
     end ShowAssignMenu;
+
+    function ShowAssignAmmoMenu return GameStates is
+        ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
+        Assign_Items : constant Item_Array_Access := new Item_Array(1..(PlayerShip.Cargo.Last_Index + 2));
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        MenuIndex : Positive := 1;
+    begin
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
+                Items_Types.Element(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Value) and
+                I /= PlayerShip.Modules.Element(ModuleIndex).Current_Value
+            then
+                Assign_Items.all(MenuIndex) := New_Item(To_String(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name), 
+                    Positive'Image(I));
+                MenuIndex := MenuIndex + 1;
+            end if;
+        end loop;
+        if MenuIndex = 1 then
+            ShowDialog("You don't have any ammo to this gun.");
+            DrawGame(Ship_Info);
+            return Ship_Info;
+        end if;
+        Assign_Items.all(MenuIndex) := New_Item("Quit", "0");
+        MenuIndex := MenuIndex + 1;
+        for I in MenuIndex..Assign_Items'Last loop
+            Assign_Items.all(I) := Null_Item;
+        end loop;
+        OptionsMenu := New_Menu(Assign_Items);
+        Set_Options(OptionsMenu, (Show_Descriptions => False, others => True));
+        Set_Mark(OptionsMenu, "");
+        Scale(OptionsMenu, MenuHeight, MenuLength);
+        MenuWindow2 := Create(MenuHeight + 2, MenuLength + 2, ((Lines / 3) - (MenuHeight / 2)), ((Columns / 2) - (MenuLength / 2)));
+        Box(MenuWindow2);
+        Set_Window(OptionsMenu, MenuWindow2);
+        Set_Sub_Window(OptionsMenu, Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
+        Post(OptionsMenu);
+        Refresh;
+        Refresh(MenuWindow2);
+        return Assign_Ammo;
+    end ShowAssignAmmoMenu;
 
     function ShipInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Menus.Driver_Result;
@@ -770,7 +819,7 @@ package body Ships.UI is
                 end if;
             when 10 => -- Select option from menu
                 Post(OptionsMenu, False);
-                if OptionIndex /= 5 and OptionIndex /= 7 then
+                if OptionIndex /= 5 and OptionIndex /= 7 and OptionIndex /= 9 then
                     if OptionIndex < 5 then
                         StartUpgrading(CurrentMenuIndex, OptionIndex);
                     elsif OptionIndex = 8 then
@@ -793,6 +842,9 @@ package body Ships.UI is
                     DrawGame(Ship_Info);
                     ShowAssignMenu;
                     return Assign_Owner;
+                elsif OptionIndex = 9 then
+                    DrawGame(Ship_Info);
+                    return ShowAssignAmmoMenu;
                 end if;
             when others =>
                 Result := Driver(OptionsMenu, Key);
@@ -920,5 +972,42 @@ package body Ships.UI is
         end case;
         return Assign_Owner;
     end AssignOwnerKeys;
+
+    function AssignAmmoKeys(Key : Key_Code) return GameStates is
+        Result : Menus.Driver_Result;
+        OptionIndex : constant Natural := Positive'Value(Description(Current(OptionsMenu)));
+        GunName : constant String := To_String(PlayerShip.Modules.Element(CurrentMenuIndex).Name);
+    begin
+        case Key is
+            when 56 | KEY_UP => -- Select previous item
+                Result := Driver(OptionsMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OptionsMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 50 | KEY_DOWN => -- Select next item
+                Result := Driver(OptionsMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OptionsMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 10 => -- Select new ammo for gun
+                Post(OptionsMenu, False);
+                if OptionIndex /= 0 then
+                    UpdateModule(PlayerShip, CurrentMenuIndex, "Current_Value", Positive'Image(OptionIndex));
+                    AddMessage("You assigned " & To_String(Items_List.Element(PlayerShip.Cargo.Element(OptionIndex).ProtoIndex).Name)
+                        & " to " & GunName & ".", OrderMessage);
+                end if;
+                DrawGame(Ship_Info);
+                return Ship_Info;
+            when others =>
+                null;
+        end case;
+        return Assign_Owner;
+    end AssignAmmoKeys;
 
 end Ships.UI;
