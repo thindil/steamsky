@@ -22,6 +22,7 @@ Weight = 1
 Type = Ammo20
 Prices = 3, 5, 5, 5
 Buyable = Y, N, N, N
+Value = 2
 [5]
 Name = Bronze plates
 Weight = 5
@@ -82,6 +83,7 @@ Weight = 1
 Type = Ammo10
 Prices = 1, 3, 3, 3
 Buyable = Y, N, N, N
+Value = 1
 [15]
 Name = Copper ore
 Weight = 7
@@ -118,6 +120,7 @@ Weight = 2
 Type = Ammo40
 Prices = 6, 8, 8, 8
 Buyable = Y, N, N, N
+Value = 4
 [21]
 Name = Steel plates
 Weight = 5
