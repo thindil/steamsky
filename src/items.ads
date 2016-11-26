@@ -31,6 +31,7 @@ package Items is
             IType : Unbounded_String; -- Type of item
             Prices : Object_Prices; -- Prices of item in bases
             Buyable : Object_Buyable; -- Did item is buyable in selected bases
+            Value : Natural; -- Additional item data (damage for ammo, etc)
         end record;
     package Objects_Container is new Vectors(Positive, Object_Data);
     Items_List : Objects_Container.Vector; -- List of item available in game
