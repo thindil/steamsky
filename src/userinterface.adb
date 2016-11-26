@@ -274,7 +274,7 @@ package body UserInterface is
                 when others =>
                     null;
             end case;
-            Orders_Items.all(MenuIndex) := New_Item("Full stop");
+            Orders_Items.all(MenuIndex) := New_Item("All stop");
             MenuIndex := MenuIndex + 1;
             Orders_Items.all(MenuIndex) := New_Item("Quarter speed");
             MenuIndex := MenuIndex + 1;
@@ -642,7 +642,7 @@ package body UserInterface is
                     end if;
                     DrawGame(NewState);
                     return NewState;
-                elsif Order = "Full stop" then
+                elsif Order = "All stop" then
                     ChangeShipSpeed(FULL_STOP);
                 elsif Order = "Attack" then
                     OldSpeed := PlayerShip.Speed;
