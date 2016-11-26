@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - New item type: medicines
 - New item: medical supplies
 - More possible ammo for this same gun types
+- Option to assign ammunition to selected gun
 
 ### Changed
 - Updated help
