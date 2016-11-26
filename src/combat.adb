@@ -268,6 +268,9 @@ package body Combat is
                                 if WeaponDamage = 0 then
                                     WeaponDamage := 1;
                                 end if;
+                                if AmmoIndex > 0 then
+                                    WeaponDamage := WeaponDamage + Items_List.Element(Ship.Cargo.Element(AmmoIndex).ProtoIndex).Value;
+                                end if;
                                 UpdateModule(EnemyShip, HitLocation, "Durability", Integer'Image(0 - WeaponDamage));
                                 if EnemyShip.Modules.Element(HitLocation).Durability = 0 then
                                     DeathReason := To_Unbounded_String("enemy fire");
