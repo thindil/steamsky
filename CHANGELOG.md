@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - New item: medical supplies
 - More possible ammo for this same gun types
 - Option to assign ammunition to selected gun
+- Damage in combat depends on ammo too
 
 ### Changed
 - Updated help
