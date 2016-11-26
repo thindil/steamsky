@@ -23,13 +23,14 @@ with ShipModules; use ShipModules;
 with Events; use Events;
 with Maps; use Maps;
 with Bases; use Bases;
+with Items; use Items;
 
 package body Combat.UI is
 
     PilotOrders : constant array (1..4) of Unbounded_String := (To_Unbounded_String("Go closer"), 
         To_Unbounded_String("Keep distance"), To_Unbounded_String("Evade"),
         To_Unbounded_String("Escape"));
-    EngineerOrders : constant array (1..4) of Unbounded_String := (To_Unbounded_String("Full stop"), 
+    EngineerOrders : constant array (1..4) of Unbounded_String := (To_Unbounded_String("All stop"), 
         To_Unbounded_String("Quarter speed"), To_Unbounded_String("Half speed"),
         To_Unbounded_String("Full speed"));
     GunnerOrders : constant array (1..6) of Unbounded_String := (To_Unbounded_String("Don't shoot"),
@@ -45,7 +46,7 @@ package body Combat.UI is
 
     procedure CombatOrders is
         MemberIndex : Natural := 0;
-        CrewIndex : constant Natural := Positive'Value(Description(Current(OrdersMenu)));
+        CrewIndex : constant Integer := Positive'Value(Description(Current(OrdersMenu)));
         OrderIndex : constant Positive := Get_Index(Current(OrdersMenu));
         ModuleIndex : Natural := 0;
         procedure UpdateGun(Gun : in out GunsInfoArray) is
@@ -66,7 +67,7 @@ package body Combat.UI is
         end if;
         if CrewIndex > 0 then
             GiveOrders(CrewIndex, Order, ModuleIndex);
-        else
+        elsif CrewIndex = 0 then
             if Name(Current(OrdersMenu)) = "Quit" then
                 return;
             end if;
@@ -87,6 +88,10 @@ package body Combat.UI is
                 when others =>
                     null;
             end case;
+        else
+            UpdateModule(PlayerShip, ModuleIndex, "Current_Value", Positive'Image(abs(CrewIndex)));
+            AddMessage("You assigned " & To_String(Items_List.Element(PlayerShip.Cargo.Element(abs(CrewIndex)).ProtoIndex).Name)
+                & " to " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ".", OrderMessage);
         end if;
     end CombatOrders;
 
@@ -301,7 +306,7 @@ package body Combat.UI is
         MenuOptions : Menu_Option_Set;
         MemberIndex : Natural := 0;
         SkillIndex, SkillValue : Natural := 0;
-        MenuIndex : Positive := 1;
+        MenuIndex, LastIndex : Positive := 1;
         SkillString : Unbounded_String;
     begin   
         if Order = Pilot or Order = Engineer then
@@ -317,19 +322,25 @@ package body Combat.UI is
         if MemberIndex > 0 then
             case Order is
                 when Pilot =>
-                    Orders_Items := new Item_Array(1..(PilotOrders'Length + 1 + PlayerShip.Crew.Last_Index));
+                    LastIndex := PilotOrders'Length + 1 + PlayerShip.Crew.Last_Index;
+                    LastIndex := LastIndex + PlayerShip.Cargo.Last_Index;
+                    Orders_Items := new Item_Array(1..LastIndex);
                     for I in PilotOrders'Range loop
                         Orders_Items.all(I) := New_Item(To_String(PilotOrders(I)), "0");
                         MenuIndex := MenuIndex + 1;
                     end loop;
                 when Engineer =>
-                    Orders_Items := new Item_Array(1..(EngineerOrders'Length + 1 + PlayerShip.Crew.Last_Index));
+                    LastIndex := EngineerOrders'Length + 1 + PlayerShip.Crew.Last_Index;
+                    LastIndex := LastIndex + PlayerShip.Cargo.Last_Index;
+                    Orders_Items := new Item_Array(1..LastIndex);
                     for I in EngineerOrders'Range loop
                         Orders_Items.all(I) := New_Item(To_String(EngineerOrders(I)), "0");
                         MenuIndex := MenuIndex + 1;
                     end loop;
                 when Gunner =>
-                    Orders_Items := new Item_Array(1..(GunnerOrders'Length + 1 + PlayerShip.Crew.Last_Index));
+                    LastIndex := GunnerOrders'Length + 1 + PlayerShip.Crew.Last_Index;
+                    LastIndex := LastIndex + PlayerShip.Cargo.Last_Index;
+                    Orders_Items := new Item_Array(1..LastIndex);
                     for I in GunnerOrders'Range loop
                         Orders_Items.all(I) := New_Item(To_String(GunnerOrders(I)), "0");
                         MenuIndex := MenuIndex + 1;
@@ -338,7 +349,9 @@ package body Combat.UI is
                     null;
             end case;
         else
-            Orders_Items := new Item_Array(1..(PlayerShip.Crew.Last_Index + 2));
+            LastIndex := PlayerShip.Crew.Last_Index + 2;
+            LastIndex := LastIndex + PlayerShip.Cargo.Last_Index;
+            Orders_Items := new Item_Array(1..LastIndex);
         end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             case Order is
@@ -391,8 +404,29 @@ package body Combat.UI is
                 MenuIndex := MenuIndex + 1;
             end if;
         end loop;
-        Orders_Items.all(Orders_Items'Last - 1) := New_Item("Quit", "0");
-        Orders_Items.all(Orders_Items'Last) := Null_Item;
+        if Order = Gunner and MemberIndex > 0 then
+            for J in Guns.First_Index..Guns.Last_Index loop
+                if PlayerShip.Modules.Element(Guns.Element(J)(1)).Owner = MemberIndex then
+                    for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                        if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
+                            Items_Types.Element(Modules_List.Element(PlayerShip.Modules.Element(Guns.Element(J)(1)).ProtoIndex).Value) and
+                            I /= PlayerShip.Modules.Element(Guns.Element(J)(1)).Current_Value
+                        then
+                            Orders_Items.all(MenuIndex) := 
+                                New_Item("Use " & To_String(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name), 
+                                Positive'Image((0 - I)));
+                            MenuIndex := MenuIndex + 1;
+                        end if;
+                    end loop;
+                    exit;
+                end if;
+            end loop;
+        end if;
+        Orders_Items.all(MenuIndex) := New_Item("Quit", "0");
+        MenuIndex := MenuIndex + 1;
+        for I in MenuIndex..LastIndex loop
+            Orders_Items.all(I) := Null_Item;
+        end loop;
         OrdersMenu := New_Menu(Orders_Items);
         MenuOptions := Get_Options(OrdersMenu);
         MenuOptions.Show_Descriptions := False;
