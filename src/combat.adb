@@ -523,7 +523,9 @@ package body Combat is
             EvadeBonus := EvadeBonus - 10;
         end if;
         Attack(PlayerShip, Enemy.Ship); -- Player attack
-        Attack(Enemy.Ship, PlayerShip); -- Enemy attack
+        if not EndCombat then
+            Attack(Enemy.Ship, PlayerShip); -- Enemy attack
+        end if;
         if not EndCombat then
             UpdateGame(1);
         end if;
