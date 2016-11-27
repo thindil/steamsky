@@ -495,6 +495,17 @@ package body Combat.UI is
                     DrawGame(Messages_View);
                     return Messages_View;
                 when others =>
+                    Result := Driver(CrewMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow);
+                    else
+                        Result := Driver(CrewMenu, M_CLEAR_PATTERN);
+                        Result := Driver(CrewMenu, Key);
+                        if Result = Menu_Ok then
+                            Refresh(MenuWindow);
+                        end if;
+                    end if;
+                    CurrentMenuIndex := Get_Index(Current(CrewMenu));
                     return Combat_State;
             end case;
         else
@@ -538,7 +549,16 @@ package body Combat.UI is
                 DrawGame(Combat_State);
                 return Combat_State;
             when others =>
-                null;
+                Result := Driver(OrdersMenu, Key);
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                else
+                    Result := Driver(OrdersMenu, M_CLEAR_PATTERN);
+                    Result := Driver(OrdersMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow2);
+                    end if;
+                end if;
         end case;
         return Combat_Orders;
     end CombatOrdersKeys;

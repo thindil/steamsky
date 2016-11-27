@@ -342,7 +342,20 @@ package body Crew.UI is
                 ShowOrdersMenu;
                 return Giving_Orders;
             when others =>
-                null;
+                Result := Driver(CrewMenu, Key);
+                if Result = Menu_Ok then
+                    MemberIndex := Get_Index(Current(CrewMenu));
+                    ShowMemberInfo;
+                    Refresh(MenuWindow);
+                else
+                    Result := Driver(CrewMenu, M_CLEAR_PATTERN);
+                    Result := Driver(CrewMenu, Key);
+                    if Result = Menu_Ok then
+                        MemberIndex := Get_Index(Current(CrewMenu));
+                        ShowMemberInfo;
+                        Refresh(MenuWindow);
+                    end if;
+                end if;
         end case;
         return Crew_Info;
     end CrewInfoKeys;
@@ -397,7 +410,16 @@ package body Crew.UI is
                 DrawGame(Crew_Info);
                 return Crew_Info;
             when others =>
-                null;
+                Result := Driver(OrdersMenu, Key);
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                else
+                    Result := Driver(OrdersMenu, M_CLEAR_PATTERN);
+                    Result := Driver(OrdersMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow2);
+                    end if;
+                end if;
         end case;
         return Giving_Orders;
     end CrewOrdersKeys;

@@ -537,8 +537,8 @@ package body Bases.UI is
         end loop;
         CurrentLine := CurrentLine + 1;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-        Add(Win => InfoWindow, Str => "Hire for" & Positive'Image(Recruit.Price) & " Charcollum.");
-        Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 0, Count => 1, Color => 1);
+        Add(Win => InfoWindow, Str => "Press ENTER to hire for" & Positive'Image(Recruit.Price) & " Charcollum.");
+        Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
@@ -653,7 +653,18 @@ package body Bases.UI is
                 Buy := True;
                 return ShowTradeForm;
             when others =>
-                null;
+                Result := Driver(TradeMenu, Key);
+                if Result = Menu_Ok then
+                    ShowItemInfo;
+                    Refresh(MenuWindow);
+                else
+                    Result := Driver(TradeMenu, M_CLEAR_PATTERN);
+                    Result := Driver(TradeMenu, Key);
+                    if Result = Menu_Ok then
+                        ShowItemInfo;
+                        Refresh(MenuWindow);
+                    end if;
+                end if;
         end case;
         CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
         return Trade_View;
@@ -689,7 +700,18 @@ package body Bases.UI is
                 RepairShip;
                 DrawGame(Repairs_View);
             when others =>
-                null;
+                Result := Driver(TradeMenu, Key);
+                if Result = Menu_Ok then
+                    ShowRepairInfo;
+                    Refresh(MenuWindow);
+                else
+                    Result := Driver(TradeMenu, M_CLEAR_PATTERN);
+                    Result := Driver(TradeMenu, Key);
+                    if Result = Menu_Ok then
+                        ShowRepairInfo;
+                        Refresh(MenuWindow);
+                    end if;
+                end if;
         end case;
         CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
         return Repairs_View;
@@ -732,7 +754,18 @@ package body Bases.UI is
                 Bases.UpgradeShip(InstallView, Positive'Value(Description(Current(TradeMenu))));
                 DrawGame(Shipyard_View);
             when others =>
-                null;
+                Result := Driver(TradeMenu, Key);
+                if Result = Menu_Ok then
+                    ShowModuleInfo;
+                    Refresh(MenuWindow);
+                else
+                    Result := Driver(TradeMenu, M_CLEAR_PATTERN);
+                    Result := Driver(TradeMenu, Key);
+                    if Result = Menu_Ok then
+                        ShowModuleInfo;
+                        Refresh(MenuWindow);
+                    end if;
+                end if;
         end case;
         CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
         return Shipyard_View;
@@ -764,11 +797,22 @@ package body Bases.UI is
                     ShowRecruitInfo;
                     Refresh(MenuWindow);
                 end if;
-            when Character'Pos('h') | Character'Pos('H') => -- Show modules to install
+            when 10 => -- Hire recruit
                 HireRecruit(Get_Index(Current(TradeMenu)));
                 DrawGame(Recruits_View);
             when others =>
-                null;
+                Result := Driver(TradeMenu, Key);
+                if Result = Menu_Ok then
+                    ShowRecruitInfo;
+                    Refresh(MenuWindow);
+                else
+                    Result := Driver(TradeMenu, M_CLEAR_PATTERN);
+                    Result := Driver(TradeMenu, Key);
+                    if Result = Menu_Ok then
+                        ShowRecruitInfo;
+                        Refresh(MenuWindow);
+                    end if;
+                end if;
         end case;
         CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
         return Recruits_View;
