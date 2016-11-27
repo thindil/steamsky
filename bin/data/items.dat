@@ -17,7 +17,7 @@ Type = Drink
 Prices = 2, 1, 2, 2
 Buyable = N, Y, N, N
 [4]
-Name = 20mm ammo
+Name = Iron 20mm ammo
 Weight = 1
 Type = Ammo20
 Prices = 3, 5, 5, 5
@@ -78,7 +78,7 @@ Type = Iron
 Prices = 4, 6, 6, 6
 Buyable = Y, N, N, N
 [14]
-Name = 10mm ammo
+Name = Iron 10mm ammo
 Weight = 1
 Type = Ammo10
 Prices = 1, 3, 3, 3
@@ -115,7 +115,7 @@ Type = IronOre
 Prices = 5, 5, 3, 5
 Buyable = N, N, Y, N
 [20]
-Name = 40mm ammo
+Name = Iron 40mm ammo
 Weight = 2
 Type = Ammo40
 Prices = 6, 8, 8, 8
