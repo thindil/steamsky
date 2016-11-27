@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - More possible ammo for this same gun types
 - Option to assign ammunition to selected gun
 - Damage in combat depends on ammo too
+- New items: Steel 10mm ammo, Steel 20mm ammo, Steel 40mm ammo
 
 ### Changed
 - Updated help
