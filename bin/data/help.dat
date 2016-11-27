@@ -1,6 +1,7 @@
 [General Informations]
 SteamSky is roguelike game where you command flying ship with crew. You must take care about ship and crew. You can trade items between sky bases, fight with enemies or manufacturing items. Game ends when your character die.
 Whole game interface is keyboard based. Most options/menus are accessible by keyboard shortcuts. All shortcuts are case insensitive, for example, to access help, you can use 'h' or 'shift+h' key. That same is with arrows keys - you can use normal arrows and keypad arrows (after enabling Num Lock at your keyboard).
+You can use shortcuts on most in-game menus too (not only navigate by arrows keys).
 Most texts in game, can be scrolled with arrow keys by one line, by one screen with PageUp/PageDown keys or to beginning by Home key and end to End key.
 Forms (for example, renaming modules) can be navigated by arrow keys too. To quit from form without changes, just jump with arrows keys to Cancel button and hit Enter. To accept changes, navigate with arrows to Ok button and then hit Enter. If you left empty field in form and press Enter, it will be count as quit without changes. 
 On mosts screens you can see in top right corner informations about needed crew positions in ship. P means pilot, E - engineer, G - gunner, R - repairs, M - manufacturing, U - upgrading ship module, T - talking in bases. 
@@ -81,7 +82,7 @@ Speed of rest of crew members depends on quality and damage level of cabin which
 You can hire new crew members in bases. First you must dock to base, then you choice Recruit option from orders menu. Amount of available recruits depends on size of base. They hire cost depends on amount of knowledge (skills and level of skills). Here no limit how much crew members you can have on ship, just remember, all of them needs food, drinks and place to rest. Hiring new crew members reduce population of base. New recruits are available every 30 days between visits of base. 
 If your ship is docked to base, you can dismiss crew members. Go to crew info screen and use Dismiss option on selected crew member. Dismissed crew members joins to base population.
 Hunger, thirst and wounds have impact on your crew members skills. Wounded or hungry crew members have penalties to their skills.
-Crew members skills levels, starting from lowest: Beginner, Novice, Apprentice, Practitioner, Competent, Respected, Renowed, Master, Grand-Master, Legendary, Ultimate.
+Crew members skills levels, starting from lowest: Beginner, Novice, Apprentice, Practitioner, Competent, Respected, Renowned, Master, Grand-Master, Legendary, Ultimate.
 [List of known bases]
 In this screen you can see all bases which you know to exists. As normal menus, you can navigate list by up/down arrows. Additional, Page Up scrolls one screen up, Page Down scrolls one screen down, Home scrolls to beginning and End scrolls to end list. 
 You can search for base by it name, simply start typing desired name and list will be scrolled to first exact match. In that moment, on the right, below base information, you can see searched text. You can delete last letter with Backspace key or delete whole searched text by Delete key or just selecting other base from list.
