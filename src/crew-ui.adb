@@ -111,7 +111,7 @@ package body Crew.UI is
                 when 51..60 =>
                     SkillLevel := To_Unbounded_String("Respected");
                 when 61..70 =>
-                    SkillLevel := To_Unbounded_String("Renowed");
+                    SkillLevel := To_Unbounded_String("Renowned");
                 when 71..80 =>
                     SkillLevel := To_Unbounded_String("Master");
                 when 81..90 =>
