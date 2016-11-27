@@ -133,4 +133,25 @@ Weight = 5
 Type = Medical
 Prices = 7, 5, 5, 7
 Buyable = N, Y, Y, N
+[23]
+Name = Steel 20mm ammo
+Weight = 1
+Type = Ammo20
+Prices = 5, 7, 7, 7
+Buyable = Y, N, N, N
+Value = 4
+[24]
+Name = Steel 10mm ammo
+Weight = 1
+Type = Ammo10
+Prices = 3, 5, 5, 5
+Buyable = Y, N, N, N
+Value = 2
+[25]
+Name = Steel 40mm ammo
+Weight = 2
+Type = Ammo40
+Prices = 8, 10, 10, 10
+Buyable = Y, N, N, N
+Value = 8
 []
