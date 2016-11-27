@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - When change ship speed outside combat, check only for engine and engineer
 - Updated interface
 - Read game changes in News screen from CHANGELOG.md
+- Ammo name from size ammo to Iron size ammo
 
 ### Fixed
 - Don't craft items when worker is on break
