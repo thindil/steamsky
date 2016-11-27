@@ -150,7 +150,16 @@ package body Help is
                 DrawGame(Help_Topic);
                 return Help_Topic;
             when others =>
-                null;
+                Result := Driver(HelpMenu, Key);
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow);
+                else
+                    Result := Driver(HelpMenu, M_CLEAR_PATTERN);
+                    Result := Driver(HelpMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow);
+                    end if;
+                end if;
         end case;
         return Help_View;
     end HelpMenuKeys;
