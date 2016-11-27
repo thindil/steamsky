@@ -240,7 +240,16 @@ package body Events is
                     DrawGame(Sky_Map_View);
                     return Sky_Map_View;
                 when others =>
-                    null;
+                    Result := Driver(EventsMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow);
+                    else
+                        Result := Driver(EventsMenu, M_CLEAR_PATTERN);
+                        Result := Driver(EventsMenu, Key);
+                        if Result = Menu_Ok then
+                            Refresh(MenuWindow);
+                        end if;
+                    end if;
             end case;
             if Result = Menu_Ok then
                 ShowEventInfo;

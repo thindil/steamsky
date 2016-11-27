@@ -209,7 +209,20 @@ package body Crafts.UI is
                     Refresh(MenuWindow);
                 end if;
             when others =>
-                null;
+                Result := Driver(RecipesMenu, Key);
+                if Result = Menu_Ok then
+                    RecipeIndex := Menus.Get_Index(Current(RecipesMenu));
+                    ShowRecipeInfo;
+                    Refresh(MenuWindow);
+                else
+                    Result := Driver(RecipesMenu, M_CLEAR_PATTERN);
+                    Result := Driver(RecipesMenu, Key);
+                    if Result = Menu_Ok then
+                        RecipeIndex := Menus.Get_Index(Current(RecipesMenu));
+                        ShowRecipeInfo;
+                        Refresh(MenuWindow);
+                    end if;
+                end if;
         end case;
         return Craft_View;
     end CraftKeys;
@@ -242,7 +255,16 @@ package body Crafts.UI is
                     Refresh(MenuWindow2);
                 end if;
             when others =>
-                null;
+                Result := Driver(ModulesMenu, Key);
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                else
+                    Result := Driver(ModulesMenu, M_CLEAR_PATTERN);
+                    Result := Driver(ModulesMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow2);
+                    end if;
+                end if;
         end case;
         return Recipe_Setting;
     end RecipeSettingKeys;
