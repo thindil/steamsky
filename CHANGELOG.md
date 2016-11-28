@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Read game changes in News screen from CHANGELOG.md
 - Ammo name from size ammo to Iron size ammo
+- Updated enemies selection
 
 ### Fixed
 - Don't craft items when worker is on break
