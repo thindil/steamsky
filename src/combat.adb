@@ -171,6 +171,7 @@ package body Combat is
                                     for J in Ship.Cargo.First_Index..Ship.Cargo.Last_Index loop
                                         if Ship.Cargo.Element(J).ProtoIndex = I then
                                             AmmoIndex := J;
+                                            UpdateModule(Ship, K, "Current_Value", Positive'Image(AmmoIndex));
                                             exit;
                                         end if;
                                     end loop;
