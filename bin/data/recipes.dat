@@ -75,4 +75,25 @@ Result = 21
 Crafted = 1
 Workplace = Furnace
 Skill = Metalsmith
+[12]
+Material = Steel, Gunpowder
+Amount = 1, 1
+Result = 23
+Crafted = 5
+Workplace = Alchemy_Lab
+Skill = Gunsmith
+[13]
+Material = Steel, Gunpowder
+Amount = 1, 1
+Result = 24
+Crafted = 10
+Workplace = Alchemy_Lab
+Skill = Gunsmith
+[14]
+Material = Steel, Gunpowder
+Amount = 1, 1
+Result = 25
+Crafted = 2
+Workplace = Alchemy_Lab
+Skill = Gunsmith
 []
