@@ -82,7 +82,7 @@ package body Combat is
 
     procedure CombatTurn is
         AccuracyBonus, EvadeBonus : Integer := 0;
-        PilotIndex, EngineerIndex, EnemyWeaponIndex : Natural := 0;
+        PilotIndex, EngineerIndex, EnemyWeaponIndex, EnemyAmmoIndex : Natural := 0;
         DistanceTraveled, SpeedBonus : Integer;
         ShootMessage : Unbounded_String;
         EnemyPilotOrder : Positive := 2;
@@ -417,6 +417,33 @@ package body Combat is
                 Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).MType = BATTERING_RAM) then
                 if Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).MType = GUN then
                     DamageRange := 5000;
+                    if Enemy.Ship.Modules.Element(I).Current_Value >= Enemy.Ship.Cargo.First_Index and 
+                        Enemy.Ship.Modules.Element(I).Current_Value <= Enemy.Ship.Cargo.Last_Index 
+                    then
+                        if Items_List.Element(Enemy.Ship.Cargo.Element(Enemy.Ship.Modules.Element(I).Current_Value).ProtoIndex).IType = 
+                            Items_Types.Element(Modules_List.Element(Enemy.Ship.Modules.Element(I).ProtoIndex).Value) 
+                        then
+                            EnemyAmmoIndex := Enemy.Ship.Modules.Element(I).Current_Value;
+                        end if;
+                    end if;
+                    if EnemyAmmoIndex = 0 then
+                        for K in Items_List.First_Index..Items_List.Last_Index loop
+                            if Items_List.Element(K).IType =
+                                Items_Types.Element(Modules_List.Element(Enemy.Ship.Modules.Element(I).ProtoIndex).Value)
+                            then
+                                for J in Enemy.Ship.Cargo.First_Index..Enemy.Ship.Cargo.Last_Index loop
+                                    if Enemy.Ship.Cargo.Element(J).ProtoIndex = K then
+                                        EnemyAmmoIndex := J;
+                                        exit;
+                                    end if;
+                                end loop;
+                                exit;
+                            end if;
+                        end loop;
+                    end if;
+                    if EnemyAmmoIndex = 0 and Enemy.CombatAI = ATTACKER then
+                        Enemy.CombatAI := COWARD;
+                    end if;
                 else
                     DamageRange := 100;
                 end if;
