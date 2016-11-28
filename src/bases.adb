@@ -666,6 +666,8 @@ package body Bases is
         MinX, MinY, MaxX, MaxY : Integer;
         type Value_Type is digits 2 range 0.0..9999999.0;
         package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
+        Enemies : ProtoShips_Container.Vector;
+        PlayerValue : Natural := 0;
         function GetRandom(Min, Max : Positive) return Positive is
             subtype Rand_Range is Positive range Min..Max;
             package Rand_Roll is new Discrete_Random(Rand_Range);
@@ -711,6 +713,31 @@ package body Bases is
         if MaxY > 1024 then
             MaxY := 1024;
         end if;
+        if GetRandom(1, 100) < 95 then
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                    when HULL | GUN | BATTERING_RAM =>
+                        PlayerValue := PlayerValue + PlayerShip.Modules.Element(I).MaxDurability +
+                        (PlayerShip.Modules.Element(I).Max_Value * 10);
+                    when ARMOR =>
+                        PlayerValue := PlayerValue + PlayerShip.Modules.Element(I).MaxDurability;
+                    when others =>
+                        null;
+                end case;
+            end loop;
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if Slice(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType, 1, 4) = "Ammo" then
+                    PlayerValue := PlayerValue + (Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Value * 10);
+                end if;
+            end loop;
+            for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
+                if Enemies_List.Element(I).CombatValue <= PlayerValue then
+                    Enemies.Append(New_Item => Enemies_List.Element(I));
+                end if;
+            end loop;
+        else
+            Enemies := Enemies_List;
+        end if;
         for I in 1..EventsAmount loop
             loop
                 Event := Events_Types'Val(GetRandom(1, 4));
@@ -735,11 +762,11 @@ package body Bases is
             case Event is
                 when EnemyShip =>
                     Events_List.Append(New_Item => (EnemyShip, EventX, EventY, EventTime, 
-                        GetRandom(Enemies_List.First_Index, Enemies_List.Last_Index)));
+                        GetRandom(Enemies.First_Index, Enemies.Last_Index)));
                 when AttackOnBase =>
                     if SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
                         Events_List.Append(New_Item => (AttackOnBase, EventX, EventY, EventTime,
-                            GetRandom(Enemies_List.First_Index, Enemies_List.Last_Index)));
+                            GetRandom(Enemies.First_Index, Enemies.Last_Index)));
                     end if;
                 when Disease =>
                     if SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
