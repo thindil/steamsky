@@ -26,6 +26,8 @@ with Messages; use Messages;
 with Crew; use Crew;
 with UserInterface; use UserInterface;
 with Bases; use Bases;
+with ShipModules; use ShipModules;
+with Items; use Items;
 
 package body Events is
 
@@ -33,15 +35,18 @@ package body Events is
     MenuWindow : Window;
 
     function CheckForEvent(OldState : GameStates) return GameStates is
-        type Percent_Range is range 1..100;
-        subtype Combat_Range is Positive range Enemies_List.First_Index..Enemies_List.Last_Index; 
-        package Rand_Roll is new Discrete_Random(Percent_Range);
-        package Rand_Combat is new Discrete_Random(Combat_Range);
-        Generator : Rand_Roll.Generator;
-        Generator2 : Rand_Combat.Generator;
-        Roll : Percent_Range;
         TimePassed : Integer;
-        PilotIndex : Natural := 0;
+        PilotIndex, PlayerValue : Natural := 0;
+        Roll : Positive;
+        Enemies : ProtoShips_Container.Vector;
+        function GetRandom(Min, Max : Positive) return Positive is
+            subtype Rand_Range is Positive range Min..Max;
+            package Rand_Roll is new Discrete_Random(Rand_Range);
+            Generator : Rand_Roll.Generator;
+        begin
+            Rand_Roll.Reset(Generator);
+            return Rand_Roll.Random(Generator);
+        end GetRandom;
     begin
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             case Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType is
@@ -51,10 +56,33 @@ package body Events is
                     return OldState;
             end case;
         end if;
-        Rand_Roll.Reset(Generator);
-        Rand_Combat.Reset(Generator2);
-        if Rand_Roll.Random(Generator) < 7 then -- Event happen
-            Roll := Rand_Roll.Random(Generator);
+        if GetRandom(1, 100) < 7 then -- Event happen
+            Roll := GetRandom(1, 100);
+            if GetRandom(1, 100) < 95 then
+                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                    case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                        when HULL | GUN | BATTERING_RAM =>
+                            PlayerValue := PlayerValue + PlayerShip.Modules.Element(I).MaxDurability +
+                            (PlayerShip.Modules.Element(I).Max_Value * 10);
+                        when ARMOR =>
+                            PlayerValue := PlayerValue + PlayerShip.Modules.Element(I).MaxDurability;
+                        when others =>
+                            null;
+                    end case;
+                end loop;
+                for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if Slice(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType, 1, 4) = "Ammo" then
+                        PlayerValue := PlayerValue + (Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Value * 10);
+                    end if;
+                end loop;
+                for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
+                    if Enemies_List.Element(I).CombatValue <= PlayerValue then
+                        Enemies.Append(New_Item => Enemies_List.Element(I));
+                    end if;
+                end loop;
+            else
+                Enemies := Enemies_List;
+            end if;
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
                 case Roll is
                     when 1..20 => -- Bad weather
@@ -75,7 +103,8 @@ package body Events is
                             UpdateGame(TimePassed);
                         end if;
                     when others => -- Combat
-                        Events_List.Append(New_Item => (EnemyShip, PlayerShip.SkyX, PlayerShip.SkyY, 30, Rand_Combat.Random(Generator2)));
+                        Events_List.Append(New_Item => (EnemyShip, PlayerShip.SkyX, PlayerShip.SkyY, 30, GetRandom(Enemies.First_Index, 
+                            Enemies.Last_Index)));
                         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := Events_List.Last_Index;
                         return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
                 end case;
@@ -84,7 +113,7 @@ package body Events is
                     case Roll is
                         when 1..20 => -- Base is attacked
                             Events_List.Append(New_Item => (AttackOnBase, PlayerShip.SkyX, PlayerShip.SkyY, 60, 
-                                Rand_Combat.Random(Generator2)));
+                                GetRandom(Enemies.First_Index, Enemies.Last_Index)));
                             AddMessage("You can't dock to base now, because base is under attack. You can help defend it.", OtherMessage);
                             return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
                         when 21 => -- Disease in base
