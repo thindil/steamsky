@@ -93,4 +93,5 @@ You can change what type of bases are listed with right arrow key and status of 
 * Each crew member need proper module for work. If that module is destroyed, member cannot start selected work (for example, can't start piloting when cockpit is destroyed).
 * You can assign crew members to selected module (cabins, guns, workplaces) on ship info screen. All workplaces first must have set crafting order, before you can assign someone.
 * You can reduce how long disease affect selected base by delivering medical supplies to it. If you choice deliver supplies for free, you can gain some reputation otherwise, you gain Charcollum and may lose some reputation.
+* What enemy you meet depends on how much upgraded ship you have - especially on upgrades of hull, armor, weapons and type of ammo. At begining of game you can meet weakest enemies, with every ship upgrade you meet stronger. Of course, there is always small chance that you encounter enemy stronger than you.
 []
