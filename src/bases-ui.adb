@@ -92,9 +92,9 @@ package body Bases.UI is
         end loop;
         InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
         if Items_List.Element(ItemIndex).Buyable(BaseType) then
-            Add(Win => InfoWindow, Str => "Buy/Sell price:");
+            Add(Win => InfoWindow, Str => "Base buy/sell price:");
         else
-            Add(Win => InfoWindow, Str => "Sell price:");
+            Add(Win => InfoWindow, Str => "Base sell price:");
         end if;
         Add(Win => InfoWindow, Str => Integer'Image(Items_List.Element(ItemIndex).Prices(BaseType)) & " Charcollum");
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
