@@ -74,4 +74,28 @@ LootMax = 100
 Perception = 10
 Cargo = 1000x1
 CombatValue = 200
+[8]
+Name = Pirate ship
+Modules = 17, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 28, 27
+Accuracy = 10
+Enemy = Yes
+CombatAI = Attacker
+Evasion = 10
+LootMin = 100
+LootMax = 200
+Perception = 10
+Cargo = 2000x1, 200x2, 400x3, 1000x20, 200x5, 40x13
+CombatValue = 590
+[9]
+Name = Armored pirate ship
+Modules = 17, 25, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 28, 27
+Accuracy = 10
+Enemy = Yes
+CombatAI = Attacker
+Evasion = 10
+LootMin = 150
+LootMax = 300
+Perception = 10
+Cargo = 2000x1, 200x2, 400x3, 1000x20, 200x5, 40x13
+CombatValue = 890
 []
