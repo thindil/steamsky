@@ -311,4 +311,16 @@ Material = Iron
 Skill = Gunsmith
 Price = 1000
 InstallTime = 45
+[28]
+Name = Bronze turret
+Type = Turret
+Weight = 100
+Value = 0
+MaxValue = 0
+Durability = 300
+Material = Bronze
+Skill = Engineering
+Price = 750
+InstallTime = 90
+Size = 1
 []
