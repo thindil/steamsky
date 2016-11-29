@@ -761,16 +761,16 @@ package body Bases is
             EventTime := Positive(Value_Type(60) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
             case Event is
                 when EnemyShip =>
-                    Events_List.Append(New_Item => (EnemyShip, EventX, EventY, EventTime, 
+                    Events_List.Append(New_Item => (EnemyShip, EventX, EventY, GetRandom(EventTime, EventTime + 60), 
                         GetRandom(Enemies.First_Index, Enemies.Last_Index)));
                 when AttackOnBase =>
                     if SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
-                        Events_List.Append(New_Item => (AttackOnBase, EventX, EventY, EventTime,
+                        Events_List.Append(New_Item => (AttackOnBase, EventX, EventY, GetRandom(EventTime, EventTime + 120),
                             GetRandom(Enemies.First_Index, Enemies.Last_Index)));
                     end if;
                 when Disease =>
                     if SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
-                        Events_List.Append(New_Item => (Disease, EventX, EventY, 10080, 1));
+                        Events_List.Append(New_Item => (Disease, EventX, EventY, GetRandom(10080, 12000), 1));
                     end if;
                 when others =>
                     null;

@@ -103,8 +103,8 @@ package body Events is
                             UpdateGame(TimePassed);
                         end if;
                     when others => -- Combat
-                        Events_List.Append(New_Item => (EnemyShip, PlayerShip.SkyX, PlayerShip.SkyY, 30, GetRandom(Enemies.First_Index, 
-                            Enemies.Last_Index)));
+                        Events_List.Append(New_Item => (EnemyShip, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(30, 45), 
+                            GetRandom(Enemies.First_Index, Enemies.Last_Index)));
                         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := Events_List.Last_Index;
                         return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
                 end case;
@@ -112,15 +112,15 @@ package body Events is
                 if PlayerShip.Speed /= DOCKED then
                     case Roll is
                         when 1..20 => -- Base is attacked
-                            Events_List.Append(New_Item => (AttackOnBase, PlayerShip.SkyX, PlayerShip.SkyY, 60, 
+                            Events_List.Append(New_Item => (AttackOnBase, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(60, 90), 
                                 GetRandom(Enemies.First_Index, Enemies.Last_Index)));
                             AddMessage("You can't dock to base now, because base is under attack. You can help defend it.", OtherMessage);
                             return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
                         when 21 => -- Disease in base
-                            Events_List.Append(New_Item => (Disease, PlayerShip.SkyX, PlayerShip.SkyY, 10080, 1));
+                            Events_List.Append(New_Item => (Disease, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(10080, 12000), 1));
                             AddMessage("You can't dock to base now, it is closed due to disease.", OtherMessage);
                         when others => -- Full docks
-                            Events_List.Append(New_Item => (FullDocks, PlayerShip.SkyX, PlayerShip.SkyY, 15, 1));
+                            Events_List.Append(New_Item => (FullDocks, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(15, 30), 1));
                             AddMessage("You can't dock to base now, because its docks are full.", OtherMessage);
                     end case;
                     SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := Events_List.Last_Index;
