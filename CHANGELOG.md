@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Damage in combat depends on ammo too
 - New items: steel 10mm ammo, steel 20mm ammo and steel 40mm ammo
 - New crafting recipes: steel 10mm ammo, steel 20mm ammo and steel 40mm ammo
+- New ship module: bronze turret
 
 ### Changed
 - Updated help
