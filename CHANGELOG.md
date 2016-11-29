@@ -42,6 +42,7 @@ All notable changes to this project will be documented in this file.
 - Don't craft items when worker is on break
 - Crash in bases list on small screens
 - Item type for steel plates
+- Crash when terminal not support changing colors
 
 ## [0.5] - 2016-11-13
 
