@@ -25,7 +25,8 @@ All notable changes to this project will be documented in this file.
 - New items: steel 10mm ammo, steel 20mm ammo and steel 40mm ammo
 - New crafting recipes: steel 10mm ammo, steel 20mm ammo and steel 40mm ammo
 - New ship module: bronze turret
-- New enemy ships: pirate ship, armored pirate ship
+- New enemy ships: pirate ship, armored pirate ship, small attacking drone,
+  attacking clockwork drone and armored attacking drone
 
 ### Changed
 - Updated help
