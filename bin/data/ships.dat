@@ -25,7 +25,7 @@ LootMin = 10
 LootMax = 100
 Perception = 1
 Cargo = 1000x1
-CombatValue = 200
+CombatValue = 300
 [4]
 Name = Tiny clockwork drone
 Modules = 10, 3, 7, 13
@@ -37,7 +37,7 @@ LootMin = 5
 LootMax = 50
 Perception = 5
 Cargo = 1000x1
-CombatValue = 100
+CombatValue = 150
 [5]
 Name = Small pirates ship
 Modules = 1, 3, 4, 4, 4, 4, 5, 7, 7, 8, 9
@@ -49,7 +49,7 @@ LootMin = 20
 LootMax = 200
 Perception = 5
 Cargo = 2000x1, 100x2, 200x3, 500x4, 100x5, 20x13
-CombatValue = 220
+CombatValue = 320
 [6]
 Name = Small undead ship
 Modules = 1, 2, 3, 5, 7, 7, 12 
@@ -61,7 +61,7 @@ LootMin = 20
 LootMax = 200
 Perception = 3
 Cargo = 2000x1, 100x5
-CombatValue = 400
+CombatValue = 500
 [7]
 Name = Small clockwork drone
 Modules = 1, 3, 7, 12
@@ -73,7 +73,7 @@ LootMin = 10
 LootMax = 100
 Perception = 10
 Cargo = 1000x1
-CombatValue = 200
+CombatValue = 320
 [8]
 Name = Pirate ship
 Modules = 17, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 28, 27
@@ -98,4 +98,40 @@ LootMax = 300
 Perception = 10
 Cargo = 2000x1, 200x2, 400x3, 1000x20, 200x5, 40x13
 CombatValue = 890
+[10]
+Name = Small attacking drone
+Modules = 1, 3, 7, 12, 8, 11
+Accuracy = 5
+Enemy = Yes
+CombatAI = Berserker
+Evasion = 5
+LootMin = 20
+LootMax = 200
+Perception = 5
+Cargo = 1000x1, 500x14
+CombatValue = 360
+[11]
+Name = Attacking clockwork drone
+Modules = 17, 15, 7, 7, 12, 8, 9
+Accuracy = 5
+Enemy = Yes
+CombatAI = Berserker
+Evasion = 5
+LootMin = 10
+LootMax = 100
+Perception = 10
+Cargo = 1000x1, 500x4
+CombatValue = 570
+[12]
+Name = Armored attacking drone
+Modules = 17, 2, 15, 7, 7, 12, 8, 9
+Accuracy = 5
+Enemy = Yes
+CombatAI = Berserker
+Evasion = 5
+LootMin = 10
+LootMax = 100
+Perception = 10
+Cargo = 1000x1, 500x4, 100x5, 20x13
+CombatValue = 770
 []
