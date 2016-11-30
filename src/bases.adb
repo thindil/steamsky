@@ -35,15 +35,18 @@ package body Bases is
             return;
         end if;
         NewPoints := SkyBases(BaseIndex).Reputation(2) + Points;
-        if NewPoints < 0 then
+        while NewPoints < 0 loop
             SkyBases(BaseIndex).Reputation(1) := SkyBases(BaseIndex).Reputation(1) - 1;
-            SkyBases(BaseIndex).Reputation(2) := abs(SkyBases(BaseIndex).Reputation(1) * 50) + NewPoints;
-            return;
-        end if;
-        if NewPoints > SkyBases(BaseIndex).Reputation(1) * 50 then
-            NewPoints := NewPoints - (SkyBases(BaseIndex).Reputation(1) * 50);
+            NewPoints := NewPoints + abs(SkyBases(BaseIndex).Reputation(1) * 50);
+            if NewPoints >= 0 then
+                SkyBases(BaseIndex).Reputation(2) := NewPoints;
+                return;
+            end if;
+        end loop;
+        while NewPoints > (SkyBases(BaseIndex).Reputation(1) * 50) loop
+            NewPoints := NewPoints - abs(SkyBases(BaseIndex).Reputation(1) * 50);
             SkyBases(BaseIndex).Reputation(1) := SkyBases(BaseIndex).Reputation(1) + 1;
-        end if;
+        end loop;
         SkyBases(BaseIndex).Reputation(2) := NewPoints;
     end GainRep;
     
