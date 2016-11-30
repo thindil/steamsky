@@ -193,8 +193,12 @@ package body Crew.UI is
     begin
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
-                when GUN | FURNACE | ALCHEMY_LAB =>
+                when GUN =>
                     if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
+                        OrdersAmount := OrdersAmount + 1;
+                    end if;
+                when ALCHEMY_LAB | FURNACE =>
+                    if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
                         OrdersAmount := OrdersAmount + 1;
                     end if;
                 when others =>
@@ -243,7 +247,7 @@ package body Crew.UI is
                         MenuIndex := MenuIndex + 1;
                     end if;
                 when ALCHEMY_LAB | FURNACE =>
-                    if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
+                    if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
                         Orders_Items.all(MenuIndex) := New_Item("Work in " & To_String(PlayerShip.Modules.Element(I).Name), 
                             Positive'Image(I));
                         MenuIndex := MenuIndex + 1;
