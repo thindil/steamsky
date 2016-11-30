@@ -256,46 +256,38 @@ package body Crew is
     end GainExp;
 
     function GenerateMemberName(Gender : Character) return Unbounded_String is -- based on name generator from libtcod
-        subtype MaleStart_Range is Positive range MaleSyllablesStart.First_Index..MaleSyllablesStart.Last_Index;
-        subtype MaleMiddle_Range is Positive range MaleSyllablesMiddle.First_Index..MaleSyllablesMiddle.Last_Index;
-        subtype MaleEnd_Range is Positive range MaleSyllablesEnd.First_Index..MaleSyllablesEnd.Last_Index;
-        subtype FemaleEnd_Range is Positive range FemaleSyllablesEnd.First_Index..FemaleSyllablesEnd.Last_Index;
-        type Short_Range is range 1..2;
-        package Rand_MaleStart is new Discrete_Random(MaleStart_Range);
-        package Rand_MaleMid is new Discrete_Random(MaleMiddle_Range);
-        package Rand_MaleEnd is new Discrete_Random(MaleEnd_Range);
-        package Rand_FemaleEnd is new Discrete_Random(FemaleEnd_Range);
-        package Rand_Short is new  Discrete_Random(Short_Range);
-        Generator : Rand_MaleStart.Generator;
-        Generator2 : Rand_MaleMid.Generator;
-        Generator3 : Rand_MaleEnd.Generator;
-        Generator4 : Rand_FemaleEnd.Generator;
-        Generator5 : Rand_Short.Generator;
         NewName : Unbounded_String;
+        function GetRandom(Min, Max : Positive) return Positive is
+            subtype Rand_Range is Positive range Min..Max;
+            package Rand_Roll is new Discrete_Random(Rand_Range);
+            Generator : Rand_Roll.Generator;
+        begin
+            Rand_Roll.Reset(Generator);
+            return Rand_Roll.Random(Generator);
+        end GetRandom;
     begin
-        Rand_MaleStart.Reset(Generator);
-        Rand_MaleMid.Reset(Generator2);
-        Rand_MaleEnd.Reset(Generator3);
-        Rand_FemaleEnd.Reset(Generator4);
-        Rand_Short.Reset(Generator5);
-        if Rand_Short.Random(Generator5) = 1 then
-            if Gender = 'M' then
-                NewName := MaleSyllablesStart.Element(Rand_MaleStart.Random(Generator)) & 
-                    MaleSyllablesMiddle.Element(Rand_MaleMid.Random(Generator2)) &
-                    MaleSyllablesEnd.Element(Rand_MaleEnd.Random(Generator3));
-            else
-                NewName := MaleSyllablesStart.Element(Rand_MaleStart.Random(Generator)) & 
-                    MaleSyllablesMiddle.Element(Rand_MaleMid.Random(Generator2)) &
-                    FemaleSyllablesEnd.Element(Rand_FemaleEnd.Random(Generator4));
+        if Gender = 'M' then
+            NewName := MaleSyllablesStart.Element(GetRandom(MaleSyllablesStart.First_Index, MaleSyllablesStart.Last_Index)) &
+                MaleVocals.Element(GetRandom(MaleVocals.First_Index, MaleVocals.Last_Index));
+            if GetRandom(1, 100) < 36 then
+                Append(NewName, MaleSyllablesMiddle.Element(GetRandom(MaleSyllablesMiddle.First_Index, MaleSyllablesMiddle.Last_Index)));
             end if;
+            if GetRandom(1, 100) < 11 then
+                Append(NewName, MaleConsonants.Element(GetRandom(MaleConsonants.First_Index, MaleConsonants.Last_Index)));
+            end if;
+            Append(NewName, MaleSyllablesEnd.Element(GetRandom(MaleSyllablesEnd.First_Index, MaleSyllablesEnd.Last_Index)));
         else
-            if Gender = 'M' then
-                NewName := MaleSyllablesStart.Element(Rand_MaleStart.Random(Generator)) & 
-                    MaleSyllablesEnd.Element(Rand_MaleMid.Random(Generator2));
-            else
-                NewName := MaleSyllablesStart.Element(Rand_MaleStart.Random(Generator)) & 
-                    FemaleSyllablesEnd(Rand_FemaleEnd.Random(Generator4));
+            NewName := FemaleSyllablesStart.Element(GetRandom(FemaleSyllablesStart.First_Index, FemaleSyllablesStart.Last_Index)) &
+                FemaleVocals.Element(GetRandom(FemaleVocals.First_Index, FemaleVocals.Last_Index));
+            if GetRandom(1, 100) < 36 then
+                Append(NewName, FemaleSyllablesMiddle.Element(GetRandom(FemaleSyllablesMiddle.First_Index, 
+                    FemaleSyllablesMiddle.Last_Index)));
             end if;
+            if GetRandom(1, 100) < 11 then
+                Append(NewName, FemaleSyllablesMiddle.Element(GetRandom(FemaleSyllablesMiddle.First_Index, 
+                    FemaleSyllablesMiddle.Last_Index)));
+            end if;
+            Append(NewName, FemaleSyllablesEnd.Element(GetRandom(FemaleSyllablesEnd.First_Index, FemaleSyllablesEnd.Last_Index)));
         end if;
         return NewName;
     end GenerateMemberName;
