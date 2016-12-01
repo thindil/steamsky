@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - New ship module: bronze turret
 - New enemy ships: pirate ship, armored pirate ship, small attacking drone,
   attacking clockwork drone and armored attacking drone
+- New type of items: ammo60
 
 ### Changed
 - Updated help
