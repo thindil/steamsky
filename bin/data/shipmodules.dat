@@ -323,4 +323,15 @@ Skill = Engineering
 Price = 750
 InstallTime = 90
 Size = 1
+[28]
+Name = Iron 60mm gun
+Type = Gun
+Weight = 60
+Value = 19
+MaxValue = 40
+Durability = 50
+Material = Iron
+Skill = Gunsmith
+Price = 2000
+InstallTime = 60
 []
