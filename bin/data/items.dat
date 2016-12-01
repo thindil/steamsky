@@ -154,4 +154,18 @@ Type = Ammo40
 Prices = 8, 10, 10, 10
 Buyable = Y, N, N, N
 Value = 8
+[26]
+Name = Iron 60mm ammo
+Weight = 4
+Type = Ammo40
+Prices = 10, 12, 12, 12
+Buyable = Y, N, N, N
+Value = 8
+[27]
+Name = Steel 60mm ammo
+Weight = 4
+Type = Ammo40
+Prices = 12, 14, 14, 14
+Buyable = Y, N, N, N
+Value = 16
 []
