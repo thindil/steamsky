@@ -397,7 +397,7 @@ package body Ships is
     function LoadShips return Boolean is
         ShipsFile : File_Type;
         RawData, FieldName, Value : Unbounded_String;
-        EqualIndex, StartIndex, EndIndex, Amount, XIndex : Natural;
+        EqualIndex, StartIndex, EndIndex, Amount, XIndex, CombatValue : Natural;
         TempRecord : ProtoShipData;
         TempModules : Positive_Container.Vector;
         Enemy : Boolean := False;
@@ -459,10 +459,26 @@ package body Ships is
                             ProtoIndex => Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1))));
                         StartIndex := EndIndex + 2;
                     end loop;
-                elsif FieldName = To_Unbounded_String("CombatValue") then
-                    TempRecord.CombatValue := Integer'Value(To_String(Value));
                 end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
+                CombatValue := 0;
+                for I in TempRecord.Modules.First_Index..TempRecord.Modules.Last_Index loop
+                    case Modules_List.Element(TempRecord.Modules.Element(I)).MType is
+                        when HULL | GUN | BATTERING_RAM =>
+                            CombatValue := CombatValue + Modules_List.Element(TempRecord.Modules.Element(I)).Durability +
+                                (Modules_List.Element(TempRecord.Modules.Element(I)).MaxValue * 10);
+                        when ARMOR =>
+                            CombatValue := CombatValue + Modules_List.Element(TempRecord.Modules.Element(I)).Durability;
+                        when others =>
+                            null;
+                    end case;
+                end loop;
+                for I in TempRecord.Cargo.First_Index..TempRecord.Cargo.Last_Index loop
+                    if Slice(Items_List.Element(TempRecord.Cargo.Element(I).ProtoIndex).IType, 1, 4) = "Ammo" then
+                        CombatValue := CombatValue + (Items_List.Element(TempRecord.Cargo.Element(I).ProtoIndex).Value * 10);
+                    end if;
+                end loop;
+                TempRecord.CombatValue := CombatValue;
                 if not Enemy then
                     ProtoShips_List.Append(New_Item => TempRecord);
                 else
