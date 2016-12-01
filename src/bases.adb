@@ -669,7 +669,7 @@ package body Bases is
         MinX, MinY, MaxX, MaxY : Integer;
         type Value_Type is digits 2 range 0.0..9999999.0;
         package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
-        Enemies : ProtoShips_Container.Vector;
+        Enemies : Positive_Container.Vector;
         PlayerValue : Natural := 0;
         function GetRandom(Min, Max : Positive) return Positive is
             subtype Rand_Range is Positive range Min..Max;
@@ -735,11 +735,13 @@ package body Bases is
             end loop;
             for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
                 if Enemies_List.Element(I).CombatValue <= PlayerValue then
-                    Enemies.Append(New_Item => Enemies_List.Element(I));
+                    Enemies.Append(New_Item => I);
                 end if;
             end loop;
         else
-            Enemies := Enemies_List;
+            for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
+                Enemies.Append(New_Item => I);
+            end loop;
         end if;
         for I in 1..EventsAmount loop
             loop
@@ -765,11 +767,11 @@ package body Bases is
             case Event is
                 when EnemyShip =>
                     Events_List.Append(New_Item => (EnemyShip, EventX, EventY, GetRandom(EventTime, EventTime + 60), 
-                        GetRandom(Enemies.First_Index, Enemies.Last_Index)));
+                        Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                 when AttackOnBase =>
                     if SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
                         Events_List.Append(New_Item => (AttackOnBase, EventX, EventY, GetRandom(EventTime, EventTime + 120),
-                            GetRandom(Enemies.First_Index, Enemies.Last_Index)));
+                            Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                     end if;
                 when Disease =>
                     if SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then

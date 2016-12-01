@@ -38,7 +38,7 @@ package body Events is
         TimePassed : Integer;
         PilotIndex, PlayerValue : Natural := 0;
         Roll : Positive;
-        Enemies : ProtoShips_Container.Vector;
+        Enemies : Positive_Container.Vector;
         function GetRandom(Min, Max : Positive) return Positive is
             subtype Rand_Range is Positive range Min..Max;
             package Rand_Roll is new Discrete_Random(Rand_Range);
@@ -77,11 +77,13 @@ package body Events is
                 end loop;
                 for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
                     if Enemies_List.Element(I).CombatValue <= PlayerValue then
-                        Enemies.Append(New_Item => Enemies_List.Element(I));
+                        Enemies.Append(New_Item => I);
                     end if;
                 end loop;
             else
-                Enemies := Enemies_List;
+                for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
+                    Enemies.Append(New_Item => I);
+                end loop;
             end if;
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
                 case Roll is
@@ -104,7 +106,7 @@ package body Events is
                         end if;
                     when others => -- Combat
                         Events_List.Append(New_Item => (EnemyShip, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(30, 45), 
-                            GetRandom(Enemies.First_Index, Enemies.Last_Index)));
+                            Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := Events_List.Last_Index;
                         return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
                 end case;
@@ -113,7 +115,7 @@ package body Events is
                     case Roll is
                         when 1..20 => -- Base is attacked
                             Events_List.Append(New_Item => (AttackOnBase, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(60, 90), 
-                                GetRandom(Enemies.First_Index, Enemies.Last_Index)));
+                                Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                             AddMessage("You can't dock to base now, because base is under attack. You can help defend it.", OtherMessage);
                             return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
                         when 21 => -- Disease in base
