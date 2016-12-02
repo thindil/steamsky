@@ -2,8 +2,9 @@
 
 Steam Sky is open source roguelike steampunk game. Your role is to command flying 
 ship with crew in sky, traveling between floating bases, fighting with enemies, trade in 
-goods, etc. Game is in very early stage of development, so at this moment most functions 
-are not implemented yet. Now game is available (and tested) only on Linux 64-bit systems.
+goods, etc. Game is in early stage of development, so at this moment most functions 
+are not implemented yet. Now game is available (and tested) only on Linux 64-bit and 
+Raspberry Pi with 32-bit Linux.
 
 ## Build game
 
