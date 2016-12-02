@@ -19,6 +19,7 @@ Result = 11
 Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Cooking
+Time = 30
 [4]
 Material = Iron, Gunpowder
 Amount = 1, 1
@@ -75,6 +76,7 @@ Result = 21
 Crafted = 1
 Workplace = Furnace
 Skill = Metalsmith
+Time = 30
 [12]
 Material = Steel, Gunpowder
 Amount = 1, 1
