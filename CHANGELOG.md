@@ -42,6 +42,7 @@ All notable changes to this project will be documented in this file.
 - Ammo name from size ammo to Iron size ammo
 - Updated enemies selection
 - Better generating characters (crew, npc) names
+- Updated README.md
 
 ### Fixed
 - Don't craft items when worker is on break
