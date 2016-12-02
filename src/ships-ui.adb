@@ -206,6 +206,9 @@ package body Ships.UI is
                 if Module.Current_Value > 0 then
                     Add(Win => InfoWIndow, Str => "Manufacturing: " &
                         To_String(Items_List.Element(Recipes_List.Element(Module.Current_Value).ResultIndex).Name));
+                    Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
+                    Add(Win => InfoWindow, Str => "Time to complete:" & Positive'Image(Module.Max_Value) & " minutes");
+                    CurrentLine := CurrentLine + 1;
                 else
                     Add(Win => InfoWindow, Str => "Manufacturing: nothing");
                 end if;
@@ -736,11 +739,13 @@ package body Ships.UI is
             when others =>
                 Result := Driver(ModulesMenu, Key);
                 if Result = Menu_Ok then
+                    ShowModuleInfo;
                     Refresh(MenuWindow);
                 else
                     Result := Driver(ModulesMenu, M_CLEAR_PATTERN);
                     Result := Driver(ModulesMenu, Key);
                     if Result = Menu_Ok then
+                        ShowModuleInfo;
                         Refresh(MenuWindow);
                     end if;
                 end if;
@@ -782,11 +787,13 @@ package body Ships.UI is
             when others =>
                 Result := Driver(ModulesMenu, Key);
                 if Result = Menu_Ok then
+                    ShowItemInfo;
                     Refresh(MenuWindow);
                 else
                     Result := Driver(ModulesMenu, M_CLEAR_PATTERN);
                     Result := Driver(ModulesMenu, Key);
                     if Result = Menu_Ok then
+                        ShowItemInfo;
                         Refresh(MenuWindow);
                     end if;
                 end if;

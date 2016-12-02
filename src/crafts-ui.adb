@@ -106,6 +106,9 @@ package body Crafts.UI is
         CurrentLine := CurrentLine + 1;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Skill: " & To_String(Skills_Names.Element(Recipe.Skill)));
+        CurrentLine := CurrentLine + 1;
+        Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+        Add(Win => InfoWindow, Str => "Time needed:" & Positive'Image(Recipe.Time) & " minutes");
         Move_Cursor(Win => InfoWindow, Line => (CurrentLine + 2), Column => 0);
         Add(Win => InfoWindow, Str => "Press ENTER for set manufacturing order");
         Change_Attributes(Win => InfoWindow, Line => (CurrentLine + 2), Column => 6, Count => 5, Color => 1);
