@@ -98,4 +98,18 @@ Result = 25
 Crafted = 2
 Workplace = Alchemy_Lab
 Skill = Gunsmith
+[15]
+Material = Iron, Gunpowder
+Amount = 1, 1
+Result = 26
+Crafted = 1
+Workplace = Alchemy_Lab
+Skill = Gunsmith
+[16]
+Material = Steel, Gunpowder
+Amount = 1, 1
+Result = 27
+Crafted = 1
+Workplace = Alchemy_Lab
+Skill = Gunsmith
 []
