@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - New enemy ships: pirate ship, armored pirate ship, small attacking drone,
   attacking clockwork drone and armored attacking drone
 - New type of items: ammo60
+- Each crafting recipe have own crafting time
 
 ### Changed
 - Updated help
