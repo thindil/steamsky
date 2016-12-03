@@ -157,15 +157,33 @@ Value = 8
 [26]
 Name = Iron 60mm ammo
 Weight = 4
-Type = Ammo40
+Type = Ammo60
 Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
 Value = 8
 [27]
 Name = Steel 60mm ammo
 Weight = 4
-Type = Ammo40
+Type = Ammo60
 Prices = 12, 14, 14, 14
 Buyable = Y, N, N, N
 Value = 16
+[22]
+Name = Medical herbs
+Weight = 5
+Type = Herbs
+Prices = 5, 3, 5, 5
+Buyable = N, Y, N, N
+[23]
+Name = Medical herbs seeds
+Weight = 1
+Type = HerbSeeds
+Prices = 4, 2, 4, 4
+Buyable = N, Y, N, N
+[24]
+Name = Vegetables seeds
+Weight = 1
+Type = VegetableSeed
+Prices = 2, 1, 2, 2
+Buyable = N, Y, N, N
 []
