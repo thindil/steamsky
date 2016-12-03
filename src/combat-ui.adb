@@ -154,6 +154,9 @@ package body Combat.UI is
         Set_Window(CrewMenu, MenuWindow);
         Set_Sub_Window(CrewMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(CrewMenu);
+        if CurrentMenuIndex >= Crew_Items'Last then
+            CurrentMenuIndex := 1;
+        end if;
         Set_Current(CrewMenu, Crew_Items.all(CurrentMenuIndex));
         Move_Cursor(Line => 5, Column => 2);
         Add(Str => "ENTER to give orders");
