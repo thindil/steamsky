@@ -10,7 +10,7 @@ Raspberry Pi with 32-bit Linux.
 
 To build it, you need:
 
-* Any Ada language compiler, for example GCC with enabled Ada support or GNAT: 
+* compiler - GCC with enabled Ada support or GNAT from: 
   http://libre.adacore.com/download/
 
 * ncurses Ada binding (should be available in most distributions or with ncurses 
@@ -36,7 +36,7 @@ Enter *bin* directory (if you build game from sources) or in main game
 directory (if you use released binary) and type `./steamsky`. Game works 
 only in terminal.
 
-Note: If you build game from source, copy license file COPYING to *bin*
+Note: If you build game from source, copy files COPYING and README.md to *bin*
 directory.
 
 
