@@ -11,5 +11,5 @@ FemaleSyllablesStart = Ad, Aer, Ar, Bel, Bet, Beth, Ce'N, Cyr, Eilin, El, Em, Em
 FemaleSyllablesMiddle = bre, da, dhe, ga, lda, le, lra, mi, ra, ri, ria, re, se, ya
 FemaleSyllablesEnd = ba, beth, da, kira, laith, lle, ma, mina, mira, na, nn, nne, nor, ra, rin, ssra, ta, th, tha, thra, tira, tta, vea, vena, we, wen, wyn
 FemaleVocals = a, e, i, o, u, y
-SkillsNames = Piloting, Engineering, Gunnery, Rhetoric, Perception, Alchemy, Cooking, Gunsmith, Metalsmith
+SkillsNames = Piloting, Engineering, Gunnery, Rhetoric, Perception, Alchemy, Cooking, Gunsmith, Metalsmith, Medicine
 ItemsTypes = Fuel, Food, Drink, Ammo10, Bronze, FoodMaterial, Wood, Gunpowder, Iron, Copper, Tin, CopperOre, TinOre, IronOre, Ammo20, Ammo40, Steel, Medicines, Ammo60, Herbs, HerbSeeds, VegetableSeeds
