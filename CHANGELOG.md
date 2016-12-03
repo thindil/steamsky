@@ -51,6 +51,7 @@ All notable changes to this project will be documented in this file.
 - Crash in bases list on small screens
 - Item type for steel plates
 - Crash when terminal not support changing colors
+- Crash in combat when crew member killed or gun destroyed
 
 ## [0.5] - 2016-11-13
 
