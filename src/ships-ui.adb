@@ -195,7 +195,7 @@ package body Ships.UI is
                 else
                     Add(Win => InfoWindow, Str => "Weapon: none");
                 end if;
-            when ALCHEMY_LAB | FURNACE =>
+            when ALCHEMY_LAB..GREENHOUSE =>
                 if Module.Owner > 0 then
                     Add(Win => InfoWindow, Str => "Worker: " &
                         To_String(PlayerShip.Crew.Element(Module.Owner).Name));
@@ -596,7 +596,7 @@ package body Ships.UI is
                     Options_Items.all(MenuIndex) := New_Item("Enlarge hull", "2");
                     MenuIndex := MenuIndex + 1;
                 end if;
-            when ALCHEMY_LAB | FURNACE =>
+            when ALCHEMY_LAB..GREENHOUSE =>
                 if PlayerShip.Modules.Element(ModuleIndex).Current_Value > 0 then
                     Options_Items.all(MenuIndex) := New_Item("Assign worker", "7");
                     MenuIndex := MenuIndex + 1;
@@ -966,7 +966,7 @@ package body Ships.UI is
                                 & ".", OrderMessage);
                         when GUN =>
                             GiveOrders(OptionIndex, Gunner, CurrentMenuIndex);
-                        when ALCHEMY_LAB | FURNACE =>
+                        when ALCHEMY_LAB..GREENHOUSE =>
                             GiveOrders(OptionIndex, Craft, CurrentMenuIndex);
                         when others =>
                             null;

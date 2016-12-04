@@ -141,15 +141,15 @@ package body Crafts is
         WorkTime, CurrentMinutes, RecipeTime : Integer;
         type DamageFactor is digits 2 range 0.0..1.0;
         Damage : DamageFactor := 0.0;
+        subtype Workplaces is ModuleType range ALCHEMY_LAB..GREENHOUSE;
         procedure UpdateMember(Member : in out Member_Data) is
         begin
             Member.OrderTime := WorkTime;
         end UpdateMember;
     begin
         for L in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(L).Owner > 0 and (Modules_List.Element(PlayerShip.Modules.Element(L).ProtoIndex).MType = 
-                ALCHEMY_LAB or Modules_List.Element(PlayerShip.Modules.Element(L).ProtoIndex).MType = FURNACE) and 
-                PlayerShip.Modules.Element(L).Current_Value > 0
+            if PlayerShip.Modules.Element(L).Owner > 0 and (Modules_List.Element(PlayerShip.Modules.Element(L).ProtoIndex).MType 
+                in Workplaces) and PlayerShip.Modules.Element(L).Current_Value > 0
             then
                 CrafterIndex := PlayerShip.Modules.Element(L).Owner;
                 if PlayerShip.Crew.Element(CrafterIndex).Order = Craft then
