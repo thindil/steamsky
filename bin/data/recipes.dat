@@ -112,4 +112,11 @@ Result = 27
 Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Gunsmith
+[17]
+Material = Herbs
+Amount = 1
+Result = 22
+Crafted = 1
+Workplace = Alchemy_Lab
+Skill = Medicine
 []
