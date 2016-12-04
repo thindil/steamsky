@@ -334,4 +334,16 @@ Material = Iron
 Skill = Gunsmith
 Price = 2000
 InstallTime = 60
+[29]
+Name = Small bronze greenhouse
+Type = Greenhouse
+Weight = 1000
+Value = 0
+MaxValue = 0
+Durability = 100
+Material = Bronze
+Skill = Engineering
+Price = 1000
+InstallTime = 60
+Size = 1
 []
