@@ -30,7 +30,7 @@ All notable changes to this project will be documented in this file.
   attacking clockwork drone and armored attacking drone
 - New types of items: ammo60, herbs, herbseeds, vegetableseeds and medicines
 - Each crafting recipe have own crafting time
-- New skill: medicine
+- New skills: medicine and farming
 - New type of ship modules: greenhouse
 
 ### Changed
