@@ -197,7 +197,7 @@ package body Crew.UI is
                     if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
                         OrdersAmount := OrdersAmount + 1;
                     end if;
-                when ALCHEMY_LAB | FURNACE =>
+                when ALCHEMY_LAB..GREENHOUSE =>
                     if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
                         OrdersAmount := OrdersAmount + 1;
                     end if;
@@ -246,7 +246,7 @@ package body Crew.UI is
                             Positive'Image(I));
                         MenuIndex := MenuIndex + 1;
                     end if;
-                when ALCHEMY_LAB | FURNACE =>
+                when ALCHEMY_LAB..GREENHOUSE =>
                     if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
                         Orders_Items.all(MenuIndex) := New_Item("Work in " & To_String(PlayerShip.Modules.Element(I).Name), 
                             Positive'Image(I));
