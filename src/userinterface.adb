@@ -124,7 +124,7 @@ package body UserInterface is
                         elsif PlayerShip.Modules.Element(I).Owner = 0 and GunnersCheck = 1 then
                             GunnersCheck := 2;
                         end if;
-                    when ALCHEMY_LAB | FURNACE =>
+                    when ALCHEMY_LAB..GREENHOUSE =>
                         if PlayerShip.Modules.Element(I).Current_Value > 0 then
                             if PlayerShip.Modules.Element(I).Owner > 0 and CraftersCheck < 2 then
                                 CraftersCheck := 1;
