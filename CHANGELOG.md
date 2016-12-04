@@ -17,19 +17,18 @@ All notable changes to this project will be documented in this file.
 - Player reputation in bases and it impact on some player actions
 - More detailed informations about skills levels
 - Check for minimal console size
-- New item type: medicines
-- New item: medical supplies
 - More possible ammo for this same gun types
 - Option to assign ammunition to selected gun
 - Damage in combat depends on ammo too
 - New items: steel 10mm ammo, steel 20mm ammo, steel 40mm ammo, iron 60mm ammo,
-  steel 60mm ammo, medical herbs, medical herbs seeds and vegetables seeds
+  steel 60mm ammo, medical herbs, medical herbs seeds, vegetables seeds and
+  medical supplies
 - New crafting recipes: steel 10mm ammo, steel 20mm ammo, steel 40mm ammo, iron
-  60mm ammo and steel 60mm ammo
-- New ship module: bronze turret and iron 60mm gun
+  60mm ammo, steel 60mm ammo and medical supplies
+- New ship modules: bronze turret and iron 60mm gun
 - New enemy ships: pirate ship, armored pirate ship, small attacking drone,
   attacking clockwork drone and armored attacking drone
-- New type of items: ammo60, herbs, herbseeds, vegetableseeds
+- New types of items: ammo60, herbs, herbseeds, vegetableseeds and medicines
 - Each crafting recipe have own crafting time
 - New skill: medicine
 
