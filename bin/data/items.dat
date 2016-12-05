@@ -168,19 +168,19 @@ Type = Ammo60
 Prices = 12, 14, 14, 14
 Buyable = Y, N, N, N
 Value = 16
-[22]
+[28]
 Name = Medical herbs
 Weight = 5
 Type = Herbs
 Prices = 5, 3, 5, 5
 Buyable = N, Y, N, N
-[23]
+[29]
 Name = Medical herbs seeds
 Weight = 1
 Type = HerbSeeds
 Prices = 4, 2, 4, 4
 Buyable = N, Y, N, N
-[24]
+[30]
 Name = Vegetables seeds
 Weight = 1
 Type = VegetableSeed
