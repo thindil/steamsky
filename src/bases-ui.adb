@@ -363,7 +363,7 @@ package body Bases.UI is
                 Float(Damage));
             MTime := Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).InstallTime;
         end if;
-        InfoWindow := Create(8, (Columns / 2), 3, (Columns / 2));
+        InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
         Add(Win => InfoWindow, Str => To_String(TextCost) & Positive'Image(Cost) & " Charcollum");
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         Add(Win => InfoWindow, Str => To_String(TextTime) & Positive'Image(MTime) & " minutes");
@@ -391,6 +391,11 @@ package body Bases.UI is
                 Add(Win => InfoWindow, Str => "Size:" & Natural'Image(Modules_List.Element(ModuleIndex).Size));
                 CurrentLine := CurrentLine + 1;
             end if;
+            if Modules_List.Element(ModuleIndex).Weight > 0 then
+                Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
+                Add(Win => InfoWindow, Str => "Weight:" & Natural'Image(Modules_List.Element(ModuleIndex).Weight) & " kg");
+                CurrentLine := CurrentLine + 1;
+            end if;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Press ENTER to install module");
             Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
@@ -406,10 +411,15 @@ package body Bases.UI is
                 when others =>
                     null;
             end case;
-            if  Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Size > 0 then
+            if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Size > 0 then
                 Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
                 Add(Win => InfoWindow, Str => "Size:" & 
                     Natural'Image(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Size));
+                CurrentLine := CurrentLine + 1;
+            end if;
+            if PlayerShip.Modules.Element(ModuleIndex).Weight > 0 then
+                Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
+                Add(Win => InfoWindow, Str => "Weight:" & Natural'Image(PlayerShip.Modules.Element(ModuleIndex).Weight) & " kg");
                 CurrentLine := CurrentLine + 1;
             end if;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
