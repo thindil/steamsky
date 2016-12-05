@@ -119,4 +119,20 @@ Result = 22
 Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Medicine
+[18]
+Material = HerbSeeds
+Amount = 1
+Result = 28
+Crafted = 2
+Workplace = Greenhouse
+Skill = Farming
+Time = 120
+[19]
+Material = VegetableSeed
+Amount = 1
+Result = 6
+Crafted = 2
+Workplace = Greenhouse
+Skill = Farming
+Time = 60
 []
