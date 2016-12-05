@@ -26,7 +26,8 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: steel 10mm ammo, steel 20mm ammo, steel 40mm ammo, iron
   60mm ammo, steel 60mm ammo, medical supplies, medical herbs and fresh
   vegetables
-- New ship modules: bronze turret, iron 60mm gun and small bronze greenhouse
+- New ship modules: bronze turret, iron 60mm gun, small bronze greenhouse and
+  small bronze water collector
 - New enemy ships: pirate ship, armored pirate ship, small attacking drone,
   attacking clockwork drone and armored attacking drone
 - New types of items: ammo60, herbs, herbseeds, vegetableseeds and medicines
