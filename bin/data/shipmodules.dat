@@ -346,4 +346,16 @@ Skill = Engineering
 Price = 1000
 InstallTime = 60
 Size = 1
+[30]
+Name = Small bronze water collector
+Type = Water_collector
+Weight = 800
+Value = 0
+MaxValue = 0
+Durability = 100
+Material = Bronze
+Skill = Engineering
+Price = 1000
+InstallTime = 60
+Size = 1
 []
