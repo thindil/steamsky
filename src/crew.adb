@@ -28,7 +28,6 @@ package body Crew is
     procedure GiveOrders(MemberIndex : Positive; GivenOrder : Crew_Orders; ModuleIndex : Natural := 0) is
         NewOrder : Crew_Orders;
         MemberName : constant String := To_String(PlayerShip.Crew.Element(MemberIndex).Name);
-        HaveMaterial, RepairNeeded : Boolean := False;
         ModuleIndex2 : Natural := 0;
         MType : ModuleType := ENGINE;
         procedure UpdateOrder(Member : in out Member_Data) is
@@ -55,47 +54,7 @@ package body Crew is
             ShowDialog(MemberName & " is too thirsty to work.");
             return;
         end if;
-        if GivenOrder = Craft then
-            if ModuleIndex = 0 then
-                ShowDialog("You must set which workplace you want to use.");
-                return;
-            end if;
-            if PlayerShip.Modules.Element(ModuleIndex).Current_Value = 0 then
-                ShowDialog("You can't set crew member for manufacturing, because you don't set item to manufacture in this module.");
-                return;
-            end if;
-        end if;
-        if GivenOrder = Gunner and ModuleIndex = 0 then
-            ShowDialog("You must set which workplace you want to use.");
-            return;
-        end if;
-        if GivenOrder = Upgrading and PlayerShip.UpgradeModule = 0 then
-            ShowDialog("You don't set yet module to upgrade.");
-            return;
-        end if;
-        if GivenOrder = Repair then
-            Repair_Loop:
-            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
-                    RepairNeeded := True;
-                    for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                        if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = 
-                            Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial then
-                            HaveMaterial := True;
-                            exit Repair_Loop;
-                        end if;
-                    end loop;
-                end if;
-            end loop Repair_Loop;
-            if not RepairNeeded then
-                ShowDialog("Your ship don't need repair.");
-                return;
-            end if;
-            if not HaveMaterial then
-                ShowDialog("You don't have repair materials.");
-                return;
-            end if;
-        elsif GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Upgrading or GivenOrder = Talk then
+        if GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Upgrading or GivenOrder = Talk then
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                 if PlayerShip.Crew.Element(I).Order = GivenOrder then
                     GiveOrders(I, Rest);
@@ -198,6 +157,9 @@ package body Crew is
                     & ".", OrderMessage);
             when Talk =>
                 AddMessage(MemberName & " was assigned to talking in bases.", OrderMessage);
+            when Heal =>
+                AddMessage(MemberName & " starts healing wounded crew members.", OrderMessage);
+                UpdateModule(PlayerShip, ModuleIndex2, "Owner", Positive'Image(MemberIndex));
         end case;
         NewOrder := GivenOrder;
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
@@ -319,7 +281,7 @@ package body Crew is
         HealthLevel : Integer := 100;
         DeathReason : Unbounded_String;
         CabinIndex, Times, RestAmount, I : Natural;
-        OrderTime, CurrentMinutes : Integer;
+        OrderTime, CurrentMinutes, HealAmount : Integer;
         type DamageFactor is digits 2 range 0.0..1.0;
         Damage : DamageFactor := 0.0;
         procedure UpdateMember(Member : in out Member_Data) is
@@ -375,6 +337,13 @@ package body Crew is
                 Member.OrderTime := OrderTime;
             end if;
         end UpdateMember;
+        procedure Heal(Member : in out Member_Data) is
+        begin
+            Member.Health := Member.Health + HealAmount;
+            if Member.Health > 100 then
+                Member.Health := 100;
+            end if;
+        end Heal;
     begin
         I := PlayerShip.Crew.First_Index;
         while I <= PlayerShip.Crew.Last_Index loop
@@ -437,6 +406,53 @@ package body Crew is
                             GainExp(Times, 1, I);
                         when Engineer =>
                             GainExp(Times, 2, I);
+                        when Heal =>
+                            HealAmount := Times * (GetSkillLevel(I, 10) / 20);
+                            if HealAmount < Times then
+                                HealAmount := Times;
+                            end if;
+                            for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                                if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = MEDICAL_ROOM and
+                                    PlayerShip.Modules.Element(J).Durability = 0 
+                                then
+                                    HealAmount := -1;
+                                    AddMessage("You don't have medical room to continue healing wounded crew members.", OrderMessage);
+                                    exit;
+                                end if;
+                            end loop;
+                            HealAmount := HealAmount * (-1);
+                            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                                if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines") then
+                                    HealAmount := abs(HealAmount);
+                                    UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(J).ProtoIndex, (0 - Times));
+                                    exit;
+                                end if;
+                            end loop;
+                            if HealAmount > 0 then
+                                for J in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                                    if PlayerShip.Crew.Element(J).Health < 100 and J /= I then
+                                        PlayerShip.Crew.Update_Element(Index => J, Process => Heal'Access);
+                                        AddMessage(To_String(PlayerShip.Crew.Element(I).Name) & " healed " & 
+                                            To_String(PlayerShip.Crew.Element(J).Name) & " a bit.", OrderMessage);
+                                        GainExp(Times, 10, I);
+                                        exit;
+                                    end if;
+                                end loop;
+                                for J in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                                    if PlayerShip.Crew.Element(J).Health < 100 and J /= I then
+                                        HealAmount := 0;
+                                        exit;
+                                    end if;
+                                end loop;
+                                if HealAmount > 0 then
+                                    AddMessage(To_String(PlayerShip.Crew.Element(I).Name) & " finished healing wounded.", OrderMessage);
+                                end if;
+                            else
+                                AddMessage("You don't have any medical supplies to continue healing wounded crew members.", OrderMessage);
+                            end if;
+                            if HealAmount /= 0 then
+                                GiveOrders(I, Rest);
+                            end if;
                         when others =>
                             null;
                     end case;
