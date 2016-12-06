@@ -135,4 +135,12 @@ Crafted = 2
 Workplace = Greenhouse
 Skill = Farming
 Time = 60
+[20]
+Material = Wood
+Amount = 1
+Result = 3
+Crafted = 1
+Workplace = Water_collector
+Skill = Engineering
+Time = 60
 []
