@@ -323,7 +323,7 @@ Skill = Engineering
 Price = 750
 InstallTime = 90
 Size = 1
-[28]
+[29]
 Name = Iron 60mm gun
 Type = Gun
 Weight = 60
@@ -334,7 +334,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 2000
 InstallTime = 60
-[29]
+[30]
 Name = Small bronze greenhouse
 Type = Greenhouse
 Weight = 1000
@@ -346,7 +346,7 @@ Skill = Engineering
 Price = 1000
 InstallTime = 60
 Size = 1
-[30]
+[31]
 Name = Small bronze water collector
 Type = Water_collector
 Weight = 800
@@ -358,4 +358,17 @@ Skill = Engineering
 Price = 1000
 InstallTime = 60
 Size = 1
+[32]
+Name = Small bronze medical room
+Type = Medical_room
+Weight = 400
+Value = 0
+MaxValue = 0
+Durability = 100
+Material = Bronze
+Skill = Engineering
+Price = 1000
+InstallTime = 60
+Size = 1
+Unique = Yes
 []
