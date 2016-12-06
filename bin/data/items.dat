@@ -130,7 +130,7 @@ Buyable = Y, N, N, N
 [22]
 Name = Medical supplies
 Weight = 5
-Type = Medical
+Type = Medicines
 Prices = 7, 5, 5, 7
 Buyable = N, Y, Y, N
 [23]
