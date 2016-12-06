@@ -33,7 +33,7 @@ All notable changes to this project will be documented in this file.
 - New types of items: ammo60, herbs, herbseeds, vegetableseeds and medicines
 - Each crafting recipe have own crafting time
 - New skills: medicine and farming
-- New types of ship modules: greenhouse and water collector
+- New types of ship modules: greenhouse, water collector and medical room
 
 ### Changed
 - Updated help
