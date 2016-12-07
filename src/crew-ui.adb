@@ -201,31 +201,33 @@ package body Crew.UI is
             end if;
         end loop;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
-                when GUN =>
-                    if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
-                        OrdersAmount := OrdersAmount + 1;
-                    end if;
-                when ALCHEMY_LAB..GREENHOUSE =>
-                    if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
-                        OrdersAmount := OrdersAmount + 1;
-                    end if;
-                when MEDICAL_ROOM =>
-                    if NeedHealer then
-                        for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                            AddMessage(To_String(Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType),
-                            othermessage);
-                            if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines") and
-                                PlayerShip.Crew.Element(MemberIndex).Order /= Heal 
-                            then
-                                HealOrder := True;
-                                exit;
-                            end if;
-                        end loop;
-                    end if;
-                when others =>
-                    null;
-            end case;
+            if PlayerShip.Modules.Element(I).Durability > 0 then
+                case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                    when GUN =>
+                        if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
+                            OrdersAmount := OrdersAmount + 1;
+                        end if;
+                    when ALCHEMY_LAB..GREENHOUSE =>
+                        if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
+                            OrdersAmount := OrdersAmount + 1;
+                        end if;
+                    when MEDICAL_ROOM =>
+                        if NeedHealer then
+                            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                                AddMessage(To_String(Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType),
+                                othermessage);
+                                if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines") and
+                                    PlayerShip.Crew.Element(MemberIndex).Order /= Heal 
+                                then
+                                    HealOrder := True;
+                                    exit;
+                                end if;
+                            end loop;
+                        end if;
+                    when others =>
+                        null;
+                end case;
+            end if;
             if not NeedRepairs and PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
                 for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                     if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = 
@@ -271,27 +273,29 @@ package body Crew.UI is
             MenuIndex := MenuIndex + 1;
         end if;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
-                when GUN =>
-                    if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
-                        Orders_Items.all(MenuIndex) := New_Item("Operate " & To_String(PlayerShip.Modules.Element(I).Name), 
+            if PlayerShip.Modules.Element(I).Durability > 0 then
+                case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                    when GUN =>
+                        if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
+                            Orders_Items.all(MenuIndex) := New_Item("Operate " & To_String(PlayerShip.Modules.Element(I).Name), 
                             Positive'Image(I));
-                        MenuIndex := MenuIndex + 1;
-                    end if;
-                when ALCHEMY_LAB..GREENHOUSE =>
-                    if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
-                        Orders_Items.all(MenuIndex) := New_Item("Work in " & To_String(PlayerShip.Modules.Element(I).Name), 
+                            MenuIndex := MenuIndex + 1;
+                        end if;
+                    when ALCHEMY_LAB..GREENHOUSE =>
+                        if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
+                            Orders_Items.all(MenuIndex) := New_Item("Work in " & To_String(PlayerShip.Modules.Element(I).Name), 
                             Positive'Image(I));
-                        MenuIndex := MenuIndex + 1;
-                    end if;
-                when MEDICAL_ROOM =>
-                    if HealOrder then
-                        Orders_Items.all(MenuIndex) := New_Item("Heal wounded crew members", Positive'Image(I));
-                        MenuIndex := MenuIndex + 1;
-                    end if;
-                when others =>
-                    null;
-            end case;
+                            MenuIndex := MenuIndex + 1;
+                        end if;
+                    when MEDICAL_ROOM =>
+                        if HealOrder then
+                            Orders_Items.all(MenuIndex) := New_Item("Heal wounded crew members", Positive'Image(I));
+                            MenuIndex := MenuIndex + 1;
+                        end if;
+                    when others =>
+                        null;
+                end case;
+            end if;
         end loop;
         if NeedRepairs then
             Orders_Items.all(MenuIndex) := New_Item("Repair ship", "0");
