@@ -39,11 +39,10 @@ package body Ships.UI is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
         DamagePercent : Natural;
         MAmount, TextLength : Natural := 0;
-        CurrentLine : Line_Position := 5;
+        CurrentLine, StartLine : Line_Position;
         MaxUpgrade, UpgradePercent : Natural;
         MaxValue : Positive;
-        HaveAmmo : Boolean := False;
-        StartLine : Line_Position;
+        HaveAmmo, HaveMaterial : Boolean := False;
         StartColumn, EndColumn : Column_Position;
         Module : constant ModuleData := PlayerShip.Modules.Element(ModuleIndex);
     begin
@@ -77,10 +76,34 @@ package body Ships.UI is
                 if MAmount > 0 then
                     Add(Win => InfoWindow, Str => " or ");
                 end if;
+                Get_Cursor_Position(Win => InfoWindow, Line => StartLine, Column => StartColumn);
                 Add(Win => InfoWindow, Str => To_String(Items_List.Element(I).Name));
+                Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
+                for K in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if Items_List.Element(PlayerShip.Cargo.Element(K).ProtoIndex).IType = Items_List.Element(I).IType then
+                        HaveMaterial := True;
+                        exit;
+                    end if;
+                end loop;
+                if not HaveMaterial then
+                    if StartLine = CurrentLine then
+                        TextLength := Natural(EndColumn - StartColumn);
+                        Change_Attributes(Win => InfoWindow, Line => StartLine,
+                        Column => StartColumn, Count => Integer(StartColumn) + TextLength, Color => 3);
+                    else
+                        TextLength := Natural((Columns / 2) - StartColumn);
+                        Change_Attributes(Win => InfoWindow, Line => StartLine,
+                        Column => StartColumn, Count => Integer(StartColumn) + TextLength, Color => 3);
+                        Change_Attributes(Win => InfoWindow, Line => CurrentLine,
+                        Column => 0, Count => Integer(EndColumn), Color => 3);
+                    end if;
+                    Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
+                end if;
+                HaveMaterial := False;
                 MAmount := MAmount + 1;
             end if;
         end loop;
+        CurrentLine := 5;
         Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
         Add(Win => InfoWindow, Str => "Repair/Upgrade skill: " &
             To_String(Skills_Names.Element(Modules_List.Element(Module.ProtoIndex).RepairSkill)));
