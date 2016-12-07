@@ -30,7 +30,8 @@ All notable changes to this project will be documented in this file.
   bronze water collector and small bronze medical room
 - New enemy ships: pirate ship, armored pirate ship, small attacking drone,
   attacking clockwork drone and armored attacking drone
-- New types of items: ammo60, herbs, herbseeds, vegetableseeds and medicines
+- New types of items: ammo60, herbs, herbseeds, vegetableseeds, medicines and
+  ammo80
 - Each crafting recipe have own crafting time
 - New skills: medicine and farming
 - New types of ship modules: greenhouse, water collector and medical room
