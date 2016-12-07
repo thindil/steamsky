@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Each crafting recipe have own crafting time
 - New skills: medicine and farming
 - New types of ship modules: greenhouse, water collector and medical room
+- Healing wounded crew members
 
 ### Changed
 - Updated help
@@ -54,7 +55,7 @@ All notable changes to this project will be documented in this file.
 - Crash in bases list on small screens
 - Item type for steel plates
 - Crash when terminal not support changing colors
-- Crash in combat when crew member killed or gun destroyed
+- Crash in combat when crew member was killed or gun was destroyed
 
 ## [0.5] - 2016-11-13
 
