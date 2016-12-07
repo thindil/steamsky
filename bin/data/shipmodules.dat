@@ -326,7 +326,7 @@ Size = 1
 [29]
 Name = Iron 60mm gun
 Type = Gun
-Weight = 60
+Weight = 120
 Value = 19
 MaxValue = 40
 Durability = 50
@@ -371,4 +371,15 @@ Price = 1000
 InstallTime = 60
 Size = 1
 Unique = Yes
+[33]
+Name = Iron 80mm gun
+Type = Gun
+Weight = 240
+Value = 23
+MaxValue = 80
+Durability = 75
+Material = Iron
+Skill = Gunsmith
+Price = 4000
+InstallTime = 90
 []
