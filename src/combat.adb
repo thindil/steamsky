@@ -332,7 +332,7 @@ package body Combat is
                             end if;
                             if EndCombat then
                                 if Ship = PlayerShip then
-                                    UpdateModule(EnemyShip, 1, "Durability", Integer'Image(0 - Ship.Modules.Element(1).MaxDurability));
+                                    UpdateModule(EnemyShip, 1, "Durability", Integer'Image(0 - EnemyShip.Modules.Element(1).MaxDurability));
                                     AddMessage(To_String(EnemyName) & " is destroyed!", CombatMessage);
                                     LootAmount := Integer(Loot_Roll.Random(Generator4));
                                     FreeSpace := FreeCargo((0 - LootAmount));
