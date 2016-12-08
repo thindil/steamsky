@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - New skills: medicine and farming
 - New types of ship modules: greenhouse, water collector and medical room
 - Healing wounded crew members
+- Dirt/cleaning ship
 
 ### Changed
 - Updated help
