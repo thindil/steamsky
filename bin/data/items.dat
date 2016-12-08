@@ -186,4 +186,18 @@ Weight = 1
 Type = VegetableSeed
 Prices = 2, 1, 2, 2
 Buyable = N, Y, N, N
+[31]
+Name = Iron 80mm ammo
+Weight = 8
+Type = Ammo80
+Prices = 14, 16, 16, 16
+Buyable = Y, N, N, N
+Value = 16
+[32]
+Name = Steel 80mm ammo
+Weight = 8
+Type = Ammo80
+Prices = 16, 18, 18, 18
+Buyable = Y, N, N, N
+Value = 32
 []
