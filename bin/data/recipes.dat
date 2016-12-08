@@ -143,4 +143,20 @@ Crafted = 1
 Workplace = Water_collector
 Skill = Engineering
 Time = 60
+[21]
+Material = Iron, Gunpowder
+Amount = 2, 2
+Result = 31
+Crafted = 1
+Workplace = Alchemy_Lab
+Skill = Gunsmith
+Time = 30
+[22]
+Material = Steel, Gunpowder
+Amount = 2, 2
+Result = 32
+Crafted = 1
+Workplace = Alchemy_Lab
+Skill = Gunsmith
+Time = 30
 []
