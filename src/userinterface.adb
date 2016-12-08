@@ -45,7 +45,7 @@ package body UserInterface is
 
     procedure ShowGameHeader(CurrentState : GameStates) is
         Speed : Unbounded_String;
-        HavePilot, HaveEngineer, HaveRepair, HaveUpgrade, HaveTrader : Boolean := False;
+        HavePilot, HaveEngineer, HaveRepair, HaveUpgrade, HaveTrader, HaveCleaner, NeedClean : Boolean := False;
         GunnersCheck, CraftersCheck : Natural := 0;
     begin
         case CurrentState is
@@ -114,8 +114,8 @@ package body UserInterface is
             end case;
             Move_Cursor(Line => 0, Column => (Columns / 3));
             Add(Str => FormatedTime & " Speed: " & To_String(Speed));
-            Move_Cursor(Line => 0, Column => (Columns - 22));
-            Add(Str => "[P][E][G][R][M][U][T]");
+            Move_Cursor(Line => 0, Column => (Columns - 25));
+            Add(Str => "[P][E][G][R][M][U][T][C]");
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                 case Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType is
                     when GUN =>
@@ -132,6 +132,10 @@ package body UserInterface is
                                 CraftersCheck := 2;
                             end if;
                         end if;
+                    when CABIN =>
+                        if PlayerShip.Modules.Element(I).Current_Value < PlayerShip.Modules.Element(I).Max_Value then
+                            NeedClean := True;
+                        end if;
                     when others =>
                         null;
                 end case;
@@ -140,51 +144,57 @@ package body UserInterface is
                 case PlayerShip.Crew.Element(I).Order is
                     when Pilot =>
                         HavePilot := True;
-                        Change_Attributes(Line => 0, Column => (Columns - 21), Count => 1, Color => 2);
+                        Change_Attributes(Line => 0, Column => (Columns - 24), Count => 1, Color => 2);
                     when Engineer =>
                         HaveEngineer := True;
-                        Change_Attributes(Line => 0, Column => (Columns - 18), Count => 1, Color => 2);
+                        Change_Attributes(Line => 0, Column => (Columns - 21), Count => 1, Color => 2);
                     when Repair =>
                         HaveRepair := True;
-                        Change_Attributes(Line => 0, Column => (Columns - 12), Count => 1, Color => 2);
+                        Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 2);
                     when Upgrading =>
                         HaveUpgrade := True;
-                        Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 2);
+                        Change_Attributes(Line => 0, Column => (Columns - 9), Count => 1, Color => 2);
                     when Talk =>
                         HaveTrader := True;
+                        Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 2);
+                    when Clean =>
+                        HaveCleaner := True;
                         Change_Attributes(Line => 0, Column => (Columns - 3), Count => 1, Color => 2);
                     when others =>
                         null;
                 end case;
             end loop;
             if not HavePilot then
-                Change_Attributes(Line => 0, Column => (Columns - 21), Count => 1, Color => 3);
+                Change_Attributes(Line => 0, Column => (Columns - 24), Count => 1, Color => 3);
             end if;
             if not HaveEngineer then
-                Change_Attributes(Line => 0, Column => (Columns - 18), Count => 1, Color => 3);
+                Change_Attributes(Line => 0, Column => (Columns - 21), Count => 1, Color => 3);
             end if;
             if GunnersCheck = 1 then
-                Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 2);
+                Change_Attributes(Line => 0, Column => (Columns - 18), Count => 1, Color => 2);
             elsif GunnersCheck = 2 then
-                Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 3);
+                Change_Attributes(Line => 0, Column => (Columns - 18), Count => 1, Color => 3);
             end if;
             if not HaveRepair then
                 for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                     if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
-                        Change_Attributes(Line => 0, Column => (Columns - 12), Count => 1, Color => 3);
+                        Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 3);
                         exit;
                     end if;
                 end loop;
             end if;
             if CraftersCheck = 1 then
-                Change_Attributes(Line => 0, Column => (Columns - 9), Count => 1, Color => 2);
+                Change_Attributes(Line => 0, Column => (Columns - 12), Count => 1, Color => 2);
             elsif CraftersCheck = 2 then
-                Change_Attributes(Line => 0, Column => (Columns - 9), Count => 1, Color => 3);
+                Change_Attributes(Line => 0, Column => (Columns - 12), Count => 1, Color => 3);
             end if;
             if not HaveUpgrade and PlayerShip.UpgradeModule > 0 then
-                Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 3);
+                Change_Attributes(Line => 0, Column => (Columns - 9), Count => 1, Color => 3);
             end if;
             if not HaveTrader and SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+                Change_Attributes(Line => 0, Column => (Columns - 6), Count => 1, Color => 3);
+            end if;
+            if not HaveCleaner and NeedClean then
                 Change_Attributes(Line => 0, Column => (Columns - 3), Count => 1, Color => 3);
             end if;
         end if;

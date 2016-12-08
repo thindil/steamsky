@@ -154,7 +154,23 @@ package body Ships.UI is
                 if Module.Max_Value = MaxValue then
                     Add(Win => InfoWindow, Str => " (max upgrade)");
                 end if;
-                CurrentLine := CurrentLine + 1;
+                DamagePercent := 100 - Natural((Float(Module.Current_Value) / Float(Module.Max_Value)) * 100.0);
+                Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
+                Add(Win => InfoWindow, Str => "State: ");
+                if DamagePercent = 0 then
+                    Add(Win => InfoWindow, Str => "clean");
+                elsif DamagePercent > 0 and DamagePercent < 20 then
+                    Add(Win => InfoWindow, Str => "bit dusty");
+                elsif DamagePercent > 19 and DamagePercent < 50 then
+                    Add(Win => InfoWindow, Str => "dusty");
+                elsif DamagePercent > 49 and DamagePercent < 80 then
+                    Add(Win => InfoWindow, Str => "dirty");
+                elsif DamagePercent > 79 and DamagePercent < 100 then
+                    Add(Win => InfoWindow, Str => "very dirty");
+                else
+                    Add(Win => InfoWindow, Str => "ruined");
+                end if;
+                CurrentLine := CurrentLine + 2;
             when GUN =>
                 Add(Win => InfoWindow, Str => "Ammunition: ");
                 if Module.Current_Value >= PlayerShip.Cargo.First_Index and Module.Current_Value <= PlayerShip.Cargo.Last_Index then
