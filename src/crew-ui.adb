@@ -146,6 +146,8 @@ package body Crew.UI is
                 OrderName := To_Unbounded_String("Talking in bases");
             when Heal =>
                 OrderName := To_Unbounded_String("Healing wounded");
+            when Clean =>
+                OrderName := To_Unbounded_String("Cleans ship");
         end case;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Order: " & To_String(OrderName));
@@ -192,7 +194,7 @@ package body Crew.UI is
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         MenuIndex : Positive := 1;
-        NeedRepairs, NeedHealer, HealOrder : Boolean := False;
+        NeedRepairs, NeedHealer, HealOrder, NeedClean : Boolean := False;
     begin
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Health < 100 and I /= MemberIndex then
@@ -223,6 +225,10 @@ package body Crew.UI is
                                     exit;
                                 end if;
                             end loop;
+                        end if;
+                    when CABIN =>
+                        if PlayerShip.Modules.Element(I).Current_Value < PlayerShip.Modules.Element(I).Max_Value then
+                            NeedClean := True;
                         end if;
                     when others =>
                         null;
@@ -263,6 +269,9 @@ package body Crew.UI is
         if PlayerShip.Crew.Element(MemberIndex).Order /= Talk then
             OrdersAmount := OrdersAmount + 1;
         end if;
+        if NeedClean then
+            OrdersAmount := OrdersAmount + 1;
+        end if;
         Orders_Items := new Item_Array(1..(OrdersAmount + 1));  
         if PlayerShip.Crew.Element(MemberIndex).Order /= Pilot then
             Orders_Items.all(MenuIndex) := New_Item("Piloting", "0");
@@ -291,6 +300,12 @@ package body Crew.UI is
                         if HealOrder then
                             Orders_Items.all(MenuIndex) := New_Item("Heal wounded crew members", Positive'Image(I));
                             MenuIndex := MenuIndex + 1;
+                        end if;
+                    when CABIN =>
+                        if NeedClean and PlayerShip.Crew.Element(MemberIndex).Order /= Clean then
+                            Orders_Items.all(MenuIndex) := New_Item("Clean ship", Positive'Image(I));
+                            MenuIndex := MenuIndex + 1;
+                            NeedClean := False;
                         end if;
                     when others =>
                         null;
@@ -442,6 +457,8 @@ package body Crew.UI is
                     GiveOrders(MemberIndex, Talk);
                 elsif OrderName = "Heal wounded crew members" then
                     GiveOrders(MemberIndex, Heal, ModuleIndex);
+                elsif OrderName = "Clean ship" then
+                    GiveOrders(MemberIndex, Clean);
                 elsif OrderName = "Dismiss" then
                     DrawGame(Dismiss_Confirm);
                     return Dismiss_Confirm;

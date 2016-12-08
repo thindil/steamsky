@@ -61,7 +61,7 @@ package body Crew is
                     exit;
                 end if;
             end loop;
-        elsif GivenOrder = Gunner or GivenOrder = Craft then
+        elsif GivenOrder = Gunner or GivenOrder = Craft or GivenOrder = Heal then
             if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
                 GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest);
             end if;
@@ -111,9 +111,6 @@ package body Crew is
                 when Gunner =>
                     ShowDialog(MemberName & " can't starts operating gun because all guns are destroyed or you don't have installed any.");
                     return;
-                when Craft =>
-                    ShowDialog(MemberName & " can't starts manufacturing because all workshops are destroyed or you don't have installed any.");
-                    return;
                 when Rest =>
                     for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                         if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = CABIN and 
@@ -160,6 +157,8 @@ package body Crew is
             when Heal =>
                 AddMessage(MemberName & " starts healing wounded crew members.", OrderMessage);
                 UpdateModule(PlayerShip, ModuleIndex2, "Owner", Positive'Image(MemberIndex));
+            when Clean =>
+                AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
         end case;
         NewOrder := GivenOrder;
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
@@ -284,6 +283,7 @@ package body Crew is
         OrderTime, CurrentMinutes, HealAmount : Integer;
         type DamageFactor is digits 2 range 0.0..1.0;
         Damage : DamageFactor := 0.0;
+        NeedCleaning : Boolean := False;
         procedure UpdateMember(Member : in out Member_Data) is
             BackToWork : Boolean := True;
         begin
@@ -453,6 +453,37 @@ package body Crew is
                             if HealAmount /= 0 then
                                 GiveOrders(I, Rest);
                             end if;
+                        when Clean =>
+                            for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                                if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
+                                    PlayerShip.Modules.Element(J).Current_Value < PlayerShip.Modules.Element(J).Max_Value
+                                then
+                                    if PlayerShip.Modules.Element(J).Current_Value + Times > PlayerShip.Modules.Element(J).Max_Value then
+                                        UpdateModule(PlayerShip, J, "Current_Value", 
+                                            Positive'Image(PlayerShip.Modules.Element(J).Max_Value));
+                                    else
+                                        UpdateModule(PlayerShip, J, "Current_Value", 
+                                            Positive'Image(PlayerShip.Modules.Element(J).Current_Value + Times));
+                                    end if;
+                                    exit;
+                                end if;
+                            end loop;
+                            for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                                if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
+                                    PlayerShip.Modules.Element(J).Current_Value < PlayerShip.Modules.Element(J).Max_Value
+                                then
+                                    NeedCleaning := True;
+                                    exit;
+                                end if;
+                            end loop;
+                            if not NeedCleaning then
+                                for J in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                                    if PlayerShip.Crew.Element(J).Order = Clean then
+                                        GiveOrders(J, Rest);
+                                    end if;
+                                end loop;
+                            end if;
+                            NeedCleaning := False;
                         when others =>
                             null;
                     end case;

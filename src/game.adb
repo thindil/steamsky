@@ -29,6 +29,7 @@ with Crafts; use Crafts;
 with UserInterface; use UserInterface;
 with Items; use Items;
 with Events; use Events;
+with ShipModules; use ShipModules;
 
 package body Game is
     
@@ -189,6 +190,13 @@ package body Game is
         if GameDate.Hour > 23 then
             GameDate.Hour := GameDate.Hour - 24;
             GameDate.Day := GameDate.Day + 1;
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = CABIN and 
+                    PlayerShip.Modules.Element(I).Current_Value > 0
+                then
+                    UpdateModule(PlayerShip, I, "Current_Value", Natural'Image(PlayerShip.Modules.Element(I).Current_Value - 1));
+                end if;
+            end loop;
         end if;
         if GameDate.Day > 30 then
             GameDate.Day := 1;
