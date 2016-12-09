@@ -58,6 +58,7 @@ All notable changes to this project will be documented in this file.
 - Item type for steel plates
 - Crash when terminal not support changing colors
 - Crash in combat when crew member was killed or gun was destroyed
+- Allow send tired crew member on break
 
 ## [0.5] - 2016-11-13
 
