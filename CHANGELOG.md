@@ -59,6 +59,7 @@ All notable changes to this project will be documented in this file.
 - Crash when terminal not support changing colors
 - Crash in combat when crew member was killed or gun was destroyed
 - Allow send tired crew member on break
+- Crash in crafting with experienced crafter
 
 ## [0.5] - 2016-11-13
 
