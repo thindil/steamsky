@@ -135,7 +135,8 @@ package body Crafts is
     end SetRecipe;
 
     procedure Manufacturing(Minutes : Positive) is
-        CrafterIndex, Amount, ResultAmount, CraftedAmount, GainedExp : Natural := 0;
+        CrafterIndex, ResultAmount, CraftedAmount, GainedExp : Natural := 0;
+        Amount : Integer := 0;
         Recipe : Craft_Data;
         MaterialIndexes : array(1..10) of Natural := (others => 0);
         WorkTime, CurrentMinutes, RecipeTime : Integer;
