@@ -216,8 +216,6 @@ package body Crew.UI is
                     when MEDICAL_ROOM =>
                         if NeedHealer then
                             for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                                AddMessage(To_String(Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType),
-                                othermessage);
                                 if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines") and
                                     PlayerShip.Crew.Element(MemberIndex).Order /= Heal 
                                 then
@@ -227,7 +225,9 @@ package body Crew.UI is
                             end loop;
                         end if;
                     when CABIN =>
-                        if PlayerShip.Modules.Element(I).Current_Value < PlayerShip.Modules.Element(I).Max_Value then
+                        if PlayerShip.Modules.Element(I).Current_Value < PlayerShip.Modules.Element(I).Max_Value and 
+                            PlayerShip.Crew.Element(MemberIndex).Order /= Clean 
+                        then
                             NeedClean := True;
                         end if;
                     when others =>
@@ -303,7 +303,7 @@ package body Crew.UI is
                         end if;
                     when CABIN =>
                         if NeedClean and PlayerShip.Crew.Element(MemberIndex).Order /= Clean then
-                            Orders_Items.all(MenuIndex) := New_Item("Clean ship", Positive'Image(I));
+                            Orders_Items.all(MenuIndex) := New_Item("Clean ship", "0");
                             MenuIndex := MenuIndex + 1;
                             NeedClean := False;
                         end if;
