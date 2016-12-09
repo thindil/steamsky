@@ -382,4 +382,15 @@ Material = Iron
 Skill = Gunsmith
 Price = 4000
 InstallTime = 90
+[34]
+Name = Iron 100mm gun
+Type = Gun
+Weight = 400
+Value = 24
+MaxValue = 160
+Durability = 100
+Material = Iron
+Skill = Gunsmith
+Price = 8000
+InstallTime = 120
 []
