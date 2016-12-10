@@ -347,6 +347,7 @@ package body Bases.UI is
         Cost, MTime : Positive;
         type DamageFactor is digits 2 range 0.0..1.0;
         Damage : DamageFactor := 0.0;
+        MAmount : Natural;
     begin
         if InstallView then
             TextCost := To_Unbounded_String("Install cost:");
@@ -383,6 +384,31 @@ package body Bases.UI is
                 when CARGO =>
                     Add(Win => InfoWindow, Str => "Max cargo:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue) & " kg");
                     CurrentLine := 4;
+                when CABIN =>
+                    Add(Win => InfoWindow, Str => "Quality: ");
+                    if Modules_List.Element(ModuleIndex).MaxValue < 30 then
+                        Add(Win => InfoWindow, Str => "minimal");
+                    elsif Modules_List.Element(ModuleIndex).MaxValue > 29 and Modules_List.Element(ModuleIndex).MaxValue < 60 then
+                        Add(Win => InfoWindow, Str => "basic");
+                    elsif Modules_List.Element(ModuleIndex).MaxValue > 59 and Modules_List.Element(ModuleIndex).MaxValue < 80 then
+                        Add(Win => InfoWindow, Str => "extended");
+                    else
+                        Add(Win => InfoWindow, Str => "luxury");
+                    end if;
+                    CurrentLine := 4;
+                when GUN =>
+                    Add(Win => InfoWindow, Str => "Ammunition: ");
+                    MAmount := 0;
+                    for I in Items_List.First_Index..Items_List.Last_Index loop
+                        if Items_List.Element(I).IType = Items_Types.Element(Modules_List.Element(ModuleIndex).Value) then
+                            if MAmount > 0 then
+                                Add(Win => InfoWindow, Str => " or ");
+                            end if;
+                            Add(Win => InfoWindow, Str => To_String(Items_List.Element(I).Name));
+                            MAmount := MAmount + 1;
+                        end if;
+                    end loop;
+                    CurrentLine := 4;
                 when others =>
                     null;
             end case;
@@ -407,6 +433,35 @@ package body Bases.UI is
                 when CARGO =>
                     Add(Win => InfoWindow, Str => "Max cargo:" & Positive'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value)
                         & " kg");
+                    CurrentLine := 4;
+                when CABIN =>
+                    Add(Win => InfoWindow, Str => "Quality: ");
+                    if PlayerShip.Modules.Element(ModuleIndex).Max_Value < 30 then
+                        Add(Win => InfoWindow, Str => "minimal");
+                    elsif PlayerShip.Modules.Element(ModuleIndex).Max_Value > 29 and PlayerShip.Modules.Element(ModuleIndex).Max_Value < 60 
+                    then
+                        Add(Win => InfoWindow, Str => "basic");
+                    elsif PlayerShip.Modules.Element(ModuleIndex).Max_Value > 59 and PlayerShip.Modules.Element(ModuleIndex).Max_Value < 80 
+                    then
+                        Add(Win => InfoWindow, Str => "extended");
+                    else
+                        Add(Win => InfoWindow, Str => "luxury");
+                    end if;
+                    CurrentLine := 4;
+                when GUN =>
+                    Add(Win => InfoWindow, Str => "Ammunition: ");
+                    MAmount := 0;
+                    for I in Items_List.First_Index..Items_List.Last_Index loop
+                        if Items_List.Element(I).IType = 
+                            Items_Types.Element(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Value) 
+                        then
+                            if MAmount > 0 then
+                                Add(Win => InfoWindow, Str => " or ");
+                            end if;
+                            Add(Win => InfoWindow, Str => To_String(Items_List.Element(I).Name));
+                            MAmount := MAmount + 1;
+                        end if;
+                    end loop;
                     CurrentLine := 4;
                 when others =>
                     null;
@@ -478,6 +533,9 @@ package body Bases.UI is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
+        if CurrentMenuIndex >= Modules_Items'Last then
+            CurrentMenuIndex := 1;
+        end if;
         if Modules_Items.all(CurrentMenuIndex) = Null_Item then
             CurrentMenuIndex := 1;
         end if;
@@ -756,9 +814,11 @@ package body Bases.UI is
                 end if;
             when Character'Pos('i') | Character'Pos('I') => -- Show modules to install
                 InstallView := True;
+                CurrentMenuIndex := 1;
                 DrawGame(Shipyard_View);
             when Character'Pos('r') | Character'Pos('R') => -- Show modules to remove
                 InstallView := False;
+                CurrentMenuIndex := 1;
                 DrawGame(Shipyard_View);
             when 10 => -- Install/remove module
                 Bases.UpgradeShip(InstallView, Positive'Value(Description(Current(TradeMenu))));
