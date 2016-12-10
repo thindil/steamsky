@@ -145,7 +145,7 @@ Skill = Engineering
 Time = 60
 [21]
 Material = Iron, Gunpowder
-Amount = 2, 2
+Amount = 2, 1
 Result = 31
 Crafted = 1
 Workplace = Alchemy_Lab
@@ -153,10 +153,26 @@ Skill = Gunsmith
 Time = 30
 [22]
 Material = Steel, Gunpowder
-Amount = 2, 2
+Amount = 2, 1
 Result = 32
 Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 30
+[23]
+Material = Iron, Gunpowder
+Amount = 4, 2
+Result = 33
+Crafted = 1
+Workplace = Alchemy_Lab
+Skill = Gunsmith
+Time = 45
+[24]
+Material = Steel, Gunpowder
+Amount = 4, 2
+Result = 34
+Crafted = 1
+Workplace = Alchemy_Lab
+Skill = Gunsmith
+Time = 45
 []
