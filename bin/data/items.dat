@@ -200,4 +200,18 @@ Type = Ammo80
 Prices = 16, 18, 18, 18
 Buyable = Y, N, N, N
 Value = 32
+[33]
+Name = Iron 100mm ammo
+Weight = 16
+Type = Ammo100
+Prices = 20, 22, 22, 22
+Buyable = Y, N, N, N
+Value = 32
+[34]
+Name = Steel 100mm ammo
+Weight = 16
+Type = Ammo100
+Prices = 22, 24, 24, 24
+Buyable = Y, N, N, N
+Value = 64
 []
