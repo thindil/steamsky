@@ -42,20 +42,6 @@ package body Crew is
         if GivenOrder = PlayerShip.Crew.Element(MemberIndex).Order then
             return;
         end if;
-        if GivenOrder /= Rest then
-            if PlayerShip.Crew.Element(MemberIndex).Tired = 100 then
-                ShowDialog(MemberName & " is too tired to work.");
-                return;
-            end if;
-            if PlayerShip.Crew.Element(MemberIndex).Hunger = 100 then
-                ShowDialog(MemberName & " is too hungry to work.");
-                return;
-            end if;
-            if PlayerShip.Crew.Element(MemberIndex).Thirst = 100 then
-                ShowDialog(MemberName & " is too thirsty to work.");
-                return;
-            end if;
-        end if;
         if GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Upgrading or GivenOrder = Talk then
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                 if PlayerShip.Crew.Element(I).Order = GivenOrder then

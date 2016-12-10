@@ -196,141 +196,149 @@ package body Crew.UI is
         MenuIndex : Positive := 1;
         NeedRepairs, NeedHealer, HealOrder, NeedClean : Boolean := False;
     begin
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Health < 100 and I /= MemberIndex then
-                NeedHealer := True;
-                exit;
-            end if;
-        end loop;
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Durability > 0 then
-                case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
-                    when GUN =>
-                        if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
-                            OrdersAmount := OrdersAmount + 1;
-                        end if;
-                    when ALCHEMY_LAB..GREENHOUSE =>
-                        if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
-                            OrdersAmount := OrdersAmount + 1;
-                        end if;
-                    when MEDICAL_ROOM =>
-                        if NeedHealer then
-                            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                                if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines") and
-                                    PlayerShip.Crew.Element(MemberIndex).Order /= Heal 
-                                then
-                                    HealOrder := True;
-                                    exit;
-                                end if;
-                            end loop;
-                        end if;
-                    when CABIN =>
-                        if PlayerShip.Modules.Element(I).Current_Value < PlayerShip.Modules.Element(I).Max_Value and 
-                            PlayerShip.Crew.Element(MemberIndex).Order /= Clean 
+        if PlayerShip.Crew.Element(MemberIndex).Tired = 100 or PlayerShip.Crew.Element(MemberIndex).Hunger = 100 or 
+            PlayerShip.Crew.Element(MemberIndex).Thirst = 100 
+        then
+            Orders_Items := new Item_Array(1..3);  
+            Orders_Items.all(1) := New_Item("Go on break", "0");
+            MenuIndex := 2;
+        else
+            for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                if PlayerShip.Crew.Element(I).Health < 100 and I /= MemberIndex then
+                    NeedHealer := True;
+                    exit;
+                end if;
+            end loop;
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if PlayerShip.Modules.Element(I).Durability > 0 then
+                    case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                        when GUN =>
+                            if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
+                                OrdersAmount := OrdersAmount + 1;
+                            end if;
+                        when ALCHEMY_LAB..GREENHOUSE =>
+                            if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
+                                OrdersAmount := OrdersAmount + 1;
+                            end if;
+                        when MEDICAL_ROOM =>
+                            if NeedHealer then
+                                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines") 
+                                        and PlayerShip.Crew.Element(MemberIndex).Order /= Heal 
+                                    then
+                                        HealOrder := True;
+                                        exit;
+                                    end if;
+                                end loop;
+                            end if;
+                        when CABIN =>
+                            if PlayerShip.Modules.Element(I).Current_Value < PlayerShip.Modules.Element(I).Max_Value and 
+                                PlayerShip.Crew.Element(MemberIndex).Order /= Clean 
+                            then
+                                NeedClean := True;
+                            end if;
+                        when others =>
+                            null;
+                    end case;
+                end if;
+                if not NeedRepairs and PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                    for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                        if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = 
+                            Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial 
                         then
-                            NeedClean := True;
+                            NeedRepairs := True;
+                            exit;
                         end if;
-                    when others =>
-                        null;
-                end case;
+                    end loop;
+                end if;
+            end loop;
+            if NeedRepairs then
+                OrdersAmount := OrdersAmount + 1;
             end if;
-            if not NeedRepairs and PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
-                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = 
-                        Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial 
-                    then
-                        NeedRepairs := True;
-                        exit;
-                    end if;
-                end loop;
+            if HealOrder then
+                OrdersAmount := OrdersAmount + 1;
             end if;
-        end loop;
-        if NeedRepairs then
-            OrdersAmount := OrdersAmount + 1;
-        end if;
-        if HealOrder then
-            OrdersAmount := OrdersAmount + 1;
-        end if;
-        if PlayerShip.Crew.Element(MemberIndex).Order /= Rest then
-            OrdersAmount := OrdersAmount + 1;
-        end if;
-        if PlayerShip.UpgradeModule > 0 and PlayerShip.Crew.Element(MemberIndex).Order /= Upgrading then
-            OrdersAmount := OrdersAmount + 1;
-        end if;
-        if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
-            OrdersAmount := OrdersAmount + 1;
-        end if;
-        if PlayerShip.Crew.Element(MemberIndex).Order /= Pilot then
-            OrdersAmount := OrdersAmount + 1;
-        end if;
-        if PlayerShip.Crew.Element(MemberIndex).Order /= Engineer then
-            OrdersAmount := OrdersAmount + 1;
-        end if;
-        if PlayerShip.Crew.Element(MemberIndex).Order /= Talk then
-            OrdersAmount := OrdersAmount + 1;
-        end if;
-        if NeedClean then
-            OrdersAmount := OrdersAmount + 1;
-        end if;
-        Orders_Items := new Item_Array(1..(OrdersAmount + 1));  
-        if PlayerShip.Crew.Element(MemberIndex).Order /= Pilot then
-            Orders_Items.all(MenuIndex) := New_Item("Piloting", "0");
-            MenuIndex := MenuIndex + 1;
-        end if;
-        if PlayerShip.Crew.Element(MemberIndex).Order /= Engineer then
-            Orders_Items.all(MenuIndex) := New_Item("Engineering", "0");
-            MenuIndex := MenuIndex + 1;
-        end if;
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Durability > 0 then
-                case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
-                    when GUN =>
-                        if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
-                            Orders_Items.all(MenuIndex) := New_Item("Operate " & To_String(PlayerShip.Modules.Element(I).Name), 
-                            Positive'Image(I));
-                            MenuIndex := MenuIndex + 1;
-                        end if;
-                    when ALCHEMY_LAB..GREENHOUSE =>
-                        if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
-                            Orders_Items.all(MenuIndex) := New_Item("Work in " & To_String(PlayerShip.Modules.Element(I).Name), 
-                            Positive'Image(I));
-                            MenuIndex := MenuIndex + 1;
-                        end if;
-                    when MEDICAL_ROOM =>
-                        if HealOrder then
-                            Orders_Items.all(MenuIndex) := New_Item("Heal wounded crew members", Positive'Image(I));
-                            MenuIndex := MenuIndex + 1;
-                        end if;
-                    when CABIN =>
-                        if NeedClean and PlayerShip.Crew.Element(MemberIndex).Order /= Clean then
-                            Orders_Items.all(MenuIndex) := New_Item("Clean ship", "0");
-                            MenuIndex := MenuIndex + 1;
-                            NeedClean := False;
-                        end if;
-                    when others =>
-                        null;
-                end case;
+            if PlayerShip.Crew.Element(MemberIndex).Order /= Rest then
+                OrdersAmount := OrdersAmount + 1;
             end if;
-        end loop;
-        if NeedRepairs then
-            Orders_Items.all(MenuIndex) := New_Item("Repair ship", "0");
-            MenuIndex := MenuIndex + 1;
-        end if;
-        if PlayerShip.UpgradeModule > 0 and PlayerShip.Crew.Element(MemberIndex).Order /= Upgrading then
-            Orders_Items.all(MenuIndex) := New_Item("Upgrade module", "0");
-            MenuIndex := MenuIndex + 1;
-        end if;
-        if PlayerShip.Crew.Element(MemberIndex).Order /= Talk then
-            Orders_Items.all(MenuIndex) := New_Item("Talking in bases", "0");
-            MenuIndex := MenuIndex + 1;
-        end if;
-        if PlayerShip.Crew.Element(MemberIndex).Order /= Rest then
-            Orders_Items.all(MenuIndex) := New_Item("Go on break", "0");
-            MenuIndex := MenuIndex + 1;
-        end if;
-        if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
-            Orders_Items.all(MenuIndex) := New_Item("Dismiss", "0");
-            MenuIndex := MenuIndex + 1;
+            if PlayerShip.UpgradeModule > 0 and PlayerShip.Crew.Element(MemberIndex).Order /= Upgrading then
+                OrdersAmount := OrdersAmount + 1;
+            end if;
+            if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
+                OrdersAmount := OrdersAmount + 1;
+            end if;
+            if PlayerShip.Crew.Element(MemberIndex).Order /= Pilot then
+                OrdersAmount := OrdersAmount + 1;
+            end if;
+            if PlayerShip.Crew.Element(MemberIndex).Order /= Engineer then
+                OrdersAmount := OrdersAmount + 1;
+            end if;
+            if PlayerShip.Crew.Element(MemberIndex).Order /= Talk then
+                OrdersAmount := OrdersAmount + 1;
+            end if;
+            if NeedClean then
+                OrdersAmount := OrdersAmount + 1;
+            end if;
+            Orders_Items := new Item_Array(1..(OrdersAmount + 1));  
+            if PlayerShip.Crew.Element(MemberIndex).Order /= Pilot then
+                Orders_Items.all(MenuIndex) := New_Item("Piloting", "0");
+                MenuIndex := MenuIndex + 1;
+            end if;
+            if PlayerShip.Crew.Element(MemberIndex).Order /= Engineer then
+                Orders_Items.all(MenuIndex) := New_Item("Engineering", "0");
+                MenuIndex := MenuIndex + 1;
+            end if;
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if PlayerShip.Modules.Element(I).Durability > 0 then
+                    case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                        when GUN =>
+                            if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
+                                Orders_Items.all(MenuIndex) := New_Item("Operate " & To_String(PlayerShip.Modules.Element(I).Name), 
+                                Positive'Image(I));
+                                MenuIndex := MenuIndex + 1;
+                            end if;
+                        when ALCHEMY_LAB..GREENHOUSE =>
+                            if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
+                                Orders_Items.all(MenuIndex) := New_Item("Work in " & To_String(PlayerShip.Modules.Element(I).Name), 
+                                Positive'Image(I));
+                                MenuIndex := MenuIndex + 1;
+                            end if;
+                        when MEDICAL_ROOM =>
+                            if HealOrder then
+                                Orders_Items.all(MenuIndex) := New_Item("Heal wounded crew members", Positive'Image(I));
+                                MenuIndex := MenuIndex + 1;
+                            end if;
+                        when CABIN =>
+                            if NeedClean and PlayerShip.Crew.Element(MemberIndex).Order /= Clean then
+                                Orders_Items.all(MenuIndex) := New_Item("Clean ship", "0");
+                                MenuIndex := MenuIndex + 1;
+                                NeedClean := False;
+                            end if;
+                        when others =>
+                            null;
+                    end case;
+                end if;
+            end loop;
+            if NeedRepairs then
+                Orders_Items.all(MenuIndex) := New_Item("Repair ship", "0");
+                MenuIndex := MenuIndex + 1;
+            end if;
+            if PlayerShip.UpgradeModule > 0 and PlayerShip.Crew.Element(MemberIndex).Order /= Upgrading then
+                Orders_Items.all(MenuIndex) := New_Item("Upgrade module", "0");
+                MenuIndex := MenuIndex + 1;
+            end if;
+            if PlayerShip.Crew.Element(MemberIndex).Order /= Talk then
+                Orders_Items.all(MenuIndex) := New_Item("Talking in bases", "0");
+                MenuIndex := MenuIndex + 1;
+            end if;
+            if PlayerShip.Crew.Element(MemberIndex).Order /= Rest then
+                Orders_Items.all(MenuIndex) := New_Item("Go on break", "0");
+                MenuIndex := MenuIndex + 1;
+            end if;
+            if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
+                Orders_Items.all(MenuIndex) := New_Item("Dismiss", "0");
+                MenuIndex := MenuIndex + 1;
+            end if;
         end if;
         Orders_Items.all(MenuIndex) := New_Item("Quit", "0");
         Orders_Items.all(Orders_Items'Last) := Null_Item;
