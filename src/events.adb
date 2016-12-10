@@ -71,8 +71,10 @@ package body Events is
                     end case;
                 end loop;
                 for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if Slice(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType, 1, 4) = "Ammo" then
-                        PlayerValue := PlayerValue + (Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Value * 10);
+                    if Length(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType) >= 4 then
+                        if Slice(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType, 1, 4) = "Ammo" then
+                            PlayerValue := PlayerValue + (Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Value * 10);
+                        end if;
                     end if;
                 end loop;
                 for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
