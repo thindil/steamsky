@@ -474,8 +474,10 @@ package body Ships is
                     end case;
                 end loop;
                 for I in TempRecord.Cargo.First_Index..TempRecord.Cargo.Last_Index loop
-                    if Slice(Items_List.Element(TempRecord.Cargo.Element(I).ProtoIndex).IType, 1, 4) = "Ammo" then
-                        CombatValue := CombatValue + (Items_List.Element(TempRecord.Cargo.Element(I).ProtoIndex).Value * 10);
+                    if Length(Items_List.Element(TempRecord.Cargo.Element(I).ProtoIndex).IType) >= 4 then
+                        if Slice(Items_List.Element(TempRecord.Cargo.Element(I).ProtoIndex).IType, 1, 4) = "Ammo" then
+                            CombatValue := CombatValue + (Items_List.Element(TempRecord.Cargo.Element(I).ProtoIndex).Value * 10);
+                        end if;
                     end if;
                 end loop;
                 TempRecord.CombatValue := CombatValue;
