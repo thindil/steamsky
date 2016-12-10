@@ -217,8 +217,8 @@ package body Ships.UI is
                             MAmount := MAmount + 1;
                         end if;
                     end loop;
+                    CurrentLine := CurrentLine + 1;
                 end if;
-                CurrentLine := CurrentLine + 1;
                 Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
                 if Module.Owner > 0 then
                     Add(Win => InfoWindow, Str => "Gunner: " &
