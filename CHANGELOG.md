@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.6] - 2016-12-11
 
 ### Added
 - Weapon damage, crafted amount of items and speed of rest depends on how much
