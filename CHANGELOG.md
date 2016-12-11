@@ -22,8 +22,8 @@ All notable changes to this project will be documented in this file.
 - Damage in combat depends on ammo too
 - New items: steel 10mm ammo, steel 20mm ammo, steel 40mm ammo, iron 60mm ammo,
   steel 60mm ammo, medical herbs, medical herbs seeds, vegetables seeds, 
-  medical supplies, iron 80mm ammo, steel 80mm ammo, iron 100mm ammo and steel
-  100mm ammo
+  medical supplies, iron 80mm ammo, steel 80mm ammo, iron 100mm ammo, steel 
+  100mm ammo, iron 120mm ammo and steel 120mm ammo
 - New crafting recipes: steel 10mm ammo, steel 20mm ammo, steel 40mm ammo, iron
   60mm ammo, steel 60mm ammo, medical supplies, medical herbs, fresh vegetables,
   water, iron 80mm ammo, steel 80mm ammo, iron 100mm ammo and steel 100mm ammo
