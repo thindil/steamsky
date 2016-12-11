@@ -32,8 +32,8 @@ All notable changes to this project will be documented in this file.
   100mm gun
 - New enemy ships: pirate ship, armored pirate ship, small attacking drone,
   attacking clockwork drone and armored attacking drone
-- New types of items: ammo60, herbs, herbseeds, vegetableseeds, medicines, ammo80
-  and ammo100
+- New types of items: ammo60, herbs, herbseeds, vegetableseeds, medicines, ammo80, 
+  ammo100 and ammo120
 - Each crafting recipe have own crafting time
 - New skills: medicine and farming
 - New types of ship modules: greenhouse, water collector and medical room
