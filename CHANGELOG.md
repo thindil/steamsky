@@ -28,8 +28,8 @@ All notable changes to this project will be documented in this file.
   60mm ammo, steel 60mm ammo, medical supplies, medical herbs, fresh vegetables,
   water, iron 80mm ammo, steel 80mm ammo, iron 100mm ammo and steel 100mm ammo
 - New ship modules: bronze turret, iron 60mm gun, small bronze greenhouse, small 
-  bronze water collector, small bronze medical room, iron 80mm gun and iron
-  100mm gun
+  bronze water collector, small bronze medical room, iron 80mm gun, iron 100mm 
+  gun and iron 120mm gun
 - New enemy ships: pirate ship, armored pirate ship, small attacking drone,
   attacking clockwork drone and armored attacking drone
 - New types of items: ammo60, herbs, herbseeds, vegetableseeds, medicines, ammo80, 
