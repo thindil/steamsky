@@ -175,4 +175,20 @@ Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 45
+[25]
+Material = Iron, Gunpowder
+Amount = 6, 2
+Result = 35
+Crafted = 1
+Workplace = Alchemy_Lab
+Skill = Gunsmith
+Time = 60
+[26]
+Material = Steel, Gunpowder
+Amount = 6, 2
+Result = 36
+Crafted = 1
+Workplace = Alchemy_Lab
+Skill = Gunsmith
+Time = 60
 []
