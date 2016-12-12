@@ -225,6 +225,7 @@ package body Crew.UI is
                                 for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                                     if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines") 
                                         and PlayerShip.Crew.Element(MemberIndex).Order /= Heal 
+                                        and PlayerShip.Crew.Element(MemberIndex).Health = 100
                                     then
                                         HealOrder := True;
                                         OrdersAmount := OrdersAmount + 1;
