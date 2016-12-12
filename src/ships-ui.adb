@@ -252,6 +252,13 @@ package body Ships.UI is
                     Add(Win => InfoWindow, Str => "Manufacturing: nothing");
                 end if;
                 CurrentLine := CurrentLine + 1;
+            when MEDICAL_ROOM =>
+                if Module.Owner > 0 then
+                    Add(Win => InfoWindow, Str => "Medic: " &
+                        To_String(PlayerShip.Crew.Element(Module.Owner).Name));
+                else
+                    Add(Win => InfoWindow, Str => "Medic: none");
+                end if;
             when others =>
                 CurrentLine := CurrentLine - 1;
         end case;
