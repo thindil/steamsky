@@ -647,6 +647,17 @@ package body Ships.UI is
                     Options_Items.all(MenuIndex) := New_Item("Assign worker", "7");
                     MenuIndex := MenuIndex + 1;
                 end if;
+            when MEDICAL_ROOM =>
+                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                    if PlayerShip.Crew.Element(I).Health < 100 then
+                        for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                            if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines") then
+                                Options_Items.all(MenuIndex) := New_Item("Assign medic", "7");
+                                MenuIndex := MenuIndex + 1;
+                            end if;
+                        end loop;
+                    end if;
+                end loop;
             when others =>
                 null;
         end case;
@@ -1014,6 +1025,8 @@ package body Ships.UI is
                             GiveOrders(OptionIndex, Gunner, CurrentMenuIndex);
                         when ALCHEMY_LAB..GREENHOUSE =>
                             GiveOrders(OptionIndex, Craft, CurrentMenuIndex);
+                        when MEDICAL_ROOM =>
+                            GiveOrders(OptionIndex, Heal, CurrentMenuIndex);
                         when others =>
                             null;
                     end case;
