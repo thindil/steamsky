@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash on giving crew orders when more than 2 medic room installed
+
 ## [0.6] - 2016-12-11
 
 ### Added
