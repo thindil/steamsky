@@ -698,8 +698,17 @@ package body Ships.UI is
     begin   
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Modules.Element(ModuleIndex).Owner /= I then
-                Assign_Items.all(MenuIndex) := New_Item("Assign " & To_String(PlayerShip.Crew.Element(I).Name), Positive'Image(I));
-                MenuIndex := MenuIndex + 1;
+                case Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType is
+                    when MEDICAL_ROOM =>
+                        if PlayerShip.Crew.Element(I).Health = 100 then
+                            Assign_Items.all(MenuIndex) := New_Item("Assign " & To_String(PlayerShip.Crew.Element(I).Name), 
+                                Positive'Image(I));
+                            MenuIndex := MenuIndex + 1;
+                        end if;
+                    when others =>
+                        Assign_Items.all(MenuIndex) := New_Item("Assign " & To_String(PlayerShip.Crew.Element(I).Name), Positive'Image(I));
+                        MenuIndex := MenuIndex + 1;
+                end case;
             end if;
         end loop;
         Assign_Items.all(MenuIndex) := New_Item("Quit", "0");
