@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated interface
+
 ### Fixed
 - Crash on giving crew orders when more than 2 medic room installed
 
