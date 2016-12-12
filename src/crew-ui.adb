@@ -227,6 +227,7 @@ package body Crew.UI is
                                         and PlayerShip.Crew.Element(MemberIndex).Order /= Heal 
                                     then
                                         HealOrder := True;
+                                        OrdersAmount := OrdersAmount + 1;
                                         exit;
                                     end if;
                                 end loop;
@@ -253,9 +254,6 @@ package body Crew.UI is
                 end if;
             end loop;
             if NeedRepairs then
-                OrdersAmount := OrdersAmount + 1;
-            end if;
-            if HealOrder then
                 OrdersAmount := OrdersAmount + 1;
             end if;
             if PlayerShip.Crew.Element(MemberIndex).Order /= Rest then
@@ -305,7 +303,8 @@ package body Crew.UI is
                             end if;
                         when MEDICAL_ROOM =>
                             if HealOrder then
-                                Orders_Items.all(MenuIndex) := New_Item("Heal wounded crew members", Positive'Image(I));
+                                Orders_Items.all(MenuIndex) := New_Item("Heal wounded in " & To_String(PlayerShip.Modules.Element(I).Name), 
+                                    Positive'Image(I));
                                 MenuIndex := MenuIndex + 1;
                             end if;
                         when CABIN =>
