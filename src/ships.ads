@@ -58,6 +58,7 @@ package Ships is
             UpgradeModule : Natural; -- Number of module to upgrade
             DestinationX : Integer; -- Destination X coordinate
             DestinationY : Integer; -- Destination Y coordinate
+            RepairModule : Natural; -- Number of module to repair as first
         end record;
     type ProtoShipData is -- Data structure for ship prototypes
         record

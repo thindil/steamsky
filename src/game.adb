@@ -33,7 +33,7 @@ with ShipModules; use ShipModules;
 
 package body Game is
     
-    SaveVersion : constant String := "0.6";
+    SaveVersion : constant String := "0.7";
 
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character) is
         type Rand_Range is range 1..1024;
@@ -351,6 +351,14 @@ package body Game is
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         RawValue := To_Unbounded_String(Integer'Image(ShipSpeed'Pos(PlayerShip.Speed)));
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Integer'Image(PlayerShip.UpgradeModule));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Integer'Image(PlayerShip.DestinationX));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Integer'Image(PlayerShip.DestinationY));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Integer'Image(PlayerShip.RepairModule));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         RawValue := To_Unbounded_String(PlayerShip.Modules.Length'Img);
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
@@ -412,12 +420,6 @@ package body Game is
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             end loop;
         end loop;
-        RawValue := To_Unbounded_String(Integer'Image(PlayerShip.UpgradeModule));
-        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-        RawValue := To_Unbounded_String(Integer'Image(PlayerShip.DestinationX));
-        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-        RawValue := To_Unbounded_String(Integer'Image(PlayerShip.DestinationY));
-        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         if Messages > MessagesAmount then
             Messages := MessagesAmount;
         end if;
@@ -557,6 +559,10 @@ package body Game is
         PlayerShip.SkyX := Integer'Value(To_String(ReadData));
         PlayerShip.SkyY := Integer'Value(To_String(ReadData));
         PlayerShip.Speed := ShipSpeed'Val(Integer'Value(To_String(ReadData)));
+        PlayerShip.UpgradeModule := Integer'Value(To_String(ReadData));
+        PlayerShip.DestinationX := Integer'Value(To_String(ReadData));
+        PlayerShip.DestinationY := Integer'Value(To_String(ReadData));
+        PlayerShip.RepairModule := Integer'Value(To_String(ReadData));
         VectorLength := Positive'Value(To_String(ReadData));
         for I in 1..VectorLength loop
             ShipModules.Append(New_Item => (Name => ReadData, ProtoIndex =>
@@ -598,9 +604,6 @@ package body Game is
                 Process => UpdateMember'Access);
         end loop;
         PlayerShip.Crew := ShipCrew;
-        PlayerShip.UpgradeModule := Integer'Value(To_String(ReadData));
-        PlayerShip.DestinationX := Integer'Value(To_String(ReadData));
-        PlayerShip.DestinationY := Integer'Value(To_String(ReadData));
         VectorLength := Integer'Value(To_String(ReadData));
         for I in 1..VectorLength loop
             Message := ReadData;
