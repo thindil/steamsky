@@ -407,6 +407,17 @@ package body Bases is
             if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
                 GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest);
             end if;
+            if PlayerShip.UpgradeModule = ModuleIndex then
+                PlayerShip.UpgradeModule := 0;
+                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                    if PlayerShip.Crew.Element(I).Order = Upgrading then
+                        GiveOrders(I, Rest);
+                    end if;
+                end loop;
+            end if;
+            if PlayerShip.RepairModule = ModuleIndex then
+                PlayerShip.RepairModule := 0;
+            end if;
             UpdateGame(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).InstallTime);
             UpdateCargo(PlayerShip, 1, Price);
             GainExp(1, 4, TraderIndex);
