@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Option to set module as priority to repair
+
 ### Changed
 - Updated interface
 - Updated help
