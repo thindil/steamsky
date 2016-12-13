@@ -364,7 +364,7 @@ package body Bases.UI is
                 Float(Damage));
             MTime := Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).InstallTime;
         end if;
-        InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
+        InfoWindow := Create(10, (Columns / 2), 4, (Columns / 2));
         Add(Win => InfoWindow, Str => To_String(TextCost) & Positive'Image(Cost) & " Charcollum");
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         Add(Win => InfoWindow, Str => To_String(TextTime) & Positive'Image(MTime) & " minutes");
@@ -526,7 +526,7 @@ package body Bases.UI is
         MenuOptions := Get_Options(TradeMenu);
         MenuOptions.Show_Descriptions := False;
         Set_Options(TradeMenu, MenuOptions);
-        Set_Format(TradeMenu, Lines - 10, 1);
+        Set_Format(TradeMenu, Lines - 7, 1);
         Set_Mark(TradeMenu, "");
         Scale(TradeMenu, MenuHeight, MenuLength);
         MenuWindow := Create(MenuHeight, MenuLength, 4, 2);
