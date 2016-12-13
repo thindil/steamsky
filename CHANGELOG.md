@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Option to set module as priority to repair
+- New enemy ship: tiny inquisition ship
 
 ### Changed
 - Updated interface
