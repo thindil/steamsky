@@ -398,6 +398,14 @@ package body Ships.UI is
             CurrentLine := 5;
         end if;
         Move_Cursor(Line => CurrentLine, Column => 2);
+        Add(Str => "Repair first: ");
+        if PlayerShip.RepairModule = 0 then
+            Add(Str => "Any module");
+        else
+            Add(Str => To_String(PlayerShip.Modules.Element(PlayerShip.RepairModule).Name));
+        end if;
+        CurrentLine := CurrentLine + 1;
+        Move_Cursor(Line => CurrentLine, Column => 2);
         Add(Str => "Destination: ");
         if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
             Add(Str => "None");
@@ -589,7 +597,7 @@ package body Ships.UI is
 
     procedure ShowModuleOptions is
         ModuleIndex : constant Positive := Get_Index(Current(ModulesMenu));
-        Options_Items : constant Item_Array_Access := new Item_Array(1..9);
+        Options_Items : constant Item_Array_Access := new Item_Array(1..11);
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         MaxValue : Positive;
@@ -667,6 +675,14 @@ package body Ships.UI is
         end if;
         if PlayerShip.UpgradeModule > 0 then
             Options_Items.all(MenuIndex) := New_Item("Stop upgrading", "8");
+            MenuIndex := MenuIndex + 1;
+        end if;
+        if PlayerShip.RepairModule /= ModuleIndex then
+            Options_Items.all(MenuIndex) := New_Item("Repair as first", "10");
+            MenuIndex := MenuIndex + 1;
+        end if;
+        if PlayerShip.RepairModule > 0 then
+            Options_Items.all(MenuIndex) := New_Item("Remove repair priority", "11");
             MenuIndex := MenuIndex + 1;
         end if;
         Options_Items.all(MenuIndex) := New_Item("Rename", "5");
@@ -892,7 +908,7 @@ package body Ships.UI is
                 end if;
             when 10 => -- Select option from menu
                 Post(OptionsMenu, False);
-                if OptionIndex /= 5 and OptionIndex /= 7 and OptionIndex /= 9 then
+                if OptionIndex /= 5 and OptionIndex < 7 then
                     if OptionIndex < 5 then
                         StartUpgrading(CurrentMenuIndex, OptionIndex);
                     elsif OptionIndex = 8 then
@@ -918,6 +934,16 @@ package body Ships.UI is
                 elsif OptionIndex = 9 then
                     DrawGame(Ship_Info);
                     return ShowAssignAmmoMenu;
+                elsif OptionIndex = 10 then
+                    PlayerShip.RepairModule := CurrentMenuIndex;
+                    AddMessage("You assigned " & ModuleName & " as repair priority.", OrderMessage);
+                    DrawGame(Ship_Info);
+                    return Ship_Info;
+                elsif OptionIndex = 11 then
+                    PlayerShip.RepairModule := 0;
+                    AddMessage("You removed repair priority.", OrderMessage);
+                    DrawGame(Ship_Info);
+                    return Ship_Info;
                 end if;
             when others =>
                 Result := Driver(OptionsMenu, Key);
