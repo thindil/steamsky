@@ -50,23 +50,19 @@ begin
     Init_Screen;
     Start_Color;
     Set_Timeout_Mode(Standard_Window, Blocking, 0);
-
-    if not Can_Change_Color then
-        Move_Cursor(Line => (Lines / 2), Column => 2);
-        Add(Str => "Your terminal don't support ability to change colors needed to run game. Press any key to exit from game");
-        Key := Get_Keystroke;
-        End_Windows;
-        return;
-    end if;
-
-    Init_Color(8, 80, 80, 80);
     Init_Pair(1, Color_Yellow, Color_Black);
     Init_Pair(2, Color_Green, Color_Black);
     Init_Pair(3, Color_Red, Color_Black);
     Init_Pair(4, Color_Blue, Color_Black);
     Init_Pair(5, Color_Cyan, Color_Black);
-    Init_Pair(6, 8, 8);
-    Init_Pair(7, Color_White, 8);
+    if Can_Change_Color then
+        Init_Color(8, 80, 80, 80);
+        Init_Pair(6, 8, 8);
+        Init_Pair(7, Color_White, 8);
+    else
+        Init_Pair(6, Color_Black, Color_Black);
+        Init_Pair(7, Color_White, Color_Black);
+    end if;
     Set_KeyPad_Mode(SwitchOn => True);
 
     if Columns < 60 or Lines < 24 then
