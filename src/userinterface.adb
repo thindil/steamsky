@@ -21,6 +21,8 @@ with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Maps; use Maps;
 with Ships; use Ships;
 with Ships.UI; use Ships.UI;
+with Ships.UI.Cargo; use Ships.UI.Cargo;
+with Ships.UI.Ship; use Ships.UI.Ship;
 with Crew; use Crew;
 with Crew.UI; use Crew.UI;
 with Bases; use Bases;
