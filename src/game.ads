@@ -27,7 +27,8 @@ package Game is
         Cargo_Info, Help_Topic, Repairs_View, Clear_Confirm, Module_Options, 
         Shipyard_View, Recruits_View, Dismiss_Confirm, Rename_Module, 
         Drop_Cargo, Trade_Form, Rename_Ship, Assign_Owner, Recipe_Setting, 
-        Move_Map, Bases_List, Events_View, Assign_Ammo, ShipyardTypesMenu); -- Game states
+        Move_Map, Bases_List, Events_View, Assign_Ammo, ShipyardTypesMenu,
+        GameMenu); -- Game states
     type Date_Record is -- Data for game date/time
         record
             Year : Natural;
