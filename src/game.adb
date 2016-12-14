@@ -30,6 +30,7 @@ with UserInterface; use UserInterface;
 with Items; use Items;
 with Events; use Events;
 with ShipModules; use ShipModules;
+with Config; use Config;
 
 package body Game is
     
@@ -57,6 +58,9 @@ package body Game is
         TmpSkills : Skills_Container.Vector;
         TmpRecruits : Recruit_Container.Vector;
     begin
+        -- Save new game configuration
+        NewGameSettings := (PlayerName => CharName, PlayerGender => Gender, ShipName => ShipName);
+        SaveConfig;
         -- Set Game time
         GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
         -- Generate world

@@ -28,6 +28,7 @@ with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
 with Crafts; use Crafts;
 with Ships; use Ships;
+with Config; use Config;
 
 package body MainMenu is
 
@@ -113,7 +114,7 @@ package body MainMenu is
             FieldOptions.Active := False;
             Set_Options(NewGame_Fields.all(1),  FieldOptions);
             NewGame_Fields.all(2) := New_Field(1, 12, 0, 18, 0, 0);
-            Set_Buffer(NewGame_Fields.all(2), 0, "Laeran");
+            Set_Buffer(NewGame_Fields.all(2), 0, To_String(NewGameSettings.PlayerName));
             FieldOptions := Get_Options(NewGame_Fields.all(2));
             FieldOptions.Auto_Skip := False;
             Set_Options(NewGame_Fields.all(2),  FieldOptions);
@@ -125,7 +126,11 @@ package body MainMenu is
             Set_Options(NewGame_Fields.all(3),  FieldOptions);
             NewGame_Fields.all(4) := New_Field(1, 12, 1, 18, 0, 0);
             Set_Field_Type(NewGame_Fields.all(4), Create(Genders, True));
-            Set_Buffer(NewGame_Fields.all(4), 0, "Male ->");
+            if NewGameSettings.PlayerGender = 'M' then
+                Set_Buffer(NewGame_Fields.all(4), 0, "Male ->");
+            else
+                Set_Buffer(NewGame_Fields.all(4), 0, "Female ->");
+            end if;
             FieldOptions := Get_Options(NewGame_Fields.all(4));
             FieldOptions.Edit := False;
             Set_Options(NewGame_Fields.all(4), FieldOptions);
@@ -135,7 +140,7 @@ package body MainMenu is
             FieldOptions.Active := False;
             Set_Options(NewGame_Fields.all(5),  FieldOptions);
             NewGame_Fields.all(6) := New_Field(1, 12, 2, 18, 0, 0);
-            Set_Buffer(NewGame_Fields.all(6), 0, "Hawk");
+            Set_Buffer(NewGame_Fields.all(6), 0, To_String(NewGameSettings.ShipName));
             FieldOptions := Get_Options(NewGame_Fields.all(6));
             FieldOptions.Auto_Skip := False;
             Set_Options(NewGame_Fields.all(6),  FieldOptions);
