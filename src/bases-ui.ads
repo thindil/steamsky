@@ -29,5 +29,6 @@ package Bases.UI is
     function ShipyardKeys(Key : Key_Code) return GameStates; -- Handle keys in shipyards
     function RecruitKeys(Key : Key_Code) return GameStates; -- Handle keys in recruit new crew members in bases
     function TradeFormKeys(Key : Key_Code) return GameStates; -- Handle keys in trade form
+    function ShipyardTypesKeys(Key : Key_Code) return GameStates; -- Handle keys in shipyard select modules types menu
 
 end Bases.UI;
