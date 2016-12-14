@@ -436,24 +436,27 @@ package body UserInterface is
     end ShowWaitOrder;
 
     procedure ShowGameMenu is
-        MenuWindow : Window;
-        MenuOptions : constant array(Positive range<>) of Unbounded_String :=
-            (To_Unbounded_String("[s] Ship informations"), To_Unbounded_String("[a] Ship cargo"),
-            To_Unbounded_String("[c] Crew informations"), To_Unbounded_String("[o] Ship orders"), 
-            To_Unbounded_String("[r] Crafting"), To_Unbounded_String("[m] Last messages"),
-            To_Unbounded_String("[b] List of known bases"), To_Unbounded_String("[n] List of known events"),
-            To_Unbounded_String("[w] Wait orders"), To_Unbounded_String("[v] Move map position"),
-            To_Unbounded_String("[h] Help"), To_Unbounded_String("[q] Quit from game"));
+        Menu_Items : constant Item_Array_Access := new Item_Array (1..14);
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
     begin
-        MenuWindow := Create(16, 32, (Lines / 2) - 8, (Columns / 2) - 16);
+        Menu_Items.all := (New_Item("s) Ship informations"), New_Item("a) Ship cargo"),
+            New_Item("c) Crew informations"), New_Item("o) Ship orders"), 
+            New_Item("r) Crafting"), New_Item("m) Last messages"),
+            New_Item("b) List of known bases"), New_Item("n) List of known events"),
+            New_Item("w) Wait orders"), New_Item("v) Move map position"),
+            New_Item("h) Help"), New_Item("q) Quit from game"),
+            New_Item("l) Close menu"), Null_Item);
+        OrdersMenu := New_Menu(Menu_Items);
+        Set_Format(OrdersMenu, Lines - 4, 1);
+        Set_Mark(OrdersMenu, "");
+        Scale(OrdersMenu, MenuHeight, MenuLength);
+        MenuWindow := Create(MenuHeight + 2, MenuLength + 2, ((Lines / 3) - (MenuHeight / 2)), ((Columns / 2) - (MenuLength / 2)));
         Box(MenuWindow);
-        for I in MenuOptions'Range loop
-            Move_Cursor(Win => MenuWindow, Line => Line_Position(I), Column => 4);
-            Add(Win => MenuWindow, Str => To_String(MenuOptions(I)));
-            Change_Attributes(Win => MenuWindow, Line => Line_Position(I), Column => 5, Count => 1, Color => 1);
-        end loop;
-        Move_Cursor(Win => MenuWindow, Line => 14, Column => 2);
-        Add(Win => MenuWindow, Str => "Any other key hide this menu");
+        Set_Window(OrdersMenu, MenuWindow);
+        Set_Sub_Window(OrdersMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 1, 1));
+        Post(OrdersMenu);
+        Refresh;
         Refresh(MenuWindow);
     end ShowGameMenu;
 
@@ -523,8 +526,44 @@ package body UserInterface is
     end DrawGame;
 
     function GameMenuKeys(CurrentState : GameStates; Key : Key_Code) return GameStates is
+        Result : Driver_Result;
+        MenuOptions : constant array (Positive range<>) of Character := ('s',
+        'a', 'c', 'o', 'r', 'm', 'b', 'n', 'w', 'v', 'h', 'q', 'l');
+        NewKey : Key_Code;
     begin
         case Key is
+            when KEY_UP => -- Select previous order
+                if CurrentState = GameMenu then
+                    Result := Driver(OrdersMenu, M_Up_Item);
+                    if Result = Request_Denied then
+                        Result := Driver(OrdersMenu, M_Last_Item);
+                    end if;
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow);
+                    end if;
+                    return GameMenu;
+                else
+                    NewKey := Key;
+                end if;
+            when KEY_DOWN => -- Select next order
+                if CurrentState = GameMenu then
+                    Result := Driver(OrdersMenu, M_Down_Item);
+                    if Result = Request_Denied then
+                        Result := Driver(OrdersMenu, M_First_Item);
+                    end if;
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow);
+                    end if;
+                    return GameMenu;
+                else
+                    NewKey := Key;
+                end if;
+            when 10 => -- Select option from menu
+                NewKey := Character'Pos(MenuOptions(Get_Index(Current(OrdersMenu))));
+            when others =>
+                NewKey := Key;
+        end case;
+        case NewKey is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to main menu
                 DrawGame(Quit_Confirm);
                 return Quit_Confirm;
@@ -544,14 +583,13 @@ package body UserInterface is
                 DrawGame(Help_View);
                 return Help_View;
             when Character'Pos('e') | Character'Pos('E') => -- Show game menu
-                DrawGame(CurrentState);
                 ShowGameMenu;
-                return CurrentState;
+                return GameMenu;
             when Character'Pos('a') | Character'Pos('A') => -- Cargo info screen
                 DrawGame(Cargo_Info);
                 return Cargo_Info;
             when Character'Pos('v') | Character'Pos('V') => -- Move map form
-                DrawGame(CurrentState);
+                DrawGame(Sky_Map_View);
                 ShowMoveMapForm;
                 return Move_Map;
             when Character'Pos('b') | Character'Pos('B') => -- List of bases screen
@@ -560,8 +598,17 @@ package body UserInterface is
             when Character'Pos('n') | Character'Pos('N') => -- List of events screen
                 DrawGame(Events_View);
                 return Events_View;
+            when Character'Pos('l') | Character'Pos('L') => -- Close menu
+                if CurrentState = GameMenu then
+                    DrawGame(Sky_Map_View);
+                    return Sky_Map_View;
+                else
+                    return CurrentState;
+                end if;
             when others =>
-                DrawGame(CurrentState);
+                if CurrentState /= GameMenu then
+                    DrawGame(CurrentState);
+                end if;
                 return CurrentState;
         end case;
     end GameMenuKeys;

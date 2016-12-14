@@ -206,6 +206,8 @@ begin
                 GameState := AssignAmmoKeys(Key);
             when ShipyardTypesMenu =>
                 GameState := ShipyardTypesKeys(Key);
+            when GameMenu =>
+                GameState := GameMenuKeys(GameState, Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
