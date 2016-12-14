@@ -20,7 +20,7 @@ with Ada.Containers.Vectors; use Ada.Containers;
 
 package ShipModules is
     
-    type ModuleType is (ENGINE, CABIN, COCKPIT, TURRET, GUN, CARGO, HULL,
+    type ModuleType is (ANY, ENGINE, CABIN, COCKPIT, TURRET, GUN, CARGO, HULL,
         ARMOR, BATTERING_RAM, ALCHEMY_LAB, FURNACE, WATER_COLLECTOR,
         GREENHOUSE, MEDICAL_ROOM);
     type BaseModule_Data is -- Data structure for prototypes of ship modules

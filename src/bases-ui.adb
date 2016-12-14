@@ -15,24 +15,35 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Maps; use Maps;
 with Items; use Items;
 with UserInterface; use UserInterface;
-with ShipModules; use ShipModules;
 with Ships; use Ships;
+with ShipModules; use ShipModules;
 
 package body Bases.UI is
     
-    TradeMenu : Menu;
-    MenuWindow : Window;
+    TradeMenu, TypesMenu : Menu;
+    MenuWindow, MenuWindow2 : Window;
     InstallView : Boolean := True;
     Buy : Boolean;
     TradeForm : Form;
     FormWindow : Window;
     CurrentMenuIndex : Positive := 1;
+    ModulesType : ModuleType := ANY;
+    ModulesNames : constant array (Natural range <>) of Unbounded_String :=
+        (To_Unbounded_String("Any"), To_Unbounded_String("Engines"),
+        To_Unbounded_String("Cabins"), To_Unbounded_String("Cockpits"),
+        To_Unbounded_String("Turrets"), To_Unbounded_String("Guns"),
+        To_Unbounded_String("Cargo bays"), To_Unbounded_String("Hulls"),
+        To_Unbounded_String("Armors"), To_Unbounded_String("Battering rams"),
+        To_Unbounded_String("Alchemy labs"), To_Unbounded_String("Furnaces"),
+        To_Unbounded_String("Water collectors"), To_Unbounded_String("Greenhouses"),
+        To_Unbounded_String("Medical rooms"));
 
     procedure RepairCost(Cost, Time, ModuleIndex : in out Natural) is
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
@@ -493,22 +504,33 @@ package body Bases.UI is
         MenuIndex : Integer := 1;
         MenuOptions : Menu_Option_Set;
         MoneyIndex : Natural;
+        procedure AddMenuItems(MType : ModuleType) is
+        begin
+            for I in Modules_List.First_Index..Modules_List.Last_Index loop
+                if Modules_List.Element(I).Price > 0 and Modules_List.Element(I).MType = MType then
+                    Modules_Items.all(MenuIndex) := New_Item(To_String(Modules_List.Element(I).Name), 
+                    Positive'Image(I));
+                    MenuIndex := MenuIndex + 1;
+                end if;
+            end loop;
+        end AddMenuItems;
     begin
         Move_Cursor(Line => 2, Column => 2);
         Add(Str => "[Install] [Remove]");
         Change_Attributes(Line => 2, Column => 3, Count => 1, Color => 1);
         Change_Attributes(Line => 2, Column => 13, Count => 1, Color => 1);
         if InstallView then
+            Move_Cursor(Line => 2, Column => 21);
+            Add(Str => "[Show modules: " & To_Lower(To_String(ModulesNames(ModuleType'Pos(ModulesType)))) & "]");
+            Change_Attributes(Line => 2, Column => 22, Count => 1, Color => 1);
             Modules_Items := new Item_Array(Modules_List.First_Index..(Modules_List.Last_Index + 1));
-            for J in ModuleType'Range loop
-                for I in Modules_List.First_Index..Modules_List.Last_Index loop
-                    if Modules_List.Element(I).Price > 0 and Modules_List.Element(I).MType = J then
-                        Modules_Items.all(MenuIndex) := New_Item(To_String(Modules_List.Element(I).Name), 
-                        Positive'Image(I));
-                        MenuIndex := MenuIndex + 1;
-                    end if;
+            if ModulesType = ANY then
+                for I in ModuleType'Range loop
+                    AddMenuItems(I);
                 end loop;
-            end loop;
+            else
+                AddMenuItems(ModulesType);
+            end if;
         else
             Modules_Items := new Item_Array(PlayerShip.Modules.First_Index..(PlayerShip.Modules.Last_Index + 1));
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
@@ -687,6 +709,28 @@ package body Bases.UI is
         DrawGame(Trade_View);
         return Trade_View;
     end TradeResult;
+
+    procedure ShowTypesMenu is
+        Types_Items : constant Item_Array_access := new Item_Array(1..(ModulesNames'Last + 3));
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+    begin
+        for I in ModulesNames'Range loop
+            Types_Items.all(I + 1) := New_Item(To_String(ModulesNames(I)));
+        end loop;
+        Types_Items.all(Types_Items'Last - 1) := New_Item("Quit");
+        Types_Items.all(Types_Items'Last) := Null_Item;
+        TypesMenu := New_Menu(Types_Items);
+        Set_Mark(TypesMenu, "");
+        Scale(TypesMenu, MenuHeight, MenuLength);
+        MenuWindow2 := Create(MenuHeight + 2, MenuLength + 2, ((Lines / 3) - (MenuHeight / 2)), ((Columns / 2) - (MenuLength / 2)));
+        Box(MenuWindow2);
+        Set_Window(TypesMenu, MenuWindow2);
+        Set_Sub_Window(TypesMenu, Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
+        Post(TypesMenu);
+        Refresh;
+        Refresh(MenuWindow2);
+    end ShowTypesMenu;
     
     function TradeKeys(Key : Key_Code) return GameStates is
         Result : Menus.Driver_Result;
@@ -792,6 +836,7 @@ package body Bases.UI is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                 CurrentMenuIndex := 1;
                 InstallView := True;
+                ModulesType := ANY;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when 56 | KEY_UP => -- Select previous repair option
@@ -820,6 +865,9 @@ package body Bases.UI is
                 InstallView := False;
                 CurrentMenuIndex := 1;
                 DrawGame(Shipyard_View);
+            when Character'Pos('s') | Character'Pos('S') => -- Show select modules type menu
+                ShowTypesMenu;
+                return ShipyardTypesMenu;
             when 10 => -- Install/remove module
                 Bases.UpgradeShip(InstallView, Positive'Value(Description(Current(TradeMenu))));
                 DrawGame(Shipyard_View);
@@ -942,5 +990,47 @@ package body Bases.UI is
         end if;
         return Trade_Form;
     end TradeFormKeys;
+
+    function ShipyardTypesKeys(Key : Key_Code) return GameStates is
+        Result : Menus.Driver_Result;
+    begin
+        case Key is
+            when 56 | KEY_UP => -- Select previous type option
+                Result := Driver(TypesMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(TypesMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 50 | KEY_DOWN => -- Select next type option
+                Result := Driver(TypesMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(TypesMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 10 => -- Set modules type to show
+                if Name(Current(TypesMenu)) /= "Quit" then
+                    CurrentMenuIndex := 1;
+                    ModulesType := ModuleType'Val(Get_Index(Current(TypesMenu)) - 1);
+                end if;
+                DrawGame(Shipyard_View);
+                return Shipyard_View;
+            when others =>
+                Result := Driver(TypesMenu, Key);
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                else
+                    Result := Driver(TypesMenu, M_CLEAR_PATTERN);
+                    Result := Driver(TypesMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow2);
+                    end if;
+                end if;
+        end case;
+        return ShipyardTypesMenu;
+    end ShipyardTypesKeys;
 
 end Bases.UI;
