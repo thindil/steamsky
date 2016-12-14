@@ -40,6 +40,7 @@ with Crafts.UI; use Crafts.UI;
 with Help; use Help;
 with MainMenu; use MainMenu;
 with BasesList; use BasesList;
+with Config; use Config;
 
 procedure SteamSky is
     GameState : GameStates := Main_Menu;
@@ -75,6 +76,7 @@ begin
         return;
     end if;
 
+    LoadConfig;
     ShowMainMenu;
 
     while GameState /= Quit loop
