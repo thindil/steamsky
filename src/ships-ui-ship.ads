@@ -15,14 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
-with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
+package Ships.UI.Ship is
 
-package Ships.UI is
+    procedure ShowShipInfo; -- Show informations about ship status
+    function ShipInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in ship info menu
+    function ModuleOptionsKeys(Key : Key_Code) return GameStates; -- Handle keys in modules options menu
+    function AssignOwnerKeys(Key : Key_Code) return GameStates; -- Handle keys in assign module owner menu
+    function AssignAmmoKeys(Key : Key_Code) return GameStates; -- Handle keys in assign gun ammo menu
 
-    ShipsMenu : Menu; -- Menu for ship modules/cargo
-
-    procedure ShowShipForm(OptionText : String; MaxRange : Natural := 0); -- Show form to rename module/drop cargo
-    function ShipFormKeys(Key : Key_Code; CurrentState : GameStates) return GameStates; -- Handle keys in rename/drop cargo form
-
-end Ships.UI;
+end Ships.UI.Ship;
