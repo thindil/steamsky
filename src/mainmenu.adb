@@ -156,6 +156,7 @@ package body MainMenu is
             Set_Buffer(NewGame_Fields.all(8), 0, "[Start]");
             NewGame_Fields.all(9) := Null_Field;
             NewGameForm := New_Form(NewGame_Fields);
+            Set_Options(NewGameForm, (others => False));
             Scale(NewGameForm, FormHeight, FormLength);
             FormWindow := Create(FormHeight + 2, FormLength + 2, ((Lines / 3) - (FormHeight / 2)), ((Columns / 2) - (FormLength / 2)));
             Box(FormWindow);
@@ -458,12 +459,6 @@ package body MainMenu is
             when KEY_BACKSPACE => -- delete last character
                 if FieldIndex = 2 or FieldIndex = 6 then
                     Result := Driver(NewGameForm, F_Delete_Previous);
-                    if Result = Form_Ok then
-                        FieldIndex := Get_Index(Current(NewGameForm));
-                        if FieldIndex /= 2 then
-                            Set_Current(NewGameForm, Fields(NewGameForm, 2));
-                        end if;
-                    end if;
                 end if;
             when KEY_DC => -- delete character at cursor
                 if FieldIndex = 2 or FieldIndex = 6 then
