@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
   inquisition ship
 - Option to select types of modules to show in shipyard
 - Save new game settings to file
+- Option to generate random player name in new game settings
 
 ### Changed
 - Updated interface
