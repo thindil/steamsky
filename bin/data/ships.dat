@@ -145,4 +145,15 @@ LootMin = 15
 LootMax = 150
 Perception = 5
 Cargo = 2000x1, 100x2, 200x3, 100x5
+[15]
+Name = Inquisition ship
+Modules = 17, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 12, 8, 9
+Accuracy = 10
+Enemy = Yes
+CombatAI = Attacker
+Evasion = 10
+LootMin = 100
+LootMax = 200
+Perception = 10
+Cargo = 2000x1, 200x2, 400x3, 500x4, 200x5, 40x13
 []
