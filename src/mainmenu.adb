@@ -29,6 +29,7 @@ with ShipModules; use ShipModules;
 with Crafts; use Crafts;
 with Ships; use Ships;
 with Config; use Config;
+with Crew; use Crew;
 
 package body MainMenu is
 
@@ -98,7 +99,7 @@ package body MainMenu is
     end ShowMainMenu;
 
     procedure ShowNewGameForm is
-        NewGame_Fields : constant Field_Array_Access := new Field_Array(1..9);
+        NewGame_Fields : constant Field_Array_Access := new Field_Array(1..10);
         FormHeight : Line_Position;
         FormLength : Column_Position;
         Visibility : Cursor_Visibility := Normal;
@@ -144,17 +145,22 @@ package body MainMenu is
             FieldOptions := Get_Options(NewGame_Fields.all(6));
             FieldOptions.Auto_Skip := False;
             Set_Options(NewGame_Fields.all(6),  FieldOptions);
-            NewGame_Fields.all(7) := New_Field(1, 6, 4, 5, 0, 0);
-            Set_Buffer(NewGame_Fields.all(7), 0, "[Quit]");
+            NewGame_Fields.all(7) := New_Field(2, 30, 4, 0, 0, 0);
+            Set_Buffer(NewGame_Fields.all(7), 0, "Press Enter for random name.");
             FieldOptions := Get_Options(NewGame_Fields.all(7));
-            FieldOptions.Edit := False;
-            Set_Options(NewGame_Fields.all(7), FieldOptions);
-            NewGame_Fields.all(8) := New_Field(1, 7, 4, 13, 0, 0);
+            FieldOptions.Active := False;
+            Set_Options(NewGame_Fields.all(7),  FieldOptions);
+            NewGame_Fields.all(8) := New_Field(1, 6, 7, 5, 0, 0);
+            Set_Buffer(NewGame_Fields.all(8), 0, "[Quit]");
             FieldOptions := Get_Options(NewGame_Fields.all(8));
             FieldOptions.Edit := False;
             Set_Options(NewGame_Fields.all(8), FieldOptions);
-            Set_Buffer(NewGame_Fields.all(8), 0, "[Start]");
-            NewGame_Fields.all(9) := Null_Field;
+            NewGame_Fields.all(9) := New_Field(1, 7, 7, 13, 0, 0);
+            FieldOptions := Get_Options(NewGame_Fields.all(9));
+            FieldOptions.Edit := False;
+            Set_Options(NewGame_Fields.all(9), FieldOptions);
+            Set_Buffer(NewGame_Fields.all(9), 0, "[Start]");
+            NewGame_Fields.all(10) := Null_Field;
             NewGameForm := New_Form(NewGame_Fields);
             Set_Options(NewGameForm, (others => False));
             Scale(NewGameForm, FormHeight, FormLength);
@@ -298,10 +304,6 @@ package body MainMenu is
                         LoadGameError("Can't load help system. Probably missing file data/help.dat");
                         return Main_Menu;
                     end if;
-                    if not LoadData then
-                        LoadGameError("Can't load game data. Probably missing file data/game.dat");
-                        return Main_Menu;
-                    end if;
                     if not LoadItems then
                         LoadGameError("Can't load items. Probably missing file data/items.dat");
                         return Main_Menu;
@@ -397,14 +399,21 @@ package body MainMenu is
                     Result := Driver(NewGameForm, F_End_Line);
                 end if;
             when 10 => -- quit/start game or change character gender, depends on form field
+                CharGender := Get_Buffer(Fields(NewGameForm, 4))(1);
+                if FieldIndex = 2 then
+                    NewCharName := GenerateMemberName(CharGender);
+                    Set_Buffer(Fields(NewGameForm, 2), 0, To_String(NewCharName));
+                    Result := Driver(NewGameForm, F_End_Line);
+                    Refresh(FormWindow);
+                end if;
                 if FieldIndex = 4 then
                     Result := Driver(NewGameForm, F_Next_Choice);
                     Refresh(FormWindow);
                 end if;
-                if FieldIndex < 7 then
+                if FieldIndex < 8 then
                     return New_Game;
                 end if;
-                if FieldIndex = 7 then
+                if FieldIndex = 8 then
                     Set_Cursor_Visibility(Visibility);
                     Post(NewGameForm, False);
                     Delete(NewGameForm);
@@ -415,10 +424,6 @@ package body MainMenu is
                 end if;
                 if not LoadHelp then
                     NewGameError("Can't load help system. Probably missing file data/help.dat");
-                    return Main_Menu;
-                end if;
-                if not LoadData then
-                    NewGameError("Can't load game data. Probably missing file data/game.dat");
                     return Main_Menu;
                 end if;
                 if not LoadItems then
@@ -439,7 +444,6 @@ package body MainMenu is
                 end if;
                 NewCharName := To_Unbounded_String(Get_Buffer(Fields(NewGameForm, 2)));
                 NewShipName := To_Unbounded_String(Get_Buffer(Fields(NewGameForm, 6)));
-                CharGender := Get_Buffer(Fields(NewGameForm, 4))(1);
                 RemoveSemicolons(NewCharName);
                 RemoveSemicolons(NewShipName);
                 Trim(NewCharName, Ada.Strings.Both);
@@ -493,8 +497,18 @@ package body MainMenu is
         end case;
         if Result = Form_Ok then
             if FieldIndex = 2 or FieldIndex = 6 then
+                if FieldIndex = 2 then
+                    Set_Buffer(Fields(NewGameForm, 7), 0, "Press Enter for random name.");
+                else
+                    Set_Buffer(Fields(NewGameForm, 7), 0, "");
+                end if;
                 Set_Background(Current(NewGameForm), (Reverse_Video => True, others => False));
             else
+                if FieldIndex = 4 then
+                    Set_Buffer(Fields(NewGameForm, 7), 0, "Left or Right arrow to change gender.");
+                else
+                    Set_Buffer(Fields(NewGameForm, 7), 0, "");
+                end if;
                 Set_Background(Fields(NewGameForm, 2), (others => False));
                 Set_Background(Fields(NewGameForm, 6), (others => False));
             end if;
