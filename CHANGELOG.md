@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Option to select types of modules to show in shipyard
 - Save new game settings to file
 - Option to generate random player name in new game settings
+- Ships size have impact on spot another ship during fly
 
 ### Changed
 - Updated interface
