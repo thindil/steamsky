@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Option to set module as priority to repair
-- New enemy ships: tiny inquisition ship, small inquisition ship and
-  inquisition ship
+- New enemy ships: tiny inquisition ship, small inquisition ship,
+  inquisition ship and armored inquisition ship
 - Option to select types of modules to show in shipyard
 - Save new game settings to file
 - Option to generate random player name in new game settings
