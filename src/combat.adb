@@ -65,6 +65,18 @@ package body Combat is
                         null;
                 end case;
             end loop;
+            for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
+                if Modules_List.Element(Enemy.Ship.Modules.Element(I).ProtoIndex).MType = HULL then
+                    PlayerPerception := PlayerPerception + Enemy.Ship.Modules.Element(I).Max_Value;
+                    exit;
+                end if;
+            end loop;
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = HULL then
+                    Enemy.Perception := Enemy.Perception + PlayerShip.Modules.Element(I).Max_Value;
+                    exit;
+                end if;
+            end loop;
             if (PlayerPerception + Integer(Rand_Roll.Random(Generator))) > (Enemy.Perception + Integer(Rand_Roll.Random(Generator))) then
                 AddMessage("You spotted " & To_String(EnemyName) & ".", OtherMessage);
             else
