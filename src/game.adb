@@ -434,6 +434,7 @@ package body Game is
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             end loop;
         end loop;
+        -- Save messages
         if Messages > MessagesAmount then
             Messages := MessagesAmount;
         end if;
@@ -447,6 +448,7 @@ package body Game is
                 Put(SaveGame, To_String(Message.Message) & ";" & To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             end loop;
         end if;
+        -- Save events
         RawValue := To_Unbounded_String(Events_List.Length'Img);
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         for I in Events_List.First_Index..Events_List.Last_Index loop
@@ -461,6 +463,19 @@ package body Game is
             RawValue := To_Unbounded_String(Integer'Image(Events_List.Element(I).Data));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         end loop;
+        -- Save game statistics
+        RawValue := To_Unbounded_String(GameStats.DestroyedShips.Length'Img);
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        for I in GameStats.DestroyedShips.First_Index..GameStats.DestroyedShips.Last_Index loop
+            RawValue := To_Unbounded_String(Integer'Image(GameStats.DestroyedShips.Element(I).ProtoIndex));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(GameStats.DestroyedShips.Element(I).Amount));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        end loop;
+        RawValue := To_Unbounded_String(Positive'Image(GameStats.BasesVisited));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Positive'Image(GameStats.MapVisited));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         Close(SaveGame);
     end SaveGame;
 
@@ -618,12 +633,14 @@ package body Game is
                 Process => UpdateMember'Access);
         end loop;
         PlayerShip.Crew := ShipCrew;
+        -- Load messages
         VectorLength := Integer'Value(To_String(ReadData));
         for I in 1..VectorLength loop
             Message := ReadData;
             MType := Message_Type'Val(Integer'Value(To_String(ReadData)));
             RestoreMessage(Message, MType);
         end loop;
+        -- Load events
         VectorLength := Positive'Value(To_String(ReadData));
         for I in 1..VectorLength loop
             Events_List.Append(New_Item => (Etype =>
@@ -632,6 +649,14 @@ package body Game is
                 Time => Integer'Value(To_String(ReadData)), Data => Integer'Value(To_String(ReadData))));
             SkyMap(Events_List.Element(I).SkyX, Events_List.Element(I).SkyY).EventIndex := I;
         end loop;
+        -- Load game statistics
+        VectorLength := Positive'Value(To_String(ReadData));
+        for I in 1..VectorLength loop
+            GameStats.DestroyedShips.Append(New_Item => (ProtoIndex => Positive'Value(To_String(ReadData)),
+                Amount => Positive'Value(To_String(ReadData))));
+        end loop;
+        GameStats.BasesVisited := Positive'Value(To_String(ReadData));
+        GameStats.MapVisited := Positive'Value(To_String(ReadData));
         Close(SaveGame);
         return True;
     exception
