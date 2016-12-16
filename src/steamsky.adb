@@ -41,6 +41,7 @@ with Help; use Help;
 with MainMenu; use MainMenu;
 with BasesList; use BasesList;
 with Config; use Config;
+with Statistics; use Statistics;
 
 procedure SteamSky is
     GameState : GameStates := Main_Menu;
@@ -217,6 +218,8 @@ begin
                 GameState := ShipyardTypesKeys(Key);
             when GameMenu =>
                 GameState := GameMenuKeys(GameState, Key);
+            when GameStats_View =>
+                GameState := ShowGameStatsKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;

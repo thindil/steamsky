@@ -38,6 +38,7 @@ with Events; use Events;
 with ShipModules; use ShipModules;
 with BasesList; use BasesList;
 with Items; use Items;
+with Statistics; use Statistics;
 
 package body UserInterface is
 
@@ -98,6 +99,9 @@ package body UserInterface is
             when Events_View =>
                 Add(Str => "List of know events [Quit]");
                 Change_Attributes(Line => 0, Column => 21, Count => 1, Color => 1);
+            when GameStats_View =>
+                Add(Str => "Game statistics [Quit]");
+                Change_Attributes(Line => 0, Column => 17, Count => 1, Color => 1);
             when others =>
                 null;
         end case;
@@ -436,7 +440,7 @@ package body UserInterface is
     end ShowWaitOrder;
 
     procedure ShowGameMenu is
-        Menu_Items : constant Item_Array_Access := new Item_Array (1..14);
+        Menu_Items : constant Item_Array_Access := new Item_Array (1..15);
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
     begin
@@ -445,8 +449,8 @@ package body UserInterface is
             New_Item("r) Crafting"), New_Item("m) Last messages"),
             New_Item("b) List of known bases"), New_Item("n) List of known events"),
             New_Item("w) Wait orders"), New_Item("v) Move map position"),
-            New_Item("h) Help"), New_Item("q) Quit from game"),
-            New_Item("l) Close menu"), Null_Item);
+            New_Item("g) Game statistics"), New_Item("h) Help"), 
+            New_Item("q) Quit from game"), New_Item("l) Close menu"), Null_Item);
         OrdersMenu := New_Menu(Menu_Items);
         Set_Format(OrdersMenu, Lines - 4, 1);
         Set_Mark(OrdersMenu, "");
@@ -513,6 +517,8 @@ package body UserInterface is
                 ShowBasesList;
             when Events_View =>
                 ShowEvents;
+            when GameStats_View =>
+                ShowGameStats;
             when others =>
                 null;
         end case;
@@ -528,7 +534,7 @@ package body UserInterface is
     function GameMenuKeys(CurrentState : GameStates; Key : Key_Code) return GameStates is
         Result : Driver_Result;
         MenuOptions : constant array (Positive range<>) of Character := ('s',
-        'a', 'c', 'o', 'r', 'm', 'b', 'n', 'w', 'v', 'h', 'q', 'l');
+            'a', 'c', 'o', 'r', 'm', 'b', 'n', 'w', 'v', 'g', 'h', 'q', 'l');
         NewKey : Key_Code;
     begin
         case Key is
@@ -605,6 +611,9 @@ package body UserInterface is
                 else
                     return CurrentState;
                 end if;
+            when Character'Pos('g') | Character'Pos('G') => -- Game statistics
+                DrawGame(GameStats_View);
+                return GameStats_View;
             when others =>
                 if CurrentState /= GameMenu then
                     DrawGame(CurrentState);
@@ -762,6 +771,7 @@ package body UserInterface is
                     SaveGame;
                     ClearMessages;
                     Events_List.Clear;
+                    ClearGameStats;
                     Erase;
                     Refresh;
                     ShowMainMenu;
