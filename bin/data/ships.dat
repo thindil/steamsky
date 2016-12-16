@@ -156,4 +156,15 @@ LootMin = 100
 LootMax = 200
 Perception = 10
 Cargo = 2000x1, 200x2, 400x3, 500x4, 200x5, 40x13
+[16]
+Name = Armored inquisition ship
+Modules = 17, 2, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 12, 8, 9
+Accuracy = 10
+Enemy = Yes
+CombatAI = Attacker
+Evasion = 10
+LootMin = 120
+LootMax = 240
+Perception = 10
+Cargo = 2000x1, 200x2, 400x3, 500x4, 200x5, 40x13
 []
