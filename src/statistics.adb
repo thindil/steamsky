@@ -55,6 +55,7 @@ package body Statistics is
     procedure ShowGameStats is
         MinutesDiff : Natural;
         TimePassed : Date_Record := (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
+        VisitedPercent : Natural;
     begin
         MinutesDiff := (GameDate.Minutes + (GameDate.Hour * 60) + (GameDate.Day * 1440) + (GameDate.Month * 43200) + 
             (GameDate.Year * 518400)) - 829571520;
@@ -89,9 +90,11 @@ package body Statistics is
             end loop;
         end if;
         Move_Cursor(Line => 3, Column => 2);
-        Add(Str => "Bases visited:" & Positive'Image(GameStats.BasesVisited));
+        VisitedPercent := Natural((Float(GameStats.BasesVisited) / 1024.0) * 100.0);
+        Add(Str => "Bases visited:" & Positive'Image(GameStats.BasesVisited) & " (" & Natural'Image(VisitedPercent) & "% )");
         Move_Cursor(Line => 4, Column => 2);
-        Add(Str => "Map discovered:" & Positive'Image(GameStats.MapVisited));
+        VisitedPercent := Natural((Float(GameStats.MapVisited) / (1024.0 * 1024.0)) * 100.0);
+        Add(Str => "Map discovered:" & Positive'Image(VisitedPercent) & "%");
     end ShowGameStats;
 
     function ShowGameStatsKeys(Key : Key_Code) return GameStates is
