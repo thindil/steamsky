@@ -31,6 +31,7 @@ with Items; use Items;
 with Events; use Events;
 with ShipModules; use ShipModules;
 with Config; use Config;
+with Statistics; use Statistics;
 
 package body Game is
     
@@ -61,6 +62,9 @@ package body Game is
         -- Save new game configuration
         NewGameSettings := (PlayerName => CharName, PlayerGender => Gender, ShipName => ShipName);
         SaveConfig;
+        -- Set game statistics
+        GameStats.BasesVisited := 1;
+        GameStats.MapVisited := 1;
         -- Set Game time
         GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
         -- Generate world
@@ -220,6 +224,9 @@ package body Game is
         UpgradeShip(Minutes);
         -- Update base
         if BaseIndex > 0 then
+            if SkyBases(BaseIndex).Visited.Year = 0 then
+                GameStats.BasesVisited := GameStats.BasesVisited + 1;
+            end if;
             SkyBases(BaseIndex).Visited := GameDate;
             if not SkyBases(BaseIndex).Known then
                 SkyBases(BaseIndex).Known := True;
@@ -228,7 +235,10 @@ package body Game is
             GenerateRecruits(BaseIndex);
         end if;
         -- Update map cell
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
+        if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited = False then
+            GameStats.MapVisited := GameStats.MapVisited + 1;
+            SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
+        end if;
         -- Update events
         UpdateEvents(Minutes);
     end UpdateGame;

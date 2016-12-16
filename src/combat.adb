@@ -21,6 +21,7 @@ with UserInterface; use UserInterface;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Items; use Items;
+with Statistics; use Statistics;
 
 package body Combat is
     
@@ -357,6 +358,7 @@ package body Combat is
                                         UpdateCargo(Ship, 1, LootAmount);
                                     end if;
                                     EnemyShip.Speed := FULL_STOP;
+                                    UpdateDestroyedShips(EnemyName);
                                 else
                                     DrawGame(Combat_State);
                                     return;
