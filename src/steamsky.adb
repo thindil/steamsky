@@ -22,7 +22,6 @@ with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Calendar; use Ada.Calendar;
 with Ada.Calendar.Formatting;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
-with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Terminal_Interface.Curses_Constants; use Terminal_Interface.Curses_Constants;
 with UserInterface; use UserInterface;
 with Maps; use Maps;
@@ -113,22 +112,10 @@ begin
             end case;
         end if;
         if GameState /= Main_Menu and GameState /= New_Game and GameState /= License_Info 
-            and GameState /= License_Full and GameState /= News_View then
+            and GameState /= License_Full and GameState /= News_View and GameState /= GameStats_View then
             if PlayerShip.Crew.Element(1).Health = 0 then -- Player is dead
-                ShowDialog("You are dead.");
-                Update_Panels;
-                Update_Screen;
-                Key := Get_Keystroke;
-                if Exists("data/savegame.dat") then
-                    Delete_File("data/savegame.dat");
-                end if;
-                ClearMessages;
-                Events_List.Clear;
-                ClearGameStats;
-                Erase;
-                Refresh;
-                ShowMainMenu;
-                GameState := Main_Menu;
+                GameState := Death_Confirm;
+                DrawGame(Death_Confirm);
             end if;
         end if;
         if HideDialog then
@@ -169,7 +156,7 @@ begin
                 GameState := TradeKeys(Key);
             when Help_View =>
                 GameState := HelpMenuKeys(Key);
-            when Quit_Confirm | Clear_Confirm | Dismiss_Confirm =>
+            when Quit_Confirm | Clear_Confirm | Dismiss_Confirm | Death_Confirm =>
                 GameState := ConfirmKeys(GameState, Key);
             when New_Game =>
                 GameState := NewGameKeys(Key);
