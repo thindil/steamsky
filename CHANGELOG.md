@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Save new game settings to file
 - Option to generate random player name in new game settings
 - Ships size have impact on spot another ship during fly
+- Game statistics
 
 ### Changed
 - Updated interface
