@@ -38,7 +38,7 @@ package Statistics is
 
     procedure UpdateDestroyedShips(ShipName : Unbounded_String); -- Add new destroyed ship do list
     procedure ClearGameStats; -- Clear game statistics
-    procedure ShowGameStats; -- Show game statistics
+    procedure ShowGameStats(RefreshOnly : Boolean := False); -- Show game statistics
     function ShowGameStatsKeys(Key : Key_Code) return GameStates; -- Handle keys on game statistics screen
 
 end Statistics;
