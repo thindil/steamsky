@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Directories; use Ada.Directories;
+with Ada.Float_Text_IO; use Ada.Float_Text_IO;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Events; use Events;
@@ -62,7 +63,9 @@ package body Statistics is
     procedure ShowGameStats(RefreshOnly : Boolean := False) is
         MinutesDiff : Natural;
         TimePassed : Date_Record := (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
-        VisitedPercent : Natural;
+        type VisitedFactor is digits 4 range 0.0..100.0;
+        VisitedPercent : VisitedFactor;
+        VisitedString : String(1..5);
     begin
         if not RefreshOnly then
             MinutesDiff := (GameDate.Minutes + (GameDate.Hour * 60) + (GameDate.Day * 1440) + (GameDate.Month * 43200) + 
@@ -105,11 +108,16 @@ package body Statistics is
                 Add(Win => DestroyedShipsPad, Str => "none");
             end if;
             Move_Cursor(Line => 3, Column => 2);
-            VisitedPercent := Natural((Float(GameStats.BasesVisited) / 1024.0) * 100.0);
-            Add(Str => "Bases visited:" & Positive'Image(GameStats.BasesVisited) & " (" & Natural'Image(VisitedPercent) & "% )");
+            VisitedPercent := (VisitedFactor(GameStats.BasesVisited) / 1024.0);
+            Put(To => VisitedString, Item => Float(VisitedPercent), Aft => 3, Exp => 0);
+            Add(Str => "Bases visited:" & Positive'Image(GameStats.BasesVisited) & " (" & VisitedString & "%)");
             Move_Cursor(Line => 4, Column => 2);
-            VisitedPercent := Natural((Float(GameStats.MapVisited) / (1024.0 * 1024.0)) * 100.0);
-            Add(Str => "Map discovered:" & Positive'Image(VisitedPercent) & "%");
+            VisitedPercent := ((VisitedFactor(GameStats.MapVisited) / (1024.0 * 1024.0)));
+            if VisitedPercent < 0.001 then
+                VisitedPercent := 0.001;
+            end if;
+            Put(To => VisitedString, Item => Float(VisitedPercent), Aft => 3, Exp => 0);
+            Add(Str => "Map discovered: " & VisitedString & "%");
             Refresh;
         end if;
         Refresh(DestroyedShipsPad, Line_Position(StartIndex), 0, 2, (Columns / 2), (Lines - 1), Columns);
