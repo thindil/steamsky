@@ -123,6 +123,8 @@ begin
                     Delete_File("data/savegame.dat");
                 end if;
                 ClearMessages;
+                Events_List.Clear;
+                ClearGameStats;
                 Erase;
                 Refresh;
                 ShowMainMenu;
