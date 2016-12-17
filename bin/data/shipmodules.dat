@@ -404,4 +404,16 @@ Material = Iron
 Skill = Gunsmith
 Price = 16000
 InstallTime = 150
+[36]
+Name = Advanced bronze cabin
+Type = Cabin
+Weight = 400
+Value = 40
+MaxValue = 40
+Durability = 100
+Material = Bronze
+Skill = Engineering
+Price = 1000
+InstallTime = 90
+Size = 1
 []
