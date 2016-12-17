@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Directories; use Ada.Directories;
 with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Maps; use Maps;
@@ -519,6 +520,9 @@ package body UserInterface is
                 ShowEvents;
             when GameStats_View =>
                 ShowGameStats;
+            when Death_Confirm =>
+                Refresh_Without_Update;
+                ShowConfirm("You are dead. Did you want to see your game statistics?");
             when others =>
                 null;
         end case;
@@ -762,9 +766,22 @@ package body UserInterface is
                 elsif OldState = Dismiss_Confirm then
                     DrawGame(Crew_Info);
                     return Crew_Info;
-                else
+                elsif OldState = Quit_Confirm then
                     DrawGame(Sky_Map_View);
                     return Sky_Map_View;
+                elsif OldState = Death_Confirm then
+                    if Exists("data/savegame.dat") then
+                        Delete_File("data/savegame.dat");
+                    end if;
+                    ClearMessages;
+                    Events_List.Clear;
+                    ClearGameStats;
+                    Erase;
+                    Refresh;
+                    ShowMainMenu;
+                    return Main_Menu;
+                else
+                    return OldState;
                 end if;
             when Character'Pos('y') | Character'Pos('Y') => -- Confirm action
                 if OldState = Quit_Confirm then
@@ -780,10 +797,15 @@ package body UserInterface is
                     ClearMessages;
                     DrawGame(Messages_View);
                     return Messages_View;
-                else
+                elsif OldState = Dismiss_Confirm then
                     DismissMember;
                     DrawGame(Crew_Info);
                     return Crew_Info;
+                elsif OldState = Death_Confirm then
+                    DrawGame(GameStats_View);
+                    return GameStats_View;
+                else
+                    return OldState;
                 end if;
             when others =>
                 DrawGame(OldState);
