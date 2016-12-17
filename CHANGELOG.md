@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Ships size have impact on spot another ship during fly
 - Game statistics
 - New ship module: advanced bronze cabin
+- Option to show game statistics after player death
 
 ### Changed
 - Updated interface
