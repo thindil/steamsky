@@ -416,4 +416,16 @@ Skill = Engineering
 Price = 1000
 InstallTime = 90
 Size = 1
+[37]
+Name = Extended bronze cabin
+Type = Cabin
+Weight = 700
+Value = 60
+MaxValue = 60
+Durability = 100
+Material = Bronze
+Skill = Engineering
+Price = 2000
+InstallTime = 120
+Size = 1
 []
