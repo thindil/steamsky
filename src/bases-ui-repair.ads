@@ -15,12 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
-with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
+package Bases.UI.Repair is
 
-package Bases.UI is
+    procedure RepairCost(Cost, Time, ModuleIndex : in out Natural); -- Count cost/time of repairs of ship
+    procedure ShowRepair; -- Show repair window
+    function RepairKeys(Key : Key_Code) return GameStates; -- Handle keys in ship repairs
 
-    TradeMenu : Menu;
-    MenuWindow : Window;
-
-end Bases.UI;
+end Bases.UI.Repair;

@@ -15,12 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
-with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
+package Bases.UI.Shipyard is
 
-package Bases.UI is
+    procedure ShowShipyard; -- Show shipyard window
+    function ShipyardKeys(Key : Key_Code) return GameStates; -- Handle keys in shipyards
+    function ShipyardTypesKeys(Key : Key_Code) return GameStates; -- Handle keys in shipyard select modules types menu
 
-    TradeMenu : Menu;
-    MenuWindow : Window;
-
-end Bases.UI;
+end Bases.UI.Shipyard;

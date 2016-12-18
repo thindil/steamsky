@@ -15,12 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
-with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
+package Bases.UI.Trade is
 
-package Bases.UI is
+    procedure ShowTrade; -- Show trade window
+    function TradeKeys(Key : Key_Code) return GameStates; -- Handle keys in bases trades
+    function TradeFormKeys(Key : Key_Code) return GameStates; -- Handle keys in trade form
 
-    TradeMenu : Menu;
-    MenuWindow : Window;
-
-end Bases.UI;
+end Bases.UI.Trade;
