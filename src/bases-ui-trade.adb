@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Maps; use Maps;
@@ -28,7 +27,6 @@ package body Bases.UI.Trade is
     Buy : Boolean;
     TradeForm : Form;
     FormWindow : Window;
-    CurrentMenuIndex : Positive := 1;
 
     procedure ShowItemInfo is
         ItemIndex : Positive;

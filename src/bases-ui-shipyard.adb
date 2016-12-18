@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
@@ -27,7 +26,6 @@ package body Bases.UI.Shipyard is
     TypesMenu : Menu;
     MenuWindow2 : Window;
     InstallView : Boolean := True;
-    CurrentMenuIndex : Positive := 1;
     ModulesType : ModuleType := ANY;
     ModulesNames : constant array (Natural range <>) of Unbounded_String :=
         (To_Unbounded_String("Any"), To_Unbounded_String("Engines"),
