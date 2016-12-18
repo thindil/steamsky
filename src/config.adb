@@ -27,7 +27,7 @@ package body Config is
     begin
         if not Exists("data/game.cfg") then
             NewGameSettings := (PlayerName => To_Unbounded_String("Laeran"),
-                PlayerGender => 'M', ShipName => To_Unbounded_String("Hawk"));
+                PlayerGender => 'M', ShipName => To_Unbounded_String("Anaria"));
             return;
         end if;
         Open(ConfigFile, In_File, "data/game.cfg");
