@@ -15,12 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
-with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
+package Bases.UI.Recruits is
 
-package Bases.UI is
+    procedure ShowRecruits; -- Show recruits window
+    function RecruitKeys(Key : Key_Code) return GameStates; -- Handle keys in recruit new crew members in bases
 
-    TradeMenu : Menu;
-    MenuWindow : Window;
-
-end Bases.UI;
+end Bases.UI.Recruits;

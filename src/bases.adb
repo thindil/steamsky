@@ -21,7 +21,7 @@ with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
 with UserInterface; use UserInterface;
-with Bases.UI; use Bases.UI;
+with Bases.UI.Repair; use Bases.UI.Repair;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Events; use Events;
