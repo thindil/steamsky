@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Maps; use Maps;
 with Items; use Items;
 with UserInterface; use UserInterface;
@@ -24,8 +23,6 @@ with ShipModules; use ShipModules;
 
 package body Bases.UI.Repair is
     
-    CurrentMenuIndex : Positive := 1;
-
     procedure RepairCost(Cost, Time, ModuleIndex : in out Natural) is
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;

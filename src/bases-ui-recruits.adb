@@ -15,15 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Maps; use Maps;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 
 package body Bases.UI.Recruits is
     
-    CurrentMenuIndex : Positive := 1;
-
     procedure ShowRecruitInfo is
         InfoWindow : Window;
         BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;

@@ -22,5 +22,6 @@ package Bases.UI is
 
     TradeMenu : Menu;
     MenuWindow : Window;
+    CurrentMenuIndex : Positive := 1;
 
 end Bases.UI;
