@@ -54,6 +54,9 @@ package Game is
     FemaleSyllablesMiddle : UnboundedString_Container.Vector;
     FemaleSyllablesEnd : UnboundedString_Container.Vector;
     FemaleVocals : UnboundedString_Container.Vector;
+    ShipSyllablesStart : UnboundedString_Container.Vector;
+    ShipSyllablesMiddle : UnboundedString_Container.Vector;
+    ShipSyllablesEnd : UnboundedString_Container.Vector;
     Skills_Names : UnboundedString_Container.Vector;
     
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character); -- Start new game: create map, place ship, crew, etc
