@@ -658,7 +658,7 @@ package body Game is
         Close(SaveGame);
         return Null_Unbounded_String;
     exception
-        when CONSTRAINT_ERROR =>
+        when CONSTRAINT_ERROR | END_ERROR =>
             Close(SaveGame);
             return To_Unbounded_String("Can't load savegame file. Invalid data.");
     end LoadGame;
