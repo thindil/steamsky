@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash on giving crew orders when more than 2 medic room installed
 - Deleting letters in new game window
+- Crash on loading invalid save game data
 
 ## [0.6] - 2016-12-11
 
