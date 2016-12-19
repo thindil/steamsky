@@ -428,4 +428,16 @@ Skill = Engineering
 Price = 2000
 InstallTime = 120
 Size = 1
+[38]
+Name = Luxury bronze cabin
+Type = Cabin
+Weight = 1000
+Value = 80
+MaxValue = 80
+Durability = 100
+Material = Bronze
+Skill = Engineering
+Price = 4000
+InstallTime = 150
+Size = 1
 []
