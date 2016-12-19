@@ -33,6 +33,7 @@ package Statistics is
             DestroyedShips : DestroyedShips_Container.Vector; -- Data for all destroyed ships by player
             BasesVisited : Positive; -- Amount of visited bases
             MapVisited : Positive; -- Amount of visited map fields
+            DistanceTraveled : Natural; -- Amount of map fields travelled
         end record;
     GameStats : GameStats_Data; -- Game statistics
 
