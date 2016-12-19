@@ -23,6 +23,7 @@ with Bases; use Bases;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
+with Statistics; use Statistics;
 
 package body Ships is
 
@@ -152,6 +153,7 @@ package body Ships is
                     when others =>
                         null;
                 end case;
+                GameStats.DistanceTraveled := GameStats.DistanceTraveled + 1;
                 UpdateGame(TimePassed);
             end if;
         end if;
