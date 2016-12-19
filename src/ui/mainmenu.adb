@@ -277,6 +277,7 @@ package body MainMenu is
     function MainMenuKeys(Key : Key_Code) return GameStates is
         Result : Menus.Driver_Result;
         Option : constant String := Name(Current(GameMenu));
+        LoadError : Unbounded_String;
     begin
         case Key is
             when 56 | KEY_UP => -- Select previous option
@@ -320,10 +321,12 @@ package body MainMenu is
                         LoadGameError("Can't load ship. Probably missing file data/ships.dat");
                         return Main_Menu;
                     end if;
-                    if LoadGame then
+                    LoadError := LoadGame;
+                    if LoadError = Null_Unbounded_String then
                         DrawGame(Sky_Map_View);
                         return Sky_Map_View;
                     else
+                        LoadGameError(To_String(LoadError));
                         return Main_Menu;
                     end if;
                 elsif Option = "News" then

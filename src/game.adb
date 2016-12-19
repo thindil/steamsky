@@ -18,15 +18,12 @@
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
-with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Bases; use Bases;
 with Maps; use Maps;
 with Ships; use Ships;
 with Crew; use Crew;
 with Messages; use Messages;
 with Crafts; use Crafts;
-with UserInterface; use UserInterface;
 with Items; use Items;
 with Events; use Events;
 with ShipModules; use ShipModules;
@@ -479,7 +476,7 @@ package body Game is
         Close(SaveGame);
     end SaveGame;
 
-    function LoadGame return Boolean is
+    function LoadGame return Unbounded_String is
         SaveGame : File_Type;
         VectorLength, SkillsLength : Natural;
         Skills : Skills_Container.Vector;
@@ -514,10 +511,7 @@ package body Game is
         -- Check save version
         if ReadData /= SaveVersion then
             Close(SaveGame);
-            ShowDialog("This saved game is incompatible with this version of game and can't be loaded.");
-            Update_Panels;
-            Update_Screen;
-            return False;
+            return To_Unbounded_String("This saved game is incompatible with this version of game and can't be loaded.");
         end if;
         -- Load game date
         GameDate.Year := Natural'Value(To_String(ReadData));
@@ -658,14 +652,11 @@ package body Game is
         GameStats.BasesVisited := Positive'Value(To_String(ReadData));
         GameStats.MapVisited := Positive'Value(To_String(ReadData));
         Close(SaveGame);
-        return True;
+        return Null_Unbounded_String;
     exception
         when CONSTRAINT_ERROR =>
             Close(SaveGame);
-            ShowDialog("Can't load savegame file. Invalid data.");
-            Update_Panels;
-            Update_Screen;
-            return False;
+            return To_Unbounded_String("Can't load savegame file. Invalid data.");
     end LoadGame;
 
     function LoadData return Boolean is
