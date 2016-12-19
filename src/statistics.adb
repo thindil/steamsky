@@ -58,6 +58,7 @@ package body Statistics is
         GameStats.DestroyedShips.Clear;
         GameStats.BasesVisited := 1;
         GameStats.MapVisited := 1;
+        GameStats.DistanceTraveled := 0;
     end ClearGameStats;
 
     procedure ShowGameStats(RefreshOnly : Boolean := False) is
@@ -118,6 +119,8 @@ package body Statistics is
             end if;
             Put(To => VisitedString, Item => Float(VisitedPercent), Aft => 3, Exp => 0);
             Add(Str => "Map discovered: " & VisitedString & "%");
+            Move_Cursor(Line => 5, Column => 2);
+            Add(Str => "Distance traveled:" & Natural'Image(GameStats.DistanceTraveled));
             Refresh;
         end if;
         Refresh(DestroyedShipsPad, Line_Position(StartIndex), 0, 2, (Columns / 2), (Lines - 1), Columns);
