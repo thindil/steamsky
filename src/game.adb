@@ -667,14 +667,16 @@ package body Game is
         DataFile : File_Type;
         RawData, FieldName, Value : Unbounded_String;
         EqualIndex, StartIndex, EndIndex, Amount : Natural;
-        FieldsNames : constant array (1..15) of Unbounded_String := (To_Unbounded_String("BasesSyllablesPre"),
+        FieldsNames : constant array (1..18) of Unbounded_String := (To_Unbounded_String("BasesSyllablesPre"),
             To_Unbounded_String("BasesSyllablesStart"), To_Unbounded_String("BasesSyllablesEnd"), 
             To_Unbounded_String("BasesSyllablesPost"), To_Unbounded_String("MaleSyllablesStart"), 
             To_Unbounded_String("MaleSyllablesMiddle"), To_Unbounded_String("MaleSyllablesEnd"), 
             To_Unbounded_String("FemaleSyllablesEnd"), To_Unbounded_String("SkillsNames"),
             To_Unbounded_String("ItemsTypes"), To_Unbounded_String("MaleVocals"),
             To_Unbounded_String("MaleConsonants"), To_Unbounded_String("FemaleSyllablesStart"),
-            To_Unbounded_String("FemaleSyllablesMiddle"), To_Unbounded_String("FemaleVocals"));
+            To_Unbounded_String("FemaleSyllablesMiddle"), To_Unbounded_String("FemaleVocals"), 
+            To_Unbounded_String("ShipSyllablesStart"), To_Unbounded_String("ShipSyllablesMiddle"),
+            To_Unbounded_String("ShipSyllablesEnd"));
     begin
         if BaseSyllablesStart.Length > 0 then
             return True;
@@ -728,6 +730,12 @@ package body Game is
                                 FemaleSyllablesMiddle.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
                             when 15 =>
                                 FemaleVocals.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                            when 16 =>
+                                ShipSyllablesStart.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                            when 17 =>
+                                ShipSyllablesMiddle.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
+                            when 18 =>
+                                ShipSyllablesEnd.Append(New_Item => To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1)));
                         end case;
                         StartIndex := EndIndex + 2;
                     end loop;
