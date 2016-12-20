@@ -413,6 +413,12 @@ package body MainMenu is
                     Result := Driver(NewGameForm, F_Next_Choice);
                     Refresh(FormWindow);
                 end if;
+                if FieldIndex = 6 then
+                    NewShipName := GenerateShipName;
+                    Set_Buffer(Fields(NewGameForm, 6), 0, To_String(NewShipName));
+                    Result := Driver(NewGameForm, F_End_Line);
+                    Refresh(FormWindow);
+                end if;
                 if FieldIndex < 8 then
                     return New_Game;
                 end if;
@@ -455,7 +461,7 @@ package body MainMenu is
                     NewCharName := To_Unbounded_String("Laeran");
                 end if;
                 if Length(NewShipName) = 0 then
-                    NewShipName := To_Unbounded_String("Hawk");
+                    NewShipName := To_Unbounded_String("Anaria");
                 end if;
                 Set_Cursor_Visibility(Visibility);
                 Post(NewGameForm, False);
@@ -500,11 +506,7 @@ package body MainMenu is
         end case;
         if Result = Form_Ok then
             if FieldIndex = 2 or FieldIndex = 6 then
-                if FieldIndex = 2 then
-                    Set_Buffer(Fields(NewGameForm, 7), 0, "Press Enter for random name.");
-                else
-                    Set_Buffer(Fields(NewGameForm, 7), 0, "");
-                end if;
+                Set_Buffer(Fields(NewGameForm, 7), 0, "Press Enter for random name.");
                 Set_Background(Current(NewGameForm), (Reverse_Video => True, others => False));
             else
                 if FieldIndex = 4 then
