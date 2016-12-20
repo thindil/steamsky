@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
   bronze cabin and heavy bronze turret
 - Option to show game statistics after player death
 - Option to generate random ship name in new game settings
+- Random names for all ships
 
 ### Changed
 - Updated interface
