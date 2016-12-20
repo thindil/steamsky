@@ -440,4 +440,16 @@ Skill = Engineering
 Price = 4000
 InstallTime = 150
 Size = 1
+[39]
+Name = Heavy bronze turret
+Type = Turret
+Weight = 200
+Value = 0
+MaxValue = 0
+Durability = 400
+Material = Bronze
+Skill = Engineering
+Price = 1000
+InstallTime = 120
+Size = 1
 []
