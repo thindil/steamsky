@@ -43,7 +43,7 @@ package body Combat is
         PilotOrder := 2;
         EngineerOrder := 3;
         EndCombat := False;
-        EnemyName := Enemy.Ship.Name;
+        EnemyName := GenerateShipName;
         MessagesStarts := GetLastMessageIndex + 1;
         Guns.Clear;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
@@ -79,14 +79,14 @@ package body Combat is
                 end if;
             end loop;
             if (PlayerPerception + Integer(Rand_Roll.Random(Generator))) > (Enemy.Perception + Integer(Rand_Roll.Random(Generator))) then
-                AddMessage("You spotted " & To_String(EnemyName) & ".", OtherMessage);
+                AddMessage("You spotted " & To_String(Enemy.Ship.Name) & ".", OtherMessage);
             else
                 if RealSpeed(PlayerShip) < RealSpeed(Enemy.Ship) then
-                    ShowDialog("You was attacked by " & To_String(EnemyName) & ".");
+                    ShowDialog("You was attacked by " & To_String(Enemy.Ship.Name) & ".");
                     OldSpeed := PlayerShip.Speed;
                     return Combat_State;
                 end if;
-                AddMessage("You spotted " & To_String(EnemyName) & ".", OtherMessage);
+                AddMessage("You spotted " & To_String(Enemy.Ship.Name) & ".", OtherMessage);
             end if;
             return Sky_Map_View;
         end if;
@@ -358,7 +358,7 @@ package body Combat is
                                         UpdateCargo(Ship, 1, LootAmount);
                                     end if;
                                     EnemyShip.Speed := FULL_STOP;
-                                    UpdateDestroyedShips(EnemyName);
+                                    UpdateDestroyedShips(EnemyShip.Name);
                                 else
                                     DrawGame(Combat_State);
                                     return;
