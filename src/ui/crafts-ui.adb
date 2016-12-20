@@ -118,13 +118,13 @@ package body Crafts.UI is
     end ShowRecipeInfo;
 
     procedure ShowRecipes is
-        Recipes_Items: constant Item_Array_Access := new Item_Array(1..(Recipes_List.Last_Index + 1));
+        Recipes_Items: constant Item_Array_Access := new Item_Array(1..(Known_Recipes.Last_Index + 1));
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
     begin
         Move_Cursor(Line => 3, Column => 2);
-        for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
-            Recipes_Items.all(I) := New_Item(To_String(Items_List.Element(Recipes_List.Element(I).ResultIndex).Name));
+        for I in Known_Recipes.First_Index..Known_Recipes.Last_Index loop
+            Recipes_Items.all(I) := New_Item(To_String(Items_List.Element(Recipes_List.Element(Known_Recipes.Element(I)).ResultIndex).Name));
         end loop;
         Recipes_Items.all(Recipes_Items'Last) := Null_Item;
         RecipesMenu := New_Menu(Recipes_Items);
@@ -135,7 +135,12 @@ package body Crafts.UI is
         Set_Window(RecipesMenu, MenuWindow);
         Set_Sub_Window(RecipesMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(RecipesMenu);
-        Set_Current(RecipesMenu, Recipes_Items.all(RecipeIndex));
+        for I in Known_Recipes.First_Index..Known_Recipes.Last_Index loop
+            if Known_Recipes.Element(I) = RecipeIndex then
+                Set_Current(RecipesMenu, Recipes_Items.all(I));
+                exit;
+            end if;
+        end loop;
         ShowRecipeInfo;
         Refresh(MenuWindow);
     end ShowRecipes;
@@ -197,7 +202,7 @@ package body Crafts.UI is
                     Result := Driver(RecipesMenu, M_Last_Item);
                 end if;
                 if Result = Menu_Ok then
-                    RecipeIndex := Menus.Get_Index(Current(RecipesMenu));
+                    RecipeIndex := Known_Recipes.Element(Menus.Get_Index(Current(RecipesMenu)));
                     ShowRecipeInfo;
                     Refresh(MenuWindow);
                 end if;
@@ -207,21 +212,21 @@ package body Crafts.UI is
                     Result := Driver(RecipesMenu, M_First_Item);
                 end if;
                 if Result = Menu_Ok then
-                    RecipeIndex := Menus.Get_Index(Current(RecipesMenu));
+                    RecipeIndex := Known_Recipes.Element(Menus.Get_Index(Current(RecipesMenu)));
                     ShowRecipeInfo;
                     Refresh(MenuWindow);
                 end if;
             when others =>
                 Result := Driver(RecipesMenu, Key);
                 if Result = Menu_Ok then
-                    RecipeIndex := Menus.Get_Index(Current(RecipesMenu));
+                    RecipeIndex := Known_Recipes.Element(Menus.Get_Index(Current(RecipesMenu)));
                     ShowRecipeInfo;
                     Refresh(MenuWindow);
                 else
                     Result := Driver(RecipesMenu, M_CLEAR_PATTERN);
                     Result := Driver(RecipesMenu, Key);
                     if Result = Menu_Ok then
-                        RecipeIndex := Menus.Get_Index(Current(RecipesMenu));
+                        RecipeIndex := Known_Recipes.Element(Menus.Get_Index(Current(RecipesMenu)));
                         ShowRecipeInfo;
                         Refresh(MenuWindow);
                     end if;
@@ -237,7 +242,7 @@ package body Crafts.UI is
         case Key is
             when 10 => -- Set selected manufacturing order
                 if ModuleIndex > 0 then
-                    SetRecipe(Get_Index(Current(RecipesMenu)), ModuleIndex);
+                    SetRecipe(RecipeIndex, ModuleIndex);
                 end if;
                 DrawGame(Craft_View);
                 return Craft_View;

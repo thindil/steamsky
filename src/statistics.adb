@@ -22,6 +22,7 @@ with Ships; use Ships;
 with Events; use Events;
 with Messages; use Messages;
 with MainMenu; use MainMenu;
+with Crafts; use Crafts;
 
 package body Statistics is
 
@@ -137,6 +138,7 @@ package body Statistics is
                     ClearMessages;
                     Events_List.Clear;
                     ClearGameStats;
+                    Known_Recipes.Clear;
                     Erase;
                     Refresh;
                     ShowMainMenu;

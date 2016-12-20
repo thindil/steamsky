@@ -33,6 +33,7 @@ package Crafts is
         end record;
     package Recipes_Container is new Vectors(Positive, Craft_Data);
     Recipes_List : Recipes_Container.Vector; -- List of recipes available in game 
+    Known_Recipes : Positive_Container.Vector; -- List of all know by player recipes
 
     function LoadRecipes return Boolean; -- Load recipes from file, return False if file not exists
     procedure Manufacturing(Minutes : Positive); -- Craft selected items

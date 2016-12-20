@@ -168,6 +168,12 @@ package body Game is
         PlayerShip.Crew.Append(New_Item => (Name => GunnerName, Gender => GunnerGender,
             Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Gunner,
             PreviousOrder => Rest, OrderTime => 15)); 
+        -- Set known recipes
+        Known_Recipes.Append(New_Item => 1);
+        Known_Recipes.Append(New_Item => 2);
+        Known_Recipes.Append(New_Item => 4);
+        Known_Recipes.Append(New_Item => 20);
+        -- Set current map field/sky base info
         SkyBases(Integer(RandomBase)).Visited := GameDate;
         SkyBases(Integer(RandomBase)).Known := True;
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
@@ -432,6 +438,13 @@ package body Game is
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             end loop;
         end loop;
+        -- Save known recipes
+        RawValue := To_Unbounded_String(Known_Recipes.Length'Img);
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        for I in Known_Recipes.First_Index..Known_Recipes.Last_Index loop
+            RawValue := To_Unbounded_String(Integer'Image(Known_Recipes.Element(I)));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        end loop;
         -- Save messages
         if Messages > MessagesAmount then
             Messages := MessagesAmount;
@@ -630,6 +643,11 @@ package body Game is
                 Process => UpdateMember'Access);
         end loop;
         PlayerShip.Crew := ShipCrew;
+        -- Load known recipes
+        VectorLength := Positive'Value(To_String(ReadData));
+        for I in 1..VectorLength loop
+            Known_Recipes.Append(New_Item => Positive'Value(To_String(ReadData)));
+        end loop;
         -- Load messages
         VectorLength := Integer'Value(To_String(ReadData));
         for I in 1..VectorLength loop
