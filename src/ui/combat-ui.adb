@@ -204,8 +204,10 @@ package body Combat.UI is
         Move_Cursor(Line => 5, Column => (Columns / 2));
         Add(Str => "Enemy status:");
         Move_Cursor(Line => 7, Column => (Columns / 2));
-        Add(Str => "Enemy: " & To_String(EnemyName));
+        Add(Str => "Name: " & To_String(EnemyName));
         Move_Cursor(Line => 8, Column => (Columns / 2));
+        Add(Str => "Type: " & To_String(Enemy.Ship.Name));
+        Move_Cursor(Line => 9, Column => (Columns / 2));
         Add(Str => "Distance: ");
         if Enemy.Distance >= 15000 then
             Add(Str => "Escaped");
@@ -218,7 +220,7 @@ package body Combat.UI is
         else
             Add(Str => "Close");
         end if;
-        Move_Cursor(Line => 9, Column => (Columns / 2));
+        Move_Cursor(Line => 10, Column => (Columns / 2));
         Add(Str => "Status: ");
         if Enemy.Distance < 15000 then
             if Enemy.Ship.Modules.Element(1).Durability = 0 then
@@ -250,7 +252,7 @@ package body Combat.UI is
         else
             Add(Str => "Unknown");
         end if;
-        Move_Cursor(Line => 10, Column => (Columns / 2));
+        Move_Cursor(Line => 11, Column => (Columns / 2));
         Add(Str => "Speed: ");
         if Enemy.Distance < 15000 then
             case Enemy.Ship.Speed is
@@ -268,14 +270,14 @@ package body Combat.UI is
         else
             Add(Str => "Unknown");
         end if;
-        Move_Cursor(Line => 13, Column => (Columns / 2));
+        Move_Cursor(Line => 14, Column => (Columns / 2));
         if not EndCombat then
             Add(Str => "SPACE for next turn");
-            Change_Attributes(Line => 13, Column => (Columns / 2),
+            Change_Attributes(Line => 14, Column => (Columns / 2),
                 Count => 5, Color => 1);
         else
             Add(Str => "Hit any key for back to sky map");
-            Change_Attributes(Line => 13, Column => (Columns / 2),
+            Change_Attributes(Line => 14, Column => (Columns / 2),
                 Count => 3, Color => 1);
         end if;
         LoopStart := 0 - MessagesAmount;
