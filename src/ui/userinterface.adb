@@ -792,6 +792,7 @@ package body UserInterface is
                     ClearMessages;
                     Events_List.Clear;
                     ClearGameStats;
+                    Known_Recipes.Clear;
                     Erase;
                     Refresh;
                     ShowMainMenu;
