@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 - Updated help
+- Start game only with few known crafting recipes
 
 ### Fixed
 - Crash on giving crew orders when more than 2 medic room installed
