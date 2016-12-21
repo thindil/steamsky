@@ -34,6 +34,7 @@ package Statistics is
             BasesVisited : Positive; -- Amount of visited bases
             MapVisited : Positive; -- Amount of visited map fields
             DistanceTraveled : Natural; -- Amount of map fields travelled
+            CraftingOrders : Natural; -- Amount of finished crafting orders
         end record;
     GameStats : GameStats_Data; -- Game statistics
 
