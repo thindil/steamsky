@@ -23,6 +23,7 @@ with Messages; use Messages;
 with Ships; use Ships;
 with Crew; use Crew;
 with Items; use Items;
+with Statistics; use Statistics;
 
 package body Crafts is
 
@@ -256,6 +257,7 @@ package body Crafts is
                                 end if;
                                 UpdateCargo(PlayerShip, Recipes_List.Element(PlayerShip.Modules.Element(L).Current_Value).ResultIndex, 
                                     ResultAmount);
+                                GameStats.CraftingOrders := GameStats.CraftingOrders + 1;
                             else
                                 for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
                                     if Recipes_List.Element(I).ResultIndex = Recipe.ResultIndex then

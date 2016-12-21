@@ -60,9 +60,7 @@ package body Game is
         NewGameSettings := (PlayerName => CharName, PlayerGender => Gender, ShipName => ShipName);
         SaveConfig;
         -- Set game statistics
-        GameStats.BasesVisited := 1;
-        GameStats.MapVisited := 1;
-        GameStats.DistanceTraveled := 0;
+        ClearGameStats;
         -- Set Game time
         GameDate := (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
         -- Generate world
@@ -489,6 +487,8 @@ package body Game is
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         RawValue := To_Unbounded_String(Positive'Image(GameStats.DistanceTraveled));
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Positive'Image(GameStats.CraftingOrders));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         Close(SaveGame);
     end SaveGame;
 
@@ -673,6 +673,7 @@ package body Game is
         GameStats.BasesVisited := Positive'Value(To_String(ReadData));
         GameStats.MapVisited := Positive'Value(To_String(ReadData));
         GameStats.DistanceTraveled := Positive'Value(To_String(ReadData));
+        GameStats.CraftingOrders := Positive'Value(To_String(ReadData));
         Close(SaveGame);
         return Null_Unbounded_String;
     exception
