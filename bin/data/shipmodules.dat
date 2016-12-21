@@ -452,4 +452,17 @@ Skill = Engineering
 Price = 1000
 InstallTime = 120
 Size = 1
+[40]
+Name = Heavy bronze battering ram
+Type = Battering_ram
+Weight = 750
+Value = 0
+MaxValue = 20
+Durability = 150
+Material = Bronze
+Skill = Engineering
+Price = 1000
+InstallTime = 150
+Unique = Yes
+Size = 1
 []
