@@ -237,9 +237,14 @@ package body Ships.UI.Ship is
                     Add(Win => InfoWindow, Str => "Worker: none");
                 end if;
                 Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
-                if Module.Current_Value > 0 then
-                    Add(Win => InfoWIndow, Str => "Manufacturing: " &
-                        To_String(Items_List.Element(Recipes_List.Element(Module.Current_Value).ResultIndex).Name));
+                if Module.Current_Value /= 0 then
+                    if Module.Current_Value > 0 then
+                        Add(Win => InfoWIndow, Str => "Manufacturing: " &
+                            To_String(Items_List.Element(Recipes_List.Element(Module.Current_Value).ResultIndex).Name));
+                    else
+                        Add(Win => InfoWindow, Str => "Deconstructing " &
+                            To_String(Items_List.Element(abs(Module.Current_Value)).Name));
+                    end if;
                     Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
                     Add(Win => InfoWindow, Str => "Time to complete:" & Positive'Image(Module.Max_Value) & " minutes");
                     CurrentLine := CurrentLine + 1;

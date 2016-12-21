@@ -25,11 +25,11 @@ package body Crafts.UI is
 
     RecipesMenu, ModulesMenu : Menu;
     MenuWindow, MenuWindow2 : Window;
-    RecipeIndex : Positive := 1;
+    RecipeIndex : Integer := 1;
 
     procedure ShowRecipeInfo is
         InfoWindow : Window;
-        Recipe : constant Craft_Data := Recipes_List.Element(RecipeIndex);
+        Recipe : Craft_Data;
         CurrentLine : Line_Position := 2;
         MAmount, TextLength : Natural := 0;
         HaveMaterial, HaveWorkplace : Boolean := False;
@@ -37,8 +37,27 @@ package body Crafts.UI is
         StartColumn, EndColumn : Column_Position;
         WorkplaceName : Unbounded_String := Null_Unbounded_String;
     begin
+        if RecipeIndex > 0 then
+            Recipe := Recipes_List.Element(RecipeIndex);
+        else
+            Recipe.MaterialTypes.Append(New_Item => Items_List.Element(abs(RecipeIndex)).IType);
+            Recipe.MaterialAmounts.Append(New_Item => 1);
+            Recipe.ResultIndex := abs(RecipeIndex);
+            Recipe.ResultAmount := 0;
+            Recipe.Workplace := ALCHEMY_LAB;
+            for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
+                if Recipes_List.Element(I).ResultIndex = Recipe.ResultIndex then
+                    Recipe.Skill := Recipes_List.Element(I).Skill;
+                    Recipe.Time := Recipes_List.Element(I).Difficulty * 15;
+                    exit;
+                end if;
+            end loop;
+            Recipe.Difficulty := 0;
+        end if;
         InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
-        Add(Win => InfoWindow, Str => "Amount:" & Integer'Image(Recipe.ResultAmount));
+        if RecipeIndex > 0 then
+            Add(Win => InfoWindow, Str => "Amount:" & Integer'Image(Recipe.ResultAmount));
+        end if;
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         Add(Win => InfoWindow, Str => "Materials needed: ");
         for I in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
@@ -118,18 +137,36 @@ package body Crafts.UI is
     end ShowRecipeInfo;
 
     procedure ShowRecipes is
-        Recipes_Items: constant Item_Array_Access := new Item_Array(1..(Known_Recipes.Last_Index + 1));
+        Recipes_Items: Item_Array_Access;
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
+        Deconstructs : Positive_Container.Vector;
     begin
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            for J in Recipes_List.First_Index..Recipes_List.Last_Index loop
+                if Recipes_List.Element(J).ResultIndex = PlayerShip.Cargo.Element(I).ProtoIndex then
+                    if Known_Recipes.Find_Index(Item => J) = Positive_Container.No_Index then
+                        Deconstructs.Append(New_Item => PlayerShip.Cargo.Element(I).ProtoIndex);
+                        exit;
+                    end if;
+                end if;
+            end loop;
+        end loop;
+        Recipes_Items := new Item_Array(1..(Integer(Known_Recipes.Length) + Integer(Deconstructs.Length) + 1));
         Move_Cursor(Line => 3, Column => 2);
         for I in Known_Recipes.First_Index..Known_Recipes.Last_Index loop
-            Recipes_Items.all(I) := New_Item(To_String(Items_List.Element(Recipes_List.Element(Known_Recipes.Element(I)).ResultIndex).Name));
+            Recipes_Items.all(I) := New_Item(To_String(Items_List.Element(Recipes_List.Element(Known_Recipes.Element(I)).ResultIndex).Name),
+                Positive'Image(Known_Recipes.Element(I)));
+        end loop;
+        for I in Deconstructs.First_Index..Deconstructs.Last_Index loop
+            Recipes_Items.all(Known_Recipes.Last_Index + I) := New_Item("Deconstruct " & 
+                To_String(Items_List.Element(Deconstructs.Element(I)).Name), Integer'Image(Deconstructs.Element(I) * (-1)));
         end loop;
         Recipes_Items.all(Recipes_Items'Last) := Null_Item;
         RecipesMenu := New_Menu(Recipes_Items);
         Set_Format(RecipesMenu, Lines - 10, 1);
         Set_Mark(RecipesMenu, "");
+        Set_Options(RecipesMenu, (Show_Descriptions => False, others => True));
         Scale(RecipesMenu, MenuHeight, MenuLength);
         MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
         Set_Window(RecipesMenu, MenuWindow);
@@ -151,9 +188,15 @@ package body Crafts.UI is
         MenuIndex : Positive := 1;
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
+        MType : ModuleType;
     begin
+        if RecipeIndex > 0 then
+            MType := Recipes_List.Element(RecipeIndex).Workplace;
+        else
+            MType := ALCHEMY_LAB;
+        end if;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List.Element(RecipeIndex).Workplace then
+            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = MType then
                 ModulesAmount := ModulesAmount + 1;
             end if;
         end loop;
@@ -164,7 +207,7 @@ package body Crafts.UI is
         end if;
         Modules_Items := new Item_Array(1..ModulesAmount);
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipes_List.Element(RecipeIndex).Workplace then
+            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = MType then
                 Modules_Items.all(MenuIndex) := New_Item("Manufacture in " & To_String(PlayerShip.Modules.Element(I).Name), 
                     Positive'Image(I));
                 MenuIndex := MenuIndex + 1;
@@ -202,7 +245,7 @@ package body Crafts.UI is
                     Result := Driver(RecipesMenu, M_Last_Item);
                 end if;
                 if Result = Menu_Ok then
-                    RecipeIndex := Known_Recipes.Element(Menus.Get_Index(Current(RecipesMenu)));
+                    RecipeIndex := Integer'Value(Description(Current(RecipesMenu)));
                     ShowRecipeInfo;
                     Refresh(MenuWindow);
                 end if;
@@ -212,21 +255,21 @@ package body Crafts.UI is
                     Result := Driver(RecipesMenu, M_First_Item);
                 end if;
                 if Result = Menu_Ok then
-                    RecipeIndex := Known_Recipes.Element(Menus.Get_Index(Current(RecipesMenu)));
+                    RecipeIndex := Integer'Value(Description(Current(RecipesMenu)));
                     ShowRecipeInfo;
                     Refresh(MenuWindow);
                 end if;
             when others =>
                 Result := Driver(RecipesMenu, Key);
                 if Result = Menu_Ok then
-                    RecipeIndex := Known_Recipes.Element(Menus.Get_Index(Current(RecipesMenu)));
+                    RecipeIndex := Integer'Value(Description(Current(RecipesMenu)));
                     ShowRecipeInfo;
                     Refresh(MenuWindow);
                 else
                     Result := Driver(RecipesMenu, M_CLEAR_PATTERN);
                     Result := Driver(RecipesMenu, Key);
                     if Result = Menu_Ok then
-                        RecipeIndex := Known_Recipes.Element(Menus.Get_Index(Current(RecipesMenu)));
+                        RecipeIndex := Integer'Value(Description(Current(RecipesMenu)));
                         ShowRecipeInfo;
                         Refresh(MenuWindow);
                     end if;

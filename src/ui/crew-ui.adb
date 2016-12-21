@@ -217,7 +217,7 @@ package body Crew.UI is
                                 OrdersAmount := OrdersAmount + 1;
                             end if;
                         when ALCHEMY_LAB..GREENHOUSE =>
-                            if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
+                            if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value /= 0 then
                                 OrdersAmount := OrdersAmount + 1;
                             end if;
                         when MEDICAL_ROOM =>
@@ -297,7 +297,7 @@ package body Crew.UI is
                                 MenuIndex := MenuIndex + 1;
                             end if;
                         when ALCHEMY_LAB..GREENHOUSE =>
-                            if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value > 0 then
+                            if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value /= 0 then
                                 Orders_Items.all(MenuIndex) := New_Item("Work in " & To_String(PlayerShip.Modules.Element(I).Name), 
                                 Positive'Image(I));
                                 MenuIndex := MenuIndex + 1;
