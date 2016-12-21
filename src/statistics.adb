@@ -60,6 +60,7 @@ package body Statistics is
         GameStats.BasesVisited := 1;
         GameStats.MapVisited := 1;
         GameStats.DistanceTraveled := 0;
+        GameStats.CraftingOrders := 0;
     end ClearGameStats;
 
     procedure ShowGameStats(RefreshOnly : Boolean := False) is
@@ -122,6 +123,8 @@ package body Statistics is
             Add(Str => "Map discovered: " & VisitedString & "%");
             Move_Cursor(Line => 5, Column => 2);
             Add(Str => "Distance traveled:" & Natural'Image(GameStats.DistanceTraveled));
+            Move_Cursor(Line => 6, Column => 2);
+            Add(Str => "Crafting orders finished:" & Natural'Image(GameStats.CraftingOrders));
             Refresh;
         end if;
         Refresh(DestroyedShipsPad, Line_Position(StartIndex), 0, 2, (Columns / 2), (Lines - 1), Columns);
