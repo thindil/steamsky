@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 - Ships size have impact on spot another ship during fly
 - Game statistics
 - New ship modules: advanced bronze cabin, extended bronze cabin, luxury
-  bronze cabin and heavy bronze turret
+  bronze cabin, heavy bronze turret and heavy bronze battering ram
 - Option to show game statistics after player death
 - Option to generate random ship name in new game settings
 - Random names for all ships
