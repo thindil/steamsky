@@ -26,10 +26,11 @@ package Crafts is
             MaterialTypes : UnboundedString_Container.Vector; -- Types of material needed for recipe
             MaterialAmounts : Positive_Container.Vector; -- Amounts of material needed for recipe
             ResultIndex : Positive; -- Prototype index of crafted item
-            ResultAmount : Positive; -- Amount of products
+            ResultAmount : Natural; -- Amount of products
             Workplace : ModuleType; -- Ship module needed for crafting
             Skill : Positive; -- Skill used in crafting item
             Time : Positive; -- Minutes needed for finish recipe
+            Difficulty : Natural; -- How difficult is recipe to discover
         end record;
     package Recipes_Container is new Vectors(Positive, Craft_Data);
     Recipes_List : Recipes_Container.Vector; -- List of recipes available in game 
@@ -37,6 +38,6 @@ package Crafts is
 
     function LoadRecipes return Boolean; -- Load recipes from file, return False if file not exists
     procedure Manufacturing(Minutes : Positive); -- Craft selected items
-    procedure SetRecipe(RecipeIndex, ModuleIndex : Positive); -- Set recipe to craft
+    procedure SetRecipe(RecipeIndex : Integer; ModuleIndex : Positive); -- Set recipe to craft
 
 end Crafts;

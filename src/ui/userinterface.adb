@@ -135,7 +135,7 @@ package body UserInterface is
                             GunnersCheck := 2;
                         end if;
                     when ALCHEMY_LAB..GREENHOUSE =>
-                        if PlayerShip.Modules.Element(I).Current_Value > 0 then
+                        if PlayerShip.Modules.Element(I).Current_Value /= 0 then
                             if PlayerShip.Modules.Element(I).Owner > 0 and CraftersCheck < 2 then
                                 CraftersCheck := 1;
                             else
