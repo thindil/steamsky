@@ -332,7 +332,7 @@ package body MainMenu is
                 elsif Option = "News" then
                     StartIndex := 0;
                     Erase;
-                    Add(Str => "Up/down arrows to scroll on line, PgUp/PgDown to scroll one screen, Home/End to go begining or end, any other key - back to main menu.");
+                    Add(Str => "Up/down arrows to scroll one line, PgUp/PgDown to scroll one screen, Home/End to go begining or end, any other key - back to main menu.");
                     Refresh_Without_Update;
                     ShowNews;
                     Update_Screen;
