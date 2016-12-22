@@ -1,0 +1,137 @@
+--    Copyright 2016 Bartek thindil Jasicki
+--    
+--    This file is part of Steam Sky.
+--
+--    Steam Sky is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Steam Sky is distributed in the hope that it will be useful,
+--    but WITHOUT ANY WARRANTY; without even the implied warranty of
+--    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+--    GNU General Public License for more details.
+--
+--    You should have received a copy of the GNU General Public License
+--    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+
+with Maps; use Maps;
+with Items; use Items;
+with UserInterface; use UserInterface;
+with Ships; use Ships;
+with Crafts; use Crafts;
+
+package body Bases.UI.Recipes is
+    
+    procedure ShowRecipeInfo is
+        RecipeIndex : Positive;
+        InfoWindow : Window;
+        BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
+            PlayerShip.SkyY).BaseIndex).BaseType) + 1;
+        Cost : Positive;
+    begin
+        for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
+            if To_String(Items_List.Element(Recipes_List.Element(I).ResultIndex).Name) = Name(Current(TradeMenu)) then
+                RecipeIndex := I;
+                exit;
+            end if;
+        end loop;
+        InfoWindow := Create(3, (Columns / 2), 3, (Columns / 2));
+        Cost := Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Prices(BaseType) * 
+            Recipes_List.Element(RecipeIndex).Difficulty * 100;
+        Add(Win => InfoWindow, Str => "Base price:" & Positive'Image(Cost) & " Charcollum");
+        Refresh;
+        Refresh(InfoWindow);
+        Delete(InfoWindow);
+    end ShowRecipeInfo;
+
+    procedure ShowTradeRecipes is
+        Trade_Items: constant Item_Array_Access := new Item_Array(1..Recipes_List.Last_Index);
+        BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
+            PlayerShip.SkyY).BaseIndex).BaseType) + 1;
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        MoneyIndex : Natural := 0;
+        MenuIndex : Integer := 1;
+    begin
+        for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
+            if Known_Recipes.Find_Index(Item => I) = Positive_Container.No_Index and Recipes_List.Element(I).BaseType = BaseType then
+                Trade_Items.all(MenuIndex) := New_Item(To_String(Items_List.Element(Recipes_List.Element(I).ResultIndex).Name));
+                MenuIndex := MenuIndex + 1;
+            end if;
+        end loop;
+        if MenuIndex = 1 then
+            Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
+            Add(Str => "You bought all available crafting recipes in this base.");
+            Refresh;
+            return;
+        end if;
+        for I in MenuIndex..Trade_Items'Last loop
+            Trade_Items.all(I) := Null_Item;
+        end loop;
+        TradeMenu := New_Menu(Trade_Items);
+        Set_Format(TradeMenu, Lines - 10, 1);
+        Set_Mark(TradeMenu, "");
+        Scale(TradeMenu, MenuHeight, MenuLength);
+        MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
+        Set_Window(TradeMenu, MenuWindow);
+        Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+        Post(TradeMenu);
+        MoneyIndex := FindMoney;
+        Move_Cursor(Line => (MenuHeight + 4), Column => 2);
+        if MoneyIndex > 0 then
+            Add(Str => "You have" & Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
+            " Charcollum.");
+        else
+            Add(Str => "You don't have any Charcollum to buy anything.");
+        end if;
+        Move_Cursor(Line => (Lines - 1), Column => 2);
+        Add(Str => "ENTER to buy selected recipe.");
+        Change_Attributes(Line => (Lines - 1), Column => 2, Count => 5, Color => 1);
+        ShowRecipeInfo;
+        Refresh(MenuWindow);
+    end ShowTradeRecipes;
+
+    function TradeRecipesKeys(Key : Key_Code) return GameStates is
+        Result : Menus.Driver_Result;
+        RecipeIndex : Positive;
+    begin
+        case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                CurrentMenuIndex := 1;
+                DrawGame(Sky_Map_View);
+                return Sky_Map_View;
+            when 56 | KEY_UP => -- Select previous recipe to buy
+                Result := Driver(TradeMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(TradeMenu, M_Last_Item);
+                end if;
+            when 50 | KEY_DOWN => -- Select next recipe to buy
+                Result := Driver(TradeMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(TradeMenu, M_First_Item);
+                end if;
+            when 10 => -- Buy recipe
+                for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
+                    if To_String(Items_List.Element(Recipes_List.Element(I).ResultIndex).Name) = Name(Current(TradeMenu)) then
+                        RecipeIndex := I;
+                        exit;
+                    end if;
+                end loop;
+                BuyRecipe(RecipeIndex);
+                DrawGame(TradeRecipes_View);
+            when others =>
+                Result := Driver(TradeMenu, Key);
+                if Result /= Menu_Ok then
+                    Result := Driver(TradeMenu, M_CLEAR_PATTERN);
+                    Result := Driver(TradeMenu, Key);
+                end if;
+        end case;
+        if Result = Menu_Ok then
+            ShowRecipeInfo;
+            Refresh(MenuWindow);
+        end if;
+        return TradeRecipes_View;
+    end TradeRecipesKeys;
+
+end Bases.UI.Recipes;

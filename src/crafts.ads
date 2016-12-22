@@ -31,6 +31,7 @@ package Crafts is
             Skill : Positive; -- Skill used in crafting item
             Time : Positive; -- Minutes needed for finish recipe
             Difficulty : Natural; -- How difficult is recipe to discover
+            BaseType : Natural; -- Sky base type in which recipe can be bought
         end record;
     package Recipes_Container is new Vectors(Positive, Craft_Data);
     Recipes_List : Recipes_Container.Vector; -- List of recipes available in game 
