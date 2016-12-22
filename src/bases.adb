@@ -25,6 +25,7 @@ with Bases.UI.Repair; use Bases.UI.Repair;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Events; use Events;
+with Crafts; use Crafts;
 
 package body Bases is
 
@@ -799,5 +800,59 @@ package body Bases is
         GainRep(BaseIndex, 1);
         UpdateGame(30);
     end AskForEvents;
+
+    procedure BuyRecipe(RecipeIndex : Positive) is
+        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        Cost, MoneyIndex : Natural;
+        RecipeName : constant String := To_String(Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Name);
+        BaseType : constant Positive := Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+        TraderIndex : Positive;
+    begin
+        if BaseType /= Recipes_List.Element(RecipeIndex).BaseType then
+            ShowDialog("You can't buy this recipe in this base.");
+            return;
+        end if;
+        if Known_Recipes.Find_Index(Item => RecipeIndex) /= Positive_Container.No_Index then
+            ShowDialog("You already known this recipe.");
+            return;
+        end if;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Talk then
+                TraderIndex := I;
+                exit;
+            end if;
+        end loop;
+        Cost := Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Prices(BaseType) * 
+            Recipes_List.Element(RecipeIndex).Difficulty * 100;
+        Cost := Cost - Integer(Float'Floor(Float(Cost) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
+        case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Reputation(1) is
+            when -24..-1 =>
+                Cost := Cost + Integer(Float'Floor(Float(Cost) * 0.05));
+            when 26..50 =>
+                Cost := Cost - Integer(Float'Floor(Float(Cost) * 0.05));
+            when 51..75 =>
+                Cost := Cost - Integer(Float'Floor(Float(Cost) * 0.1));
+            when 76..100 =>
+                Cost := Cost - Integer(Float'Floor(Float(Cost) * 0.15));
+            when others =>
+                null;
+        end case;
+        if Cost < 1 then
+            Cost := 1;
+        end if;
+        MoneyIndex := FindMoney;
+        if MoneyIndex = 0 then
+            ShowDialog("You don't have charcollum to buy recipe for " & RecipeName & ".");
+            return;
+        end if;
+        if Cost > PlayerShip.Cargo.Element(MoneyIndex).Amount then
+            ShowDialog("You don't have enough charcollum to buy recipe for " & RecipeName & ".");
+            return;
+        end if;
+        UpdateCargo(PlayerShip, 1, (0 - Cost));
+        Known_Recipes.Append(New_Item => RecipeIndex);
+        AddMessage("You bought recipe for " & RecipeName & " for" & Positive'Image(Cost) & " of charcollum.", TradeMessage);
+        UpdateGame(5);
+    end BuyRecipe;
 
 end Bases;

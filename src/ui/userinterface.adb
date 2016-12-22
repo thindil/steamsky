@@ -31,6 +31,7 @@ with Bases.UI.Trade; use Bases.UI.Trade;
 with Bases.UI.Repair; use Bases.UI.Repair;
 with Bases.UI.Shipyard; use Bases.UI.Shipyard;
 with Bases.UI.Recruits; use Bases.UI.Recruits;
+with Bases.UI.Recipes; use Bases.UI.Recipes;
 with Messages; use Messages;
 with Combat; use Combat;
 with Combat.UI; use Combat.UI;
@@ -106,6 +107,9 @@ package body UserInterface is
             when GameStats_View =>
                 Add(Str => "Game statistics [Quit]");
                 Change_Attributes(Line => 0, Column => 17, Count => 1, Color => 1);
+            when TradeRecipes_View =>
+                Add(Str => "Buy crafting recipes [Quit]");
+                Change_Attributes(Line => 0, Column => 22, Count => 1, Color => 1);
             when others =>
                 null;
         end case;
@@ -229,7 +233,7 @@ package body UserInterface is
         end loop;
         if PlayerShip.Speed = DOCKED then 
             MenuIndex := 2;
-            Orders_Items := new Item_Array(1..9);
+            Orders_Items := new Item_Array(1..10);
             Orders_Items.all(1) := New_Item("Undock");
             if HaveTrader then
                 Orders_Items.all(2) := New_Item("Trade");
@@ -256,6 +260,15 @@ package body UserInterface is
                     Orders_Items.all(MenuIndex) := New_Item("Shipyard");
                     MenuIndex := MenuIndex + 1;
                 end if;
+                for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
+                    if Known_Recipes.Find_Index(Item => I) = Positive_Container.No_Index and Recipes_List.Element(I).BaseType = 
+                        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1
+                    then
+                        Orders_Items.all(MenuIndex) := New_Item("Buy recipes");
+                        MenuIndex := MenuIndex + 1;
+                        exit;
+                    end if;
+                end loop;
             end if;
         else
             MenuIndex := 1;
@@ -526,6 +539,8 @@ package body UserInterface is
             when Death_Confirm =>
                 Refresh_Without_Update;
                 ShowConfirm("You are dead. Did you want to see your game statistics?");
+            when TradeRecipes_View =>
+                ShowTradeRecipes;
             when others =>
                 null;
         end case;
@@ -679,6 +694,9 @@ package body UserInterface is
                 elsif Order = "Shipyard" then
                     DrawGame(Shipyard_View);
                     return Shipyard_View;
+                elsif Order = "Buy recipes" then
+                    DrawGame(TradeRecipes_View);
+                    return TradeRecipes_View;
                 elsif Order = "Undock" then
                     DockShip(False);
                 elsif Order = "Quarter speed" then
