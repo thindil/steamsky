@@ -43,7 +43,7 @@ package body Crafts is
         end if;
         TempRecord := (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
             ResultIndex => 1, ResultAmount => 10000, Workplace => ALCHEMY_LAB,
-            Skill => 1, Time => 15, Difficulty => 0);
+            Skill => 1, Time => 15, Difficulty => 0, BaseType => 0);
         Open(RecipesFile, In_File, "data/recipes.dat");
         while not End_Of_File(RecipesFile) loop
             RawData := To_Unbounded_String(Get_Line(RecipesFile));
@@ -90,12 +90,14 @@ package body Crafts is
                     TempRecord.Time := Integer'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Difficulty") then
                     TempRecord.Difficulty := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("BaseType") then
+                    TempRecord.BaseType := Integer'Value(To_String(Value));
                 end if;
             elsif TempRecord.ResultAmount < 10000 then
                 Recipes_List.Append(New_Item => TempRecord);
                 TempRecord := (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
                     ResultIndex => 1, ResultAmount => 10000, Workplace => ALCHEMY_LAB, 
-                    Skill => 1, Time => 15, Difficulty => 0);
+                    Skill => 1, Time => 15, Difficulty => 0, BaseType => 0);
             end if;
         end loop;
         Close(RecipesFile);
@@ -193,6 +195,7 @@ package body Crafts is
                             end if;
                         end loop;
                         Recipe.Difficulty := 0;
+                        Recipe.BaseType := 0;
                         RecipeName := To_Unbounded_String("deconstructing ") & Items_List.Element(Recipe.ResultIndex).Name;
                     end if;
                     WorkTime := PlayerShip.Crew.Element(CrafterIndex).OrderTime;

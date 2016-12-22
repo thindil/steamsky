@@ -58,5 +58,6 @@ package Bases is
     procedure HireRecruit(RecruitIndex : Positive); -- Hire selected recruit from bases
     procedure AskForBases; -- Ask in base for direction for other bases
     procedure AskForEvents; -- Ask in base for direction for random events
+    procedure BuyRecipe(RecipeIndex : Positive); -- Buy new crafting recipe
 
 end Bases;
