@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Deconstruction of items for discover new crafting recipes
 - Option to buy crafting recipes in bases
 - New items types: andraeseeds and illandruseeds
+- New items: andrae seeds and illandru seeds
 
 ### Changed
 - Updated interface
