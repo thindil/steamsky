@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Random names for all ships
 - Deconstruction of items for discover new crafting recipes
 - Option to buy crafting recipes in bases
+- New items types: andraeseeds and illandruseeds
 
 ### Changed
 - Updated interface
