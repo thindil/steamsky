@@ -21,6 +21,7 @@ Workplace = Alchemy_Lab
 Skill = Cooking
 Time = 30
 Difficulty = 5
+BaseType = 2
 [4]
 Material = Iron, Gunpowder
 Amount = 1, 1
@@ -28,6 +29,7 @@ Result = 4
 Crafted = 5
 Workplace = Alchemy_Lab
 Skill = Gunsmith
+BaseType = 1
 [5]
 Material = Iron, Gunpowder
 Amount = 1, 1
@@ -36,6 +38,7 @@ Crafted = 10
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 1
+BaseType = 1
 [6]
 Material = CopperOre
 Amount = 1
@@ -44,6 +47,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Metalsmith
 Difficulty = 1
+BaseType = 1
 [7]
 Material = TinOre
 Amount = 1
@@ -52,6 +56,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Metalsmith
 Difficulty = 1
+BaseType = 1
 [8]
 Material = Copper, Tin
 Amount = 1, 1
@@ -60,6 +65,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Metalsmith
 Difficulty = 1
+BaseType = 1
 [9]
 Material = IronOre
 Amount = 1
@@ -68,6 +74,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Metalsmith
 Difficulty = 5
+BaseType = 1
 [10]
 Material = Iron, Gunpowder
 Amount = 1, 1
@@ -76,6 +83,7 @@ Crafted = 2
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 5
+BaseType = 1
 [11]
 Material = IronOre, Fuel
 Amount = 1, 1
@@ -85,6 +93,7 @@ Workplace = Furnace
 Skill = Metalsmith
 Time = 30
 Difficulty = 10
+BaseType = 1
 [12]
 Material = Steel, Gunpowder
 Amount = 1, 1
@@ -93,6 +102,7 @@ Crafted = 5
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 5
+BaseType = 1
 [13]
 Material = Steel, Gunpowder
 Amount = 1, 1
@@ -101,6 +111,7 @@ Crafted = 10
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 1
+BaseType = 1
 [14]
 Material = Steel, Gunpowder
 Amount = 1, 1
@@ -109,6 +120,7 @@ Crafted = 2
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 10
+BaseType = 1
 [15]
 Material = Iron, Gunpowder
 Amount = 1, 1
@@ -117,6 +129,7 @@ Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 15
+BaseType = 1
 [16]
 Material = Steel, Gunpowder
 Amount = 1, 1
@@ -125,6 +138,7 @@ Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 15
+BaseType = 1
 [17]
 Material = Herbs
 Amount = 1
@@ -133,6 +147,7 @@ Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Medicine
 Difficulty = 5
+BaseType = 2
 [18]
 Material = HerbSeeds
 Amount = 1
@@ -142,6 +157,7 @@ Workplace = Greenhouse
 Skill = Farming
 Time = 120
 Difficulty = 1
+BaseType = 2
 [19]
 Material = VegetableSeed
 Amount = 1
@@ -151,6 +167,7 @@ Workplace = Greenhouse
 Skill = Farming
 Time = 60
 Difficulty = 1
+BaseType = 2
 [20]
 Material = Wood
 Amount = 1
@@ -168,6 +185,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 30
 Difficulty = 20
+BaseType = 1
 [22]
 Material = Steel, Gunpowder
 Amount = 2, 1
@@ -177,6 +195,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 30
 Difficulty = 20
+BaseType = 1
 [23]
 Material = Iron, Gunpowder
 Amount = 4, 2
@@ -186,6 +205,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 45
 Difficulty = 25
+BaseType = 1
 [24]
 Material = Steel, Gunpowder
 Amount = 4, 2
@@ -195,6 +215,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 45
 Difficulty = 25
+BaseType = 1
 [25]
 Material = Iron, Gunpowder
 Amount = 6, 2
@@ -204,6 +225,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 60
 Difficulty = 30
+BaseType = 1
 [26]
 Material = Steel, Gunpowder
 Amount = 6, 2
@@ -213,4 +235,5 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 60
 Difficulty = 30
+BaseType = 1
 []
