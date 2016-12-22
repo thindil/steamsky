@@ -228,4 +228,16 @@ Type = Ammo120
 Prices = 30, 32, 32, 32
 Buyable = Y, N, N, N
 Value = 128
+[37]
+Name = Andrae seeds
+Weight = 1
+Type = AndraeSeed
+Prices = 2, 2, 1, 2
+Buyable = N, N, Y, N
+[38]
+Name = Illandru seeds
+Weight = 1
+Type = IllandruSeed
+Prices = 2, 2, 1, 2
+Buyable = N, N, Y, N
 []
