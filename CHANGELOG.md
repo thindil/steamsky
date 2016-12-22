@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Option to generate random ship name in new game settings
 - Random names for all ships
 - Deconstruction of items for discover new crafting recipes
+- Option to buy crafting recipes in bases
 
 ### Changed
 - Updated interface
