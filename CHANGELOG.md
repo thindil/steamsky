@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Option to buy crafting recipes in bases
 - New items types: andraeseeds and illandruseeds
 - New items: andrae seeds and illandru seeds
+- New skill: woodcutting
 
 ### Changed
 - Updated interface
