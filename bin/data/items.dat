@@ -240,4 +240,10 @@ Weight = 1
 Type = IllandruSeed
 Prices = 2, 2, 1, 2
 Buyable = N, N, Y, N
+[39]
+Name = Package
+Weight = 5
+Type = MissionItem
+Prices = 0, 0, 0, 0
+Buyable = N, N, N, N
 []
