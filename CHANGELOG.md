@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - New items types: andraeseeds and illandruseeds
 - New items: andrae seeds and illandru seeds
 - New skill: woodcutting
+- New crafting recipes: andrae logs and illandru logs
 
 ### Changed
 - Updated interface
