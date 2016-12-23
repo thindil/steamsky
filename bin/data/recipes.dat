@@ -236,4 +236,24 @@ Skill = Gunsmith
 Time = 60
 Difficulty = 30
 BaseType = 1
+[27]
+Material = AndraeSeed
+Amount = 1
+Result = 9
+Crafted = 3
+Workplace = Greenhouse
+Skill = Woodcutting
+Time = 240
+Difficulty = 1
+BaseType = 3
+[28]
+Material = IllandruSeed
+Amount = 1
+Result = 10
+Crafted = 3
+Workplace = Greenhouse
+Skill = Woodcutting
+Time = 240
+Difficulty = 1
+BaseType = 3
 []
