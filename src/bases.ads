@@ -19,6 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Game; use Game;
 with Crew; use Crew;
+with Missions; use Missions;
 
 package Bases is
 
@@ -32,18 +33,6 @@ package Bases is
         end record;
     package Recruit_Container is new Vectors(Positive, Recruit_Data);
     type Reputation_Array is array (1..2) of Integer; -- Data structure for reputation, 1 = level, 2 = points to next level
-    type Missions_Types is (Deliver, Kill, Explore);
-    type Mission_Data is -- Data structure for missions
-        record
-            MType : Missions_Types; -- Type of mission
-            Target : Natural; -- Target for mission (ship or item index)
-            Time : Positive; -- Amount of minutes to finish mission
-            TargetX : Natural; -- Skymap X-axis for mission target
-            TargetY : Natural; -- Skymap Y-axis for mission target
-            Reward : Positive; -- Amount of moneys for mission
-            StartBase : Positive; -- Index of sky base where mission starts
-        end record;
-    package Mission_Container is new Vectors(Positive, Mission_Data);
     type BaseRecord is -- Data structure for bases
         record
             Name : Unbounded_String; -- Base name
@@ -73,6 +62,5 @@ package Bases is
     procedure AskForBases; -- Ask in base for direction for other bases
     procedure AskForEvents; -- Ask in base for direction for random events
     procedure BuyRecipe(RecipeIndex : Positive); -- Buy new crafting recipe
-    procedure GenerateMissions(BaseIndex : Positive); -- Generate if needed new missions in base
 
 end Bases;
