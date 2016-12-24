@@ -55,6 +55,7 @@ package body Game is
         PilotGender, EngineerGender, GunnerGender : Character;
         TmpSkills : Skills_Container.Vector;
         TmpRecruits : Recruit_Container.Vector;
+        TmpMissions : Mission_Container.Vector;
     begin
         -- Save new game configuration
         NewGameSettings := (PlayerName => CharName, PlayerGender => Gender, ShipName => ShipName);
@@ -111,7 +112,8 @@ package body Game is
                 Natural(Rand_Population.Random(Generator4)), RecruitDate => 
                 (0, 0, 0, 0, 0), Recruits => TmpRecruits, Known => False,
                 AskedForBases => False, AskedForEvents => (0, 0, 0, 0, 0),
-                Reputation => (0, 0));
+                Reputation => (0, 0), MissionsDate => (0, 0, 0, 0, 0), Missions
+                => TmpMissions);
         end loop;
         -- Place player ship in random large base
         loop
@@ -176,6 +178,7 @@ package body Game is
         SkyBases(Integer(RandomBase)).Known := True;
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
         GenerateRecruits(Integer(RandomBase));
+        GenerateMissions(Integer(RandomBase));
     end NewGame;
 
     procedure UpdateGame(Minutes : Positive) is
@@ -235,6 +238,7 @@ package body Game is
                 AddMessage("You discovered base " & To_String(SkyBases(BaseIndex).Name) & ".", OtherMessage);
             end if;
             GenerateRecruits(BaseIndex);
+            GenerateMissions(BaseIndex);
         end if;
         -- Update map cell
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited = False then
@@ -352,6 +356,30 @@ package body Game is
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
                 RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(2)));
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).MissionsDate.Year));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).MissionsDate.Month));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).MissionsDate.Day));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(SkyBases(I).Missions.Length'Img);
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                if SkyBases(I).Missions.Length > 0 then
+                    for J in SkyBases(I).Missions.First_Index..SkyBases(I).Missions.Last_Index loop
+                        RawValue := To_Unbounded_String(Integer'Image(Missions_Types'Pos(SkyBases(I).Missions.Element(J).MType)));
+                        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                        RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Missions.Element(J).Target));
+                        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                        RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Missions.Element(J).Time));
+                        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                        RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Missions.Element(J).TargetX));
+                        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                        RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Missions.Element(J).TargetY));
+                        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                        RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).Missions.Element(J).Reward));
+                        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                    end loop;
+                end if;
             end if;
             if SkyBases(I).Known then
                 Put(SaveGame, "Y;");
@@ -503,6 +531,7 @@ package body Game is
         MType : Message_Type;
         BaseRecruits : Recruit_Container.Vector;
         VisitedFields : Positive;
+        BaseMissions : Mission_Container.Vector;
         function ReadData return Unbounded_String is
             RawData : Unbounded_String := To_Unbounded_String("");
             Char : Character;
@@ -546,7 +575,8 @@ package body Game is
             SkyBases(I) := (Name => ReadData, Visited => (0, 0, 0, 0, 0), SkyX => 0, SkyY => 0,
                 BaseType => Industrial, Population => 0, RecruitDate => (0, 0, 0, 0, 0), 
                 Recruits => BaseRecruits, Known => False, AskedForBases => False, 
-                AskedForEvents => (0, 0, 0, 0, 0), Reputation => (0, 0));
+                AskedForEvents => (0, 0, 0, 0, 0), Reputation => (0, 0),
+                MissionsDate => (0, 0, 0, 0,0), Missions => BaseMissions);
             SkyBases(I).Visited.Year := Natural'Value(To_String(ReadData));
             if SkyBases(I).Visited.Year > 0 then
                 SkyBases(I).Visited.Month := Natural'Value(To_String(ReadData));
@@ -567,14 +597,14 @@ package body Game is
                     for J in 1..VectorLength loop
                         Skills.Clear;
                         BaseRecruits.Append(New_Item => (Name => ReadData, Gender => Element(ReadData, 1), 
-                        Price => Positive'Value(To_String(ReadData)), Skills => Skills));
+                            Price => Positive'Value(To_String(ReadData)), Skills => Skills));
                         SkillsLength := Positive'Value(To_String(ReadData));
                         for K in 1..SkillsLength loop
                             Skills.Append(New_Item => (Natural'Value(To_String(ReadData)),
                             Natural'Value(To_String(ReadData)), Natural'Value(To_String(ReadData))));
                         end loop;
                         BaseRecruits.Update_Element(Index => BaseRecruits.Last_Index,
-                        Process => UpdateRecruit'Access);
+                            Process => UpdateRecruit'Access);
                     end loop;
                     SkyBases(I).Recruits := BaseRecruits;
                     BaseRecruits.Clear;
@@ -587,6 +617,20 @@ package body Game is
                 SkyBases(I).AskedForEvents.Day := Natural'Value(To_String(ReadData));
                 SkyBases(I).Reputation(1) := Integer'Value(To_String(ReadData));
                 SkyBases(I).Reputation(2) := Integer'Value(To_String(ReadData));
+                SkyBases(I).MissionsDate.Year := Natural'Value(To_String(ReadData));
+                SkyBases(I).MissionsDate.Month := Natural'Value(To_String(ReadData));
+                SkyBases(I).MissionsDate.Day := Natural'Value(To_String(ReadData));
+                VectorLength := Natural'Value(To_String(ReadData));
+                if VectorLength > 0 then
+                    for J in 1..VectorLength loop
+                        BaseMissions.Append(New_Item => (MType => Missions_Types'Val(Integer'Value(To_String(ReadData))),
+                            Target => Natural'Value(To_String(ReadData)), Time => Integer'Value(To_String(ReadData)), 
+                            TargetX => Integer'Value(To_String(ReadData)), TargetY => Integer'Value(To_String(ReadData)),
+                            Reward => Integer'Value(To_String(ReadData)), StartBase => I));
+                    end loop;
+                    SkyBases(I).Missions := BaseMissions;
+                    BaseMissions.Clear;
+                end if;
             end if;
             if ReadData = To_Unbounded_String("Y") then
                 SkyBases(I).Known := True;
