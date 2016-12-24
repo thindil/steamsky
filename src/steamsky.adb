@@ -37,6 +37,7 @@ with Bases.UI.Repair; use Bases.UI.Repair;
 with Bases.UI.Shipyard; use Bases.UI.Shipyard;
 with Bases.UI.Recruits; use Bases.UI.Recruits;
 with Bases.UI.Recipes; use Bases.UI.Recipes;
+with Bases.UI.Missions; use Bases.UI.Missions;
 with Events; use Events;
 with Combat.UI; use Combat.UI;
 with Crafts.UI; use Crafts.UI;
@@ -215,6 +216,8 @@ begin
                 GameState := ShowGameStatsKeys(Key);
             when TradeRecipes_View =>
                 GameState := TradeRecipesKeys(Key);
+            when BaseMissions_View =>
+                GameState := BaseMissionsKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;

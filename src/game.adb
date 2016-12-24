@@ -29,6 +29,7 @@ with Events; use Events;
 with ShipModules; use ShipModules;
 with Config; use Config;
 with Statistics; use Statistics;
+with Missions; use Missions;
 
 package body Game is
     

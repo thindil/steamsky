@@ -1,0 +1,119 @@
+--    Copyright 2016 Bartek thindil Jasicki
+--    
+--    This file is part of Steam Sky.
+--
+--    Steam Sky is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Steam Sky is distributed in the hope that it will be useful,
+--    but WITHOUT ANY WARRANTY; without even the implied warranty of
+--    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+--    GNU General Public License for more details.
+--
+--    You should have received a copy of the GNU General Public License
+--    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Numerics.Discrete_Random; use Ada.Numerics;
+with Ada.Numerics.Generic_Elementary_Functions;
+with Game; use Game;
+with Ships; use Ships;
+with Maps; use Maps;
+with Items; use Items;
+with Bases; use Bases;
+
+package body Missions is
+
+    procedure GenerateMissions(BaseIndex : Positive) is
+        TimeDiff : Natural;
+        MissionsAmount, MissionX, MissionY, TmpBaseIndex, DiffX, DiffY : Positive;
+        Mission : Mission_Data;
+        MissionsItems : Positive_Container.Vector;
+        MinX, MinY, MaxX, MaxY : Integer;
+        type Value_Type is digits 2 range 0.0..9999999.0;
+        package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
+        function GetRandom(Min : Natural; Max : Positive) return Natural is
+            subtype Rand_Range is Natural range Min..Max;
+            package Rand_Roll is new Discrete_Random(Rand_Range);
+            Generator : Rand_Roll.Generator;
+        begin
+            Rand_Roll.Reset(Generator);
+            return Rand_Roll.Random(Generator);
+        end GetRandom;
+    begin
+        TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).MissionsDate.Day + 
+            ((30 * SkyBases(BaseIndex).MissionsDate.Month) * SkyBases(BaseIndex).MissionsDate.Year));
+        if TimeDiff < 7 then
+            return;
+        end if;
+        if SkyBases(BaseIndex).Population < 150 then
+            MissionsAmount := GetRandom(1, 5);
+        elsif SkyBases(BaseIndex).Population > 149 and SkyBases(BaseIndex).Population < 300 then
+            MissionsAmount := GetRandom(1, 10);
+        else
+            MissionsAmount := GetRandom(1, 15);
+        end if;
+        for I in Items_List.First_Index..Items_List.Last_Index loop
+            if Items_List.Element(I).IType = To_Unbounded_String("MissionItem") then
+                MissionsItems.Append(New_Item => I);
+            end if;
+        end loop;
+        MinX := PlayerShip.SkyX - 100;
+        if MinX < 1 then
+            MinX := 1;
+        end if;
+        MaxX := PlayerShip.SkyX + 100;
+        if MaxX > 1024 then
+            MaxX := 1024;
+        end if;
+        MinY := PlayerShip.SkyY - 100;
+        if MinY < 1 then
+            MinY := 1;
+        end if;
+        MaxY := PlayerShip.SkyY + 100;
+        if MaxY > 1024 then
+            MaxY := 1024;
+        end if;
+        SkyBases(BaseIndex).Missions.Clear;
+        for I in 1..MissionsAmount loop
+            Mission.MType := Missions_Types'Val(GetRandom(0, Missions_Types'Pos(Missions_Types'Last)));
+            case Mission.MType is
+                when Deliver => 
+                    Mission.Target := MissionsItems.Element(GetRandom(MissionsItems.First_Index, MissionsItems.Last_Index));
+                when Kill =>
+                    Mission.Target := GetRandom(Enemies_List.First_Index, Enemies_List.Last_Index);
+                when Explore =>
+                    Mission.Target := 0;
+            end case;
+            loop
+                if Mission.MType /= Deliver then
+                    MissionX := GetRandom(MinX, MaxX);
+                    MissionY := GetRandom(MinY, MaxY);
+                    exit when SkyMap(MissionX, MissionY).BaseIndex = 0 and MissionX /= PlayerShip.SkyX and MissionY /= PlayerShip.SkyY;
+                else
+                    TmpBaseIndex := GetRandom(1, 1024);
+                    MissionX := SkyBases(TmpBaseIndex).SkyX;
+                    MissionY := SkyBases(TmpBaseIndex).SkyY;
+                    exit when MissionX /= PlayerShip.SkyX and MissionY /= PlayerShip.SkyY;
+                end if;
+            end loop;
+            Mission.TargetX := MissionX;
+            Mission.TargetY := MissionY;
+            DiffX := abs(PlayerShip.SkyX - MissionX);
+            DiffY := abs(PlayerShip.SkyY - MissionY);
+            Mission.Time := Positive(Value_Type(60) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
+            Mission.Reward := (Mission.Time / 5);
+            Mission.StartBase := BaseIndex;
+            SkyBases(BaseIndex).Missions.Append(New_Item => Mission);
+        end loop;
+        SkyBases(BaseIndex).MissionsDate := GameDate;
+    end GenerateMissions;
+
+    procedure AcceptMission(MissionIndex : Positive) is
+    begin
+        null;
+    end AcceptMission;
+
+end Missions;
