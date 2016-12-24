@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - New items: andrae seeds, illandru seeds and package
 - New skill: woodcutting
 - New crafting recipes: andrae logs and illandru logs
+- Changed name of ship module small alchemy lab to small bronze alchemy lab
 
 ### Changed
 - Updated interface
