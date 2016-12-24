@@ -32,6 +32,18 @@ package Bases is
         end record;
     package Recruit_Container is new Vectors(Positive, Recruit_Data);
     type Reputation_Array is array (1..2) of Integer; -- Data structure for reputation, 1 = level, 2 = points to next level
+    type Missions_Types is (Deliver, Kill, Explore);
+    type Mission_Data is -- Data structure for missions
+        record
+            MType : Missions_Types; -- Type of mission
+            Target : Natural; -- Target for mission (ship or item index)
+            Time : Positive; -- Amount of minutes to finish mission
+            TargetX : Natural; -- Skymap X-axis for mission target
+            TargetY : Natural; -- Skymap Y-axis for mission target
+            Reward : Positive; -- Amount of moneys for mission
+            StartBase : Positive; -- Index of sky base where mission starts
+        end record;
+    package Mission_Container is new Vectors(Positive, Mission_Data);
     type BaseRecord is -- Data structure for bases
         record
             Name : Unbounded_String; -- Base name
@@ -46,6 +58,8 @@ package Bases is
             AskedForBases : Boolean; -- Did player asked for bases in this base
             AskedForEvents : Date_Record; -- Time when players asked for events in this base
             Reputation : Reputation_Array; -- Reputation level and progress of player
+            MissionsDate : Date_Record; -- Time when missions was generated
+            Missions : Mission_Container.Vector; -- List of available missions
         end record;
     SkyBases : array (1..1024) of BaseRecord; -- List of sky bases
     procedure GainRep(BaseIndex : Positive; Points : Integer); -- Gain reputation in selected base
@@ -59,5 +73,6 @@ package Bases is
     procedure AskForBases; -- Ask in base for direction for other bases
     procedure AskForEvents; -- Ask in base for direction for random events
     procedure BuyRecipe(RecipeIndex : Positive); -- Buy new crafting recipe
+    procedure GenerateMissions(BaseIndex : Positive); -- Generate if needed new missions in base
 
 end Bases;
