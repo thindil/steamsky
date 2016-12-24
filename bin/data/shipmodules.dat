@@ -465,4 +465,17 @@ Price = 1000
 InstallTime = 150
 Unique = Yes
 Size = 1
+[41]
+Name = Iron cockpit
+Type = Cockpit
+Weight = 200
+Value = 0
+MaxValue = 0
+Durability = 400
+Material = Bronze
+Skill = Engineering
+Price = 1500
+InstallTime = 60
+Unique = Yes
+Size = 1
 []
