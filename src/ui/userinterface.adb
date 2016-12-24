@@ -32,6 +32,7 @@ with Bases.UI.Repair; use Bases.UI.Repair;
 with Bases.UI.Shipyard; use Bases.UI.Shipyard;
 with Bases.UI.Recruits; use Bases.UI.Recruits;
 with Bases.UI.Recipes; use Bases.UI.Recipes;
+with Bases.UI.Missions; use Bases.UI.Missions;
 with Messages; use Messages;
 with Combat; use Combat;
 with Combat.UI; use Combat.UI;
@@ -110,6 +111,9 @@ package body UserInterface is
             when TradeRecipes_View =>
                 Add(Str => "Buy crafting recipes [Quit]");
                 Change_Attributes(Line => 0, Column => 22, Count => 1, Color => 1);
+            when BaseMissions_View =>
+                Add(Str => "Available missions [Quit]");
+                Change_Attributes(Line => 0, Column => 20, Count => 1, Color => 1);
             when others =>
                 null;
         end case;
@@ -233,7 +237,7 @@ package body UserInterface is
         end loop;
         if PlayerShip.Speed = DOCKED then 
             MenuIndex := 2;
-            Orders_Items := new Item_Array(1..10);
+            Orders_Items := new Item_Array(1..11);
             Orders_Items.all(1) := New_Item("Undock");
             if HaveTrader then
                 Orders_Items.all(2) := New_Item("Trade");
@@ -269,6 +273,10 @@ package body UserInterface is
                         exit;
                     end if;
                 end loop;
+                if Integer(SkyBases(BaseIndex).Missions.Length) > 0 then
+                    Orders_Items.all(MenuIndex) := New_Item("Missions");
+                    MenuIndex := MenuIndex + 1;
+                end if;
             end if;
         else
             MenuIndex := 1;
@@ -541,6 +549,8 @@ package body UserInterface is
                 ShowConfirm("You are dead. Did you want to see your game statistics?");
             when TradeRecipes_View =>
                 ShowTradeRecipes;
+            when BaseMissions_View =>
+                ShowBaseMissions;
             when others =>
                 null;
         end case;
@@ -697,6 +707,9 @@ package body UserInterface is
                 elsif Order = "Buy recipes" then
                     DrawGame(TradeRecipes_View);
                     return TradeRecipes_View;
+                elsif Order = "Missions" then
+                    DrawGame(BaseMissions_View);
+                    return BaseMissions_View;
                 elsif Order = "Undock" then
                     DockShip(False);
                 elsif Order = "Quarter speed" then
