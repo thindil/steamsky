@@ -933,7 +933,7 @@ package body Bases is
             DiffX := abs(PlayerShip.SkyX - MissionX);
             DiffY := abs(PlayerShip.SkyY - MissionY);
             Mission.Time := Positive(Value_Type(60) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
-            Mission.Reward := Mission.Time + 100;
+            Mission.Reward := (Mission.Time / 5);
             Mission.StartBase := BaseIndex;
             SkyBases(BaseIndex).Missions.Append(New_Item => Mission);
         end loop;
