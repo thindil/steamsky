@@ -59,7 +59,7 @@ InstallTime = 60
 Unique = Yes
 Size = 1
 [6]
-Name = Small alchemy lab
+Name = Small bronze alchemy lab
 Type = Alchemy_lab
 Weight = 400
 Value = 0
