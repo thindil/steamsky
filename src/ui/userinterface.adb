@@ -45,6 +45,7 @@ with ShipModules; use ShipModules;
 with BasesList; use BasesList;
 with Items; use Items;
 with Statistics; use Statistics;
+with Missions; use Missions;
 
 package body UserInterface is
 
@@ -114,6 +115,9 @@ package body UserInterface is
             when BaseMissions_View =>
                 Add(Str => "Available missions [Quit]");
                 Change_Attributes(Line => 0, Column => 20, Count => 1, Color => 1);
+            when Missions_View =>
+                Add(Str => "Accepted missions [Quit]");
+                Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
             when others =>
                 null;
         end case;
@@ -465,7 +469,7 @@ package body UserInterface is
     end ShowWaitOrder;
 
     procedure ShowGameMenu is
-        Menu_Items : constant Item_Array_Access := new Item_Array (1..15);
+        Menu_Items : constant Item_Array_Access := new Item_Array (1..16);
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
     begin
@@ -473,9 +477,10 @@ package body UserInterface is
             New_Item("c) Crew informations"), New_Item("o) Ship orders"), 
             New_Item("r) Crafting"), New_Item("m) Last messages"),
             New_Item("b) List of known bases"), New_Item("n) List of known events"),
-            New_Item("w) Wait orders"), New_Item("v) Move map position"),
-            New_Item("g) Game statistics"), New_Item("h) Help"), 
-            New_Item("q) Quit from game"), New_Item("l) Close menu"), Null_Item);
+            New_Item("i) Accepted missions"), New_Item("w) Wait orders"), 
+            New_Item("v) Move map position"), New_Item("g) Game statistics"), 
+            New_Item("h) Help"), New_Item("q) Quit from game"), 
+            New_Item("l) Close menu"), Null_Item);
         OrdersMenu := New_Menu(Menu_Items);
         Set_Format(OrdersMenu, Lines - 4, 1);
         Set_Mark(OrdersMenu, "");
@@ -551,6 +556,8 @@ package body UserInterface is
                 ShowTradeRecipes;
             when BaseMissions_View =>
                 ShowBaseMissions;
+            when Missions_View =>
+                ShowMissions;
             when others =>
                 null;
         end case;
@@ -566,7 +573,8 @@ package body UserInterface is
     function GameMenuKeys(CurrentState : GameStates; Key : Key_Code) return GameStates is
         Result : Driver_Result;
         MenuOptions : constant array (Positive range<>) of Character := ('s',
-            'a', 'c', 'o', 'r', 'm', 'b', 'n', 'w', 'v', 'g', 'h', 'q', 'l');
+            'a', 'c', 'o', 'r', 'm', 'b', 'n', 'i', 'w', 'v', 'g', 'h', 'q', 
+            'l');
         NewKey : Key_Code;
     begin
         case Key is
@@ -646,6 +654,9 @@ package body UserInterface is
             when Character'Pos('g') | Character'Pos('G') => -- Game statistics
                 DrawGame(GameStats_View);
                 return GameStats_View;
+            when Character'Pos('i') | Character'Pos('I') => -- List of accepted missions
+                DrawGame(Missions_View);
+                return Missions_View;
             when others =>
                 if CurrentState /= GameMenu then
                     DrawGame(CurrentState);
