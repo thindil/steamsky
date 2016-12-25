@@ -109,7 +109,7 @@ package body Bases.UI.Missions is
     begin
         if SkyBases(BaseIndex).Missions.Length = 0 then
             Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
-            Add(Str => "Here no available missions in this base.");
+            Add(Str => "No available missions in this base.");
             Refresh;
             return;
         end if;

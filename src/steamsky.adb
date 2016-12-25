@@ -46,6 +46,7 @@ with MainMenu; use MainMenu;
 with BasesList; use BasesList;
 with Config; use Config;
 with Statistics; use Statistics;
+with Missions; use Missions;
 
 procedure SteamSky is
     GameState : GameStates := Main_Menu;
@@ -218,6 +219,8 @@ begin
                 GameState := TradeRecipesKeys(Key);
             when BaseMissions_View =>
                 GameState := BaseMissionsKeys(Key);
+            when Missions_View =>
+                GameState := ShowMissionsKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
