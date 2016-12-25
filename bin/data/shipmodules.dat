@@ -478,4 +478,16 @@ Price = 1500
 InstallTime = 60
 Unique = Yes
 Size = 1
+[42]
+Name = Iron cargo bay
+Type = Cargo
+Weight = 100
+Value = 0
+MaxValue = 5000
+Durability = 50
+Material = Iron
+Skill = Engineering
+Price = 600
+InstallTime = 60
+Size = 1
 []
