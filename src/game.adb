@@ -465,6 +465,26 @@ package body Game is
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             end loop;
         end loop;
+        RawValue := To_Unbounded_String(PlayerShip.Missions.Length'Img);
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        if PlayerShip.Missions.Length > 0 then
+            for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+                RawValue := To_Unbounded_String(Integer'Image(Missions_Types'Pos(PlayerShip.Missions.Element(I).MType)));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Missions.Element(I).Target));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Missions.Element(I).Time));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Missions.Element(I).TargetX));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Missions.Element(I).TargetY));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Missions.Element(I).Reward));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Missions.Element(I).StartBase));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            end loop;
+        end if;
         -- Save known recipes
         RawValue := To_Unbounded_String(Known_Recipes.Length'Img);
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -688,6 +708,16 @@ package body Game is
                 Process => UpdateMember'Access);
         end loop;
         PlayerShip.Crew := ShipCrew;
+        VectorLength := Natural'Value(To_String(ReadData));
+        if VectorLength > 0 then
+            for I in 1..VectorLength loop
+                BaseMissions.Append(New_Item => (MType => Missions_Types'Val(Integer'Value(To_String(ReadData))),
+                    Target => Natural'Value(To_String(ReadData)), Time => Integer'Value(To_String(ReadData)), 
+                    TargetX => Integer'Value(To_String(ReadData)), TargetY => Integer'Value(To_String(ReadData)),
+                    Reward => Integer'Value(To_String(ReadData)), StartBase => Integer'Value(To_String(ReadData))));
+            end loop;
+            PlayerShip.Missions := BaseMissions;
+        end if;
         -- Load known recipes
         VectorLength := Positive'Value(To_String(ReadData));
         for I in 1..VectorLength loop
