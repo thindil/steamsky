@@ -23,6 +23,9 @@ with Ships; use Ships;
 with Maps; use Maps;
 with Items; use Items;
 with Bases; use Bases;
+with UserInterface; use UserInterface;
+with Messages; use Messages;
+with Crew; use Crew;
 
 package body Missions is
 
@@ -112,8 +115,58 @@ package body Missions is
     end GenerateMissions;
 
     procedure AcceptMission(MissionIndex : Positive) is
+        BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        MissionsLimit : Integer;
+        Mission : Mission_Data := SkyBases(BaseIndex).Missions.Element(MissionIndex);
+        AcceptMessage : Unbounded_String;
+        TraderIndex : Positive;
     begin
-        null;
+        if SkyBases(BaseIndex).Reputation(1) < 0 then
+            ShowDialog("Your reputation in this base is too low to receive any mission.");
+            return;
+        end if;
+        case SkyBases(BaseIndex).Reputation(1) is
+            when 0..25 =>
+                MissionsLimit := 1;
+            when 26..50 =>
+                MissionsLimit := 3;
+            when 51..75 =>
+                MissionsLimit := 5;
+            when 76..100 =>
+                MissionsLimit := 10;
+            when others =>
+                MissionsLimit := 0;
+        end case;
+        for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+            if PlayerShip.Missions.Element(I).StartBase = BaseIndex then
+                MissionsLimit := MissionsLimit - 1;
+            end if;
+            if MissionsLimit < 1 then
+                ShowDialog("You can't take any more missions from this base. ");
+                return;
+            end if;
+        end loop;
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew.Element(I).Order = Talk then
+                TraderIndex := I;
+                exit;
+            end if;
+        end loop;
+        Mission.StartBase := BaseIndex;
+        PlayerShip.Missions.Append(New_Item => Mission);
+        SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex, Count => 1);
+        AcceptMessage := To_Unbounded_String("You accepted mission ");
+        case Mission.MType is
+            when Deliver =>
+                Append(AcceptMessage, "'Deliver " & To_String(Items_List.Element(Mission.Target).Name) & "'");
+            when Kill =>
+                Append(AcceptMessage, "'Destroy " & To_String(Enemies_List.Element(Mission.Target).Name) & "'");
+            when Explore =>
+                Append(AcceptMessage, "'Explore selected area'");
+        end case;
+        AddMessage(To_String(AcceptMessage), OtherMessage);
+        GainExp(1, 4, TraderIndex);
+        UpdateGame(5);
     end AcceptMission;
 
 end Missions;

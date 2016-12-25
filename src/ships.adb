@@ -334,6 +334,7 @@ package body Ships is
         ShipModules : Modules_Container.Vector;
         ShipCargo : Cargo_Container.Vector;
         ShipCrew : Crew_Container.Vector;
+        ShipMissions : Mission_Container.Vector;
         NewName : Unbounded_String;
         TurretIndex, GunIndex, HullIndex, Amount : Natural := 0;
     begin
@@ -375,7 +376,7 @@ package body Ships is
         TmpShip := (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed,
             Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew,
             UpgradeModule => 0, DestinationX => 0, DestinationY => 0,
-            RepairModule => 0);
+            RepairModule => 0, Missions => ShipMissions);
         for I in TmpShip.Modules.First_Index..TmpShip.Modules.Last_Index loop
             case Modules_List.Element(TmpShip.Modules.Element(I).ProtoIndex).MType is
                 when TURRET =>

@@ -19,6 +19,7 @@ with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Crew; use Crew;
 with Game; use Game;
+with Missions; use Missions;
 
 package Ships is
     type ShipSpeed is (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED,
@@ -59,6 +60,7 @@ package Ships is
             DestinationX : Integer; -- Destination X coordinate
             DestinationY : Integer; -- Destination Y coordinate
             RepairModule : Natural; -- Number of module to repair as first
+            Missions : Mission_Container.Vector; -- List of accepted missions
         end record;
     type ProtoShipData is -- Data structure for ship prototypes
         record
