@@ -73,7 +73,7 @@ Size = 1
 [7]
 Name = Bronze cargo bay
 Type = Cargo
-Weight = 0
+Weight = 100
 Value = 0
 MaxValue = 5000
 Durability = 10
