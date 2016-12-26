@@ -122,7 +122,7 @@ package body Missions is
         MissionsLimit : Integer;
         Mission : Mission_Data := SkyBases(BaseIndex).Missions.Element(MissionIndex);
         AcceptMessage : Unbounded_String;
-        MissionsrIndex : Positive;
+        TraderIndex : Positive;
     begin
         if SkyBases(BaseIndex).Reputation(1) < 0 then
             ShowDialog("Your reputation in this base is too low to receive any mission.");
@@ -151,25 +151,32 @@ package body Missions is
         end loop;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Talk then
-                MissionsrIndex := I;
+                TraderIndex := I;
                 exit;
             end if;
         end loop;
         Mission.StartBase := BaseIndex;
-        PlayerShip.Missions.Append(New_Item => Mission);
         SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := PlayerShip.Missions.Last_Index;
-        SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex, Count => 1);
         AcceptMessage := To_Unbounded_String("You accepted mission ");
         case Mission.MType is
             when Deliver =>
                 Append(AcceptMessage, "'Deliver " & To_String(Items_List.Element(Mission.Target).Name) & "'");
+                UpdateCargo(PlayerShip, Mission.Target, 1);
+                for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if PlayerShip.Cargo.Element(I).ProtoIndex = Mission.Target then
+                        Mission.Target := I;
+                        exit;
+                    end if;
+                end loop;
             when Kill =>
                 Append(AcceptMessage, "'Destroy " & To_String(Enemies_List.Element(Mission.Target).Name) & "'");
             when Explore =>
                 Append(AcceptMessage, "'Explore selected area'");
         end case;
+        SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex, Count => 1);
+        PlayerShip.Missions.Append(New_Item => Mission);
         AddMessage(To_String(AcceptMessage), OtherMessage);
-        GainExp(1, 4, MissionsrIndex);
+        GainExp(1, 4, TraderIndex);
         UpdateGame(5);
     end AcceptMission;
 
@@ -187,7 +194,8 @@ package body Missions is
         InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
         case Mission.MType is
             when Deliver =>
-                Add(Win => InfoWindow, Str => "Item: " & To_String(Items_List.Element(Mission.Target).Name));
+                Add(Win => InfoWindow, Str => "Item: " & 
+                    To_String(Items_List.Element(PlayerShip.Cargo.Element(Mission.Target).ProtoIndex).Name));
                 Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
                 Add(Win => InfoWindow, Str => "To base: " & To_String(SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex).Name));
                 CurrentLine := 2;
