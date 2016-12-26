@@ -227,8 +227,7 @@ package body UserInterface is
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         Event : Events_Types := None;
-        TimeDiff : Natural;
-        BaseIndex : Natural;
+        TimeDiff, BaseIndex, MissionsLimit : Natural;
         MenuIndex : Positive;
         HaveTrader : Boolean := False;
     begin
@@ -277,7 +276,24 @@ package body UserInterface is
                         exit;
                     end if;
                 end loop;
-                if Integer(SkyBases(BaseIndex).Missions.Length) > 0 then
+                case SkyBases(BaseIndex).Reputation(1) is
+                    when 0..25 =>
+                        MissionsLimit := 1;
+                    when 26..50 =>
+                        MissionsLimit := 3;
+                    when 51..75 =>
+                        MissionsLimit := 5;
+                    when 76..100 =>
+                        MissionsLimit := 10;
+                    when others =>
+                        MissionsLimit := 0;
+                end case;
+                for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+                    if PlayerShip.Missions.Element(I).StartBase = BaseIndex then
+                        MissionsLimit := MissionsLimit - 1;
+                    end if;
+                end loop;
+                if Integer(SkyBases(BaseIndex).Missions.Length) > 0 and MissionsLimit > 0 then
                     Orders_Items.all(MenuIndex) := New_Item("Missions");
                     MenuIndex := MenuIndex + 1;
                 end if;
