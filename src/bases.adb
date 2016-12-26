@@ -852,6 +852,8 @@ package body Bases is
         UpdateCargo(PlayerShip, 1, (0 - Cost));
         Known_Recipes.Append(New_Item => RecipeIndex);
         AddMessage("You bought recipe for " & RecipeName & " for" & Positive'Image(Cost) & " of charcollum.", TradeMessage);
+        GainExp(1, 4, TraderIndex);
+        GainRep(BaseIndex, 1);
         UpdateGame(5);
     end BuyRecipe;
 
