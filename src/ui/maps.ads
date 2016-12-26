@@ -25,6 +25,7 @@ package Maps is
             BaseIndex : Natural;  -- If sky base is in cell > 0
             Visited : Boolean; -- True if player was in this cell
             EventIndex : Natural; -- If event is in cell > 0
+            MissionIndex : Natural; -- If accepted mission is in cell > 0
         end record;
     SkyMap : array (1..1024, 1..1024) of SkyCell; -- Game map
 
