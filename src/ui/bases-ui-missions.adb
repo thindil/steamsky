@@ -31,6 +31,7 @@ package body Bases.UI.Missions is
         DiffX, DiffY : Positive;
         MinutesDiff : Natural;
         MissionTime : Date_Record := (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
+        MissionsLimit : Natural;
         type Value_Type is digits 2 range 0.0..9999999.0;
         package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
         Distance : Value_Type;
@@ -92,9 +93,34 @@ package body Bases.UI.Missions is
         CurrentLine := CurrentLine + 1;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Reward:" & Positive'Image(Mission.Reward) & " Charcollum");
-        Move_Cursor(Win => InfoWindow, Line => CurrentLine + 2, Column => 0);
-        Add(Win => InfoWindow, Str => "ENTER to accept selected mission.");
-        Change_Attributes(Win => InfoWindow, Line => CurrentLine + 2, Column => 0, Count => 5, Color => 1);
+        case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Reputation(1) is
+            when 0..25 =>
+                MissionsLimit := 1;
+            when 26..50 =>
+                MissionsLimit := 3;
+            when 51..75 =>
+                MissionsLimit := 5;
+            when 76..100 =>
+                MissionsLimit := 10;
+            when others =>
+                MissionsLimit := 0;
+        end case;
+        for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+            if PlayerShip.Missions.Element(I).StartBase = SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex then
+                MissionsLimit := MissionsLimit - 1;
+            end if;
+        end loop;
+        CurrentLine := CurrentLine + 2;
+        Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+        if MissionsLimit > 0 then
+            Add(Win => InfoWindow, Str => "You can take" & Natural'Image(MissionsLimit) & " more missions in this base.");
+            CurrentLine := CurrentLine + 1;
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => "ENTER to accept selected mission.");
+            Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 0, Count => 5, Color => 1);
+        else
+            Add(Win => InfoWindow, Str => "You can't take any more mission in this base.");
+        end if;
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
