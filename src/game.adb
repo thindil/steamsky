@@ -248,6 +248,8 @@ package body Game is
         end if;
         -- Update events
         UpdateEvents(Minutes);
+        -- Update accepted missions
+        UpdateMissions(Minutes);
     end UpdateGame;
 
     procedure SaveGame is

@@ -160,7 +160,7 @@ package body Missions is
         AcceptMessage := To_Unbounded_String("You accepted mission ");
         case Mission.MType is
             when Deliver =>
-                Append(AcceptMessage, "'Deliver " & To_String(Items_List.Element(Mission.Target).Name) & "'");
+                Append(AcceptMessage, "'Deliver " & To_String(Items_List.Element(Mission.Target).Name) & "'.");
                 UpdateCargo(PlayerShip, Mission.Target, 1);
                 for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                     if PlayerShip.Cargo.Element(I).ProtoIndex = Mission.Target then
@@ -169,9 +169,9 @@ package body Missions is
                     end if;
                 end loop;
             when Kill =>
-                Append(AcceptMessage, "'Destroy " & To_String(Enemies_List.Element(Mission.Target).Name) & "'");
+                Append(AcceptMessage, "'Destroy " & To_String(Enemies_List.Element(Mission.Target).Name) & "'.");
             when Explore =>
-                Append(AcceptMessage, "'Explore selected area'");
+                Append(AcceptMessage, "'Explore selected area'.");
         end case;
         SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex, Count => 1);
         PlayerShip.Missions.Append(New_Item => Mission);
@@ -179,6 +179,38 @@ package body Missions is
         GainExp(1, 4, TraderIndex);
         UpdateGame(5);
     end AcceptMission;
+
+    procedure UpdateMissions(Minutes : Positive) is
+        Time : Integer;
+        I : Positive := PlayerShip.Missions.First_Index;
+        FailMessage : Unbounded_String := To_Unbounded_String("You failed mission ");
+        procedure UpdateMission(Mission : in out Mission_Data) is
+        begin
+            Mission.Time := Time;
+        end UpdateMission;
+    begin
+        while I <= PlayerShip.Missions.Last_Index loop
+            Time := PlayerShip.Missions.Element(I).Time - Minutes;
+            if Time < 1 then
+                GainRep(PlayerShip.Missions.Element(I).StartBase, -5);
+                case PlayerShip.Missions.Element(I).MType is
+                    when Deliver =>
+                        Append(FailMessage, "'Deliver " & To_String(Items_List.Element(PlayerShip.Missions.Element(I).Target).Name) 
+                            & "'.");
+                    when Kill =>
+                        Append(FailMessage, "'Destroy " & To_String(Enemies_List.Element(PlayerShip.Missions.Element(I).Target).Name) 
+                            & "'.");
+                    when Explore =>
+                        Append(FailMessage, "'Explore selected area'.");
+                end case;
+                AddMessage(To_String(FailMessage), OtherMessage);
+                PlayerShip.Missions.Delete(Index => I, Count => 1);
+            else
+                PlayerShip.Missions.Update_Element(Index => I, Process => UpdateMission'Access);
+                I := I + 1;
+            end if;
+        end loop;
+    end UpdateMissions;
 
     procedure ShowMissionInfo is
         Mission : constant Mission_Data := PlayerShip.Missions.Element(Get_Index(Current(MissionsMenu)));
