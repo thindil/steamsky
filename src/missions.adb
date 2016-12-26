@@ -157,6 +157,7 @@ package body Missions is
         end loop;
         Mission.StartBase := BaseIndex;
         PlayerShip.Missions.Append(New_Item => Mission);
+        SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := PlayerShip.Missions.Last_Index;
         SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex, Count => 1);
         AcceptMessage := To_Unbounded_String("You accepted mission ");
         case Mission.MType is

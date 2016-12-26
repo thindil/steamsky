@@ -70,7 +70,7 @@ package body Game is
         Rand_Base.Reset(Generator2);
         Rand_Gender.Reset(Generator3);
         Rand_Population.Reset(Generator4);
-        SkyMap := (others => (others => (BaseIndex => 0, Visited => False, EventIndex => 0)));
+        SkyMap := (others => (others => (BaseIndex => 0, Visited => False, EventIndex => 0, MissionIndex => 0)));
         for I in Rand_Range loop
             loop
                 ValidLocation := True;
@@ -106,7 +106,7 @@ package body Game is
                 end if;
                 exit when ValidLocation;
             end loop;
-            SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I), Visited => False, EventIndex => 0);
+            SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I), Visited => False, EventIndex => 0, MissionIndex => 0);
             SkyBases(Integer(I)) := (Name => GenerateBaseName, Visited => (0, 0, 0, 0, 0), 
                 SkyX => Integer(PosX), SkyY => Integer(PosY), BaseType =>
                 Bases_Types'Val(Rand_Base.Random(Generator2)), Population =>
@@ -586,7 +586,7 @@ package body Game is
         GameDate.Hour := Natural'Value(To_String(ReadData));
         GameDate.Minutes := Natural'Value(To_String(ReadData));
         -- Load sky map
-        SkyMap := (others => (others => (BaseIndex => 0, Visited => False, EventIndex => 0)));
+        SkyMap := (others => (others => (BaseIndex => 0, Visited => False, EventIndex => 0, MissionIndex => 0)));
         VisitedFields := Positive'Value(To_String(ReadData));
         for I in 1..VisitedFields loop
             SkyMap(Positive'Value(To_String(ReadData)), Positive'Value(To_String(ReadData))).Visited := True;
@@ -715,6 +715,7 @@ package body Game is
                     Target => Natural'Value(To_String(ReadData)), Time => Integer'Value(To_String(ReadData)), 
                     TargetX => Integer'Value(To_String(ReadData)), TargetY => Integer'Value(To_String(ReadData)),
                     Reward => Integer'Value(To_String(ReadData)), StartBase => Integer'Value(To_String(ReadData))));
+                SkyMap(BaseMissions.Element(I).TargetX, BaseMissions.Element(I).TargetY).MissionIndex := I;
             end loop;
             PlayerShip.Missions := BaseMissions;
         end if;

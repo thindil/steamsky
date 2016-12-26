@@ -24,6 +24,8 @@ with Bases; use Bases;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Events; use Events;
+with Missions; use Missions;
+with Items; use Items;
 
 package body Maps is
 
@@ -34,7 +36,7 @@ package body Maps is
     procedure ShowSkyMap is
         StartX : Integer;
         StartY : Integer;
-        BaseIndex, EventIndex : Natural;
+        BaseIndex, EventIndex, MissionIndex : Natural;
         InfoWindow : Window;
         WindowHeight, CurrentLine : Line_Position := 3;
         WindowWidth, NewWindowWidth : Column_Position := 20;
@@ -109,6 +111,10 @@ package body Maps is
                     Move_Cursor(Line => Line_Position(Y), Column => Column_Position(X - 1));
                     Add(Ch => '?');
                 end if;
+                if SkyMap(StartX + X, StartY + Y).MissionIndex > 0 then
+                    Move_Cursor(Line => Line_Position(Y), Column => Column_Position(X - 1));
+                    Add(Ch => '!');
+                end if;
                 if StartX + X = PlayerShip.SkyX and StartY + Y = PlayerShip.SkyY then
                     Move_Cursor(Line => Line_Position(Y), Column =>
                         Column_Position(X - 1));
@@ -137,15 +143,23 @@ package body Maps is
             end if;
         end if;
         EventIndex := SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).EventIndex;
-        if EventIndex > 0 then
+        MissionIndex := SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).MissionIndex;
+        if EventIndex > 0 and MissionIndex = 0 then
             WindowHeight := WindowHeight + 2;
             if Events_List.Element(EventIndex).EType = EnemyShip then
                 NewWindowWidth := 4 + Column_Position(Length(Enemies_List.Element(Events_List.Element(EventIndex).Data).Name));
             elsif Events_List.Element(EventIndex).EType = AttackOnBase then
                 NewWindowWidth := 21;
             end if;
-            if NewWindowWidth < 20 then
-                NewWindowWidth := 20;
+            if NewWindowWidth > WindowWidth then
+                WindowWidth := NewWindowWidth;
+            end if;
+        elsif EventIndex = 0 and MissionIndex > 0 then
+            WindowHeight := WindowHeight + 2;
+            if PlayerShip.Missions.Element(MissionIndex).MType = Kill then
+                NewWindowWidth := 12 + Column_Position(Length(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+            elsif PlayerShip.Missions.Element(MissionIndex).MType = Deliver then
+                NewWindowWidth := 12 + Column_Position(Length(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
             end if;
             if NewWindowWidth > WindowWidth then
                 WindowWidth := NewWindowWidth;
@@ -175,7 +189,7 @@ package body Maps is
                 CurrentLine := 7;
             end if;
         end if;
-        if EventIndex > 0 then
+        if EventIndex > 0 and MissionIndex = 0 then
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
             case Events_List.Element(EventIndex).EType is
                 when EnemyShip =>
@@ -186,8 +200,20 @@ package body Maps is
                     Add(Win => InfoWindow, Str => "Base under attack");
                 when Disease => 
                     Add(Win => InfoWindow, Str => "Disease");
-                when others =>
+                when None =>
                     null;
+            end case;
+        elsif EventIndex = 0 and MissionIndex > 0 then
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
+            case PlayerShip.Missions.Element(MissionIndex).MType is
+                when Deliver =>
+                    Add(Win => InfoWindow, Str => "Deliver " & 
+                        To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                when Kill =>
+                    Add(Win => InfoWindow, Str => "Destroy " & 
+                        To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                when Explore =>
+                    Add(Win => InfoWindow, Str => "Explore area");
             end case;
         end if;
         Refresh(InfoWindow);
