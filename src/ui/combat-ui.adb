@@ -20,9 +20,6 @@ with Crew; use Crew;
 with Messages; use Messages;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
-with Events; use Events;
-with Maps; use Maps;
-with Bases; use Bases;
 with Items; use Items;
 
 package body Combat.UI is
@@ -517,13 +514,6 @@ package body Combat.UI is
             CurrentMenuIndex := 1;
             PlayerShip.Speed := OldSpeed;
             EnemyName := Null_Unbounded_String;
-            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
-                if Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType = AttackOnBase then
-                    GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 5);
-                end if;
-                Events_List.Delete(Index => SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex, Count => 1);
-                SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := 0;
-            end if;
             DrawGame(Sky_Map_View);
             return Sky_Map_View;
         end if;

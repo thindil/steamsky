@@ -26,6 +26,7 @@ with Bases; use Bases;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Crew; use Crew;
+with Combat; use Combat;
 
 package body Missions is
 
@@ -144,11 +145,11 @@ package body Missions is
             if PlayerShip.Missions.Element(I).StartBase = BaseIndex then
                 MissionsLimit := MissionsLimit - 1;
             end if;
-            if MissionsLimit < 1 then
-                ShowDialog("You can't take any more missions from this base. ");
-                return;
-            end if;
         end loop;
+        if MissionsLimit < 1 then
+            ShowDialog("You can't take any more missions from this base. ");
+            return;
+        end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Talk then
                 TraderIndex := I;
@@ -156,7 +157,6 @@ package body Missions is
             end if;
         end loop;
         Mission.StartBase := BaseIndex;
-        SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := PlayerShip.Missions.Last_Index;
         AcceptMessage := To_Unbounded_String("You accepted mission ");
         case Mission.MType is
             when Deliver =>
@@ -175,6 +175,7 @@ package body Missions is
         end case;
         SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex, Count => 1);
         PlayerShip.Missions.Append(New_Item => Mission);
+        SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := PlayerShip.Missions.Last_Index;
         AddMessage(To_String(AcceptMessage), OtherMessage);
         GainExp(1, 4, TraderIndex);
         UpdateGame(5);
@@ -212,11 +213,42 @@ package body Missions is
         end loop;
     end UpdateMissions;
 
+    function FinishMission(MissionIndex : Positive) return GameStates is
+        function GetRandom(Min, Max : Positive) return Positive is
+            subtype Rand_Range is Positive range Min..Max;
+            package Rand_Roll is new Discrete_Random(Rand_Range);
+            Generator : Rand_Roll.Generator;
+        begin
+            Rand_Roll.Reset(Generator);
+            return Rand_Roll.Random(Generator);
+        end GetRandom;
+    begin
+        case PlayerShip.Missions.Element(MissionIndex).MType is
+            when Deliver =>
+                DockShip(True);
+                UpdateGame(5);
+                AddMessage("You finished mission 'Deliver " & 
+                    To_String(Items_List.Element(PlayerShip.Cargo.Element(PlayerShip.Missions.Element(MissionIndex).Target).ProtoIndex).Name)
+                    & "'.", OtherMessage);
+                UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(PlayerShip.Missions.Element(MissionIndex).Target).ProtoIndex, -1);
+            when Kill =>
+                UpdateGame(GetRandom(15, 45));
+                return StartCombat(PlayerShip.Missions.Element(MissionIndex).Target, False);
+            when Explore =>
+                UpdateGame(GetRandom(45, 75));
+                AddMessage("You finished mission 'Explore selected area'.", OtherMessage);
+        end case;
+        GainRep(PlayerShip.Missions.Element(MissionIndex).StartBase, 5);
+        PlayerShip.Missions.Delete(Index => MissionIndex, Count => 1);
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex := 0;
+        return Sky_Map_View;
+    end FinishMission;
+
     procedure ShowMissionInfo is
         Mission : constant Mission_Data := PlayerShip.Missions.Element(Get_Index(Current(MissionsMenu)));
         InfoWindow : Window;
         CurrentLine : Line_Position := 1;
-        DiffX, DiffY : Positive;
+        DiffX, DiffY : Natural;
         MinutesDiff : Natural;
         MissionTime : Date_Record := (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
         type Value_Type is digits 2 range 0.0..9999999.0;
