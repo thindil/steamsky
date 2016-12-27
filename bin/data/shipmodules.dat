@@ -502,4 +502,16 @@ Skill = Engineering
 Price = 2000
 InstallTime = 60
 Size = 1
+[44]
+Name = Small iron furnace
+Type = Furnace
+Weight = 800
+Value = 0
+MaxValue = 0
+Durability = 200
+Material = Iron
+Skill = Metalsmith
+Price = 2000
+InstallTime = 60
+Size = 1
 []
