@@ -21,6 +21,7 @@ with Messages; use Messages;
 with Ships; use Ships;
 with Items; use Items;
 with UserInterface; use UserInterface;
+with Bases; use Bases;
 
 package body Ships.UI is
 
@@ -114,6 +115,15 @@ package body Ships.UI is
             return Drop_Cargo;
         elsif FieldIndex = 4 then
             DropAmount := Natural'Value(Get_Buffer(Fields(RenameForm, 2)));
+            for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+                if PlayerShip.Missions.Element(I).MType = Deliver and PlayerShip.Missions.Element(I).Target = ItemIndex then
+                    GainRep(PlayerShip.Missions.Element(I).StartBase, -5);
+                    AddMessage("You failed mission 'Deliver " & To_String(Items_List.Element(PlayerShip.Missions.Element(I).Target).Name),
+                        OtherMessage);
+                    PlayerShip.Missions.Delete(Index => I, Count => 1);
+                    exit;
+                end if;
+            end loop;
             UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex, (0 - DropAmount));
             AddMessage("You dropped" & Positive'Image(DropAmount) & " " & ItemName, OtherMessage);
         end if;
