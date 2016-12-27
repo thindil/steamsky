@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - New skill: woodcutting
 - New crafting recipes: andrae logs and illandru logs
 - Changed name of ship module small alchemy lab to small bronze alchemy lab
+- Random missions in bases
 
 ### Changed
 - Updated interface
