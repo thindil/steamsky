@@ -90,6 +90,15 @@ Crew members skills levels, starting from lowest: Beginner, Novice, Apprentice, 
 In this screen you can see all bases which you know to exists. As normal menus, you can navigate list by up/down arrows. Additional, Page Up scrolls one screen up, Page Down scrolls one screen down, Home scrolls to beginning and End scrolls to end list. 
 You can search for base by it name, simply start typing desired name and list will be scrolled to first exact match. In that moment, on the right, below base information, you can see searched text. You can delete last letter with Backspace key or delete whole searched text by Delete key or just selecting other base from list.
 You can change what type of bases are listed with right arrow key and status of bases (any, visited, not visited) with left arrow key.
+[Missions]
+You can ask for missions in bases where you have reputation level Unknown or above. Each base offers different missions - they amount depends on base size (in bigger bases you can get more missions). To see what missions are available in selected base, first you must dock to it then select option Missions from Orders menu (key 'o'). How many missions you can accept in base, depends on your reputation - with higher level, you can get more missions. 
+Each mission have time limit - if you don't finish mission in that time, mission will fail. Delivery mission will fail too if you drop mission item from your cargo. If you fail mission, you lose some reputation with that base.
+You can see all accepted missions in Missions menu (key 'i'). There you can set mission target map cell as destination for your ship.
+To finish mission, you must fly to map cell where mission target is and from Orders menu (key 'o') select proper order (for example, for explore missions, you must select order 'Explore area'). After some game time mission will be finished and you get reward for it - Charcollum and some reputation in base where you started mission.
+Some details about different types of missions:
+- Deliver items: you don't need to dock to base to finish this mission, you can select proper order before docking. But you must have someone assigned to 'Talk in bases' position.
+- Explore area: If you been attacked by enemy during exploring, after fight you need to explore area again (again select proper order from Orders menu).
+- Destroy ship: Same as Explore area - if you been attacked by other ship during searching for target, first you must finish this fight before you can start search again. If you escape from fight with mission target, you been need to search for it again.
 [Tips]
 * All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press 'h' key on sky map (no need to press 'e' first to show menu).
 * If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to cargo information screen, select desired item and press key 'd'.
