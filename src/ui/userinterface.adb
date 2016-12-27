@@ -637,7 +637,11 @@ package body UserInterface is
                     NewKey := Key;
                 end if;
             when 10 => -- Select option from menu
-                NewKey := Character'Pos(MenuOptions(Get_Index(Current(OrdersMenu))));
+                if CurrentState = GameMenu then
+                    NewKey := Character'Pos(MenuOptions(Get_Index(Current(OrdersMenu))));
+                else
+                    NewKey := Key;
+                end if;
             when others =>
                 NewKey := Key;
         end case;
