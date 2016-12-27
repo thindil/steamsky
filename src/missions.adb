@@ -37,7 +37,7 @@ package body Missions is
         TimeDiff : Natural;
         MissionsAmount, MissionX, MissionY, TmpBaseIndex, DiffX, DiffY : Positive;
         Mission : Mission_Data;
-        MissionsItems : Positive_Container.Vector;
+        MissionsItems, BasesInRange : Positive_Container.Vector;
         MinX, MinY, MaxX, MaxY : Integer;
         type Value_Type is digits 2 range 0.0..9999999.0;
         package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
@@ -83,6 +83,17 @@ package body Missions is
         if MaxY > 1024 then
             MaxY := 1024;
         end if;
+        for I in SkyBases'Range loop
+            if I /= BaseIndex and SkyBases(I).SkyX in MinX..MaxX and SkyBases(I).SkyY in MinY..MaxY then
+                BasesInRange.Append(New_Item => I);
+            end if;
+        end loop;
+        while MissionsAmount > Positive(BasesInRange.Length) loop
+            TmpBaseIndex := GetRandom(1, 1024);
+            if BasesInRange.Find_Index(Item => TmpBaseIndex) = Positive_Container.No_Index then
+                BasesInRange.Append(New_Item => TmpBaseIndex);
+            end if;
+        end loop;
         SkyBases(BaseIndex).Missions.Clear;
         for I in 1..MissionsAmount loop
             Mission.MType := Missions_Types'Val(GetRandom(0, Missions_Types'Pos(Missions_Types'Last)));
@@ -100,10 +111,10 @@ package body Missions is
                     MissionY := GetRandom(MinY, MaxY);
                     exit when SkyMap(MissionX, MissionY).BaseIndex = 0 and MissionX /= PlayerShip.SkyX and MissionY /= PlayerShip.SkyY;
                 else
-                    TmpBaseIndex := GetRandom(1, 1024);
-                    MissionX := SkyBases(TmpBaseIndex).SkyX;
-                    MissionY := SkyBases(TmpBaseIndex).SkyY;
-                    exit when MissionX /= PlayerShip.SkyX and MissionY /= PlayerShip.SkyY;
+                    TmpBaseIndex := GetRandom(BasesInRange.First_Index, BasesInRange.Last_Index);
+                    MissionX := SkyBases(BasesInRange.Element(TmpBaseIndex)).SkyX;
+                    MissionY := SkyBases(BasesInRange.Element(TmpBaseIndex)).SkyY;
+                    exit;
                 end if;
             end loop;
             Mission.TargetX := MissionX;
