@@ -37,6 +37,7 @@ package Missions is
     procedure GenerateMissions(BaseIndex : Positive); -- Generate if needed new missions in selected base
     procedure AcceptMission(MissionIndex : Positive); -- Accept selected mission from base
     procedure UpdateMissions(Minutes : Positive); -- Update accepted missions
+    function FinishMission(MissionIndex : Positive) return GameStates; -- Finish selected mission (or start combat needed for mission)
     procedure ShowMissions; -- Show list of accepted missions
     function ShowMissionsKeys(Key : Key_Code) return GameStates; -- Handle keys on missions list screen
 

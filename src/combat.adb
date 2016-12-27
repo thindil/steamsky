@@ -22,6 +22,10 @@ with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Items; use Items;
 with Statistics; use Statistics;
+with Events; use Events;
+with Maps; use Maps;
+with Bases; use Bases;
+with Missions; use Missions;
 
 package body Combat is
     
@@ -358,6 +362,25 @@ package body Combat is
                                         UpdateCargo(Ship, 1, LootAmount);
                                     end if;
                                     EnemyShip.Speed := FULL_STOP;
+                                    if SkyMap(Ship.SkyX, Ship.SkyY).EventIndex > 0 then
+                                        if Events_List.Element(SkyMap(Ship.SkyX, Ship.SkyY).EventIndex).EType = AttackOnBase then
+                                            GainRep(SkyMap(Ship.SkyX, Ship.SkyY).BaseIndex, 5);
+                                        end if;
+                                        Events_List.Delete(Index => SkyMap(Ship.SkyX, Ship.SkyY).EventIndex, Count => 1);
+                                        SkyMap(Ship.SkyX, Ship.SkyY).EventIndex := 0;
+                                    end if;
+                                    if SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex > 0 then
+                                        if Ship.Missions.Element(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex).MType = Kill then
+                                            if Enemies_List.Element(Ship.Missions.Element(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex).Target).Name = EnemyShip.Name
+                                            then
+                                                AddMessage("You finished mission 'Destroy " & To_String(EnemyShip.Name) & "'.", 
+                                                    OtherMessage);
+                                                GainRep(Ship.Missions.Element(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex).StartBase, 5);
+                                                Ship.Missions.Delete(Index => SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex, Count => 1);
+                                                SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex := 0;
+                                            end if;
+                                        end if;
+                                    end if;
                                     UpdateDestroyedShips(EnemyShip.Name);
                                 else
                                     DrawGame(Combat_State);

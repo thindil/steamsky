@@ -228,7 +228,7 @@ package body UserInterface is
         MenuLength : Column_Position;
         Event : Events_Types := None;
         TimeDiff, BaseIndex, MissionsLimit : Natural;
-        MenuIndex : Positive;
+        MenuIndex, MissionIndex : Positive;
         HaveTrader : Boolean := False;
     begin
         BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -335,6 +335,22 @@ package body UserInterface is
                 when others =>
                     null;
             end case;
+            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
+                MissionIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex;
+                case PlayerShip.Missions.Element(MissionIndex).MType is
+                    when Deliver =>
+                        if HaveTrader then
+                            Orders_Items.all(MenuIndex) := New_Item("Complete delivery of " & 
+                                To_String(Items_List.Element(PlayerShip.Cargo.Element(PlayerShip.Missions.Element(MissionIndex).Target).ProtoIndex).Name));
+                        end if;
+                    when Kill =>
+                        Orders_Items.all(MenuIndex) := New_Item("Search for " & 
+                            To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                    when Explore => 
+                        Orders_Items.all(MenuIndex) := New_Item("Explore area");
+                end case;
+                MenuIndex := MenuIndex + 1;
+            end if;
             Orders_Items.all(MenuIndex) := New_Item("All stop");
             MenuIndex := MenuIndex + 1;
             Orders_Items.all(MenuIndex) := New_Item("Quarter speed");
@@ -799,6 +815,14 @@ package body UserInterface is
                             exit;
                         end if;
                     end loop;
+                elsif Order = "Explore area" or Order(1..3) = "Com" or Order(1..3) = "Sea" then
+                    OldSpeed := PlayerShip.Speed;
+                    NewState := Combat_State;
+                    if EnemyName = Null_Unbounded_String then
+                        NewState := FinishMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+                    end if;
+                    DrawGame(NewState);
+                    return NewState;
                 end if;
                 DrawGame(Sky_Map_View);
                 return OldState;
