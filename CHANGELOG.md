@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Crash on giving crew orders when more than 2 medic room installed
 - Deleting letters in new game window
 - Crash on loading invalid save game data
+- Losing reputation in bases
 
 ## [0.6] - 2016-12-11
 
