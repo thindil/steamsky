@@ -106,7 +106,7 @@ package body Ships.UI is
     function DropCargoResult return GameStates is
         ItemIndex : constant Positive := Get_Index(Current(ShipsMenu));
         ItemName : constant String := To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name);
-        DropAmount : Natural;
+        DropAmount, DropAmount2 : Natural;
         Visibility : Cursor_Visibility := Invisible;
         FieldIndex : constant Positive := Get_Index(Current(RenameForm));
     begin
@@ -114,14 +114,24 @@ package body Ships.UI is
             return Drop_Cargo;
         elsif FieldIndex = 4 then
             DropAmount := Natural'Value(Get_Buffer(Fields(RenameForm, 2)));
-            for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
-                if PlayerShip.Missions.Element(I).MType = Deliver and PlayerShip.Missions.Element(I).Target = ItemIndex then
-                    DeleteMission(I, True);
-                    exit;
-                end if;
-            end loop;
-            UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex, (0 - DropAmount));
-            AddMessage("You dropped" & Positive'Image(DropAmount) & " " & ItemName, OtherMessage);
+            if DropAmount > 0 and 
+                Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).IType = To_Unbounded_String("MissionItem") 
+            then
+                DropAmount2 := DropAmount;
+                for J in 1..DropAmount2 loop
+                    for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+                        if PlayerShip.Missions.Element(I).MType = Deliver and PlayerShip.Missions.Element(I).Target = ItemIndex then
+                            DeleteMission(I, True);
+                            DropAmount := DropAmount - 1;
+                            exit;
+                        end if;
+                    end loop;
+                end loop;
+            end if;
+            if DropAmount > 0 then
+                UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex, (0 - DropAmount));
+                AddMessage("You dropped" & Positive'Image(DropAmount) & " " & ItemName, OtherMessage);
+            end if;
         end if;
         Set_Cursor_Visibility(Visibility);
         Post(RenameForm, False);
