@@ -514,4 +514,16 @@ Skill = Metalsmith
 Price = 2000
 InstallTime = 60
 Size = 1
+[45]
+Name = Small iron water collector
+Type = Water_collector
+Weight = 800
+Value = 0
+MaxValue = 0
+Durability = 200
+Material = Iron
+Skill = Engineering
+Price = 2000
+InstallTime = 60
+Size = 1
 []
