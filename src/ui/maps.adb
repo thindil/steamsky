@@ -208,7 +208,7 @@ package body Maps is
             case PlayerShip.Missions.Element(MissionIndex).MType is
                 when Deliver =>
                     Add(Win => InfoWindow, Str => "Deliver " & 
-                        To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                        To_String(Items_List.Element(PlayerShip.Cargo.Element(PlayerShip.Missions.Element(MissionIndex).Target).ProtoIndex).Name));
                 when Kill =>
                     Add(Win => InfoWindow, Str => "Destroy " & 
                         To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
