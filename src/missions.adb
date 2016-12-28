@@ -203,7 +203,7 @@ package body Missions is
         while I <= PlayerShip.Missions.Last_Index loop
             Time := PlayerShip.Missions.Element(I).Time - Minutes;
             if Time < 1 then
-                DeleteMission(I, True);
+                DeleteMission(I);
             else
                 PlayerShip.Missions.Update_Element(Index => I, Process => UpdateMission'Access);
                 I := I + 1;
@@ -235,7 +235,7 @@ package body Missions is
                 UpdateGame(GetRandom(45, 75));
                 AddMessage("You finished mission 'Explore selected area'.", OtherMessage);
         end case;
-        DeleteMission(MissionIndex);
+        DeleteMission(MissionIndex, False);
         return Sky_Map_View;
     end FinishMission;
 
