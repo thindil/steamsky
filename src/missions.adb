@@ -62,6 +62,18 @@ package body Missions is
         else
             MissionsAmount := GetRandom(1, 15);
         end if;
+        case SkyBases(BaseIndex).Reputation(1) is
+            when 1..25 =>
+                MissionsAmount := MissionsAmount + 1;
+            when 26..50 =>
+                MissionsAmount := MissionsAmount + 3;
+            when 51..75 =>
+                MissionsAmount := MissionsAmount + 5;
+            when 76..100 =>
+                MissionsAmount := MissionsAmount + 10;
+            when others =>
+                null;
+        end case;
         for I in Items_List.First_Index..Items_List.Last_Index loop
             if Items_List.Element(I).IType = To_Unbounded_String("MissionItem") then
                 MissionsItems.Append(New_Item => I);
