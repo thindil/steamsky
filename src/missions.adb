@@ -257,7 +257,13 @@ package body Missions is
             end case;
             AddMessage(To_String(MessageText), OtherMessage);
         else
-            GainRep(PlayerShip.Missions.Element(MissionIndex).StartBase, 5);
+            case PlayerShip.Missions.Element(MissionIndex).MType is
+                when Deliver =>
+                    GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 3);
+                    GainRep(PlayerShip.Missions.Element(MissionIndex).StartBase, 2);
+                when others =>
+                    GainRep(PlayerShip.Missions.Element(MissionIndex).StartBase, 5);
+            end case;
         end if;
         SkyMap(PlayerShip.Missions(MissionIndex).TargetX, PlayerShip.Missions(MissionIndex).TargetY).MissionIndex := 0;
         if PlayerShip.Missions.Element(MissionIndex).MType = Deliver then
