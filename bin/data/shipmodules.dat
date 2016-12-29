@@ -526,4 +526,16 @@ Skill = Engineering
 Price = 2000
 InstallTime = 60
 Size = 1
+[46]
+Name = Small iron greenhouse
+Type = Greenhouse
+Weight = 1000
+Value = 0
+MaxValue = 0
+Durability = 200
+Material = Iron
+Skill = Engineering
+Price = 2000
+InstallTime = 60
+Size = 1
 []
