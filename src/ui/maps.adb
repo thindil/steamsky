@@ -174,6 +174,7 @@ package body Maps is
             if SkyBases(BaseIndex).Known then
                 Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
                 Add(Win => InfoWindow, Str => To_String(SkyBases(BaseIndex).Name));
+                CurrentLine := 5;
             end if;
             if SkyBases(BaseIndex).Visited.Year > 0 then
                 Move_Cursor(Win => InfoWindow, Line => 4, Column => 2);
