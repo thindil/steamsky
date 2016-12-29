@@ -80,7 +80,16 @@ package body BasesList is
             else
                 Add(Win => InfoWindow, Str => "You can ask for events again.");
             end if;
+            TimeDiff := 7 - ((GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+                (SkyBases(BaseIndex).MissionsDate.Day + ((30 * SkyBases(BaseIndex).MissionsDate.Month) * 
+                SkyBases(BaseIndex).MissionsDate.Year)));
             Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
+            if TimeDiff > 0 then
+                Add(Win => InfoWindow, Str => "New missions available in" & Natural'Image(TimeDiff) & " days.");
+            else
+                Add(Win => InfoWindow, Str => "New missions available now.");
+            end if;
+            Move_Cursor(Win => InfoWindow, Line => 7, Column => 0);
             Add(Win => InfoWindow, Str => "Reputation: ");
             case SkyBases(BaseIndex).Reputation(1) is
                 when -100..-75 =>
@@ -104,7 +113,7 @@ package body BasesList is
                 when others =>
                     null;
             end case;
-            CurrentLine := 7;
+            CurrentLine := 8;
         else
             Add(Win => InfoWindow, Str => "Not visited yet.");
         end if;
