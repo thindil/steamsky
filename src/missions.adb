@@ -122,7 +122,7 @@ package body Missions is
                     TmpBaseIndex := GetRandom(BasesInRange.First_Index, BasesInRange.Last_Index);
                     MissionX := SkyBases(BasesInRange.Element(TmpBaseIndex)).SkyX;
                     MissionY := SkyBases(BasesInRange.Element(TmpBaseIndex)).SkyY;
-                    exit;
+                    exit when MissionX /= PlayerShip.SkyX and MissionY /= PlayerShip.SkyY;
                 end if;
             end loop;
             Mission.TargetX := MissionX;
