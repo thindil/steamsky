@@ -821,10 +821,7 @@ package body UserInterface is
                     end loop;
                 elsif Order = "Explore area" or Order(1..3) = "Com" or Order(1..3) = "Sea" then
                     OldSpeed := PlayerShip.Speed;
-                    NewState := Combat_State;
-                    if EnemyName = Null_Unbounded_String then
-                        NewState := FinishMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
-                    end if;
+                    NewState := FinishMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
                     DrawGame(NewState);
                     return NewState;
                 end if;
