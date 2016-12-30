@@ -538,4 +538,17 @@ Skill = Engineering
 Price = 2000
 InstallTime = 60
 Size = 1
+[47]
+Name = Small iron medical room
+Type = Medical_room
+Weight = 400
+Value = 0
+MaxValue = 0
+Durability = 200
+Material = Iron
+Skill = Engineering
+Price = 2000
+InstallTime = 60
+Size = 1
+Unique = Yes
 []
