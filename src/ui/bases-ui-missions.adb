@@ -134,6 +134,10 @@ package body Bases.UI.Missions is
 
     begin
         if SkyBases(BaseIndex).Missions.Length = 0 then
+            if TradeMenu /= Null_Menu then
+                Post(TradeMenu, False);
+                Delete(TradeMenu);
+            end if;
             Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
             Add(Str => "No available missions in this base.");
             Refresh;
@@ -163,35 +167,49 @@ package body Bases.UI.Missions is
     end ShowBaseMissions;
 
     function BaseMissionsKeys(Key : Key_Code) return GameStates is
-        Result : Menus.Driver_Result;
+        Result : Menus.Driver_Result := Request_Denied;
     begin
-        case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-                DrawGame(Sky_Map_View);
-                return Sky_Map_View;
-            when 56 | KEY_UP => -- Select previous recipe to buy
-                Result := Driver(TradeMenu, M_Up_Item);
-                if Result = Request_Denied then
-                    Result := Driver(TradeMenu, M_Last_Item);
-                end if;
-            when 50 | KEY_DOWN => -- Select next recipe to buy
-                Result := Driver(TradeMenu, M_Down_Item);
-                if Result = Request_Denied then
-                    Result := Driver(TradeMenu, M_First_Item);
-                end if;
-            when 10 => -- Accept mission
-                AcceptMission(Get_Index(Current(TradeMenu)));
-                DrawGame(BaseMissions_View);
-            when others =>
-                Result := Driver(TradeMenu, Key);
-                if Result /= Menu_Ok then
-                    Result := Driver(TradeMenu, M_CLEAR_PATTERN);
+        if TradeMenu /= Null_Menu then
+            case Key is
+                when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                    if TradeMenu /= Null_Menu then
+                        Post(TradeMenu, False);
+                        Delete(TradeMenu);
+                    end if;
+                    DrawGame(Sky_Map_View);
+                    return Sky_Map_View;
+                when 56 | KEY_UP => -- Select previous recipe to buy
+                    Result := Driver(TradeMenu, M_Up_Item);
+                    if Result = Request_Denied then
+                        Result := Driver(TradeMenu, M_Last_Item);
+                    end if;
+                when 50 | KEY_DOWN => -- Select next recipe to buy
+                    Result := Driver(TradeMenu, M_Down_Item);
+                    if Result = Request_Denied then
+                        Result := Driver(TradeMenu, M_First_Item);
+                    end if;
+                when 10 => -- Accept mission
+                    AcceptMission(Get_Index(Current(TradeMenu)));
+                    DrawGame(BaseMissions_View);
+                when others =>
                     Result := Driver(TradeMenu, Key);
-                end if;
-        end case;
-        if Result = Menu_Ok then
-            ShowMissionInfo;
-            Refresh(MenuWindow);
+                    if Result /= Menu_Ok then
+                        Result := Driver(TradeMenu, M_CLEAR_PATTERN);
+                        Result := Driver(TradeMenu, Key);
+                    end if;
+            end case;
+            if Result = Menu_Ok then
+                ShowMissionInfo;
+                Refresh(MenuWindow);
+            end if;
+        else
+            case Key is
+                when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                    DrawGame(Sky_Map_View);
+                    return Sky_Map_View;
+                when others =>
+                    null;
+            end case;
         end if;
         return BaseMissions_View;
     end BaseMissionsKeys;
