@@ -157,9 +157,9 @@ package body Maps is
         elsif EventIndex = 0 and MissionIndex > 0 then
             WindowHeight := WindowHeight + 2;
             if PlayerShip.Missions.Element(MissionIndex).MType = Kill then
-                NewWindowWidth := 12 + Column_Position(Length(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                NewWindowWidth := 13 + Column_Position(Length(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
             elsif PlayerShip.Missions.Element(MissionIndex).MType = Deliver then
-                NewWindowWidth := 12 + Column_Position(Length(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                NewWindowWidth := 13 + Column_Position(Length(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
             end if;
             if NewWindowWidth > WindowWidth then
                 WindowWidth := NewWindowWidth;
