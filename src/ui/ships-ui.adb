@@ -120,7 +120,9 @@ package body Ships.UI is
                 DropAmount2 := DropAmount;
                 for J in 1..DropAmount2 loop
                     for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
-                        if PlayerShip.Missions.Element(I).MType = Deliver and PlayerShip.Missions.Element(I).Target = ItemIndex then
+                        if PlayerShip.Missions.Element(I).MType = Deliver and 
+                            PlayerShip.Missions.Element(I).Target = PlayerShip.Cargo.Element(ItemIndex).ProtoIndex 
+                        then
                             DeleteMission(I);
                             DropAmount := DropAmount - 1;
                             exit;

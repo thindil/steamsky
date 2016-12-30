@@ -44,8 +44,7 @@ package body Missions.UI is
         InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
         case Mission.MType is
             when Deliver =>
-                Add(Win => InfoWindow, Str => "Item: " & 
-                    To_String(Items_List.Element(PlayerShip.Cargo.Element(Mission.Target).ProtoIndex).Name));
+                Add(Win => InfoWindow, Str => "Item: " & To_String(Items_List.Element(Mission.Target).Name));
                 Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
                 Add(Win => InfoWindow, Str => "To base: " & To_String(SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex).Name));
                 CurrentLine := 2;
