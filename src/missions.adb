@@ -181,12 +181,6 @@ package body Missions is
             when Deliver =>
                 Append(AcceptMessage, "'Deliver " & To_String(Items_List.Element(Mission.Target).Name) & "'.");
                 UpdateCargo(PlayerShip, Mission.Target, 1);
-                for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if PlayerShip.Cargo.Element(I).ProtoIndex = Mission.Target then
-                        Mission.Target := I;
-                        exit;
-                    end if;
-                end loop;
             when Kill =>
                 Append(AcceptMessage, "'Destroy " & To_String(Enemies_List.Element(Mission.Target).Name) & "'.");
             when Explore =>
@@ -234,8 +228,7 @@ package body Missions is
                 DockShip(True);
                 UpdateGame(5);
                 AddMessage("You finished mission 'Deliver " & 
-                    To_String(Items_List.Element(PlayerShip.Cargo.Element(PlayerShip.Missions.Element(MissionIndex).Target).ProtoIndex).Name)
-                    & "'.", OtherMessage);
+                    To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) & "'.", OtherMessage);
             when Kill =>
                 UpdateGame(GetRandom(15, 45));
                 return StartCombat(PlayerShip.Missions.Element(MissionIndex).Target, False);
@@ -254,9 +247,8 @@ package body Missions is
             GainRep(PlayerShip.Missions.Element(MissionIndex).StartBase, -5);
             case PlayerShip.Missions.Element(MissionIndex).MType is
                 when Deliver =>
-                    Append(MessageText, "'Deliver " & 
-                    To_String(Items_List.Element(PlayerShip.Cargo.Element(PlayerShip.Missions.Element(MissionIndex).Target).ProtoIndex).Name) 
-                    & "'.");
+                    Append(MessageText, "'Deliver " & To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) 
+                        & "'.");
                 when Kill =>
                     Append(MessageText, "'Destroy " & To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) 
                         & "'.");
@@ -275,7 +267,7 @@ package body Missions is
         end if;
         SkyMap(PlayerShip.Missions(MissionIndex).TargetX, PlayerShip.Missions(MissionIndex).TargetY).MissionIndex := 0;
         if PlayerShip.Missions.Element(MissionIndex).MType = Deliver then
-            UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(PlayerShip.Missions.Element(MissionIndex).Target).ProtoIndex, -1);
+            UpdateCargo(PlayerShip, PlayerShip.Missions.Element(MissionIndex).Target, -1);
         end if;
         PlayerShip.Missions.Delete(Index => MissionIndex, Count => 1);
     end DeleteMission;
