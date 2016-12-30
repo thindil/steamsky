@@ -46,6 +46,7 @@ with BasesList; use BasesList;
 with Items; use Items;
 with Statistics; use Statistics;
 with Missions; use Missions;
+with Missions.UI; use Missions.UI;
 
 package body UserInterface is
 

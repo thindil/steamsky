@@ -46,7 +46,7 @@ with MainMenu; use MainMenu;
 with BasesList; use BasesList;
 with Config; use Config;
 with Statistics; use Statistics;
-with Missions; use Missions;
+with Missions.UI; use Missions.UI;
 
 procedure SteamSky is
     GameState : GameStates := Main_Menu;

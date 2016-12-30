@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors; use Ada.Containers;
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Game; use Game;
 
 package Missions is
@@ -39,7 +38,5 @@ package Missions is
     procedure UpdateMissions(Minutes : Positive); -- Update accepted missions
     function FinishMission(MissionIndex : Positive) return GameStates; -- Finish selected mission (or start combat needed for mission)
     procedure DeleteMission(MissionIndex : Positive; Failed : Boolean := True); -- Delete selected mission
-    procedure ShowMissions; -- Show list of accepted missions
-    function ShowMissionsKeys(Key : Key_Code) return GameStates; -- Handle keys on missions list screen
 
 end Missions;
