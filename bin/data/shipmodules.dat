@@ -551,4 +551,15 @@ Price = 2000
 InstallTime = 60
 Size = 1
 Unique = Yes
+[48]
+Name = Steel 10mm gun
+Type = Gun
+Weight = 20
+Value = 4
+MaxValue = 7
+Durability = 40
+Material = Steel
+Skill = Gunsmith
+Price = 500
+InstallTime = 30
 []
