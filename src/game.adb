@@ -540,6 +540,10 @@ package body Game is
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         RawValue := To_Unbounded_String(Positive'Image(GameStats.CraftingOrders));
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Positive'Image(GameStats.AcceptedMissions));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+        RawValue := To_Unbounded_String(Positive'Image(GameStats.FinishedMissions));
+        Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         Close(SaveGame);
     end SaveGame;
 
@@ -752,6 +756,8 @@ package body Game is
         GameStats.MapVisited := Positive'Value(To_String(ReadData));
         GameStats.DistanceTraveled := Positive'Value(To_String(ReadData));
         GameStats.CraftingOrders := Positive'Value(To_String(ReadData));
+        GameStats.AcceptedMissions := Positive'Value(To_String(ReadData));
+        GameStats.FinishedMissions := Positive'Value(To_String(ReadData));
         Close(SaveGame);
         return Null_Unbounded_String;
     exception

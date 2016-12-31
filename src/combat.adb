@@ -375,9 +375,8 @@ package body Combat is
                                             then
                                                 AddMessage("You finished mission 'Destroy " & To_String(EnemyShip.Name) & "'.", 
                                                     OtherMessage);
-                                                GainRep(Ship.Missions.Element(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex).StartBase, 5);
-                                                Ship.Missions.Delete(Index => SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex, Count => 1);
-                                                SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex := 0;
+                                                GameStats.FinishedMissions := GameStats.FinishedMissions + 1;
+                                                DeleteMission(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex, False);
                                             end if;
                                         end if;
                                     end if;
