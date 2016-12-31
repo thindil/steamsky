@@ -26,6 +26,7 @@ with Messages; use Messages;
 with Crew; use Crew;
 with Combat; use Combat;
 with UserInterface; use UserInterface;
+with Statistics; use Statistics;
 
 package body Missions is
 
@@ -191,6 +192,7 @@ package body Missions is
         SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := PlayerShip.Missions.Last_Index;
         AddMessage(To_String(AcceptMessage), OtherMessage);
         GainExp(1, 4, TraderIndex);
+        GameStats.AcceptedMissions := GameStats.AcceptedMissions + 1;
         UpdateGame(5);
     end AcceptMission;
 
@@ -237,6 +239,7 @@ package body Missions is
                 AddMessage("You finished mission 'Explore selected area'.", OtherMessage);
         end case;
         DeleteMission(MissionIndex, False);
+        GameStats.FinishedMissions := GameStats.FinishedMissions + 1;
         return Sky_Map_View;
     end FinishMission;
 
