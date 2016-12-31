@@ -100,6 +100,10 @@ package body Bases.UI.Repair is
             end if;
         end loop;
         if MenuIndex = 1 then
+            if TradeMenu /= Null_Menu then
+                Post(TradeMenu, False);
+                Delete(TradeMenu);
+            end if;
             Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
             Add(Str => "You have nothing to repair.");
             Refresh;
@@ -146,47 +150,61 @@ package body Bases.UI.Repair is
     function RepairKeys(Key : Key_Code) return GameStates is
         Result : Menus.Driver_Result;
     begin
-        case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-                CurrentMenuIndex := 1;
-                DrawGame(Sky_Map_View);
-                return Sky_Map_View;
-            when 56 | KEY_UP => -- Select previous repair option
-                Result := Driver(TradeMenu, M_Up_Item);
-                if Result = Request_Denied then
-                    Result := Driver(TradeMenu, M_Last_Item);
-                end if;
-                if Result = Menu_Ok then
-                    ShowRepairInfo;
-                    Refresh(MenuWindow);
-                end if;
-            when 50 | KEY_DOWN => -- Select next repair option
-                Result := Driver(TradeMenu, M_Down_Item);
-                if Result = Request_Denied then
-                    Result := Driver(TradeMenu, M_First_Item);
-                end if;
-                if Result = Menu_Ok then
-                    ShowRepairInfo;
-                    Refresh(MenuWindow);
-                end if;
-            when 10 => -- Repair ship
-                RepairShip;
-                DrawGame(Repairs_View);
-            when others =>
-                Result := Driver(TradeMenu, Key);
-                if Result = Menu_Ok then
-                    ShowRepairInfo;
-                    Refresh(MenuWindow);
-                else
-                    Result := Driver(TradeMenu, M_CLEAR_PATTERN);
-                    Result := Driver(TradeMenu, Key);
+        if TradeMenu /= Null_Menu then
+            case Key is
+                when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                    CurrentMenuIndex := 1;
+                    if TradeMenu /= Null_Menu then
+                        Post(TradeMenu, False);
+                        Delete(TradeMenu);
+                    end if;
+                    DrawGame(Sky_Map_View);
+                    return Sky_Map_View;
+                when 56 | KEY_UP => -- Select previous repair option
+                    Result := Driver(TradeMenu, M_Up_Item);
+                    if Result = Request_Denied then
+                        Result := Driver(TradeMenu, M_Last_Item);
+                    end if;
                     if Result = Menu_Ok then
                         ShowRepairInfo;
                         Refresh(MenuWindow);
                     end if;
-                end if;
-        end case;
-        CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
+                when 50 | KEY_DOWN => -- Select next repair option
+                    Result := Driver(TradeMenu, M_Down_Item);
+                    if Result = Request_Denied then
+                        Result := Driver(TradeMenu, M_First_Item);
+                    end if;
+                    if Result = Menu_Ok then
+                        ShowRepairInfo;
+                        Refresh(MenuWindow);
+                    end if;
+                when 10 => -- Repair ship
+                    RepairShip;
+                    DrawGame(Repairs_View);
+                when others =>
+                    Result := Driver(TradeMenu, Key);
+                    if Result = Menu_Ok then
+                        ShowRepairInfo;
+                        Refresh(MenuWindow);
+                    else
+                        Result := Driver(TradeMenu, M_CLEAR_PATTERN);
+                        Result := Driver(TradeMenu, Key);
+                        if Result = Menu_Ok then
+                            ShowRepairInfo;
+                            Refresh(MenuWindow);
+                        end if;
+                    end if;
+            end case;
+            CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
+        else
+            case Key is
+                when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+                    DrawGame(Sky_Map_View);
+                    return Sky_Map_View;
+                when others =>
+                    null;
+            end case;
+        end if;
         return Repairs_View;
     end RepairKeys;
 
