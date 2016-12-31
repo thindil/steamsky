@@ -333,25 +333,24 @@ package body UserInterface is
                             end if;
                         end loop;
                     end if;
-                when others =>
-                    null;
+                when None =>
+                    if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
+                        MissionIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex;
+                        case PlayerShip.Missions.Element(MissionIndex).MType is
+                            when Deliver =>
+                                if HaveTrader then
+                                    Orders_Items.all(MenuIndex) := New_Item("Complete delivery of " & 
+                                    To_String(Items_List.Element(PlayerShip.Cargo.Element(PlayerShip.Missions.Element(MissionIndex).Target).ProtoIndex).Name));
+                                end if;
+                            when Kill =>
+                                Orders_Items.all(MenuIndex) := New_Item("Search for " & 
+                                To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                            when Explore => 
+                                Orders_Items.all(MenuIndex) := New_Item("Explore area");
+                        end case;
+                        MenuIndex := MenuIndex + 1;
+                    end if;
             end case;
-            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
-                MissionIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex;
-                case PlayerShip.Missions.Element(MissionIndex).MType is
-                    when Deliver =>
-                        if HaveTrader then
-                            Orders_Items.all(MenuIndex) := New_Item("Complete delivery of " & 
-                                To_String(Items_List.Element(PlayerShip.Cargo.Element(PlayerShip.Missions.Element(MissionIndex).Target).ProtoIndex).Name));
-                        end if;
-                    when Kill =>
-                        Orders_Items.all(MenuIndex) := New_Item("Search for " & 
-                            To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
-                    when Explore => 
-                        Orders_Items.all(MenuIndex) := New_Item("Explore area");
-                end case;
-                MenuIndex := MenuIndex + 1;
-            end if;
             Orders_Items.all(MenuIndex) := New_Item("All stop");
             MenuIndex := MenuIndex + 1;
             Orders_Items.all(MenuIndex) := New_Item("Quarter speed");
