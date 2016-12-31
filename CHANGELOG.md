@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Deleting letters in new game window
 - Crash on loading invalid save game data
 - Losing reputation in bases
+- Crash in repair menu when no modules to repair
 
 ## [0.6] - 2016-12-11
 
