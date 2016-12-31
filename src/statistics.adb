@@ -61,6 +61,8 @@ package body Statistics is
         GameStats.MapVisited := 1;
         GameStats.DistanceTraveled := 0;
         GameStats.CraftingOrders := 0;
+        GameStats.AcceptedMissions := 0;
+        GameStats.FinishedMissions := 0;
     end ClearGameStats;
 
     procedure ShowGameStats(RefreshOnly : Boolean := False) is
@@ -69,6 +71,7 @@ package body Statistics is
         type VisitedFactor is digits 4 range 0.0..100.0;
         VisitedPercent : VisitedFactor;
         VisitedString : String(1..5);
+        MissionsPercent : Natural := 0;
     begin
         if not RefreshOnly then
             MinutesDiff := (GameDate.Minutes + (GameDate.Hour * 60) + (GameDate.Day * 1440) + (GameDate.Month * 43200) + 
@@ -125,6 +128,12 @@ package body Statistics is
             Add(Str => "Distance traveled:" & Natural'Image(GameStats.DistanceTraveled));
             Move_Cursor(Line => 6, Column => 2);
             Add(Str => "Crafting orders finished:" & Natural'Image(GameStats.CraftingOrders));
+            if GameStats.AcceptedMissions > 0 then
+                MissionsPercent := Natural((Float(GameStats.FinishedMissions) / Float(GameStats.AcceptedMissions)) * 100.0);
+            end if;
+            Move_Cursor(Line => 7, Column => 2);
+            Add(Str => "Missions finished:" & Natural'Image(GameStats.FinishedMissions) & " (" & 
+                To_String(Trim(To_Unbounded_String(Natural'Image(MissionsPercent)), Ada.Strings.Left)) & "%)");
             Refresh;
         end if;
         Refresh(DestroyedShipsPad, Line_Position(StartIndex), 0, 2, (Columns / 2), (Lines - 1), Columns);

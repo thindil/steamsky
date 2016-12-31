@@ -35,6 +35,8 @@ package Statistics is
             MapVisited : Positive; -- Amount of visited map fields
             DistanceTraveled : Natural; -- Amount of map fields travelled
             CraftingOrders : Natural; -- Amount of finished crafting orders
+            AcceptedMissions : Natural; -- Amount of accepted missions
+            FinishedMissions : Natural; -- Amount of finished missions
         end record;
     GameStats : GameStats_Data; -- Game statistics
 
