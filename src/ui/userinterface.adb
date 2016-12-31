@@ -340,7 +340,7 @@ package body UserInterface is
                             when Deliver =>
                                 if HaveTrader then
                                     Orders_Items.all(MenuIndex) := New_Item("Complete delivery of " & 
-                                    To_String(Items_List.Element(PlayerShip.Cargo.Element(PlayerShip.Missions.Element(MissionIndex).Target).ProtoIndex).Name));
+                                    To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
                                 end if;
                             when Kill =>
                                 Orders_Items.all(MenuIndex) := New_Item("Search for " & 
