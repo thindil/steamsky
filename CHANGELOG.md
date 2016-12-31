@@ -15,7 +15,8 @@ All notable changes to this project will be documented in this file.
 - New ship modules: advanced bronze cabin, extended bronze cabin, luxury
   bronze cabin, heavy bronze turret, heavy bronze battering ram, iron cockpit,
   iron cargo bay, small iron alchemy lab, small iron furnace, small iron
-  water collector, small iron greenhouse and small iron medical room
+  water collector, small iron greenhouse, small iron medical room and steel
+  10mm gun
 - Option to show game statistics after player death
 - Option to generate random ship name in new game settings
 - Random names for all ships
