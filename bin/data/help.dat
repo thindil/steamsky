@@ -95,6 +95,7 @@ You can ask for missions in bases where you have reputation level Unknown or abo
 Each mission have time limit - if you don't finish mission in that time, mission will fail. Delivery mission will fail too if you drop mission item from your cargo. If you fail mission, you lose some reputation with that base.
 You can see all accepted missions in Missions menu (key 'i'). There you can set mission target map cell as destination for your ship.
 To finish mission, you must fly to map cell where mission target is and from Orders menu (key 'o') select proper order (for example, for explore missions, you must select order 'Explore area'). After some game time mission will be finished and you get reward for it - Charcollum and some reputation in base where you started mission.
+Amount of Charcollum for a mission depends on distance which you must fly to complete mission and type of mission.
 Some details about different types of missions:
 - Deliver items: you don't need to dock to base to finish this mission, you can select proper order before docking. But you must have someone assigned to 'Talk in bases' position. Additionally, deliver missions gives reputation to both bases (base where mission was started and base where mission was ended).
 - Explore area: If you been attacked by enemy during exploring, after fight you need to explore area again (again select proper order from Orders menu).
