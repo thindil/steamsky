@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 - Crash on loading invalid save game data
 - Losing reputation in bases
 - Crash in repair menu when no modules to repair
+- Crash on stop upgrading module
 
 ## [0.6] - 2016-12-11
 
