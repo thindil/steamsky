@@ -705,15 +705,6 @@ package body Ships.UI.Ship is
                 if OptionIndex /= 5 and OptionIndex < 7 then
                     if OptionIndex < 5 then
                         StartUpgrading(CurrentMenuIndex, OptionIndex);
-                    elsif OptionIndex = 8 then
-                        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                            if PlayerShip.Crew.Element(I).Order = Upgrading then
-                                GiveOrders(I, Rest);
-                                exit;
-                            end if;
-                        end loop;
-                        PlayerShip.UpgradeModule := 0;
-                        AddMessage("You stopped current upgrade.", OrderMessage);
                     end if;
                     DrawGame(Ship_Info);
                     return Ship_Info;
@@ -725,6 +716,17 @@ package body Ships.UI.Ship is
                     DrawGame(Ship_Info);
                     ShowAssignMenu;
                     return Assign_Owner;
+                elsif OptionIndex = 8 then
+                    for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                        if PlayerShip.Crew.Element(I).Order = Upgrading then
+                            GiveOrders(I, Rest);
+                            exit;
+                        end if;
+                    end loop;
+                    PlayerShip.UpgradeModule := 0;
+                    AddMessage("You stopped current upgrade.", OrderMessage);
+                    DrawGame(Ship_Info);
+                    return Ship_Info;
                 elsif OptionIndex = 9 then
                     DrawGame(Ship_Info);
                     return ShowAssignAmmoMenu;
