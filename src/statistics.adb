@@ -118,7 +118,7 @@ package body Statistics is
             Put(To => VisitedString, Item => Float(VisitedPercent), Aft => 3, Exp => 0);
             Add(Str => "Bases visited:" & Positive'Image(GameStats.BasesVisited) & " (" & VisitedString & "%)");
             Move_Cursor(Line => 4, Column => 2);
-            VisitedPercent := ((VisitedFactor(GameStats.MapVisited) / (1024.0 * 1024.0)));
+            VisitedPercent := VisitedFactor(Float(GameStats.MapVisited) / (1024.0 * 1024.0));
             if VisitedPercent < 0.001 then
                 VisitedPercent := 0.001;
             end if;
