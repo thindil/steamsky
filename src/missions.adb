@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -247,6 +247,7 @@ package body Missions is
     procedure DeleteMission(MissionIndex : Positive; Failed : Boolean := True) is
         MessageText : Unbounded_String := To_Unbounded_String("You failed mission ");
         Mission : constant Mission_Data := PlayerShip.Missions.Element(MissionIndex);
+        FreeSpace, RewardAmount : Integer;
     begin
         if Failed then
             GainRep(Mission.StartBase, -5);
@@ -269,6 +270,15 @@ package body Missions is
                 when others =>
                     GainRep(Mission.StartBase, 5);
             end case;
+            RewardAmount := Mission.Reward;
+            FreeSpace := FreeCargo((0 - RewardAmount));
+            if FreeSpace < 0 then
+                RewardAmount := RewardAmount + FreeSpace;
+            end if;
+            if RewardAmount > 0 then
+                AddMessage("You received" & Integer'Image(RewardAmount) & " Charcollum for finished mission.", OtherMessage);
+                UpdateCargo(PlayerShip, 1, RewardAmount);
+            end if;
         end if;
         SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := 0;
         SkyMap(SkyBases(Mission.StartBase).SkyX, SkyBases(Mission.StartBase).SkyY).MissionIndex := 0;
