@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -37,8 +37,9 @@ package body Statistics is
         end UpdateData;
     begin
         for I in GameStats.DestroyedShips.First_Index..GameStats.DestroyedShips.Last_Index loop
-            if Enemies_List.Element(I).Name = ShipName then
+            if Enemies_List.Element(GameStats.DestroyedShips.Element(I).ProtoIndex).Name = ShipName then
                 ProtoIndex := I;
+                GameStats.DestroyedShips.Update_Element(Index => ProtoIndex, Process => UpdateData'Access);
                 exit;
             end if;
         end loop;
@@ -49,8 +50,6 @@ package body Statistics is
                     exit;
                 end if;
             end loop;
-        else
-            GameStats.DestroyedShips.Update_Element(Index => ProtoIndex, Process => UpdateData'Access);
         end if;
     end UpdateDestroyedShips;
 
