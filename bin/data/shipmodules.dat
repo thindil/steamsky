@@ -573,4 +573,15 @@ Material = Steel
 Skill = Gunsmith
 Price = 1000
 InstallTime = 30
+[50]
+Name = Steel 40mm gun
+Type = Gun
+Weight = 60
+Value = 16
+MaxValue = 30
+Durability = 60
+Material = Steel
+Skill = Gunsmith
+Price = 2000
+InstallTime = 45
 []
