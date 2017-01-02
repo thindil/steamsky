@@ -41,7 +41,7 @@ package body Missions.UI is
         package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
         Distance : Value_Type;
     begin
-        InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
+        InfoWindow := Create(15, (Columns / 2), 3, (Columns / 2));
         case Mission.MType is
             when Deliver =>
                 Add(Win => InfoWindow, Str => "Item: " & To_String(Items_List.Element(Mission.Target).Name));
@@ -98,6 +98,11 @@ package body Missions.UI is
         CurrentLine := CurrentLine + 1;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Reward:" & Positive'Image(Mission.Reward) & " Charcollum");
+        if Mission.Finished then
+            CurrentLine := CurrentLine + 1;
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => "Mission is ready to return.");
+        end if;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine + 2, Column => 0);
         Add(Win => InfoWindow, Str => "Press SPACE to show mission on map");
         Change_Attributes(Win => InfoWindow, Line => CurrentLine + 2, Column => 6, Count => 5, Color => 1);

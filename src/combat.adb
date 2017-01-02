@@ -373,10 +373,7 @@ package body Combat is
                                         if Ship.Missions.Element(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex).MType = Kill then
                                             if Enemies_List.Element(Ship.Missions.Element(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex).Target).Name = EnemyShip.Name
                                             then
-                                                AddMessage("You finished mission 'Destroy " & To_String(EnemyShip.Name) & "'.", 
-                                                    OtherMessage);
-                                                GameStats.FinishedMissions := GameStats.FinishedMissions + 1;
-                                                DeleteMission(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex, False);
+                                                UpdateMission(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex);
                                             end if;
                                         end if;
                                     end if;

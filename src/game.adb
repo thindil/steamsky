@@ -485,6 +485,11 @@ package body Game is
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
                 RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Missions.Element(I).StartBase));
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                if PlayerShip.Missions.Element(I).Finished then
+                    Put(SaveGame, "Y;");
+                else
+                    Put(SaveGame, "N;");
+                end if;
             end loop;
         end if;
         -- Save known recipes
@@ -559,6 +564,7 @@ package body Game is
         BaseRecruits : Recruit_Container.Vector;
         VisitedFields : Positive;
         BaseMissions : Mission_Container.Vector;
+        Finished : Boolean;
         function ReadData return Unbounded_String is
             RawData : Unbounded_String := To_Unbounded_String("");
             Char : Character;
@@ -578,6 +584,10 @@ package body Game is
         begin
             Recruit.Skills := Skills;
         end UpdateRecruit;
+        procedure UpdateMission(Mission : in out Mission_Data) is
+        begin
+            Mission.Finished := Finished;
+        end UpdateMission;
     begin
         Open(SaveGame, In_File, "data/savegame.dat");
         -- Check save version
@@ -653,7 +663,7 @@ package body Game is
                         BaseMissions.Append(New_Item => (MType => Missions_Types'Val(Integer'Value(To_String(ReadData))),
                             Target => Natural'Value(To_String(ReadData)), Time => Integer'Value(To_String(ReadData)), 
                             TargetX => Integer'Value(To_String(ReadData)), TargetY => Integer'Value(To_String(ReadData)),
-                            Reward => Integer'Value(To_String(ReadData)), StartBase => I));
+                            Reward => Integer'Value(To_String(ReadData)), StartBase => I, Finished => False));
                     end loop;
                     SkyBases(I).Missions := BaseMissions;
                     BaseMissions.Clear;
@@ -720,8 +730,19 @@ package body Game is
                 BaseMissions.Append(New_Item => (MType => Missions_Types'Val(Integer'Value(To_String(ReadData))),
                     Target => Natural'Value(To_String(ReadData)), Time => Integer'Value(To_String(ReadData)), 
                     TargetX => Integer'Value(To_String(ReadData)), TargetY => Integer'Value(To_String(ReadData)),
-                    Reward => Integer'Value(To_String(ReadData)), StartBase => Integer'Value(To_String(ReadData))));
-                SkyMap(BaseMissions.Element(I).TargetX, BaseMissions.Element(I).TargetY).MissionIndex := I;
+                    Reward => Integer'Value(To_String(ReadData)), StartBase => Integer'Value(To_String(ReadData)),
+                    Finished => False));
+                if To_String(ReadData) = "Y" then
+                    Finished := True;
+                else
+                    Finished := False;
+                end if;
+                BaseMissions.Update_Element(Index => BaseMissions.Last_Index, Process => UpdateMission'Access);
+                if not BaseMissions.Element(I).Finished then
+                    SkyMap(BaseMissions.Element(I).TargetX, BaseMissions.Element(I).TargetY).MissionIndex := I;
+                else
+                    SkyMap(SkyBases(BaseMissions.Element(I).StartBase).SkyX, SkyBases(BaseMissions.Element(I).StartBase).SkyY).MissionIndex := I;
+                end if;
             end loop;
             PlayerShip.Missions := BaseMissions;
         end if;
