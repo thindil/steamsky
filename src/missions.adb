@@ -24,9 +24,9 @@ with Items; use Items;
 with Bases; use Bases;
 with Messages; use Messages;
 with Crew; use Crew;
-with Combat; use Combat;
 with UserInterface; use UserInterface;
 with Statistics; use Statistics;
+with Game; use Game;
 
 package body Missions is
 
@@ -130,16 +130,19 @@ package body Missions is
             Mission.TargetY := MissionY;
             DiffX := abs(PlayerShip.SkyX - MissionX);
             DiffY := abs(PlayerShip.SkyY - MissionY);
-            Mission.Time := Positive(Value_Type(60) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
             case Mission.MType is
                 when Deliver =>
+                    Mission.Time := Positive(Value_Type(60) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
                     Mission.Reward := (Mission.Time / 4);
                 when Kill => 
+                    Mission.Time := Positive(Value_Type(120) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
                     Mission.Reward := (Mission.Time / 3);
                 when Explore =>
+                    Mission.Time := Positive(Value_Type(120) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
                     Mission.Reward := (Mission.Time / 5);
             end case;
             Mission.StartBase := BaseIndex;
+            Mission.Finished := False;
             SkyBases(BaseIndex).Missions.Append(New_Item => Mission);
         end loop;
         SkyBases(BaseIndex).MissionsDate := GameDate;
@@ -184,6 +187,7 @@ package body Missions is
             end if;
         end loop;
         Mission.StartBase := BaseIndex;
+        Mission.Finished := False;
         AcceptMessage := To_Unbounded_String("You accepted mission ");
         case Mission.MType is
             when Deliver =>
@@ -222,64 +226,89 @@ package body Missions is
         end loop;
     end UpdateMissions;
 
-    function FinishMission(MissionIndex : Positive) return GameStates is
-        function GetRandom(Min, Max : Positive) return Positive is
-            subtype Rand_Range is Positive range Min..Max;
-            package Rand_Roll is new Discrete_Random(Rand_Range);
-            Generator : Rand_Roll.Generator;
-        begin
-            Rand_Roll.Reset(Generator);
-            return Rand_Roll.Random(Generator);
-        end GetRandom;
+    procedure FinishMission(MissionIndex : Positive) is
     begin
+        DockShip(True);
+        UpdateGame(5);
         case PlayerShip.Missions.Element(MissionIndex).MType is
             when Deliver =>
-                DockShip(True);
-                UpdateGame(5);
                 AddMessage("You finished mission 'Deliver " & 
                     To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) & "'.", OtherMessage);
             when Kill =>
-                UpdateGame(GetRandom(15, 45));
-                return StartCombat(PlayerShip.Missions.Element(MissionIndex).Target, False);
+                AddMessage("You finished mission 'Destroy " & 
+                    To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) & "'.", OtherMessage);
             when Explore =>
-                UpdateGame(GetRandom(45, 75));
                 AddMessage("You finished mission 'Explore selected area'.", OtherMessage);
         end case;
         DeleteMission(MissionIndex, False);
         GameStats.FinishedMissions := GameStats.FinishedMissions + 1;
-        return Sky_Map_View;
     end FinishMission;
 
     procedure DeleteMission(MissionIndex : Positive; Failed : Boolean := True) is
         MessageText : Unbounded_String := To_Unbounded_String("You failed mission ");
+        Mission : constant Mission_Data := PlayerShip.Missions.Element(MissionIndex);
     begin
         if Failed then
-            GainRep(PlayerShip.Missions.Element(MissionIndex).StartBase, -5);
-            case PlayerShip.Missions.Element(MissionIndex).MType is
+            GainRep(Mission.StartBase, -5);
+            case Mission.MType is
                 when Deliver =>
-                    Append(MessageText, "'Deliver " & To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) 
+                    Append(MessageText, "'Deliver " & To_String(Items_List.Element(Mission.Target).Name) 
                         & "'.");
                 when Kill =>
-                    Append(MessageText, "'Destroy " & To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) 
+                    Append(MessageText, "'Destroy " & To_String(Enemies_List.Element(Mission.Target).Name) 
                         & "'.");
                 when Explore =>
                     Append(MessageText, "'Explore selected area'.");
             end case;
             AddMessage(To_String(MessageText), OtherMessage);
         else
-            case PlayerShip.Missions.Element(MissionIndex).MType is
+            case Mission.MType is
                 when Deliver =>
                     GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 3);
-                    GainRep(PlayerShip.Missions.Element(MissionIndex).StartBase, 2);
+                    GainRep(Mission.StartBase, 2);
                 when others =>
-                    GainRep(PlayerShip.Missions.Element(MissionIndex).StartBase, 5);
+                    GainRep(Mission.StartBase, 5);
             end case;
         end if;
-        SkyMap(PlayerShip.Missions(MissionIndex).TargetX, PlayerShip.Missions(MissionIndex).TargetY).MissionIndex := 0;
-        if PlayerShip.Missions.Element(MissionIndex).MType = Deliver then
-            UpdateCargo(PlayerShip, PlayerShip.Missions.Element(MissionIndex).Target, -1);
+        SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := 0;
+        SkyMap(SkyBases(Mission.StartBase).SkyX, SkyBases(Mission.StartBase).SkyY).MissionIndex := 0;
+        if Mission.MType = Deliver then
+            UpdateCargo(PlayerShip, Mission.Target, -1);
         end if;
         PlayerShip.Missions.Delete(Index => MissionIndex, Count => 1);
+        for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+            if PlayerShip.Missions.Element(I).Finished then
+                SkyMap(SkyBases(PlayerShip.Missions.Element(I).StartBase).SkyX, 
+                    SkyBases(PlayerShip.Missions.Element(I).StartBase).SkyY).MissionIndex := I;
+            else
+                SkyMap(PlayerShip.Missions.Element(I).TargetX, PlayerShip.Missions.Element(I).TargetY).MissionIndex := I;
+            end if;
+        end loop;
     end DeleteMission;
+
+    procedure UpdateMission(MissionIndex : Positive) is
+        Mission : constant Mission_Data := PlayerShip.Missions.Element(MissionIndex);
+        MessageText : Unbounded_String := To_Unbounded_String("Return to ") & SkyBases(Mission.StartBase).Name & 
+            To_Unbounded_String(" to finish mission ");
+        procedure UpdateFinished(Mission : in out Mission_Data) is
+        begin
+            Mission.Finished := True;
+        end UpdateFinished;
+    begin
+        SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := 0;
+        PlayerShip.Missions.Update_Element(Index => MissionIndex, Process => UpdateFinished'Access);
+        SkyMap(SkyBases(Mission.StartBase).SkyX, SkyBases(Mission.StartBase).SkyY).MissionIndex := MissionIndex;
+        case PlayerShip.Missions.Element(MissionIndex).MType is
+            when Deliver =>
+                Append(MessageText, "'Deliver " & To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) 
+                & "'.");
+            when Kill =>
+                Append(MessageText, "'Destroy " & To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) 
+                & "'.");
+            when Explore =>
+                Append(MessageText, "'Explore selected area'.");
+        end case;
+        AddMessage(To_String(MessageText), OtherMessage);
+    end UpdateMission;
 
 end Missions;

@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Directories; use Ada.Directories;
+with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Maps; use Maps;
@@ -340,15 +341,28 @@ package body UserInterface is
                             when Deliver =>
                                 if HaveTrader then
                                     Orders_Items.all(MenuIndex) := New_Item("Complete delivery of " & 
-                                    To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                                        To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                                    MenuIndex := MenuIndex + 1;
                                 end if;
                             when Kill =>
-                                Orders_Items.all(MenuIndex) := New_Item("Search for " & 
-                                To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                                if not PlayerShip.Missions.Element(MissionIndex).Finished then
+                                    Orders_Items.all(MenuIndex) := New_Item("Search for " & 
+                                        To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                                    MenuIndex := MenuIndex + 1;
+                                elsif HaveTrader then
+                                    Orders_Items.all(MenuIndex) := New_Item("Complete destroy " &
+                                        To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                                    MenuIndex := MenuIndex + 1;
+                                end if;
                             when Explore => 
-                                Orders_Items.all(MenuIndex) := New_Item("Explore area");
+                                if not PlayerShip.Missions.Element(MissionIndex).Finished then
+                                    Orders_Items.all(MenuIndex) := New_Item("Explore area");
+                                    MenuIndex := MenuIndex + 1;
+                                elsif HaveTrader then
+                                    Orders_Items.all(MenuIndex) := New_Item("Complete explore area mission");
+                                    MenuIndex := MenuIndex + 1;
+                                end if;
                         end case;
-                        MenuIndex := MenuIndex + 1;
                     end if;
             end case;
             Orders_Items.all(MenuIndex) := New_Item("All stop");
@@ -711,6 +725,14 @@ package body UserInterface is
         begin
             Event.Time := NewTime;
         end UpdateEvent;
+        function GetRandom(Min, Max : Positive) return Natural is
+            subtype Rand_Range is Natural range Min..Max;
+            package Rand_Roll is new Discrete_Random(Rand_Range);
+            Generator : Rand_Roll.Generator;
+        begin
+            Rand_Roll.Reset(Generator);
+            return Rand_Roll.Random(Generator);
+        end GetRandom;
     begin
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             EventIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
@@ -819,11 +841,18 @@ package body UserInterface is
                             exit;
                         end if;
                     end loop;
-                elsif Order = "Explore area" or Order(1..3) = "Com" or Order(1..3) = "Sea" then
+                elsif Order(1..3) = "Com" then
+                    FinishMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+                elsif Order(1..3) = "Sea" then
                     OldSpeed := PlayerShip.Speed;
-                    NewState := FinishMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+                    UpdateGame(GetRandom(15, 45));
+                    NewState := StartCombat(PlayerShip.Missions.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex).Target, 
+                        False);
                     DrawGame(NewState);
                     return NewState;
+                elsif Order = "Explore area" then
+                    UpdateGame(GetRandom(45, 75));
+                    UpdateMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
                 end if;
                 DrawGame(Sky_Map_View);
                 return OldState;

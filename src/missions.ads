@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors; use Ada.Containers;
-with Game; use Game;
 
 package Missions is
 
@@ -30,13 +29,15 @@ package Missions is
             TargetY : Natural; -- Skymap Y-axis for mission target
             Reward : Positive; -- Amount of moneys for mission
             StartBase : Positive; -- Index of sky base where mission starts
+            Finished : Boolean; -- Did mission is finished
         end record;
     package Mission_Container is new Vectors(Positive, Mission_Data);
 
     procedure GenerateMissions(BaseIndex : Positive); -- Generate if needed new missions in selected base
     procedure AcceptMission(MissionIndex : Positive); -- Accept selected mission from base
     procedure UpdateMissions(Minutes : Positive); -- Update accepted missions
-    function FinishMission(MissionIndex : Positive) return GameStates; -- Finish selected mission (or start combat needed for mission)
+    procedure FinishMission(MissionIndex : Positive); -- Finish selected mission
     procedure DeleteMission(MissionIndex : Positive; Failed : Boolean := True); -- Delete selected mission
+    procedure UpdateMission(MissionIndex : Positive); -- Update status of mission
 
 end Missions;
