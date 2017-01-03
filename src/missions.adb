@@ -111,7 +111,7 @@ package body Missions is
                     Mission.Target := MissionsItems.Element(GetRandom(MissionsItems.First_Index, MissionsItems.Last_Index));
                 when Kill =>
                     Mission.Target := GetRandom(Enemies_List.First_Index, Enemies_List.Last_Index);
-                when Explore =>
+                when Patrol =>
                     Mission.Target := 0;
             end case;
             loop
@@ -137,7 +137,7 @@ package body Missions is
                 when Kill => 
                     Mission.Time := Positive(Value_Type(120) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
                     Mission.Reward := (Mission.Time / 3);
-                when Explore =>
+                when Patrol =>
                     Mission.Time := Positive(Value_Type(120) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
                     Mission.Reward := (Mission.Time / 5);
             end case;
@@ -195,8 +195,8 @@ package body Missions is
                 UpdateCargo(PlayerShip, Mission.Target, 1);
             when Kill =>
                 Append(AcceptMessage, "'Destroy " & To_String(Enemies_List.Element(Mission.Target).Name) & "'.");
-            when Explore =>
-                Append(AcceptMessage, "'Explore selected area'.");
+            when Patrol =>
+                Append(AcceptMessage, "'Patrol selected area'.");
         end case;
         SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex, Count => 1);
         PlayerShip.Missions.Append(New_Item => Mission);
@@ -239,8 +239,8 @@ package body Missions is
             when Kill =>
                 AddMessage("You finished mission 'Destroy " & 
                     To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) & "'.", OtherMessage);
-            when Explore =>
-                AddMessage("You finished mission 'Explore selected area'.", OtherMessage);
+            when Patrol =>
+                AddMessage("You finished mission 'Patrol selected area'.", OtherMessage);
         end case;
         DeleteMission(MissionIndex, False);
         GameStats.FinishedMissions := GameStats.FinishedMissions + 1;
@@ -260,8 +260,8 @@ package body Missions is
                 when Kill =>
                     Append(MessageText, "'Destroy " & To_String(Enemies_List.Element(Mission.Target).Name) 
                         & "'.");
-                when Explore =>
-                    Append(MessageText, "'Explore selected area'.");
+                when Patrol =>
+                    Append(MessageText, "'Patrol selected area'.");
             end case;
             AddMessage(To_String(MessageText), OtherMessage);
         else
@@ -317,8 +317,8 @@ package body Missions is
             when Kill =>
                 Append(MessageText, "'Destroy " & To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) 
                 & "'.");
-            when Explore =>
-                Append(MessageText, "'Explore selected area'.");
+            when Patrol =>
+                Append(MessageText, "'Patrol selected area'.");
         end case;
         AddMessage(To_String(MessageText), OtherMessage);
     end UpdateMission;

@@ -213,8 +213,8 @@ package body Maps is
                 when Kill =>
                     Add(Win => InfoWindow, Str => "Destroy " & 
                         To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
-                when Explore =>
-                    Add(Win => InfoWindow, Str => "Explore area");
+                when Patrol =>
+                    Add(Win => InfoWindow, Str => "Patrol area");
             end case;
         end if;
         Refresh(InfoWindow);
