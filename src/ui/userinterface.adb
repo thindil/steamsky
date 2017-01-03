@@ -258,9 +258,9 @@ package body UserInterface is
                                     To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
                                 MenuIndex := MenuIndex + 1;
                             end if;
-                        when Explore => 
+                        when Patrol => 
                             if PlayerShip.Missions.Element(MissionIndex).Finished then
-                                Orders_Items.all(MenuIndex) := New_Item("Complete explore area mission");
+                                Orders_Items.all(MenuIndex) := New_Item("Complete Patrol area mission");
                                 MenuIndex := MenuIndex + 1;
                             end if;
                     end case;
@@ -375,12 +375,12 @@ package body UserInterface is
                                         To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
                                     MenuIndex := MenuIndex + 1;
                                 end if;
-                            when Explore => 
+                            when Patrol => 
                                 if not PlayerShip.Missions.Element(MissionIndex).Finished then
-                                    Orders_Items.all(MenuIndex) := New_Item("Explore area");
+                                    Orders_Items.all(MenuIndex) := New_Item("Patrol area");
                                     MenuIndex := MenuIndex + 1;
                                 elsif HaveTrader then
-                                    Orders_Items.all(MenuIndex) := New_Item("Complete explore area mission");
+                                    Orders_Items.all(MenuIndex) := New_Item("Complete Patrol area mission");
                                     MenuIndex := MenuIndex + 1;
                                 end if;
                         end case;
@@ -869,7 +869,7 @@ package body UserInterface is
                         False);
                     DrawGame(NewState);
                     return NewState;
-                elsif Order = "Explore area" then
+                elsif Order = "Patrol area" then
                     UpdateGame(GetRandom(45, 75));
                     UpdateMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
                 end if;
