@@ -242,12 +242,33 @@ package body UserInterface is
         end loop;
         if PlayerShip.Speed = DOCKED then 
             MenuIndex := 2;
-            Orders_Items := new Item_Array(1..11);
+            Orders_Items := new Item_Array(1..12);
             Orders_Items.all(1) := New_Item("Undock");
             if HaveTrader then
-                Orders_Items.all(2) := New_Item("Trade");
-                Orders_Items.all(3) := New_Item("Recruit");
-                MenuIndex := 4;
+                if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
+                    MissionIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex;
+                    case PlayerShip.Missions.Element(MissionIndex).MType is
+                        when Deliver =>
+                            Orders_Items.all(MenuIndex) := New_Item("Complete delivery of " & 
+                                To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                            MenuIndex := MenuIndex + 1;
+                        when Kill =>
+                            if PlayerShip.Missions.Element(MissionIndex).Finished then
+                                Orders_Items.all(MenuIndex) := New_Item("Complete destroy " &
+                                    To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                                MenuIndex := MenuIndex + 1;
+                            end if;
+                        when Explore => 
+                            if PlayerShip.Missions.Element(MissionIndex).Finished then
+                                Orders_Items.all(MenuIndex) := New_Item("Complete explore area mission");
+                                MenuIndex := MenuIndex + 1;
+                            end if;
+                    end case;
+                end if;
+                Orders_Items.all(MenuIndex) := New_Item("Trade");
+                MenuIndex := MenuIndex + 1;
+                Orders_Items.all(MenuIndex) := New_Item("Recruit");
+                MenuIndex := MenuIndex + 1;
                 TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).AskedForEvents.Day + ((30 *
                 SkyBases(BaseIndex).AskedForEvents.Month) * SkyBases(BaseIndex).AskedForEvents.Year));
                 if TimeDiff > 6 then
