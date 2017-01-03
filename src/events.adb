@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -137,12 +137,13 @@ package body Events is
     procedure UpdateEvents(Minutes : Positive) is
         CurrentIndex : Positive := Events_List.First_Index;
         NewTime : Integer;
+        EventsAmount : constant Natural := Natural(Events_List.Length);
         procedure UpdateEvent(Event : in out EventData) is
         begin
             Event.Time := NewTime;
         end UpdateEvent;
     begin
-        if Events_List.Length = 0 then
+        if EventsAmount = 0 then
             return;
         end if;
         while CurrentIndex <= Events_List.Last_Index loop
@@ -155,7 +156,21 @@ package body Events is
                 CurrentIndex := CurrentIndex + 1;
             end if;
         end loop;
+        if EventsAmount > Natural(Events_List.Length) then
+            for I in Events_List.First_Index..Events_List.Last_Index loop
+                SkyMap(Events_List.Element(I).SkyX, Events_List.Element(I).SkyY).EventIndex := I;
+            end loop;
+        end if;
     end UpdateEvents;
+
+    procedure DeleteEvent(EventIndex : Positive) is
+    begin
+        SkyMap(Events_List.Element(EventIndex).SkyX, Events_List.Element(EventIndex).SkyY).EventIndex := 0;
+        Events_List.Delete(Index => EventIndex, Count => 1);
+        for I in Events_List.First_Index..Events_List.Last_Index loop
+            SkyMap(Events_List.Element(I).SkyX, Events_List.Element(I).SkyY).EventIndex := I;
+        end loop;
+    end DeleteEvent;
 
     procedure ShowEventInfo is
         InfoWindow : Window;
