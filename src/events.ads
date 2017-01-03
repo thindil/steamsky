@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -35,6 +35,7 @@ package Events is
     
     function CheckForEvent(OldState : GameStates) return GameStates; -- Check if event happen
     procedure UpdateEvents(Minutes : Positive); -- Update all events timers
+    procedure DeleteEvent(EventIndex : Positive); -- Delete selected event
     procedure ShowEvents; -- Show list of current events
     function ShowEventsKeys(Key : Key_Code) return GameStates; -- Handle keys on events list screen
 

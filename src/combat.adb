@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -366,8 +366,7 @@ package body Combat is
                                         if Events_List.Element(SkyMap(Ship.SkyX, Ship.SkyY).EventIndex).EType = AttackOnBase then
                                             GainRep(SkyMap(Ship.SkyX, Ship.SkyY).BaseIndex, 5);
                                         end if;
-                                        Events_List.Delete(Index => SkyMap(Ship.SkyX, Ship.SkyY).EventIndex, Count => 1);
-                                        SkyMap(Ship.SkyX, Ship.SkyY).EventIndex := 0;
+                                        DeleteEvent(SkyMap(Ship.SkyX, Ship.SkyY).EventIndex);
                                     end if;
                                     if SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex > 0 then
                                         if Ship.Missions.Element(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex).MType = Kill then

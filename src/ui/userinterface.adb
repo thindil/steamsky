@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -815,8 +815,7 @@ package body UserInterface is
                         if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name = To_Unbounded_String("Medical supplies") then
                             NewTime := Events_List.Element(EventIndex).Time - PlayerShip.Cargo.Element(I).Amount;
                             if NewTime < 1 then
-                                Events_List.Delete(Index => EventIndex, Count => 1);
-                                SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := 0;
+                                DeleteEvent(EventIndex);
                             else
                                 Events_List.Update_Element(Index => EventIndex, Process => UpdateEvent'Access);
                             end if;
@@ -831,8 +830,7 @@ package body UserInterface is
                         if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name = To_Unbounded_String("Medical supplies") then
                             NewTime := Events_List.Element(EventIndex).Time - PlayerShip.Cargo.Element(I).Amount;
                             if NewTime < 1 then
-                                Events_List.Delete(Index => EventIndex, Count => 1);
-                                SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := 0;
+                                DeleteEvent(EventIndex);
                             else
                                 Events_List.Update_Element(Index => EventIndex, Process => UpdateEvent'Access);
                             end if;
