@@ -228,7 +228,9 @@ package body Missions is
 
     procedure FinishMission(MissionIndex : Positive) is
     begin
-        DockShip(True);
+        if PlayerShip.Speed /= DOCKED then
+            DockShip(True);
+        end if;
         UpdateGame(5);
         case PlayerShip.Missions.Element(MissionIndex).MType is
             when Deliver =>
