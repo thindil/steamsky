@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -33,7 +33,7 @@ package body Missions.UI is
     procedure ShowMissionInfo is
         Mission : constant Mission_Data := PlayerShip.Missions.Element(Get_Index(Current(MissionsMenu)));
         InfoWindow : Window;
-        CurrentLine : Line_Position := 1;
+        CurrentLine : Line_Position := 2;
         DiffX, DiffY : Natural;
         MinutesDiff : Natural;
         MissionTime : Date_Record := (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
@@ -42,12 +42,14 @@ package body Missions.UI is
         Distance : Value_Type;
     begin
         InfoWindow := Create(15, (Columns / 2), 3, (Columns / 2));
+        Add(Win => InfoWindow, Str => "From base: " & To_String(SkyBases(Mission.StartBase).Name));
+        Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         case Mission.MType is
             when Deliver =>
                 Add(Win => InfoWindow, Str => "Item: " & To_String(Items_List.Element(Mission.Target).Name));
-                Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+                Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
                 Add(Win => InfoWindow, Str => "To base: " & To_String(SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex).Name));
-                CurrentLine := 2;
+                CurrentLine := 3;
             when Explore =>
                 Add(Win => InfoWindow, Str => "Explore selected area");
             when Kill =>
