@@ -43,8 +43,8 @@ package body Bases.UI.Missions is
                 Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
                 Add(Win => InfoWindow, Str => "To base: " & To_String(SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex).Name));
                 CurrentLine := 2;
-            when Explore =>
-                Add(Win => InfoWindow, Str => "Explore selected area");
+            when Patrol =>
+                Add(Win => InfoWindow, Str => "Patrol selected area");
             when Kill =>
                 Add(Win => InfoWindow, Str => "Target: " & To_String(Enemies_List.Element(Mission.Target).Name));
         end case;
@@ -147,8 +147,8 @@ package body Bases.UI.Missions is
             case SkyBases(BaseIndex).Missions.Element(I).MType is
                 when Deliver =>
                     Missions_Items.all(I) := New_Item("Deliver item to base");
-                when Explore =>
-                    Missions_Items.all(I) := New_Item("Explore area");
+                when Patrol =>
+                    Missions_Items.all(I) := New_Item("Patrol area");
                 when Kill =>
                     Missions_Items.all(I) := New_Item("Destroy ship");
             end case;
