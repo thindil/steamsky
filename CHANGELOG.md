@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - Crash in repair menu when no modules to repair
 - Crash on stop upgrading module
 - Crash on deleting old events
+- Crash on repair ship in bases
 
 ## [0.6] - 2016-12-11
 
