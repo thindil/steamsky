@@ -181,6 +181,7 @@ package body Bases.UI.Repair is
                 when 10 => -- Repair ship
                     RepairShip;
                     DrawGame(Repairs_View);
+                    return Repairs_View;
                 when others =>
                     Result := Driver(TradeMenu, Key);
                     if Result = Menu_Ok then
