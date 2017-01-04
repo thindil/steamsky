@@ -132,13 +132,13 @@ package body Missions is
             DiffY := abs(PlayerShip.SkyY - MissionY);
             case Mission.MType is
                 when Deliver =>
-                    Mission.Time := Positive(Value_Type(60) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
+                    Mission.Time := Positive(Value_Type(80) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
                     Mission.Reward := (Mission.Time / 4);
                 when Kill => 
-                    Mission.Time := Positive(Value_Type(120) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
-                    Mission.Reward := (Mission.Time / 3);
+                    Mission.Time := Positive(Value_Type(180) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
+                    Mission.Reward := (Mission.Time / 4);
                 when Patrol =>
-                    Mission.Time := Positive(Value_Type(120) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
+                    Mission.Time := Positive(Value_Type(180) * Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2))));
                     Mission.Reward := (Mission.Time / 5);
             end case;
             Mission.StartBase := BaseIndex;
