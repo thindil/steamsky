@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Directories; use Ada.Directories;
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
+with Ada.Containers; use Ada.Containers;
 with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Maps; use Maps;
@@ -267,7 +268,9 @@ package body UserInterface is
                 end if;
                 Orders_Items.all(MenuIndex) := New_Item("Trade");
                 MenuIndex := MenuIndex + 1;
-                Orders_Items.all(MenuIndex) := New_Item("Recruit");
+                if SkyBases(BaseIndex).Recruits.Length > 0 then
+                    Orders_Items.all(MenuIndex) := New_Item("Recruit");
+                end if;
                 MenuIndex := MenuIndex + 1;
                 TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).AskedForEvents.Day + ((30 *
                 SkyBases(BaseIndex).AskedForEvents.Month) * SkyBases(BaseIndex).AskedForEvents.Year));
