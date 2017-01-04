@@ -32,7 +32,7 @@ package body Crafts.UI is
         Recipe : Craft_Data;
         CurrentLine : Line_Position := 2;
         MAmount, TextLength : Natural := 0;
-        HaveMaterial, HaveWorkplace : Boolean := False;
+        HaveMaterial, HaveWorkplace, IsMaterial : Boolean := False;
         StartLine : Line_Position;
         StartColumn, EndColumn : Column_Position;
         WorkplaceName : Unbounded_String := Null_Unbounded_String;
@@ -66,7 +66,17 @@ package body Crafts.UI is
             Add(Win => InfoWindow, Str => "-");
             MAmount := 0;
             for J in Items_List.First_Index..Items_List.Last_Index loop
-                if Items_List.Element(J).IType = Recipe.MaterialTypes(I) then
+                IsMaterial := False;
+                if RecipeIndex > 0 then
+                    if Items_List.Element(J).IType = Recipe.MaterialTypes(I) then
+                        IsMaterial := True;
+                    end if;
+                else
+                    if Items_List.Element(J).Name = Items_List.Element(Recipe.ResultIndex).Name then
+                        IsMaterial := True;
+                    end if;
+                end if;
+                if IsMaterial then
                     if MAmount > 0 then
                         Add(Win => InfoWindow, Str => " or");
                     end if;
