@@ -130,14 +130,24 @@ package body Crafts is
             RecipeName := To_Unbounded_String("Deconstructing ") & Items_List.Element(Recipe.ResultIndex).Name;
         end if;
         -- Check for materials
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            for J in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
-                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Recipe.MaterialTypes(J) and
-                    PlayerShip.Cargo.Element(I).Amount >= Recipe.MaterialAmounts(J) then
-                    MaterialIndexes.Append(New_Item => J);
+        if RecipeIndex > 0 then
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                for J in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
+                    if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Recipe.MaterialTypes(J) and
+                        PlayerShip.Cargo.Element(I).Amount >= Recipe.MaterialAmounts(J)
+                    then
+                        MaterialIndexes.Append(New_Item => I);
+                    end if;
+                end loop;
+            end loop;
+        else
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name = Items_List.Element(Recipe.ResultIndex).Name then
+                    MaterialIndexes.Append(New_Item => I);
+                    exit;
                 end if;
             end loop;
-        end loop;
+        end if;
         if MaterialIndexes.Length < Recipe.MaterialTypes.Length then
             ShowDialog("You don't have enough materials to start manufacturing " & To_String(RecipeName) & ".");
             return;
@@ -207,13 +217,23 @@ package body Crafts is
                             WorkTime := WorkTime - RecipeTime;
                             RecipeTime := Recipe.Time; 
                             MaterialIndexes.Clear;
-                            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                                for K in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
-                                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = Recipe.MaterialTypes(K) then
+                            if PlayerShip.Modules.Element(L).Current_Value > 0 then
+                                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                                    for K in Recipe.MaterialTypes.First_Index..Recipe.MaterialTypes.Last_Index loop
+                                        if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = Recipe.MaterialTypes(K) then
+                                            MaterialIndexes.Append(New_Item => J);
+                                        end if;
+                                    end loop;
+                                end loop;
+                            else
+                                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).Name = Items_List.Element(Recipe.ResultIndex).Name 
+                                    then
                                         MaterialIndexes.Append(New_Item => J);
+                                        exit;
                                     end if;
                                 end loop;
-                            end loop;
+                            end if;
                             if MaterialIndexes.Length < Recipe.MaterialTypes.Length then
                                 AddMessage("You don't have crafting materials for " & To_String(RecipeName) & ".", CraftMessage);
                                 GiveOrders(CrafterIndex, Rest);
