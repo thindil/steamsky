@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -321,7 +321,7 @@ package body Bases is
             end loop;
             if Modules_List.Element(ModuleIndex).MType /= HULL then
                 ModulesAmount := ModulesAmount + Modules_List(ModuleIndex).Size;
-                if ModulesAmount > PlayerShip.Modules.Element(HullIndex).Max_Value then
+                if ModulesAmount > PlayerShip.Modules.Element(HullIndex).Max_Value and Modules_List.Element(ModuleIndex).MType /= GUN then
                     ShowDialog("You don't have free modules space for more modules.");
                     return;
                 end if;
