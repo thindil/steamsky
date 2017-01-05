@@ -113,11 +113,11 @@ package body Statistics is
                 Add(Win => DestroyedShipsPad, Str => "none");
             end if;
             Move_Cursor(Line => 3, Column => 2);
-            VisitedPercent := (VisitedFactor(GameStats.BasesVisited) / 1024.0);
+            VisitedPercent := (VisitedFactor(GameStats.BasesVisited) / 1024.0) * 100.0;
             Put(To => VisitedString, Item => Float(VisitedPercent), Aft => 3, Exp => 0);
             Add(Str => "Bases visited:" & Positive'Image(GameStats.BasesVisited) & " (" & VisitedString & "%)");
             Move_Cursor(Line => 4, Column => 2);
-            VisitedPercent := VisitedFactor(Float(GameStats.MapVisited) / (1024.0 * 1024.0));
+            VisitedPercent := VisitedFactor(Float(GameStats.MapVisited) / (1024.0 * 1024.0)) * 100.0;
             if VisitedPercent < 0.001 then
                 VisitedPercent := 0.001;
             end if;
