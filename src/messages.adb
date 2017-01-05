@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -137,14 +137,15 @@ package body Messages is
             return;
         end if;
         Move_Cursor(Line => 2, Column => 2);
-        Add(Str => "[All] [Combat] [Trade] [Orders] [Crafts] [Others] [Delete all]");
+        Add(Str => "[All] [Combat] [Trade] [Orders] [Crafts] [Missions] [Others] [Delete all]");
         Change_Attributes(Line => 2, Column => 3, Count => 1, Color => 1);
         Change_Attributes(Line => 2, Column => 9, Count => 1, Color => 1);
         Change_Attributes(Line => 2, Column => 18, Count => 1, Color => 1);
         Change_Attributes(Line => 2, Column => 26, Count => 1, Color => 1);
         Change_Attributes(Line => 2, Column => 36, Count => 1, Color => 1);
-        Change_Attributes(Line => 2, Column => 47, Count => 1, Color => 1);
-        Change_Attributes(Line => 2, Column => 53, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 44, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 58, Count => 1, Color => 1);
+        Change_Attributes(Line => 2, Column => 64, Count => 1, Color => 1);
         if MessagesPad = Null_Window then
             for I in reverse Messages_List.First_Index..Messages_List.Last_Index loop
                 if Messages_List.Element(I).MType = MessagesType or MessagesType = Default then
@@ -244,6 +245,13 @@ package body Messages is
             when Character'Pos('r') | Character'Pos('R') => -- Show craft messages
                 StartIndex := 0;
                 MessagesType := CraftMessage;
+                if MessagesPad /= Null_Window then
+                    Delete(MessagesPad);
+                end if;
+                DrawGame(Messages_View);
+            when Character'Pos('m') | Character'Pos('M') => -- Show missions messages
+                StartIndex := 0;
+                MessagesType := MissionMessage;
                 if MessagesPad /= Null_Window then
                     Delete(MessagesPad);
                 end if;
