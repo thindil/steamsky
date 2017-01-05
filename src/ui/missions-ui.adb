@@ -55,8 +55,13 @@ package body Missions.UI is
             when Kill =>
                 Add(Win => InfoWindow, Str => "Target: " & To_String(Enemies_List.Element(Mission.Target).Name));
         end case;
-        DiffX := abs(PlayerShip.SkyX - Mission.TargetX);
-        DiffY := abs(PlayerShip.SkyY - Mission.TargetY);
+        if not Mission.Finished then
+            DiffX := abs(PlayerShip.SkyX - Mission.TargetX);
+            DiffY := abs(PlayerShip.SkyY - Mission.TargetY);
+        else
+            DiffX := abs(PlayerShip.SkyX - SkyBases(Mission.StartBase).SkyX);
+            DiffY := abs(PlayerShip.SkyY - SkyBases(Mission.StartBase).SkyY);
+        end if;
         Distance := Value_Functions.Sqrt(Value_Type((DiffX ** 2) + (DiffY ** 2)));
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Distance:" & Integer'Image(Integer(Value_Type'Floor(Distance))));
