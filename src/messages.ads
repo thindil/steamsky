@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -22,7 +22,7 @@ with Game; use Game;
 package Messages is
 
     type Message_Type is (Default, CombatMessage, TradeMessage, OrderMessage,
-        CraftMessage, OtherMessage); -- Types of messages
+        CraftMessage, OtherMessage, MissionMessage); -- Types of messages
     type Message_Data is -- Data structure for messages
         record
             Message : Unbounded_String;
