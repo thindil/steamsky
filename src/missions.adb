@@ -201,7 +201,7 @@ package body Missions is
         SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex, Count => 1);
         PlayerShip.Missions.Append(New_Item => Mission);
         SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := PlayerShip.Missions.Last_Index;
-        AddMessage(To_String(AcceptMessage), OtherMessage);
+        AddMessage(To_String(AcceptMessage), MissionMessage);
         GainExp(1, 4, TraderIndex);
         GameStats.AcceptedMissions := GameStats.AcceptedMissions + 1;
         UpdateGame(5);
@@ -235,12 +235,12 @@ package body Missions is
         case PlayerShip.Missions.Element(MissionIndex).MType is
             when Deliver =>
                 AddMessage("You finished mission 'Deliver " & 
-                    To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) & "'.", OtherMessage);
+                    To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) & "'.", MissionMessage);
             when Kill =>
                 AddMessage("You finished mission 'Destroy " & 
-                    To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) & "'.", OtherMessage);
+                    To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) & "'.", MissionMessage);
             when Patrol =>
-                AddMessage("You finished mission 'Patrol selected area'.", OtherMessage);
+                AddMessage("You finished mission 'Patrol selected area'.", MissionMessage);
         end case;
         DeleteMission(MissionIndex, False);
         GameStats.FinishedMissions := GameStats.FinishedMissions + 1;
@@ -263,7 +263,7 @@ package body Missions is
                 when Patrol =>
                     Append(MessageText, "'Patrol selected area'.");
             end case;
-            AddMessage(To_String(MessageText), OtherMessage);
+            AddMessage(To_String(MessageText), MissionMessage);
         else
             case Mission.MType is
                 when Deliver =>
@@ -278,7 +278,7 @@ package body Missions is
                 RewardAmount := RewardAmount + FreeSpace;
             end if;
             if RewardAmount > 0 then
-                AddMessage("You received" & Integer'Image(RewardAmount) & " Charcollum for finished mission.", OtherMessage);
+                AddMessage("You received" & Integer'Image(RewardAmount) & " Charcollum for finished mission.", MissionMessage);
                 UpdateCargo(PlayerShip, 1, RewardAmount);
             end if;
         end if;
@@ -320,7 +320,7 @@ package body Missions is
             when Patrol =>
                 Append(MessageText, "'Patrol selected area'.");
         end case;
-        AddMessage(To_String(MessageText), OtherMessage);
+        AddMessage(To_String(MessageText), MissionMessage);
     end UpdateMission;
 
 end Missions;
