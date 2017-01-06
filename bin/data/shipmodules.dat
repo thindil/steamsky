@@ -617,4 +617,15 @@ Material = Steel
 Skill = Gunsmith
 Price = 16000
 InstallTime = 120
+[54]
+Name = Steel 120mm gun
+Type = Gun
+Weight = 800
+Value = 25
+MaxValue = 480
+Durability = 300
+Material = Iron
+Skill = Gunsmith
+Price = 32000
+InstallTime = 150
 []
