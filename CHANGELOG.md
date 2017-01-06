@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Start game only with few known crafting recipes
 - Weight of bronze cargo bay
+- Weight gain during ship module upgrade depends on module durability
 
 ### Fixed
 - Crash on giving crew orders when more than 2 medic room installed
