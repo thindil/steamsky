@@ -231,7 +231,7 @@ package body UserInterface is
         MenuLength : Column_Position;
         Event : Events_Types := None;
         TimeDiff, BaseIndex, MissionsLimit : Natural;
-        MenuIndex, MissionIndex : Positive;
+        MenuIndex, MissionIndex, OrdersAmount : Positive;
         HaveTrader : Boolean := False;
     begin
         BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -241,9 +241,64 @@ package body UserInterface is
                 exit;
             end if;
         end loop;
-        if PlayerShip.Speed = DOCKED then 
+        if PlayerShip.Speed = DOCKED then
+            OrdersAmount := 3;
             MenuIndex := 2;
-            Orders_Items := new Item_Array(1..12);
+            if HaveTrader then
+                OrdersAmount := OrdersAmount + 1;
+                if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
+                    OrdersAmount := OrdersAmount + 1;
+                end if;
+                if SkyBases(BaseIndex).Recruits.Length > 0 then
+                    OrdersAmount := OrdersAmount + 1;
+                end if;
+                TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).AskedForEvents.Day + ((30 *
+                SkyBases(BaseIndex).AskedForEvents.Month) * SkyBases(BaseIndex).AskedForEvents.Year));
+                if TimeDiff > 6 then
+                    OrdersAmount := OrdersAmount + 1;
+                end if;
+                if not SkyBases(BaseIndex).AskedForBases then
+                    OrdersAmount := OrdersAmount + 1;
+                end if;
+                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                    if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                        OrdersAmount := OrdersAmount + 1;
+                        exit;
+                    end if;
+                end loop;
+                if SkyBases(BaseIndex).BaseType = SHIPYARD then
+                    OrdersAmount := OrdersAmount + 1;
+                end if;
+                for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
+                    if Known_Recipes.Find_Index(Item => I) = Positive_Container.No_Index and Recipes_List.Element(I).BaseType = 
+                        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1
+                    then
+                        OrdersAmount := OrdersAmount + 1;
+                        exit;
+                    end if;
+                end loop;
+                case SkyBases(BaseIndex).Reputation(1) is
+                    when 0..25 =>
+                        MissionsLimit := 1;
+                    when 26..50 =>
+                        MissionsLimit := 3;
+                    when 51..75 =>
+                        MissionsLimit := 5;
+                    when 76..100 =>
+                        MissionsLimit := 10;
+                    when others =>
+                        MissionsLimit := 0;
+                end case;
+                for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+                    if PlayerShip.Missions.Element(I).StartBase = BaseIndex then
+                        MissionsLimit := MissionsLimit - 1;
+                    end if;
+                end loop;
+                if Integer(SkyBases(BaseIndex).Missions.Length) > 0 and MissionsLimit > 0 then
+                    OrdersAmount := OrdersAmount + 1;
+                end if;
+            end if;
+            Orders_Items := new Item_Array(1..OrdersAmount);
             Orders_Items.all(1) := New_Item("Undock");
             if HaveTrader then
                 if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
@@ -270,10 +325,8 @@ package body UserInterface is
                 MenuIndex := MenuIndex + 1;
                 if SkyBases(BaseIndex).Recruits.Length > 0 then
                     Orders_Items.all(MenuIndex) := New_Item("Recruit");
+                    MenuIndex := MenuIndex + 1;
                 end if;
-                MenuIndex := MenuIndex + 1;
-                TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).AskedForEvents.Day + ((30 *
-                SkyBases(BaseIndex).AskedForEvents.Month) * SkyBases(BaseIndex).AskedForEvents.Year));
                 if TimeDiff > 6 then
                     Orders_Items.all(MenuIndex) := New_Item("Ask for events");
                     MenuIndex := MenuIndex + 1;
@@ -302,31 +355,26 @@ package body UserInterface is
                         exit;
                     end if;
                 end loop;
-                case SkyBases(BaseIndex).Reputation(1) is
-                    when 0..25 =>
-                        MissionsLimit := 1;
-                    when 26..50 =>
-                        MissionsLimit := 3;
-                    when 51..75 =>
-                        MissionsLimit := 5;
-                    when 76..100 =>
-                        MissionsLimit := 10;
-                    when others =>
-                        MissionsLimit := 0;
-                end case;
-                for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
-                    if PlayerShip.Missions.Element(I).StartBase = BaseIndex then
-                        MissionsLimit := MissionsLimit - 1;
-                    end if;
-                end loop;
                 if Integer(SkyBases(BaseIndex).Missions.Length) > 0 and MissionsLimit > 0 then
                     Orders_Items.all(MenuIndex) := New_Item("Missions");
                     MenuIndex := MenuIndex + 1;
                 end if;
             end if;
         else
+            OrdersAmount := 6;
             MenuIndex := 1;
-            Orders_Items := new Item_Array(1..9);
+            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+                Event := Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType;
+            end if;
+            if BaseIndex > 0 and Event = None then
+                if SkyBases(BaseIndex).Reputation(1) > -25 then
+                    OrdersAmount := OrdersAmount + 1;
+                end if;
+            end if;
+            if Event /= None or SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
+                OrdersAmount := OrdersAmount + 1;
+            end if;
+            Orders_Items := new Item_Array(1..OrdersAmount);
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
                 Event := Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType;
             end if;
@@ -400,9 +448,7 @@ package body UserInterface is
         end if;
         Orders_Items.all(MenuIndex) := New_Item("Quit");
         MenuIndex := MenuIndex + 1;
-        for I in MenuIndex..Orders_Items'Last loop
-            Orders_Items.all(I) := Null_Item;
-        end loop;
+        Orders_Items.all(MenuIndex) := Null_Item;
         OrdersMenu := New_Menu(Orders_Items);
         Set_Format(OrdersMenu, Lines - 4, 1);
         Set_Mark(OrdersMenu, "");
