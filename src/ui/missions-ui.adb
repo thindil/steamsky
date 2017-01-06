@@ -109,13 +109,20 @@ package body Missions.UI is
             CurrentLine := CurrentLine + 1;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Mission is ready to return.");
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine + 2, Column => 0);
+            Add(Win => InfoWindow, Str => "Press SPACE to show start base on map");
+            Change_Attributes(Win => InfoWindow, Line => CurrentLine + 2, Column => 6, Count => 5, Color => 1);
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine + 3, Column => 0);
+            Add(Win => InfoWindow, Str => "Press ENTER to set start base as a destination for ship");
+            Change_Attributes(Win => InfoWindow, Line => CurrentLine + 3, Column => 6, Count => 5, Color => 1);
+        else
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine + 2, Column => 0);
+            Add(Win => InfoWindow, Str => "Press SPACE to show mission on map");
+            Change_Attributes(Win => InfoWindow, Line => CurrentLine + 2, Column => 6, Count => 5, Color => 1);
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine + 3, Column => 0);
+            Add(Win => InfoWindow, Str => "Press ENTER to set mission as a destination for ship");
+            Change_Attributes(Win => InfoWindow, Line => CurrentLine + 3, Column => 6, Count => 5, Color => 1);
         end if;
-        Move_Cursor(Win => InfoWindow, Line => CurrentLine + 2, Column => 0);
-        Add(Win => InfoWindow, Str => "Press SPACE to show mission on map");
-        Change_Attributes(Win => InfoWindow, Line => CurrentLine + 2, Column => 6, Count => 5, Color => 1);
-        Move_Cursor(Win => InfoWindow, Line => CurrentLine + 3, Column => 0);
-        Add(Win => InfoWindow, Str => "Press ENTER to set mission as a destination for ship");
-        Change_Attributes(Win => InfoWindow, Line => CurrentLine + 3, Column => 6, Count => 5, Color => 1);
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
@@ -159,6 +166,7 @@ package body Missions.UI is
     function ShowMissionsKeys(Key : Key_Code) return GameStates is
         Result : Driver_Result;
         MissionIndex : Positive;
+        X, Y : Integer;
     begin
         if MissionsMenu /= Null_Menu then
             MissionIndex := Get_Index(Current(MissionsMenu));
@@ -183,15 +191,20 @@ package body Missions.UI is
                     DrawGame(Sky_Map_View);
                     return Sky_Map_View;
                 when 10 => -- Set event as destination point for ship
-                    if PlayerShip.Missions.Element(MissionIndex).TargetX = PlayerShip.SkyX and 
-                        PlayerShip.Missions.Element(MissionIndex).TargetY = PlayerShip.SkyY 
-                    then
+                    if not PlayerShip.Missions.Element(MissionIndex).Finished then
+                        X := PlayerShip.Missions.Element(MissionIndex).TargetX;
+                        Y := PlayerShip.Missions.Element(MissionIndex).TargetY;
+                    else
+                        X := SkyBases(PlayerShip.Missions.Element(MissionIndex).StartBase).SkyX;
+                        Y := SkyBases(PlayerShip.Missions.Element(MissionIndex).StartBase).SkyY;
+                    end if;
+                    if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
                         ShowDialog("You are at this target now.");
                         DrawGame(Missions_View);
                         return Missions_View;
                     end if;
-                    PlayerShip.DestinationX := PlayerShip.Missions.Element(MissionIndex).TargetX;
-                    PlayerShip.DestinationY := PlayerShip.Missions.Element(MissionIndex).TargetY;
+                    PlayerShip.DestinationX := X;
+                    PlayerShip.DestinationY := Y;
                     AddMessage("You set travel destination for your ship.", OrderMessage);
                     DrawGame(Sky_Map_View);
                     return Sky_Map_View;
