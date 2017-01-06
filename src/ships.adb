@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -755,7 +755,7 @@ package body Ships is
             UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(UpgradeMaterial).ProtoIndex, (0 - ResultAmount));
             if UpgradeProgress = 0 then
                 WeightGain := Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).Weight
-                    / 100;
+                    / Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).Durability;
                 if WeightGain < 1 then
                     WeightGain := 1;
                 end if;
