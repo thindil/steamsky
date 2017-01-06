@@ -16,8 +16,8 @@ All notable changes to this project will be documented in this file.
   bronze cabin, heavy bronze turret, heavy bronze battering ram, iron cockpit,
   iron cargo bay, small iron alchemy lab, small iron furnace, small iron
   water collector, small iron greenhouse, small iron medical room, steel
-  10mm gun, steel 20mm gun, steel 40mm gun, steel 60mm gun, steel 80mm gun
-  and steel 100mm gun
+  10mm gun, steel 20mm gun, steel 40mm gun, steel 60mm gun, steel 80mm gun,
+  steel 100mm gun and steel 120mm gun
 - Option to show game statistics after player death
 - Option to generate random ship name in new game settings
 - Random names for all ships
