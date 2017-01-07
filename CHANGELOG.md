@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 - Crash on deleting old events
 - Crash on repair ship in bases
 - Don't count guns to amount of modules when buying
+- Assigned ammo when deleting items from cargo
 
 ## [0.6] - 2016-12-11
 
