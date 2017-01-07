@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
   iron cargo bay, small iron alchemy lab, small iron furnace, small iron
   water collector, small iron greenhouse, small iron medical room, steel
   10mm gun, steel 20mm gun, steel 40mm gun, steel 60mm gun, steel 80mm gun,
-  steel 100mm gun and steel 120mm gun
+  steel 100mm gun, steel 120mm gun and light iron armor
 - Option to show game statistics after player death
 - Option to generate random ship name in new game settings
 - Random names for all ships
