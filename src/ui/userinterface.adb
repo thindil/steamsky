@@ -231,7 +231,7 @@ package body UserInterface is
         MenuLength : Column_Position;
         Event : Events_Types := None;
         TimeDiff, BaseIndex, MissionsLimit : Natural;
-        MenuIndex, MissionIndex, OrdersAmount : Positive;
+        MenuIndex, OrdersAmount : Positive;
         HaveTrader : Boolean := False;
     begin
         BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -246,9 +246,14 @@ package body UserInterface is
             MenuIndex := 2;
             if HaveTrader then
                 OrdersAmount := OrdersAmount + 1;
-                if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
-                    OrdersAmount := OrdersAmount + 1;
-                end if;
+                for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+                    if (PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex) or
+                        (PlayerShip.Missions.Element(I).TargetX = PlayerShip.SkyX and PlayerShip.Missions.Element(I).TargetY = 
+                            PlayerShip.SkyY) 
+                    then
+                        OrdersAmount := OrdersAmount + 1;
+                    end if;
+                end loop;
                 if SkyBases(BaseIndex).Recruits.Length > 0 then
                     OrdersAmount := OrdersAmount + 1;
                 end if;
@@ -301,26 +306,30 @@ package body UserInterface is
             Orders_Items := new Item_Array(1..OrdersAmount);
             Orders_Items.all(1) := New_Item("Undock");
             if HaveTrader then
-                if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
-                    MissionIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex;
-                    case PlayerShip.Missions.Element(MissionIndex).MType is
-                        when Deliver =>
-                            Orders_Items.all(MenuIndex) := New_Item("Complete delivery of " & 
-                                To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
-                            MenuIndex := MenuIndex + 1;
-                        when Kill =>
-                            if PlayerShip.Missions.Element(MissionIndex).Finished then
-                                Orders_Items.all(MenuIndex) := New_Item("Complete destroy " &
-                                    To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+                    if (PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex) or
+                        (PlayerShip.Missions.Element(I).TargetX = PlayerShip.SkyX and PlayerShip.Missions.Element(I).TargetY = 
+                            PlayerShip.SkyY) 
+                    then
+                        case PlayerShip.Missions.Element(I).MType is
+                            when Deliver =>
+                                Orders_Items.all(MenuIndex) := New_Item("Complete delivery of " & 
+                                To_String(Items_List.Element(PlayerShip.Missions.Element(I).Target).Name));
                                 MenuIndex := MenuIndex + 1;
-                            end if;
-                        when Patrol => 
-                            if PlayerShip.Missions.Element(MissionIndex).Finished then
-                                Orders_Items.all(MenuIndex) := New_Item("Complete Patrol area mission");
-                                MenuIndex := MenuIndex + 1;
-                            end if;
-                    end case;
-                end if;
+                            when Kill =>
+                                if PlayerShip.Missions.Element(I).Finished then
+                                    Orders_Items.all(MenuIndex) := New_Item("Complete destroy " &
+                                    To_String(Enemies_List.Element(PlayerShip.Missions.Element(I).Target).Name));
+                                    MenuIndex := MenuIndex + 1;
+                                end if;
+                            when Patrol => 
+                                if PlayerShip.Missions.Element(I).Finished then
+                                    Orders_Items.all(MenuIndex) := New_Item("Complete Patrol area mission");
+                                    MenuIndex := MenuIndex + 1;
+                                end if;
+                        end case;
+                    end if;
+                end loop;
                 Orders_Items.all(MenuIndex) := New_Item("Trade");
                 MenuIndex := MenuIndex + 1;
                 if SkyBases(BaseIndex).Recruits.Length > 0 then
@@ -366,12 +375,31 @@ package body UserInterface is
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
                 Event := Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType;
             end if;
-            if BaseIndex > 0 and Event = None then
-                if SkyBases(BaseIndex).Reputation(1) > -25 then
-                    OrdersAmount := OrdersAmount + 1;
+            if Event = None then
+                if BaseIndex > 0 then
+                    if SkyBases(BaseIndex).Reputation(1) > -25 then
+                        OrdersAmount := OrdersAmount + 1;
+                    end if;
+                    if HaveTrader then
+                        for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+                            if (PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex) or
+                                (PlayerShip.Missions.Element(I).TargetX = PlayerShip.SkyX and PlayerShip.Missions.Element(I).TargetY = 
+                                    PlayerShip.SkyY) 
+                            then
+                                OrdersAmount := OrdersAmount + 1;
+                            end if;
+                        end loop;
+                    end if;
+                else
+                    for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+                        if (PlayerShip.Missions.Element(I).TargetX = PlayerShip.SkyX and PlayerShip.Missions.Element(I).TargetY = 
+                            PlayerShip.SkyY) and PlayerShip.Missions.Element(I).MType /= Deliver
+                        then
+                            OrdersAmount := OrdersAmount + 1;
+                        end if;
+                    end loop;
                 end if;
-            end if;
-            if Event /= None or SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
+            else
                 OrdersAmount := OrdersAmount + 1;
             end if;
             Orders_Items := new Item_Array(1..OrdersAmount);
@@ -407,34 +435,52 @@ package body UserInterface is
                         end loop;
                     end if;
                 when None =>
-                    if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
-                        MissionIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex;
-                        case PlayerShip.Missions.Element(MissionIndex).MType is
-                            when Deliver =>
-                                if HaveTrader then
-                                    Orders_Items.all(MenuIndex) := New_Item("Complete delivery of " & 
-                                        To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
-                                    MenuIndex := MenuIndex + 1;
-                                end if;
-                            when Kill =>
-                                if not PlayerShip.Missions.Element(MissionIndex).Finished then
-                                    Orders_Items.all(MenuIndex) := New_Item("Search for " & 
-                                        To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
-                                    MenuIndex := MenuIndex + 1;
-                                elsif HaveTrader then
-                                    Orders_Items.all(MenuIndex) := New_Item("Complete destroy " &
-                                        To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
-                                    MenuIndex := MenuIndex + 1;
-                                end if;
-                            when Patrol => 
-                                if not PlayerShip.Missions.Element(MissionIndex).Finished then
-                                    Orders_Items.all(MenuIndex) := New_Item("Patrol area");
-                                    MenuIndex := MenuIndex + 1;
-                                elsif HaveTrader then
-                                    Orders_Items.all(MenuIndex) := New_Item("Complete Patrol area mission");
-                                    MenuIndex := MenuIndex + 1;
-                                end if;
-                        end case;
+                    if BaseIndex > 0 then
+                        for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+                            if HaveTrader then
+                                case PlayerShip.Missions.Element(I).MType is
+                                    when Deliver =>
+                                        if PlayerShip.Missions.Element(I).TargetX = PlayerShip.SkyX and 
+                                            PlayerShip.Missions.Element(I).TargetY = PlayerShip.SkyY
+                                        then
+                                            Orders_Items.all(MenuIndex) := New_Item("Complete delivery of " & 
+                                                To_String(Items_List.Element(PlayerShip.Missions.Element(I).Target).Name));
+                                            MenuIndex := MenuIndex + 1;
+                                        end if;
+                                    when Kill =>
+                                        if PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex
+                                        then
+                                            Orders_Items.all(MenuIndex) := New_Item("Complete destroy " &
+                                                To_String(Enemies_List.Element(PlayerShip.Missions.Element(I).Target).Name));
+                                            MenuIndex := MenuIndex + 1;
+                                        end if;
+                                    when Patrol =>
+                                        if PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex
+                                        then
+                                            Orders_Items.all(MenuIndex) := New_Item("Complete Patrol area mission");
+                                            MenuIndex := MenuIndex + 1;
+                                        end if;
+                                end case;
+                            end if;
+                        end loop;
+                    else
+                        for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+                            if PlayerShip.Missions.Element(I).TargetX = PlayerShip.SkyX and 
+                                PlayerShip.Missions.Element(I).TargetY = PlayerShip.SkyY
+                            then
+                                case PlayerShip.Missions.Element(I).MType is
+                                    when Deliver =>
+                                        null;
+                                    when Kill =>
+                                        Orders_Items.all(MenuIndex) := New_Item("Search for " & 
+                                        To_String(Enemies_List.Element(PlayerShip.Missions.Element(I).Target).Name));
+                                        MenuIndex := MenuIndex + 1;
+                                    when Patrol => 
+                                        Orders_Items.all(MenuIndex) := New_Item("Patrol area");
+                                        MenuIndex := MenuIndex + 1;
+                                end case;
+                            end if;
+                        end loop;
                     end if;
             end case;
             Orders_Items.all(MenuIndex) := New_Item("All stop");
