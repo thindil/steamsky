@@ -249,6 +249,15 @@ package body Ships is
             NewAmount := Ship.Cargo.Element(ItemIndex).Amount + Amount;
             if NewAmount < 1 then
                 Ship.Cargo.Delete(Index => ItemIndex, Count => 1);
+                for I in Ship.Modules.First_Index..Ship.Modules.Last_Index loop
+                    if Modules_List.Element(Ship.Modules.Element(I).ProtoIndex).MType = GUN then
+                        if Ship.Modules.Element(I).Current_Value > ItemIndex then
+                            UpdateModule(Ship, I, "Current_Value", Natural'Image(Ship.Modules.Element(I).Current_Value - 1));
+                        elsif Ship.Modules.Element(I).Current_Value = ItemIndex then
+                            UpdateModule(Ship, I, "Current_Value", "0");
+                        end if;
+                    end if;
+                end loop;
             else
                 Ship.Cargo.Update_Element(Index => ItemIndex, Process => UpdateItem'Access);
             end if;
