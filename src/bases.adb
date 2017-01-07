@@ -340,14 +340,26 @@ package body Bases is
             UpdateCargo(PlayerShip, 1, (0 - Price));
             GainExp(1, 4, TraderIndex);
             GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
-            PlayerShip.Modules.Append(New_Item => (Name =>  Modules_List.Element(ModuleIndex).Name,
-                ProtoIndex => ModuleIndex, 
-                Weight => Modules_List.Element(ModuleIndex).Weight,
-                Current_Value => Modules_List.Element(ModuleIndex).Value,
-                Max_Value => Modules_List.Element(ModuleIndex).MaxValue,
-                Durability => Modules_List.Element(ModuleIndex).Durability,
-                MaxDurability => Modules_List.Element(ModuleIndex).Durability,
-                Owner => 0, UpgradeProgress => 0, UpgradeAction => NONE));
+            if Modules_List.Element(ModuleIndex).MType /= HULL then
+                PlayerShip.Modules.Append(New_Item => (Name =>  Modules_List.Element(ModuleIndex).Name,
+                    ProtoIndex => ModuleIndex, 
+                    Weight => Modules_List.Element(ModuleIndex).Weight,
+                    Current_Value => Modules_List.Element(ModuleIndex).Value,
+                    Max_Value => Modules_List.Element(ModuleIndex).MaxValue,
+                    Durability => Modules_List.Element(ModuleIndex).Durability,
+                    MaxDurability => Modules_List.Element(ModuleIndex).Durability,
+                    Owner => 0, UpgradeProgress => 0, UpgradeAction => NONE));
+            else
+                PlayerShip.Modules.Insert(Before => HullIndex, 
+                    New_Item => (Name =>  Modules_List.Element(ModuleIndex).Name,
+                    ProtoIndex => ModuleIndex, 
+                    Weight => Modules_List.Element(ModuleIndex).Weight,
+                    Current_Value => Modules_List.Element(ModuleIndex).Value,
+                    Max_Value => Modules_List.Element(ModuleIndex).MaxValue,
+                    Durability => Modules_List.Element(ModuleIndex).Durability,
+                    MaxDurability => Modules_List.Element(ModuleIndex).Durability,
+                    Owner => 0, UpgradeProgress => 0, UpgradeAction => NONE));
+            end if;
             case Modules_List.Element(ModuleIndex).MType is
                 when GUN =>
                     UpdateModule(PlayerShip, FreeTurretIndex, "Current_Value", Positive'Image(PlayerShip.Modules.Last_Index));
