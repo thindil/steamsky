@@ -439,6 +439,11 @@ package body Bases is
                 Positive'Image(Price) & " Charcollum.", 
                 TradeMessage);
             PlayerShip.Modules.Delete(ModuleIndex, 1);
+            if PlayerShip.RepairModule > ModuleIndex then
+                PlayerShip.RepairModule := PlayerShip.RepairModule - 1;
+            elsif PlayerShip.RepairModule = ModuleIndex then
+                PlayerShip.RepairModule := 0;
+            end if;
         end if;
     end UpgradeShip;
 
