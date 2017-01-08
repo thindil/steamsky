@@ -51,6 +51,7 @@ All notable changes to this project will be documented in this file.
 - Don't count guns to amount of modules when buying
 - Assigned ammo when deleting items from cargo
 - Repair priority when selling ship modules
+- Crash on removing crew member
 
 ## [0.6] - 2016-12-11
 
