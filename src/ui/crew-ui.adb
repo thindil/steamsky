@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -366,13 +366,8 @@ package body Crew.UI is
             ShowDialog("You can't dismiss self.");
             return;
         end if;
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Owner = MemberIndex then
-                UpdateModule(PlayerShip, I, "Owner", "0");
-            end if;
-        end loop;
         AddMessage("You dismissed " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & ".", OrderMessage);
-        PlayerShip.Crew.Delete(Index => MemberIndex, Count => 1);
+        DeleteMember(MemberIndex);
         SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
         MemberIndex := 1;
         DrawGame(Crew_Info);

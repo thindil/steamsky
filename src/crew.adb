@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -248,15 +248,10 @@ package body Crew is
             Member.Health := 0;
         end UpdateDeath;
     begin
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Owner = MemberIndex then
-                UpdateModule(PlayerShip, I, "Owner", "0");
-            end if;
-        end loop;
         if MemberIndex > 1 then
             AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " died from " &
                 To_String(Reason) & ".", CombatMessage);
-            PlayerShip.Crew.Delete(Index => MemberIndex, Count => 1);
+            DeleteMember(MemberIndex);
         else
             AddMessage("You died from " & To_String(Reason) & ".", CombatMessage);
             PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateDeath'Access);
@@ -538,5 +533,17 @@ package body Crew is
         end loop;
         return SkillLevel;
     end GetSkillLevel;
+
+    procedure DeleteMember(MemberIndex : Positive) is
+    begin
+        PlayerShip.Crew.Delete(Index => MemberIndex, Count => 1);
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if PlayerShip.Modules.Element(I).Owner = MemberIndex then
+                UpdateModule(PlayerShip, I, "Owner", "0");
+            elsif PlayerShip.Modules.Element(I).Owner > MemberIndex then
+                UpdateModule(PlayerShip, I, "Owner", Positive'Image(PlayerShip.Modules.Element(I).Owner - 1));
+            end if;
+        end loop;
+    end DeleteMember;
 
 end Crew;

@@ -45,5 +45,6 @@ package Crew is
     procedure Death(MemberIndex : Positive; Reason : Unbounded_String); -- Handle crew member death
     procedure UpdateCrew(Minutes : Positive; TiredPoints : Natural); -- Update ship crew
     function GetSkillLevel(MemberIndex, SkillIndex : Positive) return Natural; -- Get level of skill of selected crew member
+    procedure DeleteMember(MemberIndex : Positive); -- Delete selected member from crew list
 
 end Crew;
