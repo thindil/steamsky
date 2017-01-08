@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.7] - 2017-01-08
 
 ### Added
 - Option to set module as priority to repair
