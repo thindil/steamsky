@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file.
 - Deconstruction of items for discover new crafting recipes
 - Option to buy crafting recipes in bases
 - New items types: andraeseeds, illandruseeds and missionitem
-- New items: andrae seeds, illandru seeds and package
+- New items: andrae seeds, illandru seeds and small package
 - New skill: woodcutting
 - New crafting recipes: andrae logs and illandru logs
 - Changed name of ship module small alchemy lab to small bronze alchemy lab
