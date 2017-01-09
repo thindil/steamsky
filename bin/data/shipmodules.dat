@@ -640,4 +640,16 @@ Skill = Engineering
 Price = 7500
 InstallTime = 180
 Unique = Yes
+[56]
+Name = Iron armor
+Type = Armor
+Weight = 6000
+Value = 5
+MaxValue = 10
+Durability = 450
+Material = Iron
+Skill = Engineering
+Price = 10000
+InstallTime = 220
+Unique = Yes
 []
