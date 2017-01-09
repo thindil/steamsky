@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship module: iron armor
 
+### Fixed
+- Crash on selling ship modules
+
 ## [0.7] - 2017-01-08
 
 ### Added
