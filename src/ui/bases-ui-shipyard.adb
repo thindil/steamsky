@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -62,7 +62,7 @@ package body Bases.UI.Shipyard is
                 Float(Damage));
             MTime := Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).InstallTime;
         end if;
-        InfoWindow := Create(10, (Columns / 2), 4, (Columns / 2));
+        InfoWindow := Create(15, (Columns / 2), 4, (Columns / 2));
         Add(Win => InfoWindow, Str => To_String(TextCost) & Positive'Image(Cost) & " Charcollum");
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         Add(Win => InfoWindow, Str => To_String(TextTime) & Positive'Image(MTime) & " minutes");
@@ -120,6 +120,23 @@ package body Bases.UI.Shipyard is
                 Add(Win => InfoWindow, Str => "Weight:" & Natural'Image(Modules_List.Element(ModuleIndex).Weight) & " kg");
                 CurrentLine := CurrentLine + 1;
             end if;
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
+            Add(Win => InfoWindow, Str => "Repair/Upgrade material: ");
+            MAmount := 0;
+            for I in Items_List.First_Index..Items_List.Last_Index loop
+                if Items_List.Element(I).IType = Modules_List.Element(ModuleIndex).RepairMaterial
+                then
+                    if MAmount > 0 then
+                        Add(Win => InfoWindow, Str => " or ");
+                    end if;
+                    Add(Win => InfoWindow, Str => To_String(Items_List.Element(I).Name));
+                    MAmount := MAmount + 1;
+                end if;
+            end loop;
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => "Repair/Upgrade skill: " &
+            To_String(Skills_Names.Element(Modules_List.Element(ModuleIndex).RepairSkill)));
+            CurrentLine := CurrentLine + 2;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Press ENTER to install module");
             Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
