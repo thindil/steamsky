@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship module: iron armor
 
+### Changed
+- Updated interface
+
 ### Fixed
 - Crash on selling ship modules
 
