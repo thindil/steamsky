@@ -444,6 +444,13 @@ package body Bases is
             elsif PlayerShip.RepairModule = ModuleIndex then
                 PlayerShip.RepairModule := 0;
             end if;
+            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = TURRET then
+                    if PlayerShip.Modules.Element(I).Current_Value > ModuleIndex then
+                        UpdateModule(PlayerShip, I, "Current_Value", Positive'Image(PlayerShip.Modules.Element(I).Current_Value - 1));
+                    end if;
+                end if;
+            end loop;
         end if;
     end UpgradeShip;
 
