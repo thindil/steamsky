@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New ship module: iron armor
+- New ship module: iron armor and heavy iron armor
 
 ### Changed
 - Updated interface
