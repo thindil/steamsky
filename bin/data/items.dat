@@ -246,4 +246,10 @@ Weight = 5
 Type = MissionItem
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
+[40]
+Name = Corpse
+Weight = 70
+Type = Body
+Prices = 0, 0, 0, 0
+Buyable = N, N, N, N
 []
