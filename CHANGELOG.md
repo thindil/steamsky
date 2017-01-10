@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash on selling ship modules
+- Repair material for Steel 120mm gun
 
 ## [0.7] - 2017-01-08
 
