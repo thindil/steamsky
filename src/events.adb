@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Numerics.Generic_Elementary_Functions;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
@@ -28,6 +27,7 @@ with UserInterface; use UserInterface;
 with Bases; use Bases;
 with ShipModules; use ShipModules;
 with Items; use Items;
+with Utils; use Utils;
 
 package body Events is
 
@@ -39,14 +39,6 @@ package body Events is
         PilotIndex, PlayerValue : Natural := 0;
         Roll : Positive;
         Enemies : Positive_Container.Vector;
-        function GetRandom(Min, Max : Positive) return Positive is
-            subtype Rand_Range is Positive range Min..Max;
-            package Rand_Roll is new Discrete_Random(Rand_Range);
-            Generator : Rand_Roll.Generator;
-        begin
-            Rand_Roll.Reset(Generator);
-            return Rand_Roll.Random(Generator);
-        end GetRandom;
     begin
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             case Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType is
