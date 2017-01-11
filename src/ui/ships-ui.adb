@@ -105,7 +105,6 @@ package body Ships.UI is
 
     function DropCargoResult return GameStates is
         ItemIndex : constant Positive := Get_Index(Current(ShipsMenu));
-        ItemName : constant String := To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Name);
         DropAmount, DropAmount2 : Natural;
         Visibility : Cursor_Visibility := Invisible;
         FieldIndex : constant Positive := Get_Index(Current(RenameForm));
@@ -131,8 +130,8 @@ package body Ships.UI is
                 end loop;
             end if;
             if DropAmount > 0 then
+                AddMessage("You dropped" & Positive'Image(DropAmount) & " " & GetCargoName(ItemIndex) & ".", OtherMessage);
                 UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex, (0 - DropAmount));
-                AddMessage("You dropped" & Positive'Image(DropAmount) & " " & ItemName, OtherMessage);
             end if;
         end if;
         Set_Cursor_Visibility(Visibility);
