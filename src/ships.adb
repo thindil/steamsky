@@ -244,7 +244,7 @@ package body Ships is
             end if;
         end loop;
         if ItemIndex = 0 then
-            Ship.Cargo.Append(New_Item => (ProtoIndex => ProtoIndex, Amount => Amount));
+            Ship.Cargo.Append(New_Item => (ProtoIndex => ProtoIndex, Amount => Amount, Name => Null_Unbounded_String));
         else
             NewAmount := Ship.Cargo.Element(ItemIndex).Amount + Amount;
             if NewAmount < 1 then
@@ -470,7 +470,7 @@ package body Ships is
                         end if;
                         XIndex := Index(Value, "x", StartIndex);
                         TempRecord.Cargo.Append(New_Item => (Amount => Integer'Value(Slice(Value, StartIndex, XIndex - 1)),
-                            ProtoIndex => Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1))));
+                            ProtoIndex => Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1)), Name => Null_Unbounded_String));
                         StartIndex := EndIndex + 2;
                     end loop;
                 end if;
@@ -1010,5 +1010,13 @@ package body Ships is
         Append(NewName,ShipSyllablesEnd.Element(GetRandom(ShipSyllablesEnd.First_Index, ShipSyllablesEnd.Last_Index)));
         return NewName;
     end GenerateShipName;
+
+    function GetCargoName(CargoIndex : Positive) return String is
+    begin
+        if PlayerShip.Cargo.Element(CargoIndex).Name /= Null_Unbounded_String then
+            return To_String(PlayerShip.Cargo.Element(CargoIndex).Name);
+        end if;
+        return To_String(Items_List.Element(PlayerShip.Cargo.Element(CargoIndex).ProtoIndex).Name);
+    end GetCargoName;
 
 end Ships;

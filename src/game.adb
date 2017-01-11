@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -33,7 +33,7 @@ with Missions; use Missions;
 
 package body Game is
     
-    SaveVersion : constant String := "0.7";
+    SaveVersion : constant String := "0.8";
 
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character) is
         type Rand_Range is range 1..1024;
@@ -436,6 +436,7 @@ package body Game is
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Cargo.Element(I).Amount));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            Put(SaveGame, To_String(PlayerShip.Cargo.Element(I).Name) & ";");
         end loop;
         RawValue := To_Unbounded_String(PlayerShip.Crew.Length'Img);
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -701,7 +702,8 @@ package body Game is
         for I in 1..VectorLength loop
             ShipCargo.Append(New_Item => (ProtoIndex =>
                 Positive'Value(To_String(ReadData)), Amount =>
-                Positive'Value(To_String(ReadData))));
+                Positive'Value(To_String(ReadData)), Name =>
+                ReadData));
         end loop;
         PlayerShip.Cargo := ShipCargo;
         VectorLength := Positive'Value(To_String(ReadData));

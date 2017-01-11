@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -44,6 +44,7 @@ package Ships is
         record
             ProtoIndex : Positive; -- Index of prototype
             Amount : Positive; -- Amount of cargo
+            Name : Unbounded_String; -- Name of item if different than default
         end record;
     package Cargo_Container is new Vectors(Positive, CargoData);
     package Crew_Container is new Vectors(Positive, Member_Data);
@@ -96,5 +97,6 @@ package Ships is
     procedure UpgradeShip(Minutes : Positive); -- Upgrade selected module on ship
     procedure RepairShip(Minutes : Positive); -- Repair ship modules
     function GenerateShipName return Unbounded_String; -- Generate random name for ship
+    function GetCargoName(CargoIndex : Positive) return String; -- Get name of cargo
 
 end Ships;

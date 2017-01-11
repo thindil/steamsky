@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -52,7 +52,7 @@ package body Ships.UI.Cargo is
         FreeSpace : Integer;
     begin
         for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            Cargo_Items.all(I) := New_Item(To_String(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name));
+            Cargo_Items.all(I) := New_Item(GetCargoName(I));
         end loop;
         Cargo_Items.all(Cargo_Items'Last) := Null_Item;
         ShipsMenu := New_Menu(Cargo_Items);
