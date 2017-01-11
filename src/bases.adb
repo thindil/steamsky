@@ -26,6 +26,7 @@ with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Events; use Events;
 with Crafts; use Crafts;
+with Utils; use Utils;
 
 package body Bases is
 
@@ -712,14 +713,6 @@ package body Bases is
         package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
         Enemies : Positive_Container.Vector;
         PlayerValue : Natural := 0;
-        function GetRandom(Min, Max : Positive) return Positive is
-            subtype Rand_Range is Positive range Min..Max;
-            package Rand_Roll is new Discrete_Random(Rand_Range);
-            Generator : Rand_Roll.Generator;
-        begin
-            Rand_Roll.Reset(Generator);
-            return Rand_Roll.Random(Generator);
-        end GetRandom;
     begin
         TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).AskedForEvents.Day + ((30 *
             SkyBases(BaseIndex).AskedForEvents.Month) * SkyBases(BaseIndex).AskedForEvents.Year));

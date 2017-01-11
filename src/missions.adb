@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ada.Numerics.Generic_Elementary_Functions;
 with Ships; use Ships;
 with Maps; use Maps;
@@ -27,6 +26,7 @@ with Crew; use Crew;
 with UserInterface; use UserInterface;
 with Statistics; use Statistics;
 with Game; use Game;
+with Utils; use Utils;
 
 package body Missions is
 
@@ -38,14 +38,6 @@ package body Missions is
         MinX, MinY, MaxX, MaxY : Integer;
         type Value_Type is digits 2 range 0.0..9999999.0;
         package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
-        function GetRandom(Min : Natural; Max : Positive) return Natural is
-            subtype Rand_Range is Natural range Min..Max;
-            package Rand_Roll is new Discrete_Random(Rand_Range);
-            Generator : Rand_Roll.Generator;
-        begin
-            Rand_Roll.Reset(Generator);
-            return Rand_Roll.Random(Generator);
-        end GetRandom;
     begin
         TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).MissionsDate.Day + 
             ((30 * SkyBases(BaseIndex).MissionsDate.Month) * SkyBases(BaseIndex).MissionsDate.Year));

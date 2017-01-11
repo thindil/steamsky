@@ -15,13 +15,13 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ships; use Ships;
 with Messages; use Messages;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
 with Game; use Game;
 with Items; use Items;
+with Utils; use Utils;
 
 package body Crew is
 
@@ -206,14 +206,6 @@ package body Crew is
 
     function GenerateMemberName(Gender : Character) return Unbounded_String is -- based on name generator from libtcod
         NewName : Unbounded_String;
-        function GetRandom(Min, Max : Positive) return Positive is
-            subtype Rand_Range is Positive range Min..Max;
-            package Rand_Roll is new Discrete_Random(Rand_Range);
-            Generator : Rand_Roll.Generator;
-        begin
-            Rand_Roll.Reset(Generator);
-            return Rand_Roll.Random(Generator);
-        end GetRandom;
     begin
         if Gender = 'M' then
             NewName := MaleSyllablesStart.Element(GetRandom(MaleSyllablesStart.First_Index, MaleSyllablesStart.Last_Index)) &
