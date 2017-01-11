@@ -17,7 +17,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Directories; use Ada.Directories;
-with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Ada.Containers; use Ada.Containers;
 with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
@@ -49,6 +48,7 @@ with Items; use Items;
 with Statistics; use Statistics;
 with Missions; use Missions;
 with Missions.UI; use Missions.UI;
+with Utils; use Utils;
 
 package body UserInterface is
 
@@ -841,14 +841,6 @@ package body UserInterface is
         begin
             Event.Time := NewTime;
         end UpdateEvent;
-        function GetRandom(Min, Max : Positive) return Natural is
-            subtype Rand_Range is Natural range Min..Max;
-            package Rand_Roll is new Discrete_Random(Rand_Range);
-            Generator : Rand_Roll.Generator;
-        begin
-            Rand_Roll.Reset(Generator);
-            return Rand_Roll.Random(Generator);
-        end GetRandom;
     begin
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             EventIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;

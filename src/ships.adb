@@ -17,7 +17,6 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
-with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Maps; use Maps;
 with Messages; use Messages;
 with Bases; use Bases;
@@ -25,6 +24,7 @@ with Items; use Items;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
 with Statistics; use Statistics;
+with Utils; use Utils;
 
 package body Ships is
 
@@ -994,14 +994,6 @@ package body Ships is
 
     function GenerateShipName return Unbounded_String is -- based on name generator from libtcod
         NewName : Unbounded_String;
-        function GetRandom(Min, Max : Positive) return Positive is
-            subtype Rand_Range is Positive range Min..Max;
-            package Rand_Roll is new Discrete_Random(Rand_Range);
-            Generator : Rand_Roll.Generator;
-        begin
-            Rand_Roll.Reset(Generator);
-            return Rand_Roll.Random(Generator);
-        end GetRandom;
     begin
         NewName := ShipSyllablesStart.Element(GetRandom(ShipSyllablesStart.First_Index, ShipSyllablesStart.Last_Index));
         if GetRandom(1, 100) < 51 then
