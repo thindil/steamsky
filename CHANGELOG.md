@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated interface
+- Updated help
 
 ### Fixed
 - Crash on selling ship modules
