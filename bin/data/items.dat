@@ -252,4 +252,10 @@ Weight = 70
 Type = Body
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
+[41]
+Name = Package
+Weight = 10
+Type = MissionItem
+Prices = 0, 0, 0, 0
+Buyable = N, N, N, N
 []
