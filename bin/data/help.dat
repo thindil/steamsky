@@ -78,6 +78,7 @@ How much you get Charcollum from removing module depends on damage of selected m
 Each ship hull have maximum module space, which limit what and how much modules can be installed on it. Armor and weapons don't count to this limit. Most of basic modules use only one module space, but this most expensive modules, may use a lot of space. You can check how much each module space use on ship info screen or in shipyard screen.
 [Ship crew]
 You and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation.
+When your crew member die, you will stay with his/her body in your ship cargo. At this moment, you can only drop that body from cargo.
 Every member of crew getting tired when have assigned order other than On break or Talking in bases. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
 Crew members can regenerate health over time but only when they are on break and have assigned cabin. Additionally, if you have any medical room installed on ship and medical supplies in cargo, you can assign other crew member to heal wounded. It can greatly speed up recovering (speed of healing depends on Medicine skill of healer). Only fully healed members can be healer.
 If crew member cabin is destroyed (or don't have any) and he/she going on break, he/she will try find empty cabin as a new own to rest.
