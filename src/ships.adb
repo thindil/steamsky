@@ -360,11 +360,12 @@ package body Ships is
     function LoadShips return Boolean is
         ShipsFile : File_Type;
         RawData, FieldName, Value : Unbounded_String;
-        EqualIndex, StartIndex, EndIndex, Amount, XIndex, CombatValue : Natural;
+        EqualIndex, StartIndex, EndIndex, Amount, XIndex, CombatValue, DotIndex : Natural;
         TempRecord : ProtoShipData;
         TempModules : Positive_Container.Vector;
         Enemy : Boolean := False;
         TempCargo : Cargo_Container.Vector;
+        CargoAmount : Positive;
     begin
         if ProtoShips_List.Length > 0 then
             return True;
@@ -418,7 +419,15 @@ package body Ships is
                             EndIndex := Length(Value) + 1;
                         end if;
                         XIndex := Index(Value, "x", StartIndex);
-                        TempRecord.Cargo.Append(New_Item => (Amount => Integer'Value(Slice(Value, StartIndex, XIndex - 1)),
+                        DotIndex := Index(Value, "..", StartIndex);
+                        if DotIndex = 0 then
+                            CargoAmount := Integer'Value(Slice(Value, StartIndex, XIndex - 1));
+                        else
+                            CargoAmount := GetRandom(Integer'Value(Slice(Value, StartIndex, DotIndex - 1)), 
+                                Integer'Value(Slice(Value, DotIndex + 2, XIndex - 1)));
+                        end if;
+                        AddMessage(Integer'Image(CargoAmount), othermessage);
+                        TempRecord.Cargo.Append(New_Item => (Amount => CargoAmount, 
                             ProtoIndex => Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1)), Name => Null_Unbounded_String));
                         StartIndex := EndIndex + 2;
                     end loop;
