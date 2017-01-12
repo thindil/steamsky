@@ -19,6 +19,7 @@ with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with ShipModules; use ShipModules;
 
 package body Bases.UI.Shipyard is
@@ -79,7 +80,7 @@ package body Bases.UI.Shipyard is
                     Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
                     Add(Win => InfoWindow, Str => "Fuel usage:" & Positive'Image(Modules_List.Element(ModuleIndex).Value));
                     CurrentLine := 5;
-                when CARGO =>
+                when ShipModules.CARGO =>
                     Add(Win => InfoWindow, Str => "Max cargo:" & Positive'Image(Modules_List.Element(ModuleIndex).MaxValue) & " kg");
                     CurrentLine := 4;
                 when CABIN =>
@@ -145,7 +146,7 @@ package body Bases.UI.Shipyard is
                 when ENGINE =>
                     Add(Win => InfoWindow, Str => "Max power:" & Positive'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value));
                     CurrentLine := 4;
-                when CARGO =>
+                when ShipModules.CARGO =>
                     Add(Win => InfoWindow, Str => "Max cargo:" & Positive'Image(PlayerShip.Modules.Element(ModuleIndex).Max_Value)
                         & " kg");
                     CurrentLine := 4;

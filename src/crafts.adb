@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -21,6 +21,7 @@ with Ada.Directories; use Ada.Directories;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with Crew; use Crew;
 with Items; use Items;
 with Statistics; use Statistics;
