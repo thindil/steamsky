@@ -8,11 +8,12 @@ All notable changes to this project will be documented in this file.
 - New item type: body
 - New items: corpse, package and large package
 - Corpses of dead crew members
-- Random amount of cargo to ships
+- Option to set random amount of cargo to ships
 
 ### Changed
 - Updated interface
 - Updated help
+- All NPC ships have now random amount of cargo
 
 ### Fixed
 - Crash on selling ship modules
