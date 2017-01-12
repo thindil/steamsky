@@ -258,4 +258,10 @@ Weight = 10
 Type = MissionItem
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
+[42]
+Name = Large package
+Weight = 50
+Type = MissionItem
+Prices = 0, 0, 0, 0
+Buyable = N, N, N, N
 []
