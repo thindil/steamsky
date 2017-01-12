@@ -426,7 +426,6 @@ package body Ships is
                             CargoAmount := GetRandom(Integer'Value(Slice(Value, StartIndex, DotIndex - 1)), 
                                 Integer'Value(Slice(Value, DotIndex + 2, XIndex - 1)));
                         end if;
-                        AddMessage(Integer'Image(CargoAmount), othermessage);
                         TempRecord.Cargo.Append(New_Item => (Amount => CargoAmount, 
                             ProtoIndex => Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1)), Name => Null_Unbounded_String));
                         StartIndex := EndIndex + 2;
