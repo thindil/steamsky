@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -21,6 +21,7 @@ with Maps; use Maps;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 
 package body Bases.UI.Trade is
     

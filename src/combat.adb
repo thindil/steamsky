@@ -26,6 +26,7 @@ with Events; use Events;
 with Maps; use Maps;
 with Bases; use Bases;
 with Missions; use Missions;
+with Ships.Cargo; use Ships.Cargo;
 
 package body Combat is
     
