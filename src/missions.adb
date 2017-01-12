@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Numerics.Generic_Elementary_Functions;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with Maps; use Maps;
 with Items; use Items;
 with Bases; use Bases;

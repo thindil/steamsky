@@ -19,6 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Numerics.Generic_Elementary_Functions;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with Maps; use Maps;
 with Combat; use Combat;
 with Messages; use Messages;

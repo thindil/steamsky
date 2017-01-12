@@ -17,6 +17,7 @@
 
 with Items; use Items;
 with UserInterface; use UserInterface;
+with Ships.Cargo; use Ships.Cargo;
 
 package body Ships.UI.Cargo is
 

@@ -84,19 +84,15 @@ package Ships is
     function MoveShip(ShipIndex, X, Y : Integer) return Natural; -- Move selected ship
     procedure DockShip(Docking : Boolean); -- Dock/Undock ship at base
     procedure ChangeShipSpeed(SpeedValue : ShipSpeed; ShowInfo : Boolean := True); -- Change speed of ship
-    procedure UpdateCargo(Ship : in out ShipRecord; ProtoIndex : Positive; Amount : Integer); -- Update selected item in ship cargo
     procedure UpdateModule(Ship : in out ShipRecord; ModuleIndex : Positive; Field : String; Value : String); -- Update selected module
-    function FreeCargo(Amount : Integer) return Integer; -- Return available space in cargo after adding/extracting Amount
     function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y:
         Integer; Speed : ShipSpeed; Enemy : Boolean := False) return ShipRecord; -- Create new ship
     function LoadShips return Boolean; -- Load ships from file, returns False if file not found
     function CountShipWeight(Ship : ShipRecord) return Positive; -- Count weight of ship (with modules and cargo)
     function RealSpeed(Ship : ShipRecord) return Natural; -- Return real ship speed in meters per minute
-    function FindMoney return Natural; -- Return index of moneys, 0 if no moneys on ship
     procedure StartUpgrading(ModuleIndex, UpgradeType : Positive); -- Set upgrading order
     procedure UpgradeShip(Minutes : Positive); -- Upgrade selected module on ship
     procedure RepairShip(Minutes : Positive); -- Repair ship modules
     function GenerateShipName return Unbounded_String; -- Generate random name for ship
-    function GetCargoName(CargoIndex : Positive) return String; -- Get name of cargo
 
 end Ships;

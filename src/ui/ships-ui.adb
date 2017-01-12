@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -19,6 +19,7 @@ with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Messages; use Messages;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with Items; use Items;
 with UserInterface; use UserInterface;
 

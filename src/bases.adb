@@ -24,6 +24,7 @@ with UserInterface; use UserInterface;
 with Bases.UI.Repair; use Bases.UI.Repair;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with Events; use Events;
 with Crafts; use Crafts;
 with Utils; use Utils;
@@ -408,7 +409,7 @@ package body Bases is
                             exit;
                         end if;
                     end loop;
-                when CARGO =>
+                when ShipModules.CARGO =>
                     if FreeCargo((0 - PlayerShip.Modules.Element(ModuleIndex).Max_Value)) < 0 then
                         ShowDialog("You can't sell this cargo bay, because you have items in it.");
                         return;

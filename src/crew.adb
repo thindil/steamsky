@@ -22,6 +22,7 @@ with ShipModules; use ShipModules;
 with Game; use Game;
 with Items; use Items;
 with Utils; use Utils;
+with Ships.Cargo; use Ships.Cargo;
 
 package body Crew is
 
