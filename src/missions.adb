@@ -173,6 +173,12 @@ package body Missions is
             ShowDialog("You can't take any more missions from this base. ");
             return;
         end if;
+        if Mission.MType = Deliver then
+            if FreeCargo((0 - Items_List.Element(Mission.Target).Weight)) < 0 then
+                ShowDialog("You don't have enough cargo space for take this mission.");
+                return;
+            end if;
+        end if;
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew.Element(I).Order = Talk then
                 TraderIndex := I;
