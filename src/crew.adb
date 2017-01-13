@@ -153,22 +153,6 @@ package body Crew is
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
     end GiveOrders;
 
-    function Consume(ItemType : String) return Boolean is
-        ProtoIndex : Natural := 0;
-    begin
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = To_Unbounded_String(ItemType) then
-                ProtoIndex := PlayerShip.Cargo.Element(I).ProtoIndex;
-                exit;
-            end if;
-        end loop;
-        if ProtoIndex = 0 then
-            return False;
-        end if;
-        UpdateCargo(PlayerShip, ProtoIndex, (0 - 1));
-        return True;
-    end Consume;
-
     procedure GainExp(Amount : Natural; SkillNumber, CrewIndex : Positive) is
         SkillExp, SkillLevel, SkillIndex : Natural := 0;
         procedure UpdateSkill(Skill : in out Skill_Array) is
@@ -262,6 +246,23 @@ package body Crew is
         type DamageFactor is digits 2 range 0.0..1.0;
         Damage : DamageFactor := 0.0;
         NeedCleaning : Boolean := False;
+        function Consume(ItemType : String) return Natural is
+            ProtoIndex : Natural := 0;
+            ConsumeValue : Natural := 0;
+        begin
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = To_Unbounded_String(ItemType) then
+                    ProtoIndex := PlayerShip.Cargo.Element(I).ProtoIndex;
+                    ConsumeValue := Items_List.Element(ProtoIndex).Value;
+                    exit;
+                end if;
+            end loop;
+            if ProtoIndex = 0 then
+                return 0;
+            end if;
+            UpdateCargo(PlayerShip, ProtoIndex, (0 - 1));
+            return ConsumeValue;
+        end Consume;
         procedure UpdateMember(Member : in out Member_Data) is
             BackToWork : Boolean := True;
         begin
@@ -289,23 +290,19 @@ package body Crew is
                 AddMessage(To_String(Member.Name) & " is too tired to work, going rest.", OrderMessage);
             end if;
             if HungerLevel > 80 then
-                if Consume("Food") then
-                    HungerLevel := HungerLevel - 80;
-                    if HungerLevel < 0 then
-                        HungerLevel := 0;
-                    end if;
-                else
+                HungerLevel := HungerLevel - Consume("Food");
+                if HungerLevel < 0 then
+                    HungerLevel := 0;
+                elsif HungerLevel > 80 then
                     AddMessage(To_String(Member.Name) & " is hungry, but can't find anything to eat.", OtherMessage);
                 end if;
             end if;
             Member.Hunger := HungerLevel;
             if ThirstLevel > 40 then
-                if Consume("Drink") then
-                    ThirstLevel := ThirstLevel - 40;
-                    if ThirstLevel < 0 then
-                        ThirstLevel := 0;
-                    end if;
-                else
+                ThirstLevel := ThirstLevel - Consume("Drink");
+                if ThirstLevel < 0 then
+                    ThirstLevel := 0;
+                elsif ThirstLevel > 40 then
                     AddMessage(To_String(Member.Name) & " is thirsty, but can't find anything to drink.", OtherMessage);
                 end if;
             end if;
