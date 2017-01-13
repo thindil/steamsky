@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship module: iron armor and heavy iron armor
 - New item type: body
-- New items: corpse, package and large package
+- New items: corpse, package, large package and huge package
 - Corpses of dead crew members
 - Option to set random amount of cargo to ships
 
