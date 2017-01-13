@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -41,8 +41,10 @@ package body Bases.UI.Missions is
             when Deliver =>
                 Add(Win => InfoWindow, Str => "Item: " & To_String(Items_List.Element(Mission.Target).Name));
                 Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+                Add(Win => InfoWindow, Str => "Weight:" & Positive'Image(Items_List.Element(Mission.Target).Weight) & " kg");
+                Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
                 Add(Win => InfoWindow, Str => "To base: " & To_String(SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex).Name));
-                CurrentLine := 2;
+                CurrentLine := 3;
             when Patrol =>
                 Add(Win => InfoWindow, Str => "Patrol selected area");
             when Kill =>
