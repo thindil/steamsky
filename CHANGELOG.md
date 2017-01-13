@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated help
 - All NPC ships have now random amount of cargo
+- Amount of reduced hunger/thirst depends on consumables
 
 ### Fixed
 - Crash on selling ship modules
