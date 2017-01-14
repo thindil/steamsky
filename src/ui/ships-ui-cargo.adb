@@ -30,16 +30,18 @@ package body Ships.UI.Cargo is
         ItemWeight : constant Positive := PlayerShip.Cargo.Element(ItemIndex).Amount * 
             Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Weight;
     begin
-        InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
-        Add(Win => InfoWindow, Str => "Amount:" & Positive'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
+        InfoWindow := Create(6, (Columns / 2), 3, (Columns / 2));
+        Add(Win => InfoWindow, Str => "Type: " & To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).IType));
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+        Add(Win => InfoWindow, Str => "Amount:" & Positive'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
+        Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
         Add(Win => InfoWindow, Str => "Weight:" &
             Positive'Image(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Weight) & " kg");
-        Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+        Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
         Add(Win => InfoWindow, Str => "Total weight:" & Positive'Image(ItemWeight) & " kg");
-        Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
+        Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
         Add(Win => InfoWindow, Str => "Drop cargo");
-        Change_Attributes(Win => InfoWindow, Line => 4, Column => 0, 
+        Change_Attributes(Win => InfoWindow, Line => 5, Column => 0, 
             Count => 1, Color => 1);
         Refresh;
         Refresh(InfoWindow);
