@@ -42,7 +42,12 @@ package body Bases.UI.Trade is
             end if;
         end loop;
         InfoWindow := Create(6, (Columns / 2), 3, (Columns / 2));
-        Add(Win => InfoWindow, Str => "Type: " & To_String(Items_List.Element(ItemIndex).IType)); 
+        Add(Win => InfoWindow, Str => "Type: ");
+        if Items_List.Element(ItemIndex).ShowType = Null_Unbounded_String then
+            Add(Win => InfoWindow, Str => To_String(Items_List.Element(ItemIndex).IType));
+        else
+            Add(Win => InfoWindow, Str => To_String(Items_List.Element(ItemIndex).ShowType));
+        end if;
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         if Items_List.Element(ItemIndex).Buyable(BaseType) then
             Add(Win => InfoWindow, Str => "Base buy/sell price:");

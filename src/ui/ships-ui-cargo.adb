@@ -31,7 +31,12 @@ package body Ships.UI.Cargo is
             Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Weight;
     begin
         InfoWindow := Create(6, (Columns / 2), 3, (Columns / 2));
-        Add(Win => InfoWindow, Str => "Type: " & To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).IType));
+        Add(Win => InfoWindow, Str => "Type: ");
+        if Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).ShowType = Null_Unbounded_String then
+            Add(Win => InfoWindow, Str => To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).IType));
+        else
+            Add(Win => InfoWindow, Str => To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).ShowType));
+        end if;
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         Add(Win => InfoWindow, Str => "Amount:" & Positive'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
         Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
