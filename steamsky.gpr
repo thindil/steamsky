@@ -10,6 +10,10 @@ project steamsky is
     type Mode_Type is ("debug", "release");
     Mode : Mode_Type := external ("Mode", "debug");
 
+    package Builder is
+        for Default_Switches("ada") use ("-j0");
+    end Builder;
+
     package Binder is
         case Mode is
             when "debug" =>
@@ -25,7 +29,9 @@ project steamsky is
                 for Default_Switches ("ada") use ("-gnatwa",
                     "-g",
                     "-fstack-check",
-                    "-gnatVa");
+                    "-gnatVa",
+                    "-gnatU",
+                    "-gnatf");
             when "release" =>
                 for Default_Switches ("ada") use ("-O2",
                     "-gnatn2");
