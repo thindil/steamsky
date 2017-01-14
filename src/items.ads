@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -32,6 +32,7 @@ package Items is
             Prices : Object_Prices; -- Prices of item in bases
             Buyable : Object_Buyable; -- Did item is buyable in selected bases
             Value : Natural; -- Additional item data (damage for ammo, etc)
+            ShowType : Unbounded_String; -- Displayed type of item (can be group of items, renamed type, etc)
         end record;
     package Objects_Container is new Vectors(Positive, Object_Data);
     Items_List : Objects_Container.Vector; -- List of item available in game
