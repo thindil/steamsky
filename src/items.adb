@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -34,7 +34,7 @@ package body Items is
         end if;
         TempRecord := (Name => Null_Unbounded_String, Weight => 1,
             IType => Null_Unbounded_String, Prices => (0, 0, 0, 0), Buyable => (False, False,
-            False, False), Value => 0);
+            False, False), Value => 0, ShowType => Null_Unbounded_String);
         Open(ItemsFile, In_File, "data/items.dat");
         while not End_Of_File(ItemsFile) loop
             RawData := To_Unbounded_String(Get_Line(ItemsFile));
@@ -74,12 +74,14 @@ package body Items is
                     end loop;
                 elsif FieldName = To_Unbounded_String("Value") then
                     TempRecord.Value := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("ShowType") then
+                    TempRecord.ShowType := Value;
                 end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
                 Items_List.Append(New_Item => TempRecord);
                 TempRecord := (Name => Null_Unbounded_String, Weight => 1,
                     IType => Null_Unbounded_String, Prices => (0, 0, 0, 0), Buyable => (False, False,
-                    False, False), Value => 0);
+                    False, False), Value => 0, ShowType => Null_Unbounded_String);
             end if;
         end loop;
         Close(ItemsFile);
