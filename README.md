@@ -21,13 +21,13 @@ To build it, you need:
   distributions, if not, download from: http://libre.adacore.com/download/
 
 
-If you have all, in main source code directory type: 
+If you have all, in main source code directory (where this file is) type: 
 
-* if you don't have gprbuild: `gnatmake -j0 -P steamsky.gpr` for debug build or for
-  release version: `gnatmake -j0 -P steamsky.gpr -XMode=release`
+* if you don't have gprbuild: `gnatmake -Psteamsky.gpr` for debug build or for
+  release version: `gnatmake -Psteamsky.gpr -XMode=release`
 
-* if you have gprbuild: `gprbuild -j0 steamsky.gpr` for debug mode build 
-or for release mode: `gprbuild -j0 steamsky.gpr -XMode=release`
+* if you have gprbuild: `gprbuild` for debug mode build or for release mode: 
+  `gprbuild -XMode=release`
 
 
 ## Running game
