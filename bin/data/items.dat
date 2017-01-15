@@ -4,6 +4,7 @@ Weight = 1
 Type = Fuel
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
+ShowType = Fuel/Moneys
 [2]
 Name = Basic Rations
 Weight = 1
@@ -25,12 +26,14 @@ Type = Ammo20
 Prices = 3, 5, 5, 5
 Buyable = Y, N, N, N
 Value = 2
+ShowType = Ammunition
 [5]
 Name = Bronze plates
 Weight = 5
 Type = Bronze
 Prices = 3, 5, 5, 5
 Buyable = Y, N, N, N
+ShowType = Repair material
 [6]
 Name = Fresh vegetables
 Weight = 1
@@ -80,6 +83,7 @@ Weight = 5
 Type = Iron
 Prices = 4, 6, 6, 6
 Buyable = Y, N, N, N
+ShowType = Repair material
 [14]
 Name = Iron 10mm ammo
 Weight = 1
@@ -87,18 +91,21 @@ Type = Ammo10
 Prices = 1, 3, 3, 3
 Buyable = Y, N, N, N
 Value = 1
+ShowType = Ammunition
 [15]
 Name = Copper ore
 Weight = 7
 Type = CopperOre
 Prices = 2, 2, 1, 2
 Buyable = N, N, Y, N
+ShowType = Ore
 [16]
 Name = Tin ore
 Weight = 7
 Type = TinOre
 Prices = 2, 2, 1, 2
 Buyable = N, N, Y, N
+ShowType = Ore
 [17]
 Name = Copper plates
 Weight = 5
@@ -117,6 +124,7 @@ Weight = 8
 Type = IronOre
 Prices = 5, 5, 3, 5
 Buyable = N, N, Y, N
+ShowType = Ore
 [20]
 Name = Iron 40mm ammo
 Weight = 2
@@ -124,12 +132,14 @@ Type = Ammo40
 Prices = 6, 8, 8, 8
 Buyable = Y, N, N, N
 Value = 4
+ShowType = Ammunition
 [21]
 Name = Steel plates
 Weight = 5
 Type = Steel
 Prices = 6, 8, 8, 8
 Buyable = Y, N, N, N
+ShowType = Repair material
 [22]
 Name = Medical supplies
 Weight = 5
@@ -143,6 +153,7 @@ Type = Ammo20
 Prices = 5, 7, 7, 7
 Buyable = Y, N, N, N
 Value = 4
+ShowType = Ammunition
 [24]
 Name = Steel 10mm ammo
 Weight = 1
@@ -150,6 +161,7 @@ Type = Ammo10
 Prices = 3, 5, 5, 5
 Buyable = Y, N, N, N
 Value = 2
+ShowType = Ammunition
 [25]
 Name = Steel 40mm ammo
 Weight = 2
@@ -157,6 +169,7 @@ Type = Ammo40
 Prices = 8, 10, 10, 10
 Buyable = Y, N, N, N
 Value = 8
+ShowType = Ammunition
 [26]
 Name = Iron 60mm ammo
 Weight = 4
@@ -164,6 +177,7 @@ Type = Ammo60
 Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
 Value = 8
+ShowType = Ammunition
 [27]
 Name = Steel 60mm ammo
 Weight = 4
@@ -171,6 +185,7 @@ Type = Ammo60
 Prices = 12, 14, 14, 14
 Buyable = Y, N, N, N
 Value = 16
+ShowType = Ammunition
 [28]
 Name = Medical herbs
 Weight = 5
@@ -183,12 +198,14 @@ Weight = 1
 Type = HerbSeeds
 Prices = 4, 2, 4, 4
 Buyable = N, Y, N, N
+ShowType = Seeds
 [30]
 Name = Vegetables seeds
 Weight = 1
 Type = VegetableSeed
 Prices = 2, 1, 2, 2
 Buyable = N, Y, N, N
+ShowType = Seeds
 [31]
 Name = Iron 80mm ammo
 Weight = 8
@@ -196,6 +213,7 @@ Type = Ammo80
 Prices = 14, 16, 16, 16
 Buyable = Y, N, N, N
 Value = 16
+ShowType = Ammunition
 [32]
 Name = Steel 80mm ammo
 Weight = 8
@@ -203,6 +221,7 @@ Type = Ammo80
 Prices = 16, 18, 18, 18
 Buyable = Y, N, N, N
 Value = 32
+ShowType = Ammunition
 [33]
 Name = Iron 100mm ammo
 Weight = 16
@@ -210,6 +229,7 @@ Type = Ammo100
 Prices = 20, 22, 22, 22
 Buyable = Y, N, N, N
 Value = 32
+ShowType = Ammunition
 [34]
 Name = Steel 100mm ammo
 Weight = 16
@@ -217,6 +237,7 @@ Type = Ammo100
 Prices = 22, 24, 24, 24
 Buyable = Y, N, N, N
 Value = 64
+ShowType = Ammunition
 [35]
 Name = Iron 120mm ammo
 Weight = 30
@@ -224,6 +245,7 @@ Type = Ammo120
 Prices = 25, 27, 27, 27
 Buyable = Y, N, N, N
 Value = 64
+ShowType = Ammunition
 [36]
 Name = Steel 120mm ammo
 Weight = 30
@@ -231,24 +253,28 @@ Type = Ammo120
 Prices = 30, 32, 32, 32
 Buyable = Y, N, N, N
 Value = 128
+ShowType = Ammunition
 [37]
 Name = Andrae seeds
 Weight = 1
 Type = AndraeSeed
 Prices = 2, 2, 1, 2
 Buyable = N, N, Y, N
+ShowType = Seeds
 [38]
 Name = Illandru seeds
 Weight = 1
 Type = IllandruSeed
 Prices = 2, 2, 1, 2
 Buyable = N, N, Y, N
+ShowType = Seeds
 [39]
 Name = Small package
 Weight = 5
 Type = MissionItem
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
+ShowType = Special
 [40]
 Name = Corpse
 Weight = 70
@@ -261,18 +287,21 @@ Weight = 10
 Type = MissionItem
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
+ShowType = Special
 [42]
 Name = Large package
 Weight = 50
 Type = MissionItem
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
+ShowType = Special
 [43]
 Name = Huge package
 Weight = 200
 Type = MissionItem
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
+ShowType = Special
 [44]
 Name = Beer
 Weight = 1
