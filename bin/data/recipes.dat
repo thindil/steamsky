@@ -1,5 +1,5 @@
 [1]
-Material = FoodMaterial
+Material = RawFood
 Amount = 1
 Result = 2
 Crafted = 1
@@ -13,7 +13,7 @@ Crafted = 5
 Workplace = Alchemy_Lab
 Skill = Alchemy
 [3]
-Material = FoodMaterial
+Material = RawFood
 Amount = 2
 Result = 11
 Crafted = 1

@@ -37,21 +37,24 @@ ShowType = Repair material
 [6]
 Name = Fresh vegetables
 Weight = 1
-Type = FoodMaterial
+Type = RawFood
 Prices = 2, 1, 2, 2
 Buyable = N, Y, N, N
+ShowType = Raw Food
 [7]
 Name = Fresh fruits
 Weight = 1
-Type = FoodMaterial
+Type = RawFood
 Prices = 2, 1, 2, 2
 Buyable = N, Y, N, N
+ShowType = Raw Food
 [8]
 Name = Fresh meat
 Weight = 1
-Type = FoodMaterial
+Type = RawFood
 Prices = 2, 1, 2, 2
 Buyable = N, Y, N, N
+ShowType = Raw Food
 [9]
 Name = Andrae logs
 Weight = 5
