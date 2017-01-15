@@ -280,4 +280,11 @@ Type = Drink
 Prices = 3, 2, 3, 3
 Buyable = N, Y, N, N
 Value = 40
+[45]
+Name = Wine
+Weight = 1
+Type = Drink
+Prices = 4, 3, 4, 4
+Buyable = N, Y, N, N
+Value = 50
 []
