@@ -258,7 +258,18 @@ package body Crew is
                 end if;
             end loop;
             if ProtoIndex = 0 then
-                return 0;
+                if ItemType = "Food" then
+                    for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                        if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = To_Unbounded_String("RawFood") then
+                            ProtoIndex := PlayerShip.Cargo.Element(I).ProtoIndex;
+                            ConsumeValue := Items_List.Element(ProtoIndex).Value;
+                            exit;
+                        end if;
+                    end loop;
+                end if;
+                if ProtoIndex = 0 then
+                    return 0;
+                end if;
             end if;
             UpdateCargo(PlayerShip, ProtoIndex, (0 - 1));
             return ConsumeValue;
