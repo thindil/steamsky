@@ -322,4 +322,11 @@ Type = Drink
 Prices = 4, 3, 4, 4
 Buyable = N, Y, N, N
 Value = 50
+[46]
+Name = Lavish Rations
+Weight = 1
+Type = Food
+Prices = 7, 5, 7, 7
+Buyable = N, Y, N, N
+Value = 100
 []
