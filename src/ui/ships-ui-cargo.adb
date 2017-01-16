@@ -45,9 +45,9 @@ package body Ships.UI.Cargo is
         Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
         Add(Win => InfoWindow, Str => "Total weight:" & Positive'Image(ItemWeight) & " kg");
         Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
-        Add(Win => InfoWindow, Str => "Drop cargo");
-        Change_Attributes(Win => InfoWindow, Line => 5, Column => 0, 
-            Count => 1, Color => 1);
+        Add(Win => InfoWindow, Str => "Press Enter to drop cargo");
+        Change_Attributes(Win => InfoWindow, Line => 5, Column => 6, 
+            Count => 5, Color => 1);
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
@@ -112,7 +112,7 @@ package body Ships.UI.Cargo is
                     ShowItemInfo;
                     Refresh(MenuWindow);
                 end if;
-            when Character'Pos('d') | Character'Pos('D') => -- Drop selected cargo
+            when 10 => -- Drop selected cargo
                 ShowShipForm("Amount of " & ItemName & " to drop:", PlayerShip.Cargo.Element(CurrentMenuIndex).Amount);
                 return Drop_Cargo;
             when others =>
