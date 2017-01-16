@@ -37,10 +37,13 @@ package body Bases.UI.Recipes is
                 exit;
             end if;
         end loop;
-        InfoWindow := Create(3, (Columns / 2), 3, (Columns / 2));
+        InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
         Cost := Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Prices(BaseType) * 
             Recipes_List.Element(RecipeIndex).Difficulty * 100;
         Add(Win => InfoWindow, Str => "Base price:" & Positive'Image(Cost) & " Charcollum");
+        Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+        Add(Win => InfoWindow, Str => "ENTER to buy selected recipe.");
+        Change_Attributes(Win => InfoWindow, Line => 2, Column => 0, Count => 5, Color => 1);
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
@@ -86,9 +89,6 @@ package body Bases.UI.Recipes is
         else
             Add(Str => "You don't have any Charcollum to buy anything.");
         end if;
-        Move_Cursor(Line => (Lines - 1), Column => 2);
-        Add(Str => "ENTER to buy selected recipe.");
-        Change_Attributes(Line => (Lines - 1), Column => 2, Count => 5, Color => 1);
         ShowRecipeInfo;
         Refresh(MenuWindow);
     end ShowTradeRecipes;
