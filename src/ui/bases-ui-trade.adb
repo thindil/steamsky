@@ -34,6 +34,7 @@ package body Bases.UI.Trade is
         InfoWindow : Window;
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
+        CurrentLine : Line_Position := 4;
     begin
         for I in Items_List.First_Index..Items_List.Last_Index loop
             if To_String(Items_List.Element(I).Name) = Name(Current(TradeMenu)) then
@@ -41,7 +42,7 @@ package body Bases.UI.Trade is
                 exit;
             end if;
         end loop;
-        InfoWindow := Create(6, (Columns / 2), 3, (Columns / 2));
+        InfoWindow := Create(8, (Columns / 2), 3, (Columns / 2));
         Add(Win => InfoWindow, Str => "Type: ");
         if Items_List.Element(ItemIndex).ShowType = Null_Unbounded_String then
             Add(Win => InfoWindow, Str => To_String(Items_List.Element(ItemIndex).IType));
@@ -62,9 +63,14 @@ package body Bases.UI.Trade is
             if PlayerShip.Cargo.Element(I).ProtoIndex = ItemIndex then
                 Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
                 Add(Win => InfoWindow, Str => "Owned:" & Integer'Image(PlayerShip.Cargo.Element(I).Amount));
+                CurrentLine := 5;
                 exit;
             end if;
         end loop;
+        Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+        Add(Win => InfoWindow, Str => "ENTER to buy selected item, SPACE for sell.");
+        Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 0, Count => 5, Color => 1);
+        Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 28, Count => 5, Color => 1);
         Refresh;
         Refresh(InfoWindow);
         Delete(InfoWindow);
@@ -126,10 +132,6 @@ package body Bases.UI.Trade is
             FreeSpace := 0;
         end if;
         Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
-        Move_Cursor(Line => (Lines - 1), Column => 2);
-        Add(Str => "ENTER to buy selected item, SPACE for sell.");
-        Change_Attributes(Line => (Lines - 1), Column => 2, Count => 5, Color => 1);
-        Change_Attributes(Line => (Lines - 1), Column => 30, Count => 5, Color => 1);
         ShowItemInfo;
         Refresh(MenuWindow);
     end ShowTrade;
