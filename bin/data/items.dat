@@ -329,4 +329,11 @@ Type = Food
 Prices = 7, 5, 7, 7
 Buyable = N, Y, N, N
 Value = 100
+[47]
+Name = Alchemy set
+Weight = 5
+Type = AlchemySet
+Prices = 50, 52, 52, 52
+Buyable = Y, N, N, N
+ShowType = Tool
 []
