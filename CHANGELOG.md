@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship module: iron armor and heavy iron armor
 - New item types: body and alchemyset
-- New items: corpse, package, large package, huge package, beer, wine and
-  lavish ration
+- New items: corpse, package, large package, huge package, beer, wine,
+  lavish ration and alchemy set
 - Corpses of dead crew members which made saves from 0.7 incompatible
 - Option to set random amount of cargo to ships
 - Eat raw food by hungry crew members (when no other food available)
