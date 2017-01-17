@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Corpses of dead crew members which made saves from 0.7 incompatible
 - Option to set random amount of cargo to ships
 - Eat raw food by hungry crew members (when no other food available)
+- Tools to manufacturing items
 
 ### Changed
 - Updated interface
