@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
@@ -32,7 +31,7 @@ package body Crafts.UI is
         Recipe : Craft_Data;
         CurrentLine : Line_Position := 2;
         MAmount, TextLength : Natural := 0;
-        HaveMaterial, HaveWorkplace, IsMaterial : Boolean := False;
+        HaveMaterial, HaveWorkplace, IsMaterial, HaveTool, IsTool : Boolean := False;
         StartLine : Line_Position;
         StartColumn, EndColumn : Column_Position;
         WorkplaceName : Unbounded_String := Null_Unbounded_String;
@@ -54,6 +53,7 @@ package body Crafts.UI is
             end loop;
             Recipe.Difficulty := 0;
             Recipe.BaseType := 0;
+            Recipe.Tool := To_Unbounded_String("AlchemySet");
         end if;
         InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
         if RecipeIndex > 0 then
@@ -109,6 +109,48 @@ package body Crafts.UI is
             end loop;
             CurrentLine := CurrentLine + 1;
         end loop;
+        if Recipe.Tool /= To_Unbounded_String("None") then
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => "Tool: ");
+            MAmount := 0;
+            for J in Items_List.First_Index..Items_List.Last_Index loop
+                IsTool := False;
+                if Items_List.Element(J).IType = Recipe.Tool then
+                    IsTool := True;
+                end if;
+                if IsTool then
+                    if MAmount > 0 then
+                        Add(Win => InfoWindow, Str => " or");
+                    end if;
+                    Get_Cursor_Position(Win => InfoWindow, Line => StartLine, Column => StartColumn);
+                    Add(Win => InfoWindow, Str => To_String(Items_List.Element(J).Name));
+                    Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
+                    for K in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                        if Items_List.Element(PlayerShip.Cargo.Element(K).ProtoIndex).IType = Recipe.Tool then
+                            HaveTool := True;
+                            exit;
+                        end if;
+                    end loop;
+                    if not HaveTool then
+                        if StartLine = CurrentLine then
+                            TextLength := Natural(EndColumn - StartColumn);
+                            Change_Attributes(Win => InfoWindow, Line => StartLine,
+                                Column => StartColumn, Count => Integer(StartColumn) + TextLength, Color => 3);
+                        else
+                            TextLength := Natural((Columns / 2) - StartColumn);
+                            Change_Attributes(Win => InfoWindow, Line => StartLine,
+                                Column => StartColumn, Count => Integer(StartColumn) + TextLength, Color => 3);
+                            Change_Attributes(Win => InfoWindow, Line => CurrentLine,
+                                Column => 0, Count => Integer(EndColumn), Color => 3);
+                        end if;
+                        Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
+                    end if;
+                    HaveMaterial := False;
+                    MAmount := MAmount + 1;
+                end if;
+            end loop;
+            CurrentLine := CurrentLine + 1;
+        end if;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Workplace: ");
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop

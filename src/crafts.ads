@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with ShipModules; use ShipModules;
 with Game; use Game;
 
@@ -32,6 +33,7 @@ package Crafts is
             Time : Positive; -- Minutes needed for finish recipe
             Difficulty : Natural; -- How difficult is recipe to discover
             BaseType : Natural; -- Sky base type in which recipe can be bought
+            Tool : Unbounded_String; -- Type of tool used to craft item
         end record;
     package Recipes_Container is new Vectors(Positive, Craft_Data);
     Recipes_List : Recipes_Container.Vector; -- List of recipes available in game 

@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with UserInterface; use UserInterface;
@@ -44,7 +43,7 @@ package body Crafts is
         end if;
         TempRecord := (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
             ResultIndex => 1, ResultAmount => 10000, Workplace => ALCHEMY_LAB,
-            Skill => 1, Time => 15, Difficulty => 0, BaseType => 0);
+            Skill => 1, Time => 15, Difficulty => 0, BaseType => 0, Tool => To_Unbounded_String("None"));
         Open(RecipesFile, In_File, "data/recipes.dat");
         while not End_Of_File(RecipesFile) loop
             RawData := To_Unbounded_String(Get_Line(RecipesFile));
@@ -93,12 +92,14 @@ package body Crafts is
                     TempRecord.Difficulty := Integer'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("BaseType") then
                     TempRecord.BaseType := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Tool") then
+                    TempRecord.Tool := Value;
                 end if;
             elsif TempRecord.ResultAmount < 10000 then
                 Recipes_List.Append(New_Item => TempRecord);
                 TempRecord := (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
                     ResultIndex => 1, ResultAmount => 10000, Workplace => ALCHEMY_LAB, 
-                    Skill => 1, Time => 15, Difficulty => 0, BaseType => 0);
+                    Skill => 1, Time => 15, Difficulty => 0, BaseType => 0, Tool => To_Unbounded_String("None"));
             end if;
         end loop;
         Close(RecipesFile);
@@ -110,6 +111,7 @@ package body Crafts is
         SpaceNeeded : Integer := 0;
         MaterialIndexes : Positive_Container.Vector;
         RecipeName : Unbounded_String;
+        HaveTool : Boolean := False;
     begin
         if RecipeIndex > 0 then
             Recipe := Recipes_List.Element(RecipeIndex);
@@ -128,6 +130,7 @@ package body Crafts is
                 end if;
             end loop;
             Recipe.Difficulty := 0;
+            Recipe.Tool := To_Unbounded_String("AlchemySet");
             RecipeName := To_Unbounded_String("Deconstructing ") & Items_List.Element(Recipe.ResultIndex).Name;
         end if;
         -- Check for materials
@@ -153,6 +156,22 @@ package body Crafts is
             ShowDialog("You don't have enough materials to start manufacturing " & To_String(RecipeName) & ".");
             return;
         end if;
+        -- Check for tool
+        if Recipe.Tool /= To_Unbounded_String("None") then
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Recipe.Tool then
+                    HaveTool := True;
+                    exit;
+                end if;
+            end loop;
+        else
+            HaveTool := True;
+        end if;
+        if not HaveTool then
+            ShowDialog("You don't have proper tool to start manufacturing " & To_String(RecipeName) & ".");
+            return;
+        end if;
+        -- Check for free space
         for I in MaterialIndexes.First_Index..MaterialIndexes.Last_Index loop
             SpaceNeeded := SpaceNeeded + Items_List.Element(MaterialIndexes.Element(I)).Weight * Recipe.MaterialAmounts.Element(I);
         end loop;
@@ -176,6 +195,7 @@ package body Crafts is
         Damage : DamageFactor := 0.0;
         subtype Workplaces is ModuleType range ALCHEMY_LAB..GREENHOUSE;
         RecipeName : Unbounded_String;
+        HaveTool : Boolean;
         procedure UpdateMember(Member : in out Member_Data) is
         begin
             Member.OrderTime := WorkTime;
@@ -207,6 +227,7 @@ package body Crafts is
                         end loop;
                         Recipe.Difficulty := 0;
                         Recipe.BaseType := 0;
+                        Recipe.Tool := To_Unbounded_String("AlchemySet");
                         RecipeName := To_Unbounded_String("deconstructing ") & Items_List.Element(Recipe.ResultIndex).Name;
                     end if;
                     WorkTime := PlayerShip.Crew.Element(CrafterIndex).OrderTime;
@@ -228,7 +249,8 @@ package body Crafts is
                                 end loop;
                             else
                                 for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).Name = Items_List.Element(Recipe.ResultIndex).Name 
+                                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).Name = 
+                                        Items_List.Element(Recipe.ResultIndex).Name 
                                     then
                                         MaterialIndexes.Append(New_Item => J);
                                         exit;
@@ -237,6 +259,24 @@ package body Crafts is
                             end if;
                             if MaterialIndexes.Length < Recipe.MaterialTypes.Length then
                                 AddMessage("You don't have crafting materials for " & To_String(RecipeName) & ".", CraftMessage);
+                                GiveOrders(CrafterIndex, Rest);
+                                UpdateModule(PlayerShip, L, "Current_Value", "0");
+                                UpdateModule(PlayerShip, L, "Max_Value", Integer'Image(0 - PlayerShip.Modules.Element(L).Max_Value));
+                                exit Craft_Loop;
+                            end if;
+                            if Recipe.Tool /= To_Unbounded_String("None") then
+                                HaveTool := False;
+                                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = Recipe.Tool then
+                                        HaveTool := True;
+                                        exit;
+                                    end if;
+                                end loop;
+                            else
+                                HaveTool := True;
+                            end if;
+                            if not HaveTool then
+                                AddMessage("You don't have tool for " & To_String(RecipeName) & ".", CraftMessage);
                                 GiveOrders(CrafterIndex, Rest);
                                 UpdateModule(PlayerShip, L, "Current_Value", "0");
                                 UpdateModule(PlayerShip, L, "Max_Value", Integer'Image(0 - PlayerShip.Modules.Element(L).Max_Value));
