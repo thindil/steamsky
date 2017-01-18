@@ -336,4 +336,11 @@ Type = AlchemySet
 Prices = 50, 52, 52, 52
 Buyable = Y, N, N, N
 ShowType = Tool
+[48]
+Name = Bronze mold
+Weight = 10
+Type = Mold
+Prices = 50, 52, 52, 52
+Buyable = Y, N, N, N
+ShowType = Tool
 []
