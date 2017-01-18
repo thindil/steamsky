@@ -12,6 +12,7 @@ Result = 1
 Crafted = 5
 Workplace = Alchemy_Lab
 Skill = Alchemy
+Tool = AlchemySet
 [3]
 Material = RawFood
 Amount = 2
@@ -48,6 +49,7 @@ Workplace = Furnace
 Skill = Metalsmith
 Difficulty = 1
 BaseType = 1
+Tool = Mold
 [7]
 Material = TinOre
 Amount = 1
@@ -57,6 +59,7 @@ Workplace = Furnace
 Skill = Metalsmith
 Difficulty = 1
 BaseType = 1
+Tool = Mold
 [8]
 Material = Copper, Tin
 Amount = 1, 1
@@ -66,6 +69,7 @@ Workplace = Furnace
 Skill = Metalsmith
 Difficulty = 1
 BaseType = 1
+Tool = Mold
 [9]
 Material = IronOre
 Amount = 1
@@ -75,6 +79,7 @@ Workplace = Furnace
 Skill = Metalsmith
 Difficulty = 5
 BaseType = 1
+Tool = Mold
 [10]
 Material = Iron, Gunpowder
 Amount = 1, 1
@@ -94,6 +99,7 @@ Skill = Metalsmith
 Time = 30
 Difficulty = 10
 BaseType = 1
+Tool = Mold
 [12]
 Material = Steel, Gunpowder
 Amount = 1, 1
@@ -148,6 +154,7 @@ Workplace = Alchemy_Lab
 Skill = Medicine
 Difficulty = 5
 BaseType = 2
+Tool = AlchemySet
 [18]
 Material = HerbSeeds
 Amount = 1
