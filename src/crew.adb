@@ -229,7 +229,7 @@ package body Crew is
             AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " died from " &
                 To_String(Reason) & ".", CombatMessage);
             PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 40, Amount => 1, Name => PlayerShip.Crew.Element(MemberIndex).Name &
-                To_Unbounded_String("'s corpse")));
+                To_Unbounded_String("'s corpse"), Durability => 100));
             DeleteMember(MemberIndex);
         else
             AddMessage("You died from " & To_String(Reason) & ".", CombatMessage);

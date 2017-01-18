@@ -24,6 +24,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Crew; use Crew;
 with Items; use Items;
 with Statistics; use Statistics;
+with Utils; use Utils;
 
 package body Crafts is
 
@@ -186,7 +187,7 @@ package body Crafts is
     end SetRecipe;
 
     procedure Manufacturing(Minutes : Positive) is
-        CrafterIndex, ResultAmount, CraftedAmount, GainedExp : Natural := 0;
+        CrafterIndex, ResultAmount, CraftedAmount, GainedExp, ToolIndex : Natural := 0;
         Amount : Integer := 0;
         Recipe : Craft_Data;
         MaterialIndexes : Positive_Container.Vector;
@@ -195,11 +196,18 @@ package body Crafts is
         Damage : DamageFactor := 0.0;
         subtype Workplaces is ModuleType range ALCHEMY_LAB..GREENHOUSE;
         RecipeName : Unbounded_String;
-        HaveTool : Boolean;
         procedure UpdateMember(Member : in out Member_Data) is
         begin
             Member.OrderTime := WorkTime;
         end UpdateMember;
+        procedure UpdateTool(UsedTool : in out CargoData) is
+        begin
+            if UsedTool.Durability - 1 = 0 then
+                UpdateCargo(PlayerShip, ToolIndex, -1);
+            else
+                UsedTool.Durability := UsedTool.Durability - 1;
+            end if;
+        end UpdateTool;
     begin
         for L in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if PlayerShip.Modules.Element(L).Owner > 0 and (Modules_List.Element(PlayerShip.Modules.Element(L).ProtoIndex).MType 
@@ -265,17 +273,17 @@ package body Crafts is
                                 exit Craft_Loop;
                             end if;
                             if Recipe.Tool /= To_Unbounded_String("None") then
-                                HaveTool := False;
+                                ToolIndex := 0;
                                 for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                                     if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = Recipe.Tool then
-                                        HaveTool := True;
+                                        ToolIndex := J;
                                         exit;
                                     end if;
                                 end loop;
                             else
-                                HaveTool := True;
+                                ToolIndex := 0;
                             end if;
-                            if not HaveTool then
+                            if ToolIndex = 0 and Recipe.Tool /= To_Unbounded_String("None") then
                                 AddMessage("You don't have tool for " & To_String(RecipeName) & ".", CraftMessage);
                                 GiveOrders(CrafterIndex, Rest);
                                 UpdateModule(PlayerShip, L, "Current_Value", "0");
@@ -310,6 +318,11 @@ package body Crafts is
                                 UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(MaterialIndexes.Element(J)).ProtoIndex, 
                                     (0 - Recipe.MaterialAmounts.Element(J)));
                             end loop;
+                            if ToolIndex > 0 then
+                                if GetRandom(1, 100) <= Items_List.Element(PlayerShip.Cargo.Element(ToolIndex).ProtoIndex).Value then
+                                    PlayerShip.Cargo.Update_Element(Index => ToolIndex, Process => UpdateTool'Access);
+                                end if;
+                            end if;
                             if PlayerShip.Modules.Element(L).Current_Value > 0 then
                                 Amount := Amount - (Items_List.Element(Recipe.ResultIndex).Weight * ResultAmount);
                                 if FreeCargo(Amount) < 0 then

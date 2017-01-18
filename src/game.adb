@@ -437,6 +437,8 @@ package body Game is
             RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Cargo.Element(I).Amount));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             Put(SaveGame, To_String(PlayerShip.Cargo.Element(I).Name) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Cargo.Element(I).Durability));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         end loop;
         RawValue := To_Unbounded_String(PlayerShip.Crew.Length'Img);
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -703,7 +705,7 @@ package body Game is
             ShipCargo.Append(New_Item => (ProtoIndex =>
                 Positive'Value(To_String(ReadData)), Amount =>
                 Positive'Value(To_String(ReadData)), Name =>
-                ReadData));
+                ReadData, Durability => Positive'Value(To_String(ReadData))));
         end loop;
         PlayerShip.Cargo := ShipCargo;
         VectorLength := Positive'Value(To_String(ReadData));
