@@ -427,7 +427,8 @@ package body Ships is
                                 Integer'Value(Slice(Value, DotIndex + 2, XIndex - 1)));
                         end if;
                         TempRecord.Cargo.Append(New_Item => (Amount => CargoAmount, 
-                            ProtoIndex => Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1)), Name => Null_Unbounded_String));
+                            ProtoIndex => Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1)), Name => Null_Unbounded_String,
+                            Durability => 100));
                         StartIndex := EndIndex + 2;
                     end loop;
                 end if;

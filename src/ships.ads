@@ -45,6 +45,7 @@ package Ships is
             ProtoIndex : Positive; -- Index of prototype
             Amount : Positive; -- Amount of cargo
             Name : Unbounded_String; -- Name of item if different than default
+            Durability : Natural; -- Current durability of item
         end record;
     package Cargo_Container is new Vectors(Positive, CargoData);
     package Crew_Container is new Vectors(Positive, Member_Data);

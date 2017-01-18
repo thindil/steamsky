@@ -35,7 +35,7 @@ package body Ships.Cargo is
             end if;
         end loop;
         if ItemIndex = 0 then
-            Ship.Cargo.Append(New_Item => (ProtoIndex => ProtoIndex, Amount => Amount, Name => Null_Unbounded_String));
+            Ship.Cargo.Append(New_Item => (ProtoIndex => ProtoIndex, Amount => Amount, Name => Null_Unbounded_String, Durability => 100));
         else
             NewAmount := Ship.Cargo.Element(ItemIndex).Amount + Amount;
             if NewAmount < 1 then
