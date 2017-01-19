@@ -31,6 +31,7 @@ Crafted = 5
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 BaseType = 1
+Tool = GunsmithSet
 [5]
 Material = Iron, Gunpowder
 Amount = 1, 1
@@ -40,6 +41,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 1
 BaseType = 1
+Tool = GunsmithSet
 [6]
 Material = CopperOre
 Amount = 1
@@ -89,6 +91,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 5
 BaseType = 1
+Tool = GunsmithSet
 [11]
 Material = IronOre, Fuel
 Amount = 1, 1
@@ -109,6 +112,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 5
 BaseType = 1
+Tool = GunsmithSet
 [13]
 Material = Steel, Gunpowder
 Amount = 1, 1
@@ -118,6 +122,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 1
 BaseType = 1
+Tool = GunsmithSet
 [14]
 Material = Steel, Gunpowder
 Amount = 1, 1
@@ -127,6 +132,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 10
 BaseType = 1
+Tool = GunsmithSet
 [15]
 Material = Iron, Gunpowder
 Amount = 1, 1
@@ -136,6 +142,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 15
 BaseType = 1
+Tool = GunsmithSet
 [16]
 Material = Steel, Gunpowder
 Amount = 1, 1
@@ -145,6 +152,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 15
 BaseType = 1
+Tool = GunsmithSet
 [17]
 Material = Herbs
 Amount = 1
@@ -193,6 +201,7 @@ Skill = Gunsmith
 Time = 30
 Difficulty = 20
 BaseType = 1
+Tool = GunsmithSet
 [22]
 Material = Steel, Gunpowder
 Amount = 2, 1
@@ -203,6 +212,7 @@ Skill = Gunsmith
 Time = 30
 Difficulty = 20
 BaseType = 1
+Tool = GunsmithSet
 [23]
 Material = Iron, Gunpowder
 Amount = 4, 2
@@ -213,6 +223,7 @@ Skill = Gunsmith
 Time = 45
 Difficulty = 25
 BaseType = 1
+Tool = GunsmithSet
 [24]
 Material = Steel, Gunpowder
 Amount = 4, 2
@@ -223,6 +234,7 @@ Skill = Gunsmith
 Time = 45
 Difficulty = 25
 BaseType = 1
+Tool = GunsmithSet
 [25]
 Material = Iron, Gunpowder
 Amount = 6, 2
@@ -233,6 +245,7 @@ Skill = Gunsmith
 Time = 60
 Difficulty = 30
 BaseType = 1
+Tool = GunsmithSet
 [26]
 Material = Steel, Gunpowder
 Amount = 6, 2
@@ -243,6 +256,7 @@ Skill = Gunsmith
 Time = 60
 Difficulty = 30
 BaseType = 1
+Tool = GunsmithSet
 [27]
 Material = AndraeSeed
 Amount = 1
