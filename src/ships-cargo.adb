@@ -17,6 +17,7 @@
 
 with Items; use Items;
 with ShipModules; use ShipModules;
+with Utils; use Utils;
 
 package body Ships.Cargo is
 
@@ -91,5 +92,28 @@ package body Ships.Cargo is
         end if;
         return To_String(Items_List.Element(PlayerShip.Cargo.Element(CargoIndex).ProtoIndex).Name);
     end GetCargoName;
+
+    procedure DamageCargo(CargoIndex : Positive; CrewIndex, SkillIndex : Natural := 0) is
+        DamageChance : Integer := 0;
+        procedure UpdateItem(DamagedItem : in out CargoData) is
+        begin
+            if DamagedItem.Durability - 1 = 0 then
+                UpdateCargo(PlayerShip, CargoIndex, -1);
+            else
+                DamagedItem.Durability := DamagedItem.Durability - 1;
+            end if;
+        end UpdateItem;
+    begin
+        if CrewIndex > 0 then
+            DamageChance := Items_List.Element(PlayerShip.Cargo.Element(CargoIndex).ProtoIndex).Value -
+                (GetSkillLevel(CrewIndex, SkillIndex) / 5);
+            if DamageChance < 0 then
+                DamageChance := 0;
+            end if;
+        end if;
+        if GetRandom(1, 100) <= DamageChance then
+            PlayerShip.Cargo.Update_Element(Index => CargoIndex, Process => UpdateItem'Access);
+        end if;
+    end DamageCargo;
 
 end Ships.Cargo;
