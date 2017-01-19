@@ -343,4 +343,11 @@ Type = Mold
 Prices = 50, 52, 52, 52
 Buyable = Y, N, N, N
 ShowType = Tool
+[49]
+Name = Bronze gunsmith set
+Weight = 10
+Type = GunsmithSet
+Prices = 50, 52, 52, 52
+Buyable = Y, N, N, N
+ShowType = Tool
 []
