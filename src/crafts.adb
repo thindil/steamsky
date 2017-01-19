@@ -24,7 +24,6 @@ with Ships.Cargo; use Ships.Cargo;
 with Crew; use Crew;
 with Items; use Items;
 with Statistics; use Statistics;
-with Utils; use Utils;
 
 package body Crafts is
 
@@ -200,14 +199,6 @@ package body Crafts is
         begin
             Member.OrderTime := WorkTime;
         end UpdateMember;
-        procedure UpdateTool(UsedTool : in out CargoData) is
-        begin
-            if UsedTool.Durability - 1 = 0 then
-                UpdateCargo(PlayerShip, ToolIndex, -1);
-            else
-                UsedTool.Durability := UsedTool.Durability - 1;
-            end if;
-        end UpdateTool;
     begin
         for L in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if PlayerShip.Modules.Element(L).Owner > 0 and (Modules_List.Element(PlayerShip.Modules.Element(L).ProtoIndex).MType 
@@ -319,9 +310,7 @@ package body Crafts is
                                     (0 - Recipe.MaterialAmounts.Element(J)));
                             end loop;
                             if ToolIndex > 0 then
-                                if GetRandom(1, 100) <= Items_List.Element(PlayerShip.Cargo.Element(ToolIndex).ProtoIndex).Value then
-                                    PlayerShip.Cargo.Update_Element(Index => ToolIndex, Process => UpdateTool'Access);
-                                end if;
+                                DamageCargo(ToolIndex, CrafterIndex, Recipe.Skill);
                             end if;
                             if PlayerShip.Modules.Element(L).Current_Value > 0 then
                                 Amount := Amount - (Items_List.Element(Recipe.ResultIndex).Weight * ResultAmount);
