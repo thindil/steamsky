@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New ship module: iron armor and heavy iron armor
-- New item types: body, alchemyset, mold
+- New item types: body, alchemyset, mold, gunsmithset
 - New items: corpse, package, large package, huge package, beer, wine,
   lavish ration, alchemy set and bronze mold
 - Corpses of dead crew members which made saves from 0.7 incompatible
