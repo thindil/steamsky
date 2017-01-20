@@ -5,6 +5,7 @@ Result = 2
 Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Cooking
+Tool = CookingSet
 [2]
 Material = Wood
 Amount = 1
@@ -23,6 +24,7 @@ Skill = Cooking
 Time = 30
 Difficulty = 5
 BaseType = 2
+Tool = CookingSet
 [4]
 Material = Iron, Gunpowder
 Amount = 1, 1
