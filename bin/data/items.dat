@@ -350,4 +350,11 @@ Type = GunsmithSet
 Prices = 50, 52, 52, 52
 Buyable = Y, N, N, N
 ShowType = Tool
+[50]
+Name = Wooden cooking set
+Weight = 5
+Type = CookingSet
+Prices = 50, 52, 52, 52
+Buyable = Y, N, N, N
+ShowType = Tool
 []
