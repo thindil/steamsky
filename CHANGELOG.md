@@ -13,7 +13,8 @@ All notable changes to this project will be documented in this file.
 - Option to set random amount of cargo to ships
 - Eat raw food by hungry crew members (when no other food available)
 - Tools to manufacturing items
-- Alchemy set and bronze gunsmith set to starting cargo
+- Alchemy set, bronze gunsmith set and wooden cooking set to starting 
+  cargo
 
 ### Changed
 - Updated interface
