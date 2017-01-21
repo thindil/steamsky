@@ -8,8 +8,8 @@ All notable changes to this project will be documented in this file.
 - New item types: body, alchemyset, mold, gunsmithset, cookingset, 
   sickle
 - New items: corpse, package, large package, huge package, beer, wine,
-  lavish ration, alchemy set, bronze mold, bronze gunsmith set and
-  wooden cooking set
+  lavish ration, alchemy set, bronze mold, bronze gunsmith set, wooden 
+  cooking set and bronze sickle
 - Corpses of dead crew members which made saves from 0.7 incompatible
 - Option to set random amount of cargo to ships
 - Eat raw food by hungry crew members (when no other food available)
