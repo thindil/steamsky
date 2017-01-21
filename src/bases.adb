@@ -133,6 +133,9 @@ package body Bases is
             end if;
         end loop;
         Profit := Items_List.Element(ProtoIndex).Prices(BaseType) * SellAmount;
+        if PlayerShip.Cargo.Element(ItemIndex).Durability < 100 then
+            Profit := Positive(Float'Floor(Float(Profit) * (Float(PlayerShip.Cargo.Element(ItemIndex).Durability) / 100.0)));
+        end if;
         Profit := Profit + Integer(Float'Floor(Float(Profit) * (Float(GetSkillLevel(4, TraderIndex)) / 200.0)));
         case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Reputation(1) is
             when -24..-1 =>
