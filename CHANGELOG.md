@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New ship module: iron armor and heavy iron armor
-- New item types: body, alchemyset, mold, gunsmithset, cookingset
+- New item types: body, alchemyset, mold, gunsmithset, cookingset, 
+  sickle
 - New items: corpse, package, large package, huge package, beer, wine,
   lavish ration, alchemy set, bronze mold, bronze gunsmith set and
   wooden cooking set
