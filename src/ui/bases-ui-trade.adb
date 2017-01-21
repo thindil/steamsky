@@ -35,6 +35,7 @@ package body Bases.UI.Trade is
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         CurrentLine : Line_Position := 4;
+        DamagePercent : Natural;
     begin
         for I in Items_List.First_Index..Items_List.Last_Index loop
             if To_String(Items_List.Element(I).Name) = Name(Current(TradeMenu)) then
@@ -42,7 +43,7 @@ package body Bases.UI.Trade is
                 exit;
             end if;
         end loop;
-        InfoWindow := Create(8, (Columns / 2), 3, (Columns / 2));
+        InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
         Add(Win => InfoWindow, Str => "Type: ");
         if Items_List.Element(ItemIndex).ShowType = Null_Unbounded_String then
             Add(Win => InfoWindow, Str => To_String(Items_List.Element(ItemIndex).IType));
@@ -63,7 +64,22 @@ package body Bases.UI.Trade is
             if PlayerShip.Cargo.Element(I).ProtoIndex = ItemIndex then
                 Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
                 Add(Win => InfoWindow, Str => "Owned:" & Integer'Image(PlayerShip.Cargo.Element(I).Amount));
-                CurrentLine := 5;
+                if PlayerShip.Cargo.Element(I).Durability < 100 then
+                    Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
+                    Add(Win => InfoWindow, Str => "Status: ");
+                    DamagePercent := 100 - Natural((Float(PlayerShip.Cargo.Element(I).Durability) / 100.0) * 100.0);
+                    if DamagePercent > 0 and DamagePercent < 20 then
+                        Add(Win => InfoWindow, Str => "Slightly used");
+                    elsif DamagePercent > 19 and DamagePercent < 50 then
+                        Add(Win => InfoWindow, Str => "Damaged");
+                    elsif DamagePercent > 49 and DamagePercent < 80 then
+                        Add(Win => InfoWindow, Str => "Heavily damaged");
+                    elsif DamagePercent > 79 and DamagePercent < 100 then
+                        Add(Win => InfoWindow, Str => "Almost destroyed");
+                    end if;
+                    CurrentLine := 5;
+                end if;
+                CurrentLine := CurrentLine + 1;
                 exit;
             end if;
         end loop;
