@@ -175,6 +175,7 @@ Skill = Farming
 Time = 120
 Difficulty = 1
 BaseType = 2
+Tool = Sickle
 [19]
 Material = VegetableSeed
 Amount = 1
@@ -185,6 +186,7 @@ Skill = Farming
 Time = 60
 Difficulty = 1
 BaseType = 2
+Tool = Sickle
 [20]
 Material = Wood
 Amount = 1
