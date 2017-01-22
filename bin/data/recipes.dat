@@ -271,6 +271,7 @@ Skill = Woodcutting
 Time = 240
 Difficulty = 1
 BaseType = 3
+Tool = Saw
 [28]
 Material = IllandruSeed
 Amount = 1
@@ -281,4 +282,5 @@ Skill = Woodcutting
 Time = 240
 Difficulty = 1
 BaseType = 3
+Tool = Saw
 []
