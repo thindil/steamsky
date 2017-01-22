@@ -333,35 +333,35 @@ Value = 100
 Name = Alchemy set
 Weight = 5
 Type = AlchemySet
-Prices = 50, 52, 52, 52
+Prices = 5, 7, 7, 7
 Buyable = Y, N, N, N
 ShowType = Tool
 [48]
 Name = Bronze mold
 Weight = 10
 Type = Mold
-Prices = 50, 52, 52, 52
+Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
 ShowType = Tool
 [49]
 Name = Bronze gunsmith set
 Weight = 10
 Type = GunsmithSet
-Prices = 50, 52, 52, 52
+Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
 ShowType = Tool
 [50]
 Name = Wooden cooking set
 Weight = 5
 Type = CookingSet
-Prices = 50, 52, 52, 52
+Prices = 7, 9, 9, 9
 Buyable = Y, N, N, N
 ShowType = Tool
 [51]
 Name = Bronze sickle
 Weight = 1
 Type = Sickle
-Prices = 50, 52, 52, 52
+Prices = 5, 7, 7, 7
 Buyable = Y, N, N, N
 ShowType = Tool
 [52]
