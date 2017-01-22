@@ -364,4 +364,11 @@ Type = Sickle
 Prices = 50, 52, 52, 52
 Buyable = Y, N, N, N
 ShowType = Tool
+[52]
+Name = Bronze saw
+Weight = 1
+Type = Saw
+Prices = 5, 7, 7, 7
+Buyable = Y, N, N, N
+ShowType = Tool
 []
