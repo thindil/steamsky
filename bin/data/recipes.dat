@@ -195,6 +195,7 @@ Crafted = 3
 Workplace = Water_collector
 Skill = Engineering
 Time = 60
+Tool = Bucket
 [21]
 Material = Iron, Gunpowder
 Amount = 2, 1
