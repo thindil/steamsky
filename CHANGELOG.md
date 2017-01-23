@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
   sickle, saw, bucket
 - New items: corpse, package, large package, huge package, beer, wine,
   lavish ration, alchemy set, bronze mold, bronze gunsmith set, wooden 
-  cooking set, bronze sickle and bronze saw
+  cooking set, bronze sickle, bronze saw and wooden bucket
 - Corpses of dead crew members which made saves from 0.7 incompatible
 - Option to set random amount of cargo to ships
 - Eat raw food by hungry crew members (when no other food available)
