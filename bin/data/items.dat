@@ -371,4 +371,11 @@ Type = Saw
 Prices = 5, 7, 7, 7
 Buyable = Y, N, N, N
 ShowType = Tool
+[53]
+Name = Wooden bucket
+Weight = 2
+Type = Bucket
+Prices = 7, 9, 9, 9
+Buyable = Y, N, N, N
+ShowType = Tool
 []
