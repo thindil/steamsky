@@ -365,7 +365,7 @@ package body Ships is
         TempModules : Positive_Container.Vector;
         Enemy : Boolean := False;
         TempCargo : Cargo_Container.Vector;
-        CargoAmount : Positive;
+        CargoAmount : Natural;
     begin
         if ProtoShips_List.Length > 0 then
             return True;
@@ -426,9 +426,11 @@ package body Ships is
                             CargoAmount := GetRandom(Integer'Value(Slice(Value, StartIndex, DotIndex - 1)), 
                                 Integer'Value(Slice(Value, DotIndex + 2, XIndex - 1)));
                         end if;
-                        TempRecord.Cargo.Append(New_Item => (Amount => CargoAmount, 
-                            ProtoIndex => Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1)), Name => Null_Unbounded_String,
-                            Durability => 100));
+                        if CargoAmount > 0 then
+                            TempRecord.Cargo.Append(New_Item => (Amount => CargoAmount, 
+                                ProtoIndex => Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1)), Name => Null_Unbounded_String,
+                                Durability => 100));
+                        end if;
                         StartIndex := EndIndex + 2;
                     end loop;
                 end if;
