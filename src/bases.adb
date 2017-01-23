@@ -153,7 +153,7 @@ package body Bases is
             ShowDialog("You don't have enough free cargo space in your ship for Charcollum.");
             return;
         end if;
-        UpdateCargo(PlayerShip, ProtoIndex, (0 - SellAmount));
+        UpdateCargo(PlayerShip, ProtoIndex, (0 - SellAmount), PlayerShip.Cargo.Element(ItemIndex).Durability);
         UpdateCargo(PlayerShip, 1, Profit);
         GainExp(1, 4, TraderIndex);
         GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);

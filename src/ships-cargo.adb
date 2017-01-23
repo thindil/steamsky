@@ -21,7 +21,7 @@ with Utils; use Utils;
 
 package body Ships.Cargo is
 
-    procedure UpdateCargo(Ship : in out ShipRecord; ProtoIndex : Positive; Amount : Integer) is
+    procedure UpdateCargo(Ship : in out ShipRecord; ProtoIndex : Positive; Amount : Integer; Durability : Positive := 100) is
         ItemIndex : Natural := 0;
         NewAmount : Natural;
         procedure UpdateItem(Item : in out CargoData) is
@@ -30,13 +30,14 @@ package body Ships.Cargo is
         end UpdateItem;
     begin
         for I in Ship.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if Ship.Cargo.Element(I).ProtoIndex = ProtoIndex then
+            if Ship.Cargo.Element(I).ProtoIndex = ProtoIndex and Ship.Cargo.Element(I).Durability = Durability then
                 ItemIndex := I;
                 exit;
             end if;
         end loop;
         if ItemIndex = 0 then
-            Ship.Cargo.Append(New_Item => (ProtoIndex => ProtoIndex, Amount => Amount, Name => Null_Unbounded_String, Durability => 100));
+            Ship.Cargo.Append(New_Item => (ProtoIndex => ProtoIndex, Amount => Amount, Name => Null_Unbounded_String, 
+                Durability => Durability));
         else
             NewAmount := Ship.Cargo.Element(ItemIndex).Amount + Amount;
             if NewAmount < 1 then
