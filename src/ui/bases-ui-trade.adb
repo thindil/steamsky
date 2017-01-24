@@ -36,6 +36,7 @@ package body Bases.UI.Trade is
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         CurrentLine : Line_Position := 4;
         DamagePercent : Natural;
+        CargoIndex : constant Natural := Integer'Value(Description(Current(TradeMenu)));
     begin
         for I in Items_List.First_Index..Items_List.Last_Index loop
             if To_String(Items_List.Element(I).Name) = Name(Current(TradeMenu)) then
@@ -60,29 +61,26 @@ package body Bases.UI.Trade is
         Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
         Add(Win => InfoWindow, Str => "Weight:" & Integer'Image(Items_List.Element(ItemIndex).Weight) & 
             " kg");
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).ProtoIndex = ItemIndex then
-                Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
-                Add(Win => InfoWindow, Str => "Owned:" & Integer'Image(PlayerShip.Cargo.Element(I).Amount));
-                if PlayerShip.Cargo.Element(I).Durability < 100 then
-                    Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
-                    Add(Win => InfoWindow, Str => "Status: ");
-                    DamagePercent := 100 - Natural((Float(PlayerShip.Cargo.Element(I).Durability) / 100.0) * 100.0);
-                    if DamagePercent > 0 and DamagePercent < 20 then
-                        Add(Win => InfoWindow, Str => "Slightly used");
-                    elsif DamagePercent > 19 and DamagePercent < 50 then
-                        Add(Win => InfoWindow, Str => "Damaged");
-                    elsif DamagePercent > 49 and DamagePercent < 80 then
-                        Add(Win => InfoWindow, Str => "Heavily damaged");
-                    elsif DamagePercent > 79 and DamagePercent < 100 then
-                        Add(Win => InfoWindow, Str => "Almost destroyed");
-                    end if;
-                    CurrentLine := 5;
+        if CargoIndex > 0 then
+            Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
+            Add(Win => InfoWindow, Str => "Owned:" & Integer'Image(PlayerShip.Cargo.Element(CargoIndex).Amount));
+            if PlayerShip.Cargo.Element(CargoIndex).Durability < 100 then
+                Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
+                Add(Win => InfoWindow, Str => "Status: ");
+                DamagePercent := 100 - Natural((Float(PlayerShip.Cargo.Element(CargoIndex).Durability) / 100.0) * 100.0);
+                if DamagePercent > 0 and DamagePercent < 20 then
+                    Add(Win => InfoWindow, Str => "Slightly used");
+                elsif DamagePercent > 19 and DamagePercent < 50 then
+                    Add(Win => InfoWindow, Str => "Damaged");
+                elsif DamagePercent > 49 and DamagePercent < 80 then
+                    Add(Win => InfoWindow, Str => "Heavily damaged");
+                elsif DamagePercent > 79 and DamagePercent < 100 then
+                    Add(Win => InfoWindow, Str => "Almost destroyed");
                 end if;
-                CurrentLine := CurrentLine + 1;
-                exit;
+                CurrentLine := 5;
             end if;
-        end loop;
+            CurrentLine := CurrentLine + 1;
+        end if;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "ENTER to buy selected item, SPACE for sell.");
         Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 0, Count => 5, Color => 1);
@@ -93,36 +91,64 @@ package body Bases.UI.Trade is
     end ShowItemInfo;
 
     procedure ShowTrade is
-        Trade_Items: constant Item_Array_Access := new Item_Array(1..Items_List.Last_Index);
+        Trade_Items : Item_Array_Access;
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         MoneyIndex : Natural := 0;
-        ShowItem : Boolean := False;
         MenuIndex : Integer := 1;
         FreeSpace : Integer;
+        ItemsAmount : Positive := 1;
+        Added : Boolean;
     begin
-        for I in 1..(Items_List.Last_Index) loop
-            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if PlayerShip.Cargo.Element(J).ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
-                    ShowItem := True;
-                    exit;
+        for I in Items_List.First_Index..Items_List.Last_Index loop
+            if not Items_List.Element(I).Buyable(BaseType) then
+                for Item of PlayerShip.Cargo loop
+                    if Item.ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
+                        ItemsAmount := ItemsAmount + 1;
+                    end if;
+                end loop;
+            else
+                Added := False;
+                for Item of PlayerShip.Cargo loop
+                    if Item.ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
+                        ItemsAmount := ItemsAmount + 1;
+                        Added := True;
+                    end if;
+                end loop;
+                if not Added then
+                    ItemsAmount := ItemsAmount + 1;
                 end if;
-            end loop;
-            if Items_List.Element(I).Buyable(BaseType) then
-                ShowItem := True;
             end if;
-            if ShowItem then
-                Trade_Items.all(MenuIndex) := New_Item(To_String(Items_List.Element(I).Name));
-                MenuIndex := MenuIndex + 1;
+        end loop;
+        Trade_Items := new Item_Array(1..ItemsAmount);
+        for I in Items_List.First_Index..Items_List.Last_Index loop
+            if not Items_List.Element(I).Buyable(BaseType) then
+                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if PlayerShip.Cargo.Element(J).ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
+                        Trade_Items.all(MenuIndex) := New_Item(To_String(Items_List.Element(I).Name), Positive'Image(J));
+                        MenuIndex := MenuIndex + 1;
+                    end if;
+                end loop;
+            else
+                Added := False;
+                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if PlayerShip.Cargo.Element(J).ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
+                        Trade_Items.all(MenuIndex) := New_Item(To_String(Items_List.Element(I).Name), Positive'Image(J));
+                        MenuIndex := MenuIndex + 1;
+                        Added := True;
+                    end if;
+                end loop;
+                if not Added then
+                    Trade_Items.all(MenuIndex) := New_Item(To_String(Items_List.Element(I).Name), "0");
+                    MenuIndex := MenuIndex + 1;
+                end if;
             end if;
-            ShowItem := False;
         end loop;
-        for I in MenuIndex..Items_List.Last_Index loop
-            Trade_Items.all(I) := Null_Item;
-        end loop;
+        Trade_Items.all(MenuIndex) := Null_Item;
         TradeMenu := New_Menu(Trade_Items);
+        Set_Options(TradeMenu, (Show_Descriptions => False, others => True));
         Set_Format(TradeMenu, Lines - 10, 1);
         Set_Mark(TradeMenu, "");
         Scale(TradeMenu, MenuHeight, MenuLength);
