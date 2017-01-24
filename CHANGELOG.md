@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Repair material for Steel 120mm gun
 - Upgrade module when selling ship modules
 - Check for free cargo space when accepting mission from base
+- Item types for Vegetables seeds, Andrae seeds and Illandru seeds
 
 ## [0.7] - 2017-01-08
 
