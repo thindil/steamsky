@@ -208,7 +208,7 @@ ShowType = Seeds
 [30]
 Name = Vegetables seeds
 Weight = 1
-Type = VegetableSeed
+Type = VegetableSeeds
 Prices = 2, 1, 2, 2
 Buyable = N, Y, N, N
 ShowType = Seeds
@@ -263,14 +263,14 @@ ShowType = Ammunition
 [37]
 Name = Andrae seeds
 Weight = 1
-Type = AndraeSeed
+Type = AndraeSeeds
 Prices = 2, 2, 1, 2
 Buyable = N, N, Y, N
 ShowType = Seeds
 [38]
 Name = Illandru seeds
 Weight = 1
-Type = IllandruSeed
+Type = IllandruSeeds
 Prices = 2, 2, 1, 2
 Buyable = N, N, Y, N
 ShowType = Seeds
