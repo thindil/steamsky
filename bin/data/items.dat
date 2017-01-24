@@ -378,4 +378,11 @@ Type = Bucket
 Prices = 7, 9, 9, 9
 Buyable = Y, N, N, N
 ShowType = Tool
+[54]
+Name = Barley seeds
+Weight = 1
+Type = BarleySeeds
+Prices = 2, 1, 2, 2
+Buyable = N, Y, N, N
+ShowType = Seeds
 []
