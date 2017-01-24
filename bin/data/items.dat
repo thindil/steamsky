@@ -336,6 +336,7 @@ Type = AlchemySet
 Prices = 5, 7, 7, 7
 Buyable = Y, N, N, N
 ShowType = Tool
+Value = 10
 [48]
 Name = Bronze mold
 Weight = 10
@@ -343,6 +344,7 @@ Type = Mold
 Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
 ShowType = Tool
+Value = 15
 [49]
 Name = Bronze gunsmith set
 Weight = 10
@@ -350,6 +352,7 @@ Type = GunsmithSet
 Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
 ShowType = Tool
+Value = 15
 [50]
 Name = Wooden cooking set
 Weight = 5
@@ -357,6 +360,7 @@ Type = CookingSet
 Prices = 7, 9, 9, 9
 Buyable = Y, N, N, N
 ShowType = Tool
+Value = 20
 [51]
 Name = Bronze sickle
 Weight = 1
@@ -364,6 +368,7 @@ Type = Sickle
 Prices = 5, 7, 7, 7
 Buyable = Y, N, N, N
 ShowType = Tool
+Value = 15
 [52]
 Name = Bronze saw
 Weight = 1
@@ -371,6 +376,7 @@ Type = Saw
 Prices = 5, 7, 7, 7
 Buyable = Y, N, N, N
 ShowType = Tool
+Value = 15
 [53]
 Name = Wooden bucket
 Weight = 2
@@ -378,6 +384,7 @@ Type = Bucket
 Prices = 7, 9, 9, 9
 Buyable = Y, N, N, N
 ShowType = Tool
+Value = 20
 [54]
 Name = Barley seeds
 Weight = 1
