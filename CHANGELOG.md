@@ -27,6 +27,8 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Item type from FoodMaterial to RawFood
 - Better random cargo in npc ships
+- Prices of: iron 80mm ammo, steel 80mm ammo, iron 100mm ammo, steel
+  100mm ammo, iron 120mm ammo and steel 120mm ammo
 
 ### Fixed
 - Crash on selling ship modules
