@@ -305,4 +305,14 @@ Time = 60
 Difficulty = 1
 BaseType = 2
 Tool = Sickle
+[31]
+Material = BarleySeed
+Amount = 1
+Result = 44
+Crafted = 2
+Workplace = Alchemy_Lab
+Skill = Brewery
+Difficulty = 1
+BaseType = 2
+Tool = AlchemySet
 []
