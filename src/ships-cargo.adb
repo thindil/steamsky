@@ -97,10 +97,12 @@ package body Ships.Cargo is
     procedure DamageCargo(CargoIndex : Positive; CrewIndex, SkillIndex : Natural := 0) is
         DamageChance : Integer := 0;
         SelectedItem : constant CargoData := PlayerShip.Cargo.Element(CargoIndex);
+        I : Positive := PlayerShip.Cargo.First_Index;
+        NewAmount : Positive;
         procedure UpdateItem(DamagedItem : in out CargoData) is
         begin
             if DamagedItem.Amount > 1 and DamagedItem.Durability > 1 then
-                Damageditem.Amount := 1;
+                DamagedItem.Amount := 1;
             end if;
             if DamagedItem.Durability - 1 = 0 then
                 UpdateCargo(PlayerShip, CargoIndex, -1);
@@ -108,6 +110,10 @@ package body Ships.Cargo is
                 DamagedItem.Durability := DamagedItem.Durability - 1;
             end if;
         end UpdateItem;
+        procedure UpdateItemAmount(Item : in out CargoData) is
+        begin
+            Item.Amount := NewAmount;
+        end UpdateItemAmount;
     begin
         if CrewIndex > 0 then
             DamageChance := Items_List.Element(SelectedItem.ProtoIndex).Value - (GetSkillLevel(CrewIndex, SkillIndex) / 5);
@@ -121,6 +127,21 @@ package body Ships.Cargo is
                     Name => SelectedItem.Name, Durability => SelectedItem.Durability));
             end if;
             PlayerShip.Cargo.Update_Element(Index => CargoIndex, Process => UpdateItem'Access);
+            while I <= PlayerShip.Cargo.Last_Index loop
+                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if PlayerShip.Cargo.Element(I).ProtoIndex = PlayerShip.Cargo.Element(J).ProtoIndex and
+                        PlayerShip.Cargo.Element(I).Durability = PlayerShip.Cargo.Element(J).Durability and
+                        I /= J
+                    then
+                        NewAmount := PlayerShip.Cargo.Element(I).Amount + PlayerShip.Cargo.Element(J).Amount;
+                        PlayerShip.Cargo.Update_Element(Index => I, Process => UpdateItemAmount'Access);
+                        PlayerShip.Cargo.Delete(Index => J, Count => 1);
+                        I := I - 1;
+                        exit;
+                    end if;
+                end loop;
+                I := I + 1;
+            end loop;
         end if;
     end DamageCargo;
 
