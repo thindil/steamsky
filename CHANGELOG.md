@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
 - Tools to manufacturing items
 - Alchemy set, bronze gunsmith set and wooden cooking set to starting 
   cargo
-- New crafting recipes: barley seeds and barley
+- New crafting recipes: barley seeds, barley and beer
 - New skill: brewery
 
 ### Changed
