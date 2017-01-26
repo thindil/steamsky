@@ -295,7 +295,7 @@ Difficulty = 1
 BaseType = 2
 Tool = AlchemySet
 [30]
-Material = BarleySeed
+Material = BarleySeeds
 Amount = 1
 Result = 55
 Crafted = 2
@@ -306,7 +306,7 @@ Difficulty = 1
 BaseType = 2
 Tool = Sickle
 [31]
-Material = BarleySeed
+Material = BarleySeeds
 Amount = 1
 Result = 44
 Crafted = 2
