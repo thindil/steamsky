@@ -399,4 +399,10 @@ Type = Barley
 Prices = 3, 2, 3, 3
 Buyable = N, Y, N, N
 ShowType = Grain
+[56]
+Name = Grapes
+Weight = 1
+Type = Grapes
+Prices = 3, 2, 3, 3
+Buyable = N, Y, N, N
 []
