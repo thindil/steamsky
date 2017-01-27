@@ -405,4 +405,10 @@ Weight = 1
 Type = Grapes
 Prices = 3, 2, 3, 3
 Buyable = N, Y, N, N
+[57]
+Name = Grape Vine
+Weight = 20
+Type = GrapeVine
+Prices = 0, 0, 0, 0
+Buyable = N, N, N, N
 []
