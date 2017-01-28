@@ -102,19 +102,18 @@ package body Bases.UI.Trade is
         ItemsAmount : Positive := 1;
         Added : Boolean;
     begin
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Prices(BaseType) > 0 then
+                ItemsAmount := ItemsAmount + 1;
+            end if;
+        end loop;
         for I in Items_List.First_Index..Items_List.Last_Index loop
-            if not Items_List.Element(I).Buyable(BaseType) then
-                for Item of PlayerShip.Cargo loop
-                    if Item.ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
-                        ItemsAmount := ItemsAmount + 1;
-                    end if;
-                end loop;
-            else
+            if Items_List.Element(I).Buyable(BaseType) then
                 Added := False;
-                for Item of PlayerShip.Cargo loop
-                    if Item.ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
-                        ItemsAmount := ItemsAmount + 1;
+                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if PlayerShip.Cargo.Element(J).ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
                         Added := True;
+                        exit;
                     end if;
                 end loop;
                 if not Added then
@@ -123,21 +122,20 @@ package body Bases.UI.Trade is
             end if;
         end loop;
         Trade_Items := new Item_Array(1..ItemsAmount);
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Prices(BaseType) > 0 then
+                Trade_Items.all(MenuIndex) := New_Item(To_String(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name), 
+                    Positive'Image(I));
+                MenuIndex := MenuIndex + 1;
+            end if;
+        end loop;
         for I in Items_List.First_Index..Items_List.Last_Index loop
-            if not Items_List.Element(I).Buyable(BaseType) then
-                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if PlayerShip.Cargo.Element(J).ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
-                        Trade_Items.all(MenuIndex) := New_Item(To_String(Items_List.Element(I).Name), Positive'Image(J));
-                        MenuIndex := MenuIndex + 1;
-                    end if;
-                end loop;
-            else
+            if Items_List.Element(I).Buyable(BaseType) then
                 Added := False;
                 for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                     if PlayerShip.Cargo.Element(J).ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
-                        Trade_Items.all(MenuIndex) := New_Item(To_String(Items_List.Element(I).Name), Positive'Image(J));
-                        MenuIndex := MenuIndex + 1;
                         Added := True;
+                        exit;
                     end if;
                 end loop;
                 if not Added then
