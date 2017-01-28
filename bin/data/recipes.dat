@@ -325,4 +325,15 @@ Skill = Farming
 Difficulty = 5
 BaseType = 2
 Tool = AlchemySet
+[33]
+Material = Grapes
+Amount = 1
+Result = 57
+Crafted = 2
+Workplace = Greenhouse
+Skill = Farming
+Time = 60
+Difficulty = 5
+BaseType = 2
+Tool = Bucket
 []
