@@ -336,4 +336,14 @@ Time = 60
 Difficulty = 5
 BaseType = 2
 Tool = Bucket
+[34]
+Material = Grapes
+Amount = 1
+Result = 45
+Crafted = 2
+Workplace = Alchemy_Lab
+Skill = Brewery
+Difficulty = 5
+BaseType = 2
+Tool = AlchemySet
 []
