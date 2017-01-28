@@ -21,7 +21,7 @@ with Utils; use Utils;
 
 package body Ships.Cargo is
 
-    procedure UpdateCargo(Ship : in out ShipRecord; ProtoIndex : Positive; Amount : Integer; Durability : Positive := 100) is
+    procedure UpdateCargo(Ship : in out ShipRecord; ProtoIndex : Positive; Amount : Integer; Durability : Natural := 100) is
         ItemIndex : Natural := 0;
         NewAmount : Natural;
         procedure UpdateItem(Item : in out CargoData) is
@@ -104,11 +104,7 @@ package body Ships.Cargo is
             if DamagedItem.Amount > 1 and DamagedItem.Durability > 1 then
                 DamagedItem.Amount := 1;
             end if;
-            if DamagedItem.Durability - 1 = 0 then
-                UpdateCargo(PlayerShip, CargoIndex, -1);
-            else
-                DamagedItem.Durability := DamagedItem.Durability - 1;
-            end if;
+            DamagedItem.Durability := DamagedItem.Durability - 1;
         end UpdateItem;
         procedure UpdateItemAmount(Item : in out CargoData) is
         begin
@@ -121,28 +117,33 @@ package body Ships.Cargo is
                 DamageChance := 0;
             end if;
         end if;
-        if GetRandom(1, 100) <= DamageChance then
-            if SelectedItem.Amount > 1 and SelectedItem.Durability > 1 then
-                PlayerShip.Cargo.Append(New_Item => (ProtoIndex => SelectedItem.ProtoIndex, Amount => (SelectedItem.Amount - 1), 
-                    Name => SelectedItem.Name, Durability => SelectedItem.Durability));
-            end if;
-            PlayerShip.Cargo.Update_Element(Index => CargoIndex, Process => UpdateItem'Access);
-            while I <= PlayerShip.Cargo.Last_Index loop
-                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if PlayerShip.Cargo.Element(I).ProtoIndex = PlayerShip.Cargo.Element(J).ProtoIndex and
-                        PlayerShip.Cargo.Element(I).Durability = PlayerShip.Cargo.Element(J).Durability and
-                        I /= J
-                    then
-                        NewAmount := PlayerShip.Cargo.Element(I).Amount + PlayerShip.Cargo.Element(J).Amount;
-                        PlayerShip.Cargo.Update_Element(Index => I, Process => UpdateItemAmount'Access);
-                        PlayerShip.Cargo.Delete(Index => J, Count => 1);
-                        I := I - 1;
-                        exit;
-                    end if;
-                end loop;
-                I := I + 1;
-            end loop;
+        if GetRandom(1, 100) > DamageChance then -- Cargo not damaged
+            return;
         end if;
+        if SelectedItem.Amount > 1 then
+            PlayerShip.Cargo.Append(New_Item => (ProtoIndex => SelectedItem.ProtoIndex, Amount => (SelectedItem.Amount - 1), 
+            Name => SelectedItem.Name, Durability => SelectedItem.Durability));
+        end if;
+        PlayerShip.Cargo.Update_Element(Index => CargoIndex, Process => UpdateItem'Access);
+        if PlayerShip.Cargo.Element(CargoIndex).Durability = 0 then -- Cargo destroyed
+            UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(CargoIndex).ProtoIndex, -1, 0);
+            return;
+        end if;
+        while I <= PlayerShip.Cargo.Last_Index loop
+            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if PlayerShip.Cargo.Element(I).ProtoIndex = PlayerShip.Cargo.Element(J).ProtoIndex and
+                    PlayerShip.Cargo.Element(I).Durability = PlayerShip.Cargo.Element(J).Durability and
+                    I /= J
+                then
+                    NewAmount := PlayerShip.Cargo.Element(I).Amount + PlayerShip.Cargo.Element(J).Amount;
+                    PlayerShip.Cargo.Update_Element(Index => I, Process => UpdateItemAmount'Access);
+                    PlayerShip.Cargo.Delete(Index => J, Count => 1);
+                    I := I - 1;
+                    exit;
+                end if;
+            end loop;
+            I := I + 1;
+        end loop;
     end DamageCargo;
 
 end Ships.Cargo;
