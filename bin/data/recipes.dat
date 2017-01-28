@@ -315,4 +315,14 @@ Skill = Brewery
 Difficulty = 1
 BaseType = 2
 Tool = AlchemySet
+[32]
+Material = GrapeVine
+Amount = 1
+Result = 56
+Crafted = 2
+Workplace = Alchemy_Lab
+Skill = Farming
+Difficulty = 5
+BaseType = 2
+Tool = AlchemySet
 []
