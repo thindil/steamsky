@@ -411,4 +411,10 @@ Weight = 20
 Type = GrapeVine
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
+[58]
+Name = Quartz sand
+Weight = 5
+Type = Sand
+Prices = 2, 2, 1, 2
+Buyable = N, N, Y, N
 []
