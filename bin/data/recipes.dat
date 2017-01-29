@@ -346,4 +346,15 @@ Skill = Brewery
 Difficulty = 5
 BaseType = 2
 Tool = AlchemySet
+[35]
+Material = RawFood
+Amount = 3
+Result = 46
+Crafted = 1
+Workplace = Alchemy_Lab
+Skill = Cooking
+Time = 30
+Difficulty = 10
+BaseType = 2
+Tool = CookingSet
 []
