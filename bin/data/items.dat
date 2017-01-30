@@ -417,4 +417,12 @@ Weight = 5
 Type = Sand
 Prices = 2, 2, 1, 2
 Buyable = N, N, Y, N
+[59]
+Name = Bronze blacksmith set
+Weight = 100
+Type = BlacksmithSet
+Prices = 35, 37, 37, 37
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 15
 []
