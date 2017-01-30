@@ -18,7 +18,7 @@ All notable changes to this project will be documented in this file.
 - Alchemy set, bronze gunsmith set and wooden cooking set to starting 
   cargo
 - New crafting recipes: barley seeds, barley, beer, grapes, grape vine,
-  wine and lavish ration
+  wine, lavish ration and alchemy set
 - New skill: brewery
 
 ### Changed
