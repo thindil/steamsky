@@ -19,7 +19,7 @@ All notable changes to this project will be documented in this file.
   cargo
 - New crafting recipes: barley seeds, barley, beer, grapes, grape vine,
   wine, lavish ration and alchemy set
-- New skill: brewery
+- New skills: brewery and blacksmith
 
 ### Changed
 - Updated interface
