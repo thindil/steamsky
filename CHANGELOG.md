@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship module: iron armor and heavy iron armor
 - New item types: body, alchemyset, mold, gunsmithset, cookingset, 
-  sickle, saw, bucket, barleyseeds, barley, grape, grapevine, sand
+  sickle, saw, bucket, barleyseeds, barley, grape, grapevine, sand,
+  blacksmithset
 - New items: corpse, package, large package, huge package, beer, wine,
   lavish ration, alchemy set, bronze mold, bronze gunsmith set, wooden 
   cooking set, bronze sickle, bronze saw, wooden bucket, barley seeds,
