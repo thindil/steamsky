@@ -357,4 +357,14 @@ Time = 30
 Difficulty = 10
 BaseType = 2
 Tool = CookingSet
+[36]
+Material = Sand
+Amount = 2
+Result = 47
+Crafted = 1
+Workplace = Furnace
+Skill = Alchemy
+Difficulty = 1
+BaseType = 1
+Tool = Mold
 []
