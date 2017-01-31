@@ -367,4 +367,14 @@ Skill = Alchemy
 Difficulty = 1
 BaseType = 1
 Tool = Mold
+[37]
+Material = Bronze
+Amount = 2
+Result = 48
+Crafted = 1
+Workplace = Furnace
+Skill = Blacksmith
+Difficulty = 1
+BaseType = 1
+Tool = BlacksmithSet
 []
