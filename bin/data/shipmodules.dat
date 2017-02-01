@@ -664,4 +664,16 @@ Skill = Engineering
 Price = 12500
 InstallTime = 240
 Unique = Yes
+[58]
+Name = Small bronze workshop
+Type = Workshop
+Weight = 400
+Value = 0
+MaxValue = 0
+Durability = 100
+Material = Bronze
+Skill = Engineering
+Price = 1000
+InstallTime = 60
+Size = 1
 []
