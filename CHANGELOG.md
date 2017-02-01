@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
   bronze sickle, bronze blacksmith set and bronze saw
 - New skills: brewery and blacksmith
 - New type of ship modules: workshop
+- New ship module: small bronze workshop
 
 ### Changed
 - Updated interface
