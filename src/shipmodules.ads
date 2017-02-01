@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -21,7 +21,7 @@ with Ada.Containers.Vectors; use Ada.Containers;
 package ShipModules is
     
     type ModuleType is (ANY, ENGINE, CABIN, COCKPIT, TURRET, GUN, CARGO, HULL,
-        ARMOR, BATTERING_RAM, ALCHEMY_LAB, FURNACE, WATER_COLLECTOR,
+        ARMOR, BATTERING_RAM, ALCHEMY_LAB, FURNACE, WATER_COLLECTOR, WORKSHOP,
         GREENHOUSE, MEDICAL_ROOM);
     type BaseModule_Data is -- Data structure for prototypes of ship modules
         record
