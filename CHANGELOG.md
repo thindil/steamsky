@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file.
   cargo
 - New crafting recipes: barley seeds, barley, beer, grapes, grape vine,
   wine, lavish ration, alchemy set, bronze mold, bronze gunsmith set,
-  bronze sickle and bronze blacksmith set
+  bronze sickle, bronze blacksmith set and bronze saw
 - New skills: brewery and blacksmith
 
 ### Changed
