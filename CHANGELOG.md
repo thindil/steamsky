@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
   wine, lavish ration, alchemy set, bronze mold, bronze gunsmith set,
   bronze sickle, bronze blacksmith set and bronze saw
 - New skills: brewery and blacksmith
+- New type of ship modules: workshop
 
 ### Changed
 - Updated interface
