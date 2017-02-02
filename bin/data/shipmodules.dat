@@ -676,4 +676,16 @@ Skill = Engineering
 Price = 1000
 InstallTime = 60
 Size = 1
+[59]
+Name = Small iron workshop
+Type = Workshop
+Weight = 400
+Value = 0
+MaxValue = 0
+Durability = 200
+Material = Iron
+Skill = Engineering
+Price = 2000
+InstallTime = 60
+Size = 1
 []
