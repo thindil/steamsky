@@ -21,7 +21,8 @@ All notable changes to this project will be documented in this file.
   cargo
 - New crafting recipes: barley seeds, barley, beer, grapes, grape vine,
   wine, lavish ration, alchemy set, bronze mold, bronze gunsmith set,
-  bronze sickle, bronze blacksmith set and bronze saw
+  bronze sickle, bronze blacksmith set, bronze saw and bronze woodworker
+  set
 - New skills: brewery, blacksmith and woodworking
 - New type of ship modules: workshop
 - New ship modules: small bronze workshop and small iron workshop
