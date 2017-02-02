@@ -425,4 +425,12 @@ Prices = 35, 37, 37, 37
 Buyable = Y, N, N, N
 ShowType = Tool
 Value = 15
+[60]
+Name = Bronze woodworker set
+Weight = 5
+Type = WoodworkerSet
+Prices = 5, 7, 7, 7
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 15
 []
