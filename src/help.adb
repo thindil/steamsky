@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -37,6 +37,7 @@ package body Help is
     HelpPad : Window;
     HelpMenu : Menu;
     MenuWindow : Window;
+    PreviousState : GameStates := Sky_Map_View;
 
     function LoadHelp return Boolean is
         HelpFile : File_Type;
@@ -72,11 +73,14 @@ package body Help is
         return True;
     end LoadHelp;
 
-    procedure ShowHelpMenu is
+    procedure ShowHelpMenu(NewHelp : Boolean := False) is
         Help_Items : constant Item_Array_Access := new Item_Array(Help_List.First_Index..(Help_List.Last_Index + 1));
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
     begin
+        if NewHelp then
+            PreviousState := Sky_Map_View;
+        end if;
         for I in Help_List.First_Index..Help_List.Last_Index loop
             Help_Items.all(I) := New_Item(To_String(Help_List.Element(I).Title));
         end loop;
@@ -94,11 +98,15 @@ package body Help is
         Refresh(MenuWindow);
     end ShowHelpMenu;
 
-    procedure ShowHelp(NewHelp : Boolean := False) is
+    procedure ShowHelp(OldState : GameStates := Help_Topic; HelpIndex : Natural := 0) is
         LinesAmount : Line_Position;
         TextPosition, OldTextPosition : Natural := 1;
     begin
-        if NewHelp then
+        if HelpIndex > 0 then
+            TopicIndex := HelpIndex;
+        end if;
+        if OldState /= Help_Topic then
+            PreviousState := OldState;
             LinesAmount := Line_Position(Ada.Strings.Unbounded.Count(Help_List.Element(TopicIndex).Text, To_Set(ASCII.LF)));
             while TextPosition > 0 loop
                 TextPosition := Index(Help_List.Element(TopicIndex).Text, To_Set(ASCII.LF), OldTextPosition);
@@ -126,10 +134,10 @@ package body Help is
     begin
         TopicIndex := Menus.Get_Index(Current(HelpMenu));
         case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to previous screen
                 TopicIndex := 1;
-                DrawGame(Sky_Map_View);
-                return Sky_Map_View;
+                DrawGame(PreviousState);
+                return PreviousState;
             when 56 | KEY_UP => -- Select previous help topic
                 Result := Driver(HelpMenu, M_Up_Item);
                 if Result = Request_Denied then
@@ -167,12 +175,15 @@ package body Help is
     function HelpKeys(Key : Key_Code) return GameStates is
     begin
         case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-                DrawGame(Sky_Map_View);
-                return Sky_Map_View;
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to previous screen
+                StartIndex := 0;
+                DrawGame(PreviousState);
+                return PreviousState;
             when Character'Pos('m') | Character'Pos('M') => -- Back to help menu
                 StartIndex := 0;
-                DrawGame(Help_View);
+                Erase;
+                ShowGameHeader(Help_View);
+                ShowHelpMenu;
                 return Help_View;
             when 56 | KEY_UP => -- Scroll help one line up
                 StartIndex := StartIndex - 1;

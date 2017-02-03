@@ -22,6 +22,7 @@ with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
+with Help; use Help;
 
 package body Bases.UI.Trade is
     
@@ -329,6 +330,11 @@ package body Bases.UI.Trade is
             when 10 => -- Buy item
                 Buy := True;
                 return ShowTradeForm;
+            when KEY_F1 => -- Show help
+                Erase;
+                ShowGameHeader(Help_Topic);
+                ShowHelp(Trade_View, 3);
+                return Help_Topic;
             when others =>
                 Result := Driver(TradeMenu, Key);
                 if Result = Menu_Ok then

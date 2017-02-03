@@ -67,27 +67,32 @@ package body UserInterface is
                 Add(Str => "[Menu]");
                 Change_Attributes(Line => 0, Column => 2, Count => 1, Color => 1);
             when Ship_Info =>
-                Add(Str => "Ship Informations [Quit]");
+                Add(Str => "Ship Informations [Quit] [F1 Help]");
                 Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 26, Count => 2, Color => 1);
             when Crew_Info | Giving_Orders =>
-                Add(Str => "Crew Informations [Quit]");
+                Add(Str => "Crew Informations [Quit] [F1 Help]");
                 Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 26, Count => 2, Color => 1);
             when Dismiss_Confirm =>
                 Add(Str => "Crew Informations");
             when Messages_View =>
                 Add(Str => "Last Messages [Quit]");
                 Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 22, Count => 2, Color => 1);
             when Clear_Confirm =>
                 Add(Str => "Last Messages");
             when Trade_View =>
-                Add(Str => "Trade with base [Quit]");
+                Add(Str => "Trade with base [Quit] [F1 Help]");
                 Change_Attributes(Line => 0, Column => 17, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 24, Count => 2, Color => 1);
             when Help_View =>
                 Add(Str => "Help Index [Quit]");
                 Change_Attributes(Line => 0, Column => 12, Count => 1, Color => 1);
             when Craft_View =>
-                Add(Str => "Manufacturing [Quit]");
+                Add(Str => "Manufacturing [Quit] [F1 Help]");
                 Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 22, Count => 2, Color => 1);
             when Cargo_Info =>
                 Add(Str => "Ship Cargo [Quit]");
                 Change_Attributes(Line => 0, Column => 12, Count => 1, Color => 1);
@@ -105,8 +110,9 @@ package body UserInterface is
                 Add(Str => "Recruit new crew members [Quit]");
                 Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
             when Bases_List =>
-                Add(Str => "List of know bases [Quit]");
+                Add(Str => "List of know bases [Quit] [F1 Help]");
                 Change_Attributes(Line => 0, Column => 20, Count => 1, Color => 1);
+                Change_Attributes(Line => 0, Column => 27, Count => 2, Color => 1);
             when Events_View =>
                 Add(Str => "List of know events [Quit]");
                 Change_Attributes(Line => 0, Column => 21, Count => 1, Color => 1);
@@ -676,7 +682,7 @@ package body UserInterface is
             when Trade_View =>
                 ShowTrade;
             when Help_View =>
-                ShowHelpMenu;
+                ShowHelpMenu(True);
             when Quit_Confirm =>
                 ShowSkyMap;
                 Refresh_Without_Update;
@@ -691,7 +697,7 @@ package body UserInterface is
             when Cargo_Info =>
                 ShowCargoInfo;
             when Help_Topic =>
-                ShowHelp(True);
+                ShowHelp(Sky_Map_View);
             when Repairs_View =>
                 ShowRepair;
             when Clear_Confirm =>

@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -24,6 +24,7 @@ with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Maps; use Maps;
 with Ships; use Ships;
+with Help; use Help;
 
 package body BasesList is
 
@@ -285,6 +286,11 @@ package body BasesList is
                     Delete(BasesMenu);
                     DrawGame(Bases_List);
                     return Bases_List;
+                when KEY_F1 => -- Show help
+                    Erase;
+                    ShowGameHeader(Help_Topic);
+                    ShowHelp(Bases_List, 8);
+                    return Help_Topic;
                 when others =>
                     Result := Driver(BasesMenu, Key);
             end case;
@@ -320,6 +326,11 @@ package body BasesList is
                     Delete(BasesMenu);
                     DrawGame(Bases_List);
                     return Bases_List;
+                when KEY_F1 => -- Show help
+                    Erase;
+                    ShowGameHeader(Help_Topic);
+                    ShowHelp(Bases_List, 8);
+                    return Help_Topic;
                 when others =>
                     null;
             end case;
