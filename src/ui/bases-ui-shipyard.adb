@@ -35,8 +35,8 @@ package body Bases.UI.Shipyard is
         To_Unbounded_String("Cargo bays"), To_Unbounded_String("Hulls"),
         To_Unbounded_String("Armors"), To_Unbounded_String("Battering rams"),
         To_Unbounded_String("Alchemy labs"), To_Unbounded_String("Furnaces"),
-        To_Unbounded_String("Water collectors"), To_Unbounded_String("Greenhouses"),
-        To_Unbounded_String("Medical rooms"));
+        To_Unbounded_String("Water collectors"), To_Unbounded_String("Workshops"),
+        To_Unbounded_String("Greenhouses"), To_Unbounded_String("Medical rooms"));
 
     procedure ShowModuleInfo is
         ModuleIndex : constant Positive := Positive'Value(Description(Current(TradeMenu)));
