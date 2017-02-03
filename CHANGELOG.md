@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - New skills: brewery, blacksmith and woodworking
 - New type of ship modules: workshop
 - New ship modules: small bronze workshop and small iron workshop
+- New type of missions in bases: explore
 
 ### Changed
 - Updated interface
