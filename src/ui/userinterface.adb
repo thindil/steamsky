@@ -334,6 +334,11 @@ package body UserInterface is
                                     Orders_Items.all(MenuIndex) := New_Item("Complete Patrol area mission");
                                     MenuIndex := MenuIndex + 1;
                                 end if;
+                            when Explore => 
+                                if PlayerShip.Missions.Element(I).Finished then
+                                    Orders_Items.all(MenuIndex) := New_Item("Complete Explore area mission");
+                                    MenuIndex := MenuIndex + 1;
+                                end if;
                         end case;
                     end if;
                 end loop;
@@ -467,6 +472,12 @@ package body UserInterface is
                                             Orders_Items.all(MenuIndex) := New_Item("Complete Patrol area mission");
                                             MenuIndex := MenuIndex + 1;
                                         end if;
+                                    when Explore =>
+                                        if PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex
+                                        then
+                                            Orders_Items.all(MenuIndex) := New_Item("Complete Explore area mission");
+                                            MenuIndex := MenuIndex + 1;
+                                        end if;
                                 end case;
                             end if;
                         end loop;
@@ -484,6 +495,9 @@ package body UserInterface is
                                         MenuIndex := MenuIndex + 1;
                                     when Patrol => 
                                         Orders_Items.all(MenuIndex) := New_Item("Patrol area");
+                                        MenuIndex := MenuIndex + 1;
+                                    when Explore => 
+                                        Orders_Items.all(MenuIndex) := New_Item("Explore area");
                                         MenuIndex := MenuIndex + 1;
                                 end case;
                             end if;
@@ -965,6 +979,9 @@ package body UserInterface is
                     return NewState;
                 elsif Order = "Patrol area" then
                     UpdateGame(GetRandom(45, 75));
+                    UpdateMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+                elsif Order = "Explore area" then
+                    UpdateGame(GetRandom(30, 60));
                     UpdateMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
                 end if;
                 DrawGame(Sky_Map_View);
