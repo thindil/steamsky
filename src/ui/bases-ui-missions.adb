@@ -49,6 +49,8 @@ package body Bases.UI.Missions is
                 Add(Win => InfoWindow, Str => "Patrol selected area");
             when Kill =>
                 Add(Win => InfoWindow, Str => "Target: " & To_String(Enemies_List.Element(Mission.Target).Name));
+            when Explore =>
+                Add(Win => InfoWindow, Str => "Explore selected area");
         end case;
         DiffX := abs(PlayerShip.SkyX - Mission.TargetX);
         DiffY := abs(PlayerShip.SkyY - Mission.TargetY);
@@ -153,6 +155,8 @@ package body Bases.UI.Missions is
                     Missions_Items.all(I) := New_Item("Patrol area");
                 when Kill =>
                     Missions_Items.all(I) := New_Item("Destroy ship");
+                when Explore =>
+                    Missions_Items.all(I) := New_Item("Explore area");
             end case;
         end loop;
         Missions_Items.all(Missions_Items'Last) := Null_Item;

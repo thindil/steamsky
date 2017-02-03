@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -215,6 +215,8 @@ package body Maps is
                         To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
                 when Patrol =>
                     Add(Win => InfoWindow, Str => "Patrol area");
+                when Explore =>
+                    Add(Win => InfoWindow, Str => "Explore area");
             end case;
         end if;
         Refresh(InfoWindow);
