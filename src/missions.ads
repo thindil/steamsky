@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -19,7 +19,7 @@ with Ada.Containers.Vectors; use Ada.Containers;
 
 package Missions is
 
-    type Missions_Types is (Deliver, Kill, Patrol);
+    type Missions_Types is (Deliver, Kill, Patrol, Explore);
     type Mission_Data is -- Data structure for missions
         record
             MType : Missions_Types; -- Type of mission
