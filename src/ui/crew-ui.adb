@@ -23,6 +23,7 @@ with Bases; use Bases;
 with Maps; use Maps;
 with ShipModules; use ShipModules;
 with Items; use Items;
+with Help; use Help;
 
 package body Crew.UI is
 
@@ -404,6 +405,11 @@ package body Crew.UI is
             when 10 => -- Give orders to selected crew member
                 ShowOrdersMenu;
                 return Giving_Orders;
+            when KEY_F1 => -- Show help
+                Erase;
+                ShowGameHeader(Help_Topic);
+                ShowHelp(Crew_Info, 7);
+                return Help_Topic;
             when others =>
                 Result := Driver(CrewMenu, Key);
                 if Result = Menu_Ok then

@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -21,8 +21,8 @@ with Game; use Game;
 package Help is
 
     function LoadHelp return Boolean; -- Load help text from file, returns False if file not found
-    procedure ShowHelpMenu; -- Show in-game help menu window
-    procedure ShowHelp(NewHelp : Boolean := False); -- Show in-game help on selected topic
+    procedure ShowHelpMenu(NewHelp : Boolean := False); -- Show in-game help menu window
+    procedure ShowHelp(OldState : GameStates := Help_Topic; HelpIndex : Natural := 0); -- Show in-game help on selected topic
     function HelpMenuKeys(Key : Key_Code) return GameStates; -- Handle keys in help menu window
     function HelpKeys(Key : Key_Code) return GameStates; -- Handle keys in help window
 
