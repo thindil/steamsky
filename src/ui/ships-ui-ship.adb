@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -22,6 +22,7 @@ with Messages; use Messages;
 with Crafts; use Crafts;
 with Maps; use Maps;
 with Bases; use Bases;
+with Help; use Help;
 
 package body Ships.UI.Ship is
 
@@ -660,6 +661,11 @@ package body Ships.UI.Ship is
             when Character'Pos('n') | Character'Pos('N') => -- Rename ship
                 ShowShipForm("New name for ship:");
                 return Rename_Ship;
+            when KEY_F1 => -- Show help
+                Erase;
+                ShowGameHeader(Help_Topic);
+                ShowHelp(Ship_Info, 6);
+                return Help_Topic;
             when others =>
                 Result := Driver(ShipsMenu, Key);
                 if Result = Menu_Ok then

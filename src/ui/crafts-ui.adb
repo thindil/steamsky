@@ -19,6 +19,7 @@ with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Items; use Items;
+with Help; use Help;
 
 package body Crafts.UI is
 
@@ -312,6 +313,11 @@ package body Crafts.UI is
                     ShowRecipeInfo;
                     Refresh(MenuWindow);
                 end if;
+            when KEY_F1 => -- Show help
+                Erase;
+                ShowGameHeader(Help_Topic);
+                ShowHelp(Craft_View, 5);
+                return Help_Topic;
             when others =>
                 Result := Driver(RecipesMenu, Key);
                 if Result = Menu_Ok then
