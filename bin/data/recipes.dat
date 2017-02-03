@@ -437,4 +437,14 @@ Skill = Woodworker
 Difficulty = 5
 BaseType = 1
 Tool = WoodworkerSet
+[43]
+Material = Wood
+Amount = 1
+Result = 53
+Crafted = 1
+Workplace = Workshop
+Skill = Woodworker
+Difficulty = 5
+BaseType = 1
+Tool = WoodworkerSet
 []
