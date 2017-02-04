@@ -167,4 +167,15 @@ LootMin = 120
 LootMax = 240
 Perception = 10
 Cargo = 1800..2000x1, 100..200x2, 350..400x3, 250..500x4, 100..200x5, 10..40x13
+[17]
+Name = Large clockwork drone
+Modules = 23, 25, 19, 7, 7, 7, 7, 12, 28, 27, 28, 27
+Accuracy = 10
+Enemy = Yes
+CombatAI = Berserker
+Evasion = 10
+LootMin = 200
+LootMax = 400
+Perception = 20
+Cargo = 1800..2000x1, 450..500x20, 120..250x5, 20..60x13
 []
