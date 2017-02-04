@@ -64,6 +64,12 @@ package Ships is
             RepairModule : Natural; -- Number of module to repair as first
             Missions : Mission_Container.Vector; -- List of accepted missions
         end record;
+    type ProtoCrewData is -- Data structure for crew prototypes
+        record
+            Skills : Skills_Container.Vector; -- Skills of crew member
+            Order : Crew_Orders; -- Order for crew member
+        end record;
+    package ProtoCrew_Container is new Vectors(Positive, ProtoCrewData);
     type ProtoShipData is -- Data structure for ship prototypes
         record
             Name : Unbounded_String; -- Prototype name
@@ -76,6 +82,7 @@ package Ships is
             Perception : Positive; -- Bonus to spot player ship first
             Cargo : Cargo_Container.Vector; -- List of ship cargo
             CombatValue : Positive; -- Combat value of ship (used to generate enemies)
+            Crew : ProtoCrew_Container.Vector; -- List of ship crew
         end record;
     package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
     ProtoShips_List : ProtoShips_Container.Vector;

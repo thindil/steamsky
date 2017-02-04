@@ -38,25 +38,21 @@ package body Game is
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character) is
         type Rand_Range is range 1..1024;
         type Bases_Range is range 0..3;
-        type Gender_Range is range 1..2;
         type Population_Range is range 10..500;
         package Rand_Int is new Discrete_Random(Rand_Range);
         package Rand_Base is new Discrete_Random(Bases_Range);
-        package Rand_Gender is new Discrete_Random(Gender_Range);
         package Rand_Population is new Discrete_Random(Population_Range);
         Generator : Rand_Int.Generator;
         Generator2 : Rand_Base.Generator;
-        Generator3 : Rand_Gender.Generator;
         Generator4 : Rand_Population.Generator;
         PosX, PosY : Rand_Range;
         RandomBase : Rand_Range;
-        PilotName, EngineerName, GunnerName : Unbounded_String;
         ValidLocation : Boolean;
         TempX, TempY : Integer;
-        PilotGender, EngineerGender, GunnerGender : Character;
         TmpSkills : Skills_Container.Vector;
         TmpRecruits : Recruit_Container.Vector;
         TmpMissions : Mission_Container.Vector;
+        CabinAssigned : Boolean := False;
     begin
         -- Save new game configuration
         NewGameSettings := (PlayerName => CharName, PlayerGender => Gender, ShipName => ShipName);
@@ -68,7 +64,6 @@ package body Game is
         -- Generate world
         Rand_Int.Reset(Generator);
         Rand_Base.Reset(Generator2);
-        Rand_Gender.Reset(Generator3);
         Rand_Population.Reset(Generator4);
         SkyMap := (others => (others => (BaseIndex => 0, Visited => False, EventIndex => 0, MissionIndex => 0)));
         for I in Rand_Range loop
@@ -121,54 +116,26 @@ package body Game is
             RandomBase := Rand_Int.Random(Generator);
             exit when SkyBases(Integer(RandomBase)).Population > 299;
         end loop;
-        -- Generate names for crew
-        if Rand_Gender.Random(Generator3) = 1 then
-            PilotGender := 'M';
-        else
-            PilotGender := 'F';
-        end if;
-        PilotName := GenerateMemberName(PilotGender);
-        if Rand_Gender.Random(Generator3) = 1 then
-            EngineerGender := 'M';
-        else
-            EngineerGender := 'F';
-        end if;
-        EngineerName := GenerateMemberName(EngineerGender);
-        if Rand_Gender.Random(Generator3) = 1 then
-            GunnerGender := 'M';
-        else
-            GunnerGender := 'F';
-        end if;
-        GunnerName := GenerateMemberName(GunnerGender);
-        -- Create player ship with modules
+        -- Create player ship
         PlayerShip := CreateShip(1, ShipName, SkyBases(Integer(RandomBase)).SkyX,
             SkyBases(Integer(RandomBase)).SkyY, DOCKED);
-        UpdateModule(PlayerShip, 4, "Name", To_String(CharName) & "'s Cabin");
-        UpdateModule(PlayerShip, 4, "Owner", "1");
-        UpdateModule(PlayerShip, 5, "Name", To_String(PilotName) & "'s Cabin");
-        UpdateModule(PlayerShip, 5, "Owner", "2");
-        UpdateModule(PlayerShip, 6, "Name", To_String(EngineerName) & "'s Cabin");
-        UpdateModule(PlayerShip, 6, "Owner", "3");
-        UpdateModule(PlayerShip, 7, "Name", To_String(GunnerName) & "'s Cabin");
-        UpdateModule(PlayerShip, 7, "Owner", "4");
-        UpdateModule(PlayerShip, 13, "Owner", "4");
-        -- Add crew to ship
+        -- Add player to ship
         TmpSkills.Append(New_Item => (4, 5, 0));
-        PlayerShip.Crew.Append(New_Item => (Name => CharName, Gender => Gender,
+        PlayerShip.Crew.Prepend(New_Item => (Name => CharName, Gender => Gender,
             Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Talk,
             PreviousOrder => Rest, OrderTime => 15)); 
-        TmpSkills.Replace_Element(Index => 1, New_Item => (1, 5, 0));
-        PlayerShip.Crew.Append(New_Item => (Name => PilotName, Gender => PilotGender,
-            Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Pilot,
-            PreviousOrder => Rest, OrderTime => 15)); 
-        TmpSkills.Replace_Element(Index => 1, New_Item => (2, 5, 0));
-        PlayerShip.Crew.Append(New_Item => (Name => EngineerName, Gender => EngineerGender,
-            Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Engineer,
-            PreviousOrder => Rest, OrderTime => 15)); 
-        TmpSkills.Replace_Element(Index => 1, New_Item => (3, 5, 0));
-        PlayerShip.Crew.Append(New_Item => (Name => GunnerName, Gender => GunnerGender,
-            Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Gunner,
-            PreviousOrder => Rest, OrderTime => 15)); 
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if PlayerShip.Modules.Element(I).Owner > 0 then
+                UpdateModule(PlayerShip, I, "Owner", Positive'Image(PlayerShip.Modules.Element(I).Owner + 1));
+            end if;
+            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = CABIN and 
+                PlayerShip.Modules.Element(I).Owner = 0 and not CabinAssigned
+            then
+                UpdateModule(PlayerShip, I, "Name", To_String(CharName) & "'s Cabin");
+                UpdateModule(PlayerShip, I, "Owner", "1");
+                CabinAssigned := True;
+            end if;
+        end loop;
         -- Set known recipes
         Known_Recipes.Append(New_Item => 1);
         Known_Recipes.Append(New_Item => 2);
