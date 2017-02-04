@@ -489,7 +489,7 @@ package body Ships is
                             XIndex := Index(SkillsValue, "x", StartIndex2);
                             TempSkills.Append(New_Item => (Integer'Value(Slice(SkillsValue, StartIndex2, XIndex - 1)),
                                 Integer'Value(Slice(SkillsValue, XIndex + 1, EndIndex2 - 1)), 0));
-                            StartIndex := EndIndex2 + 2;
+                            StartIndex2 := EndIndex2 + 2;
                         end loop;
                         TempRecord.Crew.Append(New_Item => (Skills => TempSkills, Order => Rest));
                         TempSkills.Clear;
