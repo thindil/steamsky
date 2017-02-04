@@ -290,49 +290,77 @@ package body Ships is
         Integer; Speed : ShipSpeed; Enemy : Boolean := False) return ShipRecord is
         TmpShip : ShipRecord;
         ShipModules : Modules_Container.Vector;
-        ShipCargo : Cargo_Container.Vector;
         ShipCrew : Crew_Container.Vector;
         ShipMissions : Mission_Container.Vector;
         NewName : Unbounded_String;
         TurretIndex, GunIndex, HullIndex, Amount : Natural := 0;
+        Gender : Character;
+        MemberName : Unbounded_String;
+        TmpSkills : Skills_Container.Vector;
+        ProtoShip : ProtoShipData;
+        procedure UpdateMod(Module : in out ModuleData) is
+        begin
+            if Modules_List.Element(Module.ProtoIndex).MType = CABIN then
+                Module.Name := MemberName & To_Unbounded_String("'s Cabin");
+            end if;
+            Module.Owner := ShipCrew.Last_Index;
+        end UpdateMod;
     begin
         if not Enemy then
-            for I in ProtoShips_List.Element(ProtoIndex).Modules.First_Index..ProtoShips_List.Element(ProtoIndex).Modules.Last_Index loop
-                ShipModules.Append(New_Item => (Name => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Name,
-                ProtoIndex => ProtoShips_List.Element(ProtoIndex).Modules(I), 
-                Weight => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Weight,
-                Current_Value => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Value,
-                Max_Value => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).MaxValue,
-                Durability => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Durability,
-                MaxDurability => Modules_List.Element(ProtoShips_List.Element(ProtoIndex).Modules(I)).Durability,
-                Owner => 0, UpgradeProgress => 0, UpgradeAction => NONE));
-            end loop;
-            if Name = Null_Unbounded_String then
-                NewName := ProtoShips_List.Element(ProtoIndex).Name;
-            else
-                NewName := Name;
-            end if;
-            ShipCargo := ProtoShips_List.Element(ProtoIndex).Cargo;
+            ProtoShip := ProtoShips_List.Element(ProtoIndex);
         else
-            for I in Enemies_List.Element(ProtoIndex).Modules.First_Index..Enemies_List.Element(ProtoIndex).Modules.Last_Index loop
-                ShipModules.Append(New_Item => (Name => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Name,
-                ProtoIndex => Enemies_List.Element(ProtoIndex).Modules(I), 
-                Weight => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Weight,
-                Current_Value => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Value,
-                Max_Value => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).MaxValue,
-                Durability => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Durability,
-                MaxDurability => Modules_List.Element(Enemies_List.Element(ProtoIndex).Modules(I)).Durability,
-                Owner => 0, UpgradeProgress => 0, UpgradeAction => NONE));
-            end loop;
-            if Name = Null_Unbounded_String then
-                NewName := Enemies_List.Element(ProtoIndex).Name;
-            else
-                NewName := Name;
-            end if;
-            ShipCargo := Enemies_List.Element(ProtoIndex).Cargo;
+            ProtoShip := Enemies_List.Element(ProtoIndex);
         end if;
+        for I in ProtoShip.Modules.First_Index..ProtoShip.Modules.Last_Index loop
+            ShipModules.Append(New_Item => (Name => Modules_List.Element(ProtoShip.Modules(I)).Name,
+            ProtoIndex => ProtoShip.Modules(I), 
+            Weight => Modules_List.Element(ProtoShip.Modules(I)).Weight,
+            Current_Value => Modules_List.Element(ProtoShip.Modules(I)).Value,
+            Max_Value => Modules_List.Element(ProtoShip.Modules(I)).MaxValue,
+            Durability => Modules_List.Element(ProtoShip.Modules(I)).Durability,
+            MaxDurability => Modules_List.Element(ProtoShip.Modules(I)).Durability,
+            Owner => 0, UpgradeProgress => 0, UpgradeAction => NONE));
+        end loop;
+        if Name = Null_Unbounded_String then
+            NewName := ProtoShip.Name;
+        else
+            NewName := Name;
+        end if;
+        for Member of ProtoShip.Crew loop
+            if GetRandom(1, 100) < 50 then
+                Gender := 'M';
+            else
+                Gender := 'F';
+            end if;
+            MemberName := GenerateMemberName(Gender);
+            for Skill of Member.Skills loop
+                TmpSkills.Append(New_Item => Skill);
+            end loop;
+            ShipCrew.Append(New_Item => (Name => MemberName, Gender => Gender,
+                Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Member.Order,
+                PreviousOrder => Rest, OrderTime => 15));
+            TmpSkills.Clear;
+            for I in ShipModules.First_Index..ShipModules.Last_Index loop
+                if Modules_List.Element(ShipModules.Element(I).ProtoIndex).MType = CABIN and ShipModules.Element(I).Owner = 0 then
+                    ShipModules.Update_Element(Index => I, Process => UpdateMod'Access);
+                    exit;
+                end if;
+            end loop;
+            for I in ShipModules.First_Index..ShipModules.Last_Index loop
+                if ShipModules.Element(I).Owner = 0 then
+                    if Modules_List.Element(ShipModules.Element(I).ProtoIndex).MType = GUN and Member.Order = Gunner then
+                        ShipModules.Update_Element(Index => I, Process => UpdateMod'Access);
+                        exit;
+                    end if;
+                elsif Modules_List.Element(ShipModules.Element(I).ProtoIndex).MType = COCKPIT and Member.Order = Pilot
+                then
+                    ShipModules.Update_Element(Index => I, Process => UpdateMod'Access);
+                    exit;
+                end if;
+            end loop;
+        end loop;
         TmpShip := (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed,
-            Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew,
+            Modules => ShipModules, Cargo => ProtoShip.Cargo, Crew => ShipCrew,
             UpgradeModule => 0, DestinationX => 0, DestinationY => 0,
             RepairModule => 0, Missions => ShipMissions);
         for I in TmpShip.Modules.First_Index..TmpShip.Modules.Last_Index loop
@@ -359,13 +387,21 @@ package body Ships is
 
     function LoadShips return Boolean is
         ShipsFile : File_Type;
-        RawData, FieldName, Value : Unbounded_String;
-        EqualIndex, StartIndex, EndIndex, Amount, XIndex, CombatValue, DotIndex : Natural;
+        RawData, FieldName, Value, SkillsValue : Unbounded_String;
+        EqualIndex, StartIndex, EndIndex, Amount, XIndex, CombatValue, DotIndex, EndIndex2, StartIndex2 : Natural;
         TempRecord : ProtoShipData;
         TempModules : Positive_Container.Vector;
         Enemy : Boolean := False;
         TempCargo : Cargo_Container.Vector;
         CargoAmount : Natural;
+        TempCrew : ProtoCrew_Container.Vector;
+        TempSkills : Skills_Container.Vector;
+        TempOrder : Crew_Orders;
+        SkillsAmount : Positive;
+        procedure UpdateMember(Member : in out ProtoCrewData) is
+        begin
+            Member.Order := TempOrder;
+        end UpdateMember;
     begin
         if ProtoShips_List.Length > 0 then
             return True;
@@ -375,7 +411,8 @@ package body Ships is
         end if;
         TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
             Accuracy => 1, CombatAI => NONE, Evasion => 1, LootMin => 1,
-            LootMax => 100, Perception => 1, Cargo => TempCargo, CombatValue => 1);
+            LootMax => 100, Perception => 1, Cargo => TempCargo, CombatValue => 1,
+            Crew => TempCrew);
         Open(ShipsFile, In_File, "data/ships.dat");
         while not End_Of_File(ShipsFile) loop
             RawData := To_Unbounded_String(Get_Line(ShipsFile));
@@ -433,6 +470,44 @@ package body Ships is
                         end if;
                         StartIndex := EndIndex + 2;
                     end loop;
+                elsif FieldName = To_Unbounded_String("Skills") then
+                    StartIndex := 1;
+                    Amount := Ada.Strings.Unbounded.Count(Value, "; ") + 1;
+                    for I in 1..Amount loop
+                        EndIndex := Index(Value, "; ", StartIndex);
+                        if EndIndex = 0 then
+                            EndIndex := Length(Value) + 1;
+                        end if;
+                        SkillsValue := To_Unbounded_String(Slice(Value, StartIndex, EndIndex - 1));
+                        StartIndex2 := 1;
+                        SkillsAmount :=  Ada.Strings.Unbounded.Count(SkillsValue, ", ") + 1;
+                        for J in 1..SkillsAmount loop
+                            EndIndex2 := Index(SkillsValue, ", ", StartIndex2);
+                            if EndIndex2 = 0 then
+                                EndIndex2 := Length(SkillsValue) + 1;
+                            end if;
+                            XIndex := Index(SkillsValue, "x", StartIndex2);
+                            TempSkills.Append(New_Item => (Integer'Value(Slice(SkillsValue, StartIndex2, XIndex - 1)),
+                                Integer'Value(Slice(SkillsValue, XIndex + 1, EndIndex2 - 1)), 0));
+                            StartIndex := EndIndex2 + 2;
+                        end loop;
+                        TempRecord.Crew.Append(New_Item => (Skills => TempSkills, Order => Rest));
+                        TempSkills.Clear;
+                        StartIndex := EndIndex + 2;
+                    end loop;
+                elsif FieldName = To_Unbounded_String("Orders") then
+                    StartIndex := 1;
+                    Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                    for I in 1..Amount loop
+                        EndIndex := Index(Value, ", ", StartIndex);
+                        if EndIndex = 0 then
+                            EndIndex := Length(Value) + 1;
+                        end if;
+                        TempOrder := Crew_Orders'Value(Slice(Value, StartIndex, EndIndex - 1));
+                        TempRecord.Crew.Update_Element(Index => I, Process => UpdateMember'Access);
+                        StartIndex := EndIndex + 2;
+                    end loop;
+                    TempOrder := Rest;
                 end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
                 CombatValue := 0;
@@ -463,7 +538,9 @@ package body Ships is
                 end if;
                 TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
                     Accuracy => 1, CombatAI => NONE, Evasion => 1, LootMin => 1, 
-                    LootMax => 100, Perception => 1, Cargo => TempCargo, CombatValue => 1);
+                    LootMax => 100, Perception => 1, Cargo => TempCargo, CombatValue => 1,
+                    Crew => TempCrew);
+                TempRecord.Name := Null_Unbounded_String;
             end if;
         end loop;
         Close(ShipsFile);
