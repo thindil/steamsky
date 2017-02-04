@@ -100,7 +100,7 @@ To finish mission, you must fly to map cell where mission target is and from Ord
 Amount of Charcollum for a mission depends on distance which you must fly to complete mission, type of mission and amount of free space in your ship cargo. If you don't have free space in cargo ship, you don't get reward for mission.
 Some details about different types of missions:
 - Deliver items: you don't need to dock to base to finish this mission, you can select proper order before docking. But you must have someone assigned to 'Talk in bases' position. Additionally, deliver missions gives reputation to both bases (base where mission was started and base where mission was ended).
-- Patrol area: If you been attacked by enemy during exploring, after fight you need to patrol area again (again select proper order from Orders menu).
+- Patrol or Explore area: If you been attacked by enemy during exploring or patrolling, after fight you need to patrol or explore area again (again select proper order from Orders menu).
 - Destroy ship: Same as Patrol area - if you been attacked by other ship during searching for target, first you must finish this fight before you can start search again. If you escape from fight with mission target, you been need to search for it again.
 [Tips]
 * All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press 'h' key on sky map (no need to press 'e' first to show menu).
