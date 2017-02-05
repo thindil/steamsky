@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -21,6 +21,7 @@ with Messages; use Messages;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
 with Items; use Items;
+with Help; use Help;
 
 package body Combat.UI is
 
@@ -279,6 +280,10 @@ package body Combat.UI is
             Add(Str => "SPACE for next turn");
             Change_Attributes(Line => 14, Column => (Columns / 2),
                 Count => 5, Color => 1);
+            Move_Cursor(Line => 15, Column => (Columns / 2));
+            Add(Str => "F1 for help");
+            Change_Attributes(Line => 15, Column => (Columns / 2),
+                Count => 2, Color => 1);
         else
             Add(Str => "Hit any key for back to sky map");
             Change_Attributes(Line => 14, Column => (Columns / 2),
@@ -503,6 +508,11 @@ package body Combat.UI is
                 when Character'Pos('m') | Character'Pos('M') => -- Show messages list
                     DrawGame(Messages_View);
                     return Messages_View;
+                when KEY_F1 => -- Show help
+                    Erase;
+                    ShowGameHeader(Help_Topic);
+                    ShowHelp(Combat_State, 4);
+                    return Help_Topic;
                 when others =>
                     Result := Driver(CrewMenu, Key);
                     if Result = Menu_Ok then
