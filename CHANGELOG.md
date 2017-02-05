@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - New ship modules: small bronze workshop and small iron workshop
 - New type of missions in bases: explore
 - New enemy ships: large clockwork drone and large pirate ship
+- Option to sell all selected items in bases
 
 ### Changed
 - Updated interface
