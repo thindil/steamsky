@@ -9,7 +9,7 @@ For pilot and engineer if letter is green, position is taken by crew member, red
 For gunners and manufacturing - green letter mean all positions are taken (all guns, all crafting modules), red letter mean you have free positions (not all guns/crafting modules are taken), white letter mean, you don't have or no need anyone assigned to this positions.
 For repairs, upgrading ship modules, talking in bases and cleaning ship, green you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white letter means you don't have anyone assigned to this position and you don't need anyone.
 To move map without moving ship, hold SHIFT and use keypad keys this same which are used for moving ship. Hit SPACE to center map on ship. In that way, you can see informations about selected map cell (for example, bases info). Window in right up corner of screen always show info about your current map cell.
-At this moment, help is under heavy development (as whole game).
+At this moment, help is under development (as whole game).
 [Ship movement]
 Your ship starts docked to base. To move it, you must first give order "Undock" from base. Press 'o' key (or first 'e' key for see game menu) for open orders menu.
 Each unvisited field on map is grey. Once you fly on this field, it color change to black.
@@ -30,7 +30,7 @@ If you have set travel destination, press key 5 on keypad to auto travel. If des
 To buy/sell items from bases you must first dock to base and having assigned crew member to trading with bases. All bases buy all items, but which items are sold, depends on base type.
 Prices in bases depends on skill Rhetoric of assigned to trade crew member - with higher skill you can sell items for more and buy for less. Additionally, prices depends on your reputation in base. With high reputation you earn more or pay less for goods, new recruits or services. 
 Prices showed on trade screen are base prices, without bonuses or penalties from reputation and trader skill.
-To buy/sell items from bases, open orders menu (key 'o') and then select option Trade, you will see trading screen. Use arrows keys to select desired material to buy/sell, then press 'Enter' key to buy or 'Space' key to start trading selected item. Next, enter amount of items which you want to buy or sell and select button [Ok]. To buy/sell items you must have enough free cargo space on your ship ("moneys" aka Charcollum needs free cargo space too).
+To buy/sell items from bases, open orders menu (key 'o') and then select option Trade, you will see trading screen. Use arrows keys to select desired material to buy/sell, then press 'Enter' key to buy or 'Space' key to start trading selected item. Next, enter amount of items which you want to buy or sell and select button [Ok]. If you want to sell all owned items of that type, just select button [Sell all] and press 'Enter'. To buy/sell items you must have enough free cargo space on your ship ("moneys" aka Charcollum needs free cargo space too).
 [Combat]
 To start combat, you must first be in this same map cell where desired target is. Then, from orders menu, select option Attack (key 'a'). 
 Combat can start automatically if enemy ship spots your ship first and is faster than you. Your chance to see enemy first depends on your ship pilot and gunners Perception skill and size of ships. If you have smaller ship than enemy, it is bigger chance that you spot them first.
