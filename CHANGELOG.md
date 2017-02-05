@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.8] - 2017-02-05
 
 ### Added
 - New ship module: iron armor and heavy iron armor
