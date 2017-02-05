@@ -180,4 +180,15 @@ LootMin = 200
 LootMax = 400
 Perception = 20
 Cargo = 1800..2000x1, 450..500x20, 120..250x5, 20..60x13
+[18]
+Name = Large pirate ship
+Modules = 23, 26, 19, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 28, 29, 28, 29, 28, 29
+Accuracy = 20
+Enemy = Yes
+CombatAI = Attacker
+Evasion = 20
+LootMin = 300
+LootMax = 500
+Perception = 20
+Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
 []
