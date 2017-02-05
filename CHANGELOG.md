@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file.
 - New type of ship modules: workshop
 - New ship modules: small bronze workshop and small iron workshop
 - New type of missions in bases: explore
-- New enemy ship: large clockwork drone
+- New enemy ships: large clockwork drone and large pirate ship
 
 ### Changed
 - Updated interface
