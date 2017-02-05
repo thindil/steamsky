@@ -178,7 +178,7 @@ package body Bases.UI.Trade is
     end ShowTrade;
 
     function ShowTradeForm return GameStates is
-        Trade_Fields : constant Field_Array_Access := new Field_Array(1..5);
+        Trade_Fields : constant Field_Array_Access := new Field_Array(1..6);
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         FieldOptions : Field_Option_Set;
@@ -250,7 +250,16 @@ package body Bases.UI.Trade is
             FieldOptions.Edit := False;
             Set_Options(Trade_Fields.all(4), FieldOptions);
             Set_Buffer(Trade_Fields.all(4), 0, "[Ok]");
-            Trade_Fields.all(5) := Null_Field;
+            if Buy then
+                Trade_Fields.all(5) := Null_Field;
+            else
+                Trade_Fields.all(5) := New_Field(1, 11, 2, (Column_Position(Length(FieldText)) / 2) + 16, 0, 0);
+                FieldOptions := Get_Options(Trade_Fields.all(5));
+                FieldOptions.Edit := False;
+                Set_Options(Trade_Fields.all(5), FieldOptions);
+                Set_Buffer(Trade_Fields.all(5), 0, "[Sell all]");
+            end if;
+            Trade_Fields.all(6) := Null_Field;
             TradeForm := New_Form(Trade_Fields);
             Scale(TradeForm, FormHeight, FormLength);
             FormWindow := Create(FormHeight + 2, FormLength + 2, ((Lines / 3) - (FormHeight / 2)), ((Columns / 2) - (FormLength / 2)));
@@ -272,7 +281,7 @@ package body Bases.UI.Trade is
     begin
         if FieldIndex < 3 then
             return Trade_Form;
-        elsif FieldIndex = 4 then
+        elsif FieldIndex > 3 then
             for I in Items_List.First_Index..Items_List.Last_Index loop
                 if To_String(Items_List.Element(I).Name) = Name(Current(TradeMenu)) then
                     ItemIndex := I;
@@ -286,7 +295,11 @@ package body Bases.UI.Trade is
                         exit;
                     end if;
                 end loop;
-                SellItems(CargoIndex, Get_Buffer(Fields(TradeForm, 2)));
+                if FieldIndex = 4 then
+                    SellItems(CargoIndex, Get_Buffer(Fields(TradeForm, 2)));
+                else
+                    SellItems(CargoIndex, Positive'Image(PlayerShip.Cargo.Element(CargoIndex).Amount));
+                end if;
             else
                 BuyItems(ItemIndex, Get_Buffer(Fields(TradeForm, 2)));
             end if;
