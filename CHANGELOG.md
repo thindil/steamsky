@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New enemy ship: undead ship
+- Descriptions to ship modules
 
 ### Changed
 - Updated interface
