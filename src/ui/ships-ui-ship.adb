@@ -42,7 +42,7 @@ package body Ships.UI.Ship is
         StartColumn, EndColumn : Column_Position;
         Module : constant ModuleData := PlayerShip.Modules.Element(ModuleIndex);
     begin
-        InfoWindow := Create(20, (Columns / 2), 8, (Columns / 2));
+        InfoWindow := Create((Lines - 3), (Columns / 2), 2, (Columns / 2));
         Add(Win => InfoWindow, Str => "Status: ");
         DamagePercent := 100 - Natural((Float(Module.Durability) / Float(Module.MaxDurability)) * 100.0);
         if DamagePercent = 0 then
