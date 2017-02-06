@@ -9,6 +9,7 @@ Material = Bronze
 Skill = Engineering
 Price = 5000 
 InstallTime = 180
+Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
 [2]
 Name = Light bronze armor
 Type = Armor
@@ -21,6 +22,7 @@ Skill = Engineering
 Price = 5000
 InstallTime = 180
 Unique = Yes
+Description = Weakest type of armor. Protect whole ship.
 [3]
 Name = Small bronze engine
 Type = Engine
@@ -33,6 +35,7 @@ Skill = Engineering
 Price = 4000
 InstallTime = 120
 Size = 1
+Description = Smallest available engine. Each ship needs at least one engine to fly.
 [4]
 Name = Basic bronze cabin
 Type = Cabin
@@ -45,6 +48,7 @@ Skill = Engineering
 Price = 500
 InstallTime = 60
 Size = 1
+Description = Small cabin made of bronze with just few furnitures.
 [5]
 Name = Bronze cockpit
 Type = Cockpit
@@ -58,6 +62,7 @@ Price = 750
 InstallTime = 60
 Unique = Yes
 Size = 1
+Description = Each ship require one cockpit to fly.
 [6]
 Name = Small bronze alchemy lab
 Type = Alchemy_lab
@@ -70,6 +75,7 @@ Skill = Engineering
 Price = 1000
 InstallTime = 60
 Size = 1
+Description = Allow research new crafting recipes and craft some items.
 [7]
 Name = Bronze cargo bay
 Type = Cargo
@@ -82,6 +88,7 @@ Skill = Engineering
 Price = 300
 InstallTime = 60
 Size = 1
+Description = Space for hold ship cargo.
 [8]
 Name = Small bronze turret
 Type = Turret
@@ -94,6 +101,7 @@ Skill = Engineering
 Price = 500
 InstallTime = 60
 Size = 1
+Description = Smallest available turret. If turret is destroyed, gun is destroyed too and gunner killed.
 [9]
 Name = Iron 20mm gun
 Type = Gun
@@ -105,6 +113,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 500
 InstallTime = 30
+Description = Standard 20mm ship gun. Require empty turret.
 [10]
 Name = Clockwork drone hull
 Type = Hull
