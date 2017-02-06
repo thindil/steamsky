@@ -137,6 +137,11 @@ package body Bases.UI.Shipyard is
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Repair/Upgrade skill: " &
             To_String(Skills_Names.Element(Modules_List.Element(ModuleIndex).RepairSkill)));
+            if Modules_List.Element(ModuleIndex).Description /= Null_Unbounded_String then
+                CurrentLine := CurrentLine + 2;
+                Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+                Add(Win => InfoWindow, Str => To_String(Modules_List.Element(ModuleIndex).Description));
+            end if;
             CurrentLine := CurrentLine + 2;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Press ENTER to install module");
@@ -192,6 +197,12 @@ package body Bases.UI.Shipyard is
                 Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
                 Add(Win => InfoWindow, Str => "Weight:" & Natural'Image(PlayerShip.Modules.Element(ModuleIndex).Weight) & " kg");
                 CurrentLine := CurrentLine + 1;
+            end if;
+            if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Description /= Null_Unbounded_String then
+                Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+                Add(Win => InfoWindow, 
+                    Str => To_String(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Description));
+                CurrentLine := CurrentLine + 2;
             end if;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Press ENTER to remove module");

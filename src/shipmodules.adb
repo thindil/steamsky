@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -36,7 +36,7 @@ package body ShipModules is
         TempRecord := (Name => Null_Unbounded_String, MType => ENGINE, 
             Weight => 0, Value => 0, MaxValue => 0, Durability => 0,
             RepairMaterial => Null_Unbounded_String, RepairSkill => 2, Price => 0, 
-            InstallTime => 60, Unique => False, Size => 0);
+            InstallTime => 60, Unique => False, Size => 0, Description => Null_Unbounded_String);
         Open(ModulesFile, In_File, "data/shipmodules.dat");
         while not End_Of_File(ModulesFile) loop
             RawData := To_Unbounded_String(Get_Line(ModulesFile));
@@ -77,13 +77,15 @@ package body ShipModules is
                     end if;
                 elsif FieldName = To_Unbounded_String("Size") then
                     TempRecord.Size := Integer'Value(To_String(Value));
+                elsif FieldName = To_Unbounded_String("Description") then
+                    TempRecord.Description := Value;
                 end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
                 Modules_List.Append(New_Item => TempRecord);
                 TempRecord := (Name => Null_Unbounded_String, MType => ENGINE, 
                     Weight => 0, Value => 0, MaxValue => 0, Durability => 0,
                     RepairMaterial => Null_Unbounded_String, RepairSkill => 2, Price => 0,
-                    InstallTime => 60, Unique => False, Size => 0);
+                    InstallTime => 60, Unique => False, Size => 0, Description => Null_Unbounded_String);
             end if;
         end loop;
         Close(ModulesFile);

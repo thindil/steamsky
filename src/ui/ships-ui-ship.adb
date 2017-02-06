@@ -322,6 +322,12 @@ package body Ships.UI.Ship is
             end if;
             CurrentLine := CurrentLine + 1;
         end if;
+        if Modules_List.Element(Module.ProtoIndex).Description /= Null_Unbounded_String then
+            CurrentLine := CurrentLine + 1;
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => To_String(Modules_List.Element(Module.ProtoIndex).Description));
+            CurrentLine := CurrentLine + 1;
+        end if;
         CurrentLine := CurrentLine + 1;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Press Enter to see selected module options");
