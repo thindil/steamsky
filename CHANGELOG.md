@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New enemy ship: undead ship
+- New enemy ships: undead ship and large undead ship
 - Descriptions to ship modules
 
 ### Changed
