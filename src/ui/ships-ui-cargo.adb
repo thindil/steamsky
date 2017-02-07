@@ -31,6 +31,7 @@ package body Ships.UI.Cargo is
             Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Weight;
         CurrentLine : Line_Position := 1;
         DamagePercent : Natural;
+        StartColumn : Column_Position;
     begin
         InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
         if PlayerShip.Cargo.Element(ItemIndex).Durability < 100 then
@@ -64,7 +65,13 @@ package body Ships.UI.Cargo is
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         CurrentLine := CurrentLine + 1;
         Add(Win => InfoWindow, Str => "Total weight:" & Positive'Image(ItemWeight) & " kg");
-        CurrentLine := CurrentLine + 2;
+        CurrentLine := CurrentLine + 1;
+        if Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Description /= Null_Unbounded_String then
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => To_String(Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex).Description));
+            Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => StartColumn);
+            CurrentLine := CurrentLine + 2;
+        end if;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Press Enter to drop cargo");
         Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, 
