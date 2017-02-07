@@ -47,6 +47,7 @@ package body Bases.UI.Shipyard is
         type DamageFactor is digits 2 range 0.0..1.0;
         Damage : DamageFactor := 0.0;
         MAmount : Natural;
+        StartColumn : Column_Position;
     begin
         if InstallView then
             TextCost := To_Unbounded_String("Install cost:");
@@ -141,6 +142,7 @@ package body Bases.UI.Shipyard is
                 CurrentLine := CurrentLine + 2;
                 Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
                 Add(Win => InfoWindow, Str => To_String(Modules_List.Element(ModuleIndex).Description));
+                Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => StartColumn);
             end if;
             CurrentLine := CurrentLine + 2;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
@@ -202,6 +204,7 @@ package body Bases.UI.Shipyard is
                 Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
                 Add(Win => InfoWindow, 
                     Str => To_String(Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).Description));
+                Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => StartColumn);
                 CurrentLine := CurrentLine + 2;
             end if;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
