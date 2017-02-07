@@ -326,6 +326,7 @@ package body Ships.UI.Ship is
             CurrentLine := CurrentLine + 1;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => To_String(Modules_List.Element(Module.ProtoIndex).Description));
+            Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => StartColumn);
             CurrentLine := CurrentLine + 1;
         end if;
         CurrentLine := CurrentLine + 1;
