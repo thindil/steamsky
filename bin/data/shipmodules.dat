@@ -132,6 +132,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 250
 InstallTime = 30
+Description = Smalled and weakest type of ship gun. Require empty turret.
 [12]
 Name = Bronze battering ram
 Type = Battering_ram
@@ -145,6 +146,7 @@ Price = 500
 InstallTime = 100
 Unique = Yes
 Size = 1
+Description = Standard battering ram, made of bronze. Attack enemies automatically when in close range.
 [13]
 Name = Small bronze battering ram
 Type = Battering_ram
@@ -158,6 +160,7 @@ Price = 250
 InstallTime = 60
 Unique = Yes
 Size = 1
+Description = Weakest battering ram, made of bronze. Attack enemies automatically when in close range.
 [14]
 Name = Small advanced bronze engine
 Type = Engine
@@ -170,6 +173,7 @@ Skill = Engineering
 Price = 6000
 InstallTime = 120
 Size = 1
+Description = Updated version of smallest available engine. Each ship needs at least one engine to fly.
 [15]
 Name = Medium bronze engine
 Type = Engine
@@ -182,6 +186,7 @@ Skill = Engineering
 Price = 8000
 InstallTime = 150
 Size = 2
+Description = Standard available engine. Each ship needs at least one engine to fly.
 [16]
 Name = Small advanced bronze hull
 Type = Hull
@@ -193,6 +198,7 @@ Material = Bronze
 Skill = Engineering
 Price = 7500 
 InstallTime = 200
+Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
 [17]
 Name = Medium bronze hull
 Type = Hull
@@ -204,6 +210,7 @@ Material = Bronze
 Skill = Engineering
 Price = 10000 
 InstallTime = 220
+Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
 [18]
 Name = Medium advanced bronze engine
 Type = Engine
@@ -216,6 +223,7 @@ Skill = Engineering
 Price = 10000
 InstallTime = 180
 Size = 2
+Description = Updated version of standard available engine. Each ship needs at least one engine to fly.
 [19]
 Name = Large bronze engine
 Type = Engine
@@ -228,6 +236,7 @@ Skill = Engineering
 Price = 15000
 InstallTime = 200
 Size = 3
+Description = Large engine made of bronze. Each ship needs at least one engine to fly.
 [20]
 Name = Large advanced bronze engine
 Type = Engine
@@ -240,6 +249,7 @@ Skill = Engineering
 Price = 20000
 InstallTime = 220
 Size = 3
+Description = Updated version of large engine. Each ship needs at least one engine to fly.
 [21]
 Name = Small bronze furnace
 Type = Furnace
