@@ -38,6 +38,7 @@ package body Bases.UI.Trade is
         CurrentLine : Line_Position := 4;
         DamagePercent : Natural;
         CargoIndex : constant Natural := Integer'Value(Description(Current(TradeMenu)));
+        StartColumn : Column_Position;
     begin
         for I in Items_List.First_Index..Items_List.Last_Index loop
             if To_String(Items_List.Element(I).Name) = Name(Current(TradeMenu)) then
@@ -81,6 +82,12 @@ package body Bases.UI.Trade is
                 CurrentLine := 5;
             end if;
             CurrentLine := CurrentLine + 1;
+        end if;
+        if Items_List.Element(ItemIndex).Description /= Null_Unbounded_String then
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => To_String(Items_List.Element(ItemIndex).Description));
+            Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => StartColumn);
+            CurrentLine := CurrentLine + 2;
         end if;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "ENTER to buy selected item, SPACE for sell.");
