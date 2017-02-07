@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -221,6 +221,8 @@ begin
                 GameState := BaseMissionsKeys(Key);
             when Missions_View =>
                 GameState := ShowMissionsKeys(Key);
+            when Orders_For_All =>
+                GameState := CrewOrdersAllKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
