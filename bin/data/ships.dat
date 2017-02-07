@@ -202,4 +202,15 @@ LootMin = 100
 LootMax = 300
 Perception = 3
 Cargo = 2000..2500x1, 150..300x5
+[20]
+Name = Large undead ship
+Modules = 23, 26, 19, 5, 7, 7, 7, 7, 7, 7, 40 
+Accuracy = 20
+Enemy = Yes
+CombatAI = Berserker
+Evasion = 15
+LootMin = 200
+LootMax = 400
+Perception = 3
+Cargo = 3000..4000x1, 300..400x5
 []
