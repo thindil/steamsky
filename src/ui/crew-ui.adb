@@ -36,6 +36,7 @@ package body Crew.UI is
         Member : constant Member_Data := PlayerShip.Crew.Element(MemberIndex);
         CurrentLine : Line_Position := 1;
         Health, Tired, Hungry, Thirsty, SkillLevel, OrderName : Unbounded_String := Null_Unbounded_String;
+        NeedClean, NeedRepairs : Boolean := False;
     begin
         if Member.Health < 100 and Member.Health > 80 then
             Health := To_Unbounded_String("Slightly wounded");
@@ -152,10 +153,39 @@ package body Crew.UI is
         end case;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Order: " & To_String(OrderName));
+        CurrentLine := CurrentLine + 2;
         if Member.Tired < 100 and Member.Hunger < 100 and Member.Thirst < 100 then
-            CurrentLine := CurrentLine + 2;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Press Enter to give orders to crew member");
+            Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
+            CurrentLine := CurrentLine + 1;
+        end if;
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if PlayerShip.Modules.Element(I).Durability > 0 and 
+                Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = CABIN and 
+                PlayerShip.Modules.Element(I).Current_Value < PlayerShip.Modules.Element(I).Max_Value and
+                not NeedClean
+            then
+                NeedClean := True;
+                exit;
+            end if;
+            if not NeedRepairs and PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = 
+                        Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial 
+                    then
+                        NeedRepairs := True;
+                        exit;
+                    end if;
+                end loop;
+            end if;
+            if NeedRepairs then
+                exit;
+            end if;
+        end loop;
+        if NeedClean or NeedRepairs then
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+            Add(Win => InfoWindow, Str => "Press Space to give orders to all crew");
             Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
         end if;
         Refresh;
@@ -374,6 +404,56 @@ package body Crew.UI is
         DrawGame(Crew_Info);
     end DismissMember;
 
+    procedure ShowOrdersForAll is
+        Orders_Items: constant Item_Array_Access := new Item_Array(1..4);
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        MenuIndex : Positive := 1;
+        NeedClean, NeedRepairs : Boolean := False;
+    begin
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            if PlayerShip.Modules.Element(I).Durability > 0 and 
+                Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = CABIN and 
+                PlayerShip.Modules.Element(I).Current_Value < PlayerShip.Modules.Element(I).Max_Value and
+                not NeedClean
+            then
+                Orders_Items.all(MenuIndex) := New_Item("Clean ship everyone");
+                MenuIndex := MenuIndex + 1;
+                NeedClean := True;
+            end if;
+            if not NeedRepairs and PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = 
+                        Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial 
+                    then
+                        Orders_Items.all(MenuIndex) := New_Item("Repair ship everyone");
+                        MenuIndex := MenuIndex + 1;
+                        NeedRepairs := True;
+                        exit;
+                    end if;
+                end loop;
+            end if;
+            if NeedClean and NeedRepairs then
+                exit;
+            end if;
+        end loop;
+        Orders_Items.all(MenuIndex) := New_Item("Quit");
+        MenuIndex := MenuIndex + 1;
+        for I in MenuIndex..Orders_Items'Last loop
+            Orders_Items.all(I) := Null_Item;
+        end loop;
+        OrdersMenu := New_Menu(Orders_Items);
+        Set_Mark(OrdersMenu, "");
+        Scale(OrdersMenu, MenuHeight, MenuLength);
+        MenuWindow2 := Create(MenuHeight + 2, MenuLength + 2, ((Lines / 3) - (MenuHeight / 2)), ((Columns / 2) - (MenuLength / 2)));
+        Box(MenuWindow2);
+        Set_Window(OrdersMenu, MenuWindow2);
+        Set_Sub_Window(OrdersMenu, Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
+        Post(OrdersMenu);
+        Refresh;
+        Refresh(MenuWindow2);
+    end ShowOrdersForAll;
+
     function CrewInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Driver_Result;
     begin
@@ -405,6 +485,9 @@ package body Crew.UI is
             when 10 => -- Give orders to selected crew member
                 ShowOrdersMenu;
                 return Giving_Orders;
+            when 32 => -- Give orders to all crew
+                ShowOrdersForAll;
+                return Orders_For_All;
             when KEY_F1 => -- Show help
                 Erase;
                 ShowGameHeader(Help_Topic);
@@ -495,4 +578,51 @@ package body Crew.UI is
         return Giving_Orders;
     end CrewOrdersKeys;
 
+    function CrewOrdersAllKeys(Key : Key_Code) return GameStates is
+        Result : Driver_Result;
+        OrderName : constant String := Name(Current(OrdersMenu));
+    begin
+        case Key is
+            when 56 | KEY_UP => -- Select previous order
+                Result := Driver(OrdersMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OrdersMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 50 | KEY_DOWN => -- Select next order
+                Result := Driver(OrdersMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OrdersMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                end if;
+            when 10 => -- Select order
+                if OrderName = "Repair ship everyone" then
+                    for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                        GiveOrders(I, Repair);
+                    end loop;
+                elsif OrderName = "Clean ship everyone" then
+                    for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                        GiveOrders(I, Clean);
+                    end loop;
+                end if;
+                DrawGame(Crew_Info);
+                return Crew_Info;
+            when others =>
+                Result := Driver(OrdersMenu, Key);
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                else
+                    Result := Driver(OrdersMenu, M_CLEAR_PATTERN);
+                    Result := Driver(OrdersMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow2);
+                    end if;
+                end if;
+        end case;
+        return Giving_Orders;
+    end CrewOrdersAllKeys;
 end Crew.UI;
