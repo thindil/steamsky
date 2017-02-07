@@ -5,6 +5,7 @@ Type = Fuel
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
 ShowType = Fuel/Moneys
+Description = Standard ship fuel. Used as moneys in bases trades too.
 [2]
 Name = Basic Rations
 Weight = 1
@@ -12,6 +13,7 @@ Type = Food
 Prices = 3, 2, 3, 3
 Buyable = N, Y, N, N
 Value = 60
+Description = Standard food rations for crew members.
 [3]
 Name = Water
 Weight = 1
@@ -19,6 +21,7 @@ Type = Drink
 Prices = 2, 1, 2, 2
 Buyable = N, Y, N, N
 Value = 30
+Description = Clean water, needed by crew members.
 [4]
 Name = Iron 20mm ammo
 Weight = 1
@@ -27,6 +30,7 @@ Prices = 3, 5, 5, 5
 Buyable = Y, N, N, N
 Value = 2
 ShowType = Ammunition
+Description = Standard 20mm gun ammunition.
 [5]
 Name = Bronze plates
 Weight = 5
@@ -34,6 +38,7 @@ Type = Bronze
 Prices = 3, 5, 5, 5
 Buyable = Y, N, N, N
 ShowType = Repair material
+Description = Heavy, large, bronze plates used to repair or upgrade ship modules.
 [6]
 Name = Fresh vegetables
 Weight = 1
@@ -42,6 +47,7 @@ Prices = 2, 1, 2, 2
 Buyable = N, Y, N, N
 Value = 30
 ShowType = Raw Food
+Description = Raw food used mainly for crafting rations.
 [7]
 Name = Fresh fruits
 Weight = 1
@@ -50,6 +56,7 @@ Prices = 2, 1, 2, 2
 Buyable = N, Y, N, N
 Value = 30
 ShowType = Raw Food
+Description = Raw food used mainly for crafting rations.
 [8]
 Name = Fresh meat
 Weight = 1
@@ -58,18 +65,21 @@ Prices = 2, 1, 2, 2
 Buyable = N, Y, N, N
 Value = 30
 ShowType = Raw Food
+Description = Raw food used mainly for crafting rations.
 [9]
 Name = Andrae logs
 Weight = 5
 Type = Wood
 Prices = 5, 5, 3, 5
 Buyable = N, N, Y, N
+Description = Wooden logs used in crafting items and Charcollum.
 [10]
 Name = Illandru logs
 Weight = 3
 Type = Wood
 Prices = 6, 6, 4, 6
 Buyable = N, N, Y, N
+Description = Wooden logs used in crafting items and Charcollum.
 [11]
 Name = Fine Rations
 Weight = 1
