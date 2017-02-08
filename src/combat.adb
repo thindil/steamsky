@@ -259,10 +259,10 @@ package body Combat is
                                             for J in EnemyShip.Modules.First_Index..EnemyShip.Modules.Last_Index loop
                                                 if (GunnerOrder = 4 and Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType 
                                                     = ENGINE) or (GunnerOrder = 5 and 
-                                                        (Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = GUN or 
-                                                        Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM)) or
-                                                            (GunnerOrder = 6 and Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType 
-                                                            = HULL) 
+                                                    (Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = GUN or 
+                                                    Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM)) or
+                                                    (GunnerOrder = 6 and Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType 
+                                                    = HULL) 
                                                 then
                                                     HitLocation := J;
                                                     exit;
