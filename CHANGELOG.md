@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - New enemy ships: undead ship and large undead ship
 - Descriptions to ship modules
 - Descriptions to items
+- Orders for all crew members
 
 ### Changed
 - Updated interface
