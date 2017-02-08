@@ -262,6 +262,7 @@ Skill = Metalsmith
 Price = 1000
 InstallTime = 60
 Size = 1
+Description = Allow smelt ores into metals.
 [22]
 Name = Advanced medium bronze hull
 Type = Hull
@@ -273,6 +274,7 @@ Material = Bronze
 Skill = Engineering
 Price = 12500 
 InstallTime = 240
+Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
 [23]
 Name = Large bronze hull
 Type = Hull
@@ -284,6 +286,7 @@ Material = Bronze
 Skill = Engineering
 Price = 15000 
 InstallTime = 260
+Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
 [24]
 Name = Advanced large bronze hull
 Type = Hull
@@ -295,6 +298,7 @@ Material = Bronze
 Skill = Engineering
 Price = 17500 
 InstallTime = 280
+Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
 [25]
 Name = Bronze armor
 Type = Armor
@@ -307,6 +311,7 @@ Skill = Engineering
 Price = 7500
 InstallTime = 220
 Unique = Yes
+Description = Standard type of bronze armor. Protect whole ship.
 [26]
 Name = Heavy bronze armor
 Type = Armor
@@ -319,6 +324,7 @@ Skill = Engineering
 Price = 10000
 InstallTime = 240
 Unique = Yes
+Description = Heaviest type of bronze armor. Protect whole ship.
 [27]
 Name = Iron 40mm gun
 Type = Gun
@@ -330,6 +336,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 1000
 InstallTime = 45
+Description = Standard 40mm ship gun. Require empty turret.
 [28]
 Name = Bronze turret
 Type = Turret
@@ -342,6 +349,7 @@ Skill = Engineering
 Price = 750
 InstallTime = 90
 Size = 1
+Description = Standard bronze turret. If turret is destroyed, gun is destroyed too and gunner killed.
 [29]
 Name = Iron 60mm gun
 Type = Gun
@@ -353,6 +361,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 2000
 InstallTime = 60
+Description = Standard 60mm ship gun. Require empty turret.
 [30]
 Name = Small bronze greenhouse
 Type = Greenhouse
@@ -365,6 +374,7 @@ Skill = Engineering
 Price = 1000
 InstallTime = 60
 Size = 1
+Description = Allow cultivate plants.
 [31]
 Name = Small bronze water collector
 Type = Water_collector
