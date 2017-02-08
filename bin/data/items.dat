@@ -87,12 +87,14 @@ Type = Food
 Prices = 5, 3, 5, 5
 Buyable = N, Y, N, N
 Value = 80
+Description = Better food rations for crew members.
 [12]
 Name = Gunpowder
 Weight = 1
 Type = Gunpowder
 Prices = 1, 2, 2, 2
 Buyable = Y, N, N, N
+Description = Used to produce ammunition.
 [13]
 Name = Iron plates
 Weight = 5
@@ -100,6 +102,7 @@ Type = Iron
 Prices = 4, 6, 6, 6
 Buyable = Y, N, N, N
 ShowType = Repair material
+Description = Heavy, large, iron plates used to repair or upgrade ship modules.
 [14]
 Name = Iron 10mm ammo
 Weight = 1
@@ -108,6 +111,7 @@ Prices = 1, 3, 3, 3
 Buyable = Y, N, N, N
 Value = 1
 ShowType = Ammunition
+Description = Standard 10mm gun ammunition.
 [15]
 Name = Copper ore
 Weight = 7
@@ -115,6 +119,7 @@ Type = CopperOre
 Prices = 2, 2, 1, 2
 Buyable = N, N, Y, N
 ShowType = Ore
+Description = Unrefined copper ore.
 [16]
 Name = Tin ore
 Weight = 7
@@ -122,18 +127,21 @@ Type = TinOre
 Prices = 2, 2, 1, 2
 Buyable = N, N, Y, N
 ShowType = Ore
+Description = Unrefined tin ore.
 [17]
 Name = Copper plates
 Weight = 5
 Type = Copper
 Prices = 2, 4, 4, 4
 Buyable = Y, N, N, N
+Description = Heavy, large, copper plates.
 [18]
 Name = Tin plates
 Weight = 5
 Type = Tin
 Prices = 2, 4, 4, 4
 Buyable = Y, N, N, N
+Description = Heavy, large, tin plates.
 [19]
 Name = Iron ore
 Weight = 8
@@ -141,6 +149,7 @@ Type = IronOre
 Prices = 5, 5, 3, 5
 Buyable = N, N, Y, N
 ShowType = Ore
+Description = Unrefined iron ore.
 [20]
 Name = Iron 40mm ammo
 Weight = 2
@@ -149,6 +158,7 @@ Prices = 6, 8, 8, 8
 Buyable = Y, N, N, N
 Value = 4
 ShowType = Ammunition
+Description = Standard 40mm gun ammunition.
 [21]
 Name = Steel plates
 Weight = 5
