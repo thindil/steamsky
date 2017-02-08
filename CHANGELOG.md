@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Descriptions to ship modules
 - Descriptions to items
 - Orders for all crew members
+- New enemy ship: large inquisition ship
 
 ### Changed
 - Updated interface
