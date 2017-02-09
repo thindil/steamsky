@@ -257,12 +257,12 @@ package body Combat is
                                         if GunnerIndex > 0 and GunnerOrder > 3 and GunnerOrder < 7 then -- aim for part of enemy ship
                                             HitLocation := 1;
                                             for J in EnemyShip.Modules.First_Index..EnemyShip.Modules.Last_Index loop
-                                                if (GunnerOrder = 4 and Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType 
+                                                if ((GunnerOrder = 4 and Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType 
                                                     = ENGINE) or (GunnerOrder = 5 and 
                                                     (Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = GUN or 
                                                     Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM)) or
                                                     (GunnerOrder = 6 and Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType 
-                                                    = HULL) 
+                                                    = HULL)) and EnemyShip.Modules.Element(J).Durability > 0 
                                                 then
                                                     HitLocation := J;
                                                     exit;
