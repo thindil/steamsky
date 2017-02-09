@@ -387,6 +387,7 @@ Skill = Engineering
 Price = 1000
 InstallTime = 60
 Size = 1
+Description = Allow collect water from air.
 [32]
 Name = Small bronze medical room
 Type = Medical_room
@@ -400,6 +401,7 @@ Price = 1000
 InstallTime = 60
 Size = 1
 Unique = Yes
+Description = Allow treat wounded crew members.
 [33]
 Name = Iron 80mm gun
 Type = Gun
@@ -411,6 +413,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 4000
 InstallTime = 90
+Description = Standard 80mm ship gun. Require empty turret.
 [34]
 Name = Iron 100mm gun
 Type = Gun
@@ -422,6 +425,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 8000
 InstallTime = 120
+Description = Standard 100mm ship gun. Require empty turret.
 [35]
 Name = Iron 120mm gun
 Type = Gun
@@ -433,6 +437,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 16000
 InstallTime = 150
+Description = Standard 120mm ship gun. Require empty turret.
 [36]
 Name = Advanced bronze cabin
 Type = Cabin
@@ -445,6 +450,7 @@ Skill = Engineering
 Price = 1000
 InstallTime = 90
 Size = 1
+Description = Small, decorated cabin made of bronze.
 [37]
 Name = Extended bronze cabin
 Type = Cabin
@@ -457,6 +463,7 @@ Skill = Engineering
 Price = 2000
 InstallTime = 120
 Size = 1
+Description = Small, decorated cabin made of bronze with few better quality furnitures.
 [38]
 Name = Luxury bronze cabin
 Type = Cabin
@@ -469,6 +476,7 @@ Skill = Engineering
 Price = 4000
 InstallTime = 150
 Size = 1
+Description = Small, decorated, cabin made of bronze, well equiped with hight quality furniture.
 [39]
 Name = Heavy bronze turret
 Type = Turret
@@ -481,6 +489,7 @@ Skill = Engineering
 Price = 1000
 InstallTime = 120
 Size = 1
+Description = Heaviest bronze turret. If turret is destroyed, gun is destroyed too and gunner killed.
 [40]
 Name = Heavy bronze battering ram
 Type = Battering_ram
@@ -494,6 +503,7 @@ Price = 1000
 InstallTime = 150
 Unique = Yes
 Size = 1
+Description = Heavy battering ram, made of bronze. Attack enemies automatically when in close range.
 [41]
 Name = Iron cockpit
 Type = Cockpit
