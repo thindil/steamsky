@@ -166,12 +166,14 @@ Type = Steel
 Prices = 6, 8, 8, 8
 Buyable = Y, N, N, N
 ShowType = Repair material
+Description = Heavy, large, steel plates.
 [22]
 Name = Medical supplies
 Weight = 5
 Type = Medicines
 Prices = 7, 5, 5, 7
 Buyable = N, Y, Y, N
+Description = Bandages, disease and poison antidotes, all what is needed to cure patients.
 [23]
 Name = Steel 20mm ammo
 Weight = 1
@@ -180,6 +182,7 @@ Prices = 5, 7, 7, 7
 Buyable = Y, N, N, N
 Value = 4
 ShowType = Ammunition
+Description = Upgraded 20mm gun ammunition.
 [24]
 Name = Steel 10mm ammo
 Weight = 1
@@ -188,6 +191,7 @@ Prices = 3, 5, 5, 5
 Buyable = Y, N, N, N
 Value = 2
 ShowType = Ammunition
+Description = Upgraded 10mm gun ammunition.
 [25]
 Name = Steel 40mm ammo
 Weight = 2
@@ -196,6 +200,7 @@ Prices = 8, 10, 10, 10
 Buyable = Y, N, N, N
 Value = 8
 ShowType = Ammunition
+Description = Upgraded 40mm gun ammunition.
 [26]
 Name = Iron 60mm ammo
 Weight = 4
@@ -204,6 +209,7 @@ Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
 Value = 8
 ShowType = Ammunition
+Description = Standard 60mm gun ammunition.
 [27]
 Name = Steel 60mm ammo
 Weight = 4
@@ -212,12 +218,14 @@ Prices = 12, 14, 14, 14
 Buyable = Y, N, N, N
 Value = 16
 ShowType = Ammunition
+Description = Upgraded 60mm gun ammunition.
 [28]
 Name = Medical herbs
 Weight = 5
 Type = Herbs
 Prices = 5, 3, 5, 5
 Buyable = N, Y, N, N
+Description = Different herbs needed to create medical supplies.
 [29]
 Name = Medical herbs seeds
 Weight = 1
@@ -225,6 +233,7 @@ Type = HerbSeeds
 Prices = 4, 2, 4, 4
 Buyable = N, Y, N, N
 ShowType = Seeds
+Description = Seeds to cultivate medical herbs.
 [30]
 Name = Vegetables seeds
 Weight = 1
@@ -232,6 +241,7 @@ Type = VegetableSeeds
 Prices = 2, 1, 2, 2
 Buyable = N, Y, N, N
 ShowType = Seeds
+Description = Seeds to cultivate vegetables.
 [31]
 Name = Iron 80mm ammo
 Weight = 8
