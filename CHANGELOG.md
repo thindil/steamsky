@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New enemy ships: undead ship and large undead ship
+- New enemy ships: undead ship, large undead ship and large attacking
+  drone
 - Descriptions to ship modules
 - Descriptions to items
 - Orders for all crew members
