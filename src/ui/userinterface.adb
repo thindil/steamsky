@@ -917,7 +917,7 @@ package body UserInterface is
                 elsif Order = "Defend" then
                     OldSpeed := PlayerShip.Speed;
                     NewState := Combat_State;
-                    if EnemyName = Null_Unbounded_String then
+                    if EnemyName /= Enemies_List.Element(Events_List.Element(EventIndex).Data).Name then
                         NewState := StartCombat(Events_List.Element(EventIndex).Data, False);
                     end if;
                     DrawGame(NewState);
@@ -927,7 +927,7 @@ package body UserInterface is
                 elsif Order = "Attack" then
                     OldSpeed := PlayerShip.Speed;
                     NewState := Combat_State;
-                    if EnemyName = Null_Unbounded_String then
+                    if EnemyName /= Enemies_List.Element(Events_List.Element(EventIndex).Data).Name then
                         NewState := StartCombat(Events_List.Element(EventIndex).Data, False);
                     end if;
                     DrawGame(NewState);
