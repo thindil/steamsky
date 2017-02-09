@@ -14,6 +14,9 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated help
 
+### Fixed
+- Attacking different ship than selected
+
 ## [0.8] - 2017-02-05
 
 ### Added
