@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 - Updated help
+- Combat AI for pirates ships
 
 ### Fixed
 - Attacking different ship than selected
