@@ -235,4 +235,15 @@ LootMin = 10
 LootMax = 100
 Perception = 25
 Cargo = 1500..2000x1, 450..500x20, 150..300x5, 20..40x13
+[23]
+Name = Advanced attacking drone
+Modules = 22, 25, 18, 7, 7, 7, 7, 7, 40, 28, 27
+Accuracy = 15
+Enemy = Yes
+CombatAI = Berserker
+Evasion = 15
+LootMin = 100
+LootMax = 250
+Perception = 25
+Cargo = 1000..1500x1, 200..300x20, 100..200x5, 10..20x13
 []
