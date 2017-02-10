@@ -24,7 +24,7 @@ with Missions; use Missions;
 package Ships is
     type ShipSpeed is (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED,
         FULL_SPEED);
-    type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD);
+    type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER);
     type ShipUpgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
     type ModuleData is -- Data structure for ship modules
         record
