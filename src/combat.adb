@@ -272,7 +272,20 @@ package body Combat is
                                             HitLocation := Integer(EnemyMod_Roll.Random(Generator3));
                                         end if;
                                     else
-                                        HitLocation := Integer(PlayerMod_Roll.Random(Generator2));
+                                        if Enemy.CombatAI = DISARMER then
+                                            HitLocation := 1;
+                                            for J in EnemyShip.Modules.First_Index..EnemyShip.Modules.Last_Index loop
+                                                if (Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = GUN or 
+                                                    Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM) 
+                                                    and EnemyShip.Modules.Element(J).Durability > 0 
+                                                then
+                                                    HitLocation := J;
+                                                    exit;
+                                                end if;
+                                            end loop;
+                                        else
+                                            HitLocation := Integer(PlayerMod_Roll.Random(Generator2));
+                                        end if;
                                     end if;
                                     while EnemyShip.Modules.Element(HitLocation).Durability = 0 loop
                                         HitLocation := HitLocation - 1;
@@ -475,7 +488,7 @@ package body Combat is
                             end if;
                         end loop;
                     end if;
-                    if EnemyAmmoIndex = 0 and Enemy.CombatAI = ATTACKER then
+                    if EnemyAmmoIndex = 0 and (Enemy.CombatAI = ATTACKER or Enemy.CombatAI = DISARMER) then
                         Enemy.CombatAI := COWARD;
                     end if;
                 else
@@ -485,7 +498,7 @@ package body Combat is
                 exit;
             end if;
         end loop;
-        if EnemyWeaponIndex = 0 and Enemy.CombatAI = ATTACKER then
+        if EnemyWeaponIndex = 0 and (Enemy.CombatAI = ATTACKER or Enemy.CombatAI = DISARMER) then
             Enemy.CombatAI := COWARD;
         end if;
         case Enemy.CombatAI is
@@ -499,7 +512,7 @@ package body Combat is
                     AddMessage(To_String(EnemyName) & " decreases speed.", CombatMessage);
                     EnemyPilotOrder := 2;
                 end if;
-            when ATTACKER =>
+            when ATTACKER | DISARMER =>
                 if Enemy.Distance > DamageRange  and Enemy.Ship.Speed /= FULL_SPEED then
                     Enemy.Ship.Speed := ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) + 1);
                     AddMessage(To_String(EnemyName) & " increases speed.", CombatMessage);
