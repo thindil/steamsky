@@ -517,6 +517,7 @@ Price = 1500
 InstallTime = 60
 Unique = Yes
 Size = 1
+Description = Each ship require one cockpit to fly. This is better version of standard cockpit.
 [42]
 Name = Iron cargo bay
 Type = Cargo
@@ -529,6 +530,7 @@ Skill = Engineering
 Price = 600
 InstallTime = 60
 Size = 1
+Description = Space for hold ship cargo, made of iron.
 [43]
 Name = Small iron alchemy lab
 Type = Alchemy_lab
@@ -541,6 +543,7 @@ Skill = Engineering
 Price = 2000
 InstallTime = 60
 Size = 1
+Description = Allow research new crafting recipes and craft some items. More durable version.
 [44]
 Name = Small iron furnace
 Type = Furnace
@@ -553,6 +556,7 @@ Skill = Metalsmith
 Price = 2000
 InstallTime = 60
 Size = 1
+Description = Allow smelt ores into metals. More durable version.
 [45]
 Name = Small iron water collector
 Type = Water_collector
@@ -565,6 +569,7 @@ Skill = Engineering
 Price = 2000
 InstallTime = 60
 Size = 1
+Description = Allow collect water from air. More durable version.
 [46]
 Name = Small iron greenhouse
 Type = Greenhouse
@@ -577,6 +582,7 @@ Skill = Engineering
 Price = 2000
 InstallTime = 60
 Size = 1
+Description = Allow cultivate plants. More durable version.
 [47]
 Name = Small iron medical room
 Type = Medical_room
@@ -590,6 +596,7 @@ Price = 2000
 InstallTime = 60
 Size = 1
 Unique = Yes
+Description = Allow treat wounded crew members. More durable version.
 [48]
 Name = Steel 10mm gun
 Type = Gun
@@ -601,6 +608,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 500
 InstallTime = 30
+Description = Smalled type of ship gun. Require empty turret.
 [49]
 Name = Steel 20mm gun
 Type = Gun
@@ -612,6 +620,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 1000
 InstallTime = 30
+Description = Upgraded 20mm ship gun. Require empty turret.
 [50]
 Name = Steel 40mm gun
 Type = Gun
@@ -623,6 +632,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 2000
 InstallTime = 45
+Description = Upgraded 40mm ship gun. Require empty turret.
 [51]
 Name = Steel 60mm gun
 Type = Gun
