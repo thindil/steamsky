@@ -231,8 +231,8 @@ Accuracy = 20
 Enemy = Yes
 CombatAI = Berserker
 Evasion = 20
-LootMin = 10
-LootMax = 100
+LootMin = 250
+LootMax = 450
 Perception = 25
 Cargo = 1500..2000x1, 450..500x20, 150..300x5, 20..40x13
 [23]
