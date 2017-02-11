@@ -38,9 +38,10 @@ package body Combat.UI is
     Order : Crew_Orders;
     CrewMenu : Menu;
     OrdersMenu : Menu;
-    MenuWindow : Window;
-    MenuWindow2 : Window;
+    MenuWindow, MenuWindow2, EnemyPad : Window;
     CurrentMenuIndex : Positive := 1;
+    StartIndex : Integer := 0;
+    EndIndex : Integer;
 
     procedure CombatOrders is
         MemberIndex : Natural := 0;
@@ -275,18 +276,23 @@ package body Combat.UI is
         else
             Add(Str => "Unknown");
         end if;
-        Move_Cursor(Line => 14, Column => (Columns / 2));
+        Move_Cursor(Line => 12, Column => (Columns / 2));
+        Add(Str => "Detailed enemy info");
+        if not EndCombat then
+            Change_Attributes(Line => 12, Column => (Columns / 2), Count => 1, Color => 1);
+        end if;
+        Move_Cursor(Line => 15, Column => (Columns / 2));
         if not EndCombat then
             Add(Str => "SPACE for next turn");
-            Change_Attributes(Line => 14, Column => (Columns / 2),
-                Count => 5, Color => 1);
-            Move_Cursor(Line => 15, Column => (Columns / 2));
-            Add(Str => "F1 for help");
             Change_Attributes(Line => 15, Column => (Columns / 2),
+                Count => 5, Color => 1);
+            Move_Cursor(Line => 16, Column => (Columns / 2));
+            Add(Str => "F1 for help");
+            Change_Attributes(Line => 16, Column => (Columns / 2),
                 Count => 2, Color => 1);
         else
             Add(Str => "Hit any key for back to sky map");
-            Change_Attributes(Line => 14, Column => (Columns / 2),
+            Change_Attributes(Line => 15, Column => (Columns / 2),
                 Count => 3, Color => 1);
         end if;
         LoopStart := 0 - MessagesAmount;
@@ -456,6 +462,30 @@ package body Combat.UI is
         Refresh(MenuWindow2);
     end ShowOrdersMenu;
 
+    procedure ShowEnemyInfo is
+        DamagePercent : Natural;
+    begin
+        if EnemyPad = Null_Window then
+            EndIndex := Integer(Enemy.Ship.Modules.Last_Index) - Integer(Lines / 2);
+            EnemyPad := New_Pad(Line_Position(Enemy.Ship.Modules.Last_Index) + 2, (Columns / 2));
+            Box(EnemyPad);
+            for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
+                Move_Cursor(Win => EnemyPad, Line => Line_Position(I), Column => 2);
+                Add(Win => EnemyPad, Str => To_String(Enemy.Ship.Modules.Element(I).Name) & ": ");
+                DamagePercent := 100 - Natural((Float(Enemy.Ship.Modules.Element(I).Durability) / 
+                    Float(Enemy.Ship.Modules.Element(I).MaxDurability)) * 100.0);
+                if DamagePercent = 0 then
+                    Add(Win => EnemyPad, Str => "Ok");
+                elsif DamagePercent > 0 and DamagePercent < 100 then
+                    Add(Win => EnemyPad, Str => "Damaged");
+                else
+                    Add(Win => EnemyPad, Str => "Destroyed");
+                end if;
+            end loop;
+        end if;
+        Refresh(EnemyPad, Line_Position(StartIndex), 0, (Lines / 5), (Columns / 5), (Lines - 1), Columns);
+    end ShowEnemyInfo;
+
     function CombatKeys(Key : Key_Code) return GameStates is
         Result : Driver_Result;
     begin
@@ -508,6 +538,10 @@ package body Combat.UI is
                 when Character'Pos('m') | Character'Pos('M') => -- Show messages list
                     DrawGame(Messages_View);
                     return Messages_View;
+                when Character'Pos('d') | Character'Pos('D') => -- Show enemy info
+                    EnemyPad := Null_Window;
+                    ShowEnemyInfo;
+                    return Enemy_Info;
                 when KEY_F1 => -- Show help
                     Erase;
                     ShowGameHeader(Help_Topic);
@@ -574,5 +608,34 @@ package body Combat.UI is
         end case;
         return Combat_Orders;
     end CombatOrdersKeys;
+
+    function EnemyInfoKeys(Key : Key_Code) return GameStates is
+    begin
+        case Key is
+            when 56 | KEY_UP => -- Scroll enemy info up one line
+                StartIndex := StartIndex - 1;
+            when 50 | KEY_DOWN => -- Scroll enemy info down one line
+                StartIndex := StartIndex + 1;
+            when 51 | KEY_NPAGE => -- Scroll enemy info down one page
+                StartIndex := StartIndex + Integer(Lines / 2);
+            when 57 | KEY_PPAGE => -- Scroll enemy info up one page
+                StartIndex := StartIndex - Integer(Lines / 2);
+            when 55 | KEY_HOME => -- Scroll enemy info to start
+                StartIndex := 0;
+            when 49 | KEY_END => -- Scroll enemy info to end
+                StartIndex := EndIndex;
+            when others => -- Back to combat screen
+                DrawGame(Combat_State);
+                return Combat_State;
+        end case;
+        if StartIndex < 0 then
+            StartIndex := 0;
+        end if;
+        if StartIndex > EndIndex then
+            StartIndex := EndIndex;
+        end if;
+        ShowEnemyInfo;
+        return Enemy_Info;
+    end EnemyInfoKeys;
 
 end Combat.UI;

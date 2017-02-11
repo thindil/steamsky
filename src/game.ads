@@ -29,7 +29,7 @@ package Game is
         Drop_Cargo, Trade_Form, Rename_Ship, Assign_Owner, Recipe_Setting, 
         Move_Map, Bases_List, Events_View, Assign_Ammo, ShipyardTypesMenu,
         GameMenu, GameStats_View, Death_Confirm, TradeRecipes_View, 
-        BaseMissions_View, Missions_View, Orders_For_All); -- Game states
+        BaseMissions_View, Missions_View, Orders_For_All, Enemy_Info); -- Game states
     type Date_Record is -- Data for game date/time
         record
             Year : Natural;
