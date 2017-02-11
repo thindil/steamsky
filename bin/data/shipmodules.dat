@@ -644,6 +644,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 4000
 InstallTime = 60
+Description = Upgraded 60mm ship gun. Require empty turret.
 [52]
 Name = Steel 80mm gun
 Type = Gun
@@ -655,6 +656,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 8000
 InstallTime = 90
+Description = Upgraded 80mm ship gun. Require empty turret.
 [53]
 Name = Steel 100mm gun
 Type = Gun
@@ -666,6 +668,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 16000
 InstallTime = 120
+Description = Upgraded 100mm ship gun. Require empty turret.
 [54]
 Name = Steel 120mm gun
 Type = Gun
@@ -677,6 +680,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 32000
 InstallTime = 150
+Description = Upgraded 120mm ship gun. Require empty turret.
 [55]
 Name = Light iron armor
 Type = Armor
@@ -689,6 +693,7 @@ Skill = Engineering
 Price = 7500
 InstallTime = 180
 Unique = Yes
+Description = Weakest type of iron armor. Protect whole ship.
 [56]
 Name = Iron armor
 Type = Armor
@@ -701,6 +706,7 @@ Skill = Engineering
 Price = 10000
 InstallTime = 220
 Unique = Yes
+Description = Standard type of iron armor. Protect whole ship.
 [57]
 Name = Heavy iron armor
 Type = Armor
@@ -713,6 +719,7 @@ Skill = Engineering
 Price = 12500
 InstallTime = 240
 Unique = Yes
+Description = Best type of iron armor. Protect whole ship.
 [58]
 Name = Small bronze workshop
 Type = Workshop
@@ -725,6 +732,7 @@ Skill = Engineering
 Price = 1000
 InstallTime = 60
 Size = 1
+Description = Allow craft some tools.
 [59]
 Name = Small iron workshop
 Type = Workshop
@@ -737,4 +745,5 @@ Skill = Engineering
 Price = 2000
 InstallTime = 60
 Size = 1
+Description = Allow craft some tools. More durable version.
 []
