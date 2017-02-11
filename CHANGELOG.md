@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New enemy ships: undead ship, large undead ship, large attacking
-  drone and advanced attacking drone
+  drone, advanced attacking drone and advanced pirate ship
 - Descriptions to ship modules
 - Descriptions to items
 - Orders for all crew members
