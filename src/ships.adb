@@ -362,7 +362,7 @@ package body Ships is
         TmpShip := (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed,
             Modules => ShipModules, Cargo => ProtoShip.Cargo, Crew => ShipCrew,
             UpgradeModule => 0, DestinationX => 0, DestinationY => 0,
-            RepairModule => 0, Missions => ShipMissions);
+            RepairModule => 0, Missions => ShipMissions, Description => ProtoShip.Description);
         for I in TmpShip.Modules.First_Index..TmpShip.Modules.Last_Index loop
             case Modules_List.Element(TmpShip.Modules.Element(I).ProtoIndex).MType is
                 when TURRET =>
@@ -412,7 +412,7 @@ package body Ships is
         TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
             Accuracy => 1, CombatAI => NONE, Evasion => 1, LootMin => 1,
             LootMax => 100, Perception => 1, Cargo => TempCargo, CombatValue => 1,
-            Crew => TempCrew);
+            Crew => TempCrew, Description => Null_Unbounded_String);
         Open(ShipsFile, In_File, "data/ships.dat");
         while not End_Of_File(ShipsFile) loop
             RawData := To_Unbounded_String(Get_Line(ShipsFile));
@@ -508,6 +508,8 @@ package body Ships is
                         StartIndex := EndIndex + 2;
                     end loop;
                     TempOrder := Rest;
+                elsif FieldName = To_Unbounded_String("Description") then
+                    TempRecord.Description := Value;
                 end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
                 CombatValue := 0;
@@ -539,7 +541,7 @@ package body Ships is
                 TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
                     Accuracy => 1, CombatAI => NONE, Evasion => 1, LootMin => 1, 
                     LootMax => 100, Perception => 1, Cargo => TempCargo, CombatValue => 1,
-                    Crew => TempCrew);
+                    Crew => TempCrew, Description => Null_Unbounded_String);
                 TempRecord.Name := Null_Unbounded_String;
             end if;
         end loop;
