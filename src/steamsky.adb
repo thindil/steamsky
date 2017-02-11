@@ -223,6 +223,8 @@ begin
                 GameState := ShowMissionsKeys(Key);
             when Orders_For_All =>
                 GameState := CrewOrdersAllKeys(Key);
+            when Enemy_Info =>
+                GameState := EnemyInfoKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;
