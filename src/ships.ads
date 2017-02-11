@@ -63,6 +63,7 @@ package Ships is
             DestinationY : Integer; -- Destination Y coordinate
             RepairModule : Natural; -- Number of module to repair as first
             Missions : Mission_Container.Vector; -- List of accepted missions
+            Description : Unbounded_String; -- Description of ship
         end record;
     type ProtoCrewData is -- Data structure for crew prototypes
         record
@@ -83,6 +84,7 @@ package Ships is
             Cargo : Cargo_Container.Vector; -- List of ship cargo
             CombatValue : Positive; -- Combat value of ship (used to generate enemies)
             Crew : ProtoCrew_Container.Vector; -- List of ship crew
+            Description : Unbounded_String; -- Description of ship
         end record;
     package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
     ProtoShips_List : ProtoShips_Container.Vector;
