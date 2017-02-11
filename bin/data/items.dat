@@ -334,6 +334,7 @@ Type = MissionItem
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
 ShowType = Special
+Description = Item needed for one of your missions. Deliver it to proper sky base fro reward. Droping it from cargo automatically fail proper mission.
 [42]
 Name = Large package
 Weight = 50
@@ -341,6 +342,7 @@ Type = MissionItem
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
 ShowType = Special
+Description = Item needed for one of your missions. Deliver it to proper sky base fro reward. Droping it from cargo automatically fail proper mission.
 [43]
 Name = Huge package
 Weight = 200
@@ -348,6 +350,7 @@ Type = MissionItem
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
 ShowType = Special
+Description = Item needed for one of your missions. Deliver it to proper sky base fro reward. Droping it from cargo automatically fail proper mission.
 [44]
 Name = Beer
 Weight = 1
@@ -355,6 +358,7 @@ Type = Drink
 Prices = 3, 2, 3, 3
 Buyable = N, Y, N, N
 Value = 40
+Description = Standard beer, needed by crew members.
 [45]
 Name = Wine
 Weight = 1
@@ -362,6 +366,7 @@ Type = Drink
 Prices = 4, 3, 4, 4
 Buyable = N, Y, N, N
 Value = 50
+Description = Good quality wine, needed by crew members.
 [46]
 Name = Lavish Rations
 Weight = 1
@@ -369,6 +374,7 @@ Type = Food
 Prices = 7, 5, 7, 7
 Buyable = N, Y, N, N
 Value = 100
+Description = Best food rations for crew members.
 [47]
 Name = Alchemy set
 Weight = 5
@@ -377,6 +383,7 @@ Prices = 5, 7, 7, 7
 Buyable = Y, N, N, N
 ShowType = Tool
 Value = 10
+Description = Tool used in alchemical recipes.
 [48]
 Name = Bronze mold
 Weight = 10
@@ -385,6 +392,7 @@ Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
 ShowType = Tool
 Value = 15
+Description = Bronze tool used in metalsmith recipes.
 [49]
 Name = Bronze gunsmith set
 Weight = 10
@@ -393,6 +401,7 @@ Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
 ShowType = Tool
 Value = 15
+Description = Bronze tool used in gunsmith recipes.
 [50]
 Name = Wooden cooking set
 Weight = 5
@@ -401,6 +410,7 @@ Prices = 7, 9, 9, 9
 Buyable = Y, N, N, N
 ShowType = Tool
 Value = 20
+Description = Wooden tool used to cook items.
 [51]
 Name = Bronze sickle
 Weight = 1
