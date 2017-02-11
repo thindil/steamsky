@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Orders for all crew members
 - New enemy ship: large inquisition ship
 - New combat AI type: disarmer
+- More info about enemy to combat screen
 
 ### Changed
 - Updated interface
