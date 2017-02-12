@@ -464,24 +464,54 @@ package body Combat.UI is
 
     procedure ShowEnemyInfo is
         DamagePercent : Natural;
+        InfoText : Unbounded_String := Null_Unbounded_String;
+        LinesAmount, TmpLinesAmount : Line_Position;
+        TextPosition, EndTextPosition : Positive := 1;
+        StartColumn : Column_Position := 0;
     begin
         if EnemyPad = Null_Window then
-            EndIndex := Integer(Enemy.Ship.Modules.Last_Index) - Integer(Lines / 2);
-            EnemyPad := New_Pad(Line_Position(Enemy.Ship.Modules.Last_Index) + 2, (Columns / 2));
-            Box(EnemyPad);
+            TmpLinesAmount := 2;
+            while TextPosition < Length(Enemy.Ship.Description) loop
+                EndTextPosition := TextPosition + (Positive(Columns / 2) - 3);
+                if EndTextPosition > Length(Enemy.Ship.Description) then
+                    EndTextPosition := Length(Enemy.Ship.Description);
+                end if;
+                Append(InfoText, Unbounded_Slice(Enemy.Ship.Description, TextPosition, EndTextPosition));
+                Append(InfoText, ASCII.LF);
+                Append(InfoText, " ");
+                TmpLinesAmount := TmpLinesAmount + 1;
+                TextPosition := EndTextPosition + 1;
+            end loop;
+            if Enemy.Ship.Description /= Null_Unbounded_String then
+                Append(InfoText, ASCII.LF);
+                TmpLinesAmount := TmpLinesAmount + 1;
+                StartColumn := 1;
+            end if;
             for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
-                Move_Cursor(Win => EnemyPad, Line => Line_Position(I), Column => 2);
-                Add(Win => EnemyPad, Str => To_String(Enemy.Ship.Modules.Element(I).Name) & ": ");
+                Append(InfoText, " ");
+                Append(InfoText, Enemy.Ship.Modules.Element(I).Name);
+                Append(InfoText, ": ");
                 DamagePercent := 100 - Natural((Float(Enemy.Ship.Modules.Element(I).Durability) / 
                     Float(Enemy.Ship.Modules.Element(I).MaxDurability)) * 100.0);
                 if DamagePercent = 0 then
-                    Add(Win => EnemyPad, Str => "Ok");
+                    Append(InfoText,"Ok");
                 elsif DamagePercent > 0 and DamagePercent < 100 then
-                    Add(Win => EnemyPad, Str => "Damaged");
+                    Append(InfoText, "Damaged");
                 else
-                    Add(Win => EnemyPad, Str => "Destroyed");
+                    Append(InfoText, "Destroyed");
                 end if;
+                Append(InfoText, ASCII.LF);
+                TmpLinesAmount := TmpLinesAmount + 1;
             end loop;
+            LinesAmount := Line_Position(Length(InfoText)) / Line_Position((Columns / 2) - 3);
+            if LinesAmount < TmpLinesAmount then
+                LinesAmount := TmpLinesAmount;
+            end if;
+            EndIndex := Integer(LinesAmount) - Integer(Lines / 2);
+            EnemyPad := New_Pad(LinesAmount, (Columns / 2));
+            Move_Cursor(Win => EnemyPad, Line => 1, Column => StartColumn);
+            Add(Win => EnemyPad, Str => To_String(InfoText));
+            Box(EnemyPad);
         end if;
         Refresh(EnemyPad, Line_Position(StartIndex), 0, (Lines / 5), (Columns / 5), (Lines - 1), Columns);
     end ShowEnemyInfo;
