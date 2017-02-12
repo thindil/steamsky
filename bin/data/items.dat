@@ -419,6 +419,7 @@ Prices = 5, 7, 7, 7
 Buyable = Y, N, N, N
 ShowType = Tool
 Value = 15
+Description = Bronze tool used in cultivating plants.
 [52]
 Name = Bronze saw
 Weight = 1
@@ -427,6 +428,7 @@ Prices = 5, 7, 7, 7
 Buyable = Y, N, N, N
 ShowType = Tool
 Value = 15
+Description = Bronze tool used to cut wood.
 [53]
 Name = Wooden bucket
 Weight = 2
@@ -435,6 +437,7 @@ Prices = 7, 9, 9, 9
 Buyable = Y, N, N, N
 ShowType = Tool
 Value = 20
+Description = Simple wooden bucket.
 [54]
 Name = Barley seeds
 Weight = 1
@@ -442,6 +445,7 @@ Type = BarleySeeds
 Prices = 2, 1, 2, 2
 Buyable = N, Y, N, N
 ShowType = Seeds
+Description = Seeds used to cultivate barley.
 [55]
 Name = Barley
 Weight = 1
@@ -449,24 +453,28 @@ Type = Barley
 Prices = 3, 2, 3, 3
 Buyable = N, Y, N, N
 ShowType = Grain
+Description = Standard grain used in cooking or brewery.
 [56]
 Name = Grapes
 Weight = 1
 Type = Grapes
 Prices = 3, 2, 3, 3
 Buyable = N, Y, N, N
+Description = Vine grapes used to create wine.
 [57]
 Name = Grape Vine
 Weight = 20
 Type = GrapeVine
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
+Description = Vine plant, take grapes from it.
 [58]
 Name = Quartz sand
 Weight = 5
 Type = Sand
 Prices = 2, 2, 1, 2
 Buyable = N, N, Y, N
+Description = Normal sand, used in creating glass.
 [59]
 Name = Bronze blacksmith set
 Weight = 100
@@ -475,6 +483,7 @@ Prices = 35, 37, 37, 37
 Buyable = Y, N, N, N
 ShowType = Tool
 Value = 15
+Description = Bronze set of tools used in blacksmith recipes.
 [60]
 Name = Bronze woodworker set
 Weight = 5
@@ -483,4 +492,5 @@ Prices = 5, 7, 7, 7
 Buyable = Y, N, N, N
 ShowType = Tool
 Value = 15
+Description = Bronze set of tools used in woodworker recipes.
 []
