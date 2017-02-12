@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Crew; use Crew;
 with Messages; use Messages;
@@ -463,8 +464,8 @@ package body Combat.UI is
     end ShowOrdersMenu;
 
     procedure ShowEnemyInfo is
-        DamagePercent : Natural;
-        InfoText : Unbounded_String := Null_Unbounded_String;
+        DamagePercent, SpaceIndex : Natural;
+        InfoText, ModuleName : Unbounded_String := Null_Unbounded_String;
         LinesAmount, TmpLinesAmount : Line_Position;
         TextPosition, EndTextPosition : Positive := 1;
         BoxLines : Line_Position := Lines / 2;
@@ -486,7 +487,19 @@ package body Combat.UI is
                 TmpLinesAmount := TmpLinesAmount + 1;
             end if;
             for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
-                Append(InfoText, Enemy.Ship.Modules.Element(I).Name);
+                if Enemy.Distance > 1000 then
+                    ModuleName := 
+                        To_Unbounded_String(ModuleType'Image(Modules_List.Element(Enemy.Ship.Modules.Element(I).ProtoIndex).MType));
+                    Replace_Slice(ModuleName, 2, Length(ModuleName), To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
+                    SpaceIndex := Index(ModuleName, "_");
+                    while SpaceIndex > 0 loop
+                        Replace_Element(ModuleName, SpaceIndex, ' ');
+                        SpaceIndex := Index(ModuleName, "_");
+                    end loop;
+                else
+                    ModuleName := Modules_List.Element(Enemy.Ship.Modules.Element(I).ProtoIndex).Name;
+                end if;
+                Append(InfoText, To_String(ModuleName));
                 Append(InfoText, ": ");
                 DamagePercent := 100 - Natural((Float(Enemy.Ship.Modules.Element(I).Durability) / 
                     Float(Enemy.Ship.Modules.Element(I).MaxDurability)) * 100.0);
