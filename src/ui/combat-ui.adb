@@ -467,28 +467,25 @@ package body Combat.UI is
         InfoText : Unbounded_String := Null_Unbounded_String;
         LinesAmount, TmpLinesAmount : Line_Position;
         TextPosition, EndTextPosition : Positive := 1;
-        StartColumn : Column_Position := 0;
+        BoxLines : Line_Position := Lines / 2;
     begin
         if EnemyPad = Null_Window then
-            TmpLinesAmount := 2;
-            while TextPosition < Length(Enemy.Ship.Description) loop
-                EndTextPosition := TextPosition + (Positive(Columns / 2) - 3);
-                if EndTextPosition > Length(Enemy.Ship.Description) then
-                    EndTextPosition := Length(Enemy.Ship.Description);
-                end if;
-                Append(InfoText, Unbounded_Slice(Enemy.Ship.Description, TextPosition, EndTextPosition));
-                Append(InfoText, ASCII.LF);
-                Append(InfoText, " ");
-                TmpLinesAmount := TmpLinesAmount + 1;
-                TextPosition := EndTextPosition + 1;
-            end loop;
+            TmpLinesAmount := 1;
             if Enemy.Ship.Description /= Null_Unbounded_String then
+                while TextPosition < Length(Enemy.Ship.Description) loop
+                    EndTextPosition := TextPosition + (Positive(Columns / 2) - 3);
+                    if EndTextPosition > Length(Enemy.Ship.Description) then
+                        EndTextPosition := Length(Enemy.Ship.Description);
+                    end if;
+                    Append(InfoText, Unbounded_Slice(Enemy.Ship.Description, TextPosition, EndTextPosition));
+                    Append(InfoText, ASCII.LF);
+                    TmpLinesAmount := TmpLinesAmount + 1;
+                    TextPosition := EndTextPosition + 1;
+                end loop;
                 Append(InfoText, ASCII.LF);
                 TmpLinesAmount := TmpLinesAmount + 1;
-                StartColumn := 1;
             end if;
             for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
-                Append(InfoText, " ");
                 Append(InfoText, Enemy.Ship.Modules.Element(I).Name);
                 Append(InfoText, ": ");
                 DamagePercent := 100 - Natural((Float(Enemy.Ship.Modules.Element(I).Durability) / 
@@ -500,20 +497,26 @@ package body Combat.UI is
                 else
                     Append(InfoText, "Destroyed");
                 end if;
-                Append(InfoText, ASCII.LF);
-                TmpLinesAmount := TmpLinesAmount + 1;
+                if I < Enemy.Ship.Modules.Last_Index then
+                    Append(InfoText, ASCII.LF);
+                    TmpLinesAmount := TmpLinesAmount + 1;
+                end if;
             end loop;
-            LinesAmount := Line_Position(Length(InfoText)) / Line_Position((Columns / 2) - 3);
+            LinesAmount := Line_Position(Length(InfoText)) / Line_Position((Columns / 2));
             if LinesAmount < TmpLinesAmount then
                 LinesAmount := TmpLinesAmount;
             end if;
-            EndIndex := Integer(LinesAmount) - Integer(Lines / 2);
+            if BoxLines > LinesAmount + 2 then
+                BoxLines := LinesAmount + 2;
+            end if;
+            EndIndex := Integer(LinesAmount) - Integer(Lines / 2) + 2;
+            MenuWindow2 := Create(BoxLines, ((Columns / 2) + 2), ((Lines / 5) - 1), ((Columns / 5) - 1));
+            Box(MenuWindow2);
+            Refresh(MenuWindow2);
             EnemyPad := New_Pad(LinesAmount, (Columns / 2));
-            Move_Cursor(Win => EnemyPad, Line => 1, Column => StartColumn);
             Add(Win => EnemyPad, Str => To_String(InfoText));
-            Box(EnemyPad);
         end if;
-        Refresh(EnemyPad, Line_Position(StartIndex), 0, (Lines / 5), (Columns / 5), (Lines - 1), Columns);
+        Refresh(EnemyPad, Line_Position(StartIndex), 0, (Lines / 5), (Columns / 5), ((Lines / 2) + 1), Columns);
     end ShowEnemyInfo;
 
     function CombatKeys(Key : Key_Code) return GameStates is
