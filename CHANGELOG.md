@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated help
 - Combat AI for pirates ships
+- Combat order 'Aim for weapon' hits turrets instead directly guns
 
 ### Fixed
 - Attacking different ship than selected
