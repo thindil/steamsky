@@ -58,6 +58,7 @@ On combat screen you can see only damaged modules. Colors on your ship modules l
 - Yellow : module is heavily damaged
 - Red : module is almost destroyed
 - Blue : module is destroyed
+Amount of informations about enemy ship depends on distance to it. In close range, you can see detailed informations about enemy ship modules. In any bigger range, only very general informations.
 [Crafting]
 To start manufacturing items, first you must have enough material, proper module installed on ship and proper tool in ship cargo. Then you must set proper crafting order in Craft menu and give crew member order to start crafting. What ship module and which items are needed for crafting, you can check in crafting menu (key 'r'). If you don't have items or workplace needed for crafting, they will be written in red in selected recipe information. Each recipe have own crafting time after which item is created, but crafter gains experience in crafting skill each 15 minutes. If after creating item, you don't have enough materials or tools to craft next item, crew member going on break and crafting order is reseted.
 Each tool have chance to be damaged during crafting. Chance on damage tool depends on tool and crafting skill.
