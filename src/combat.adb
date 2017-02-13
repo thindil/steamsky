@@ -259,7 +259,8 @@ package body Combat is
                                             for J in EnemyShip.Modules.First_Index..EnemyShip.Modules.Last_Index loop
                                                 if ((GunnerOrder = 4 and Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType 
                                                     = ENGINE) or (GunnerOrder = 5 and 
-                                                    (Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = GUN or 
+                                                    ((Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = TURRET and
+                                                    EnemyShip.Modules.Element(J).Current_Value > 0) or 
                                                     Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM)) or
                                                     (GunnerOrder = 6 and Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType 
                                                     = HULL)) and EnemyShip.Modules.Element(J).Durability > 0 
@@ -275,7 +276,8 @@ package body Combat is
                                         if Enemy.CombatAI = DISARMER then
                                             HitLocation := 1;
                                             for J in EnemyShip.Modules.First_Index..EnemyShip.Modules.Last_Index loop
-                                                if (Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = GUN or 
+                                                if ((Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = TURRET and 
+                                                    EnemyShip.Modules.Element(J).Current_Value > 0) or 
                                                     Modules_List.Element(EnemyShip.Modules.Element(J).ProtoIndex).MType = BATTERING_RAM) 
                                                     and EnemyShip.Modules.Element(J).Durability > 0 
                                                 then
