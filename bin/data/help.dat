@@ -36,6 +36,7 @@ To start combat, you must first be in this same map cell where desired target is
 Combat can start automatically if enemy ship spots your ship first and is faster than you. Your chance to see enemy first depends on your ship pilot and gunners Perception skill and size of ships. If you have smaller ship than enemy, it is bigger chance that you spot them first.
 In combat, first you must set crew members to selected position and give each orders then hit space for made one combat turn. Each combat turn take 1 minute of game time. 
 If you give order to aim for selected part of enemy ship, your Gunners will be shoot as often as for precise fire, just chance on hit will depends on part of enemy ship. If selected enemy part will be destroyed, Gunners will be shooting in random part of enemy ship, as usual.
+Order 'Aim for weapon' hits directly battering rams or turrets for guns.
 To escape from fight, you must set Pilot order on Escape, after few turns (depends how far and fast enemy was) you should escape.
 Slow speed in combat helps your Gunners hits enemies but also helps enemies hits you. If you want to have more chances to evade enemy attack, set speed to full speed. That same is with Pilot orders - evade or escape order helps avoids attacks but also reduce your chance to hit enemies.
 Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too and you die.
