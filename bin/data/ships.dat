@@ -209,7 +209,7 @@ CombatAI = Berserker
 Evasion = 5
 LootMin = 100
 LootMax = 300
-Perception = 3
+Perception = 5
 Cargo = 2000..2500x1, 150..300x5
 [20]
 Name = Large undead ship
@@ -220,7 +220,7 @@ CombatAI = Berserker
 Evasion = 15
 LootMin = 200
 LootMax = 400
-Perception = 3
+Perception = 15
 Cargo = 3000..4000x1, 300..400x5
 [21]
 Name = Large inquisition ship
