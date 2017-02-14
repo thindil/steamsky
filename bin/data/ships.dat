@@ -287,4 +287,16 @@ LootMin = 200
 LootMax = 300
 Perception = 10
 Cargo = 2500..3000x1, 200..350x5
+[26]
+Name = Advanced inquisition ship
+Modules = 22, 25, 18, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 40, 28, 29
+Accuracy = 15
+Enemy = Yes
+CombatAI = Attacker
+Evasion = 15
+LootMin = 120
+LootMax = 240
+Perception = 15
+Cargo = 2000..2200x1, 150..220x2, 400..500x3, 400..600x20, 150..250x5, 20..50x13
+Description = Advanced version of standard flying vessel of inquisition.
 []
