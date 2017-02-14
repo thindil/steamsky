@@ -35,7 +35,7 @@ package body Ships is
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = COCKPIT and PlayerShip.Modules.Element(I).Durability > 0 then
                 HaveCockpit := True;
-            elsif Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = ENGINE and PlayerShip.Modules.Element(I).Durability > 0 
+            elsif Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = ENGINE and PlayerShip.Modules.Element(I).Durability > 1 
             then
                 HaveEngine := True;
             end if;
