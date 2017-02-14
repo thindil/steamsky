@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - New combat AI type: disarmer
 - More info about enemy to combat screen
 - Descriptions to ships
+- New random event: engine damage during fly
 
 ### Changed
 - Updated interface
