@@ -37,9 +37,9 @@ package body Events is
 
     function CheckForEvent(OldState : GameStates) return GameStates is
         TimePassed : Integer;
-        PilotIndex, PlayerValue : Natural := 0;
-        Roll : Positive;
-        Enemies : Positive_Container.Vector;
+        CrewIndex, PlayerValue : Natural := 0;
+        Roll, Roll2 : Positive;
+        Enemies, Engines : Positive_Container.Vector;
     begin
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             case Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType is
@@ -82,20 +82,56 @@ package body Events is
             end if;
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
                 case Roll is
-                    when 1..20 => -- Bad weather
+                    when 1..5 => -- Engine damaged
                         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                            if PlayerShip.Crew.Element(I).Order = Pilot then
-                                PilotIndex := I;
+                            if PlayerShip.Crew.Element(I).Order = Engineer then
+                                CrewIndex := I;
                                 exit;
                             end if;
                         end loop;
-                        if PilotIndex > 0 then
+                        if CrewIndex > 0 and PlayerShip.Speed /= FULL_STOP then
+                            Roll2 := GetRandom(1, 100);
+                            case PlayerShip.Speed is
+                                when QUARTER_SPEED =>
+                                    if Roll2 < 21 then
+                                        Roll2 := 1;
+                                    else
+                                        Roll2 := Roll2 - 20;
+                                    end if;
+                                when FULL_SPEED =>
+                                    Roll2 :=  Roll2 + 20;
+                                when others =>
+                                    null;
+                            end case;
+                            if Roll2 > GetSkillLevel(CrewIndex, 2) then
+                                AddMessage("One of your engines is taking damage.", OtherMessage);
+                                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                                    if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = ENGINE then
+                                        Engines.Append(New_Item => I);
+                                    end if;
+                                end loop;
+                                UpdateModule(PlayerShip, Engines.Element(GetRandom(Engines.First_Index, Engines.Last_Index)), 
+                                    "Durability", "-1");
+                            else
+                                AddMessage(To_String(PlayerShip.Crew.Element(CrewIndex).Name) & " has prevented engine damage.",
+                                    OtherMessage);
+                            end if;
+                            GainExp(1, 2, CrewIndex);
+                        end if;
+                    when 6..20 => -- Bad weather
+                        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                            if PlayerShip.Crew.Element(I).Order = Pilot then
+                                CrewIndex := I;
+                                exit;
+                            end if;
+                        end loop;
+                        if CrewIndex > 0 then
                             AddMessage("Sudden bad weather makes your travel takes longer.", OtherMessage);
-                            TimePassed := 60 - GetSkillLevel(PilotIndex, 1);
+                            TimePassed := 60 - GetSkillLevel(CrewIndex, 1);
                             if TimePassed < 1 then
                                 TimePassed := 1;
                             end if;
-                            GainExp(1, 1, PilotIndex);
+                            GainExp(1, 1, CrewIndex);
                             UpdateCargo(PlayerShip, 1, -1);
                             UpdateGame(TimePassed);
                         end if;
