@@ -24,6 +24,7 @@ package Crew is
     package Skills_Container is new Vectors(Positive, Skill_Array);
     type Crew_Orders is (Pilot, Engineer, Gunner, Rest, Repair, Craft,
         Upgrading, Talk, Heal, Clean);
+    type Orders_Array is array(1..9) of Natural;
     type Member_Data is -- Data structure for ship crew member
         record
             Name : Unbounded_String; -- Name of member
@@ -36,6 +37,7 @@ package Crew is
             Order : Crew_Orders; -- Current order for member
             PreviousOrder : Crew_Orders; -- Previous order for member
             OrderTime : Integer; -- Minutes to next check for order result
+            Orders : Orders_Array; -- Priority of orders of memeber
         end record;
 
     procedure GiveOrders(MemberIndex : Positive; GivenOrder: Crew_Orders; ModuleIndex : Natural := 0); -- Change order for selected crew member
