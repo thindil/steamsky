@@ -746,4 +746,16 @@ Price = 2000
 InstallTime = 60
 Size = 1
 Description = Allow craft some tools. More durable version.
+[60]
+Name = Huge bronze hull
+Type = Hull
+Weight = 10000
+Value = 0
+MaxValue = 40
+Durability = 250
+Material = Bronze
+Skill = Engineering
+Price = 20000 
+InstallTime = 300
+Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
 []
