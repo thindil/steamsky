@@ -27,9 +27,9 @@ with Help; use Help;
 
 package body Crew.UI is
 
-    CrewMenu, OrdersMenu : Menu;
+    CrewMenu, OrdersMenu, PrioritiesMenu : Menu;
     MenuWindow, MenuWindow2 : Window;
-    MemberIndex : Positive := 1;
+    MemberIndex, PriorityIndex : Positive := 1;
 
     procedure ShowMemberInfo is
         InfoWindow : Window;
@@ -221,7 +221,7 @@ package body Crew.UI is
 
     procedure ShowOrdersMenu is
         Orders_Items : Item_Array_Access;
-        OrdersAmount : Positive := 1;
+        OrdersAmount : Positive := 2;
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         MenuIndex : Positive := 1;
@@ -371,6 +371,8 @@ package body Crew.UI is
                 MenuIndex := MenuIndex + 1;
             end if;
         end if;
+        Orders_Items.all(MenuIndex) := New_Item("Set orders priorities", "0");
+        MenuIndex := MenuIndex + 1;
         Orders_Items.all(MenuIndex) := New_Item("Quit", "0");
         Orders_Items.all(Orders_Items'Last) := Null_Item;
         OrdersMenu := New_Menu(Orders_Items);
@@ -453,6 +455,44 @@ package body Crew.UI is
         Refresh;
         Refresh(MenuWindow2);
     end ShowOrdersForAll;
+
+    procedure ShowPrioritiesMenu is
+        Orders_Items: constant Item_Array_Access := new Item_Array(Orders_Array'First..(Orders_Array'Last + 2));
+        OrdersNames : constant array (Positive range <>) of Unbounded_String := (To_Unbounded_String("Piloting"), 
+            To_Unbounded_String("Engineering"), To_Unbounded_String("Operating guns"), To_Unbounded_String("Repair ship"), 
+            To_Unbounded_String("Manufacturing"), To_Unbounded_String("Upgrading ship"), To_Unbounded_String("Talking in bases"), 
+            To_Unbounded_String("Healing wounded"), To_Unbounded_String("Cleaning ship"));
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+        OrderPriority : Unbounded_String;
+    begin
+        for I in OrdersNames'Range loop
+            case PlayerShip.Crew.Element(MemberIndex).Orders(I) is
+                when 0 =>
+                    OrderPriority := To_Unbounded_String("None");
+                when 1 =>
+                    OrderPriority := To_Unbounded_String("Normal");
+                when 2 =>
+                    OrderPriority := To_Unbounded_String("Highest");
+                when others =>
+                    null;
+            end case;
+            Orders_Items.all(I) := New_Item(To_String(OrdersNames(I)), To_String(OrderPriority));
+        end loop;
+        Orders_Items.all(Orders_Items'Last - 1) := New_Item("Quit");
+        Orders_Items.all(Orders_Items'Last) := Null_Item;
+        PrioritiesMenu := New_Menu(Orders_Items);
+        Set_Mark(PrioritiesMenu, "");
+        Scale(PrioritiesMenu, MenuHeight, MenuLength);
+        MenuWindow2 := Create(MenuHeight + 2, MenuLength + 2, ((Lines / 3) - (MenuHeight / 2)), ((Columns / 2) - (MenuLength / 2)));
+        Box(MenuWindow2);
+        Set_Window(PrioritiesMenu, MenuWindow2);
+        Set_Sub_Window(PrioritiesMenu, Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
+        Post(PrioritiesMenu);
+        Set_Current(PrioritiesMenu, Orders_Items.all(PriorityIndex));
+        Refresh;
+        Refresh(MenuWindow2);
+    end ShowPrioritiesMenu;
 
     function CrewInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates is
         Result : Driver_Result;
@@ -554,6 +594,10 @@ package body Crew.UI is
                 elsif OrderName = "Dismiss" then
                     DrawGame(Dismiss_Confirm);
                     return Dismiss_Confirm;
+                elsif OrderName = "Set orders priorities" then
+                    DrawGame(Crew_Info);
+                    ShowPrioritiesMenu;
+                    return Orders_Priorities;
                 elsif OrderName /= "Quit" then
                     if Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).MType = GUN then
                         GiveOrders(MemberIndex, Gunner, ModuleIndex);
@@ -625,4 +669,87 @@ package body Crew.UI is
         end case;
         return Giving_Orders;
     end CrewOrdersAllKeys;
+
+    function OrdersPrioritiesKeys(Key : Key_Code) return GameStates is
+        Result : Driver_Result;
+        OptionIndex : Positive := PriorityIndex;
+        NewPriority : Integer := -1;
+        procedure UpdatePriorities(Member : in out Member_Data) is
+        begin
+            Member.Orders(OptionIndex) := NewPriority;
+        end UpdatePriorities;
+    begin
+        case Key is
+            when 56 | KEY_UP => -- Select previous order
+                Result := Driver(PrioritiesMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(PrioritiesMenu, M_Last_Item);
+                end if;
+                if Result = Menu_Ok then
+                    PriorityIndex := Get_Index(Current(PrioritiesMenu));
+                    Refresh(MenuWindow2);
+                end if;
+            when 50 | KEY_DOWN => -- Select next order
+                Result := Driver(PrioritiesMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(PrioritiesMenu, M_First_Item);
+                end if;
+                if Result = Menu_Ok then
+                    PriorityIndex := Get_Index(Current(PrioritiesMenu));
+                    Refresh(MenuWindow2);
+                end if;
+            when 52 | KEY_LEFT => -- Set lower priority
+                NewPriority := PlayerShip.Crew.Element(MemberIndex).Orders(OptionIndex) - 1;
+                if NewPriority > -1 then
+                    DrawGame(Crew_Info);
+                    PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdatePriorities'Access);
+                end if;
+            when 54 | KEY_RIGHT => -- Set higher priority
+                NewPriority := PlayerShip.Crew.Element(MemberIndex).Orders(OptionIndex) + 1;
+                if NewPriority = 1 then
+                    DrawGame(Crew_Info);
+                    PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdatePriorities'Access);
+                elsif NewPriority = 2 then
+                    DrawGame(Crew_Info);
+                    for I in PlayerShip.Crew.Element(MemberIndex).Orders'Range loop
+                        if PlayerShip.Crew.Element(MemberIndex).Orders(I) = 2 then
+                            NewPriority := 1;
+                            OptionIndex := I;
+                            PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdatePriorities'Access);
+                            exit;
+                        end if;
+                    end loop;
+                    NewPriority := 2;
+                    OptionIndex := Get_Index(Current(PrioritiesMenu));
+                    PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdatePriorities'Access);
+                else
+                    NewPriority := -1;
+                end if;
+            when 10 => -- Quit or show hint about setting
+                if OptionIndex > Orders_Array'Last then
+                    DrawGame(Crew_Info);
+                    return Crew_Info;
+                else
+                    ShowDialog("Use Left arrow to lower order priority or Right arrow to raise order priority.");
+                    DrawGame(Crew_Info);
+                    ShowPrioritiesMenu;
+                end if;
+            when others =>
+                Result := Driver(PrioritiesMenu, Key);
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                else
+                    Result := Driver(PrioritiesMenu, M_CLEAR_PATTERN);
+                    Result := Driver(PrioritiesMenu, Key);
+                    if Result = Menu_Ok then
+                        Refresh(MenuWindow2);
+                    end if;
+                end if;
+        end case;
+        if NewPriority > -1 then
+            ShowPrioritiesMenu;
+        end if;
+        return Orders_Priorities;
+    end OrdersPrioritiesKeys;
+
 end Crew.UI;
