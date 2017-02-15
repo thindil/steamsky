@@ -696,6 +696,7 @@ package body Crew.UI is
                 end if;
             when 10 => -- Quit or show hint about setting
                 if OptionIndex > Orders_Array'Last then
+                    PriorityIndex := 1;
                     DrawGame(Crew_Info);
                     return Crew_Info;
                 else
