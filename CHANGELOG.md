@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Attacking different ship than selected
 - Attacking selected part of enemy ship
+- Giving orders for all crew members
 
 ## [0.8] - 2017-02-05
 
