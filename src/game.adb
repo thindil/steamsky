@@ -33,7 +33,7 @@ with Missions; use Missions;
 
 package body Game is
     
-    SaveVersion : constant String := "0.8";
+    SaveVersion : constant String := "0.9";
 
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character) is
         type Rand_Range is range 1..1024;
@@ -123,7 +123,7 @@ package body Game is
         TmpSkills.Append(New_Item => (4, 5, 0));
         PlayerShip.Crew.Prepend(New_Item => (Name => CharName, Gender => Gender,
             Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Talk,
-            PreviousOrder => Rest, OrderTime => 15)); 
+            PreviousOrder => Rest, OrderTime => 15, Orders => (others => 0))); 
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if PlayerShip.Modules.Element(I).Owner > 0 then
                 UpdateModule(PlayerShip, I, "Owner", Positive'Image(PlayerShip.Modules.Element(I).Owner + 1));
@@ -436,6 +436,10 @@ package body Game is
                 RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Skills.Element(J)(3)));
                 Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             end loop;
+            for J in PlayerShip.Crew.Element(I).Orders'Range loop
+                RawValue := To_Unbounded_String(Integer'Image(PlayerShip.Crew.Element(I).Orders(J)));
+                Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            end loop;
         end loop;
         RawValue := To_Unbounded_String(PlayerShip.Missions.Length'Img);
         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -535,6 +539,7 @@ package body Game is
         VisitedFields : Positive;
         BaseMissions : Mission_Container.Vector;
         Finished : Boolean;
+        TmpOrders : Orders_Array;
         function ReadData return Unbounded_String is
             RawData : Unbounded_String := To_Unbounded_String("");
             Char : Character;
@@ -549,6 +554,7 @@ package body Game is
         procedure UpdateMember(Member : in out Member_Data) is
         begin
             Member.Skills := Skills;
+            Member.Orders := TmpOrders;
         end UpdateMember;
         procedure UpdateRecruit(Recruit : in out Recruit_Data) is
         begin
@@ -685,11 +691,15 @@ package body Game is
                 Natural'Value(To_String(ReadData)), Order =>
                 Crew_Orders'Val(Integer'Value(To_String(ReadData))), 
                 PreviousOrder => Crew_Orders'Val(Integer'Value(To_String(ReadData))), 
-                OrderTime => Integer'Value(To_String(ReadData))));
+                OrderTime => Integer'Value(To_String(ReadData)), Orders => 
+                (others => 0)));
             SkillsLength := Positive'Value(To_String(ReadData));
             for J in 1..SkillsLength loop
                 Skills.Append(New_Item => (Natural'Value(To_String(ReadData)),
                     Natural'Value(To_String(ReadData)), Natural'Value(To_String(ReadData))));
+            end loop;
+            for J in TmpOrders'Range loop
+                TmpOrders(J) := Natural'Value(To_String(ReadData));
             end loop;
             ShipCrew.Update_Element(Index => ShipCrew.Last_Index,
                 Process => UpdateMember'Access);

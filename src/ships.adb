@@ -338,7 +338,7 @@ package body Ships is
             end loop;
             ShipCrew.Append(New_Item => (Name => MemberName, Gender => Gender,
                 Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Member.Order,
-                PreviousOrder => Rest, OrderTime => 15));
+                PreviousOrder => Rest, OrderTime => 15, Orders => (others => 0)));
             TmpSkills.Clear;
             for I in ShipModules.First_Index..ShipModules.Last_Index loop
                 if Modules_List.Element(ShipModules.Element(I).ProtoIndex).MType = CABIN and ShipModules.Element(I).Owner = 0 then

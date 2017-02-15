@@ -596,7 +596,7 @@ package body Bases is
         PlayerShip.Crew.Append(New_Item => (Name => Recruit.Name, Gender =>
             Recruit.Gender, Health => 100, Tired => 0, Skills =>
             Recruit.Skills, Hunger => 0, Thirst => 0, Order => Rest,
-            PreviousOrder => Rest, OrderTime => 15)); 
+            PreviousOrder => Rest, OrderTime => 15, Orders => (others => 0))); 
         UpdateCargo(PlayerShip, 1, (0 - Price));
         GainExp(1, 4, TraderIndex);
         GainRep(BaseIndex, 1);
