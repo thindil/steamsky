@@ -225,6 +225,8 @@ begin
                 GameState := CrewOrdersAllKeys(Key);
             when Enemy_Info =>
                 GameState := EnemyInfoKeys(Key);
+            when Orders_Priorities =>
+                GameState := OrdersPrioritiesKeys(Key);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
         end case;

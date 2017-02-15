@@ -26,5 +26,6 @@ package Crew.UI is
     function CrewInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in crew info menu
     function CrewOrdersKeys(Key : Key_Code) return GameStates; -- Handle keys in crew orders menu
     function CrewOrdersAllKeys(Key : Key_Code) return GameStates; -- Handle keys in orders for all crew menu
+    function OrdersPrioritiesKeys(Key : Key_Code) return GameStates; -- Handle keys in crew orders priorities menu
 
 end Crew.UI;
