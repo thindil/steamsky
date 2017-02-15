@@ -667,7 +667,7 @@ package body Crew.UI is
                     end if;
                 end if;
         end case;
-        return Giving_Orders;
+        return Orders_For_All;
     end CrewOrdersAllKeys;
 
     function OrdersPrioritiesKeys(Key : Key_Code) return GameStates is
