@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 - More info about enemy to combat screen
 - Descriptions to ships
 - New random event: engine damage during fly
-- New ship module: huge bronze hull
+- New ship modules: huge bronze hull and advanced huge bronze hull
 
 ### Changed
 - Updated interface
