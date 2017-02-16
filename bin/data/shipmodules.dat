@@ -758,4 +758,16 @@ Skill = Engineering
 Price = 20000 
 InstallTime = 300
 Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+[61]
+Name = Advanced huge bronze hull
+Type = Hull
+Weight = 11000
+Value = 0
+MaxValue = 45
+Durability = 300
+Material = Bronze
+Skill = Engineering
+Price = 22500 
+InstallTime = 320
+Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
 []
