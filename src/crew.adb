@@ -27,7 +27,7 @@ with Maps; use Maps;
 
 package body Crew is
 
-    procedure GiveOrders(MemberIndex : Positive; GivenOrder : Crew_Orders; ModuleIndex : Natural := 0) is
+    procedure GiveOrders(MemberIndex : Positive; GivenOrder : Crew_Orders; ModuleIndex : Natural := 0; CheckPriorities : Boolean := True) is
         NewOrder : Crew_Orders;
         MemberName : constant String := To_String(PlayerShip.Crew.Element(MemberIndex).Name);
         ModuleIndex2 : Natural := 0;
@@ -47,13 +47,13 @@ package body Crew is
         if GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Upgrading or GivenOrder = Talk then
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                 if PlayerShip.Crew.Element(I).Order = GivenOrder then
-                    GiveOrders(I, Rest);
+                    GiveOrders(I, Rest, 0, False);
                     exit;
                 end if;
             end loop;
         elsif GivenOrder = Gunner or GivenOrder = Craft or GivenOrder = Heal then
             if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
-                GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest);
+                GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest, 0, False);
             end if;
         end if;
         if ModuleIndex = 0 and (GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Rest) then
@@ -73,7 +73,7 @@ package body Crew is
                         PlayerShip.Modules.Element(I).Durability > 0 
                     then
                         if PlayerShip.Modules.Element(I).Owner /= 0 then
-                            GiveOrders(PlayerShip.Modules.Element(I).Owner, Rest);
+                            GiveOrders(PlayerShip.Modules.Element(I).Owner, Rest, 0, False);
                         end if;
                         ModuleIndex2 := I;
                         exit;
@@ -152,7 +152,9 @@ package body Crew is
         end case;
         NewOrder := GivenOrder;
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
-        UpdateOrders;
+        if CheckPriorities then
+            UpdateOrders;
+        end if;
     end GiveOrders;
 
     procedure GainExp(Amount : Natural; SkillNumber, CrewIndex : Positive) is
