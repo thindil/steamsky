@@ -40,7 +40,8 @@ package Crew is
             Orders : Orders_Array; -- Priority of orders of memeber
         end record;
 
-    procedure GiveOrders(MemberIndex : Positive; GivenOrder: Crew_Orders; ModuleIndex : Natural := 0); -- Change order for selected crew member
+    procedure GiveOrders(MemberIndex : Positive; GivenOrder: Crew_Orders; 
+        ModuleIndex : Natural := 0; CheckPriorities : Boolean := True); -- Change order for selected crew member
     procedure GainExp(Amount : Natural; SkillNumber, CrewIndex : Positive); -- Gain experience in selected skill.
     function GenerateMemberName(Gender : Character) return Unbounded_String; -- Generate random name for crew member
     procedure Death(MemberIndex : Positive; Reason : Unbounded_String); -- Handle crew member death
