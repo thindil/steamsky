@@ -474,6 +474,10 @@ package body Crew is
                                 end loop;
                             end if;
                             NeedCleaning := False;
+                        when Talk =>
+                            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
+                                GiveOrders(I, Rest);
+                            end if;
                         when others =>
                             null;
                     end case;
