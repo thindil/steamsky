@@ -47,5 +47,6 @@ package Crew is
     procedure UpdateCrew(Minutes : Positive; TiredPoints : Natural); -- Update ship crew
     function GetSkillLevel(MemberIndex, SkillIndex : Positive) return Natural; -- Get level of skill of selected crew member
     procedure DeleteMember(MemberIndex : Positive); -- Delete selected member from crew list
+    procedure UpdateOrders; -- Update crew orders based on their orders priorities
 
 end Crew;

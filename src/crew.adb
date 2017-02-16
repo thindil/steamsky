@@ -23,6 +23,7 @@ with Game; use Game;
 with Items; use Items;
 with Utils; use Utils;
 with Ships.Cargo; use Ships.Cargo;
+with Maps; use Maps;
 
 package body Crew is
 
@@ -151,6 +152,7 @@ package body Crew is
         end case;
         NewOrder := GivenOrder;
         PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateOrder'Access);
+        UpdateOrders;
     end GiveOrders;
 
     procedure GainExp(Amount : Natural; SkillNumber, CrewIndex : Positive) is
@@ -548,5 +550,236 @@ package body Crew is
             end if;
         end loop;
     end DeleteMember;
+
+    procedure UpdateOrders is
+        HavePilot, HaveEngineer, HaveUpgrade, HaveTrader, NeedClean, NeedRepairs, NeedGunners, NeedCrafters, NeedHealer, 
+            CanHeal : Boolean := False;
+        function UpdatePosition(Order : Crew_Orders; MaxPriority : Boolean := True) return Boolean is
+            ModuleIndex, MemberIndex : Natural := 0;
+        begin
+            if MaxPriority then
+                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                    if PlayerShip.Crew.Element(I).Orders(Crew_Orders'Pos(Order) + 1) = 2 and PlayerShip.Crew.Element(I).Order /= Order and
+                        PlayerShip.Crew.Element(I).PreviousOrder /= Order
+                    then
+                        MemberIndex := I;
+                        exit;
+                    end if;
+                end loop;
+            else
+                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                    if PlayerShip.Crew.Element(I).Orders(Crew_Orders'Pos(Order) + 1) = 1 and PlayerShip.Crew.Element(I).Order = Rest and
+                        PlayerShip.Crew.Element(I).PreviousOrder = Rest
+                    then
+                        MemberIndex := I;
+                        exit;
+                    end if;
+                end loop;
+            end if;
+            if MemberIndex = 0 then
+                return False;
+            end if;
+            if Order = Gunner or Order = Craft or Order = Heal then
+                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                    case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                        when GUN =>
+                            if Order = Gunner and PlayerShip.Modules.Element(I).Owner = 0 and PlayerShip.Modules.Element(I).Durability > 0
+                            then
+                                ModuleIndex := I;
+                                exit;
+                            end if;
+                        when ALCHEMY_LAB..GREENHOUSE =>
+                            if Order = Craft and PlayerShip.Modules.Element(I).Owner = 0 and PlayerShip.Modules.Element(I).Durability > 0
+                            then
+                                ModuleIndex := I;
+                                exit;
+                            end if;
+                        when MEDICAL_ROOM =>
+                            if Order = Heal and PlayerShip.Modules.Element(I).Owner = 0 and PlayerShip.Modules.Element(I).Durability > 0
+                            then
+                                ModuleIndex := I;
+                                exit;
+                            end if;
+                        when others =>
+                            null;
+                    end case;
+                end loop;
+                if ModuleIndex = 0 then
+                    return False;
+                end if;
+            elsif Order = Pilot or Order = Engineer then
+                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                    case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                        when COCKPIT =>
+                            if Order = Pilot and PlayerShip.Modules.Element(I).Durability > 0 then
+                                ModuleIndex := I;
+                                exit;
+                            end if;
+                        when ENGINE =>
+                            if Order = Engineer and PlayerShip.Modules.Element(I).Durability > 0 then
+                                ModuleIndex := I;
+                                exit;
+                            end if;
+                        when others =>
+                            null;
+                    end case;
+                end loop;
+                if ModuleIndex = 0 then
+                    return False;
+                end if;
+            end if;
+            GiveOrders(MemberIndex, Order, ModuleIndex);
+            return True;
+        end UpdatePosition;
+    begin
+        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+            case PlayerShip.Crew.Element(I).Order is
+                when Pilot =>
+                    HavePilot := True;
+                when Engineer =>
+                    HaveEngineer := True;
+                when Upgrading =>
+                    HaveUpgrade := True;
+                when Talk =>
+                    HaveTrader := True;
+                when others =>
+                    null;
+            end case;
+            if PlayerShip.Crew.Element(I).Health < 100 then
+                NeedHealer := True;
+            end if;
+        end loop;
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            case Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                when GUN =>
+                    if PlayerShip.Modules.Element(I).Owner = 0 and PlayerShip.Modules.Element(I).Durability > 0 and not NeedGunners then
+                        NeedGunners := True;
+                    end if;
+                when ALCHEMY_LAB..GREENHOUSE =>
+                    if PlayerShip.Modules.Element(I).Current_Value /= 0 and PlayerShip.Modules.Element(I).Owner = 0 and 
+                        PlayerShip.Modules.Element(I).Durability > 0 and not NeedCrafters 
+                    then
+                        NeedCrafters := True;
+                    end if;
+                when CABIN =>
+                    if PlayerShip.Modules.Element(I).Current_Value < PlayerShip.Modules.Element(I).Max_Value and
+                        PlayerShip.Modules.Element(I).Durability > 0
+                    then
+                        NeedClean := True;
+                    end if;
+                when MEDICAL_ROOM =>
+                    if NeedHealer and PlayerShip.Modules.Element(I).Durability > 0 then
+                        for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                            if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines") then
+                                CanHeal := True;
+                                exit;
+                            end if;
+                        end loop;
+                    end if;
+                when others =>
+                    null;
+            end case;
+            if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability and not NeedRepairs then
+                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = 
+                        Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial 
+                    then
+                        NeedRepairs := True;
+                        exit;
+                    end if;
+                end loop;
+            end if;
+        end loop;
+        if not HavePilot then
+            if UpdatePosition(Pilot) then
+                UpdateOrders;
+            end if;
+        end if;
+        if not HaveEngineer then
+            if UpdatePosition(Engineer) then
+                UpdateOrders;
+            end if;
+        end if;
+        if NeedGunners then
+            if UpdatePosition(Gunner) then
+                UpdateOrders;
+            end if;
+        end if;
+        if NeedCrafters then
+            if UpdatePosition(Craft) then
+                UpdateOrders;
+            end if;
+        end if;
+        if not HaveUpgrade and PlayerShip.UpgradeModule > 0 then
+            if UpdatePosition(Upgrading) then
+                UpdateOrders;
+            end if;
+        end if;
+        if not HaveTrader and SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+            if UpdatePosition(Talk) then
+                UpdateOrders;
+            end if;
+        end if;
+        if NeedClean then
+            if UpdatePosition(Clean) then
+                UpdateOrders;
+            end if;
+        end if;
+        if CanHeal then
+            if UpdatePosition(Heal) then
+                UpdateOrders;
+            end if;
+        end if;
+        if NeedRepairs then
+            if UpdatePosition(Repair) then
+                UpdateOrders;
+            end if;
+        end if;
+        if not HavePilot then
+            if UpdatePosition(Pilot, False) then
+                UpdateOrders;
+            end if;
+        end if;
+        if not HaveEngineer then
+            if UpdatePosition(Engineer, False) then
+                UpdateOrders;
+            end if;
+        end if;
+        if NeedGunners then
+            if UpdatePosition(Gunner, False) then
+                UpdateOrders;
+            end if;
+        end if;
+        if NeedCrafters then
+            if UpdatePosition(Craft, False) then
+                UpdateOrders;
+            end if;
+        end if;
+        if not HaveUpgrade and PlayerShip.UpgradeModule > 0 then
+            if UpdatePosition(Upgrading, False) then
+                UpdateOrders;
+            end if;
+        end if;
+        if not HaveTrader and SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+            if UpdatePosition(Talk, False) then
+                UpdateOrders;
+            end if;
+        end if;
+        if NeedClean then
+            if UpdatePosition(Clean, False) then
+                UpdateOrders;
+            end if;
+        end if;
+        if CanHeal then
+            if UpdatePosition(Heal, False) then
+                UpdateOrders;
+            end if;
+        end if;
+        if NeedRepairs then
+            if UpdatePosition(Repair, False) then
+                UpdateOrders;
+            end if;
+        end if;
+    end UpdateOrders;
 
 end Crew;
