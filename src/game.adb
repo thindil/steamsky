@@ -207,6 +207,7 @@ package body Game is
             end if;
             GenerateRecruits(BaseIndex);
             GenerateMissions(BaseIndex);
+            UpdateOrders;
         end if;
         -- Update map cell
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited = False then
