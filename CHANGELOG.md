@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Descriptions to ships
 - New random event: engine damage during fly
 - New ship modules: huge bronze hull and advanced huge bronze hull
+- Option to set orders priorities for crew members
 
 ### Changed
 - Updated interface
@@ -27,7 +28,6 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Attacking different ship than selected
 - Attacking selected part of enemy ship
-- Giving orders for all crew members
 
 ## [0.8] - 2017-02-05
 
