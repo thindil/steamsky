@@ -53,6 +53,8 @@ package body BasesList is
             Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
             Add(Win => InfoWindow, Str => "Type: " & To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
             Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+            Add(Win => InfoWindow, Str => "Owner: " & To_Lower(Bases_Owners'Image(SkyBases(BaseIndex).Owner)));
+            Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
             Add(Win => InfoWindow, Str => "Size: ");
             if SkyBases(BaseIndex).Population < 150 then
                 Add(Win => InfoWindow, Str => "small");
@@ -61,12 +63,12 @@ package body BasesList is
             else
                 Add(Win => InfoWindow, Str => "large");
             end if;
-            Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
             Add(Win => InfoWindow, Str => "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
             TimeDiff := 30 - ((GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
                 (SkyBases(BaseIndex).RecruitDate.Day + ((30 * SkyBases(BaseIndex).RecruitDate.Month) * 
                 SkyBases(BaseIndex).RecruitDate.Year)));
-            Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
             if TimeDiff > 0 then
                 Add(Win => InfoWindow, Str => "New recruits available in" & Natural'Image(TimeDiff) & " days.");
             else
@@ -75,7 +77,7 @@ package body BasesList is
             TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
                 (SkyBases(BaseIndex).AskedForEvents.Day + ((30 * SkyBases(BaseIndex).AskedForEvents.Month) * 
                 SkyBases(BaseIndex).AskedForEvents.Year));
-            Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
             if TimeDiff < 7 then
                 Add(Win => InfoWindow, Str => "You asked for events" & Natural'Image(TimeDiff) & " days ago.");
             else
@@ -84,13 +86,13 @@ package body BasesList is
             TimeDiff := 7 - ((GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
                 (SkyBases(BaseIndex).MissionsDate.Day + ((30 * SkyBases(BaseIndex).MissionsDate.Month) * 
                 SkyBases(BaseIndex).MissionsDate.Year)));
-            Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => 7, Column => 0);
             if TimeDiff > 0 then
                 Add(Win => InfoWindow, Str => "New missions available in" & Natural'Image(TimeDiff) & " days.");
             else
                 Add(Win => InfoWindow, Str => "New missions available now.");
             end if;
-            Move_Cursor(Win => InfoWindow, Line => 7, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => 8, Column => 0);
             Add(Win => InfoWindow, Str => "Reputation: ");
             case SkyBases(BaseIndex).Reputation(1) is
                 when -100..-75 =>
@@ -114,7 +116,7 @@ package body BasesList is
                 when others =>
                     null;
             end case;
-            CurrentLine := 8;
+            CurrentLine := 9;
         else
             Add(Win => InfoWindow, Str => "Not visited yet.");
         end if;
