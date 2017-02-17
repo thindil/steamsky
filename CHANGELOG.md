@@ -17,6 +17,8 @@ All notable changes to this project will be documented in this file.
 - New random event: engine damage during fly
 - New ship modules: huge bronze hull and advanced huge bronze hull
 - Option to set orders priorities for crew members
+- Send on break crew member which have set order to talk in bases when
+  outside base
 
 ### Changed
 - Updated interface
