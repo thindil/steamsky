@@ -30,6 +30,7 @@ with ShipModules; use ShipModules;
 with Config; use Config;
 with Statistics; use Statistics;
 with Missions; use Missions;
+with Utils; use Utils;
 
 package body Game is
     
@@ -48,11 +49,12 @@ package body Game is
         PosX, PosY : Rand_Range;
         RandomBase : Rand_Range;
         ValidLocation : Boolean;
-        TempX, TempY : Integer;
+        TempX, TempY, BaseReputation : Integer;
         TmpSkills : Skills_Container.Vector;
         TmpRecruits : Recruit_Container.Vector;
         TmpMissions : Mission_Container.Vector;
         CabinAssigned : Boolean := False;
+        BaseOwner : Bases_Owners;
     begin
         -- Save new game configuration
         NewGameSettings := (PlayerName => CharName, PlayerGender => Gender, ShipName => ShipName);
@@ -102,14 +104,54 @@ package body Game is
                 exit when ValidLocation;
             end loop;
             SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I), Visited => False, EventIndex => 0, MissionIndex => 0);
+            case GetRandom(1, 100) is
+                when 1..94 =>
+                    BaseOwner := Poleis;
+                    BaseReputation := 0;
+                when 95 =>
+                    BaseOwner := Independent;
+                    case GetRandom(1, 100) is
+                        when 1..95 =>
+                            BaseReputation := 0;
+                        when 96 =>
+                            BaseReputation := -1;
+                        when 97 =>
+                            BaseReputation := -2;
+                        when 98 =>
+                            BaseReputation := -3;
+                        when 99 =>
+                            BaseReputation := 1;
+                        when 100 =>
+                            BaseReputation := 2;
+                        when others =>
+                            null;
+                    end case;
+                when 96 =>
+                    BaseOwner := Abandoned;
+                    BaseReputation := 0;
+                when 97 =>
+                    BaseOwner := Pirates;
+                    BaseReputation := -10;
+                when 98 =>
+                    BaseOwner := Undead;
+                    BaseReputation := -100;
+                when 99 =>
+                    BaseOwner := Drones;
+                    BaseReputation := -100;
+                when 100 =>
+                    BaseOwner := Inquisition;
+                    BaseReputation := -50;
+                when others =>
+                    null;
+            end case;
             SkyBases(Integer(I)) := (Name => GenerateBaseName, Visited => (0, 0, 0, 0, 0), 
                 SkyX => Integer(PosX), SkyY => Integer(PosY), BaseType =>
                 Bases_Types'Val(Rand_Base.Random(Generator2)), Population =>
                 Natural(Rand_Population.Random(Generator4)), RecruitDate => 
                 (0, 0, 0, 0, 0), Recruits => TmpRecruits, Known => False,
                 AskedForBases => False, AskedForEvents => (0, 0, 0, 0, 0),
-                Reputation => (0, 0), MissionsDate => (0, 0, 0, 0, 0), Missions
-                => TmpMissions);
+                Reputation => (BaseReputation, 0), MissionsDate => (0, 0, 0, 0, 0), Missions
+                => TmpMissions, Owner => BaseOwner);
         end loop;
         -- Place player ship in random large base
         loop
@@ -357,6 +399,8 @@ package body Game is
             else
                 Put(SaveGame, "N;");
             end if;
+            RawValue := To_Unbounded_String(Integer'Image(Bases_Owners'Pos(SkyBases(I).Owner)));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
         end loop;
         -- Save player ship
         Put(SaveGame, To_String(PlayerShip.Name) & ";");
@@ -590,7 +634,7 @@ package body Game is
                 BaseType => Industrial, Population => 0, RecruitDate => (0, 0, 0, 0, 0), 
                 Recruits => BaseRecruits, Known => False, AskedForBases => False, 
                 AskedForEvents => (0, 0, 0, 0, 0), Reputation => (0, 0),
-                MissionsDate => (0, 0, 0, 0,0), Missions => BaseMissions);
+                MissionsDate => (0, 0, 0, 0,0), Missions => BaseMissions, Owner => Poleis);
             SkyBases(I).Visited.Year := Natural'Value(To_String(ReadData));
             if SkyBases(I).Visited.Year > 0 then
                 SkyBases(I).Visited.Month := Natural'Value(To_String(ReadData));
@@ -649,6 +693,7 @@ package body Game is
             if ReadData = To_Unbounded_String("Y") then
                 SkyBases(I).Known := True;
             end if;
+            SkyBases(I).Owner := Bases_Owners'Val(Integer'Value(To_String(ReadData)));
             SkyMap(SkyBases(I).SkyX, SkyBases(I).SkyY).BaseIndex := I;
         end loop;
         -- Load player ship
