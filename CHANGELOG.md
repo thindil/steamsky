@@ -15,7 +15,8 @@ All notable changes to this project will be documented in this file.
 - More info about enemy to combat screen
 - Descriptions to ships
 - New random event: engine damage during fly
-- New ship modules: huge bronze hull and advanced huge bronze hull
+- New ship modules: huge bronze hull, advanced huge bronze hull and
+  huge bronze engine
 - Option to set orders priorities for crew members
 - Send on break crew member which have set order to talk in bases when
   outside base
