@@ -770,4 +770,17 @@ Skill = Engineering
 Price = 22500 
 InstallTime = 320
 Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+[62]
+Name = Huge bronze engine
+Type = Engine
+Weight = 5000
+Value = 10
+MaxValue = 25000
+Durability = 250
+Material = Bronze
+Skill = Engineering
+Price = 30000
+InstallTime = 250
+Size = 4
+Description = Huge engine made of bronze. Each ship needs at least one engine to fly.
 []
