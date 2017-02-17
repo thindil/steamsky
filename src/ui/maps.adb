@@ -133,7 +133,7 @@ package body Maps is
         BaseIndex := SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).BaseIndex;
         if BaseIndex > 0 then
             if SkyBases(BaseIndex).Visited.Year > 0 then
-                WindowHeight := WindowHeight + 4;
+                WindowHeight := WindowHeight + 5;
             elsif SkyBases(BaseIndex).Known then
                 WindowHeight := WindowHeight + 2;
             end if;
@@ -187,7 +187,9 @@ package body Maps is
                 else
                     Add(Win => InfoWindow, Str => "large");
                 end if;
-                CurrentLine := 7;
+                Move_Cursor(Win => InfoWindow, Line => 6, Column => 2);
+                Add(Win => InfoWindow, Str => To_Lower(Bases_Owners'Image(SkyBases(BaseIndex).Owner)));
+                CurrentLine := 8;
             end if;
         end if;
         if EventIndex > 0 and MissionIndex = 0 then
