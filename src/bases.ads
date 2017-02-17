@@ -33,6 +33,7 @@ package Bases is
         end record;
     package Recruit_Container is new Vectors(Positive, Recruit_Data);
     type Reputation_Array is array (1..2) of Integer; -- Data structure for reputation, 1 = level, 2 = points to next level
+    type Bases_Owners is (Poleis, Independent, Abandoned, Pirates, Undead, Drones, Inquisition);
     type BaseRecord is -- Data structure for bases
         record
             Name : Unbounded_String; -- Base name
@@ -49,6 +50,7 @@ package Bases is
             Reputation : Reputation_Array; -- Reputation level and progress of player
             MissionsDate : Date_Record; -- Time when missions was generated
             Missions : Mission_Container.Vector; -- List of available missions
+            Owner : Bases_Owners; -- Owner of base
         end record;
     SkyBases : array (1..1024) of BaseRecord; -- List of sky bases
     procedure GainRep(BaseIndex : Positive; Points : Integer); -- Gain reputation in selected base
