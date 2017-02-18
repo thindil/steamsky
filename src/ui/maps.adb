@@ -133,7 +133,7 @@ package body Maps is
         BaseIndex := SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).BaseIndex;
         if BaseIndex > 0 then
             if SkyBases(BaseIndex).Visited.Year > 0 then
-                WindowHeight := WindowHeight + 5;
+                WindowHeight := WindowHeight + 6;
             elsif SkyBases(BaseIndex).Known then
                 WindowHeight := WindowHeight + 2;
             end if;
@@ -189,7 +189,30 @@ package body Maps is
                 end if;
                 Move_Cursor(Win => InfoWindow, Line => 6, Column => 2);
                 Add(Win => InfoWindow, Str => To_Lower(Bases_Owners'Image(SkyBases(BaseIndex).Owner)));
-                CurrentLine := 8;
+                Move_Cursor(Win => InfoWindow, Line => 7, Column => 2);
+                case SkyBases(BaseIndex).Reputation(1) is
+                    when -100..-75 =>
+                        Add(Win => InfoWindow, Str => "hated");
+                    when -74..-50 =>
+                        Add(Win => InfoWindow, Str => "outlaw");
+                    when -49..-25 =>
+                        Add(Win => InfoWindow, Str => "hostile");
+                    when -24..-1 =>
+                        Add(Win => InfoWindow, Str => "unfriendly");
+                    when 0 =>
+                        Add(Win => InfoWindow, Str => "unknown");
+                    when 1..25 =>
+                        Add(Win => InfoWindow, Str => "visitor");
+                    when 26..50 =>
+                        Add(Win => InfoWindow, Str => "trader");
+                    when 51..75 =>
+                        Add(Win => InfoWindow, Str => "friend");
+                    when 76..100 =>
+                        Add(Win => InfoWindow, Str => "well known");
+                    when others =>
+                        null;
+                end case;
+                CurrentLine := 9;
             end if;
         end if;
         if EventIndex > 0 and MissionIndex = 0 then
