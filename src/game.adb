@@ -156,7 +156,7 @@ package body Game is
         -- Place player ship in random large base
         loop
             RandomBase := Rand_Int.Random(Generator);
-            exit when SkyBases(Integer(RandomBase)).Population > 299;
+            exit when SkyBases(Integer(RandomBase)).Population > 299 and SkyBases(Integer(RandomBase)).Owner = Poleis;
         end loop;
         -- Create player ship
         PlayerShip := CreateShip(1, ShipName, SkyBases(Integer(RandomBase)).SkyX,
