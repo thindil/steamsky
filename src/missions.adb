@@ -42,7 +42,7 @@ package body Missions is
     begin
         TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).MissionsDate.Day + 
             ((30 * SkyBases(BaseIndex).MissionsDate.Month) * SkyBases(BaseIndex).MissionsDate.Year));
-        if TimeDiff < 7 then
+        if TimeDiff < 7 or SkyBases(BaseIndex).Owner = Abandoned then
             return;
         end if;
         if SkyBases(BaseIndex).Population < 150 then
@@ -86,13 +86,15 @@ package body Missions is
             MaxY := 1024;
         end if;
         for I in SkyBases'Range loop
-            if I /= BaseIndex and SkyBases(I).SkyX in MinX..MaxX and SkyBases(I).SkyY in MinY..MaxY then
+            if I /= BaseIndex and SkyBases(I).SkyX in MinX..MaxX and SkyBases(I).SkyY in MinY..MaxY and SkyBases(I).Owner /= Abandoned 
+            then
                 BasesInRange.Append(New_Item => I);
             end if;
         end loop;
         while MissionsAmount > Positive(BasesInRange.Length) loop
             TmpBaseIndex := GetRandom(1, 1024);
-            if BasesInRange.Find_Index(Item => TmpBaseIndex) = Positive_Container.No_Index then
+            if BasesInRange.Find_Index(Item => TmpBaseIndex) = Positive_Container.No_Index and SkyBases(TmpBaseIndex).Owner /= Abandoned 
+            then
                 BasesInRange.Append(New_Item => TmpBaseIndex);
             end if;
         end loop;
