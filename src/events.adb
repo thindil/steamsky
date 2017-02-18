@@ -142,7 +142,7 @@ package body Events is
                         return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
                 end case;
             else
-                if PlayerShip.Speed /= DOCKED then
+                if PlayerShip.Speed /= DOCKED and SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner /= Abandoned then
                     if Roll = 21 and (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner = Drones or 
                         SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner = Undead)
                     then
