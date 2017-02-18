@@ -796,7 +796,8 @@ package body Bases is
                     TmpBaseIndex := GetRandom(1, 1024);
                     EventX := SkyBases(TmpBaseIndex).SkyX;
                     EventY := SkyBases(TmpBaseIndex).SkyY;
-                    exit when EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY and SkyMap(EventX, EventY).EventIndex = 0;
+                    exit when EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY and SkyMap(EventX, EventY).EventIndex = 0 and
+                        SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /= Abandoned;
                 end if;
             end loop;
             DiffX := abs(PlayerShip.SkyX - EventX);
