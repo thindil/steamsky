@@ -812,7 +812,9 @@ package body Bases is
                             Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                     end if;
                 when Disease =>
-                    if SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
+                    if SkyBases(SkyMap(EventX, EventY).BaseIndex).Known and (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /= Drones and
+                        SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /= Undead)
+                    then
                         Events_List.Append(New_Item => (Disease, EventX, EventY, GetRandom(10080, 12000), 1));
                     end if;
                 when others =>
