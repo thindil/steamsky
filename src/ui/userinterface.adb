@@ -251,7 +251,7 @@ package body UserInterface is
         if PlayerShip.Speed = DOCKED then
             OrdersAmount := 3;
             MenuIndex := 2;
-            if HaveTrader then
+            if HaveTrader and SkyBases(BaseIndex).Owner /= Abandoned then
                 OrdersAmount := OrdersAmount + 1;
                 for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
                     if (PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex) or
@@ -312,7 +312,7 @@ package body UserInterface is
             end if;
             Orders_Items := new Item_Array(1..OrdersAmount);
             Orders_Items.all(1) := New_Item("Undock");
-            if HaveTrader then
+            if HaveTrader and SkyBases(BaseIndex).Owner /= Abandoned then
                 for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
                     if (PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex) or
                         (PlayerShip.Missions.Element(I).TargetX = PlayerShip.SkyX and PlayerShip.Missions.Element(I).TargetY = 
