@@ -783,4 +783,17 @@ Price = 30000
 InstallTime = 250
 Size = 4
 Description = Huge engine made of bronze. Each ship needs at least one engine to fly.
+[63]
+Name = Advanced huge bronze engine
+Type = Engine
+Weight = 7500
+Value = 11
+MaxValue = 37000
+Durability = 250
+Material = Bronze
+Skill = Engineering
+Price = 35000
+InstallTime = 270
+Size = 4
+Description = Updated version of huge engine made of bronze. Each ship needs at least one engine to fly.
 []
