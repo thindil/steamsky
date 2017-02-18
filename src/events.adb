@@ -143,6 +143,11 @@ package body Events is
                 end case;
             else
                 if PlayerShip.Speed /= DOCKED then
+                    if Roll = 21 and (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner = Drones or 
+                        SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner = Undead)
+                    then
+                        Roll := 22;
+                    end if;
                     case Roll is
                         when 1..20 => -- Base is attacked
                             Events_List.Append(New_Item => (AttackOnBase, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(60, 90), 
