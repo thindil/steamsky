@@ -65,32 +65,44 @@ package body BasesList is
             end if;
             Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
             Add(Win => InfoWindow, Str => "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
-            TimeDiff := 30 - ((GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
-                (SkyBases(BaseIndex).RecruitDate.Day + ((30 * SkyBases(BaseIndex).RecruitDate.Month) * 
-                SkyBases(BaseIndex).RecruitDate.Year)));
             Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
-            if TimeDiff > 0 then
-                Add(Win => InfoWindow, Str => "New recruits available in" & Natural'Image(TimeDiff) & " days.");
+            if SkyBases(BaseIndex).Owner /= Abandoned and SkyBases(BaseIndex).Reputation(1) > -25 then
+                TimeDiff := 30 - ((GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+                    (SkyBases(BaseIndex).RecruitDate.Day + ((30 * SkyBases(BaseIndex).RecruitDate.Month) * 
+                    SkyBases(BaseIndex).RecruitDate.Year)));
+                if TimeDiff > 0 then
+                    Add(Win => InfoWindow, Str => "New recruits available in" & Natural'Image(TimeDiff) & " days.");
+                else
+                    Add(Win => InfoWindow, Str => "New recruits available now.");
+                end if;
             else
-                Add(Win => InfoWindow, Str => "New recruits available now.");
+                Add(Win => InfoWindow, Str => "You can't recruit crew members on this base.");
             end if;
-            TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
-                (SkyBases(BaseIndex).AskedForEvents.Day + ((30 * SkyBases(BaseIndex).AskedForEvents.Month) * 
-                SkyBases(BaseIndex).AskedForEvents.Year));
             Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
-            if TimeDiff < 7 then
-                Add(Win => InfoWindow, Str => "You asked for events" & Natural'Image(TimeDiff) & " days ago.");
+            if SkyBases(BaseIndex).Owner /= Abandoned and SkyBases(BaseIndex).Reputation(1) > -25 then
+                TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+                    (SkyBases(BaseIndex).AskedForEvents.Day + ((30 * SkyBases(BaseIndex).AskedForEvents.Month) * 
+                    SkyBases(BaseIndex).AskedForEvents.Year));
+                if TimeDiff < 7 then
+                    Add(Win => InfoWindow, Str => "You asked for events" & Natural'Image(TimeDiff) & " days ago.");
+                else
+                    Add(Win => InfoWindow, Str => "You can ask for events again.");
+                end if;
             else
-                Add(Win => InfoWindow, Str => "You can ask for events again.");
+                Add(Win => InfoWindow, Str => "You can't ask for events in this base.");
             end if;
-            TimeDiff := 7 - ((GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
-                (SkyBases(BaseIndex).MissionsDate.Day + ((30 * SkyBases(BaseIndex).MissionsDate.Month) * 
-                SkyBases(BaseIndex).MissionsDate.Year)));
             Move_Cursor(Win => InfoWindow, Line => 7, Column => 0);
-            if TimeDiff > 0 then
-                Add(Win => InfoWindow, Str => "New missions available in" & Natural'Image(TimeDiff) & " days.");
+            if SkyBases(BaseIndex).Owner /= Abandoned and SkyBases(BaseIndex).Reputation(1) > -1 then
+                TimeDiff := 7 - ((GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+                    (SkyBases(BaseIndex).MissionsDate.Day + ((30 * SkyBases(BaseIndex).MissionsDate.Month) * 
+                    SkyBases(BaseIndex).MissionsDate.Year)));
+                if TimeDiff > 0 then
+                    Add(Win => InfoWindow, Str => "New missions available in" & Natural'Image(TimeDiff) & " days.");
+                else
+                    Add(Win => InfoWindow, Str => "New missions available now.");
+                end if;
             else
-                Add(Win => InfoWindow, Str => "New missions available now.");
+                Add(Win => InfoWindow, Str => "You can't take missions in this base.");
             end if;
             Move_Cursor(Win => InfoWindow, Line => 8, Column => 0);
             Add(Win => InfoWindow, Str => "Reputation: ");
