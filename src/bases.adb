@@ -492,7 +492,7 @@ package body Bases is
     begin
         TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
             (SkyBases(BaseIndex).RecruitDate.Day + ((30 * SkyBases(BaseIndex).RecruitDate.Month) * SkyBases(BaseIndex).RecruitDate.Year));
-        if TimeDiff < 30 then
+        if TimeDiff < 30 or SkyBases(BaseIndex).Owner = Abandoned then
             return;
         end if;
         Rand_Recruits.Reset(Generator);
