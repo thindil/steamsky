@@ -304,4 +304,16 @@ LootMax = 240
 Perception = 15
 Cargo = 2000..2200x1, 150..220x2, 400..500x3, 400..600x20, 150..250x5, 20..50x13
 Description = Advanced version of standard flying vessel of inquisition.
+[27]
+Name = Huge pirate ship
+Modules = 60, 26, 62, 62 , 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 33, 39, 33, 39, 33, 39, 33
+Accuracy = 40
+Enemy = Yes
+CombatAI = Disarmer
+Evasion = 40
+LootMin = 500
+LootMax = 1000
+Perception = 40
+Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13
+Description = Huge, well armored pirate ship. As many pirates they prefer to dismarm enemies first.
 []
