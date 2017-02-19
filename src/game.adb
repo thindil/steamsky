@@ -39,13 +39,10 @@ package body Game is
     procedure NewGame(CharName, ShipName : Unbounded_String; Gender : Character) is
         type Rand_Range is range 1..1024;
         type Bases_Range is range 0..3;
-        type Population_Range is range 10..500;
         package Rand_Int is new Discrete_Random(Rand_Range);
         package Rand_Base is new Discrete_Random(Bases_Range);
-        package Rand_Population is new Discrete_Random(Population_Range);
         Generator : Rand_Int.Generator;
         Generator2 : Rand_Base.Generator;
-        Generator4 : Rand_Population.Generator;
         PosX, PosY : Rand_Range;
         RandomBase : Rand_Range;
         ValidLocation : Boolean;
@@ -55,6 +52,7 @@ package body Game is
         TmpMissions : Mission_Container.Vector;
         CabinAssigned : Boolean := False;
         BaseOwner : Bases_Owners;
+        BasePopulation : Natural;
     begin
         -- Save new game configuration
         NewGameSettings := (PlayerName => CharName, PlayerGender => Gender, ShipName => ShipName);
@@ -66,7 +64,6 @@ package body Game is
         -- Generate world
         Rand_Int.Reset(Generator);
         Rand_Base.Reset(Generator2);
-        Rand_Population.Reset(Generator4);
         SkyMap := (others => (others => (BaseIndex => 0, Visited => False, EventIndex => 0, MissionIndex => 0)));
         for I in Rand_Range loop
             loop
@@ -104,6 +101,7 @@ package body Game is
                 exit when ValidLocation;
             end loop;
             SkyMap(Integer(PosX), Integer(PosY)) := (BaseIndex => Integer(I), Visited => False, EventIndex => 0, MissionIndex => 0);
+            BasePopulation := GetRandom(10, 500);
             case GetRandom(1, 100) is
                 when 1..94 =>
                     BaseOwner := Poleis;
@@ -129,6 +127,7 @@ package body Game is
                 when 96 =>
                     BaseOwner := Abandoned;
                     BaseReputation := 0;
+                    BasePopulation := 0;
                 when 97 =>
                     BaseOwner := Pirates;
                     BaseReputation := -10;
@@ -146,9 +145,8 @@ package body Game is
             end case;
             SkyBases(Integer(I)) := (Name => GenerateBaseName, Visited => (0, 0, 0, 0, 0), 
                 SkyX => Integer(PosX), SkyY => Integer(PosY), BaseType =>
-                Bases_Types'Val(Rand_Base.Random(Generator2)), Population =>
-                Natural(Rand_Population.Random(Generator4)), RecruitDate => 
-                (0, 0, 0, 0, 0), Recruits => TmpRecruits, Known => False,
+                Bases_Types'Val(Rand_Base.Random(Generator2)), Population => BasePopulation,
+                RecruitDate => (0, 0, 0, 0, 0), Recruits => TmpRecruits, Known => False,
                 AskedForBases => False, AskedForEvents => (0, 0, 0, 0, 0),
                 Reputation => (BaseReputation, 0), MissionsDate => (0, 0, 0, 0, 0), Missions
                 => TmpMissions, Owner => BaseOwner);
