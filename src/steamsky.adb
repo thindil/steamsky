@@ -227,7 +227,7 @@ begin
                 GameState := EnemyInfoKeys(Key);
             when Orders_Priorities =>
                 GameState := OrdersPrioritiesKeys(Key);
-            when BasesList_Types | BasesList_Statuses =>
+            when BasesList_Types | BasesList_Statuses | BasesList_Owners =>
                 GameState := BasesOptionsKeys(Key, GameState);
             when others =>
                 GameState := GameMenuKeys(GameState, Key);
