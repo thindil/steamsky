@@ -33,7 +33,7 @@ package Bases is
         end record;
     package Recruit_Container is new Vectors(Positive, Recruit_Data);
     type Reputation_Array is array (1..2) of Integer; -- Data structure for reputation, 1 = level, 2 = points to next level
-    type Bases_Owners is (Poleis, Independent, Abandoned, Pirates, Undead, Drones, Inquisition);
+    type Bases_Owners is (Poleis, Independent, Abandoned, Pirates, Undead, Drones, Inquisition, Any);
     type BaseRecord is -- Data structure for bases
         record
             Name : Unbounded_String; -- Base name
