@@ -717,6 +717,7 @@ package body Bases is
         package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
         Enemies : Positive_Container.Vector;
         PlayerValue : Natural := 0;
+        Attempts : Natural;
     begin
         TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).AskedForEvents.Day + ((30 *
             SkyBases(BaseIndex).AskedForEvents.Month) * SkyBases(BaseIndex).AskedForEvents.Year));
@@ -784,8 +785,9 @@ package body Bases is
         for I in 1..EventsAmount loop
             loop
                 Event := Events_Types'Val(GetRandom(1, 4));
-                exit when Event = EnemyShip or Event = AttackOnBase or Event = Disease;
+                exit when Event /= FullDocks;
             end loop;
+            Attempts := 10;
             loop
                 if Event = EnemyShip then
                     EventX := GetRandom(MinX, MaxX);
@@ -796,8 +798,30 @@ package body Bases is
                     TmpBaseIndex := GetRandom(1, 1024);
                     EventX := SkyBases(TmpBaseIndex).SkyX;
                     EventY := SkyBases(TmpBaseIndex).SkyY;
-                    exit when EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY and SkyMap(EventX, EventY).EventIndex = 0 and
-                        SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /= Abandoned;
+                    Attempts := Attempts - 1;
+                    if Attempts = 0 then
+                        Event := EnemyShip;
+                        loop
+                            EventX := GetRandom(MinX, MaxX);
+                            EventY := GetRandom(MinY, MaxY);
+                            exit when SkyMap(EventX, EventY).BaseIndex = 0 and EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY and 
+                                SkyMap(EventX, EventY).EventIndex = 0;
+                        end loop;
+                        exit;
+                    end if;
+                    if Event = AttackOnBase and (EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY and 
+                        SkyMap(EventX, EventY).EventIndex = 0 and SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /= Abandoned and 
+                        SkyBases(SkyMap(EventX, EventY).BaseIndex).Known) 
+                    then
+                        exit;
+                    end if;
+                    if Event = Disease and (EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY and 
+                        SkyMap(EventX, EventY).EventIndex = 0 and (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /= Abandoned or
+                        SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /= Drones or 
+                        SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /= Undead) and SkyBases(SkyMap(EventX, EventY).BaseIndex).Known)
+                    then
+                        exit;
+                    end if;
                 end if;
             end loop;
             DiffX := abs(PlayerShip.SkyX - EventX);
@@ -808,16 +832,10 @@ package body Bases is
                     Events_List.Append(New_Item => (EnemyShip, EventX, EventY, GetRandom(EventTime, EventTime + 60), 
                         Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                 when AttackOnBase =>
-                    if SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
-                        Events_List.Append(New_Item => (AttackOnBase, EventX, EventY, GetRandom(EventTime, EventTime + 120),
-                            Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
-                    end if;
+                    Events_List.Append(New_Item => (AttackOnBase, EventX, EventY, GetRandom(EventTime, EventTime + 120),
+                        Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                 when Disease =>
-                    if SkyBases(SkyMap(EventX, EventY).BaseIndex).Known and (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /= Drones and
-                        SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /= Undead)
-                    then
-                        Events_List.Append(New_Item => (Disease, EventX, EventY, GetRandom(10080, 12000), 1));
-                    end if;
+                    Events_List.Append(New_Item => (Disease, EventX, EventY, GetRandom(10080, 12000), 1));
                 when others =>
                     null;
             end case;
