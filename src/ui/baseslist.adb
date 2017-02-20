@@ -28,10 +28,10 @@ with Help; use Help;
 
 package body BasesList is
 
-    BasesMenu : Menu;
+    BasesMenu, OptionsMenu : Menu;
     BasesType : Bases_Types := Any;
     BasesStatus : Positive := 1;
-    MenuWindow : Window;
+    MenuWindow, MenuWindow2 : Window;
     CurrentMenuIndex : Positive := 1;
 
     procedure ShowBaseInfo is
@@ -194,9 +194,10 @@ package body BasesList is
             Bases_Items.all(I) := Null_Item;
         end loop;
         Move_Cursor(Line => 2, Column => 5);
-        Add(Str => "Types: " & To_Lower(Bases_Types'Image(BasesType)));
+        Add(Str => "F2 Type: " & To_Lower(Bases_Types'Image(BasesType)));
+        Change_Attributes(Line => 2, Column => 5, Count => 2, Color => 1);
         Move_Cursor(Line => 2, Column => 30);
-        Add(Str => "Status: ");
+        Add(Str => "F3 Status: ");
         case BasesStatus is
             when 1 =>
                 Add(Str => "any");
@@ -207,6 +208,7 @@ package body BasesList is
             when others =>
                 null;
         end case;
+        Change_Attributes(Line => 2, Column => 30, Count => 2, Color => 1);
         if Bases_Items.all(1) /= Null_Item then
             BasesMenu := New_Menu(Bases_Items);
             Set_Options(BasesMenu, (Show_Descriptions => False, others => True));
@@ -226,6 +228,40 @@ package body BasesList is
             Refresh;
         end if;
     end ShowBasesList;
+
+    procedure ShowBasesOptions(CurrentState : GameStates) is
+        Options_Items : Item_Array_Access;
+        MenuIndex : Positive;
+        MenuHeight : Line_Position;
+        MenuLength : Column_Position;
+    begin
+        if CurrentState = BasesList_Types then
+            Options_Items := new Item_Array(1..(Bases_Types'Pos(Bases_Types'Last) + 3));
+            for I in Bases_Types loop
+                Options_Items.all(Bases_Types'Pos(I) + 1) := New_Item(To_Lower(Bases_Types'Image(I)));
+            end loop;
+            MenuIndex := Bases_Types'Pos(Bases_Types'Last) + 2;
+        else
+            Options_Items := new Item_Array(1..5);
+            Options_Items.all(1) := New_Item("any");
+            Options_Items.all(2) := New_Item("only visited");
+            Options_Items.all(3) := New_Item("only not visited");
+            MenuIndex := 4;
+        end if;
+        Options_Items.all(MenuIndex) := New_Item("quit");
+        MenuIndex := MenuIndex + 1;
+        Options_Items.all(MenuIndex) := Null_Item;
+        OptionsMenu := New_Menu(Options_Items);
+        Set_Mark(OptionsMenu, "");
+        Scale(OptionsMenu, MenuHeight, MenuLength);
+        MenuWindow2 := Create(MenuHeight + 2, MenuLength + 2, ((Lines / 3) - (MenuHeight / 2)), ((Columns / 2) - (MenuLength / 2)));
+        Box(MenuWindow2);
+        Set_Window(OptionsMenu, MenuWindow2);
+        Set_Sub_Window(OptionsMenu, Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
+        Post(OptionsMenu);
+        Refresh(MenuWindow2);
+        Refresh;
+    end ShowBasesOptions;
 
     function BasesListKeys(Key : Key_Code) return GameStates is
         Result : Driver_Result;
@@ -279,27 +315,12 @@ package body BasesList is
                     Result := Driver(BasesMenu, M_BACK_PATTERN);
                 when KEY_DC => -- Clear whole searching string
                     Result := Driver(BasesMenu, M_CLEAR_PATTERN);
-                when KEY_RIGHT => -- Change bases type
-                    if BasesType = Bases_Types'Last then
-                        BasesType := Bases_Types'First;
-                    else
-                        BasesType := Bases_Types'Val(Bases_Types'Pos(BasesType) + 1);
-                    end if;
-                    CurrentMenuIndex := 1;
-                    Post(BasesMenu, False);
-                    Delete(BasesMenu);
-                    DrawGame(Bases_List);
-                    return Bases_List;
-                when KEY_LEFT => -- Change bases status
-                    BasesStatus := BasesStatus + 1;
-                    if BasesStatus > 3 then
-                        BasesStatus := 1;
-                    end if;
-                    CurrentMenuIndex := 1;
-                    Post(BasesMenu, False);
-                    Delete(BasesMenu);
-                    DrawGame(Bases_List);
-                    return Bases_List;
+                when KEY_F2 => -- Show bases types menu
+                    ShowBasesOptions(BasesList_Types);
+                    return BasesList_Types;
+                when KEY_F3 => -- Show bases statuses menu
+                    ShowBasesOptions(BasesList_Statuses);
+                    return BasesList_Statuses;
                 when KEY_F1 => -- Show help
                     Erase;
                     ShowGameHeader(Help_Topic);
@@ -321,25 +342,12 @@ package body BasesList is
                     BasesStatus := 1;
                     DrawGame(Sky_Map_View);
                     return Sky_Map_View;
-                when KEY_RIGHT => -- Change bases type
-                    if BasesType = Bases_Types'Last then
-                        BasesType := Bases_Types'First;
-                    else
-                        BasesType := Bases_Types'Val(Bases_Types'Pos(BasesType) + 1);
-                    end if;
-                    CurrentMenuIndex := 1;
-                    DrawGame(Bases_List);
-                    return Bases_List;
-                when KEY_LEFT => -- Change bases status
-                    BasesStatus := BasesStatus + 1;
-                    if BasesStatus > 3 then
-                        BasesStatus := 1;
-                    end if;
-                    CurrentMenuIndex := 1;
-                    Post(BasesMenu, False);
-                    Delete(BasesMenu);
-                    DrawGame(Bases_List);
-                    return Bases_List;
+                when KEY_F2 => -- Show bases types menu
+                    ShowBasesOptions(BasesList_Types);
+                    return BasesList_Types;
+                when KEY_F3 => -- Show bases statuses menu
+                    ShowBasesOptions(BasesList_Statuses);
+                    return BasesList_Statuses;
                 when KEY_F1 => -- Show help
                     Erase;
                     ShowGameHeader(Help_Topic);
@@ -352,4 +360,45 @@ package body BasesList is
         return Bases_List;
     end BasesListKeys;
 
+    function BasesOptionsKeys(Key : Key_Code; CurrentState : GameStates) return GameStates is
+        Result : Driver_Result;
+    begin
+        case Key is
+            when KEY_UP => -- Select previous option
+                Result := Driver(OptionsMenu, M_Up_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OptionsMenu, M_Last_Item);
+                end if;
+            when KEY_DOWN => -- Select next option
+                Result := Driver(OptionsMenu, M_Down_Item);
+                if Result = Request_Denied then
+                    Result := Driver(OptionsMenu, M_First_Item);
+                end if;
+            when 10 => -- Select option from menu
+                if Name(Current(OptionsMenu)) = "quit" then
+                    DrawGame(Bases_List);
+                    return Bases_List;
+                end if;
+                if CurrentState = BasesList_Types then
+                    BasesType := Bases_Types'Val(Get_Index(Current(OptionsMenu)) - 1);
+                else
+                    BasesStatus := Get_Index(Current(OptionsMenu));
+                end if;
+                CurrentMenuIndex := 1;
+                DrawGame(Bases_List);
+                return Bases_List;
+            when others =>
+                Result := Driver(OptionsMenu, Key);
+                if Result = Menu_Ok then
+                    Refresh(MenuWindow2);
+                else
+                    Result := Driver(OptionsMenu, M_CLEAR_PATTERN);
+                    Result := Driver(OptionsMenu, Key);
+                end if;
+        end case;
+        if Result = Menu_Ok then
+            Refresh(MenuWindow2);
+        end if;
+        return CurrentState;
+    end BasesOptionsKeys;
 end BasesList;
