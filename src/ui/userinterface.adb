@@ -348,12 +348,12 @@ package body UserInterface is
                     Orders_Items.all(MenuIndex) := New_Item("Recruit");
                     MenuIndex := MenuIndex + 1;
                 end if;
-                if TimeDiff > 6 then
-                    Orders_Items.all(MenuIndex) := New_Item("Ask for events");
-                    MenuIndex := MenuIndex + 1;
-                end if;
                 if not SkyBases(BaseIndex).AskedForBases then
                     Orders_Items.all(MenuIndex) := New_Item("Ask for bases");
+                    MenuIndex := MenuIndex + 1;
+                end if;
+                if TimeDiff > 6 then
+                    Orders_Items.all(MenuIndex) := New_Item("Ask for events");
                     MenuIndex := MenuIndex + 1;
                 end if;
                 for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
