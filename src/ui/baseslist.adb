@@ -33,6 +33,7 @@ package body BasesList is
     BasesStatus : Positive := 1;
     MenuWindow, MenuWindow2 : Window;
     CurrentMenuIndex : Positive := 1;
+    BasesOwner : Bases_Owners := Any;
 
     procedure ShowBaseInfo is
         InfoWindow : Window;
@@ -168,11 +169,15 @@ package body BasesList is
             if SkyBases(I).Known then
                 case BasesStatus is
                     when 1 => -- All bases
-                        if BasesType = Any or (BasesType /= Any and SkyBases(I).Visited.Year > 0 and SkyBases(I).BaseType = BasesType) then
+                        if (BasesType = Any or (BasesType /= Any and SkyBases(I).Visited.Year > 0 and SkyBases(I).BaseType = BasesType))
+                            and (BasesOwner = Any or (BasesOwner /= Any and SkyBases(I).Visited.Year > 0 and 
+                            SkyBases(I).Owner = BasesOwner))
+                        then
                             AddBase := True;
                         end if;
                     when 2 => -- Only visited bases
-                        if (BasesType = Any or (BasesType /= Any and SkyBases(I).BaseType = BasesType)) and SkyBases(I).Visited.Year > 0 
+                        if ((BasesType = Any or (BasesType /= Any and SkyBases(I).BaseType = BasesType)) and (BasesOwner = Any or 
+                            (BasesOwner /= Any and SkyBases(I).Owner = BasesOwner))) and SkyBases(I).Visited.Year > 0 
                         then
                             AddBase := True;
                         end if;
@@ -209,6 +214,9 @@ package body BasesList is
                 null;
         end case;
         Change_Attributes(Line => 2, Column => 30, Count => 2, Color => 1);
+        Move_Cursor(Line => 2, Column => 60);
+        Add(Str => "F4 Owner: " & To_Lower(Bases_Owners'Image(BasesOwner)));
+        Change_Attributes(Line => 2, Column => 60, Count => 2, Color => 1);
         if Bases_Items.all(1) /= Null_Item then
             BasesMenu := New_Menu(Bases_Items);
             Set_Options(BasesMenu, (Show_Descriptions => False, others => True));
@@ -235,19 +243,28 @@ package body BasesList is
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
     begin
-        if CurrentState = BasesList_Types then
-            Options_Items := new Item_Array(1..(Bases_Types'Pos(Bases_Types'Last) + 3));
-            for I in Bases_Types loop
-                Options_Items.all(Bases_Types'Pos(I) + 1) := New_Item(To_Lower(Bases_Types'Image(I)));
-            end loop;
-            MenuIndex := Bases_Types'Pos(Bases_Types'Last) + 2;
-        else
-            Options_Items := new Item_Array(1..5);
-            Options_Items.all(1) := New_Item("any");
-            Options_Items.all(2) := New_Item("only visited");
-            Options_Items.all(3) := New_Item("only not visited");
-            MenuIndex := 4;
-        end if;
+        case CurrentState is
+            when BasesList_Types =>
+                Options_Items := new Item_Array(1..(Bases_Types'Pos(Bases_Types'Last) + 3));
+                for I in Bases_Types loop
+                    Options_Items.all(Bases_Types'Pos(I) + 1) := New_Item(To_Lower(Bases_Types'Image(I)));
+                end loop;
+                MenuIndex := Bases_Types'Pos(Bases_Types'Last) + 2;
+            when BasesList_Statuses =>
+                Options_Items := new Item_Array(1..5);
+                Options_Items.all(1) := New_Item("any");
+                Options_Items.all(2) := New_Item("only visited");
+                Options_Items.all(3) := New_Item("only not visited");
+                MenuIndex := 4;
+            when BasesList_Owners =>
+                Options_Items := new Item_Array(1..(Bases_Owners'Pos(Bases_Owners'Last) + 3));
+                for I in Bases_Owners loop
+                    Options_Items.all(Bases_Owners'Pos(I) + 1) := New_Item(To_Lower(Bases_Owners'Image(I)));
+                end loop;
+                MenuIndex := Bases_Owners'Pos(Bases_Owners'Last) + 2;
+            when others =>
+                null;
+        end case;
         Options_Items.all(MenuIndex) := New_Item("quit");
         MenuIndex := MenuIndex + 1;
         Options_Items.all(MenuIndex) := Null_Item;
@@ -321,6 +338,9 @@ package body BasesList is
                 when KEY_F3 => -- Show bases statuses menu
                     ShowBasesOptions(BasesList_Statuses);
                     return BasesList_Statuses;
+                when KEY_F4 => -- Show bases owners menu
+                    ShowBasesOptions(BasesList_Owners);
+                    return BasesList_Owners;
                 when KEY_F1 => -- Show help
                     Erase;
                     ShowGameHeader(Help_Topic);
@@ -381,8 +401,10 @@ package body BasesList is
                 end if;
                 if CurrentState = BasesList_Types then
                     BasesType := Bases_Types'Val(Get_Index(Current(OptionsMenu)) - 1);
-                else
+                elsif CurrentState = BasesList_Statuses then
                     BasesStatus := Get_Index(Current(OptionsMenu));
+                else
+                    BasesOwner := Bases_Owners'Val(Get_Index(Current(OptionsMenu)) - 1);
                 end if;
                 CurrentMenuIndex := 1;
                 DrawGame(Bases_List);
