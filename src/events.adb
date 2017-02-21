@@ -40,17 +40,8 @@ package body Events is
         CrewIndex, PlayerValue : Natural := 0;
         Roll, Roll2 : Positive;
         Enemies, Engines : Positive_Container.Vector;
-    begin
-        if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
-            case Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType is
-                when EnemyShip =>
-                    return StartCombat(Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).Data);
-                when others =>
-                    return OldState;
-            end case;
-        end if;
-        if GetRandom(1, 100) < 7 then -- Event happen
-            Roll := GetRandom(1, 100);
+        procedure GenerateEnemies(Owner : Bases_Owners := Any) is
+        begin
             if GetRandom(1, 100) < 95 then
                 for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                     case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
@@ -71,15 +62,29 @@ package body Events is
                     end if;
                 end loop;
                 for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
-                    if Enemies_List.Element(I).CombatValue <= PlayerValue then
+                    if Enemies_List.Element(I).CombatValue <= PlayerValue and (Owner = Any or Enemies_List.Element(I).Owner = Owner) then
                         Enemies.Append(New_Item => I);
                     end if;
                 end loop;
             else
                 for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
-                    Enemies.Append(New_Item => I);
+                    if Owner = Any or Enemies_List.Element(I).Owner = Owner then
+                        Enemies.Append(New_Item => I);
+                    end if;
                 end loop;
             end if;
+        end GenerateEnemies;
+    begin
+        if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+            case Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType is
+                when EnemyShip =>
+                    return StartCombat(Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).Data);
+                when others =>
+                    return OldState;
+            end case;
+        end if;
+        if GetRandom(1, 100) < 7 then -- Event happen
+            Roll := GetRandom(1, 100);
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
                 case Roll is
                     when 1..5 => -- Engine damaged
@@ -136,6 +141,7 @@ package body Events is
                             UpdateGame(TimePassed);
                         end if;
                     when others => -- Combat
+                        GenerateEnemies;
                         Events_List.Append(New_Item => (EnemyShip, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(30, 45), 
                             Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := Events_List.Last_Index;
@@ -150,6 +156,7 @@ package body Events is
                     end if;
                     case Roll is
                         when 1..20 => -- Base is attacked
+                            GenerateEnemies;
                             Events_List.Append(New_Item => (AttackOnBase, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(60, 90), 
                                 Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                             AddMessage("You can't dock to base now, because base is under attack. You can help defend it.", OtherMessage);
@@ -157,7 +164,17 @@ package body Events is
                         when 21 => -- Disease in base
                             Events_List.Append(New_Item => (Disease, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(10080, 12000), 1));
                             AddMessage("You can't dock to base now, it is closed due to disease.", OtherMessage);
-                        when others => -- Full docks
+                        when others => -- Full docks or enemy patrol
+                            if Roll in 20..40 and (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner /= Poleis and
+                                SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner /= Independent) and
+                                SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Reputation(1) < -24
+                            then
+                                GenerateEnemies(SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner);
+                                Events_List.Append(New_Item => (EnemyPatrol, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(30, 45), 
+                                    Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
+                                SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := Events_List.Last_Index;
+                                return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
+                            end if;
                             Events_List.Append(New_Item => (FullDocks, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(15, 30), 1));
                             AddMessage("You can't dock to base now, because its docks are full.", OtherMessage);
                     end case;
