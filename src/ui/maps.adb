@@ -226,6 +226,8 @@ package body Maps is
                     Add(Win => InfoWindow, Str => "Base under attack");
                 when Disease => 
                     Add(Win => InfoWindow, Str => "Disease");
+                when EnemyPatrol =>
+                    Add(Win => InfoWindow, Str => "Enemy patrol");
                 when None =>
                     null;
             end case;
