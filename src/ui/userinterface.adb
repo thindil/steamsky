@@ -425,7 +425,7 @@ package body UserInterface is
                 end if;
             end if;
             case Event is
-                when EnemyShip =>
+                when EnemyShip | EnemyPatrol =>
                     Orders_Items.all(MenuIndex) := New_Item("Attack");
                     MenuIndex := MenuIndex + 1;
                 when FullDocks =>
