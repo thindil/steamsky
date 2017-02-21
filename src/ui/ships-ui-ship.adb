@@ -21,7 +21,6 @@ with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Crafts; use Crafts;
 with Maps; use Maps;
-with Bases; use Bases;
 with Help; use Help;
 
 package body Ships.UI.Ship is

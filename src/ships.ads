@@ -20,6 +20,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Crew; use Crew;
 with Game; use Game;
 with Missions; use Missions;
+with Bases; use Bases;
 
 package Ships is
     type ShipSpeed is (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED,
@@ -85,6 +86,7 @@ package Ships is
             CombatValue : Positive; -- Combat value of ship (used to generate enemies)
             Crew : ProtoCrew_Container.Vector; -- List of ship crew
             Description : Unbounded_String; -- Description of ship
+            Owner : Bases_Owners; -- Faction to which ship belong
         end record;
     package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
     ProtoShips_List : ProtoShips_Container.Vector;
