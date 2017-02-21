@@ -19,7 +19,6 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Maps; use Maps;
 with Messages; use Messages;
-with Bases; use Bases;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
@@ -412,7 +411,7 @@ package body Ships is
         TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
             Accuracy => 1, CombatAI => NONE, Evasion => 1, LootMin => 1,
             LootMax => 100, Perception => 1, Cargo => TempCargo, CombatValue => 1,
-            Crew => TempCrew, Description => Null_Unbounded_String);
+            Crew => TempCrew, Description => Null_Unbounded_String, Owner => Poleis);
         Open(ShipsFile, In_File, "data/ships.dat");
         while not End_Of_File(ShipsFile) loop
             RawData := To_Unbounded_String(Get_Line(ShipsFile));
@@ -510,6 +509,8 @@ package body Ships is
                     TempOrder := Rest;
                 elsif FieldName = To_Unbounded_String("Description") then
                     TempRecord.Description := Value;
+                elsif FieldName = To_Unbounded_String("Owner") then
+                    TempRecord.Owner := Bases_Owners'Value(To_String(Value));
                 end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
                 CombatValue := 0;
@@ -541,7 +542,7 @@ package body Ships is
                 TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
                     Accuracy => 1, CombatAI => NONE, Evasion => 1, LootMin => 1, 
                     LootMax => 100, Perception => 1, Cargo => TempCargo, CombatValue => 1,
-                    Crew => TempCrew, Description => Null_Unbounded_String);
+                    Crew => TempCrew, Description => Null_Unbounded_String, Owner => Poleis);
                 TempRecord.Name := Null_Unbounded_String;
             end if;
         end loop;
