@@ -16,6 +16,7 @@ LootMax = 100
 Perception = 2
 Cargo = 800..1000x1, 80..100x2, 150..200x3, 300..500x14
 Description = Smallest known pirates ship. As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
 [3]
 Name = Tiny undead ship
 Modules = 1, 3, 7, 12
@@ -28,6 +29,7 @@ LootMax = 100
 Perception = 1
 Cargo = 750..1000x1
 Description = Smallest known undead ship. Dangerous at close range.
+Owner = Undead
 [4]
 Name = Tiny clockwork drone
 Modules = 10, 3, 7, 13
@@ -40,6 +42,7 @@ LootMax = 50
 Perception = 5
 Cargo = 800..1000x1
 Description = Smallest known clockwork drone. Dangerous at close range.
+Owner = Drones
 [5]
 Name = Small pirates ship
 Modules = 1, 3, 4, 4, 4, 4, 5, 7, 7, 8, 9
@@ -52,6 +55,7 @@ LootMax = 200
 Perception = 5
 Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13
 Description = Small, fast pirate vessel. As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
 [6]
 Name = Small undead ship
 Modules = 1, 2, 3, 5, 7, 7, 12 
@@ -64,6 +68,7 @@ LootMax = 200
 Perception = 3
 Cargo = 1500..2000x1, 80..100x5
 Description = Small undead flying vessel. Dangerous at close range.
+Owner = Undead
 [7]
 Name = Small clockwork drone
 Modules = 1, 3, 7, 12
@@ -76,6 +81,7 @@ LootMax = 100
 Perception = 10
 Cargo = 500..1000x1
 Description = Small flying clockwork drone. Dangerous at close range.
+Owner = Drones
 [8]
 Name = Pirate ship
 Modules = 17, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 28, 27
@@ -88,6 +94,7 @@ LootMax = 200
 Perception = 10
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x5, 10..40x13
 Description = Standard pirate vessel. As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
 [9]
 Name = Armored pirate ship
 Modules = 17, 25, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 28, 27
@@ -100,6 +107,7 @@ LootMax = 300
 Perception = 10
 Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x20, 100..200x5, 20..40x13
 Description = Armored version of pirate ship. As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
 [10]
 Name = Small attacking drone
 Modules = 1, 3, 7, 12, 8, 11
@@ -112,6 +120,7 @@ LootMax = 200
 Perception = 5
 Cargo = 200..1000x1, 200..500x14
 Description = Small, more aggresive version of clockwork drone.
+Owner = Drones
 [11]
 Name = Attacking clockwork drone
 Modules = 17, 15, 7, 7, 12, 8, 9
@@ -124,6 +133,7 @@ LootMax = 100
 Perception = 10
 Cargo = 800..1000x1, 100..500x4
 Description = Standard, very aggresive version of clockwork drone.
+Owner = Drones
 [12]
 Name = Armored attacking drone
 Modules = 17, 2, 15, 7, 7, 12, 8, 9
@@ -136,6 +146,7 @@ LootMax = 100
 Perception = 10
 Cargo = 900..1000x1, 450..500x4, 90..100x5, 5..20x13
 Description = Armored, very aggresive version of clockwork drone.
+Owner = Drones
 [13]
 Name = Tiny inquisition ship
 Modules = 1, 3, 4, 7, 12
@@ -148,6 +159,7 @@ LootMax = 100
 Perception = 2
 Cargo = 500..1000x1, 20..100x2, 40..200x3
 Description = Smallest know inquisition ship.
+Owner = Inquisition
 [14]
 Name = Small inquisition ship
 Modules = 1, 3, 4, 4, 4, 4, 5, 7, 7, 12
@@ -160,6 +172,7 @@ LootMax = 150
 Perception = 5
 Cargo = 1000..2000x1, 30..100x2, 150..200x3, 20..100x5
 Description = Small flying vessel of inquisition, dangerous at close range.
+Owner = Inquisition
 [15]
 Name = Inquisition ship
 Modules = 17, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 12, 8, 9
@@ -172,6 +185,7 @@ LootMax = 200
 Perception = 10
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 300..500x4, 50..200x5, 5..40x13
 Description = Standard ship of inquisition.
+Owner = Inquisition
 [16]
 Name = Armored inquisition ship
 Modules = 17, 2, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 12, 8, 9
@@ -184,6 +198,7 @@ LootMax = 240
 Perception = 10
 Cargo = 1800..2000x1, 100..200x2, 350..400x3, 250..500x4, 100..200x5, 10..40x13
 Description = Armored version of standard flying vessel of inquisition.
+Owner = Inquisition
 [17]
 Name = Large clockwork drone
 Modules = 23, 25, 19, 7, 7, 7, 7, 12, 28, 27, 28, 27
@@ -196,6 +211,7 @@ LootMax = 400
 Perception = 20
 Cargo = 1800..2000x1, 450..500x20, 120..250x5, 20..60x13
 Description = Large, good armored and aggresive clockwork drone.
+Owner = Drones
 [18]
 Name = Large pirate ship
 Modules = 23, 26, 19, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 28, 29, 28, 29, 28, 29
@@ -208,6 +224,7 @@ LootMax = 500
 Perception = 20
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
 Description = Large, good armored pirate ship. As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
 [19]
 Name = Undead ship
 Modules = 17, 25, 15, 5, 7, 7, 7, 7, 40 
@@ -220,6 +237,7 @@ LootMax = 300
 Perception = 5
 Cargo = 2000..2500x1, 150..300x5
 Description = Standard version of undead flying vessel. Dangerous at close range.
+Owner = Undead
 [20]
 Name = Large undead ship
 Modules = 23, 26, 19, 5, 7, 7, 7, 7, 7, 7, 40 
@@ -232,6 +250,7 @@ LootMax = 400
 Perception = 15
 Cargo = 3000..4000x1, 300..400x5
 Description = Large, good armored version of undead flying vessel. Dangerous at close range.
+Owner = Undead
 [21]
 Name = Large inquisition ship
 Modules = 23, 26, 19, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 40, 28, 27, 28, 27
@@ -244,6 +263,7 @@ LootMax = 500
 Perception = 20
 Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x20, 200..400x5, 20..50x13
 Description = Large, good armored version of inquisition flying vessel.
+Owner = Inquisition
 [22]
 Name = Large attacking drone
 Modules = 23, 26, 19, 7, 7, 7, 7, 7, 7, 40, 28, 27, 28, 27
@@ -256,6 +276,7 @@ LootMax = 450
 Perception = 25
 Cargo = 1500..2000x1, 450..500x20, 150..300x5, 20..40x13
 Description = Large, good armored version of attacking clockwork drone.
+Owner = Drones
 [23]
 Name = Advanced attacking drone
 Modules = 22, 25, 18, 7, 7, 7, 7, 7, 40, 28, 27
@@ -268,6 +289,7 @@ LootMax = 250
 Perception = 25
 Cargo = 1000..1500x1, 200..300x20, 100..200x5, 10..20x13
 Description = Advanced version of standard attacking clockwork drone.
+Owner = Drones
 [24]
 Name = Advanced pirate ship
 Modules = 22, 25, 18, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 28, 27
@@ -280,6 +302,7 @@ LootMax = 250
 Perception = 15
 Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x5, 20..40x13
 Description = Advanced version of standard pirate ship. As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
 [25]
 Name = Advanced undead ship
 Modules = 22, 25, 18, 5, 7, 7, 7, 7, 7, 40 
@@ -292,6 +315,7 @@ LootMax = 300
 Perception = 10
 Cargo = 2500..3000x1, 200..350x5
 Description = Advanced version of standard undead ship. Dangerous at close range.
+Owner = Undead
 [26]
 Name = Advanced inquisition ship
 Modules = 22, 25, 18, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 40, 28, 29
@@ -304,6 +328,7 @@ LootMax = 240
 Perception = 15
 Cargo = 2000..2200x1, 150..220x2, 400..500x3, 400..600x20, 150..250x5, 20..50x13
 Description = Advanced version of standard flying vessel of inquisition.
+Owner = Inquisition
 [27]
 Name = Huge pirate ship
 Modules = 60, 26, 62, 62 , 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 33, 39, 33, 39, 33, 39, 33
@@ -316,6 +341,7 @@ LootMax = 1000
 Perception = 40
 Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13
 Description = Huge, well armored pirate ship. As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
 [28]
 Name = Advanced huge pirate ship
 Modules = 61, 26, 63, 63 , 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 34, 39, 34, 39, 34, 39, 34
@@ -328,6 +354,7 @@ LootMax = 1000
 Perception = 40
 Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x5, 300..500x13
 Description = Advanced version of huge, well armored pirate ship. As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
 [29]
 Name = Large undead ship
 Modules = 61, 26, 63, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40 
@@ -340,4 +367,5 @@ LootMax = 750
 Perception = 30
 Cargo = 5000..7000x1, 500..750x5
 Description = Huge, good armored version of undead flying vessel. Dangerous at close range.
+Owner = Undead
 []
