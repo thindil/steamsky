@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Combat AI for pirates ships
 - Combat order 'Aim for weapon' hits turrets instead directly guns
 - Minimum required durability of engine to fly on almost destroyed
+- Better generation of event when asking in bases
 
 ### Fixed
 - Attacking different ship than selected
