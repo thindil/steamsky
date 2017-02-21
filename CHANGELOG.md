@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Send on break crew member which have set order to talk in bases when
   outside base
 - Owners of sky bases
+- Owners of ships
 
 ### Changed
 - Updated interface
