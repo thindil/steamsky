@@ -493,4 +493,13 @@ Buyable = Y, N, N, N
 ShowType = Tool
 Value = 15
 Description = Bronze set of tools used in woodworker recipes.
+[61]
+Name = Bronze repair tools
+Weight = 5
+Type = RepairTools
+Prices = 5, 7, 7, 7
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 15
+Description = Bronze set of tools needed to repair ship.
 []
