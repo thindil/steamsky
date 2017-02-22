@@ -43,6 +43,7 @@ with Crafts.UI; use Crafts.UI;
 with Help; use Help;
 with MainMenu; use MainMenu;
 with Events; use Events;
+with Events.UI; use Events.UI;
 with ShipModules; use ShipModules;
 with BasesList; use BasesList;
 with Items; use Items;

@@ -39,6 +39,7 @@ with Bases.UI.Recruits; use Bases.UI.Recruits;
 with Bases.UI.Recipes; use Bases.UI.Recipes;
 with Bases.UI.Missions; use Bases.UI.Missions;
 with Events; use Events;
+with Events.UI; use Events.UI;
 with Combat.UI; use Combat.UI;
 with Crafts.UI; use Crafts.UI;
 with Help; use Help;
