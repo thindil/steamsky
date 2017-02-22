@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
   outside base
 - Owners of sky bases
 - Owners of ships
+- New item type: repairtools
 
 ### Changed
 - Updated interface
