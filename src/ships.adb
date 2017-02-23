@@ -915,7 +915,7 @@ package body Ships is
             Points := RepairPoints;
         end UpdatePoints;
         procedure RepairModule(ModuleIndex : Positive) is
-            PointsIndex, PointsBonus, RepairMaterial : Natural;
+            PointsIndex, PointsBonus, RepairMaterial, ToolsIndex : Natural;
             ProtoIndex, RepairValue : Positive;
         begin
             PointsIndex := 0;
@@ -929,18 +929,22 @@ package body Ships is
                             CrewRepairPoints(PointsIndex);
                         RepairPoints := CrewRepairPoints(PointsIndex) + PointsBonus;
                         RepairMaterial := 0;
+                        ToolsIndex := 0;
                         for K in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                             if Items_List.Element(PlayerShip.Cargo.Element(K).ProtoIndex).IType = 
                                 Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).RepairMaterial 
                             then
                                 ProtoIndex := PlayerShip.Cargo.Element(K).ProtoIndex;
-                                RepairMaterial := J;
+                                RepairMaterial := K;
                                 -- Limit repair point depends on amount of repair materials
                                 if PlayerShip.Cargo.Element(K).Amount < RepairPoints then
                                     RepairPoints := PlayerShip.Cargo.Element(K).Amount;
                                 end if;
-                                exit;
+                            elsif Items_List.Element(PlayerShip.Cargo.Element(K).ProtoIndex).IType = To_Unbounded_String("RepairTools") 
+                            then
+                                ToolsIndex := K;
                             end if;
+                            exit when RepairMaterial > 0 and ToolsIndex > 0;
                         end loop;
                         if RepairMaterial = 0 then
                             AddMessage("You don't have repair materials to continue repairs of " & 
@@ -948,27 +952,41 @@ package body Ships is
                             RepairNeeded := False;
                             return;
                         end if;
-                        -- Repair module
-                        if PlayerShip.Modules.Element(ModuleIndex).Durability + RepairPoints >=
-                            PlayerShip.Modules.Element(ModuleIndex).MaxDurability 
-                        then
-                            RepairValue := PlayerShip.Modules.Element(ModuleIndex).MaxDurability - 
+                        if ToolsIndex = 0 then
+                            if PointsIndex = 1 then
+                                AddMessage("You don't have repair tools to continue repairs of " & 
+                                    To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ".", OrderMessage);
+                                RepairNeeded := False;
+                                return;
+                            end if;
+                            AddMessage(To_String(PlayerShip.Crew.Element(J).Name) & " can't continue repairs due to lack of repair tools.",
+                                OrderMessage);
+                            GiveOrders(J, Rest);
+                        else
+                            -- Repair module
+                            if PlayerShip.Modules.Element(ModuleIndex).Durability + RepairPoints >=
+                                PlayerShip.Modules.Element(ModuleIndex).MaxDurability 
+                            then
+                                RepairValue := PlayerShip.Modules.Element(ModuleIndex).MaxDurability - 
                                 PlayerShip.Modules.Element(ModuleIndex).Durability;
-                            RepairNeeded := False;
-                        else
-                            RepairValue := RepairPoints;
+                                RepairNeeded := False;
+                            else
+                                RepairValue := RepairPoints;
+                            end if;
+                            UpdateCargo(PlayerShip, ProtoIndex, (0 - RepairValue));
+                            UpdateModule(PlayerShip, ModuleIndex, "Durability", Integer'Image(RepairValue));
+                            if RepairValue > CrewRepairPoints(PointsIndex) then
+                                RepairValue := CrewRepairPoints(PointsIndex);
+                                RepairPoints := 0;
+                            else
+                                RepairPoints := CrewRepairPoints(PointsIndex) - RepairValue;
+                            end if;
+                            GainExp(RepairValue, Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).RepairSkill, J);
+                            CrewRepairPoints.Update_Element(Index => PointsIndex, Process => UpdatePoints'Access);
+                            DamageCargo(ToolsIndex, J, 
+                                Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).RepairSkill);
+                            exit when not RepairNeeded;
                         end if;
-                        UpdateCargo(PlayerShip, ProtoIndex, (0 - RepairValue));
-                        UpdateModule(PlayerShip, ModuleIndex, "Durability", Integer'Image(RepairValue));
-                        if RepairValue > CrewRepairPoints(PointsIndex) then
-                            RepairValue := CrewRepairPoints(PointsIndex);
-                            RepairPoints := 0;
-                        else
-                            RepairPoints := CrewRepairPoints(PointsIndex) - RepairValue;
-                        end if;
-                        GainExp(RepairValue, Modules_List.Element(PlayerShip.Modules.Element(ModuleIndex).ProtoIndex).RepairSkill, J);
-                        CrewRepairPoints.Update_Element(Index => PointsIndex, Process => UpdatePoints'Access);
-                        exit when not RepairNeeded;
                     end if;
                 end if;
             end loop;

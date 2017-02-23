@@ -30,7 +30,7 @@ package body Crew is
     procedure GiveOrders(MemberIndex : Positive; GivenOrder : Crew_Orders; ModuleIndex : Natural := 0; CheckPriorities : Boolean := True) is
         NewOrder : Crew_Orders;
         MemberName : constant String := To_String(PlayerShip.Crew.Element(MemberIndex).Name);
-        ModuleIndex2 : Natural := 0;
+        ModuleIndex2, ToolsIndex : Natural := 0;
         MType : ModuleType := ENGINE;
         procedure UpdateOrder(Member : in out Member_Data) is
         begin
@@ -54,6 +54,17 @@ package body Crew is
         elsif GivenOrder = Gunner or GivenOrder = Craft or GivenOrder = Heal then
             if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
                 GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest, 0, False);
+            end if;
+        elsif GivenOrder = Repair then
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = To_Unbounded_String("RepairTools") then
+                    ToolsIndex := I;
+                    exit;
+                end if;
+            end loop;
+            if ToolsIndex = 0 then
+                ShowDialog(MemberName & " can't starts repairing ship because you don't have repair tools.");
+                return;
             end if;
         end if;
         if ModuleIndex = 0 and (GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Rest) then
