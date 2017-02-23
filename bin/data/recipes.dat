@@ -447,4 +447,14 @@ Skill = Woodworker
 Difficulty = 5
 BaseType = 1
 Tool = WoodworkerSet
+[44]
+Material = Bronze
+Amount = 1
+Result = 61
+Crafted = 1
+Workplace = Furnace
+Skill = Blacksmith
+Difficulty = 5
+BaseType = 1
+Tool = BlacksmithSet
 []
