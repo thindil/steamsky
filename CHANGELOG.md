@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Owners of ships
 - New item type: repairtools
 - New item: bronze repair tools
+- New crafting recipe: bronze repair tools
 
 ### Changed
 - Updated interface
