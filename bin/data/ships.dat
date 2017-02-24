@@ -394,4 +394,17 @@ Perception = 40
 Cargo = 6000..8000x1, 600..800x5
 Description = Advanced version of huge, good armored undead flying vessel. Dangerous at close range.
 Owner = Undead
+[32]
+Name = Advanced huge attacking drone
+Modules = 61, 26, 63, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40, 39, 34, 39, 34, 39, 34
+Accuracy = 50
+Enemy = Yes
+CombatAI = Berserker
+Evasion = 50
+LootMin = 600
+LootMax = 1000
+Perception = 60
+Cargo = 4000..6000x1, 600..1000x33, 600..800x5, 150..300x13
+Description = Advanced version of huge, good armored, attacking clockwork drone.
+Owner = Drones
 []
