@@ -370,7 +370,7 @@ Description = Huge, good armored version of undead flying vessel. Dangerous at c
 Owner = Undead
 [30]
 Name = Huge attacking drone
-Modules = 61, 26, 63, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40, 39, 33, 39, 33, 39, 33
+Modules = 60, 26, 62, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40, 39, 33, 39, 33, 39, 33
 Accuracy = 40
 Enemy = Yes
 CombatAI = Berserker
@@ -378,7 +378,7 @@ Evasion = 40
 LootMin = 500
 LootMax = 900
 Perception = 50
-Cargo = 2000..4000x1, 500..1000x33, 500..750x5, 100..200x13
+Cargo = 2000..4000x1, 500..1000x31, 500..750x5, 150..300x13
 Description = Huge, good armored version of attacking clockwork drone.
 Owner = Drones
 [31]
