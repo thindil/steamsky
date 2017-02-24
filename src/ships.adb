@@ -611,8 +611,7 @@ package body Ships is
 
     procedure StartUpgrading(ModuleIndex, UpgradeType : Positive) is
         MaxValue : Natural;
-        HaveMaterials : Boolean := False;
-        MaterialIndex : Positive;
+        HaveMaterials, HaveTools : Boolean := False;
         UpgradeProgress : Positive;
         UpgradeAction : ShipUpgrade;
     begin
@@ -699,32 +698,35 @@ package body Ships is
                 Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).RepairMaterial
             then
                 HaveMaterials := True;
-                MaterialIndex := PlayerShip.Cargo.Element(I).ProtoIndex;
-                exit;
+            elsif Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = To_Unbounded_String("RepairTools") then
+                HaveTools := True;
             end if;
+            exit when HaveMaterials and HaveTools;
         end loop;
         if not HaveMaterials then
             for I in Items_List.First_Index..Items_List.Last_Index loop
                 if Items_List(I).IType = Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).RepairMaterial then
-                    MaterialIndex := I;
-                    exit;
+                    ShowDialog("You don't have " & To_String(Items_List(I).Name) & " for upgrading " &
+                        To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ".");
+                    return;
                 end if;
             end loop;
-            ShowDialog("You don't have " & To_String(Items_List(MaterialIndex).Name) & " for upgrading " &
-                To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ".");
-        else
-            PlayerShip.UpgradeModule := ModuleIndex;
-            if PlayerShip.Modules.Element(ModuleIndex).UpgradeAction /= UpgradeAction then
-                UpdateModule(PlayerShip, ModuleIndex, "UpgradeProgress", Integer'Image(UpgradeProgress));
-                UpdateModule(PlayerShip, ModuleIndex, "UpgradeAction", ShipUpgrade'Image(UpgradeAction));
-            end if;
-            AddMessage("You set " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) &
-                " to upgrade.", OrderMessage);
         end if;
+        if not HaveTools then
+            ShowDialog("You don't have repair tools for upgrading " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ".");
+            return;
+        end if;
+        PlayerShip.UpgradeModule := ModuleIndex;
+        if PlayerShip.Modules.Element(ModuleIndex).UpgradeAction /= UpgradeAction then
+            UpdateModule(PlayerShip, ModuleIndex, "UpgradeProgress", Integer'Image(UpgradeProgress));
+            UpdateModule(PlayerShip, ModuleIndex, "UpgradeAction", ShipUpgrade'Image(UpgradeAction));
+        end if;
+        AddMessage("You set " & To_String(PlayerShip.Modules.Element(ModuleIndex).Name) &
+            " to upgrade.", OrderMessage);
     end StartUpgrading;
 
     procedure UpgradeShip(Minutes : Positive) is
-        ResultAmount, UpgradePoints, WorkerIndex, UpgradeMaterial, UpgradeProgress : Natural := 0;
+        ResultAmount, UpgradePoints, WorkerIndex, UpgradeMaterial, UpgradeProgress, UpgradeTools : Natural := 0;
         MaxValue : Positive;
         WeightGain : Natural;
         Times : Natural := 0;
@@ -772,13 +774,20 @@ package body Ships is
                     Modules_List(PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex).RepairMaterial
                 then
                     UpgradeMaterial := I;
-                    exit;
+                elsif Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = To_Unbounded_String("RepairTools") then
+                    UpgradeTools := I;
                 end if;
+                exit when UpgradeMaterial > 0 and UpgradeTools > 0;
             end loop;
             if UpgradeMaterial = 0 then
                 AddMessage("You don't have enough materials to upgrade " &
-                To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name),
-                    OrderMessage);
+                    To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name), OrderMessage);
+                GiveOrders(WorkerIndex, Rest);
+                exit;
+            end if;
+            if UpgradeTools = 0 then
+                AddMessage("You don't have repair tools to upgrade " & 
+                    To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name), OrderMessage);
                 GiveOrders(WorkerIndex, Rest);
                 exit;
             end if;
@@ -787,6 +796,8 @@ package body Ships is
             end if;
             GainExp(ResultAmount, Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).RepairSkill,
                 WorkerIndex);
+            DamageCargo(UpgradeTools, WorkerIndex, 
+                Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).RepairSkill);
             UpgradeProgress := PlayerShip.Modules.Element(PlayerShip.UpgradeModule).UpgradeProgress - ResultAmount;
             UpgradePoints := UpgradePoints - ResultAmount;
             UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(UpgradeMaterial).ProtoIndex, (0 - ResultAmount));
