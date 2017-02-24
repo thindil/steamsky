@@ -357,7 +357,7 @@ Description = Advanced version of huge, well armored pirate ship. As many pirate
 Owner = Pirates
 [29]
 Name = Huge undead ship
-Modules = 61, 26, 63, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40 
+Modules = 60, 26, 62, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40 
 Accuracy = 40
 Enemy = Yes
 CombatAI = Berserker
