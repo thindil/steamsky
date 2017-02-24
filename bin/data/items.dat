@@ -501,5 +501,5 @@ Prices = 5, 7, 7, 7
 Buyable = Y, N, N, N
 ShowType = Tool
 Value = 15
-Description = Bronze set of tools needed to repair ship.
+Description = Bronze set of tools needed to repair or upgrade ship modules.
 []
