@@ -407,4 +407,17 @@ Perception = 60
 Cargo = 4000..6000x1, 600..1000x33, 600..800x5, 150..300x13
 Description = Advanced version of huge, good armored, attacking clockwork drone.
 Owner = Drones
+[33]
+Name = Huge inquisition ship
+Modules = 60, 26, 62, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40, 39, 33, 39, 33, 39, 33, 39, 33
+Accuracy = 40
+Enemy = Yes
+CombatAI = Attacker
+Evasion = 50
+LootMin = 750
+LootMax = 1000
+Perception = 50
+Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x31, 400..600x5, 50..100x13
+Description = Huge, good armored version of inquisition flying vessel.
+Owner = Inquisition
 []
