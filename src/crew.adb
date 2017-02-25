@@ -32,6 +32,7 @@ package body Crew is
         MemberName : constant String := To_String(PlayerShip.Crew.Element(MemberIndex).Name);
         ModuleIndex2, ToolsIndex : Natural := 0;
         MType : ModuleType := ENGINE;
+        RequiredTool : Unbounded_String;
         procedure UpdateOrder(Member : in out Member_Data) is
         begin
             Member.Order := NewOrder;
@@ -55,15 +56,24 @@ package body Crew is
             if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
                 GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest, 0, False);
             end if;
-        elsif GivenOrder = Repair then
+        elsif GivenOrder = Repair or GivenOrder = Clean then
+            if GivenOrder = Repair then
+                RequiredTool := To_Unbounded_String("RepairTools");
+            else
+                RequiredTool := To_Unbounded_String("Bucket");
+            end if;
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = To_Unbounded_String("RepairTools") then
+                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = RequiredTool then
                     ToolsIndex := I;
                     exit;
                 end if;
             end loop;
             if ToolsIndex = 0 then
-                ShowDialog(MemberName & " can't starts repairing ship because you don't have repair tools.");
+                if GivenOrder = Repair then
+                    ShowDialog(MemberName & " can't starts repairing ship because you don't have repair tools.");
+                else
+                    ShowDialog(MemberName & " can't starts cleaning ship because you don't have any bucket.");
+                end if;
                 return;
             end if;
         end if;
@@ -256,7 +266,7 @@ package body Crew is
         TiredLevel, HungerLevel, ThirstLevel : Integer := 0;
         HealthLevel : Integer := 100;
         DeathReason : Unbounded_String;
-        CabinIndex, Times, RestAmount, I : Natural;
+        CabinIndex, Times, RestAmount, I, ToolIndex : Natural;
         OrderTime, CurrentMinutes, HealAmount : Integer;
         type DamageFactor is digits 2 range 0.0..1.0;
         Damage : DamageFactor := 0.0;
@@ -455,36 +465,49 @@ package body Crew is
                                 GiveOrders(I, Rest);
                             end if;
                         when Clean =>
-                            for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                                if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
-                                    PlayerShip.Modules.Element(J).Current_Value < PlayerShip.Modules.Element(J).Max_Value
-                                then
-                                    if PlayerShip.Modules.Element(J).Current_Value + Times > PlayerShip.Modules.Element(J).Max_Value then
-                                        UpdateModule(PlayerShip, J, "Current_Value", 
-                                            Positive'Image(PlayerShip.Modules.Element(J).Max_Value));
-                                    else
-                                        UpdateModule(PlayerShip, J, "Current_Value", 
-                                            Positive'Image(PlayerShip.Modules.Element(J).Current_Value + Times));
+                            ToolIndex := 0;
+                            NeedCleaning := False;
+                            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                                if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Bucket") then
+                                    ToolIndex := J;
+                                    exit;
+                                end if;
+                            end loop;
+                            if ToolIndex > 0 then
+                                for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                                    if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
+                                        PlayerShip.Modules.Element(J).Current_Value < PlayerShip.Modules.Element(J).Max_Value
+                                    then
+                                        if PlayerShip.Modules.Element(J).Current_Value + Times > PlayerShip.Modules.Element(J).Max_Value then
+                                            UpdateModule(PlayerShip, J, "Current_Value", 
+                                                Positive'Image(PlayerShip.Modules.Element(J).Max_Value));
+                                        else
+                                            UpdateModule(PlayerShip, J, "Current_Value", 
+                                                Positive'Image(PlayerShip.Modules.Element(J).Current_Value + Times));
+                                        end if;
+                                        DamageCargo(ToolIndex);
+                                        exit;
                                     end if;
-                                    exit;
-                                end if;
-                            end loop;
-                            for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                                if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
-                                    PlayerShip.Modules.Element(J).Current_Value < PlayerShip.Modules.Element(J).Max_Value
-                                then
-                                    NeedCleaning := True;
-                                    exit;
-                                end if;
-                            end loop;
+                                end loop;
+                                for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+                                    if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
+                                        PlayerShip.Modules.Element(J).Current_Value < PlayerShip.Modules.Element(J).Max_Value
+                                    then
+                                        NeedCleaning := True;
+                                        exit;
+                                    end if;
+                                end loop;
+                            end if;
                             if not NeedCleaning then
+                                if ToolIndex = 0 then
+                                    AddMessage("You can't continue cleaning ship because you don't have any bucket.", OrderMessage);
+                                end if;
                                 for J in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                                     if PlayerShip.Crew.Element(J).Order = Clean then
                                         GiveOrders(J, Rest);
                                     end if;
                                 end loop;
                             end if;
-                            NeedCleaning := False;
                         when Talk =>
                             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
                                 GiveOrders(I, Rest);
