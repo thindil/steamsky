@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - New item type: repairtools
 - New item: bronze repair tools
 - New crafting recipe: bronze repair tools
+- Bronze repair tools to starting cargo
 
 ### Changed
 - Updated interface
