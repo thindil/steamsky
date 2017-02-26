@@ -796,4 +796,16 @@ Price = 35000
 InstallTime = 270
 Size = 4
 Description = Updated version of huge engine made of bronze. Each ship needs at least one engine to fly.
+[64]
+Name = Small iron hull
+Type = Hull
+Weight = 4500
+Value = 0
+MaxValue = 12
+Durability = 150
+Material = Iron
+Skill = Engineering
+Price = 6500 
+InstallTime = 180
+Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
 []
