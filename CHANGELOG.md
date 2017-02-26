@@ -8,8 +8,8 @@ All notable changes to this project will be documented in this file.
   drone, advanced attacking drone, advanced pirate ship, advanced
   undead ship, advanced inquisition ship, huge pirate ship, advanced
   huge pirate ship, huge undead ship, huge attacking drone, advanced
-  huge undead ship, advanced huge attacking drone and huge
-  inquisition ship
+  huge undead ship, advanced huge attacking drone, huge inquisition
+  ship and advanced huge inquisition ship
 - Descriptions to ship modules
 - Descriptions to items
 - Orders for all crew members
