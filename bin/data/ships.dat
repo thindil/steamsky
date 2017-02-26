@@ -420,4 +420,17 @@ Perception = 50
 Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x31, 400..600x5, 50..100x13
 Description = Huge, good armored version of inquisition flying vessel.
 Owner = Inquisition
+[34]
+Name = Advanced huge inquisition ship
+Modules = 61, 26, 63, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40, 39, 34, 39, 34, 39, 34, 39, 34
+Accuracy = 50
+Enemy = Yes
+CombatAI = Attacker
+Evasion = 60
+LootMin = 900
+LootMax = 1200
+Perception = 60
+Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x33, 500..650x5, 75..120x13
+Description = Advanced version of huge, good armored, inquisition flying vessel.
+Owner = Inquisition
 []
