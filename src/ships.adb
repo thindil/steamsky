@@ -1050,14 +1050,32 @@ package body Ships is
         end if;
     end RepairShip;
 
-    function GenerateShipName return Unbounded_String is -- based on name generator from libtcod
-        NewName : Unbounded_String;
+    function GenerateShipName(Owner : Bases_Owners := Any) return Unbounded_String is -- based on name generator from libtcod
+        NewName : Unbounded_String := Null_Unbounded_String;
+        LettersAmount, NumbersAmount : Positive;
+        subtype Letters is Character range 'A'..'Z';
+        subtype Numbers is Character range '0'..'9';
     begin
-        NewName := ShipSyllablesStart.Element(GetRandom(ShipSyllablesStart.First_Index, ShipSyllablesStart.Last_Index));
-        if GetRandom(1, 100) < 51 then
-            Append(NewName, ShipSyllablesMiddle.Element(GetRandom(ShipSyllablesMiddle.First_Index, ShipSyllablesMiddle.Last_Index)));
-        end if;
-        Append(NewName,ShipSyllablesEnd.Element(GetRandom(ShipSyllablesEnd.First_Index, ShipSyllablesEnd.Last_Index)));
+        case Owner is
+            when Any => 
+                NewName := ShipSyllablesStart.Element(GetRandom(ShipSyllablesStart.First_Index, ShipSyllablesStart.Last_Index));
+                if GetRandom(1, 100) < 51 then
+                    Append(NewName, ShipSyllablesMiddle.Element(GetRandom(ShipSyllablesMiddle.First_Index, ShipSyllablesMiddle.Last_Index)));
+                end if;
+                Append(NewName,ShipSyllablesEnd.Element(GetRandom(ShipSyllablesEnd.First_Index, ShipSyllablesEnd.Last_Index)));
+            when Drones =>
+                LettersAmount := GetRandom(2, 5);
+                for I in 1..LettersAmount loop
+                    Append(NewName, Letters'Val(GetRandom(Letters'Pos(Letters'First), Letters'Pos(Letters'Last))));
+                end loop;
+                Append(NewName, '-');
+                NumbersAmount := GetRandom(2, 4);
+                for I in 1..NumbersAmount loop
+                    Append(NewName, Numbers'Val(GetRandom(Numbers'Pos(Numbers'First), Numbers'Pos(Numbers'Last))));
+                end loop;
+            when others =>
+                null;
+        end case;
         return NewName;
     end GenerateShipName;
 

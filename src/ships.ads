@@ -105,6 +105,6 @@ package Ships is
     procedure StartUpgrading(ModuleIndex, UpgradeType : Positive); -- Set upgrading order
     procedure UpgradeShip(Minutes : Positive); -- Upgrade selected module on ship
     procedure RepairShip(Minutes : Positive); -- Repair ship modules
-    function GenerateShipName return Unbounded_String; -- Generate random name for ship
+    function GenerateShipName(Owner : Bases_Owners := Any) return Unbounded_String; -- Generate random name for ship
 
 end Ships;
