@@ -822,10 +822,10 @@ package body Ships is
                             AddMessage("You reached maximum durability for " &
                                 To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
                                 & ".", OrderMessage);
-                            GiveOrders(WorkerIndex, Rest);
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", "0");
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeAction", "NONE");
                             PlayerShip.UpgradeModule := 0;
+                            GiveOrders(WorkerIndex, Rest);
                             return;
                         else
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", "10");
@@ -851,10 +851,10 @@ package body Ships is
                             AddMessage("You reached maximum upgrade for " &
                                 To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
                                 & ".", OrderMessage);
-                            GiveOrders(WorkerIndex, Rest);
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", "0");
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeAction", "NONE");
                             PlayerShip.UpgradeModule := 0;
+                            GiveOrders(WorkerIndex, Rest);
                             return;
                         else
                             case Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType is
@@ -890,10 +890,10 @@ package body Ships is
                             AddMessage("You reached maximum upgrade for " &
                                 To_String(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name)
                                 & ".", OrderMessage);
-                            GiveOrders(WorkerIndex, Rest);
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeProgress", "0");
                             UpdateModule(PlayerShip, PlayerShip.UpgradeModule, "UpgradeAction", "NONE");
                             PlayerShip.UpgradeModule := 0;
+                            GiveOrders(WorkerIndex, Rest);
                             return;
                         else
                             case Modules_List.Element(PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex).MType is
