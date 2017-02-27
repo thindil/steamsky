@@ -45,6 +45,32 @@ package body Crew is
         if GivenOrder = PlayerShip.Crew.Element(MemberIndex).Order then
             return;
         end if;
+        if GivenOrder = Upgrading or GivenOrder = Repair or GivenOrder = Clean then -- Check for tools
+            if GivenOrder = Clean then
+                RequiredTool := To_Unbounded_String("Bucket");
+            else
+                RequiredTool := To_Unbounded_String("RepairTools");
+            end if;
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = RequiredTool then
+                    ToolsIndex := I;
+                    exit;
+                end if;
+            end loop;
+            if ToolsIndex = 0 then
+                case GivenOrder is
+                    when Repair =>
+                        ShowDialog(MemberName & " can't starts repairing ship because you don't have repair tools.");
+                    when Clean =>
+                        ShowDialog(MemberName & " can't starts cleaning ship because you don't have any bucket.");
+                    when Upgrading =>
+                        ShowDialog(MemberName & " can't starts upgrading module because you don't have repair tools.");
+                    when others =>
+                        null;
+                end case;
+                return;
+            end if;
+        end if;
         if GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Upgrading or GivenOrder = Talk then
             for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                 if PlayerShip.Crew.Element(I).Order = GivenOrder then
@@ -55,26 +81,6 @@ package body Crew is
         elsif GivenOrder = Gunner or GivenOrder = Craft or GivenOrder = Heal then
             if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
                 GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest, 0, False);
-            end if;
-        elsif GivenOrder = Repair or GivenOrder = Clean then
-            if GivenOrder = Repair then
-                RequiredTool := To_Unbounded_String("RepairTools");
-            else
-                RequiredTool := To_Unbounded_String("Bucket");
-            end if;
-            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = RequiredTool then
-                    ToolsIndex := I;
-                    exit;
-                end if;
-            end loop;
-            if ToolsIndex = 0 then
-                if GivenOrder = Repair then
-                    ShowDialog(MemberName & " can't starts repairing ship because you don't have repair tools.");
-                else
-                    ShowDialog(MemberName & " can't starts cleaning ship because you don't have any bucket.");
-                end if;
-                return;
             end if;
         end if;
         if ModuleIndex = 0 and (GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Rest) then
@@ -671,6 +677,21 @@ package body Crew is
             GiveOrders(MemberIndex, Order, ModuleIndex);
             return True;
         end UpdatePosition;
+        function HaveTools(Order : Crew_Orders) return Boolean is
+            RequiredTool : Unbounded_String;
+        begin
+            if Order = Clean then
+                RequiredTool := To_Unbounded_String("Bucket");
+            else
+                RequiredTool := To_Unbounded_String("RepairTools");
+            end if;
+            for Item of PlayerShip.Cargo loop
+                if Items_List.Element(Item.ProtoIndex).IType = RequiredTool then
+                    return True;
+                end if;
+            end loop;
+            return False;
+        end HaveTools;
     begin
         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
             case PlayerShip.Crew.Element(I).Order is
@@ -750,7 +771,7 @@ package body Crew is
                 UpdateOrders;
             end if;
         end if;
-        if not HaveUpgrade and PlayerShip.UpgradeModule > 0 then
+        if not HaveUpgrade and PlayerShip.UpgradeModule > 0 and HaveTools(Upgrading) then
             if UpdatePosition(Upgrading) then
                 UpdateOrders;
             end if;
@@ -760,7 +781,7 @@ package body Crew is
                 UpdateOrders;
             end if;
         end if;
-        if NeedClean then
+        if NeedClean and HaveTools(Clean) then
             if UpdatePosition(Clean) then
                 UpdateOrders;
             end if;
@@ -770,7 +791,7 @@ package body Crew is
                 UpdateOrders;
             end if;
         end if;
-        if NeedRepairs then
+        if NeedRepairs and HaveTools(Repair) then
             if UpdatePosition(Repair) then
                 UpdateOrders;
             end if;
@@ -795,7 +816,7 @@ package body Crew is
                 UpdateOrders;
             end if;
         end if;
-        if not HaveUpgrade and PlayerShip.UpgradeModule > 0 then
+        if not HaveUpgrade and PlayerShip.UpgradeModule > 0 and HaveTools(Upgrading) then
             if UpdatePosition(Upgrading, False) then
                 UpdateOrders;
             end if;
@@ -805,7 +826,7 @@ package body Crew is
                 UpdateOrders;
             end if;
         end if;
-        if NeedClean then
+        if NeedClean and HaveTools(Clean) then
             if UpdatePosition(Clean, False) then
                 UpdateOrders;
             end if;
@@ -815,7 +836,7 @@ package body Crew is
                 UpdateOrders;
             end if;
         end if;
-        if NeedRepairs then
+        if NeedRepairs and HaveTools(Repair) then
             if UpdatePosition(Repair, False) then
                 UpdateOrders;
             end if;
