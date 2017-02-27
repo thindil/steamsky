@@ -137,6 +137,9 @@ package body Maps is
             elsif SkyBases(BaseIndex).Known then
                 WindowHeight := WindowHeight + 2;
             end if;
+            if SkyBases(BaseIndex).Population = 0 then
+                WindowHeight := WindowHeight - 1;
+            end if;
             WindowWidth := 4 + Column_Position(Length(SkyBases(BaseIndex).Name));
             if WindowWidth < 20 then
                 WindowWidth := 20;
@@ -180,39 +183,43 @@ package body Maps is
                 Move_Cursor(Win => InfoWindow, Line => 4, Column => 2);
                 Add(Win => InfoWindow, Str => To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
                 Move_Cursor(Win => InfoWindow, Line => 5, Column => 2);
-                if SkyBases(BaseIndex).Population < 150 then
+                if SkyBases(BaseIndex).Population > 0 and SkyBases(BaseIndex).Population < 150 then
                     Add(Win => InfoWindow, Str => "small");
                 elsif SkyBases(BaseIndex).Population > 149 and SkyBases(BaseIndex).Population < 300 then
                     Add(Win => InfoWindow, Str => "medium");
-                else
+                elsif SkyBases(BaseIndex).Population > 299 then
                     Add(Win => InfoWindow, Str => "large");
                 end if;
                 Move_Cursor(Win => InfoWindow, Line => 6, Column => 2);
                 Add(Win => InfoWindow, Str => To_Lower(Bases_Owners'Image(SkyBases(BaseIndex).Owner)));
-                Move_Cursor(Win => InfoWindow, Line => 7, Column => 2);
-                case SkyBases(BaseIndex).Reputation(1) is
-                    when -100..-75 =>
-                        Add(Win => InfoWindow, Str => "hated");
-                    when -74..-50 =>
-                        Add(Win => InfoWindow, Str => "outlaw");
-                    when -49..-25 =>
-                        Add(Win => InfoWindow, Str => "hostile");
-                    when -24..-1 =>
-                        Add(Win => InfoWindow, Str => "unfriendly");
-                    when 0 =>
-                        Add(Win => InfoWindow, Str => "unknown");
-                    when 1..25 =>
-                        Add(Win => InfoWindow, Str => "visitor");
-                    when 26..50 =>
-                        Add(Win => InfoWindow, Str => "trader");
-                    when 51..75 =>
-                        Add(Win => InfoWindow, Str => "friend");
-                    when 76..100 =>
-                        Add(Win => InfoWindow, Str => "well known");
-                    when others =>
-                        null;
-                end case;
-                CurrentLine := 9;
+                if SkyBases(BaseIndex).Population > 0 then
+                    Move_Cursor(Win => InfoWindow, Line => 7, Column => 2);
+                    case SkyBases(BaseIndex).Reputation(1) is
+                        when -100..-75 =>
+                            Add(Win => InfoWindow, Str => "hated");
+                        when -74..-50 =>
+                            Add(Win => InfoWindow, Str => "outlaw");
+                        when -49..-25 =>
+                            Add(Win => InfoWindow, Str => "hostile");
+                        when -24..-1 =>
+                            Add(Win => InfoWindow, Str => "unfriendly");
+                        when 0 =>
+                            Add(Win => InfoWindow, Str => "unknown");
+                        when 1..25 =>
+                            Add(Win => InfoWindow, Str => "visitor");
+                        when 26..50 =>
+                            Add(Win => InfoWindow, Str => "trader");
+                        when 51..75 =>
+                            Add(Win => InfoWindow, Str => "friend");
+                        when 76..100 =>
+                            Add(Win => InfoWindow, Str => "well known");
+                        when others =>
+                            null;
+                    end case;
+                    CurrentLine := 9;
+                else
+                    CurrentLine := 8;
+                end if;
             end if;
         end if;
         if EventIndex > 0 and MissionIndex = 0 then
