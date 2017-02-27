@@ -48,7 +48,11 @@ package body Combat is
         PilotOrder := 2;
         EngineerOrder := 3;
         EndCombat := False;
-        EnemyName := GenerateShipName;
+        if Enemies_List.Element(EnemyIndex).Owner /= Drones then
+            EnemyName := GenerateShipName;
+        else
+            EnemyName := GenerateShipName(Drones);
+        end if;
         MessagesStarts := GetLastMessageIndex + 1;
         Guns.Clear;
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
