@@ -19,7 +19,8 @@ All notable changes to this project will be documented in this file.
 - Descriptions to ships
 - New random events: engine damage during fly and enemy patrol
 - New ship modules: huge bronze hull, advanced huge bronze hull, huge
-  bronze engine, advanced huge bronze engine and small iron hull
+  bronze engine, advanced huge bronze engine, small iron hull and
+  small advanced iron hull
 - Option to set orders priorities for crew members which made saves
   from 0.8 incompatible
 - Send on break crew member which have set order to talk in bases when
