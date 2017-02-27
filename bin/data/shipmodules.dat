@@ -808,4 +808,16 @@ Skill = Engineering
 Price = 6500 
 InstallTime = 180
 Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+[65]
+Name = Small advanced iron hull
+Type = Hull
+Weight = 5500
+Value = 0
+MaxValue = 17
+Durability = 150
+Material = Iron
+Skill = Engineering
+Price = 8500 
+InstallTime = 200
+Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
 []
