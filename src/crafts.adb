@@ -276,9 +276,9 @@ package body Crafts is
                             end if;
                             if ToolIndex = 0 and Recipe.Tool /= To_Unbounded_String("None") then
                                 AddMessage("You don't have tool for " & To_String(RecipeName) & ".", CraftMessage);
-                                GiveOrders(CrafterIndex, Rest);
                                 UpdateModule(PlayerShip, L, "Current_Value", "0");
                                 UpdateModule(PlayerShip, L, "Max_Value", Integer'Image(0 - PlayerShip.Modules.Element(L).Max_Value));
+                                GiveOrders(CrafterIndex, Rest);
                                 exit Craft_Loop;
                             end if;
                             Amount := 0;
@@ -298,9 +298,9 @@ package body Crafts is
                             for J in MaterialIndexes.First_Index..MaterialIndexes.Last_Index loop
                                 if PlayerShip.Cargo.Element(MaterialIndexes.Element(J)).Amount < Recipe.MaterialAmounts.Element(J) then
                                     AddMessage("You don't have enough crafting materials for " & To_String(RecipeName) & ".", CraftMessage);
-                                    GiveOrders(CrafterIndex, Rest);
                                     UpdateModule(PlayerShip, L, "Current_Value", "0");
                                     UpdateModule(PlayerShip, L, "Max_Value", Integer'Image(0 - PlayerShip.Modules.Element(L).Max_Value));
+                                    GiveOrders(CrafterIndex, Rest);
                                     exit Craft_Loop;
                                 end if;
                             end loop;
@@ -316,9 +316,9 @@ package body Crafts is
                                 Amount := Amount - (Items_List.Element(Recipe.ResultIndex).Weight * ResultAmount);
                                 if FreeCargo(Amount) < 0 then
                                     AddMessage("You don't have free cargo space for " & To_String(RecipeName) & ".", CraftMessage);
-                                    GiveOrders(CrafterIndex, Rest);
                                     UpdateModule(PlayerShip, L, "Current_Value", "0");
                                     UpdateModule(PlayerShip, L, "Max_Value", Integer'Image(0 - PlayerShip.Modules.Element(L).Max_Value));
+                                    GiveOrders(CrafterIndex, Rest);
                                     exit Craft_Loop;
                                 end if;
                                 UpdateCargo(PlayerShip, Recipes_List.Element(PlayerShip.Modules.Element(L).Current_Value).ResultIndex, 
@@ -360,9 +360,9 @@ package body Crafts is
                         end if;
                         PlayerShip.Crew.Update_Element(Index => CrafterIndex, Process => UpdateMember'Access);
                         if PlayerShip.Modules.Element(L).Current_Value < 0 and CraftedAmount > 0 then
-                            GiveOrders(CrafterIndex, Rest);
                             UpdateModule(PlayerShip, L, "Current_Value", "0");
                             UpdateModule(PlayerShip, L, "Max_Value", Integer'Image(0 - PlayerShip.Modules.Element(L).Max_Value));
+                            GiveOrders(CrafterIndex, Rest);
                         end if;
                     end if;
                 end if;
