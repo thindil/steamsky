@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - New item: bronze repair tools
 - New crafting recipe: bronze repair tools
 - Bronze repair tools and wooden bucket to starting cargo
+- Separated names for drones ships
 
 ### Changed
 - Updated interface
