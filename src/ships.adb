@@ -163,6 +163,8 @@ package body Ships is
 
     procedure DockShip(Docking : Boolean) is
         BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        MoneyIndex : constant Natural := FindMoney;
+        DockingCost : Positive;
     begin
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
             ShowDialog("Here no base to dock or undock.");
@@ -180,9 +182,40 @@ package body Ships is
             return;
         end if;
         if Docking then
+            if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner /= Abandoned then
+                if MoneyIndex = 0 then
+                    ShowDialog("You can't dock to base because you don't have Charcollum to pay for docking.");
+                    return;
+                end if;
+                for Module of PlayerShip.Modules loop
+                    if Modules_List.Element(Module.ProtoIndex).MType = HULL then
+                        DockingCost := Module.Max_Value;
+                        exit;
+                    end if;
+                end loop;
+                case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Reputation(1) is
+                    when -24..-1 =>
+                        DockingCost := DockingCost + Integer(Float'Floor(Float(DockingCost) * 0.05));
+                    when 26..50 =>
+                        DockingCost := DockingCost - Integer(Float'Floor(Float(DockingCost) * 0.05));
+                    when 51..75 =>
+                        DockingCost := DockingCost - Integer(Float'Floor(Float(DockingCost) * 0.1));
+                    when 76..100 =>
+                        DockingCost := DockingCost - Integer(Float'Floor(Float(DockingCost) * 0.15));
+                    when others =>
+                        null;
+                end case;
+                if DockingCost > PlayerShip.Cargo.Element(MoneyIndex).Amount then
+                    ShowDialog("You can't dock to base because you don't have enough Charcollum to pay for docking.");
+                    return;
+                end if;
+                UpdateCargo(PlayerShip, 1, (0 - DockingCost));
+                AddMessage("Ship docked to base " & To_String(SkyBases(BaseIndex).Name) & ". It costs" & Positive'Image(DockingCost) &
+                    " Charcollum.", OrderMessage);
+            else
+                AddMessage("Ship docked to base " & To_String(SkyBases(BaseIndex).Name) & ".", OrderMessage);
+            end if;
             PlayerShip.Speed := DOCKED;
-            AddMessage("Ship docked to base " &
-                To_String(SkyBases(BaseIndex).Name), OrderMessage);
             UpdateGame(10);
         else
             PlayerShip.Speed := QUARTER_SPEED;
