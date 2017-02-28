@@ -235,13 +235,13 @@ package body Bases.UI.Shipyard is
         end AddMenuItems;
     begin
         Move_Cursor(Line => 2, Column => 2);
-        Add(Str => "[Install] [Remove]");
-        Change_Attributes(Line => 2, Column => 3, Count => 1, Color => 1);
-        Change_Attributes(Line => 2, Column => 13, Count => 1, Color => 1);
+        Add(Str => "[F2 Install] [F3 Remove]");
+        Change_Attributes(Line => 2, Column => 3, Count => 2, Color => 1);
+        Change_Attributes(Line => 2, Column => 16, Count => 2, Color => 1);
         if InstallView then
-            Move_Cursor(Line => 2, Column => 21);
-            Add(Str => "[Show modules: " & To_Lower(To_String(ModulesNames(ModuleType'Pos(ModulesType)))) & "]");
-            Change_Attributes(Line => 2, Column => 22, Count => 1, Color => 1);
+            Move_Cursor(Line => 2, Column => 27);
+            Add(Str => "[F4 Show modules: " & To_Lower(To_String(ModulesNames(ModuleType'Pos(ModulesType)))) & "]");
+            Change_Attributes(Line => 2, Column => 28, Count => 2, Color => 1);
             Modules_Items := new Item_Array(Modules_List.First_Index..(Modules_List.Last_Index + 1));
             if ModulesType = ANY then
                 for I in ModuleType'Range loop
@@ -350,15 +350,15 @@ package body Bases.UI.Shipyard is
                     ShowModuleInfo;
                     Refresh(MenuWindow);
                 end if;
-            when Character'Pos('i') | Character'Pos('I') => -- Show modules to install
+            when KEY_F2 => -- Show modules to install
                 InstallView := True;
                 CurrentMenuIndex := 1;
                 DrawGame(Shipyard_View);
-            when Character'Pos('r') | Character'Pos('R') => -- Show modules to remove
+            when KEY_F3 => -- Show modules to remove
                 InstallView := False;
                 CurrentMenuIndex := 1;
                 DrawGame(Shipyard_View);
-            when Character'Pos('s') | Character'Pos('S') => -- Show select modules type menu
+            when KEY_F4 => -- Show select modules type menu
                 ShowTypesMenu;
                 return ShipyardTypesMenu;
             when 10 => -- Install/remove module
