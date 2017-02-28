@@ -28,6 +28,7 @@ with UserInterface; use UserInterface;
 with Statistics; use Statistics;
 with Game; use Game;
 with Utils; use Utils;
+with ShipModules; use ShipModules;
 
 package body Missions is
 
@@ -39,6 +40,8 @@ package body Missions is
         MinX, MinY, MaxX, MaxY : Integer;
         type Value_Type is digits 2 range 0.0..9999999.0;
         package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions(Value_Type);
+        Enemies : Positive_Container.Vector;
+        PlayerValue : Natural := 0;
     begin
         TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) - (SkyBases(BaseIndex).MissionsDate.Day + 
             ((30 * SkyBases(BaseIndex).MissionsDate.Month) * SkyBases(BaseIndex).MissionsDate.Year));
@@ -99,13 +102,36 @@ package body Missions is
             end if;
         end loop;
         SkyBases(BaseIndex).Missions.Clear;
+        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
+            case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                when HULL | GUN | BATTERING_RAM =>
+                    PlayerValue := PlayerValue + PlayerShip.Modules.Element(I).MaxDurability +
+                    (PlayerShip.Modules.Element(I).Max_Value * 10);
+                when ARMOR =>
+                    PlayerValue := PlayerValue + PlayerShip.Modules.Element(I).MaxDurability;
+                when others =>
+                    null;
+            end case;
+        end loop;
+        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+            if Length(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType) >= 4 then
+                if Slice(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType, 1, 4) = "Ammo" then
+                    PlayerValue := PlayerValue + (Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Value * 10);
+                end if;
+            end if;
+        end loop;
+        for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
+            if Enemies_List.Element(I).CombatValue <= PlayerValue then
+                Enemies.Append(New_Item => I);
+            end if;
+        end loop;
         for I in 1..MissionsAmount loop
             Mission.MType := Missions_Types'Val(GetRandom(0, Missions_Types'Pos(Missions_Types'Last)));
             case Mission.MType is
                 when Deliver => 
                     Mission.Target := MissionsItems.Element(GetRandom(MissionsItems.First_Index, MissionsItems.Last_Index));
                 when Kill =>
-                    Mission.Target := GetRandom(Enemies_List.First_Index, Enemies_List.Last_Index);
+                    Mission.Target := Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index));
                 when Patrol =>
                     Mission.Target := 0;
                 when Explore =>
