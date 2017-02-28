@@ -12,6 +12,7 @@ To move map without moving ship, hold SHIFT and use keypad keys this same which 
 At this moment, help is under development (as whole game).
 [Ship movement]
 Your ship starts docked to base. To move it, you must first give order "Undock" from base. Press 'o' key (or first 'e' key for see game menu) for open orders menu.
+Each docking operation cost some moneys, depending on your ship size (bigger ships have bigger docking cost) and your reputation in that base. Undocking from bases is free.
 Each unvisited field on map is grey. Once you fly on this field, it color change to black.
 At game start, you know only one base. You can discover others by flying on it or by asking for other bases in current base. To ask, press 'o' key and then select option 'Ask for bases'. You can ask for other bases only once in each base. Each ask take 30 minutes of game time. Amount of discovered bases depends on current base size (in larger bases they know more other bases).
 When you undocked from base, in this same menu, you can set ship speed or dock again. Faster speed means you travel faster but you use more fuel too.
