@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 - Minimum required durability of engine to fly on almost destroyed
 - Better generation of event when asking in bases
 - Repairing, upgrading and cleaning player ship modules needs tools
+- Better destroy ship missions generation
 
 ### Fixed
 - Attacking different ship than selected
