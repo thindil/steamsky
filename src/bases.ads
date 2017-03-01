@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -64,5 +64,6 @@ package Bases is
     procedure AskForBases; -- Ask in base for direction for other bases
     procedure AskForEvents; -- Ask in base for direction for random events
     procedure BuyRecipe(RecipeIndex : Positive); -- Buy new crafting recipe
+    procedure UpdatePopulation(BaseIndex : Positive); -- Update base population if needed
 
 end Bases;

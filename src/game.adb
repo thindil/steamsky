@@ -245,6 +245,7 @@ package body Game is
                 SkyBases(BaseIndex).Known := True;
                 AddMessage("You discovered base " & To_String(SkyBases(BaseIndex).Name) & ".", OtherMessage);
             end if;
+            UpdatePopulation(BaseIndex);
             GenerateRecruits(BaseIndex);
             GenerateMissions(BaseIndex);
             UpdateOrders;

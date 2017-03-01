@@ -190,6 +190,7 @@ package body Events is
         CurrentIndex : Positive := Events_List.First_Index;
         NewTime : Integer;
         EventsAmount : constant Natural := Natural(Events_List.Length);
+        PopulationLost, BaseIndex : Positive; 
         procedure UpdateEvent(Event : in out EventData) is
         begin
             Event.Time := NewTime;
@@ -201,6 +202,18 @@ package body Events is
         while CurrentIndex <= Events_List.Last_Index loop
             NewTime := Events_List.Element(CurrentIndex).Time - Minutes;
             if NewTime < 1 then
+                if (Events_List.Element(CurrentIndex).EType = Disease or Events_List.Element(CurrentIndex).EType = AttackOnBase) and
+                    GetRandom(1, 100) < 10
+                then
+                    BaseIndex := SkyMap(Events_List.Element(CurrentIndex).SkyX, Events_List.Element(CurrentIndex).SkyY).BaseIndex;
+                    PopulationLost := GetRandom(1, 10);
+                    if PopulationLost > SkyBases(BaseIndex).Population then
+                        PopulationLost := SkyBases(BaseIndex).Population;
+                        SkyBases(BaseIndex).Owner := Abandoned;
+                        SkyBases(BaseIndex).Reputation := (0, 0);
+                    end if;
+                    SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population - PopulationLost;
+                end if;
                 SkyMap(Events_List.Element(CurrentIndex).SkyX, Events_List.Element(CurrentIndex).SkyY).EventIndex := 0;
                 Events_List.Delete(Index => CurrentIndex, Count => 1);
             else
