@@ -54,11 +54,12 @@ package body Bases is
     end GainRep;
     
     procedure BuyItems(ItemIndex : Positive; Amount : String) is
-        BuyAmount, TraderIndex : Positive;
+        BuyAmount, TraderIndex, Price : Positive;
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         ItemName : constant String := To_String(Items_List.Element(ItemIndex).Name);
         Cost, MoneyIndex : Natural;
+        EventIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
     begin
         BuyAmount := Positive'Value(Amount);
         if not Items_List.Element(ItemIndex).Buyable(BaseType) then
@@ -71,7 +72,13 @@ package body Bases is
                 exit;
             end if;
         end loop;
-        Cost := BuyAmount * Items_List.Element(ItemIndex).Prices(BaseType);
+        Price := Items_List.Element(ItemIndex).Prices(BaseType);
+        if EventIndex > 0 then
+            if Events_List.Element(EventIndex).EType = DoublePrice and Events_List.Element(EventIndex).Data = ItemIndex then
+                Price := Price * 2;
+            end if;
+        end if;
+        Cost := BuyAmount * Price;
         Cost := Cost - Integer(Float'Floor(Float(Cost) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
         case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Reputation(1) is
             when -24..-1 =>
@@ -119,7 +126,8 @@ package body Bases is
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         ProtoIndex : constant Positive := PlayerShip.Cargo.Element(ItemIndex).ProtoIndex;
         ItemName : constant String := To_String(Items_List.Element(ProtoIndex).Name);
-        Profit : Positive;
+        Profit, Price : Positive;
+        EventIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
     begin
         SellAmount := Positive'Value(Amount);
         if PlayerShip.Cargo.Element(ItemIndex).Amount < SellAmount then
@@ -132,7 +140,13 @@ package body Bases is
                 exit;
             end if;
         end loop;
-        Profit := Items_List.Element(ProtoIndex).Prices(BaseType) * SellAmount;
+        Price := Items_List.Element(ProtoIndex).Prices(BaseType);
+        if EventIndex > 0 then
+            if Events_List.Element(EventIndex).EType = DoublePrice and Events_List.Element(EventIndex).Data = ProtoIndex then
+                Price := Price * 2;
+            end if;
+        end if;
+        Profit := Price * SellAmount;
         if PlayerShip.Cargo.Element(ItemIndex).Durability < 100 then
             Profit := Positive(Float'Floor(Float(Profit) * (Float(PlayerShip.Cargo.Element(ItemIndex).Durability) / 100.0)));
         end if;
@@ -709,7 +723,7 @@ package body Bases is
     procedure AskForEvents is
         BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         TimeDiff : Natural;
-        MaxEvents, EventsAmount, TmpBaseIndex, TraderIndex : Positive;
+        MaxEvents, EventsAmount, TmpBaseIndex, TraderIndex, ItemIndex : Positive;
         Event : Events_Types;
         EventX, EventY, EventTime, DiffX, DiffY : Positive;
         MinX, MinY, MaxX, MaxY : Integer;
@@ -784,8 +798,8 @@ package body Bases is
         end if;
         for I in 1..EventsAmount loop
             loop
-                Event := Events_Types'Val(GetRandom(1, 4));
-                exit when Event /= FullDocks;
+                Event := Events_Types'Val(GetRandom(1, 6));
+                exit when Event /= FullDocks and Event /= EnemyPatrol;
             end loop;
             Attempts := 10;
             loop
@@ -815,7 +829,7 @@ package body Bases is
                     then
                         exit;
                     end if;
-                    if Event = Disease and (EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY and 
+                    if (Event = Disease or Event = DoublePrice) and (EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY and 
                         SkyMap(EventX, EventY).EventIndex = 0 and (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /= Abandoned or
                         SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /= Drones or 
                         SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /= Undead) and SkyBases(SkyMap(EventX, EventY).BaseIndex).Known)
@@ -836,6 +850,12 @@ package body Bases is
                         Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                 when Disease =>
                     Events_List.Append(New_Item => (Disease, EventX, EventY, GetRandom(10080, 12000), 1));
+                when DoublePrice =>
+                    loop
+                        ItemIndex := GetRandom(Items_List.First_Index, Items_List.Last_Index);
+                        exit when Items_List.Element(ItemIndex).Prices(1) > 0;
+                    end loop;
+                    Events_List.Append(New_Item => (DoublePrice, EventX, EventY, GetRandom((EventTime * 3), (EventTime * 4)), ItemIndex));
                 when others =>
                     null;
             end case;

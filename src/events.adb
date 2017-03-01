@@ -32,8 +32,9 @@ package body Events is
     function CheckForEvent(OldState : GameStates) return GameStates is
         TimePassed : Integer;
         CrewIndex, PlayerValue : Natural := 0;
-        Roll, Roll2 : Positive;
+        Roll, Roll2, ItemIndex : Positive;
         Enemies, Engines : Positive_Container.Vector;
+        BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         procedure GenerateEnemies(Owner : Bases_Owners := Any) is
         begin
             if GetRandom(1, 100) < 95 then
@@ -79,7 +80,7 @@ package body Events is
         end if;
         if GetRandom(1, 100) < 7 then -- Event happen
             Roll := GetRandom(1, 100);
-            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then -- Outside bases
+            if BaseIndex = 0 then -- Outside bases
                 case Roll is
                     when 1..5 => -- Engine damaged
                         for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
@@ -142,11 +143,11 @@ package body Events is
                         return StartCombat(Events_List.Element(Events_List.Last_Index).Data);
                 end case;
             else
-                if PlayerShip.Speed /= DOCKED and SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner /= Abandoned then
-                    if Roll = 21 and (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner = Drones or 
-                        SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner = Undead)
+                if PlayerShip.Speed /= DOCKED and SkyBases(BaseIndex).Owner /= Abandoned then
+                    if Roll in 21..30 and (SkyBases(BaseIndex).Owner = Drones or 
+                        SkyBases(BaseIndex).Owner = Undead)
                     then
-                        Roll := 22;
+                        Roll := 31;
                     end if;
                     case Roll is
                         when 1..20 => -- Base is attacked
@@ -158,12 +159,18 @@ package body Events is
                         when 21 => -- Disease in base
                             Events_List.Append(New_Item => (Disease, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(10080, 12000), 1));
                             AddMessage("You can't dock to base now, it is closed due to disease.", OtherMessage);
+                        when 22..30 => -- Double price for item in base
+                            loop
+                                ItemIndex := GetRandom(Items_List.First_Index, Items_List.Last_Index);
+                                exit when Items_List.Element(ItemIndex).Prices(1) > 0;
+                            end loop;
+                            Events_List.Append(New_Item => (DoublePrice, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(1440, 2880),
+                                ItemIndex));
                         when others => -- Full docks or enemy patrol
-                            if Roll in 20..40 and (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner /= Poleis and
-                                SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner /= Independent) and
-                                SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Reputation(1) < -24
+                            if Roll in 20..40 and (SkyBases(BaseIndex).Owner /= Poleis and SkyBases(BaseIndex).Owner /= Independent) and
+                                SkyBases(BaseIndex).Reputation(1) < -24
                             then
-                                GenerateEnemies(SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner);
+                                GenerateEnemies(SkyBases(BaseIndex).Owner);
                                 Events_List.Append(New_Item => (EnemyPatrol, PlayerShip.SkyX, PlayerShip.SkyY, GetRandom(30, 45), 
                                     Enemies.Element(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                                 SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex := Events_List.Last_Index;
