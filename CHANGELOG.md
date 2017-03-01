@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Bronze repair tools and wooden bucket to starting cargo
 - Separated names for drones ships
 - Docking fees when docking to bases
+- Population changes to bases
 
 ### Changed
 - Updated interface
