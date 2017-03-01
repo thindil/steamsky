@@ -235,13 +235,12 @@ package body Bases.UI.Shipyard is
         end AddMenuItems;
     begin
         Move_Cursor(Line => 2, Column => 2);
-        Add(Str => "[F2 Install] [F3 Remove]");
-        Change_Attributes(Line => 2, Column => 3, Count => 2, Color => 1);
-        Change_Attributes(Line => 2, Column => 16, Count => 2, Color => 1);
         if InstallView then
-            Move_Cursor(Line => 2, Column => 27);
-            Add(Str => "[F4 Show modules: " & To_Lower(To_String(ModulesNames(ModuleType'Pos(ModulesType)))) & "]");
-            Change_Attributes(Line => 2, Column => 28, Count => 2, Color => 1);
+            Add(Str => "[Install] [F2 Remove]");
+            Change_Attributes(Line => 2, Column => 13, Count => 2, Color => 1);
+            Move_Cursor(Line => 2, Column => 24);
+            Add(Str => "[F3 Show modules: " & To_Lower(To_String(ModulesNames(ModuleType'Pos(ModulesType)))) & "]");
+            Change_Attributes(Line => 2, Column => 25, Count => 2, Color => 1);
             Modules_Items := new Item_Array(Modules_List.First_Index..(Modules_List.Last_Index + 1));
             if ModulesType = ANY then
                 for I in ModuleType'Range loop
@@ -251,6 +250,8 @@ package body Bases.UI.Shipyard is
                 AddMenuItems(ModulesType);
             end if;
         else
+            Add(Str => "[F2 Install] [Remove]");
+            Change_Attributes(Line => 2, Column => 3, Count => 2, Color => 1);
             Modules_Items := new Item_Array(PlayerShip.Modules.First_Index..(PlayerShip.Modules.Last_Index + 1));
             for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
                 if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType /= HULL then
@@ -350,17 +351,19 @@ package body Bases.UI.Shipyard is
                     ShowModuleInfo;
                     Refresh(MenuWindow);
                 end if;
-            when KEY_F2 => -- Show modules to install
-                InstallView := True;
+            when KEY_F2 => -- Switch modules to install/remove
+                if not InstallView then
+                    InstallView := True;
+                else
+                    InstallView := False;
+                end if;
                 CurrentMenuIndex := 1;
                 DrawGame(Shipyard_View);
-            when KEY_F3 => -- Show modules to remove
-                InstallView := False;
-                CurrentMenuIndex := 1;
-                DrawGame(Shipyard_View);
-            when KEY_F4 => -- Show select modules type menu
-                ShowTypesMenu;
-                return ShipyardTypesMenu;
+            when KEY_F3 => -- Show select modules type menu
+                if InstallView then
+                    ShowTypesMenu;
+                    return ShipyardTypesMenu;
+                end if;
             when 10 => -- Install/remove module
                 Bases.UpgradeShip(InstallView, Positive'Value(Description(Current(TradeMenu))));
                 DrawGame(Shipyard_View);
