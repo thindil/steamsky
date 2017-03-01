@@ -17,7 +17,8 @@ All notable changes to this project will be documented in this file.
 - New combat AI type: disarmer
 - More info about enemy to combat screen
 - Descriptions to ships
-- New random events: engine damage during fly and enemy patrol
+- New random events: engine damage during fly, enemy patrol and double
+  price for items in bases
 - New ship modules: huge bronze hull, advanced huge bronze hull, huge
   bronze engine, advanced huge bronze engine, small iron hull, small
   advanced iron hull, medium iron hull and advanced medium iron hull
