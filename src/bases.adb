@@ -924,4 +924,27 @@ package body Bases is
         UpdateGame(5);
     end BuyRecipe;
 
+    procedure UpdatePopulation(BaseIndex : Positive) is
+        TimeDiff : Natural;
+        PopulationDiff : Integer;
+    begin
+        TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+            (SkyBases(BaseIndex).RecruitDate.Day + ((30 * SkyBases(BaseIndex).RecruitDate.Month) * SkyBases(BaseIndex).RecruitDate.Year));
+        if (TimeDiff < 30 or SkyBases(BaseIndex).Owner = Abandoned) and GetRandom(1, 100) > 30 then
+            return;
+        end if;
+        if GetRandom(1, 100) < 20 then
+            PopulationDiff := 0 - GetRandom(1, 10);
+        else
+            PopulationDiff := GetRandom(1, 10);
+        end if;
+        if SkyBases(BaseIndex).Population + PopulationDiff < 0 then
+            PopulationDiff := 0 - SkyBases(BaseIndex).Population;
+        end if;
+        SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + PopulationDiff;
+        if SkyBases(BaseIndex).Population = 0 then
+            SkyBases(BaseIndex).Owner := Abandoned;
+            SkyBases(BaseIndex).Reputation := (0, 0);
+        end if;
+    end UpdatePopulation;
 end Bases;
