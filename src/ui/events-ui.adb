@@ -23,6 +23,7 @@ with Maps; use Maps;
 with Messages; use Messages;
 with UserInterface; use UserInterface;
 with Bases; use Bases;
+with Items; use Items;
 
 package body Events.UI is
 
@@ -42,12 +43,16 @@ package body Events.UI is
             Positive'Image(Events_List.Element(EventIndex).SkyY));
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         case Events_List.Element(EventIndex).EType is
-            when EnemyShip =>
+            when EnemyShip | EnemyPatrol =>
                 Add(Win => InfoWindow, Str => To_String(Enemies_List.Element(Events_List.Element(EventIndex).Data).Name));
             when FullDocks | AttackOnBase | Disease =>
                 Add(Win => InfoWindow, Str => To_String(SkyBases(SkyMap(Events_List.Element(EventIndex).SkyX,
                     Events_List.Element(EventIndex).SkyY).BaseIndex).Name));
-            when others =>
+            when DoublePrice =>
+                Add(Win => InfoWindow, Str => To_String(SkyBases(SkyMap(Events_List.Element(EventIndex).SkyX,
+                    Events_List.Element(EventIndex).SkyY).BaseIndex).Name) & " - " & 
+                    To_String(Items_List.Element(Events_List.Element(EventIndex).Data).Name));
+            when None =>
                 null;
         end case;
         DiffX := abs(PlayerShip.SkyX - Events_List.Element(EventIndex).SkyX);
@@ -81,7 +86,11 @@ package body Events.UI is
                     Events_Items.all(I) := New_Item("Base is under attack");
                 when Disease =>
                     Events_Items.all(I) := New_Item("Disease in base");
-                when others =>
+                when EnemyPatrol =>
+                    Events_Items.all(I) := New_Item("Enemy patrol");
+                when DoublePrice =>
+                    Events_Items.all(I) := New_Item("Double price in base");
+                when None =>
                     null;
             end case;
         end loop;

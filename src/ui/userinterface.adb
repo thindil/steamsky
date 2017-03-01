@@ -388,7 +388,7 @@ package body UserInterface is
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
                 Event := Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType;
             end if;
-            if Event = None then
+            if Event = None or Event = DoublePrice then
                 if BaseIndex > 0 then
                     if SkyBases(BaseIndex).Reputation(1) > -25 then
                         OrdersAmount := OrdersAmount + 1;
@@ -419,7 +419,7 @@ package body UserInterface is
             if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
                 Event := Events_List.Element(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex).EType;
             end if;
-            if BaseIndex > 0 and Event = None then
+            if BaseIndex > 0 and (Event = None or Event = DoublePrice) then
                 if SkyBases(BaseIndex).Reputation(1) > -25 then
                     Orders_Items.all(MenuIndex) := New_Item("Dock");
                     MenuIndex := MenuIndex + 1;
@@ -447,7 +447,7 @@ package body UserInterface is
                             end if;
                         end loop;
                     end if;
-                when None =>
+                when None | DoublePrice =>
                     if BaseIndex > 0 then
                         for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
                             if HaveTrader then

@@ -153,6 +153,8 @@ package body Maps is
                 NewWindowWidth := 4 + Column_Position(Length(Enemies_List.Element(Events_List.Element(EventIndex).Data).Name));
             elsif Events_List.Element(EventIndex).EType = AttackOnBase then
                 NewWindowWidth := 21;
+            elsif Events_List.Element(EventIndex).EType = DoublePrice then
+                NewWindowWidth := 21 + Column_Position(Length(Items_List.Element(Events_List.Element(EventIndex).Data).Name));
             end if;
             if NewWindowWidth > WindowWidth then
                 WindowWidth := NewWindowWidth;
@@ -235,6 +237,8 @@ package body Maps is
                     Add(Win => InfoWindow, Str => "Disease");
                 when EnemyPatrol =>
                     Add(Win => InfoWindow, Str => "Enemy patrol");
+                when DoublePrice =>
+                    Add(Win => InfoWindow, Str => "Double price for " & To_String(Items_List.Element(Events_List.Element(EventIndex).Data).Name));
                 when None =>
                     null;
             end case;
