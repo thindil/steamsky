@@ -23,6 +23,7 @@ with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Help; use Help;
+with Events; use Events;
 
 package body Bases.UI.Trade is
     
@@ -31,7 +32,7 @@ package body Bases.UI.Trade is
     FormWindow : Window;
 
     procedure ShowItemInfo is
-        ItemIndex : Positive;
+        ItemIndex, Price : Positive;
         InfoWindow : Window;
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
@@ -39,6 +40,7 @@ package body Bases.UI.Trade is
         DamagePercent : Natural;
         CargoIndex : constant Natural := Integer'Value(Description(Current(TradeMenu)));
         StartColumn : Column_Position;
+        EventIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
     begin
         for I in Items_List.First_Index..Items_List.Last_Index loop
             if To_String(Items_List.Element(I).Name) = Name(Current(TradeMenu)) then
@@ -59,7 +61,13 @@ package body Bases.UI.Trade is
         else
             Add(Win => InfoWindow, Str => "Base sell price:");
         end if;
-        Add(Win => InfoWindow, Str => Integer'Image(Items_List.Element(ItemIndex).Prices(BaseType)) & " Charcollum");
+        Price := Items_List.Element(ItemIndex).Prices(BaseType);
+        if EventIndex > 0 then
+            if Events_List.Element(EventIndex).EType = DoublePrice and Events_List.Element(EventIndex).Data = ItemIndex then
+                Price := Price * 2;
+            end if;
+        end if;
+        Add(Win => InfoWindow, Str => Integer'Image(Price) & " Charcollum");
         Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
         Add(Win => InfoWindow, Str => "Weight:" & Integer'Image(Items_List.Element(ItemIndex).Weight) & 
             " kg");
@@ -192,9 +200,10 @@ package body Bases.UI.Trade is
         FormHeight : Line_Position;
         FormLength : Column_Position;
         Visibility : Cursor_Visibility := Normal;
-        ItemIndex : Positive;
+        ItemIndex, Price : Positive;
         CargoIndex, MaxAmount : Natural := 0;
         FieldText : Unbounded_String := To_Unbounded_String("Enter amount of ");
+        EventIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
     begin
         for I in Items_List.First_Index..Items_List.Last_Index loop
             if To_String(Items_List.Element(I).Name) = Name(Current(TradeMenu)) then
@@ -203,6 +212,12 @@ package body Bases.UI.Trade is
             end if;
         end loop;
         Append(FieldText, Items_List.Element(ItemIndex).Name);
+        Price := Items_List.Element(ItemIndex).Prices(BaseType);
+        if EventIndex > 0 then
+            if Events_List.Element(EventIndex).EType = DoublePrice and Events_List.Element(EventIndex).Data = ItemIndex then
+                Price := Price * 2;
+            end if;
+        end if;
         if Buy then
             if not Items_List.Element(ItemIndex).Buyable(BaseType) then
                 ShowDialog("You can't buy " & To_String(Items_List.Element(ItemIndex).Name) &
@@ -212,7 +227,7 @@ package body Bases.UI.Trade is
             end if;
             for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                 if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
-                    MaxAmount := PlayerShip.Cargo.Element(I).Amount / Items_List.Element(ItemIndex).Prices(BaseType);
+                    MaxAmount := PlayerShip.Cargo.Element(I).Amount / Price;
                     exit;
                 end if;
             end loop;
