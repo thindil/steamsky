@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -30,13 +30,13 @@ package Combat is
     type Enemy_Record is -- Data structure for enemies
         record
             Ship : ShipRecord; -- Ship data for enemy
-            Accuracy : Positive; -- Bonus to accuracy
+            Accuracy : Natural; -- Bonus to accuracy
             Distance : Integer; -- Current distance to enemy
             CombatAI : ShipCombatAI; -- Enemy in combat AI type
-            Evasion : Positive; -- Bonus to evasion
+            Evasion : Natural; -- Bonus to evasion
             LootMin : Positive; -- Minimal amount of loot from ship
             LootMax : Positive; -- Maximum amount of loot from ship
-            Perception : Positive; -- Bonus to perception
+            Perception : Natural; -- Bonus to perception
         end record;
     Enemy : Enemy_Record; -- Enemy informations
     EndCombat : Boolean; -- True if combat ends

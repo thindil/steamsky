@@ -44,10 +44,7 @@ package Crew is
         ModuleIndex : Natural := 0; CheckPriorities : Boolean := True); -- Change order for selected crew member
     procedure GainExp(Amount : Natural; SkillNumber, CrewIndex : Positive); -- Gain experience in selected skill.
     function GenerateMemberName(Gender : Character) return Unbounded_String; -- Generate random name for crew member
-    procedure Death(MemberIndex : Positive; Reason : Unbounded_String); -- Handle crew member death
     procedure UpdateCrew(Minutes : Positive; TiredPoints : Natural); -- Update ship crew
-    function GetSkillLevel(MemberIndex, SkillIndex : Positive) return Natural; -- Get level of skill of selected crew member
-    procedure DeleteMember(MemberIndex : Positive); -- Delete selected member from crew list
     procedure UpdateOrders; -- Update crew orders based on their orders priorities
 
 end Crew;
