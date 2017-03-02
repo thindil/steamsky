@@ -21,7 +21,8 @@ All notable changes to this project will be documented in this file.
   price for items in bases
 - New ship modules: huge bronze hull, advanced huge bronze hull, huge
   bronze engine, advanced huge bronze engine, small iron hull, small
-  advanced iron hull, medium iron hull and advanced medium iron hull
+  advanced iron hull, medium iron hull, advanced medium iron hull and
+  large iron hull
 - Option to set orders priorities for crew members which made saves
   from 0.8 incompatible
 - Send on break crew member which have set order to talk in bases when
