@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Separated names for drones ships
 - Docking fees when docking to bases
 - Population changes to bases
+- Crew in NPC ships
 
 ### Changed
 - Updated interface
