@@ -150,7 +150,7 @@ package body Maps is
         if EventIndex > 0 and MissionIndex = 0 then
             WindowHeight := WindowHeight + 2;
             if Events_List.Element(EventIndex).EType = EnemyShip then
-                NewWindowWidth := 4 + Column_Position(Length(Enemies_List.Element(Events_List.Element(EventIndex).Data).Name));
+                NewWindowWidth := 4 + Column_Position(Length(ProtoShips_List.Element(Events_List.Element(EventIndex).Data).Name));
             elsif Events_List.Element(EventIndex).EType = AttackOnBase then
                 NewWindowWidth := 21;
             elsif Events_List.Element(EventIndex).EType = DoublePrice then
@@ -162,7 +162,8 @@ package body Maps is
         elsif EventIndex = 0 and MissionIndex > 0 then
             WindowHeight := WindowHeight + 2;
             if PlayerShip.Missions.Element(MissionIndex).MType = Kill then
-                NewWindowWidth := 12 + Column_Position(Length(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                NewWindowWidth := 12 + 
+                    Column_Position(Length(ProtoShips_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
             elsif PlayerShip.Missions.Element(MissionIndex).MType = Deliver then
                 NewWindowWidth := 12 + Column_Position(Length(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
             end if;
@@ -228,7 +229,7 @@ package body Maps is
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
             case Events_List.Element(EventIndex).EType is
                 when EnemyShip =>
-                    Add(Win => InfoWindow, Str => To_String(Enemies_List.Element(Events_List.Element(EventIndex).Data).Name));
+                    Add(Win => InfoWindow, Str => To_String(ProtoShips_List.Element(Events_List.Element(EventIndex).Data).Name));
                 when FullDocks =>
                     Add(Win => InfoWindow, Str => "Full docks");
                 when AttackOnBase =>
@@ -250,7 +251,7 @@ package body Maps is
                         To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
                 when Kill =>
                     Add(Win => InfoWindow, Str => "Destroy " & 
-                        To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
+                        To_String(ProtoShips_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name));
                 when Patrol =>
                     Add(Win => InfoWindow, Str => "Patrol area");
                 when Explore =>

@@ -120,8 +120,10 @@ package body Missions is
                 end if;
             end if;
         end loop;
-        for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
-            if Enemies_List.Element(I).CombatValue <= PlayerValue then
+        for I in ProtoShips_List.First_Index..ProtoShips_List.Last_Index loop
+            if ProtoShips_List.Element(I).CombatValue <= PlayerValue and (ProtoShips_List.Element(I).Owner /= Poleis and 
+                ProtoShips_List.Element(I).Owner /= Independent)
+            then
                 Enemies.Append(New_Item => I);
             end if;
         end loop;
@@ -235,7 +237,7 @@ package body Missions is
                 Append(AcceptMessage, "'Deliver " & To_String(Items_List.Element(Mission.Target).Name) & "'.");
                 UpdateCargo(PlayerShip, Mission.Target, 1);
             when Kill =>
-                Append(AcceptMessage, "'Destroy " & To_String(Enemies_List.Element(Mission.Target).Name) & "'.");
+                Append(AcceptMessage, "'Destroy " & To_String(ProtoShips_List.Element(Mission.Target).Name) & "'.");
             when Patrol =>
                 Append(AcceptMessage, "'Patrol selected area'.");
             when Explore => 
@@ -281,7 +283,7 @@ package body Missions is
                     To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) & "'.", MissionMessage);
             when Kill =>
                 AddMessage("You finished mission 'Destroy " & 
-                    To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) & "'.", MissionMessage);
+                    To_String(ProtoShips_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) & "'.", MissionMessage);
             when Patrol =>
                 AddMessage("You finished mission 'Patrol selected area'.", MissionMessage);
             when Explore =>
@@ -303,7 +305,7 @@ package body Missions is
                     Append(MessageText, "'Deliver " & To_String(Items_List.Element(Mission.Target).Name) 
                         & "'.");
                 when Kill =>
-                    Append(MessageText, "'Destroy " & To_String(Enemies_List.Element(Mission.Target).Name) 
+                    Append(MessageText, "'Destroy " & To_String(ProtoShips_List.Element(Mission.Target).Name) 
                         & "'.");
                 when Patrol =>
                     Append(MessageText, "'Patrol selected area'.");
@@ -362,7 +364,7 @@ package body Missions is
                 Append(MessageText, "'Deliver " & To_String(Items_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) 
                 & "'.");
             when Kill =>
-                Append(MessageText, "'Destroy " & To_String(Enemies_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) 
+                Append(MessageText, "'Destroy " & To_String(ProtoShips_List.Element(PlayerShip.Missions.Element(MissionIndex).Target).Name) 
                 & "'.");
             when Patrol =>
                 Append(MessageText, "'Patrol selected area'.");
