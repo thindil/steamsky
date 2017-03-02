@@ -786,14 +786,18 @@ package body Bases is
                     PlayerValue := PlayerValue + (Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Value * 10);
                 end if;
             end loop;
-            for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
-                if Enemies_List.Element(I).CombatValue <= PlayerValue then
+            for I in ProtoShips_List.First_Index..ProtoShips_List.Last_Index loop
+                if ProtoShips_List.Element(I).CombatValue <= PlayerValue and (ProtoShips_List.Element(I).Owner /= Poleis and
+                    ProtoShips_List.Element(I).Owner /= Independent)
+                then
                     Enemies.Append(New_Item => I);
                 end if;
             end loop;
         else
-            for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
-                Enemies.Append(New_Item => I);
+            for I in ProtoShips_List.First_Index..ProtoShips_List.Last_Index loop
+                if ProtoShips_List.Element(I).Owner /= Poleis and ProtoShips_List.Element(I).Owner /= Independent then
+                    Enemies.Append(New_Item => I);
+                end if;
             end loop;
         end if;
         for I in 1..EventsAmount loop
