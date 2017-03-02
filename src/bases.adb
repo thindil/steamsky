@@ -934,21 +934,36 @@ package body Bases is
     begin
         TimeDiff := (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
             (SkyBases(BaseIndex).RecruitDate.Day + ((30 * SkyBases(BaseIndex).RecruitDate.Month) * SkyBases(BaseIndex).RecruitDate.Year));
-        if (TimeDiff < 30 or SkyBases(BaseIndex).Owner = Abandoned) and GetRandom(1, 100) > 30 then
+        if TimeDiff < 30 then
             return;
         end if;
-        if GetRandom(1, 100) < 20 then
-            PopulationDiff := 0 - GetRandom(1, 10);
+        if SkyBases(BaseIndex).Owner /= Abandoned then
+            if GetRandom(1, 100) > 30 then
+                return;
+            end if;
+            if GetRandom(1, 100) < 20 then
+                PopulationDiff := 0 - GetRandom(1, 10);
+            else
+                PopulationDiff := GetRandom(1, 10);
+            end if;
+            if SkyBases(BaseIndex).Population + PopulationDiff < 0 then
+                PopulationDiff := 0 - SkyBases(BaseIndex).Population;
+            end if;
+            SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + PopulationDiff;
+            if SkyBases(BaseIndex).Population = 0 then
+                SkyBases(BaseIndex).Owner := Abandoned;
+                SkyBases(BaseIndex).Reputation := (0, 0);
+            end if;
         else
-            PopulationDiff := GetRandom(1, 10);
-        end if;
-        if SkyBases(BaseIndex).Population + PopulationDiff < 0 then
-            PopulationDiff := 0 - SkyBases(BaseIndex).Population;
-        end if;
-        SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + PopulationDiff;
-        if SkyBases(BaseIndex).Population = 0 then
-            SkyBases(BaseIndex).Owner := Abandoned;
-            SkyBases(BaseIndex).Reputation := (0, 0);
+            if GetRandom(1, 100) > 5 then
+                return;
+            end if;
+            SkyBases(BaseIndex).Population := GetRandom(5, 10);
+            loop
+                SkyBases(BaseIndex).Owner := Bases_Owners'Val(GetRandom(Bases_Owners'Pos(Bases_Owners'First), 
+                    Bases_Owners'Pos(Bases_Owners'Last)));
+                exit when SkyBases(BaseIndex).Owner /= Abandoned and SkyBases(BaseIndex).Owner /= Any;
+            end loop;
         end if;
     end UpdatePopulation;
 end Bases;
