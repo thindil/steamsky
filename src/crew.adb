@@ -249,25 +249,6 @@ package body Crew is
         return NewName;
     end GenerateMemberName;
 
-    procedure Death(MemberIndex : Positive; Reason : Unbounded_String) is
-        procedure UpdateDeath(Member : in out Member_Data) is
-        begin
-            Member.Order := Rest;
-            Member.Health := 0;
-        end UpdateDeath;
-    begin
-        if MemberIndex > 1 then
-            AddMessage(To_String(PlayerShip.Crew.Element(MemberIndex).Name) & " died from " &
-                To_String(Reason) & ".", CombatMessage);
-            PlayerShip.Cargo.Append(New_Item => (ProtoIndex => 40, Amount => 1, Name => PlayerShip.Crew.Element(MemberIndex).Name &
-                To_Unbounded_String("'s corpse"), Durability => 100));
-            DeleteMember(MemberIndex);
-        else
-            AddMessage("You died from " & To_String(Reason) & ".", CombatMessage);
-            PlayerShip.Crew.Update_Element(Index => MemberIndex, Process => UpdateDeath'Access);
-        end if;
-    end Death;
-
     procedure UpdateCrew(Minutes : Positive; TiredPoints : Natural) is
         TiredLevel, HungerLevel, ThirstLevel : Integer := 0;
         HealthLevel : Integer := 100;
@@ -547,7 +528,7 @@ package body Crew is
                     end if;
                 end if;
                 if HealthLevel = 0 then
-                    Death(I, DeathReason);
+                    Death(I, DeathReason, PlayerShip);
                 end if;
             end if;
             if HealthLevel > 0 then
@@ -556,46 +537,6 @@ package body Crew is
             end if;
         end loop;
     end UpdateCrew;
-
-    function GetSkillLevel(MemberIndex, SkillIndex : Positive) return Natural is
-        SkillLevel : Integer := 0;
-        type DamageFactor is digits 2 range 0.0..1.0;
-        Damage : DamageFactor := 0.0;
-        BaseSkillLevel : Natural;
-    begin
-        for I in PlayerShip.Crew.Element(MemberIndex).Skills.First_Index..PlayerShip.Crew.Element(MemberIndex).Skills.Last_Index loop
-            if PlayerShip.Crew.Element(MemberIndex).Skills.Element(I)(1) = SkillIndex then
-                BaseSkillLevel := PlayerShip.Crew.Element(MemberIndex).Skills.Element(I)(2);
-                Damage := 1.0 - DamageFactor(Float(PlayerShip.Crew.Element(MemberIndex).Health) / 100.0);
-                SkillLevel := SkillLevel + (BaseSkillLevel - Integer(Float(BaseSkillLevel) * Float(Damage)));
-                if PlayerShip.Crew.Element(MemberIndex).Thirst > 40 then
-                    Damage := 1.0 - DamageFactor(Float(PlayerShip.Crew.Element(MemberIndex).Thirst) / 100.0);
-                    SkillLevel := SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
-                end if;
-                if PlayerShip.Crew.Element(MemberIndex).Hunger > 80 then
-                    Damage := 1.0 - DamageFactor(Float(PlayerShip.Crew.Element(MemberIndex).Hunger) / 100.0);
-                    SkillLevel := SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
-                end if;
-                if SkillLevel < 0 then
-                    SkillLevel := 0;
-                end if;
-                return SkillLevel;
-            end if;
-        end loop;
-        return SkillLevel;
-    end GetSkillLevel;
-
-    procedure DeleteMember(MemberIndex : Positive) is
-    begin
-        PlayerShip.Crew.Delete(Index => MemberIndex, Count => 1);
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Owner = MemberIndex then
-                UpdateModule(PlayerShip, I, "Owner", "0");
-            elsif PlayerShip.Modules.Element(I).Owner > MemberIndex then
-                UpdateModule(PlayerShip, I, "Owner", Positive'Image(PlayerShip.Modules.Element(I).Owner - 1));
-            end if;
-        end loop;
-    end DeleteMember;
 
     procedure UpdateOrders is
         HavePilot, HaveEngineer, HaveUpgrade, HaveTrader, NeedClean, NeedRepairs, NeedGunners, NeedCrafters, NeedHealer, 

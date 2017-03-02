@@ -76,12 +76,12 @@ package Ships is
         record
             Name : Unbounded_String; -- Prototype name
             Modules : Positive_Container.Vector; -- List of ship modules
-            Accuracy : Positive; -- Bonus to hit for ship
+            Accuracy : Natural; -- Bonus to hit for ship
             CombatAI : ShipCombatAi; -- Behaviour of ship in combat
-            Evasion : Positive; -- Bonus to evade attacks
+            Evasion : Natural; -- Bonus to evade attacks
             LootMin : Positive; -- Minimal amount of loot from ship
             LootMax : Positive; -- Maximum amount of loot from ship
-            Perception : Positive; -- Bonus to spot player ship first
+            Perception : Natural; -- Bonus to spot player ship first
             Cargo : Cargo_Container.Vector; -- List of ship cargo
             CombatValue : Positive; -- Combat value of ship (used to generate enemies)
             Crew : ProtoCrew_Container.Vector; -- List of ship crew
@@ -105,5 +105,9 @@ package Ships is
     procedure UpgradeShip(Minutes : Positive); -- Upgrade selected module on ship
     procedure RepairShip(Minutes : Positive); -- Repair ship modules
     function GenerateShipName(Owner : Bases_Owners := Any) return Unbounded_String; -- Generate random name for ship
+    function GetSkillLevel(MemberIndex, SkillIndex : Positive; Ship : ShipRecord := PlayerShip) 
+        return Natural; -- Get level of skill of selected crew member
+    procedure Death(MemberIndex : Positive; Reason : Unbounded_String; Ship : in out ShipRecord); -- Handle crew member death
+    procedure DeleteMember(MemberIndex : Positive; Ship : in out ShipRecord); -- Delete selected member from crew list
 
 end Ships;

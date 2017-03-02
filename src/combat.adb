@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 with Crew; use Crew;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
@@ -27,15 +26,40 @@ with Maps; use Maps;
 with Bases; use Bases;
 with Missions; use Missions;
 with Ships.Cargo; use Ships.Cargo;
+with Utils; use Utils;
 
 package body Combat is
     
     function StartCombat(EnemyIndex : Positive; NewCombat : Boolean := True) return GameStates is
-        type Roll_Range is range 1..100;
         EnemyShip : ShipRecord;
-        PlayerPerception : Natural := 0;
-        package Rand_Roll is new Discrete_Random(Roll_Range);
-        Generator : Rand_Roll.Generator;
+        PlayerPerception, EnemyPerception : Natural := 0;
+        function CountPerception(Spotter, Spotted : ShipRecord) return Natural is
+            Result : Natural := 0;
+        begin
+            for I in Spotter.Crew.First_Index..Spotter.Crew.Last_Index loop
+                case Spotter.Crew.Element(I).Order is
+                    when Pilot =>
+                        Result := Result + GetSkillLevel(I, 5, Spotter);
+                        if Spotter = PlayerShip then
+                            GainExp(1, 5, I);
+                        end if;
+                    when Gunner =>
+                        Result := Result + GetSkillLevel(I, 5, Spotter);
+                        if Spotter = PlayerShip then
+                            GainExp(1, 5, I);
+                        end if;
+                    when others =>
+                        null;
+                end case;
+            end loop;
+            for I in Spotted.Modules.First_Index..Spotted.Modules.Last_Index loop
+                if Modules_List.Element(Spotted.Modules.Element(I).ProtoIndex).MType = HULL then
+                    Result := Result + Spotted.Modules.Element(I).Max_Value;
+                    exit;
+                end if;
+            end loop;
+            return Result;
+        end CountPerception;
     begin
         EnemyShip := CreateShip(EnemyIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, FULL_SPEED);
         Enemy := (Ship => EnemyShip, Accuracy => ProtoShips_List.Element(EnemyIndex).Accuracy, 
@@ -61,32 +85,13 @@ package body Combat is
             end if;
         end loop;
         if NewCombat then
-            Rand_Roll.Reset(Generator);
-            for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                case PlayerShip.Crew.Element(I).Order is
-                    when Pilot =>
-                        PlayerPerception := PlayerPerception + GetSkillLevel(I, 5);
-                        GainExp(1, 5, I);
-                    when Gunner =>
-                        PlayerPerception := PlayerPerception + GetSkillLevel(I, 5);
-                        GainExp(1, 5, I);
-                    when others =>
-                        null;
-                end case;
-            end loop;
-            for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
-                if Modules_List.Element(Enemy.Ship.Modules.Element(I).ProtoIndex).MType = HULL then
-                    PlayerPerception := PlayerPerception + Enemy.Ship.Modules.Element(I).Max_Value;
-                    exit;
-                end if;
-            end loop;
-            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = HULL then
-                    Enemy.Perception := Enemy.Perception + PlayerShip.Modules.Element(I).Max_Value;
-                    exit;
-                end if;
-            end loop;
-            if (PlayerPerception + Integer(Rand_Roll.Random(Generator))) > (Enemy.Perception + Integer(Rand_Roll.Random(Generator))) then
+            PlayerPerception := CountPerception(PlayerShip, Enemy.Ship);
+            if Enemy.Perception > 0 then
+                EnemyPerception := Enemy.Perception;
+            else
+                EnemyPerception := CountPerception(Enemy.Ship, PlayerShip);
+            end if;
+            if (PlayerPerception + GetRandom(1, 100)) > (EnemyPerception + GetRandom(1, 100)) then
                 AddMessage("You spotted " & To_String(Enemy.Ship.Name) & ".", OtherMessage);
             else
                 if RealSpeed(PlayerShip) < RealSpeed(Enemy.Ship) then
@@ -103,25 +108,13 @@ package body Combat is
 
     procedure CombatTurn is
         AccuracyBonus, EvadeBonus : Integer := 0;
-        PilotIndex, EngineerIndex, EnemyWeaponIndex, EnemyAmmoIndex : Natural := 0;
+        PilotIndex, EngineerIndex, EnemyWeaponIndex, EnemyAmmoIndex, EnemyPilotIndex : Natural := 0;
         DistanceTraveled, SpeedBonus : Integer;
         ShootMessage : Unbounded_String;
         EnemyPilotOrder : Positive := 2;
         HaveFuel : Boolean := False;
         DamageRange : Positive;
         procedure Attack(Ship, EnemyShip : in out ShipRecord) is
-            type Roll_Range is range 1..100;
-            subtype PlayerMod_Range is Positive range PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index;
-            subtype EnemyMod_Range is Positive range Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index;
-            subtype Loot_Range is Positive range Enemy.LootMin..Enemy.LootMax;
-            package Rand_Roll is new Discrete_Random(Roll_Range);
-            package PlayerMod_Roll is new Discrete_Random(PlayerMod_Range);
-            package EnemyMod_Roll is new Discrete_Random(EnemyMod_Range);
-            package Loot_Roll is new Discrete_Random(Loot_Range);
-            Generator : Rand_Roll.Generator;
-            Generator2 : PlayerMod_Roll.Generator;
-            Generator3 : EnemyMod_Roll.Generator;
-            Generator4 : Loot_Roll.Generator;
             GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex : Natural;
             GunnerOrder : Positive;
             HitChance, HitLocation, LootAmount : Integer;
@@ -131,10 +124,6 @@ package body Combat is
             WeaponDamage : Natural;
             DeathReason : Unbounded_String;
         begin
-            Rand_Roll.Reset(Generator);
-            PlayerMod_Roll.Reset(Generator2);
-            EnemyMod_Roll.Reset(Generator3);
-            Loot_Roll.Reset(Generator4);
             Attack_Loop:
             for K in Ship.Modules.First_Index..Ship.Modules.Last_Index loop
                 if Ship.Modules.Element(K).Durability > 0 and (Modules_List(Ship.Modules.Element(K).ProtoIndex).MType = GUN or
@@ -143,11 +132,11 @@ package body Combat is
                     GunnerIndex := 0;
                     AmmoIndex := 0;
                     if Modules_List(Ship.Modules.Element(K).ProtoIndex).MType = GUN then
+                        GunnerIndex := Ship.Modules.Element(K).Owner;
                         if Ship = PlayerShip then
                             if Ship.Modules.Element(K).Owner = 0 then
                                 Shoots := 0;
                             else
-                                GunnerIndex := Ship.Modules.Element(K).Owner;
                                 for I in Guns.First_Index..Guns.Last_Index loop
                                     if Guns.Element(I)(1) = K then
                                         GunnerOrder := Guns.Element(I)(2);
@@ -220,13 +209,12 @@ package body Combat is
                     end if;
                     if Shoots > 0 then
                         if Ship = PlayerShip then
-                            if GunnerIndex > 0 then
-                                HitChance := AccuracyBonus + GetSkillLevel(GunnerIndex, 3) - Enemy.Evasion;
-                            else
-                                HitChance := AccuracyBonus - Enemy.Evasion;
-                            end if;
+                            HitChance := AccuracyBonus - Enemy.Evasion;
                         else
                             HitChance := Enemy.Accuracy - EvadeBonus;
+                        end if;
+                        if GunnerIndex > 0 then
+                            HitChance := HitChance + GetSkillLevel(GunnerIndex, 3, Ship);
                         end if;
                         for I in 1..Shoots loop
                             if Modules_List(Ship.Modules.Element(K).ProtoIndex).MType = GUN then
@@ -242,7 +230,7 @@ package body Combat is
                                     ShootMessage := EnemyName & To_Unbounded_String(" attacks you");
                                 end if;
                             end if;
-                            if Integer(Rand_Roll.Random(Generator)) + HitChance > Integer(Rand_Roll.Random(Generator)) then
+                            if GetRandom(1, 100) + HitChance > GetRandom(1, 100) then
                                 ShootMessage := ShootMessage & To_Unbounded_String(" and hit in ");
                                 ArmorIndex := 0;
                                 for J in EnemyShip.Modules.First_Index..EnemyShip.Modules.Last_Index loop
@@ -273,7 +261,7 @@ package body Combat is
                                                 end if;
                                             end loop;
                                         else
-                                            HitLocation := Integer(EnemyMod_Roll.Random(Generator3));
+                                            HitLocation := GetRandom(Enemy.Ship.Modules.First_Index, Enemy.Ship.Modules.Last_Index);
                                         end if;
                                     else
                                         if Enemy.CombatAI = DISARMER then
@@ -289,7 +277,7 @@ package body Combat is
                                                 end if;
                                             end loop;
                                         else
-                                            HitLocation := Integer(PlayerMod_Roll.Random(Generator2));
+                                            HitLocation := GetRandom(PlayerShip.Modules.First_Index, PlayerShip.Modules.Last_Index);
                                         end if;
                                     end if;
                                     while EnemyShip.Modules.Element(HitLocation).Durability = 0 loop
@@ -316,14 +304,14 @@ package body Combat is
                                             EndCombat := True;
                                             if Ship /= PlayerShip then
                                                 DeathReason := To_Unbounded_String("ship explosion");
-                                                Death(1, DeathReason);
+                                                Death(1, DeathReason, PlayerShip);
                                             end if;
                                         when TURRET =>
                                             WeaponIndex := EnemyShip.Modules.Element(HitLocation).Current_Value;
                                             if WeaponIndex > 0 then
                                                 UpdateModule(EnemyShip, WeaponIndex, "Durability", "-1000");
-                                                if Ship /= PlayerShip and EnemyShip.Modules.Element(WeaponIndex).Owner > 0 then
-                                                    Death(EnemyShip.Modules.Element(WeaponIndex).Owner, DeathReason);
+                                                if EnemyShip.Modules.Element(WeaponIndex).Owner > 0 then
+                                                    Death(EnemyShip.Modules.Element(WeaponIndex).Owner, DeathReason, EnemyShip);
                                                     for J in Guns.First_Index..Guns.Last_Index loop
                                                         if Guns.Element(J)(1) = WeaponIndex then
                                                             Guns.Delete(Index => J, Count => 1);
@@ -342,14 +330,14 @@ package body Combat is
                                                 end loop;
                                             end if;
                                         when CABIN =>
-                                            if Ship /= PlayerShip and EnemyShip.Modules.Element(HitLocation).Owner > 0 then
+                                            if EnemyShip.Modules.Element(HitLocation).Owner > 0 then
                                                 if EnemyShip.Crew.Element(EnemyShip.Modules.Element(HitLocation).Owner).Order = Rest then
-                                                    Death(EnemyShip.Modules.Element(HitLocation).Owner, DeathReason);
+                                                    Death(EnemyShip.Modules.Element(HitLocation).Owner, DeathReason, EnemyShip);
                                                 end if;
                                             end if;
                                         when others =>
-                                            if Ship /= PlayerShip and EnemyShip.Modules.Element(HitLocation).Owner > 0 then
-                                                Death(EnemyShip.Modules.Element(HitLocation).Owner, DeathReason);
+                                            if EnemyShip.Modules.Element(HitLocation).Owner > 0 then
+                                                Death(EnemyShip.Modules.Element(HitLocation).Owner, DeathReason, EnemyShip);
                                             end if;
                                     end case;
                                 end if;
@@ -370,7 +358,7 @@ package body Combat is
                                 if Ship = PlayerShip then
                                     UpdateModule(EnemyShip, 1, "Durability", Integer'Image(0 - EnemyShip.Modules.Element(1).MaxDurability));
                                     AddMessage(To_String(EnemyName) & " is destroyed!", CombatMessage);
-                                    LootAmount := Integer(Loot_Roll.Random(Generator4));
+                                    LootAmount := GetRandom(Enemy.LootMin, Enemy.LootMax);
                                     FreeSpace := FreeCargo((0 - LootAmount));
                                     if FreeSpace < 0 then
                                         LootAmount := LootAmount + FreeSpace;
@@ -420,8 +408,14 @@ package body Combat is
                     null;
             end case;
         end loop;
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = To_Unbounded_String("Fuel") then
+        for I in Enemy.Ship.Crew.First_Index..Enemy.Ship.Crew.Last_Index loop
+            if Enemy.Ship.Crew.Element(I).Order = Pilot then
+                EnemyPilotIndex := I;
+                exit;
+            end if;
+        end loop;
+        for Item of PlayerShip.Cargo loop
+            if Items_List.Element(Item.ProtoIndex).IType = To_Unbounded_String("Fuel") then
                 HaveFuel := True;
                 exit;
             end if;
@@ -454,6 +448,9 @@ package body Combat is
         else
             AccuracyBonus := 20;
             EvadeBonus := -10;
+        end if;
+        if EnemyPilotIndex > 0 then
+            AccuracyBonus := AccuracyBonus - GetSkillLevel(EnemyPilotIndex, 1, Enemy.Ship);
         end if;
         if EngineerIndex > 0 and HaveFuel then
             ChangeShipSpeed(ShipSpeed'Val(EngineerOrder), False);

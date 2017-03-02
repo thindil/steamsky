@@ -384,7 +384,7 @@ package body Crew.UI is
             return;
         end if;
         AddMessage("You dismissed " & To_String(PlayerShip.Crew.Element(MemberIndex).Name) & ".", OrderMessage);
-        DeleteMember(MemberIndex);
+        DeleteMember(MemberIndex, PlayerShip);
         SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
         MemberIndex := 1;
         DrawGame(Crew_Info);
