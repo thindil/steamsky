@@ -37,15 +37,15 @@ package body Statistics is
         end UpdateData;
     begin
         for I in GameStats.DestroyedShips.First_Index..GameStats.DestroyedShips.Last_Index loop
-            if Enemies_List.Element(GameStats.DestroyedShips.Element(I).ProtoIndex).Name = ShipName then
+            if ProtoShips_List.Element(GameStats.DestroyedShips.Element(I).ProtoIndex).Name = ShipName then
                 ProtoIndex := I;
                 GameStats.DestroyedShips.Update_Element(Index => ProtoIndex, Process => UpdateData'Access);
                 exit;
             end if;
         end loop;
         if ProtoIndex = 0 then
-            for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
-                if Enemies_List.Element(I).Name = ShipName then
+            for I in ProtoShips_List.First_Index..ProtoShips_List.Last_Index loop
+                if ProtoShips_List.Element(I).Name = ShipName then
                     GameStats.DestroyedShips.Append(New_Item => (ProtoIndex => I, Amount => 1));
                     exit;
                 end if;
@@ -102,7 +102,7 @@ package body Statistics is
                 for I in GameStats.DestroyedShips.First_Index..GameStats.DestroyedShips.Last_Index loop
                     Move_Cursor(Win => DestroyedShipsPad, Line => Line_Position(I), Column => 0);
                     Add(Win => DestroyedShipsPad, Str => 
-                        To_String(Enemies_List.Element(GameStats.DestroyedShips.Element(I).ProtoIndex).Name) & ":" & 
+                        To_String(ProtoShips_List.Element(GameStats.DestroyedShips.Element(I).ProtoIndex).Name) & ":" & 
                         Positive'Image(GameStats.DestroyedShips.Element(I).Amount));
                 end loop;
                 EndIndex := Integer(GameStats.DestroyedShips.Length) - Integer(Lines - 2);

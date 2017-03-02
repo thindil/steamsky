@@ -318,8 +318,7 @@ package body Ships is
         Ship.Modules.Update_Element(Index => ModuleIndex, Process => UpdateMod'Access);
     end UpdateModule;
     
-    function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y:
-        Integer; Speed : ShipSpeed; Enemy : Boolean := False) return ShipRecord is
+    function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y: Integer; Speed : ShipSpeed) return ShipRecord is
         TmpShip : ShipRecord;
         ShipModules : Modules_Container.Vector;
         ShipCrew : Crew_Container.Vector;
@@ -329,7 +328,7 @@ package body Ships is
         Gender : Character;
         MemberName : Unbounded_String;
         TmpSkills : Skills_Container.Vector;
-        ProtoShip : ProtoShipData;
+        ProtoShip : constant ProtoShipData := ProtoShips_List.Element(ProtoIndex);
         procedure UpdateMod(Module : in out ModuleData) is
         begin
             if Modules_List.Element(Module.ProtoIndex).MType = CABIN then
@@ -338,11 +337,6 @@ package body Ships is
             Module.Owner := ShipCrew.Last_Index;
         end UpdateMod;
     begin
-        if not Enemy then
-            ProtoShip := ProtoShips_List.Element(ProtoIndex);
-        else
-            ProtoShip := Enemies_List.Element(ProtoIndex);
-        end if;
         for I in ProtoShip.Modules.First_Index..ProtoShip.Modules.Last_Index loop
             ShipModules.Append(New_Item => (Name => Modules_List.Element(ProtoShip.Modules(I)).Name,
             ProtoIndex => ProtoShip.Modules(I), 
@@ -423,7 +417,6 @@ package body Ships is
         EqualIndex, StartIndex, EndIndex, Amount, XIndex, CombatValue, DotIndex, EndIndex2, StartIndex2 : Natural;
         TempRecord : ProtoShipData;
         TempModules : Positive_Container.Vector;
-        Enemy : Boolean := False;
         TempCargo : Cargo_Container.Vector;
         CargoAmount : Natural;
         TempCrew : ProtoCrew_Container.Vector;
@@ -467,8 +460,6 @@ package body Ships is
                     end loop;
                 elsif FieldName = To_Unbounded_String("Accuracy") then
                     TempRecord.Accuracy := Integer'Value(To_String(Value));
-                elsif FieldName = To_Unbounded_String("Enemy") then
-                    Enemy := True;
                 elsif FieldName = To_Unbounded_String("CombatAI") then
                     TempRecord.CombatAI := ShipCombatAI'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Evasion") then
@@ -566,12 +557,7 @@ package body Ships is
                     end if;
                 end loop;
                 TempRecord.CombatValue := CombatValue;
-                if not Enemy then
-                    ProtoShips_List.Append(New_Item => TempRecord);
-                else
-                    Enemies_List.Append(New_Item => TempRecord);
-                    Enemy := False;
-                end if;
+                ProtoShips_List.Append(New_Item => TempRecord);
                 TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
                     Accuracy => 1, CombatAI => NONE, Evasion => 1, LootMin => 1, 
                     LootMax => 100, Perception => 1, Cargo => TempCargo, CombatValue => 1,

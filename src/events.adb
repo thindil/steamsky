@@ -56,14 +56,19 @@ package body Events is
                         end if;
                     end if;
                 end loop;
-                for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
-                    if Enemies_List.Element(I).CombatValue <= PlayerValue and (Owner = Any or Enemies_List.Element(I).Owner = Owner) then
+                for I in ProtoShips_List.First_Index..ProtoShips_List.Last_Index loop
+                    if ProtoShips_List.Element(I).CombatValue <= PlayerValue and (Owner = Any or 
+                        ProtoShips_List.Element(I).Owner = Owner) and (ProtoShips_List.Element(I).Owner /= Poleis and 
+                        ProtoShips_List.Element(I).Owner /= Independent)
+                    then
                         Enemies.Append(New_Item => I);
                     end if;
                 end loop;
             else
-                for I in Enemies_List.First_Index..Enemies_List.Last_Index loop
-                    if Owner = Any or Enemies_List.Element(I).Owner = Owner then
+                for I in ProtoShips_List.First_Index..ProtoShips_List.Last_Index loop
+                    if (Owner = Any or ProtoShips_List.Element(I).Owner = Owner) and 
+                        (ProtoShips_List.Element(I).Owner /= Poleis and ProtoShips_List.Element(I).Owner /= Independent) 
+                    then
                         Enemies.Append(New_Item => I);
                     end if;
                 end loop;

@@ -44,7 +44,7 @@ package body Events.UI is
         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
         case Events_List.Element(EventIndex).EType is
             when EnemyShip | EnemyPatrol =>
-                Add(Win => InfoWindow, Str => To_String(Enemies_List.Element(Events_List.Element(EventIndex).Data).Name));
+                Add(Win => InfoWindow, Str => To_String(ProtoShips_List.Element(Events_List.Element(EventIndex).Data).Name));
             when FullDocks | AttackOnBase | Disease =>
                 Add(Win => InfoWindow, Str => To_String(SkyBases(SkyMap(Events_List.Element(EventIndex).SkyX,
                     Events_List.Element(EventIndex).SkyY).BaseIndex).Name));

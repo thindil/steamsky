@@ -327,7 +327,7 @@ package body UserInterface is
                             when Kill =>
                                 if PlayerShip.Missions.Element(I).Finished then
                                     Orders_Items.all(MenuIndex) := New_Item("Complete destroy " &
-                                    To_String(Enemies_List.Element(PlayerShip.Missions.Element(I).Target).Name));
+                                    To_String(ProtoShips_List.Element(PlayerShip.Missions.Element(I).Target).Name));
                                     MenuIndex := MenuIndex + 1;
                                 end if;
                             when Patrol => 
@@ -464,7 +464,7 @@ package body UserInterface is
                                         if PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex
                                         then
                                             Orders_Items.all(MenuIndex) := New_Item("Complete destroy " &
-                                                To_String(Enemies_List.Element(PlayerShip.Missions.Element(I).Target).Name));
+                                                To_String(ProtoShips_List.Element(PlayerShip.Missions.Element(I).Target).Name));
                                             MenuIndex := MenuIndex + 1;
                                         end if;
                                     when Patrol =>
@@ -492,7 +492,7 @@ package body UserInterface is
                                         null;
                                     when Kill =>
                                         Orders_Items.all(MenuIndex) := New_Item("Search for " & 
-                                        To_String(Enemies_List.Element(PlayerShip.Missions.Element(I).Target).Name));
+                                        To_String(ProtoShips_List.Element(PlayerShip.Missions.Element(I).Target).Name));
                                         MenuIndex := MenuIndex + 1;
                                     when Patrol => 
                                         Orders_Items.all(MenuIndex) := New_Item("Patrol area");
@@ -918,7 +918,7 @@ package body UserInterface is
                 elsif Order = "Defend" then
                     OldSpeed := PlayerShip.Speed;
                     NewState := Combat_State;
-                    if EnemyName /= Enemies_List.Element(Events_List.Element(EventIndex).Data).Name then
+                    if EnemyName /= ProtoShips_List.Element(Events_List.Element(EventIndex).Data).Name then
                         NewState := StartCombat(Events_List.Element(EventIndex).Data, False);
                     end if;
                     DrawGame(NewState);
@@ -928,7 +928,7 @@ package body UserInterface is
                 elsif Order = "Attack" then
                     OldSpeed := PlayerShip.Speed;
                     NewState := Combat_State;
-                    if EnemyName /= Enemies_List.Element(Events_List.Element(EventIndex).Data).Name then
+                    if EnemyName /= ProtoShips_List.Element(Events_List.Element(EventIndex).Data).Name then
                         NewState := StartCombat(Events_List.Element(EventIndex).Data, False);
                     end if;
                     DrawGame(NewState);

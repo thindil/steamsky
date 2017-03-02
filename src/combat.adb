@@ -37,18 +37,17 @@ package body Combat is
         package Rand_Roll is new Discrete_Random(Roll_Range);
         Generator : Rand_Roll.Generator;
     begin
-        EnemyShip := CreateShip(EnemyIndex, Null_Unbounded_String,
-            PlayerShip.SkyX, PlayerShip.SkyY, FULL_SPEED, True);
-        Enemy := (Ship => EnemyShip, Accuracy => Enemies_List.Element(EnemyIndex).Accuracy, 
-            Distance => 10000, CombatAI => Enemies_List.Element(EnemyIndex).CombatAI, 
-            Evasion => Enemies_List.Element(EnemyIndex).Evasion, LootMin =>
-            Enemies_List.Element(EnemyIndex).LootMin, LootMax =>
-            Enemies_List.Element(EnemyIndex).LootMax, Perception =>
-            Enemies_List.Element(EnemyIndex).Perception);
+        EnemyShip := CreateShip(EnemyIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, FULL_SPEED);
+        Enemy := (Ship => EnemyShip, Accuracy => ProtoShips_List.Element(EnemyIndex).Accuracy, 
+            Distance => 10000, CombatAI => ProtoShips_List.Element(EnemyIndex).CombatAI, 
+            Evasion => ProtoShips_List.Element(EnemyIndex).Evasion, LootMin =>
+            ProtoShips_List.Element(EnemyIndex).LootMin, LootMax =>
+            ProtoShips_List.Element(EnemyIndex).LootMax, Perception =>
+            ProtoShips_List.Element(EnemyIndex).Perception);
         PilotOrder := 2;
         EngineerOrder := 3;
         EndCombat := False;
-        if Enemies_List.Element(EnemyIndex).Owner /= Drones then
+        if ProtoShips_List.Element(EnemyIndex).Owner /= Drones then
             EnemyName := GenerateShipName;
         else
             EnemyName := GenerateShipName(Drones);
@@ -390,7 +389,7 @@ package body Combat is
                                     end if;
                                     if SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex > 0 then
                                         if Ship.Missions.Element(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex).MType = Kill then
-                                            if Enemies_List.Element(Ship.Missions.Element(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex).Target).Name = EnemyShip.Name
+                                            if ProtoShips_List.Element(Ship.Missions.Element(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex).Target).Name = EnemyShip.Name
                                             then
                                                 UpdateMission(SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex);
                                             end if;

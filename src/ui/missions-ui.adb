@@ -53,7 +53,7 @@ package body Missions.UI is
             when Patrol =>
                 Add(Win => InfoWindow, Str => "Patrol selected area");
             when Kill =>
-                Add(Win => InfoWindow, Str => "Target: " & To_String(Enemies_List.Element(Mission.Target).Name));
+                Add(Win => InfoWindow, Str => "Target: " & To_String(ProtoShips_List.Element(Mission.Target).Name));
             when Explore =>
                 Add(Win => InfoWindow, Str => "Explore selected area");
         end case;
