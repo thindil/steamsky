@@ -279,7 +279,9 @@ package body Crew.UI is
                 OrdersAmount := OrdersAmount + 1;
             end if;
             if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
-                OrdersAmount := OrdersAmount + 1;
+                if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner /= Abandoned then
+                    OrdersAmount := OrdersAmount + 1;
+                end if;
             end if;
             if PlayerShip.Crew.Element(MemberIndex).Order /= Pilot then
                 OrdersAmount := OrdersAmount + 1;
@@ -351,8 +353,10 @@ package body Crew.UI is
                 MenuIndex := MenuIndex + 1;
             end if;
             if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
-                Orders_Items.all(MenuIndex) := New_Item("Dismiss", "0");
-                MenuIndex := MenuIndex + 1;
+                if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Owner /= Abandoned then
+                    Orders_Items.all(MenuIndex) := New_Item("Dismiss", "0");
+                    MenuIndex := MenuIndex + 1;
+                end if;
             end if;
         end if;
         Orders_Items.all(MenuIndex) := New_Item("Set orders priorities", "0");
