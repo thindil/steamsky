@@ -134,14 +134,14 @@ Description = Armored, very aggresive version of clockwork drone.
 Owner = Drones
 [13]
 Name = Tiny inquisition ship
-Modules = 1, 3, 4, 7, 12
+Modules = 1, 3, 4, 5, 7, 12
 Accuracy = 1
 CombatAI = Attacker
-Evasion = 1
 LootMin = 10
 LootMax = 100
-Perception = 2
 Cargo = 500..1000x1, 20..100x2, 40..200x3
+Skills = 1x1, 5x2
+Orders = Pilot
 Description = Smallest know inquisition ship.
 Owner = Inquisition
 [14]
@@ -154,30 +154,30 @@ LootMin = 15
 LootMax = 150
 Perception = 5
 Cargo = 1000..2000x1, 30..100x2, 150..200x3, 20..100x5
+Skills = 1x5, 5x5
+Orders = Pilot
 Description = Small flying vessel of inquisition, dangerous at close range.
 Owner = Inquisition
 [15]
 Name = Inquisition ship
 Modules = 17, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 12, 8, 9
-Accuracy = 10
 CombatAI = Attacker
-Evasion = 10
 LootMin = 100
 LootMax = 200
-Perception = 10
+Skills = 1x10, 5x5; 3x10, 5x5
+Orders = Pilot, Gunner
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 300..500x4, 50..200x5, 5..40x13
 Description = Standard ship of inquisition.
 Owner = Inquisition
 [16]
 Name = Armored inquisition ship
 Modules = 17, 2, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 12, 8, 9
-Accuracy = 10
 CombatAI = Attacker
-Evasion = 10
 LootMin = 120
 LootMax = 240
-Perception = 10
 Cargo = 1800..2000x1, 100..200x2, 350..400x3, 250..500x4, 100..200x5, 10..40x13
+Skills = 1x10, 5x5; 3x10, 5x5
+Orders = Pilot, Gunner
 Description = Armored version of standard flying vessel of inquisition.
 Owner = Inquisition
 [17]
@@ -230,13 +230,12 @@ Owner = Undead
 [21]
 Name = Large inquisition ship
 Modules = 23, 26, 19, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 40, 28, 27, 28, 27
-Accuracy = 15
 CombatAI = Attacker
-Evasion = 20
 LootMin = 250
 LootMax = 500
-Perception = 20
 Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x20, 200..400x5, 20..50x13
+Skills = 1x20, 5x10; 3x15, 5x5; 3x15, 5x5
+Orders = Pilot, Gunner, Gunner
 Description = Large, good armored version of inquisition flying vessel.
 Owner = Inquisition
 [22]
@@ -296,6 +295,8 @@ LootMin = 120
 LootMax = 240
 Perception = 15
 Cargo = 2000..2200x1, 150..220x2, 400..500x3, 400..600x20, 150..250x5, 20..50x13
+Skills = 1x15, 5x8; 3x15, 5x7
+Orders = Pilot, Gunner
 Description = Advanced version of standard flying vessel of inquisition.
 Owner = Inquisition
 [27]
@@ -371,25 +372,23 @@ Owner = Drones
 [33]
 Name = Huge inquisition ship
 Modules = 60, 26, 62, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40, 39, 33, 39, 33, 39, 33, 39, 33
-Accuracy = 40
 CombatAI = Attacker
-Evasion = 50
 LootMin = 750
 LootMax = 1000
-Perception = 50
 Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x31, 400..600x5, 50..100x13
+Skills = 1x50, 5x10; 3x40, 5x10; 3x40, 5x10; 3x40, 5x10; 3x40, 5x10
+Orders = Pilot, Gunner, Gunner, Gunner, Gunner
 Description = Huge, good armored version of inquisition flying vessel.
 Owner = Inquisition
 [34]
 Name = Advanced huge inquisition ship
 Modules = 61, 26, 63, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40, 39, 34, 39, 34, 39, 34, 39, 34
-Accuracy = 50
 CombatAI = Attacker
-Evasion = 60
 LootMin = 900
 LootMax = 1200
-Perception = 60
 Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x33, 500..650x5, 75..120x13
+Skills = 1x60, 5x12; 3x50, 5x12; 3x50, 5x12; 3x50, 5x12; 3x50, 5x12
+Orders = Pilot, Gunner, Gunner, Gunner, Gunner
 Description = Advanced version of huge, good armored, inquisition flying vessel.
 Owner = Inquisition
 []
