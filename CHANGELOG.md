@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Docking fees when docking to bases
 - Population changes to bases
 - Crew in NPC ships
+- Random skills levels to NPC ships
 
 ### Changed
 - Updated interface
