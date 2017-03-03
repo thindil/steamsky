@@ -459,17 +459,35 @@ package body Ships is
                         StartIndex := EndIndex + 2;
                     end loop;
                 elsif FieldName = To_Unbounded_String("Accuracy") then
-                    TempRecord.Accuracy := Integer'Value(To_String(Value));
+                    DotIndex := Index(Value, "..");
+                    if DotIndex = 0 then
+                        TempRecord.Accuracy := Integer'Value(To_String(Value));
+                    else
+                        TempRecord.Accuracy := GetRandom(Integer'Value(Slice(Value, 1, DotIndex - 1)), 
+                            Integer'Value(Slice(Value, DotIndex + 2, Length(Value))));
+                    end if;
                 elsif FieldName = To_Unbounded_String("CombatAI") then
                     TempRecord.CombatAI := ShipCombatAI'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Evasion") then
-                    TempRecord.Evasion := Integer'Value(To_String(Value));
+                    DotIndex := Index(Value, "..");
+                    if DotIndex = 0 then
+                        TempRecord.Evasion := Integer'Value(To_String(Value));
+                    else
+                        TempRecord.Evasion := GetRandom(Integer'Value(Slice(Value, 1, DotIndex - 1)), 
+                            Integer'Value(Slice(Value, DotIndex + 2, Length(Value))));
+                    end if;
                 elsif FieldName = To_Unbounded_String("LootMin") then
                     TempRecord.LootMin := Integer'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("LootMax") then
                     TempRecord.LootMax := Integer'Value(To_String(Value));
                 elsif FieldName = To_Unbounded_String("Perception") then
-                    TempRecord.Perception := Integer'Value(To_String(Value));
+                    DotIndex := Index(Value, "..");
+                    if DotIndex = 0 then
+                        TempRecord.Perception := Integer'Value(To_String(Value));
+                    else
+                        TempRecord.Perception := GetRandom(Integer'Value(Slice(Value, 1, DotIndex - 1)), 
+                            Integer'Value(Slice(Value, DotIndex + 2, Length(Value))));
+                    end if;
                 elsif FieldName = To_Unbounded_String("Cargo") then
                     StartIndex := 1;
                     Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
@@ -510,8 +528,15 @@ package body Ships is
                                 EndIndex2 := Length(SkillsValue) + 1;
                             end if;
                             XIndex := Index(SkillsValue, "x", StartIndex2);
-                            TempSkills.Append(New_Item => (Integer'Value(Slice(SkillsValue, StartIndex2, XIndex - 1)),
-                                Integer'Value(Slice(SkillsValue, XIndex + 1, EndIndex2 - 1)), 0));
+                            DotIndex := Index(SkillsValue, "..", StartIndex2);
+                            if DotIndex = 0 then
+                                TempSkills.Append(New_Item => (Integer'Value(Slice(SkillsValue, StartIndex2, XIndex - 1)),
+                                    Integer'Value(Slice(SkillsValue, XIndex + 1, EndIndex2 - 1)), 0));
+                            else
+                                TempSkills.Append(New_Item => (Integer'Value(Slice(SkillsValue, StartIndex2, XIndex - 1)),
+                                    GetRandom(Integer'Value(Slice(Value, XIndex + 1, DotIndex - 1)), 
+                                    Integer'Value(Slice(Value, DotIndex + 2, EndIndex2 - 1))), 0));
+                            end if;
                             StartIndex2 := EndIndex2 + 2;
                         end loop;
                         TempRecord.Crew.Append(New_Item => (Skills => TempSkills, Order => Rest));
