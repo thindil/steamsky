@@ -55,6 +55,7 @@ All notable changes to this project will be documented in this file.
 - Attacking selected part of enemy ship
 - Fuel usage for medium advanced bronze engine, large bronze engine and
   large advanced bronze engine
+- Crash on loading ships data
 
 ## [0.8] - 2017-02-05
 
