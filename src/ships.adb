@@ -498,7 +498,7 @@ package body Ships is
                         end if;
                         XIndex := Index(Value, "x", StartIndex);
                         DotIndex := Index(Value, "..", StartIndex);
-                        if DotIndex = 0 then
+                        if DotIndex = 0 or DotIndex > EndIndex then
                             CargoAmount := Integer'Value(Slice(Value, StartIndex, XIndex - 1));
                         else
                             CargoAmount := GetRandom(Integer'Value(Slice(Value, StartIndex, DotIndex - 1)), 
@@ -529,13 +529,13 @@ package body Ships is
                             end if;
                             XIndex := Index(SkillsValue, "x", StartIndex2);
                             DotIndex := Index(SkillsValue, "..", StartIndex2);
-                            if DotIndex = 0 then
+                            if DotIndex = 0 or DotIndex > EndIndex2 then
                                 TempSkills.Append(New_Item => (Integer'Value(Slice(SkillsValue, StartIndex2, XIndex - 1)),
                                     Integer'Value(Slice(SkillsValue, XIndex + 1, EndIndex2 - 1)), 0));
                             else
                                 TempSkills.Append(New_Item => (Integer'Value(Slice(SkillsValue, StartIndex2, XIndex - 1)),
-                                    GetRandom(Integer'Value(Slice(Value, XIndex + 1, DotIndex - 1)), 
-                                    Integer'Value(Slice(Value, DotIndex + 2, EndIndex2 - 1))), 0));
+                                    GetRandom(Integer'Value(Slice(SkillsValue, XIndex + 1, DotIndex - 1)), 
+                                    Integer'Value(Slice(SkillsValue, DotIndex + 2, EndIndex2 - 1))), 0));
                             end if;
                             StartIndex2 := EndIndex2 + 2;
                         end loop;
