@@ -329,6 +329,7 @@ package body Ships is
         MemberName : Unbounded_String;
         TmpSkills : Skills_Container.Vector;
         ProtoShip : constant ProtoShipData := ProtoShips_List.Element(ProtoIndex);
+        ShipCargo : Cargo_Container.Vector;
         procedure UpdateMod(Module : in out ModuleData) is
         begin
             if Modules_List.Element(Module.ProtoIndex).MType = CABIN then
@@ -385,8 +386,17 @@ package body Ships is
                 end if;
             end loop;
         end loop;
+        for Item of ProtoShip.Cargo loop
+            if Item(3) > 0 then
+                Amount := GetRandom(Item(2), Item(3));
+            else
+                Amount := Item(2);
+            end if;
+            ShipCargo.Append(New_Item => (ProtoIndex => Item(1), Amount => Amount, Name => Null_Unbounded_String,
+                Durability => 100));
+        end loop;
         TmpShip := (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed,
-            Modules => ShipModules, Cargo => ProtoShip.Cargo, Crew => ShipCrew,
+            Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew,
             UpgradeModule => 0, DestinationX => 0, DestinationY => 0,
             RepairModule => 0, Missions => ShipMissions, Description => ProtoShip.Description);
         for I in TmpShip.Modules.First_Index..TmpShip.Modules.Last_Index loop
@@ -417,8 +427,7 @@ package body Ships is
         EqualIndex, StartIndex, EndIndex, Amount, XIndex, CombatValue, DotIndex, EndIndex2, StartIndex2 : Natural;
         TempRecord : ProtoShipData;
         TempModules : Positive_Container.Vector;
-        TempCargo : Cargo_Container.Vector;
-        CargoAmount : Natural;
+        TempCargo : Skills_Container.Vector;
         TempCrew : ProtoCrew_Container.Vector;
         TempSkills : Skills_Container.Vector;
         TempOrder : Crew_Orders;
@@ -499,15 +508,12 @@ package body Ships is
                         XIndex := Index(Value, "x", StartIndex);
                         DotIndex := Index(Value, "..", StartIndex);
                         if DotIndex = 0 or DotIndex > EndIndex then
-                            CargoAmount := Integer'Value(Slice(Value, StartIndex, XIndex - 1));
+                            TempRecord.Cargo.Append(New_Item => (Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1)),
+                                Integer'Value(Slice(Value, StartIndex, XIndex - 1)), 0));
                         else
-                            CargoAmount := GetRandom(Integer'Value(Slice(Value, StartIndex, DotIndex - 1)), 
-                                Integer'Value(Slice(Value, DotIndex + 2, XIndex - 1)));
-                        end if;
-                        if CargoAmount > 0 then
-                            TempRecord.Cargo.Append(New_Item => (Amount => CargoAmount, 
-                                ProtoIndex => Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1)), Name => Null_Unbounded_String,
-                                Durability => 100));
+                            TempRecord.Cargo.Append(New_Item => (Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1)),
+                                Integer'Value(Slice(Value, StartIndex, DotIndex - 1)), 
+                                Integer'Value(Slice(Value, DotIndex + 2, XIndex - 1))));
                         end if;
                         StartIndex := EndIndex + 2;
                     end loop;
@@ -575,9 +581,9 @@ package body Ships is
                     end case;
                 end loop;
                 for I in TempRecord.Cargo.First_Index..TempRecord.Cargo.Last_Index loop
-                    if Length(Items_List.Element(TempRecord.Cargo.Element(I).ProtoIndex).IType) >= 4 then
-                        if Slice(Items_List.Element(TempRecord.Cargo.Element(I).ProtoIndex).IType, 1, 4) = "Ammo" then
-                            CombatValue := CombatValue + (Items_List.Element(TempRecord.Cargo.Element(I).ProtoIndex).Value * 10);
+                    if Length(Items_List.Element(TempRecord.Cargo.Element(I)(1)).IType) >= 4 then
+                        if Slice(Items_List.Element(TempRecord.Cargo.Element(I)(1)).IType, 1, 4) = "Ammo" then
+                            CombatValue := CombatValue + (Items_List.Element(TempRecord.Cargo.Element(I)(1)).Value * 10);
                         end if;
                     end if;
                 end loop;
