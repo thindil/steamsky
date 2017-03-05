@@ -22,7 +22,8 @@ All notable changes to this project will be documented in this file.
 - New ship modules: huge bronze hull, advanced huge bronze hull, huge
   bronze engine, advanced huge bronze engine, small iron hull, small
   advanced iron hull, medium iron hull, advanced medium iron hull, large
-  iron hull, advanced large iron hull and huge iron hull
+  iron hull, advanced large iron hull, huge iron hull and advanced huge
+  iron hull
 - Option to set orders priorities for crew members which made saves
   from 0.8 incompatible
 - Send on break crew member which have set order to talk in bases when
