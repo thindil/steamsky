@@ -82,7 +82,7 @@ package Ships is
             LootMin : Positive; -- Minimal amount of loot from ship
             LootMax : Positive; -- Maximum amount of loot from ship
             Perception : Natural; -- Bonus to spot player ship first
-            Cargo : Cargo_Container.Vector; -- List of ship cargo
+            Cargo : Skills_Container.Vector; -- List of ship cargo
             CombatValue : Positive; -- Combat value of ship (used to generate enemies)
             Crew : ProtoCrew_Container.Vector; -- List of ship crew
             Description : Unbounded_String; -- Description of ship
