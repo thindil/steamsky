@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.9] - 2017-03-05
 
 ### Added
 - New enemy ships: undead ship, large undead ship, large attacking
@@ -58,6 +58,7 @@ All notable changes to this project will be documented in this file.
   large advanced bronze engine
 - Crash on loading ships data
 - Generating random cargo for ships
+- Centering map on new game or load old game
 
 ## [0.8] - 2017-02-05
 
