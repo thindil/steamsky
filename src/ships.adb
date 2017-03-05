@@ -165,6 +165,7 @@ package body Ships is
         BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         MoneyIndex : constant Natural := FindMoney;
         DockingCost : Positive;
+        TraderIndex : Natural := 0;
     begin
         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
             ShowDialog("Here no base to dock or undock.");
@@ -193,6 +194,15 @@ package body Ships is
                         exit;
                     end if;
                 end loop;
+                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
+                    if PlayerShip.Crew.Element(I).Order = Talk then
+                        TraderIndex := I;
+                        exit;
+                    end if;
+                end loop;
+                if TraderIndex > 0 then
+                    DockingCost := DockingCost - Integer(Float'Floor(Float(DockingCost) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
+                end if;
                 case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Reputation(1) is
                     when -24..-1 =>
                         DockingCost := DockingCost + Integer(Float'Floor(Float(DockingCost) * 0.05));
@@ -212,6 +222,9 @@ package body Ships is
                 UpdateCargo(PlayerShip, 1, (0 - DockingCost));
                 AddMessage("Ship docked to base " & To_String(SkyBases(BaseIndex).Name) & ". It costs" & Positive'Image(DockingCost) &
                     " Charcollum.", OrderMessage);
+                if TraderIndex > 0 then
+                    GainExp(1, 4, TraderIndex);
+                end if;
             else
                 AddMessage("Ship docked to base " & To_String(SkyBases(BaseIndex).Name) & ".", OrderMessage);
             end if;
