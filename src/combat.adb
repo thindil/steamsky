@@ -81,7 +81,6 @@ package body Combat is
             Enemy.Perception := GetRandom(ProtoShips_List.Element(EnemyIndex).Perception(1), 
                 ProtoShips_List.Element(EnemyIndex).Perception(2));
         end if;
-        Addmessage(Integer'Image(Enemy.Perception), othermessage);
         PilotOrder := 2;
         EngineerOrder := 3;
         EndCombat := False;
