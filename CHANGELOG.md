@@ -57,6 +57,7 @@ All notable changes to this project will be documented in this file.
 - Fuel usage for medium advanced bronze engine, large bronze engine and
   large advanced bronze engine
 - Crash on loading ships data
+- Generating random cargo for ships
 
 ## [0.8] - 2017-02-05
 
