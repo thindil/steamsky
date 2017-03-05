@@ -30,6 +30,7 @@ with Crafts; use Crafts;
 with Ships; use Ships;
 with Config; use Config;
 with Crew; use Crew;
+with Maps; use Maps;
 
 package body MainMenu is
 
@@ -323,6 +324,7 @@ package body MainMenu is
                     end if;
                     LoadError := LoadGame;
                     if LoadError = Null_Unbounded_String then
+                        CenterMap;
                         DrawGame(Sky_Map_View);
                         return Sky_Map_View;
                     else
@@ -467,6 +469,7 @@ package body MainMenu is
                 Post(NewGameForm, False);
                 Delete(NewGameForm);
                 NewGame(NewCharName, NewShipName, CharGender);
+                CenterMap;
                 DrawGame(Sky_Map_View);
                 return Sky_Map_View;
             when KEY_BACKSPACE => -- delete last character

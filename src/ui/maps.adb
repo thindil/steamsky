@@ -328,6 +328,12 @@ package body Maps is
         MoveY := NewY - PlayerShip.SkyY;
     end MoveMap;
 
+    procedure CenterMap is
+    begin
+        MoveX := 0;
+        MoveY := 0;
+    end CenterMap;
+
     function SkyMapKeys(Key : Key_Code) return Integer is
         Result : Integer := 1;
         NewKey : Key_Code;
@@ -414,8 +420,7 @@ package body Maps is
                     end case;
                 end if;
             when Character'Pos(' ') => -- Center on ship
-                MoveX := 0;
-                MoveY := 0;
+                CenterMap;
                 Result := 4;
             when 10 => -- Set base as destination point for ship
                 if  MoveX = 0 and MoveY = 0 then
