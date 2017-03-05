@@ -62,12 +62,26 @@ package body Combat is
         end CountPerception;
     begin
         EnemyShip := CreateShip(EnemyIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY, FULL_SPEED);
-        Enemy := (Ship => EnemyShip, Accuracy => ProtoShips_List.Element(EnemyIndex).Accuracy, 
-            Distance => 10000, CombatAI => ProtoShips_List.Element(EnemyIndex).CombatAI, 
-            Evasion => ProtoShips_List.Element(EnemyIndex).Evasion, LootMin =>
-            ProtoShips_List.Element(EnemyIndex).LootMin, LootMax =>
-            ProtoShips_List.Element(EnemyIndex).LootMax, Perception =>
-            ProtoShips_List.Element(EnemyIndex).Perception);
+        Enemy := (Ship => EnemyShip, Accuracy => 0, Distance => 10000, CombatAI => ProtoShips_List.Element(EnemyIndex).CombatAI, 
+            Evasion => 0, LootMin => ProtoShips_List.Element(EnemyIndex).LootMin, LootMax =>
+            ProtoShips_List.Element(EnemyIndex).LootMax, Perception => 0);
+        if ProtoShips_List.Element(EnemyIndex).Accuracy(2) = 0 then
+            Enemy.Accuracy := ProtoShips_List.Element(EnemyIndex).Accuracy(1);
+        else
+            Enemy.Accuracy := GetRandom(ProtoShips_List.Element(EnemyIndex).Accuracy(1), ProtoShips_List.Element(EnemyIndex).Accuracy(2));
+        end if;
+        if ProtoShips_List.Element(EnemyIndex).Evasion(2) = 0 then
+            Enemy.Evasion := ProtoShips_List.Element(EnemyIndex).Evasion(1);
+        else
+            Enemy.Evasion := GetRandom(ProtoShips_List.Element(EnemyIndex).Evasion(1), ProtoShips_List.Element(EnemyIndex).Evasion(2));
+        end if;
+        if ProtoShips_List.Element(EnemyIndex).Perception(2) = 0 then
+            Enemy.Perception := ProtoShips_List.Element(EnemyIndex).Perception(1);
+        else
+            Enemy.Perception := GetRandom(ProtoShips_List.Element(EnemyIndex).Perception(1), 
+                ProtoShips_List.Element(EnemyIndex).Perception(2));
+        end if;
+        Addmessage(Integer'Image(Enemy.Perception), othermessage);
         PilotOrder := 2;
         EngineerOrder := 3;
         EndCombat := False;

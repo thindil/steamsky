@@ -72,16 +72,17 @@ package Ships is
             Order : Crew_Orders; -- Order for crew member
         end record;
     package ProtoCrew_Container is new Vectors(Positive, ProtoCrewData);
+    type ShipSkills_Array is array(1..2) of Natural;
     type ProtoShipData is -- Data structure for ship prototypes
         record
             Name : Unbounded_String; -- Prototype name
             Modules : Positive_Container.Vector; -- List of ship modules
-            Accuracy : Natural; -- Bonus to hit for ship
+            Accuracy : ShipSkills_Array; -- Bonus to hit for ship
             CombatAI : ShipCombatAi; -- Behaviour of ship in combat
-            Evasion : Natural; -- Bonus to evade attacks
+            Evasion : ShipSkills_Array; -- Bonus to evade attacks
             LootMin : Positive; -- Minimal amount of loot from ship
             LootMax : Positive; -- Maximum amount of loot from ship
-            Perception : Natural; -- Bonus to spot player ship first
+            Perception : ShipSkills_Array; -- Bonus to spot player ship first
             Cargo : Skills_Container.Vector; -- List of ship cargo
             CombatValue : Positive; -- Combat value of ship (used to generate enemies)
             Crew : ProtoCrew_Container.Vector; -- List of ship crew

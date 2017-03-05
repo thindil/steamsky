@@ -361,7 +361,11 @@ package body Ships is
             end if;
             MemberName := GenerateMemberName(Gender);
             for Skill of Member.Skills loop
-                TmpSkills.Append(New_Item => Skill);
+                if Skill(3) = 0 then
+                    TmpSkills.Append(New_Item => Skill);
+                else
+                    TmpSkills.Append(New_Item => (Skill(1), GetRandom(Skill(2), Skill(3)), 0));
+                end if;
             end loop;
             ShipCrew.Append(New_Item => (Name => MemberName, Gender => Gender,
                 Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Member.Order,
@@ -444,8 +448,8 @@ package body Ships is
             return False;
         end if;
         TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
-            Accuracy => 0, CombatAI => NONE, Evasion => 0, LootMin => 1,
-            LootMax => 100, Perception => 0, Cargo => TempCargo, CombatValue => 1,
+            Accuracy => (0, 0), CombatAI => NONE, Evasion => (0, 0), LootMin => 1,
+            LootMax => 100, Perception => (0, 0), Cargo => TempCargo, CombatValue => 1,
             Crew => TempCrew, Description => Null_Unbounded_String, Owner => Poleis);
         Open(ShipsFile, In_File, "data/ships.dat");
         while not End_Of_File(ShipsFile) loop
@@ -470,9 +474,9 @@ package body Ships is
                 elsif FieldName = To_Unbounded_String("Accuracy") then
                     DotIndex := Index(Value, "..");
                     if DotIndex = 0 then
-                        TempRecord.Accuracy := Integer'Value(To_String(Value));
+                        TempRecord.Accuracy := (Integer'Value(To_String(Value)), 0);
                     else
-                        TempRecord.Accuracy := GetRandom(Integer'Value(Slice(Value, 1, DotIndex - 1)), 
+                        TempRecord.Accuracy := (Integer'Value(Slice(Value, 1, DotIndex - 1)), 
                             Integer'Value(Slice(Value, DotIndex + 2, Length(Value))));
                     end if;
                 elsif FieldName = To_Unbounded_String("CombatAI") then
@@ -480,9 +484,9 @@ package body Ships is
                 elsif FieldName = To_Unbounded_String("Evasion") then
                     DotIndex := Index(Value, "..");
                     if DotIndex = 0 then
-                        TempRecord.Evasion := Integer'Value(To_String(Value));
+                        TempRecord.Evasion := (Integer'Value(To_String(Value)), 0);
                     else
-                        TempRecord.Evasion := GetRandom(Integer'Value(Slice(Value, 1, DotIndex - 1)), 
+                        TempRecord.Evasion := (Integer'Value(Slice(Value, 1, DotIndex - 1)), 
                             Integer'Value(Slice(Value, DotIndex + 2, Length(Value))));
                     end if;
                 elsif FieldName = To_Unbounded_String("LootMin") then
@@ -492,9 +496,9 @@ package body Ships is
                 elsif FieldName = To_Unbounded_String("Perception") then
                     DotIndex := Index(Value, "..");
                     if DotIndex = 0 then
-                        TempRecord.Perception := Integer'Value(To_String(Value));
+                        TempRecord.Perception := (Integer'Value(To_String(Value)), 0);
                     else
-                        TempRecord.Perception := GetRandom(Integer'Value(Slice(Value, 1, DotIndex - 1)), 
+                        TempRecord.Perception := (Integer'Value(Slice(Value, 1, DotIndex - 1)), 
                             Integer'Value(Slice(Value, DotIndex + 2, Length(Value))));
                     end if;
                 elsif FieldName = To_Unbounded_String("Cargo") then
@@ -540,8 +544,8 @@ package body Ships is
                                     Integer'Value(Slice(SkillsValue, XIndex + 1, EndIndex2 - 1)), 0));
                             else
                                 TempSkills.Append(New_Item => (Integer'Value(Slice(SkillsValue, StartIndex2, XIndex - 1)),
-                                    GetRandom(Integer'Value(Slice(SkillsValue, XIndex + 1, DotIndex - 1)), 
-                                    Integer'Value(Slice(SkillsValue, DotIndex + 2, EndIndex2 - 1))), 0));
+                                    Integer'Value(Slice(SkillsValue, XIndex + 1, DotIndex - 1)), 
+                                    Integer'Value(Slice(SkillsValue, DotIndex + 2, EndIndex2 - 1))));
                             end if;
                             StartIndex2 := EndIndex2 + 2;
                         end loop;
@@ -590,8 +594,8 @@ package body Ships is
                 TempRecord.CombatValue := CombatValue;
                 ProtoShips_List.Append(New_Item => TempRecord);
                 TempRecord := (Name => Null_Unbounded_String, Modules => TempModules, 
-                    Accuracy => 0, CombatAI => NONE, Evasion => 0, LootMin => 1, 
-                    LootMax => 100, Perception => 0, Cargo => TempCargo, CombatValue => 1,
+                    Accuracy => (0, 0), CombatAI => NONE, Evasion => (0, 0), LootMin => 1, 
+                    LootMax => 100, Perception => (0, 0), Cargo => TempCargo, CombatValue => 1,
                     Crew => TempCrew, Description => Null_Unbounded_String, Owner => Poleis);
                 TempRecord.Name := Null_Unbounded_String;
             end if;
