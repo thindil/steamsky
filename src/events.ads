@@ -20,7 +20,7 @@ with Game; use Game;
 
 package Events is
 
-    type Events_Types is (None, EnemyShip, FullDocks, AttackOnBase, Disease, EnemyPatrol, DoublePrice); -- Types of events
+    type Events_Types is (None, EnemyShip, AttackOnBase, Disease, DoublePrice, FullDocks, EnemyPatrol); -- Types of events
     type EventData is -- Data structure for random events
         record
             EType : Events_Types; -- Type of event
