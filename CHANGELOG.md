@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New ship module: small iron engine
+
 ## [0.9] - 2017-03-05
 
 ### Added
