@@ -892,4 +892,17 @@ Skill = Engineering
 Price = 24000 
 InstallTime = 320
 Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+[72]
+Name = Small iron engine
+Type = Engine
+Weight = 1100
+Value = 4
+MaxValue = 2500
+Durability = 150
+Material = Iron
+Skill = Engineering
+Price = 5000
+InstallTime = 120
+Size = 1
+Description = Smallest available engine made of iron. Each ship needs at least one engine to fly.
 []
