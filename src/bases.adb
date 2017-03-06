@@ -281,9 +281,10 @@ package body Bases is
                 ShowDialog("You don't have enough Charcollum to pay for " & To_String(Modules_List.Element(ModuleIndex).Name) & ".");
                 return;
             end if;
-            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Modules_List.Element(ModuleIndex).MType and
-                    Modules_List.Element(ModuleIndex).Unique then
+            for Module of PlayerShip.Modules loop
+                if Modules_List.Element(Module.ProtoIndex).MType = Modules_List.Element(ModuleIndex).MType and
+                    Modules_List.Element(ModuleIndex).Unique 
+                then
                     ShowDialog("You can't install another " & To_String(Modules_List.Element(ModuleIndex).Name) & 
                         " because you have installed one module that type. Remove old first.");
                     return;
@@ -420,18 +421,6 @@ package body Bases is
     procedure GenerateRecruits(BaseIndex : Positive) is
         TimeDiff : Natural;
         MaxRecruits, RecruitsAmount, SkillsAmount, SkillNumber, SkillLevel : Positive;
-        subtype Recruits_Range is Positive range 1..15;
-        subtype Gender_Range is Positive range 1..2;
-        subtype SkillsAmount_Range is Positive range Skills_Names.First_Index..Skills_Names.Last_Index;
-        subtype SkillValue_Range is Positive range 1..100;
-        package Rand_Recruits is new Discrete_Random(Recruits_Range);
-        package Rand_Gender is new Discrete_Random(Gender_Range);
-        package Rand_Skills is new Discrete_Random(SkillsAmount_Range);
-        package Rand_Value is new Discrete_Random(SkillValue_Range);
-        Generator : Rand_Recruits.Generator;
-        Generator2 : Rand_Gender.Generator;
-        Generator3 : Rand_Skills.Generator;
-        Generator4 : Rand_Value.Generator;
         BaseRecruits : Recruit_Container.Vector;
         Skills : Skills_Container.Vector;
         Gender : Character;
@@ -448,10 +437,6 @@ package body Bases is
         if TimeDiff < 30 or SkyBases(BaseIndex).Owner = Abandoned then
             return;
         end if;
-        Rand_Recruits.Reset(Generator);
-        Rand_Gender.Reset(Generator2);
-        Rand_Skills.Reset(Generator3);
-        Rand_Value.Reset(Generator4);
         if SkyBases(BaseIndex).Population < 150 then
             MaxRecruits := 5;
         elsif SkyBases(BaseIndex).Population > 149 and SkyBases(BaseIndex).Population < 300 then
@@ -462,24 +447,21 @@ package body Bases is
         if MaxRecruits > (SkyBases(BaseIndex).Population / 10) then
             MaxRecruits := (SkyBases(BaseIndex).Population / 10) + 1;
         end if;
-        loop
-            RecruitsAmount := Rand_Recruits.Random(Generator);
-            exit when RecruitsAmount < MaxRecruits;
-        end loop;
+        RecruitsAmount := GetRandom(1, MaxRecruits);
         for I in 1..RecruitsAmount loop
             Skills.Clear;
             Price := 0;
-            if Rand_Gender.Random(Generator2) = 1 then
+            if GetRandom(1, 2) = 1 then
                 Gender := 'M';
             else
                 Gender := 'F';
             end if;
             BaseRecruits.Append(New_Item => (Name => GenerateMemberName(Gender), Gender => Gender, 
                 Price => 1, Skills => Skills));
-            SkillsAmount := Rand_Skills.Random(Generator3);
+            SkillsAmount := GetRandom(Skills_Names.First_Index, Skills_Names.Last_Index);
             for J in 1..SkillsAmount loop
-                SkillNumber := Rand_Skills.Random(Generator3);
-                SkillLevel := Rand_Value.Random(Generator4);
+                SkillNumber := GetRandom(Skills_Names.First_Index, Skills_Names.Last_Index);
+                SkillLevel := GetRandom(1, 100);
                 SkillIndex := 0;
                 for K in Skills.First_Index..Skills.Last_Index loop
                     if Skills.Element(K)(1) = SkillNumber then
@@ -543,9 +525,6 @@ package body Bases is
         BaseIndex : constant Positive := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         Radius, TempX, TempY : Integer;
         Amount, TmpBaseIndex : Natural;
-        subtype Bases_Range is Positive range 1..1024;
-        package Rand_Bases is new Discrete_Random(Bases_Range);
-        Generator : Rand_Bases.Generator;
         TraderIndex : Positive;
         UnknownBases : Natural := 0;
     begin
@@ -610,9 +589,8 @@ package body Bases is
                 exit when UnknownBases >= Amount;
             end loop;
             if UnknownBases >= Amount then
-                Rand_Bases.Reset(Generator);
                 loop
-                    TmpBaseIndex := Rand_Bases.Random(Generator);
+                    TmpBaseIndex := GetRandom(1, 1024);
                     if not SkyBases(TmpBaseIndex).Known then
                         SkyBases(TmpBaseIndex).Known := True;
                         Amount := Amount - 1;
@@ -679,20 +657,19 @@ package body Bases is
             MaxY := 1024;
         end if;
         if GetRandom(1, 100) < 95 then
-            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+            for Module of PlayerShip.Modules loop
+                case Modules_List.Element(Module.ProtoIndex).MType is
                     when HULL | GUN | BATTERING_RAM =>
-                        PlayerValue := PlayerValue + PlayerShip.Modules.Element(I).MaxDurability +
-                        (PlayerShip.Modules.Element(I).Max_Value * 10);
+                        PlayerValue := PlayerValue + Module.MaxDurability + (Module.Max_Value * 10);
                     when ARMOR =>
-                        PlayerValue := PlayerValue + PlayerShip.Modules.Element(I).MaxDurability;
+                        PlayerValue := PlayerValue + Module.MaxDurability;
                     when others =>
                         null;
                 end case;
             end loop;
-            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if Slice(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType, 1, 4) = "Ammo" then
-                    PlayerValue := PlayerValue + (Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Value * 10);
+            for Item of PlayerShip.Cargo loop
+                if Slice(Items_List.Element(Item.ProtoIndex).IType, 1, 4) = "Ammo" then
+                    PlayerValue := PlayerValue + (Items_List.Element(Item.ProtoIndex).Value * 10);
                 end if;
             end loop;
             for I in ProtoShips_List.First_Index..ProtoShips_List.Last_Index loop
