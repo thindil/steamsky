@@ -14,11 +14,10 @@ All notable changes to this project will be documented in this file.
   undead ship, advanced inquisition ship, huge pirate ship, advanced
   huge pirate ship, huge undead ship, huge attacking drone, advanced
   huge undead ship, advanced huge attacking drone, huge inquisition
-  ship and advanced huge inquisition ship
+  ship, advanced huge inquisition ship and large inquisition ship
 - Descriptions to ship modules
 - Descriptions to items
 - Orders for all crew members
-- New enemy ship: large inquisition ship
 - New combat AI type: disarmer
 - More info about enemy to combat screen
 - Descriptions to ships
