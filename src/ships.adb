@@ -1213,4 +1213,14 @@ package body Ships is
         end loop;
     end DeleteMember;
 
+    function FindMember(Order : Crew_Orders; Ship : ShipRecord := PlayerShip) return Natural is
+    begin
+        for I in Ship.Crew.First_Index..Ship.Crew.Last_Index loop
+            if Ship.Crew.Element(I).Order = Order then
+                return I;
+            end if;
+        end loop;
+        return 0;
+    end FindMember;
+
 end Ships;
