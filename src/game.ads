@@ -41,7 +41,7 @@ package Game is
             Minutes : Natural;
         end record;
     GameDate : Date_Record;
-    GameVersion : constant String := "Version: 0.9";
+    GameVersion : constant String := "Version: 1.0";
     package UnboundedString_Container is new Vectors(Positive, Unbounded_String);
     package Positive_Container is new Vectors(Positive, Positive);
     BaseSyllablesPre : UnboundedString_Container.Vector;
