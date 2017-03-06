@@ -687,10 +687,7 @@ package body Bases is
             end loop;
         end if;
         for I in 1..EventsAmount loop
-            loop
-                Event := Events_Types'Val(GetRandom(1, 6));
-                exit when Event /= FullDocks and Event /= EnemyPatrol;
-            end loop;
+            Event := Events_Types'Val(GetRandom(1, 4));
             Attempts := 10;
             loop
                 if Event = EnemyShip then
