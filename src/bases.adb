@@ -94,12 +94,7 @@ package body Bases is
             ShowDialog("You can't buy " & ItemName & " in this base.");
             return;
         end if;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Talk then
-                TraderIndex := I;
-                exit;
-            end if;
-        end loop;
+        TraderIndex := FindMember(Talk);
         Price := Items_List.Element(ItemIndex).Prices(BaseType);
         if EventIndex > 0 then
             if Events_List.Element(EventIndex).EType = DoublePrice and Events_List.Element(EventIndex).Data = ItemIndex then
@@ -147,12 +142,7 @@ package body Bases is
             ShowDialog("You dont have that much " & ItemName & " in ship cargo.");
             return;
         end if;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Talk then
-                TraderIndex := I;
-                exit;
-            end if;
-        end loop;
+        TraderIndex := FindMember(Talk);
         Price := Items_List.Element(ProtoIndex).Prices(BaseType);
         if EventIndex > 0 then
             if Events_List.Element(EventIndex).EType = DoublePrice and Events_List.Element(EventIndex).Data = ProtoIndex then
@@ -228,12 +218,7 @@ package body Bases is
             ShowDialog("You don't have Charcollum to pay for repairs.");
             return;
         end if;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Talk then
-                TraderIndex := I;
-                exit;
-            end if;
-        end loop;
+        TraderIndex := FindMember(Talk);
         CountPrice(Cost, TraderIndex);
         if PlayerShip.Cargo.Element(MoneyIndex).Amount < Cost then
             ShowDialog("You don't have enough Charcollum to pay for repairs.");
@@ -288,12 +273,7 @@ package body Bases is
                     null;
             end case;
         end loop;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Talk then
-                TraderIndex := I;
-                exit;
-            end if;
-        end loop;
+        TraderIndex := FindMember(Talk);
         if Install then
             Price := Modules_List.Element(ModuleIndex).Price;
             CountPrice(Price, TraderIndex);
@@ -539,12 +519,7 @@ package body Bases is
             ShowDialog("You don't have Charcollum to hire anyone.");
             return;
         end if;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Talk then
-                TraderIndex := I;
-                exit;
-            end if;
-        end loop;
+        TraderIndex := FindMember(Talk);
         Price := Recruit.Price;
         CountPrice(Price, TraderIndex);
         if PlayerShip.Cargo.Element(MoneyIndex).Amount < Price then
@@ -588,12 +563,7 @@ package body Bases is
             Amount := 40;
             Radius := 40;
         end if;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Talk then
-                TraderIndex := I;
-                exit;
-            end if;
-        end loop;
+        TraderIndex := FindMember(Talk);
         Bases_Loop:
         for X in -Radius..Radius loop
             for Y in -Radius..Radius loop
@@ -683,12 +653,7 @@ package body Bases is
             ShowDialog("You asked for know events in this base not so long ago.");
             return;
         end if;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Talk then
-                TraderIndex := I;
-                exit;
-            end if;
-        end loop;
+        TraderIndex := FindMember(Talk);
         if SkyBases(BaseIndex).Population < 150 then
             MaxEvents := 5;
         elsif SkyBases(BaseIndex).Population > 149 and SkyBases(BaseIndex).Population < 300 then
@@ -831,12 +796,7 @@ package body Bases is
             ShowDialog("You already known this recipe.");
             return;
         end if;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Talk then
-                TraderIndex := I;
-                exit;
-            end if;
-        end loop;
+        TraderIndex := FindMember(Talk);
         Cost := Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Prices(BaseType) * 
             Recipes_List.Element(RecipeIndex).Difficulty * 100;
         CountPrice(Cost, TraderIndex);
