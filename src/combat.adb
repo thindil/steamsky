@@ -52,9 +52,9 @@ package body Combat is
                         null;
                 end case;
             end loop;
-            for I in Spotted.Modules.First_Index..Spotted.Modules.Last_Index loop
-                if Modules_List.Element(Spotted.Modules.Element(I).ProtoIndex).MType = HULL then
-                    Result := Result + Spotted.Modules.Element(I).Max_Value;
+            for Module of Spotted.Modules loop
+                if Modules_List.Element(Module.ProtoIndex).MType = HULL then
+                    Result := Result + Module.Max_Value;
                     exit;
                 end if;
             end loop;
@@ -150,9 +150,9 @@ package body Combat is
                             if Ship.Modules.Element(K).Owner = 0 then
                                 Shoots := 0;
                             else
-                                for I in Guns.First_Index..Guns.Last_Index loop
-                                    if Guns.Element(I)(1) = K then
-                                        GunnerOrder := Guns.Element(I)(2);
+                                for Gun of Guns loop
+                                    if Gun(1) = K then
+                                        GunnerOrder := Gun(2);
                                         exit;
                                     end if;
                                 end loop;
@@ -421,12 +421,7 @@ package body Combat is
                     null;
             end case;
         end loop;
-        for I in Enemy.Ship.Crew.First_Index..Enemy.Ship.Crew.Last_Index loop
-            if Enemy.Ship.Crew.Element(I).Order = Pilot then
-                EnemyPilotIndex := I;
-                exit;
-            end if;
-        end loop;
+        EnemyPilotIndex := FindMember(Pilot, Enemy.Ship);
         for Item of PlayerShip.Cargo loop
             if Items_List.Element(Item.ProtoIndex).IType = To_Unbounded_String("Fuel") then
                 HaveFuel := True;
@@ -506,6 +501,7 @@ package body Combat is
                     end if;
                     if EnemyAmmoIndex = 0 and (Enemy.CombatAI = ATTACKER or Enemy.CombatAI = DISARMER) then
                         Enemy.CombatAI := COWARD;
+                        exit;
                     end if;
                 else
                     DamageRange := 100;
