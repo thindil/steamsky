@@ -39,6 +39,9 @@ only in terminal.
 Note: If you build game from source, copy files COPYING and README.md to *bin*
 directory.
 
+## Modify game
+For detailed informations about modifying various game elements, see
+[MODDING.md](MODDING.md)
 
 
 That's all for now, as usual, probably I forgot about something important ;)
