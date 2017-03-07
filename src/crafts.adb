@@ -122,10 +122,10 @@ package body Crafts is
             Recipe.ResultIndex := abs(RecipeIndex);
             Recipe.ResultAmount := 1;
             Recipe.Workplace := ALCHEMY_LAB;
-            for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
-                if Recipes_List.Element(I).ResultIndex = Recipe.ResultIndex then
-                    Recipe.Skill := Recipes_List.Element(I).Skill;
-                    Recipe.Time := Recipes_List.Element(I).Difficulty * 15;
+            for ProtoRecipe of Recipes_List loop
+                if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
+                    Recipe.Skill := ProtoRecipe.Skill;
+                    Recipe.Time := ProtoRecipe.Difficulty * 15;
                     exit;
                 end if;
             end loop;
@@ -158,8 +158,8 @@ package body Crafts is
         end if;
         -- Check for tool
         if Recipe.Tool /= To_Unbounded_String("None") then
-            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = Recipe.Tool then
+            for Item of PlayerShip.Cargo loop
+                if Items_List.Element(Item.ProtoIndex).IType = Recipe.Tool then
                     HaveTool := True;
                     exit;
                 end if;
@@ -217,10 +217,10 @@ package body Crafts is
                         Recipe.MaterialAmounts.Append(New_Item => 1);
                         Recipe.ResultAmount := 0;
                         Recipe.Workplace := ALCHEMY_LAB;
-                        for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
-                            if Recipes_List.Element(I).ResultIndex = Recipe.ResultIndex then
-                                Recipe.Skill := Recipes_List.Element(I).Skill;
-                                Recipe.Time := Recipes_List.Element(I).Difficulty * 15;
+                        for ProtoRecipe of Recipes_List loop
+                            if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
+                                Recipe.Skill := ProtoRecipe.Skill;
+                                Recipe.Time := ProtoRecipe.Difficulty * 15;
                                 exit;
                             end if;
                         end loop;
