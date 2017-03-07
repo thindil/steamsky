@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New ship modules: small iron engine and small advanced iron engine
+- Modding guide: MODDING.md
 
 ## [0.9] - 2017-03-05
 
