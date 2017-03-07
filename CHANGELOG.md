@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New ship module: small iron engine
+- New ship modules: small iron engine and small advanced iron engine
 
 ## [0.9] - 2017-03-05
 
