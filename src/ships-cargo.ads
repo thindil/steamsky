@@ -20,7 +20,8 @@ package Ships.Cargo is
     procedure UpdateCargo(Ship : in out ShipRecord; ProtoIndex : Positive; Amount : Integer; Durability : Natural := 100); -- Update 
                                                         -- selected item in ship cargo
     function FreeCargo(Amount : Integer) return Integer; -- Return available space in cargo after adding/extracting Amount
-    function FindMoney return Natural; -- Return index of moneys, 0 if no moneys on ship
+    function FindCargo(ProtoIndex : Natural := 0; ItemType : Unbounded_String := Null_Unbounded_String) return Natural; -- Return 
+                                                        -- index of item, 0 if no item in ship cargo
     function GetCargoName(CargoIndex : Positive) return String; -- Get name of cargo
     procedure DamageCargo(CargoIndex : Positive; CrewIndex, SkillIndex : Natural := 0); -- Check if item in ship cargo was damaged
 

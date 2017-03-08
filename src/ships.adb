@@ -163,7 +163,7 @@ package body Ships is
 
     procedure DockShip(Docking : Boolean) is
         BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-        MoneyIndex : constant Natural := FindMoney;
+        MoneyIndex : constant Natural := FindCargo(1);
         DockingCost : Positive;
         TraderIndex : Natural := 0;
     begin

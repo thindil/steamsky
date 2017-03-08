@@ -103,7 +103,7 @@ package body Bases is
         end if;
         Cost := BuyAmount * Price;
         CountPrice(Cost, TraderIndex);
-        MoneyIndex := FindMoney;
+        MoneyIndex := FindCargo(1);
         if FreeCargo(Cost - (Items_List.Element(ItemIndex).Weight * BuyAmount)) < 0 then
             ShowDialog("You don't have that much free space in your ship cargo.");
             return;
@@ -213,7 +213,7 @@ package body Bases is
         if Cost = 0 then
             return;
         end if;
-        MoneyIndex := FindMoney;
+        MoneyIndex := FindCargo(1);
         if MoneyIndex = 0 then
             ShowDialog("You don't have Charcollum to pay for repairs.");
             return;
@@ -250,7 +250,7 @@ package body Bases is
     end RepairShip;
 
     procedure UpgradeShip(Install : Boolean; ModuleIndex : Positive) is
-        MoneyIndex : constant Natural := FindMoney;
+        MoneyIndex : constant Natural := FindCargo(1);
         HullIndex, ModulesAmount, TraderIndex : Positive;
         FreeTurretIndex, Price : Natural := 0;
         type DamageFactor is digits 2 range 0.0..1.0;
@@ -496,7 +496,7 @@ package body Bases is
         Recruit : constant Recruit_Data := SkyBases(BaseIndex).Recruits.Element(RecruitIndex);
         TraderIndex : Positive;
     begin
-        MoneyIndex := FindMoney;
+        MoneyIndex := FindCargo(1);
         if MoneyIndex = 0 then
             ShowDialog("You don't have Charcollum to hire anyone.");
             return;
@@ -774,7 +774,7 @@ package body Bases is
         Cost := Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex).Prices(BaseType) * 
             Recipes_List.Element(RecipeIndex).Difficulty * 100;
         CountPrice(Cost, TraderIndex);
-        MoneyIndex := FindMoney;
+        MoneyIndex := FindCargo(1);
         if MoneyIndex = 0 then
             ShowDialog("You don't have charcollum to buy recipe for " & RecipeName & ".");
             return;
