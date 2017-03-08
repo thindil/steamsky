@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated README.md
 
+### Fixed
+- Healing crew members
+
 ## [0.9] - 2017-03-05
 
 ### Added
