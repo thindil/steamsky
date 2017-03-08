@@ -479,9 +479,8 @@ package body Crew is
                                         exit;
                                     end if;
                                 end loop;
-                                for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                                    if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
-                                        PlayerShip.Modules.Element(J).Current_Value < PlayerShip.Modules.Element(J).Max_Value
+                                for Module of PlayerShip.Modules loop
+                                    if Modules_List.Element(Module.ProtoIndex).MType = CABIN and Module.Current_Value < Module.Max_Value
                                     then
                                         NeedCleaning := True;
                                         exit;
@@ -637,8 +636,8 @@ package body Crew is
             return False;
         end HaveTools;
     begin
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            case PlayerShip.Crew.Element(I).Order is
+        for Member of PlayerShip.Crew loop
+            case Member.Order is
                 when Pilot =>
                     HavePilot := True;
                 when Engineer =>
@@ -650,32 +649,28 @@ package body Crew is
                 when others =>
                     null;
             end case;
-            if PlayerShip.Crew.Element(I).Health < 100 then
+            if Member.Health < 100 then
                 NeedHealer := True;
             end if;
         end loop;
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            case Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+        for Module of PlayerShip.Modules loop
+            case Modules_List(Module.ProtoIndex).MType is
                 when GUN =>
-                    if PlayerShip.Modules.Element(I).Owner = 0 and PlayerShip.Modules.Element(I).Durability > 0 and not NeedGunners then
+                    if Module.Owner = 0 and Module.Durability > 0 and not NeedGunners then
                         NeedGunners := True;
                     end if;
                 when ALCHEMY_LAB..GREENHOUSE =>
-                    if PlayerShip.Modules.Element(I).Current_Value /= 0 and PlayerShip.Modules.Element(I).Owner = 0 and 
-                        PlayerShip.Modules.Element(I).Durability > 0 and not NeedCrafters 
-                    then
+                    if Module.Current_Value /= 0 and Module.Owner = 0 and Module.Durability > 0 and not NeedCrafters then
                         NeedCrafters := True;
                     end if;
                 when CABIN =>
-                    if PlayerShip.Modules.Element(I).Current_Value < PlayerShip.Modules.Element(I).Max_Value and
-                        PlayerShip.Modules.Element(I).Durability > 0
-                    then
+                    if Module.Current_Value < Module.Max_Value and Module.Durability > 0 then
                         NeedClean := True;
                     end if;
                 when MEDICAL_ROOM =>
-                    if NeedHealer and PlayerShip.Modules.Element(I).Durability > 0 then
-                        for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                            if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines") then
+                    if NeedHealer and Module.Durability > 0 then
+                        for Item of PlayerShip.Cargo loop
+                            if Items_List.Element(Item.ProtoIndex).IType = To_Unbounded_String("Medicines") then
                                 CanHeal := True;
                                 exit;
                             end if;
@@ -684,11 +679,9 @@ package body Crew is
                 when others =>
                     null;
             end case;
-            if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability and not NeedRepairs then
-                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = 
-                        Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial 
-                    then
+            if Module.Durability < Module.MaxDurability and not NeedRepairs then
+                for Item of PlayerShip.Cargo loop
+                    if Items_List.Element(Item.ProtoIndex).IType = Modules_List.Element(Module.ProtoIndex).RepairMaterial then
                         NeedRepairs := True;
                         exit;
                     end if;
