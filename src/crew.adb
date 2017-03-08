@@ -262,18 +262,18 @@ package body Crew is
             ProtoIndex : Natural := 0;
             ConsumeValue : Natural := 0;
         begin
-            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = To_Unbounded_String(ItemType) then
-                    ProtoIndex := PlayerShip.Cargo.Element(I).ProtoIndex;
+            for Item of PlayerShip.Cargo loop
+                if Items_List.Element(Item.ProtoIndex).IType = To_Unbounded_String(ItemType) then
+                    ProtoIndex := Item.ProtoIndex;
                     ConsumeValue := Items_List.Element(ProtoIndex).Value;
                     exit;
                 end if;
             end loop;
             if ProtoIndex = 0 then
                 if ItemType = "Food" then
-                    for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                        if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = To_Unbounded_String("RawFood") then
-                            ProtoIndex := PlayerShip.Cargo.Element(I).ProtoIndex;
+                    for Item of PlayerShip.Cargo loop
+                        if Items_List.Element(Item.ProtoIndex).IType = To_Unbounded_String("RawFood") then
+                            ProtoIndex := Item.ProtoIndex;
                             ConsumeValue := Items_List.Element(ProtoIndex).Value;
                             exit;
                         end if;
@@ -291,13 +291,10 @@ package body Crew is
         begin
             Member.Tired := TiredLevel;
             if TiredLevel = 0 and Member.Order = Rest and Member.PreviousOrder /= Rest then
-                if Member.PreviousOrder /= Repair then
-                    for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                        if PlayerShip.Crew.Element(I).Order = Member.PreviousOrder then
-                            BackToWork := False;
-                            exit;
-                        end if;
-                    end loop;
+                if Member.PreviousOrder /= Repair and Member.PreviousOrder /= Clean then
+                    if FindMember(Member.PreviousOrder) > 0 then
+                        BackToWork := False;
+                    end if;
                 end if;
                 if BackToWork then
                     Member.Order := Member.PreviousOrder;
