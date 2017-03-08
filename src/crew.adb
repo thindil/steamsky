@@ -257,7 +257,7 @@ package body Crew is
         OrderTime, CurrentMinutes, HealAmount : Integer;
         type DamageFactor is digits 2 range 0.0..1.0;
         Damage : DamageFactor := 0.0;
-        NeedCleaning : Boolean := False;
+        NeedCleaning, HaveMedicalRoom : Boolean := False;
         function Consume(ItemType : String) return Natural is
             ProtoIndex : Natural := 0;
             ConsumeValue : Natural := 0;
@@ -406,23 +406,29 @@ package body Crew is
                             if HealAmount < Times then
                                 HealAmount := Times;
                             end if;
-                            for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                                if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = MEDICAL_ROOM and
-                                    PlayerShip.Modules.Element(J).Durability = 0 
-                                then
-                                    HealAmount := -1;
-                                    AddMessage("You don't have medical room to continue healing wounded crew members.", OrderMessage);
+                            HaveMedicalRoom := False;
+                            for Module of PlayerShip.Modules loop
+                                if Modules_List.Element(Module.ProtoIndex).MType = MEDICAL_ROOM and Module.Durability > 0 then
+                                    HaveMedicalRoom := True;
                                     exit;
                                 end if;
                             end loop;
-                            HealAmount := HealAmount * (-1);
-                            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                                if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines") then
-                                    HealAmount := abs(HealAmount);
-                                    UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(J).ProtoIndex, (0 - Times));
-                                    exit;
-                                end if;
-                            end loop;
+                            if not HaveMedicalRoom then
+                                HealAmount := 0;
+                                AddMessage("You don't have medical room to continue healing wounded crew members.", OrderMessage);
+                            end if;
+                            if HealAmount > 0 then
+                                HealAmount := HealAmount * (-1);
+                                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines")
+                                        and PlayerShip.Cargo.Element(J).Amount >= Times
+                                    then
+                                        HealAmount := abs(HealAmount);
+                                        UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(J).ProtoIndex, (0 - Times));
+                                        exit;
+                                    end if;
+                                end loop;
+                            end if;
                             if HealAmount > 0 then
                                 for J in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
                                     if PlayerShip.Crew.Element(J).Health < 100 and J /= I then
