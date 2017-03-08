@@ -74,17 +74,26 @@ package body Ships.Cargo is
         return FreeCargo;
     end FreeCargo;
 
-    function FindMoney return Natural is
-        MoneyIndex : Natural := 0;
+    function FindCargo(ProtoIndex : Natural := 0; ItemType : Unbounded_String := Null_Unbounded_String) return Natural is
+        CargoIndex : Natural := 0;
     begin
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
-                MoneyIndex := I;
-                exit;
-            end if;
-        end loop;
-        return MoneyIndex;
-    end FindMoney;
+        if ProtoIndex > 0 then
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if PlayerShip.Cargo.Element(I).ProtoIndex = ProtoIndex then
+                    CargoIndex := I;
+                    exit;
+                end if;
+            end loop;
+        elsif ItemType /= Null_Unbounded_String then
+            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+                if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = ItemType then
+                    CargoIndex := I;
+                    exit;
+                end if;
+            end loop;
+        end if;
+        return CargoIndex;
+    end FindCargo;
 
     function GetCargoName(CargoIndex : Positive) return String is
     begin
