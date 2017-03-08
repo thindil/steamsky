@@ -81,7 +81,7 @@ package body Bases.UI.Recipes is
         Set_Window(TradeMenu, MenuWindow);
         Set_Sub_Window(TradeMenu, Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
         Post(TradeMenu);
-        MoneyIndex := FindMoney;
+        MoneyIndex := FindCargo(1);
         Move_Cursor(Line => (MenuHeight + 4), Column => 2);
         if MoneyIndex > 0 then
             Add(Str => "You have" & Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &

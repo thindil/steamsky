@@ -174,7 +174,7 @@ package body Bases.UI.Trade is
             CurrentMenuIndex := 1;
         end if;
         Set_Current(TradeMenu, Trade_Items.all(CurrentMenuIndex));
-        MoneyIndex := FindMoney;
+        MoneyIndex := FindCargo(1);
         Move_Cursor(Line => (MenuHeight + 4), Column => 2);
         if MoneyIndex > 0 then
             Add(Str => "You have" & Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
