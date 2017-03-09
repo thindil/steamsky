@@ -72,24 +72,24 @@ package body Messages is
         if MessageIndex < 1 then
             Index := 1;
             if Integer(Messages_List.Length) + MessageIndex > 0 then
-                for I in reverse Messages_List.First_Index..Messages_List.Last_Index loop
-                    if Messages_List.Element(I).MType = MType or MType = Default then
+                for Message of reverse Messages_List loop
+                    if Message.MType = MType or MType = Default then
                         Index := Index - 1;
                     end if;
                     if Index = MessageIndex then
-                        return Messages_List.Element(I);
+                        return Message;
                     end if;
                 end loop;
             end if;
             return (Message => Null_Unbounded_String, MType => Default, MessageIndex => 1);
         end if;
         Index := 0;
-        for I in Messages_List.First_Index..Messages_List.Last_Index loop
-            if Messages_List.Element(I).MType = MType or MType = Default then
+        for Message of Messages_List loop
+            if Message.MType = MType or MType = Default then
                 Index := Index + 1;
             end if;
             if Index = MessageIndex then
-                return Messages_List.Element(I);
+                return Message;
             end if;
         end loop;
         return (Message => Null_Unbounded_String, MType => Default, MessageIndex => 1);
@@ -107,8 +107,8 @@ package body Messages is
         if MType = Default then
             return Natural(Messages_List.Length);
         else
-            for I in Messages_List.First_Index..Messages_List.Last_Index loop
-                if Messages_List.Element(I).MType = MType then
+            for Message of Messages_List loop
+                if Message.MType = MType then
                     Amount := Amount + 1;
                 end if;
             end loop;
@@ -147,14 +147,13 @@ package body Messages is
         Change_Attributes(Line => 2, Column => 58, Count => 1, Color => 1);
         Change_Attributes(Line => 2, Column => 64, Count => 1, Color => 1);
         if MessagesPad = Null_Window then
-            for I in reverse Messages_List.First_Index..Messages_List.Last_Index loop
-                if Messages_List.Element(I).MType = MessagesType or MessagesType = Default then
-                    Append(TextMessages, Messages_List.Element(I).Message);
+            for Message of reverse Messages_List loop
+                if Message.MType = MessagesType or MessagesType = Default then
+                    Append(TextMessages, Message.Message);
                     Append(TextMessages, ASCII.LF);
                     LinesAmount := LinesAmount + 1;
-                    if Length(Messages_List.Element(I).Message) > Positive(Columns - 2) then
-                        LinesAmount := LinesAmount + (Line_Position(Length(Messages_List.Element(I).Message)) / 
-                            Line_Position(Columns - 2));
+                    if Length(Message.Message) > Positive(Columns - 2) then
+                        LinesAmount := LinesAmount + (Line_Position(Length(Message.Message)) / Line_Position(Columns - 2));
                     end if;
                 end if;
             end loop;
