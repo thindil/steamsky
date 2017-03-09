@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Healing crew members
+- Counting used modules space on ships
 
 ## [0.9] - 2017-03-05
 
