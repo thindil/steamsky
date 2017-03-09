@@ -931,4 +931,17 @@ Price = 9000
 InstallTime = 150
 Size = 2
 Description = Standard available engine made of iron. Each ship needs at least one engine to fly.
+[75]
+Name = Medium advanced iron engine
+Type = Engine
+Weight = 2100
+Value = 7
+MaxValue = 9000
+Durability = 200
+Material = Iron
+Skill = Engineering
+Price = 12000
+InstallTime = 180
+Size = 2
+Description = Updated version of standard available engine made of iron. Each ship needs at least one engine to fly.
 []
