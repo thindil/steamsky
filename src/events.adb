@@ -32,45 +32,44 @@ package body Events is
     function CheckForEvent(OldState : GameStates) return GameStates is
         TimePassed : Integer;
         CrewIndex, PlayerValue : Natural := 0;
-        Roll, Roll2, ItemIndex : Positive;
+        Roll, Roll2, ItemIndex, EnemyIndex : Positive;
         Enemies, Engines : Positive_Container.Vector;
         BaseIndex : constant Natural := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
         procedure GenerateEnemies(Owner : Bases_Owners := Any) is
         begin
+            EnemyIndex := ProtoShips_List.First_Index;
             if GetRandom(1, 100) < 95 then
-                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                    case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+                for Module of PlayerShip.Modules loop
+                    case Modules_List.Element(Module.ProtoIndex).MType is
                         when HULL | GUN | BATTERING_RAM =>
-                            PlayerValue := PlayerValue + PlayerShip.Modules.Element(I).MaxDurability +
-                            (PlayerShip.Modules.Element(I).Max_Value * 10);
+                            PlayerValue := PlayerValue + Module.MaxDurability + (Module.Max_Value * 10);
                         when ARMOR =>
-                            PlayerValue := PlayerValue + PlayerShip.Modules.Element(I).MaxDurability;
+                            PlayerValue := PlayerValue + Module.MaxDurability;
                         when others =>
                             null;
                     end case;
                 end loop;
-                for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if Length(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType) >= 4 then
-                        if Slice(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType, 1, 4) = "Ammo" then
-                            PlayerValue := PlayerValue + (Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Value * 10);
+                for Item of PlayerShip.Cargo loop
+                    if Length(Items_List.Element(Item.ProtoIndex).IType) >= 4 then
+                        if Slice(Items_List.Element(Item.ProtoIndex).IType, 1, 4) = "Ammo" then
+                            PlayerValue := PlayerValue + (Items_List.Element(Item.ProtoIndex).Value * 10);
                         end if;
                     end if;
                 end loop;
-                for I in ProtoShips_List.First_Index..ProtoShips_List.Last_Index loop
-                    if ProtoShips_List.Element(I).CombatValue <= PlayerValue and (Owner = Any or 
-                        ProtoShips_List.Element(I).Owner = Owner) and (ProtoShips_List.Element(I).Owner /= Poleis and 
-                        ProtoShips_List.Element(I).Owner /= Independent)
+                for Ship of ProtoShips_List loop
+                    if Ship.CombatValue <= PlayerValue and (Owner = Any or Ship.Owner = Owner) and (Ship.Owner /= Poleis and 
+                        Ship.Owner /= Independent)
                     then
-                        Enemies.Append(New_Item => I);
+                        Enemies.Append(New_Item => EnemyIndex);
                     end if;
+                    EnemyIndex := EnemyIndex + 1;
                 end loop;
             else
-                for I in ProtoShips_List.First_Index..ProtoShips_List.Last_Index loop
-                    if (Owner = Any or ProtoShips_List.Element(I).Owner = Owner) and 
-                        (ProtoShips_List.Element(I).Owner /= Poleis and ProtoShips_List.Element(I).Owner /= Independent) 
-                    then
-                        Enemies.Append(New_Item => I);
+                for Ship of ProtoShips_List loop
+                    if (Owner = Any or Ship.Owner = Owner) and (Ship.Owner /= Poleis and Ship.Owner /= Independent) then
+                        Enemies.Append(New_Item => EnemyIndex);
                     end if;
+                    EnemyIndex := EnemyIndex + 1;
                 end loop;
             end if;
         end GenerateEnemies;
@@ -88,12 +87,7 @@ package body Events is
             if BaseIndex = 0 then -- Outside bases
                 case Roll is
                     when 1..5 => -- Engine damaged
-                        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                            if PlayerShip.Crew.Element(I).Order = Engineer then
-                                CrewIndex := I;
-                                exit;
-                            end if;
-                        end loop;
+                        CrewIndex := FindMember(Engineer, PlayerShip);
                         if CrewIndex > 0 and PlayerShip.Speed /= FULL_STOP then
                             Roll2 := GetRandom(1, 100);
                             case PlayerShip.Speed is
@@ -124,12 +118,7 @@ package body Events is
                             GainExp(1, 2, CrewIndex);
                         end if;
                     when 6..20 => -- Bad weather
-                        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                            if PlayerShip.Crew.Element(I).Order = Pilot then
-                                CrewIndex := I;
-                                exit;
-                            end if;
-                        end loop;
+                        CrewIndex := FindMember(Pilot, PlayerShip);
                         if CrewIndex > 0 then
                             AddMessage("Sudden bad weather makes your travel takes longer.", OtherMessage);
                             TimePassed := 60 - GetSkillLevel(CrewIndex, 1);
