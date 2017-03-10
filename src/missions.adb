@@ -48,13 +48,14 @@ package body Missions is
         if TimeDiff < 7 or SkyBases(BaseIndex).Owner = Abandoned then
             return;
         end if;
-        if SkyBases(BaseIndex).Population < 150 then
-            MissionsAmount := GetRandom(1, 5);
-        elsif SkyBases(BaseIndex).Population > 149 and SkyBases(BaseIndex).Population < 300 then
-            MissionsAmount := GetRandom(1, 10);
-        else
-            MissionsAmount := GetRandom(1, 15);
-        end if;
+        case SkyBases(BaseIndex).Population is
+            when 1..149 =>
+                MissionsAmount := GetRandom(1, 5);
+            when 150..299 =>
+                MissionsAmount := GetRandom(1, 10);
+            when others =>
+                MissionsAmount := GetRandom(1, 15);
+        end case;
         case SkyBases(BaseIndex).Reputation(1) is
             when 1..25 =>
                 MissionsAmount := MissionsAmount + 1;
@@ -102,21 +103,21 @@ package body Missions is
             end if;
         end loop;
         SkyBases(BaseIndex).Missions.Clear;
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+        for Module of PlayerShip.Modules loop
+            case Modules_List.Element(Module.ProtoIndex).MType is
                 when HULL | GUN | BATTERING_RAM =>
-                    PlayerValue := PlayerValue + PlayerShip.Modules.Element(I).MaxDurability +
-                    (PlayerShip.Modules.Element(I).Max_Value * 10);
+                    PlayerValue := PlayerValue + Module.MaxDurability +
+                    (Module.Max_Value * 10);
                 when ARMOR =>
-                    PlayerValue := PlayerValue + PlayerShip.Modules.Element(I).MaxDurability;
+                    PlayerValue := PlayerValue + Module.MaxDurability;
                 when others =>
                     null;
             end case;
         end loop;
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if Length(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType) >= 4 then
-                if Slice(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType, 1, 4) = "Ammo" then
-                    PlayerValue := PlayerValue + (Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Value * 10);
+        for Item of PlayerShip.Cargo loop
+            if Length(Items_List.Element(Item.ProtoIndex).IType) >= 4 then
+                if Slice(Items_List.Element(Item.ProtoIndex).IType, 1, 4) = "Ammo" then
+                    PlayerValue := PlayerValue + (Items_List.Element(Item.ProtoIndex).Value * 10);
                 end if;
             end if;
         end loop;
@@ -208,10 +209,11 @@ package body Missions is
             when others =>
                 MissionsLimit := 0;
         end case;
-        for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
-            if PlayerShip.Missions.Element(I).StartBase = BaseIndex then
+        for Mission of PlayerShip.Missions loop
+            if Mission.StartBase = BaseIndex then
                 MissionsLimit := MissionsLimit - 1;
             end if;
+            exit when MissionsLimit = 0;
         end loop;
         if MissionsLimit < 1 then
             ShowDialog("You can't take any more missions from this base. ");
@@ -223,12 +225,7 @@ package body Missions is
                 return;
             end if;
         end if;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Talk then
-                TraderIndex := I;
-                exit;
-            end if;
-        end loop;
+        TraderIndex := FindMember(Talk);
         Mission.StartBase := BaseIndex;
         Mission.Finished := False;
         AcceptMessage := To_Unbounded_String("You accepted mission ");
