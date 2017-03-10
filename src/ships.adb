@@ -95,22 +95,15 @@ package body Ships is
         TmpSkills : Skills_Container.Vector;
         ProtoShip : constant ProtoShipData := ProtoShips_List.Element(ProtoIndex);
         ShipCargo : Cargo_Container.Vector;
-        procedure UpdateMod(Module : in out ModuleData) is
-        begin
-            if Modules_List.Element(Module.ProtoIndex).MType = CABIN then
-                Module.Name := MemberName & To_Unbounded_String("'s Cabin");
-            end if;
-            Module.Owner := ShipCrew.Last_Index;
-        end UpdateMod;
     begin
-        for I in ProtoShip.Modules.First_Index..ProtoShip.Modules.Last_Index loop
-            ShipModules.Append(New_Item => (Name => Modules_List.Element(ProtoShip.Modules(I)).Name,
-            ProtoIndex => ProtoShip.Modules(I), 
-            Weight => Modules_List.Element(ProtoShip.Modules(I)).Weight,
-            Current_Value => Modules_List.Element(ProtoShip.Modules(I)).Value,
-            Max_Value => Modules_List.Element(ProtoShip.Modules(I)).MaxValue,
-            Durability => Modules_List.Element(ProtoShip.Modules(I)).Durability,
-            MaxDurability => Modules_List.Element(ProtoShip.Modules(I)).Durability,
+        for Module of ProtoShip.Modules loop
+            ShipModules.Append(New_Item => (Name => Modules_List.Element(Module).Name,
+            ProtoIndex => Module, 
+            Weight => Modules_List.Element(Module).Weight,
+            Current_Value => Modules_List.Element(Module).Value,
+            Max_Value => Modules_List.Element(Module).MaxValue,
+            Durability => Modules_List.Element(Module).Durability,
+            MaxDurability => Modules_List.Element(Module).Durability,
             Owner => 0, UpgradeProgress => 0, UpgradeAction => NONE));
         end loop;
         if Name = Null_Unbounded_String then
@@ -136,21 +129,21 @@ package body Ships is
                 Health => 100, Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0, Order => Member.Order,
                 PreviousOrder => Rest, OrderTime => 15, Orders => (others => 0)));
             TmpSkills.Clear;
-            for I in ShipModules.First_Index..ShipModules.Last_Index loop
-                if Modules_List.Element(ShipModules.Element(I).ProtoIndex).MType = CABIN and ShipModules.Element(I).Owner = 0 then
-                    ShipModules.Update_Element(Index => I, Process => UpdateMod'Access);
+            for Module of ShipModules loop
+                if Modules_List.Element(Module.ProtoIndex).MType = CABIN and Module.Owner = 0 then
+                    Module.Name := MemberName & To_Unbounded_String("'s Cabin");
+                    Module.Owner := ShipCrew.Last_Index;
                     exit;
                 end if;
             end loop;
-            for I in ShipModules.First_Index..ShipModules.Last_Index loop
-                if ShipModules.Element(I).Owner = 0 then
-                    if Modules_List.Element(ShipModules.Element(I).ProtoIndex).MType = GUN and Member.Order = Gunner then
-                        ShipModules.Update_Element(Index => I, Process => UpdateMod'Access);
+            for Module of ShipModules loop
+                if Module.Owner = 0 then
+                    if Modules_List.Element(Module.ProtoIndex).MType = GUN and Member.Order = Gunner then
+                        Module.Owner := ShipCrew.Last_Index;
                         exit;
                     end if;
-                elsif Modules_List.Element(ShipModules.Element(I).ProtoIndex).MType = COCKPIT and Member.Order = Pilot
-                then
-                    ShipModules.Update_Element(Index => I, Process => UpdateMod'Access);
+                elsif Modules_List.Element(Module.ProtoIndex).MType = COCKPIT and Member.Order = Pilot then
+                    Module.Owner := ShipCrew.Last_Index;
                     exit;
                 end if;
             end loop;
@@ -374,11 +367,11 @@ package body Ships is
         Weight : Natural := 0;
         CargoWeight : Positive;
     begin
-        for I in Ship.Modules.First_Index..Ship.Modules.Last_Index loop
-            Weight := Weight + Ship.Modules.Element(I).Weight;
+        for Module of Ship.Modules loop
+            Weight := Weight + Module.Weight;
         end loop;
-        for I in Ship.Cargo.First_Index..Ship.Cargo.Last_Index loop
-            CargoWeight := Ship.Cargo.Element(I).Amount * Items_List.Element(Ship.Cargo.Element(I).ProtoIndex).Weight;
+        for Item of Ship.Cargo loop
+            CargoWeight := Item.Amount * Items_List.Element(Item.ProtoIndex).Weight;
             Weight := Weight + CargoWeight;
         end loop;
         return Weight;
@@ -468,20 +461,18 @@ package body Ships is
             when others =>
                 return;
         end case;
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if Items_List(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
-                Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).RepairMaterial
-            then
+        for Item of PlayerShip.Cargo loop
+            if Items_List(Item.ProtoIndex).IType = Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).RepairMaterial then
                 HaveMaterials := True;
-            elsif Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType = To_Unbounded_String("RepairTools") then
+            elsif Items_List.Element(Item.ProtoIndex).IType = To_Unbounded_String("RepairTools") then
                 HaveTools := True;
             end if;
             exit when HaveMaterials and HaveTools;
         end loop;
         if not HaveMaterials then
-            for I in Items_List.First_Index..Items_List.Last_Index loop
-                if Items_List(I).IType = Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).RepairMaterial then
-                    ShowDialog("You don't have " & To_String(Items_List(I).Name) & " for upgrading " &
+            for Item of Items_List loop
+                if Item.IType = Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).RepairMaterial then
+                    ShowDialog("You don't have " & To_String(Item.Name) & " for upgrading " &
                         To_String(PlayerShip.Modules.Element(ModuleIndex).Name) & ".");
                     return;
                 end if;
@@ -511,12 +502,7 @@ package body Ships is
             Member.OrderTime := OrderTime;
         end UpdateMember;
     begin
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Upgrading then
-                WorkerIndex := I;
-                exit;
-            end if;
-        end loop;
+        WorkerIndex := FindMember(Upgrading);
         if WorkerIndex = 0 then
             return;
         end if;
@@ -692,10 +678,6 @@ package body Ships is
         RepairNeeded, RepairStopped : Boolean := False;
         package Natural_Container is new Vectors(Positive, Natural);
         CrewRepairPoints : Natural_Container.Vector;
-        procedure UpdateMember(Member : in out Member_Data) is
-        begin
-            Member.OrderTime := OrderTime;
-        end UpdateMember;
         procedure UpdatePoints(Points : in out Natural) is
         begin
             Points := RepairPoints;
@@ -777,10 +759,10 @@ package body Ships is
             end loop;
         end RepairModule;
     begin
-        for J in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(J).Order = Repair then
+        for Member of PlayerShip.Crew loop
+            if Member.Order = Repair then
                 CurrentMinutes := Minutes;
-                OrderTime := PlayerShip.Crew.Element(J).OrderTime;
+                OrderTime := Member.OrderTime;
                 RepairPoints := 0;
                 while CurrentMinutes > 0 loop
                     if CurrentMinutes >= OrderTime then
@@ -793,7 +775,7 @@ package body Ships is
                     end if;
                 end loop;
                 CrewRepairPoints.Append(New_Item => RepairPoints);
-                PlayerShip.Crew.Update_Element(Index => J, Process => UpdateMember'Access);
+                Member.OrderTime := OrderTime;
             end if;
         end loop;
         if CrewRepairPoints.Length = 0 then
