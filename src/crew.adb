@@ -23,6 +23,7 @@ with Game; use Game;
 with Items; use Items;
 with Utils; use Utils;
 with Ships.Cargo; use Ships.Cargo;
+with Ships.Crew; use Ships.Crew;
 with Maps; use Maps;
 
 package body Crew is

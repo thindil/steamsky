@@ -21,6 +21,7 @@ with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
+with Ships.Crew; use Ships.Crew;
 with Crew; use Crew;
 with Items; use Items;
 with Statistics; use Statistics;

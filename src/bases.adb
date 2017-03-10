@@ -25,6 +25,7 @@ with Bases.UI.Repair; use Bases.UI.Repair;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
+with Ships.Crew; use Ships.Crew;
 with Events; use Events;
 with Crafts; use Crafts;
 with Utils; use Utils;
