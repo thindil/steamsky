@@ -24,6 +24,7 @@ with Maps; use Maps;
 with ShipModules; use ShipModules;
 with Items; use Items;
 with Help; use Help;
+with Ships.Crew; use Ships.Crew;
 
 package body Crew.UI is
 
