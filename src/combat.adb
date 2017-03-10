@@ -27,6 +27,7 @@ with Bases; use Bases;
 with Missions; use Missions;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
+with Ships.Movement; use Ships.Movement;
 with Utils; use Utils;
 
 package body Combat is

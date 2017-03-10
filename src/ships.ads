@@ -93,15 +93,11 @@ package Ships is
     ProtoShips_List : ProtoShips_Container.Vector;
     PlayerShip : ShipRecord;
     
-    function MoveShip(ShipIndex, X, Y : Integer) return Natural; -- Move selected ship
-    procedure DockShip(Docking : Boolean); -- Dock/Undock ship at base
-    procedure ChangeShipSpeed(SpeedValue : ShipSpeed; ShowInfo : Boolean := True); -- Change speed of ship
     procedure UpdateModule(Ship : in out ShipRecord; ModuleIndex : Positive; Field : String; Value : String); -- Update selected module
     function CreateShip(ProtoIndex : Positive; Name : Unbounded_String; X, Y: Integer; 
         Speed : ShipSpeed) return ShipRecord; -- Create new ship
     function LoadShips return Boolean; -- Load ships from file, returns False if file not found
     function CountShipWeight(Ship : ShipRecord) return Positive; -- Count weight of ship (with modules and cargo)
-    function RealSpeed(Ship : ShipRecord) return Natural; -- Return real ship speed in meters per minute
     procedure StartUpgrading(ModuleIndex, UpgradeType : Positive); -- Set upgrading order
     procedure UpgradeShip(Minutes : Positive); -- Upgrade selected module on ship
     procedure RepairShip(Minutes : Positive); -- Repair ship modules
