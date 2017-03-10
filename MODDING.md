@@ -71,12 +71,12 @@ ships, ships modules, etc)
 
 ### General informations
 - Open file *recipes.dat* in *data* directory.
-- Each value in item data structure must be one line length.
+- Each value in recipe data structure must be one line length.
 - File must end with `[]`.
 
 ### Recipe data structure
 - Each recipe start from `[` symbol. Numbers between `[` and `]` are just for 
-  easier counting items indexes. You can write any text between symbols.
+  easier counting recipes indexes. You can write any text between symbols.
 - Material: Item type of materials need for recipe. Each material must be
   separated with `, ` (comma and space)
 - Amount: Amount of crafting materials needed for recipe. If you set more than
@@ -94,11 +94,45 @@ ships, ships modules, etc)
 - Difficulty: optional parameter. How complicated recipe is. Should be between 
   1 and 100.
 - BaseType: In which bases type recipe can be bought. If not set, recipe will be
-  know from begining of game. Values: 1 for Industrial, 2 for Agricultural, 3
+  know from beginning of game. Values: 1 for Industrial, 2 for Agricultural, 3
   for Refinery and 4 for Shipyard
 - Time: optional parameter. How long in minutes take crafting selected recipe.
   If not set, it take 15 minutes.
 
 ## Ship modules
+
+### General informations
+- Open file *shipmodules.dat* in *data* directory.
+- Each value in ship module data structure must be one line length.
+- File must end with `[]`.
+
+### Ship module data structure
+- Each ship module start from `[` symbol. Numbers between `[` and `]` are just for 
+  easier counting modules indexes. You can write any text between symbols.
+- Name: Standard name of module. Will be visible in ship info screen and in
+  shipyards.
+- Type: Type of module. Available options are: Engine, Cabin, Cockpit, Turret,
+  Gun, Cargo, Hull, Armor, Battering\_ram, Alchemy\_Lab, Furnace,
+  Water\_Collector, Workshop, Greenhouse, Medical\_room
+- Weight: Weight of module in kilograms.
+- Value: Depends on type of module. For 'Engine' it is fuel usage for travel by
+  one map field. For 'Cabin' it is value of reduced tiredness of owner who rest
+  there. For 'Gun' it is index of item type used as ammunition (item types are
+  in *game.dat* file). For any other type of modules should be 0 (zero).
+- MaxValue: Depends on type of module. For 'Hull' it is max free module space.
+  For 'Engine' it is engine power. For 'Cabin' should be that same like Value
+  value. For 'Cargo' it is maximum capacity in kilograms for cargo for that
+  module. For 'Gun' or 'Battering\_ram' it is amount of damage done by selected
+  weapon. For any other type of modules should be 0 (zero).
+- Durability: Base durability of module. How many damage module can take before
+  will be destroyed.
+- Material: Type of item which will be used to repair or upgrade module.
+- Skill: Name of skill which will be used during repair or upgrading module.
+- Price: Base buy or sell price of module in shipyard.
+- InstallTime: How long in minutes take install/remove selected module from
+  ship.
+- Unique: If set to 'Yes' then each ship can have only one module of that type.
+- Size: Amount of hull module space used by module.
+- Description: Any length description of item.
 
 ## Ships
