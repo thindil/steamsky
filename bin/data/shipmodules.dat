@@ -944,4 +944,17 @@ Price = 12000
 InstallTime = 180
 Size = 2
 Description = Updated version of standard available engine made of iron. Each ship needs at least one engine to fly.
+[76]
+Name = Large iron engine
+Type = Engine
+Weight = 2600
+Value = 8
+MaxValue = 14000
+Durability = 250
+Material = Iron
+Skill = Engineering
+Price = 17000
+InstallTime = 200
+Size = 3
+Description = Large engine made of iron. Each ship needs at least one engine to fly.
 []
