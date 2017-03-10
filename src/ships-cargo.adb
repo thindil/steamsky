@@ -43,12 +43,12 @@ package body Ships.Cargo is
             NewAmount := Ship.Cargo.Element(ItemIndex).Amount + Amount;
             if NewAmount < 1 then
                 Ship.Cargo.Delete(Index => ItemIndex, Count => 1);
-                for I in Ship.Modules.First_Index..Ship.Modules.Last_Index loop
-                    if Modules_List.Element(Ship.Modules.Element(I).ProtoIndex).MType = GUN then
-                        if Ship.Modules.Element(I).Current_Value > ItemIndex then
-                            UpdateModule(Ship, I, "Current_Value", Natural'Image(Ship.Modules.Element(I).Current_Value - 1));
-                        elsif Ship.Modules.Element(I).Current_Value = ItemIndex then
-                            UpdateModule(Ship, I, "Current_Value", "0");
+                for Module of Ship.Modules loop
+                    if Modules_List.Element(Module.ProtoIndex).MType = GUN then
+                        if Module.Current_Value > ItemIndex then
+                            Module.Current_Value := Module.Current_Value - 1;
+                        elsif Module.Current_Value = ItemIndex then
+                            Module.Current_Value := 0;
                         end if;
                     end if;
                 end loop;
@@ -61,15 +61,13 @@ package body Ships.Cargo is
     function FreeCargo(Amount : Integer) return Integer is
         FreeCargo : Integer := 0;
     begin
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).Mtype = ShipModules.CARGO 
-                and PlayerShip.Modules.Element(I).Durability > 0 then
-                FreeCargo := FreeCargo + PlayerShip.Modules.Element(I).Max_Value;
+        for Module of PlayerShip.Modules loop
+            if Modules_List.Element(Module.ProtoIndex).Mtype = ShipModules.CARGO and Module.Durability > 0 then
+                FreeCargo := FreeCargo + Module.Max_Value;
             end if;
         end loop;
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            FreeCargo := FreeCargo - (Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Weight * 
-                PlayerShip.Cargo.Element(I).Amount);
+        for Item of PlayerShip.Cargo loop
+            FreeCargo := FreeCargo - (Items_List.Element(Item.ProtoIndex).Weight * Item.Amount);
         end loop;
         FreeCargo := FreeCargo + Amount;
         return FreeCargo;
