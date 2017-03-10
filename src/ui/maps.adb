@@ -20,6 +20,7 @@ with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Terminal_Interface.Curses.Forms.Field_Types.IntField; use Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Ships; use Ships;
+with Ships.Movement; use Ships.Movement;
 with Bases; use Bases;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
