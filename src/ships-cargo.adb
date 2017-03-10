@@ -18,6 +18,7 @@
 with Items; use Items;
 with ShipModules; use ShipModules;
 with Utils; use Utils;
+with Ships.Crew; use Ships.Crew;
 
 package body Ships.Cargo is
 

@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
+with Ships.Crew; use Ships.Crew;
 with Maps; use Maps;
 with Combat; use Combat;
 with Messages; use Messages;
