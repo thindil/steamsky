@@ -159,12 +159,44 @@ package body BasesList is
     end ShowBaseInfo;
 
     procedure ShowBasesList is
-        Bases_Items : constant Item_Array_Access := new Item_Array(1..(SkyBases'Last + 1));
+        Bases_Items : Item_Array_Access;
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         MenuIndex : Positive := 1;
         AddBase : Boolean := False;
+        MenuAmount : Natural := 0;
     begin
+        for I in SkyBases'Range loop
+            if SkyBases(I).Known then
+                case BasesStatus is
+                    when 1 => -- All bases
+                        if (BasesType = Any or (BasesType /= Any and SkyBases(I).Visited.Year > 0 and SkyBases(I).BaseType = BasesType))
+                            and (BasesOwner = Any or (BasesOwner /= Any and SkyBases(I).Visited.Year > 0 and 
+                            SkyBases(I).Owner = BasesOwner))
+                        then
+                            AddBase := True;
+                        end if;
+                    when 2 => -- Only visited bases
+                        if ((BasesType = Any or (BasesType /= Any and SkyBases(I).BaseType = BasesType)) and (BasesOwner = Any or 
+                            (BasesOwner /= Any and SkyBases(I).Owner = BasesOwner))) and SkyBases(I).Visited.Year > 0 
+                        then
+                            AddBase := True;
+                        end if;
+                    when 3 => -- Only not visited bases
+                        if SkyBases(I).Visited.Year = 0 then
+                            AddBase := True;
+                        end if;
+                    when others =>
+                        null;
+                end case;
+                if AddBase then
+                    MenuAmount := MenuAmount + 1;
+                    AddBase := False;
+                end if;
+            end if;
+        end loop;
+        Bases_Items := new Item_Array(1..(MenuAmount + 1));
+        AddBase := False;
         for I in SkyBases'Range loop
             if SkyBases(I).Known then
                 case BasesStatus is
@@ -195,9 +227,7 @@ package body BasesList is
                 end if;
             end if;
         end loop;
-        for I in MenuIndex..Bases_Items'Last loop
-            Bases_Items.all(I) := Null_Item;
-        end loop;
+        Bases_Items.all(Bases_Items'Last) := Null_Item;
         Move_Cursor(Line => 2, Column => 5);
         Add(Str => "F2 Type: " & To_Lower(Bases_Types'Image(BasesType)));
         Change_Attributes(Line => 2, Column => 5, Count => 2, Color => 1);
