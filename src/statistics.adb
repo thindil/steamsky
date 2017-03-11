@@ -30,20 +30,16 @@ package body Statistics is
     StartIndex, EndIndex : Integer := 0;
 
     procedure UpdateDestroyedShips(ShipName : Unbounded_String) is
-        ProtoIndex : Natural := 0;
-        procedure UpdateData(Ship : in out DestroyedShips_Data) is
-        begin
-            Ship.Amount := Ship.Amount + 1;
-        end UpdateData;
+        Updated : Boolean := False;
     begin
-        for I in GameStats.DestroyedShips.First_Index..GameStats.DestroyedShips.Last_Index loop
-            if ProtoShips_List.Element(GameStats.DestroyedShips.Element(I).ProtoIndex).Name = ShipName then
-                ProtoIndex := I;
-                GameStats.DestroyedShips.Update_Element(Index => ProtoIndex, Process => UpdateData'Access);
+        for DestroyedShip of GameStats.DestroyedShips loop
+            if ProtoShips_List.Element(DestroyedShip.ProtoIndex).Name = ShipName then
+                DestroyedShip.Amount := DestroyedShip.Amount + 1;
+                Updated := True;
                 exit;
             end if;
         end loop;
-        if ProtoIndex = 0 then
+        if not Updated then
             for I in ProtoShips_List.First_Index..ProtoShips_List.Last_Index loop
                 if ProtoShips_List.Element(I).Name = ShipName then
                     GameStats.DestroyedShips.Append(New_Item => (ProtoIndex => I, Amount => 1));
@@ -95,7 +91,7 @@ package body Statistics is
             end loop;
             Move_Cursor(Line => 2, Column => 2);
             Add(Str => "Time passed:" & Natural'Image(TimePassed.Year) & "y," & Natural'Image(TimePassed.Month) & "m," 
-            & Natural'Image(TimePassed.Day) & "d," & Natural'Image(TimePassed.Hour) & "h," & Natural'Image(TimePassed.Minutes) & "mins");
+                & Natural'Image(TimePassed.Day) & "d," & Natural'Image(TimePassed.Hour) & "h," & Natural'Image(TimePassed.Minutes) & "mins");
             if GameStats.DestroyedShips.Length > 0 then
                 DestroyedShipsPad := New_Pad(Line_Position(GameStats.DestroyedShips.Length + 2), (Columns / 2));
                 Add(Win => DestroyedShipsPad, Str => "Destroyed ships:");
