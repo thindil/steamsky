@@ -133,6 +133,47 @@ ships, ships modules, etc)
   ship.
 - Unique: If set to 'Yes' then each ship can have only one module of that type.
 - Size: Amount of hull module space used by module.
-- Description: Any length description of item.
+- Description: Any length description of ship module.
 
 ## Ships
+
+### General informations
+- Open file *ships.dat* in *data* directory.
+- Each value in ship data structure must be one line length.
+- File must end with `[]`.
+
+### Ship data structure
+- Each ship start from `[` symbol. Numbers between `[` and `]` are just for 
+  easier counting ships indexes. You can write any text between symbols.
+- Name: Type of ship. Will be visible during combat information
+- Modules: List of modules indexes (from *shipmodules.dat* file), separated by
+  `, ` (comma and space)
+- Accuracy: Bonus to accuracy for ship. Can be constant value (example: 1) or 
+  range from minimum value to max value, separated by `..` (double dots)
+  (example: 1..5).
+- CombatAI: Behavior of ship in combat (NPC ships only). Possible values are:
+  Berserker - attack to end, no matter how heavy damage take.
+  Attacker - aggressive but will be run away from combat when lost all
+  ammunition or weapons.
+  Coward - try run from combat, attack only in self-defense.
+  Disarmer - same as Attacker but first aim for player ship weapons before
+  start destroying ship.
+- Evasion: Bonus to evasion for ship. Can be constant value or range from 
+  minimum value to max value, separated by `..` (double dots).
+- LootMin: Minimum amount of moneys earned for destroying that ship.
+- LootMax: Maximum amount of moneys earned for destroying that ship.
+- Perception: Bonus to perception for ship. Can be constant value or range 
+  from minimum value to max value, separated by `..` (double dots).
+- Cargo: List of cargo of ship. Each item in cargo is separated by `, ` (comma
+  and space). Each item entry is Amount`x`Item index (from *items.dat* file).
+  Amount can be constant value or range from minimum value to max value, 
+  separated by `..` (double dots).
+- Skills: List of crew members skills and its levels. Each crew member skills
+  list is separated by `; ` (semicolon and space). Each crew member skill is
+  separated by `, ` (comma and space).
+- Orders: Orders for each crew member. Must be in this same amount as skills of
+  crew members. Possible values are: Pilot, Engineer, Gunner, Repair, Craft,
+  Upgrading, Talk, Heal, Clean, Rest.
+- Description: Any length description of ship.
+- Owner: Which fraction own ship. Possible values are: Poleis, Independent,
+  Pirates, Undead, Drones, Inquisition.
