@@ -50,29 +50,33 @@ package body Bases.UI.Recipes is
     end ShowRecipeInfo;
 
     procedure ShowTradeRecipes is
-        Trade_Items: constant Item_Array_Access := new Item_Array(1..Recipes_List.Last_Index);
+        Trade_Items: Item_Array_Access;
         BaseType : constant Positive := Bases_Types'Pos(SkyBases(SkyMap(PlayerShip.SkyX,
             PlayerShip.SkyY).BaseIndex).BaseType) + 1;
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
-        MoneyIndex : Natural := 0;
-        MenuIndex : Integer := 1;
+        MoneyIndex, MenuAmount : Natural := 0;
+        MenuIndex : Positive := 1;
     begin
         for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
-            if Known_Recipes.Find_Index(Item => I) = Positive_Container.No_Index and Recipes_List.Element(I).BaseType = BaseType then
-                Trade_Items.all(MenuIndex) := New_Item(To_String(Items_List.Element(Recipes_List.Element(I).ResultIndex).Name));
-                MenuIndex := MenuIndex + 1;
+            if Recipes_List.Element(I).BaseType = BaseType and Known_Recipes.Find_Index(Item => I) = Positive_Container.No_Index then
+                MenuAmount := MenuAmount + 1;
             end if;
         end loop;
-        if MenuIndex = 1 then
+        if MenuAmount = 0 then
             Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
             Add(Str => "You bought all available crafting recipes in this base.");
             Refresh;
             return;
         end if;
-        for I in MenuIndex..Trade_Items'Last loop
-            Trade_Items.all(I) := Null_Item;
+        Trade_Items := new Item_Array(1..(MenuAmount + 1));
+        for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
+            if Recipes_List.Element(I).BaseType = BaseType and Known_Recipes.Find_Index(Item => I) = Positive_Container.No_Index then
+                Trade_Items.all(MenuIndex) := New_Item(To_String(Items_List.Element(Recipes_List.Element(I).ResultIndex).Name));
+                MenuIndex := MenuIndex + 1;
+            end if;
         end loop;
+        Trade_Items.all(Trade_Items'Last) := Null_Item;
         TradeMenu := New_Menu(Trade_Items);
         Set_Format(TradeMenu, Lines - 10, 1);
         Set_Mark(TradeMenu, "");
