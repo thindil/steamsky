@@ -28,16 +28,13 @@ package body Ships.Movement is
     function HaveOrderRequirements(ShowInfo : Boolean := True) return Boolean is
         HaveCockpit, HaveEngine, HavePilot, HaveEngineer : Boolean := False;
     begin
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = COCKPIT and PlayerShip.Modules.Element(I).Durability > 0 then
+        for Module of PlayerShip.Modules loop
+            if Modules_List(Module.ProtoIndex).MType = COCKPIT and Module.Durability > 0 then
                 HaveCockpit := True;
-            elsif Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = ENGINE and PlayerShip.Modules.Element(I).Durability > 1 
-            then
+            elsif Modules_List(Module.ProtoIndex).MType = ENGINE and Module.Durability > 1 then
                 HaveEngine := True;
             end if;
-            if HaveEngine and HaveCockpit then
-                exit;
-            end if;
+            exit when HaveEngine and HaveCockpit;
         end loop;
         if not HaveEngine then
             if ShowInfo then
@@ -51,15 +48,13 @@ package body Ships.Movement is
             end if;
             return False;
         end if;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Pilot then
+        for Member of PlayerShip.Crew loop
+            if Member.Order = Pilot then
                 HavePilot := True;
-            elsif PlayerShip.Crew.Element(I).Order = Engineer then
+            elsif Member.Order = Engineer then
                 HaveEngineer := True;
             end if;
-            if HavePilot and HaveEngineer then
-                exit;
-            end if;
+            exit when HavePilot and HaveEngineer;
         end loop;
         if not HavePilot then
             if ShowInfo then
@@ -96,15 +91,15 @@ package body Ships.Movement is
             if not HaveOrderRequirements then
                 return 0;
             end if;
-            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = ENGINE then
+            for Module of PlayerShip.Modules loop
+                if Modules_List.Element(Module.ProtoIndex).MType = ENGINE then
                     case PlayerShip.Speed is
                         when QUARTER_SPEED =>
-                            FuelNeeded := FuelNeeded - (PlayerShip.Modules.Element(I).Current_Value / 4);
+                            FuelNeeded := FuelNeeded - (Module.Current_Value / 4);
                         when HALF_SPEED =>
-                            FuelNeeded := FuelNeeded - (PlayerShip.Modules.Element(I).Current_Value / 2);
+                            FuelNeeded := FuelNeeded - (Module.Current_Value / 2);
                         when FULL_SPEED =>
-                            FuelNeeded := FuelNeeded - PlayerShip.Modules.Element(I).Current_Value;
+                            FuelNeeded := FuelNeeded - Module.Current_Value;
                         when others =>
                             null;
                     end case;
@@ -113,9 +108,9 @@ package body Ships.Movement is
             if FuelNeeded = 0 then
                 FuelNeeded := -1;
             end if;
-            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop -- Check for fuel
-                if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then 
-                    if PlayerShip.Cargo.Element(I).Amount < abs FuelNeeded then
+            for Item of PlayerShip.Cargo loop -- Check for fuel
+                if Item.ProtoIndex = 1 then 
+                    if Item.Amount < abs FuelNeeded then
                         ShowDialog("You don't have enough fuel (Charcollum).");
                         return 0;
                     end if;
@@ -191,12 +186,7 @@ package body Ships.Movement is
                         exit;
                     end if;
                 end loop;
-                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                    if PlayerShip.Crew.Element(I).Order = Talk then
-                        TraderIndex := I;
-                        exit;
-                    end if;
-                end loop;
+                TraderIndex := FindMember(Talk);
                 if TraderIndex > 0 then
                     DockingCost := DockingCost - Integer(Float'Floor(Float(DockingCost) * (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
                 end if;
@@ -236,7 +226,7 @@ package body Ships.Movement is
     end DockShip;
 
     procedure ChangeShipSpeed(SpeedValue : ShipSpeed; ShowInfo : Boolean := True) is
-        HaveEngine, HaveEngineer : Boolean := False;
+        HaveEngine : Boolean := False;
     begin
         if PlayerShip.Speed = DOCKED then
             if ShowInfo then
@@ -244,9 +234,8 @@ package body Ships.Movement is
             end if;
             return;
         end if;
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType = ENGINE and PlayerShip.Modules.Element(I).Durability > 0 
-            then
+        for Module of PlayerShip.Modules loop
+            if Modules_List(Module.ProtoIndex).MType = ENGINE and Module.Durability > 0 then
                 HaveEngine := True;
                 exit;
             end if;
@@ -257,13 +246,7 @@ package body Ships.Movement is
             end if;
             return;
         end if;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Engineer then
-                HaveEngineer := True;
-                exit;
-            end if;
-        end loop;
-        if not HaveEngineer then
+        if FindMember(Engineer) = 0 then
             if ShowInfo then
                 ShowDialog("You don't have enginner on duty.");
             end if;
@@ -285,10 +268,10 @@ package body Ships.Movement is
             end if;
         end if;
         Weight := CountShipWeight(Ship) / 500;
-        for I in Ship.Modules.First_Index..Ship.Modules.Last_Index loop
-            if Modules_List.Element(Ship.Modules.Element(I).ProtoIndex).Mtype = ENGINE then
-                BaseSpeed := Ship.Modules.Element(I).Max_Value * 100;
-                Damage := 1.0 - DamageFactor(Float(Ship.Modules.Element(I).Durability) / Float(Ship.Modules.Element(I).MaxDurability));
+        for Module of Ship.Modules loop
+            if Modules_List.Element(Module.ProtoIndex).Mtype = ENGINE then
+                BaseSpeed := Module.Max_Value * 100;
+                Damage := 1.0 - DamageFactor(Float(Module.Durability) / Float(Module.MaxDurability));
                 Speed := Speed + (BaseSpeed - Integer(Float(BaseSpeed) * Float(Damage)));
             end if;
         end loop;
