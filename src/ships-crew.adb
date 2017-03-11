@@ -25,9 +25,9 @@ package body Ships.Crew is
         Damage : DamageFactor := 0.0;
         BaseSkillLevel : Natural;
     begin
-        for I in Ship.Crew.Element(MemberIndex).Skills.First_Index..Ship.Crew.Element(MemberIndex).Skills.Last_Index loop
-            if Ship.Crew.Element(MemberIndex).Skills.Element(I)(1) = SkillIndex then
-                BaseSkillLevel := Ship.Crew.Element(MemberIndex).Skills.Element(I)(2);
+        for Skill of Ship.Crew.Element(MemberIndex).Skills loop
+            if Skill(1) = SkillIndex then
+                BaseSkillLevel := Skill(2);
                 Damage := 1.0 - DamageFactor(Float(Ship.Crew.Element(MemberIndex).Health) / 100.0);
                 SkillLevel := SkillLevel + (BaseSkillLevel - Integer(Float(BaseSkillLevel) * Float(Damage)));
                 if Ship.Crew.Element(MemberIndex).Thirst > 40 then
@@ -77,11 +77,11 @@ package body Ships.Crew is
     procedure DeleteMember(MemberIndex : Positive; Ship : in out ShipRecord) is
     begin
         Ship.Crew.Delete(Index => MemberIndex, Count => 1);
-        for I in Ship.Modules.First_Index..Ship.Modules.Last_Index loop
-            if Ship.Modules.Element(I).Owner = MemberIndex then
-                UpdateModule(Ship, I, "Owner", "0");
-            elsif Ship.Modules.Element(I).Owner > MemberIndex then
-                UpdateModule(Ship, I, "Owner", Positive'Image(Ship.Modules.Element(I).Owner - 1));
+        for Module of Ship.Modules loop
+            if Module.Owner = MemberIndex then
+                Module.Owner := 0;
+            elsif Module.Owner > MemberIndex then
+                Module.Owner := Module.Owner - 1;
             end if;
         end loop;
     end DeleteMember;
