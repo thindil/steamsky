@@ -37,8 +37,8 @@ package body Bases.UI.Recruits is
             Add(Win => InfoWindow, Str => "Female");
         end if;
         CurrentLine := CurrentLine + 1;
-        for I in Recruit.Skills.First_Index..Recruit.Skills.Last_Index loop
-            case Recruit.Skills.Element(I)(2) is
+        for Skill of Recruit.Skills loop
+            case Skill(2) is
                 when 1..10 =>
                     SkillLevel := To_Unbounded_String("Beginner");
                 when 11..20 =>
@@ -63,7 +63,7 @@ package body Bases.UI.Recruits is
                     SkillLevel := To_Unbounded_String("Ultimate");
             end case;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-            Add(Win => InfoWindow, Str => To_String(Skills_Names.Element(Recruit.Skills.Element(I)(1))) & ": " & To_String(SkillLevel));
+            Add(Win => InfoWindow, Str => To_String(Skills_Names.Element(Skill(1))) & ": " & To_String(SkillLevel));
             CurrentLine := CurrentLine + 1;
         end loop;
         CurrentLine := CurrentLine + 1;
