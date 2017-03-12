@@ -118,16 +118,16 @@ package body Bases.UI.Trade is
         ItemsAmount : Positive := 1;
         Added : Boolean;
     begin
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Prices(BaseType) > 0 then
+        for Item of PlayerShip.Cargo loop
+            if Items_List.Element(Item.ProtoIndex).Prices(BaseType) > 0 then
                 ItemsAmount := ItemsAmount + 1;
             end if;
         end loop;
         for I in Items_List.First_Index..Items_List.Last_Index loop
             if Items_List.Element(I).Buyable(BaseType) then
                 Added := False;
-                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if PlayerShip.Cargo.Element(J).ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
+                for Item of PlayerShip.Cargo loop
+                    if Item.ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
                         Added := True;
                         exit;
                     end if;
@@ -148,8 +148,8 @@ package body Bases.UI.Trade is
         for I in Items_List.First_Index..Items_List.Last_Index loop
             if Items_List.Element(I).Buyable(BaseType) then
                 Added := False;
-                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if PlayerShip.Cargo.Element(J).ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
+                for Item of PlayerShip.Cargo loop
+                    if Item.ProtoIndex = I and Items_List.Element(I).Prices(BaseType) > 0 then
                         Added := True;
                         exit;
                     end if;
@@ -225,9 +225,9 @@ package body Bases.UI.Trade is
                 DrawGame(Trade_View);
                 return Trade_View;
             end if;
-            for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                if PlayerShip.Cargo.Element(I).ProtoIndex = 1 then
-                    MaxAmount := PlayerShip.Cargo.Element(I).Amount / Price;
+            for Item of PlayerShip.Cargo loop
+                if Item.ProtoIndex = 1 then
+                    MaxAmount := Item.Amount / Price;
                     exit;
                 end if;
             end loop;
