@@ -125,13 +125,12 @@ package body Bases.UI.Shipyard is
             Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
             Add(Win => InfoWindow, Str => "Repair/Upgrade material: ");
             MAmount := 0;
-            for I in Items_List.First_Index..Items_List.Last_Index loop
-                if Items_List.Element(I).IType = Modules_List.Element(ModuleIndex).RepairMaterial
-                then
+            for Item of Items_List loop
+                if Item.IType = Modules_List.Element(ModuleIndex).RepairMaterial then
                     if MAmount > 0 then
                         Add(Win => InfoWindow, Str => " or ");
                     end if;
-                    Add(Win => InfoWindow, Str => To_String(Items_List.Element(I).Name));
+                    Add(Win => InfoWindow, Str => To_String(Item.Name));
                     MAmount := MAmount + 1;
                 end if;
             end loop;
@@ -228,7 +227,7 @@ package body Bases.UI.Shipyard is
             for I in Modules_List.First_Index..Modules_List.Last_Index loop
                 if Modules_List.Element(I).Price > 0 and Modules_List.Element(I).MType = MType then
                     Modules_Items.all(MenuIndex) := New_Item(To_String(Modules_List.Element(I).Name), 
-                    Positive'Image(I));
+                        Positive'Image(I));
                     MenuIndex := MenuIndex + 1;
                 end if;
             end loop;
@@ -290,10 +289,10 @@ package body Bases.UI.Shipyard is
             Add(Str => "You don't have any Charcollum to install anything.");
         end if;
         Move_Cursor(Line => (MenuHeight + 6), Column => 2);
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = HULL then
-                Add(Str => "You have used" & Natural'Image(PlayerShip.Modules.Element(I).Current_Value) & " modules space from max" &
-                    Natural'Image(PlayerShip.Modules.Element(I).Max_Value) & " allowed.");
+        for Module of PlayerShip.Modules loop
+            if Modules_List.Element(Module.ProtoIndex).MType = HULL then
+                Add(Str => "You have used" & Natural'Image(Module.Current_Value) & " modules space from max" &
+                    Natural'Image(Module.Max_Value) & " allowed.");
                 exit;
             end if;
         end loop;
