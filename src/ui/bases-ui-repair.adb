@@ -31,9 +31,9 @@ package body Bases.UI.Repair is
         for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
             if To_String(PlayerShip.Modules.Element(I).Name) = Name(Current(TradeMenu)) then
                 Time := PlayerShip.Modules.Element(I).MaxDurability - PlayerShip.Modules.Element(I).Durability;
-                for J in Items_List.First_Index..Items_List.Last_Index loop
-                   if Items_List.Element(J).IType = Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial then
-                       Cost := Time * Items_List.Element(J).Prices(BaseType);
+                for Item of Items_List loop
+                   if Item.IType = Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial then
+                       Cost := Time * Item.Prices(BaseType);
                        ModuleIndex := I;
                        exit;
                    end if;
@@ -42,14 +42,13 @@ package body Bases.UI.Repair is
             end if;
         end loop;
         if Cost = 0 then
-            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
-                    Time := Time + PlayerShip.Modules.Element(I).MaxDurability - PlayerShip.Modules.Element(I).Durability;
-                    for J in Items_List.First_Index..Items_List.Last_Index loop
-                        if Items_List.Element(J).IType = Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial
+            for Module of PlayerShip.Modules loop
+                if Module.Durability < Module.MaxDurability then
+                    Time := Time + Module.MaxDurability - Module.Durability;
+                    for Item of Items_List loop
+                        if Item.IType = Modules_List.Element(Module.ProtoIndex).RepairMaterial
                         then
-                            Cost := Cost + ((PlayerShip.Modules.Element(I).MaxDurability - PlayerShip.Modules.Element(I).Durability) *
-                                Items_List.Element(J).Prices(BaseType));
+                            Cost := Cost + ((Module.MaxDurability - Module.Durability) * Item.Prices(BaseType));
                             exit;
                         end if;
                     end loop;
@@ -94,9 +93,9 @@ package body Bases.UI.Repair is
         MenuIndex : Integer := 1;
         MoneyIndex : Natural := 0;
     begin
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
-                Repair_Items.all(MenuIndex) := New_Item(To_String(PlayerShip.Modules.Element(I).Name));
+        for Module of PlayerShip.Modules loop
+            if Module.Durability < Module.MaxDurability then
+                Repair_Items.all(MenuIndex) := New_Item(To_String(Module.Name));
                 MenuIndex := MenuIndex + 1;
             end if;
         end loop;
