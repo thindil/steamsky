@@ -22,6 +22,7 @@ with Messages; use Messages;
 with Crafts; use Crafts;
 with Maps; use Maps;
 with Help; use Help;
+with Ships.Cargo; use Ships.Cargo;
 
 package body Ships.UI.Ship is
 
@@ -65,21 +66,18 @@ package body Ships.UI.Ship is
         Add(Win => InfoWindow, Str => "Weight:" & Integer'Image(Module.Weight) & " kg");
         Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
         Add(Win => InfoWindow, Str => "Repair/Upgrade material: ");
-        for I in Items_List.First_Index..Items_List.Last_Index loop
-            if Items_List.Element(I).IType = Modules_List.Element(Module.ProtoIndex).RepairMaterial
+        for Item of Items_List loop
+            if Item.IType = Modules_List.Element(Module.ProtoIndex).RepairMaterial
                 then
                 if MAmount > 0 then
                     Add(Win => InfoWindow, Str => " or ");
                 end if;
                 Get_Cursor_Position(Win => InfoWindow, Line => StartLine, Column => StartColumn);
-                Add(Win => InfoWindow, Str => To_String(Items_List.Element(I).Name));
+                Add(Win => InfoWindow, Str => To_String(Item.Name));
                 Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
-                for K in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if Items_List.Element(PlayerShip.Cargo.Element(K).ProtoIndex).IType = Items_List.Element(I).IType then
-                        HaveMaterial := True;
-                        exit;
-                    end if;
-                end loop;
+                if FindCargo(ItemType => Item.IType) > 0 then
+                    HaveMaterial := True;
+                end if;
                 if not HaveMaterial then
                     if StartLine = CurrentLine then
                         TextLength := Natural(EndColumn - StartColumn);
@@ -117,7 +115,7 @@ package body Ships.UI.Ship is
                     Add(Win => InfoWindow, Str => " (max upgrade)");
                 end if;
                 CurrentLine := CurrentLine + 1;
-            when CARGO =>
+            when ShipModules.CARGO =>
                 Add(Win => InfoWindow, Str => "Max cargo:" & Integer'Image(Module.Max_Value) &
                     " kg");
             when HULL =>
@@ -188,12 +186,9 @@ package body Ships.UI.Ship is
                             Get_Cursor_Position(Win => InfoWindow, Line => StartLine, Column => StartColumn);
                             Add(Win => InfoWindow, Str => To_String(Items_List.Element(I).Name));
                             Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
-                            for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                                if PlayerShip.Cargo.Element(J).ProtoIndex = I then
-                                    HaveAmmo := True;
-                                    exit;
-                                end if;
-                            end loop;
+                            if FindCargo(I) > 0 then
+                                HaveAmmo := True;
+                            end if;
                             if not HaveAmmo then
                                 if StartLine = CurrentLine then
                                     TextLength := Natural(EndColumn - StartColumn);
@@ -505,14 +500,11 @@ package body Ships.UI.Ship is
                     MenuIndex := MenuIndex + 1;
                 end if;
             when MEDICAL_ROOM =>
-                for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                    if PlayerShip.Crew.Element(I).Health < 100 then
-                        for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                            if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines") then
-                                Options_Items.all(MenuIndex) := New_Item("Assign medic", "7");
-                                MenuIndex := MenuIndex + 1;
-                            end if;
-                        end loop;
+                for Member of PlayerShip.Crew loop
+                    if Member.Health < 100 and FindCargo(ItemType => To_Unbounded_String("Medicines")) > 0 then
+                        Options_Items.all(MenuIndex) := New_Item("Assign medic", "7");
+                        MenuIndex := MenuIndex + 1;
+                        exit;
                     end if;
                 end loop;
             when others =>
