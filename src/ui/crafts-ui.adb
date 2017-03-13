@@ -18,6 +18,7 @@
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with Items; use Items;
 with Help; use Help;
 
@@ -45,10 +46,10 @@ package body Crafts.UI is
             Recipe.ResultIndex := abs(RecipeIndex);
             Recipe.ResultAmount := 0;
             Recipe.Workplace := ALCHEMY_LAB;
-            for I in Recipes_List.First_Index..Recipes_List.Last_Index loop
-                if Recipes_List.Element(I).ResultIndex = Recipe.ResultIndex then
-                    Recipe.Skill := Recipes_List.Element(I).Skill;
-                    Recipe.Time := Recipes_List.Element(I).Difficulty * 15;
+            for ProtoRecipe of Recipes_List loop
+                if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
+                    Recipe.Skill := ProtoRecipe.Skill;
+                    Recipe.Time := ProtoRecipe.Difficulty * 15;
                     exit;
                 end if;
             end loop;
@@ -66,14 +67,14 @@ package body Crafts.UI is
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
             Add(Win => InfoWindow, Str => "-");
             MAmount := 0;
-            for J in Items_List.First_Index..Items_List.Last_Index loop
+            for Item of Items_List loop
                 IsMaterial := False;
                 if RecipeIndex > 0 then
-                    if Items_List.Element(J).IType = Recipe.MaterialTypes(I) then
+                    if Item.IType = Recipe.MaterialTypes(I) then
                         IsMaterial := True;
                     end if;
                 else
-                    if Items_List.Element(J).Name = Items_List.Element(Recipe.ResultIndex).Name then
+                    if Item.Name = Items_List.Element(Recipe.ResultIndex).Name then
                         IsMaterial := True;
                     end if;
                 end if;
@@ -82,14 +83,11 @@ package body Crafts.UI is
                         Add(Win => InfoWindow, Str => " or");
                     end if;
                     Get_Cursor_Position(Win => InfoWindow, Line => StartLine, Column => StartColumn);
-                    Add(Win => InfoWindow, Str => Integer'Image(Recipe.MaterialAmounts(I)) & "x" & To_String(Items_List.Element(J).Name));
+                    Add(Win => InfoWindow, Str => Integer'Image(Recipe.MaterialAmounts(I)) & "x" & To_String(Item.Name));
                     Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
-                    for K in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                        if Items_List.Element(PlayerShip.Cargo.Element(K).ProtoIndex).IType = Recipe.MaterialTypes(I) then
-                            HaveMaterial := True;
-                            exit;
-                        end if;
-                    end loop;
+                    if FindCargo(ItemType => Recipe.MaterialTypes(I)) > 0 then
+                        HaveMaterial := True;
+                    end if;
                     if not HaveMaterial then
                         if StartLine = CurrentLine then
                             TextLength := Natural(EndColumn - StartColumn);
@@ -114,9 +112,9 @@ package body Crafts.UI is
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Tool: ");
             MAmount := 0;
-            for J in Items_List.First_Index..Items_List.Last_Index loop
+            for Item of Items_List loop
                 IsTool := False;
-                if Items_List.Element(J).IType = Recipe.Tool then
+                if Item.IType = Recipe.Tool then
                     IsTool := True;
                 end if;
                 if IsTool then
@@ -124,14 +122,11 @@ package body Crafts.UI is
                         Add(Win => InfoWindow, Str => " or");
                     end if;
                     Get_Cursor_Position(Win => InfoWindow, Line => StartLine, Column => StartColumn);
-                    Add(Win => InfoWindow, Str => To_String(Items_List.Element(J).Name));
+                    Add(Win => InfoWindow, Str => To_String(Item.Name));
                     Get_Cursor_Position(Win => InfoWindow, Line => CurrentLine, Column => EndColumn);
-                    for K in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                        if Items_List.Element(PlayerShip.Cargo.Element(K).ProtoIndex).IType = Recipe.Tool then
-                            HaveTool := True;
-                            exit;
-                        end if;
-                    end loop;
+                    if FindCargo(ItemType => Recipe.Tool) > 0 then
+                        HaveTool := True;
+                    end if;
                     if not HaveTool then
                         if StartLine = CurrentLine then
                             TextLength := Natural(EndColumn - StartColumn);
@@ -154,19 +149,19 @@ package body Crafts.UI is
         end if;
         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
         Add(Win => InfoWindow, Str => "Workplace: ");
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = Recipe.Workplace then
-                if PlayerShip.Modules.Element(I).Durability > 0 then
+        for Module of PlayerShip.Modules loop
+            if Modules_List.Element(Module.ProtoIndex).MType = Recipe.Workplace then
+                if Module.Durability > 0 then
                     HaveWorkplace := True;
                 end if;
-                WorkplaceName := PlayerShip.Modules.Element(I).Name;
+                WorkplaceName := Module.Name;
                 exit;
             end if;
         end loop;
         if WorkplaceName = Null_Unbounded_String then
-            for I in Modules_List.First_Index..Modules_List.Last_Index loop
-                if Modules_List.Element(I).MType = Recipe.Workplace then
-                    WorkplaceName := Modules_List.Element(I).Name;
+            for Module of Modules_List loop
+                if Module.MType = Recipe.Workplace then
+                    WorkplaceName := Module.Name;
                     exit;
                 end if;
             end loop;
@@ -196,11 +191,11 @@ package body Crafts.UI is
         MenuLength : Column_Position;
         Deconstructs : Positive_Container.Vector;
     begin
-        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
+        for Item of PlayerShip.Cargo loop
             for J in Recipes_List.First_Index..Recipes_List.Last_Index loop
-                if Recipes_List.Element(J).ResultIndex = PlayerShip.Cargo.Element(I).ProtoIndex then
+                if Recipes_List.Element(J).ResultIndex = Item.ProtoIndex then
                     if Known_Recipes.Find_Index(Item => J) = Positive_Container.No_Index then
-                        Deconstructs.Append(New_Item => PlayerShip.Cargo.Element(I).ProtoIndex);
+                        Deconstructs.Append(New_Item => Item.ProtoIndex);
                         exit;
                     end if;
                 end if;
@@ -249,8 +244,8 @@ package body Crafts.UI is
         else
             MType := ALCHEMY_LAB;
         end if;
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = MType then
+        for Module of PlayerShip.Modules loop
+            if Modules_List.Element(Module.ProtoIndex).MType = MType then
                 ModulesAmount := ModulesAmount + 1;
             end if;
         end loop;
