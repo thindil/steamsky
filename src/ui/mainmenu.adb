@@ -249,7 +249,6 @@ package body MainMenu is
                     LinesAmount := LinesAmount + 1;
                 end loop;
                 Close(ChangesFile);
-                Append(NewsText, "For more informations about changes, see CHANGELOG.md");
             end if;
             TmpLinesAmount := Line_Position(Length(NewsText)) / Line_Position(Columns - 2);
             if TmpLinesAmount < 1 then
