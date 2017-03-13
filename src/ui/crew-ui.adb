@@ -18,11 +18,11 @@
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with Messages; use Messages;
 with Bases; use Bases;
 with Maps; use Maps;
 with ShipModules; use ShipModules;
-with Items; use Items;
 with Help; use Help;
 with Ships.Crew; use Ships.Crew;
 
@@ -100,8 +100,8 @@ package body Crew.UI is
             CurrentLine := CurrentLine + 1;
         end if;
         CurrentLine := CurrentLine + 1;
-        for I in Member.Skills.First_Index..Member.Skills.Last_Index loop
-            case Member.Skills.Element(I)(2) is
+        for Skill of Member.Skills loop
+            case Skill(2) is
                 when 1..10 =>
                     SkillLevel := To_Unbounded_String("Beginner");
                 when 11..20 =>
@@ -126,7 +126,7 @@ package body Crew.UI is
                     SkillLevel := To_Unbounded_String("Ultimate");
             end case;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-            Add(Win => InfoWindow, Str => To_String(Skills_Names.Element(Member.Skills.Element(I)(1))) & ": " & To_String(SkillLevel));
+            Add(Win => InfoWindow, Str => To_String(Skills_Names.Element(Skill(1))) & ": " & To_String(SkillLevel));
             CurrentLine := CurrentLine + 1;
         end loop;
         CurrentLine := CurrentLine + 1;
@@ -161,24 +161,17 @@ package body Crew.UI is
             Change_Attributes(Win => InfoWindow, Line => CurrentLine, Column => 6, Count => 5, Color => 1);
             CurrentLine := CurrentLine + 1;
         end if;
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Durability > 0 and 
-                Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType = CABIN and 
-                PlayerShip.Modules.Element(I).Current_Value < PlayerShip.Modules.Element(I).Max_Value and
-                not NeedClean
+        for Module of PlayerShip.Modules loop
+            if Module.Durability > 0 and Modules_List.Element(Module.ProtoIndex).MType = CABIN and 
+                Module.Current_Value < Module.Max_Value and not NeedClean
             then
                 NeedClean := True;
                 exit;
             end if;
-            if not NeedRepairs and PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
-                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = 
-                        Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).RepairMaterial 
-                    then
-                        NeedRepairs := True;
-                        exit;
-                    end if;
-                end loop;
+            if not NeedRepairs and Module.Durability < Module.MaxDurability then
+                if FindCargo(ItemType => Modules_List.Element(Module.ProtoIndex).RepairMaterial) > 0 then
+                    NeedRepairs := True;
+                end if;
             end if;
             if NeedRepairs then
                 exit;
@@ -241,29 +234,26 @@ package body Crew.UI is
                     exit;
                 end if;
             end loop;
-            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                if PlayerShip.Modules.Element(I).Durability > 0 then
-                    case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+            for Module of PlayerShip.Modules loop
+                if Module.Durability > 0 then
+                    case Modules_List.Element(Module.ProtoIndex).MType is
                         when GUN =>
-                            if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
+                            if Module.Owner /= MemberIndex then
                                 OrdersAmount := OrdersAmount + 1;
                             end if;
                         when ALCHEMY_LAB..GREENHOUSE =>
-                            if PlayerShip.Modules.Element(I).Owner /= MemberIndex and PlayerShip.Modules.Element(I).Current_Value /= 0 then
+                            if Module.Owner /= MemberIndex and Module.Current_Value /= 0 then
                                 OrdersAmount := OrdersAmount + 1;
                             end if;
                         when MEDICAL_ROOM =>
                             if NeedHealer then
-                                for J in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                                    if Items_List.Element(PlayerShip.Cargo.Element(J).ProtoIndex).IType = To_Unbounded_String("Medicines") 
-                                        and PlayerShip.Crew.Element(MemberIndex).Order /= Heal 
-                                        and PlayerShip.Crew.Element(MemberIndex).Health = 100
-                                    then
-                                        HealOrder := True;
-                                        OrdersAmount := OrdersAmount + 1;
-                                        exit;
-                                    end if;
-                                end loop;
+                                if FindCargo(ItemType => To_Unbounded_String("Medicines")) > 0 and 
+                                    PlayerShip.Crew.Element(MemberIndex).Order /= Heal and
+                                    PlayerShip.Crew.Element(MemberIndex).Health = 100
+                                then
+                                    HealOrder := True;
+                                    OrdersAmount := OrdersAmount + 1;
+                                end if;
                             end if;
                         when others =>
                             null;
