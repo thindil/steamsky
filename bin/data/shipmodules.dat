@@ -983,4 +983,17 @@ Price = 32500
 InstallTime = 250
 Size = 4
 Description = Huge engine made of iron. Each ship needs at least one engine to fly.
+[79]
+Name = Advanced huge iron engine
+Type = Engine
+Weight = 8500
+Value = 11
+MaxValue = 40000
+Durability = 300
+Material = Iron
+Skill = Engineering
+Price = 37500
+InstallTime = 270
+Size = 4
+Description = Updated version of huge engine made of bronze. Each ship needs at least one engine to fly.
 []
