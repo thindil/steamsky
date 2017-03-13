@@ -56,12 +56,7 @@ package body Combat.UI is
         end UpdateGun;
     begin
         if Order = Pilot or Order = Engineer then
-            for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                if PlayerShip.Crew.Element(I).Order = Order then
-                    MemberIndex := I;
-                    exit;
-                end if;
-            end loop;
+            MemberIndex := FindMember(Order);
         else
             ModuleIndex := Guns.Element(Positive'Value(Description(Current(CrewMenu))))(1);
             MemberIndex := PlayerShip.Modules.Element(ModuleIndex).Owner;
@@ -183,27 +178,26 @@ package body Combat.UI is
         Move_Cursor(Line => CurrentLine, Column => 2);
         Add(Str => "Damage:");
         CurrentLine := CurrentLine + 1;
-        for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-            DamagePercent := 100 - Natural((Float(PlayerShip.Modules.Element(I).Durability) /
-                Float(PlayerShip.Modules.Element(I).MaxDurability)) * 100.0);
+        for Module of PlayerShip.Modules loop
+            DamagePercent := 100 - Natural((Float(Module.Durability) / Float(Module.MaxDurability)) * 100.0);
             if DamagePercent > 0 then
                 Move_Cursor(Line => CurrentLine, Column => 2);
-                Add(Str => To_String(PlayerShip.Modules.Element(I).Name));
+                Add(Str => To_String(Module.Name));
                 if DamagePercent > 19 and DamagePercent < 50 then
                     Change_Attributes(Line => CurrentLine, Column => 2,
-                        Count => Length(PlayerShip.Modules.Element(I).Name), 
+                        Count => Length(Module.Name), 
                         Color => 2);
                 elsif DamagePercent > 49 and DamagePercent < 80 then
                     Change_Attributes(Line => CurrentLine, Column => 2,
-                        Count => Length(PlayerShip.Modules.Element(I).Name), 
+                        Count => Length(Module.Name), 
                         Color => 1);
                 elsif DamagePercent > 79 and DamagePercent < 100 then
                     Change_Attributes(Line => CurrentLine, Column => 2,
-                        Count => Length(PlayerShip.Modules.Element(I).Name), 
+                        Count => Length(Module.Name), 
                         Color => 3);
                 elsif DamagePercent = 100 then
                     Change_Attributes(Line => CurrentLine, Column => 2,
-                        Count => Length(PlayerShip.Modules.Element(I).Name), 
+                        Count => Length(Module.Name), 
                         Color => 4);
                 end if;
                 CurrentLine := CurrentLine + 1;
@@ -235,16 +229,16 @@ package body Combat.UI is
                 Add(Str => "Destroyed");
             else
                 EnemyStatus := To_Unbounded_String("Ok");
-                for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
-                    if Enemy.Ship.Modules.Element(I).Durability < Enemy.Ship.Modules.Element(I).MaxDurability then
+                for Module of Enemy.Ship.Modules loop
+                    if Module.Durability < Module.MaxDurability then
                         EnemyStatus := To_Unbounded_String("Damaged");
                         exit;
                     end if;
                 end loop;
                 Add(Str => To_String(EnemyStatus));
-                for I in Enemy.Ship.Modules.First_Index..Enemy.Ship.Modules.Last_Index loop
-                    if Enemy.Ship.Modules.Element(I).Durability > 0 then
-                        case Modules_List.Element(Enemy.Ship.Modules.Element(I).ProtoIndex).MType is
+                for Module of Enemy.Ship.Modules loop
+                    if Module.Durability > 0 then
+                        case Modules_List.Element(Module.ProtoIndex).MType is
                             when ARMOR =>
                                 Add(Str => " (armored)");
                             when GUN =>
@@ -332,12 +326,7 @@ package body Combat.UI is
         SkillString : Unbounded_String;
     begin   
         if Order = Pilot or Order = Engineer then
-            for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                if PlayerShip.Crew.Element(I).Order = Order then
-                    MemberIndex := I;
-                    exit;
-                end if;
-            end loop;
+            MemberIndex := FindMember(Order);
         else
             MemberIndex := PlayerShip.Modules.Element(Guns.Element(Positive'Value(Description(Current(CrewMenu))))(1)).Owner;
         end if;
@@ -427,12 +416,12 @@ package body Combat.UI is
             end if;
         end loop;
         if Order = Gunner and MemberIndex > 0 then
-            for J in Guns.First_Index..Guns.Last_Index loop
-                if PlayerShip.Modules.Element(Guns.Element(J)(1)).Owner = MemberIndex then
+            for Gun of Guns loop
+                if PlayerShip.Modules.Element(Gun(1)).Owner = MemberIndex then
                     for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
                         if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
-                            Items_Types.Element(Modules_List.Element(PlayerShip.Modules.Element(Guns.Element(J)(1)).ProtoIndex).Value) and
-                            I /= PlayerShip.Modules.Element(Guns.Element(J)(1)).Current_Value
+                            Items_Types.Element(Modules_List.Element(PlayerShip.Modules.Element(Gun(1)).ProtoIndex).Value) and
+                            I /= PlayerShip.Modules.Element(Gun(1)).Current_Value
                         then
                             Orders_Items.all(MenuIndex) := 
                                 New_Item("Use " & To_String(Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name), 
