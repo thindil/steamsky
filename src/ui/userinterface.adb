@@ -23,6 +23,7 @@ with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Maps; use Maps;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
+with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Ships.UI; use Ships.UI;
 with Ships.UI.Cargo; use Ships.UI.Cargo;
@@ -150,32 +151,32 @@ package body UserInterface is
             Add(Str => FormatedTime & " Speed: " & To_String(Speed));
             Move_Cursor(Line => 0, Column => (Columns - 25));
             Add(Str => "[P][E][G][R][M][U][T][C]");
-            for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                case Modules_List(PlayerShip.Modules.Element(I).ProtoIndex).MType is
+            for Module of PlayerShip.Modules loop
+                case Modules_List(Module.ProtoIndex).MType is
                     when GUN =>
-                        if PlayerShip.Modules.Element(I).Owner > 0 and GunnersCheck = 0 then
+                        if Module.Owner > 0 and GunnersCheck = 0 then
                             GunnersCheck := 1;
-                        elsif PlayerShip.Modules.Element(I).Owner = 0 and GunnersCheck = 1 then
+                        elsif Module.Owner = 0 and GunnersCheck = 1 then
                             GunnersCheck := 2;
                         end if;
                     when ALCHEMY_LAB..GREENHOUSE =>
-                        if PlayerShip.Modules.Element(I).Current_Value /= 0 then
-                            if PlayerShip.Modules.Element(I).Owner > 0 and CraftersCheck < 2 then
+                        if Module.Current_Value /= 0 then
+                            if Module.Owner > 0 and CraftersCheck < 2 then
                                 CraftersCheck := 1;
                             else
                                 CraftersCheck := 2;
                             end if;
                         end if;
                     when CABIN =>
-                        if PlayerShip.Modules.Element(I).Current_Value < PlayerShip.Modules.Element(I).Max_Value then
+                        if Module.Current_Value < Module.Max_Value then
                             NeedClean := True;
                         end if;
                     when others =>
                         null;
                 end case;
             end loop;
-            for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-                case PlayerShip.Crew.Element(I).Order is
+            for Member of PlayerShip.Crew loop
+                case Member.Order is
                     when Pilot =>
                         HavePilot := True;
                         Change_Attributes(Line => 0, Column => (Columns - 24), Count => 1, Color => 2);
@@ -210,8 +211,8 @@ package body UserInterface is
                 Change_Attributes(Line => 0, Column => (Columns - 18), Count => 1, Color => 3);
             end if;
             if not HaveRepair then
-                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                    if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                for Module of PlayerShip.Modules loop
+                    if Module.Durability < Module.MaxDurability then
                         Change_Attributes(Line => 0, Column => (Columns - 15), Count => 1, Color => 3);
                         exit;
                     end if;
@@ -239,28 +240,40 @@ package body UserInterface is
         MenuHeight : Line_Position;
         MenuLength : Column_Position;
         Event : Events_Types := None;
-        TimeDiff, BaseIndex, MissionsLimit : Natural;
+        TimeDiff, BaseIndex : Natural;
         MenuIndex, OrdersAmount : Positive;
+        MissionsLimit : Integer;
         HaveTrader : Boolean := False;
     begin
         BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-        for I in PlayerShip.Crew.First_Index..PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Talk then
-                HaveTrader := True;
-                exit;
-            end if;
-        end loop;
+        if FindMember(Talk) > 0 then
+            HaveTrader := True;
+        end if;
         if PlayerShip.Speed = DOCKED then
             OrdersAmount := 3;
             MenuIndex := 2;
             if HaveTrader and SkyBases(BaseIndex).Owner /= Abandoned then
                 OrdersAmount := OrdersAmount + 1;
-                for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
-                    if (PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex) or
-                        (PlayerShip.Missions.Element(I).TargetX = PlayerShip.SkyX and PlayerShip.Missions.Element(I).TargetY = 
-                            PlayerShip.SkyY) 
+                case SkyBases(BaseIndex).Reputation(1) is
+                    when 0..25 =>
+                        MissionsLimit := 1;
+                    when 26..50 =>
+                        MissionsLimit := 3;
+                    when 51..75 =>
+                        MissionsLimit := 5;
+                    when 76..100 =>
+                        MissionsLimit := 10;
+                    when others =>
+                        MissionsLimit := 0;
+                end case;
+                for Mission of PlayerShip.Missions loop
+                    if (Mission.Finished and Mission.StartBase = BaseIndex) or 
+                        (Mission.TargetX = PlayerShip.SkyX and Mission.TargetY = PlayerShip.SkyY) 
                     then
                         OrdersAmount := OrdersAmount + 1;
+                    end if;
+                    if Mission.StartBase = BaseIndex then
+                        MissionsLimit := MissionsLimit - 1;
                     end if;
                 end loop;
                 if SkyBases(BaseIndex).Recruits.Length > 0 then
@@ -274,8 +287,8 @@ package body UserInterface is
                 if not SkyBases(BaseIndex).AskedForBases then
                     OrdersAmount := OrdersAmount + 1;
                 end if;
-                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                    if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                for Module of PlayerShip.Modules loop
+                    if Module.Durability < Module.MaxDurability then
                         OrdersAmount := OrdersAmount + 1;
                         exit;
                     end if;
@@ -291,23 +304,6 @@ package body UserInterface is
                         exit;
                     end if;
                 end loop;
-                case SkyBases(BaseIndex).Reputation(1) is
-                    when 0..25 =>
-                        MissionsLimit := 1;
-                    when 26..50 =>
-                        MissionsLimit := 3;
-                    when 51..75 =>
-                        MissionsLimit := 5;
-                    when 76..100 =>
-                        MissionsLimit := 10;
-                    when others =>
-                        MissionsLimit := 0;
-                end case;
-                for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
-                    if PlayerShip.Missions.Element(I).StartBase = BaseIndex then
-                        MissionsLimit := MissionsLimit - 1;
-                    end if;
-                end loop;
                 if Integer(SkyBases(BaseIndex).Missions.Length) > 0 and MissionsLimit > 0 then
                     OrdersAmount := OrdersAmount + 1;
                 end if;
@@ -315,29 +311,28 @@ package body UserInterface is
             Orders_Items := new Item_Array(1..OrdersAmount);
             Orders_Items.all(1) := New_Item("Undock");
             if HaveTrader and SkyBases(BaseIndex).Owner /= Abandoned then
-                for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
-                    if (PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex) or
-                        (PlayerShip.Missions.Element(I).TargetX = PlayerShip.SkyX and PlayerShip.Missions.Element(I).TargetY = 
-                            PlayerShip.SkyY) 
+                for Mission of PlayerShip.Missions loop
+                    if (Mission.Finished and Mission.StartBase = BaseIndex) or
+                        (Mission.TargetX = PlayerShip.SkyX and Mission.TargetY = PlayerShip.SkyY) 
                     then
-                        case PlayerShip.Missions.Element(I).MType is
+                        case Mission.MType is
                             when Deliver =>
                                 Orders_Items.all(MenuIndex) := New_Item("Complete delivery of " & 
-                                To_String(Items_List.Element(PlayerShip.Missions.Element(I).Target).Name));
+                                    To_String(Items_List.Element(Mission.Target).Name));
                                 MenuIndex := MenuIndex + 1;
                             when Kill =>
-                                if PlayerShip.Missions.Element(I).Finished then
+                                if Mission.Finished then
                                     Orders_Items.all(MenuIndex) := New_Item("Complete destroy " &
-                                    To_String(ProtoShips_List.Element(PlayerShip.Missions.Element(I).Target).Name));
+                                        To_String(ProtoShips_List.Element(Mission.Target).Name));
                                     MenuIndex := MenuIndex + 1;
                                 end if;
                             when Patrol => 
-                                if PlayerShip.Missions.Element(I).Finished then
+                                if Mission.Finished then
                                     Orders_Items.all(MenuIndex) := New_Item("Complete Patrol area mission");
                                     MenuIndex := MenuIndex + 1;
                                 end if;
                             when Explore => 
-                                if PlayerShip.Missions.Element(I).Finished then
+                                if Mission.Finished then
                                     Orders_Items.all(MenuIndex) := New_Item("Complete Explore area mission");
                                     MenuIndex := MenuIndex + 1;
                                 end if;
@@ -358,8 +353,8 @@ package body UserInterface is
                     Orders_Items.all(MenuIndex) := New_Item("Ask for events");
                     MenuIndex := MenuIndex + 1;
                 end if;
-                for I in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                    if PlayerShip.Modules.Element(I).Durability < PlayerShip.Modules.Element(I).MaxDurability then
+                for Module of PlayerShip.Modules loop
+                    if Module.Durability < Module.MaxDurability then
                         Orders_Items.all(MenuIndex) := New_Item("Repair");
                         MenuIndex := MenuIndex + 1;
                         exit;
@@ -395,19 +390,17 @@ package body UserInterface is
                         OrdersAmount := OrdersAmount + 1;
                     end if;
                     if HaveTrader then
-                        for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
-                            if (PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex) or
-                                (PlayerShip.Missions.Element(I).TargetX = PlayerShip.SkyX and PlayerShip.Missions.Element(I).TargetY = 
-                                    PlayerShip.SkyY) 
+                        for Mission of PlayerShip.Missions loop
+                            if (Mission.Finished and Mission.StartBase = BaseIndex) or
+                                (Mission.TargetX = PlayerShip.SkyX and Mission.TargetY = PlayerShip.SkyY) 
                             then
                                 OrdersAmount := OrdersAmount + 1;
                             end if;
                         end loop;
                     end if;
                 else
-                    for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
-                        if (PlayerShip.Missions.Element(I).TargetX = PlayerShip.SkyX and PlayerShip.Missions.Element(I).TargetY = 
-                            PlayerShip.SkyY) and PlayerShip.Missions.Element(I).MType /= Deliver
+                    for Mission of PlayerShip.Missions loop
+                        if (Mission.TargetX = PlayerShip.SkyX and Mission.TargetY = PlayerShip.SkyY) and Mission.MType /= Deliver
                         then
                             OrdersAmount := OrdersAmount + 1;
                         end if;
@@ -438,45 +431,37 @@ package body UserInterface is
                     MenuIndex := MenuIndex + 1;
                 when Disease =>
                     if HaveTrader then
-                        for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name = To_Unbounded_String("Medical supplies") then
-                                Orders_Items.all(MenuIndex) := New_Item("Deliver medical supplies for free");
-                                MenuIndex := MenuIndex + 1;
-                                Orders_Items.all(MenuIndex) := New_Item("Deliver medical suppplies for price");
-                                MenuIndex := MenuIndex + 1;
-                                exit;
-                            end if;
-                        end loop;
+                        if FindCargo(ItemType => To_Unbounded_String("Medical supplies")) > 0 then
+                            Orders_Items.all(MenuIndex) := New_Item("Deliver medical supplies for free");
+                            MenuIndex := MenuIndex + 1;
+                            Orders_Items.all(MenuIndex) := New_Item("Deliver medical suppplies for price");
+                            MenuIndex := MenuIndex + 1;
+                        end if;
                     end if;
                 when None | DoublePrice =>
                     if BaseIndex > 0 then
-                        for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
+                        for Mission of PlayerShip.Missions loop
                             if HaveTrader then
-                                case PlayerShip.Missions.Element(I).MType is
+                                case Mission.MType is
                                     when Deliver =>
-                                        if PlayerShip.Missions.Element(I).TargetX = PlayerShip.SkyX and 
-                                            PlayerShip.Missions.Element(I).TargetY = PlayerShip.SkyY
-                                        then
+                                        if Mission.TargetX = PlayerShip.SkyX and Mission.TargetY = PlayerShip.SkyY then
                                             Orders_Items.all(MenuIndex) := New_Item("Complete delivery of " & 
-                                                To_String(Items_List.Element(PlayerShip.Missions.Element(I).Target).Name));
+                                                To_String(Items_List.Element(Mission.Target).Name));
                                             MenuIndex := MenuIndex + 1;
                                         end if;
                                     when Kill =>
-                                        if PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex
-                                        then
+                                        if Mission.Finished and Mission.StartBase = BaseIndex then
                                             Orders_Items.all(MenuIndex) := New_Item("Complete destroy " &
-                                                To_String(ProtoShips_List.Element(PlayerShip.Missions.Element(I).Target).Name));
+                                                To_String(ProtoShips_List.Element(Mission.Target).Name));
                                             MenuIndex := MenuIndex + 1;
                                         end if;
                                     when Patrol =>
-                                        if PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex
-                                        then
+                                        if Mission.Finished and Mission.StartBase = BaseIndex then
                                             Orders_Items.all(MenuIndex) := New_Item("Complete Patrol area mission");
                                             MenuIndex := MenuIndex + 1;
                                         end if;
                                     when Explore =>
-                                        if PlayerShip.Missions.Element(I).Finished and PlayerShip.Missions.Element(I).StartBase = BaseIndex
-                                        then
+                                        if Mission.Finished and Mission.StartBase = BaseIndex then
                                             Orders_Items.all(MenuIndex) := New_Item("Complete Explore area mission");
                                             MenuIndex := MenuIndex + 1;
                                         end if;
@@ -484,16 +469,14 @@ package body UserInterface is
                             end if;
                         end loop;
                     else
-                        for I in PlayerShip.Missions.First_Index..PlayerShip.Missions.Last_Index loop
-                            if PlayerShip.Missions.Element(I).TargetX = PlayerShip.SkyX and 
-                                PlayerShip.Missions.Element(I).TargetY = PlayerShip.SkyY
-                            then
-                                case PlayerShip.Missions.Element(I).MType is
+                        for Mission of PlayerShip.Missions loop
+                            if Mission.TargetX = PlayerShip.SkyX and Mission.TargetY = PlayerShip.SkyY then
+                                case Mission.MType is
                                     when Deliver =>
                                         null;
                                     when Kill =>
                                         Orders_Items.all(MenuIndex) := New_Item("Search for " & 
-                                        To_String(ProtoShips_List.Element(PlayerShip.Missions.Element(I).Target).Name));
+                                            To_String(ProtoShips_List.Element(Mission.Target).Name));
                                         MenuIndex := MenuIndex + 1;
                                     when Patrol => 
                                         Orders_Items.all(MenuIndex) := New_Item("Patrol area");
@@ -603,10 +586,8 @@ package body UserInterface is
             if PlayerShip.Crew.Element(I).Health < 100 and PlayerShip.Crew.Element(I).Health > 0 
                 and PlayerShip.Crew.Element(I).Order = Rest 
             then
-                for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                    if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
-                        PlayerShip.Modules.Element(J).Owner = I 
-                    then
+                for Module of PlayerShip.Modules loop
+                    if Modules_List.Element(Module.ProtoIndex).MType = CABIN and Module.Owner = I then
                         NeedHealing := True;
                         exit;
                     end if;
@@ -942,15 +923,15 @@ package body UserInterface is
                     DrawGame(Wait_Order);
                     return Wait_Order;
                 elsif Order = "Deliver medical supplies for free" then
-                    for I in PlayerShip.Cargo.First_Index..PlayerShip.Cargo.Last_Index loop
-                        if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Name = To_Unbounded_String("Medical supplies") then
-                            NewTime := Events_List.Element(EventIndex).Time - PlayerShip.Cargo.Element(I).Amount;
+                    for Item of PlayerShip.Cargo loop
+                        if Items_List.Element(Item.ProtoIndex).Name = To_Unbounded_String("Medical supplies") then
+                            NewTime := Events_List.Element(EventIndex).Time - Item.Amount;
                             if NewTime < 1 then
                                 DeleteEvent(EventIndex);
                             else
                                 Events_List.Update_Element(Index => EventIndex, Process => UpdateEvent'Access);
                             end if;
-                            UpdateCargo(PlayerShip, PlayerShip.Cargo.Element(I).ProtoIndex, (0 - PlayerShip.Cargo.Element(I).Amount));
+                            UpdateCargo(PlayerShip, Item.ProtoIndex, (0 - Item.Amount));
                             GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 10);
                             AddMessage("You gave medical supplies for free to base.", TradeMessage);
                             exit;
@@ -1127,10 +1108,8 @@ package body UserInterface is
                     if PlayerShip.Crew.Element(I).Health < 100 and PlayerShip.Crew.Element(I).Health > 0  and
                         PlayerShip.Crew.Element(I).Order = Rest 
                     then
-                        for J in PlayerShip.Modules.First_Index..PlayerShip.Modules.Last_Index loop
-                            if Modules_List.Element(PlayerShip.Modules.Element(J).ProtoIndex).MType = CABIN and
-                                PlayerShip.Modules.Element(J).Owner = I 
-                            then
+                        for Module of PlayerShip.Modules loop
+                            if Modules_List.Element(Module.ProtoIndex).MType = CABIN and Module.Owner = I then
                                 if TimeNeeded < (100 - PlayerShip.Crew.Element(I).Health) * 15 then
                                     TimeNeeded := (100 - PlayerShip.Crew.Element(I).Health) * 15;
                                 end if;
