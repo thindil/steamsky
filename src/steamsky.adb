@@ -43,7 +43,7 @@ with Events; use Events;
 with Events.UI; use Events.UI;
 with Combat.UI; use Combat.UI;
 with Crafts.UI; use Crafts.UI;
-with Help; use Help;
+with Help.UI; use Help.UI;
 with MainMenu; use MainMenu;
 with BasesList; use BasesList;
 with Config; use Config;

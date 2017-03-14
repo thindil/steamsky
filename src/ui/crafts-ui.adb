@@ -20,7 +20,7 @@ with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Items; use Items;
-with Help; use Help;
+with Help.UI; use Help.UI;
 
 package body Crafts.UI is
 

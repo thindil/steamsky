@@ -22,7 +22,7 @@ with Messages; use Messages;
 with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
 with Items; use Items;
-with Help; use Help;
+with Help.UI; use Help.UI;
 with Ships.Crew; use Ships.Crew;
 
 package body Combat.UI is

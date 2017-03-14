@@ -22,7 +22,7 @@ with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
-with Help; use Help;
+with Help.UI; use Help.UI;
 with Events; use Events;
 
 package body Bases.UI.Trade is
