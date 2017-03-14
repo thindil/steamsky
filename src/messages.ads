@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
+with Ada.Containers.Vectors; use Ada.Containers;
 with Game; use Game;
 
 package Messages is
@@ -29,6 +29,8 @@ package Messages is
             MType : Message_Type;
             MessageIndex : Positive;
         end record;
+    package Messages_Container is new Vectors(Positive, Message_Data);
+    Messages_List : Messages_Container.Vector; -- List of all messages
 
     LastMessage : Unbounded_String := To_Unbounded_String(""); -- Last message received
     function FormatedTime(Time : Date_Record := GameDate) return String; -- Format game time
@@ -38,7 +40,5 @@ package Messages is
     function MessagesAmount(MType : Message_Type := Default) return Natural; -- Return amount of selected type messages
     procedure RestoreMessage(Message : Unbounded_String; MType : Message_Type := Default); -- Restore message from save file
     function GetLastMessageIndex return Natural; -- Return last message index
-    procedure ShowMessages; -- Show messages list
-    function MessagesKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in messages list
 
 end Messages;
