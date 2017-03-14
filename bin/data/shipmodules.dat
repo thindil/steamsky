@@ -996,4 +996,17 @@ Price = 37500
 InstallTime = 270
 Size = 4
 Description = Updated version of huge engine made of bronze. Each ship needs at least one engine to fly.
+[80]
+Name = Basic iron cabin
+Type = Cabin
+Weight = 250
+Value = 20
+MaxValue = 20
+Durability = 120
+Material = Iron
+Skill = Engineering
+Price = 650
+InstallTime = 60
+Size = 1
+Description = Small cabin made of iron with just few furnitures.
 []
