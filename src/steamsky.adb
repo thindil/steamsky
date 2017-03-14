@@ -47,7 +47,7 @@ with Help.UI; use Help.UI;
 with MainMenu; use MainMenu;
 with BasesList; use BasesList;
 with Config; use Config;
-with Statistics; use Statistics;
+with Statistics.UI; use Statistics.UI;
 with Missions.UI; use Missions.UI;
 
 procedure SteamSky is

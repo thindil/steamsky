@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
@@ -17,8 +17,6 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
-with Game; use Game;
 
 package Statistics is
 
@@ -42,7 +40,5 @@ package Statistics is
 
     procedure UpdateDestroyedShips(ShipName : Unbounded_String); -- Add new destroyed ship do list
     procedure ClearGameStats; -- Clear game statistics
-    procedure ShowGameStats(RefreshOnly : Boolean := False); -- Show game statistics
-    function ShowGameStatsKeys(Key : Key_Code) return GameStates; -- Handle keys on game statistics screen
 
 end Statistics;
