@@ -24,6 +24,7 @@ with Ada.Calendar.Formatting;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Terminal_Interface.Curses_Constants; use Terminal_Interface.Curses_Constants;
 with UserInterface; use UserInterface;
+with UserInterface.Keys; use UserInterface.Keys;
 with Maps; use Maps;
 with Game; use Game;
 with Messages; use Messages;
