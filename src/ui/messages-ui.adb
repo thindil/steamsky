@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2017 Bartek thindil Jasicki
 --    
 --    This file is part of Steam Sky.
 --
