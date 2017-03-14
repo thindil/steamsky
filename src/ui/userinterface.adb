@@ -46,7 +46,7 @@ with Events.UI; use Events.UI;
 with ShipModules; use ShipModules;
 with BasesList; use BasesList;
 with Items; use Items;
-with Statistics; use Statistics;
+with Statistics.UI; use Statistics.UI;
 with Missions; use Missions;
 with Missions.UI; use Missions.UI;
 
