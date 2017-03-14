@@ -23,7 +23,7 @@ with Messages; use Messages;
 with Bases; use Bases;
 with Maps; use Maps;
 with ShipModules; use ShipModules;
-with Help; use Help;
+with Help.UI; use Help.UI;
 with Ships.Crew; use Ships.Crew;
 
 package body Crew.UI is
