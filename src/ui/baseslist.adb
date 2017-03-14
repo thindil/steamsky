@@ -24,7 +24,7 @@ with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Maps; use Maps;
 with Ships; use Ships;
-with Help; use Help;
+with Help.UI; use Help.UI;
 
 package body BasesList is
 
