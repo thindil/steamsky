@@ -1,0 +1,39 @@
+## Bugs reporting
+
+Bugs are not only problems or game crashes, but typos too. If you find any bug
+in game, please report it at <https://github.com/thindil/steamsky/issues> or if
+you prefer, on mail <thindil@laeran.pl>
+
+### Some general hints about reporting bugs
+
+- In "Title" field try write very short but not too general description of
+  problem. Good example: "Game crashed when entering base". Bad example: "Game
+  crashes often."
+- In body/comment field try write that much informations about problem as
+  possible. In most cases more informations is better than less. General rule
+  of good problem report is give enough informations which allow to reproduce
+  problem by other people. It may be in form of steps which are needed for
+  cause problem.
+- If game crashed, in most cases it should create file *error.log* in *data*
+  directory. It will be a lot of help if you can attach that file to bug
+  report. Each bug information in this file contains: date when crash happens,
+  version of game used and memory address of lines of code which caused crash.
+  You can check this last information by using command `addr2line` in directory
+  where *steamsky* executable file is. Example:
+
+  `addr2line -e steamsky [here full list of memory addresses from error.log]`
+
+  This command may not works if you use "release" version of game due to
+  removed some debug informations from executable file.
+
+### Example of bug report:
+
+Title: "Game crashed when entering base"
+
+Body: 
+
+1. Dock to base
+2. Open base actions menu
+3. Select option "Trade" from menu with arrows keys
+4. Press enter
+5. Game crashing
