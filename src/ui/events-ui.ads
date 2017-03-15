@@ -1,5 +1,5 @@
 --    Copyright 2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -19,7 +19,8 @@ with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 
 package Events.UI is
 
-    procedure ShowEvents; -- Show list of current events
-    function ShowEventsKeys(Key : Key_Code) return GameStates; -- Handle keys on events list screen
+   procedure ShowEvents; -- Show list of current events
+   function ShowEventsKeys
+     (Key: Key_Code) return GameStates; -- Handle keys on events list screen
 
 end Events.UI;

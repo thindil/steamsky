@@ -1,5 +1,5 @@
 --    Copyright 2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -16,12 +16,23 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 package Ships.Crew is
-    
-    function GetSkillLevel(MemberIndex, SkillIndex : Positive; Ship : ShipRecord := PlayerShip) 
-        return Natural; -- Get level of skill of selected crew member
-    procedure Death(MemberIndex : Positive; Reason : Unbounded_String; Ship : in out ShipRecord); -- Handle crew member death
-    procedure DeleteMember(MemberIndex : Positive; Ship : in out ShipRecord); -- Delete selected member from crew list
-    function FindMember(Order : Crew_Orders; Ship : ShipRecord := PlayerShip) 
-        return Natural; -- Find index of first crew member with selected order
+
+   function GetSkillLevel
+     (MemberIndex, SkillIndex: Positive;
+      Ship: ShipRecord :=
+        PlayerShip)
+     return Natural; -- Get level of skill of selected crew member
+   procedure Death
+     (MemberIndex: Positive;
+      Reason: Unbounded_String;
+      Ship: in out ShipRecord); -- Handle crew member death
+   procedure DeleteMember
+     (MemberIndex: Positive;
+      Ship: in out ShipRecord); -- Delete selected member from crew list
+   function FindMember
+     (Order: Crew_Orders;
+      Ship: ShipRecord :=
+        PlayerShip)
+     return Natural; -- Find index of first crew member with selected order
 
 end Ships.Crew;
