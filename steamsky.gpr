@@ -42,6 +42,8 @@ project steamsky is
         case Mode is
             when "release" =>
                 for Default_Switches ("ada") use ("-s", "-Wl,--gc-sections");
+            when others =>
+                null;
         end case;
     end Linker;
 
