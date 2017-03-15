@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -17,8 +17,11 @@
 
 package Bases.UI.Shipyard is
 
-    procedure ShowShipyard; -- Show shipyard window
-    function ShipyardKeys(Key : Key_Code) return GameStates; -- Handle keys in shipyards
-    function ShipyardTypesKeys(Key : Key_Code) return GameStates; -- Handle keys in shipyard select modules types menu
+   procedure ShowShipyard; -- Show shipyard window
+   function ShipyardKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in shipyards
+   function ShipyardTypesKeys
+     (Key: Key_Code)
+     return GameStates; -- Handle keys in shipyard select modules types menu
 
 end Bases.UI.Shipyard;

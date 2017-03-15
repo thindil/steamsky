@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -20,11 +20,16 @@ with Game; use Game;
 
 package MainMenu is
 
-    procedure ShowMainMenu; -- Show main game menu
-    function MainMenuKeys(Key : Key_Code) return GameStates; -- Handle keys on main menu
-    function NewGameKeys(Key : Key_Code) return GameStates; -- Handle keys in new game window
-    function LicenseKeys(Key : Key_Code) return GameStates; -- Handle keys on license screen
-    function FullLicenseKeys(Key : Key_Code) return GameStates; -- Handle keys on full license screen
-    function NewsKeys(Key : Key_Code) return GameStates; -- Handle keys on news screen
+   procedure ShowMainMenu; -- Show main game menu
+   function MainMenuKeys
+     (Key: Key_Code) return GameStates; -- Handle keys on main menu
+   function NewGameKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in new game window
+   function LicenseKeys
+     (Key: Key_Code) return GameStates; -- Handle keys on license screen
+   function FullLicenseKeys
+     (Key: Key_Code) return GameStates; -- Handle keys on full license screen
+   function NewsKeys
+     (Key: Key_Code) return GameStates; -- Handle keys on news screen
 
 end MainMenu;

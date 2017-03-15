@@ -1,5 +1,5 @@
 --    Copyright 2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -16,10 +16,15 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 package Ships.Movement is
-    
-    function MoveShip(ShipIndex, X, Y : Integer) return Natural; -- Move selected ship
-    procedure DockShip(Docking : Boolean); -- Dock/Undock ship at base
-    procedure ChangeShipSpeed(SpeedValue : ShipSpeed; ShowInfo : Boolean := True); -- Change speed of ship
-    function RealSpeed(Ship : ShipRecord) return Natural; -- Return real ship speed in meters per minute
+
+   function MoveShip
+     (ShipIndex, X, Y: Integer) return Natural; -- Move selected ship
+   procedure DockShip(Docking: Boolean); -- Dock/Undock ship at base
+   procedure ChangeShipSpeed
+     (SpeedValue: ShipSpeed;
+      ShowInfo: Boolean := True); -- Change speed of ship
+   function RealSpeed
+     (Ship: ShipRecord)
+     return Natural; -- Return real ship speed in meters per minute
 
 end Ships.Movement;

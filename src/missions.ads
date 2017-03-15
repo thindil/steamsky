@@ -1,5 +1,5 @@
 --    Copyright 2016-2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -19,25 +19,29 @@ with Ada.Containers.Vectors; use Ada.Containers;
 
 package Missions is
 
-    type Missions_Types is (Deliver, Kill, Patrol, Explore);
-    type Mission_Data is -- Data structure for missions
-        record
-            MType : Missions_Types; -- Type of mission
-            Target : Natural; -- Target for mission (ship or item index)
-            Time : Positive; -- Amount of minutes to finish mission
-            TargetX : Natural; -- Skymap X-axis for mission target
-            TargetY : Natural; -- Skymap Y-axis for mission target
-            Reward : Positive; -- Amount of moneys for mission
-            StartBase : Positive; -- Index of sky base where mission starts
-            Finished : Boolean; -- Did mission is finished
-        end record;
-    package Mission_Container is new Vectors(Positive, Mission_Data);
+   type Missions_Types is (Deliver, Kill, Patrol, Explore);
+   type Mission_Data is -- Data structure for missions
+   record
+      MType: Missions_Types; -- Type of mission
+      Target: Natural; -- Target for mission (ship or item index)
+      Time: Positive; -- Amount of minutes to finish mission
+      TargetX: Natural; -- Skymap X-axis for mission target
+      TargetY: Natural; -- Skymap Y-axis for mission target
+      Reward: Positive; -- Amount of moneys for mission
+      StartBase: Positive; -- Index of sky base where mission starts
+      Finished: Boolean; -- Did mission is finished
+   end record;
+   package Mission_Container is new Vectors(Positive, Mission_Data);
 
-    procedure GenerateMissions(BaseIndex : Positive); -- Generate if needed new missions in selected base
-    procedure AcceptMission(MissionIndex : Positive); -- Accept selected mission from base
-    procedure UpdateMissions(Minutes : Positive); -- Update accepted missions
-    procedure FinishMission(MissionIndex : Positive); -- Finish selected mission
-    procedure DeleteMission(MissionIndex : Positive; Failed : Boolean := True); -- Delete selected mission
-    procedure UpdateMission(MissionIndex : Positive); -- Update status of mission
+   procedure GenerateMissions
+     (BaseIndex: Positive); -- Generate if needed new missions in selected base
+   procedure AcceptMission
+     (MissionIndex: Positive); -- Accept selected mission from base
+   procedure UpdateMissions(Minutes: Positive); -- Update accepted missions
+   procedure FinishMission(MissionIndex: Positive); -- Finish selected mission
+   procedure DeleteMission
+     (MissionIndex: Positive;
+      Failed: Boolean := True); -- Delete selected mission
+   procedure UpdateMission(MissionIndex: Positive); -- Update status of mission
 
 end Missions;

@@ -1,5 +1,5 @@
 --    Copyright 2016-2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -21,13 +21,14 @@ with Game; use Game;
 
 package UserInterface is
 
-    OrdersMenu : Menu; -- Menu for orders/game menu
-    MenuWindow : Window; -- Window for menu
-    
-    procedure ShowGameHeader(CurrentState : GameStates); -- Show in-game header
-    procedure ShowDialog(Message : String); -- Show dialog window with message
-    function HideDialog return Boolean; -- Hide dialog if visible, return True if dialog was hidden
-    procedure DrawGame(CurrentState : GameStates); -- Draw game screen
-    procedure ShowGameMenu; -- Show in game menu
-    
+   OrdersMenu: Menu; -- Menu for orders/game menu
+   MenuWindow: Window; -- Window for menu
+
+   procedure ShowGameHeader(CurrentState: GameStates); -- Show in-game header
+   procedure ShowDialog(Message: String); -- Show dialog window with message
+   function HideDialog
+     return Boolean; -- Hide dialog if visible, return True if dialog was hidden
+   procedure DrawGame(CurrentState: GameStates); -- Draw game screen
+   procedure ShowGameMenu; -- Show in game menu
+
 end UserInterface;

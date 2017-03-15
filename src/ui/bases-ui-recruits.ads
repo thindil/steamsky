@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -17,7 +17,9 @@
 
 package Bases.UI.Recruits is
 
-    procedure ShowRecruits; -- Show recruits window
-    function RecruitKeys(Key : Key_Code) return GameStates; -- Handle keys in recruit new crew members in bases
+   procedure ShowRecruits; -- Show recruits window
+   function RecruitKeys
+     (Key: Key_Code)
+     return GameStates; -- Handle keys in recruit new crew members in bases
 
 end Bases.UI.Recruits;

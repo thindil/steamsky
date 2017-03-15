@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -17,7 +17,9 @@
 
 package Bases.UI.Missions is
 
-    procedure ShowBaseMissions; -- Show missions window
-    function BaseMissionsKeys(Key : Key_Code) return GameStates; -- Handle keys in missions window in bases
+   procedure ShowBaseMissions; -- Show missions window
+   function BaseMissionsKeys
+     (Key: Key_Code)
+     return GameStates; -- Handle keys in missions window in bases
 
 end Bases.UI.Missions;

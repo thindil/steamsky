@@ -1,5 +1,5 @@
 --    Copyright 2016-2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -18,10 +18,13 @@
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 
 package Combat.UI is
-    
-    procedure ShowCombat; -- Show combat screen
-    function CombatKeys(Key : Key_Code) return GameStates; -- Handle keys on combat screen
-    function CombatOrdersKeys(Key : Key_Code) return GameStates; -- Handle keys in combat orders menu
-    function EnemyInfoKeys(Key : Key_Code) return GameStates; -- Handle keys in detailed enemy info
+
+   procedure ShowCombat; -- Show combat screen
+   function CombatKeys
+     (Key: Key_Code) return GameStates; -- Handle keys on combat screen
+   function CombatOrdersKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in combat orders menu
+   function EnemyInfoKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in detailed enemy info
 
 end Combat.UI;

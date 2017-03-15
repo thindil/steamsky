@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -17,8 +17,12 @@
 
 package Bases.UI.Repair is
 
-    procedure RepairCost(Cost, Time, ModuleIndex : in out Natural); -- Count cost/time of repairs of ship
-    procedure ShowRepair; -- Show repair window
-    function RepairKeys(Key : Key_Code) return GameStates; -- Handle keys in ship repairs
+   procedure RepairCost
+     (Cost,
+      Time,
+      ModuleIndex: in out Natural); -- Count cost/time of repairs of ship
+   procedure ShowRepair; -- Show repair window
+   function RepairKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in ship repairs
 
 end Bases.UI.Repair;

@@ -1,5 +1,5 @@
 --    Copyright 2016-2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -20,12 +20,19 @@ with Game; use Game;
 
 package Crew.UI is
 
-    procedure ShowCrewInfo; -- Show crew info
-    procedure ShowOrdersMenu; -- Show menu with orders for crew
-    procedure DismissMember; -- Dismiss selected crew member
-    function CrewInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in crew info menu
-    function CrewOrdersKeys(Key : Key_Code) return GameStates; -- Handle keys in crew orders menu
-    function CrewOrdersAllKeys(Key : Key_Code) return GameStates; -- Handle keys in orders for all crew menu
-    function OrdersPrioritiesKeys(Key : Key_Code) return GameStates; -- Handle keys in crew orders priorities menu
+   procedure ShowCrewInfo; -- Show crew info
+   procedure ShowOrdersMenu; -- Show menu with orders for crew
+   procedure DismissMember; -- Dismiss selected crew member
+   function CrewInfoKeys
+     (Key: Key_Code;
+      OldState: GameStates) return GameStates; -- Handle keys in crew info menu
+   function CrewOrdersKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in crew orders menu
+   function CrewOrdersAllKeys
+     (Key: Key_Code)
+     return GameStates; -- Handle keys in orders for all crew menu
+   function OrdersPrioritiesKeys
+     (Key: Key_Code)
+     return GameStates; -- Handle keys in crew orders priorities menu
 
 end Crew.UI;

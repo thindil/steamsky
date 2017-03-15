@@ -1,5 +1,5 @@
 --    Copyright 2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -19,13 +19,13 @@ with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 
 package body Utils is
 
-    function GetRandom(Min : Natural; Max : Positive) return Natural is
-        subtype Rand_Range is Natural range Min..Max;
-        package Rand_Roll is new Discrete_Random(Rand_Range);
-        Generator : Rand_Roll.Generator;
-    begin
-        Rand_Roll.Reset(Generator);
-        return Rand_Roll.Random(Generator);
-    end GetRandom;
+   function GetRandom(Min: Natural; Max: Positive) return Natural is
+      subtype Rand_Range is Natural range Min .. Max;
+      package Rand_Roll is new Discrete_Random(Rand_Range);
+      Generator: Rand_Roll.Generator;
+   begin
+      Rand_Roll.Reset(Generator);
+      return Rand_Roll.Random(Generator);
+   end GetRandom;
 
 end Utils;
