@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
   iron engine, huge iron engine, advanced huge iron engine, basic iron cabin
   and advanced iron cabin
 - Modding guide: MODDING.md
+- Contributing guide: CONTRIBUTING.md
 
 ### Changed
 - Updated README.md
