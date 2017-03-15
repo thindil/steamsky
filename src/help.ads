@@ -1,5 +1,5 @@
 --    Copyright 2016-2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -20,14 +20,15 @@ with Ada.Containers.Vectors; use Ada.Containers;
 
 package Help is
 
-    type Help_Data is -- Data structure for help topic
-        record
-            Title : Unbounded_String; -- Title of help topic
-            Text : Unbounded_String; -- Text of help
-        end record;
-    package Help_Container is new Vectors(Positive, Help_Data);
-    Help_List : Help_Container.Vector; -- List of all help topics
+   type Help_Data is -- Data structure for help topic
+   record
+      Title: Unbounded_String; -- Title of help topic
+      Text: Unbounded_String; -- Text of help
+   end record;
+   package Help_Container is new Vectors(Positive, Help_Data);
+   Help_List: Help_Container.Vector; -- List of all help topics
 
-    function LoadHelp return Boolean; -- Load help text from file, returns False if file not found
+   function LoadHelp
+     return Boolean; -- Load help text from file, returns False if file not found
 
 end Help;

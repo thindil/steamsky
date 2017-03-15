@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -20,43 +20,49 @@ with Ada.Text_IO; use Ada.Text_IO;
 
 package body Config is
 
-    procedure LoadConfig is
-        ConfigFile : File_Type;
-        RawData, FieldName, Value : Unbounded_String;
-        EqualIndex : Natural;
-    begin
-        if not Exists("data/game.cfg") then
-            NewGameSettings := (PlayerName => To_Unbounded_String("Laeran"),
-                PlayerGender => 'M', ShipName => To_Unbounded_String("Anaria"));
-            return;
-        end if;
-        Open(ConfigFile, In_File, "data/game.cfg");
-        while not End_Of_File(ConfigFile) loop
-            RawData := To_Unbounded_String(Get_Line(ConfigFile));
-            if Length(RawData) > 0 then
-                EqualIndex := Index(RawData, "=");
-                FieldName := Head(RawData, EqualIndex - 2);
-                Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
-                if FieldName = To_Unbounded_String("PlayerName") then
-                    NewGameSettings.PlayerName := Value;
-                elsif FieldName = To_Unbounded_String("PlayerGender") then
-                    NewGameSettings.PlayerGender := Element(Value, 1);
-                elsif FieldName = To_Unbounded_String("ShipName") then
-                    NewGameSettings.ShipName := Value;
-                end if;
+   procedure LoadConfig is
+      ConfigFile: File_Type;
+      RawData, FieldName, Value: Unbounded_String;
+      EqualIndex: Natural;
+   begin
+      if not Exists("data/game.cfg") then
+         NewGameSettings :=
+           (PlayerName => To_Unbounded_String("Laeran"),
+            PlayerGender => 'M',
+            ShipName => To_Unbounded_String("Anaria"));
+         return;
+      end if;
+      Open(ConfigFile, In_File, "data/game.cfg");
+      while not End_Of_File(ConfigFile) loop
+         RawData := To_Unbounded_String(Get_Line(ConfigFile));
+         if Length(RawData) > 0 then
+            EqualIndex := Index(RawData, "=");
+            FieldName := Head(RawData, EqualIndex - 2);
+            Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
+            if FieldName = To_Unbounded_String("PlayerName") then
+               NewGameSettings.PlayerName := Value;
+            elsif FieldName = To_Unbounded_String("PlayerGender") then
+               NewGameSettings.PlayerGender := Element(Value, 1);
+            elsif FieldName = To_Unbounded_String("ShipName") then
+               NewGameSettings.ShipName := Value;
             end if;
-        end loop;
-        Close(ConfigFile);
-    end LoadConfig;
+         end if;
+      end loop;
+      Close(ConfigFile);
+   end LoadConfig;
 
-    procedure SaveConfig is
-        ConfigFile : File_Type;
-    begin
-        Create(ConfigFile, Append_File, "data/game.cfg");
-        Put_Line(ConfigFile, "PlayerName = " & To_String(NewGameSettings.PlayerName));
-        Put_Line(ConfigFile, "PlayerGender = " & NewGameSettings.PlayerGender);
-        Put_Line(ConfigFile, "ShipName = " & To_String(NewGameSettings.ShipName));
-        Close(ConfigFile);
-    end SaveConfig;
+   procedure SaveConfig is
+      ConfigFile: File_Type;
+   begin
+      Create(ConfigFile, Append_File, "data/game.cfg");
+      Put_Line
+        (ConfigFile,
+         "PlayerName = " & To_String(NewGameSettings.PlayerName));
+      Put_Line(ConfigFile, "PlayerGender = " & NewGameSettings.PlayerGender);
+      Put_Line
+        (ConfigFile,
+         "ShipName = " & To_String(NewGameSettings.ShipName));
+      Close(ConfigFile);
+   end SaveConfig;
 
 end Config;

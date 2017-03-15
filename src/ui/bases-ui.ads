@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -20,8 +20,8 @@ with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 
 package Bases.UI is
 
-    TradeMenu : Menu;
-    MenuWindow : Window;
-    CurrentMenuIndex : Positive := 1;
+   TradeMenu: Menu;
+   MenuWindow: Window;
+   CurrentMenuIndex: Positive := 1;
 
 end Bases.UI;

@@ -1,5 +1,5 @@
 --    Copyright 2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -20,7 +20,10 @@ with Game; use Game;
 
 package Statistics.UI is
 
-    procedure ShowGameStats(RefreshOnly : Boolean := False); -- Show game statistics
-    function ShowGameStatsKeys(Key : Key_Code) return GameStates; -- Handle keys on game statistics screen
+   procedure ShowGameStats
+     (RefreshOnly: Boolean := False); -- Show game statistics
+   function ShowGameStatsKeys
+     (Key: Key_Code)
+     return GameStates; -- Handle keys on game statistics screen
 
 end Statistics.UI;

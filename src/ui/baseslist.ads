@@ -1,5 +1,5 @@
 --    Copyright 2016-2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -19,9 +19,13 @@ with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Game; use Game;
 
 package BasesList is
-    
-    procedure ShowBasesList; -- Show known bases list screen
-    function BasesListKeys(Key : Key_Code) return GameStates; -- Handle keys on bases list screen
-    function BasesOptionsKeys(Key : Key_Code; CurrentState : GameStates) return GameStates; -- Handle keys in bases list options
+
+   procedure ShowBasesList; -- Show known bases list screen
+   function BasesListKeys
+     (Key: Key_Code) return GameStates; -- Handle keys on bases list screen
+   function BasesOptionsKeys
+     (Key: Key_Code;
+      CurrentState: GameStates)
+     return GameStates; -- Handle keys in bases list options
 
 end BasesList;

@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -17,10 +17,16 @@
 
 package Ships.UI.Ship is
 
-    procedure ShowShipInfo; -- Show informations about ship status
-    function ShipInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in ship info menu
-    function ModuleOptionsKeys(Key : Key_Code) return GameStates; -- Handle keys in modules options menu
-    function AssignOwnerKeys(Key : Key_Code) return GameStates; -- Handle keys in assign module owner menu
-    function AssignAmmoKeys(Key : Key_Code) return GameStates; -- Handle keys in assign gun ammo menu
+   procedure ShowShipInfo; -- Show informations about ship status
+   function ShipInfoKeys
+     (Key: Key_Code;
+      OldState: GameStates) return GameStates; -- Handle keys in ship info menu
+   function ModuleOptionsKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in modules options menu
+   function AssignOwnerKeys
+     (Key: Key_Code)
+     return GameStates; -- Handle keys in assign module owner menu
+   function AssignAmmoKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in assign gun ammo menu
 
 end Ships.UI.Ship;

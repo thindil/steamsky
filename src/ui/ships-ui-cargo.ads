@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -17,7 +17,10 @@
 
 package Ships.UI.Cargo is
 
-    procedure ShowCargoInfo; -- Show informations about ship cargo
-    function CargoInfoKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in cargo info menu
+   procedure ShowCargoInfo; -- Show informations about ship cargo
+   function CargoInfoKeys
+     (Key: Key_Code;
+      OldState: GameStates)
+     return GameStates; -- Handle keys in cargo info menu
 
 end Ships.UI.Cargo;

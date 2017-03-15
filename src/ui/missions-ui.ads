@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -20,7 +20,8 @@ with Game; use Game;
 
 package Missions.UI is
 
-    procedure ShowMissions; -- Show list of accepted missions
-    function ShowMissionsKeys(Key : Key_Code) return GameStates; -- Handle keys on missions list screen
+   procedure ShowMissions; -- Show list of accepted missions
+   function ShowMissionsKeys
+     (Key: Key_Code) return GameStates; -- Handle keys on missions list screen
 
 end Missions.UI;

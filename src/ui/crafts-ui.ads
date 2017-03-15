@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -19,8 +19,10 @@ with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 
 package Crafts.UI is
 
-    procedure ShowRecipes; -- Show crafting screen
-    function CraftKeys(Key : Key_Code) return GameStates; -- Handle keys in craft screen
-    function RecipeSettingKeys(Key : Key_Code) return GameStates; -- Handle keys in module select menu
+   procedure ShowRecipes; -- Show crafting screen
+   function CraftKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in craft screen
+   function RecipeSettingKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in module select menu
 
 end Crafts.UI;

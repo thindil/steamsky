@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -19,15 +19,15 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Config is
 
-    type NewGameRecord is -- Data for new game settings
-        record
-            PlayerName : Unbounded_String; -- Default player name
-            PlayerGender : Character; -- Default player gender
-            ShipName : Unbounded_String; -- Default ship name
-        end record;
-    NewGameSettings : NewGameRecord;
+   type NewGameRecord is -- Data for new game settings
+   record
+      PlayerName: Unbounded_String; -- Default player name
+      PlayerGender: Character; -- Default player gender
+      ShipName: Unbounded_String; -- Default ship name
+   end record;
+   NewGameSettings: NewGameRecord;
 
-    procedure LoadConfig; -- Load game configuration from file
-    procedure SaveConfig; -- Save game configuration to file
+   procedure LoadConfig; -- Load game configuration from file
+   procedure SaveConfig; -- Save game configuration to file
 
 end Config;

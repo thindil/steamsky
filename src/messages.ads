@@ -1,5 +1,5 @@
 --    Copyright 2016-2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -21,24 +21,43 @@ with Game; use Game;
 
 package Messages is
 
-    type Message_Type is (Default, CombatMessage, TradeMessage, OrderMessage,
-        CraftMessage, OtherMessage, MissionMessage); -- Types of messages
-    type Message_Data is -- Data structure for messages
-        record
-            Message : Unbounded_String;
-            MType : Message_Type;
-            MessageIndex : Positive;
-        end record;
-    package Messages_Container is new Vectors(Positive, Message_Data);
-    Messages_List : Messages_Container.Vector; -- List of all messages
+   type Message_Type is
+     (Default,
+      CombatMessage,
+      TradeMessage,
+      OrderMessage,
+      CraftMessage,
+      OtherMessage,
+      MissionMessage); -- Types of messages
+   type Message_Data is -- Data structure for messages
+   record
+      Message: Unbounded_String;
+      MType: Message_Type;
+      MessageIndex: Positive;
+   end record;
+   package Messages_Container is new Vectors(Positive, Message_Data);
+   Messages_List: Messages_Container.Vector; -- List of all messages
 
-    LastMessage : Unbounded_String := To_Unbounded_String(""); -- Last message received
-    function FormatedTime(Time : Date_Record := GameDate) return String; -- Format game time
-    procedure AddMessage(Message : String; MType : Message_Type); -- Add new message to list
-    function GetMessage(MessageIndex : Integer; MType : Message_Type := Default) return Message_Data; -- Return selected message
-    procedure ClearMessages; -- Remove all messages;
-    function MessagesAmount(MType : Message_Type := Default) return Natural; -- Return amount of selected type messages
-    procedure RestoreMessage(Message : Unbounded_String; MType : Message_Type := Default); -- Restore message from save file
-    function GetLastMessageIndex return Natural; -- Return last message index
+   LastMessage: Unbounded_String :=
+     To_Unbounded_String(""); -- Last message received
+   function FormatedTime
+     (Time: Date_Record := GameDate) return String; -- Format game time
+   procedure AddMessage
+     (Message: String;
+      MType: Message_Type); -- Add new message to list
+   function GetMessage
+     (MessageIndex: Integer;
+      MType: Message_Type :=
+        Default)
+     return Message_Data; -- Return selected message
+   procedure ClearMessages; -- Remove all messages;
+   function MessagesAmount
+     (MType: Message_Type :=
+        Default)
+     return Natural; -- Return amount of selected type messages
+   procedure RestoreMessage
+     (Message: Unbounded_String;
+      MType: Message_Type := Default); -- Restore message from save file
+   function GetLastMessageIndex return Natural; -- Return last message index
 
 end Messages;

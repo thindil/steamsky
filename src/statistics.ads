@@ -1,5 +1,5 @@
 --    Copyright 2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -20,25 +20,29 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Statistics is
 
-    type DestroyedShips_Data is -- Data for destroyed ships
-        record
-            ProtoIndex : Positive; -- Prototype index of destroyed ship
-            Amount : Positive; -- Amount of destroyed that ships
-        end record;
-    package DestroyedShips_Container is new Vectors(Positive, DestroyedShips_Data);
-    type GameStats_Data is -- Data for game statistics
-        record
-            DestroyedShips : DestroyedShips_Container.Vector; -- Data for all destroyed ships by player
-            BasesVisited : Positive; -- Amount of visited bases
-            MapVisited : Positive; -- Amount of visited map fields
-            DistanceTraveled : Natural; -- Amount of map fields travelled
-            CraftingOrders : Natural; -- Amount of finished crafting orders
-            AcceptedMissions : Natural; -- Amount of accepted missions
-            FinishedMissions : Natural; -- Amount of finished missions
-        end record;
-    GameStats : GameStats_Data; -- Game statistics
+   type DestroyedShips_Data is -- Data for destroyed ships
+   record
+      ProtoIndex: Positive; -- Prototype index of destroyed ship
+      Amount: Positive; -- Amount of destroyed that ships
+   end record;
+   package DestroyedShips_Container is new Vectors
+     (Positive,
+      DestroyedShips_Data);
+   type GameStats_Data is -- Data for game statistics
+   record
+      DestroyedShips: DestroyedShips_Container
+        .Vector; -- Data for all destroyed ships by player
+      BasesVisited: Positive; -- Amount of visited bases
+      MapVisited: Positive; -- Amount of visited map fields
+      DistanceTraveled: Natural; -- Amount of map fields travelled
+      CraftingOrders: Natural; -- Amount of finished crafting orders
+      AcceptedMissions: Natural; -- Amount of accepted missions
+      FinishedMissions: Natural; -- Amount of finished missions
+   end record;
+   GameStats: GameStats_Data; -- Game statistics
 
-    procedure UpdateDestroyedShips(ShipName : Unbounded_String); -- Add new destroyed ship do list
-    procedure ClearGameStats; -- Clear game statistics
+   procedure UpdateDestroyedShips
+     (ShipName: Unbounded_String); -- Add new destroyed ship do list
+   procedure ClearGameStats; -- Clear game statistics
 
 end Statistics;

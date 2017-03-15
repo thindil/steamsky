@@ -1,5 +1,5 @@
 --    Copyright 2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -19,7 +19,9 @@ with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 
 package Messages.UI is
 
-    procedure ShowMessages; -- Show messages list
-    function MessagesKeys(Key : Key_Code; OldState : GameStates) return GameStates; -- Handle keys in messages list
+   procedure ShowMessages; -- Show messages list
+   function MessagesKeys
+     (Key: Key_Code;
+      OldState: GameStates) return GameStates; -- Handle keys in messages list
 
 end Messages.UI;

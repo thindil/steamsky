@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -17,7 +17,9 @@
 
 package Bases.UI.Recipes is
 
-    procedure ShowTradeRecipes; -- Show trade recipes window
-    function TradeRecipesKeys(Key : Key_Code) return GameStates; -- Handle keys in buying recipes in bases
+   procedure ShowTradeRecipes; -- Show trade recipes window
+   function TradeRecipesKeys
+     (Key: Key_Code)
+     return GameStates; -- Handle keys in buying recipes in bases
 
 end Bases.UI.Recipes;

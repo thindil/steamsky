@@ -1,5 +1,5 @@
 --    Copyright 2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -16,10 +16,18 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 package UserInterface.Keys is
-    
-    function GameMenuKeys(CurrentState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in game menu
-    function OrdersMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in orders menu
-    function ConfirmKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in confirm window
-    function WaitMenuKeys(OldState : GameStates; Key : Key_Code) return GameStates; -- Handle keys in wait orders menu
-    
+
+   function GameMenuKeys
+     (CurrentState: GameStates;
+      Key: Key_Code) return GameStates; -- Handle keys in game menu
+   function OrdersMenuKeys
+     (OldState: GameStates;
+      Key: Key_Code) return GameStates; -- Handle keys in orders menu
+   function ConfirmKeys
+     (OldState: GameStates;
+      Key: Key_Code) return GameStates; -- Handle keys in confirm window
+   function WaitMenuKeys
+     (OldState: GameStates;
+      Key: Key_Code) return GameStates; -- Handle keys in wait orders menu
+
 end UserInterface.Keys;

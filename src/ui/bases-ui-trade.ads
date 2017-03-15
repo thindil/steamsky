@@ -1,5 +1,5 @@
 --    Copyright 2016 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -17,8 +17,10 @@
 
 package Bases.UI.Trade is
 
-    procedure ShowTrade; -- Show trade window
-    function TradeKeys(Key : Key_Code) return GameStates; -- Handle keys in bases trades
-    function TradeFormKeys(Key : Key_Code) return GameStates; -- Handle keys in trade form
+   procedure ShowTrade; -- Show trade window
+   function TradeKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in bases trades
+   function TradeFormKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in trade form
 
 end Bases.UI.Trade;

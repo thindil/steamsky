@@ -1,5 +1,5 @@
 --    Copyright 2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -20,9 +20,14 @@ with Game; use Game;
 
 package Help.UI is
 
-    procedure ShowHelpMenu(NewHelp : Boolean := False); -- Show in-game help menu window
-    procedure ShowHelp(OldState : GameStates := Help_Topic; HelpIndex : Natural := 0); -- Show in-game help on selected topic
-    function HelpMenuKeys(Key : Key_Code) return GameStates; -- Handle keys in help menu window
-    function HelpKeys(Key : Key_Code) return GameStates; -- Handle keys in help window
+   procedure ShowHelpMenu
+     (NewHelp: Boolean := False); -- Show in-game help menu window
+   procedure ShowHelp
+     (OldState: GameStates := Help_Topic;
+      HelpIndex: Natural := 0); -- Show in-game help on selected topic
+   function HelpMenuKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in help menu window
+   function HelpKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in help window
 
 end Help.UI;

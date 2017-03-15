@@ -1,5 +1,5 @@
 --    Copyright 2016-2017 Bartek thindil Jasicki
---    
+--
 --    This file is part of Steam Sky.
 --
 --    Steam Sky is free software: you can redistribute it and/or modify
@@ -20,20 +20,28 @@ with Game; use Game;
 
 package Events is
 
-    type Events_Types is (None, EnemyShip, AttackOnBase, Disease, DoublePrice, FullDocks, EnemyPatrol); -- Types of events
-    type EventData is -- Data structure for random events
-        record
-            EType : Events_Types; -- Type of event
-            SkyX : Integer; -- X coordinate on sky map
-            SkyY : Integer; -- Y coordinate on sky map
-            Time : Integer; -- Time to end of event
-            Data : Positive; -- Various data for event (for example index of enemy ship)
-        end record;
-    package Events_Container is new Vectors(Positive, EventData);
-    Events_List : Events_Container.Vector;
-    
-    function CheckForEvent(OldState : GameStates) return GameStates; -- Check if event happen
-    procedure UpdateEvents(Minutes : Positive); -- Update all events timers
-    procedure DeleteEvent(EventIndex : Positive); -- Delete selected event
+   type Events_Types is
+     (None,
+      EnemyShip,
+      AttackOnBase,
+      Disease,
+      DoublePrice,
+      FullDocks,
+      EnemyPatrol); -- Types of events
+   type EventData is -- Data structure for random events
+   record
+      EType: Events_Types; -- Type of event
+      SkyX: Integer; -- X coordinate on sky map
+      SkyY: Integer; -- Y coordinate on sky map
+      Time: Integer; -- Time to end of event
+      Data: Positive; -- Various data for event (for example index of enemy ship)
+   end record;
+   package Events_Container is new Vectors(Positive, EventData);
+   Events_List: Events_Container.Vector;
+
+   function CheckForEvent
+     (OldState: GameStates) return GameStates; -- Check if event happen
+   procedure UpdateEvents(Minutes: Positive); -- Update all events timers
+   procedure DeleteEvent(EventIndex: Positive); -- Delete selected event
 
 end Events;
