@@ -47,4 +47,11 @@ project steamsky is
         end case;
     end Linker;
 
+    package Pretty_Printer is
+        for Default_Switches("ada") use ("--RM-style-spacing", 
+                "--no-separate-loop-then", 
+                "--no-separate-is",
+                "-rnb");
+    end Pretty_Printer;
+
 end steamsky;
