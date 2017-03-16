@@ -43,6 +43,10 @@ directory.
 For detailed informations about modifying various game elements, see
 [MODDING.md](MODDING.md)
 
+## Contributing to project
+For detailed informations about contributing to project (bugs reporting, ideas
+propositions, code conduct, etc), see [CONTRIBUTING.md](CONTRIBUTING.md)
+
 
 That's all for now, as usual, probably I forgot about something important ;)
 
