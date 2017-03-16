@@ -1022,4 +1022,17 @@ Price = 1200
 InstallTime = 90
 Size = 1
 Description = Small, decorated cabin made of iron.
+[82]
+Name = Extended iron cabin
+Type = Cabin
+Weight = 750
+Value = 60
+MaxValue = 60
+Durability = 120
+Material = Iron
+Skill = Engineering
+Price = 2200
+InstallTime = 120
+Size = 1
+Description = Small, decorated cabin made of iron with few better quality furnitures.
 []
