@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Healing crew members
 - Counting used modules space on ships
 - Sending crew members on break on stop upgrading ship module
+- Saving bases reputation which made saves from 0.9 incompatible
 
 ## [0.9] - 2017-03-05
 
