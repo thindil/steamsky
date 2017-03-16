@@ -1002,6 +1002,7 @@ package body Ships.UI.Ship is
                ShowAssignMenu;
                return Assign_Owner;
             elsif OptionIndex = 8 then
+               PlayerShip.UpgradeModule := 0;
                for I in
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
                   if PlayerShip.Crew.Element(I).Order = Upgrading then
@@ -1009,7 +1010,6 @@ package body Ships.UI.Ship is
                      exit;
                   end if;
                end loop;
-               PlayerShip.UpgradeModule := 0;
                AddMessage("You stopped current upgrade.", OrderMessage);
                DrawGame(Ship_Info);
                return Ship_Info;
