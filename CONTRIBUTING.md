@@ -37,3 +37,16 @@ Body:
 3. Select option "Trade" from menu with arrows keys
 4. Press enter
 5. Game crashing
+
+## Features propositions
+
+At this moment, please, don't give any propositions about new game features or
+mechanic. I have my own long TODO list and your propositions can duplicate or
+be against my ideas. Of course, if you really want, you can always start
+discussion about new feature, just I'm afraid, it may take long time to
+implement it into game.
+If you want to talk/propose changes in any existing in game feature or 
+mechanic, feel free to contact me via issues tracker or mail (addresses of 
+both you can find at top of this file). General rule about propositions is 
+same as for bugs reports - please, try write that much informations as 
+possible. This help us all better understand purpose of your changes.
