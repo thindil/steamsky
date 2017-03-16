@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Healing crew members
 - Counting used modules space on ships
+- Sending crew members on break on stop upgrading ship module
 
 ## [0.9] - 2017-03-05
 
