@@ -33,7 +33,7 @@ with Utils; use Utils;
 
 package body Game is
 
-   SaveVersion: constant String := "0.9";
+   SaveVersion: constant String := "1.0";
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
@@ -439,12 +439,14 @@ package body Game is
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).AskedForEvents.Day));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            RawValue :=
-              To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(1)));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            RawValue :=
-              To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(2)));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         end if;
+         RawValue :=
+           To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(1)));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         RawValue :=
+           To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(2)));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         if SkyBases(I).Visited.Year > 0 then
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).MissionsDate.Year));
@@ -832,8 +834,10 @@ package body Game is
               Natural'Value(To_String(ReadData));
             SkyBases(I).AskedForEvents.Day :=
               Natural'Value(To_String(ReadData));
-            SkyBases(I).Reputation(1) := Integer'Value(To_String(ReadData));
-            SkyBases(I).Reputation(2) := Integer'Value(To_String(ReadData));
+         end if;
+         SkyBases(I).Reputation(1) := Integer'Value(To_String(ReadData));
+         SkyBases(I).Reputation(2) := Integer'Value(To_String(ReadData));
+         if SkyBases(I).Visited.Year > 0 then
             SkyBases(I).MissionsDate.Year :=
               Natural'Value(To_String(ReadData));
             SkyBases(I).MissionsDate.Month :=
