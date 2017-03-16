@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship modules: small iron engine, small advanced iron engine, medium 
   iron engine, medium advanced iron engine, large iron engine, large advanced
-  iron engine, huge iron engine, advanced huge iron engine, basic iron cabin
-  and advanced iron cabin
+  iron engine, huge iron engine, advanced huge iron engine, basic iron cabin,
+  advanced iron cabin and extended iron cabin
 - Modding guide: MODDING.md
 - Contributing guide: CONTRIBUTING.md
 
