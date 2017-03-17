@@ -138,6 +138,7 @@ package body Events is
                                Engines.Last_Index)),
                            "Durability",
                            "-1");
+                        UpdateOrders;
                      else
                         AddMessage
                           (To_String(PlayerShip.Crew.Element(CrewIndex).Name) &
