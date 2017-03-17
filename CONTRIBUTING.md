@@ -70,7 +70,7 @@ But before you send your changes to project, please use command `gnatpp` which
 automatically format source code to project coding standard. Proper `gnatpp`
 command usage (in main project directory, where *steamsky.gpr* file is):
 
-`gnatpp -P steamsky.gpr`
+`gnatpp -P steamsky.gpr --incremental`
 
 ### Code submission
 
