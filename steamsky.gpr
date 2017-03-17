@@ -51,7 +51,8 @@ project steamsky is
         for Default_Switches("ada") use ("--RM-style-spacing", 
                 "--no-separate-loop-then", 
                 "--no-separate-is",
-                "-rnb");
+                "-rnb",
+                "-j0");
     end Pretty_Printer;
 
 end steamsky;
