@@ -50,3 +50,31 @@ mechanic, feel free to contact me via issues tracker or mail (addresses of
 both you can find at top of this file). General rule about propositions is 
 same as for bugs reports - please, try write that much informations as 
 possible. This help us all better understand purpose of your changes.
+
+## Code propositions
+
+### General informations
+
+If you want start help in game development, please consider starts from
+something easy like fixing bugs. Before you been want to add new feature to
+game, please contact with me by issues tracker or mail, addresses of both are
+at top of this file. Same as with features proposition - your code may
+"collide" with my work and it this moment you may just lost time by working on
+it. So it is better that we first discuss your proposition. In any other case,
+fell free to fix my code.
+
+### Coding standard
+
+When you write your own code, feel free to use any coding standard you want.
+But before you send your changes to project, please use command `gnatpp` which
+automatically format source code to project coding standard. Proper `gnatpp`
+command usage (in main project directory, where *steamsky.gpr* file is):
+
+`gnatpp -P steamsky.gpr`
+
+### Code submission
+
+Preferred way to submit your code is clone repository and then open new pull
+proposal at <https://github.com/thindil/steamsky/compare>. But if you prefer,
+you can send your code by mail too (email address is at top of this file). In
+that situation, please append to your mail patch file with changes.
