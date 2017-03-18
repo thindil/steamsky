@@ -224,6 +224,7 @@ package body Game is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       TiredPoints: Natural := 0;
+      NeedCleaning : Boolean := False;
    begin
       for I in 1 .. Minutes loop
          if ((GameDate.Minutes + I) rem 15) = 0 then
@@ -242,21 +243,16 @@ package body Game is
       if GameDate.Hour > 23 then
          GameDate.Hour := GameDate.Hour - 24;
          GameDate.Day := GameDate.Day + 1;
-         for I in
-           PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index loop
-            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex)
-                .MType =
-              CABIN and
-              PlayerShip.Modules.Element(I).Current_Value > 0 then
-               UpdateModule
-                 (PlayerShip,
-                  I,
-                  "Current_Value",
-                  Natural'
-                    Image
-                      (PlayerShip.Modules.Element(I).Current_Value - 1));
+         for Module of PlayerShip.Modules loop
+            if Modules_List.Element(Module.ProtoIndex).MType = CABIN and
+              Module.Current_Value > 0 then
+              Module.Current_Value := Module.Current_Value - 1;
+              NeedCleaning := True;
             end if;
          end loop;
+         if NeedCleaning then
+             UpdateOrders;
+         end if;
       end if;
       if GameDate.Day > 30 then
          GameDate.Day := 1;
