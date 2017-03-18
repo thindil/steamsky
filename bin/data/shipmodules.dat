@@ -1048,4 +1048,17 @@ Price = 4500
 InstallTime = 150
 Size = 1
 Description = Small, decorated, cabin made of iron, well equiped with hight quality furniture.
+[84]
+Name = Small iron turret
+Type = Turret
+Weight = 60
+Value = 0
+MaxValue = 0
+Durability = 220
+Material = Iron
+Skill = Engineering
+Price = 600
+InstallTime = 60
+Size = 1
+Description = Smallest available turret made of iron. If turret is destroyed, gun is destroyed too and gunner killed.
 []
