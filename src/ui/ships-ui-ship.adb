@@ -23,6 +23,7 @@ with Crafts; use Crafts;
 with Maps; use Maps;
 with Help.UI; use Help.UI;
 with Ships.Cargo; use Ships.Cargo;
+with Ships.Upgrade; use Ships.Upgrade;
 
 package body Ships.UI.Ship is
 

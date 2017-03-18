@@ -20,6 +20,7 @@ with Ada.Directories; use Ada.Directories;
 with Bases; use Bases;
 with Maps; use Maps;
 with Ships; use Ships;
+with Ships.Upgrade; use Ships.Upgrade;
 with Crew; use Crew;
 with Messages; use Messages;
 with Crafts; use Crafts;
