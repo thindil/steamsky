@@ -108,9 +108,6 @@ package Ships is
    function CountShipWeight
      (Ship: ShipRecord)
      return Positive; -- Count weight of ship (with modules and cargo)
-   procedure StartUpgrading
-     (ModuleIndex, UpgradeType: Positive); -- Set upgrading order
-   procedure UpgradeShip(Minutes: Positive); -- Upgrade selected module on ship
    procedure RepairShip(Minutes: Positive); -- Repair ship modules
    function GenerateShipName
      (Owner: Bases_Owners :=
