@@ -187,7 +187,6 @@ package body Crew.UI is
            Module.Current_Value < Module.Max_Value and
            not NeedClean then
             NeedClean := True;
-            exit;
          end if;
          if not NeedRepairs and Module.Durability < Module.MaxDurability then
             if FindCargo
@@ -197,7 +196,7 @@ package body Crew.UI is
                NeedRepairs := True;
             end if;
          end if;
-         if NeedRepairs then
+         if NeedRepairs and NeedClean then
             exit;
          end if;
       end loop;
