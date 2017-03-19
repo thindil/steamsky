@@ -224,7 +224,7 @@ package body Game is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       TiredPoints: Natural := 0;
-      NeedCleaning : Boolean := False;
+      NeedCleaning: Boolean := False;
    begin
       for I in 1 .. Minutes loop
          if ((GameDate.Minutes + I) rem 15) = 0 then
@@ -246,12 +246,12 @@ package body Game is
          for Module of PlayerShip.Modules loop
             if Modules_List.Element(Module.ProtoIndex).MType = CABIN and
               Module.Current_Value > 0 then
-              Module.Current_Value := Module.Current_Value - 1;
-              NeedCleaning := True;
+               Module.Current_Value := Module.Current_Value - 1;
+               NeedCleaning := True;
             end if;
          end loop;
          if NeedCleaning then
-             UpdateOrders;
+            UpdateOrders;
          end if;
       end if;
       if GameDate.Day > 30 then
