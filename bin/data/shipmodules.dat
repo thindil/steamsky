@@ -1061,4 +1061,17 @@ Price = 600
 InstallTime = 60
 Size = 1
 Description = Smallest available turret made of iron. If turret is destroyed, gun is destroyed too and gunner killed.
+[85]
+Name = Iron turret
+Type = Turret
+Weight = 100
+Value = 0
+MaxValue = 0
+Durability = 320
+Material = Iron
+Skill = Engineering
+Price = 850
+InstallTime = 90
+Size = 1
+Description = Standard iron turret. If turret is destroyed, gun is destroyed too and gunner killed.
 []
