@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Sending crew members on break on stop upgrading ship module
 - Saving bases reputation which made saves from 0.9 incompatible
 - Showing orders for all crew
+- Crash on lack of upgrading tools during upgrade ship
 
 ## [0.9] - 2017-03-05
 
