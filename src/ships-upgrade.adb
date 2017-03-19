@@ -231,6 +231,25 @@ package body Ships.Upgrade is
       begin
          Member.OrderTime := OrderTime;
       end UpdateMember;
+      procedure FindMatsAndTools is
+      begin
+         UpgradeMaterial := 0;
+         UpgradeTools := 0;
+         for I in
+           PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
+            if Items_List(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
+              Modules_List
+                (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
+                .RepairMaterial then
+               UpgradeMaterial := I;
+            elsif Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex)
+                .IType =
+              To_Unbounded_String("RepairTools") then
+               UpgradeTools := I;
+            end if;
+            exit when UpgradeMaterial > 0 and UpgradeTools > 0;
+         end loop;
+      end FindMatsAndTools;
    begin
       WorkerIndex := FindMember(Upgrading);
       if WorkerIndex = 0 then
@@ -273,21 +292,7 @@ package body Ships.Upgrade is
               PlayerShip.Modules.Element(PlayerShip.UpgradeModule)
                 .UpgradeProgress;
          end if;
-         UpgradeMaterial := 0;
-         for I in
-           PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-            if Items_List(PlayerShip.Cargo.Element(I).ProtoIndex).IType =
-              Modules_List
-                (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
-                .RepairMaterial then
-               UpgradeMaterial := I;
-            elsif Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex)
-                .IType =
-              To_Unbounded_String("RepairTools") then
-               UpgradeTools := I;
-            end if;
-            exit when UpgradeMaterial > 0 and UpgradeTools > 0;
-         end loop;
+         FindMatsAndTools;
          if UpgradeMaterial = 0 then
             AddMessage
               ("You don't have enough materials to upgrade " &
@@ -322,6 +327,7 @@ package body Ships.Upgrade is
             Modules_List.Element
             (PlayerShip.Modules.Element(PlayerShip.UpgradeModule).ProtoIndex)
               .RepairSkill);
+         FindMatsAndTools;
          UpgradeProgress :=
            PlayerShip.Modules.Element(PlayerShip.UpgradeModule)
              .UpgradeProgress -
