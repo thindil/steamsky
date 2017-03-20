@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
   iron engine, medium advanced iron engine, large iron engine, large advanced
   iron engine, huge iron engine, advanced huge iron engine, basic iron cabin,
   advanced iron cabin, extended iron cabin, luxury iron cabin, small iron
-  turret and iron turret
+  turret, iron turret and heavy iron turret
 - Modding guide: MODDING.md
 - Contributing guide: CONTRIBUTING.md
 
