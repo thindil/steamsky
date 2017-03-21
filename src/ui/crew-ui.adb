@@ -300,7 +300,7 @@ package body Crew.UI is
                end case;
             end if;
          end loop;
-         if NeedRepairs then
+         if NeedRepairs and PlayerShip.Crew.Element(MemberIndex).Order /= Repair then
             OrdersAmount := OrdersAmount + 1;
          end if;
          if PlayerShip.Crew.Element(MemberIndex).Order /= Rest then
@@ -386,7 +386,7 @@ package body Crew.UI is
                end case;
             end if;
          end loop;
-         if NeedRepairs then
+         if NeedRepairs and PlayerShip.Crew.Element(MemberIndex).Order /= Repair then
             Orders_Items.all(MenuIndex) := New_Item("Repair ship", "0");
             MenuIndex := MenuIndex + 1;
          end if;
