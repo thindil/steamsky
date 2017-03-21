@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Saving bases reputation which made saves from 0.9 incompatible
 - Showing orders for all crew
 - Crash on lack of upgrading tools during upgrade ship
+- Crash on giving orders to crew members
 
 ## [0.9] - 2017-03-05
 
