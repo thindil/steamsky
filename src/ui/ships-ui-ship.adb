@@ -991,6 +991,7 @@ package body Ships.UI.Ship is
             if OptionIndex /= 5 and OptionIndex < 7 then
                if OptionIndex < 5 then
                   StartUpgrading(CurrentMenuIndex, OptionIndex);
+                  UpdateOrders;
                end if;
                DrawGame(Ship_Info);
                return Ship_Info;
