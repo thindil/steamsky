@@ -1087,4 +1087,18 @@ Price = 1100
 InstallTime = 120
 Size = 1
 Description = Heaviest iron turret. If turret is destroyed, gun is destroyed too and gunner killed.
+[87]
+Name = Iron battering ram
+Type = Battering_ram
+Weight = 600
+Value = 0
+MaxValue = 12
+Durability = 120
+Material = Iron
+Skill = Engineering
+Price = 600
+InstallTime = 100
+Unique = Yes
+Size = 1
+Description = Standard battering ram, made of iron. Attack enemies automatically when in close range.
 []
