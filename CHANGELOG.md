@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated README.md
 - Better handling orders priorities
+- Updated interface
 
 ### Fixed
 - Healing crew members
