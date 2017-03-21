@@ -326,7 +326,8 @@ package body Crew.UI is
          if PlayerShip.Crew.Element(MemberIndex).Order /= Talk then
             OrdersAmount := OrdersAmount + 1;
          end if;
-         if NeedClean then
+         if NeedClean and
+           PlayerShip.Crew.Element(MemberIndex).Order /= Clean then
             OrdersAmount := OrdersAmount + 1;
          end if;
          Orders_Items := new Item_Array(1 .. (OrdersAmount + 1));
