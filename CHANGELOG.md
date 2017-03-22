@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Better handling orders priorities
 - Updated interface
+- Reduced chance to encounter stronger enemies
 
 ### Fixed
 - Healing crew members
