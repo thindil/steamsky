@@ -129,21 +129,42 @@ package body Bases.UI.Trade is
          CurrentLine := CurrentLine + 2;
       end if;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-      Add
-        (Win => InfoWindow,
-         Str => "ENTER to buy selected item, SPACE for sell.");
-      Change_Attributes
-        (Win => InfoWindow,
-         Line => CurrentLine,
-         Column => 0,
-         Count => 5,
-         Color => 1);
-      Change_Attributes
-        (Win => InfoWindow,
-         Line => CurrentLine,
-         Column => 28,
-         Count => 5,
-         Color => 1);
+      if Items_List.Element(ItemIndex).Buyable(BaseType) and
+        CargoIndex > 0 then
+         Add
+           (Win => InfoWindow,
+            Str => "ENTER to buy selected item, SPACE for sell.");
+         Change_Attributes
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => 0,
+            Count => 5,
+            Color => 1);
+         Change_Attributes
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => 28,
+            Count => 5,
+            Color => 1);
+      elsif Items_List.Element(ItemIndex).Buyable(BaseType) and
+        CargoIndex = 0 then
+         Add(Win => InfoWindow, Str => "ENTER to buy selected item.");
+         Change_Attributes
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => 0,
+            Count => 5,
+            Color => 1);
+      elsif not Items_List.Element(ItemIndex).Buyable(BaseType) and
+        CargoIndex > 0 then
+         Add(Win => InfoWindow, Str => "SPACE for sell selected item.");
+         Change_Attributes
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => 0,
+            Count => 5,
+            Color => 1);
+      end if;
       Refresh;
       Refresh(InfoWindow);
       Delete(InfoWindow);
