@@ -40,7 +40,7 @@ package body Events is
       procedure GenerateEnemies(Owner: Bases_Owners := Any) is
       begin
          EnemyIndex := ProtoShips_List.First_Index;
-         if GetRandom(1, 100) < 95 then
+         if GetRandom(1, 100) < 99 then
             for Module of PlayerShip.Modules loop
                case Modules_List.Element(Module.ProtoIndex).MType is
                   when HULL | GUN | BATTERING_RAM =>
