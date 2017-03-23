@@ -1115,4 +1115,18 @@ InstallTime = 60
 Unique = Yes
 Size = 1
 Description = Weak battering ram, made of iron. Attack enemies automatically when in close range.
+[89]
+Name = Heavy iron battering ram
+Type = Battering_ram
+Weight = 800
+Value = 0
+MaxValue = 22
+Durability = 175
+Material = Iron
+Skill = Engineering
+Price = 1200
+InstallTime = 150
+Unique = Yes
+Size = 1
+Description = Heavy battering ram, made of iron. Attack enemies automatically when in close range.
 []
