@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
   battering ram and heavy iron battering ram
 - Modding guide: MODDING.md
 - Contributing guide: CONTRIBUTING.md
+- New enemy ship: tiny pirates ship mk II
 
 ### Changed
 - Updated README.md
