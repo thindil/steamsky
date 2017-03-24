@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Showing orders for all crew
 - Crash on lack of upgrading tools during upgrade ship
 - Crash on giving orders to crew members
+- Orders menu when player returns with finished mission
 
 ## [0.9] - 2017-03-05
 
