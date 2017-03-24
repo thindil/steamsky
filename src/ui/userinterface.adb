@@ -488,7 +488,8 @@ package body UserInterface is
                   if
                     (Mission.TargetX = PlayerShip.SkyX and
                      Mission.TargetY = PlayerShip.SkyY) and
-                    Mission.MType /= Deliver and not Mission.Finished then
+                    Mission.MType /= Deliver and
+                    not Mission.Finished then
                      OrdersAmount := OrdersAmount + 1;
                   end if;
                end loop;
@@ -580,7 +581,8 @@ package body UserInterface is
                else
                   for Mission of PlayerShip.Missions loop
                      if Mission.TargetX = PlayerShip.SkyX and
-                       Mission.TargetY = PlayerShip.SkyY and not Mission.Finished then
+                       Mission.TargetY = PlayerShip.SkyY and
+                       not Mission.Finished then
                         case Mission.MType is
                            when Deliver =>
                               null;
