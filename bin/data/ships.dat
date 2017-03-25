@@ -392,4 +392,15 @@ Skills = 1x1, 5x1; 3x1, 5x1
 Orders = Pilot, Gunner
 Description = Smallest known pirates ship (upgraded version). As many pirates they prefer to dismarm enemies first.
 Owner = Pirates
+[36]
+Name = Tiny undead ship mk II
+Modules = 64, 72, 41, 42, 87
+CombatAI = Berserker
+LootMin = 10
+LootMax = 100
+Cargo = 750..1000x1
+Skills = 1x1, 5x1
+Orders = Pilot
+Description = Smallest known undead ship (upgraded version). Dangerous at close range.
+Owner = Undead
 []
