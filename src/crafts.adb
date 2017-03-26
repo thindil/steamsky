@@ -264,27 +264,21 @@ package body Crafts is
          Member.OrderTime := WorkTime;
       end UpdateMember;
    begin
-      for L in
-        PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index loop
-         if PlayerShip.Modules.Element(L).Owner > 0 and
-           (Modules_List.Element(PlayerShip.Modules.Element(L).ProtoIndex)
-              .MType in
-              Workplaces) and
-           PlayerShip.Modules.Element(L).Current_Value /= 0 then
-            CrafterIndex := PlayerShip.Modules.Element(L).Owner;
+      for Module of PlayerShip.Modules loop
+         if Module.Owner > 0 and
+           (Modules_List.Element(Module.ProtoIndex).MType in Workplaces) and
+           Module.Current_Value /= 0 then
+            CrafterIndex := Module.Owner;
             if PlayerShip.Crew.Element(CrafterIndex).Order = Craft then
                CurrentMinutes := Minutes;
-               RecipeTime := PlayerShip.Modules.Element(L).Max_Value;
-               if PlayerShip.Modules.Element(L).Current_Value > 0 then
-                  Recipe :=
-                    Recipes_List.Element
-                    (PlayerShip.Modules.Element(L).Current_Value);
+               RecipeTime := Module.Max_Value;
+               if Module.Current_Value > 0 then
+                  Recipe := Recipes_List.Element(Module.Current_Value);
                   RecipeName :=
                     To_Unbounded_String("manufacturing ") &
                     Items_List.Element(Recipe.ResultIndex).Name;
                else
-                  Recipe.ResultIndex :=
-                    abs (PlayerShip.Modules.Element(L).Current_Value);
+                  Recipe.ResultIndex := abs (Module.Current_Value);
                   Recipe.MaterialTypes.Append
                   (New_Item => Items_List.Element(Recipe.ResultIndex).IType);
                   Recipe.MaterialAmounts.Append(New_Item => 1);
@@ -313,7 +307,7 @@ package body Crafts is
                      WorkTime := WorkTime - RecipeTime;
                      RecipeTime := Recipe.Time;
                      MaterialIndexes.Clear;
-                     if PlayerShip.Modules.Element(L).Current_Value > 0 then
+                     if Module.Current_Value > 0 then
                         for J in
                           PlayerShip.Cargo.First_Index ..
                               PlayerShip.Cargo.Last_Index loop
@@ -349,14 +343,8 @@ package body Crafts is
                            ".",
                            CraftMessage);
                         GiveOrders(CrafterIndex, Rest);
-                        UpdateModule(PlayerShip, L, "Current_Value", "0");
-                        UpdateModule
-                          (PlayerShip,
-                           L,
-                           "Max_Value",
-                           Integer'
-                             Image
-                               (0 - PlayerShip.Modules.Element(L).Max_Value));
+                        Module.Current_Value := 0;
+                        Module.Max_Value := 0;
                         exit Craft_Loop;
                      end if;
                      if Recipe.Tool /= To_Unbounded_String("None") then
@@ -382,14 +370,8 @@ package body Crafts is
                            To_String(RecipeName) &
                            ".",
                            CraftMessage);
-                        UpdateModule(PlayerShip, L, "Current_Value", "0");
-                        UpdateModule
-                          (PlayerShip,
-                           L,
-                           "Max_Value",
-                           Integer'
-                             Image
-                               (0 - PlayerShip.Modules.Element(L).Max_Value));
+                        Module.Current_Value := 0;
+                        Module.Max_Value := 0;
                         GiveOrders(CrafterIndex, Rest);
                         exit Craft_Loop;
                      end if;
@@ -417,8 +399,8 @@ package body Crafts is
                      Damage :=
                        1.0 -
                        DamageFactor
-                         (Float(PlayerShip.Modules.Element(L).Durability) /
-                          Float(PlayerShip.Modules.Element(L).MaxDurability));
+                         (Float(Module.Durability) /
+                          Float(Module.MaxDurability));
                      ResultAmount :=
                        ResultAmount -
                        Natural(Float(ResultAmount) * Float(Damage));
@@ -436,15 +418,8 @@ package body Crafts is
                               To_String(RecipeName) &
                               ".",
                               CraftMessage);
-                           UpdateModule(PlayerShip, L, "Current_Value", "0");
-                           UpdateModule
-                             (PlayerShip,
-                              L,
-                              "Max_Value",
-                              Integer'
-                                Image
-                                  (0 -
-                                   PlayerShip.Modules.Element(L).Max_Value));
+                           Module.Current_Value := 0;
+                           Module.Max_Value := 0;
                            GiveOrders(CrafterIndex, Rest);
                            exit Craft_Loop;
                         end if;
@@ -462,7 +437,7 @@ package body Crafts is
                      if ToolIndex > 0 then
                         DamageCargo(ToolIndex, CrafterIndex, Recipe.Skill);
                      end if;
-                     if PlayerShip.Modules.Element(L).Current_Value > 0 then
+                     if Module.Current_Value > 0 then
                         Amount :=
                           Amount -
                           (Items_List.Element(Recipe.ResultIndex).Weight *
@@ -473,22 +448,14 @@ package body Crafts is
                               To_String(RecipeName) &
                               ".",
                               CraftMessage);
-                           UpdateModule(PlayerShip, L, "Current_Value", "0");
-                           UpdateModule
-                             (PlayerShip,
-                              L,
-                              "Max_Value",
-                              Integer'
-                                Image
-                                  (0 -
-                                   PlayerShip.Modules.Element(L).Max_Value));
+                           Module.Current_Value := 0;
+                           Module.Max_Value := 0;
                            GiveOrders(CrafterIndex, Rest);
                            exit Craft_Loop;
                         end if;
                         UpdateCargo
                           (PlayerShip,
-                           Recipes_List.Element
-                           (PlayerShip.Modules.Element(L).Current_Value)
+                           Recipes_List.Element(Module.Current_Value)
                              .ResultIndex,
                            ResultAmount);
                         GameStats.CraftingOrders :=
@@ -511,14 +478,7 @@ package body Crafts is
                      CurrentMinutes := 0;
                   end if;
                end loop Craft_Loop;
-               UpdateModule
-                 (PlayerShip,
-                  L,
-                  "Max_Value",
-                  Positive'
-                    Image
-                      ((0 - PlayerShip.Modules.Element(L).Max_Value) +
-                       RecipeTime));
+               Module.Max_Value := RecipeTime;
                if CraftedAmount > 0 then
                   if Recipe.ResultAmount > 0 then
                      AddMessage
@@ -550,16 +510,9 @@ package body Crafts is
                   end if;
                   PlayerShip.Crew.Update_Element
                   (Index => CrafterIndex, Process => UpdateMember'Access);
-                  if PlayerShip.Modules.Element(L).Current_Value < 0 and
-                    CraftedAmount > 0 then
-                     UpdateModule(PlayerShip, L, "Current_Value", "0");
-                     UpdateModule
-                       (PlayerShip,
-                        L,
-                        "Max_Value",
-                        Integer'
-                          Image
-                            (0 - PlayerShip.Modules.Element(L).Max_Value));
+                  if Module.Current_Value < 0 and CraftedAmount > 0 then
+                     Module.Current_Value := 0;
+                     Module.Max_Value := 0;
                      GiveOrders(CrafterIndex, Rest);
                   end if;
                end if;
