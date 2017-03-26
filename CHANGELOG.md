@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Crash on lack of upgrading tools during upgrade ship
 - Crash on giving orders to crew members
 - Orders menu when player returns with finished mission
+- Sending worker on break after finished crafting
 
 ## [0.9] - 2017-03-05
 
