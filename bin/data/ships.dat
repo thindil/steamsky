@@ -403,4 +403,15 @@ Skills = 1x1, 5x1
 Orders = Pilot
 Description = Smallest known undead ship (upgraded version). Dangerous at close range.
 Owner = Undead
+[37]
+Name = Small pirates ship mk II
+Modules = 64, 72, 80, 80, 80, 41, 42, 42, 84, 9
+CombatAI = Disarmer
+LootMin = 20
+LootMax = 200
+Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13
+Skills = 1x3, 5x2..4; 3x3, 5x2..4; 2x3..6
+Orders = Pilot, Gunner, Engineer
+Description = Small, fast pirate vessel. As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
 []
