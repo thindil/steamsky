@@ -342,9 +342,9 @@ package body Crafts is
                            To_String(RecipeName) &
                            ".",
                            CraftMessage);
-                        GiveOrders(CrafterIndex, Rest);
                         Module.Current_Value := 0;
                         Module.Max_Value := 0;
+                        GiveOrders(CrafterIndex, Rest);
                         exit Craft_Loop;
                      end if;
                      if Recipe.Tool /= To_Unbounded_String("None") then
