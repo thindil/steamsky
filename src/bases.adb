@@ -520,25 +520,26 @@ package body Bases is
             HullIndex,
             "Current_Value",
             Positive'Image(ModulesAmount));
-         if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
-            GiveOrders(PlayerShip.Modules.Element(ModuleIndex).Owner, Rest);
-         end if;
          if PlayerShip.UpgradeModule = ModuleIndex then
             PlayerShip.UpgradeModule := 0;
             for I in
               PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
                if PlayerShip.Crew.Element(I).Order = Upgrading then
                   GiveOrders(I, Rest);
+                  exit;
                end if;
             end loop;
-         end if;
-         if PlayerShip.RepairModule = ModuleIndex then
-            PlayerShip.RepairModule := 0;
          end if;
          UpdateGame
            (Modules_List.Element
             (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
               .InstallTime);
+         if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
+            GiveOrders
+              (MemberIndex => PlayerShip.Modules.Element(ModuleIndex).Owner,
+               GivenOrder => Rest,
+               CheckPriorities => False);
+         end if;
          UpdateCargo(PlayerShip, 1, Price);
          GainExp(1, 4, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
@@ -557,8 +558,6 @@ package body Bases is
          end if;
          if PlayerShip.UpgradeModule > ModuleIndex then
             PlayerShip.UpgradeModule := PlayerShip.UpgradeModule - 1;
-         elsif PlayerShip.UpgradeModule = ModuleIndex then
-            PlayerShip.UpgradeModule := 0;
          end if;
          for Module of PlayerShip.Modules loop
             if Modules_List.Element(Module.ProtoIndex).MType = TURRET then
