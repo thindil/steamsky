@@ -451,7 +451,6 @@ package body Maps is
 
    function SkyMapKeys(Key: Key_Code) return Integer is
       Result: Integer := 1;
-      NewKey: Key_Code;
       NewX, NewY: Integer := 0;
    begin
       case Key is
@@ -522,21 +521,12 @@ package body Maps is
             MoveX := MoveX + 1;
             MoveY := MoveY + 1;
             Result := 4;
-         when 27 => -- Map moving with arrows keys
-            NewKey := Get_Keystroke;
-            if NewKey = 91 then
-               NewKey := Get_Keystroke;
-               case NewKey is
-                  when 97 => -- Move map up
-                     MoveY := MoveY - 1;
-                     Result := 4;
-                  when 98 => -- Move map down
-                     MoveY := MoveY + 1;
-                     Result := 4;
-                  when others =>
-                     Result := 0;
-               end case;
-            end if;
+         when 337 => -- Move map up
+            MoveY := MoveY - 1;
+            Result := 4;
+         when 336 => -- Move map down
+            MoveY := MoveY + 1;
+            Result := 4;
          when Character'Pos(' ') => -- Center on ship
             CenterMap;
             Result := 4;
