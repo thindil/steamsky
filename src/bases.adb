@@ -492,16 +492,10 @@ package body Bases is
                   return;
                end if;
             when GUN =>
-               for I in
-                 PlayerShip.Modules.First_Index ..
-                     PlayerShip.Modules.Last_Index loop
-                  if Modules_List.Element
-                    (PlayerShip.Modules.Element(I).ProtoIndex)
-                      .MType =
-                    TURRET and
-                    PlayerShip.Modules.Element(I).Current_Value =
-                      ModuleIndex then
-                     UpdateModule(PlayerShip, I, "Current_Value", "0");
+               for Module of PlayerShip.Modules loop
+                  if Modules_List.Element(Module.ProtoIndex).MType = TURRET and
+                    Module.Current_Value = ModuleIndex then
+                     Module.Current_Value := 0;
                      exit;
                   end if;
                end loop;
@@ -566,20 +560,10 @@ package body Bases is
          elsif PlayerShip.UpgradeModule = ModuleIndex then
             PlayerShip.UpgradeModule := 0;
          end if;
-         for I in
-           PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index loop
-            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex)
-                .MType =
-              TURRET then
-               if PlayerShip.Modules.Element(I).Current_Value >
-                 ModuleIndex then
-                  UpdateModule
-                    (PlayerShip,
-                     I,
-                     "Current_Value",
-                     Positive'
-                       Image
-                         (PlayerShip.Modules.Element(I).Current_Value - 1));
+         for Module of PlayerShip.Modules loop
+            if Modules_List.Element(Module.ProtoIndex).MType = TURRET then
+               if Module.Current_Value > ModuleIndex then
+                  Module.Current_Value := Module.Current_Value - 1;
                end if;
             end if;
          end loop;
