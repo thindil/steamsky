@@ -425,4 +425,16 @@ Skills = 1x1, 5x1..4
 Orders = Pilot
 Description = Small undead flying vessel (upgraded version). Dangerous at close range.
 Owner = Undead
+[39]
+Name = Small clockwork drone mk II
+Modules = 64, 72, 42, 87
+Accuracy = 3..8
+CombatAI = Berserker
+Evasion = 3..8
+LootMin = 10
+LootMax = 100
+Perception = 7..12
+Cargo = 500..1000x1
+Description = Small flying clockwork drone. Dangerous at close range.
+Owner = Drones
 []
