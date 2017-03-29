@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Sending worker on break after finished crafting
 - Sending gunner on break when selling guns
 - Crash on finishing crafting
+- Dropping damaged items from cargo
 
 ## [0.9] - 2017-03-05
 
