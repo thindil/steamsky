@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Orders menu when player returns with finished mission
 - Sending worker on break after finished crafting
 - Sending gunner on break when selling guns
+- Crash on finishing crafting
 
 ## [0.9] - 2017-03-05
 
