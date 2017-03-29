@@ -164,7 +164,8 @@ package body Ships.UI is
             UpdateCargo
               (PlayerShip,
                PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
-               (0 - DropAmount));
+               (0 - DropAmount),
+               PlayerShip.Cargo.Element(ItemIndex).Durability);
          end if;
       end if;
       Set_Cursor_Visibility(Visibility);
