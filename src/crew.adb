@@ -809,7 +809,8 @@ package body Crew is
                   when ALCHEMY_LAB .. GREENHOUSE =>
                      if Order = Craft and
                        PlayerShip.Modules.Element(I).Owner = 0 and
-                       PlayerShip.Modules.Element(I).Durability > 0 then
+                       PlayerShip.Modules.Element(I).Durability > 0 and
+                       PlayerShip.Modules.Element(I).Current_Value /= 0 then
                         ModuleIndex := I;
                         exit;
                      end if;
