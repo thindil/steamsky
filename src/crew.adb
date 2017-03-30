@@ -664,36 +664,16 @@ package body Crew is
                         end if;
                      end loop;
                      if ToolIndex > 0 then
-                        for J in
-                          PlayerShip.Modules.First_Index ..
-                              PlayerShip.Modules.Last_Index loop
-                           if Modules_List.Element
-                             (PlayerShip.Modules.Element(J).ProtoIndex)
-                               .MType =
+                        for Module of PlayerShip.Modules loop
+                           if Modules_List.Element(Module.ProtoIndex).MType =
                              CABIN and
-                             PlayerShip.Modules.Element(J).Current_Value <
-                               PlayerShip.Modules.Element(J).Max_Value then
-                              if PlayerShip.Modules.Element(J).Current_Value +
-                                Times >
-                                PlayerShip.Modules.Element(J).Max_Value then
-                                 UpdateModule
-                                   (PlayerShip,
-                                    J,
-                                    "Current_Value",
-                                    Positive'
-                                      Image
-                                        (PlayerShip.Modules.Element(J)
-                                           .Max_Value));
+                             Module.Current_Value < Module.Max_Value then
+                              if Module.Current_Value + Times >
+                                Module.Max_Value then
+                                 Module.Current_Value := Module.Max_Value;
                               else
-                                 UpdateModule
-                                   (PlayerShip,
-                                    J,
-                                    "Current_Value",
-                                    Positive'
-                                      Image
-                                        (PlayerShip.Modules.Element(J)
-                                           .Current_Value +
-                                         Times));
+                                 Module.Current_Value :=
+                                   Module.Current_Value + Times;
                               end if;
                               DamageCargo(ToolIndex);
                               exit;
