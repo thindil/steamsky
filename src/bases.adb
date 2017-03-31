@@ -439,12 +439,6 @@ package body Bases is
                   FreeTurretIndex,
                   "Current_Value",
                   Positive'Image(PlayerShip.Modules.Last_Index));
-            when HULL =>
-               UpdateModule
-                 (PlayerShip,
-                  PlayerShip.Modules.Last_Index,
-                  "Current_Value",
-                  Positive'Image(ModulesAmount));
             when others =>
                UpdateModule
                  (PlayerShip,
