@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 - Contributing guide: CONTRIBUTING.md
 - New enemy ships: tiny pirates ship mk II, tiny undead ship mk II, small
   pirates ship mk II, small undead ship mk II, small clockwork drone mk II,
-  pirate ship mk II, armored pirate ship mk II and small attacking drone mk II 
+  pirate ship mk II, armored pirate ship mk II and small attacking drone mk II
 
 ### Changed
 - Updated README.md
@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Crash on finishing crafting
 - Dropping damaged items from cargo
 - Return crew member to crafting items from other orders
+- Buying new hull in shipyards
 
 ## [0.9] - 2017-03-05
 
