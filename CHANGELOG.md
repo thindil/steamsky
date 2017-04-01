@@ -14,7 +14,8 @@ All notable changes to this project will be documented in this file.
 - Contributing guide: CONTRIBUTING.md
 - New enemy ships: tiny pirates ship mk II, tiny undead ship mk II, small
   pirates ship mk II, small undead ship mk II, small clockwork drone mk II,
-  pirate ship mk II, armored pirate ship mk II and small attacking drone mk II
+  pirate ship mk II, armored pirate ship mk II, small attacking drone mk II and
+  attacking clockwork drone mk II
 
 ### Changed
 - Updated README.md
