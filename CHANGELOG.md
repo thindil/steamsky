@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Better handling orders priorities
 - Updated interface
 - Reduced chance to encounter stronger enemies
+- Faster gaining reputation in bases
 
 ### Fixed
 - Healing crew members
