@@ -483,4 +483,16 @@ Perception = 5..15
 Cargo = 800..1000x1, 100..500x4
 Description = Standard, very aggresive, upgraded version of clockwork drone.
 Owner = Drones
+[44]
+Name = Armored attacking drone mk II
+Modules = 66, 55, 74, 42, 42, 87, 84, 9
+Accuracy = 3..8
+CombatAI = Berserker
+Evasion = 3..8
+LootMin = 10
+LootMax = 100
+Perception = 5..15
+Cargo = 900..1000x1, 450..500x4, 90..100x13
+Description = Armored, very aggresive, upgraded version of clockwork drone.
+Owner = Drones
 []
