@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - New enemy ship: tiny inquisition ship mk II
 
 ### Changed
+- Merged fields lootmin and lootmax in ships data
 - Updated MODDING.md
 
 ## [1.0] - 2017-04-02
