@@ -160,8 +160,8 @@ ships, ships modules, etc)
   start destroying ship.
 - Evasion: Bonus to evasion for ship. Can be constant value or range from 
   minimum value to max value, separated by `..` (double dots).
-- LootMin: Minimum amount of moneys earned for destroying that ship.
-- LootMax: Maximum amount of moneys earned for destroying that ship.
+- Loot: Amount of moneys earned for destroying that ship. Can be constant value
+  or range from minimum value to max value, separated by `..` (double dots).
 - Perception: Bonus to perception for ship. Can be constant value or range 
   from minimum value to max value, separated by `..` (double dots).
 - Cargo: List of cargo of ship. Each item in cargo is separated by `, ` (comma
