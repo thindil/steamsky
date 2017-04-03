@@ -78,8 +78,7 @@ package body Combat is
          Distance => 10000,
          CombatAI => ProtoShips_List.Element(EnemyIndex).CombatAI,
          Evasion => 0,
-         LootMin => ProtoShips_List.Element(EnemyIndex).LootMin,
-         LootMax => ProtoShips_List.Element(EnemyIndex).LootMax,
+         Loot => 0,
          Perception => 0);
       if ProtoShips_List.Element(EnemyIndex).Accuracy(2) = 0 then
          Enemy.Accuracy := ProtoShips_List.Element(EnemyIndex).Accuracy(1);
@@ -104,6 +103,14 @@ package body Combat is
            GetRandom
              (ProtoShips_List.Element(EnemyIndex).Perception(1),
               ProtoShips_List.Element(EnemyIndex).Perception(2));
+      end if;
+      if ProtoShips_List.Element(EnemyIndex).Loot(2) = 0 then
+         Enemy.Loot := ProtoShips_List.Element(EnemyIndex).Loot(1);
+      else
+         Enemy.Loot :=
+           GetRandom
+             (ProtoShips_List.Element(EnemyIndex).Loot(1),
+              ProtoShips_List.Element(EnemyIndex).Loot(2));
       end if;
       PilotOrder := 2;
       EngineerOrder := 3;
@@ -562,8 +569,7 @@ package body Combat is
                            AddMessage
                              (To_String(EnemyName) & " is destroyed!",
                               CombatMessage);
-                           LootAmount :=
-                             GetRandom(Enemy.LootMin, Enemy.LootMax);
+                           LootAmount := Enemy.Loot;
                            FreeSpace := FreeCargo((0 - LootAmount));
                            if FreeSpace < 0 then
                               LootAmount := LootAmount + FreeSpace;
