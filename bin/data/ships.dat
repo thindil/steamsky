@@ -495,4 +495,16 @@ Perception = 5..15
 Cargo = 900..1000x1, 450..500x4, 90..100x13
 Description = Armored, very aggresive, upgraded version of clockwork drone.
 Owner = Drones
+[45]
+Name = Tiny inquisition ship mk II
+Modules = 64, 72, 80, 41, 42, 87
+Accuracy = 1
+CombatAI = Attacker
+LootMin = 10
+LootMax = 100
+Cargo = 500..1000x1, 20..100x2, 40..200x3
+Skills = 1x1, 5x1..2
+Orders = Pilot
+Description = Smallest know inquisition ship (upgraded version).
+Owner = Inquisition
 []
