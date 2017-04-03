@@ -276,8 +276,7 @@ package body Ships is
          Accuracy => (0, 0),
          CombatAI => NONE,
          Evasion => (0, 0),
-         LootMin => 1,
-         LootMax => 100,
+         Loot => (0, 0),
          Perception => (0, 0),
          Cargo => TempCargo,
          CombatValue => 1,
@@ -326,10 +325,15 @@ package body Ships is
                     (Integer'Value(Slice(Value, 1, DotIndex - 1)),
                      Integer'Value(Slice(Value, DotIndex + 2, Length(Value))));
                end if;
-            elsif FieldName = To_Unbounded_String("LootMin") then
-               TempRecord.LootMin := Integer'Value(To_String(Value));
-            elsif FieldName = To_Unbounded_String("LootMax") then
-               TempRecord.LootMax := Integer'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("Loot") then
+               DotIndex := Index(Value, "..");
+               if DotIndex = 0 then
+                  TempRecord.Loot := (Integer'Value(To_String(Value)), 0);
+               else
+                  TempRecord.Loot :=
+                    (Integer'Value(Slice(Value, 1, DotIndex - 1)),
+                     Integer'Value(Slice(Value, DotIndex + 2, Length(Value))));
+               end if;
             elsif FieldName = To_Unbounded_String("Perception") then
                DotIndex := Index(Value, "..");
                if DotIndex = 0 then
@@ -496,8 +500,7 @@ package body Ships is
                Accuracy => (0, 0),
                CombatAI => NONE,
                Evasion => (0, 0),
-               LootMin => 1,
-               LootMax => 100,
+               Loot => (0, 0),
                Perception => (0, 0),
                Cargo => TempCargo,
                CombatValue => 1,

@@ -35,8 +35,7 @@ package Combat is
       Distance: Integer; -- Current distance to enemy
       CombatAI: ShipCombatAi; -- Enemy in combat AI type
       Evasion: Natural; -- Bonus to evasion
-      LootMin: Positive; -- Minimal amount of loot from ship
-      LootMax: Positive; -- Maximum amount of loot from ship
+      Loot: Natural; -- Amount of charcollum looted from ship
       Perception: Natural; -- Bonus to perception
    end record;
    Enemy: Enemy_Record; -- Enemy informations

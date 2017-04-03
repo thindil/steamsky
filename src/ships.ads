@@ -80,8 +80,7 @@ package Ships is
       Accuracy: ShipSkills_Array; -- Bonus to hit for ship
       CombatAI: ShipCombatAi; -- Behaviour of ship in combat
       Evasion: ShipSkills_Array; -- Bonus to evade attacks
-      LootMin: Positive; -- Minimal amount of loot from ship
-      LootMax: Positive; -- Maximum amount of loot from ship
+      Loot: ShipSkills_Array; -- Amount of charcollum gained for destroying ship
       Perception: ShipSkills_Array; -- Bonus to spot player ship first
       Cargo: Skills_Container.Vector; -- List of ship cargo
       CombatValue: Positive; -- Combat value of ship (used to generate enemies)
