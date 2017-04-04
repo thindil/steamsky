@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Merged fields lootmin and lootmax in ships data
 - Updated MODDING.md
+- Reduced needed experience for next skill level
 
 ## [1.0] - 2017-04-02
 
