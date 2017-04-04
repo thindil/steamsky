@@ -101,30 +101,28 @@ package body Bases is
             (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
                .BaseType) +
         1;
-      ItemName: constant String :=
-        To_String(Items_List.Element(ItemIndex).Name);
+      ItemName: constant String := To_String(Items_List(ItemIndex).Name);
       Cost, MoneyIndex: Natural;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
    begin
       BuyAmount := Positive'Value(Amount);
-      if not Items_List.Element(ItemIndex).Buyable(BaseType) then
+      if not Items_List(ItemIndex).Buyable(BaseType) then
          ShowDialog("You can't buy " & ItemName & " in this base.");
          return;
       end if;
       TraderIndex := FindMember(Talk);
-      Price := Items_List.Element(ItemIndex).Prices(BaseType);
+      Price := Items_List(ItemIndex).Prices(BaseType);
       if EventIndex > 0 then
-         if Events_List.Element(EventIndex).EType = DoublePrice and
-           Events_List.Element(EventIndex).Data = ItemIndex then
+         if Events_List(EventIndex).EType = DoublePrice and
+           Events_List(EventIndex).Data = ItemIndex then
             Price := Price * 2;
          end if;
       end if;
       Cost := BuyAmount * Price;
       CountPrice(Cost, TraderIndex);
       MoneyIndex := FindCargo(1);
-      if FreeCargo(Cost - (Items_List.Element(ItemIndex).Weight * BuyAmount)) <
-        0 then
+      if FreeCargo(Cost - (Items_List(ItemIndex).Weight * BuyAmount)) < 0 then
          ShowDialog("You don't have that much free space in your ship cargo.");
          return;
       end if;
@@ -132,7 +130,7 @@ package body Bases is
          ShowDialog("You don't have charcollum to buy " & ItemName & ".");
          return;
       end if;
-      if Cost > PlayerShip.Cargo.Element(MoneyIndex).Amount then
+      if Cost > PlayerShip.Cargo(MoneyIndex).Amount then
          ShowDialog
            ("You don't have enough charcollum to buy so much " &
             ItemName &
@@ -166,39 +164,35 @@ package body Bases is
             (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
                .BaseType) +
         1;
-      ProtoIndex: constant Positive :=
-        PlayerShip.Cargo.Element(ItemIndex).ProtoIndex;
-      ItemName: constant String :=
-        To_String(Items_List.Element(ProtoIndex).Name);
+      ProtoIndex: constant Positive := PlayerShip.Cargo(ItemIndex).ProtoIndex;
+      ItemName: constant String := To_String(Items_List(ProtoIndex).Name);
       Profit, Price: Positive;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
    begin
       SellAmount := Positive'Value(Amount);
-      if PlayerShip.Cargo.Element(ItemIndex).Amount < SellAmount then
+      if PlayerShip.Cargo(ItemIndex).Amount < SellAmount then
          ShowDialog("You dont have that much " & ItemName & " in ship cargo.");
          return;
       end if;
       TraderIndex := FindMember(Talk);
-      Price := Items_List.Element(ProtoIndex).Prices(BaseType);
+      Price := Items_List(ProtoIndex).Prices(BaseType);
       if EventIndex > 0 then
-         if Events_List.Element(EventIndex).EType = DoublePrice and
-           Events_List.Element(EventIndex).Data = ProtoIndex then
+         if Events_List(EventIndex).EType = DoublePrice and
+           Events_List(EventIndex).Data = ProtoIndex then
             Price := Price * 2;
          end if;
       end if;
       Profit := Price * SellAmount;
-      if PlayerShip.Cargo.Element(ItemIndex).Durability < 100 then
+      if PlayerShip.Cargo(ItemIndex).Durability < 100 then
          Profit :=
            Positive
              (Float'Floor
                 (Float(Profit) *
-                 (Float(PlayerShip.Cargo.Element(ItemIndex).Durability) /
-                  100.0)));
+                 (Float(PlayerShip.Cargo(ItemIndex).Durability) / 100.0)));
       end if;
       CountPrice(Profit, TraderIndex, False);
-      if FreeCargo
-          ((Items_List.Element(ProtoIndex).Weight * SellAmount) - Profit) <
+      if FreeCargo((Items_List(ProtoIndex).Weight * SellAmount) - Profit) <
         0 then
          ShowDialog
            ("You don't have enough free cargo space in your ship for Charcollum.");
@@ -208,7 +202,7 @@ package body Bases is
         (PlayerShip,
          ProtoIndex,
          (0 - SellAmount),
-         PlayerShip.Cargo.Element(ItemIndex).Durability);
+         PlayerShip.Cargo(ItemIndex).Durability);
       UpdateCargo(PlayerShip, 1, Profit);
       GainExp(1, 4, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
@@ -242,10 +236,10 @@ package body Bases is
       end if;
       NewName :=
         NewName &
-        BaseSyllablesStart.Element
-        (GetRandom
-           (BaseSyllablesStart.First_Index,
-            BaseSyllablesStart.Last_Index)) &
+        BaseSyllablesStart
+          (GetRandom
+             (BaseSyllablesStart.First_Index,
+              BaseSyllablesStart.Last_Index)) &
         BaseSyllablesEnd
           (GetRandom
              (BaseSyllablesEnd.First_Index,
@@ -277,19 +271,19 @@ package body Bases is
       end if;
       TraderIndex := FindMember(Talk);
       CountPrice(Cost, TraderIndex);
-      if PlayerShip.Cargo.Element(MoneyIndex).Amount < Cost then
+      if PlayerShip.Cargo(MoneyIndex).Amount < Cost then
          ShowDialog("You don't have enough Charcollum to pay for repairs.");
          return;
       end if;
-      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-         if PlayerShip.Crew.Element(I).Order = Repair then
-            GiveOrders(I, Rest);
+      for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Crew(I).Order = Repair then
+            GiveOrders(Crew_Container.To_Index(I), Rest);
          end if;
       end loop;
       if ModuleIndex > 0 then
          RepairValue :=
-           PlayerShip.Modules.Element(ModuleIndex).MaxDurability -
-           PlayerShip.Modules.Element(ModuleIndex).Durability;
+           PlayerShip.Modules(ModuleIndex).MaxDurability -
+           PlayerShip.Modules(ModuleIndex).Durability;
          UpdateModule
            (PlayerShip,
             ModuleIndex,
@@ -297,24 +291,15 @@ package body Bases is
             Positive'Image(RepairValue));
          AddMessage
            ("You bought " &
-            To_String(PlayerShip.Modules.Element(ModuleIndex).Name) &
+            To_String(PlayerShip.Modules(ModuleIndex).Name) &
             " repair for" &
             Positive'Image(Cost) &
             " Charcollum.",
             TradeMessage);
       else
-         for I in
-           PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Durability <
-              PlayerShip.Modules.Element(I).MaxDurability then
-               RepairValue :=
-                 PlayerShip.Modules.Element(I).MaxDurability -
-                 PlayerShip.Modules.Element(I).Durability;
-               UpdateModule
-                 (PlayerShip,
-                  I,
-                  "Durability",
-                  Positive'Image(RepairValue));
+         for Module of PlayerShip.Modules loop
+            if Module.Durability < Module.MaxDurability then
+               Module.Durability := Module.MaxDurability;
             end if;
          end loop;
          AddMessage
@@ -340,16 +325,14 @@ package body Bases is
          ShowDialog("You don't have Charcollum to pay for modules.");
          return;
       end if;
-      for I in
-        PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index loop
-         case Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex)
-           .MType is
+      for C in PlayerShip.Modules.Iterate loop
+         case Modules_List(PlayerShip.Modules(C).ProtoIndex).MType is
             when HULL =>
-               HullIndex := I;
-               ModulesAmount := PlayerShip.Modules.Element(I).Current_Value;
+               HullIndex := Modules_Container.To_Index(C);
+               ModulesAmount := PlayerShip.Modules(C).Current_Value;
             when TURRET =>
-               if PlayerShip.Modules.Element(I).Current_Value = 0 then
-                  FreeTurretIndex := I;
+               if PlayerShip.Modules(C).Current_Value = 0 then
+                  FreeTurretIndex := Modules_Container.To_Index(C);
                end if;
             when others =>
                null;
@@ -357,36 +340,35 @@ package body Bases is
       end loop;
       TraderIndex := FindMember(Talk);
       if Install then
-         Price := Modules_List.Element(ModuleIndex).Price;
+         Price := Modules_List(ModuleIndex).Price;
          CountPrice(Price, TraderIndex);
-         if PlayerShip.Cargo.Element(MoneyIndex).Amount < Price then
+         if PlayerShip.Cargo(MoneyIndex).Amount < Price then
             ShowDialog
               ("You don't have enough Charcollum to pay for " &
-               To_String(Modules_List.Element(ModuleIndex).Name) &
+               To_String(Modules_List(ModuleIndex).Name) &
                ".");
             return;
          end if;
          for Module of PlayerShip.Modules loop
-            if Modules_List.Element(Module.ProtoIndex).MType =
-              Modules_List.Element(ModuleIndex).MType and
-              Modules_List.Element(ModuleIndex).Unique then
+            if Modules_List(Module.ProtoIndex).MType =
+              Modules_List(ModuleIndex).MType and
+              Modules_List(ModuleIndex).Unique then
                ShowDialog
                  ("You can't install another " &
-                  To_String(Modules_List.Element(ModuleIndex).Name) &
+                  To_String(Modules_List(ModuleIndex).Name) &
                   " because you have installed one module that type. Remove old first.");
                return;
             end if;
          end loop;
-         if Modules_List.Element(ModuleIndex).MType /= HULL then
+         if Modules_List(ModuleIndex).MType /= HULL then
             ModulesAmount := ModulesAmount + Modules_List(ModuleIndex).Size;
-            if ModulesAmount >
-              PlayerShip.Modules.Element(HullIndex).Max_Value and
-              Modules_List.Element(ModuleIndex).MType /= GUN then
+            if ModulesAmount > PlayerShip.Modules(HullIndex).Max_Value and
+              Modules_List(ModuleIndex).MType /= GUN then
                ShowDialog
                  ("You don't have free modules space for more modules.");
                return;
             end if;
-            if Modules_List.Element(ModuleIndex).MType = GUN and
+            if Modules_List(ModuleIndex).MType = GUN and
               FreeTurretIndex = 0 then
                ShowDialog
                  ("You don't have free turret for next gun. Install new turret or remove old gun first.");
@@ -400,20 +382,20 @@ package body Bases is
             end if;
             PlayerShip.Modules.Delete(HullIndex, 1);
          end if;
-         UpdateGame(Modules_List.Element(ModuleIndex).InstallTime);
+         UpdateGame(Modules_List(ModuleIndex).InstallTime);
          UpdateCargo(PlayerShip, 1, (0 - Price));
          GainExp(1, 4, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
-         if Modules_List.Element(ModuleIndex).MType /= HULL then
+         if Modules_List(ModuleIndex).MType /= HULL then
             PlayerShip.Modules.Append
             (New_Item =>
-               (Name => Modules_List.Element(ModuleIndex).Name,
+               (Name => Modules_List(ModuleIndex).Name,
                 ProtoIndex => ModuleIndex,
-                Weight => Modules_List.Element(ModuleIndex).Weight,
-                Current_Value => Modules_List.Element(ModuleIndex).Value,
-                Max_Value => Modules_List.Element(ModuleIndex).MaxValue,
-                Durability => Modules_List.Element(ModuleIndex).Durability,
-                MaxDurability => Modules_List.Element(ModuleIndex).Durability,
+                Weight => Modules_List(ModuleIndex).Weight,
+                Current_Value => Modules_List(ModuleIndex).Value,
+                Max_Value => Modules_List(ModuleIndex).MaxValue,
+                Durability => Modules_List(ModuleIndex).Durability,
+                MaxDurability => Modules_List(ModuleIndex).Durability,
                 Owner => 0,
                 UpgradeProgress => 0,
                 UpgradeAction => NONE));
@@ -421,18 +403,18 @@ package body Bases is
             PlayerShip.Modules.Insert
             (Before =>
                HullIndex, New_Item =>
-               (Name => Modules_List.Element(ModuleIndex).Name,
+               (Name => Modules_List(ModuleIndex).Name,
                 ProtoIndex => ModuleIndex,
-                Weight => Modules_List.Element(ModuleIndex).Weight,
-                Current_Value => Modules_List.Element(ModuleIndex).Value,
-                Max_Value => Modules_List.Element(ModuleIndex).MaxValue,
-                Durability => Modules_List.Element(ModuleIndex).Durability,
-                MaxDurability => Modules_List.Element(ModuleIndex).Durability,
+                Weight => Modules_List(ModuleIndex).Weight,
+                Current_Value => Modules_List(ModuleIndex).Value,
+                Max_Value => Modules_List(ModuleIndex).MaxValue,
+                Durability => Modules_List(ModuleIndex).Durability,
+                MaxDurability => Modules_List(ModuleIndex).Durability,
                 Owner => 0,
                 UpgradeProgress => 0,
                 UpgradeAction => NONE));
          end if;
-         case Modules_List.Element(ModuleIndex).MType is
+         case Modules_List(ModuleIndex).MType is
             when GUN =>
                UpdateModule
                  (PlayerShip,
@@ -448,7 +430,7 @@ package body Bases is
          end case;
          AddMessage
            ("You installed " &
-            To_String(Modules_List.Element(ModuleIndex).Name) &
+            To_String(Modules_List(ModuleIndex).Name) &
             " on your ship for" &
             Positive'Image(Price) &
             " Charcollum.",
@@ -457,16 +439,13 @@ package body Bases is
          Damage :=
            1.0 -
            DamageFactor
-             (Float(PlayerShip.Modules.Element(ModuleIndex).Durability) /
-              Float(PlayerShip.Modules.Element(ModuleIndex).MaxDurability));
+             (Float(PlayerShip.Modules(ModuleIndex).Durability) /
+              Float(PlayerShip.Modules(ModuleIndex).MaxDurability));
          Price :=
-           Modules_List.Element
-           (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
-             .Price -
+           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Price -
            Integer
              (Float
-                (Modules_List.Element
-                 (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+                (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                    .Price) *
               Float(Damage));
          CountPrice(Price, TraderIndex, False);
@@ -475,27 +454,23 @@ package body Bases is
               ("You don't have enough free space for Charcollum in ship cargo.");
             return;
          end if;
-         case Modules_List.Element
-         (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
-           .MType is
+         case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
             when TURRET =>
-               if PlayerShip.Modules.Element(ModuleIndex).Current_Value >
-                 0 then
+               if PlayerShip.Modules(ModuleIndex).Current_Value > 0 then
                   ShowDialog
                     ("You have installed gun in this turret, remove it before you remove this turret.");
                   return;
                end if;
             when GUN =>
                for Module of PlayerShip.Modules loop
-                  if Modules_List.Element(Module.ProtoIndex).MType = TURRET and
+                  if Modules_List(Module.ProtoIndex).MType = TURRET and
                     Module.Current_Value = ModuleIndex then
                      Module.Current_Value := 0;
                      exit;
                   end if;
                end loop;
             when ShipModules.CARGO =>
-               if FreeCargo
-                   ((0 - PlayerShip.Modules.Element(ModuleIndex).Max_Value)) <
+               if FreeCargo((0 - PlayerShip.Modules(ModuleIndex).Max_Value)) <
                  0 then
                   ShowDialog
                     ("You can't sell this cargo bay, because you have items in it.");
@@ -506,9 +481,7 @@ package body Bases is
          end case;
          ModulesAmount :=
            ModulesAmount -
-           Modules_List.Element
-           (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
-             .Size;
+           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size;
          UpdateModule
            (PlayerShip,
             HullIndex,
@@ -516,21 +489,19 @@ package body Bases is
             Positive'Image(ModulesAmount));
          if PlayerShip.UpgradeModule = ModuleIndex then
             PlayerShip.UpgradeModule := 0;
-            for I in
-              PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-               if PlayerShip.Crew.Element(I).Order = Upgrading then
-                  GiveOrders(I, Rest);
+            for C in PlayerShip.Crew.Iterate loop
+               if PlayerShip.Crew(C).Order = Upgrading then
+                  GiveOrders(Crew_Container.To_Index(C), Rest);
                   exit;
                end if;
             end loop;
          end if;
          UpdateGame
-           (Modules_List.Element
-            (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+           (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
               .InstallTime);
-         if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
+         if PlayerShip.Modules(ModuleIndex).Owner > 0 then
             GiveOrders
-              (MemberIndex => PlayerShip.Modules.Element(ModuleIndex).Owner,
+              (MemberIndex => PlayerShip.Modules(ModuleIndex).Owner,
                GivenOrder => Rest,
                CheckPriorities => False);
          end if;
@@ -539,7 +510,7 @@ package body Bases is
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          AddMessage
            ("You removed " &
-            To_String(PlayerShip.Modules.Element(ModuleIndex).Name) &
+            To_String(PlayerShip.Modules(ModuleIndex).Name) &
             " from your ship and earned" &
             Positive'Image(Price) &
             " Charcollum.",
@@ -554,7 +525,7 @@ package body Bases is
             PlayerShip.UpgradeModule := PlayerShip.UpgradeModule - 1;
          end if;
          for Module of PlayerShip.Modules loop
-            if Modules_List.Element(Module.ProtoIndex).MType = TURRET then
+            if Modules_List(Module.ProtoIndex).MType = TURRET then
                if Module.Current_Value > ModuleIndex then
                   Module.Current_Value := Module.Current_Value - 1;
                end if;
@@ -622,10 +593,10 @@ package body Bases is
               GetRandom(Skills_Names.First_Index, Skills_Names.Last_Index);
             SkillLevel := GetRandom(1, 100);
             SkillIndex := 0;
-            for K in Skills.First_Index .. Skills.Last_Index loop
-               if Skills.Element(K)(1) = SkillNumber then
-                  if Skills.Element(K)(2) < SkillLevel then
-                     SkillIndex := K;
+            for C in Skills.Iterate loop
+               if Skills(C)(1) = SkillNumber then
+                  if Skills(C)(2) < SkillLevel then
+                     SkillIndex := Skills_Container.To_Index(C);
                   else
                      SkillIndex := -1;
                   end if;
@@ -639,8 +610,8 @@ package body Bases is
                (Index => SkillIndex, New_Item => (SkillNumber, SkillLevel, 0));
             end if;
          end loop;
-         for J in Skills.First_Index .. Skills.Last_Index loop
-            Price := Price + Skills.Element(J)(2);
+         for C in Skills.Iterate loop
+            Price := Price + Skills(C)(2);
          end loop;
          Price := Price * 100;
          BaseRecruits.Update_Element
@@ -655,7 +626,7 @@ package body Bases is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex, Price: Natural;
       Recruit: constant Recruit_Data :=
-        SkyBases(BaseIndex).Recruits.Element(RecruitIndex);
+        SkyBases(BaseIndex).Recruits(RecruitIndex);
       TraderIndex: Positive;
    begin
       MoneyIndex := FindCargo(1);
@@ -666,7 +637,7 @@ package body Bases is
       TraderIndex := FindMember(Talk);
       Price := Recruit.Price;
       CountPrice(Price, TraderIndex);
-      if PlayerShip.Cargo.Element(MoneyIndex).Amount < Price then
+      if PlayerShip.Cargo(MoneyIndex).Amount < Price then
          ShowDialog
            ("You don't have enough Charcollum to hire " &
             To_String(Recruit.Name) &
@@ -791,7 +762,7 @@ package body Bases is
       end if;
       SkyBases(BaseIndex).AskedForBases := True;
       AddMessage
-        (To_String(PlayerShip.Crew.Element(TraderIndex).Name) &
+        (To_String(PlayerShip.Crew(TraderIndex).Name) &
          " asked for directions to other bases.",
          OrderMessage);
       GainExp(1, 4, TraderIndex);
@@ -851,7 +822,7 @@ package body Bases is
       end if;
       if GetRandom(1, 100) < 99 then
          for Module of PlayerShip.Modules loop
-            case Modules_List.Element(Module.ProtoIndex).MType is
+            case Modules_List(Module.ProtoIndex).MType is
                when HULL | GUN | BATTERING_RAM =>
                   PlayerValue :=
                     PlayerValue +
@@ -864,27 +835,23 @@ package body Bases is
             end case;
          end loop;
          for Item of PlayerShip.Cargo loop
-            if Slice(Items_List.Element(Item.ProtoIndex).IType, 1, 4) =
-              "Ammo" then
+            if Slice(Items_List(Item.ProtoIndex).IType, 1, 4) = "Ammo" then
                PlayerValue :=
-                 PlayerValue +
-                 (Items_List.Element(Item.ProtoIndex).Value * 10);
+                 PlayerValue + (Items_List(Item.ProtoIndex).Value * 10);
             end if;
          end loop;
-         for I in
-           ProtoShips_List.First_Index .. ProtoShips_List.Last_Index loop
-            if ProtoShips_List.Element(I).CombatValue <= PlayerValue and
-              (ProtoShips_List.Element(I).Owner /= Poleis and
-               ProtoShips_List.Element(I).Owner /= Independent) then
-               Enemies.Append(New_Item => I);
+         for C in ProtoShips_List.Iterate loop
+            if ProtoShips_List(C).CombatValue <= PlayerValue and
+              (ProtoShips_List(C).Owner /= Poleis and
+               ProtoShips_List(C).Owner /= Independent) then
+               Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
             end if;
          end loop;
       else
-         for I in
-           ProtoShips_List.First_Index .. ProtoShips_List.Last_Index loop
-            if ProtoShips_List.Element(I).Owner /= Poleis and
-              ProtoShips_List.Element(I).Owner /= Independent then
-               Enemies.Append(New_Item => I);
+         for C in ProtoShips_List.Iterate loop
+            if ProtoShips_List(C).Owner /= Poleis and
+              ProtoShips_List(C).Owner /= Independent then
+               Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
             end if;
          end loop;
       end if;
@@ -954,8 +921,8 @@ package body Bases is
                    EventX,
                    EventY,
                    GetRandom(EventTime, EventTime + 60),
-                   Enemies.Element
-                   (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
+                   Enemies
+                     (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
             when AttackOnBase =>
                Events_List.Append
                (New_Item =>
@@ -963,8 +930,8 @@ package body Bases is
                    EventX,
                    EventY,
                    GetRandom(EventTime, EventTime + 120),
-                   Enemies.Element
-                   (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
+                   Enemies
+                     (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
             when Disease =>
                Events_List.Append
                (New_Item =>
@@ -973,7 +940,7 @@ package body Bases is
                loop
                   ItemIndex :=
                     GetRandom(Items_List.First_Index, Items_List.Last_Index);
-                  exit when Items_List.Element(ItemIndex).Prices(1) > 0;
+                  exit when Items_List(ItemIndex).Prices(1) > 0;
                end loop;
                Events_List.Append
                (New_Item =>
@@ -989,7 +956,7 @@ package body Bases is
       end loop;
       SkyBases(BaseIndex).AskedForEvents := GameDate;
       AddMessage
-        (To_String(PlayerShip.Crew.Element(TraderIndex).Name) &
+        (To_String(PlayerShip.Crew(TraderIndex).Name) &
          " asked for events in base.",
          OrderMessage);
       GainExp(1, 4, TraderIndex);
@@ -1002,14 +969,12 @@ package body Bases is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost, MoneyIndex: Natural;
       RecipeName: constant String :=
-        To_String
-          (Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex)
-             .Name);
+        To_String(Items_List(Recipes_List(RecipeIndex).ResultIndex).Name);
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       TraderIndex: Positive;
    begin
-      if BaseType /= Recipes_List.Element(RecipeIndex).BaseType then
+      if BaseType /= Recipes_List(RecipeIndex).BaseType then
          ShowDialog("You can't buy this recipe in this base.");
          return;
       end if;
@@ -1020,10 +985,8 @@ package body Bases is
       end if;
       TraderIndex := FindMember(Talk);
       Cost :=
-        Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex)
-          .Prices
-          (BaseType) *
-        Recipes_List.Element(RecipeIndex).Difficulty *
+        Items_List(Recipes_List(RecipeIndex).ResultIndex).Prices(BaseType) *
+        Recipes_List(RecipeIndex).Difficulty *
         100;
       CountPrice(Cost, TraderIndex);
       MoneyIndex := FindCargo(1);
@@ -1032,7 +995,7 @@ package body Bases is
            ("You don't have charcollum to buy recipe for " & RecipeName & ".");
          return;
       end if;
-      if Cost > PlayerShip.Cargo.Element(MoneyIndex).Amount then
+      if Cost > PlayerShip.Cargo(MoneyIndex).Amount then
          ShowDialog
            ("You don't have enough charcollum to buy recipe for " &
             RecipeName &
