@@ -17,9 +17,18 @@
 
 package Utils is
 
+   type Debug_Types is
+     (None,
+      Everything,
+      Combat); -- Types of debug mode, which messages log to file
+   DebugMode: Debug_Types := None; -- Did game is run in debug mode
+
    function GetRandom
      (Min: Natural;
       Max: Positive)
      return Natural; -- Return random number from Min to Max range
+   procedure Log
+     (Message: String;
+      MessageType: Debug_Types); -- Log message (if proper type) to file in debug mode
 
 end Utils;
