@@ -306,8 +306,8 @@ package body Crew is
            PlayerShip.Crew.Element(CrewIndex).Skills.Element(SkillIndex)(3) +
            Amount;
       end if;
-      if SkillExp >= (SkillLevel * 100) then
-         SkillExp := SkillExp - (SkillLevel * 100);
+      if SkillExp >= (SkillLevel * 50) then
+         SkillExp := SkillExp - (SkillLevel * 50);
          SkillLevel := SkillLevel + 1;
       end if;
       PlayerShip.Crew.Update_Element
