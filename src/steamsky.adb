@@ -21,6 +21,7 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Calendar; use Ada.Calendar;
 with Ada.Calendar.Formatting;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Terminal_Interface.Curses_Constants;
 use Terminal_Interface.Curses_Constants;
@@ -50,6 +51,7 @@ with BasesList; use BasesList;
 with Config; use Config;
 with Statistics.UI; use Statistics.UI;
 with Missions.UI; use Missions.UI;
+with Utils; use Utils;
 
 procedure SteamSky is
    GameState: GameStates := Main_Menu;
@@ -59,6 +61,25 @@ procedure SteamSky is
    ErrorFile: File_Type;
 begin
    Set_Directory(Command_Name(Command_Name'First .. Command_Name'Last - 9));
+   for I in 1 .. Argument_Count loop
+      if Argument(I)'Length > 8 then
+         if Argument(I)(1 .. 8) = "--debug=" then
+            for J in Debug_Types loop
+               if To_Upper(Argument(I)(9 .. (Argument(I)'Last))) =
+                 Debug_Types'Image(J) then
+                  DebugMode := J;
+                  exit;
+               end if;
+            end loop;
+            Log
+              ("Start game in debug mode: " &
+               Debug_Types'Image(DebugMode) &
+               ".",
+               DebugMode);
+            exit;
+         end if;
+      end if;
+   end loop;
    if not LoadData then
       Move_Cursor(Line => (Lines / 2), Column => 2);
       Add(Str => "Can't load game data. Probably missing file data/game.dat");
