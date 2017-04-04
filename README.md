@@ -36,6 +36,9 @@ Enter *bin* directory (if you build game from sources) or in main game
 directory (if you use released binary) and type `./steamsky`. Game works 
 only in terminal.
 
+If you want to run game in debug mode (some data will be logged to file
+*data/debug.log*) type `./steamsky --debug=everything`.
+
 Note: If you build game from source, copy files COPYING and README.md to *bin*
 directory.
 
