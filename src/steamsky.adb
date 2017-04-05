@@ -51,7 +51,7 @@ with BasesList; use BasesList;
 with Config; use Config;
 with Statistics.UI; use Statistics.UI;
 with Missions.UI; use Missions.UI;
-with Utils; use Utils;
+with Log; use Log;
 
 procedure SteamSky is
    GameState: GameStates := Main_Menu;
@@ -71,11 +71,7 @@ begin
                   exit;
                end if;
             end loop;
-            Log
-              ("Start game in debug mode: " &
-               Debug_Types'Image(DebugMode) &
-               ".",
-               DebugMode);
+            StartLogging;
             exit;
          end if;
       end if;
@@ -265,9 +261,10 @@ begin
    end loop;
 
    End_Windows;
+   EndLogging;
 exception
    when An_Exception : others =>
-      if GameState /= Main_Menu and GameState /= New_Game then
+      if GameState /= Main_Menu and GameState /= New_Game and GameState /= Quit then
          SaveGame;
       end if;
       if Exists("data/error.log") then
@@ -287,4 +284,5 @@ exception
            "Oops, something bad happens and game crashed. Game should save your progress, but better check it. Also, please, remember what you done before crash and report this problem at https://github.com/thindil/steamsky/issues (or if you prefer, on mail thindil@laeran.pl) and attach (if possible) file error.log from data directory. Hit any key to quit game.");
       Key := Get_Keystroke;
       End_Windows;
+      EndLogging;
 end SteamSky;

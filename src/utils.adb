@@ -16,10 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Numerics.Discrete_Random; use Ada.Numerics;
-with Ada.Calendar; use Ada.Calendar;
-with Ada.Calendar.Formatting;
-with Ada.Directories; use Ada.Directories;
-with Ada.Text_IO; use Ada.Text_IO;
 
 package body Utils is
 
@@ -31,23 +27,5 @@ package body Utils is
       Rand_Roll.Reset(Generator);
       return Rand_Roll.Random(Generator);
    end GetRandom;
-
-   procedure Log(Message: String; MessageType: Debug_Types) is
-      LogFile: File_Type;
-   begin
-      if DebugMode = None or
-        (MessageType /= DebugMode and DebugMode /= Everything) then
-         return;
-      end if;
-      if Exists("data/debug.log") then
-         Open(LogFile, Append_File, "data/debug.log");
-      else
-         Create(LogFile, Append_File, "data/debug.log");
-      end if;
-      Put_Line
-        (LogFile,
-         "[" & Ada.Calendar.Formatting.Image(Clock) & "]: " & Message);
-      Close(LogFile);
-   end Log;
 
 end Utils;
