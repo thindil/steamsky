@@ -473,4 +473,14 @@ Skills = 1x3..7, 5x3..7
 Orders = Pilot
 Description = Small flying vessel of inquisition (upgraded version), dangerous at close range.
 Owner = Inquisition
+[47]
+Name = Inquisition ship mk II
+Modules = 66, 74, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 87, 84, 9
+CombatAI = Attacker
+Loot = 100..200
+Skills = 1x5..15, 5x3..7; 3x5..15, 5x3..8
+Orders = Pilot, Gunner
+Cargo = 1500..2000x1, 100..200x2, 300..400x3, 300..500x4, 5..40x13
+Description = Standard ship of inquisition (upgraded version).
+Owner = Inquisition
 []
