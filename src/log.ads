@@ -15,11 +15,21 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-package Utils is
+with Ada.Text_IO; use Ada.Text_IO;
 
-   function GetRandom
-     (Min: Natural;
-      Max: Positive)
-     return Natural; -- Return random number from Min to Max range
+package Log is
 
-end Utils;
+   type Debug_Types is
+     (None,
+      Everything,
+      Combat); -- Types of debug mode, which messages log to file
+   DebugMode: Debug_Types := None; -- Did game is run in debug mode
+   LogFile: File_Type; -- Debug log file
+
+   procedure StartLogging; -- Open/create debug.log file
+   procedure LogMessage
+     (Message: String;
+      MessageType: Debug_Types); -- Log message (if proper type) to file in debug mode
+   procedure EndLogging; -- Close debug.file
+
+end Log;
