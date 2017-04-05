@@ -39,16 +39,13 @@ only in terminal.
 If you want to run game in debug mode (some data will be logged to file
 *data/debug.log*) type `./steamsky --debug=everything`.
 
-Note: If you build game from source, copy files COPYING and README.md to *bin*
-directory.
-
 ## Modify game
 For detailed informations about modifying various game elements, see
-[MODDING.md](MODDING.md)
+[MODDING.md](bin/docs/MODDING.md)
 
 ## Contributing to project
 For detailed informations about contributing to project (bugs reporting, ideas
-propositions, code conduct, etc), see [CONTRIBUTING.md](CONTRIBUTING.md)
+propositions, code conduct, etc), see [CONTRIBUTING.md](bin/docs/CONTRIBUTING.md)
 
 
 That's all for now, as usual, probably I forgot about something important ;)
