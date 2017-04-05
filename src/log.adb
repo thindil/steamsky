@@ -24,7 +24,7 @@ package body Log is
    procedure StartLogging is
    begin
       if DebugMode = None then
-          return;
+         return;
       end if;
       if Exists("data/debug.log") then
          Open(LogFile, Append_File, "data/debug.log");
@@ -32,10 +32,8 @@ package body Log is
          Create(LogFile, Append_File, "data/debug.log");
       end if;
       LogMessage
-          ("Start game in debug mode: " &
-          Debug_Types'Image(DebugMode) &
-          ".",
-          DebugMode);
+        ("Start game in debug mode: " & Debug_Types'Image(DebugMode) & ".",
+         DebugMode);
    end StartLogging;
 
    procedure LogMessage(Message: String; MessageType: Debug_Types) is
@@ -52,14 +50,12 @@ package body Log is
    procedure EndLogging is
    begin
       if DebugMode = None then
-          return;
+         return;
       end if;
       LogMessage
-          ("Ending game in debug mode: " &
-          Debug_Types'Image(DebugMode) &
-          ".",
-          DebugMode);
-       Close(LogFile);
+        ("Ending game in debug mode: " & Debug_Types'Image(DebugMode) & ".",
+         DebugMode);
+      Close(LogFile);
    end EndLogging;
 
 end Log;

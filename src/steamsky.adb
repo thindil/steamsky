@@ -264,7 +264,9 @@ begin
    EndLogging;
 exception
    when An_Exception : others =>
-      if GameState /= Main_Menu and GameState /= New_Game and GameState /= Quit then
+      if GameState /= Main_Menu and
+        GameState /= New_Game and
+        GameState /= Quit then
          SaveGame;
       end if;
       if Exists("data/error.log") then
