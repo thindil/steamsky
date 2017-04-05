@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Reduced needed experience for next skill level
 - Updated README.md
+- Moved documentation to separated directory
 
 ## [1.0] - 2017-04-02
 
