@@ -229,12 +229,12 @@ package body MainMenu is
    begin
       if LicensePad = Null_Window then
          LinesAmount := 0;
-         if not Exists("COPYING") then
+         if not Exists("docs/COPYING") then
             LicenseText :=
               To_Unbounded_String
-                ("Can't find license file. Did COPYING file is in this same directory where executable is?");
+                ("Can't find license file. Did COPYING file is in docs directory?");
          else
-            Open(LicenseFile, In_File, "COPYING");
+            Open(LicenseFile, In_File, "docs/COPYING");
             while not End_Of_File(LicenseFile) loop
                Append(LicenseText, Get_Line(LicenseFile));
                Append(LicenseText, ASCII.LF);
@@ -275,12 +275,12 @@ package body MainMenu is
    begin
       if NewsPad = Null_Window then
          LinesAmount := 0;
-         if not Exists("CHANGELOG.md") then
+         if not Exists("docs/CHANGELOG.md") then
             NewsText :=
               To_Unbounded_String
-                ("Can't find changelog file. Did CHANGELOG.md file is in this same directory where executable is?");
+                ("Can't find changelog file. Did CHANGELOG.md file is in docs directory?");
          else
-            Open(ChangesFile, In_File, "CHANGELOG.md");
+            Open(ChangesFile, In_File, "docs/CHANGELOG.md");
             Set_Line(ChangesFile, 6);
             loop
                FileText := To_Unbounded_String(Get_Line(ChangesFile));
