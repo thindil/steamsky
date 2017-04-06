@@ -29,7 +29,7 @@ package body Items is
       if Items_List.Length > 0 then
          return True;
       end if;
-      if not Exists("data/items.dat") then
+      if not Exists("data/items/items.dat") then
          return False;
       end if;
       TempRecord :=
@@ -41,7 +41,7 @@ package body Items is
          Value => 0,
          ShowType => Null_Unbounded_String,
          Description => Null_Unbounded_String);
-      Open(ItemsFile, In_File, "data/items.dat");
+      Open(ItemsFile, In_File, "data/items/items.dat");
       while not End_Of_File(ItemsFile) loop
          RawData := To_Unbounded_String(Get_Line(ItemsFile));
          if Element(RawData, 1) /= '[' then

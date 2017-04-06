@@ -267,7 +267,7 @@ package body Ships is
       if ProtoShips_List.Length > 0 then
          return True;
       end if;
-      if not Exists("data/ships.dat") then
+      if not Exists("data/ships/ships.dat") then
          return False;
       end if;
       TempRecord :=
@@ -283,7 +283,7 @@ package body Ships is
          Crew => TempCrew,
          Description => Null_Unbounded_String,
          Owner => Poleis);
-      Open(ShipsFile, In_File, "data/ships.dat");
+      Open(ShipsFile, In_File, "data/ships/ships.dat");
       while not End_Of_File(ShipsFile) loop
          RawData := To_Unbounded_String(Get_Line(ShipsFile));
          if Element(RawData, 1) /= '[' then
