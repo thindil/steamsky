@@ -483,4 +483,14 @@ Orders = Pilot, Gunner
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 300..500x4, 5..40x13
 Description = Standard ship of inquisition (upgraded version).
 Owner = Inquisition
+[48]
+Name = Armored inquisition ship mk II
+Modules = 66, 55, 74, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 87, 84, 9
+CombatAI = Attacker
+Loot = 120..240
+Cargo = 1800..2000x1, 100..200x2, 350..400x3, 250..500x4, 100..200x13
+Skills = 1x5..15, 5x3..7; 3x5..15, 5x3..7
+Orders = Pilot, Gunner
+Description = Armored and upgraded version of standard flying vessel of inquisition.
+Owner = Inquisition
 []
