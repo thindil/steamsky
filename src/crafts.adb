@@ -25,6 +25,7 @@ with Ships.Crew; use Ships.Crew;
 with Crew; use Crew;
 with Items; use Items;
 with Statistics; use Statistics;
+with Log; use Log;
 
 package body Crafts is
 
@@ -35,96 +36,108 @@ package body Crafts is
       TempRecord: Craft_Data;
       TempMaterials: UnboundedString_Container.Vector;
       TempAmount: Positive_Container.Vector;
+      Files: Search_Type;
+      FoundFile: Directory_Entry_Type;
    begin
       if Recipes_List.Length > 0 then
          return True;
       end if;
-      if not Exists("data/recipes/recipes.dat") then
+      if not Exists("data/recipes/") then
          return False;
       end if;
-      TempRecord :=
-        (MaterialTypes => TempMaterials,
-         MaterialAmounts => TempAmount,
-         ResultIndex => 1,
-         ResultAmount => 10000,
-         Workplace => ALCHEMY_LAB,
-         Skill => 1,
-         Time => 15,
-         Difficulty => 0,
-         BaseType => 0,
-         Tool => To_Unbounded_String("None"));
-      Open(RecipesFile, In_File, "data/recipes/recipes.dat");
-      while not End_Of_File(RecipesFile) loop
-         RawData := To_Unbounded_String(Get_Line(RecipesFile));
-         if Element(RawData, 1) /= '[' then
-            EqualIndex := Index(RawData, "=");
-            FieldName := Head(RawData, EqualIndex - 2);
-            Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
-            if FieldName = To_Unbounded_String("Material") then
-               StartIndex := 1;
-               Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-               for I in 1 .. Amount loop
-                  EndIndex := Index(Value, ", ", StartIndex);
-                  if EndIndex = 0 then
-                     EndIndex := Length(Value) + 1;
-                  end if;
-                  TempRecord.MaterialTypes.Append
-                  (New_Item =>
-                     To_Unbounded_String
-                       (Slice(Value, StartIndex, EndIndex - 1)));
-                  StartIndex := EndIndex + 2;
-               end loop;
-            elsif FieldName = To_Unbounded_String("Amount") then
-               StartIndex := 1;
-               Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-               for I in 1 .. Amount loop
-                  EndIndex := Index(Value, ", ", StartIndex);
-                  if EndIndex = 0 then
-                     EndIndex := Length(Value) + 1;
-                  end if;
-                  TempRecord.MaterialAmounts.Append
-                  (New_Item =>
-                     Integer'Value(Slice(Value, StartIndex, EndIndex - 1)));
-                  StartIndex := EndIndex + 2;
-               end loop;
-            elsif FieldName = To_Unbounded_String("Result") then
-               TempRecord.ResultIndex := Integer'Value(To_String(Value));
-            elsif FieldName = To_Unbounded_String("Crafted") then
-               TempRecord.ResultAmount := Integer'Value(To_String(Value));
-            elsif FieldName = To_Unbounded_String("Workplace") then
-               TempRecord.Workplace := ModuleType'Value(To_String(Value));
-            elsif FieldName = To_Unbounded_String("Skill") then
-               for I in Skills_Names.Iterate loop
-                  if Value = To_String(Skills_Names(I)) then
-                     TempRecord.Skill := UnboundedString_Container.To_Index(I);
-                     exit;
-                  end if;
-               end loop;
-            elsif FieldName = To_Unbounded_String("Time") then
-               TempRecord.Time := Integer'Value(To_String(Value));
-            elsif FieldName = To_Unbounded_String("Difficulty") then
-               TempRecord.Difficulty := Integer'Value(To_String(Value));
-            elsif FieldName = To_Unbounded_String("BaseType") then
-               TempRecord.BaseType := Integer'Value(To_String(Value));
-            elsif FieldName = To_Unbounded_String("Tool") then
-               TempRecord.Tool := Value;
+      Start_Search(Files, "data/recipes/", "*.dat");
+      if not More_Entries(Files) then
+         return False;
+      end if;
+      while More_Entries(Files) loop
+         Get_Next_Entry(Files, FoundFile);
+         TempRecord :=
+           (MaterialTypes => TempMaterials,
+            MaterialAmounts => TempAmount,
+            ResultIndex => 1,
+            ResultAmount => 10000,
+            Workplace => ALCHEMY_LAB,
+            Skill => 1,
+            Time => 15,
+            Difficulty => 0,
+            BaseType => 0,
+            Tool => To_Unbounded_String("None"));
+         LogMessage("Recipe file: " & Full_Name(FoundFile), Everything);
+         Open(RecipesFile, In_File, Full_Name(FoundFile));
+         while not End_Of_File(RecipesFile) loop
+            RawData := To_Unbounded_String(Get_Line(RecipesFile));
+            if Element(RawData, 1) /= '[' then
+               EqualIndex := Index(RawData, "=");
+               FieldName := Head(RawData, EqualIndex - 2);
+               Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
+               if FieldName = To_Unbounded_String("Material") then
+                  StartIndex := 1;
+                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                  for I in 1 .. Amount loop
+                     EndIndex := Index(Value, ", ", StartIndex);
+                     if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                     end if;
+                     TempRecord.MaterialTypes.Append
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Slice(Value, StartIndex, EndIndex - 1)));
+                     StartIndex := EndIndex + 2;
+                  end loop;
+               elsif FieldName = To_Unbounded_String("Amount") then
+                  StartIndex := 1;
+                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                  for I in 1 .. Amount loop
+                     EndIndex := Index(Value, ", ", StartIndex);
+                     if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                     end if;
+                     TempRecord.MaterialAmounts.Append
+                     (New_Item =>
+                        Integer'Value(Slice(Value, StartIndex, EndIndex - 1)));
+                     StartIndex := EndIndex + 2;
+                  end loop;
+               elsif FieldName = To_Unbounded_String("Result") then
+                  TempRecord.ResultIndex := Integer'Value(To_String(Value));
+               elsif FieldName = To_Unbounded_String("Crafted") then
+                  TempRecord.ResultAmount := Integer'Value(To_String(Value));
+               elsif FieldName = To_Unbounded_String("Workplace") then
+                  TempRecord.Workplace := ModuleType'Value(To_String(Value));
+               elsif FieldName = To_Unbounded_String("Skill") then
+                  for I in Skills_Names.Iterate loop
+                     if Value = To_String(Skills_Names(I)) then
+                        TempRecord.Skill :=
+                          UnboundedString_Container.To_Index(I);
+                        exit;
+                     end if;
+                  end loop;
+               elsif FieldName = To_Unbounded_String("Time") then
+                  TempRecord.Time := Integer'Value(To_String(Value));
+               elsif FieldName = To_Unbounded_String("Difficulty") then
+                  TempRecord.Difficulty := Integer'Value(To_String(Value));
+               elsif FieldName = To_Unbounded_String("BaseType") then
+                  TempRecord.BaseType := Integer'Value(To_String(Value));
+               elsif FieldName = To_Unbounded_String("Tool") then
+                  TempRecord.Tool := Value;
+               end if;
+            elsif TempRecord.ResultAmount < 10000 then
+               Recipes_List.Append(New_Item => TempRecord);
+               TempRecord :=
+                 (MaterialTypes => TempMaterials,
+                  MaterialAmounts => TempAmount,
+                  ResultIndex => 1,
+                  ResultAmount => 10000,
+                  Workplace => ALCHEMY_LAB,
+                  Skill => 1,
+                  Time => 15,
+                  Difficulty => 0,
+                  BaseType => 0,
+                  Tool => To_Unbounded_String("None"));
             end if;
-         elsif TempRecord.ResultAmount < 10000 then
-            Recipes_List.Append(New_Item => TempRecord);
-            TempRecord :=
-              (MaterialTypes => TempMaterials,
-               MaterialAmounts => TempAmount,
-               ResultIndex => 1,
-               ResultAmount => 10000,
-               Workplace => ALCHEMY_LAB,
-               Skill => 1,
-               Time => 15,
-               Difficulty => 0,
-               BaseType => 0,
-               Tool => To_Unbounded_String("None"));
-         end if;
+         end loop;
+         Close(RecipesFile);
       end loop;
-      Close(RecipesFile);
+      End_Search(Files);
       return True;
    end LoadRecipes;
 
