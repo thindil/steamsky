@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New enemy ships: tiny inquisition ship mk II, small inquisition ship mk II,
   inquisition ship mk II and armored inquisition ship mk II
+- Support for many data files of this same objects types
 
 ### Changed
 - Merged fields lootmin and lootmax in ships data
