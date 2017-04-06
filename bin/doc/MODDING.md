@@ -42,7 +42,8 @@ ships, ships modules, etc)
 ## Items
 
 ### General informations
-- Open file *items.dat* in *data* directory.
+- Open file *items.dat* in *data/items* directory or create new file with *dat*
+  extension in this directory (example: *myitems.dat*)
 - Each value in item data structure must be one line length.
 - File must end with `[]`.
 
@@ -70,7 +71,8 @@ ships, ships modules, etc)
 ## Recipes
 
 ### General informations
-- Open file *recipes.dat* in *data* directory.
+- Open file *recipes.dat* in *data/recipes* directory or create new file with
+  *dat* extension in this directory (example: *myrecipes.dat*).
 - Each value in recipe data structure must be one line length.
 - File must end with `[]`.
 
@@ -102,7 +104,8 @@ ships, ships modules, etc)
 ## Ship modules
 
 ### General informations
-- Open file *shipmodules.dat* in *data* directory.
+- Open file *shipmodules.dat* in *data/shipmodules* directory or create new
+  file with *dat* extension in that directory (example: *myshipmodules.dat*).
 - Each value in ship module data structure must be one line length.
 - File must end with `[]`.
 
@@ -138,7 +141,8 @@ ships, ships modules, etc)
 ## Ships
 
 ### General informations
-- Open file *ships.dat* in *data* directory.
+- Open file *ships.dat* in *data/ships* directory or create new file with *dat*
+  extension in that directory (example: *myships.dat*).
 - Each value in ship data structure must be one line length.
 - File must end with `[]`.
 
