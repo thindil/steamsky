@@ -23,6 +23,7 @@ with ShipModules; use ShipModules;
 with Utils; use Utils;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
+with Log; use Log;
 
 package body Ships is
 
@@ -259,6 +260,8 @@ package body Ships is
       TempSkills: Skills_Container.Vector;
       TempOrder: Crew_Orders;
       SkillsAmount: Positive;
+      Files: Search_Type;
+      FoundFile: Directory_Entry_Type;
       procedure UpdateMember(Member: in out ProtoCrewData) is
       begin
          Member.Order := TempOrder;
@@ -267,250 +270,289 @@ package body Ships is
       if ProtoShips_List.Length > 0 then
          return True;
       end if;
-      if not Exists("data/ships/ships.dat") then
+      if not Exists("data/ships/") then
          return False;
       end if;
-      TempRecord :=
-        (Name => Null_Unbounded_String,
-         Modules => TempModules,
-         Accuracy => (0, 0),
-         CombatAI => NONE,
-         Evasion => (0, 0),
-         Loot => (0, 0),
-         Perception => (0, 0),
-         Cargo => TempCargo,
-         CombatValue => 1,
-         Crew => TempCrew,
-         Description => Null_Unbounded_String,
-         Owner => Poleis);
-      Open(ShipsFile, In_File, "data/ships/ships.dat");
-      while not End_Of_File(ShipsFile) loop
-         RawData := To_Unbounded_String(Get_Line(ShipsFile));
-         if Element(RawData, 1) /= '[' then
-            EqualIndex := Index(RawData, "=");
-            FieldName := Head(RawData, EqualIndex - 2);
-            Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
-            if FieldName = To_Unbounded_String("Name") then
-               TempRecord.Name := Value;
-            elsif FieldName = To_Unbounded_String("Modules") then
-               StartIndex := 1;
-               Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-               for I in 1 .. Amount loop
-                  EndIndex := Index(Value, ", ", StartIndex);
-                  if EndIndex = 0 then
-                     EndIndex := Length(Value) + 1;
-                  end if;
-                  TempRecord.Modules.Append
-                  (New_Item =>
-                     Integer'Value(Slice(Value, StartIndex, EndIndex - 1)));
-                  StartIndex := EndIndex + 2;
-               end loop;
-            elsif FieldName = To_Unbounded_String("Accuracy") then
-               DotIndex := Index(Value, "..");
-               if DotIndex = 0 then
-                  TempRecord.Accuracy := (Integer'Value(To_String(Value)), 0);
-               else
-                  TempRecord.Accuracy :=
-                    (Integer'Value(Slice(Value, 1, DotIndex - 1)),
-                     Integer'Value(Slice(Value, DotIndex + 2, Length(Value))));
-               end if;
-            elsif FieldName = To_Unbounded_String("CombatAI") then
-               TempRecord.CombatAI := ShipCombatAi'Value(To_String(Value));
-            elsif FieldName = To_Unbounded_String("Evasion") then
-               DotIndex := Index(Value, "..");
-               if DotIndex = 0 then
-                  TempRecord.Evasion := (Integer'Value(To_String(Value)), 0);
-               else
-                  TempRecord.Evasion :=
-                    (Integer'Value(Slice(Value, 1, DotIndex - 1)),
-                     Integer'Value(Slice(Value, DotIndex + 2, Length(Value))));
-               end if;
-            elsif FieldName = To_Unbounded_String("Loot") then
-               DotIndex := Index(Value, "..");
-               if DotIndex = 0 then
-                  TempRecord.Loot := (Integer'Value(To_String(Value)), 0);
-               else
-                  TempRecord.Loot :=
-                    (Integer'Value(Slice(Value, 1, DotIndex - 1)),
-                     Integer'Value(Slice(Value, DotIndex + 2, Length(Value))));
-               end if;
-            elsif FieldName = To_Unbounded_String("Perception") then
-               DotIndex := Index(Value, "..");
-               if DotIndex = 0 then
-                  TempRecord.Perception :=
-                    (Integer'Value(To_String(Value)), 0);
-               else
-                  TempRecord.Perception :=
-                    (Integer'Value(Slice(Value, 1, DotIndex - 1)),
-                     Integer'Value(Slice(Value, DotIndex + 2, Length(Value))));
-               end if;
-            elsif FieldName = To_Unbounded_String("Cargo") then
-               StartIndex := 1;
-               Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-               for I in 1 .. Amount loop
-                  EndIndex := Index(Value, ", ", StartIndex);
-                  if EndIndex = 0 then
-                     EndIndex := Length(Value) + 1;
-                  end if;
-                  XIndex := Index(Value, "x", StartIndex);
-                  DotIndex := Index(Value, "..", StartIndex);
-                  if DotIndex = 0 or DotIndex > EndIndex then
-                     TempRecord.Cargo.Append
-                     (New_Item =>
-                        (Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1)),
-                         Integer'Value(Slice(Value, StartIndex, XIndex - 1)),
-                         0));
-                  else
-                     TempRecord.Cargo.Append
-                     (New_Item =>
-                        (Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1)),
-                         Integer'Value(Slice(Value, StartIndex, DotIndex - 1)),
-                         Integer'
-                           Value
-                             (Slice(Value, DotIndex + 2, XIndex - 1))));
-                  end if;
-                  StartIndex := EndIndex + 2;
-               end loop;
-            elsif FieldName = To_Unbounded_String("Skills") then
-               StartIndex := 1;
-               Amount := Ada.Strings.Unbounded.Count(Value, "; ") + 1;
-               for I in 1 .. Amount loop
-                  EndIndex := Index(Value, "; ", StartIndex);
-                  if EndIndex = 0 then
-                     EndIndex := Length(Value) + 1;
-                  end if;
-                  SkillsValue :=
-                    To_Unbounded_String
-                      (Slice(Value, StartIndex, EndIndex - 1));
-                  StartIndex2 := 1;
-                  SkillsAmount :=
-                    Ada.Strings.Unbounded.Count(SkillsValue, ", ") + 1;
-                  for J in 1 .. SkillsAmount loop
-                     EndIndex2 := Index(SkillsValue, ", ", StartIndex2);
-                     if EndIndex2 = 0 then
-                        EndIndex2 := Length(SkillsValue) + 1;
+      Start_Search(Files, "data/ships/", "*.dat");
+      if not More_Entries(Files) then
+         return False;
+      end if;
+      while More_Entries(Files) loop
+         Get_Next_Entry(Files, FoundFile);
+         TempRecord :=
+           (Name => Null_Unbounded_String,
+            Modules => TempModules,
+            Accuracy => (0, 0),
+            CombatAI => NONE,
+            Evasion => (0, 0),
+            Loot => (0, 0),
+            Perception => (0, 0),
+            Cargo => TempCargo,
+            CombatValue => 1,
+            Crew => TempCrew,
+            Description => Null_Unbounded_String,
+            Owner => Poleis);
+         LogMessage("Ships file: " & Full_Name(FoundFile), Everything);
+         Open(ShipsFile, In_File, Full_Name(FoundFile));
+         while not End_Of_File(ShipsFile) loop
+            RawData := To_Unbounded_String(Get_Line(ShipsFile));
+            if Element(RawData, 1) /= '[' then
+               EqualIndex := Index(RawData, "=");
+               FieldName := Head(RawData, EqualIndex - 2);
+               Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
+               if FieldName = To_Unbounded_String("Name") then
+                  TempRecord.Name := Value;
+               elsif FieldName = To_Unbounded_String("Modules") then
+                  StartIndex := 1;
+                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                  for I in 1 .. Amount loop
+                     EndIndex := Index(Value, ", ", StartIndex);
+                     if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
                      end if;
-                     XIndex := Index(SkillsValue, "x", StartIndex2);
-                     DotIndex := Index(SkillsValue, "..", StartIndex2);
-                     if DotIndex = 0 or DotIndex > EndIndex2 then
-                        TempSkills.Append
+                     TempRecord.Modules.Append
+                     (New_Item =>
+                        Integer'Value(Slice(Value, StartIndex, EndIndex - 1)));
+                     StartIndex := EndIndex + 2;
+                  end loop;
+               elsif FieldName = To_Unbounded_String("Accuracy") then
+                  DotIndex := Index(Value, "..");
+                  if DotIndex = 0 then
+                     TempRecord.Accuracy :=
+                       (Integer'Value(To_String(Value)), 0);
+                  else
+                     TempRecord.Accuracy :=
+                       (Integer'Value(Slice(Value, 1, DotIndex - 1)),
+                        Integer'
+                          Value
+                            (Slice(Value, DotIndex + 2, Length(Value))));
+                  end if;
+               elsif FieldName = To_Unbounded_String("CombatAI") then
+                  TempRecord.CombatAI := ShipCombatAi'Value(To_String(Value));
+               elsif FieldName = To_Unbounded_String("Evasion") then
+                  DotIndex := Index(Value, "..");
+                  if DotIndex = 0 then
+                     TempRecord.Evasion :=
+                       (Integer'Value(To_String(Value)), 0);
+                  else
+                     TempRecord.Evasion :=
+                       (Integer'Value(Slice(Value, 1, DotIndex - 1)),
+                        Integer'
+                          Value
+                            (Slice(Value, DotIndex + 2, Length(Value))));
+                  end if;
+               elsif FieldName = To_Unbounded_String("Loot") then
+                  DotIndex := Index(Value, "..");
+                  if DotIndex = 0 then
+                     TempRecord.Loot := (Integer'Value(To_String(Value)), 0);
+                  else
+                     TempRecord.Loot :=
+                       (Integer'Value(Slice(Value, 1, DotIndex - 1)),
+                        Integer'
+                          Value
+                            (Slice(Value, DotIndex + 2, Length(Value))));
+                  end if;
+               elsif FieldName = To_Unbounded_String("Perception") then
+                  DotIndex := Index(Value, "..");
+                  if DotIndex = 0 then
+                     TempRecord.Perception :=
+                       (Integer'Value(To_String(Value)), 0);
+                  else
+                     TempRecord.Perception :=
+                       (Integer'Value(Slice(Value, 1, DotIndex - 1)),
+                        Integer'
+                          Value
+                            (Slice(Value, DotIndex + 2, Length(Value))));
+                  end if;
+               elsif FieldName = To_Unbounded_String("Cargo") then
+                  StartIndex := 1;
+                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                  for I in 1 .. Amount loop
+                     EndIndex := Index(Value, ", ", StartIndex);
+                     if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                     end if;
+                     XIndex := Index(Value, "x", StartIndex);
+                     DotIndex := Index(Value, "..", StartIndex);
+                     if DotIndex = 0 or DotIndex > EndIndex then
+                        TempRecord.Cargo.Append
                         (New_Item =>
                            (Integer'
                               Value
-                                (Slice(SkillsValue, StartIndex2, XIndex - 1)),
+                                (Slice(Value, XIndex + 1, EndIndex - 1)),
                             Integer'
                               Value
-                                (Slice
-                                   (SkillsValue,
-                                    XIndex + 1,
-                                    EndIndex2 - 1)),
+                                (Slice(Value, StartIndex, XIndex - 1)),
                             0));
                      else
-                        TempSkills.Append
+                        TempRecord.Cargo.Append
                         (New_Item =>
                            (Integer'
                               Value
-                                (Slice(SkillsValue, StartIndex2, XIndex - 1)),
+                                (Slice(Value, XIndex + 1, EndIndex - 1)),
                             Integer'
                               Value
-                                (Slice(SkillsValue, XIndex + 1, DotIndex - 1)),
+                                (Slice(Value, StartIndex, DotIndex - 1)),
                             Integer'
                               Value
-                                (Slice
-                                   (SkillsValue,
-                                    DotIndex + 2,
-                                    EndIndex2 - 1))));
+                                (Slice(Value, DotIndex + 2, XIndex - 1))));
                      end if;
-                     StartIndex2 := EndIndex2 + 2;
+                     StartIndex := EndIndex + 2;
                   end loop;
-                  TempRecord.Crew.Append
-                  (New_Item => (Skills => TempSkills, Order => Rest));
-                  TempSkills.Clear;
-                  StartIndex := EndIndex + 2;
-               end loop;
-            elsif FieldName = To_Unbounded_String("Orders") then
-               StartIndex := 1;
-               Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-               for I in 1 .. Amount loop
-                  EndIndex := Index(Value, ", ", StartIndex);
-                  if EndIndex = 0 then
-                     EndIndex := Length(Value) + 1;
-                  end if;
-                  TempOrder :=
-                    Crew_Orders'Value(Slice(Value, StartIndex, EndIndex - 1));
-                  TempRecord.Crew.Update_Element
-                  (Index => I, Process => UpdateMember'Access);
-                  StartIndex := EndIndex + 2;
-               end loop;
-               TempOrder := Rest;
-            elsif FieldName = To_Unbounded_String("Description") then
-               TempRecord.Description := Value;
-            elsif FieldName = To_Unbounded_String("Owner") then
-               TempRecord.Owner := Bases_Owners'Value(To_String(Value));
-            end if;
-         elsif TempRecord.Name /= Null_Unbounded_String then
-            CombatValue := 0;
-            for I in
-              TempRecord.Modules.First_Index ..
-                  TempRecord.Modules.Last_Index loop
-               case Modules_List.Element(TempRecord.Modules.Element(I))
-                 .MType is
-                  when HULL | GUN | BATTERING_RAM =>
-                     CombatValue :=
-                       CombatValue +
-                       Modules_List.Element(TempRecord.Modules.Element(I))
-                         .Durability +
-                       (Modules_List.Element(TempRecord.Modules.Element(I))
-                          .MaxValue *
-                        10);
-                  when ARMOR =>
-                     CombatValue :=
-                       CombatValue +
-                       Modules_List.Element(TempRecord.Modules.Element(I))
-                         .Durability;
-                  when others =>
-                     null;
-               end case;
-            end loop;
-            for I in
-              TempRecord.Cargo.First_Index .. TempRecord.Cargo.Last_Index loop
-               if Length
-                   (Items_List.Element(TempRecord.Cargo.Element(I)(1))
-                      .IType) >=
-                 4 then
-                  if Slice
-                      (Items_List.Element(TempRecord.Cargo.Element(I)(1))
-                         .IType,
-                       1,
-                       4) =
-                    "Ammo" then
-                     CombatValue :=
-                       CombatValue +
-                       (Items_List.Element(TempRecord.Cargo.Element(I)(1))
-                          .Value *
-                        10);
-                  end if;
+               elsif FieldName = To_Unbounded_String("Skills") then
+                  StartIndex := 1;
+                  Amount := Ada.Strings.Unbounded.Count(Value, "; ") + 1;
+                  for I in 1 .. Amount loop
+                     EndIndex := Index(Value, "; ", StartIndex);
+                     if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                     end if;
+                     SkillsValue :=
+                       To_Unbounded_String
+                         (Slice(Value, StartIndex, EndIndex - 1));
+                     StartIndex2 := 1;
+                     SkillsAmount :=
+                       Ada.Strings.Unbounded.Count(SkillsValue, ", ") + 1;
+                     for J in 1 .. SkillsAmount loop
+                        EndIndex2 := Index(SkillsValue, ", ", StartIndex2);
+                        if EndIndex2 = 0 then
+                           EndIndex2 := Length(SkillsValue) + 1;
+                        end if;
+                        XIndex := Index(SkillsValue, "x", StartIndex2);
+                        DotIndex := Index(SkillsValue, "..", StartIndex2);
+                        if DotIndex = 0 or DotIndex > EndIndex2 then
+                           TempSkills.Append
+                           (New_Item =>
+                              (Integer'
+                                 Value
+                                   (Slice
+                                      (SkillsValue,
+                                       StartIndex2,
+                                       XIndex - 1)),
+                               Integer'
+                                 Value
+                                   (Slice
+                                      (SkillsValue,
+                                       XIndex + 1,
+                                       EndIndex2 - 1)),
+                               0));
+                        else
+                           TempSkills.Append
+                           (New_Item =>
+                              (Integer'
+                                 Value
+                                   (Slice
+                                      (SkillsValue,
+                                       StartIndex2,
+                                       XIndex - 1)),
+                               Integer'
+                                 Value
+                                   (Slice
+                                      (SkillsValue,
+                                       XIndex + 1,
+                                       DotIndex - 1)),
+                               Integer'
+                                 Value
+                                   (Slice
+                                      (SkillsValue,
+                                       DotIndex + 2,
+                                       EndIndex2 - 1))));
+                        end if;
+                        StartIndex2 := EndIndex2 + 2;
+                     end loop;
+                     TempRecord.Crew.Append
+                     (New_Item => (Skills => TempSkills, Order => Rest));
+                     TempSkills.Clear;
+                     StartIndex := EndIndex + 2;
+                  end loop;
+               elsif FieldName = To_Unbounded_String("Orders") then
+                  StartIndex := 1;
+                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                  for I in 1 .. Amount loop
+                     EndIndex := Index(Value, ", ", StartIndex);
+                     if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                     end if;
+                     TempOrder :=
+                       Crew_Orders'
+                         Value
+                           (Slice(Value, StartIndex, EndIndex - 1));
+                     TempRecord.Crew.Update_Element
+                     (Index => I, Process => UpdateMember'Access);
+                     StartIndex := EndIndex + 2;
+                  end loop;
+                  TempOrder := Rest;
+               elsif FieldName = To_Unbounded_String("Description") then
+                  TempRecord.Description := Value;
+               elsif FieldName = To_Unbounded_String("Owner") then
+                  TempRecord.Owner := Bases_Owners'Value(To_String(Value));
                end if;
-            end loop;
-            TempRecord.CombatValue := CombatValue;
-            ProtoShips_List.Append(New_Item => TempRecord);
-            TempRecord :=
-              (Name => Null_Unbounded_String,
-               Modules => TempModules,
-               Accuracy => (0, 0),
-               CombatAI => NONE,
-               Evasion => (0, 0),
-               Loot => (0, 0),
-               Perception => (0, 0),
-               Cargo => TempCargo,
-               CombatValue => 1,
-               Crew => TempCrew,
-               Description => Null_Unbounded_String,
-               Owner => Poleis);
-            TempRecord.Name := Null_Unbounded_String;
-         end if;
+            elsif TempRecord.Name /= Null_Unbounded_String then
+               CombatValue := 0;
+               for I in
+                 TempRecord.Modules.First_Index ..
+                     TempRecord.Modules.Last_Index loop
+                  case Modules_List.Element(TempRecord.Modules.Element(I))
+                    .MType is
+                     when HULL | GUN | BATTERING_RAM =>
+                        CombatValue :=
+                          CombatValue +
+                          Modules_List.Element(TempRecord.Modules.Element(I))
+                            .Durability +
+                          (Modules_List.Element(TempRecord.Modules.Element(I))
+                             .MaxValue *
+                           10);
+                     when ARMOR =>
+                        CombatValue :=
+                          CombatValue +
+                          Modules_List.Element(TempRecord.Modules.Element(I))
+                            .Durability;
+                     when others =>
+                        null;
+                  end case;
+               end loop;
+               for I in
+                 TempRecord.Cargo.First_Index ..
+                     TempRecord.Cargo.Last_Index loop
+                  if Length
+                      (Items_List.Element(TempRecord.Cargo.Element(I)(1))
+                         .IType) >=
+                    4 then
+                     if Slice
+                         (Items_List.Element(TempRecord.Cargo.Element(I)(1))
+                            .IType,
+                          1,
+                          4) =
+                       "Ammo" then
+                        CombatValue :=
+                          CombatValue +
+                          (Items_List.Element(TempRecord.Cargo.Element(I)(1))
+                             .Value *
+                           10);
+                     end if;
+                  end if;
+               end loop;
+               TempRecord.CombatValue := CombatValue;
+               ProtoShips_List.Append(New_Item => TempRecord);
+               TempRecord :=
+                 (Name => Null_Unbounded_String,
+                  Modules => TempModules,
+                  Accuracy => (0, 0),
+                  CombatAI => NONE,
+                  Evasion => (0, 0),
+                  Loot => (0, 0),
+                  Perception => (0, 0),
+                  Cargo => TempCargo,
+                  CombatValue => 1,
+                  Crew => TempCrew,
+                  Description => Null_Unbounded_String,
+                  Owner => Poleis);
+               TempRecord.Name := Null_Unbounded_String;
+            end if;
+         end loop;
+         Close(ShipsFile);
       end loop;
-      Close(ShipsFile);
+      End_Search(Files);
       return True;
    end LoadShips;
 
