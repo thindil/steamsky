@@ -30,7 +30,7 @@ package body ShipModules is
       if Modules_List.Length > 0 then
          return True;
       end if;
-      if not Exists("data/shipmodules.dat") then
+      if not Exists("data/shipmodules/shipmodules.dat") then
          return False;
       end if;
       TempRecord :=
@@ -47,7 +47,7 @@ package body ShipModules is
          Unique => False,
          Size => 0,
          Description => Null_Unbounded_String);
-      Open(ModulesFile, In_File, "data/shipmodules.dat");
+      Open(ModulesFile, In_File, "data/shipmodules/shipmodules.dat");
       while not End_Of_File(ModulesFile) loop
          RawData := To_Unbounded_String(Get_Line(ModulesFile));
          if Element(RawData, 1) /= '[' then

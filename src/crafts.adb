@@ -39,7 +39,7 @@ package body Crafts is
       if Recipes_List.Length > 0 then
          return True;
       end if;
-      if not Exists("data/recipes.dat") then
+      if not Exists("data/recipes/recipes.dat") then
          return False;
       end if;
       TempRecord :=
@@ -53,7 +53,7 @@ package body Crafts is
          Difficulty => 0,
          BaseType => 0,
          Tool => To_Unbounded_String("None"));
-      Open(RecipesFile, In_File, "data/recipes.dat");
+      Open(RecipesFile, In_File, "data/recipes/recipes.dat");
       while not End_Of_File(RecipesFile) loop
          RawData := To_Unbounded_String(Get_Line(RecipesFile));
          if Element(RawData, 1) /= '[' then

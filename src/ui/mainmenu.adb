@@ -359,22 +359,22 @@ package body MainMenu is
                end if;
                if not LoadItems then
                   LoadGameError
-                    ("Can't load items. Probably missing file data/items.dat");
+                    ("Can't load items. Probably missing files in data/items directory");
                   return Main_Menu;
                end if;
                if not LoadShipModules then
                   LoadGameError
-                    ("Can't load ship modules. Probably missing file data/shipmodules.dat");
+                    ("Can't load ship modules. Probably missing files in data/shipmodules directory");
                   return Main_Menu;
                end if;
                if not LoadRecipes then
                   LoadGameError
-                    ("Can't load crafting recipes. Probably missing file data/recipes.dat");
+                    ("Can't load crafting recipes. Probably missing files in data/recipes directory");
                   return Main_Menu;
                end if;
                if not LoadShips then
                   LoadGameError
-                    ("Can't load ship. Probably missing file data/ships.dat");
+                    ("Can't load ship. Probably missing files data/ships directory");
                   return Main_Menu;
                end if;
                LoadError := LoadGame;
