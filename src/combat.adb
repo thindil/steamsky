@@ -509,7 +509,7 @@ package body Combat is
                      if AmmoIndex > 0 then
                         UpdateCargo
                           (Ship,
-                           Ship.Cargo(AmmoIndex).ProtoIndex,
+                           Ship.Cargo.Element(AmmoIndex).ProtoIndex,
                            -1);
                      end if;
                      if Ship = PlayerShip then

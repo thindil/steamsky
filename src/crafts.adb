@@ -476,7 +476,8 @@ package body Crafts is
                         end if;
                         UpdateCargo
                           (PlayerShip,
-                           Recipes_List(Module.Current_Value).ResultIndex,
+                           Recipes_List.Element(Module.Current_Value)
+                             .ResultIndex,
                            ResultAmount);
                         GameStats.CraftingOrders :=
                           GameStats.CraftingOrders + 1;
