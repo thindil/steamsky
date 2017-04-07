@@ -16,6 +16,9 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Moved documentation to separated directory
 
+### Fixed
+- Crash on buying recipes of items with zero price in bases
+
 ## [1.0] - 2017-04-02
 
 ### Added
