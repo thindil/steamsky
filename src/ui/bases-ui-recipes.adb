@@ -44,12 +44,19 @@ package body Bases.UI.Recipes is
          end if;
       end loop;
       InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
-      Cost :=
-        Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex)
+      if Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex)
           .Prices
-          (BaseType) *
-        Recipes_List.Element(RecipeIndex).Difficulty *
-        100;
+          (BaseType) >
+        0 then
+         Cost :=
+           Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex)
+             .Prices
+             (BaseType) *
+           Recipes_List.Element(RecipeIndex).Difficulty *
+           100;
+      else
+         Cost := Recipes_List.Element(RecipeIndex).Difficulty * 100;
+      end if;
       Add
         (Win => InfoWindow,
          Str => "Base price:" & Positive'Image(Cost) & " Charcollum");
