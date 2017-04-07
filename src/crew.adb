@@ -35,7 +35,7 @@ package body Crew is
       CheckPriorities: Boolean := True) is
       NewOrder: Crew_Orders;
       MemberName: constant String :=
-        To_String(PlayerShip.Crew.Element(MemberIndex).Name);
+        To_String(PlayerShip.Crew(MemberIndex).Name);
       ModuleIndex2, ToolsIndex: Natural := 0;
       MType: ModuleType := ENGINE;
       RequiredTool: Unbounded_String;
@@ -48,7 +48,7 @@ package body Crew is
          Member.OrderTime := 15;
       end UpdateOrder;
    begin
-      if GivenOrder = PlayerShip.Crew.Element(MemberIndex).Order then
+      if GivenOrder = PlayerShip.Crew(MemberIndex).Order then
          return;
       end if;
       if GivenOrder = Upgrading or
@@ -61,8 +61,7 @@ package body Crew is
          end if;
          for I in
            PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex)
-                .IType =
+            if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
               RequiredTool then
                ToolsIndex := I;
                exit;
@@ -94,18 +93,14 @@ package body Crew is
         GivenOrder = Talk then
          for I in
            PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = GivenOrder then
+            if PlayerShip.Crew(I).Order = GivenOrder then
                GiveOrders(I, Rest, 0, False);
                exit;
             end if;
          end loop;
       elsif GivenOrder = Gunner or GivenOrder = Craft or GivenOrder = Heal then
-         if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
-            GiveOrders
-              (PlayerShip.Modules.Element(ModuleIndex).Owner,
-               Rest,
-               0,
-               False);
+         if PlayerShip.Modules(ModuleIndex).Owner > 0 then
+            GiveOrders(PlayerShip.Modules(ModuleIndex).Owner, Rest, 0, False);
          end if;
       end if;
       if ModuleIndex = 0 and
@@ -120,32 +115,23 @@ package body Crew is
             when others =>
                null;
          end case;
-         for I in
-           PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index loop
+         for I in PlayerShip.Modules.Iterate loop
             if MType /= CABIN then
-               if Modules_List.Element
-                 (PlayerShip.Modules.Element(I).ProtoIndex)
-                   .MType =
+               if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType =
                  MType and
-                 PlayerShip.Modules.Element(I).Durability > 0 then
-                  if PlayerShip.Modules.Element(I).Owner /= 0 then
-                     GiveOrders
-                       (PlayerShip.Modules.Element(I).Owner,
-                        Rest,
-                        0,
-                        False);
+                 PlayerShip.Modules(I).Durability > 0 then
+                  if PlayerShip.Modules(I).Owner /= 0 then
+                     GiveOrders(PlayerShip.Modules(I).Owner, Rest, 0, False);
                   end if;
-                  ModuleIndex2 := I;
+                  ModuleIndex2 := Modules_Container.To_Index(I);
                   exit;
                end if;
             else
-               if Modules_List.Element
-                 (PlayerShip.Modules.Element(I).ProtoIndex)
-                   .MType =
+               if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType =
                  CABIN and
-                 PlayerShip.Modules.Element(I).Durability > 0 and
-                 PlayerShip.Modules.Element(I).Owner = MemberIndex then
-                  ModuleIndex2 := I;
+                 PlayerShip.Modules(I).Durability > 0 and
+                 PlayerShip.Modules(I).Owner = MemberIndex then
+                  ModuleIndex2 := Modules_Container.To_Index(I);
                   exit;
                end if;
             end if;
@@ -171,24 +157,15 @@ package body Crew is
                   " can't starts operating gun because all guns are destroyed or you don't have installed any.");
                return;
             when Rest =>
-               for I in
-                 PlayerShip.Modules.First_Index ..
-                     PlayerShip.Modules.Last_Index loop
-                  if Modules_List.Element
-                    (PlayerShip.Modules.Element(I).ProtoIndex)
-                      .MType =
-                    CABIN and
-                    PlayerShip.Modules.Element(I).Durability > 0 and
-                    PlayerShip.Modules.Element(I).Owner = 0 then
-                     UpdateModule
-                       (PlayerShip,
-                        I,
-                        "Owner",
-                        Positive'Image(MemberIndex));
+               for Module of PlayerShip.Modules loop
+                  if Modules_List(Module.ProtoIndex).MType = CABIN and
+                    Module.Durability > 0 and
+                    Module.Owner = 0 then
+                     Module.Owner := MemberIndex;
                      AddMessage
                        (MemberName &
                         " take " &
-                        To_String(PlayerShip.Modules.Element(I).Name) &
+                        To_String(Module.Name) &
                         " as own cabin.",
                         OtherMessage);
                      exit;
@@ -198,13 +175,10 @@ package body Crew is
                null;
          end case;
       end if;
-      for I in
-        PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index loop
-         if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex)
-             .MType /=
-           CABIN and
-           PlayerShip.Modules.Element(I).Owner = MemberIndex then
-            UpdateModule(PlayerShip, I, "Owner", "0");
+      for Module of PlayerShip.Modules loop
+         if Modules_List(Module.ProtoIndex).MType /= CABIN and
+           Module.Owner = MemberIndex then
+            Module.Owner := 0;
             exit;
          end if;
       end loop;
@@ -240,8 +214,7 @@ package body Crew is
             AddMessage
               (MemberName &
                " starts upgrading " &
-               To_String
-                 (PlayerShip.Modules.Element(PlayerShip.UpgradeModule).Name) &
+               To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
                ".",
                OrderMessage);
          when Talk =>
@@ -287,24 +260,18 @@ package body Crew is
       end UpdateSkills;
    begin
       for I in
-        PlayerShip.Crew.Element(CrewIndex).Skills.First_Index ..
-            PlayerShip.Crew.Element(CrewIndex).Skills.Last_Index loop
-         if PlayerShip.Crew.Element(CrewIndex).Skills.Element(I)(1) =
-           SkillNumber then
+        PlayerShip.Crew(CrewIndex).Skills.First_Index ..
+            PlayerShip.Crew(CrewIndex).Skills.Last_Index loop
+         if PlayerShip.Crew(CrewIndex).Skills(I)(1) = SkillNumber then
             SkillIndex := I;
-            exit;
          end if;
       end loop;
       if SkillIndex > 0 then
-         if PlayerShip.Crew.Element(CrewIndex).Skills.Element(SkillIndex)(2) =
-           100 then
+         if PlayerShip.Crew(CrewIndex).Skills(SkillIndex)(2) = 100 then
             return;
          end if;
-         SkillLevel :=
-           PlayerShip.Crew.Element(CrewIndex).Skills.Element(SkillIndex)(2);
-         SkillExp :=
-           PlayerShip.Crew.Element(CrewIndex).Skills.Element(SkillIndex)(3) +
-           Amount;
+         SkillLevel := PlayerShip.Crew(CrewIndex).Skills(SkillIndex)(2);
+         SkillExp := PlayerShip.Crew(CrewIndex).Skills(SkillIndex)(3) + Amount;
       end if;
       if SkillExp >= (SkillLevel * 50) then
          SkillExp := SkillExp - (SkillLevel * 50);
@@ -321,64 +288,64 @@ package body Crew is
    begin
       if Gender = 'M' then
          NewName :=
-           MaleSyllablesStart.Element
-           (GetRandom
-              (MaleSyllablesStart.First_Index,
-               MaleSyllablesStart.Last_Index)) &
-           MaleVocals.Element
-           (GetRandom(MaleVocals.First_Index, MaleVocals.Last_Index));
+           MaleSyllablesStart
+             (GetRandom
+                (MaleSyllablesStart.First_Index,
+                 MaleSyllablesStart.Last_Index)) &
+           MaleVocals
+             (GetRandom(MaleVocals.First_Index, MaleVocals.Last_Index));
          if GetRandom(1, 100) < 36 then
             Append
               (NewName,
-               MaleSyllablesMiddle.Element
-               (GetRandom
-                  (MaleSyllablesMiddle.First_Index,
-                   MaleSyllablesMiddle.Last_Index)));
+               MaleSyllablesMiddle
+                 (GetRandom
+                    (MaleSyllablesMiddle.First_Index,
+                     MaleSyllablesMiddle.Last_Index)));
          end if;
          if GetRandom(1, 100) < 11 then
             Append
               (NewName,
-               MaleConsonants.Element
-               (GetRandom
-                  (MaleConsonants.First_Index,
-                   MaleConsonants.Last_Index)));
+               MaleConsonants
+                 (GetRandom
+                    (MaleConsonants.First_Index,
+                     MaleConsonants.Last_Index)));
          end if;
          Append
            (NewName,
-            MaleSyllablesEnd.Element
-            (GetRandom
-               (MaleSyllablesEnd.First_Index,
-                MaleSyllablesEnd.Last_Index)));
+            MaleSyllablesEnd
+              (GetRandom
+                 (MaleSyllablesEnd.First_Index,
+                  MaleSyllablesEnd.Last_Index)));
       else
          NewName :=
-           FemaleSyllablesStart.Element
-           (GetRandom
-              (FemaleSyllablesStart.First_Index,
-               FemaleSyllablesStart.Last_Index)) &
-           FemaleVocals.Element
-           (GetRandom(FemaleVocals.First_Index, FemaleVocals.Last_Index));
+           FemaleSyllablesStart
+             (GetRandom
+                (FemaleSyllablesStart.First_Index,
+                 FemaleSyllablesStart.Last_Index)) &
+           FemaleVocals
+             (GetRandom(FemaleVocals.First_Index, FemaleVocals.Last_Index));
          if GetRandom(1, 100) < 36 then
             Append
               (NewName,
-               FemaleSyllablesMiddle.Element
-               (GetRandom
-                  (FemaleSyllablesMiddle.First_Index,
-                   FemaleSyllablesMiddle.Last_Index)));
+               FemaleSyllablesMiddle
+                 (GetRandom
+                    (FemaleSyllablesMiddle.First_Index,
+                     FemaleSyllablesMiddle.Last_Index)));
          end if;
          if GetRandom(1, 100) < 11 then
             Append
               (NewName,
-               FemaleSyllablesMiddle.Element
-               (GetRandom
-                  (FemaleSyllablesMiddle.First_Index,
-                   FemaleSyllablesMiddle.Last_Index)));
+               FemaleSyllablesMiddle
+                 (GetRandom
+                    (FemaleSyllablesMiddle.First_Index,
+                     FemaleSyllablesMiddle.Last_Index)));
          end if;
          Append
            (NewName,
-            FemaleSyllablesEnd.Element
-            (GetRandom
-               (FemaleSyllablesEnd.First_Index,
-                FemaleSyllablesEnd.Last_Index)));
+            FemaleSyllablesEnd
+              (GetRandom
+                 (FemaleSyllablesEnd.First_Index,
+                  FemaleSyllablesEnd.Last_Index)));
       end if;
       return NewName;
    end GenerateMemberName;
@@ -397,20 +364,20 @@ package body Crew is
          ConsumeValue: Natural := 0;
       begin
          for Item of PlayerShip.Cargo loop
-            if Items_List.Element(Item.ProtoIndex).IType =
+            if Items_List(Item.ProtoIndex).IType =
               To_Unbounded_String(ItemType) then
                ProtoIndex := Item.ProtoIndex;
-               ConsumeValue := Items_List.Element(ProtoIndex).Value;
+               ConsumeValue := Items_List(ProtoIndex).Value;
                exit;
             end if;
          end loop;
          if ProtoIndex = 0 then
             if ItemType = "Food" then
                for Item of PlayerShip.Cargo loop
-                  if Items_List.Element(Item.ProtoIndex).IType =
+                  if Items_List(Item.ProtoIndex).IType =
                     To_Unbounded_String("RawFood") then
                      ProtoIndex := Item.ProtoIndex;
-                     ConsumeValue := Items_List.Element(ProtoIndex).Value;
+                     ConsumeValue := Items_List(ProtoIndex).Value;
                      exit;
                   end if;
                end loop;
@@ -494,7 +461,7 @@ package body Crew is
       I := PlayerShip.Crew.First_Index;
       while I <= PlayerShip.Crew.Last_Index loop
          CurrentMinutes := Minutes;
-         OrderTime := PlayerShip.Crew.Element(I).OrderTime;
+         OrderTime := PlayerShip.Crew(I).OrderTime;
          Times := 0;
          while CurrentMinutes > 0 loop
             if CurrentMinutes >= OrderTime then
@@ -506,42 +473,32 @@ package body Crew is
                CurrentMinutes := 0;
             end if;
          end loop;
-         HealthLevel := PlayerShip.Crew.Element(I).Health;
-         HungerLevel := PlayerShip.Crew.Element(I).Hunger;
-         ThirstLevel := PlayerShip.Crew.Element(I).Thirst;
-         TiredLevel := PlayerShip.Crew.Element(I).Tired;
+         HealthLevel := PlayerShip.Crew(I).Health;
+         HungerLevel := PlayerShip.Crew(I).Hunger;
+         ThirstLevel := PlayerShip.Crew(I).Thirst;
+         TiredLevel := PlayerShip.Crew(I).Tired;
          if Times > 0 then
-            if PlayerShip.Crew.Element(I).Order = Rest then
+            if PlayerShip.Crew(I).Order = Rest then
                CabinIndex := 0;
-               for J in
-                 PlayerShip.Modules.First_Index ..
-                     PlayerShip.Modules.Last_Index loop
-                  if Modules_List.Element
-                    (PlayerShip.Modules.Element(J).ProtoIndex)
-                      .MType =
+               for J in PlayerShip.Modules.Iterate loop
+                  if Modules_List(PlayerShip.Modules(J).ProtoIndex).MType =
                     CABIN and
-                    PlayerShip.Modules.Element(J).Owner = I then
-                     CabinIndex := J;
+                    PlayerShip.Modules(J).Owner = I then
+                     CabinIndex := Modules_Container.To_Index(J);
                      exit;
                   end if;
                end loop;
-               if PlayerShip.Crew.Element(I).Tired > 0 then
+               if PlayerShip.Crew(I).Tired > 0 then
                   if CabinIndex > 0 then
                      Damage :=
                        1.0 -
                        DamageFactor
-                         (Float
-                            (PlayerShip.Modules.Element(CabinIndex)
-                               .Durability) /
-                          Float
-                            (PlayerShip.Modules.Element(CabinIndex)
-                               .MaxDurability));
+                         (Float(PlayerShip.Modules(CabinIndex).Durability) /
+                          Float(PlayerShip.Modules(CabinIndex).MaxDurability));
                      RestAmount :=
-                       PlayerShip.Modules.Element(CabinIndex).Current_Value -
+                       PlayerShip.Modules(CabinIndex).Current_Value -
                        Natural
-                         (Float
-                            (PlayerShip.Modules.Element(CabinIndex)
-                               .Current_Value) *
+                         (Float(PlayerShip.Modules(CabinIndex).Current_Value) *
                           Float(Damage));
                      if RestAmount = 0 then
                         RestAmount := 1;
@@ -558,13 +515,13 @@ package body Crew is
                   HealthLevel := HealthLevel + Times;
                end if;
             else
-               if PlayerShip.Crew.Element(I).Order /= Talk then
+               if PlayerShip.Crew(I).Order /= Talk then
                   TiredLevel := TiredLevel + Times;
                end if;
                if TiredLevel > 100 then
                   TiredLevel := 100;
                end if;
-               case PlayerShip.Crew.Element(I).Order is
+               case PlayerShip.Crew(I).Order is
                   when Pilot =>
                      GainExp(Times, 1, I);
                   when Engineer =>
@@ -576,7 +533,7 @@ package body Crew is
                      end if;
                      HaveMedicalRoom := False;
                      for Module of PlayerShip.Modules loop
-                        if Modules_List.Element(Module.ProtoIndex).MType =
+                        if Modules_List(Module.ProtoIndex).MType =
                           MEDICAL_ROOM and
                           Module.Durability > 0 then
                            HaveMedicalRoom := True;
@@ -591,53 +548,49 @@ package body Crew is
                      end if;
                      if HealAmount > 0 then
                         HealAmount := HealAmount * (-1);
-                        for J in
+                        for I in
                           PlayerShip.Cargo.First_Index ..
                               PlayerShip.Cargo.Last_Index loop
-                           if Items_List.Element
-                             (PlayerShip.Cargo.Element(J).ProtoIndex)
+                           if Items_List
+                               (PlayerShip.Cargo.Element(I).ProtoIndex)
                                .IType =
                              To_Unbounded_String("Medicines") and
-                             PlayerShip.Cargo.Element(J).Amount >= Times then
+                             PlayerShip.Cargo.Element(I).Amount >= Times then
                               HealAmount := abs (HealAmount);
                               UpdateCargo
                                 (PlayerShip,
-                                 PlayerShip.Cargo.Element(J).ProtoIndex,
+                                 PlayerShip.Cargo.Element(I).ProtoIndex,
                                  (0 - Times));
                               exit;
                            end if;
                         end loop;
                      end if;
                      if HealAmount > 0 then
-                        for J in
-                          PlayerShip.Crew.First_Index ..
-                              PlayerShip.Crew.Last_Index loop
-                           if PlayerShip.Crew.Element(J).Health < 100 and
-                             J /= I then
+                        for J in PlayerShip.Crew.Iterate loop
+                           if PlayerShip.Crew(J).Health < 100 and
+                             Crew_Container.To_Index(J) /= I then
                               PlayerShip.Crew.Update_Element
-                              (Index => J, Process => Heal'Access);
+                              (Position => J, Process => Heal'Access);
                               AddMessage
-                                (To_String(PlayerShip.Crew.Element(I).Name) &
+                                (To_String(PlayerShip.Crew(I).Name) &
                                  " healed " &
-                                 To_String(PlayerShip.Crew.Element(J).Name) &
+                                 To_String(PlayerShip.Crew(J).Name) &
                                  " a bit.",
                                  OrderMessage);
                               GainExp(Times, 10, I);
                               exit;
                            end if;
                         end loop;
-                        for J in
-                          PlayerShip.Crew.First_Index ..
-                              PlayerShip.Crew.Last_Index loop
-                           if PlayerShip.Crew.Element(J).Health < 100 and
-                             J /= I then
+                        for J in PlayerShip.Crew.Iterate loop
+                           if PlayerShip.Crew(J).Health < 100 and
+                             Crew_Container.To_Index(J) /= I then
                               HealAmount := 0;
                               exit;
                            end if;
                         end loop;
                         if HealAmount > 0 then
                            AddMessage
-                             (To_String(PlayerShip.Crew.Element(I).Name) &
+                             (To_String(PlayerShip.Crew(I).Name) &
                               " finished healing wounded.",
                               OrderMessage);
                         end if;
@@ -652,21 +605,16 @@ package body Crew is
                   when Clean =>
                      ToolIndex := 0;
                      NeedCleaning := False;
-                     for J in
-                       PlayerShip.Cargo.First_Index ..
-                           PlayerShip.Cargo.Last_Index loop
-                        if Items_List.Element
-                          (PlayerShip.Cargo.Element(J).ProtoIndex)
-                            .IType =
+                     for J in PlayerShip.Cargo.Iterate loop
+                        if Items_List(PlayerShip.Cargo(J).ProtoIndex).IType =
                           To_Unbounded_String("Bucket") then
-                           ToolIndex := J;
+                           ToolIndex := Cargo_Container.To_Index(J);
                            exit;
                         end if;
                      end loop;
                      if ToolIndex > 0 then
                         for Module of PlayerShip.Modules loop
-                           if Modules_List.Element(Module.ProtoIndex).MType =
-                             CABIN and
+                           if Modules_List(Module.ProtoIndex).MType = CABIN and
                              Module.Current_Value < Module.Max_Value then
                               if Module.Current_Value + Times >
                                 Module.Max_Value then
@@ -680,8 +628,7 @@ package body Crew is
                            end if;
                         end loop;
                         for Module of PlayerShip.Modules loop
-                           if Modules_List.Element(Module.ProtoIndex).MType =
-                             CABIN and
+                           if Modules_List(Module.ProtoIndex).MType = CABIN and
                              Module.Current_Value < Module.Max_Value then
                               NeedCleaning := True;
                               exit;
@@ -694,11 +641,9 @@ package body Crew is
                              ("You can't continue cleaning ship because you don't have any bucket.",
                               OrderMessage);
                         end if;
-                        for J in
-                          PlayerShip.Crew.First_Index ..
-                              PlayerShip.Crew.Last_Index loop
-                           if PlayerShip.Crew.Element(J).Order = Clean then
-                              GiveOrders(J, Rest);
+                        for J in PlayerShip.Crew.Iterate loop
+                           if PlayerShip.Crew(J).Order = Clean then
+                              GiveOrders(Crew_Container.To_Index(J), Rest);
                            end if;
                         end loop;
                      end if;
@@ -717,7 +662,7 @@ package body Crew is
             if HungerLevel > 100 then
                HungerLevel := 100;
             end if;
-            if PlayerShip.Crew.Element(I).Hunger = 100 then
+            if PlayerShip.Crew(I).Hunger = 100 then
                HealthLevel := HealthLevel - TiredPoints;
                if HealthLevel < 1 then
                   HealthLevel := 0;
@@ -728,7 +673,7 @@ package body Crew is
             if ThirstLevel > 100 then
                ThirstLevel := 100;
             end if;
-            if PlayerShip.Crew.Element(I).Thirst = 100 then
+            if PlayerShip.Crew(I).Thirst = 100 then
                HealthLevel := HealthLevel - TiredPoints;
                if HealthLevel < 1 then
                   HealthLevel := 0;
@@ -765,26 +710,20 @@ package body Crew is
          ModuleIndex, MemberIndex: Natural := 0;
       begin
          if MaxPriority then
-            for I in
-              PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-               if PlayerShip.Crew.Element(I).Orders
-                   (Crew_Orders'Pos(Order) + 1) =
-                 2 and
-                 PlayerShip.Crew.Element(I).Order /= Order and
-                 PlayerShip.Crew.Element(I).PreviousOrder /= Order then
-                  MemberIndex := I;
+            for I in PlayerShip.Crew.Iterate loop
+               if PlayerShip.Crew(I).Orders(Crew_Orders'Pos(Order) + 1) = 2 and
+                 PlayerShip.Crew(I).Order /= Order and
+                 PlayerShip.Crew(I).PreviousOrder /= Order then
+                  MemberIndex := Crew_Container.To_Index(I);
                   exit;
                end if;
             end loop;
          else
-            for I in
-              PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-               if PlayerShip.Crew.Element(I).Orders
-                   (Crew_Orders'Pos(Order) + 1) =
-                 1 and
-                 PlayerShip.Crew.Element(I).Order = Rest and
-                 PlayerShip.Crew.Element(I).PreviousOrder = Rest then
-                  MemberIndex := I;
+            for I in PlayerShip.Crew.Iterate loop
+               if PlayerShip.Crew(I).Orders(Crew_Orders'Pos(Order) + 1) = 1 and
+                 PlayerShip.Crew(I).Order = Rest and
+                 PlayerShip.Crew(I).PreviousOrder = Rest then
+                  MemberIndex := Crew_Container.To_Index(I);
                   exit;
                end if;
             end loop;
@@ -793,32 +732,28 @@ package body Crew is
             return False;
          end if;
          if Order = Gunner or Order = Craft or Order = Heal then
-            for I in
-              PlayerShip.Modules.First_Index ..
-                  PlayerShip.Modules.Last_Index loop
-               case Modules_List.Element
-               (PlayerShip.Modules.Element(I).ProtoIndex)
-                 .MType is
+            for I in PlayerShip.Modules.Iterate loop
+               case Modules_List(PlayerShip.Modules(I).ProtoIndex).MType is
                   when GUN =>
                      if Order = Gunner and
-                       PlayerShip.Modules.Element(I).Owner = 0 and
-                       PlayerShip.Modules.Element(I).Durability > 0 then
-                        ModuleIndex := I;
+                       PlayerShip.Modules(I).Owner = 0 and
+                       PlayerShip.Modules(I).Durability > 0 then
+                        ModuleIndex := Modules_Container.To_Index(I);
                         exit;
                      end if;
                   when ALCHEMY_LAB .. GREENHOUSE =>
                      if Order = Craft and
-                       PlayerShip.Modules.Element(I).Owner = 0 and
-                       PlayerShip.Modules.Element(I).Durability > 0 and
-                       PlayerShip.Modules.Element(I).Current_Value /= 0 then
-                        ModuleIndex := I;
+                       PlayerShip.Modules(I).Owner = 0 and
+                       PlayerShip.Modules(I).Durability > 0 and
+                       PlayerShip.Modules(I).Current_Value /= 0 then
+                        ModuleIndex := Modules_Container.To_Index(I);
                         exit;
                      end if;
                   when MEDICAL_ROOM =>
                      if Order = Heal and
-                       PlayerShip.Modules.Element(I).Owner = 0 and
-                       PlayerShip.Modules.Element(I).Durability > 0 then
-                        ModuleIndex := I;
+                       PlayerShip.Modules(I).Owner = 0 and
+                       PlayerShip.Modules(I).Durability > 0 then
+                        ModuleIndex := Modules_Container.To_Index(I);
                         exit;
                      end if;
                   when others =>
@@ -829,22 +764,18 @@ package body Crew is
                return False;
             end if;
          elsif Order = Pilot or Order = Engineer then
-            for I in
-              PlayerShip.Modules.First_Index ..
-                  PlayerShip.Modules.Last_Index loop
-               case Modules_List.Element
-               (PlayerShip.Modules.Element(I).ProtoIndex)
-                 .MType is
+            for I in PlayerShip.Modules.Iterate loop
+               case Modules_List(PlayerShip.Modules(I).ProtoIndex).MType is
                   when COCKPIT =>
                      if Order = Pilot and
-                       PlayerShip.Modules.Element(I).Durability > 0 then
-                        ModuleIndex := I;
+                       PlayerShip.Modules(I).Durability > 0 then
+                        ModuleIndex := Modules_Container.To_Index(I);
                         exit;
                      end if;
                   when ENGINE =>
                      if Order = Engineer and
-                       PlayerShip.Modules.Element(I).Durability > 0 then
-                        ModuleIndex := I;
+                       PlayerShip.Modules(I).Durability > 0 then
+                        ModuleIndex := Modules_Container.To_Index(I);
                         exit;
                      end if;
                   when others =>
@@ -867,7 +798,7 @@ package body Crew is
             RequiredTool := To_Unbounded_String("RepairTools");
          end if;
          for Item of PlayerShip.Cargo loop
-            if Items_List.Element(Item.ProtoIndex).IType = RequiredTool then
+            if Items_List(Item.ProtoIndex).IType = RequiredTool then
                return True;
             end if;
          end loop;
@@ -914,7 +845,7 @@ package body Crew is
             when MEDICAL_ROOM =>
                if NeedHealer and Module.Durability > 0 then
                   for Item of PlayerShip.Cargo loop
-                     if Items_List.Element(Item.ProtoIndex).IType =
+                     if Items_List(Item.ProtoIndex).IType =
                        To_Unbounded_String("Medicines") then
                         CanHeal := True;
                         exit;
@@ -926,8 +857,8 @@ package body Crew is
          end case;
          if Module.Durability < Module.MaxDurability and not NeedRepairs then
             for Item of PlayerShip.Cargo loop
-               if Items_List.Element(Item.ProtoIndex).IType =
-                 Modules_List.Element(Module.ProtoIndex).RepairMaterial then
+               if Items_List(Item.ProtoIndex).IType =
+                 Modules_List(Module.ProtoIndex).RepairMaterial then
                   NeedRepairs := True;
                   exit;
                end if;
