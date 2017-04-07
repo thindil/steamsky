@@ -984,10 +984,15 @@ package body Bases is
          return;
       end if;
       TraderIndex := FindMember(Talk);
-      Cost :=
-        Items_List(Recipes_List(RecipeIndex).ResultIndex).Prices(BaseType) *
-        Recipes_List(RecipeIndex).Difficulty *
-        100;
+      if Items_List(Recipes_List(RecipeIndex).ResultIndex).Prices(BaseType) >
+        0 then
+         Cost :=
+           Items_List(Recipes_List(RecipeIndex).ResultIndex).Prices(BaseType) *
+           Recipes_List(RecipeIndex).Difficulty *
+           100;
+      else
+         Cost := Recipes_List(RecipeIndex).Difficulty * 100;
+      end if;
       CountPrice(Cost, TraderIndex);
       MoneyIndex := FindCargo(1);
       if MoneyIndex = 0 then
