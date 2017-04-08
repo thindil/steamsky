@@ -106,6 +106,9 @@ package body UserInterface.Keys is
          when Character'Pos('c') | Character'Pos('C') => -- Crew info screen
             DrawGame(Crew_Info);
             return Crew_Info;
+         when Character'Pos('o') | Character'Pos('O') => -- Ship orders menu
+            DrawGame(Control_Speed);
+            return Control_Speed;
          when Character'Pos('r') | Character'Pos('R') => -- Crafting screen
             DrawGame(Craft_View);
             return Craft_View;
