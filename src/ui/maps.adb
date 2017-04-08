@@ -44,7 +44,7 @@ package body Maps is
       WindowWidth, NewWindowWidth: Column_Position := 20;
       CurrentCell: Attributed_Character;
    begin
-      CurrentCell := ACS_Map(ACS_Solid_Block);
+      CurrentCell := ACS_Map(ACS_Checker_Board);
       CurrentCell.Color := 0;
       StartX := PlayerShip.SkyX - Integer(Columns / 2);
       StartX := StartX + MoveX;
