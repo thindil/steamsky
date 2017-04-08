@@ -42,7 +42,7 @@ package body Events is
          EnemyIndex := ProtoShips_List.First_Index;
          if GetRandom(1, 100) < 99 then
             for Module of PlayerShip.Modules loop
-               case Modules_List.Element(Module.ProtoIndex).MType is
+               case Modules_List(Module.ProtoIndex).MType is
                   when HULL | GUN | BATTERING_RAM =>
                      PlayerValue :=
                        PlayerValue +
@@ -55,12 +55,11 @@ package body Events is
                end case;
             end loop;
             for Item of PlayerShip.Cargo loop
-               if Length(Items_List.Element(Item.ProtoIndex).IType) >= 4 then
-                  if Slice(Items_List.Element(Item.ProtoIndex).IType, 1, 4) =
+               if Length(Items_List(Item.ProtoIndex).IType) >= 4 then
+                  if Slice(Items_List(Item.ProtoIndex).IType, 1, 4) =
                     "Ammo" then
                      PlayerValue :=
-                       PlayerValue +
-                       (Items_List.Element(Item.ProtoIndex).Value * 10);
+                       PlayerValue + (Items_List(Item.ProtoIndex).Value * 10);
                   end if;
                end if;
             end loop;
@@ -84,13 +83,12 @@ package body Events is
       end GenerateEnemies;
    begin
       if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
-         case Events_List.Element
-         (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+         case Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
            .EType is
             when EnemyShip =>
                return StartCombat
-                   (Events_List.Element
-                    (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                   (Events_List
+                      (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
                       .Data);
             when others =>
                return OldState;
@@ -123,8 +121,7 @@ package body Events is
                         for I in
                           PlayerShip.Modules.First_Index ..
                               PlayerShip.Modules.Last_Index loop
-                           if Modules_List.Element
-                             (PlayerShip.Modules.Element(I).ProtoIndex)
+                           if Modules_List(PlayerShip.Modules(I).ProtoIndex)
                                .MType =
                              ENGINE then
                               Engines.Append(New_Item => I);
@@ -132,16 +129,16 @@ package body Events is
                         end loop;
                         UpdateModule
                           (PlayerShip,
-                           Engines.Element
-                           (GetRandom
-                              (Engines.First_Index,
-                               Engines.Last_Index)),
+                           Engines
+                             (GetRandom
+                                (Engines.First_Index,
+                                 Engines.Last_Index)),
                            "Durability",
                            "-1");
                         UpdateOrders;
                      else
                         AddMessage
-                          (To_String(PlayerShip.Crew.Element(CrewIndex).Name) &
+                          (To_String(PlayerShip.Crew(CrewIndex).Name) &
                            " has prevented engine damage.",
                            OtherMessage);
                      end if;
@@ -169,12 +166,11 @@ package body Events is
                       PlayerShip.SkyX,
                       PlayerShip.SkyY,
                       GetRandom(30, 45),
-                      Enemies.Element
-                      (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
+                      Enemies
+                        (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
-                  return StartCombat
-                      (Events_List.Element(Events_List.Last_Index).Data);
+                  return StartCombat(Events_List(Events_List.Last_Index).Data);
             end case;
          else
             if PlayerShip.Speed /= DOCKED and
@@ -193,15 +189,15 @@ package body Events is
                          PlayerShip.SkyX,
                          PlayerShip.SkyY,
                          GetRandom(60, 90),
-                         Enemies.Element
-                         (GetRandom
-                            (Enemies.First_Index,
-                             Enemies.Last_Index))));
+                         Enemies
+                           (GetRandom
+                              (Enemies.First_Index,
+                               Enemies.Last_Index))));
                      AddMessage
                        ("You can't dock to base now, because base is under attack. You can help defend it.",
                         OtherMessage);
                      return StartCombat
-                         (Events_List.Element(Events_List.Last_Index).Data);
+                         (Events_List(Events_List.Last_Index).Data);
                   when 21 => -- Disease in base
                      Events_List.Append
                      (New_Item =>
@@ -219,7 +215,7 @@ package body Events is
                           GetRandom
                             (Items_List.First_Index,
                              Items_List.Last_Index);
-                        exit when Items_List.Element(ItemIndex).Prices(1) > 0;
+                        exit when Items_List(ItemIndex).Prices(1) > 0;
                      end loop;
                      Events_List.Append
                      (New_Item =>
@@ -240,14 +236,14 @@ package body Events is
                             PlayerShip.SkyX,
                             PlayerShip.SkyY,
                             GetRandom(30, 45),
-                            Enemies.Element
-                            (GetRandom
-                               (Enemies.First_Index,
-                                Enemies.Last_Index))));
+                            Enemies
+                              (GetRandom
+                                 (Enemies.First_Index,
+                                  Enemies.Last_Index))));
                         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                           Events_List.Last_Index;
                         return StartCombat
-                            (Events_List.Element(Events_List.Last_Index).Data);
+                            (Events_List(Events_List.Last_Index).Data);
                      end if;
                      Events_List.Append
                      (New_Item =>
@@ -282,16 +278,16 @@ package body Events is
          return;
       end if;
       while CurrentIndex <= Events_List.Last_Index loop
-         NewTime := Events_List.Element(CurrentIndex).Time - Minutes;
+         NewTime := Events_List(CurrentIndex).Time - Minutes;
          if NewTime < 1 then
             if
-              (Events_List.Element(CurrentIndex).EType = Disease or
-               Events_List.Element(CurrentIndex).EType = AttackOnBase) and
+              (Events_List(CurrentIndex).EType = Disease or
+               Events_List(CurrentIndex).EType = AttackOnBase) and
               GetRandom(1, 100) < 10 then
                BaseIndex :=
                  SkyMap
-                   (Events_List.Element(CurrentIndex).SkyX,
-                    Events_List.Element(CurrentIndex).SkyY)
+                   (Events_List(CurrentIndex).SkyX,
+                    Events_List(CurrentIndex).SkyY)
                    .BaseIndex;
                PopulationLost := GetRandom(1, 10);
                if PopulationLost > SkyBases(BaseIndex).Population then
@@ -303,8 +299,8 @@ package body Events is
                  SkyBases(BaseIndex).Population - PopulationLost;
             end if;
             SkyMap
-              (Events_List.Element(CurrentIndex).SkyX,
-               Events_List.Element(CurrentIndex).SkyY)
+              (Events_List(CurrentIndex).SkyX,
+               Events_List(CurrentIndex).SkyY)
               .EventIndex :=
               0;
             Events_List.Delete(Index => CurrentIndex, Count => 1);
@@ -316,25 +312,19 @@ package body Events is
       end loop;
       if EventsAmount > Natural(Events_List.Length) then
          for I in Events_List.First_Index .. Events_List.Last_Index loop
-            SkyMap(Events_List.Element(I).SkyX, Events_List.Element(I).SkyY)
-              .EventIndex :=
-              I;
+            SkyMap(Events_List(I).SkyX, Events_List(I).SkyY).EventIndex := I;
          end loop;
       end if;
    end UpdateEvents;
 
    procedure DeleteEvent(EventIndex: Positive) is
    begin
-      SkyMap
-        (Events_List.Element(EventIndex).SkyX,
-         Events_List.Element(EventIndex).SkyY)
+      SkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY)
         .EventIndex :=
         0;
       Events_List.Delete(Index => EventIndex, Count => 1);
       for I in Events_List.First_Index .. Events_List.Last_Index loop
-         SkyMap(Events_List.Element(I).SkyX, Events_List.Element(I).SkyY)
-           .EventIndex :=
-           I;
+         SkyMap(Events_List(I).SkyX, Events_List(I).SkyY).EventIndex := I;
       end loop;
    end DeleteEvent;
 
