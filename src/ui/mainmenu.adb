@@ -338,9 +338,13 @@ package body MainMenu is
          Update_Screen;
       end ShowErrorInfo;
    begin
+      LoadHelp;
       LoadItems;
       return True;
    exception
+      when Help_File_Not_Found =>
+         ShowErrorInfo("Can't load help data. No file data/help.dat.");
+         return False;
       when Items_Directory_Not_Found =>
          ShowErrorInfo
            ("Can't load items data. Directory with items data files not found.");
@@ -379,11 +383,6 @@ package body MainMenu is
                return New_Game;
             elsif Option = "Load game" then
                if not LoadGameData(False) then
-                  return Main_Menu;
-               end if;
-               if not LoadHelp then
-                  LoadGameError
-                    ("Can't load help system. Probably missing file data/help.dat");
                   return Main_Menu;
                end if;
                if not LoadShipModules then
@@ -515,11 +514,6 @@ package body MainMenu is
                return Main_Menu;
             end if;
             if not LoadGameData then
-               return Main_Menu;
-            end if;
-            if not LoadHelp then
-               NewGameError
-                 ("Can't load help system. Probably missing file data/help.dat");
                return Main_Menu;
             end if;
             if not LoadShipModules then
