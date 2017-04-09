@@ -20,16 +20,16 @@ with Ada.Directories; use Ada.Directories;
 
 package body Help is
 
-   function LoadHelp return Boolean is
+   procedure LoadHelp is
       HelpFile: File_Type;
       RawData: Unbounded_String;
       TmpHelp: Help_Data;
    begin
       if Help_List.Length > 0 then
-         return True;
+         return;
       end if;
       if not Exists("data/help.dat") then
-         return False;
+         raise Help_File_Not_Found;
       end if;
       TmpHelp :=
         (Title => Null_Unbounded_String, Text => Null_Unbounded_String);
@@ -53,7 +53,6 @@ package body Help is
          end if;
       end loop;
       Close(HelpFile);
-      return True;
    end LoadHelp;
 
 end Help;
