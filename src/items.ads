@@ -38,8 +38,9 @@ package Items is
    end record;
    package Objects_Container is new Vectors(Positive, Object_Data);
    Items_List: Objects_Container.Vector; -- List of item available in game
+   Items_Directory_Not_Found : exception; -- Raised when no directory with items files
+   Items_Files_Not_Found : exception; -- Raised when no files with items
 
-   function LoadItems
-     return Boolean; -- Load items from file, returns False if file not found
+   procedure LoadItems; -- Load items from files
 
 end Items;
