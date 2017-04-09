@@ -198,7 +198,7 @@ package body Game is
          if Module.Owner > 0 then
             Module.Owner := Module.Owner + 1;
          end if;
-         if Modules_List.Element(Module.ProtoIndex).MType = CABIN and
+         if Modules_List(Module.ProtoIndex).MType = CABIN and
            Module.Owner = 0 and
            not CabinAssigned then
             Module.Name := CharName & To_Unbounded_String("'s Cabin");
@@ -244,7 +244,7 @@ package body Game is
          GameDate.Hour := GameDate.Hour - 24;
          GameDate.Day := GameDate.Day + 1;
          for Module of PlayerShip.Modules loop
-            if Modules_List.Element(Module.ProtoIndex).MType = CABIN and
+            if Modules_List(Module.ProtoIndex).MType = CABIN and
               Module.Current_Value > 0 then
                Module.Current_Value := Module.Current_Value - 1;
                NeedCleaning := True;
@@ -957,16 +957,14 @@ package body Game is
             (Index =>
                BaseMissions.Last_Index, Process =>
                UpdateMission'Access);
-            if not BaseMissions.Element(I).Finished then
-               SkyMap
-                 (BaseMissions.Element(I).TargetX,
-                  BaseMissions.Element(I).TargetY)
+            if not BaseMissions(I).Finished then
+               SkyMap(BaseMissions(I).TargetX, BaseMissions(I).TargetY)
                  .MissionIndex :=
                  I;
             else
                SkyMap
-                 (SkyBases(BaseMissions.Element(I).StartBase).SkyX,
-                  SkyBases(BaseMissions.Element(I).StartBase).SkyY)
+                 (SkyBases(BaseMissions(I).StartBase).SkyX,
+                  SkyBases(BaseMissions(I).StartBase).SkyY)
                  .MissionIndex :=
                  I;
             end if;
@@ -995,9 +993,7 @@ package body Game is
              SkyY => Integer'Value(To_String(ReadData)),
              Time => Integer'Value(To_String(ReadData)),
              Data => Integer'Value(To_String(ReadData))));
-         SkyMap(Events_List.Element(I).SkyX, Events_List.Element(I).SkyY)
-           .EventIndex :=
-           I;
+         SkyMap(Events_List(I).SkyX, Events_List(I).SkyY).EventIndex := I;
       end loop;
       -- Load game statistics
       VectorLength := Positive'Value(To_String(ReadData));
