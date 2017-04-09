@@ -514,4 +514,14 @@ Skills = 1x15..25, 5x3..6; 3x15..25, 5x3..6; 2x15..25; 3x15..25, 5x3..6; 3x15..2
 Orders = Pilot, Gunner, Engineer, Gunner, Gunner
 Description = Large, good armored, upgraded version of pirate ship. As many pirates they prefer to dismarm enemies first.
 Owner = Pirates
+[51]
+Name = Undead ship mk II
+Modules = 66, 56, 74, 41, 42, 42, 42, 42, 89
+CombatAI = Berserker
+Loot = 100..300
+Cargo = 2000..2500x1, 150..300x13
+Skills = 1x3..6, 5x3..6
+Orders = Pilot
+Description = Upgraded version of undead flying vessel. Dangerous at close range.
+Owner = Undead
 []
