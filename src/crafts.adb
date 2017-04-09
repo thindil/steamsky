@@ -29,7 +29,7 @@ with Log; use Log;
 
 package body Crafts is
 
-   function LoadRecipes return Boolean is
+   procedure LoadRecipes is
       RecipesFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex, StartIndex, EndIndex, Amount: Natural;
@@ -40,14 +40,14 @@ package body Crafts is
       FoundFile: Directory_Entry_Type;
    begin
       if Recipes_List.Length > 0 then
-         return True;
+         return;
       end if;
       if not Exists("data/recipes/") then
-         return False;
+         raise Recipes_Directory_Not_Found;
       end if;
       Start_Search(Files, "data/recipes/", "*.dat");
       if not More_Entries(Files) then
-         return False;
+         raise Recipes_Files_Not_Found;
       end if;
       while More_Entries(Files) loop
          Get_Next_Entry(Files, FoundFile);
@@ -138,7 +138,6 @@ package body Crafts is
          Close(RecipesFile);
       end loop;
       End_Search(Files);
-      return True;
    end LoadRecipes;
 
    procedure SetRecipe(RecipeIndex: Integer; ModuleIndex: Positive) is
