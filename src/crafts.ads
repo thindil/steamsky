@@ -41,9 +41,10 @@ package Crafts is
    Recipes_List: Recipes_Container.Vector; -- List of recipes available in game
    Known_Recipes: Positive_Container
      .Vector; -- List of all know by player recipes
+   Recipes_Directory_Not_Found : exception;
+   Recipes_Files_Not_Found : exception;
 
-   function LoadRecipes
-     return Boolean; -- Load recipes from file, return False if file not exists
+   procedure LoadRecipes; -- Load recipes from files
    procedure Manufacturing(Minutes: Positive); -- Craft selected items
    procedure SetRecipe
      (RecipeIndex: Integer;
