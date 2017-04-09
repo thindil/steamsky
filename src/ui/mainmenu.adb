@@ -325,6 +325,32 @@ package body MainMenu is
       Update_Screen;
    end LoadGameError;
 
+   function LoadGameData(NewGame: Boolean := True) return Boolean is
+      procedure ShowErrorInfo(Message: String) is
+      begin
+         if NewGame then
+            Erase;
+            ShowMainMenu;
+            Refresh_Without_Update;
+         end if;
+         ShowDialog(Message);
+         Update_Panels;
+         Update_Screen;
+      end ShowErrorInfo;
+   begin
+      LoadItems;
+      return True;
+   exception
+      when Items_Directory_Not_Found =>
+         ShowErrorInfo
+           ("Can't load items data. Directory with items data files not found.");
+         return False;
+      when Items_Files_Not_Found =>
+         ShowErrorInfo
+           ("Can't load items data. Files with items data not found.");
+         return False;
+   end LoadGameData;
+
    function MainMenuKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
       Option: constant String := Name(Current(GameMenu));
@@ -352,14 +378,12 @@ package body MainMenu is
                ShowNewGameForm;
                return New_Game;
             elsif Option = "Load game" then
+               if not LoadGameData(False) then
+                  return Main_Menu;
+               end if;
                if not LoadHelp then
                   LoadGameError
                     ("Can't load help system. Probably missing file data/help.dat");
-                  return Main_Menu;
-               end if;
-               if not LoadItems then
-                  LoadGameError
-                    ("Can't load items. Probably missing files in data/items directory");
                   return Main_Menu;
                end if;
                if not LoadShipModules then
@@ -490,14 +514,12 @@ package body MainMenu is
                ShowMainMenu;
                return Main_Menu;
             end if;
+            if not LoadGameData then
+               return Main_Menu;
+            end if;
             if not LoadHelp then
                NewGameError
                  ("Can't load help system. Probably missing file data/help.dat");
-               return Main_Menu;
-            end if;
-            if not LoadItems then
-               NewGameError
-                 ("Can't load items. Probably missing file data/items.dat");
                return Main_Menu;
             end if;
             if not LoadShipModules then

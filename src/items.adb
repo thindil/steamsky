@@ -21,7 +21,7 @@ with Log; use Log;
 
 package body Items is
 
-   function LoadItems return Boolean is
+   procedure LoadItems is
       ItemsFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex, StartIndex, EndIndex: Natural;
@@ -30,14 +30,14 @@ package body Items is
       FoundFile: Directory_Entry_Type;
    begin
       if Items_List.Length > 0 then
-         return True;
+         return;
       end if;
       if not Exists("data/items/") then
-         return False;
+         raise Items_Directory_Not_Found;
       end if;
       Start_Search(Files, "data/items/", "*.dat");
       if not More_Entries(Files) then
-         return False;
+         raise Items_Files_Not_Found;
       end if;
       while More_Entries(Files) loop
          Get_Next_Entry(Files, FoundFile);
@@ -50,7 +50,7 @@ package body Items is
             Value => 0,
             ShowType => Null_Unbounded_String,
             Description => Null_Unbounded_String);
-         LogMessage("Item file: " & Full_Name(FoundFile), Everything);
+         LogMessage("Loading item file: " & Full_Name(FoundFile), Everything);
          Open(ItemsFile, In_File, Full_Name(FoundFile));
          while not End_Of_File(ItemsFile) loop
             RawData := To_Unbounded_String(Get_Line(ItemsFile));
@@ -112,7 +112,6 @@ package body Items is
          Close(ItemsFile);
       end loop;
       End_Search(Files);
-      return True;
    end LoadItems;
 
 end Items;
