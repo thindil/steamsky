@@ -513,10 +513,10 @@ package body MainMenu is
             Trim(NewCharName, Ada.Strings.Both);
             Trim(NewShipName, Ada.Strings.Both);
             if Length(NewCharName) = 0 then
-               NewCharName := To_Unbounded_String("Laeran");
+               NewCharName := NewGameSettings.PlayerName;
             end if;
             if Length(NewShipName) = 0 then
-               NewShipName := To_Unbounded_String("Anaria");
+               NewShipName := NewGameSettings.ShipName;
             end if;
             Set_Cursor_Visibility(Visibility);
             Post(NewGameForm, False);
