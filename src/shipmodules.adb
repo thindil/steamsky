@@ -56,7 +56,9 @@ package body ShipModules is
             Unique => False,
             Size => 0,
             Description => Null_Unbounded_String);
-         LogMessage("Loading ship modules file: " & Full_Name(FoundFile), Everything);
+         LogMessage
+           ("Loading ship modules file: " & Full_Name(FoundFile),
+            Everything);
          Open(ModulesFile, In_File, Full_Name(FoundFile));
          while not End_Of_File(ModulesFile) loop
             RawData := To_Unbounded_String(Get_Line(ModulesFile));
