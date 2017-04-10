@@ -524,4 +524,14 @@ Skills = 1x3..6, 5x3..6
 Orders = Pilot
 Description = Upgraded version of undead flying vessel. Dangerous at close range.
 Owner = Undead
+[52]
+Name = Large undead ship mk II
+Modules = 68, 57, 76, 41, 42, 42, 42, 42, 42, 42, 89
+CombatAI = Berserker
+Loot = 200..400
+Cargo = 3000..4000x1, 300..400x13
+Skills = 1x7..20, 5x7..20
+Orders = Pilot
+Description = Large, good armored, upgraded version of undead flying vessel. Dangerous at close range.
+Owner = Undead
 []
