@@ -318,13 +318,6 @@ package body MainMenu is
          Columns);
    end ShowNews;
 
-   procedure LoadGameError(Message: String) is
-   begin
-      ShowDialog(Message);
-      Update_Panels;
-      Update_Screen;
-   end LoadGameError;
-
    function LoadGameData(NewGame: Boolean := True) return Boolean is
       procedure ShowErrorInfo(Message: String) is
       begin
@@ -342,6 +335,7 @@ package body MainMenu is
       LoadItems;
       LoadShipModules;
       LoadRecipes;
+      LoadShips;
       return True;
    exception
       when Help_File_Not_Found =>
@@ -371,12 +365,19 @@ package body MainMenu is
          ShowErrorInfo
            ("Can't load recipes data. Files with recipes data not found.");
          return False;
+      when Ships_Directory_Not_Found =>
+         ShowErrorInfo
+           ("Can't load ships data. Directory with ships data files not found.");
+         return False;
+      when Ships_Files_Not_Found =>
+         ShowErrorInfo
+           ("Can't load ships data. Files with ships data not found.");
+         return False;
    end LoadGameData;
 
    function MainMenuKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
       Option: constant String := Name(Current(GameMenu));
-      LoadError: Unbounded_String;
    begin
       case Key is
          when 56 | KEY_UP => -- Select previous option
@@ -403,20 +404,9 @@ package body MainMenu is
                if not LoadGameData(False) then
                   return Main_Menu;
                end if;
-               if not LoadShips then
-                  LoadGameError
-                    ("Can't load ship. Probably missing files data/ships directory");
-                  return Main_Menu;
-               end if;
-               LoadError := LoadGame;
-               if LoadError = Null_Unbounded_String then
-                  CenterMap;
-                  DrawGame(Sky_Map_View);
-                  return Sky_Map_View;
-               else
-                  LoadGameError(To_String(LoadError));
-                  return Main_Menu;
-               end if;
+               CenterMap;
+               DrawGame(Sky_Map_View);
+               return Sky_Map_View;
             elsif Option = "News" then
                StartIndex := 0;
                Erase;
@@ -450,16 +440,6 @@ package body MainMenu is
       end case;
       return Main_Menu;
    end MainMenuKeys;
-
-   procedure NewGameError(Message: String) is
-   begin
-      Erase;
-      ShowMainMenu;
-      Refresh_Without_Update;
-      ShowDialog(Message);
-      Update_Panels;
-      Update_Screen;
-   end NewGameError;
 
    function NewGameKeys(Key: Key_Code) return GameStates is
       NewCharName, NewShipName: Unbounded_String;
@@ -522,11 +502,6 @@ package body MainMenu is
                return Main_Menu;
             end if;
             if not LoadGameData then
-               return Main_Menu;
-            end if;
-            if not LoadShips then
-               NewGameError
-                 ("Can't load ship. Probably missing file data/ships.dat");
                return Main_Menu;
             end if;
             NewCharName :=
