@@ -340,6 +340,7 @@ package body MainMenu is
    begin
       LoadHelp;
       LoadItems;
+      LoadShipModules;
       LoadRecipes;
       return True;
    exception
@@ -353,6 +354,14 @@ package body MainMenu is
       when Items_Files_Not_Found =>
          ShowErrorInfo
            ("Can't load items data. Files with items data not found.");
+         return False;
+      when Modules_Directory_Not_Found =>
+         ShowErrorInfo
+           ("Can't load ship modules data. Directory with modules data files not found.");
+         return False;
+      when Modules_Files_Not_Found =>
+         ShowErrorInfo
+           ("Can't load ship modules data. Files with modules data not found.");
          return False;
       when Recipes_Directory_Not_Found =>
          ShowErrorInfo
@@ -392,11 +401,6 @@ package body MainMenu is
                return New_Game;
             elsif Option = "Load game" then
                if not LoadGameData(False) then
-                  return Main_Menu;
-               end if;
-               if not LoadShipModules then
-                  LoadGameError
-                    ("Can't load ship modules. Probably missing files in data/shipmodules directory");
                   return Main_Menu;
                end if;
                if not LoadShips then
@@ -518,11 +522,6 @@ package body MainMenu is
                return Main_Menu;
             end if;
             if not LoadGameData then
-               return Main_Menu;
-            end if;
-            if not LoadShipModules then
-               NewGameError
-                 ("Can't load ship modules. Probably missing file data/shipmodules.dat");
                return Main_Menu;
             end if;
             if not LoadShips then
