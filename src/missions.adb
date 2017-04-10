@@ -74,10 +74,9 @@ package body Missions is
          when others =>
             null;
       end case;
-      for I in Items_List.First_Index .. Items_List.Last_Index loop
-         if Items_List.Element(I).IType =
-           To_Unbounded_String("MissionItem") then
-            MissionsItems.Append(New_Item => I);
+      for I in Items_List.Iterate loop
+         if Items_List(I).IType = To_Unbounded_String("MissionItem") then
+            MissionsItems.Append(New_Item => Objects_Container.To_Index(I));
          end if;
       end loop;
       MinX := PlayerShip.SkyX - 100;
@@ -114,7 +113,7 @@ package body Missions is
       end loop;
       SkyBases(BaseIndex).Missions.Clear;
       for Module of PlayerShip.Modules loop
-         case Modules_List.Element(Module.ProtoIndex).MType is
+         case Modules_List(Module.ProtoIndex).MType is
             when HULL | GUN | BATTERING_RAM =>
                PlayerValue :=
                  PlayerValue + Module.MaxDurability + (Module.Max_Value * 10);
@@ -125,20 +124,18 @@ package body Missions is
          end case;
       end loop;
       for Item of PlayerShip.Cargo loop
-         if Length(Items_List.Element(Item.ProtoIndex).IType) >= 4 then
-            if Slice(Items_List.Element(Item.ProtoIndex).IType, 1, 4) =
-              "Ammo" then
+         if Length(Items_List(Item.ProtoIndex).IType) >= 4 then
+            if Slice(Items_List(Item.ProtoIndex).IType, 1, 4) = "Ammo" then
                PlayerValue :=
-                 PlayerValue +
-                 (Items_List.Element(Item.ProtoIndex).Value * 10);
+                 PlayerValue + (Items_List(Item.ProtoIndex).Value * 10);
             end if;
          end if;
       end loop;
-      for I in ProtoShips_List.First_Index .. ProtoShips_List.Last_Index loop
-         if ProtoShips_List.Element(I).CombatValue <= PlayerValue and
-           (ProtoShips_List.Element(I).Owner /= Poleis and
-            ProtoShips_List.Element(I).Owner /= Independent) then
-            Enemies.Append(New_Item => I);
+      for I in ProtoShips_List.Iterate loop
+         if ProtoShips_List(I).CombatValue <= PlayerValue and
+           (ProtoShips_List(I).Owner /= Poleis and
+            ProtoShips_List(I).Owner /= Independent) then
+            Enemies.Append(New_Item => ProtoShips_Container.To_Index(I));
          end if;
       end loop;
       for I in 1 .. MissionsAmount loop
@@ -149,14 +146,13 @@ package body Missions is
          case Mission.MType is
             when Deliver =>
                Mission.Target :=
-                 MissionsItems.Element
-                 (GetRandom
-                    (MissionsItems.First_Index,
-                     MissionsItems.Last_Index));
+                 MissionsItems
+                   (GetRandom
+                      (MissionsItems.First_Index,
+                       MissionsItems.Last_Index));
             when Kill =>
                Mission.Target :=
-                 Enemies.Element
-                 (GetRandom(Enemies.First_Index, Enemies.Last_Index));
+                 Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
             when Patrol =>
                Mission.Target := 0;
             when Explore =>
@@ -184,8 +180,8 @@ package body Missions is
             else
                TmpBaseIndex :=
                  GetRandom(BasesInRange.First_Index, BasesInRange.Last_Index);
-               MissionX := SkyBases(BasesInRange.Element(TmpBaseIndex)).SkyX;
-               MissionY := SkyBases(BasesInRange.Element(TmpBaseIndex)).SkyY;
+               MissionX := SkyBases(BasesInRange(TmpBaseIndex)).SkyX;
+               MissionY := SkyBases(BasesInRange(TmpBaseIndex)).SkyY;
                exit when MissionX /= PlayerShip.SkyX and
                  MissionY /= PlayerShip.SkyY;
             end if;
@@ -225,8 +221,7 @@ package body Missions is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MissionsLimit: Integer;
-      Mission: Mission_Data :=
-        SkyBases(BaseIndex).Missions.Element(MissionIndex);
+      Mission: Mission_Data := SkyBases(BaseIndex).Missions(MissionIndex);
       AcceptMessage: Unbounded_String;
       TraderIndex: Positive;
    begin
@@ -258,7 +253,7 @@ package body Missions is
          return;
       end if;
       if Mission.MType = Deliver then
-         if FreeCargo((0 - Items_List.Element(Mission.Target).Weight)) < 0 then
+         if FreeCargo((0 - Items_List(Mission.Target).Weight)) < 0 then
             ShowDialog
               ("You don't have enough cargo space for take this mission.");
             return;
@@ -273,14 +268,14 @@ package body Missions is
             Append
               (AcceptMessage,
                "'Deliver " &
-               To_String(Items_List.Element(Mission.Target).Name) &
+               To_String(Items_List(Mission.Target).Name) &
                "'.");
             UpdateCargo(PlayerShip, Mission.Target, 1);
          when Kill =>
             Append
               (AcceptMessage,
                "'Destroy " &
-               To_String(ProtoShips_List.Element(Mission.Target).Name) &
+               To_String(ProtoShips_List(Mission.Target).Name) &
                "'.");
          when Patrol =>
             Append(AcceptMessage, "'Patrol selected area'.");
@@ -306,7 +301,7 @@ package body Missions is
       end UpdateMission;
    begin
       while I <= PlayerShip.Missions.Last_Index loop
-         Time := PlayerShip.Missions.Element(I).Time - Minutes;
+         Time := PlayerShip.Missions(I).Time - Minutes;
          if Time < 1 then
             DeleteMission(I);
          else
@@ -323,22 +318,19 @@ package body Missions is
          DockShip(True);
       end if;
       UpdateGame(5);
-      case PlayerShip.Missions.Element(MissionIndex).MType is
+      case PlayerShip.Missions(MissionIndex).MType is
          when Deliver =>
             AddMessage
               ("You finished mission 'Deliver " &
                To_String
-                 (Items_List.Element
-                  (PlayerShip.Missions.Element(MissionIndex).Target)
-                    .Name) &
+                 (Items_List(PlayerShip.Missions(MissionIndex).Target).Name) &
                "'.",
                MissionMessage);
          when Kill =>
             AddMessage
               ("You finished mission 'Destroy " &
                To_String
-                 (ProtoShips_List.Element
-                  (PlayerShip.Missions.Element(MissionIndex).Target)
+                 (ProtoShips_List(PlayerShip.Missions(MissionIndex).Target)
                     .Name) &
                "'.",
                MissionMessage);
@@ -358,8 +350,7 @@ package body Missions is
    procedure DeleteMission(MissionIndex: Positive; Failed: Boolean := True) is
       MessageText: Unbounded_String :=
         To_Unbounded_String("You failed mission ");
-      Mission: constant Mission_Data :=
-        PlayerShip.Missions.Element(MissionIndex);
+      Mission: constant Mission_Data := PlayerShip.Missions(MissionIndex);
       FreeSpace, RewardAmount: Integer;
    begin
       if Failed then
@@ -369,13 +360,13 @@ package body Missions is
                Append
                  (MessageText,
                   "'Deliver " &
-                  To_String(Items_List.Element(Mission.Target).Name) &
+                  To_String(Items_List(Mission.Target).Name) &
                   "'.");
             when Kill =>
                Append
                  (MessageText,
                   "'Destroy " &
-                  To_String(ProtoShips_List.Element(Mission.Target).Name) &
+                  To_String(ProtoShips_List(Mission.Target).Name) &
                   "'.");
             when Patrol =>
                Append(MessageText, "'Patrol selected area'.");
@@ -417,16 +408,16 @@ package body Missions is
       PlayerShip.Missions.Delete(Index => MissionIndex, Count => 1);
       for I in
         PlayerShip.Missions.First_Index .. PlayerShip.Missions.Last_Index loop
-         if PlayerShip.Missions.Element(I).Finished then
+         if PlayerShip.Missions(I).Finished then
             SkyMap
-              (SkyBases(PlayerShip.Missions.Element(I).StartBase).SkyX,
-               SkyBases(PlayerShip.Missions.Element(I).StartBase).SkyY)
+              (SkyBases(PlayerShip.Missions(I).StartBase).SkyX,
+               SkyBases(PlayerShip.Missions(I).StartBase).SkyY)
               .MissionIndex :=
               I;
          else
             SkyMap
-              (PlayerShip.Missions.Element(I).TargetX,
-               PlayerShip.Missions.Element(I).TargetY)
+              (PlayerShip.Missions(I).TargetX,
+               PlayerShip.Missions(I).TargetY)
               .MissionIndex :=
               I;
          end if;
@@ -434,8 +425,7 @@ package body Missions is
    end DeleteMission;
 
    procedure UpdateMission(MissionIndex: Positive) is
-      Mission: constant Mission_Data :=
-        PlayerShip.Missions.Element(MissionIndex);
+      Mission: constant Mission_Data := PlayerShip.Missions(MissionIndex);
       MessageText: Unbounded_String :=
         To_Unbounded_String("Return to ") &
         SkyBases(Mission.StartBase).Name &
@@ -453,23 +443,20 @@ package body Missions is
          SkyBases(Mission.StartBase).SkyY)
         .MissionIndex :=
         MissionIndex;
-      case PlayerShip.Missions.Element(MissionIndex).MType is
+      case PlayerShip.Missions(MissionIndex).MType is
          when Deliver =>
             Append
               (MessageText,
                "'Deliver " &
                To_String
-                 (Items_List.Element
-                  (PlayerShip.Missions.Element(MissionIndex).Target)
-                    .Name) &
+                 (Items_List(PlayerShip.Missions(MissionIndex).Target).Name) &
                "'.");
          when Kill =>
             Append
               (MessageText,
                "'Destroy " &
                To_String
-                 (ProtoShips_List.Element
-                  (PlayerShip.Missions.Element(MissionIndex).Target)
+                 (ProtoShips_List(PlayerShip.Missions(MissionIndex).Target)
                     .Name) &
                "'.");
          when Patrol =>
