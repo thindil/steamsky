@@ -22,7 +22,7 @@ with Log; use Log;
 
 package body ShipModules is
 
-   function LoadShipModules return Boolean is
+   procedure LoadShipModules is
       ModulesFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex: Natural;
@@ -31,14 +31,14 @@ package body ShipModules is
       FoundFile: Directory_Entry_Type;
    begin
       if Modules_List.Length > 0 then
-         return True;
+         return;
       end if;
       if not Exists("data/shipmodules/") then
-         return False;
+         raise Modules_Directory_Not_Found;
       end if;
       Start_Search(Files, "data/shipmodules/", "*.dat");
       if not More_Entries(Files) then
-         return False;
+         raise Modules_Files_Not_Found;
       end if;
       while More_Entries(Files) loop
          Get_Next_Entry(Files, FoundFile);
@@ -56,7 +56,7 @@ package body ShipModules is
             Unique => False,
             Size => 0,
             Description => Null_Unbounded_String);
-         LogMessage("Ship modules file: " & Full_Name(FoundFile), Everything);
+         LogMessage("Loading ship modules file: " & Full_Name(FoundFile), Everything);
          Open(ModulesFile, In_File, Full_Name(FoundFile));
          while not End_Of_File(ModulesFile) loop
             RawData := To_Unbounded_String(Get_Line(ModulesFile));
@@ -122,7 +122,6 @@ package body ShipModules is
          Close(ModulesFile);
       end loop;
       End_Search(Files);
-      return True;
    end LoadShipModules;
 
 end ShipModules;
