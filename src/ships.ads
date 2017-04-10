@@ -91,6 +91,8 @@ package Ships is
    package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
    ProtoShips_List: ProtoShips_Container.Vector;
    PlayerShip: ShipRecord;
+   Ships_Directory_Not_Found : exception; -- Raised when no directory with ships files
+   Ships_Files_Not_Found : exception; -- Raised when no files with ships
 
    procedure UpdateModule
      (Ship: in out ShipRecord;
@@ -102,8 +104,7 @@ package Ships is
       Name: Unbounded_String;
       X, Y: Integer;
       Speed: ShipSpeed) return ShipRecord; -- Create new ship
-   function LoadShips
-     return Boolean; -- Load ships from file, returns False if file not found
+   procedure LoadShips; -- Load ships from files
    function CountShipWeight
      (Ship: ShipRecord)
      return Positive; -- Count weight of ship (with modules and cargo)

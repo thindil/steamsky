@@ -241,7 +241,7 @@ package body Ships is
       return TmpShip;
    end CreateShip;
 
-   function LoadShips return Boolean is
+   procedure LoadShips is
       ShipsFile: File_Type;
       RawData, FieldName, Value, SkillsValue: Unbounded_String;
       EqualIndex,
@@ -268,14 +268,14 @@ package body Ships is
       end UpdateMember;
    begin
       if ProtoShips_List.Length > 0 then
-         return True;
+         return;
       end if;
       if not Exists("data/ships/") then
-         return False;
+         raise Ships_Directory_Not_Found;
       end if;
       Start_Search(Files, "data/ships/", "*.dat");
       if not More_Entries(Files) then
-         return False;
+         raise Ships_Files_Not_Found;
       end if;
       while More_Entries(Files) loop
          Get_Next_Entry(Files, FoundFile);
@@ -553,7 +553,6 @@ package body Ships is
          Close(ShipsFile);
       end loop;
       End_Search(Files);
-      return True;
    end LoadShips;
 
    function CountShipWeight(Ship: ShipRecord) return Positive is
