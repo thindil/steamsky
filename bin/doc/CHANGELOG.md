@@ -20,6 +20,8 @@ All notable changes to this project will be documented in this file.
 - Crash on buying recipes of items with zero price in bases
 - Cursor mark on map
 - Ship orders entry in main menu
+- Read default player/ship name from configuration when none entered in new
+  game form
 
 ## [1.0] - 2017-04-02
 
