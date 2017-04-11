@@ -534,4 +534,14 @@ Skills = 1x7..20, 5x7..20
 Orders = Pilot
 Description = Large, good armored, upgraded version of undead flying vessel. Dangerous at close range.
 Owner = Undead
+[53]
+Name = Large inquisition ship mk II
+Modules = 68, 57, 76, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 42, 42, 42, 85, 27, 85, 27
+CombatAI = Attacker
+Loot = 250..500
+Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x20, 200..400x13
+Skills = 1x15..25, 5x7..15; 3x10..20, 5x3..8; 3x10..20, 5x3..7
+Orders = Pilot, Gunner, Gunner
+Description = Large, good armored, upgraded version of inquisition flying vessel.
+Owner = Inquisition
 []
