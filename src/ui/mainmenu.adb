@@ -378,6 +378,7 @@ package body MainMenu is
    function MainMenuKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
       Option: constant String := Name(Current(GameMenu));
+      LoadError: Unbounded_String;
    begin
       case Key is
          when 56 | KEY_UP => -- Select previous option
@@ -404,9 +405,17 @@ package body MainMenu is
                if not LoadGameData(False) then
                   return Main_Menu;
                end if;
-               CenterMap;
-               DrawGame(Sky_Map_View);
-               return Sky_Map_View;
+               LoadError := LoadGame;
+               if LoadError = Null_Unbounded_String then
+                  CenterMap;
+                  DrawGame(Sky_Map_View);
+                  return Sky_Map_View;
+               else
+                  ShowDialog(To_String(LoadError));
+                  Update_Panels;
+                  Update_Screen;
+                  return Main_Menu;
+               end if;
             elsif Option = "News" then
                StartIndex := 0;
                Erase;
