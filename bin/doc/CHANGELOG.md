@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New enemy ships: tiny inquisition ship mk II, small inquisition ship mk II,
   inquisition ship mk II, armored inquisition ship mk II, large clockwork drone
-  mk II, large pirate ship mk II, undead ship mk II and large undead ship mk II
+  mk II, large pirate ship mk II, undead ship mk II, large undead ship mk II
+  and large inquisition ship mk II
 - Support for many data files of this same objects types
 
 ### Changed
