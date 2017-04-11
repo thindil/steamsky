@@ -55,7 +55,8 @@ package body ShipModules is
             InstallTime => 60,
             Unique => False,
             Size => 0,
-            Description => Null_Unbounded_String);
+            Description => Null_Unbounded_String,
+            Index => Null_Unbounded_String);
          LogMessage
            ("Loading ship modules file: " & Full_Name(FoundFile),
             Everything);
@@ -103,22 +104,32 @@ package body ShipModules is
                elsif FieldName = To_Unbounded_String("Description") then
                   TempRecord.Description := Value;
                end if;
-            elsif TempRecord.Name /= Null_Unbounded_String then
-               Modules_List.Append(New_Item => TempRecord);
-               TempRecord :=
-                 (Name => Null_Unbounded_String,
-                  MType => ENGINE,
-                  Weight => 0,
-                  Value => 0,
-                  MaxValue => 0,
-                  Durability => 0,
-                  RepairMaterial => Null_Unbounded_String,
-                  RepairSkill => 2,
-                  Price => 0,
-                  InstallTime => 60,
-                  Unique => False,
-                  Size => 0,
-                  Description => Null_Unbounded_String);
+            else
+               if TempRecord.Name /= Null_Unbounded_String then
+                  LogMessage
+                    ("Module added: " & To_String(TempRecord.Name),
+                     Everything);
+                  Modules_List.Append(New_Item => TempRecord);
+                  TempRecord :=
+                    (Name => Null_Unbounded_String,
+                     MType => ENGINE,
+                     Weight => 0,
+                     Value => 0,
+                     MaxValue => 0,
+                     Durability => 0,
+                     RepairMaterial => Null_Unbounded_String,
+                     RepairSkill => 2,
+                     Price => 0,
+                     InstallTime => 60,
+                     Unique => False,
+                     Size => 0,
+                     Description => Null_Unbounded_String,
+                     Index => Null_Unbounded_String);
+               end if;
+               if Length(RawData) > 2 then
+                  TempRecord.Index :=
+                    Unbounded_Slice(RawData, 2, (Length(RawData) - 1));
+               end if;
             end if;
          end loop;
          Close(ModulesFile);

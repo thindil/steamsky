@@ -259,7 +259,7 @@ package body Ships is
       TempCrew: ProtoCrew_Container.Vector;
       TempSkills: Skills_Container.Vector;
       TempOrder: Crew_Orders;
-      SkillsAmount: Positive;
+      SkillsAmount, ModuleIndex: Positive;
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
       procedure UpdateMember(Member: in out ProtoCrewData) is
@@ -292,7 +292,7 @@ package body Ships is
             Crew => TempCrew,
             Description => Null_Unbounded_String,
             Owner => Poleis);
-         LogMessage("Ships file: " & Full_Name(FoundFile), Everything);
+         LogMessage("Loading ships file: " & Full_Name(FoundFile), Everything);
          Open(ShipsFile, In_File, Full_Name(FoundFile));
          while not End_Of_File(ShipsFile) loop
             RawData := To_Unbounded_String(Get_Line(ShipsFile));
@@ -310,9 +310,14 @@ package body Ships is
                      if EndIndex = 0 then
                         EndIndex := Length(Value) + 1;
                      end if;
-                     TempRecord.Modules.Append
-                     (New_Item =>
-                        Integer'Value(Slice(Value, StartIndex, EndIndex - 1)));
+                     for I in Modules_List.Iterate loop
+                        if Modules_List(I).Index =
+                          Unbounded_Slice(Value, StartIndex, EndIndex - 1) then
+                           ModuleIndex := BaseModules_Container.To_Index(I);
+                           exit;
+                        end if;
+                     end loop;
+                     TempRecord.Modules.Append(New_Item => ModuleIndex);
                      StartIndex := EndIndex + 2;
                   end loop;
                elsif FieldName = To_Unbounded_String("Accuracy") then
@@ -534,6 +539,9 @@ package body Ships is
                end loop;
                TempRecord.CombatValue := CombatValue;
                ProtoShips_List.Append(New_Item => TempRecord);
+               LogMessage
+                 ("Ship added: " & To_String(TempRecord.Name),
+                  Everything);
                TempRecord :=
                  (Name => Null_Unbounded_String,
                   Modules => TempModules,
