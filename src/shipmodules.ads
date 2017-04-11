@@ -52,6 +52,7 @@ package ShipModules is
       Unique: Boolean; -- Did ship can have installed only one that module
       Size: Natural; -- How many space in ship this module take
       Description: Unbounded_String; -- Description of module
+      Index: Unbounded_String; -- Index of module
    end record;
    package BaseModules_Container is new Vectors(Positive, BaseModule_Data);
    Modules_List: BaseModules_Container
