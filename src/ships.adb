@@ -247,14 +247,15 @@ package body Ships is
       CombatValue,
       DotIndex,
       EndIndex2,
-      StartIndex2: Natural;
+      StartIndex2,
+      ModuleIndex: Natural;
       TempRecord: ProtoShipData;
       TempModules: Positive_Container.Vector;
       TempCargo: Skills_Container.Vector;
       TempCrew: ProtoCrew_Container.Vector;
       TempSkills: Skills_Container.Vector;
       TempOrder: Crew_Orders;
-      SkillsAmount, ModuleIndex: Positive;
+      SkillsAmount: Positive;
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
       procedure UpdateMember(Member: in out ProtoCrewData) is
@@ -305,13 +306,9 @@ package body Ships is
                      if EndIndex = 0 then
                         EndIndex := Length(Value) + 1;
                      end if;
-                     for I in Modules_List.Iterate loop
-                        if Modules_List(I).Index =
-                          Unbounded_Slice(Value, StartIndex, EndIndex - 1) then
-                           ModuleIndex := BaseModules_Container.To_Index(I);
-                           exit;
-                        end if;
-                     end loop;
+                     ModuleIndex :=
+                       FindProtoModule
+                         (Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      TempRecord.Modules.Append(New_Item => ModuleIndex);
                      StartIndex := EndIndex + 2;
                   end loop;
