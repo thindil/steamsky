@@ -137,4 +137,14 @@ package body ShipModules is
       End_Search(Files);
    end LoadShipModules;
 
+   function FindProtoModule(Index: Unbounded_String) return Natural is
+   begin
+      for I in Modules_List.Iterate loop
+         if Modules_List(I).Index = Index then
+            return BaseModules_Container.To_Index(I);
+         end if;
+      end loop;
+      return 0;
+   end FindProtoModule;
+
 end ShipModules;
