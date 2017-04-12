@@ -61,5 +61,8 @@ package ShipModules is
    Modules_Files_Not_Found : exception; -- Raised when no files with modules
 
    procedure LoadShipModules; -- Load modules from files
+   function FindProtoModule
+     (Index: Unbounded_String)
+     return Natural; -- Return vector index of module or zero if module not found
 
 end ShipModules;
