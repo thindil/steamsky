@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Ship orders entry in main menu
 - Read default player/ship name from configuration when none entered in new
   game form
+- Some ships data
 
 ## [1.0] - 2017-04-02
 
