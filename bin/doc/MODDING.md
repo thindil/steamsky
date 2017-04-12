@@ -110,8 +110,9 @@ ships, ships modules, etc)
 - File must end with `[]`.
 
 ### Ship module data structure
-- Each ship module start from `[` symbol. Numbers between `[` and `]` are just for 
-  easier counting modules indexes. You can write any text between symbols.
+- Each ship module start from `[` symbol. Any value between `[` and `]` is a
+  module index (it can be number or text) and must be unique. This value is
+  used in ships data entries.
 - Name: Standard name of module. Will be visible in ship info screen and in
   shipyards.
 - Type: Type of module. Available options are: Engine, Cabin, Cockpit, Turret,
