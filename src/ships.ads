@@ -93,6 +93,7 @@ package Ships is
    PlayerShip: ShipRecord;
    Ships_Directory_Not_Found : exception; -- Raised when no directory with ships files
    Ships_Files_Not_Found : exception; -- Raised when no files with ships
+   Ships_Invalid_Data : exception; -- Raised when invalid data in ships file
 
    procedure UpdateModule
      (Ship: in out ShipRecord;
