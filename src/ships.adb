@@ -68,7 +68,7 @@ package body Ships is
       end if;
       if Field = "Durability" then
          NewDurability :=
-           Ship.Modules.Element(ModuleIndex).Durability + Integer'Value(Value);
+           Ship.Modules(ModuleIndex).Durability + Integer'Value(Value);
          if NewDurability < 0 then
             NewDurability := 0;
          end if;
@@ -80,18 +80,16 @@ package body Ships is
          NewOwner := Natural'Value(Value);
       elsif Field = "MaxDurability" then
          NewMaxDurability :=
-           Ship.Modules.Element(ModuleIndex).MaxDurability +
-           Integer'Value(Value);
+           Ship.Modules(ModuleIndex).MaxDurability + Integer'Value(Value);
       elsif Field = "Max_Value" then
          NewMaxValue :=
-           Ship.Modules.Element(ModuleIndex).Max_Value + Integer'Value(Value);
+           Ship.Modules(ModuleIndex).Max_Value + Integer'Value(Value);
       elsif Field = "UpgradeProgress" then
          NewUpgradeProgress := Integer'Value(Value);
       elsif Field = "UpgradeAction" then
          NewUpgradeAction := ShipUpgrade'Value(Value);
       elsif Field = "Weight" then
-         NewWeight :=
-           Ship.Modules.Element(ModuleIndex).Weight + Natural'Value(Value);
+         NewWeight := Ship.Modules(ModuleIndex).Weight + Natural'Value(Value);
       end if;
       Ship.Modules.Update_Element
       (Index => ModuleIndex, Process => UpdateMod'Access);
@@ -111,19 +109,19 @@ package body Ships is
       Gender: Character;
       MemberName: Unbounded_String;
       TmpSkills: Skills_Container.Vector;
-      ProtoShip: constant ProtoShipData := ProtoShips_List.Element(ProtoIndex);
+      ProtoShip: constant ProtoShipData := ProtoShips_List(ProtoIndex);
       ShipCargo: Cargo_Container.Vector;
    begin
       for Module of ProtoShip.Modules loop
          ShipModules.Append
          (New_Item =>
-            (Name => Modules_List.Element(Module).Name,
+            (Name => Modules_List(Module).Name,
              ProtoIndex => Module,
-             Weight => Modules_List.Element(Module).Weight,
-             Current_Value => Modules_List.Element(Module).Value,
-             Max_Value => Modules_List.Element(Module).MaxValue,
-             Durability => Modules_List.Element(Module).Durability,
-             MaxDurability => Modules_List.Element(Module).Durability,
+             Weight => Modules_List(Module).Weight,
+             Current_Value => Modules_List(Module).Value,
+             Max_Value => Modules_List(Module).MaxValue,
+             Durability => Modules_List(Module).Durability,
+             MaxDurability => Modules_List(Module).Durability,
              Owner => 0,
              UpgradeProgress => 0,
              UpgradeAction => NONE));
@@ -163,7 +161,7 @@ package body Ships is
              Orders => (others => 0)));
          TmpSkills.Clear;
          for Module of ShipModules loop
-            if Modules_List.Element(Module.ProtoIndex).MType = CABIN and
+            if Modules_List(Module.ProtoIndex).MType = CABIN and
               Module.Owner = 0 then
                Module.Name := MemberName & To_Unbounded_String("'s Cabin");
                Module.Owner := ShipCrew.Last_Index;
@@ -172,12 +170,12 @@ package body Ships is
          end loop;
          for Module of ShipModules loop
             if Module.Owner = 0 then
-               if Modules_List.Element(Module.ProtoIndex).MType = GUN and
+               if Modules_List(Module.ProtoIndex).MType = GUN and
                  Member.Order = Gunner then
                   Module.Owner := ShipCrew.Last_Index;
                   exit;
                end if;
-            elsif Modules_List.Element(Module.ProtoIndex).MType = COCKPIT and
+            elsif Modules_List(Module.ProtoIndex).MType = COCKPIT and
               Member.Order = Pilot then
                Module.Owner := ShipCrew.Last_Index;
                exit;
@@ -212,15 +210,14 @@ package body Ships is
          Missions => ShipMissions,
          Description => ProtoShip.Description);
       Amount := 0;
-      for I in TmpShip.Modules.First_Index .. TmpShip.Modules.Last_Index loop
-         case Modules_List.Element(TmpShip.Modules.Element(I).ProtoIndex)
-           .MType is
+      for I in TmpShip.Modules.Iterate loop
+         case Modules_List(TmpShip.Modules(I).ProtoIndex).MType is
             when TURRET =>
-               TurretIndex := I;
+               TurretIndex := Modules_Container.To_Index(I);
             when GUN =>
-               GunIndex := I;
+               GunIndex := Modules_Container.To_Index(I);
             when HULL =>
-               HullIndex := I;
+               HullIndex := Modules_Container.To_Index(I);
             when others =>
                null;
          end case;
@@ -233,9 +230,7 @@ package body Ships is
             TurretIndex := 0;
             GunIndex := 0;
          end if;
-         Amount :=
-           Amount +
-           Modules_List.Element(TmpShip.Modules.Element(I).ProtoIndex).Size;
+         Amount := Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
       end loop;
       UpdateModule(TmpShip, HullIndex, "Current_Value", Natural'Image(Amount));
       return TmpShip;
@@ -494,46 +489,25 @@ package body Ships is
                end if;
             elsif TempRecord.Name /= Null_Unbounded_String then
                CombatValue := 0;
-               for I in
-                 TempRecord.Modules.First_Index ..
-                     TempRecord.Modules.Last_Index loop
-                  case Modules_List.Element(TempRecord.Modules.Element(I))
-                    .MType is
+               for ModuleIndex of TempRecord.Modules loop
+                  case Modules_List(ModuleIndex).MType is
                      when HULL | GUN | BATTERING_RAM =>
                         CombatValue :=
                           CombatValue +
-                          Modules_List.Element(TempRecord.Modules.Element(I))
-                            .Durability +
-                          (Modules_List.Element(TempRecord.Modules.Element(I))
-                             .MaxValue *
-                           10);
+                          Modules_List(ModuleIndex).Durability +
+                          (Modules_List(ModuleIndex).MaxValue * 10);
                      when ARMOR =>
                         CombatValue :=
-                          CombatValue +
-                          Modules_List.Element(TempRecord.Modules.Element(I))
-                            .Durability;
+                          CombatValue + Modules_List(ModuleIndex).Durability;
                      when others =>
                         null;
                   end case;
                end loop;
-               for I in
-                 TempRecord.Cargo.First_Index ..
-                     TempRecord.Cargo.Last_Index loop
-                  if Length
-                      (Items_List.Element(TempRecord.Cargo.Element(I)(1))
-                         .IType) >=
-                    4 then
-                     if Slice
-                         (Items_List.Element(TempRecord.Cargo.Element(I)(1))
-                            .IType,
-                          1,
-                          4) =
-                       "Ammo" then
+               for Item of TempRecord.Cargo loop
+                  if Length(Items_List(Item(1)).IType) >= 4 then
+                     if Slice(Items_List(Item(1)).IType, 1, 4) = "Ammo" then
                         CombatValue :=
-                          CombatValue +
-                          (Items_List.Element(TempRecord.Cargo.Element(I)(1))
-                             .Value *
-                           10);
+                          CombatValue + (Items_List(Item(1)).Value * 10);
                      end if;
                   end if;
                end loop;
@@ -571,8 +545,7 @@ package body Ships is
          Weight := Weight + Module.Weight;
       end loop;
       for Item of Ship.Cargo loop
-         CargoWeight :=
-           Item.Amount * Items_List.Element(Item.ProtoIndex).Weight;
+         CargoWeight := Item.Amount * Items_List(Item.ProtoIndex).Weight;
          Weight := Weight + CargoWeight;
       end loop;
       return Weight;
@@ -594,51 +567,41 @@ package body Ships is
          PointsIndex := 0;
          RepairNeeded := True;
          RepairStopped := False;
-         for J in
-           PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(J).Order = Repair then
+         for J in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(J).Order = Repair then
                PointsIndex := PointsIndex + 1;
                if CrewRepairPoints(PointsIndex) > 0 then
                   PointsBonus :=
                     (GetSkillLevel
-                       (J,
-                        Modules_List.Element
-                        (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+                       (Crew_Container.To_Index(J),
+                        Modules_List
+                          (PlayerShip.Modules(ModuleIndex).ProtoIndex)
                           .RepairSkill) /
                      10) *
                     CrewRepairPoints(PointsIndex);
                   RepairPoints := CrewRepairPoints(PointsIndex) + PointsBonus;
                   RepairMaterial := 0;
                   ToolsIndex := 0;
-                  for K in
-                    PlayerShip.Cargo.First_Index ..
-                        PlayerShip.Cargo.Last_Index loop
-                     if Items_List.Element
-                       (PlayerShip.Cargo.Element(K).ProtoIndex)
-                         .IType =
-                       Modules_List.Element
-                       (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+                  for K in PlayerShip.Cargo.Iterate loop
+                     if Items_List(PlayerShip.Cargo(K).ProtoIndex).IType =
+                       Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                          .RepairMaterial then
-                        ProtoIndex := PlayerShip.Cargo.Element(K).ProtoIndex;
-                        RepairMaterial := K;
+                        ProtoIndex := PlayerShip.Cargo(K).ProtoIndex;
+                        RepairMaterial := Cargo_Container.To_Index(K);
                   -- Limit repair point depends on amount of repair materials
-                        if PlayerShip.Cargo.Element(K).Amount <
-                          RepairPoints then
-                           RepairPoints := PlayerShip.Cargo.Element(K).Amount;
+                        if PlayerShip.Cargo(K).Amount < RepairPoints then
+                           RepairPoints := PlayerShip.Cargo(K).Amount;
                         end if;
-                     elsif Items_List.Element
-                       (PlayerShip.Cargo.Element(K).ProtoIndex)
-                         .IType =
+                     elsif Items_List(PlayerShip.Cargo(K).ProtoIndex).IType =
                        To_Unbounded_String("RepairTools") then
-                        ToolsIndex := K;
+                        ToolsIndex := Cargo_Container.To_Index(K);
                      end if;
                      exit when RepairMaterial > 0 and ToolsIndex > 0;
                   end loop;
                   if RepairMaterial = 0 then
                      AddMessage
                        ("You don't have repair materials to continue repairs of " &
-                        To_String
-                          (PlayerShip.Modules.Element(ModuleIndex).Name) &
+                        To_String(PlayerShip.Modules(ModuleIndex).Name) &
                         ".",
                         OrderMessage);
                      RepairStopped := True;
@@ -648,13 +611,12 @@ package body Ships is
                      if PointsIndex = 1 then
                         AddMessage
                           ("You don't have repair tools to continue repairs of " &
-                           To_String
-                             (PlayerShip.Modules.Element(ModuleIndex).Name) &
+                           To_String(PlayerShip.Modules(ModuleIndex).Name) &
                            ".",
                            OrderMessage);
                      else
                         AddMessage
-                          (To_String(PlayerShip.Crew.Element(J).Name) &
+                          (To_String(PlayerShip.Crew(J).Name) &
                            " can't continue repairs due to lack of repair tools.",
                            OrderMessage);
                      end if;
@@ -662,12 +624,12 @@ package body Ships is
                      return;
                   end if;
                   -- Repair module
-                  if PlayerShip.Modules.Element(ModuleIndex).Durability +
+                  if PlayerShip.Modules(ModuleIndex).Durability +
                     RepairPoints >=
-                    PlayerShip.Modules.Element(ModuleIndex).MaxDurability then
+                    PlayerShip.Modules(ModuleIndex).MaxDurability then
                      RepairValue :=
-                       PlayerShip.Modules.Element(ModuleIndex).MaxDurability -
-                       PlayerShip.Modules.Element(ModuleIndex).Durability;
+                       PlayerShip.Modules(ModuleIndex).MaxDurability -
+                       PlayerShip.Modules(ModuleIndex).Durability;
                      RepairNeeded := False;
                   else
                      RepairValue := RepairPoints;
@@ -687,17 +649,15 @@ package body Ships is
                   end if;
                   GainExp
                     (RepairValue,
-                     Modules_List.Element
-                     (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+                     Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                        .RepairSkill,
-                     J);
+                     Crew_Container.To_Index(J));
                   CrewRepairPoints.Update_Element
                   (Index => PointsIndex, Process => UpdatePoints'Access);
                   DamageCargo
                     (ToolsIndex,
-                     J,
-                     Modules_List.Element
-                     (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+                     Crew_Container.To_Index(J),
+                     Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                        .RepairSkill);
                   exit when not RepairNeeded;
                end if;
@@ -728,18 +688,16 @@ package body Ships is
          return;
       end if;
       if PlayerShip.RepairModule > 0 then
-         if PlayerShip.Modules.Element(PlayerShip.RepairModule).Durability <
-           PlayerShip.Modules.Element(PlayerShip.RepairModule)
-             .MaxDurability then
+         if PlayerShip.Modules(PlayerShip.RepairModule).Durability <
+           PlayerShip.Modules(PlayerShip.RepairModule).MaxDurability then
             RepairModule(PlayerShip.RepairModule);
          end if;
       end if;
       Repair_Loop:
-      for I in
-        PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index loop
-         if PlayerShip.Modules.Element(I).Durability <
-           PlayerShip.Modules.Element(I).MaxDurability then
-            RepairModule(I);
+      for I in PlayerShip.Modules.Iterate loop
+         if PlayerShip.Modules(I).Durability <
+           PlayerShip.Modules(I).MaxDurability then
+            RepairModule(Modules_Container.To_Index(I));
          end if;
       end loop Repair_Loop;
       -- Send repair team on break if all is ok
@@ -747,10 +705,9 @@ package body Ships is
          if not RepairNeeded then
             AddMessage("All repairs are finished.", OrderMessage);
          end if;
-         for I in
-           PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Order = Repair then
-               GiveOrders(I, Rest);
+         for I in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(I).Order = Repair then
+               GiveOrders(Crew_Container.To_Index(I), Rest);
             end if;
          end loop;
       end if;
@@ -768,24 +725,24 @@ package body Ships is
       case Owner is
          when Any =>
             NewName :=
-              ShipSyllablesStart.Element
-              (GetRandom
-                 (ShipSyllablesStart.First_Index,
-                  ShipSyllablesStart.Last_Index));
+              ShipSyllablesStart
+                (GetRandom
+                   (ShipSyllablesStart.First_Index,
+                    ShipSyllablesStart.Last_Index));
             if GetRandom(1, 100) < 51 then
                Append
                  (NewName,
-                  ShipSyllablesMiddle.Element
-                  (GetRandom
-                     (ShipSyllablesMiddle.First_Index,
-                      ShipSyllablesMiddle.Last_Index)));
+                  ShipSyllablesMiddle
+                    (GetRandom
+                       (ShipSyllablesMiddle.First_Index,
+                        ShipSyllablesMiddle.Last_Index)));
             end if;
             Append
               (NewName,
-               ShipSyllablesEnd.Element
-               (GetRandom
-                  (ShipSyllablesEnd.First_Index,
-                   ShipSyllablesEnd.Last_Index)));
+               ShipSyllablesEnd
+                 (GetRandom
+                    (ShipSyllablesEnd.First_Index,
+                     ShipSyllablesEnd.Last_Index)));
          when Drones =>
             LettersAmount := GetRandom(2, 5);
             for I in 1 .. LettersAmount loop
