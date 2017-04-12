@@ -375,10 +375,11 @@ package body MainMenu is
          ShowErrorInfo
            ("Can't load ships data. Files with ships data not found.");
          return False;
-       when An_Exception: Ships_Invalid_Data =>
-           LogMessage(Exception_Message(An_Exception), EVERYTHING);
-           ShowErrorInfo("Can't load ships data. Invalid value in file. Run game in debug mode to get more info.");
-           return False;
+      when An_Exception : Ships_Invalid_Data =>
+         LogMessage(Exception_Message(An_Exception), Everything);
+         ShowErrorInfo
+           ("Can't load ships data. Invalid value in file. Run game in debug mode to get more info.");
+         return False;
    end LoadGameData;
 
    function MainMenuKeys(Key: Key_Code) return GameStates is
