@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Directories; use Ada.Directories;
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Exceptions; use Ada.Exceptions;
 with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
 with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Terminal_Interface.Curses.Forms.Field_Types.Enumeration;
@@ -32,6 +33,7 @@ with Ships; use Ships;
 with Config; use Config;
 with Crew; use Crew;
 with Maps; use Maps;
+with Log; use Log;
 
 package body MainMenu is
 
@@ -373,6 +375,10 @@ package body MainMenu is
          ShowErrorInfo
            ("Can't load ships data. Files with ships data not found.");
          return False;
+       when An_Exception: Ships_Invalid_Data =>
+           LogMessage(Exception_Message(An_Exception), EVERYTHING);
+           ShowErrorInfo("Can't load ships data. Invalid value in file. Run game in debug mode to get more info.");
+           return False;
    end LoadGameData;
 
    function MainMenuKeys(Key: Key_Code) return GameStates is

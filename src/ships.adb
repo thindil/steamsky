@@ -309,6 +309,9 @@ package body Ships is
                      ModuleIndex :=
                        FindProtoModule
                          (Unbounded_Slice(Value, StartIndex, EndIndex - 1));
+                       if ModuleIndex = 0 then
+                           raise Ships_Invalid_Data with "Invalid module index: |" & Slice(Value, StartIndex, EndIndex - 1) & "| in " & To_String(TempRecord.Name) & ".";
+                       end if;
                      TempRecord.Modules.Append(New_Item => ModuleIndex);
                      StartIndex := EndIndex + 2;
                   end loop;
