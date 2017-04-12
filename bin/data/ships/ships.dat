@@ -544,4 +544,15 @@ Skills = 1x15..25, 5x7..15; 3x10..20, 5x3..8; 3x10..20, 5x3..7
 Orders = Pilot, Gunner, Gunner
 Description = Large, good armored, upgraded version of inquisition flying vessel.
 Owner = Inquisition
+[54]
+Name = Large attacking drone mk II
+Modules = 68, 57, 76, 42, 42, 42, 42, 42, 42, 89, 85, 27, 85, 27
+Accuracy = 15..25
+CombatAI = Berserker
+Evasion = 15..25
+Loot = 250..450
+Perception = 20..30
+Cargo = 1500..2000x1, 450..500x20, 150..300x13
+Description = Large, good armored version of attacking clockwork drone.
+Owner = Drones
 []
