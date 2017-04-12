@@ -47,7 +47,7 @@ Description = Small, fast pirate vessel. As many pirates they prefer to dismarm 
 Owner = Pirates
 [6]
 Name = Small undead ship
-Modules = 1, 2, 3, 5, 7, 7, 12 
+Modules = 1, 2, 3, 5, 7, 7, 12
 CombatAI = Berserker
 Loot = 20..200
 Cargo = 1500..2000x1, 80..100x5
@@ -183,7 +183,7 @@ Description = Large, good armored pirate ship. As many pirates they prefer to di
 Owner = Pirates
 [19]
 Name = Undead ship
-Modules = 17, 25, 15, 5, 7, 7, 7, 7, 40 
+Modules = 17, 25, 15, 5, 7, 7, 7, 7, 40
 CombatAI = Berserker
 Loot = 100..300
 Cargo = 2000..2500x1, 150..300x5
@@ -193,7 +193,7 @@ Description = Standard version of undead flying vessel. Dangerous at close range
 Owner = Undead
 [20]
 Name = Large undead ship
-Modules = 23, 26, 19, 5, 7, 7, 7, 7, 7, 7, 40 
+Modules = 23, 26, 19, 5, 7, 7, 7, 7, 7, 7, 40
 CombatAI = Berserker
 Loot = 200..400
 Cargo = 3000..4000x1, 300..400x5
@@ -245,7 +245,7 @@ Description = Advanced version of standard pirate ship. As many pirates they pre
 Owner = Pirates
 [25]
 Name = Advanced undead ship
-Modules = 22, 25, 18, 5, 7, 7, 7, 7, 7, 40 
+Modules = 22, 25, 18, 5, 7, 7, 7, 7, 7, 40
 CombatAI = Berserker
 Loot = 200..300
 Cargo = 2500..3000x1, 200..350x5
@@ -268,7 +268,7 @@ Description = Advanced version of standard flying vessel of inquisition.
 Owner = Inquisition
 [27]
 Name = Huge pirate ship
-Modules = 60, 26, 62, 62 , 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 33, 39, 33, 39, 33, 39, 33
+Modules = 60, 26, 62, 62, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 33, 39, 33, 39, 33, 39, 33
 CombatAI = Disarmer
 Loot = 500..1000
 Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13
@@ -278,7 +278,7 @@ Description = Huge, well armored pirate ship. As many pirates they prefer to dis
 Owner = Pirates
 [28]
 Name = Advanced huge pirate ship
-Modules = 61, 26, 63, 63 , 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 34, 39, 34, 39, 34, 39, 34
+Modules = 61, 26, 63, 63, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 34, 39, 34, 39, 34, 39, 34
 CombatAI = Disarmer
 Loot = 750..1200
 Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x5, 300..500x13
@@ -288,7 +288,7 @@ Description = Advanced version of huge, well armored pirate ship. As many pirate
 Owner = Pirates
 [29]
 Name = Huge undead ship
-Modules = 60, 26, 62, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40 
+Modules = 60, 26, 62, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40
 CombatAI = Berserker
 Loot = 500..750
 Cargo = 5000..7000x1, 500..750x5
@@ -309,7 +309,7 @@ Description = Huge, good armored version of attacking clockwork drone.
 Owner = Drones
 [31]
 Name = Advanced huge undead ship
-Modules = 61, 26, 63, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40 
+Modules = 61, 26, 63, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40
 CombatAI = Berserker
 Loot = 600..900
 Cargo = 6000..8000x1, 600..800x5
@@ -380,7 +380,7 @@ Description = Small, fast pirate vessel (upgraded version). As many pirates they
 Owner = Pirates
 [38]
 Name = Small undead ship mk II
-Modules = 64, 55, 72, 41, 42, 42, 87 
+Modules = 64, 55, 72, 41, 42, 42, 87
 CombatAI = Berserker
 Loot = 20..200
 Cargo = 1500..2000x1, 80..100x13
