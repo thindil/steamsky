@@ -34,10 +34,10 @@ package body Ships.Cargo is
          Item.Amount := NewAmount;
       end UpdateItem;
    begin
-      for I in Ship.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-         if Ship.Cargo.Element(I).ProtoIndex = ProtoIndex and
-           Ship.Cargo.Element(I).Durability = Durability then
-            ItemIndex := I;
+      for I in Ship.Cargo.Iterate loop
+         if Ship.Cargo(I).ProtoIndex = ProtoIndex and
+           Ship.Cargo(I).Durability = Durability then
+            ItemIndex := Cargo_Container.To_Index(I);
             exit;
          end if;
       end loop;
@@ -49,11 +49,11 @@ package body Ships.Cargo is
              Name => Null_Unbounded_String,
              Durability => Durability));
       else
-         NewAmount := Ship.Cargo.Element(ItemIndex).Amount + Amount;
+         NewAmount := Ship.Cargo(ItemIndex).Amount + Amount;
          if NewAmount < 1 then
             Ship.Cargo.Delete(Index => ItemIndex, Count => 1);
             for Module of Ship.Modules loop
-               if Modules_List.Element(Module.ProtoIndex).MType = GUN then
+               if Modules_List(Module.ProtoIndex).MType = GUN then
                   if Module.Current_Value > ItemIndex then
                      Module.Current_Value := Module.Current_Value - 1;
                   elsif Module.Current_Value = ItemIndex then
@@ -72,16 +72,14 @@ package body Ships.Cargo is
       FreeCargo: Integer := 0;
    begin
       for Module of PlayerShip.Modules loop
-         if Modules_List.Element(Module.ProtoIndex).MType =
-           ShipModules.CARGO and
+         if Modules_List(Module.ProtoIndex).MType = ShipModules.CARGO and
            Module.Durability > 0 then
             FreeCargo := FreeCargo + Module.Max_Value;
          end if;
       end loop;
       for Item of PlayerShip.Cargo loop
          FreeCargo :=
-           FreeCargo -
-           (Items_List.Element(Item.ProtoIndex).Weight * Item.Amount);
+           FreeCargo - (Items_List(Item.ProtoIndex).Weight * Item.Amount);
       end loop;
       FreeCargo := FreeCargo + Amount;
       return FreeCargo;
@@ -93,20 +91,16 @@ package body Ships.Cargo is
       CargoIndex: Natural := 0;
    begin
       if ProtoIndex > 0 then
-         for I in
-           PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).ProtoIndex = ProtoIndex then
-               CargoIndex := I;
+         for I in PlayerShip.Cargo.Iterate loop
+            if PlayerShip.Cargo(I).ProtoIndex = ProtoIndex then
+               CargoIndex := Cargo_Container.To_Index(I);
                exit;
             end if;
          end loop;
       elsif ItemType /= Null_Unbounded_String then
-         for I in
-           PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-            if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex)
-                .IType =
-              ItemType then
-               CargoIndex := I;
+         for I in PlayerShip.Cargo.Iterate loop
+            if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType = ItemType then
+               CargoIndex := Cargo_Container.To_Index(I);
                exit;
             end if;
          end loop;
@@ -116,20 +110,18 @@ package body Ships.Cargo is
 
    function GetCargoName(CargoIndex: Positive) return String is
    begin
-      if PlayerShip.Cargo.Element(CargoIndex).Name /=
-        Null_Unbounded_String then
-         return To_String(PlayerShip.Cargo.Element(CargoIndex).Name);
+      if PlayerShip.Cargo(CargoIndex).Name /= Null_Unbounded_String then
+         return To_String(PlayerShip.Cargo(CargoIndex).Name);
       end if;
       return To_String
-          (Items_List.Element(PlayerShip.Cargo.Element(CargoIndex).ProtoIndex)
-             .Name);
+          (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).Name);
    end GetCargoName;
 
    procedure DamageCargo
      (CargoIndex: Positive;
       CrewIndex, SkillIndex: Natural := 0) is
       DamageChance: Integer := 0;
-      SelectedItem: constant CargoData := PlayerShip.Cargo.Element(CargoIndex);
+      SelectedItem: constant CargoData := PlayerShip.Cargo(CargoIndex);
       I: Positive := PlayerShip.Cargo.First_Index;
       NewAmount: Positive;
       procedure UpdateItem(DamagedItem: in out CargoData) is
@@ -146,7 +138,7 @@ package body Ships.Cargo is
    begin
       if CrewIndex > 0 then
          DamageChance :=
-           Items_List.Element(SelectedItem.ProtoIndex).Value -
+           Items_List(SelectedItem.ProtoIndex).Value -
            (GetSkillLevel(CrewIndex, SkillIndex) / 5);
          if DamageChance < 0 then
             DamageChance := 0;
@@ -165,11 +157,10 @@ package body Ships.Cargo is
       end if;
       PlayerShip.Cargo.Update_Element
       (Index => CargoIndex, Process => UpdateItem'Access);
-      if PlayerShip.Cargo.Element(CargoIndex).Durability =
-        0 then -- Cargo destroyed
+      if PlayerShip.Cargo(CargoIndex).Durability = 0 then -- Cargo destroyed
          UpdateCargo
            (PlayerShip,
-            PlayerShip.Cargo.Element(CargoIndex).ProtoIndex,
+            PlayerShip.Cargo(CargoIndex).ProtoIndex,
             -1,
             0);
          return;
@@ -177,14 +168,13 @@ package body Ships.Cargo is
       while I <= PlayerShip.Cargo.Last_Index loop
          for J in
            PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).ProtoIndex =
-              PlayerShip.Cargo.Element(J).ProtoIndex and
-              PlayerShip.Cargo.Element(I).Durability =
-                PlayerShip.Cargo.Element(J).Durability and
+            if PlayerShip.Cargo(I).ProtoIndex =
+              PlayerShip.Cargo(J).ProtoIndex and
+              PlayerShip.Cargo(I).Durability =
+                PlayerShip.Cargo(J).Durability and
               I /= J then
                NewAmount :=
-                 PlayerShip.Cargo.Element(I).Amount +
-                 PlayerShip.Cargo.Element(J).Amount;
+                 PlayerShip.Cargo(I).Amount + PlayerShip.Cargo(J).Amount;
                PlayerShip.Cargo.Update_Element
                (Index => I, Process => UpdateItemAmount'Access);
                PlayerShip.Cargo.Delete(Index => J, Count => 1);
