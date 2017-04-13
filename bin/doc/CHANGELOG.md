@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Read default player/ship name from configuration when none entered in new
   game form
 - Some ships data
+- Merging damaged items
 
 ## [1.0] - 2017-04-02
 
