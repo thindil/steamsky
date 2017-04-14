@@ -29,7 +29,7 @@ with Events; use Events;
 with Missions; use Missions;
 with Items; use Items;
 
-package body Maps is
+package body Maps.UI is
 
    MoveX, MoveY: Integer := 0;
    MoveForm: Form;
@@ -607,4 +607,4 @@ package body Maps is
       return Move_Map;
    end MoveFormKeys;
 
-end Maps;
+end Maps.UI;

@@ -33,6 +33,7 @@ with Ships; use Ships;
 with Config; use Config;
 with Crew; use Crew;
 with Maps; use Maps;
+with Maps.UI; use Maps.UI;
 with Log; use Log;
 
 package body MainMenu is

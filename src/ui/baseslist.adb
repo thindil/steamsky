@@ -23,6 +23,7 @@ with Bases; use Bases;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Maps; use Maps;
+with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Help.UI; use Help.UI;
 

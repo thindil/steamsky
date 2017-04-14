@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Directories; use Ada.Directories;
 with Maps; use Maps;
+with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;

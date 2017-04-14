@@ -18,16 +18,7 @@
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Game; use Game;
 
-package Maps is
-
-   type SkyCell is -- Data structure for cells in game map
-   record
-      BaseIndex: Natural;  -- If sky base is in cell > 0
-      Visited: Boolean; -- True if player was in this cell
-      EventIndex: Natural; -- If event is in cell > 0
-      MissionIndex: Natural; -- If accepted mission is in cell > 0
-   end record;
-   SkyMap: array(1 .. 1024, 1 .. 1024) of SkyCell; -- Game map
+package Maps.UI is
 
    procedure ShowSkyMap; -- Show map of game
    procedure ShowMoveMapForm; -- Show form to move map to selected location
@@ -40,4 +31,4 @@ package Maps is
    function MoveFormKeys
      (Key: Key_Code) return GameStates; -- Handle keys in move map form
 
-end Maps;
+end Maps.UI;
