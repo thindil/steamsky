@@ -20,6 +20,6 @@ package Game.SaveLoad is
    procedure SaveGame; -- Save game to file
    function LoadGame
      return Unbounded_String; -- Load game from file, return empty string if game loaded,
-   --  otherwise reason why game can't be loaded
+--  otherwise reason why game can't be loaded
 
 end Game.SaveLoad;
