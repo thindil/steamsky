@@ -29,6 +29,7 @@ with UserInterface; use UserInterface;
 with UserInterface.Keys; use UserInterface.Keys;
 with Maps.UI; use Maps.UI;
 with Game; use Game;
+with Game.SaveLoad; use Game.SaveLoad;
 with Messages.UI; use Messages.UI;
 with Crew.UI; use Crew.UI;
 with Ships; use Ships;

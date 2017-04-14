@@ -35,6 +35,7 @@ with Items; use Items;
 with Statistics; use Statistics;
 with Missions; use Missions;
 with Utils; use Utils;
+with Game.SaveLoad; use Game.SaveLoad;
 
 package body UserInterface.Keys is
 
