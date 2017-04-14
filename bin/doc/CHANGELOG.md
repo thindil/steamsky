@@ -9,7 +9,8 @@ All notable changes to this project will be documented in this file.
   mk II, large pirate ship mk II, undead ship mk II, large undead ship mk II,
   large inquisition ship mk II, large attacking drone mk II, advanced attacking
   drone mk II and advanced pirate ship mk II
-- Support for many data files of this same objects types
+- Support for many data files of this same objects types which made saves from
+  1.0 incompatible
 
 ### Changed
 - Merged fields lootmin and lootmax in ships data
