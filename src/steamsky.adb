@@ -27,7 +27,7 @@ with Terminal_Interface.Curses_Constants;
 use Terminal_Interface.Curses_Constants;
 with UserInterface; use UserInterface;
 with UserInterface.Keys; use UserInterface.Keys;
-with Maps; use Maps;
+with Maps.UI; use Maps.UI;
 with Game; use Game;
 with Messages.UI; use Messages.UI;
 with Crew.UI; use Crew.UI;
