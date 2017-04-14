@@ -108,10 +108,6 @@ package Game is
       Gender: Character); -- Start new game: create map, place ship, crew, etc
    procedure UpdateGame
      (Minutes: Positive); -- Game ticks (update time, crew, ship, etc)
-   procedure SaveGame; -- Save game to file
-   function LoadGame
-     return Unbounded_String; -- Load game from file, return empty string if game loaded,
-   --  otherwise reason why game can't be loaded
    function LoadData
      return Boolean; -- Load game data from file, return false if file not found
 
