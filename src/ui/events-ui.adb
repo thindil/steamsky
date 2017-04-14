@@ -20,6 +20,7 @@ with Ada.Numerics.Generic_Elementary_Functions;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Ships; use Ships;
 with Maps; use Maps;
+with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with UserInterface; use UserInterface;
 with Bases; use Bases;
