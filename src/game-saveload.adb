@@ -25,10 +25,11 @@ with Crafts; use Crafts;
 with Events; use Events;
 with Statistics; use Statistics;
 with Missions; use Missions;
+with ShipModules; use ShipModules;
 
 package body Game.SaveLoad is
 
-   SaveVersion: constant String := "1.0";
+   SaveVersion: constant String := "1.1";
 
    procedure SaveGame is
       SaveGame: File_Type;
@@ -253,8 +254,7 @@ package body Game.SaveLoad is
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       for Module of PlayerShip.Modules loop
          Put(SaveGame, To_String(Module.Name) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Module.ProtoIndex));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         Put(SaveGame, To_String(Modules_List(Module.ProtoIndex).Index) & ";");
          RawValue := To_Unbounded_String(Integer'Image(Module.Weight));
          Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
          RawValue := To_Unbounded_String(Integer'Image(Module.Current_Value));
@@ -610,7 +610,7 @@ package body Game.SaveLoad is
          ShipModules.Append
          (New_Item =>
             (Name => ReadData,
-             ProtoIndex => Integer'Value(To_String(ReadData)),
+             ProtoIndex => FindProtoModule(ReadData),
              Weight => Natural'Value(To_String(ReadData)),
              Current_Value => Integer'Value(To_String(ReadData)),
              Max_Value => Integer'Value(To_String(ReadData)),
