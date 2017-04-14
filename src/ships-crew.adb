@@ -27,30 +27,26 @@ package body Ships.Crew is
       Damage: DamageFactor := 0.0;
       BaseSkillLevel: Natural;
    begin
-      for Skill of Ship.Crew.Element(MemberIndex).Skills loop
+      for Skill of Ship.Crew(MemberIndex).Skills loop
          if Skill(1) = SkillIndex then
             BaseSkillLevel := Skill(2);
             Damage :=
-              1.0 -
-              DamageFactor
-                (Float(Ship.Crew.Element(MemberIndex).Health) / 100.0);
+              1.0 - DamageFactor(Float(Ship.Crew(MemberIndex).Health) / 100.0);
             SkillLevel :=
               SkillLevel +
               (BaseSkillLevel -
                Integer(Float(BaseSkillLevel) * Float(Damage)));
-            if Ship.Crew.Element(MemberIndex).Thirst > 40 then
+            if Ship.Crew(MemberIndex).Thirst > 40 then
                Damage :=
                  1.0 -
-                 DamageFactor
-                   (Float(Ship.Crew.Element(MemberIndex).Thirst) / 100.0);
+                 DamageFactor(Float(Ship.Crew(MemberIndex).Thirst) / 100.0);
                SkillLevel :=
                  SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
             end if;
-            if Ship.Crew.Element(MemberIndex).Hunger > 80 then
+            if Ship.Crew(MemberIndex).Hunger > 80 then
                Damage :=
                  1.0 -
-                 DamageFactor
-                   (Float(Ship.Crew.Element(MemberIndex).Hunger) / 100.0);
+                 DamageFactor(Float(Ship.Crew(MemberIndex).Hunger) / 100.0);
                SkillLevel :=
                  SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
             end if;
@@ -76,7 +72,7 @@ package body Ships.Crew is
       if MemberIndex > 1 then
          if Ship = PlayerShip then
             AddMessage
-              (To_String(Ship.Crew.Element(MemberIndex).Name) &
+              (To_String(Ship.Crew(MemberIndex).Name) &
                " died from " &
                To_String(Reason) &
                ".",
@@ -87,8 +83,7 @@ package body Ships.Crew is
             (ProtoIndex => 40,
              Amount => 1,
              Name =>
-               Ship.Crew.Element(MemberIndex).Name &
-               To_Unbounded_String("'s corpse"),
+               Ship.Crew(MemberIndex).Name & To_Unbounded_String("'s corpse"),
              Durability => 100));
          DeleteMember(MemberIndex, Ship);
       else
@@ -104,7 +99,7 @@ package body Ships.Crew is
                (ProtoIndex => 40,
                 Amount => 1,
                 Name =>
-                  Ship.Crew.Element(MemberIndex).Name &
+                  Ship.Crew(MemberIndex).Name &
                   To_Unbounded_String("'s corpse"),
                 Durability => 100));
             DeleteMember(MemberIndex, Ship);
@@ -129,7 +124,7 @@ package body Ships.Crew is
       Ship: ShipRecord := PlayerShip) return Natural is
    begin
       for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
-         if Ship.Crew.Element(I).Order = Order then
+         if Ship.Crew(I).Order = Order then
             return I;
          end if;
       end loop;
