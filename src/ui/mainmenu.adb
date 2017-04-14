@@ -35,6 +35,7 @@ with Crew; use Crew;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Log; use Log;
+with Game.SaveLoad; use Game.SaveLoad;
 
 package body MainMenu is
 
