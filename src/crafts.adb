@@ -32,7 +32,7 @@ package body Crafts is
    procedure LoadRecipes is
       RecipesFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
-      EqualIndex, StartIndex, EndIndex, Amount: Natural;
+      EqualIndex, StartIndex, EndIndex, Amount, ItemIndex: Natural;
       TempRecord: Craft_Data;
       TempMaterials: UnboundedString_Container.Vector;
       TempAmount: Positive_Container.Vector;
@@ -62,7 +62,9 @@ package body Crafts is
             Difficulty => 0,
             BaseType => 0,
             Tool => To_Unbounded_String("None"));
-         LogMessage("Recipe file: " & Full_Name(FoundFile), Everything);
+         LogMessage
+           ("Loading recipes file: " & Full_Name(FoundFile),
+            Everything);
          Open(RecipesFile, In_File, Full_Name(FoundFile));
          while not End_Of_File(RecipesFile) loop
             RawData := To_Unbounded_String(Get_Line(RecipesFile));
@@ -98,7 +100,14 @@ package body Crafts is
                      StartIndex := EndIndex + 2;
                   end loop;
                elsif FieldName = To_Unbounded_String("Result") then
-                  TempRecord.ResultIndex := Integer'Value(To_String(Value));
+                  ItemIndex := FindProtoItem(Value);
+                  if ItemIndex = 0 then
+                     raise Recipes_Invalid_Data
+                       with "Invalid result item index: |" &
+                       To_String(Value) &
+                       "|.";
+                  end if;
+                  TempRecord.ResultIndex := ItemIndex;
                elsif FieldName = To_Unbounded_String("Crafted") then
                   TempRecord.ResultAmount := Integer'Value(To_String(Value));
                elsif FieldName = To_Unbounded_String("Workplace") then
@@ -122,6 +131,10 @@ package body Crafts is
                end if;
             elsif TempRecord.ResultAmount < 10000 then
                Recipes_List.Append(New_Item => TempRecord);
+               LogMessage
+                 ("Recipe added: " &
+                  To_String(Items_List(TempRecord.ResultIndex).Name),
+                  Everything);
                TempRecord :=
                  (MaterialTypes => TempMaterials,
                   MaterialAmounts => TempAmount,
