@@ -248,7 +248,8 @@ package body Ships is
       DotIndex,
       EndIndex2,
       StartIndex2,
-      ModuleIndex: Natural;
+      ModuleIndex,
+      ItemIndex: Natural;
       TempRecord: ProtoShipData;
       TempModules: Positive_Container.Vector;
       TempCargo: Skills_Container.Vector;
@@ -380,12 +381,21 @@ package body Ships is
                      end if;
                      XIndex := Index(Value, "x", StartIndex);
                      DotIndex := Index(Value, "..", StartIndex);
+                     ItemIndex :=
+                       FindProtoItem
+                         (Unbounded_Slice(Value, XIndex + 1, EndIndex - 1));
+                     if ItemIndex = 0 then
+                        raise Ships_Invalid_Data
+                          with "Invalid item index: |" &
+                          Slice(Value, XIndex + 1, EndIndex - 1) &
+                          "| in " &
+                          To_String(TempRecord.Name) &
+                          ".";
+                     end if;
                      if DotIndex = 0 or DotIndex > EndIndex then
                         TempRecord.Cargo.Append
                         (New_Item =>
-                           (Integer'
-                              Value
-                                (Slice(Value, XIndex + 1, EndIndex - 1)),
+                           (ItemIndex,
                             Integer'
                               Value
                                 (Slice(Value, StartIndex, XIndex - 1)),
@@ -393,9 +403,7 @@ package body Ships is
                      else
                         TempRecord.Cargo.Append
                         (New_Item =>
-                           (Integer'
-                              Value
-                                (Slice(Value, XIndex + 1, EndIndex - 1)),
+                           (ItemIndex,
                             Integer'
                               Value
                                 (Slice(Value, StartIndex, DotIndex - 1)),

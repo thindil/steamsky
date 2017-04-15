@@ -43,6 +43,7 @@ package Crafts is
      .Vector; -- List of all know by player recipes
    Recipes_Directory_Not_Found : exception;
    Recipes_Files_Not_Found : exception;
+   Recipes_Invalid_Data : exception;
 
    procedure LoadRecipes; -- Load recipes from files
    procedure Manufacturing(Minutes: Positive); -- Craft selected items

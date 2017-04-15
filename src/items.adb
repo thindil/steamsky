@@ -49,7 +49,8 @@ package body Items is
             Buyable => (False, False, False, False),
             Value => 0,
             ShowType => Null_Unbounded_String,
-            Description => Null_Unbounded_String);
+            Description => Null_Unbounded_String,
+            Index => Null_Unbounded_String);
          LogMessage("Loading item file: " & Full_Name(FoundFile), Everything);
          Open(ItemsFile, In_File, Full_Name(FoundFile));
          while not End_Of_File(ItemsFile) loop
@@ -96,22 +97,42 @@ package body Items is
                elsif FieldName = To_Unbounded_String("Description") then
                   TempRecord.Description := Value;
                end if;
-            elsif TempRecord.Name /= Null_Unbounded_String then
-               Items_List.Append(New_Item => TempRecord);
-               TempRecord :=
-                 (Name => Null_Unbounded_String,
-                  Weight => 1,
-                  IType => Null_Unbounded_String,
-                  Prices => (0, 0, 0, 0),
-                  Buyable => (False, False, False, False),
-                  Value => 0,
-                  ShowType => Null_Unbounded_String,
-                  Description => Null_Unbounded_String);
+            else
+               if TempRecord.Name /= Null_Unbounded_String then
+                  Items_List.Append(New_Item => TempRecord);
+                  LogMessage
+                    ("Item added: " & To_String(TempRecord.Name),
+                     Everything);
+                  TempRecord :=
+                    (Name => Null_Unbounded_String,
+                     Weight => 1,
+                     IType => Null_Unbounded_String,
+                     Prices => (0, 0, 0, 0),
+                     Buyable => (False, False, False, False),
+                     Value => 0,
+                     ShowType => Null_Unbounded_String,
+                     Description => Null_Unbounded_String,
+                     Index => Null_Unbounded_String);
+               end if;
+               if Length(RawData) > 2 then
+                  TempRecord.Index :=
+                    Unbounded_Slice(RawData, 2, (Length(RawData) - 1));
+               end if;
             end if;
          end loop;
          Close(ItemsFile);
       end loop;
       End_Search(Files);
    end LoadItems;
+
+   function FindProtoItem(Index: Unbounded_String) return Natural is
+   begin
+      for I in Items_List.Iterate loop
+         if Items_List(I).Index = Index then
+            return Objects_Container.To_Index(I);
+         end if;
+      end loop;
+      return 0;
+   end FindProtoItem;
 
 end Items;

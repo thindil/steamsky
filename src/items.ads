@@ -35,6 +35,7 @@ package Items is
       Value: Natural; -- Additional item data (damage for ammo, etc)
       ShowType: Unbounded_String; -- Displayed type of item (can be group of items, renamed type, etc)
       Description: Unbounded_String; -- Description of item
+      Index: Unbounded_String; -- Index of item
    end record;
    package Objects_Container is new Vectors(Positive, Object_Data);
    Items_List: Objects_Container.Vector; -- List of item available in game
@@ -42,5 +43,8 @@ package Items is
    Items_Files_Not_Found : exception; -- Raised when no files with items
 
    procedure LoadItems; -- Load items from files
+   function FindProtoItem
+     (Index: Unbounded_String)
+     return Natural; -- Return vector index of item or zero if item not found
 
 end Items;
