@@ -148,8 +148,9 @@ ships, ships modules, etc)
 - File must end with `[]`.
 
 ### Ship data structure
-- Each ship start from `[` symbol. Numbers between `[` and `]` are just for 
-  easier counting ships indexes. You can write any text between symbols.
+- Each ship start from `[` symbol. Any value between `[` and `]` is a index 
+  (it can be number or text) and must be unique. This value is used at this
+  moment only to set player ship.
 - Name: Type of ship. Will be visible during combat information
 - Modules: List of modules indexes (from *shipmodules.dat* file), separated by
   `, ` (comma and space)
