@@ -48,8 +48,9 @@ ships, ships modules, etc)
 - File must end with `[]`.
 
 ### Item data structure
-- Each item start from `[` symbol. Numbers between `[` and `]` are just for 
-  easier counting items indexes. You can write any text between symbols.
+- Each item start from `[` symbol. Any value between `[` and `]` is a item
+  index (it can be number or text) and must be unique. This value is used in
+  ships and recipes data entries.
 - Name: name of item displayed in various places (cargo info, crafting, etc)
 - Weight: weight of one item in kilograms
 - Type: item type of item (from *game.dat* file, entry *ItemsTypes*)
