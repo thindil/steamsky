@@ -96,7 +96,7 @@ package body Ships.Movement is
             return 0;
          end if;
          for Module of PlayerShip.Modules loop
-            if Modules_List.Element(Module.ProtoIndex).MType = ENGINE then
+            if Modules_List(Module.ProtoIndex).MType = ENGINE then
                case PlayerShip.Speed is
                   when QUARTER_SPEED =>
                      FuelNeeded := FuelNeeded - (Module.Current_Value / 4);
@@ -189,7 +189,7 @@ package body Ships.Movement is
                return;
             end if;
             for Module of PlayerShip.Modules loop
-               if Modules_List.Element(Module.ProtoIndex).MType = HULL then
+               if Modules_List(Module.ProtoIndex).MType = HULL then
                   DockingCost := Module.Max_Value;
                   exit;
                end if;
@@ -225,7 +225,7 @@ package body Ships.Movement is
                when others =>
                   null;
             end case;
-            if DockingCost > PlayerShip.Cargo.Element(MoneyIndex).Amount then
+            if DockingCost > PlayerShip.Cargo(MoneyIndex).Amount then
                ShowDialog
                  ("You can't dock to base because you don't have enough Charcollum to pay for docking.");
                return;
@@ -307,7 +307,7 @@ package body Ships.Movement is
       end if;
       Weight := CountShipWeight(Ship) / 500;
       for Module of Ship.Modules loop
-         if Modules_List.Element(Module.ProtoIndex).MType = ENGINE then
+         if Modules_List(Module.ProtoIndex).MType = ENGINE then
             BaseSpeed := Module.Max_Value * 100;
             Damage :=
               1.0 -
@@ -318,15 +318,21 @@ package body Ships.Movement is
          end if;
       end loop;
       Speed := Speed - Integer((Float(Weight) / 100.0) * Float(Speed));
-      for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
-         if Ship.Crew.Element(I).Order = Pilot then
+      for I in Ship.Crew.Iterate loop
+         if Ship.Crew(I).Order = Pilot then
             Speed :=
               Speed +
-              Integer(Float(Speed) * (Float(GetSkillLevel(I, 1)) / 300.0));
-         elsif Ship.Crew.Element(I).Order = Engineer then
+              Integer
+                (Float(Speed) *
+                 (Float(GetSkillLevel(Crew_Container.To_Index(I), 1)) /
+                  300.0));
+         elsif Ship.Crew(I).Order = Engineer then
             Speed :=
               Speed +
-              Integer(Float(Speed) * (Float(GetSkillLevel(I, 2)) / 300.0));
+              Integer
+                (Float(Speed) *
+                 (Float(GetSkillLevel(Crew_Container.To_Index(I), 2)) /
+                  300.0));
          end if;
       end loop;
       case Ship.Speed is
