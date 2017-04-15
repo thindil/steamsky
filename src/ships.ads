@@ -87,6 +87,7 @@ package Ships is
       Crew: ProtoCrew_Container.Vector; -- List of ship crew
       Description: Unbounded_String; -- Description of ship
       Owner: Bases_Owners; -- Faction to which ship belong
+      Index: Unbounded_String; -- Index of ship
    end record;
    package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
    ProtoShips_List: ProtoShips_Container.Vector;

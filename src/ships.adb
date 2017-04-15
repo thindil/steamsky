@@ -287,7 +287,8 @@ package body Ships is
             CombatValue => 1,
             Crew => TempCrew,
             Description => Null_Unbounded_String,
-            Owner => Poleis);
+            Owner => Poleis,
+            Index => Null_Unbounded_String);
          LogMessage("Loading ships file: " & Full_Name(FoundFile), Everything);
          Open(ShipsFile, In_File, Full_Name(FoundFile));
          while not End_Of_File(ShipsFile) loop
@@ -492,49 +493,57 @@ package body Ships is
                elsif FieldName = To_Unbounded_String("Owner") then
                   TempRecord.Owner := Bases_Owners'Value(To_String(Value));
                end if;
-            elsif TempRecord.Name /= Null_Unbounded_String then
-               CombatValue := 0;
-               for ModuleIndex of TempRecord.Modules loop
-                  case Modules_List(ModuleIndex).MType is
-                     when HULL | GUN | BATTERING_RAM =>
-                        CombatValue :=
-                          CombatValue +
-                          Modules_List(ModuleIndex).Durability +
-                          (Modules_List(ModuleIndex).MaxValue * 10);
-                     when ARMOR =>
-                        CombatValue :=
-                          CombatValue + Modules_List(ModuleIndex).Durability;
-                     when others =>
-                        null;
-                  end case;
-               end loop;
-               for Item of TempRecord.Cargo loop
-                  if Length(Items_List(Item(1)).IType) >= 4 then
-                     if Slice(Items_List(Item(1)).IType, 1, 4) = "Ammo" then
-                        CombatValue :=
-                          CombatValue + (Items_List(Item(1)).Value * 10);
+            else
+               if TempRecord.Name /= Null_Unbounded_String then
+                  CombatValue := 0;
+                  for ModuleIndex of TempRecord.Modules loop
+                     case Modules_List(ModuleIndex).MType is
+                        when HULL | GUN | BATTERING_RAM =>
+                           CombatValue :=
+                             CombatValue +
+                             Modules_List(ModuleIndex).Durability +
+                             (Modules_List(ModuleIndex).MaxValue * 10);
+                        when ARMOR =>
+                           CombatValue :=
+                             CombatValue +
+                             Modules_List(ModuleIndex).Durability;
+                        when others =>
+                           null;
+                     end case;
+                  end loop;
+                  for Item of TempRecord.Cargo loop
+                     if Length(Items_List(Item(1)).IType) >= 4 then
+                        if Slice(Items_List(Item(1)).IType, 1, 4) = "Ammo" then
+                           CombatValue :=
+                             CombatValue + (Items_List(Item(1)).Value * 10);
+                        end if;
                      end if;
-                  end if;
-               end loop;
-               TempRecord.CombatValue := CombatValue;
-               ProtoShips_List.Append(New_Item => TempRecord);
-               LogMessage
-                 ("Ship added: " & To_String(TempRecord.Name),
-                  Everything);
-               TempRecord :=
-                 (Name => Null_Unbounded_String,
-                  Modules => TempModules,
-                  Accuracy => (0, 0),
-                  CombatAI => NONE,
-                  Evasion => (0, 0),
-                  Loot => (0, 0),
-                  Perception => (0, 0),
-                  Cargo => TempCargo,
-                  CombatValue => 1,
-                  Crew => TempCrew,
-                  Description => Null_Unbounded_String,
-                  Owner => Poleis);
-               TempRecord.Name := Null_Unbounded_String;
+                  end loop;
+                  TempRecord.CombatValue := CombatValue;
+                  ProtoShips_List.Append(New_Item => TempRecord);
+                  LogMessage
+                    ("Ship added: " & To_String(TempRecord.Name),
+                     Everything);
+                  TempRecord :=
+                    (Name => Null_Unbounded_String,
+                     Modules => TempModules,
+                     Accuracy => (0, 0),
+                     CombatAI => NONE,
+                     Evasion => (0, 0),
+                     Loot => (0, 0),
+                     Perception => (0, 0),
+                     Cargo => TempCargo,
+                     CombatValue => 1,
+                     Crew => TempCrew,
+                     Description => Null_Unbounded_String,
+                     Owner => Poleis,
+                     Index => Null_Unbounded_String);
+                  TempRecord.Name := Null_Unbounded_String;
+               end if;
+               if Length(RawData) > 2 then
+                  TempRecord.Index :=
+                    Unbounded_Slice(RawData, 2, (Length(RawData) - 1));
+               end if;
             end if;
          end loop;
          Close(ShipsFile);
