@@ -26,6 +26,7 @@ with Events; use Events;
 with Statistics; use Statistics;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
+with Items; use Items;
 
 package body Game.SaveLoad is
 
@@ -278,8 +279,7 @@ package body Game.SaveLoad is
       RawValue := To_Unbounded_String(PlayerShip.Cargo.Length'Img);
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       for Item of PlayerShip.Cargo loop
-         RawValue := To_Unbounded_String(Integer'Image(Item.ProtoIndex));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         Put(SaveGame, To_String(Items_List(Item.ProtoIndex).Index) & ";");
          RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
          Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
          Put(SaveGame, To_String(Item.Name) & ";");
@@ -626,7 +626,7 @@ package body Game.SaveLoad is
       for I in 1 .. VectorLength loop
          ShipCargo.Append
          (New_Item =>
-            (ProtoIndex => Positive'Value(To_String(ReadData)),
+            (ProtoIndex => FindProtoItem(ReadData),
              Amount => Positive'Value(To_String(ReadData)),
              Name => ReadData,
              Durability => Positive'Value(To_String(ReadData))));
