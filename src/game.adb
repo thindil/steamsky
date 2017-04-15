@@ -37,7 +37,7 @@ package body Game is
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
       Gender: Character) is
-      PosX, PosY, RandomBase: Positive;
+      PosX, PosY, RandomBase, ShipIndex: Positive;
       ValidLocation: Boolean;
       TempX, TempY, BaseReputation: Integer;
       TmpSkills: Skills_Container.Vector;
@@ -170,9 +170,15 @@ package body Game is
            SkyBases(RandomBase).Owner = Poleis;
       end loop;
       -- Create player ship
+      for I in ProtoShips_List.Iterate loop
+         if ProtoShips_List(I).Index = To_Unbounded_String("1") then
+            ShipIndex := ProtoShips_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
       PlayerShip :=
         CreateShip
-          (1,
+          (ShipIndex,
            ShipName,
            SkyBases(Integer(RandomBase)).SkyX,
            SkyBases(Integer(RandomBase)).SkyY,
