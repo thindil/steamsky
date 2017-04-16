@@ -1,5 +1,5 @@
 Some general informations about adding/editing some game elements (skills,
-ships, ships modules, etc)
+ships, ships modules, etc.)
 
 ## Skills
 
@@ -51,7 +51,7 @@ ships, ships modules, etc)
 - Each item start from `[` symbol. Any value between `[` and `]` is a item
   index (it can be number or text) and must be unique. This value is used in
   ships and recipes data entries.
-- Name: name of item displayed in various places (cargo info, crafting, etc)
+- Name: name of item displayed in various places (cargo info, crafting, etc.)
 - Weight: weight of one item in kilograms
 - Type: item type of item (from *game.dat* file, entry *ItemsTypes*)
 - Prices: item base price in bases. Each value mean price in selected base
@@ -78,8 +78,9 @@ ships, ships modules, etc)
 - File must end with `[]`.
 
 ### Recipe data structure
-- Each recipe start from `[` symbol. Numbers between `[` and `]` are just for 
-  easier counting recipes indexes. You can write any text between symbols.
+- Each recipe start from `[` symbol. Any value between `[` and `]` is a recipe 
+  index (it can be number or text) and must be unique. This value is used at
+  this moment only for set starting recipes.
 - Material: Item type of materials need for recipe. Each material must be
   separated with `, ` (comma and space)
 - Amount: Amount of crafting materials needed for recipe. If you set more than
