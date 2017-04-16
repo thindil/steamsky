@@ -354,8 +354,7 @@ package body Game.SaveLoad is
       RawValue := To_Unbounded_String(Known_Recipes.Length'Img);
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       for Recipe of Known_Recipes loop
-         RawValue := To_Unbounded_String(Integer'Image(Recipe));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         Put(SaveGame, To_String(Recipes_List(Recipe).Index) & ";");
       end loop;
       -- Save messages
       if Messages > MessagesAmount then
@@ -704,7 +703,7 @@ package body Game.SaveLoad is
       -- Load known recipes
       VectorLength := Positive'Value(To_String(ReadData));
       for I in 1 .. VectorLength loop
-         Known_Recipes.Append(New_Item => Positive'Value(To_String(ReadData)));
+         Known_Recipes.Append(New_Item => FindRecipe(ReadData));
       end loop;
       -- Load messages
       VectorLength := Integer'Value(To_String(ReadData));
