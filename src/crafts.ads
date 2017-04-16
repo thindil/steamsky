@@ -36,6 +36,7 @@ package Crafts is
       Difficulty: Natural; -- How difficult is recipe to discover
       BaseType: Natural; -- Sky base type in which recipe can be bought
       Tool: Unbounded_String; -- Type of tool used to craft item
+      Index: Unbounded_String; -- Index of recipe
    end record;
    package Recipes_Container is new Vectors(Positive, Craft_Data);
    Recipes_List: Recipes_Container.Vector; -- List of recipes available in game
@@ -50,5 +51,8 @@ package Crafts is
    procedure SetRecipe
      (RecipeIndex: Integer;
       ModuleIndex: Positive); -- Set recipe to craft
+   function FindRecipe
+     (Index: Unbounded_String)
+     return Natural; -- Return vector index of recipe or zero if recipe not found
 
 end Crafts;
