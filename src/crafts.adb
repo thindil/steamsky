@@ -61,7 +61,8 @@ package body Crafts is
             Time => 15,
             Difficulty => 0,
             BaseType => 0,
-            Tool => To_Unbounded_String("None"));
+            Tool => To_Unbounded_String("None"),
+            Index => Null_Unbounded_String);
          LogMessage
            ("Loading recipes file: " & Full_Name(FoundFile),
             Everything);
@@ -129,23 +130,30 @@ package body Crafts is
                elsif FieldName = To_Unbounded_String("Tool") then
                   TempRecord.Tool := Value;
                end if;
-            elsif TempRecord.ResultAmount < 10000 then
-               Recipes_List.Append(New_Item => TempRecord);
-               LogMessage
-                 ("Recipe added: " &
-                  To_String(Items_List(TempRecord.ResultIndex).Name),
-                  Everything);
-               TempRecord :=
-                 (MaterialTypes => TempMaterials,
-                  MaterialAmounts => TempAmount,
-                  ResultIndex => 1,
-                  ResultAmount => 10000,
-                  Workplace => ALCHEMY_LAB,
-                  Skill => 1,
-                  Time => 15,
-                  Difficulty => 0,
-                  BaseType => 0,
-                  Tool => To_Unbounded_String("None"));
+            else
+               if TempRecord.ResultAmount < 10000 then
+                  Recipes_List.Append(New_Item => TempRecord);
+                  LogMessage
+                    ("Recipe added: " &
+                     To_String(Items_List(TempRecord.ResultIndex).Name),
+                     Everything);
+                  TempRecord :=
+                    (MaterialTypes => TempMaterials,
+                     MaterialAmounts => TempAmount,
+                     ResultIndex => 1,
+                     ResultAmount => 10000,
+                     Workplace => ALCHEMY_LAB,
+                     Skill => 1,
+                     Time => 15,
+                     Difficulty => 0,
+                     BaseType => 0,
+                     Tool => To_Unbounded_String("None"),
+                     Index => Null_Unbounded_String);
+               end if;
+               if Length(RawData) > 2 then
+                  TempRecord.Index :=
+                    Unbounded_Slice(RawData, 2, (Length(RawData) - 1));
+               end if;
             end if;
          end loop;
          Close(RecipesFile);
@@ -550,5 +558,15 @@ package body Crafts is
          end if;
       end loop;
    end Manufacturing;
+
+   function FindRecipe(Index: Unbounded_String) return Natural is
+   begin
+      for I in Recipes_List.Iterate loop
+         if Recipes_List(I).Index = Index then
+            return Recipes_Container.To_Index(I);
+         end if;
+      end loop;
+      return 0;
+   end FindRecipe;
 
 end Crafts;
