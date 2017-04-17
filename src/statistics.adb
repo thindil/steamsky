@@ -23,19 +23,19 @@ package body Statistics is
       Updated: Boolean := False;
    begin
       for DestroyedShip of GameStats.DestroyedShips loop
-         if ProtoShips_List.Element(DestroyedShip.ProtoIndex).Name =
-           ShipName then
+         if ProtoShips_List(DestroyedShip.ProtoIndex).Name = ShipName then
             DestroyedShip.Amount := DestroyedShip.Amount + 1;
             Updated := True;
             exit;
          end if;
       end loop;
       if not Updated then
-         for I in
-           ProtoShips_List.First_Index .. ProtoShips_List.Last_Index loop
-            if ProtoShips_List.Element(I).Name = ShipName then
+         for I in ProtoShips_List.Iterate loop
+            if ProtoShips_List(I).Name = ShipName then
                GameStats.DestroyedShips.Append
-               (New_Item => (ProtoIndex => I, Amount => 1));
+               (New_Item =>
+                  (ProtoIndex => ProtoShips_Container.To_Index(I),
+                   Amount => 1));
                exit;
             end if;
          end loop;
