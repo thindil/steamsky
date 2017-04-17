@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
   game form
 - Some ships data
 - Merging damaged items
+- Recipes for Andrae and Illandru logs
 
 ## [1.0] - 2017-04-02
 
