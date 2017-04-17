@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Read default player/ship name from configuration when none entered in new
   game form
 - Merging damaged items
+- Recipes for Andrae and Illandru logs
 
 ## [1.0] - 2017-04-02
 
