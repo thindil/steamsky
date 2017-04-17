@@ -263,7 +263,7 @@ Difficulty = 30
 BaseType = 1
 Tool = GunsmithSet
 [27]
-Material = AndraeSeed
+Material = AndraeSeeds
 Amount = 1
 Result = 9
 Crafted = 3
@@ -274,7 +274,7 @@ Difficulty = 1
 BaseType = 3
 Tool = Saw
 [28]
-Material = IllandruSeed
+Material = IllandruSeeds
 Amount = 1
 Result = 10
 Crafted = 3
