@@ -25,9 +25,8 @@ package body Bases.UI.Missions is
 
    procedure ShowMissionInfo is
       Mission: constant Mission_Data :=
-        SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-          .Missions.Element
-        (Get_Index(Current(TradeMenu)));
+        SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Missions
+          (Get_Index(Current(TradeMenu)));
       InfoWindow: Window;
       CurrentLine: Line_Position := 1;
       DiffX, DiffY: Positive;
@@ -45,15 +44,13 @@ package body Bases.UI.Missions is
          when Deliver =>
             Add
               (Win => InfoWindow,
-               Str =>
-                 "Item: " &
-                 To_String(Items_List.Element(Mission.Target).Name));
+               Str => "Item: " & To_String(Items_List(Mission.Target).Name));
             Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
             Add
               (Win => InfoWindow,
                Str =>
                  "Weight:" &
-                 Positive'Image(Items_List.Element(Mission.Target).Weight) &
+                 Positive'Image(Items_List(Mission.Target).Weight) &
                  " kg");
             Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
             Add
@@ -71,8 +68,7 @@ package body Bases.UI.Missions is
             Add
               (Win => InfoWindow,
                Str =>
-                 "Target: " &
-                 To_String(ProtoShips_List.Element(Mission.Target).Name));
+                 "Target: " & To_String(ProtoShips_List(Mission.Target).Name));
          when Explore =>
             Add(Win => InfoWindow, Str => "Explore selected area");
       end case;
@@ -144,9 +140,8 @@ package body Bases.UI.Missions is
          when others =>
             MissionsLimit := 0;
       end case;
-      for I in
-        PlayerShip.Missions.First_Index .. PlayerShip.Missions.Last_Index loop
-         if PlayerShip.Missions.Element(I).StartBase =
+      for Mission of PlayerShip.Missions loop
+         if Mission.StartBase =
            SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex then
             MissionsLimit := MissionsLimit - 1;
          end if;
@@ -201,7 +196,7 @@ package body Bases.UI.Missions is
       for I in
         SkyBases(BaseIndex).Missions.First_Index ..
             SkyBases(BaseIndex).Missions.Last_Index loop
-         case SkyBases(BaseIndex).Missions.Element(I).MType is
+         case SkyBases(BaseIndex).Missions(I).MType is
             when Deliver =>
                Missions_Items.all(I) := New_Item("Deliver item to base");
             when Patrol =>
