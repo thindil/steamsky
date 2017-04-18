@@ -469,6 +469,13 @@ package body Combat is
                                     end if;
                                  end if;
                               when GUN =>
+                                 if EnemyShip.Modules(HitLocation).Owner >
+                                   0 then
+                                    Death
+                                      (EnemyShip.Modules(HitLocation).Owner,
+                                       DeathReason,
+                                       EnemyShip);
+                                 end if;
                                  if Ship /= PlayerShip then
                                     for J in
                                       Guns.First_Index .. Guns.Last_Index loop
