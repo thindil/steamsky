@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
   game form
 - Merging damaged items
 - Recipes for Andrae and Illandru logs
+- Killing gunner on direct hit in gun
 
 ## [1.0] - 2017-04-02
 
