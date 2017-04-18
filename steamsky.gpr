@@ -11,7 +11,7 @@ project steamsky is
     Mode : Mode_Type := external ("Mode", "debug");
 
     package Builder is
-        for Default_Switches("ada") use ("-j0");
+        for Default_Switches("ada") use ("-j0", "-gnat2012");
     end Builder;
 
     package Binder is
