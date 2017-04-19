@@ -174,6 +174,27 @@ package body Combat is
          Damage: DamageFactor := 0.0;
          WeaponDamage: Natural;
          DeathReason: Unbounded_String;
+         procedure RemoveGun(ModuleIndex: Positive) is
+         begin
+             if EnemyShip.Modules.Element(ModuleIndex)
+                 .Owner >
+                 0 then
+                 Death
+                     (EnemyShip.Modules.Element(ModuleIndex)
+                     .Owner,
+                     DeathReason,
+                     EnemyShip);
+             end if;
+             if EnemyShip = PlayerShip then
+                 for J in
+                 Guns.First_Index .. Guns.Last_Index loop
+                 if Guns.Element(J)(1) = ModuleIndex then
+                     Guns.Delete(Index => J, Count => 1);
+                     exit;
+                 end if;
+                 end loop;
+             end if;
+         end RemoveGun;
       begin
          Attack_Loop:
          for K in Ship.Modules.First_Index .. Ship.Modules.Last_Index loop
@@ -470,46 +491,10 @@ package body Combat is
                                        WeaponIndex,
                                        "Durability",
                                        "-1000");
-                                    if EnemyShip.Modules.Element(WeaponIndex)
-                                        .Owner >
-                                      0 then
-                                       Death
-                                         (EnemyShip.Modules.Element
-                                          (WeaponIndex)
-                                            .Owner,
-                                          DeathReason,
-                                          EnemyShip);
-                                       for J in
-                                         Guns.First_Index ..
-                                             Guns.Last_Index loop
-                                          if Guns.Element(J)(1) =
-                                            WeaponIndex then
-                                             Guns.Delete
-                                             (Index => J, Count => 1);
-                                             exit;
-                                          end if;
-                                       end loop;
-                                    end if;
+                                    RemoveGun(WeaponIndex);
                                  end if;
                               when GUN =>
-                                 if EnemyShip.Modules.Element(HitLocation)
-                                     .Owner >
-                                   0 then
-                                    Death
-                                      (EnemyShip.Modules.Element(HitLocation)
-                                         .Owner,
-                                       DeathReason,
-                                       EnemyShip);
-                                 end if;
-                                 if Ship /= PlayerShip then
-                                    for J in
-                                      Guns.First_Index .. Guns.Last_Index loop
-                                       if Guns.Element(J)(1) = HitLocation then
-                                          Guns.Delete(Index => J, Count => 1);
-                                          exit;
-                                       end if;
-                                    end loop;
-                                 end if;
+                                  RemoveGun(HitLocation);
                               when CABIN =>
                                  if EnemyShip.Modules.Element(HitLocation)
                                      .Owner >
