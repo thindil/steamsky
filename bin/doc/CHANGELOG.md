@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Merging damaged items
 - Recipes for Andrae and Illandru logs
 - Killing gunner on direct hit in gun
+- Removing gun on destroying turret
 
 ## [1.0] - 2017-04-02
 
