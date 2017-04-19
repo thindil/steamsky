@@ -35,27 +35,22 @@ package body Bases.UI.Recipes is
         1;
       Cost: Positive;
    begin
-      for I in Recipes_List.First_Index .. Recipes_List.Last_Index loop
-         if To_String
-             (Items_List.Element(Recipes_List.Element(I).ResultIndex).Name) =
+      for I in Recipes_List.Iterate loop
+         if To_String(Items_List(Recipes_List(I).ResultIndex).Name) =
            Name(Current(TradeMenu)) then
-            RecipeIndex := I;
+            RecipeIndex := Recipes_Container.To_Index(I);
             exit;
          end if;
       end loop;
       InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
-      if Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex)
-          .Prices
-          (BaseType) >
+      if Items_List(Recipes_List(RecipeIndex).ResultIndex).Prices(BaseType) >
         0 then
          Cost :=
-           Items_List.Element(Recipes_List.Element(RecipeIndex).ResultIndex)
-             .Prices
-             (BaseType) *
-           Recipes_List.Element(RecipeIndex).Difficulty *
+           Items_List(Recipes_List(RecipeIndex).ResultIndex).Prices(BaseType) *
+           Recipes_List(RecipeIndex).Difficulty *
            100;
       else
-         Cost := Recipes_List.Element(RecipeIndex).Difficulty * 100;
+         Cost := Recipes_List(RecipeIndex).Difficulty * 100;
       end if;
       Add
         (Win => InfoWindow,
@@ -86,9 +81,9 @@ package body Bases.UI.Recipes is
       MoneyIndex, MenuAmount: Natural := 0;
       MenuIndex: Positive := 1;
    begin
-      for I in Recipes_List.First_Index .. Recipes_List.Last_Index loop
-         if Recipes_List.Element(I).BaseType = BaseType and
-           Known_Recipes.Find_Index(Item => I) =
+      for I in Recipes_List.Iterate loop
+         if Recipes_List(I).BaseType = BaseType and
+           Known_Recipes.Find_Index(Item => Recipes_Container.To_Index(I)) =
              Positive_Container.No_Index then
             MenuAmount := MenuAmount + 1;
          end if;
@@ -100,15 +95,13 @@ package body Bases.UI.Recipes is
          return;
       end if;
       Trade_Items := new Item_Array(1 .. (MenuAmount + 1));
-      for I in Recipes_List.First_Index .. Recipes_List.Last_Index loop
-         if Recipes_List.Element(I).BaseType = BaseType and
-           Known_Recipes.Find_Index(Item => I) =
+      for I in Recipes_List.Iterate loop
+         if Recipes_List(I).BaseType = BaseType and
+           Known_Recipes.Find_Index(Item => Recipes_Container.To_Index(I)) =
              Positive_Container.No_Index then
             Trade_Items.all(MenuIndex) :=
               New_Item
-                (To_String
-                   (Items_List.Element(Recipes_List.Element(I).ResultIndex)
-                      .Name));
+                (To_String(Items_List(Recipes_List(I).ResultIndex).Name));
             MenuIndex := MenuIndex + 1;
          end if;
       end loop;
@@ -129,7 +122,7 @@ package body Bases.UI.Recipes is
          Add
            (Str =>
               "You have" &
-              Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex).Amount) &
               " Charcollum.");
       else
          Add(Str => "You don't have any Charcollum to buy anything.");
@@ -158,12 +151,10 @@ package body Bases.UI.Recipes is
                Result := Driver(TradeMenu, M_First_Item);
             end if;
          when 10 => -- Buy recipe
-            for I in Recipes_List.First_Index .. Recipes_List.Last_Index loop
-               if To_String
-                   (Items_List.Element(Recipes_List.Element(I).ResultIndex)
-                      .Name) =
+            for I in Recipes_List.Iterate loop
+               if To_String(Items_List(Recipes_List(I).ResultIndex).Name) =
                  Name(Current(TradeMenu)) then
-                  RecipeIndex := I;
+                  RecipeIndex := Recipes_Container.To_Index(I);
                   exit;
                end if;
             end loop;
