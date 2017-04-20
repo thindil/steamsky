@@ -47,7 +47,7 @@ package Crew is
       Order: Crew_Orders; -- Current order for member
       PreviousOrder: Crew_Orders; -- Previous order for member
       OrderTime: Integer; -- Minutes to next check for order result
-      Orders: Orders_Array; -- Priority of orders of memeber
+      Orders: Orders_Array; -- Priority of orders of member
    end record;
 
    procedure GiveOrders
