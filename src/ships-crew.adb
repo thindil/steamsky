@@ -119,11 +119,11 @@ package body Ships.Crew is
 
    function FindMember
      (Order: Crew_Orders;
-      Ship: ShipRecord := PlayerShip) return Natural is
+      Crew: Crew_Container.Vector := PlayerShip.Crew) return Natural is
    begin
-      for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
-         if Ship.Crew(I).Order = Order then
-            return I;
+      for I in Crew.Iterate loop
+         if Crew(I).Order = Order then
+            return Crew_Container.To_Index(I);
          end if;
       end loop;
       return 0;

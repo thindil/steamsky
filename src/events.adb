@@ -99,7 +99,7 @@ package body Events is
          if BaseIndex = 0 then -- Outside bases
             case Roll is
                when 1 .. 5 => -- Engine damaged
-                  CrewIndex := FindMember(Engineer, PlayerShip);
+                  CrewIndex := FindMember(Engineer);
                   if CrewIndex > 0 and PlayerShip.Speed /= FULL_STOP then
                      Roll2 := GetRandom(1, 100);
                      case PlayerShip.Speed is
@@ -145,7 +145,7 @@ package body Events is
                      GainExp(1, 2, CrewIndex);
                   end if;
                when 6 .. 20 => -- Bad weather
-                  CrewIndex := FindMember(Pilot, PlayerShip);
+                  CrewIndex := FindMember(Pilot);
                   if CrewIndex > 0 then
                      AddMessage
                        ("Sudden bad weather makes your travel takes longer.",

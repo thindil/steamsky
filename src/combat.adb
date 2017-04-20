@@ -596,7 +596,7 @@ package body Combat is
                null;
          end case;
       end loop;
-      EnemyPilotIndex := FindMember(Pilot, Enemy.Ship);
+      EnemyPilotIndex := FindMember(Pilot, Enemy.Ship.Crew);
       for Item of PlayerShip.Cargo loop
          if Items_List(Item.ProtoIndex).IType =
            To_Unbounded_String("Fuel") then
