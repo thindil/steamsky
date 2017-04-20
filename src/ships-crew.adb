@@ -21,32 +21,30 @@ package body Ships.Crew is
 
    function GetSkillLevel
      (MemberIndex, SkillIndex: Positive;
-      Ship: ShipRecord := PlayerShip) return Natural is
+      Crew: Crew_Container.Vector := PlayerShip.Crew) return Natural is
       SkillLevel: Integer := 0;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       BaseSkillLevel: Natural;
    begin
-      for Skill of Ship.Crew(MemberIndex).Skills loop
+      for Skill of Crew(MemberIndex).Skills loop
          if Skill(1) = SkillIndex then
             BaseSkillLevel := Skill(2);
             Damage :=
-              1.0 - DamageFactor(Float(Ship.Crew(MemberIndex).Health) / 100.0);
+              1.0 - DamageFactor(Float(Crew(MemberIndex).Health) / 100.0);
             SkillLevel :=
               SkillLevel +
               (BaseSkillLevel -
                Integer(Float(BaseSkillLevel) * Float(Damage)));
-            if Ship.Crew(MemberIndex).Thirst > 40 then
+            if Crew(MemberIndex).Thirst > 40 then
                Damage :=
-                 1.0 -
-                 DamageFactor(Float(Ship.Crew(MemberIndex).Thirst) / 100.0);
+                 1.0 - DamageFactor(Float(Crew(MemberIndex).Thirst) / 100.0);
                SkillLevel :=
                  SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
             end if;
-            if Ship.Crew(MemberIndex).Hunger > 80 then
+            if Crew(MemberIndex).Hunger > 80 then
                Damage :=
-                 1.0 -
-                 DamageFactor(Float(Ship.Crew(MemberIndex).Hunger) / 100.0);
+                 1.0 - DamageFactor(Float(Crew(MemberIndex).Hunger) / 100.0);
                SkillLevel :=
                  SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
             end if;
