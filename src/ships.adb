@@ -312,6 +312,8 @@ package body Ships is
                        FindProtoModule
                          (Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      if ModuleIndex = 0 then
+                        Close(ShipsFile);
+                        End_Search(Files);
                         raise Ships_Invalid_Data
                           with "Invalid module index: |" &
                           Slice(Value, StartIndex, EndIndex - 1) &
@@ -385,6 +387,8 @@ package body Ships is
                        FindProtoItem
                          (Unbounded_Slice(Value, XIndex + 1, EndIndex - 1));
                      if ItemIndex = 0 then
+                        Close(ShipsFile);
+                        End_Search(Files);
                         raise Ships_Invalid_Data
                           with "Invalid item index: |" &
                           Slice(Value, XIndex + 1, EndIndex - 1) &
