@@ -103,6 +103,8 @@ package body Crafts is
                elsif FieldName = To_Unbounded_String("Result") then
                   ItemIndex := FindProtoItem(Value);
                   if ItemIndex = 0 then
+                     Close(RecipesFile);
+                     End_Search(Files);
                      raise Recipes_Invalid_Data
                        with "Invalid result item index: |" &
                        To_String(Value) &
