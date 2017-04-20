@@ -45,14 +45,14 @@ package body Combat is
                when Pilot =>
                   Result :=
                     Result +
-                    GetSkillLevel(Crew_Container.To_Index(I), 5, Spotter);
+                    GetSkillLevel(Crew_Container.To_Index(I), 5, Spotter.Crew);
                   if Spotter = PlayerShip then
                      GainExp(1, 5, Crew_Container.To_Index(I));
                   end if;
                when Gunner =>
                   Result :=
                     Result +
-                    GetSkillLevel(Crew_Container.To_Index(I), 5, Spotter);
+                    GetSkillLevel(Crew_Container.To_Index(I), 5, Spotter.Crew);
                   if Spotter = PlayerShip then
                      GainExp(1, 5, Crew_Container.To_Index(I));
                   end if;
@@ -304,7 +304,7 @@ package body Combat is
                   end if;
                   if GunnerIndex > 0 then
                      HitChance :=
-                       HitChance + GetSkillLevel(GunnerIndex, 3, Ship);
+                       HitChance + GetSkillLevel(GunnerIndex, 3, Ship.Crew);
                   end if;
                   for I in 1 .. Shoots loop
                      if Modules_List(Ship.Modules(K).ProtoIndex).MType =
@@ -635,9 +635,9 @@ package body Combat is
       end if;
       if EnemyPilotIndex > 0 then
          AccuracyBonus :=
-           AccuracyBonus - GetSkillLevel(EnemyPilotIndex, 1, Enemy.Ship);
+           AccuracyBonus - GetSkillLevel(EnemyPilotIndex, 1, Enemy.Ship.Crew);
          Enemy.Evasion :=
-           Enemy.Evasion + GetSkillLevel(EnemyPilotIndex, 1, Enemy.Ship);
+           Enemy.Evasion + GetSkillLevel(EnemyPilotIndex, 1, Enemy.Ship.Crew);
       end if;
       if EngineerIndex > 0 and HaveFuel then
          ChangeShipSpeed(ShipSpeed'Val(EngineerOrder), False);
