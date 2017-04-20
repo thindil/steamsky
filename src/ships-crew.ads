@@ -31,8 +31,8 @@ package Ships.Crew is
       Ship: in out ShipRecord); -- Delete selected member from crew list
    function FindMember
      (Order: Crew_Orders;
-      Ship: ShipRecord :=
-        PlayerShip)
+      Crew: Crew_Container.Vector :=
+        PlayerShip.Crew)
      return Natural; -- Find index of first crew member with selected order
 
 end Ships.Crew;
