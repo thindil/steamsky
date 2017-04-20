@@ -28,7 +28,7 @@ package body Bases.UI.Recruits is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       RecruitIndex: constant Positive := Get_Index(Current(TradeMenu));
       Recruit: constant Recruit_Data :=
-        SkyBases(BaseIndex).Recruits.Element(RecruitIndex);
+        SkyBases(BaseIndex).Recruits(RecruitIndex);
       CurrentLine: Line_Position := 1;
       SkillLevel: Unbounded_String;
    begin
@@ -68,7 +68,7 @@ package body Bases.UI.Recruits is
          Add
            (Win => InfoWindow,
             Str =>
-              To_String(Skills_Names.Element(Skill(1))) &
+              To_String(Skills_Names(Skill(1))) &
               ": " &
               To_String(SkillLevel));
          CurrentLine := CurrentLine + 1;
@@ -114,7 +114,7 @@ package body Bases.UI.Recruits is
         SkyBases(BaseIndex).Recruits.First_Index ..
             SkyBases(BaseIndex).Recruits.Last_Index loop
          Recruits_Items.all(I) :=
-           New_Item(To_String(SkyBases(BaseIndex).Recruits.Element(I).Name));
+           New_Item(To_String(SkyBases(BaseIndex).Recruits(I).Name));
       end loop;
       Recruits_Items.all(Recruits_Items'Last) := Null_Item;
       TradeMenu := New_Menu(Recruits_Items);
@@ -137,7 +137,7 @@ package body Bases.UI.Recruits is
          Add
            (Str =>
               "You have" &
-              Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex).Amount) &
               " Charcollum.");
       else
          Add(Str => "You don't have any Charcollum to hire anyone.");
