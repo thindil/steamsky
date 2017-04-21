@@ -197,7 +197,7 @@ package body Game is
           Order => Talk,
           PreviousOrder => Rest,
           OrderTime => 15,
-          Orders => (others => 0)));
+          Orders => (0, 0, 0, 1, 1, 1, 2, 1, 1)));
       for Module of PlayerShip.Modules loop
          if Module.Owner > 0 then
             Module.Owner := Module.Owner + 1;
