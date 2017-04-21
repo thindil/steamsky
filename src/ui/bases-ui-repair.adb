@@ -32,19 +32,18 @@ package body Bases.UI.Repair is
                .BaseType) +
         1;
    begin
-      for I in
-        PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index loop
-         if To_String(PlayerShip.Modules.Element(I).Name) =
+      for I in PlayerShip.Modules.Iterate loop
+         if To_String(PlayerShip.Modules(I).Name) =
            Name(Current(TradeMenu)) then
             Time :=
-              PlayerShip.Modules.Element(I).MaxDurability -
-              PlayerShip.Modules.Element(I).Durability;
+              PlayerShip.Modules(I).MaxDurability -
+              PlayerShip.Modules(I).Durability;
             for Item of Items_List loop
                if Item.IType =
-                 Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex)
+                 Modules_List(PlayerShip.Modules(I).ProtoIndex)
                    .RepairMaterial then
                   Cost := Time * Item.Prices(BaseType);
-                  ModuleIndex := I;
+                  ModuleIndex := Modules_Container.To_Index(I);
                   exit;
                end if;
             end loop;
@@ -57,7 +56,7 @@ package body Bases.UI.Repair is
                Time := Time + Module.MaxDurability - Module.Durability;
                for Item of Items_List loop
                   if Item.IType =
-                    Modules_List.Element(Module.ProtoIndex).RepairMaterial then
+                    Modules_List(Module.ProtoIndex).RepairMaterial then
                      Cost :=
                        Cost +
                        ((Module.MaxDurability - Module.Durability) *
@@ -168,7 +167,7 @@ package body Bases.UI.Repair is
          Add
            (Str =>
               "You have" &
-              Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex).Amount) &
               " Charcollum.");
       else
          Add(Str => "You don't have any Charcollum to repair anything.");
