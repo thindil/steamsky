@@ -158,7 +158,7 @@ package body Ships is
              Order => Member.Order,
              PreviousOrder => Rest,
              OrderTime => 15,
-             Orders => (others => 0)));
+             Orders => Member.Orders));
          TmpSkills.Clear;
          for Module of ShipModules loop
             if Modules_List(Module.ProtoIndex).MType = CABIN and
@@ -238,7 +238,11 @@ package body Ships is
 
    procedure LoadShips is
       ShipsFile: File_Type;
-      RawData, FieldName, Value, SkillsValue: Unbounded_String;
+      RawData,
+      FieldName,
+      Value,
+      SkillsValue,
+      PrioritiesValue: Unbounded_String;
       EqualIndex,
       StartIndex,
       EndIndex,
@@ -256,13 +260,18 @@ package body Ships is
       TempCrew: ProtoCrew_Container.Vector;
       TempSkills: Skills_Container.Vector;
       TempOrder: Crew_Orders;
-      SkillsAmount: Positive;
+      SkillsAmount, PrioritiesAmount: Positive;
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
+      TempPriorities: Orders_Array := (others => 0);
       procedure UpdateMember(Member: in out ProtoCrewData) is
       begin
          Member.Order := TempOrder;
       end UpdateMember;
+      procedure UpdateMember2(Member: in out ProtoCrewData) is
+      begin
+         Member.Orders := TempPriorities;
+      end UpdateMember2;
    begin
       if ProtoShips_List.Length > 0 then
          return;
@@ -479,7 +488,10 @@ package body Ships is
                         StartIndex2 := EndIndex2 + 2;
                      end loop;
                      TempRecord.Crew.Append
-                     (New_Item => (Skills => TempSkills, Order => Rest));
+                     (New_Item =>
+                        (Skills => TempSkills,
+                         Order => Rest,
+                         Orders => (others => 0)));
                      TempSkills.Clear;
                      StartIndex := EndIndex + 2;
                   end loop;
@@ -504,6 +516,46 @@ package body Ships is
                   TempRecord.Description := Value;
                elsif FieldName = To_Unbounded_String("Owner") then
                   TempRecord.Owner := Bases_Owners'Value(To_String(Value));
+               elsif FieldName = To_Unbounded_String("Priorities") then
+                  StartIndex := 1;
+                  Amount := Ada.Strings.Unbounded.Count(Value, "; ") + 1;
+                  for I in 1 .. Amount loop
+                     EndIndex := Index(Value, "; ", StartIndex);
+                     if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                     end if;
+                     PrioritiesValue :=
+                       To_Unbounded_String
+                         (Slice(Value, StartIndex, EndIndex - 1));
+                     StartIndex2 := 1;
+                     PrioritiesAmount :=
+                       Ada.Strings.Unbounded.Count(PrioritiesValue, ", ") + 1;
+                     for J in 1 .. PrioritiesAmount loop
+                        EndIndex2 := Index(PrioritiesValue, ", ", StartIndex2);
+                        if EndIndex2 = 0 then
+                           EndIndex2 := Length(PrioritiesValue) + 1;
+                        end if;
+                        XIndex := Index(PrioritiesValue, "x", StartIndex2);
+                        TempPriorities
+                          (Integer'
+                             Value
+                               (Slice
+                                  (PrioritiesValue,
+                                   StartIndex2,
+                                   XIndex - 1))) :=
+                          Integer'
+                            Value
+                              (Slice
+                                 (PrioritiesValue,
+                                  XIndex + 1,
+                                  EndIndex2 - 1));
+                        StartIndex2 := EndIndex2 + 2;
+                     end loop;
+                     TempRecord.Crew.Update_Element
+                     (Index => I, Process => UpdateMember2'Access);
+                     TempPriorities := (others => 0);
+                     StartIndex := EndIndex + 2;
+                  end loop;
                end if;
             else
                if TempRecord.Name /= Null_Unbounded_String then
