@@ -185,3 +185,9 @@ ships, ships modules, etc.)
 - Description: Any length description of ship.
 - Owner: Which fraction own ship. Possible values are: Poleis, Independent,
   Pirates, Undead, Drones, Inquisition.
+- Priorities: Orders priorities for each crew member (player ship only). Must
+  be in this same amount as skills of crew members. Each priority entry is
+  Ordex`x`Piority where Order is: 1 - Piloting, 2 - Engineering, 3 - Operating
+  guns, 4 - Repair ship, 5 - Manufacturing, 6 - Upgrading ship, 7 - Talking in
+  bases, 8 - Healing wounded, 9 - Cleaning ship and Piority is 1 - Normal
+  piority, 2 - Highest priority (one per crew member)
