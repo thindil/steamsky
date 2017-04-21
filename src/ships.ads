@@ -70,6 +70,7 @@ package Ships is
    record
       Skills: Skills_Container.Vector; -- Skills of crew member
       Order: Crew_Orders; -- Order for crew member
+      Orders: Orders_Array; -- Priority of orders of member
    end record;
    package ProtoCrew_Container is new Vectors(Positive, ProtoCrewData);
    type ShipSkills_Array is array(1 .. 2) of Natural;
