@@ -264,6 +264,16 @@ package body Ships is
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
       TempPriorities: Orders_Array := (others => 0);
+      OrdersNames: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("Piloting"),
+         To_Unbounded_String("Engineering"),
+         To_Unbounded_String("Operating guns"),
+         To_Unbounded_String("Repair ship"),
+         To_Unbounded_String("Manufacturing"),
+         To_Unbounded_String("Upgrading ship"),
+         To_Unbounded_String("Talking in bases"),
+         To_Unbounded_String("Healing wounded"),
+         To_Unbounded_String("Cleaning ship"));
       procedure UpdateMember(Member: in out ProtoCrewData) is
       begin
          Member.Order := TempOrder;
@@ -535,20 +545,17 @@ package body Ships is
                         if EndIndex2 = 0 then
                            EndIndex2 := Length(PrioritiesValue) + 1;
                         end if;
-                        XIndex := Index(PrioritiesValue, "x", StartIndex2);
-                        TempPriorities
-                          (Integer'
-                             Value
-                               (Slice
-                                  (PrioritiesValue,
-                                   StartIndex2,
-                                   XIndex - 1))) :=
-                          Integer'
-                            Value
-                              (Slice
-                                 (PrioritiesValue,
-                                  XIndex + 1,
-                                  EndIndex2 - 1));
+                        XIndex := Index(PrioritiesValue, ":", StartIndex2);
+                        for K in OrdersNames'Range loop
+                            if OrdersNames(K) = Unbounded_Slice(PrioritiesValue, StartIndex2, XIndex - 1) then
+                                if Slice(PrioritiesValue, XIndex + 1, EndIndex2 - 1) = "Normal" then
+                                    TempPriorities(K) := 1;
+                                else
+                                    TempPriorities(K) := 2;
+                                end if;
+                                exit;
+                            end if;
+                        end loop;
                         StartIndex2 := EndIndex2 + 2;
                      end loop;
                      TempRecord.Crew.Update_Element
