@@ -69,21 +69,17 @@ package body Bases.UI.Shipyard is
          Damage :=
            1.0 -
            DamageFactor
-             (Float(PlayerShip.Modules.Element(ModuleIndex).Durability) /
-              Float(PlayerShip.Modules.Element(ModuleIndex).MaxDurability));
+             (Float(PlayerShip.Modules(ModuleIndex).Durability) /
+              Float(PlayerShip.Modules(ModuleIndex).MaxDurability));
          Cost :=
-           Modules_List.Element
-           (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
-             .Price -
+           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Price -
            Integer
              (Float
-                (Modules_List.Element
-                 (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+                (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                    .Price) *
               Float(Damage));
          MTime :=
-           Modules_List.Element
-           (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
              .InstallTime;
       end if;
       InfoWindow := Create(15, (Columns / 2), 4, (Columns / 2));
@@ -96,7 +92,7 @@ package body Bases.UI.Shipyard is
          Str => To_String(TextTime) & Positive'Image(MTime) & " minutes");
       Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
       if InstallView then
-         case Modules_List.Element(ModuleIndex).MType is
+         case Modules_List(ModuleIndex).MType is
             when HULL =>
                Add
                  (Win => InfoWindow,
@@ -106,44 +102,38 @@ package body Bases.UI.Shipyard is
                  (Win => InfoWindow,
                   Str =>
                     "Modules space:" &
-                    Positive'
-                      Image
-                        (Modules_List.Element(ModuleIndex).MaxValue));
+                    Positive'Image(Modules_List(ModuleIndex).MaxValue));
                CurrentLine := 5;
             when ENGINE =>
                Add
                  (Win => InfoWindow,
                   Str =>
                     "Max power:" &
-                    Positive'
-                      Image
-                        (Modules_List.Element(ModuleIndex).MaxValue));
+                    Positive'Image(Modules_List(ModuleIndex).MaxValue));
                Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
                Add
                  (Win => InfoWindow,
                   Str =>
                     "Fuel usage:" &
-                    Positive'Image(Modules_List.Element(ModuleIndex).Value));
+                    Positive'Image(Modules_List(ModuleIndex).Value));
                CurrentLine := 5;
             when ShipModules.CARGO =>
                Add
                  (Win => InfoWindow,
                   Str =>
                     "Max cargo:" &
-                    Positive'
-                      Image
-                        (Modules_List.Element(ModuleIndex).MaxValue) &
+                    Positive'Image(Modules_List(ModuleIndex).MaxValue) &
                     " kg");
                CurrentLine := 4;
             when CABIN =>
                Add(Win => InfoWindow, Str => "Quality: ");
-               if Modules_List.Element(ModuleIndex).MaxValue < 30 then
+               if Modules_List(ModuleIndex).MaxValue < 30 then
                   Add(Win => InfoWindow, Str => "minimal");
-               elsif Modules_List.Element(ModuleIndex).MaxValue > 29 and
-                 Modules_List.Element(ModuleIndex).MaxValue < 60 then
+               elsif Modules_List(ModuleIndex).MaxValue > 29 and
+                 Modules_List(ModuleIndex).MaxValue < 60 then
                   Add(Win => InfoWindow, Str => "basic");
-               elsif Modules_List.Element(ModuleIndex).MaxValue > 59 and
-                 Modules_List.Element(ModuleIndex).MaxValue < 80 then
+               elsif Modules_List(ModuleIndex).MaxValue > 59 and
+                 Modules_List(ModuleIndex).MaxValue < 80 then
                   Add(Win => InfoWindow, Str => "extended");
                else
                   Add(Win => InfoWindow, Str => "luxury");
@@ -152,16 +142,13 @@ package body Bases.UI.Shipyard is
             when GUN =>
                Add(Win => InfoWindow, Str => "Ammunition: ");
                MAmount := 0;
-               for I in Items_List.First_Index .. Items_List.Last_Index loop
-                  if Items_List.Element(I).IType =
-                    Items_Types.Element
-                    (Modules_List.Element(ModuleIndex).Value) then
+               for Item of Items_List loop
+                  if Item.IType =
+                    Items_Types(Modules_List(ModuleIndex).Value) then
                      if MAmount > 0 then
                         Add(Win => InfoWindow, Str => " or ");
                      end if;
-                     Add
-                       (Win => InfoWindow,
-                        Str => To_String(Items_List.Element(I).Name));
+                     Add(Win => InfoWindow, Str => To_String(Item.Name));
                      MAmount := MAmount + 1;
                   end if;
                end loop;
@@ -169,19 +156,17 @@ package body Bases.UI.Shipyard is
             when others =>
                null;
          end case;
-         if Modules_List.Element(ModuleIndex).Size > 0 then
+         if Modules_List(ModuleIndex).Size > 0 then
             Move_Cursor
               (Win => InfoWindow,
                Line => CurrentLine - 1,
                Column => 0);
             Add
               (Win => InfoWindow,
-               Str =>
-                 "Size:" &
-                 Natural'Image(Modules_List.Element(ModuleIndex).Size));
+               Str => "Size:" & Natural'Image(Modules_List(ModuleIndex).Size));
             CurrentLine := CurrentLine + 1;
          end if;
-         if Modules_List.Element(ModuleIndex).Weight > 0 then
+         if Modules_List(ModuleIndex).Weight > 0 then
             Move_Cursor
               (Win => InfoWindow,
                Line => CurrentLine - 1,
@@ -190,7 +175,7 @@ package body Bases.UI.Shipyard is
               (Win => InfoWindow,
                Str =>
                  "Weight:" &
-                 Natural'Image(Modules_List.Element(ModuleIndex).Weight) &
+                 Natural'Image(Modules_List(ModuleIndex).Weight) &
                  " kg");
             CurrentLine := CurrentLine + 1;
          end if;
@@ -198,8 +183,7 @@ package body Bases.UI.Shipyard is
          Add(Win => InfoWindow, Str => "Repair/Upgrade material: ");
          MAmount := 0;
          for Item of Items_List loop
-            if Item.IType =
-              Modules_List.Element(ModuleIndex).RepairMaterial then
+            if Item.IType = Modules_List(ModuleIndex).RepairMaterial then
                if MAmount > 0 then
                   Add(Win => InfoWindow, Str => " or ");
                end if;
@@ -212,17 +196,13 @@ package body Bases.UI.Shipyard is
            (Win => InfoWindow,
             Str =>
               "Repair/Upgrade skill: " &
-              To_String
-                (Skills_Names.Element
-                 (Modules_List.Element(ModuleIndex).RepairSkill)));
-         if Modules_List.Element(ModuleIndex).Description /=
-           Null_Unbounded_String then
+              To_String(Skills_Names(Modules_List(ModuleIndex).RepairSkill)));
+         if Modules_List(ModuleIndex).Description /= Null_Unbounded_String then
             CurrentLine := CurrentLine + 2;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add
               (Win => InfoWindow,
-               Str =>
-                 To_String(Modules_List.Element(ModuleIndex).Description));
+               Str => To_String(Modules_List(ModuleIndex).Description));
             Get_Cursor_Position
               (Win => InfoWindow,
                Line => CurrentLine,
@@ -238,37 +218,31 @@ package body Bases.UI.Shipyard is
             Count => 5,
             Color => 1);
       else
-         case Modules_List.Element
-         (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
-           .MType is
+         case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
             when ENGINE =>
                Add
                  (Win => InfoWindow,
                   Str =>
                     "Max power:" &
-                    Positive'
-                      Image
-                        (PlayerShip.Modules.Element(ModuleIndex).Max_Value));
+                    Positive'Image(PlayerShip.Modules(ModuleIndex).Max_Value));
                CurrentLine := 4;
             when ShipModules.CARGO =>
                Add
                  (Win => InfoWindow,
                   Str =>
                     "Max cargo:" &
-                    Positive'
-                      Image
-                        (PlayerShip.Modules.Element(ModuleIndex).Max_Value) &
+                    Positive'Image(PlayerShip.Modules(ModuleIndex).Max_Value) &
                     " kg");
                CurrentLine := 4;
             when CABIN =>
                Add(Win => InfoWindow, Str => "Quality: ");
-               if PlayerShip.Modules.Element(ModuleIndex).Max_Value < 30 then
+               if PlayerShip.Modules(ModuleIndex).Max_Value < 30 then
                   Add(Win => InfoWindow, Str => "minimal");
-               elsif PlayerShip.Modules.Element(ModuleIndex).Max_Value > 29 and
-                 PlayerShip.Modules.Element(ModuleIndex).Max_Value < 60 then
+               elsif PlayerShip.Modules(ModuleIndex).Max_Value > 29 and
+                 PlayerShip.Modules(ModuleIndex).Max_Value < 60 then
                   Add(Win => InfoWindow, Str => "basic");
-               elsif PlayerShip.Modules.Element(ModuleIndex).Max_Value > 59 and
-                 PlayerShip.Modules.Element(ModuleIndex).Max_Value < 80 then
+               elsif PlayerShip.Modules(ModuleIndex).Max_Value > 59 and
+                 PlayerShip.Modules(ModuleIndex).Max_Value < 80 then
                   Add(Win => InfoWindow, Str => "extended");
                else
                   Add(Win => InfoWindow, Str => "luxury");
@@ -278,17 +252,16 @@ package body Bases.UI.Shipyard is
                Add(Win => InfoWindow, Str => "Ammunition: ");
                MAmount := 0;
                for I in Items_List.First_Index .. Items_List.Last_Index loop
-                  if Items_List.Element(I).IType =
-                    Items_Types.Element
-                    (Modules_List.Element
-                     (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
-                       .Value) then
+                  if Items_List(I).IType =
+                    Items_Types
+                      (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                         .Value) then
                      if MAmount > 0 then
                         Add(Win => InfoWindow, Str => " or ");
                      end if;
                      Add
                        (Win => InfoWindow,
-                        Str => To_String(Items_List.Element(I).Name));
+                        Str => To_String(Items_List(I).Name));
                      MAmount := MAmount + 1;
                   end if;
                end loop;
@@ -296,9 +269,7 @@ package body Bases.UI.Shipyard is
             when others =>
                null;
          end case;
-         if Modules_List.Element
-           (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
-             .Size >
+         if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size >
            0 then
             Move_Cursor
               (Win => InfoWindow,
@@ -310,12 +281,11 @@ package body Bases.UI.Shipyard is
                  "Size:" &
                  Natural'
                    Image
-                     (Modules_List.Element
-                      (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+                     (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                         .Size));
             CurrentLine := CurrentLine + 1;
          end if;
-         if PlayerShip.Modules.Element(ModuleIndex).Weight > 0 then
+         if PlayerShip.Modules(ModuleIndex).Weight > 0 then
             Move_Cursor
               (Win => InfoWindow,
                Line => CurrentLine - 1,
@@ -324,14 +294,11 @@ package body Bases.UI.Shipyard is
               (Win => InfoWindow,
                Str =>
                  "Weight:" &
-                 Natural'
-                   Image
-                     (PlayerShip.Modules.Element(ModuleIndex).Weight) &
+                 Natural'Image(PlayerShip.Modules(ModuleIndex).Weight) &
                  " kg");
             CurrentLine := CurrentLine + 1;
          end if;
-         if Modules_List.Element
-           (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+         if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
              .Description /=
            Null_Unbounded_String then
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
@@ -339,8 +306,7 @@ package body Bases.UI.Shipyard is
               (Win => InfoWindow,
                Str =>
                  To_String
-                   (Modules_List.Element
-                    (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .Description));
             Get_Cursor_Position
               (Win => InfoWindow,
@@ -371,13 +337,12 @@ package body Bases.UI.Shipyard is
       MoneyIndex: Natural;
       procedure AddMenuItems(MType: ModuleType) is
       begin
-         for I in Modules_List.First_Index .. Modules_List.Last_Index loop
-            if Modules_List.Element(I).Price > 0 and
-              Modules_List.Element(I).MType = MType then
+         for I in Modules_List.Iterate loop
+            if Modules_List(I).Price > 0 and Modules_List(I).MType = MType then
                Modules_Items.all(MenuIndex) :=
                  New_Item
-                   (To_String(Modules_List.Element(I).Name),
-                    Positive'Image(I));
+                   (To_String(Modules_List(I).Name),
+                    Positive'Image(BaseModules_Container.To_Index(I)));
                MenuIndex := MenuIndex + 1;
             end if;
          end loop;
@@ -411,15 +376,13 @@ package body Bases.UI.Shipyard is
            new Item_Array
            (PlayerShip.Modules.First_Index ..
                 (PlayerShip.Modules.Last_Index + 1));
-         for I in
-           PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index loop
-            if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex)
-                .MType /=
+         for I in PlayerShip.Modules.Iterate loop
+            if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType /=
               HULL then
                Modules_Items.all(MenuIndex) :=
                  New_Item
-                   (To_String(PlayerShip.Modules.Element(I).Name),
-                    Positive'Image(I));
+                   (To_String(PlayerShip.Modules(I).Name),
+                    Positive'Image(Modules_Container.To_Index(I)));
                MenuIndex := MenuIndex + 1;
             end if;
          end loop;
@@ -453,14 +416,14 @@ package body Bases.UI.Shipyard is
          Add
            (Str =>
               "You have" &
-              Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex).Amount) &
               " Charcollum.");
       elsif InstallView then
          Add(Str => "You don't have any Charcollum to install anything.");
       end if;
       Move_Cursor(Line => (MenuHeight + 6), Column => 2);
       for Module of PlayerShip.Modules loop
-         if Modules_List.Element(Module.ProtoIndex).MType = HULL then
+         if Modules_List(Module.ProtoIndex).MType = HULL then
             Add
               (Str =>
                  "You have used" &
