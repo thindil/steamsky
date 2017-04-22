@@ -651,4 +651,15 @@ Skills = 1x40..60, 5x40..60
 Orders = Pilot
 Description = Advanced and upgraded version of huge, good armored undead flying vessel. Dangerous at close range.
 Owner = Undead
+[64]
+Name = Advanced huge attacking drone mk II
+Modules = 71, 57, 79, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 89, 86, 34, 86, 34, 86, 34
+Accuracy = 40..60
+CombatAI = Berserker
+Evasion = 40..60
+Loot = 600..1000
+Perception = 50..60
+Cargo = 4000..6000x1, 600..1000x33, 600..800x13
+Description = Advanced and upgraded version of huge, good armored, attacking clockwork drone.
+Owner = Drones
 []
