@@ -547,14 +547,22 @@ package body Ships is
                         end if;
                         XIndex := Index(PrioritiesValue, ":", StartIndex2);
                         for K in OrdersNames'Range loop
-                            if OrdersNames(K) = Unbounded_Slice(PrioritiesValue, StartIndex2, XIndex - 1) then
-                                if Slice(PrioritiesValue, XIndex + 1, EndIndex2 - 1) = "Normal" then
-                                    TempPriorities(K) := 1;
-                                else
-                                    TempPriorities(K) := 2;
-                                end if;
-                                exit;
-                            end if;
+                           if OrdersNames(K) =
+                             Unbounded_Slice
+                               (PrioritiesValue,
+                                StartIndex2,
+                                XIndex - 1) then
+                              if Slice
+                                  (PrioritiesValue,
+                                   XIndex + 1,
+                                   EndIndex2 - 1) =
+                                "Normal" then
+                                 TempPriorities(K) := 1;
+                              else
+                                 TempPriorities(K) := 2;
+                              end if;
+                              exit;
+                           end if;
                         end loop;
                         StartIndex2 := EndIndex2 + 2;
                      end loop;
