@@ -48,34 +48,31 @@ package body Bases.UI.Trade is
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
    begin
-      for I in Items_List.First_Index .. Items_List.Last_Index loop
-         if To_String(Items_List.Element(I).Name) =
-           Name(Current(TradeMenu)) then
-            ItemIndex := I;
+      for I in Items_List.Iterate loop
+         if To_String(Items_List(I).Name) = Name(Current(TradeMenu)) then
+            ItemIndex := Objects_Container.To_Index(I);
             exit;
          end if;
       end loop;
       InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
       Add(Win => InfoWindow, Str => "Type: ");
-      if Items_List.Element(ItemIndex).ShowType = Null_Unbounded_String then
-         Add
-           (Win => InfoWindow,
-            Str => To_String(Items_List.Element(ItemIndex).IType));
+      if Items_List(ItemIndex).ShowType = Null_Unbounded_String then
+         Add(Win => InfoWindow, Str => To_String(Items_List(ItemIndex).IType));
       else
          Add
            (Win => InfoWindow,
-            Str => To_String(Items_List.Element(ItemIndex).ShowType));
+            Str => To_String(Items_List(ItemIndex).ShowType));
       end if;
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
-      if Items_List.Element(ItemIndex).Buyable(BaseType) then
+      if Items_List(ItemIndex).Buyable(BaseType) then
          Add(Win => InfoWindow, Str => "Base buy/sell price:");
       else
          Add(Win => InfoWindow, Str => "Base sell price:");
       end if;
-      Price := Items_List.Element(ItemIndex).Prices(BaseType);
+      Price := Items_List(ItemIndex).Prices(BaseType);
       if EventIndex > 0 then
-         if Events_List.Element(EventIndex).EType = DoublePrice and
-           Events_List.Element(EventIndex).Data = ItemIndex then
+         if Events_List(EventIndex).EType = DoublePrice and
+           Events_List(EventIndex).Data = ItemIndex then
             Price := Price * 2;
          end if;
       end if;
@@ -84,24 +81,20 @@ package body Bases.UI.Trade is
       Add
         (Win => InfoWindow,
          Str =>
-           "Weight:" &
-           Integer'Image(Items_List.Element(ItemIndex).Weight) &
-           " kg");
+           "Weight:" & Integer'Image(Items_List(ItemIndex).Weight) & " kg");
       if CargoIndex > 0 then
          Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
          Add
            (Win => InfoWindow,
             Str =>
-              "Owned:" &
-              Integer'Image(PlayerShip.Cargo.Element(CargoIndex).Amount));
-         if PlayerShip.Cargo.Element(CargoIndex).Durability < 100 then
+              "Owned:" & Integer'Image(PlayerShip.Cargo(CargoIndex).Amount));
+         if PlayerShip.Cargo(CargoIndex).Durability < 100 then
             Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
             Add(Win => InfoWindow, Str => "Status: ");
             DamagePercent :=
               100 -
               Natural
-                ((Float(PlayerShip.Cargo.Element(CargoIndex).Durability) /
-                  100.0) *
+                ((Float(PlayerShip.Cargo(CargoIndex).Durability) / 100.0) *
                  100.0);
             if DamagePercent > 0 and DamagePercent < 20 then
                Add(Win => InfoWindow, Str => "Slightly used");
@@ -116,12 +109,11 @@ package body Bases.UI.Trade is
          end if;
          CurrentLine := CurrentLine + 1;
       end if;
-      if Items_List.Element(ItemIndex).Description /=
-        Null_Unbounded_String then
+      if Items_List(ItemIndex).Description /= Null_Unbounded_String then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
          Add
            (Win => InfoWindow,
-            Str => To_String(Items_List.Element(ItemIndex).Description));
+            Str => To_String(Items_List(ItemIndex).Description));
          Get_Cursor_Position
            (Win => InfoWindow,
             Line => CurrentLine,
@@ -129,8 +121,7 @@ package body Bases.UI.Trade is
          CurrentLine := CurrentLine + 2;
       end if;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-      if Items_List.Element(ItemIndex).Buyable(BaseType) and
-        CargoIndex > 0 then
+      if Items_List(ItemIndex).Buyable(BaseType) and CargoIndex > 0 then
          Add
            (Win => InfoWindow,
             Str => "ENTER to buy selected item, SPACE for sell.");
@@ -146,8 +137,7 @@ package body Bases.UI.Trade is
             Column => 28,
             Count => 5,
             Color => 1);
-      elsif Items_List.Element(ItemIndex).Buyable(BaseType) and
-        CargoIndex = 0 then
+      elsif Items_List(ItemIndex).Buyable(BaseType) and CargoIndex = 0 then
          Add(Win => InfoWindow, Str => "ENTER to buy selected item.");
          Change_Attributes
            (Win => InfoWindow,
@@ -155,8 +145,7 @@ package body Bases.UI.Trade is
             Column => 0,
             Count => 5,
             Color => 1);
-      elsif not Items_List.Element(ItemIndex).Buyable(BaseType) and
-        CargoIndex > 0 then
+      elsif not Items_List(ItemIndex).Buyable(BaseType) and CargoIndex > 0 then
          Add(Win => InfoWindow, Str => "SPACE for sell selected item.");
          Change_Attributes
            (Win => InfoWindow,
@@ -187,16 +176,16 @@ package body Bases.UI.Trade is
       Added: Boolean;
    begin
       for Item of PlayerShip.Cargo loop
-         if Items_List.Element(Item.ProtoIndex).Prices(BaseType) > 0 then
+         if Items_List(Item.ProtoIndex).Prices(BaseType) > 0 then
             ItemsAmount := ItemsAmount + 1;
          end if;
       end loop;
-      for I in Items_List.First_Index .. Items_List.Last_Index loop
-         if Items_List.Element(I).Buyable(BaseType) then
+      for I in Items_List.Iterate loop
+         if Items_List(I).Buyable(BaseType) then
             Added := False;
             for Item of PlayerShip.Cargo loop
-               if Item.ProtoIndex = I and
-                 Items_List.Element(I).Prices(BaseType) > 0 then
+               if Item.ProtoIndex = Objects_Container.To_Index(I) and
+                 Items_List(I).Prices(BaseType) > 0 then
                   Added := True;
                   exit;
                end if;
@@ -207,32 +196,29 @@ package body Bases.UI.Trade is
          end if;
       end loop;
       Trade_Items := new Item_Array(1 .. ItemsAmount);
-      for I in PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-         if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex).Prices
-             (BaseType) >
+      for I in PlayerShip.Cargo.Iterate loop
+         if Items_List(PlayerShip.Cargo(I).ProtoIndex).Prices(BaseType) >
            0 then
             Trade_Items.all(MenuIndex) :=
               New_Item
-                (To_String
-                   (Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex)
-                      .Name),
-                 Positive'Image(I));
+                (To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name),
+                 Positive'Image(Cargo_Container.To_Index(I)));
             MenuIndex := MenuIndex + 1;
          end if;
       end loop;
-      for I in Items_List.First_Index .. Items_List.Last_Index loop
-         if Items_List.Element(I).Buyable(BaseType) then
+      for I in Items_List.Iterate loop
+         if Items_List(I).Buyable(BaseType) then
             Added := False;
             for Item of PlayerShip.Cargo loop
-               if Item.ProtoIndex = I and
-                 Items_List.Element(I).Prices(BaseType) > 0 then
+               if Item.ProtoIndex = Objects_Container.To_Index(I) and
+                 Items_List(I).Prices(BaseType) > 0 then
                   Added := True;
                   exit;
                end if;
             end loop;
             if not Added then
                Trade_Items.all(MenuIndex) :=
-                 New_Item(To_String(Items_List.Element(I).Name), "0");
+                 New_Item(To_String(Items_List(I).Name), "0");
                MenuIndex := MenuIndex + 1;
             end if;
          end if;
@@ -259,7 +245,7 @@ package body Bases.UI.Trade is
          Add
            (Str =>
               "You have" &
-              Natural'Image(PlayerShip.Cargo.Element(MoneyIndex).Amount) &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex).Amount) &
               " Charcollum.");
       else
          Add(Str => "You don't have any Charcollum to buy anything.");
@@ -292,26 +278,25 @@ package body Bases.UI.Trade is
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
    begin
-      for I in Items_List.First_Index .. Items_List.Last_Index loop
-         if To_String(Items_List.Element(I).Name) =
-           Name(Current(TradeMenu)) then
-            ItemIndex := I;
+      for I in Items_List.Iterate loop
+         if To_String(Items_List(I).Name) = Name(Current(TradeMenu)) then
+            ItemIndex := Objects_Container.To_Index(I);
             exit;
          end if;
       end loop;
-      Append(FieldText, Items_List.Element(ItemIndex).Name);
-      Price := Items_List.Element(ItemIndex).Prices(BaseType);
+      Append(FieldText, Items_List(ItemIndex).Name);
+      Price := Items_List(ItemIndex).Prices(BaseType);
       if EventIndex > 0 then
-         if Events_List.Element(EventIndex).EType = DoublePrice and
-           Events_List.Element(EventIndex).Data = ItemIndex then
+         if Events_List(EventIndex).EType = DoublePrice and
+           Events_List(EventIndex).Data = ItemIndex then
             Price := Price * 2;
          end if;
       end if;
       if Buy then
-         if not Items_List.Element(ItemIndex).Buyable(BaseType) then
+         if not Items_List(ItemIndex).Buyable(BaseType) then
             ShowDialog
               ("You can't buy " &
-               To_String(Items_List.Element(ItemIndex).Name) &
+               To_String(Items_List(ItemIndex).Name) &
                " in this base.");
             DrawGame(Trade_View);
             return Trade_View;
@@ -324,18 +309,17 @@ package body Bases.UI.Trade is
          end loop;
          Append(FieldText, " to buy");
       else
-         for I in
-           PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).ProtoIndex = ItemIndex then
-               CargoIndex := I;
-               MaxAmount := PlayerShip.Cargo.Element(I).Amount;
+         for I in PlayerShip.Cargo.Iterate loop
+            if PlayerShip.Cargo(I).ProtoIndex = ItemIndex then
+               CargoIndex := Cargo_Container.To_Index(I);
+               MaxAmount := PlayerShip.Cargo(I).Amount;
                exit;
             end if;
          end loop;
          if CargoIndex = 0 then
             ShowDialog
               ("You don't have any " &
-               To_String(Items_List.Element(ItemIndex).Name) &
+               To_String(Items_List(ItemIndex).Name) &
                " for sale.");
             DrawGame(Trade_View);
             return Trade_View;
@@ -426,18 +410,16 @@ package body Bases.UI.Trade is
       if FieldIndex < 3 then
          return Trade_Form;
       elsif FieldIndex > 3 then
-         for I in Items_List.First_Index .. Items_List.Last_Index loop
-            if To_String(Items_List.Element(I).Name) =
-              Name(Current(TradeMenu)) then
-               ItemIndex := I;
+         for I in Items_List.Iterate loop
+            if To_String(Items_List(I).Name) = Name(Current(TradeMenu)) then
+               ItemIndex := Objects_Container.To_Index(I);
                exit;
             end if;
          end loop;
          if not Buy then
-            for I in
-              PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-               if PlayerShip.Cargo.Element(I).ProtoIndex = ItemIndex then
-                  CargoIndex := I;
+            for I in PlayerShip.Cargo.Iterate loop
+               if PlayerShip.Cargo(I).ProtoIndex = ItemIndex then
+                  CargoIndex := Cargo_Container.To_Index(I);
                   exit;
                end if;
             end loop;
@@ -446,7 +428,7 @@ package body Bases.UI.Trade is
             else
                SellItems
                  (CargoIndex,
-                  Positive'Image(PlayerShip.Cargo.Element(CargoIndex).Amount));
+                  Positive'Image(PlayerShip.Cargo(CargoIndex).Amount));
             end if;
          else
             BuyItems(ItemIndex, Get_Buffer(Fields(TradeForm, 2)));
