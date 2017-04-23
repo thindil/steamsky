@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Recipes for Andrae and Illandru logs
 - Killing gunner on direct hit in gun
 - Removing gun on destroying turret
+- Crash on reading changelog file
 
 ## [1.0] - 2017-04-02
 
