@@ -282,7 +282,7 @@ package body MainMenu is
          else
             Open(ChangesFile, In_File, "CHANGELOG.md");
             Set_Line(ChangesFile, 6);
-            loop
+            while not End_Of_File(ChangesFile) loop
                FileText := To_Unbounded_String(Get_Line(ChangesFile));
                if Length(FileText) > 1 then
                   exit when Slice(FileText, 1, 3) = "## ";
