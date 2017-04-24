@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Support for many data files of this same objects types which made saves from
   1.0 incompatible
 - Starting priorities of orders for player ship crew
+- New ship module: small steel hull
 
 ### Changed
 - Merged fields lootmin and lootmax in ships data
