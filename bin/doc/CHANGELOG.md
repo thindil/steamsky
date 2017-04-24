@@ -11,8 +11,8 @@ All notable changes to this project will be documented in this file.
   drone mk II, advanced pirate ship mk II, advanced undead ship mk II,
   advanced inquisition ship mk II, huge pirate ship mk II, advanced huge pirate
   ship mk II, huge undead ship mk II, huge attacking drone mk II, advanced huge
-  undead ship mk II, advanced huge attacking drone mk II and huge inquisition
-  ship mk II
+  undead ship mk II, advanced huge attacking drone mk II, huge inquisition ship
+  mk II and advanced huge inquisition ship mk II
 - Support for many data files of this same objects types which made saves from
   1.0 incompatible
 - Starting priorities of orders for player ship crew
