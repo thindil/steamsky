@@ -672,4 +672,14 @@ Skills = 1x40..60, 5x5..15; 3x30..50, 5x5..15; 3x30..50, 5x5..15; 3x30..50, 5x5.
 Orders = Pilot, Gunner, Gunner, Gunner, Gunner
 Description = Huge, good armored and upgraded version of inquisition flying vessel.
 Owner = Inquisition
+[66]
+Name = Advanced huge inquisition ship mk II
+Modules = 71, 57, 79, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 89, 86, 34, 86, 34, 86, 34, 86, 34
+CombatAI = Attacker
+Loot = 900..1200
+Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x33, 500..650x13
+Skills = 1x50..70, 5x8..20; 3x40..60, 5x8..20; 3x40..60, 5x8..20; 3x40..60, 5x8..20; 3x40..60, 5x8..20
+Orders = Pilot, Gunner, Gunner, Gunner, Gunner
+Description = Advanced and upgraded version of huge, good armored, inquisition flying vessel.
+Owner = Inquisition
 []
