@@ -1129,4 +1129,16 @@ InstallTime = 150
 Unique = Yes
 Size = 1
 Description = Heavy battering ram, made of iron. Attack enemies automatically when in close range.
+[90]
+Name = Small steel hull
+Type = Hull
+Weight = 5000
+Value = 0
+MaxValue = 14
+Durability = 200
+Material = Steel
+Skill = Engineering
+Price = 7500
+InstallTime = 180
+Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
 []
