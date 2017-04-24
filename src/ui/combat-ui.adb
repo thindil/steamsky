@@ -67,8 +67,8 @@ package body Combat.UI is
          MemberIndex := FindMember(Order);
       else
          ModuleIndex :=
-           Guns.Element(Positive'Value(Description(Current(CrewMenu))))(1);
-         MemberIndex := PlayerShip.Modules.Element(ModuleIndex).Owner;
+           Guns(Positive'Value(Description(Current(CrewMenu))))(1);
+         MemberIndex := PlayerShip.Modules(ModuleIndex).Owner;
       end if;
       if CrewIndex > 0 then
          GiveOrders(CrewIndex, Order, ModuleIndex);
@@ -81,7 +81,7 @@ package body Combat.UI is
                PilotOrder := OrderIndex;
                AddMessage
                  ("Order for " &
-                  To_String(PlayerShip.Crew.Element(MemberIndex).Name) &
+                  To_String(PlayerShip.Crew(MemberIndex).Name) &
                   " was set on: " &
                   To_String(PilotOrders(PilotOrder)),
                   CombatMessage);
@@ -89,7 +89,7 @@ package body Combat.UI is
                EngineerOrder := OrderIndex;
                AddMessage
                  ("Order for " &
-                  To_String(PlayerShip.Crew.Element(MemberIndex).Name) &
+                  To_String(PlayerShip.Crew(MemberIndex).Name) &
                   " was set on: " &
                   To_String(EngineerOrders(EngineerOrder)),
                   CombatMessage);
@@ -100,7 +100,7 @@ package body Combat.UI is
                   UpdateGun'Access);
                AddMessage
                  ("Order for " &
-                  To_String(PlayerShip.Crew.Element(MemberIndex).Name) &
+                  To_String(PlayerShip.Crew(MemberIndex).Name) &
                   " was set on: " &
                   To_String(GunnerOrders(OrderIndex)),
                   CombatMessage);
@@ -116,11 +116,9 @@ package body Combat.UI is
          AddMessage
            ("You assigned " &
             To_String
-              (Items_List.Element
-               (PlayerShip.Cargo.Element(abs (CrewIndex)).ProtoIndex)
-                 .Name) &
+              (Items_List(PlayerShip.Cargo(abs (CrewIndex)).ProtoIndex).Name) &
             " to " &
-            To_String(PlayerShip.Modules.Element(ModuleIndex).Name) &
+            To_String(PlayerShip.Modules(ModuleIndex).Name) &
             ".",
             OrderMessage);
       end if;
@@ -142,12 +140,12 @@ package body Combat.UI is
       EnemyStatus: Unbounded_String;
    begin
       Crew_Items := new Item_Array(1 .. Natural(Guns.Length) + 3);
-      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-         case PlayerShip.Crew.Element(I).Order is
+      for I in PlayerShip.Crew.Iterate loop
+         case PlayerShip.Crew(I).Order is
             when Pilot =>
-               PilotName := PlayerShip.Crew.Element(I).Name;
+               PilotName := PlayerShip.Crew(I).Name;
             when Engineer =>
-               EngineerName := PlayerShip.Crew.Element(I).Name;
+               EngineerName := PlayerShip.Crew(I).Name;
             when others =>
                null;
          end case;
@@ -173,18 +171,15 @@ package body Combat.UI is
       end if;
       Crew_Items.all(2) := New_Item(To_String(EngineerName), "0");
       for I in Guns.First_Index .. Guns.Last_Index loop
-         GunnerName :=
-           PlayerShip.Modules.Element(Guns.Element(I)(1)).Name & ": ";
-         if PlayerShip.Modules.Element(Guns.Element(I)(1)).Owner = 0 then
+         GunnerName := PlayerShip.Modules(Guns(I)(1)).Name & ": ";
+         if PlayerShip.Modules(Guns(I)(1)).Owner = 0 then
             GunnerName := GunnerName & To_Unbounded_String("Vacant");
          else
             GunnerName :=
               GunnerName &
-              PlayerShip.Crew.Element
-              (PlayerShip.Modules.Element(Guns.Element(I)(1)).Owner)
-                .Name &
+              PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner).Name &
               " -> " &
-              GunnerOrders(Guns.Element(I)(2));
+              GunnerOrders(Guns(I)(2));
          end if;
          Crew_Items.all(I + 2) :=
            New_Item(To_String(GunnerName), Positive'Image(I));
@@ -310,7 +305,7 @@ package body Combat.UI is
       Move_Cursor(Line => 10, Column => (Columns / 2));
       Add(Str => "Status: ");
       if Enemy.Distance < 15000 then
-         if Enemy.Ship.Modules.Element(1).Durability = 0 then
+         if Enemy.Ship.Modules(1).Durability = 0 then
             Add(Str => "Destroyed");
          else
             EnemyStatus := To_Unbounded_String("Ok");
@@ -323,7 +318,7 @@ package body Combat.UI is
             Add(Str => To_String(EnemyStatus));
             for Module of Enemy.Ship.Modules loop
                if Module.Durability > 0 then
-                  case Modules_List.Element(Module.ProtoIndex).MType is
+                  case Modules_List(Module.ProtoIndex).MType is
                      when ARMOR =>
                         Add(Str => " (armored)");
                      when GUN =>
@@ -430,8 +425,8 @@ package body Combat.UI is
          MemberIndex := FindMember(Order);
       else
          MemberIndex :=
-           PlayerShip.Modules.Element
-           (Guns.Element(Positive'Value(Description(Current(CrewMenu))))(1))
+           PlayerShip.Modules
+             (Guns(Positive'Value(Description(Current(CrewMenu))))(1))
              .Owner;
       end if;
       if MemberIndex > 0 then
@@ -517,13 +512,13 @@ package body Combat.UI is
             if I = SkillIndex then
                SkillString := SkillString & To_Unbounded_String("+");
             end if;
-            if PlayerShip.Crew.Element(I).Order /= Rest then
+            if PlayerShip.Crew(I).Order /= Rest then
                SkillString := SkillString & To_Unbounded_String(" -");
             end if;
             Orders_Items.all(MenuIndex) :=
               New_Item
                 ("Assign " &
-                 To_String(PlayerShip.Crew.Element(I).Name) &
+                 To_String(PlayerShip.Crew(I).Name) &
                  To_String(SkillString),
                  Positive'Image(I));
             MenuIndex := MenuIndex + 1;
@@ -531,24 +526,20 @@ package body Combat.UI is
       end loop;
       if Order = Gunner and MemberIndex > 0 then
          for Gun of Guns loop
-            if PlayerShip.Modules.Element(Gun(1)).Owner = MemberIndex then
+            if PlayerShip.Modules(Gun(1)).Owner = MemberIndex then
                for I in
                  PlayerShip.Cargo.First_Index ..
                      PlayerShip.Cargo.Last_Index loop
-                  if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex)
-                      .IType =
-                    Items_Types.Element
-                    (Modules_List.Element
-                     (PlayerShip.Modules.Element(Gun(1)).ProtoIndex)
-                       .Value) and
-                    I /= PlayerShip.Modules.Element(Gun(1)).Current_Value then
+                  if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
+                    Items_Types
+                      (Modules_List(PlayerShip.Modules(Gun(1)).ProtoIndex)
+                         .Value) and
+                    I /= PlayerShip.Modules(Gun(1)).Current_Value then
                      Orders_Items.all(MenuIndex) :=
                        New_Item
                          ("Use " &
                           To_String
-                            (Items_List.Element
-                             (PlayerShip.Cargo.Element(I).ProtoIndex)
-                               .Name),
+                            (Items_List(PlayerShip.Cargo(I).ProtoIndex).Name),
                           Positive'Image((0 - I)));
                      MenuIndex := MenuIndex + 1;
                   end if;
@@ -612,15 +603,13 @@ package body Combat.UI is
             Append(InfoText, ASCII.LF);
             TmpLinesAmount := TmpLinesAmount + 1;
          end if;
-         for I in
-           Enemy.Ship.Modules.First_Index .. Enemy.Ship.Modules.Last_Index loop
+         for I in Enemy.Ship.Modules.Iterate loop
             if Enemy.Distance > 1000 then
                ModuleName :=
                  To_Unbounded_String
                    (ModuleType'
                       Image
-                        (Modules_List.Element
-                         (Enemy.Ship.Modules.Element(I).ProtoIndex)
+                        (Modules_List(Enemy.Ship.Modules(I).ProtoIndex)
                            .MType));
                Replace_Slice
                  (ModuleName,
@@ -634,16 +623,15 @@ package body Combat.UI is
                end loop;
             else
                ModuleName :=
-                 Modules_List.Element(Enemy.Ship.Modules.Element(I).ProtoIndex)
-                   .Name;
+                 Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name;
             end if;
             Append(InfoText, To_String(ModuleName));
             Append(InfoText, ": ");
             DamagePercent :=
               100 -
               Natural
-                ((Float(Enemy.Ship.Modules.Element(I).Durability) /
-                  Float(Enemy.Ship.Modules.Element(I).MaxDurability)) *
+                ((Float(Enemy.Ship.Modules(I).Durability) /
+                  Float(Enemy.Ship.Modules(I).MaxDurability)) *
                  100.0);
             if DamagePercent = 0 then
                Append(InfoText, "Ok");
@@ -652,7 +640,8 @@ package body Combat.UI is
             else
                Append(InfoText, "Destroyed");
             end if;
-            if I < Enemy.Ship.Modules.Last_Index then
+            if Modules_Container.To_Index(I) <
+              Enemy.Ship.Modules.Last_Index then
                Append(InfoText, ASCII.LF);
                TmpLinesAmount := TmpLinesAmount + 1;
             end if;
