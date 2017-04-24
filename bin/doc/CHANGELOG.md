@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Reduced needed experience for next skill level
 - Updated README.md
 - Moved documentation to separated directory
+- Reduced impact of randomness in combat
 
 ### Fixed
 - Crash on buying recipes of items with zero price in bases
