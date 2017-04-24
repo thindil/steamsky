@@ -139,8 +139,8 @@ package body Combat is
          else
             EnemyPerception := CountPerception(Enemy.Ship, PlayerShip);
          end if;
-         if (PlayerPerception + GetRandom(1, 100)) >
-           (EnemyPerception + GetRandom(1, 100)) then
+         if (PlayerPerception + GetRandom(1, 50)) >
+           (EnemyPerception + GetRandom(1, 50)) then
             AddMessage
               ("You spotted " & To_String(Enemy.Ship.Name) & ".",
                OtherMessage);
@@ -327,7 +327,7 @@ package body Combat is
                              EnemyName & To_Unbounded_String(" attacks you");
                         end if;
                      end if;
-                     if GetRandom(1, 100) + HitChance > GetRandom(1, 100) then
+                     if GetRandom(1, 50) + HitChance > GetRandom(1, 50) then
                         ShootMessage :=
                           ShootMessage & To_Unbounded_String(" and hit in ");
                         ArmorIndex := 0;
