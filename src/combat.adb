@@ -29,6 +29,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Utils; use Utils;
+with Log; use Log;
 
 package body Combat is
 
@@ -71,7 +72,7 @@ package body Combat is
    begin
       EnemyShip :=
         CreateShip
-          (EnemyIndex,
+          (46,
            Null_Unbounded_String,
            PlayerShip.SkyX,
            PlayerShip.SkyY,
@@ -176,7 +177,7 @@ package body Combat is
       procedure Attack(Ship, EnemyShip: in out ShipRecord) is
          GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex: Natural;
          GunnerOrder: Positive;
-         HitChance, HitLocation, LootAmount: Integer;
+         HitChance, HitLocation, LootAmount, HitResult, RollResult: Integer;
          FreeSpace: Integer := 0;
          type DamageFactor is digits 2 range 0.0 .. 1.0;
          Damage: DamageFactor := 0.0;
@@ -299,13 +300,18 @@ package body Combat is
                if Shoots > 0 then
                   if Ship = PlayerShip then
                      HitChance := AccuracyBonus - Enemy.Evasion;
+                     LogMessage("Player's round.", Log.Combat);
                   else
                      HitChance := Enemy.Accuracy - EvadeBonus;
+                     LogMessage("Enemy's round.", Log.Combat);
                   end if;
                   if GunnerIndex > 0 then
                      HitChance :=
                        HitChance + GetSkillLevel(GunnerIndex, 3, Ship.Crew);
                   end if;
+                  LogMessage
+                    ("HitChance:" & Integer'Image(HitChance),
+                     Log.Combat);
                   for I in 1 .. Shoots loop
                      if Modules_List(Ship.Modules(K).ProtoIndex).MType =
                        GUN then
@@ -327,7 +333,15 @@ package body Combat is
                              EnemyName & To_Unbounded_String(" attacks you");
                         end if;
                      end if;
-                     if GetRandom(1, 50) + HitChance > GetRandom(1, 50) then
+                     HitResult := HitChance + GetRandom(1, 50);
+                     RollResult := GetRandom(1, 50);
+                     LogMessage
+                       ("HitResult:" &
+                        Integer'Image(HitResult) &
+                        " vs RollResult:" &
+                        Integer'Image(RollResult),
+                        Log.Combat);
+                     if HitResult > RollResult then
                         ShootMessage :=
                           ShootMessage & To_Unbounded_String(" and hit in ");
                         ArmorIndex := 0;
