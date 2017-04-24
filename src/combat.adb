@@ -72,7 +72,7 @@ package body Combat is
    begin
       EnemyShip :=
         CreateShip
-          (46,
+          (EnemyIndex,
            Null_Unbounded_String,
            PlayerShip.SkyX,
            PlayerShip.SkyY,
