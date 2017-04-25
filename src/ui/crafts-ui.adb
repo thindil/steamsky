@@ -44,10 +44,10 @@ package body Crafts.UI is
       WorkplaceName: Unbounded_String := Null_Unbounded_String;
    begin
       if RecipeIndex > 0 then
-         Recipe := Recipes_List.Element(RecipeIndex);
+         Recipe := Recipes_List(RecipeIndex);
       else
          Recipe.MaterialTypes.Append
-         (New_Item => Items_List.Element(abs (RecipeIndex)).IType);
+         (New_Item => Items_List(abs (RecipeIndex)).IType);
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultIndex := abs (RecipeIndex);
          Recipe.ResultAmount := 0;
@@ -84,7 +84,7 @@ package body Crafts.UI is
                   IsMaterial := True;
                end if;
             else
-               if Item.Name = Items_List.Element(Recipe.ResultIndex).Name then
+               if Item.Name = Items_List(Recipe.ResultIndex).Name then
                   IsMaterial := True;
                end if;
             end if;
@@ -207,8 +207,7 @@ package body Crafts.UI is
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       Add(Win => InfoWindow, Str => "Workplace: ");
       for Module of PlayerShip.Modules loop
-         if Modules_List.Element(Module.ProtoIndex).MType =
-           Recipe.Workplace then
+         if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace then
             if Module.Durability > 0 then
                HaveWorkplace := True;
             end if;
@@ -237,7 +236,7 @@ package body Crafts.UI is
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       Add
         (Win => InfoWindow,
-         Str => "Skill: " & To_String(Skills_Names.Element(Recipe.Skill)));
+         Str => "Skill: " & To_String(Skills_Names(Recipe.Skill)));
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       Add
@@ -264,7 +263,7 @@ package body Crafts.UI is
    begin
       for Item of PlayerShip.Cargo loop
          for J in Recipes_List.First_Index .. Recipes_List.Last_Index loop
-            if Recipes_List.Element(J).ResultIndex = Item.ProtoIndex then
+            if Recipes_List(J).ResultIndex = Item.ProtoIndex then
                if Known_Recipes.Find_Index(Item => J) =
                  Positive_Container.No_Index then
                   Deconstructs.Append(New_Item => Item.ProtoIndex);
@@ -284,17 +283,14 @@ package body Crafts.UI is
          Recipes_Items.all(I) :=
            New_Item
              (To_String
-                (Items_List.Element
-                 (Recipes_List.Element(Known_Recipes.Element(I)).ResultIndex)
-                   .Name),
-              Positive'Image(Known_Recipes.Element(I)));
+                (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name),
+              Positive'Image(Known_Recipes(I)));
       end loop;
       for I in Deconstructs.First_Index .. Deconstructs.Last_Index loop
          Recipes_Items.all(Known_Recipes.Last_Index + I) :=
            New_Item
-             ("Deconstruct " &
-              To_String(Items_List.Element(Deconstructs.Element(I)).Name),
-              Integer'Image(Deconstructs.Element(I) * (-1)));
+             ("Deconstruct " & To_String(Items_List(Deconstructs(I)).Name),
+              Integer'Image(Deconstructs(I) * (-1)));
       end loop;
       Recipes_Items.all(Recipes_Items'Last) := Null_Item;
       RecipesMenu := New_Menu(Recipes_Items);
@@ -309,7 +305,7 @@ package body Crafts.UI is
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
       Post(RecipesMenu);
       for I in Known_Recipes.First_Index .. Known_Recipes.Last_Index loop
-         if Known_Recipes.Element(I) = RecipeIndex then
+         if Known_Recipes(I) = RecipeIndex then
             Set_Current(RecipesMenu, Recipes_Items.all(I));
             exit;
          end if;
@@ -327,12 +323,12 @@ package body Crafts.UI is
       MType: ModuleType;
    begin
       if RecipeIndex > 0 then
-         MType := Recipes_List.Element(RecipeIndex).Workplace;
+         MType := Recipes_List(RecipeIndex).Workplace;
       else
          MType := ALCHEMY_LAB;
       end if;
       for Module of PlayerShip.Modules loop
-         if Modules_List.Element(Module.ProtoIndex).MType = MType then
+         if Modules_List(Module.ProtoIndex).MType = MType then
             ModulesAmount := ModulesAmount + 1;
          end if;
       end loop;
@@ -342,16 +338,12 @@ package body Crafts.UI is
          return Craft_View;
       end if;
       Modules_Items := new Item_Array(1 .. ModulesAmount);
-      for I in
-        PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index loop
-         if Modules_List.Element(PlayerShip.Modules.Element(I).ProtoIndex)
-             .MType =
-           MType then
+      for I in PlayerShip.Modules.Iterate loop
+         if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType = MType then
             Modules_Items.all(MenuIndex) :=
               New_Item
-                ("Manufacture in " &
-                 To_String(PlayerShip.Modules.Element(I).Name),
-                 Positive'Image(I));
+                ("Manufacture in " & To_String(PlayerShip.Modules(I).Name),
+                 Positive'Image(Modules_Container.To_Index(I)));
             MenuIndex := MenuIndex + 1;
          end if;
       end loop;
