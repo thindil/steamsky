@@ -150,7 +150,9 @@ package body Combat is
                ShowDialog
                  ("You was attacked by " & To_String(Enemy.Ship.Name) & ".");
                OldSpeed := PlayerShip.Speed;
-               LogMessage("Started combat with " & To_String(Enemy.Ship.Name), Log.Combat);
+               LogMessage
+                 ("Started combat with " & To_String(Enemy.Ship.Name),
+                  Log.Combat);
                return Combat_State;
             end if;
             AddMessage
@@ -159,7 +161,9 @@ package body Combat is
          end if;
          return Sky_Map_View;
       end if;
-      LogMessage("Started combat with " & To_String(Enemy.Ship.Name), Log.Combat);
+      LogMessage
+        ("Started combat with " & To_String(Enemy.Ship.Name),
+         Log.Combat);
       return Combat_State;
    end StartCombat;
 
@@ -350,7 +354,8 @@ package body Combat is
                              EnemyName & To_Unbounded_String(" attacks you");
                         end if;
                      end if;
-                     if HitChance + GetRandom(1, 50) > GetRandom(1, 50) then
+                     if HitChance + GetRandom(1, 50) >
+                       GetRandom(1, HitChance + 50) then
                         ShootMessage :=
                           ShootMessage & To_Unbounded_String(" and hit in ");
                         ArmorIndex := 0;
