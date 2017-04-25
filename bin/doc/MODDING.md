@@ -187,7 +187,24 @@ ships, ships modules, etc.)
   Pirates, Undead, Drones, Inquisition.
 - Priorities: Orders priorities for each crew member (player ship only). Must
   be in this same amount as skills of crew members. Each priority entry is
-  Order`:`Piority where Order is: Piloting, Engineering, Operating guns, 
+  Order`:`Priority where Order is: Piloting, Engineering, Operating guns, 
   Repair ship, Manufacturing, Upgrading ship, Talking in bases, Healing 
-  wounded, Cleaning ship and Piority is: Normal or Highest (one per crew 
+  wounded, Cleaning ship and Priority is: Normal or Highest (one per crew 
   member).
+
+## Debugging
+
+If you want test your changes, you may run game in debug mode. In this mode
+game create file *debug.log* in *data* directory. To start game in debug mode
+run it with parameter --debug=[debugtype]. Example:
+
+`./steamsky --debug=everything`
+
+At this moment available are two types of debug:
+
+- Option 'everything' mean to log each debug message to file. At this moment
+  this mean informations about loading game data (ships/recipes/items/modules)
+  and some combat data. This option may be useful to check correctness of data
+  of added new items, etc.
+- Option 'combat' mean to log debug messages only from combat.
+
