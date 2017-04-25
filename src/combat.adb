@@ -150,6 +150,7 @@ package body Combat is
                ShowDialog
                  ("You was attacked by " & To_String(Enemy.Ship.Name) & ".");
                OldSpeed := PlayerShip.Speed;
+               LogMessage("Started combat with " & To_String(Enemy.Ship.Name), Log.Combat);
                return Combat_State;
             end if;
             AddMessage
@@ -158,6 +159,7 @@ package body Combat is
          end if;
          return Sky_Map_View;
       end if;
+      LogMessage("Started combat with " & To_String(Enemy.Ship.Name), Log.Combat);
       return Combat_State;
    end StartCombat;
 
@@ -177,7 +179,7 @@ package body Combat is
       procedure Attack(Ship, EnemyShip: in out ShipRecord) is
          GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex: Natural;
          GunnerOrder: Positive;
-         HitChance, HitLocation, LootAmount, HitResult, RollResult: Integer;
+         HitChance, HitLocation, LootAmount: Integer;
          FreeSpace: Integer := 0;
          type DamageFactor is digits 2 range 0.0 .. 1.0;
          Damage: DamageFactor := 0.0;
@@ -201,6 +203,11 @@ package body Combat is
             end if;
          end RemoveGun;
       begin
+         if Ship = PlayerShip then
+            LogMessage("Player's round.", Log.Combat);
+         else
+            LogMessage("Enemy's round.", Log.Combat);
+         end if;
          Attack_Loop:
          for K in Ship.Modules.Iterate loop
             if Ship.Modules(K).Durability > 0 and
@@ -300,17 +307,27 @@ package body Combat is
                if Shoots > 0 then
                   if Ship = PlayerShip then
                      HitChance := AccuracyBonus - Enemy.Evasion;
-                     LogMessage("Player's round.", Log.Combat);
                   else
                      HitChance := Enemy.Accuracy - EvadeBonus;
-                     LogMessage("Enemy's round.", Log.Combat);
                   end if;
                   if GunnerIndex > 0 then
                      HitChance :=
                        HitChance + GetSkillLevel(GunnerIndex, 3, Ship.Crew);
                   end if;
                   LogMessage
-                    ("HitChance:" & Integer'Image(HitChance),
+                    ("Player Accuracy:" &
+                     Integer'Image(AccuracyBonus) &
+                     " Player Evasion:" &
+                     Integer'Image(EvadeBonus),
+                     Log.Combat);
+                  LogMessage
+                    ("Enemy Evasion:" &
+                     Integer'Image(Enemy.Evasion) &
+                     " Enemy Accuracy:" &
+                     Integer'Image(Enemy.Accuracy),
+                     Log.Combat);
+                  LogMessage
+                    ("Chance for hit:" & Integer'Image(HitChance),
                      Log.Combat);
                   for I in 1 .. Shoots loop
                      if Modules_List(Ship.Modules(K).ProtoIndex).MType =
@@ -333,15 +350,7 @@ package body Combat is
                              EnemyName & To_Unbounded_String(" attacks you");
                         end if;
                      end if;
-                     HitResult := HitChance + GetRandom(1, 50);
-                     RollResult := GetRandom(1, 50);
-                     LogMessage
-                       ("HitResult:" &
-                        Integer'Image(HitResult) &
-                        " vs RollResult:" &
-                        Integer'Image(RollResult),
-                        Log.Combat);
-                     if HitResult > RollResult then
+                     if HitChance + GetRandom(1, 50) > GetRandom(1, 50) then
                         ShootMessage :=
                           ShootMessage & To_Unbounded_String(" and hit in ");
                         ArmorIndex := 0;
@@ -826,11 +835,14 @@ package body Combat is
       elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
          AccuracyBonus := AccuracyBonus - 10;
          EvadeBonus := EvadeBonus + 10;
+         LogMessage("Distance: long", Log.Combat);
       elsif Enemy.Distance < 5000 and Enemy.Distance >= 1000 then
          AccuracyBonus := AccuracyBonus + 10;
+         LogMessage("Distance: medium", Log.Combat);
       elsif Enemy.Distance < 1000 then
          AccuracyBonus := AccuracyBonus + 20;
          EvadeBonus := EvadeBonus - 10;
+         LogMessage("Distance: short or close", Log.Combat);
       end if;
       Attack(PlayerShip, Enemy.Ship); -- Player attack
       if not EndCombat then
