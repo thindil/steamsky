@@ -1,13 +1,22 @@
 ## General Info
 
-Steam Sky is open source roguelike steampunk game. Your role is to command flying 
-ship with crew in sky, traveling between floating bases, fighting with enemies, trade in 
-goods, etc. Game is in early stage of development, so at this moment most functions 
-are not implemented yet. Now game is available (and tested) only on Linux 64-bit and 
-Raspberry Pi with 32-bit Linux.
+Steam Sky is open source, roguelike game in steampunk theme. Your role is to 
+command flying ship and its crew, traveling between floating bases, fighting 
+with enemies, trade in goods, etc. Here are no end goal for game, you can play
+as long as your character not die. Game is under heavy development, but 
+generally is playable. Now game is available (and tested) only on Linux 
+64-bit.
 
-## Build game
+## Game versions
+At this moment are available 2 game versions:
+- 1.0.x: "stable" version of game. This version receive only fixes of bug but
+  no new features. Source code for this version is in *1.0* branch.
+- 1.x: "development" version of game, future version 2.0. This is main place
+  where game development happen. It often break save compatibilities between
+  releases so use at your own risk. Source code for this version is in *master*
+  branch.
 
+## Build game from sources
 To build it, you need:
 
 * compiler - GCC with enabled Ada support or GNAT from: 
@@ -36,12 +45,9 @@ Enter *bin* directory (if you build game from sources) or in main game
 directory (if you use released binary) and type `./steamsky`. Game works 
 only in terminal.
 
-If you want to run game in debug mode (some data will be logged to file
-*data/debug.log*) type `./steamsky --debug=everything`.
-
 ## Modify game
-For detailed informations about modifying various game elements, see
-[MODDING.md](bin/doc/MODDING.md)
+For detailed informations about modifying various game elements or debugging
+game, see [MODDING.md](bin/doc/MODDING.md)
 
 ## Contributing to project
 For detailed informations about contributing to project (bugs reporting, ideas
