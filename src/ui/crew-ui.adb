@@ -35,7 +35,7 @@ package body Crew.UI is
 
    procedure ShowMemberInfo is
       InfoWindow: Window;
-      Member: constant Member_Data := PlayerShip.Crew.Element(MemberIndex);
+      Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
       CurrentLine: Line_Position := 1;
       Health,
       Tired,
@@ -135,7 +135,7 @@ package body Crew.UI is
          Add
            (Win => InfoWindow,
             Str =>
-              To_String(Skills_Names.Element(Skill(1))) &
+              To_String(Skills_Names(Skill(1))) &
               ": " &
               To_String(SkillLevel));
          CurrentLine := CurrentLine + 1;
@@ -183,15 +183,14 @@ package body Crew.UI is
       end if;
       for Module of PlayerShip.Modules loop
          if Module.Durability > 0 and
-           Modules_List.Element(Module.ProtoIndex).MType = CABIN and
+           Modules_List(Module.ProtoIndex).MType = CABIN and
            Module.Current_Value < Module.Max_Value and
            not NeedClean then
             NeedClean := True;
          end if;
          if not NeedRepairs and Module.Durability < Module.MaxDurability then
             if FindCargo
-                (ItemType =>
-                   Modules_List.Element(Module.ProtoIndex).RepairMaterial) >
+                (ItemType => Modules_List(Module.ProtoIndex).RepairMaterial) >
               0 then
                NeedRepairs := True;
             end if;
@@ -225,8 +224,7 @@ package body Crew.UI is
    begin
       Move_Cursor(Line => 3, Column => 2);
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-         Crew_Items.all(I) :=
-           New_Item(To_String(PlayerShip.Crew.Element(I).Name));
+         Crew_Items.all(I) := New_Item(To_String(PlayerShip.Crew(I).Name));
       end loop;
       Crew_Items.all(Crew_Items'Last) := Null_Item;
       CrewMenu := New_Menu(Crew_Items);
@@ -255,24 +253,23 @@ package body Crew.UI is
       MenuIndex: Positive := 1;
       NeedHealer, HealOrder: Boolean := False;
    begin
-      if PlayerShip.Crew.Element(MemberIndex).Tired = 100 or
-        PlayerShip.Crew.Element(MemberIndex).Hunger = 100 or
-        PlayerShip.Crew.Element(MemberIndex).Thirst = 100 then
+      if PlayerShip.Crew(MemberIndex).Tired = 100 or
+        PlayerShip.Crew(MemberIndex).Hunger = 100 or
+        PlayerShip.Crew(MemberIndex).Thirst = 100 then
          Orders_Items := new Item_Array(1 .. 3);
          Orders_Items.all(1) := New_Item("Go on break", "0");
          MenuIndex := 2;
       else
-         for I in
-           PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew.Element(I).Health < 100 and
-              I /= MemberIndex then
+         for I in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(I).Health < 100 and
+              Crew_Container.To_Index(I) /= MemberIndex then
                NeedHealer := True;
                exit;
             end if;
          end loop;
          for Module of PlayerShip.Modules loop
             if Module.Durability > 0 then
-               case Modules_List.Element(Module.ProtoIndex).MType is
+               case Modules_List(Module.ProtoIndex).MType is
                   when GUN =>
                      if Module.Owner /= MemberIndex then
                         OrdersAmount := OrdersAmount + 1;
@@ -287,10 +284,8 @@ package body Crew.UI is
                         if FindCargo
                             (ItemType => To_Unbounded_String("Medicines")) >
                           0 and
-                          PlayerShip.Crew.Element(MemberIndex).Order /=
-                            Heal and
-                          PlayerShip.Crew.Element(MemberIndex).Health =
-                            100 then
+                          PlayerShip.Crew(MemberIndex).Order /= Heal and
+                          PlayerShip.Crew(MemberIndex).Health = 100 then
                            HealOrder := True;
                            OrdersAmount := OrdersAmount + 1;
                         end if;
@@ -300,15 +295,14 @@ package body Crew.UI is
                end case;
             end if;
          end loop;
-         if NeedRepairs and
-           PlayerShip.Crew.Element(MemberIndex).Order /= Repair then
+         if NeedRepairs and PlayerShip.Crew(MemberIndex).Order /= Repair then
             OrdersAmount := OrdersAmount + 1;
          end if;
-         if PlayerShip.Crew.Element(MemberIndex).Order /= Rest then
+         if PlayerShip.Crew(MemberIndex).Order /= Rest then
             OrdersAmount := OrdersAmount + 1;
          end if;
          if PlayerShip.UpgradeModule > 0 and
-           PlayerShip.Crew.Element(MemberIndex).Order /= Upgrading then
+           PlayerShip.Crew(MemberIndex).Order /= Upgrading then
             OrdersAmount := OrdersAmount + 1;
          end if;
          if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
@@ -318,51 +312,47 @@ package body Crew.UI is
                OrdersAmount := OrdersAmount + 1;
             end if;
          end if;
-         if PlayerShip.Crew.Element(MemberIndex).Order /= Pilot then
+         if PlayerShip.Crew(MemberIndex).Order /= Pilot then
             OrdersAmount := OrdersAmount + 1;
          end if;
-         if PlayerShip.Crew.Element(MemberIndex).Order /= Engineer then
+         if PlayerShip.Crew(MemberIndex).Order /= Engineer then
             OrdersAmount := OrdersAmount + 1;
          end if;
-         if PlayerShip.Crew.Element(MemberIndex).Order /= Talk then
+         if PlayerShip.Crew(MemberIndex).Order /= Talk then
             OrdersAmount := OrdersAmount + 1;
          end if;
-         if NeedClean and
-           PlayerShip.Crew.Element(MemberIndex).Order /= Clean then
+         if NeedClean and PlayerShip.Crew(MemberIndex).Order /= Clean then
             OrdersAmount := OrdersAmount + 1;
          end if;
          Orders_Items := new Item_Array(1 .. (OrdersAmount + 1));
-         if PlayerShip.Crew.Element(MemberIndex).Order /= Pilot then
+         if PlayerShip.Crew(MemberIndex).Order /= Pilot then
             Orders_Items.all(MenuIndex) := New_Item("Piloting", "0");
             MenuIndex := MenuIndex + 1;
          end if;
-         if PlayerShip.Crew.Element(MemberIndex).Order /= Engineer then
+         if PlayerShip.Crew(MemberIndex).Order /= Engineer then
             Orders_Items.all(MenuIndex) := New_Item("Engineering", "0");
             MenuIndex := MenuIndex + 1;
          end if;
-         for I in
-           PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index loop
-            if PlayerShip.Modules.Element(I).Durability > 0 then
-               case Modules_List.Element
-               (PlayerShip.Modules.Element(I).ProtoIndex)
-                 .MType is
+         for I in PlayerShip.Modules.Iterate loop
+            if PlayerShip.Modules(I).Durability > 0 then
+               case Modules_List(PlayerShip.Modules(I).ProtoIndex).MType is
                   when GUN =>
-                     if PlayerShip.Modules.Element(I).Owner /= MemberIndex then
+                     if PlayerShip.Modules(I).Owner /= MemberIndex then
                         Orders_Items.all(MenuIndex) :=
                           New_Item
                             ("Operate " &
-                             To_String(PlayerShip.Modules.Element(I).Name),
-                             Positive'Image(I));
+                             To_String(PlayerShip.Modules(I).Name),
+                             Positive'Image(Modules_Container.To_Index(I)));
                         MenuIndex := MenuIndex + 1;
                      end if;
                   when ALCHEMY_LAB .. GREENHOUSE =>
-                     if PlayerShip.Modules.Element(I).Owner /= MemberIndex and
-                       PlayerShip.Modules.Element(I).Current_Value /= 0 then
+                     if PlayerShip.Modules(I).Owner /= MemberIndex and
+                       PlayerShip.Modules(I).Current_Value /= 0 then
                         Orders_Items.all(MenuIndex) :=
                           New_Item
                             ("Work in " &
-                             To_String(PlayerShip.Modules.Element(I).Name),
-                             Positive'Image(I));
+                             To_String(PlayerShip.Modules(I).Name),
+                             Positive'Image(Modules_Container.To_Index(I)));
                         MenuIndex := MenuIndex + 1;
                      end if;
                   when MEDICAL_ROOM =>
@@ -370,13 +360,13 @@ package body Crew.UI is
                         Orders_Items.all(MenuIndex) :=
                           New_Item
                             ("Heal wounded in " &
-                             To_String(PlayerShip.Modules.Element(I).Name),
-                             Positive'Image(I));
+                             To_String(PlayerShip.Modules(I).Name),
+                             Positive'Image(Modules_Container.To_Index(I)));
                         MenuIndex := MenuIndex + 1;
                      end if;
                   when CABIN =>
                      if NeedClean and
-                       PlayerShip.Crew.Element(MemberIndex).Order /= Clean then
+                       PlayerShip.Crew(MemberIndex).Order /= Clean then
                         Orders_Items.all(MenuIndex) :=
                           New_Item("Clean ship", "0");
                         MenuIndex := MenuIndex + 1;
@@ -387,21 +377,20 @@ package body Crew.UI is
                end case;
             end if;
          end loop;
-         if NeedRepairs and
-           PlayerShip.Crew.Element(MemberIndex).Order /= Repair then
+         if NeedRepairs and PlayerShip.Crew(MemberIndex).Order /= Repair then
             Orders_Items.all(MenuIndex) := New_Item("Repair ship", "0");
             MenuIndex := MenuIndex + 1;
          end if;
          if PlayerShip.UpgradeModule > 0 and
-           PlayerShip.Crew.Element(MemberIndex).Order /= Upgrading then
+           PlayerShip.Crew(MemberIndex).Order /= Upgrading then
             Orders_Items.all(MenuIndex) := New_Item("Upgrade module", "0");
             MenuIndex := MenuIndex + 1;
          end if;
-         if PlayerShip.Crew.Element(MemberIndex).Order /= Talk then
+         if PlayerShip.Crew(MemberIndex).Order /= Talk then
             Orders_Items.all(MenuIndex) := New_Item("Talking in bases", "0");
             MenuIndex := MenuIndex + 1;
          end if;
-         if PlayerShip.Crew.Element(MemberIndex).Order /= Rest then
+         if PlayerShip.Crew(MemberIndex).Order /= Rest then
             Orders_Items.all(MenuIndex) := New_Item("Go on break", "0");
             MenuIndex := MenuIndex + 1;
          end if;
@@ -452,9 +441,7 @@ package body Crew.UI is
          return;
       end if;
       AddMessage
-        ("You dismissed " &
-         To_String(PlayerShip.Crew.Element(MemberIndex).Name) &
-         ".",
+        ("You dismissed " & To_String(PlayerShip.Crew(MemberIndex).Name) & ".",
          OrderMessage);
       DeleteMember(MemberIndex, PlayerShip);
       SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
@@ -518,7 +505,7 @@ package body Crew.UI is
       OrderPriority: Unbounded_String;
    begin
       for I in OrdersNames'Range loop
-         case PlayerShip.Crew.Element(MemberIndex).Orders(I) is
+         case PlayerShip.Crew(MemberIndex).Orders(I) is
             when 0 =>
                OrderPriority := To_Unbounded_String("None");
             when 1 =>
@@ -666,8 +653,7 @@ package body Crew.UI is
                ShowPrioritiesMenu;
                return Orders_Priorities;
             elsif OrderName /= "Quit" then
-               if Modules_List.Element
-                 (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+               if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                    .MType =
                  GUN then
                   GiveOrders(MemberIndex, Gunner, ModuleIndex);
@@ -772,7 +758,7 @@ package body Crew.UI is
             end if;
          when 52 | KEY_LEFT => -- Set lower priority
             NewPriority :=
-              PlayerShip.Crew.Element(MemberIndex).Orders(OptionIndex) - 1;
+              PlayerShip.Crew(MemberIndex).Orders(OptionIndex) - 1;
             if NewPriority > -1 then
                DrawGame(Crew_Info);
                PlayerShip.Crew.Update_Element
@@ -780,7 +766,7 @@ package body Crew.UI is
             end if;
          when 54 | KEY_RIGHT => -- Set higher priority
             NewPriority :=
-              PlayerShip.Crew.Element(MemberIndex).Orders(OptionIndex) + 1;
+              PlayerShip.Crew(MemberIndex).Orders(OptionIndex) + 1;
             if NewPriority = 1 then
                DrawGame(Crew_Info);
                PlayerShip.Crew.Update_Element
@@ -788,7 +774,7 @@ package body Crew.UI is
             elsif NewPriority = 2 then
                DrawGame(Crew_Info);
                for I in PlayerShip.Crew.Element(MemberIndex).Orders'Range loop
-                  if PlayerShip.Crew.Element(MemberIndex).Orders(I) = 2 then
+                  if PlayerShip.Crew(MemberIndex).Orders(I) = 2 then
                      NewPriority := 1;
                      OptionIndex := I;
                      PlayerShip.Crew.Update_Element
