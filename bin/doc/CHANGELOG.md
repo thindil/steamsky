@@ -38,4 +38,5 @@ All notable changes to this project will be documented in this file.
 - Killing gunner on direct hit in gun
 - Removing gun on destroying turret
 - Crash on read changelog file
+- Counting player accuracy during combat
 
