@@ -183,7 +183,7 @@ package body Combat is
       procedure Attack(Ship, EnemyShip: in out ShipRecord) is
          GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex: Natural;
          GunnerOrder: Positive;
-         HitChance, HitLocation, LootAmount: Integer;
+         HitChance, HitLocation, LootAmount, CurrentAccuracyBonus: Integer;
          FreeSpace: Integer := 0;
          type DamageFactor is digits 2 range 0.0 .. 1.0;
          Damage: DamageFactor := 0.0;
@@ -234,15 +234,15 @@ package body Combat is
                         end loop;
                         case GunnerOrder is
                            when 2 =>
-                              AccuracyBonus := AccuracyBonus + 20;
+                              CurrentAccuracyBonus := AccuracyBonus + 20;
                               Shoots := 2;
                            when 3 =>
                               Shoots := 4;
                            when 4 =>
-                              AccuracyBonus := AccuracyBonus - 10;
+                              CurrentAccuracyBonus := AccuracyBonus - 10;
                               Shoots := 2;
                            when 5 =>
-                              AccuracyBonus := AccuracyBonus - 20;
+                              CurrentAccuracyBonus := AccuracyBonus - 20;
                               Shoots := 2;
                            when 6 =>
                               Shoots := 2;
@@ -310,7 +310,7 @@ package body Combat is
                end if;
                if Shoots > 0 then
                   if Ship = PlayerShip then
-                     HitChance := AccuracyBonus - Enemy.Evasion;
+                     HitChance := CurrentAccuracyBonus - Enemy.Evasion;
                   else
                      HitChance := Enemy.Accuracy - EvadeBonus;
                   end if;
@@ -320,7 +320,7 @@ package body Combat is
                   end if;
                   LogMessage
                     ("Player Accuracy:" &
-                     Integer'Image(AccuracyBonus) &
+                     Integer'Image(CurrentAccuracyBonus) &
                      " Player Evasion:" &
                      Integer'Image(EvadeBonus),
                      Log.Combat);
