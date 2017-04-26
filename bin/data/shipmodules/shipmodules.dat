@@ -1154,4 +1154,17 @@ Price = 10000
 InstallTime = 180
 Unique = Yes
 Description = Weakest type of steel armor. Protect whole ship.
+[92]
+Name = Small steel engine
+Type = Engine
+Weight = 1200
+Value = 4
+MaxValue = 3000
+Durability = 200
+Material = Steel
+Skill = Engineering
+Price = 6000
+InstallTime = 120
+Size = 1
+Description = Smallest available engine, made of steel. Each ship needs at least one engine to fly.
 []
