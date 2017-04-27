@@ -172,6 +172,9 @@ begin
                when 3 =>
                   GameState := Wait_Order;
                   DrawGame(GameState);
+               when 5 =>
+                  GameState := Combat_State;
+                  DrawGame(GameState);
                when others =>
                   DrawGame(GameState);
             end case;
