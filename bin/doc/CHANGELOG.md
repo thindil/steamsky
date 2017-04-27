@@ -16,7 +16,8 @@ All notable changes to this project will be documented in this file.
 - Support for many data files of this same objects types which made saves from
   1.0 incompatible
 - Starting priorities of orders for player ship crew
-- New ship modules: small steel hull, light steel armor and small steel engine
+- New ship modules: small steel hull, light steel armor, small steel engine and
+  basic steel cabin
 
 ### Changed
 - Merged fields lootmin and lootmax in ships data
