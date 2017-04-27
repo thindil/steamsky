@@ -1167,4 +1167,17 @@ Price = 6000
 InstallTime = 120
 Size = 1
 Description = Smallest available engine, made of steel. Each ship needs at least one engine to fly.
+[93]
+Name = Basic steel cabin
+Type = Cabin
+Weight = 300
+Value = 20
+MaxValue = 20
+Durability = 150
+Material = Steel
+Skill = Engineering
+Price = 800
+InstallTime = 60
+Size = 1
+Description = Small cabin made of steel with just few furnitures.
 []
