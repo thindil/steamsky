@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Moved documentation to separated directory
 - Impact of randomness in combat
+- Updated help
 
 ### Fixed
 - Crash on buying recipes of items with zero price in bases
