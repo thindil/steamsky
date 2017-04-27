@@ -45,19 +45,17 @@ package body Events.UI is
         (Win => InfoWindow,
          Str =>
            "X:" &
-           Positive'Image(Events_List.Element(EventIndex).SkyX) &
+           Positive'Image(Events_List(EventIndex).SkyX) &
            " Y:" &
-           Positive'Image(Events_List.Element(EventIndex).SkyY));
+           Positive'Image(Events_List(EventIndex).SkyY));
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
-      case Events_List.Element(EventIndex).EType is
+      case Events_List(EventIndex).EType is
          when EnemyShip | EnemyPatrol =>
             Add
               (Win => InfoWindow,
                Str =>
                  To_String
-                   (ProtoShips_List.Element
-                    (Events_List.Element(EventIndex).Data)
-                      .Name));
+                   (ProtoShips_List(Events_List(EventIndex).Data).Name));
          when FullDocks | AttackOnBase | Disease =>
             Add
               (Win => InfoWindow,
@@ -65,8 +63,8 @@ package body Events.UI is
                  To_String
                    (SkyBases
                       (SkyMap
-                         (Events_List.Element(EventIndex).SkyX,
-                          Events_List.Element(EventIndex).SkyY)
+                         (Events_List(EventIndex).SkyX,
+                          Events_List(EventIndex).SkyY)
                          .BaseIndex)
                       .Name));
          when DoublePrice =>
@@ -76,19 +74,17 @@ package body Events.UI is
                  To_String
                    (SkyBases
                       (SkyMap
-                         (Events_List.Element(EventIndex).SkyX,
-                          Events_List.Element(EventIndex).SkyY)
+                         (Events_List(EventIndex).SkyX,
+                          Events_List(EventIndex).SkyY)
                          .BaseIndex)
                       .Name) &
                  " - " &
-                 To_String
-                   (Items_List.Element(Events_List.Element(EventIndex).Data)
-                      .Name));
+                 To_String(Items_List(Events_List(EventIndex).Data).Name));
          when None =>
             null;
       end case;
-      DiffX := abs (PlayerShip.SkyX - Events_List.Element(EventIndex).SkyX);
-      DiffY := abs (PlayerShip.SkyY - Events_List.Element(EventIndex).SkyY);
+      DiffX := abs (PlayerShip.SkyX - Events_List(EventIndex).SkyX);
+      DiffY := abs (PlayerShip.SkyY - Events_List(EventIndex).SkyY);
       Distance := Value_Functions.Sqrt(Value_Type((DiffX**2) + (DiffY**2)));
       Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
       Add
@@ -126,7 +122,7 @@ package body Events.UI is
       MenuLength: Column_Position;
    begin
       for I in Events_List.First_Index .. Events_List.Last_Index loop
-         case Events_List.Element(I).EType is
+         case Events_List(I).EType is
             when EnemyShip =>
                Events_Items.all(I) := New_Item("Enemy ship spotted");
             when FullDocks =>
@@ -189,19 +185,19 @@ package body Events.UI is
                end if;
             when 32 => -- Show selected event on map
                MoveMap
-                 (Events_List.Element(EventIndex).SkyX,
-                  Events_List.Element(EventIndex).SkyY);
+                 (Events_List(EventIndex).SkyX,
+                  Events_List(EventIndex).SkyY);
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             when 10 => -- Set event as destination point for ship
-               if Events_List.Element(EventIndex).SkyX = PlayerShip.SkyX and
-                 Events_List.Element(EventIndex).SkyY = PlayerShip.SkyY then
+               if Events_List(EventIndex).SkyX = PlayerShip.SkyX and
+                 Events_List(EventIndex).SkyY = PlayerShip.SkyY then
                   ShowDialog("You are at this event now.");
                   DrawGame(Events_View);
                   return Events_View;
                end if;
-               PlayerShip.DestinationX := Events_List.Element(EventIndex).SkyX;
-               PlayerShip.DestinationY := Events_List.Element(EventIndex).SkyY;
+               PlayerShip.DestinationX := Events_List(EventIndex).SkyX;
+               PlayerShip.DestinationY := Events_List(EventIndex).SkyY;
                AddMessage
                  ("You set travel destination for your ship.",
                   OrderMessage);
