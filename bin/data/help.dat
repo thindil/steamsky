@@ -16,7 +16,7 @@ Each docking operation cost some moneys, depending on your ship size (bigger shi
 Each unvisited field on map is grey. Once you fly on this field, it color change to black.
 At game start, you know only one base. You can discover others by flying on it or by asking for other bases in current base. To ask, press 'o' key and then select option 'Ask for bases'. You can ask for other bases only once in each base. Each ask take 30 minutes of game time. Amount of discovered bases depends on current base size (in larger bases they know more other bases).
 When you undocked from base, in this same menu, you can set ship speed or dock again. Faster speed means you travel faster but you use more fuel too.
-You can gain or lost reputation with each base. Generally, you gain reputation when you interact with base (trade, repair ship, recruit new crew members, ask for events, etc). You can check your reputation level in your list of known bases. If your reputation with base is low, you can't dock to that base.
+You can gain or lost reputation with each base. Generally, you gain reputation when you interact with base (trade, repair ship, recruit new crew members, ask for events, etc.). You can check your reputation level in your list of known bases. If your reputation with base is low, you can't dock to that base.
 Reputation levels, starting from lowest: Hated, Outlaw, Hostile, Unfriendly, Unknown, Visitor, Trader, Friend, Well Known.
 To move your ship, you must set it speed, have fuel (called Charcollum, which works as moneys too), and someone from ship crew assigned to pilot and engineer role. To assign crew members to selected role, open crew menu - key 'c', select desired crew member and give order by press key 'o'.
 Travel time depends on skills of Pilot and Engineer (current members on this positions) and selected ship speed. 
@@ -27,7 +27,8 @@ Ship speed depends on engine power, engine damage, ship weight (with cargo) and 
 With higher set ship speed, there is bigger chance that one of engines will be damaged. More experienced Engineer have better chances to prevent engine damage during fly.
 As you fly near bases (you are in this same cell where base is), you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are in default text color. All bases marked on map as 'o'.
 You can set your destination travel point on map by selecting map cell (with SHIFT + arrow keys) and then press Enter.
-If you have set travel destination, press key 5 on keypad to auto travel. If destination is not set, pressing key 5 on keypad allow you to wait 1 game minute without moving.
+If you have set travel destination, press key 5 on keypad to auto travel by one map field. If you want move further, you can press '%' key (shift + '5' key) - then you been move until you reach destination, combat happen or you can't move anymore (no pilot/engineer, too damaged engines, no fuel, etc.).
+If destination is not set, pressing key 5 on keypad allow you to wait 1 game minute without moving.
 [Trading]
 To buy/sell items from bases you must first dock to base and having assigned crew member to talking in bases. All bases buy all items, but which items are sold, depends on base type.
 Prices in bases depends on skill Rhetoric of assigned to trade crew member - with higher skill you can sell items for more and buy for less. Additionally, prices depends on your reputation in base. With high reputation you earn more or pay less for goods, new recruits or services. 
