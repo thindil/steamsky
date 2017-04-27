@@ -499,6 +499,40 @@ package body Maps.UI is
                   return 4;
                end if;
             end if;
+         when Character'Pos('%') => -- Move to destination until combat
+            -- happen or reach destination or can't move
+            if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
+               return 0;
+            end if;
+            loop
+               NewX := 0;
+               NewY := 0;
+               if PlayerShip.DestinationX > PlayerShip.SkyX then
+                  NewX := 1;
+               elsif PlayerShip.DestinationX < PlayerShip.SkyX then
+                  NewX := -1;
+               end if;
+               if PlayerShip.DestinationY > PlayerShip.SkyY then
+                  NewY := 1;
+               elsif PlayerShip.DestinationY < PlayerShip.SkyY then
+                  NewY := -1;
+               end if;
+               Result := MoveShip(0, NewX, NewY);
+               exit when Result = 0;
+               if PlayerShip.DestinationX = PlayerShip.SkyX and
+                 PlayerShip.DestinationY = PlayerShip.SkyY then
+                  AddMessage
+                    ("You reached your travel destination.",
+                     OrderMessage);
+                  PlayerShip.DestinationX := 0;
+                  PlayerShip.DestinationY := 0;
+                  return 4;
+               end if;
+               if CheckForEvent(Sky_Map_View) /= Sky_Map_View then
+                  return 5;
+               end if;
+            end loop;
+            Result := 4;
          when KEY_SRIGHT =>
             MoveX := MoveX + 1;
             Result := 4;
