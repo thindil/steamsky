@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Starting priorities of orders for player ship crew
 - New ship modules: small steel hull, light steel armor, small steel engine and
   basic steel cabin
+- Fast auto travel option
 
 ### Changed
 - Merged fields lootmin and lootmax in ships data
