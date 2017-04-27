@@ -428,7 +428,7 @@ package body Bases.UI.Trade is
             else
                SellItems
                  (CargoIndex,
-                  Positive'Image(PlayerShip.Cargo(CargoIndex).Amount));
+                  Positive'Image(PlayerShip.Cargo.Element(CargoIndex).Amount));
             end if;
          else
             BuyItems(ItemIndex, Get_Buffer(Fields(TradeForm, 2)));
