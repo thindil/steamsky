@@ -42,4 +42,5 @@ All notable changes to this project will be documented in this file.
 - Removing gun on destroying turret
 - Crash on read changelog file
 - Counting player accuracy during combat
+- Crash on player death from starvation/dehydration
 
