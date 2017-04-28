@@ -192,8 +192,19 @@ ships, ships modules, etc.)
   wounded, Cleaning ship and Priority is: Normal or Highest (one per crew 
   member).
 
-## Debugging
+## Help
 
+### General informations
+- Open file *help.dat* in *data* directory.
+- File must end with `[]`.
+
+### Help data structure
+- Each help entry starts from `[` symbol. Any value between `[` and `]` is a
+  menu entry in main help menu. It can be number or text.
+- Whole text below (until next new line which starts from `[`) is help entry
+  text visible when player select this option from help menu.
+
+## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
 game create file *debug.log* in *data* directory. To start game in debug mode
 run it with parameter --debug=[debugtype]. Example:
