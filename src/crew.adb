@@ -682,6 +682,7 @@ package body Crew is
             end if;
             if HealthLevel = 0 then
                Death(I, DeathReason, PlayerShip);
+               exit when I = 1;
             end if;
          end if;
          if HealthLevel > 0 then
