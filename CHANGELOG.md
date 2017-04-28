@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Counting player accuracy in combat
+- Crash on player death from starvation/dehydration
 
 ## [1.0.1] - 2017-04-23
 
