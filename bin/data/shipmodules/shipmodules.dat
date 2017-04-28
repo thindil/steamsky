@@ -1180,4 +1180,18 @@ Price = 800
 InstallTime = 60
 Size = 1
 Description = Small cabin made of steel with just few furnitures.
+[94]
+Name = Steel cockpit
+Type = Cockpit
+Weight = 300
+Value = 0
+MaxValue = 0
+Durability = 600
+Material = Steel
+Skill = Engineering
+Price = 3000
+InstallTime = 60
+Unique = Yes
+Size = 1
+Description = Each ship require one cockpit to fly. This is steel version of standard cockpit.
 []
