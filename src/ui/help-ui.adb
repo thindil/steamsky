@@ -38,7 +38,7 @@ package body Help.UI is
          PreviousState := Sky_Map_View;
       end if;
       for I in Help_List.First_Index .. Help_List.Last_Index loop
-         Help_Items.all(I) := New_Item(To_String(Help_List.Element(I).Title));
+         Help_Items.all(I) := New_Item(To_String(Help_List(I).Title));
       end loop;
       Help_Items.all(Help_Items'Last) := Null_Item;
       HelpMenu := New_Menu(Help_Items);
@@ -70,12 +70,12 @@ package body Help.UI is
          LinesAmount :=
            Line_Position
              (Ada.Strings.Unbounded.Count
-                (Help_List.Element(TopicIndex).Text,
+                (Help_List(TopicIndex).Text,
                  To_Set(ASCII.LF)));
          while TextPosition > 0 loop
             TextPosition :=
               Index
-                (Help_List.Element(TopicIndex).Text,
+                (Help_List(TopicIndex).Text,
                  To_Set(ASCII.LF),
                  OldTextPosition);
             if TextPosition > 0 and
@@ -91,9 +91,7 @@ package body Help.UI is
             LinesAmount := 1;
          end if;
          HelpPad := New_Pad(LinesAmount + 1, Columns);
-         Add
-           (Win => HelpPad,
-            Str => To_String(Help_List.Element(TopicIndex).Text));
+         Add(Win => HelpPad, Str => To_String(Help_List(TopicIndex).Text));
          EndIndex := Integer(LinesAmount - (Lines - 2));
          if EndIndex < 0 then
             EndIndex := 0;
