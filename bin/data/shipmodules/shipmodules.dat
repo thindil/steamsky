@@ -1194,4 +1194,17 @@ InstallTime = 60
 Unique = Yes
 Size = 1
 Description = Each ship require one cockpit to fly. This is steel version of standard cockpit.
+[95]
+Name = Small steel alchemy lab
+Type = Alchemy_lab
+Weight = 450
+Value = 0
+MaxValue = 0
+Durability = 300
+Material = Steel
+Skill = Engineering
+Price = 4000
+InstallTime = 60
+Size = 1
+Description = Allow research new crafting recipes and craft some items. More durable version made of steel
 []
