@@ -42,7 +42,7 @@ package body UserInterface.Keys is
    function GameMenuKeys
      (CurrentState: GameStates;
       Key: Key_Code) return GameStates is
-      Result: Driver_Result;
+      Result: Menus.Driver_Result;
       MenuOptions: constant array(Positive range <>) of Character :=
         ('s',
          'a',
@@ -167,7 +167,7 @@ package body UserInterface.Keys is
       EventIndex: Natural := 0;
       NewState: GameStates;
       Order: constant String := Name(Current(OrdersMenu));
-      Result: Driver_Result;
+      Result: Menus.Driver_Result;
       NewTime: Integer;
       procedure UpdateEvent(Event: in out EventData) is
       begin
@@ -416,7 +416,7 @@ package body UserInterface.Keys is
       CabinBonus: Natural;
       Order: constant String :=
         Name(Current(OrdersMenu))(4 .. Name(Current(OrdersMenu))'Last);
-      Result: Driver_Result;
+      Result: Menus.Driver_Result;
    begin
       case Key is
          when KEY_UP => -- Select previous wait order
@@ -453,6 +453,10 @@ package body UserInterface.Keys is
                UpdateGame(30);
             elsif Order = "Wait 1 hour" then
                UpdateGame(60);
+            elsif Order = "Wait X minutes" then
+               DrawGame(Sky_Map_View);
+               ShowWaitForm;
+               return WaitX_Order;
             elsif Order = "Wait until crew is rested" then
                for I in
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
@@ -557,5 +561,63 @@ package body UserInterface.Keys is
       DrawGame(ReturnState);
       return ReturnState;
    end WaitMenuKeys;
+
+   function WaitFormKeys(Key: Key_Code) return GameStates is
+      Result: Forms.Driver_Result;
+      FieldIndex: Positive := Get_Index(Current(WaitForm));
+      Visibility: Cursor_Visibility := Invisible;
+   begin
+      case Key is
+         when KEY_UP => -- Select previous field
+            Result := Driver(WaitForm, F_Previous_Field);
+            FieldIndex := Get_Index(Current(WaitForm));
+            if FieldIndex = 2 then
+               Result := Driver(WaitForm, F_End_Line);
+            end if;
+         when KEY_DOWN => -- Select next field
+            Result := Driver(WaitForm, F_Next_Field);
+            FieldIndex := Get_Index(Current(WaitForm));
+            if FieldIndex = 2 then
+               Result := Driver(WaitForm, F_End_Line);
+            end if;
+         when 10 => -- quit/move map
+            if FieldIndex = 4 then
+               UpdateGame(Integer'Value(Get_Buffer(Fields(WaitForm, 2))));
+            end if;
+            Set_Cursor_Visibility(Visibility);
+            Post(WaitForm, False);
+            Delete(WaitForm);
+            DrawGame(Sky_Map_View);
+            return Sky_Map_View;
+         when Key_Backspace => -- delete last character
+            if FieldIndex = 2 then
+               Result := Driver(WaitForm, F_Delete_Previous);
+            end if;
+         when KEY_DC => -- delete character at cursor
+            if FieldIndex = 2 then
+               Result := Driver(WaitForm, F_Delete_Char);
+            end if;
+         when KEY_RIGHT => -- Move cursor right
+            if FieldIndex = 2 then
+               Result := Driver(WaitForm, F_Right_Char);
+            end if;
+         when KEY_LEFT => -- Move cursor left
+            if FieldIndex = 2 then
+               Result := Driver(WaitForm, F_Left_Char);
+            end if;
+         when others =>
+            Result := Driver(WaitForm, Key);
+      end case;
+      if Result = Form_Ok then
+         Set_Background(Fields(WaitForm, 2), (others => False));
+         if FieldIndex = 2 then
+            Set_Background
+              (Current(WaitForm),
+               (Reverse_Video => True, others => False));
+         end if;
+         Refresh(MenuWindow);
+      end if;
+      return WaitX_Order;
+   end WaitFormKeys;
 
 end UserInterface.Keys;

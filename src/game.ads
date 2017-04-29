@@ -70,7 +70,8 @@ package Game is
       Orders_Priorities,
       BasesList_Types,
       BasesList_Statuses,
-      BasesList_Owners); -- Game states
+      BasesList_Owners,
+      WaitX_Order); -- Game states
    type Date_Record is -- Data for game date/time
    record
       Year: Natural;
