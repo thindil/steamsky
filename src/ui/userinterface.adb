@@ -705,18 +705,19 @@ package body UserInterface is
    end HideDialog;
 
    procedure ShowWaitOrder is
-      WaitWindow: Window;
-      WaitLines: Line_Position := 9;
-      WaitColumns: Column_Position := 23;
       NeedHealing, NeedRest: Boolean := False;
-      WaitOrders: constant array(1 .. 6) of Unbounded_String :=
-        (To_Unbounded_String("Wait 1 minute"),
-         To_Unbounded_String("Wait 5 minutes"),
-         To_Unbounded_String("Wait 10 minutes"),
-         To_Unbounded_String("Wait 15 minutes"),
-         To_Unbounded_String("Wait 30 minutes"),
-         To_Unbounded_String("Wait 1 hour"));
-      CurrentLine: Line_Position := 0;
+      WaitOrders: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("1) Wait 1 minute"),
+         To_Unbounded_String("2) Wait 5 minutes"),
+         To_Unbounded_String("3) Wait 10 minutes"),
+         To_Unbounded_String("4) Wait 15 minutes"),
+         To_Unbounded_String("5) Wait 30 minutes"),
+         To_Unbounded_String("6) Wait 1 hour"));
+      Wait_Items: Item_Array_Access;
+      MenuHeight: Line_Position;
+      MenuLength: Column_Position;
+      WaitAmount: Positive := WaitOrders'Length + 2;
+      MenuIndex: Positive := WaitOrders'Length + 1;
    begin
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          if PlayerShip.Crew.Element(I).Tired > 0 and
@@ -736,74 +737,48 @@ package body UserInterface is
          end if;
       end loop;
       if NeedRest then
-         WaitLines := WaitLines + 1;
-         WaitColumns := 31;
+          WaitAmount := WaitAmount + 1;
       end if;
       if NeedHealing then
-         WaitLines := WaitLines + 1;
-         WaitColumns := 31;
+          WaitAmount := WaitAmount + 1;
       end if;
-      WaitWindow :=
-        Create
-          (WaitLines,
-           WaitColumns,
-           (Lines / 2) - (WaitLines / 2),
-           (Columns / 2) - (WaitColumns / 2));
-      Box(WaitWindow);
+      Wait_Items := new Item_Array(1 .. WaitAmount);
       for I in WaitOrders'Range loop
-         CurrentLine := CurrentLine + 1;
-         Move_Cursor(Win => WaitWindow, Line => CurrentLine, Column => 1);
-         Add
-           (Win => WaitWindow,
-            Str => Integer'Image(I) & " " & To_String(WaitOrders(I)));
-         Change_Attributes
-           (Win => WaitWindow,
-            Line => CurrentLine,
-            Column => 2,
-            Count => 1,
-            Color => 1);
+         Wait_Items.all(I) := New_Item(To_String(WaitOrders(I)));
       end loop;
       if NeedRest then
-         CurrentLine := CurrentLine + 1;
-         Move_Cursor(Win => WaitWindow, Line => CurrentLine, Column => 1);
-         Add
-           (Win => WaitWindow,
-            Str =>
-              Line_Position'Image(CurrentLine) &
-              " " &
-              "Wait until crew is rested");
-         Change_Attributes
-           (Win => WaitWindow,
-            Line => CurrentLine,
-            Column => 2,
-            Count => 1,
-            Color => 1);
+         Wait_Items.all(MenuIndex) :=
+           New_Item
+             (Positive'Image(MenuIndex)(2) & ") Wait until crew is rested");
+         MenuIndex := MenuIndex + 1;
       end if;
       if NeedHealing then
-         CurrentLine := CurrentLine + 1;
-         Move_Cursor(Win => WaitWindow, Line => CurrentLine, Column => 1);
-         Add
-           (Win => WaitWindow,
-            Str =>
-              Line_Position'Image(CurrentLine) &
-              " " &
-              "Wait until crew is healed");
-         Change_Attributes
-           (Win => WaitWindow,
-            Line => CurrentLine,
-            Column => 2,
-            Count => 1,
-            Color => 1);
+         Wait_Items.all(MenuIndex) :=
+           New_Item
+             (Positive'Image(MenuIndex)(2) & ") Wait until crew is healed");
+         MenuIndex := MenuIndex + 1;
       end if;
-      Move_Cursor(Win => WaitWindow, Line => WaitLines - 2, Column => 2);
-      Add(Win => WaitWindow, Str => "Quit");
-      Change_Attributes
-        (Win => WaitWindow,
-         Line => WaitLines - 2,
-         Column => 2,
-         Count => 1,
-         Color => 1);
-      Refresh(WaitWindow);
+      AddMessage("3:" & Integer'Image(WaitAmount), othermessage);
+      Wait_Items.all(MenuIndex) := New_Item("Q) Quit");
+      MenuIndex := MenuIndex + 1;
+      Wait_Items.all(MenuIndex) := Null_Item;
+      OrdersMenu := New_Menu(Wait_Items);
+      Set_Mark(OrdersMenu, "");
+      Scale(OrdersMenu, MenuHeight, MenuLength);
+      MenuWindow :=
+        Create
+          (MenuHeight + 2,
+           MenuLength + 2,
+           ((Lines / 3) - (MenuHeight / 2)),
+           ((Columns / 2) - (MenuLength / 2)));
+      Box(MenuWindow);
+      Set_Window(OrdersMenu, MenuWindow);
+      Set_Sub_Window
+        (OrdersMenu,
+         Derived_Window(MenuWindow, MenuHeight, MenuLength, 1, 1));
+      Post(OrdersMenu);
+      Refresh;
+      Refresh(MenuWindow);
    end ShowWaitOrder;
 
    procedure ShowGameMenu is
