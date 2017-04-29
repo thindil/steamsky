@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 
 package body Messages.UI is
@@ -22,28 +23,44 @@ package body Messages.UI is
    StartIndex, EndIndex: Integer := 0;
    MessagesType: Message_Type := Default;
    MessagesPad: Window := Null_Window;
+   MessagesMenu: Menu;
+   MenuWindow: Window;
 
    procedure ShowMessages is
       LinesAmount: Line_Position := 0;
       TextMessages: Unbounded_String;
+      Messages_Items: constant Item_Array_Access := new Item_Array(1 .. 9);
+      MenuHeight: Line_Position;
+      MenuLength: Column_Position;
    begin
       if Messages_List.Length = 0 then
          Move_Cursor(Line => (Lines / 2), Column => (Columns / 2) - 8);
          Add(Str => "No messages yet.");
          return;
       end if;
-      Move_Cursor(Line => 2, Column => 2);
-      Add
-        (Str =>
-           "[All] [Combat] [Trade] [Orders] [Crafts] [Missions] [Others] [Delete all]");
-      Change_Attributes(Line => 2, Column => 3, Count => 1, Color => 1);
-      Change_Attributes(Line => 2, Column => 9, Count => 1, Color => 1);
-      Change_Attributes(Line => 2, Column => 18, Count => 1, Color => 1);
-      Change_Attributes(Line => 2, Column => 26, Count => 1, Color => 1);
-      Change_Attributes(Line => 2, Column => 36, Count => 1, Color => 1);
-      Change_Attributes(Line => 2, Column => 44, Count => 1, Color => 1);
-      Change_Attributes(Line => 2, Column => 58, Count => 1, Color => 1);
-      Change_Attributes(Line => 2, Column => 64, Count => 1, Color => 1);
+      Messages_Items.all :=
+        (New_Item("All"),
+         New_Item("Combat"),
+         New_Item("Trade"),
+         New_Item("Orders"),
+         New_Item("Crafts"),
+         New_Item("Missions"),
+         New_Item("Others"),
+         New_Item("Delete all"),
+         Null_Item);
+      MessagesMenu := New_Menu(Messages_Items);
+      Set_Format(MessagesMenu, 1, 8);
+      Set_Mark(MessagesMenu, "");
+      Scale(MessagesMenu, MenuHeight, MenuLength);
+      MenuWindow := Create(MenuHeight, MenuLength, 2, 2);
+      Set_Window(MessagesMenu, MenuWindow);
+      Set_Sub_Window
+        (MessagesMenu,
+         Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+      Post(MessagesMenu);
+      Set_Current
+        (MessagesMenu,
+         Messages_Items.all(Message_Type'Pos(MessagesType) + 1));
       if MessagesPad = Null_Window then
          for Message of reverse Messages_List loop
             if Message.MType = MessagesType or MessagesType = Default then
@@ -71,6 +88,7 @@ package body Messages.UI is
          end if;
       end if;
       Refresh;
+      Refresh(MenuWindow);
       Refresh
         (MessagesPad,
          Line_Position(StartIndex),
@@ -84,6 +102,22 @@ package body Messages.UI is
    function MessagesKeys
      (Key: Key_Code;
       OldState: GameStates) return GameStates is
+      Result: Driver_Result;
+      function SetMessagesType return GameStates is
+      begin
+         if MessagesPad /= Null_Window then
+            Delete(MessagesPad);
+         end if;
+         if Get_Index(Current(MessagesMenu)) < 8 then
+            MessagesType :=
+              Message_Type'Val(Get_Index(Current(MessagesMenu)) - 1);
+            DrawGame(Messages_View);
+            return Messages_View;
+         else
+            DrawGame(Clear_Confirm);
+            return Clear_Confirm;
+         end if;
+      end SetMessagesType;
    begin
       case Key is
          when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -124,69 +158,29 @@ package body Messages.UI is
          when 49 | Key_End => -- Scroll messages to end
             StartIndex := EndIndex;
             ShowMessages;
-         when Character'Pos('a') => -- Show all messages
-            StartIndex := 0;
-            MessagesType := Default;
-            if MessagesPad /= Null_Window then
-               Delete(MessagesPad);
+         when 52 | KEY_LEFT => -- Select previous messages types
+            Result := Driver(MessagesMenu, M_Left_Item);
+            if Result = Request_Denied then
+               Result := Driver(MessagesMenu, M_Last_Item);
             end if;
-            DrawGame(Messages_View);
-         when Character'Pos('c') |
-           Character'Pos('C') => -- Show combat messages
-            StartIndex := 0;
-            MessagesType := CombatMessage;
-            if MessagesPad /= Null_Window then
-               Delete(MessagesPad);
+            return SetMessagesType;
+         when 54 | KEY_RIGHT => -- Select next messages types
+            Result := Driver(MessagesMenu, M_Right_Item);
+            if Result = Request_Denied then
+               Result := Driver(MessagesMenu, M_First_Item);
             end if;
-            DrawGame(Messages_View);
-         when Character'Pos('t') | Character'Pos('T') => -- Show trade messages
-            StartIndex := 0;
-            MessagesType := TradeMessage;
-            if MessagesPad /= Null_Window then
-               Delete(MessagesPad);
-            end if;
-            DrawGame(Messages_View);
-         when Character'Pos('o') |
-           Character'Pos('O') => -- Show orders messages
-            StartIndex := 0;
-            MessagesType := OrderMessage;
-            if MessagesPad /= Null_Window then
-               Delete(MessagesPad);
-            end if;
-            DrawGame(Messages_View);
-         when Character'Pos('r') | Character'Pos('R') => -- Show craft messages
-            StartIndex := 0;
-            MessagesType := CraftMessage;
-            if MessagesPad /= Null_Window then
-               Delete(MessagesPad);
-            end if;
-            DrawGame(Messages_View);
-         when Character'Pos('m') |
-           Character'Pos('M') => -- Show missions messages
-            StartIndex := 0;
-            MessagesType := MissionMessage;
-            if MessagesPad /= Null_Window then
-               Delete(MessagesPad);
-            end if;
-            DrawGame(Messages_View);
-         when Character'Pos('e') |
-           Character'Pos('E') => -- Show others messages
-            StartIndex := 0;
-            MessagesType := OtherMessage;
-            if MessagesPad /= Null_Window then
-               Delete(MessagesPad);
-            end if;
-            DrawGame(Messages_View);
-         when Character'Pos('d') | Character'Pos('D') => -- Clear messages
-            StartIndex := 0;
-            MessagesType := Default;
-            if MessagesPad /= Null_Window then
-               Delete(MessagesPad);
-            end if;
-            DrawGame(Clear_Confirm);
-            return Clear_Confirm;
+            return SetMessagesType;
          when others =>
-            null;
+            Result := Driver(MessagesMenu, Key);
+            if Result = Menu_Ok then
+               return SetMessagesType;
+            else
+               Result := Driver(MessagesMenu, M_Clear_Pattern);
+               Result := Driver(MessagesMenu, Key);
+               if Result = Menu_Ok then
+                  return SetMessagesType;
+               end if;
+            end if;
       end case;
       return Messages_View;
    end MessagesKeys;
