@@ -414,107 +414,143 @@ package body UserInterface.Keys is
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       CabinBonus: Natural;
+      Order: constant String :=
+        Name(Current(OrdersMenu))(4 .. Name(Current(OrdersMenu))'Last);
+      Result: Driver_Result;
    begin
       case Key is
-         when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-            DrawGame(Sky_Map_View);
-            return Sky_Map_View;
-         when Character'Pos('1') => -- Wait 1 minute
-            UpdateGame(1);
-         when Character'Pos('2') => -- Wait 5 minutes
-            UpdateGame(5);
-         when Character'Pos('3') => -- Wait 10 minutes
-            UpdateGame(10);
-         when Character'Pos('4') => -- Wait 15 minutes
-            UpdateGame(15);
-         when Character'Pos('5') => -- Wait 30 minute
-            UpdateGame(30);
-         when Character'Pos('6') => -- Wait 1 hour
-            UpdateGame(60);
-         when Character'Pos('7') => -- Wait until crew is rested
-            for I in
-              PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-               if PlayerShip.Crew.Element(I).Tired > 0 and
-                 PlayerShip.Crew.Element(I).Order = Rest then
-                  CabinIndex := 0;
-                  TempTimeNeeded := 0;
-                  for J in
-                    PlayerShip.Modules.First_Index ..
-                        PlayerShip.Modules.Last_Index loop
-                     if Modules_List.Element
-                       (PlayerShip.Modules.Element(J).ProtoIndex)
-                         .MType =
-                       CABIN and
-                       PlayerShip.Modules.Element(J).Owner = I then
-                        CabinIndex := J;
-                        exit;
-                     end if;
-                  end loop;
-                  if CabinIndex > 0 then
-                     Damage :=
-                       1.0 -
-                       DamageFactor
-                         (Float
-                            (PlayerShip.Modules.Element(CabinIndex)
-                               .Durability) /
-                          Float
-                            (PlayerShip.Modules.Element(CabinIndex)
-                               .MaxDurability));
-                     CabinBonus :=
-                       PlayerShip.Modules.Element(CabinIndex).Current_Value -
-                       Natural
-                         (Float
-                            (PlayerShip.Modules.Element(CabinIndex)
-                               .Current_Value) *
-                          Float(Damage));
-                     if CabinBonus = 0 then
-                        CabinBonus := 1;
-                     end if;
-                     TempTimeNeeded :=
-                       (PlayerShip.Crew.Element(I).Tired / CabinBonus) * 15;
-                     if TempTimeNeeded = 0 then
-                        TempTimeNeeded := 15;
-                     end if;
-                  else
-                     TempTimeNeeded := PlayerShip.Crew.Element(I).Tired * 15;
-                  end if;
-                  TempTimeNeeded := TempTimeNeeded + 15;
-                  if TempTimeNeeded > TimeNeeded then
-                     TimeNeeded := TempTimeNeeded;
-                  end if;
-               end if;
-            end loop;
-            if TimeNeeded > 0 then
-               UpdateGame(TimeNeeded);
-            else
-               return Wait_Order;
+         when KEY_UP => -- Select previous wait order
+            Result := Driver(OrdersMenu, M_Up_Item);
+            if Result = Request_Denied then
+               Result := Driver(OrdersMenu, M_Last_Item);
             end if;
-         when Character'Pos('8') => -- Wait until crew is healed
-            for I in
-              PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-               if PlayerShip.Crew.Element(I).Health < 100 and
-                 PlayerShip.Crew.Element(I).Health > 0 and
-                 PlayerShip.Crew.Element(I).Order = Rest then
-                  for Module of PlayerShip.Modules loop
-                     if Modules_List.Element(Module.ProtoIndex).MType =
-                       CABIN and
-                       Module.Owner = I then
-                        if TimeNeeded <
-                          (100 - PlayerShip.Crew.Element(I).Health) * 15 then
-                           TimeNeeded :=
-                             (100 - PlayerShip.Crew.Element(I).Health) * 15;
+            if Result = Menu_Ok then
+               Refresh(MenuWindow);
+            end if;
+            return Wait_Order;
+         when KEY_DOWN => -- Select next wait order
+            Result := Driver(OrdersMenu, M_Down_Item);
+            if Result = Request_Denied then
+               Result := Driver(OrdersMenu, M_First_Item);
+            end if;
+            if Result = Menu_Ok then
+               Refresh(MenuWindow);
+            end if;
+            return Wait_Order;
+         when 10 => -- Select option from menu
+            if Order = "Quit" then
+               DrawGame(Sky_Map_View);
+               return Sky_Map_View;
+            elsif Order = "Wait 1 minute" then
+               UpdateGame(1);
+            elsif Order = "Wait 5 minutes" then
+               UpdateGame(5);
+            elsif Order = "Wait 10 minutes" then
+               UpdateGame(10);
+            elsif Order = "Wait 15 minutes" then
+               UpdateGame(15);
+            elsif Order = "Wait 30 minutes" then
+               UpdateGame(30);
+            elsif Order = "Wait 1 hour" then
+               UpdateGame(60);
+            elsif Order = "Wait until crew is rested" then
+               for I in
+                 PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+                  if PlayerShip.Crew.Element(I).Tired > 0 and
+                    PlayerShip.Crew.Element(I).Order = Rest then
+                     CabinIndex := 0;
+                     TempTimeNeeded := 0;
+                     for J in
+                       PlayerShip.Modules.First_Index ..
+                           PlayerShip.Modules.Last_Index loop
+                        if Modules_List.Element
+                          (PlayerShip.Modules.Element(J).ProtoIndex)
+                            .MType =
+                          CABIN and
+                          PlayerShip.Modules.Element(J).Owner = I then
+                           CabinIndex := J;
+                           exit;
                         end if;
-                        exit;
+                     end loop;
+                     if CabinIndex > 0 then
+                        Damage :=
+                          1.0 -
+                          DamageFactor
+                            (Float
+                               (PlayerShip.Modules.Element(CabinIndex)
+                                  .Durability) /
+                             Float
+                               (PlayerShip.Modules.Element(CabinIndex)
+                                  .MaxDurability));
+                        CabinBonus :=
+                          PlayerShip.Modules.Element(CabinIndex)
+                            .Current_Value -
+                          Natural
+                            (Float
+                               (PlayerShip.Modules.Element(CabinIndex)
+                                  .Current_Value) *
+                             Float(Damage));
+                        if CabinBonus = 0 then
+                           CabinBonus := 1;
+                        end if;
+                        TempTimeNeeded :=
+                          (PlayerShip.Crew.Element(I).Tired / CabinBonus) * 15;
+                        if TempTimeNeeded = 0 then
+                           TempTimeNeeded := 15;
+                        end if;
+                     else
+                        TempTimeNeeded :=
+                          PlayerShip.Crew.Element(I).Tired * 15;
                      end if;
-                  end loop;
+                     TempTimeNeeded := TempTimeNeeded + 15;
+                     if TempTimeNeeded > TimeNeeded then
+                        TimeNeeded := TempTimeNeeded;
+                     end if;
+                  end if;
+               end loop;
+               if TimeNeeded > 0 then
+                  UpdateGame(TimeNeeded);
+               else
+                  return Wait_Order;
                end if;
-            end loop;
-            if TimeNeeded > 0 then
-               UpdateGame(TimeNeeded);
-            else
-               return Wait_Order;
+            elsif Order = "Wait until crew is healed" then
+               for I in
+                 PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+                  if PlayerShip.Crew.Element(I).Health < 100 and
+                    PlayerShip.Crew.Element(I).Health > 0 and
+                    PlayerShip.Crew.Element(I).Order = Rest then
+                     for Module of PlayerShip.Modules loop
+                        if Modules_List.Element(Module.ProtoIndex).MType =
+                          CABIN and
+                          Module.Owner = I then
+                           if TimeNeeded <
+                             (100 - PlayerShip.Crew.Element(I).Health) *
+                               15 then
+                              TimeNeeded :=
+                                (100 - PlayerShip.Crew.Element(I).Health) * 15;
+                           end if;
+                           exit;
+                        end if;
+                     end loop;
+                  end if;
+               end loop;
+               if TimeNeeded > 0 then
+                  UpdateGame(TimeNeeded);
+               else
+                  return Wait_Order;
+               end if;
             end if;
          when others =>
+            Result := Driver(OrdersMenu, Key);
+            if Result = Menu_Ok then
+               Refresh(MenuWindow);
+            else
+               Result := Driver(OrdersMenu, M_Clear_Pattern);
+               Result := Driver(OrdersMenu, Key);
+               if Result = Menu_Ok then
+                  Refresh(MenuWindow);
+               end if;
+            end if;
             return Wait_Order;
       end case;
       ReturnState := CheckForEvent(OldState);
