@@ -17,12 +17,14 @@
 
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
+with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Game; use Game;
 
 package UserInterface is
 
    OrdersMenu: Menu; -- Menu for orders/game menu
    MenuWindow: Window; -- Window for menu
+   WaitForm: Form; -- Form for wait X minutes
 
    procedure ShowGameHeader(CurrentState: GameStates); -- Show in-game header
    procedure ShowDialog(Message: String); -- Show dialog window with message
@@ -30,5 +32,6 @@ package UserInterface is
      return Boolean; -- Hide dialog if visible, return True if dialog was hidden
    procedure DrawGame(CurrentState: GameStates); -- Draw game screen
    procedure ShowGameMenu; -- Show in game menu
+   procedure ShowWaitForm; -- Show form for wait X minutes
 
 end UserInterface;

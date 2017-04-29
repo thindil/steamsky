@@ -18,6 +18,8 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers; use Ada.Containers;
 with Terminal_Interface.Curses.Panels; use Terminal_Interface.Curses.Panels;
+with Terminal_Interface.Curses.Forms.Field_Types.IntField;
+use Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
@@ -712,7 +714,8 @@ package body UserInterface is
          To_Unbounded_String("3) Wait 10 minutes"),
          To_Unbounded_String("4) Wait 15 minutes"),
          To_Unbounded_String("5) Wait 30 minutes"),
-         To_Unbounded_String("6) Wait 1 hour"));
+         To_Unbounded_String("6) Wait 1 hour"),
+         To_Unbounded_String("7) Wait X minutes"));
       Wait_Items: Item_Array_Access;
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
@@ -737,10 +740,10 @@ package body UserInterface is
          end if;
       end loop;
       if NeedRest then
-          WaitAmount := WaitAmount + 1;
+         WaitAmount := WaitAmount + 1;
       end if;
       if NeedHealing then
-          WaitAmount := WaitAmount + 1;
+         WaitAmount := WaitAmount + 1;
       end if;
       Wait_Items := new Item_Array(1 .. WaitAmount);
       for I in WaitOrders'Range loop
@@ -758,7 +761,6 @@ package body UserInterface is
              (Positive'Image(MenuIndex)(2) & ") Wait until crew is healed");
          MenuIndex := MenuIndex + 1;
       end if;
-      AddMessage("3:" & Integer'Image(WaitAmount), othermessage);
       Wait_Items.all(MenuIndex) := New_Item("Q) Quit");
       MenuIndex := MenuIndex + 1;
       Wait_Items.all(MenuIndex) := Null_Item;
@@ -899,5 +901,62 @@ package body UserInterface is
       Update_Panels;
       Update_Screen;
    end DrawGame;
+
+   procedure ShowWaitForm is
+      Wait_Fields: constant Field_Array_Access := new Field_Array(1 .. 5);
+      FieldOptions: Field_Option_Set;
+      FormHeight: Line_Position;
+      FormLength: Column_Position;
+      Visibility: Cursor_Visibility := Normal;
+      Result: Forms.Driver_Result;
+   begin
+      Set_Cursor_Visibility(Visibility);
+      Wait_Fields.all(1) := New_Field(1, 8, 0, 0, 0, 0);
+      FieldOptions := Get_Options(Wait_Fields.all(1));
+      Set_Buffer(Wait_Fields.all(1), 0, "Minutes:");
+      FieldOptions.Active := False;
+      Set_Options(Wait_Fields.all(1), FieldOptions);
+      Wait_Fields.all(2) := New_Field(1, 5, 0, 8, 0, 0);
+      FieldOptions := Get_Options(Wait_Fields.all(2));
+      Set_Buffer(Wait_Fields.all(2), 0, "1");
+      FieldOptions.Auto_Skip := False;
+      FieldOptions.Null_Ok := False;
+      Set_Options(Wait_Fields.all(2), FieldOptions);
+      Set_Background
+        (Wait_Fields.all(2),
+         (Reverse_Video => True, others => False));
+      Set_Field_Type(Wait_Fields.all(2), (0, 1, 1024));
+      Wait_Fields.all(3) := New_Field(1, 8, 2, 1, 0, 0);
+      Set_Buffer(Wait_Fields.all(3), 0, "[Cancel]");
+      FieldOptions := Get_Options(Wait_Fields.all(3));
+      FieldOptions.Edit := False;
+      Set_Options(Wait_Fields.all(3), FieldOptions);
+      Wait_Fields.all(4) := New_Field(1, 4, 2, 11, 0, 0);
+      FieldOptions := Get_Options(Wait_Fields.all(4));
+      FieldOptions.Edit := False;
+      Set_Options(Wait_Fields.all(4), FieldOptions);
+      Set_Buffer(Wait_Fields.all(4), 0, "[Ok]");
+      Wait_Fields.all(5) := Null_Field;
+      WaitForm := New_Form(Wait_Fields);
+      Set_Options(WaitForm, (others => False));
+      Scale(WaitForm, FormHeight, FormLength);
+      MenuWindow :=
+        Create
+          (FormHeight + 2,
+           FormLength + 2,
+           ((Lines / 3) - (FormHeight / 2)),
+           ((Columns / 2) - (FormLength / 2)));
+      Box(MenuWindow);
+      Set_Window(WaitForm, MenuWindow);
+      Set_Sub_Window
+        (WaitForm,
+         Derived_Window(MenuWindow, FormHeight, FormLength, 1, 1));
+      Post(WaitForm);
+      Result := Driver(WaitForm, F_End_Line);
+      if Result = Form_Ok then
+         Refresh;
+         Refresh(MenuWindow);
+      end if;
+   end ShowWaitForm;
 
 end UserInterface;

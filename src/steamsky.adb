@@ -259,6 +259,8 @@ begin
             GameState := OrdersPrioritiesKeys(Key);
          when BasesList_Types | BasesList_Statuses | BasesList_Owners =>
             GameState := BasesOptionsKeys(Key, GameState);
+         when WaitX_Order =>
+            GameState := WaitFormKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;
