@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - New ship modules: small steel hull, light steel armor, small steel engine,
   basic steel cabin, steel cockpit and small steel alchemy lab
 - Fast auto travel option
+- Option to wait selected by player minutes
 
 ### Changed
 - Merged fields lootmin and lootmax in ships data
