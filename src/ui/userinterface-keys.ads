@@ -29,5 +29,7 @@ package UserInterface.Keys is
    function WaitMenuKeys
      (OldState: GameStates;
       Key: Key_Code) return GameStates; -- Handle keys in wait orders menu
+   function WaitFormKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in wait x minutes form
 
 end UserInterface.Keys;
