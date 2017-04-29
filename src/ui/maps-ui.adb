@@ -190,44 +190,37 @@ package body Maps.UI is
         SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).MissionIndex;
       if EventIndex > 0 and MissionIndex = 0 then
          WindowHeight := WindowHeight + 2;
-         if Events_List.Element(EventIndex).EType = EnemyShip then
+         if Events_List(EventIndex).EType = EnemyShip then
             NewWindowWidth :=
               4 +
               Column_Position
-                (Length
-                   (ProtoShips_List.Element
-                    (Events_List.Element(EventIndex).Data)
-                      .Name));
-         elsif Events_List.Element(EventIndex).EType = AttackOnBase then
+                (Length(ProtoShips_List(Events_List(EventIndex).Data).Name));
+         elsif Events_List(EventIndex).EType = AttackOnBase then
             NewWindowWidth := 21;
-         elsif Events_List.Element(EventIndex).EType = DoublePrice then
+         elsif Events_List(EventIndex).EType = DoublePrice then
             NewWindowWidth :=
               21 +
               Column_Position
-                (Length
-                   (Items_List.Element(Events_List.Element(EventIndex).Data)
-                      .Name));
+                (Length(Items_List(Events_List(EventIndex).Data).Name));
          end if;
          if NewWindowWidth > WindowWidth then
             WindowWidth := NewWindowWidth;
          end if;
       elsif EventIndex = 0 and MissionIndex > 0 then
          WindowHeight := WindowHeight + 2;
-         if PlayerShip.Missions.Element(MissionIndex).MType = Kill then
+         if PlayerShip.Missions(MissionIndex).MType = Kill then
             NewWindowWidth :=
               12 +
               Column_Position
                 (Length
-                   (ProtoShips_List.Element
-                    (PlayerShip.Missions.Element(MissionIndex).Target)
+                   (ProtoShips_List(PlayerShip.Missions(MissionIndex).Target)
                       .Name));
-         elsif PlayerShip.Missions.Element(MissionIndex).MType = Deliver then
+         elsif PlayerShip.Missions(MissionIndex).MType = Deliver then
             NewWindowWidth :=
               12 +
               Column_Position
                 (Length
-                   (Items_List.Element
-                    (PlayerShip.Missions.Element(MissionIndex).Target)
+                   (Items_List(PlayerShip.Missions(MissionIndex).Target)
                       .Name));
          end if;
          if NewWindowWidth > WindowWidth then
@@ -303,15 +296,13 @@ package body Maps.UI is
       end if;
       if EventIndex > 0 and MissionIndex = 0 then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
-         case Events_List.Element(EventIndex).EType is
+         case Events_List(EventIndex).EType is
             when EnemyShip =>
                Add
                  (Win => InfoWindow,
                   Str =>
                     To_String
-                      (ProtoShips_List.Element
-                       (Events_List.Element(EventIndex).Data)
-                         .Name));
+                      (ProtoShips_List(Events_List(EventIndex).Data).Name));
             when FullDocks =>
                Add(Win => InfoWindow, Str => "Full docks");
             when AttackOnBase =>
@@ -325,23 +316,20 @@ package body Maps.UI is
                  (Win => InfoWindow,
                   Str =>
                     "Double price for " &
-                    To_String
-                      (Items_List.Element(Events_List.Element(EventIndex).Data)
-                         .Name));
+                    To_String(Items_List(Events_List(EventIndex).Data).Name));
             when None =>
                null;
          end case;
       elsif EventIndex = 0 and MissionIndex > 0 then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
-         case PlayerShip.Missions.Element(MissionIndex).MType is
+         case PlayerShip.Missions(MissionIndex).MType is
             when Deliver =>
                Add
                  (Win => InfoWindow,
                   Str =>
                     "Deliver " &
                     To_String
-                      (Items_List.Element
-                       (PlayerShip.Missions.Element(MissionIndex).Target)
+                      (Items_List(PlayerShip.Missions(MissionIndex).Target)
                          .Name));
             when Kill =>
                Add
@@ -349,8 +337,8 @@ package body Maps.UI is
                   Str =>
                     "Destroy " &
                     To_String
-                      (ProtoShips_List.Element
-                       (PlayerShip.Missions.Element(MissionIndex).Target)
+                      (ProtoShips_List
+                         (PlayerShip.Missions(MissionIndex).Target)
                          .Name));
             when Patrol =>
                Add(Win => InfoWindow, Str => "Patrol area");
