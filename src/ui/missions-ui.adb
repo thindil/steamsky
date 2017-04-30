@@ -33,7 +33,7 @@ package body Missions.UI is
 
    procedure ShowMissionInfo is
       Mission: constant Mission_Data :=
-        PlayerShip.Missions.Element(Get_Index(Current(MissionsMenu)));
+        PlayerShip.Missions(Get_Index(Current(MissionsMenu)));
       InfoWindow: Window;
       CurrentLine: Line_Position := 2;
       DiffX, DiffY: Natural;
@@ -54,9 +54,7 @@ package body Missions.UI is
          when Deliver =>
             Add
               (Win => InfoWindow,
-               Str =>
-                 "Item: " &
-                 To_String(Items_List.Element(Mission.Target).Name));
+               Str => "Item: " & To_String(Items_List(Mission.Target).Name));
             Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
             Add
               (Win => InfoWindow,
@@ -73,8 +71,7 @@ package body Missions.UI is
             Add
               (Win => InfoWindow,
                Str =>
-                 "Target: " &
-                 To_String(ProtoShips_List.Element(Mission.Target).Name));
+                 "Target: " & To_String(ProtoShips_List(Mission.Target).Name));
          when Explore =>
             Add(Win => InfoWindow, Str => "Explore selected area");
       end case;
@@ -202,7 +199,7 @@ package body Missions.UI is
       end if;
       for I in
         PlayerShip.Missions.First_Index .. PlayerShip.Missions.Last_Index loop
-         case PlayerShip.Missions.Element(I).MType is
+         case PlayerShip.Missions(I).MType is
             when Deliver =>
                Missions_Items.all(I) := New_Item("Deliver item to base");
             when Patrol =>
@@ -253,23 +250,19 @@ package body Missions.UI is
                end if;
             when 32 => -- Show selected event on map
                MoveMap
-                 (PlayerShip.Missions.Element(MissionIndex).TargetX,
-                  PlayerShip.Missions.Element(MissionIndex).TargetY);
+                 (PlayerShip.Missions(MissionIndex).TargetX,
+                  PlayerShip.Missions(MissionIndex).TargetY);
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             when 10 => -- Set event as destination point for ship
-               if not PlayerShip.Missions.Element(MissionIndex).Finished then
-                  X := PlayerShip.Missions.Element(MissionIndex).TargetX;
-                  Y := PlayerShip.Missions.Element(MissionIndex).TargetY;
+               if not PlayerShip.Missions(MissionIndex).Finished then
+                  X := PlayerShip.Missions(MissionIndex).TargetX;
+                  Y := PlayerShip.Missions(MissionIndex).TargetY;
                else
                   X :=
-                    SkyBases
-                      (PlayerShip.Missions.Element(MissionIndex).StartBase)
-                      .SkyX;
+                    SkyBases(PlayerShip.Missions(MissionIndex).StartBase).SkyX;
                   Y :=
-                    SkyBases
-                      (PlayerShip.Missions.Element(MissionIndex).StartBase)
-                      .SkyY;
+                    SkyBases(PlayerShip.Missions(MissionIndex).StartBase).SkyY;
                end if;
                if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
                   ShowDialog("You are at this target now.");
