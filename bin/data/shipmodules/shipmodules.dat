@@ -1207,4 +1207,17 @@ Price = 4000
 InstallTime = 60
 Size = 1
 Description = Allow research new crafting recipes and craft some items. More durable version made of steel
+[96]
+Name = Steel cargo bay
+Type = Cargo
+Weight = 150
+Value = 0
+MaxValue = 5000
+Durability = 75
+Material = Steel
+Skill = Engineering
+Price = 1200
+InstallTime = 60
+Size = 1
+Description = Space for hold ship cargo, made of steel.
 []
