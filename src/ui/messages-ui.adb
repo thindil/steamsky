@@ -36,6 +36,10 @@ package body Messages.UI is
       if Messages_List.Length = 0 then
          Move_Cursor(Line => (Lines / 2), Column => (Columns / 2) - 8);
          Add(Str => "No messages yet.");
+         if MessagesMenu /= Null_Menu then
+            Post(MessagesMenu, False);
+            Delete(MessagesMenu);
+         end if;
          return;
       end if;
       Messages_Items.all :=
@@ -159,18 +163,27 @@ package body Messages.UI is
             StartIndex := EndIndex;
             ShowMessages;
          when 52 | KEY_LEFT => -- Select previous messages types
+            if MessagesMenu = Null_Menu then
+               return Messages_View;
+            end if;
             Result := Driver(MessagesMenu, M_Left_Item);
             if Result = Request_Denied then
                Result := Driver(MessagesMenu, M_Last_Item);
             end if;
             return SetMessagesType;
          when 54 | KEY_RIGHT => -- Select next messages types
+            if MessagesMenu = Null_Menu then
+               return Messages_View;
+            end if;
             Result := Driver(MessagesMenu, M_Right_Item);
             if Result = Request_Denied then
                Result := Driver(MessagesMenu, M_First_Item);
             end if;
             return SetMessagesType;
          when others =>
+            if MessagesMenu = Null_Menu then
+               return Messages_View;
+            end if;
             Result := Driver(MessagesMenu, Key);
             if Result = Menu_Ok then
                return SetMessagesType;
