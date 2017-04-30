@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.1] - 2017-04-30
 
 ### Added
 - New enemy ships: tiny inquisition ship mk II, small inquisition ship mk II,
