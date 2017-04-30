@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
   1.0 incompatible
 - Starting priorities of orders for player ship crew
 - New ship modules: small steel hull, light steel armor, small steel engine,
-  basic steel cabin, steel cockpit and small steel alchemy lab
+  basic steel cabin, steel cockpit, small steel alchemy lab and steel cargo bay
 - Fast auto travel option
 - Option to wait selected by player minutes
 
