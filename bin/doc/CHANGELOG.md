@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship module: small steel turret
 
+### Fixed
+- Counting enemy evasion during combat
+
 ## [1.1] - 2017-04-30
 
 ### Added
