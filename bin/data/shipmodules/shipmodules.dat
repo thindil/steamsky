@@ -1220,4 +1220,17 @@ Price = 1200
 InstallTime = 60
 Size = 1
 Description = Space for hold ship cargo, made of steel.
+[97]
+Name = Small steel turret
+Type = Turret
+Weight = 75
+Value = 0
+MaxValue = 0
+Durability = 250
+Material = Steel
+Skill = Engineering
+Price = 750
+InstallTime = 60
+Size = 1
+Description = Smallest available turret made of steel. If turret is destroyed, gun is destroyed too and gunner killed.
 []
