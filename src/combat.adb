@@ -664,8 +664,6 @@ package body Combat is
       if EnemyPilotIndex > 0 then
          AccuracyBonus :=
            AccuracyBonus - GetSkillLevel(EnemyPilotIndex, 1, Enemy.Ship.Crew);
-         Enemy.Evasion :=
-           Enemy.Evasion + GetSkillLevel(EnemyPilotIndex, 1, Enemy.Ship.Crew);
       end if;
       if EngineerIndex > 0 and HaveFuel then
          ChangeShipSpeed(ShipSpeed'Val(EngineerOrder), False);
