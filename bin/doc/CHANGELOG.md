@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New ship module: small steel turret
+
 ## [1.1] - 2017-04-30
 
 ### Added
