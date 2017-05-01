@@ -135,17 +135,16 @@ package body Ships.UI is
       elsif FieldIndex = 4 then
          DropAmount := Natural'Value(Get_Buffer(Fields(RenameForm, 2)));
          if DropAmount > 0 and
-           Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex)
-               .IType =
+           Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
              To_Unbounded_String("MissionItem") then
             DropAmount2 := DropAmount;
             for J in 1 .. DropAmount2 loop
                for I in
                  PlayerShip.Missions.First_Index ..
                      PlayerShip.Missions.Last_Index loop
-                  if PlayerShip.Missions.Element(I).MType = Deliver and
-                    PlayerShip.Missions.Element(I).Target =
-                      PlayerShip.Cargo.Element(ItemIndex).ProtoIndex then
+                  if PlayerShip.Missions(I).MType = Deliver and
+                    PlayerShip.Missions(I).Target =
+                      PlayerShip.Cargo(ItemIndex).ProtoIndex then
                      DeleteMission(I);
                      DropAmount := DropAmount - 1;
                      exit;
