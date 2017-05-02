@@ -318,6 +318,9 @@ package body Combat is
                      HitChance :=
                        HitChance + GetSkillLevel(GunnerIndex, 3, Ship.Crew);
                   end if;
+                  if HitChance < -48 then
+                     HitChance := -48;
+                  end if;
                   LogMessage
                     ("Player Accuracy:" &
                      Integer'Image(CurrentAccuracyBonus) &
