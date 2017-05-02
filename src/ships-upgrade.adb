@@ -149,8 +149,7 @@ package body Ships.Upgrade is
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
              .RepairMaterial then
             HaveMaterials := True;
-         elsif Items_List(Item.ProtoIndex).IType =
-           To_Unbounded_String("RepairTools") then
+         elsif Items_List(Item.ProtoIndex).IType = RepairTools then
             HaveTools := True;
          end if;
          exit when HaveMaterials and HaveTools;
@@ -224,7 +223,7 @@ package body Ships.Upgrade is
                 .RepairMaterial then
                UpgradeMaterial := Cargo_Container.To_Index(I);
             elsif Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
-              To_Unbounded_String("RepairTools") then
+              RepairTools then
                UpgradeTools := Cargo_Container.To_Index(I);
             end if;
             exit when UpgradeMaterial > 0 and UpgradeTools > 0;
