@@ -1233,4 +1233,18 @@ Price = 750
 InstallTime = 60
 Size = 1
 Description = Smallest available turret made of steel. If turret is destroyed, gun is destroyed too and gunner killed.
+[98]
+Name = Steel battering ram
+Type = Battering_ram
+Weight = 700
+Value = 0
+MaxValue = 14
+Durability = 150
+Material = Steel
+Skill = Engineering
+Price = 700
+InstallTime = 100
+Unique = Yes
+Size = 1
+Description = Standard battering ram, made of steel. Attack enemies automatically when in close range.
 []
