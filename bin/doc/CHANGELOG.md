@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New ship module: small steel turret
+- New ship modules: small steel turret and steel battering ram
 
 ### Fixed
 - Counting enemy evasion during combat
