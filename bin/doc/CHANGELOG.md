@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New ship modules: small steel turret and steel battering ram
+- Option to set which item type is used as repair tools
 
 ### Fixed
 - Counting enemy evasion during combat
