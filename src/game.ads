@@ -103,6 +103,7 @@ package Game is
    ShipSyllablesMiddle: UnboundedString_Container.Vector;
    ShipSyllablesEnd: UnboundedString_Container.Vector;
    Skills_Names: UnboundedString_Container.Vector;
+   RepairTools: Unbounded_String := To_Unbounded_String("RepairTools");
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;

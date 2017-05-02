@@ -686,7 +686,7 @@ package body Ships is
                            RepairPoints := PlayerShip.Cargo(K).Amount;
                         end if;
                      elsif Items_List(PlayerShip.Cargo(K).ProtoIndex).IType =
-                       To_Unbounded_String("RepairTools") then
+                       RepairTools then
                         ToolsIndex := Cargo_Container.To_Index(K);
                      end if;
                      exit when RepairMaterial > 0 and ToolsIndex > 0;
