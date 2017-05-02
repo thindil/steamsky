@@ -28,21 +28,19 @@ package body Ships.UI.Cargo is
       InfoWindow: Window;
       ItemIndex: constant Positive := Get_Index(Current(ShipsMenu));
       ItemWeight: constant Positive :=
-        PlayerShip.Cargo.Element(ItemIndex).Amount *
-        Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex)
-          .Weight;
+        PlayerShip.Cargo(ItemIndex).Amount *
+        Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Weight;
       CurrentLine: Line_Position := 1;
       DamagePercent: Natural;
       StartColumn: Column_Position;
    begin
       InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
-      if PlayerShip.Cargo.Element(ItemIndex).Durability < 100 then
+      if PlayerShip.Cargo(ItemIndex).Durability < 100 then
          Add(Win => InfoWindow, Str => "Status: ");
          DamagePercent :=
            100 -
            Natural
-             ((Float(PlayerShip.Cargo.Element(ItemIndex).Durability) / 100.0) *
-              100.0);
+             ((Float(PlayerShip.Cargo(ItemIndex).Durability) / 100.0) * 100.0);
          if DamagePercent > 0 and DamagePercent < 20 then
             Add(Win => InfoWindow, Str => "Slightly used");
          elsif DamagePercent > 19 and DamagePercent < 50 then
@@ -56,31 +54,25 @@ package body Ships.UI.Cargo is
          CurrentLine := 2;
       end if;
       Add(Win => InfoWindow, Str => "Type: ");
-      if Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex)
-          .ShowType =
+      if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).ShowType =
         Null_Unbounded_String then
          Add
            (Win => InfoWindow,
             Str =>
               To_String
-                (Items_List.Element
-                 (PlayerShip.Cargo.Element(ItemIndex).ProtoIndex)
-                   .IType));
+                (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType));
       else
          Add
            (Win => InfoWindow,
             Str =>
               To_String
-                (Items_List.Element
-                 (PlayerShip.Cargo.Element(ItemIndex).ProtoIndex)
-                   .ShowType));
+                (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).ShowType));
       end if;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       Add
         (Win => InfoWindow,
          Str =>
-           "Amount:" &
-           Positive'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
+           "Amount:" & Positive'Image(PlayerShip.Cargo(ItemIndex).Amount));
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       Add
@@ -89,9 +81,7 @@ package body Ships.UI.Cargo is
            "Weight:" &
            Positive'
              Image
-               (Items_List.Element
-                (PlayerShip.Cargo.Element(ItemIndex).ProtoIndex)
-                  .Weight) &
+               (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Weight) &
            " kg");
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
@@ -100,16 +90,14 @@ package body Ships.UI.Cargo is
         (Win => InfoWindow,
          Str => "Total weight:" & Positive'Image(ItemWeight) & " kg");
       CurrentLine := CurrentLine + 1;
-      if Items_List.Element(PlayerShip.Cargo.Element(ItemIndex).ProtoIndex)
-          .Description /=
+      if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Description /=
         Null_Unbounded_String then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
          Add
            (Win => InfoWindow,
             Str =>
               To_String
-                (Items_List.Element
-                 (PlayerShip.Cargo.Element(ItemIndex).ProtoIndex)
+                (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex)
                    .Description));
          Get_Cursor_Position
            (Win => InfoWindow,
@@ -171,9 +159,7 @@ package body Ships.UI.Cargo is
       Result: Menus.Driver_Result;
       ItemName: constant String :=
         To_String
-          (Items_List.Element
-           (PlayerShip.Cargo.Element(CurrentMenuIndex).ProtoIndex)
-             .Name);
+          (Items_List(PlayerShip.Cargo(CurrentMenuIndex).ProtoIndex).Name);
    begin
       case Key is
          when Character'Pos('q') |
