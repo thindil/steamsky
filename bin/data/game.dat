@@ -16,3 +16,4 @@ ShipSyllablesMiddle = ad, ag, al, an, and, ant, anth, ar, ard, as, at, atr, eg, 
 ShipSyllablesEnd = a, aia, ana, as, ea, ene, eos, esia, ia, iad, ias, is, ium, ius, on, ona, or, ova, um, us, ya
 SkillsNames = Piloting, Engineering, Gunnery, Rhetoric, Perception, Alchemy, Cooking, Gunsmith, Metalsmith, Medicine, Farming, Woodcutting, Brewery, Blacksmith, Woodworking
 ItemsTypes = Fuel, Food, Drink, Ammo10, Bronze, RawFood, Wood, Gunpowder, Iron, Copper, Tin, CopperOre, TinOre, IronOre, Ammo20, Ammo40, Steel, Medicines, Ammo60, Herbs, HerbSeeds, VegetableSeeds, Ammo80, Ammo100, Ammo120, AndraeSeeds, IllandruSeeds, MissionItem, Body, AlchemySet, Mold, GunsmithSet, CookingSet, Sickle, Saw, Bucket, BarleySeeds, Barley, Grapes, GrapeVine, Sand, BlacksmithSet, WoodworkerSet, RepairTools
+RepairTools = RepairTools
