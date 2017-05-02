@@ -57,7 +57,7 @@ package body Crew is
          if GivenOrder = Clean then
             RequiredTool := To_Unbounded_String("Bucket");
          else
-            RequiredTool := To_Unbounded_String("RepairTools");
+            RequiredTool := RepairTools;
          end if;
          for I in
            PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
@@ -796,7 +796,7 @@ package body Crew is
          if Order = Clean then
             RequiredTool := To_Unbounded_String("Bucket");
          else
-            RequiredTool := To_Unbounded_String("RepairTools");
+            RequiredTool := RepairTools;
          end if;
          for Item of PlayerShip.Cargo loop
             if Items_List(Item.ProtoIndex).IType = RequiredTool then
