@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New ship modules: small steel turret and steel battering ram
+- New ship modules: small steel turret, steel battering ram and small steel
+  battering ram
 - Option to set which item type is used as repair tools
 
 ### Fixed
