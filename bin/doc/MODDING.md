@@ -39,6 +39,11 @@ ships, ships modules, etc.)
 ### Adding new items types
 - To add new item type, just append it name to ItemsTypes entry.
 
+## Repair tools type
+To change which item type is used for repair tools, open file *game.dat* in
+*data* directory and edit line which starts with RepairTools. Value after equal
+sign must be existing item type.
+
 ## Items
 
 ### General informations
