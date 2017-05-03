@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file.
   battering ram
 - Option to set which item type is used as repair tools
 
+### Changed
+- Updated MODDING.md
+
 ### Fixed
 - Counting enemy evasion during combat
 - Crash in combat when chance to hit is very small
