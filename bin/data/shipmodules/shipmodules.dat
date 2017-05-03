@@ -1247,4 +1247,18 @@ InstallTime = 100
 Unique = Yes
 Size = 1
 Description = Standard battering ram, made of steel. Attack enemies automatically when in close range.
+[99]
+Name = Small steel battering ram
+Type = Battering_ram
+Weight = 250
+Value = 0
+MaxValue = 7
+Durability = 75
+Material = Steel
+Skill = Engineering
+Price = 350
+InstallTime = 60
+Unique = Yes
+Size = 1
+Description = Weakest battering ram, made of steel. Attack enemies automatically when in close range.
 []
