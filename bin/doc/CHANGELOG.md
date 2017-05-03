@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship modules: small steel turret, steel battering ram and small steel
   battering ram
-- Option to set which item type is used as repair tools
+- Option to set which item type is used as repair/cleaning tools
 
 ### Changed
 - Updated MODDING.md
