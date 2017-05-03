@@ -104,6 +104,7 @@ package Game is
    ShipSyllablesEnd: UnboundedString_Container.Vector;
    Skills_Names: UnboundedString_Container.Vector;
    RepairTools: Unbounded_String := To_Unbounded_String("RepairTools");
+   CleaningTools: Unbounded_String := To_Unbounded_String("Bucket");
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;

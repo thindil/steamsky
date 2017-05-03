@@ -55,7 +55,7 @@ package body Crew is
         GivenOrder = Repair or
         GivenOrder = Clean then -- Check for tools
          if GivenOrder = Clean then
-            RequiredTool := To_Unbounded_String("Bucket");
+            RequiredTool := CleaningTools;
          else
             RequiredTool := RepairTools;
          end if;
@@ -76,7 +76,7 @@ package body Crew is
                when Clean =>
                   ShowDialog
                     (MemberName &
-                     " can't starts cleaning ship because you don't have any bucket.");
+                     " can't starts cleaning ship because you don't have any cleaning tools.");
                when Upgrading =>
                   ShowDialog
                     (MemberName &
@@ -607,7 +607,7 @@ package body Crew is
                      NeedCleaning := False;
                      for J in PlayerShip.Cargo.Iterate loop
                         if Items_List(PlayerShip.Cargo(J).ProtoIndex).IType =
-                          To_Unbounded_String("Bucket") then
+                          CleaningTools then
                            ToolIndex := Cargo_Container.To_Index(J);
                            exit;
                         end if;
@@ -638,7 +638,7 @@ package body Crew is
                      if not NeedCleaning then
                         if ToolIndex = 0 then
                            AddMessage
-                             ("You can't continue cleaning ship because you don't have any bucket.",
+                             ("You can't continue cleaning ship because you don't have any cleaning tools.",
                               OrderMessage);
                         end if;
                         for J in PlayerShip.Crew.Iterate loop
@@ -794,7 +794,7 @@ package body Crew is
          RequiredTool: Unbounded_String;
       begin
          if Order = Clean then
-            RequiredTool := To_Unbounded_String("Bucket");
+            RequiredTool := CleaningTools;
          else
             RequiredTool := RepairTools;
          end if;
