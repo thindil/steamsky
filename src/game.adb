@@ -354,93 +354,75 @@ package body Game is
                      when 1 =>
                         BaseSyllablesPre.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 2 =>
                         BaseSyllablesStart.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 3 =>
                         BaseSyllablesEnd.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 4 =>
                         BaseSyllablesPost.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 5 =>
                         MaleSyllablesStart.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 6 =>
                         MaleSyllablesMiddle.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 7 =>
                         MaleSyllablesEnd.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 8 =>
                         FemaleSyllablesEnd.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 9 =>
                         Skills_Names.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 10 =>
                         Items_Types.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 11 =>
                         MaleVocals.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 12 =>
                         MaleConsonants.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 13 =>
                         FemaleSyllablesStart.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 14 =>
                         FemaleSyllablesMiddle.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 15 =>
                         FemaleVocals.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 16 =>
                         ShipSyllablesStart.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 17 =>
                         ShipSyllablesMiddle.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 18 =>
                         ShipSyllablesEnd.Append
                         (New_Item =>
-                           To_Unbounded_String
-                             (Slice(Value, StartIndex, EndIndex - 1)));
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 19 =>
                         RepairTools := Value;
                   end case;
