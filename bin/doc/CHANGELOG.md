@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Counting enemy evasion during combat
 - Crash in combat when chance to hit is very small
+- Typo in small advaced iron engine description
 
 ## [1.1] - 2017-04-30
 
