@@ -917,7 +917,7 @@ Skill = Engineering
 Price = 7000
 InstallTime = 120
 Size = 1
-Description = Updated version of smallest available engine made if iron. Each ship needs at least one engine to fly.
+Description = Updated version of smallest available engine made of iron. Each ship needs at least one engine to fly.
 [74]
 Name = Medium iron engine
 Type = Engine
