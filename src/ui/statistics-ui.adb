@@ -84,24 +84,19 @@ package body Statistics.UI is
                 (Line_Position(GameStats.DestroyedShips.Length + 2),
                  (Columns / 2));
             Add(Win => DestroyedShipsPad, Str => "Destroyed ships:");
-            for I in
-              GameStats.DestroyedShips.First_Index ..
-                  GameStats.DestroyedShips.Last_Index loop
+            for I in GameStats.DestroyedShips.Iterate loop
                Move_Cursor
                  (Win => DestroyedShipsPad,
-                  Line => Line_Position(I),
+                  Line => Line_Position(DestroyedShips_Container.To_Index(I)),
                   Column => 0);
                Add
                  (Win => DestroyedShipsPad,
                   Str =>
                     To_String
-                      (ProtoShips_List.Element
-                       (GameStats.DestroyedShips.Element(I).ProtoIndex)
+                      (ProtoShips_List(GameStats.DestroyedShips(I).ProtoIndex)
                          .Name) &
                     ":" &
-                    Positive'
-                      Image
-                        (GameStats.DestroyedShips.Element(I).Amount));
+                    Positive'Image(GameStats.DestroyedShips(I).Amount));
             end loop;
             EndIndex :=
               Integer(GameStats.DestroyedShips.Length) - Integer(Lines - 2);
@@ -183,7 +178,7 @@ package body Statistics.UI is
    begin
       case Key is
          when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-            if PlayerShip.Crew.Element(1).Health = 0 then -- Player is dead
+            if PlayerShip.Crew(1).Health = 0 then -- Player is dead
                if Exists("data/savegame.dat") then
                   Delete_File("data/savegame.dat");
                end if;
