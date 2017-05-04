@@ -1261,4 +1261,17 @@ InstallTime = 60
 Unique = Yes
 Size = 1
 Description = Weakest battering ram, made of steel. Attack enemies automatically when in close range.
+[100]
+Name = Small advanced steel engine
+Type = Engine
+Weight = 1400
+Value = 5
+MaxValue = 4000
+Durability = 200
+Material = Steel
+Skill = Engineering
+Price = 8000
+InstallTime = 120
+Size = 1
+Description = Updated version of smallest available engine made of iron. Each ship needs at least one engine to fly.
 []
