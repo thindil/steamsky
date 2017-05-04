@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Counting player accuracy in combat
 - Crash on player death from starvation/dehydration
 - Counting enemy evasion during combat
+- Typo in small advanced iron engine description
 
 ## [1.0.1] - 2017-04-23
 
