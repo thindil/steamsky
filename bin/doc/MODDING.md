@@ -40,9 +40,15 @@ ships, ships modules, etc.)
 - To add new item type, just append it name to ItemsTypes entry.
 
 ## Repair tools type
-To change which item type is used for repair tools, open file *game.dat* in
-*data* directory and edit line which starts with RepairTools. Value after equal
-sign must be existing item type.
+To change which item type is used for repair/upgrading tools, open file 
+*game.dat* in *data* directory and edit line which starts with RepairTools.
+Value after equal sign must be existing item type. Default value is
+'RepairTools.'
+
+## Cleaning tools type
+To change which item type is used for cleaning ship, open file *game.dat* in 
+*data* directory and edit line which starts with CleaningTools. Value after 
+equal sign must be existing item type. Default value is 'Bucket'.
 
 ## Items
 
