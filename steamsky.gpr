@@ -31,7 +31,8 @@ project steamsky is
                     "-fstack-check",
                     "-gnatVa",
                     "-gnatU",
-                    "-gnatf");
+                    "-gnatf",
+                    "-gnateE");
             when "release" =>
                 for Default_Switches ("ada") use ("-O2",
                     "-gnatn2");
