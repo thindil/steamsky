@@ -790,21 +790,6 @@ package body Crew is
          GiveOrders(MemberIndex, Order, ModuleIndex);
          return True;
       end UpdatePosition;
-      function HaveTools(Order: Crew_Orders) return Boolean is
-         RequiredTool: Unbounded_String;
-      begin
-         if Order = Clean then
-            RequiredTool := CleaningTools;
-         else
-            RequiredTool := RepairTools;
-         end if;
-         for Item of PlayerShip.Cargo loop
-            if Items_List(Item.ProtoIndex).IType = RequiredTool then
-               return True;
-            end if;
-         end loop;
-         return False;
-      end HaveTools;
    begin
       for Member of PlayerShip.Crew loop
          case Member.Order is
@@ -888,9 +873,16 @@ package body Crew is
       end if;
       if not HaveUpgrade and
         PlayerShip.UpgradeModule > 0 and
-        HaveTools(Upgrading) then
-         if UpdatePosition(Upgrading) then
-            UpdateOrders;
+        FindCargo(ItemType => RepairTools) > 0 then
+         if FindCargo
+             (ItemType =>
+                Modules_List
+                  (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
+                  .RepairMaterial) >
+           0 then
+            if UpdatePosition(Upgrading) then
+               UpdateOrders;
+            end if;
          end if;
       end if;
       if not HaveTrader and
@@ -899,7 +891,7 @@ package body Crew is
             UpdateOrders;
          end if;
       end if;
-      if NeedClean and HaveTools(Clean) then
+      if NeedClean and FindCargo(ItemType => CleaningTools) > 0 then
          if UpdatePosition(Clean) then
             UpdateOrders;
          end if;
@@ -909,7 +901,7 @@ package body Crew is
             UpdateOrders;
          end if;
       end if;
-      if NeedRepairs and HaveTools(Repair) then
+      if NeedRepairs and FindCargo(ItemType => RepairTools) > 0 then
          if UpdatePosition(Repair) then
             UpdateOrders;
          end if;
@@ -936,9 +928,16 @@ package body Crew is
       end if;
       if not HaveUpgrade and
         PlayerShip.UpgradeModule > 0 and
-        HaveTools(Upgrading) then
-         if UpdatePosition(Upgrading, False) then
-            UpdateOrders;
+        FindCargo(ItemType => RepairTools) > 0 then
+         if FindCargo
+             (ItemType =>
+                Modules_List
+                  (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
+                  .RepairMaterial) >
+           0 then
+            if UpdatePosition(Upgrading, False) then
+               UpdateOrders;
+            end if;
          end if;
       end if;
       if not HaveTrader and
@@ -947,7 +946,7 @@ package body Crew is
             UpdateOrders;
          end if;
       end if;
-      if NeedClean and HaveTools(Clean) then
+      if NeedClean and FindCargo(ItemType => CleaningTools) > 0 then
          if UpdatePosition(Clean, False) then
             UpdateOrders;
          end if;
@@ -957,7 +956,7 @@ package body Crew is
             UpdateOrders;
          end if;
       end if;
-      if NeedRepairs and HaveTools(Repair) then
+      if NeedRepairs and FindCargo(ItemType => RepairTools) > 0 then
          if UpdatePosition(Repair, False) then
             UpdateOrders;
          end if;
