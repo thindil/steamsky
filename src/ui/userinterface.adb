@@ -371,7 +371,7 @@ package body UserInterface is
             for I in Recipes_List.First_Index .. Recipes_List.Last_Index loop
                if Known_Recipes.Find_Index(Item => I) =
                  Positive_Container.No_Index and
-                 Recipes_List.Element(I).BaseType =
+                 Recipes_List(I).BaseType =
                    Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1 then
                   OrdersAmount := OrdersAmount + 1;
                   exit;
@@ -394,8 +394,7 @@ package body UserInterface is
                         Orders_Items.all(MenuIndex) :=
                           New_Item
                             ("Complete delivery of " &
-                             To_String
-                               (Items_List.Element(Mission.Target).Name));
+                             To_String(Items_List(Mission.Target).Name));
                         MenuIndex := MenuIndex + 1;
                      when Kill =>
                         if Mission.Finished then
@@ -403,8 +402,7 @@ package body UserInterface is
                              New_Item
                                ("Complete destroy " &
                                 To_String
-                                  (ProtoShips_List.Element(Mission.Target)
-                                     .Name));
+                                  (ProtoShips_List(Mission.Target).Name));
                            MenuIndex := MenuIndex + 1;
                         end if;
                      when Patrol =>
@@ -450,7 +448,7 @@ package body UserInterface is
             for I in Recipes_List.First_Index .. Recipes_List.Last_Index loop
                if Known_Recipes.Find_Index(Item => I) =
                  Positive_Container.No_Index and
-                 Recipes_List.Element(I).BaseType =
+                 Recipes_List(I).BaseType =
                    Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1 then
                   Orders_Items.all(MenuIndex) := New_Item("Buy recipes");
                   MenuIndex := MenuIndex + 1;
@@ -468,8 +466,7 @@ package body UserInterface is
          MenuIndex := 1;
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             Event :=
-              Events_List.Element
-              (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+              Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
                 .EType;
          end if;
          if Event = None or Event = DoublePrice then
@@ -503,8 +500,7 @@ package body UserInterface is
          Orders_Items := new Item_Array(1 .. OrdersAmount);
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             Event :=
-              Events_List.Element
-              (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+              Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
                 .EType;
          end if;
          if BaseIndex > 0 and (Event = None or Event = DoublePrice) then
@@ -548,8 +544,7 @@ package body UserInterface is
                                    New_Item
                                      ("Complete delivery of " &
                                       To_String
-                                        (Items_List.Element(Mission.Target)
-                                           .Name));
+                                        (Items_List(Mission.Target).Name));
                                  MenuIndex := MenuIndex + 1;
                               end if;
                            when Kill =>
@@ -559,8 +554,7 @@ package body UserInterface is
                                    New_Item
                                      ("Complete destroy " &
                                       To_String
-                                        (ProtoShips_List.Element
-                                         (Mission.Target)
+                                        (ProtoShips_List(Mission.Target)
                                            .Name));
                                  MenuIndex := MenuIndex + 1;
                               end if;
@@ -594,8 +588,7 @@ package body UserInterface is
                                 New_Item
                                   ("Search for " &
                                    To_String
-                                     (ProtoShips_List.Element(Mission.Target)
-                                        .Name));
+                                     (ProtoShips_List(Mission.Target).Name));
                               MenuIndex := MenuIndex + 1;
                            when Patrol =>
                               Orders_Items.all(MenuIndex) :=
@@ -723,15 +716,15 @@ package body UserInterface is
       MenuIndex: Positive := WaitOrders'Length + 1;
    begin
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-         if PlayerShip.Crew.Element(I).Tired > 0 and
-           PlayerShip.Crew.Element(I).Order = Rest then
+         if PlayerShip.Crew(I).Tired > 0 and
+           PlayerShip.Crew(I).Order = Rest then
             NeedRest := True;
          end if;
-         if PlayerShip.Crew.Element(I).Health < 100 and
-           PlayerShip.Crew.Element(I).Health > 0 and
-           PlayerShip.Crew.Element(I).Order = Rest then
+         if PlayerShip.Crew(I).Health < 100 and
+           PlayerShip.Crew(I).Health > 0 and
+           PlayerShip.Crew(I).Order = Rest then
             for Module of PlayerShip.Modules loop
-               if Modules_List.Element(Module.ProtoIndex).MType = CABIN and
+               if Modules_List(Module.ProtoIndex).MType = CABIN and
                  Module.Owner = I then
                   NeedHealing := True;
                   exit;
