@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Crash in combat when chance to hit is very small
 - Typo in small advaced iron engine description
 - Don't start upgrades if no upgrading material in cargo
+- Crash on giving medical supplies to bases for free
 
 ## [1.1] - 2017-04-30
 
