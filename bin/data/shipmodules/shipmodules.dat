@@ -1287,4 +1287,16 @@ Price = 10000
 InstallTime = 150
 Size = 2
 Description = Standard available engine made of steel. Each ship needs at least one engine to fly.
+[102]
+Name = Small advanced steel hull
+Type = Hull
+Weight = 6000
+Value = 0
+MaxValue = 19
+Durability = 200
+Material = Steel
+Skill = Engineering
+Price = 9500 
+InstallTime = 200
+Description = Base module of each ship made of steel. Whole ship is destroyed if hull is destroyed.
 []
