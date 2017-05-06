@@ -253,10 +253,14 @@ package body UserInterface.Keys is
                DrawGame(Wait_Order);
                return Wait_Order;
             elsif Order = "Deliver medical supplies for free" then
-               for Item of PlayerShip.Cargo loop
-                  if Items_List(Item.ProtoIndex).Name =
+               for I in
+                 PlayerShip.Cargo.First_Index ..
+                     PlayerShip.Cargo.Last_Index loop
+                  if Items_List(PlayerShip.Cargo(I).ProtoIndex).Name =
                     To_Unbounded_String("Medical supplies") then
-                     NewTime := Events_List(EventIndex).Time - Item.Amount;
+                     NewTime :=
+                       Events_List(EventIndex).Time -
+                       PlayerShip.Cargo(I).Amount;
                      if NewTime < 1 then
                         DeleteEvent(EventIndex);
                      else
@@ -265,8 +269,8 @@ package body UserInterface.Keys is
                      end if;
                      UpdateCargo
                        (PlayerShip,
-                        Item.ProtoIndex,
-                        (0 - Item.Amount));
+                        PlayerShip.Cargo.Element(I).ProtoIndex,
+                        (0 - PlayerShip.Cargo.Element(I).Amount));
                      GainRep
                        (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
                         10);
