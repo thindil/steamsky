@@ -229,10 +229,8 @@ package body UserInterface.Keys is
                OldSpeed := PlayerShip.Speed;
                NewState := Combat_State;
                if EnemyName /=
-                 ProtoShips_List.Element(Events_List.Element(EventIndex).Data)
-                   .Name then
-                  NewState :=
-                    StartCombat(Events_List.Element(EventIndex).Data, False);
+                 ProtoShips_List(Events_List(EventIndex).Data).Name then
+                  NewState := StartCombat(Events_List(EventIndex).Data, False);
                end if;
                DrawGame(NewState);
                return NewState;
@@ -242,10 +240,8 @@ package body UserInterface.Keys is
                OldSpeed := PlayerShip.Speed;
                NewState := Combat_State;
                if EnemyName /=
-                 ProtoShips_List.Element(Events_List.Element(EventIndex).Data)
-                   .Name then
-                  NewState :=
-                    StartCombat(Events_List.Element(EventIndex).Data, False);
+                 ProtoShips_List(Events_List(EventIndex).Data).Name then
+                  NewState := StartCombat(Events_List(EventIndex).Data, False);
                end if;
                DrawGame(NewState);
                return NewState;
@@ -258,10 +254,9 @@ package body UserInterface.Keys is
                return Wait_Order;
             elsif Order = "Deliver medical supplies for free" then
                for Item of PlayerShip.Cargo loop
-                  if Items_List.Element(Item.ProtoIndex).Name =
+                  if Items_List(Item.ProtoIndex).Name =
                     To_Unbounded_String("Medical supplies") then
-                     NewTime :=
-                       Events_List.Element(EventIndex).Time - Item.Amount;
+                     NewTime := Events_List(EventIndex).Time - Item.Amount;
                      if NewTime < 1 then
                         DeleteEvent(EventIndex);
                      else
@@ -285,12 +280,11 @@ package body UserInterface.Keys is
                for I in
                  PlayerShip.Cargo.First_Index ..
                      PlayerShip.Cargo.Last_Index loop
-                  if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex)
-                      .Name =
+                  if Items_List(PlayerShip.Cargo(I).ProtoIndex).Name =
                     To_Unbounded_String("Medical supplies") then
                      NewTime :=
-                       Events_List.Element(EventIndex).Time -
-                       PlayerShip.Cargo.Element(I).Amount;
+                       Events_List(EventIndex).Time -
+                       PlayerShip.Cargo(I).Amount;
                      if NewTime < 1 then
                         DeleteEvent(EventIndex);
                      else
@@ -314,8 +308,8 @@ package body UserInterface.Keys is
                UpdateGame(GetRandom(15, 45));
                NewState :=
                  StartCombat
-                   (PlayerShip.Missions.Element
-                    (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
+                   (PlayerShip.Missions
+                      (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
                       .Target,
                     False);
                DrawGame(NewState);
@@ -458,21 +452,18 @@ package body UserInterface.Keys is
                ShowWaitForm;
                return WaitX_Order;
             elsif Order = "Wait until crew is rested" then
-               for I in
-                 PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-                  if PlayerShip.Crew.Element(I).Tired > 0 and
-                    PlayerShip.Crew.Element(I).Order = Rest then
+               for I in PlayerShip.Crew.Iterate loop
+                  if PlayerShip.Crew(I).Tired > 0 and
+                    PlayerShip.Crew(I).Order = Rest then
                      CabinIndex := 0;
                      TempTimeNeeded := 0;
-                     for J in
-                       PlayerShip.Modules.First_Index ..
-                           PlayerShip.Modules.Last_Index loop
-                        if Modules_List.Element
-                          (PlayerShip.Modules.Element(J).ProtoIndex)
+                     for J in PlayerShip.Modules.Iterate loop
+                        if Modules_List(PlayerShip.Modules(J).ProtoIndex)
                             .MType =
                           CABIN and
-                          PlayerShip.Modules.Element(J).Owner = I then
-                           CabinIndex := J;
+                          PlayerShip.Modules(J).Owner =
+                            Crew_Container.To_Index(I) then
+                           CabinIndex := Modules_Container.To_Index(J);
                            exit;
                         end if;
                      end loop;
@@ -480,31 +471,25 @@ package body UserInterface.Keys is
                         Damage :=
                           1.0 -
                           DamageFactor
-                            (Float
-                               (PlayerShip.Modules.Element(CabinIndex)
-                                  .Durability) /
+                            (Float(PlayerShip.Modules(CabinIndex).Durability) /
                              Float
-                               (PlayerShip.Modules.Element(CabinIndex)
-                                  .MaxDurability));
+                               (PlayerShip.Modules(CabinIndex).MaxDurability));
                         CabinBonus :=
-                          PlayerShip.Modules.Element(CabinIndex)
-                            .Current_Value -
+                          PlayerShip.Modules(CabinIndex).Current_Value -
                           Natural
                             (Float
-                               (PlayerShip.Modules.Element(CabinIndex)
-                                  .Current_Value) *
+                               (PlayerShip.Modules(CabinIndex).Current_Value) *
                              Float(Damage));
                         if CabinBonus = 0 then
                            CabinBonus := 1;
                         end if;
                         TempTimeNeeded :=
-                          (PlayerShip.Crew.Element(I).Tired / CabinBonus) * 15;
+                          (PlayerShip.Crew(I).Tired / CabinBonus) * 15;
                         if TempTimeNeeded = 0 then
                            TempTimeNeeded := 15;
                         end if;
                      else
-                        TempTimeNeeded :=
-                          PlayerShip.Crew.Element(I).Tired * 15;
+                        TempTimeNeeded := PlayerShip.Crew(I).Tired * 15;
                      end if;
                      TempTimeNeeded := TempTimeNeeded + 15;
                      if TempTimeNeeded > TimeNeeded then
@@ -518,20 +503,17 @@ package body UserInterface.Keys is
                   return Wait_Order;
                end if;
             elsif Order = "Wait until crew is healed" then
-               for I in
-                 PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-                  if PlayerShip.Crew.Element(I).Health < 100 and
-                    PlayerShip.Crew.Element(I).Health > 0 and
-                    PlayerShip.Crew.Element(I).Order = Rest then
+               for I in PlayerShip.Crew.Iterate loop
+                  if PlayerShip.Crew(I).Health < 100 and
+                    PlayerShip.Crew(I).Health > 0 and
+                    PlayerShip.Crew(I).Order = Rest then
                      for Module of PlayerShip.Modules loop
-                        if Modules_List.Element(Module.ProtoIndex).MType =
-                          CABIN and
-                          Module.Owner = I then
+                        if Modules_List(Module.ProtoIndex).MType = CABIN and
+                          Module.Owner = Crew_Container.To_Index(I) then
                            if TimeNeeded <
-                             (100 - PlayerShip.Crew.Element(I).Health) *
-                               15 then
+                             (100 - PlayerShip.Crew(I).Health) * 15 then
                               TimeNeeded :=
-                                (100 - PlayerShip.Crew.Element(I).Health) * 15;
+                                (100 - PlayerShip.Crew(I).Health) * 15;
                            end if;
                            exit;
                         end if;
