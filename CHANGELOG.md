@@ -9,7 +9,8 @@ All notable changes to this project will be documented in this file.
 - Counting enemy evasion during combat
 - Typo in small advanced iron engine description
 - Don't start upgrades if no upgrading material in cargo
-- Crash on giving medical supplies to bases for free
+- Crash on giving medicines to bases for free
+- Delivering medicines to diseased bases
 
 ## [1.0.1] - 2017-04-23
 
