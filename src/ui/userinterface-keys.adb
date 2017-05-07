@@ -254,13 +254,13 @@ package body UserInterface.Keys is
             elsif Order = "Wait" then
                DrawGame(Wait_Order);
                return Wait_Order;
-            elsif Order = "Deliver medical supplies for free" then
+            elsif Order = "Deliver medicines for free" then
                for I in
                  PlayerShip.Cargo.First_Index ..
                      PlayerShip.Cargo.Last_Index loop
                   if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex)
-                      .Name =
-                    To_Unbounded_String("Medical supplies") then
+                      .IType =
+                    To_Unbounded_String("Medicines") then
                      NewTime :=
                        Events_List.Element(EventIndex).Time -
                        PlayerShip.Cargo.Element(I).Amount;
@@ -278,18 +278,18 @@ package body UserInterface.Keys is
                        (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
                         10);
                      AddMessage
-                       ("You gave medical supplies for free to base.",
+                       ("You gave medicines for free to base.",
                         TradeMessage);
                      exit;
                   end if;
                end loop;
-            elsif Order = "Deliver medical supplies for price" then
+            elsif Order = "Deliver medicines for price" then
                for I in
                  PlayerShip.Cargo.First_Index ..
                      PlayerShip.Cargo.Last_Index loop
                   if Items_List.Element(PlayerShip.Cargo.Element(I).ProtoIndex)
-                      .Name =
-                    To_Unbounded_String("Medical supplies") then
+                      .IType =
+                    To_Unbounded_String("Medicines") then
                      NewTime :=
                        Events_List.Element(EventIndex).Time -
                        PlayerShip.Cargo.Element(I).Amount;
