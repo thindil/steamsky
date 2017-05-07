@@ -281,9 +281,7 @@ package body Crew.UI is
                      end if;
                   when MEDICAL_ROOM =>
                      if NeedHealer then
-                        if FindCargo
-                            (ItemType => To_Unbounded_String("Medicines")) >
-                          0 and
+                        if FindCargo(ItemType => HealingTools) > 0 and
                           PlayerShip.Crew(MemberIndex).Order /= Heal and
                           PlayerShip.Crew(MemberIndex).Health = 100 then
                            HealOrder := True;
