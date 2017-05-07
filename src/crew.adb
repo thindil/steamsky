@@ -554,7 +554,7 @@ package body Crew is
                            if Items_List
                                (PlayerShip.Cargo.Element(I).ProtoIndex)
                                .IType =
-                             To_Unbounded_String("Medicines") and
+                             HealingTools and
                              PlayerShip.Cargo.Element(I).Amount >= Times then
                               HealAmount := abs (HealAmount);
                               UpdateCargo
@@ -829,14 +829,10 @@ package body Crew is
                   NeedClean := True;
                end if;
             when MEDICAL_ROOM =>
-               if NeedHealer and Module.Durability > 0 then
-                  for Item of PlayerShip.Cargo loop
-                     if Items_List(Item.ProtoIndex).IType =
-                       To_Unbounded_String("Medicines") then
-                        CanHeal := True;
-                        exit;
-                     end if;
-                  end loop;
+               if NeedHealer and
+                 Module.Durability > 0 and
+                 FindCargo(ItemType => HealingTools) > 0 then
+                  CanHeal := True;
                end if;
             when others =>
                null;

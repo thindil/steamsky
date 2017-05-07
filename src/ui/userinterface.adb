@@ -309,7 +309,7 @@ package body UserInterface is
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
       Event: Events_Types := None;
-      TimeDiff, BaseIndex: Natural;
+      TimeDiff, BaseIndex, ItemIndex: Natural;
       MenuIndex, OrdersAmount: Positive;
       MissionsLimit: Integer;
       HaveTrader: Boolean := False;
@@ -521,14 +521,13 @@ package body UserInterface is
                MenuIndex := MenuIndex + 1;
             when Disease =>
                if HaveTrader then
-                  if FindCargo
-                      (ItemType => To_Unbounded_String("Medical supplies")) >
-                    0 then
+                  ItemIndex := FindCargo(ItemType => HealingTools);
+                  if ItemIndex > 0 then
                      Orders_Items.all(MenuIndex) :=
-                       New_Item("Deliver medical supplies for free");
+                       New_Item("Deliver medicines for free");
                      MenuIndex := MenuIndex + 1;
                      Orders_Items.all(MenuIndex) :=
-                       New_Item("Deliver medical suppplies for price");
+                       New_Item("Deliver medicines for price");
                      MenuIndex := MenuIndex + 1;
                   end if;
                end if;
