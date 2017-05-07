@@ -31,8 +31,8 @@ ships, ships modules, etc.)
 
 ### Changing existing items types
 - In most cases you can change Item Type, with few exceptions: 'Fuel', 'Food',
-  'Drink', 'RawFood', 'MissionItem', 'Body', 'AlchemySet' and 'Medicines'. If 
-  you change any of this item type, game may stop working.
+  'Drink', 'RawFood', 'MissionItem', 'Body', 'AlchemySet'. If you change any 
+  of this item type, game may stop working.
 - After change of Item Type don't forget to do proper changes in other data
   files (like items or recipes)
 
@@ -49,6 +49,12 @@ Value after equal sign must be existing item type. Default value is
 To change which item type is used for cleaning ship, open file *game.dat* in 
 *data* directory and edit line which starts with CleaningTools. Value after 
 equal sign must be existing item type. Default value is 'Bucket'.
+
+## Healing tools type
+To change which item type is used for healing crew members and for deliver
+medicines to bases, open file *game.dat* in *data* directory and edit line
+which starts with HealingTools. Value after equal sign must be existing 
+item type. Default value is 'Medicines'.
 
 ## Items
 
