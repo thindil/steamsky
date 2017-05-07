@@ -105,6 +105,7 @@ package Game is
    Skills_Names: UnboundedString_Container.Vector;
    RepairTools: Unbounded_String := To_Unbounded_String("RepairTools");
    CleaningTools: Unbounded_String := To_Unbounded_String("Bucket");
+   HealingTools: Unbounded_String := To_Unbounded_String("Medicines");
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;

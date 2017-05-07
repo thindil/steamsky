@@ -31,11 +31,11 @@ with Crafts; use Crafts;
 with MainMenu; use MainMenu;
 with Events; use Events;
 with ShipModules; use ShipModules;
-with Items; use Items;
 with Statistics; use Statistics;
 with Missions; use Missions;
 with Utils; use Utils;
 with Game.SaveLoad; use Game.SaveLoad;
+with Items; use Items;
 
 package body UserInterface.Keys is
 
@@ -164,7 +164,7 @@ package body UserInterface.Keys is
    function OrdersMenuKeys
      (OldState: GameStates;
       Key: Key_Code) return GameStates is
-      EventIndex: Natural := 0;
+      EventIndex, ItemIndex: Natural := 0;
       NewState: GameStates;
       Order: constant String := Name(Current(OrdersMenu));
       Result: Menus.Driver_Result;
@@ -252,58 +252,43 @@ package body UserInterface.Keys is
             elsif Order = "Wait" then
                DrawGame(Wait_Order);
                return Wait_Order;
-            elsif Order = "Deliver medical supplies for free" then
-               for I in
-                 PlayerShip.Cargo.First_Index ..
-                     PlayerShip.Cargo.Last_Index loop
-                  if Items_List(PlayerShip.Cargo(I).ProtoIndex).Name =
-                    To_Unbounded_String("Medical supplies") then
-                     NewTime :=
-                       Events_List(EventIndex).Time -
-                       PlayerShip.Cargo(I).Amount;
-                     if NewTime < 1 then
-                        DeleteEvent(EventIndex);
-                     else
-                        Events_List.Update_Element
-                        (Index => EventIndex, Process => UpdateEvent'Access);
-                     end if;
-                     UpdateCargo
-                       (PlayerShip,
-                        PlayerShip.Cargo.Element(I).ProtoIndex,
-                        (0 - PlayerShip.Cargo.Element(I).Amount));
-                     GainRep
-                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
-                        10);
-                     AddMessage
-                       ("You gave medical supplies for free to base.",
-                        TradeMessage);
-                     exit;
-                  end if;
-               end loop;
-            elsif Order = "Deliver medical supplies for price" then
-               for I in
-                 PlayerShip.Cargo.First_Index ..
-                     PlayerShip.Cargo.Last_Index loop
-                  if Items_List(PlayerShip.Cargo(I).ProtoIndex).Name =
-                    To_Unbounded_String("Medical supplies") then
-                     NewTime :=
-                       Events_List(EventIndex).Time -
-                       PlayerShip.Cargo(I).Amount;
-                     if NewTime < 1 then
-                        DeleteEvent(EventIndex);
-                     else
-                        Events_List.Update_Element
-                        (Index => EventIndex, Process => UpdateEvent'Access);
-                     end if;
-                     SellItems
-                       (I,
-                        Integer'Image(PlayerShip.Cargo.Element(I).Amount));
-                     GainRep
-                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
-                        -2);
-                     exit;
-                  end if;
-               end loop;
+            elsif Order = "Deliver medicines for free" then
+               ItemIndex := FindCargo(ItemType => HealingTools);
+               NewTime :=
+                 Events_List(EventIndex).Time -
+                 PlayerShip.Cargo(ItemIndex).Amount;
+               if NewTime < 1 then
+                  DeleteEvent(EventIndex);
+               else
+                  Events_List.Update_Element
+                  (Index => EventIndex, Process => UpdateEvent'Access);
+               end if;
+               UpdateCargo
+                 (PlayerShip,
+                  PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+                  (0 - PlayerShip.Cargo.Element(ItemIndex).Amount));
+               GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 10);
+               AddMessage
+                 ("You gave " &
+                  To_String
+                    (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Name) &
+                  " for free to base.",
+                  TradeMessage);
+            elsif Order = "Deliver medicines for price" then
+               ItemIndex := FindCargo(ItemType => HealingTools);
+               NewTime :=
+                 Events_List(EventIndex).Time -
+                 PlayerShip.Cargo(ItemIndex).Amount;
+               if NewTime < 1 then
+                  DeleteEvent(EventIndex);
+               else
+                  Events_List.Update_Element
+                  (Index => EventIndex, Process => UpdateEvent'Access);
+               end if;
+               SellItems
+                 (ItemIndex,
+                  Integer'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
+               GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, -2);
             elsif Order(1 .. 3) = "Com" then
                FinishMission
                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);

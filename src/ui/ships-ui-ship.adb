@@ -696,8 +696,7 @@ package body Ships.UI.Ship is
          when MEDICAL_ROOM =>
             for Member of PlayerShip.Crew loop
                if Member.Health < 100 and
-                 FindCargo(ItemType => To_Unbounded_String("Medicines")) >
-                   0 then
+                 FindCargo(ItemType => HealingTools) > 0 then
                   Options_Items.all(MenuIndex) :=
                     New_Item("Assign medic", "7");
                   MenuIndex := MenuIndex + 1;
