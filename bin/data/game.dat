@@ -18,3 +18,4 @@ SkillsNames = Piloting, Engineering, Gunnery, Rhetoric, Perception, Alchemy, Coo
 ItemsTypes = Fuel, Food, Drink, Ammo10, Bronze, RawFood, Wood, Gunpowder, Iron, Copper, Tin, CopperOre, TinOre, IronOre, Ammo20, Ammo40, Steel, Medicines, Ammo60, Herbs, HerbSeeds, VegetableSeeds, Ammo80, Ammo100, Ammo120, AndraeSeeds, IllandruSeeds, MissionItem, Body, AlchemySet, Mold, GunsmithSet, CookingSet, Sickle, Saw, Bucket, BarleySeeds, Barley, Grapes, GrapeVine, Sand, BlacksmithSet, WoodworkerSet, RepairTools
 RepairTools = RepairTools
 CleaningTools = Bucket
+HealingTools = Medicines
