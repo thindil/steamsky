@@ -171,7 +171,7 @@ package body Game is
       end loop;
       -- Create player ship
       for I in ProtoShips_List.Iterate loop
-         if ProtoShips_List(I).Index = To_Unbounded_String("1") then
+         if ProtoShips_List(I).Index = PlayerShipIndex then
             ShipIndex := ProtoShips_Container.To_Index(I);
             exit;
          end if;
@@ -308,7 +308,7 @@ package body Game is
       DataFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex, StartIndex, EndIndex, Amount: Natural;
-      FieldsNames: constant array(1 .. 21) of Unbounded_String :=
+      FieldsNames: constant array(1 .. 22) of Unbounded_String :=
         (To_Unbounded_String("BasesSyllablesPre"),
          To_Unbounded_String("BasesSyllablesStart"),
          To_Unbounded_String("BasesSyllablesEnd"),
@@ -329,7 +329,8 @@ package body Game is
          To_Unbounded_String("ShipSyllablesEnd"),
          To_Unbounded_String("RepairTools"),
          To_Unbounded_String("CleaningToools"),
-         To_Unbounded_String("HealingTools"));
+         To_Unbounded_String("HealingTools"),
+         To_Unbounded_String("PlayerShipIndex"));
    begin
       if BaseSyllablesStart.Length > 0 then
          return True;
@@ -431,6 +432,8 @@ package body Game is
                         CleaningTools := Value;
                      when 21 =>
                         HealingTools := Value;
+                     when 22 =>
+                        PlayerShipIndex := Value;
                   end case;
                   StartIndex := EndIndex + 2;
                end loop;
