@@ -19,3 +19,4 @@ ItemsTypes = Fuel, Food, Drink, Ammo10, Bronze, RawFood, Wood, Gunpowder, Iron, 
 RepairTools = RepairTools
 CleaningTools = Bucket
 HealingTools = Medicines
+PlayerShipIndex = 1
