@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   battering ram, small advanced steel engine, medium steel engine, small
   advanced steel hull, medium steel hull and medium advanced steel engine
 - Option to set which item type is used as repair/cleaning/healing tools
+- Option to set which ship is used as player ship
 
 ### Changed
 - Updated MODDING.md
