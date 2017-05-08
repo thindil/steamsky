@@ -56,6 +56,12 @@ medicines to bases, open file *game.dat* in *data* directory and edit line
 which starts with HealingTools. Value after equal sign must be existing 
 item type. Default value is 'Medicines'.
 
+## Player Ship index
+To change which ship is used as a player ship, open file *game.dat* in *data*
+directory and edit line which starts with PlayerShipIndex. Value after equal
+sign must be existing ship index from any ships file from *data/ships*
+directory.
+
 ## Items
 
 ### General informations
