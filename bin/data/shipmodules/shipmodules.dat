@@ -1311,4 +1311,17 @@ Skill = Engineering
 Price = 12000 
 InstallTime = 220
 Description = Base module of each ship made of steel. Whole ship is destroyed if hull is destroyed.
+[104]
+Name = Medium advanced steel engine
+Type = Engine
+Weight = 2200
+Value = 7
+MaxValue = 10500
+Durability = 250
+Material = Steel
+Skill = Engineering
+Price = 14000
+InstallTime = 180
+Size = 2
+Description = Updated version of standard available engine made of steel. Each ship needs at least one engine to fly.
 []
