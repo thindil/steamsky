@@ -61,7 +61,7 @@ package body Crafts.UI is
          end loop;
          Recipe.Difficulty := 0;
          Recipe.BaseType := 0;
-         Recipe.Tool := To_Unbounded_String("AlchemySet");
+         Recipe.Tool := AlchemyTools;
       end if;
       InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
       if RecipeIndex > 0 then

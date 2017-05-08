@@ -107,6 +107,7 @@ package Game is
    CleaningTools: Unbounded_String := To_Unbounded_String("Bucket");
    HealingTools: Unbounded_String := To_Unbounded_String("Medicines");
    PlayerShipIndex: Unbounded_String := To_Unbounded_String("1");
+   AlchemyTools: Unbounded_String := To_Unbounded_String("AlchemySet");
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;

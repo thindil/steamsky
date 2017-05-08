@@ -308,7 +308,7 @@ package body Game is
       DataFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex, StartIndex, EndIndex, Amount: Natural;
-      FieldsNames: constant array(1 .. 22) of Unbounded_String :=
+      FieldsNames: constant array(1 .. 23) of Unbounded_String :=
         (To_Unbounded_String("BasesSyllablesPre"),
          To_Unbounded_String("BasesSyllablesStart"),
          To_Unbounded_String("BasesSyllablesEnd"),
@@ -330,7 +330,8 @@ package body Game is
          To_Unbounded_String("RepairTools"),
          To_Unbounded_String("CleaningToools"),
          To_Unbounded_String("HealingTools"),
-         To_Unbounded_String("PlayerShipIndex"));
+         To_Unbounded_String("PlayerShipIndex"),
+         To_Unbounded_String("AlchemyTools"));
    begin
       if BaseSyllablesStart.Length > 0 then
          return True;
@@ -434,6 +435,8 @@ package body Game is
                         HealingTools := Value;
                      when 22 =>
                         PlayerShipIndex := Value;
+                     when 23 =>
+                        AlchemyTools := Value;
                   end case;
                   StartIndex := EndIndex + 2;
                end loop;

@@ -188,7 +188,7 @@ package body Crafts is
             end if;
          end loop;
          Recipe.Difficulty := 0;
-         Recipe.Tool := To_Unbounded_String("AlchemySet");
+         Recipe.Tool := AlchemyTools;
          RecipeName :=
            To_Unbounded_String("Deconstructing ") &
            Items_List(Recipe.ResultIndex).Name;
@@ -328,7 +328,7 @@ package body Crafts is
                   end loop;
                   Recipe.Difficulty := 0;
                   Recipe.BaseType := 0;
-                  Recipe.Tool := To_Unbounded_String("AlchemySet");
+                  Recipe.Tool := AlchemyTools;
                   RecipeName :=
                     To_Unbounded_String("deconstructing ") &
                     Items_List(Recipe.ResultIndex).Name;
