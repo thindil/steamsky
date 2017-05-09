@@ -359,20 +359,19 @@ package body Crew is
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       NeedCleaning, HaveMedicalRoom: Boolean := False;
-      function Consume(ItemType: String) return Natural is
+      function Consume(ItemType: Unbounded_String) return Natural is
          ProtoIndex: Natural := 0;
          ConsumeValue: Natural := 0;
       begin
          for Item of PlayerShip.Cargo loop
-            if Items_List(Item.ProtoIndex).IType =
-              To_Unbounded_String(ItemType) then
+            if Items_List(Item.ProtoIndex).IType = ItemType then
                ProtoIndex := Item.ProtoIndex;
                ConsumeValue := Items_List(ProtoIndex).Value;
                exit;
             end if;
          end loop;
          if ProtoIndex = 0 then
-            if ItemType = "Food" then
+            if ItemType = To_Unbounded_String("Food") then
                for Item of PlayerShip.Cargo loop
                   if Items_List(Item.ProtoIndex).IType =
                     To_Unbounded_String("RawFood") then
@@ -420,7 +419,7 @@ package body Crew is
                OrderMessage);
          end if;
          if HungerLevel > 80 then
-            HungerLevel := HungerLevel - Consume("Food");
+            HungerLevel := HungerLevel - Consume(To_Unbounded_String("Food"));
             if HungerLevel < 0 then
                HungerLevel := 0;
             elsif HungerLevel > 80 then
@@ -432,7 +431,7 @@ package body Crew is
          end if;
          Member.Hunger := HungerLevel;
          if ThirstLevel > 40 then
-            ThirstLevel := ThirstLevel - Consume("Drink");
+            ThirstLevel := ThirstLevel - Consume(DrinksType);
             if ThirstLevel < 0 then
                ThirstLevel := 0;
             elsif ThirstLevel > 40 then
