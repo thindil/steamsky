@@ -62,6 +62,11 @@ directory and edit line which starts with PlayerShipIndex. Value after equal
 sign must be existing ship index from any ships file from *data/ships*
 directory.
 
+## Alchemy tools type
+To change which item type is used for deconstruct items, open file *game.dat* 
+in *data* directory and edit line which starts with AlchemyTools. Value after 
+equal sign must be existing item type. Default value is 'AlchemySet'.
+
 ## Items
 
 ### General informations
