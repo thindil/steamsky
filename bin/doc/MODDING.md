@@ -67,6 +67,11 @@ To change which item type is used for deconstruct items, open file *game.dat*
 in *data* directory and edit line which starts with AlchemyTools. Value after 
 equal sign must be existing item type. Default value is 'AlchemySet'.
 
+## Drinks type
+To change which item type is used for reduce thirst, open file *game.dat* 
+in *data* directory and edit line which starts with DrinksType. Value after 
+equal sign must be existing item type. Default value is 'Drink'.
+
 ## Items
 
 ### General informations
