@@ -21,3 +21,4 @@ CleaningTools = Bucket
 HealingTools = Medicines
 PlayerShipIndex = 1
 AlchemyTools = AlchemySet
+DrinksType = Drink
