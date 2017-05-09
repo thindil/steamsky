@@ -108,6 +108,7 @@ package Game is
    HealingTools: Unbounded_String := To_Unbounded_String("Medicines");
    PlayerShipIndex: Unbounded_String := To_Unbounded_String("1");
    AlchemyTools: Unbounded_String := To_Unbounded_String("AlchemySet");
+   DrinksType: Unbounded_String := To_Unbounded_String("Drink");
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
