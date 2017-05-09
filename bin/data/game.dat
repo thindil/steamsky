@@ -20,3 +20,4 @@ RepairTools = RepairTools
 CleaningTools = Bucket
 HealingTools = Medicines
 PlayerShipIndex = 1
+AlchemyTools = AlchemySet
