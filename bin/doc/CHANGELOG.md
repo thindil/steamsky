@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
   advanced steel hull, medium steel hull, medium advanced steel engine and
   large steel engine
 - Option to set which item type is used as repair/cleaning/healing/alchemy
-  tools
+  tools and as drinks
 - Option to set which ship is used as player ship
 
 ### Changed
