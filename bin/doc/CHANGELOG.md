@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Option to set which item type is used as repair/cleaning/healing/alchemy
   tools and as drinks
 - Option to set which ship is used as player ship
+- Option to set which item is used as corpse
 
 ### Changed
 - Updated MODDING.md
