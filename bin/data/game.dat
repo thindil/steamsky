@@ -22,3 +22,4 @@ HealingTools = Medicines
 PlayerShipIndex = 1
 AlchemyTools = AlchemySet
 DrinksType = Drink
+CorpseIndex = 40
