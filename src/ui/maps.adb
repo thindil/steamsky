@@ -173,11 +173,11 @@ package body Maps is
       if BaseIndex > 0 then
          if SkyBases(BaseIndex).Visited.Year > 0 then
             WindowHeight := WindowHeight + 6;
+            if SkyBases(BaseIndex).Population = 0 then
+               WindowHeight := WindowHeight - 1;
+            end if;
          elsif SkyBases(BaseIndex).Known then
             WindowHeight := WindowHeight + 2;
-         end if;
-         if SkyBases(BaseIndex).Population = 0 then
-            WindowHeight := WindowHeight - 1;
          end if;
          WindowWidth := 4 + Column_Position(Length(SkyBases(BaseIndex).Name));
          if WindowWidth < 20 then
