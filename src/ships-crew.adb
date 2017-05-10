@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Messages; use Messages;
+with Items; use Items;
 
 package body Ships.Crew is
 
@@ -76,14 +77,6 @@ package body Ships.Crew is
                ".",
                CombatMessage);
          end if;
-         Ship.Cargo.Append
-         (New_Item =>
-            (ProtoIndex => 40,
-             Amount => 1,
-             Name =>
-               Ship.Crew(MemberIndex).Name & To_Unbounded_String("'s corpse"),
-             Durability => 100));
-         DeleteMember(MemberIndex, Ship);
       else
          if Ship = PlayerShip then
             AddMessage
@@ -91,18 +84,17 @@ package body Ships.Crew is
                CombatMessage);
             PlayerShip.Crew.Update_Element
             (Index => MemberIndex, Process => UpdateDeath'Access);
-         else
-            Ship.Cargo.Append
-            (New_Item =>
-               (ProtoIndex => 40,
-                Amount => 1,
-                Name =>
-                  Ship.Crew(MemberIndex).Name &
-                  To_Unbounded_String("'s corpse"),
-                Durability => 100));
-            DeleteMember(MemberIndex, Ship);
+            return;
          end if;
       end if;
+      Ship.Cargo.Append
+      (New_Item =>
+         (ProtoIndex => FindProtoItem(CorpseIndex),
+          Amount => 1,
+          Name =>
+            Ship.Crew(MemberIndex).Name & To_Unbounded_String("'s corpse"),
+          Durability => 100));
+      DeleteMember(MemberIndex, Ship);
    end Death;
 
    procedure DeleteMember(MemberIndex: Positive; Ship: in out ShipRecord) is
