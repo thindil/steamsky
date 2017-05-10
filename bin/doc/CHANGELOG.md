@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship modules: small steel turret, steel battering ram, small steel
   battering ram, small advanced steel engine, medium steel engine, small
-  advanced steel hull, medium steel hull, medium advanced steel engine and
-  large steel engine
+  advanced steel hull, medium steel hull, medium advanced steel engine,
+  large steel engine and large advanced steel engine
 - Option to set which item type is used as repair/cleaning/healing/alchemy
   tools and as drinks
 - Option to set which ship is used as player ship
