@@ -31,8 +31,8 @@ ships, ships modules, etc.)
 
 ### Changing existing items types
 - In most cases you can change Item Type, with few exceptions: 'Fuel', 'Food',
-  'Drink', 'RawFood', 'MissionItem', 'Body', 'AlchemySet'. If you change any 
-  of this item type, game may stop working.
+  'RawFood', 'MissionItem'. If you change any of this item type, game may 
+  stop working.
 - After change of Item Type don't forget to do proper changes in other data
   files (like items or recipes)
 
@@ -60,7 +60,7 @@ item type. Default value is 'Medicines'.
 To change which ship is used as a player ship, open file *game.dat* in *data*
 directory and edit line which starts with PlayerShipIndex. Value after equal
 sign must be existing ship index from any ships file from *data/ships*
-directory.
+directory. Default value is '1'.
 
 ## Alchemy tools type
 To change which item type is used for deconstruct items, open file *game.dat* 
@@ -71,6 +71,12 @@ equal sign must be existing item type. Default value is 'AlchemySet'.
 To change which item type is used for reduce thirst, open file *game.dat* 
 in *data* directory and edit line which starts with DrinksType. Value after 
 equal sign must be existing item type. Default value is 'Drink'.
+
+## Corpse index
+To change which item is used as a body for dead, open file *game.dat* in *data*
+directory and edit line which starts with CorpseIndex. Value after equal sign 
+must be existing item index from any items file from *data/items* directory.
+Default value is '40'.
 
 ## Items
 
