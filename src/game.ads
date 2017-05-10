@@ -109,6 +109,7 @@ package Game is
    PlayerShipIndex: Unbounded_String := To_Unbounded_String("1");
    AlchemyTools: Unbounded_String := To_Unbounded_String("AlchemySet");
    DrinksType: Unbounded_String := To_Unbounded_String("Drink");
+   CorpseIndex: Unbounded_String := To_Unbounded_String("40");
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
