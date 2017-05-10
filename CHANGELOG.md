@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Don't start upgrades if no upgrading material in cargo
 - Crash on giving medicines to bases for free
 - Delivering medicines to diseased bases
+- Info about abandoned bases on map
 
 ## [1.0.1] - 2017-04-23
 
