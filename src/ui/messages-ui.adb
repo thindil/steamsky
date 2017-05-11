@@ -48,8 +48,8 @@ package body Messages.UI is
          New_Item("Trade"),
          New_Item("Orders"),
          New_Item("Crafts"),
-         New_Item("Missions"),
          New_Item("Others"),
+         New_Item("Missions"),
          New_Item("Delete all"),
          Null_Item);
       MessagesMenu := New_Menu(Messages_Items);
