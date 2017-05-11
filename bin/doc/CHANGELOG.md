@@ -8,9 +8,15 @@ All notable changes to this project will be documented in this file.
   battering ram, small advanced steel engine, medium steel engine, small
   advanced steel hull, medium steel hull, medium advanced steel engine,
   large steel engine, large advanced steel engine and small steel furnace
-- Option to set which item type is used as repair/cleaning/healing/alchemy
-  tools and as drinks/corpses
+- Option to set which item type is used for delivery missions items
+- Option to set which item type is used as drinks
+- Option to set which item type is used as corpses
 - Option to set which ship is used as player ship
+- Option to set which item type is used as tools for upgrade/repair modules
+- Option to set which item type is used as tools for cleaning ship
+- Option to set which item type is used as tools for healing crew members or
+  medicines delivery for diseased bases
+- Option to set which item type is used as tools for for deconstructing items
 
 ### Changed
 - Updated MODDING.md
