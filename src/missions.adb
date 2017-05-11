@@ -75,7 +75,7 @@ package body Missions is
             null;
       end case;
       for I in Items_List.Iterate loop
-         if Items_List(I).IType = To_Unbounded_String("MissionItem") then
+         if Items_List(I).IType = MissionItemsType then
             MissionsItems.Append(New_Item => Objects_Container.To_Index(I));
          end if;
       end loop;
