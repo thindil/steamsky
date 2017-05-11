@@ -23,3 +23,4 @@ PlayerShipIndex = 1
 AlchemyTools = AlchemySet
 DrinksType = Drink
 CorpseIndex = 40
+MissionItemsType = MissionItem
