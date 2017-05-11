@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Don't start upgrades if no upgrading material in cargo
 - Crash on giving medical supplies to bases for free
 - Info about abandoned bases on map
+- Showing others/missions messages
 
 ## [1.1] - 2017-04-30
 
