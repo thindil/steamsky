@@ -1350,4 +1350,17 @@ Price = 24000
 InstallTime = 220
 Size = 3
 Description = Updated version of large engine made of steel. Each ship needs at least one engine to fly.
+[107]
+Name = Small steel furnace
+Type = Furnace
+Weight = 900
+Value = 0
+MaxValue = 0
+Durability = 300
+Material = Steel
+Skill = Metalsmith
+Price = 3000
+InstallTime = 60
+Size = 1
+Description = Allow smelt ores into metals. Made of steel.
 []
