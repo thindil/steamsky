@@ -136,7 +136,7 @@ package body Ships.UI is
          DropAmount := Natural'Value(Get_Buffer(Fields(RenameForm, 2)));
          if DropAmount > 0 and
            Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
-             To_Unbounded_String("MissionItem") then
+             MissionItemsType then
             DropAmount2 := DropAmount;
             for J in 1 .. DropAmount2 loop
                for I in
