@@ -31,8 +31,7 @@ ships, ships modules, etc.)
 
 ### Changing existing items types
 - In most cases you can change Item Type, with few exceptions: 'Fuel', 'Food',
-  'RawFood', 'MissionItem'. If you change any of this item type, game may 
-  stop working.
+  'RawFood'. If you change any of this item type, game may stop working.
 - After change of Item Type don't forget to do proper changes in other data
   files (like items or recipes)
 
@@ -77,6 +76,11 @@ To change which item is used as a body for dead, open file *game.dat* in *data*
 directory and edit line which starts with CorpseIndex. Value after equal sign 
 must be existing item index from any items file from *data/items* directory.
 Default value is '40'.
+
+## Mission items type
+To change which item type is used for delivery missions, open file *game.dat* 
+in *data* directory and edit line which starts with MissionItemsType. Value 
+after equal sign must be existing item type. Default value is 'MissionItem'.
 
 ## Items
 
