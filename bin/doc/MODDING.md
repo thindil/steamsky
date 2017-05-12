@@ -30,10 +30,11 @@ ships, ships modules, etc.)
   automatic line wrap enabled, don't forget to fix it).
 
 ### Changing existing items types
-- In most cases you can change Item Type, with few exceptions: 'Fuel', 'Food',
-  'RawFood'. If you change any of this item type, game may stop working.
+- In most cases you can change Item Type, with one exceptions: 'Fuel'. If you
+  change this item type, game may stop working.
 - After change of Item Type don't forget to do proper changes in other data
-  files (like items or recipes)
+  files (like items or recipes) and in this same file if item type was used in
+  one of below settings.
 
 ### Adding new items types
 - To add new item type, just append it name to ItemsTypes entry.
@@ -81,6 +82,13 @@ Default value is '40'.
 To change which item type is used for delivery missions, open file *game.dat* 
 in *data* directory and edit line which starts with MissionItemsType. Value 
 after equal sign must be existing item type. Default value is 'MissionItem'.
+
+## Food items types
+To change which items types are used as food, open file *game.dat* in *data*
+directory and edit line which starts with FoodTypes. First type is main food
+type, second type is used by crew members when first type isn't found in ship
+cargo. Values after equal sign must be existing items types, separated by coma
+and space: `, `. Default value is 'Food, RawFood'.
 
 ## Items
 
