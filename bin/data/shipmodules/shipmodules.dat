@@ -1363,4 +1363,16 @@ Price = 3000
 InstallTime = 60
 Size = 1
 Description = Allow smelt ores into metals. Made of steel.
+[108]
+Name = Advanced medium steel hull
+Type = Hull
+Weight = 8000
+Value = 0
+MaxValue = 29
+Durability = 250
+Material = Steel
+Skill = Engineering
+Price = 14500 
+InstallTime = 240
+Description = Base module of each ship, made of steel. Whole ship is destroyed if hull is destroyed.
 []
