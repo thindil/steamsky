@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Option to set which item type is used as tools for healing crew members or
   medicines delivery for diseased bases
 - Option to set which item type is used as tools for for deconstructing items
+- Option to set which items types are used as food by crew members
 
 ### Changed
 - Updated MODDING.md
