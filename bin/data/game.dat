@@ -24,3 +24,4 @@ AlchemyTools = AlchemySet
 DrinksType = Drink
 CorpseIndex = 40
 MissionItemsType = MissionItem
+FoodTypes = Food, RawFood
