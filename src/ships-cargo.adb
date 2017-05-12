@@ -155,7 +155,7 @@ package body Ships.Cargo is
       if PlayerShip.Cargo(CargoIndex).Durability = 0 then -- Cargo destroyed
          UpdateCargo
            (PlayerShip,
-            PlayerShip.Cargo(CargoIndex).ProtoIndex,
+            PlayerShip.Cargo.Element(CargoIndex).ProtoIndex,
             -1,
             0);
          return;
