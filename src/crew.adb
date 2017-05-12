@@ -371,10 +371,9 @@ package body Crew is
             end if;
          end loop;
          if ProtoIndex = 0 then
-            if ItemType = To_Unbounded_String("Food") then
+            if ItemType = FoodTypes(1) then
                for Item of PlayerShip.Cargo loop
-                  if Items_List(Item.ProtoIndex).IType =
-                    To_Unbounded_String("RawFood") then
+                  if Items_List(Item.ProtoIndex).IType = FoodTypes(2) then
                      ProtoIndex := Item.ProtoIndex;
                      ConsumeValue := Items_List(ProtoIndex).Value;
                      exit;
@@ -419,7 +418,7 @@ package body Crew is
                OrderMessage);
          end if;
          if HungerLevel > 80 then
-            HungerLevel := HungerLevel - Consume(To_Unbounded_String("Food"));
+            HungerLevel := HungerLevel - Consume(FoodTypes(1));
             if HungerLevel < 0 then
                HungerLevel := 0;
             elsif HungerLevel > 80 then
