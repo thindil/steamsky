@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Crash on giving medical supplies to bases for free
 - Info about abandoned bases on map
 - Showing others/missions messages
+- Crash on removing damaged items
 
 ## [1.1] - 2017-04-30
 
