@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Crash on giving medicines to bases for free
 - Delivering medicines to diseased bases
 - Info about abandoned bases on map
+- Info about lack of food/drinks in ship cargo
 
 ## [1.0.1] - 2017-04-23
 
