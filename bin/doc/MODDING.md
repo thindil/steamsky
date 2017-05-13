@@ -30,8 +30,6 @@ ships, ships modules, etc.)
   automatic line wrap enabled, don't forget to fix it).
 
 ### Changing existing items types
-- In most cases you can change Item Type, with one exceptions: 'Fuel'. If you
-  change this item type, game may stop working.
 - After change of Item Type don't forget to do proper changes in other data
   files (like items or recipes) and in this same file if item type was used in
   one of below settings.
@@ -89,6 +87,11 @@ directory and edit line which starts with FoodTypes. First type is main food
 type, second type is used by crew members when first type isn't found in ship
 cargo. Values after equal sign must be existing items types, separated by coma
 and space: `, `. Default value is 'Food, RawFood'.
+
+## Fuel item type
+To change which item type is used as a fuel for ship, open file *game.dat* in 
+*data* directory and edit line which starts with FuelType. Value after equal 
+sign must be existing item type. Default value is 'Fuel'.
 
 ## Items
 
