@@ -113,6 +113,7 @@ package Game is
    MissionItemsType: Unbounded_String := To_Unbounded_String("MissionItem");
    FoodTypes: array(1 .. 2) of Unbounded_String :=
      (To_Unbounded_String("Food"), To_Unbounded_String("RawFood"));
+   FuelType: Unbounded_String := To_Unbounded_String("Fuel");
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
