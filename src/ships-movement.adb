@@ -80,6 +80,7 @@ package body Ships.Movement is
       TimePassed, FuelNeeded: Integer := 0;
       type SpeedType is digits 2;
       Speed: SpeedType;
+      FuelIndex: Natural;
    begin
       if ShipIndex = 0 then
          case PlayerShip.Speed is
@@ -112,15 +113,15 @@ package body Ships.Movement is
          if FuelNeeded = 0 then
             FuelNeeded := -1;
          end if;
-         for Item of PlayerShip.Cargo loop -- Check for fuel
-            if Item.ProtoIndex = 1 then
-               if Item.Amount < abs FuelNeeded then
-                  ShowDialog("You don't have enough fuel (Charcollum).");
-                  return 0;
-               end if;
-               exit;
-            end if;
-         end loop;
+         FuelIndex := FindCargo(ItemType => FuelType);
+         if FuelIndex = 0 then
+            ShowDialog("You don't have any fuel.");
+            return 0;
+         end if;
+         if PlayerShip.Cargo(FuelIndex).Amount < abs FuelNeeded then
+            ShowDialog("You don't have enough fuel (Charcollum).");
+            return 0;
+         end if;
          NewX := PlayerShip.SkyX + X;
          NewY := PlayerShip.SkyY + Y;
       end if;
@@ -130,7 +131,10 @@ package body Ships.Movement is
       if ShipIndex = 0 then
          PlayerShip.SkyX := NewX;
          PlayerShip.SkyY := NewY;
-         UpdateCargo(PlayerShip, 1, FuelNeeded);
+         UpdateCargo
+           (PlayerShip,
+            PlayerShip.Cargo.Element(FuelIndex).ProtoIndex,
+            FuelNeeded);
          Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
          TimePassed := Integer(100.0 / Speed);
          if TimePassed > 0 then
