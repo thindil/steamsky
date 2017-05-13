@@ -424,6 +424,7 @@ package body Crew is
       end Consume;
       procedure UpdateMember(Member: in out Member_Data) is
          BackToWork: Boolean := True;
+         ConsumeResult: Natural;
       begin
          Member.Tired := TiredLevel;
          if TiredLevel = 0 and
@@ -453,10 +454,12 @@ package body Crew is
                OrderMessage);
          end if;
          if HungerLevel > 80 then
-            HungerLevel := HungerLevel - Consume("Food");
+            ConsumeResult := Consume("Food");
+            HungerLevel := HungerLevel - ConsumeResult;
             if HungerLevel < 0 then
                HungerLevel := 0;
-            elsif HungerLevel > 80 then
+            end if;
+            if ConsumeResult = 0 then
                AddMessage
                  (To_String(Member.Name) &
                   " is hungry, but can't find anything to eat.",
@@ -465,10 +468,12 @@ package body Crew is
          end if;
          Member.Hunger := HungerLevel;
          if ThirstLevel > 40 then
-            ThirstLevel := ThirstLevel - Consume("Drink");
+            ConsumeResult := Consume("Drink");
+            ThirstLevel := ThirstLevel - ConsumeResult;
             if ThirstLevel < 0 then
                ThirstLevel := 0;
-            elsif ThirstLevel > 40 then
+            end if;
+            if ConsumeResult = 0 then
                AddMessage
                  (To_String(Member.Name) &
                   " is thirsty, but can't find anything to drink.",
