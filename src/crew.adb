@@ -360,35 +360,35 @@ package body Crew is
       Damage: DamageFactor := 0.0;
       NeedCleaning, HaveMedicalRoom: Boolean := False;
       function Consume(ItemType: Unbounded_String) return Natural is
-         ProtoIndex: Natural := 0;
-         ConsumeValue: Natural := 0;
+         ConsumeValue, ItemIndex: Natural;
       begin
-         for Item of PlayerShip.Cargo loop
-            if Items_List(Item.ProtoIndex).IType = ItemType then
-               ProtoIndex := Item.ProtoIndex;
-               ConsumeValue := Items_List(ProtoIndex).Value;
-               exit;
-            end if;
-         end loop;
-         if ProtoIndex = 0 then
-            if ItemType = FoodTypes(1) then
-               for Item of PlayerShip.Cargo loop
-                  if Items_List(Item.ProtoIndex).IType = FoodTypes(2) then
-                     ProtoIndex := Item.ProtoIndex;
-                     ConsumeValue := Items_List(ProtoIndex).Value;
-                     exit;
-                  end if;
-               end loop;
-            end if;
-            if ProtoIndex = 0 then
-               return 0;
+         ItemIndex := FindCargo(ItemType => ItemType);
+         if ItemIndex > 0 then
+            ConsumeValue :=
+              Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value;
+            UpdateCargo
+              (PlayerShip,
+               PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+               -1);
+            return ConsumeValue;
+         end if;
+         if ItemType = FoodTypes(1) then
+            ItemIndex := FindCargo(ItemType => FoodTypes(2));
+            if ItemIndex > 0 then
+               ConsumeValue :=
+                 Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value;
+               UpdateCargo
+                 (PlayerShip,
+                  PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+                  -1);
+               return ConsumeValue;
             end if;
          end if;
-         UpdateCargo(PlayerShip, ProtoIndex, (0 - 1));
-         return ConsumeValue;
+         return 0;
       end Consume;
       procedure UpdateMember(Member: in out Member_Data) is
          BackToWork: Boolean := True;
+         ConsumeResult: Natural;
       begin
          Member.Tired := TiredLevel;
          if TiredLevel = 0 and
@@ -418,10 +418,12 @@ package body Crew is
                OrderMessage);
          end if;
          if HungerLevel > 80 then
-            HungerLevel := HungerLevel - Consume(FoodTypes(1));
+            ConsumeResult := Consume(FoodTypes(1));
+            HungerLevel := HungerLevel - ConsumeResult;
             if HungerLevel < 0 then
                HungerLevel := 0;
-            elsif HungerLevel > 80 then
+            end if;
+            if ConsumeResult = 0 then
                AddMessage
                  (To_String(Member.Name) &
                   " is hungry, but can't find anything to eat.",
@@ -430,10 +432,12 @@ package body Crew is
          end if;
          Member.Hunger := HungerLevel;
          if ThirstLevel > 40 then
-            ThirstLevel := ThirstLevel - Consume(DrinksType);
+            ConsumeResult := Consume(DrinksType);
+            ThirstLevel := ThirstLevel - ConsumeResult;
             if ThirstLevel < 0 then
                ThirstLevel := 0;
-            elsif ThirstLevel > 40 then
+            end if;
+            if ConsumeResult = 0 then
                AddMessage
                  (To_String(Member.Name) &
                   " is thirsty, but can't find anything to drink.",
