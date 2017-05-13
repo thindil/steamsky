@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Info about abandoned bases on map
 - Showing others/missions messages
 - Crash on removing damaged items
+- Info about lack of food/drinks in ship cargo
 
 ## [1.1] - 2017-04-30
 
