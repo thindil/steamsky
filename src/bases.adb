@@ -94,7 +94,7 @@ package body Bases is
    end CountPrice;
 
    procedure BuyItems(ItemIndex: Positive; Amount: String) is
-      BuyAmount, TraderIndex, Price: Positive;
+      BuyAmount, TraderIndex, Price, ProtoMoneyIndex: Positive;
       BaseType: constant Positive :=
         Bases_Types'
           Pos
@@ -102,7 +102,7 @@ package body Bases is
                .BaseType) +
         1;
       ItemName: constant String := To_String(Items_List(ItemIndex).Name);
-      Cost, MoneyIndex: Natural;
+      Cost, MoneyIndex2: Natural;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
    begin
@@ -121,23 +121,24 @@ package body Bases is
       end if;
       Cost := BuyAmount * Price;
       CountPrice(Cost, TraderIndex);
-      MoneyIndex := FindCargo(1);
+      ProtoMoneyIndex := FindProtoItem(MoneyIndex);
+      MoneyIndex2 := FindCargo(ProtoMoneyIndex);
       if FreeCargo(Cost - (Items_List(ItemIndex).Weight * BuyAmount)) < 0 then
          ShowDialog("You don't have that much free space in your ship cargo.");
          return;
       end if;
-      if MoneyIndex = 0 then
+      if MoneyIndex2 = 0 then
          ShowDialog("You don't have charcollum to buy " & ItemName & ".");
          return;
       end if;
-      if Cost > PlayerShip.Cargo(MoneyIndex).Amount then
+      if Cost > PlayerShip.Cargo(MoneyIndex2).Amount then
          ShowDialog
            ("You don't have enough charcollum to buy so much " &
             ItemName &
             ".");
          return;
       end if;
-      UpdateCargo(PlayerShip, 1, (0 - Cost));
+      UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
       UpdateCargo(PlayerShip, ItemIndex, BuyAmount);
       GainExp(1, 4, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
@@ -203,7 +204,7 @@ package body Bases is
          ProtoIndex,
          (0 - SellAmount),
          PlayerShip.Cargo.Element(ItemIndex).Durability);
-      UpdateCargo(PlayerShip, 1, Profit);
+      UpdateCargo(PlayerShip, FindProtoItem(MoneyIndex), Profit);
       GainExp(1, 4, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
       AddMessage
@@ -257,21 +258,22 @@ package body Bases is
    end GenerateBaseName;
 
    procedure RepairShip is
-      Cost, Time, ModuleIndex, MoneyIndex, RepairValue: Natural := 0;
-      TraderIndex: Positive;
+      Cost, Time, ModuleIndex, MoneyIndex2, RepairValue: Natural := 0;
+      TraderIndex, ProtoMoneyIndex: Positive;
    begin
       RepairCost(Cost, Time, ModuleIndex);
       if Cost = 0 then
          return;
       end if;
-      MoneyIndex := FindCargo(1);
-      if MoneyIndex = 0 then
+      ProtoMoneyIndex := FindProtoItem(MoneyIndex);
+      MoneyIndex2 := FindCargo(ProtoMoneyIndex);
+      if MoneyIndex2 = 0 then
          ShowDialog("You don't have Charcollum to pay for repairs.");
          return;
       end if;
       TraderIndex := FindMember(Talk);
       CountPrice(Cost, TraderIndex);
-      if PlayerShip.Cargo(MoneyIndex).Amount < Cost then
+      if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
          ShowDialog("You don't have enough Charcollum to pay for repairs.");
          return;
       end if;
@@ -308,20 +310,21 @@ package body Bases is
             " Charcollum.",
             TradeMessage);
       end if;
-      UpdateCargo(PlayerShip, 1, (0 - Cost));
+      UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
       GainExp(1, 4, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
       UpdateGame(Time);
    end RepairShip;
 
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Positive) is
-      MoneyIndex: constant Natural := FindCargo(1);
+      ProtoMoneyIndex: constant Positive := FindProtoItem(MoneyIndex);
+      MoneyIndex2: constant Natural := FindCargo(ProtoMoneyIndex);
       HullIndex, ModulesAmount, TraderIndex: Positive;
       FreeTurretIndex, Price: Natural := 0;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
    begin
-      if MoneyIndex = 0 then
+      if MoneyIndex2 = 0 then
          ShowDialog("You don't have Charcollum to pay for modules.");
          return;
       end if;
@@ -342,7 +345,7 @@ package body Bases is
       if Install then
          Price := Modules_List(ModuleIndex).Price;
          CountPrice(Price, TraderIndex);
-         if PlayerShip.Cargo(MoneyIndex).Amount < Price then
+         if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
             ShowDialog
               ("You don't have enough Charcollum to pay for " &
                To_String(Modules_List(ModuleIndex).Name) &
@@ -383,7 +386,7 @@ package body Bases is
             PlayerShip.Modules.Delete(HullIndex, 1);
          end if;
          UpdateGame(Modules_List(ModuleIndex).InstallTime);
-         UpdateCargo(PlayerShip, 1, (0 - Price));
+         UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Price));
          GainExp(1, 4, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          if Modules_List(ModuleIndex).MType /= HULL then
@@ -505,7 +508,7 @@ package body Bases is
                GivenOrder => Rest,
                CheckPriorities => False);
          end if;
-         UpdateCargo(PlayerShip, 1, Price);
+         UpdateCargo(PlayerShip, ProtoMoneyIndex, Price);
          GainExp(1, 4, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          AddMessage
@@ -624,20 +627,21 @@ package body Bases is
    procedure HireRecruit(RecruitIndex: Positive) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MoneyIndex, Price: Natural;
+      MoneyIndex2, Price: Natural;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
-      TraderIndex: Positive;
+      TraderIndex, ProtoMoneyIndex: Positive;
    begin
-      MoneyIndex := FindCargo(1);
-      if MoneyIndex = 0 then
+      ProtoMoneyIndex := FindProtoItem(MoneyIndex);
+      MoneyIndex2 := FindCargo(ProtoMoneyIndex);
+      if MoneyIndex2 = 0 then
          ShowDialog("You don't have Charcollum to hire anyone.");
          return;
       end if;
       TraderIndex := FindMember(Talk);
       Price := Recruit.Price;
       CountPrice(Price, TraderIndex);
-      if PlayerShip.Cargo(MoneyIndex).Amount < Price then
+      if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
          ShowDialog
            ("You don't have enough Charcollum to hire " &
             To_String(Recruit.Name) &
@@ -657,7 +661,7 @@ package body Bases is
           PreviousOrder => Rest,
           OrderTime => 15,
           Orders => (others => 0)));
-      UpdateCargo(PlayerShip, 1, (0 - Price));
+      UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Price));
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       AddMessage
@@ -967,12 +971,12 @@ package body Bases is
    procedure BuyRecipe(RecipeIndex: Positive) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      Cost, MoneyIndex: Natural;
+      Cost, MoneyIndex2: Natural;
       RecipeName: constant String :=
         To_String(Items_List(Recipes_List(RecipeIndex).ResultIndex).Name);
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
-      TraderIndex: Positive;
+      TraderIndex, ProtoMoneyIndex: Positive;
    begin
       if BaseType /= Recipes_List(RecipeIndex).BaseType then
          ShowDialog("You can't buy this recipe in this base.");
@@ -994,20 +998,21 @@ package body Bases is
          Cost := Recipes_List(RecipeIndex).Difficulty * 100;
       end if;
       CountPrice(Cost, TraderIndex);
-      MoneyIndex := FindCargo(1);
-      if MoneyIndex = 0 then
+      ProtoMoneyIndex := FindProtoItem(MoneyIndex);
+      MoneyIndex2 := FindCargo(ProtoMoneyIndex);
+      if MoneyIndex2 = 0 then
          ShowDialog
            ("You don't have charcollum to buy recipe for " & RecipeName & ".");
          return;
       end if;
-      if Cost > PlayerShip.Cargo(MoneyIndex).Amount then
+      if Cost > PlayerShip.Cargo(MoneyIndex2).Amount then
          ShowDialog
            ("You don't have enough charcollum to buy recipe for " &
             RecipeName &
             ".");
          return;
       end if;
-      UpdateCargo(PlayerShip, 1, (0 - Cost));
+      UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
       Known_Recipes.Append(New_Item => RecipeIndex);
       AddMessage
         ("You bought recipe for " &

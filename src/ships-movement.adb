@@ -22,6 +22,7 @@ with Ships.Crew; use Ships.Crew;
 with Statistics; use Statistics;
 with Maps; use Maps;
 with Messages; use Messages;
+with Items; use Items;
 
 package body Ships.Movement is
 
@@ -164,7 +165,8 @@ package body Ships.Movement is
    procedure DockShip(Docking: Boolean) is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MoneyIndex: constant Natural := FindCargo(1);
+      ProtoMoneyIndex: constant Positive := FindProtoItem(MoneyIndex);
+      MoneyIndex2: constant Natural := FindCargo(ProtoMoneyIndex);
       DockingCost: Positive;
       TraderIndex: Natural := 0;
    begin
@@ -187,7 +189,7 @@ package body Ships.Movement is
          if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
              .Owner /=
            Abandoned then
-            if MoneyIndex = 0 then
+            if MoneyIndex2 = 0 then
                ShowDialog
                  ("You can't dock to base because you don't have Charcollum to pay for docking.");
                return;
@@ -229,12 +231,12 @@ package body Ships.Movement is
                when others =>
                   null;
             end case;
-            if DockingCost > PlayerShip.Cargo(MoneyIndex).Amount then
+            if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
                ShowDialog
                  ("You can't dock to base because you don't have enough Charcollum to pay for docking.");
                return;
             end if;
-            UpdateCargo(PlayerShip, 1, (0 - DockingCost));
+            UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - DockingCost));
             AddMessage
               ("Ship docked to base " &
                To_String(SkyBases(BaseIndex).Name) &

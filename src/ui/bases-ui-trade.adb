@@ -169,7 +169,7 @@ package body Bases.UI.Trade is
         1;
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
-      MoneyIndex: Natural := 0;
+      MoneyIndex2: Natural := 0;
       MenuIndex: Integer := 1;
       FreeSpace: Integer;
       ItemsAmount: Positive := 1;
@@ -239,13 +239,13 @@ package body Bases.UI.Trade is
          CurrentMenuIndex := 1;
       end if;
       Set_Current(TradeMenu, Trade_Items.all(CurrentMenuIndex));
-      MoneyIndex := FindCargo(1);
+      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
       Move_Cursor(Line => (MenuHeight + 4), Column => 2);
-      if MoneyIndex > 0 then
+      if MoneyIndex2 > 0 then
          Add
            (Str =>
               "You have" &
-              Natural'Image(PlayerShip.Cargo(MoneyIndex).Amount) &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
               " Charcollum.");
       else
          Add(Str => "You don't have any Charcollum to buy anything.");

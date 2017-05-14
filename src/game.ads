@@ -114,6 +114,7 @@ package Game is
    FoodTypes: array(1 .. 2) of Unbounded_String :=
      (To_Unbounded_String("Food"), To_Unbounded_String("RawFood"));
    FuelType: Unbounded_String := To_Unbounded_String("Fuel");
+   MoneyIndex: Unbounded_String := To_Unbounded_String("1");
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
