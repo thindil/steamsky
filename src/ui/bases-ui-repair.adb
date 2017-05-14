@@ -115,7 +115,7 @@ package body Bases.UI.Repair is
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
       MenuIndex: Integer := 1;
-      MoneyIndex: Natural := 0;
+      MoneyIndex2: Natural := 0;
    begin
       for Module of PlayerShip.Modules loop
          if Module.Durability < Module.MaxDurability then
@@ -161,13 +161,13 @@ package body Bases.UI.Repair is
          CurrentMenuIndex := 1;
       end if;
       Set_Current(TradeMenu, Repair_Items.all(CurrentMenuIndex));
-      MoneyIndex := FindCargo(1);
+      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
       Move_Cursor(Line => (MenuHeight + 4), Column => 2);
-      if MoneyIndex > 0 then
+      if MoneyIndex2 > 0 then
          Add
            (Str =>
               "You have" &
-              Natural'Image(PlayerShip.Cargo(MoneyIndex).Amount) &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
               " Charcollum.");
       else
          Add(Str => "You don't have any Charcollum to repair anything.");

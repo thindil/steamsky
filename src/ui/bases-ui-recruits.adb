@@ -19,6 +19,7 @@ with Maps; use Maps;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
+with Items; use Items;
 
 package body Bases.UI.Recruits is
 
@@ -98,7 +99,7 @@ package body Bases.UI.Recruits is
       Recruits_Items: Item_Array_Access;
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
-      MoneyIndex: Natural := 0;
+      MoneyIndex2: Natural := 0;
    begin
       if SkyBases(BaseIndex).Recruits.Length = 0 then
          Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
@@ -131,13 +132,13 @@ package body Bases.UI.Recruits is
          CurrentMenuIndex := 1;
       end if;
       Set_Current(TradeMenu, Recruits_Items.all(CurrentMenuIndex));
-      MoneyIndex := FindCargo(1);
+      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
       Move_Cursor(Line => (MenuHeight + 4), Column => 2);
-      if MoneyIndex > 0 then
+      if MoneyIndex2 > 0 then
          Add
            (Str =>
               "You have" &
-              Natural'Image(PlayerShip.Cargo(MoneyIndex).Amount) &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
               " Charcollum.");
       else
          Add(Str => "You don't have any Charcollum to hire anyone.");

@@ -78,7 +78,7 @@ package body Bases.UI.Recipes is
         1;
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
-      MoneyIndex, MenuAmount: Natural := 0;
+      MoneyIndex2, MenuAmount: Natural := 0;
       MenuIndex: Positive := 1;
    begin
       for I in Recipes_List.Iterate loop
@@ -116,13 +116,13 @@ package body Bases.UI.Recipes is
         (TradeMenu,
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
       Post(TradeMenu);
-      MoneyIndex := FindCargo(1);
+      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
       Move_Cursor(Line => (MenuHeight + 4), Column => 2);
-      if MoneyIndex > 0 then
+      if MoneyIndex2 > 0 then
          Add
            (Str =>
               "You have" &
-              Natural'Image(PlayerShip.Cargo(MoneyIndex).Amount) &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
               " Charcollum.");
       else
          Add(Str => "You don't have any Charcollum to buy anything.");

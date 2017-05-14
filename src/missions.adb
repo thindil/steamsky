@@ -393,7 +393,7 @@ package body Missions is
                Integer'Image(RewardAmount) &
                " Charcollum for finished mission.",
                MissionMessage);
-            UpdateCargo(PlayerShip, 1, RewardAmount);
+            UpdateCargo(PlayerShip, FindProtoItem(MoneyIndex), RewardAmount);
          end if;
       end if;
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := 0;
