@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.0.2] - 2017-05-14
 
 ### Fixed
 - Counting player accuracy in combat
