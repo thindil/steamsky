@@ -93,6 +93,12 @@ To change which item type is used as a fuel for ship, open file *game.dat* in
 *data* directory and edit line which starts with FuelType. Value after equal 
 sign must be existing item type. Default value is 'Fuel'.
 
+## Money index
+To change which item is used as a money, open file *game.dat* in *data* 
+directory and edit line which starts with MoneyIndex. Value after equal sign 
+must be existing item index from any items file from *data/items* directory.
+Default value is '1'.
+
 ## Items
 
 ### General informations
