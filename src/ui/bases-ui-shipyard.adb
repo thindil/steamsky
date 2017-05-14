@@ -334,7 +334,7 @@ package body Bases.UI.Shipyard is
       MenuLength: Column_Position;
       MenuIndex: Integer := 1;
       MenuOptions: Menu_Option_Set;
-      MoneyIndex: Natural;
+      MoneyIndex2: Natural;
       procedure AddMenuItems(MType: ModuleType) is
       begin
          for I in Modules_List.Iterate loop
@@ -410,13 +410,13 @@ package body Bases.UI.Shipyard is
          CurrentMenuIndex := 1;
       end if;
       Set_Current(TradeMenu, Modules_Items.all(CurrentMenuIndex));
-      MoneyIndex := FindCargo(1);
+      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
       Move_Cursor(Line => (MenuHeight + 5), Column => 2);
-      if MoneyIndex > 0 then
+      if MoneyIndex2 > 0 then
          Add
            (Str =>
               "You have" &
-              Natural'Image(PlayerShip.Cargo(MoneyIndex).Amount) &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
               " Charcollum.");
       elsif InstallView then
          Add(Str => "You don't have any Charcollum to install anything.");
