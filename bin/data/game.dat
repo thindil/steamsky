@@ -26,3 +26,4 @@ CorpseIndex = 40
 MissionItemsType = MissionItem
 FoodTypes = Food, RawFood
 FuelType = Fuel
+MoneyIndex = 1
