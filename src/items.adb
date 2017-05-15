@@ -125,13 +125,25 @@ package body Items is
       End_Search(Files);
    end LoadItems;
 
-   function FindProtoItem(Index: Unbounded_String) return Natural is
+   function FindProtoItem
+     (Index,
+      ItemType: Unbounded_String :=
+        Null_Unbounded_String)
+     return Natural is
    begin
-      for I in Items_List.Iterate loop
-         if Items_List(I).Index = Index then
-            return Objects_Container.To_Index(I);
-         end if;
-      end loop;
+      if Index /= Null_Unbounded_String then
+         for I in Items_List.Iterate loop
+            if Items_List(I).Index = Index then
+               return Objects_Container.To_Index(I);
+            end if;
+         end loop;
+      elsif ItemType /= Null_Unbounded_String then
+         for I in Items_List.Iterate loop
+            if Items_List(I).IType = ItemType then
+               return Objects_Container.To_Index(I);
+            end if;
+         end loop;
+      end if;
       return 0;
    end FindProtoItem;
 
