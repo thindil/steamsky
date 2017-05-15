@@ -44,7 +44,9 @@ package Items is
 
    procedure LoadItems; -- Load items from files
    function FindProtoItem
-     (Index: Unbounded_String)
+     (Index,
+      ItemType: Unbounded_String :=
+        Null_Unbounded_String)
      return Natural; -- Return vector index of item or zero if item not found
 
 end Items;
