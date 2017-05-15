@@ -103,18 +103,17 @@ package Game is
    ShipSyllablesMiddle: UnboundedString_Container.Vector;
    ShipSyllablesEnd: UnboundedString_Container.Vector;
    Skills_Names: UnboundedString_Container.Vector;
-   RepairTools: Unbounded_String := To_Unbounded_String("RepairTools");
-   CleaningTools: Unbounded_String := To_Unbounded_String("Bucket");
-   HealingTools: Unbounded_String := To_Unbounded_String("Medicines");
-   PlayerShipIndex: Unbounded_String := To_Unbounded_String("1");
-   AlchemyTools: Unbounded_String := To_Unbounded_String("AlchemySet");
-   DrinksType: Unbounded_String := To_Unbounded_String("Drink");
-   CorpseIndex: Unbounded_String := To_Unbounded_String("40");
-   MissionItemsType: Unbounded_String := To_Unbounded_String("MissionItem");
-   FoodTypes: array(1 .. 2) of Unbounded_String :=
-     (To_Unbounded_String("Food"), To_Unbounded_String("RawFood"));
-   FuelType: Unbounded_String := To_Unbounded_String("Fuel");
-   MoneyIndex: Unbounded_String := To_Unbounded_String("1");
+   RepairTools: Unbounded_String;
+   CleaningTools: Unbounded_String;
+   HealingTools: Unbounded_String;
+   PlayerShipIndex: Unbounded_String;
+   AlchemyTools: Unbounded_String;
+   DrinksType: Unbounded_String;
+   CorpseIndex: Unbounded_String;
+   MissionItemsType: Unbounded_String;
+   FoodTypes: array(1 .. 2) of Unbounded_String;
+   FuelType: Unbounded_String;
+   MoneyIndex: Unbounded_String;
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
