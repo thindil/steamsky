@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated MODDING.md
 - Faster gaining reputation in bases
+- Gain more reputation from finished missions
 
 ### Fixed
 - Counting enemy evasion during combat
