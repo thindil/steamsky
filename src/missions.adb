@@ -354,7 +354,7 @@ package body Missions is
       FreeSpace, RewardAmount: Integer;
    begin
       if Failed then
-         GainRep(Mission.StartBase, -5);
+         GainRep(Mission.StartBase, -10);
          case Mission.MType is
             when Deliver =>
                Append
@@ -375,13 +375,12 @@ package body Missions is
          end case;
          AddMessage(To_String(MessageText), MissionMessage);
       else
-         case Mission.MType is
-            when Deliver =>
-               GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 3);
-               GainRep(Mission.StartBase, 2);
-            when others =>
-               GainRep(Mission.StartBase, 5);
-         end case;
+         if Mission.MType = Deliver then
+            GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 5);
+            GainRep(Mission.StartBase, 5);
+         else
+            GainRep(Mission.StartBase, 10);
+         end if;
          RewardAmount := Mission.Reward;
          FreeSpace := FreeCargo((0 - RewardAmount));
          if FreeSpace < 0 then
