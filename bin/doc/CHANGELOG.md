@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file.
   battering ram, small advanced steel engine, medium steel engine, small
   advanced steel hull, medium steel hull, medium advanced steel engine,
   large steel engine, large advanced steel engine, small steel furnace,
-  advanced medium steel hull, large steel hull and advanced large steel hull
+  advanced medium steel hull, large steel hull, advanced large steel hull and
+  steel armor
 - Option to set which item type is used for delivery missions items
 - Option to set which item type is used as drinks
 - Option to set which item type is used as corpses
