@@ -1399,4 +1399,17 @@ Skill = Engineering
 Price = 19500 
 InstallTime = 280
 Description = Base module of each ship, made of steel. Whole ship is destroyed if hull is destroyed.
+[111]
+Name = Steel armor
+Type = Armor
+Weight = 6500
+Value = 5
+MaxValue = 10
+Durability = 600
+Material = Steel
+Skill = Engineering
+Price = 12000
+InstallTime = 220
+Unique = Yes
+Description = Standard type of steel armor. Protect whole ship.
 []
