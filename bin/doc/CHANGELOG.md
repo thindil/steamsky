@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - Showing others/missions messages
 - Crash on removing damaged items
 - Info about lack of food/drinks in ship cargo
+- Showing this same deconstruct option few times
 
 ## [1.1] - 2017-04-30
 
