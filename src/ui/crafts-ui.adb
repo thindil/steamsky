@@ -265,7 +265,9 @@ package body Crafts.UI is
          for J in Recipes_List.First_Index .. Recipes_List.Last_Index loop
             if Recipes_List(J).ResultIndex = Item.ProtoIndex then
                if Known_Recipes.Find_Index(Item => J) =
-                 Positive_Container.No_Index then
+                 Positive_Container.No_Index and
+                 Deconstructs.Find_Index(Item => Item.ProtoIndex) =
+                   Positive_Container.No_Index then
                   Deconstructs.Append(New_Item => Item.ProtoIndex);
                   exit;
                end if;
