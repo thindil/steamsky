@@ -40,64 +40,61 @@ ships, ships modules, etc.)
 ## Repair tools type
 To change which item type is used for repair/upgrading tools, open file 
 *game.dat* in *data* directory and edit line which starts with RepairTools.
-Value after equal sign must be existing item type. Default value is
-'RepairTools.'
+Value after equal sign must be existing item type.
 
 ## Cleaning tools type
 To change which item type is used for cleaning ship, open file *game.dat* in 
 *data* directory and edit line which starts with CleaningTools. Value after 
-equal sign must be existing item type. Default value is 'Bucket'.
+equal sign must be existing item type.
 
 ## Healing tools type
 To change which item type is used for healing crew members and for deliver
 medicines to bases, open file *game.dat* in *data* directory and edit line
 which starts with HealingTools. Value after equal sign must be existing 
-item type. Default value is 'Medicines'.
+item type.
 
 ## Player Ship index
 To change which ship is used as a player ship, open file *game.dat* in *data*
 directory and edit line which starts with PlayerShipIndex. Value after equal
 sign must be existing ship index from any ships file from *data/ships*
-directory. Default value is '1'.
+directory.
 
 ## Alchemy tools type
 To change which item type is used for deconstruct items, open file *game.dat* 
 in *data* directory and edit line which starts with AlchemyTools. Value after 
-equal sign must be existing item type. Default value is 'AlchemySet'.
+equal sign must be existing item type.
 
 ## Drinks type
 To change which item type is used for reduce thirst, open file *game.dat* 
 in *data* directory and edit line which starts with DrinksType. Value after 
-equal sign must be existing item type. Default value is 'Drink'.
+equal sign must be existing item type.
 
 ## Corpse index
 To change which item is used as a body for dead, open file *game.dat* in *data*
 directory and edit line which starts with CorpseIndex. Value after equal sign 
 must be existing item index from any items file from *data/items* directory.
-Default value is '40'.
 
 ## Mission items type
 To change which item type is used for delivery missions, open file *game.dat* 
 in *data* directory and edit line which starts with MissionItemsType. Value 
-after equal sign must be existing item type. Default value is 'MissionItem'.
+after equal sign must be existing item type.
 
 ## Food items types
 To change which items types are used as food, open file *game.dat* in *data*
 directory and edit line which starts with FoodTypes. First type is main food
 type, second type is used by crew members when first type isn't found in ship
 cargo. Values after equal sign must be existing items types, separated by coma
-and space: `, `. Default value is 'Food, RawFood'.
+and space: `, `.
 
 ## Fuel item type
 To change which item type is used as a fuel for ship, open file *game.dat* in 
 *data* directory and edit line which starts with FuelType. Value after equal 
-sign must be existing item type. Default value is 'Fuel'.
+sign must be existing item type.
 
 ## Money index
 To change which item is used as a money, open file *game.dat* in *data* 
 directory and edit line which starts with MoneyIndex. Value after equal sign 
 must be existing item index from any items file from *data/items* directory.
-Default value is '1'.
 
 ## Items
 
