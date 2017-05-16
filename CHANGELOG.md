@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Showing this same deconstruct option few times
+
 ## [1.0.2] - 2017-05-14
 
 ### Fixed
