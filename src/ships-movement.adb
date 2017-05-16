@@ -120,7 +120,11 @@ package body Ships.Movement is
             return 0;
          end if;
          if PlayerShip.Cargo(FuelIndex).Amount < abs FuelNeeded then
-            ShowDialog("You don't have enough fuel (Charcollum).");
+            ShowDialog
+              ("You don't have enough fuel (" &
+               To_String
+                 (Items_List(PlayerShip.Cargo(FuelIndex).ProtoIndex).Name) &
+               ").");
             return 0;
          end if;
          NewX := PlayerShip.SkyX + X;
