@@ -328,7 +328,7 @@ package body Game is
          To_Unbounded_String("ShipSyllablesMiddle"),
          To_Unbounded_String("ShipSyllablesEnd"),
          To_Unbounded_String("RepairTools"),
-         To_Unbounded_String("CleaningToools"),
+         To_Unbounded_String("CleaningTools"),
          To_Unbounded_String("HealingTools"),
          To_Unbounded_String("PlayerShipIndex"),
          To_Unbounded_String("AlchemyTools"),
