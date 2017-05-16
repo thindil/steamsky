@@ -155,7 +155,10 @@ package body Events is
                         TimePassed := 1;
                      end if;
                      GainExp(1, 1, CrewIndex);
-                     UpdateCargo(PlayerShip, 1, -1);
+                     UpdateCargo
+                       (PlayerShip,
+                        FindProtoItem(ItemType => FuelType),
+                        -1);
                      UpdateGame(TimePassed);
                   end if;
                when others => -- Combat
