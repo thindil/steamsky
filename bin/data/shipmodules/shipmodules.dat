@@ -1412,4 +1412,17 @@ Price = 12000
 InstallTime = 220
 Unique = Yes
 Description = Standard type of steel armor. Protect whole ship.
+[112]
+Name = Heavy steel armor
+Type = Armor
+Weight = 9000
+Value = 5
+MaxValue = 10
+Durability = 800
+Material = Steel
+Skill = Engineering
+Price = 15000
+InstallTime = 240
+Unique = Yes
+Description = Heaviest type of steel armor. Protect whole ship.
 []
