@@ -1425,4 +1425,17 @@ Price = 15000
 InstallTime = 240
 Unique = Yes
 Description = Heaviest type of steel armor. Protect whole ship.
+[113]
+Name = Steel turret
+Type = Turret
+Weight = 120
+Value = 0
+MaxValue = 0
+Durability = 340
+Material = Steel
+Skill = Engineering
+Price = 950
+InstallTime = 90
+Size = 1
+Description = Standard steel turret. If turret is destroyed, gun is destroyed too and gunner killed.
 []
