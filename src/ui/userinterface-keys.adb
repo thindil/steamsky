@@ -341,7 +341,9 @@ package body UserInterface.Keys is
             elsif OldState = Dismiss_Confirm then
                DrawGame(Crew_Info);
                return Crew_Info;
-            elsif OldState = Quit_Confirm then
+            elsif OldState = Quit_Confirm or
+              OldState = PilotRest_Confirm or
+              OldState = EngineerRest_Confirm then
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             elsif OldState = Death_Confirm then
@@ -380,6 +382,11 @@ package body UserInterface.Keys is
             elsif OldState = Death_Confirm then
                DrawGame(GameStats_View);
                return GameStats_View;
+            elsif OldState = PilotRest_Confirm or
+              OldState = EngineerRest_Confirm then
+               WaitForRest;
+               DrawGame(Sky_Map_View);
+               return Sky_Map_View;
             else
                return OldState;
             end if;
