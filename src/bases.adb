@@ -128,12 +128,19 @@ package body Bases is
          return;
       end if;
       if MoneyIndex2 = 0 then
-         ShowDialog("You don't have charcollum to buy " & ItemName & ".");
+         ShowDialog
+           ("You don't have " &
+            To_String(MoneyName) &
+            " to buy " &
+            ItemName &
+            ".");
          return;
       end if;
       if Cost > PlayerShip.Cargo(MoneyIndex2).Amount then
          ShowDialog
-           ("You don't have enough charcollum to buy so much " &
+           ("You don't have enough " &
+            To_String(MoneyName) &
+            " to buy so much " &
             ItemName &
             ".");
          return;
@@ -149,7 +156,9 @@ package body Bases is
          ItemName &
          " for" &
          Positive'Image(Cost) &
-         " Charcollum.",
+         " " &
+         To_String(MoneyName) &
+         ".",
          TradeMessage);
       UpdateGame(5);
    exception
@@ -196,7 +205,9 @@ package body Bases is
       if FreeCargo((Items_List(ProtoIndex).Weight * SellAmount) - Profit) <
         0 then
          ShowDialog
-           ("You don't have enough free cargo space in your ship for Charcollum.");
+           ("You don't have enough free cargo space in your ship for " &
+            To_String(MoneyName) &
+            ".");
          return;
       end if;
       UpdateCargo
@@ -214,7 +225,9 @@ package body Bases is
          ItemName &
          " for" &
          Positive'Image(Profit) &
-         " Charcollum.",
+         " " &
+         To_String(MoneyName) &
+         ".",
          TradeMessage);
       UpdateGame(5);
    exception
@@ -268,13 +281,17 @@ package body Bases is
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
       MoneyIndex2 := FindCargo(ProtoMoneyIndex);
       if MoneyIndex2 = 0 then
-         ShowDialog("You don't have Charcollum to pay for repairs.");
+         ShowDialog
+           ("You don't have " & To_String(MoneyName) & " to pay for repairs.");
          return;
       end if;
       TraderIndex := FindMember(Talk);
       CountPrice(Cost, TraderIndex);
       if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
-         ShowDialog("You don't have enough Charcollum to pay for repairs.");
+         ShowDialog
+           ("You don't have enough " &
+            To_String(MoneyName) &
+            " to pay for repairs.");
          return;
       end if;
       for I in PlayerShip.Crew.Iterate loop
@@ -296,7 +313,9 @@ package body Bases is
             To_String(PlayerShip.Modules(ModuleIndex).Name) &
             " repair for" &
             Positive'Image(Cost) &
-            " Charcollum.",
+            " " &
+            To_String(MoneyName) &
+            ".",
             TradeMessage);
       else
          for Module of PlayerShip.Modules loop
@@ -307,7 +326,9 @@ package body Bases is
          AddMessage
            ("You bought whole ship repair for" &
             Positive'Image(Cost) &
-            " Charcollum.",
+            " " &
+            To_String(MoneyName) &
+            ".",
             TradeMessage);
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
@@ -325,7 +346,8 @@ package body Bases is
       Damage: DamageFactor := 0.0;
    begin
       if MoneyIndex2 = 0 then
-         ShowDialog("You don't have Charcollum to pay for modules.");
+         ShowDialog
+           ("You don't have " & To_String(MoneyName) & " to pay for modules.");
          return;
       end if;
       for C in PlayerShip.Modules.Iterate loop
@@ -347,7 +369,9 @@ package body Bases is
          CountPrice(Price, TraderIndex);
          if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
             ShowDialog
-              ("You don't have enough Charcollum to pay for " &
+              ("You don't have enough " &
+               To_String(MoneyName) &
+               " to pay for " &
                To_String(Modules_List(ModuleIndex).Name) &
                ".");
             return;
@@ -436,7 +460,9 @@ package body Bases is
             To_String(Modules_List(ModuleIndex).Name) &
             " on your ship for" &
             Positive'Image(Price) &
-            " Charcollum.",
+            " " &
+            To_String(MoneyName) &
+            ".",
             TradeMessage);
       else
          Damage :=
@@ -454,7 +480,9 @@ package body Bases is
          CountPrice(Price, TraderIndex, False);
          if FreeCargo((0 - Price)) < 0 then
             ShowDialog
-              ("You don't have enough free space for Charcollum in ship cargo.");
+              ("You don't have enough free space for " &
+               To_String(MoneyName) &
+               " in ship cargo.");
             return;
          end if;
          case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
@@ -516,7 +544,9 @@ package body Bases is
             To_String(PlayerShip.Modules(ModuleIndex).Name) &
             " from your ship and earned" &
             Positive'Image(Price) &
-            " Charcollum.",
+            " " &
+            To_String(MoneyName) &
+            ".",
             TradeMessage);
          PlayerShip.Modules.Delete(ModuleIndex, 1);
          if PlayerShip.RepairModule > ModuleIndex then
@@ -635,7 +665,8 @@ package body Bases is
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
       MoneyIndex2 := FindCargo(ProtoMoneyIndex);
       if MoneyIndex2 = 0 then
-         ShowDialog("You don't have Charcollum to hire anyone.");
+         ShowDialog
+           ("You don't have " & To_String(MoneyName) & " to hire anyone.");
          return;
       end if;
       TraderIndex := FindMember(Talk);
@@ -643,7 +674,9 @@ package body Bases is
       CountPrice(Price, TraderIndex);
       if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
          ShowDialog
-           ("You don't have enough Charcollum to hire " &
+           ("You don't have enough " &
+            To_String(MoneyName) &
+            " to hire " &
             To_String(Recruit.Name) &
             ".");
          return;
@@ -669,7 +702,9 @@ package body Bases is
          To_String(Recruit.Name) &
          " for" &
          Positive'Image(Price) &
-         " Charcollum.",
+         " " &
+         To_String(MoneyName) &
+         ".",
          TradeMessage);
       SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex, Count => 1);
       SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population - 1;
@@ -1002,12 +1037,18 @@ package body Bases is
       MoneyIndex2 := FindCargo(ProtoMoneyIndex);
       if MoneyIndex2 = 0 then
          ShowDialog
-           ("You don't have charcollum to buy recipe for " & RecipeName & ".");
+           ("You don't have " &
+            To_String(MoneyName) &
+            " to buy recipe for " &
+            RecipeName &
+            ".");
          return;
       end if;
       if Cost > PlayerShip.Cargo(MoneyIndex2).Amount then
          ShowDialog
-           ("You don't have enough charcollum to buy recipe for " &
+           ("You don't have enough" &
+            To_String(MoneyName) &
+            "  to buy recipe for " &
             RecipeName &
             ".");
          return;
@@ -1019,7 +1060,9 @@ package body Bases is
          RecipeName &
          " for" &
          Positive'Image(Cost) &
-         " of charcollum.",
+         " of " &
+         To_String(MoneyName) &
+         ".",
          TradeMessage);
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);

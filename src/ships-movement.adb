@@ -195,7 +195,9 @@ package body Ships.Movement is
            Abandoned then
             if MoneyIndex2 = 0 then
                ShowDialog
-                 ("You can't dock to base because you don't have Charcollum to pay for docking.");
+                 ("You can't dock to base because you don't have " &
+                  To_String(MoneyName) &
+                  " to pay for docking.");
                return;
             end if;
             for Module of PlayerShip.Modules loop
@@ -237,7 +239,9 @@ package body Ships.Movement is
             end case;
             if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
                ShowDialog
-                 ("You can't dock to base because you don't have enough Charcollum to pay for docking.");
+                 ("You can't dock to base because you don't have enough " &
+                  To_String(MoneyName) &
+                  " to pay for docking.");
                return;
             end if;
             UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - DockingCost));
@@ -246,7 +250,9 @@ package body Ships.Movement is
                To_String(SkyBases(BaseIndex).Name) &
                ". It costs" &
                Positive'Image(DockingCost) &
-               " Charcollum.",
+               " " &
+               To_String(MoneyName) &
+               ".",
                OrderMessage);
             if TraderIndex > 0 then
                GainExp(1, 4, TraderIndex);

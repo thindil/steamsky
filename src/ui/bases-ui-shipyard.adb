@@ -85,7 +85,11 @@ package body Bases.UI.Shipyard is
       InfoWindow := Create(15, (Columns / 2), 4, (Columns / 2));
       Add
         (Win => InfoWindow,
-         Str => To_String(TextCost) & Positive'Image(Cost) & " Charcollum");
+         Str =>
+           To_String(TextCost) &
+           Positive'Image(Cost) &
+           " " &
+           To_String(MoneyName));
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
       Add
         (Win => InfoWindow,
@@ -417,9 +421,15 @@ package body Bases.UI.Shipyard is
            (Str =>
               "You have" &
               Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-              " Charcollum.");
+              " " &
+              To_String(MoneyName) &
+              ".");
       elsif InstallView then
-         Add(Str => "You don't have any Charcollum to install anything.");
+         Add
+           (Str =>
+              "You don't have any " &
+              To_String(MoneyName) &
+              " to install anything.");
       end if;
       Move_Cursor(Line => (MenuHeight + 6), Column => 2);
       for Module of PlayerShip.Modules loop

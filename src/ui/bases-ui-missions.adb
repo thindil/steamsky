@@ -125,7 +125,11 @@ package body Bases.UI.Missions is
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       Add
         (Win => InfoWindow,
-         Str => "Reward:" & Positive'Image(Mission.Reward) & " Charcollum");
+         Str =>
+           "Reward:" &
+           Positive'Image(Mission.Reward) &
+           " " &
+           To_String(MoneyName));
       case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
         .Reputation
         (1) is
