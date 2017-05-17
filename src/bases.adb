@@ -530,7 +530,9 @@ package body Bases is
          UpdateGame
            (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
               .InstallTime);
-         if PlayerShip.Modules(ModuleIndex).Owner > 0 then
+         if PlayerShip.Modules(ModuleIndex).Owner > 0 and
+           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType /=
+             CABIN then
             GiveOrders
               (MemberIndex => PlayerShip.Modules(ModuleIndex).Owner,
                GivenOrder => Rest,
