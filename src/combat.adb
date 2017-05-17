@@ -564,7 +564,9 @@ package body Combat is
                               AddMessage
                                 ("You looted" &
                                  Integer'Image(LootAmount) &
-                                 " Charcollum from " &
+                                 " " &
+                                 To_String(MoneyName) &
+                                 " from " &
                                  To_String(EnemyName) &
                                  ".",
                                  CombatMessage);

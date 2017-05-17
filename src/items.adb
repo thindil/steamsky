@@ -61,6 +61,9 @@ package body Items is
                Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
                if FieldName = To_Unbounded_String("Name") then
                   TempRecord.Name := Value;
+                  if TempRecord.Index = MoneyIndex then
+                     MoneyName := Value;
+                  end if;
                elsif FieldName = To_Unbounded_String("Weight") then
                   TempRecord.Weight := Integer'Value(To_String(Value));
                elsif FieldName = To_Unbounded_String("Type") then

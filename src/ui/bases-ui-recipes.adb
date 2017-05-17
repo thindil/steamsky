@@ -54,7 +54,8 @@ package body Bases.UI.Recipes is
       end if;
       Add
         (Win => InfoWindow,
-         Str => "Base price:" & Positive'Image(Cost) & " Charcollum");
+         Str =>
+           "Base price:" & Positive'Image(Cost) & " " & To_String(MoneyName));
       Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
       Add(Win => InfoWindow, Str => "ENTER to buy selected recipe.");
       Change_Attributes
@@ -123,9 +124,15 @@ package body Bases.UI.Recipes is
            (Str =>
               "You have" &
               Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-              " Charcollum.");
+              " " &
+              To_String(MoneyName) &
+              ".");
       else
-         Add(Str => "You don't have any Charcollum to buy anything.");
+         Add
+           (Str =>
+              "You don't have any " &
+              To_String(MoneyName) &
+              " to buy anything.");
       end if;
       ShowRecipeInfo;
       Refresh(MenuWindow);

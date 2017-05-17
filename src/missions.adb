@@ -390,7 +390,9 @@ package body Missions is
             AddMessage
               ("You received" &
                Integer'Image(RewardAmount) &
-               " Charcollum for finished mission.",
+               " " &
+               To_String(MoneyName) &
+               " for finished mission.",
                MissionMessage);
             UpdateCargo(PlayerShip, FindProtoItem(MoneyIndex), RewardAmount);
          end if;

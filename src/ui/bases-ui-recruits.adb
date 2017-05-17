@@ -81,7 +81,9 @@ package body Bases.UI.Recruits is
          Str =>
            "Press ENTER to hire for" &
            Positive'Image(Recruit.Price) &
-           " Charcollum.");
+           " " &
+           To_String(MoneyName) &
+           ".");
       Change_Attributes
         (Win => InfoWindow,
          Line => CurrentLine,
@@ -139,9 +141,15 @@ package body Bases.UI.Recruits is
            (Str =>
               "You have" &
               Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-              " Charcollum.");
+              " " &
+              To_String(MoneyName) &
+              ".");
       else
-         Add(Str => "You don't have any Charcollum to hire anyone.");
+         Add
+           (Str =>
+              "You don't have any " &
+              To_String(MoneyName) &
+              " to hire anyone.");
       end if;
       ShowRecruitInfo;
       Refresh(MenuWindow);

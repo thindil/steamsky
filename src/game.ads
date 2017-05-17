@@ -114,6 +114,7 @@ package Game is
    FoodTypes: array(1 .. 2) of Unbounded_String;
    FuelType: Unbounded_String;
    MoneyIndex: Unbounded_String;
+   MoneyName: Unbounded_String;
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
