@@ -528,7 +528,11 @@ package body Bases is
            (Modules_List.Element
             (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
               .InstallTime);
-         if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 then
+         if PlayerShip.Modules.Element(ModuleIndex).Owner > 0 and
+           Modules_List.Element
+             (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+               .MType /=
+             CABIN then
             GiveOrders
               (MemberIndex => PlayerShip.Modules.Element(ModuleIndex).Owner,
                GivenOrder => Rest,
