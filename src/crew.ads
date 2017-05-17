@@ -66,5 +66,6 @@ package Crew is
      (Minutes: Positive;
       TiredPoints: Natural); -- Update ship crew
    procedure UpdateOrders; -- Update crew orders based on their orders priorities
+   procedure WaitForRest; -- Wait until whole crew is rested
 
 end Crew;

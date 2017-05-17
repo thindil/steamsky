@@ -392,11 +392,8 @@ package body UserInterface.Keys is
    function WaitMenuKeys
      (OldState: GameStates;
       Key: Key_Code) return GameStates is
-      TimeNeeded, CabinIndex, TempTimeNeeded: Natural := 0;
+      TimeNeeded: Natural := 0;
       ReturnState: GameStates;
-      type DamageFactor is digits 2 range 0.0 .. 1.0;
-      Damage: DamageFactor := 0.0;
-      CabinBonus: Natural;
       Order: constant String :=
         Name(Current(OrdersMenu))(4 .. Name(Current(OrdersMenu))'Last);
       Result: Menus.Driver_Result;
@@ -441,56 +438,7 @@ package body UserInterface.Keys is
                ShowWaitForm;
                return WaitX_Order;
             elsif Order = "Wait until crew is rested" then
-               for I in PlayerShip.Crew.Iterate loop
-                  if PlayerShip.Crew(I).Tired > 0 and
-                    PlayerShip.Crew(I).Order = Rest then
-                     CabinIndex := 0;
-                     TempTimeNeeded := 0;
-                     for J in PlayerShip.Modules.Iterate loop
-                        if Modules_List(PlayerShip.Modules(J).ProtoIndex)
-                            .MType =
-                          CABIN and
-                          PlayerShip.Modules(J).Owner =
-                            Crew_Container.To_Index(I) then
-                           CabinIndex := Modules_Container.To_Index(J);
-                           exit;
-                        end if;
-                     end loop;
-                     if CabinIndex > 0 then
-                        Damage :=
-                          1.0 -
-                          DamageFactor
-                            (Float(PlayerShip.Modules(CabinIndex).Durability) /
-                             Float
-                               (PlayerShip.Modules(CabinIndex).MaxDurability));
-                        CabinBonus :=
-                          PlayerShip.Modules(CabinIndex).Current_Value -
-                          Natural
-                            (Float
-                               (PlayerShip.Modules(CabinIndex).Current_Value) *
-                             Float(Damage));
-                        if CabinBonus = 0 then
-                           CabinBonus := 1;
-                        end if;
-                        TempTimeNeeded :=
-                          (PlayerShip.Crew(I).Tired / CabinBonus) * 15;
-                        if TempTimeNeeded = 0 then
-                           TempTimeNeeded := 15;
-                        end if;
-                     else
-                        TempTimeNeeded := PlayerShip.Crew(I).Tired * 15;
-                     end if;
-                     TempTimeNeeded := TempTimeNeeded + 15;
-                     if TempTimeNeeded > TimeNeeded then
-                        TimeNeeded := TempTimeNeeded;
-                     end if;
-                  end if;
-               end loop;
-               if TimeNeeded > 0 then
-                  UpdateGame(TimeNeeded);
-               else
-                  return Wait_Order;
-               end if;
+               WaitForRest;
             elsif Order = "Wait until crew is healed" then
                for I in PlayerShip.Crew.Iterate loop
                   if PlayerShip.Crew(I).Health < 100 and
