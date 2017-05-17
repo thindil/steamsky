@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Option to set which items types are used as food by crew members
 - Option to set which item type is used as fuel
 - Option to set which item is used as moneys
+- Ask for rest if needed after ship move
 
 ### Changed
 - Updated MODDING.md
