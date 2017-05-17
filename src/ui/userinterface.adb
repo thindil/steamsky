@@ -882,6 +882,16 @@ package body UserInterface is
             ShowBaseMissions;
          when Missions_View =>
             ShowMissions;
+         when PilotRest_Confirm =>
+            ShowSkyMap;
+            Refresh_Without_Update;
+            ShowConfirm
+              ("You don't have pilot on duty. Did you want to wait until your pilot rest?");
+         when EngineerRest_Confirm =>
+            ShowSkyMap;
+            Refresh_Without_Update;
+            ShowConfirm
+              ("You don't have engineer on duty. Did you want to wait until your engineer rest?");
          when others =>
             null;
       end case;

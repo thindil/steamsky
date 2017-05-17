@@ -82,6 +82,19 @@ package body Ships.Movement is
       type SpeedType is digits 2;
       Speed: SpeedType;
       FuelIndex: Natural;
+      function NeedRest(Order: Crew_Orders) return Boolean is
+         MemberIndex: Natural;
+      begin
+         MemberIndex := FindMember(Order);
+         if MemberIndex = 0 then
+            for Member of PlayerShip.Crew loop
+               if Member.PreviousOrder = Order then
+                  return True;
+               end if;
+            end loop;
+         end if;
+         return False;
+      end NeedRest;
    begin
       if ShipIndex = 0 then
          case PlayerShip.Speed is
@@ -162,6 +175,12 @@ package body Ships.Movement is
             GameStats.DistanceTraveled := GameStats.DistanceTraveled + 1;
             UpdateGame(TimePassed);
          end if;
+      end if;
+      if NeedRest(Pilot) then
+         return 6;
+      end if;
+      if NeedRest(Engineer) then
+         return 7;
       end if;
       return 1;
    end MoveShip;

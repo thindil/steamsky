@@ -175,6 +175,12 @@ begin
                when 5 =>
                   GameState := Combat_State;
                   DrawGame(GameState);
+               when 6 =>
+                  GameState := PilotRest_Confirm;
+                  DrawGame(GameState);
+               when 7 =>
+                  GameState := EngineerRest_Confirm;
+                  DrawGame(GameState);
                when others =>
                   DrawGame(GameState);
             end case;
@@ -192,7 +198,12 @@ begin
             GameState := TradeKeys(Key);
          when Help_View =>
             GameState := HelpMenuKeys(Key);
-         when Quit_Confirm | Clear_Confirm | Dismiss_Confirm | Death_Confirm =>
+         when Quit_Confirm |
+           Clear_Confirm |
+           Dismiss_Confirm |
+           Death_Confirm |
+           PilotRest_Confirm |
+           EngineerRest_Confirm =>
             GameState := ConfirmKeys(GameState, Key);
          when New_Game =>
             GameState := NewGameKeys(Key);

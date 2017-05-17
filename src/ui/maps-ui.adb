@@ -506,7 +506,7 @@ package body Maps.UI is
                   NewY := -1;
                end if;
                Result := MoveShip(0, NewX, NewY);
-               exit when Result = 0;
+               exit when Result = 0 or Result = 6 or Result = 7;
                if PlayerShip.DestinationX = PlayerShip.SkyX and
                  PlayerShip.DestinationY = PlayerShip.SkyY then
                   AddMessage
@@ -520,7 +520,9 @@ package body Maps.UI is
                   return 5;
                end if;
             end loop;
-            Result := 4;
+            if Result = 0 then
+               Result := 4;
+            end if;
          when KEY_SRIGHT =>
             MoveX := MoveX + 1;
             Result := 4;
