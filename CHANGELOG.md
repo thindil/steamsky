@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing this same deconstruct option few times
+- Sending crew member on break on selling cabin
 
 ## [1.0.2] - 2017-05-14
 
