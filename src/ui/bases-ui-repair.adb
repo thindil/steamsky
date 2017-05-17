@@ -87,7 +87,8 @@ package body Bases.UI.Repair is
       InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
       Add
         (Win => InfoWindow,
-         Str => "Repair cost:" & Natural'Image(Cost) & " Charcollum");
+         Str =>
+           "Repair cost:" & Natural'Image(Cost) & " " & To_String(MoneyName));
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
       Add
         (Win => InfoWindow,
@@ -168,9 +169,15 @@ package body Bases.UI.Repair is
            (Str =>
               "You have" &
               Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-              " Charcollum.");
+              " " &
+              To_String(MoneyName) &
+              ".");
       else
-         Add(Str => "You don't have any Charcollum to repair anything.");
+         Add
+           (Str =>
+              "You don't have any " &
+              To_String(MoneyName) &
+              " to repair anything.");
       end if;
       ShowRepairInfo;
       Refresh(MenuWindow);

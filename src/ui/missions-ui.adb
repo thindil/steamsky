@@ -133,7 +133,11 @@ package body Missions.UI is
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       Add
         (Win => InfoWindow,
-         Str => "Reward:" & Positive'Image(Mission.Reward) & " Charcollum");
+         Str =>
+           "Reward:" &
+           Positive'Image(Mission.Reward) &
+           " " &
+           To_String(MoneyName));
       if Mission.Finished then
          CurrentLine := CurrentLine + 1;
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);

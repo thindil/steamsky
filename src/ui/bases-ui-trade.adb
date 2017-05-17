@@ -76,7 +76,9 @@ package body Bases.UI.Trade is
             Price := Price * 2;
          end if;
       end if;
-      Add(Win => InfoWindow, Str => Integer'Image(Price) & " Charcollum");
+      Add
+        (Win => InfoWindow,
+         Str => Integer'Image(Price) & " " & To_String(MoneyName));
       Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
       Add
         (Win => InfoWindow,
@@ -246,9 +248,15 @@ package body Bases.UI.Trade is
            (Str =>
               "You have" &
               Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-              " Charcollum.");
+              " " &
+              To_String(MoneyName) &
+              ".");
       else
-         Add(Str => "You don't have any Charcollum to buy anything.");
+         Add
+           (Str =>
+              "You don't have any " &
+              To_String(MoneyName) &
+              " to buy anything.");
       end if;
       Move_Cursor(Line => (MenuHeight + 5), Column => 2);
       FreeSpace := FreeCargo(0);
