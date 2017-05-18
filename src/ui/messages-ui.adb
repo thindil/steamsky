@@ -29,7 +29,7 @@ package body Messages.UI is
    procedure ShowMessages is
       LinesAmount: Line_Position := 0;
       TextMessages: Unbounded_String;
-      Messages_Items: constant Item_Array_Access := new Item_Array(1 .. 9);
+      Messages_Items: constant Item_Array_Access := new Item_Array(1 .. 8);
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
    begin
@@ -50,10 +50,9 @@ package body Messages.UI is
          New_Item("Crafts"),
          New_Item("Others"),
          New_Item("Missions"),
-         New_Item("Delete all"),
          Null_Item);
       MessagesMenu := New_Menu(Messages_Items);
-      Set_Format(MessagesMenu, 1, 8);
+      Set_Format(MessagesMenu, 1, 7);
       Set_Mark(MessagesMenu, "");
       Scale(MessagesMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 2, 2);
@@ -65,6 +64,13 @@ package body Messages.UI is
       Set_Current
         (MessagesMenu,
          Messages_Items.all(Message_Type'Pos(MessagesType) + 1));
+      Move_Cursor(Line => 2, Column => MenuLength + 4);
+      Add(Str => "[Delete all messages]");
+      Change_Attributes
+        (Line => 2,
+         Column => MenuLength + 5,
+         Count => 1,
+         Color => 1);
       if MessagesPad = Null_Window then
          for Message of reverse Messages_List loop
             if Message.MType = MessagesType or MessagesType = Default then
@@ -112,15 +118,10 @@ package body Messages.UI is
          if MessagesPad /= Null_Window then
             Delete(MessagesPad);
          end if;
-         if Get_Index(Current(MessagesMenu)) < 8 then
-            MessagesType :=
-              Message_Type'Val(Get_Index(Current(MessagesMenu)) - 1);
-            DrawGame(Messages_View);
-            return Messages_View;
-         else
-            DrawGame(Clear_Confirm);
-            return Clear_Confirm;
-         end if;
+         MessagesType :=
+           Message_Type'Val(Get_Index(Current(MessagesMenu)) - 1);
+         DrawGame(Messages_View);
+         return Messages_View;
       end SetMessagesType;
    begin
       case Key is
@@ -132,6 +133,9 @@ package body Messages.UI is
             end if;
             DrawGame(OldState);
             return OldState;
+         when Character'Pos('d') | Character'Pos('D') => -- Delete all messages
+            DrawGame(Clear_Confirm);
+            return Clear_Confirm;
          when 56 | KEY_UP => -- Scroll messages one line up
             StartIndex := StartIndex - 1;
             if StartIndex < 0 then
