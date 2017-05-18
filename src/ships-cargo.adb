@@ -122,7 +122,7 @@ package body Ships.Cargo is
       CrewIndex, SkillIndex: Natural := 0) is
       DamageChance: Integer := 0;
       SelectedItem: constant CargoData := PlayerShip.Cargo(CargoIndex);
-      I: Positive := PlayerShip.Cargo.First_Index;
+      I: Natural := PlayerShip.Cargo.First_Index;
       procedure UpdateItem(DamagedItem: in out CargoData) is
       begin
          if DamagedItem.Amount > 1 and DamagedItem.Durability > 1 then
@@ -170,14 +170,14 @@ package body Ships.Cargo is
               I /= J then
                UpdateCargo
                  (PlayerShip,
+                  PlayerShip.Cargo.Element(J).ProtoIndex,
+                  (0 - PlayerShip.Cargo.Element(J).Amount),
+                  PlayerShip.Cargo.Element(J).Durability);
+               UpdateCargo
+                 (PlayerShip,
                   PlayerShip.Cargo(I).ProtoIndex,
                   PlayerShip.Cargo(J).Amount,
                   PlayerShip.Cargo(I).Durability);
-               UpdateCargo
-                 (PlayerShip,
-                  PlayerShip.Cargo(J).ProtoIndex,
-                  (0 - PlayerShip.Cargo(J).Amount),
-                  PlayerShip.Cargo(J).Durability);
                I := I - 1;
                exit;
             end if;
