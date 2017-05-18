@@ -342,8 +342,13 @@ package body MainMenu is
       LoadShips;
       return True;
    exception
-      when Help_File_Not_Found =>
-         ShowErrorInfo("Can't load help data. No file data/help.dat.");
+      when Help_Directory_Not_Found =>
+         ShowErrorInfo
+           ("Can't load help data. Directory with help files not found.");
+         return False;
+      when Help_Files_Not_Found =>
+         ShowErrorInfo
+           ("Can't load help data. Files with help data not found.");
          return False;
       when Items_Directory_Not_Found =>
          ShowErrorInfo

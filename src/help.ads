@@ -27,7 +27,8 @@ package Help is
    end record;
    package Help_Container is new Vectors(Positive, Help_Data);
    Help_List: Help_Container.Vector; -- List of all help topics
-   Help_File_Not_Found : exception;
+   Help_Directory_Not_Found : exception; -- Raised when no directory with help files
+   Help_Files_Not_Found : exception; -- Raised when no files with help
 
    procedure LoadHelp; -- Load help text from file
 
