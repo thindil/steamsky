@@ -179,14 +179,14 @@ package body Ships.Cargo is
               I /= J then
                UpdateCargo
                  (PlayerShip,
-                  PlayerShip.Cargo.Element(I).ProtoIndex,
-                  PlayerShip.Cargo.Element(J).Amount,
-                  PlayerShip.Cargo.Element(I).Durability);
-               UpdateCargo
-                 (PlayerShip,
                   PlayerShip.Cargo.Element(J).ProtoIndex,
                   (0 - PlayerShip.Cargo.Element(J).Amount),
                   PlayerShip.Cargo.Element(J).Durability);
+               UpdateCargo
+                 (PlayerShip,
+                  PlayerShip.Cargo.Element(I).ProtoIndex,
+                  PlayerShip.Cargo.Element(J).Amount,
+                  PlayerShip.Cargo.Element(I).Durability);
                I := I - 1;
                exit;
             end if;
