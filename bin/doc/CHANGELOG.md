@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 - Info about lack of food/drinks in ship cargo
 - Showing this same deconstruct option few times
 - Sending crew member on break on selling cabin
+- Crash on damaging tools during ship upgrade
 
 ## [1.1] - 2017-04-30
 
