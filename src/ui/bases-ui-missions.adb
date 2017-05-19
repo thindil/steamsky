@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Generic_Elementary_Functions;
 with Maps; use Maps;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
@@ -29,15 +28,10 @@ package body Bases.UI.Missions is
           (Get_Index(Current(TradeMenu)));
       InfoWindow: Window;
       CurrentLine: Line_Position := 1;
-      DiffX, DiffY: Positive;
       MinutesDiff: Natural;
       MissionTime: Date_Record :=
         (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
       MissionsLimit: Natural;
-      type Value_Type is digits 2 range 0.0 .. 9999999.0;
-      package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions
-        (Value_Type);
-      Distance: Value_Type;
    begin
       InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
       case Mission.MType is
@@ -72,14 +66,12 @@ package body Bases.UI.Missions is
          when Explore =>
             Add(Win => InfoWindow, Str => "Explore selected area");
       end case;
-      DiffX := abs (PlayerShip.SkyX - Mission.TargetX);
-      DiffY := abs (PlayerShip.SkyY - Mission.TargetY);
-      Distance := Value_Functions.Sqrt(Value_Type((DiffX**2) + (DiffY**2)));
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       Add
         (Win => InfoWindow,
          Str =>
-           "Distance:" & Integer'Image(Integer(Value_Type'Floor(Distance))));
+           "Distance:" &
+           Integer'Image(CountDistance(Mission.TargetX, Mission.TargetY)));
       MinutesDiff := Mission.Time;
       while MinutesDiff > 0 loop
          if MinutesDiff >= 518400 then
