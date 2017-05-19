@@ -17,7 +17,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Ada.Numerics.Generic_Elementary_Functions;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Bases; use Bases;
 with UserInterface; use UserInterface;
@@ -42,12 +41,7 @@ package body BasesList is
         Positive'Value(Description(Current(BasesMenu)));
       SearchPattern: String(1 .. 250);
       TrimedSearchPattern: Unbounded_String;
-      type Value_Type is digits 2 range 0.0 .. 9999999.0;
-      package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions
-        (Value_Type);
-      DiffX, DiffY: Natural;
       CurrentLine: Line_Position := 1;
-      Distance: Value_Type;
       TimeDiff: Integer;
    begin
       InfoWindow := Create(20, (Columns / 2), 4, (Columns / 2));
@@ -185,14 +179,17 @@ package body BasesList is
       else
          Add(Win => InfoWindow, Str => "Not visited yet.");
       end if;
-      DiffX := abs (PlayerShip.SkyX - SkyBases(BaseIndex).SkyX);
-      DiffY := abs (PlayerShip.SkyY - SkyBases(BaseIndex).SkyY);
-      Distance := Value_Functions.Sqrt(Value_Type((DiffX**2) + (DiffY**2)));
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       Add
         (Win => InfoWindow,
          Str =>
-           "Distance:" & Integer'Image(Integer(Value_Type'Floor(Distance))));
+           "Distance:" &
+           Integer'
+             Image
+               (Integer
+                  (CountDistance
+                     (SkyBases(BaseIndex).SkyX,
+                      SkyBases(BaseIndex).SkyY))));
       CurrentLine := CurrentLine + 2;
       Pattern(BasesMenu, SearchPattern);
       TrimedSearchPattern :=

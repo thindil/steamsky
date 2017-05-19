@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Numerics.Generic_Elementary_Functions;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Ships; use Ships;
 with Maps; use Maps;
@@ -36,14 +35,9 @@ package body Missions.UI is
         PlayerShip.Missions(Get_Index(Current(MissionsMenu)));
       InfoWindow: Window;
       CurrentLine: Line_Position := 2;
-      DiffX, DiffY: Natural;
-      MinutesDiff: Natural;
+      MinutesDiff, Distance: Natural;
       MissionTime: Date_Record :=
         (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
-      type Value_Type is digits 2 range 0.0 .. 9999999.0;
-      package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions
-        (Value_Type);
-      Distance: Value_Type;
    begin
       InfoWindow := Create(15, (Columns / 2), 3, (Columns / 2));
       Add
@@ -76,18 +70,15 @@ package body Missions.UI is
             Add(Win => InfoWindow, Str => "Explore selected area");
       end case;
       if not Mission.Finished then
-         DiffX := abs (PlayerShip.SkyX - Mission.TargetX);
-         DiffY := abs (PlayerShip.SkyY - Mission.TargetY);
+         Distance := CountDistance(Mission.TargetX, Mission.TargetY);
       else
-         DiffX := abs (PlayerShip.SkyX - SkyBases(Mission.StartBase).SkyX);
-         DiffY := abs (PlayerShip.SkyY - SkyBases(Mission.StartBase).SkyY);
+         Distance :=
+           CountDistance
+             (SkyBases(Mission.StartBase).SkyX,
+              SkyBases(Mission.StartBase).SkyY);
       end if;
-      Distance := Value_Functions.Sqrt(Value_Type((DiffX**2) + (DiffY**2)));
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-      Add
-        (Win => InfoWindow,
-         Str =>
-           "Distance:" & Integer'Image(Integer(Value_Type'Floor(Distance))));
+      Add(Win => InfoWindow, Str => "Distance:" & Integer'Image(Distance));
       MinutesDiff := Mission.Time;
       while MinutesDiff > 0 loop
          if MinutesDiff >= 518400 then
