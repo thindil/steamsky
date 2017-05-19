@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Showing this same deconstruct option few times
 - Sending crew member on break on selling cabin
 - Crash on damaging tools during ship upgrade
+- Info about free/taken guns
 
 ## [1.0.2] - 2017-05-14
 
