@@ -158,11 +158,7 @@ package body UserInterface is
          for Module of PlayerShip.Modules loop
             case Modules_List(Module.ProtoIndex).MType is
                when GUN =>
-                  if Module.Owner > 0 and GunnersCheck = 0 then
-                     GunnersCheck := 1;
-                  elsif Module.Owner = 0 and GunnersCheck = 1 then
-                     GunnersCheck := 2;
-                  end if;
+                  GunnersCheck := GunnersCheck + 1;
                when ALCHEMY_LAB .. GREENHOUSE =>
                   if Module.Current_Value /= 0 then
                      if Module.Owner > 0 and CraftersCheck < 2 then
@@ -223,6 +219,8 @@ package body UserInterface is
                      Column => (Columns - 3),
                      Count => 1,
                      Color => 2);
+               when Gunner =>
+                  GunnersCheck := GunnersCheck - 1;
                when others =>
                   null;
             end case;
@@ -241,13 +239,13 @@ package body UserInterface is
                Count => 1,
                Color => 3);
          end if;
-         if GunnersCheck = 1 then
+         if GunnersCheck = 0 then
             Change_Attributes
               (Line => 0,
                Column => (Columns - 18),
                Count => 1,
                Color => 2);
-         elsif GunnersCheck = 2 then
+         else
             Change_Attributes
               (Line => 0,
                Column => (Columns - 18),
