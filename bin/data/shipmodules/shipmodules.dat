@@ -1451,4 +1451,17 @@ Price = 3000
 InstallTime = 60
 Size = 1
 Description = Allow cultivate plants. Made of steel.
+[115]
+Name = Small steel water collector
+Type = Water_collector
+Weight = 900
+Value = 0
+MaxValue = 0
+Durability = 300
+Material = Steel
+Skill = Engineering
+Price = 3000
+InstallTime = 60
+Size = 1
+Description = Allow collect water from air. Made of steel.
 []
