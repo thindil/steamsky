@@ -252,7 +252,8 @@ must be existing item index from any items file from *data/items* directory.
 ## Help
 
 ### General informations
-- Open file *help.dat* in *data* directory.
+- Open file *help.dat* in *data/help* directory or create newfile with *dat* 
+  extension in that directory (example: *myhelp.dat*).
 - File must end with `[]`.
 
 ### Help data structure
