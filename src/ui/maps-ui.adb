@@ -227,6 +227,9 @@ package body Maps.UI is
             WindowWidth := NewWindowWidth;
          end if;
       end if;
+      if MoveX /= 0 or MoveY /= 0 then
+         WindowHeight := WindowHeight + 2;
+      end if;
       InfoWindow :=
         Create(WindowHeight, WindowWidth, 1, (Columns - WindowWidth - 1));
       Box(InfoWindow);
@@ -345,6 +348,18 @@ package body Maps.UI is
             when Explore =>
                Add(Win => InfoWindow, Str => "Explore area");
          end case;
+      end if;
+      if MoveX /= 0 or MoveY /= 0 then
+         Move_Cursor(Win => InfoWindow, Line => WindowHeight - 2, Column => 2);
+         Add
+           (Win => InfoWindow,
+            Str =>
+              "Distance:" &
+              Positive'
+                Image
+                  (CountDistance
+                     (PlayerShip.SkyX + MoveX,
+                      PlayerShip.SkyY + MoveY)));
       end if;
       Refresh(InfoWindow);
       Delete(InfoWindow);
