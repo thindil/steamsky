@@ -15,20 +15,23 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-package Maps is
+with Ada.Numerics.Generic_Elementary_Functions;
+with Ships; use Ships;
 
-   type SkyCell is -- Data structure for cells in game map
-   record
-      BaseIndex: Natural;  -- If sky base is in cell > 0
-      Visited: Boolean; -- True if player was in this cell
-      EventIndex: Natural; -- If event is in cell > 0
-      MissionIndex: Natural; -- If accepted mission is in cell > 0
-   end record;
-   SkyMap: array(1 .. 1024, 1 .. 1024) of SkyCell; -- Game map
+package body Maps is
 
    function CountDistance
-     (DestinationX,
-      DestinationY: Positive)
-     return Natural; -- Return distance between player ship and destination point
+     (DestinationX, DestinationY: Positive) return Natural is
+      type Value_Type is digits 2 range 0.0 .. 9999999.0;
+      package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions
+        (Value_Type);
+      DiffX, DiffY: Natural;
+      Distance: Value_Type;
+   begin
+      DiffX := abs (PlayerShip.SkyX - DestinationX);
+      DiffY := abs (PlayerShip.SkyY - DestinationY);
+      Distance := Value_Functions.Sqrt(Value_Type((DiffX**2) + (DiffY**2)));
+      return Natural(Value_Type'Floor(Distance));
+   end CountDistance;
 
 end Maps;
