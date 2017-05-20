@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Ask for rest if needed after ship move
 - Support for many help files
 - Option to auto rest when pilot/engineer is too tired to work
+- Ability to set game options in game
 
 ### Changed
 - Updated MODDING.md
