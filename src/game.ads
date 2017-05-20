@@ -73,7 +73,8 @@ package Game is
       BasesList_Owners,
       WaitX_Order,
       PilotRest_Confirm,
-      EngineerRest_Confirm); -- Game states
+      EngineerRest_Confirm,
+      GameOptions_View); -- Game states
    type Date_Record is -- Data for game date/time
    record
       Year: Natural;
