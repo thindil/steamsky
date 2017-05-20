@@ -9,8 +9,8 @@ All notable changes to this project will be documented in this file.
   advanced steel hull, medium steel hull, medium advanced steel engine,
   large steel engine, large advanced steel engine, small steel furnace,
   advanced medium steel hull, large steel hull, advanced large steel hull,
-  steel armor, heavy steel armor, steel turret, small steel greenhouse and
-  small steel water collector
+  steel armor, heavy steel armor, steel turret, small steel greenhouse,
+  small steel water collector and small steel medical room
 - Option to set which item type is used for delivery missions items
 - Option to set which item type is used as drinks
 - Option to set which item type is used as corpses
