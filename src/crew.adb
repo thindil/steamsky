@@ -400,6 +400,15 @@ package body Crew is
                   BackToWork := False;
                end if;
             end if;
+            if Member.PreviousOrder = Gunner and not BackToWork then
+               for Module of PlayerShip.Modules loop
+                  if Modules_List(Module.ProtoIndex).MType = GUN and
+                    Module.Owner = I then
+                     BackToWork := True;
+                     exit;
+                  end if;
+               end loop;
+            end if;
             if BackToWork then
                Member.Order := Member.PreviousOrder;
                Member.OrderTime := 15;
