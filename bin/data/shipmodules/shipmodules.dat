@@ -1464,4 +1464,18 @@ Price = 3000
 InstallTime = 60
 Size = 1
 Description = Allow collect water from air. Made of steel.
+[116]
+Name = Small steel medical room
+Type = Medical_room
+Weight = 500
+Value = 0
+MaxValue = 0
+Durability = 300
+Material = Steel
+Skill = Engineering
+Price = 3000
+InstallTime = 60
+Size = 1
+Unique = Yes
+Description = Allow treat wounded crew members. Made of steel.
 []
