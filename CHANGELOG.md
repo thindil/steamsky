@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Sending crew member on break on selling cabin
 - Crash on damaging tools during ship upgrade
 - Info about free/taken guns
+- Gunner back to work from rest when more than one gun is used
 
 ## [1.0.2] - 2017-05-14
 
