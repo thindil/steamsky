@@ -54,6 +54,7 @@ with Config; use Config;
 with Statistics.UI; use Statistics.UI;
 with Missions.UI; use Missions.UI;
 with Log; use Log;
+with GameOptions; use GameOptions;
 
 procedure SteamSky is
    GameState: GameStates := Main_Menu;
@@ -280,6 +281,8 @@ begin
             GameState := BasesOptionsKeys(Key, GameState);
          when WaitX_Order =>
             GameState := WaitFormKeys(Key);
+         when GameOptions_View =>
+            GameState := GameOptionsKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;

@@ -52,6 +52,7 @@ with Items; use Items;
 with Statistics.UI; use Statistics.UI;
 with Missions; use Missions;
 with Missions.UI; use Missions.UI;
+with GameOptions; use GameOptions;
 
 package body UserInterface is
 
@@ -135,6 +136,9 @@ package body UserInterface is
          when Missions_View =>
             Add(Str => "Accepted missions [Quit]");
             Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
+         when GameOptions_View =>
+            Add(Str => "Game options [Quit]");
+            Change_Attributes(Line => 0, Column => 14, Count => 1, Color => 1);
          when others =>
             null;
       end case;
@@ -774,7 +778,7 @@ package body UserInterface is
    end ShowWaitOrder;
 
    procedure ShowGameMenu is
-      Menu_Items: constant Item_Array_Access := new Item_Array(1 .. 16);
+      Menu_Items: constant Item_Array_Access := new Item_Array(1 .. 17);
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
    begin
@@ -792,6 +796,7 @@ package body UserInterface is
          New_Item("v) Move map position"),
          New_Item("g) Game statistics"),
          New_Item("h) Help"),
+         New_Item("p) Game options"),
          New_Item("q) Quit from game"),
          New_Item("l) Close menu"),
          Null_Item);
@@ -890,6 +895,8 @@ package body UserInterface is
             Refresh_Without_Update;
             ShowConfirm
               ("You don't have engineer on duty. Did you want to wait until your engineer rest?");
+         when GameOptions_View =>
+            ShowOptions;
          when others =>
             null;
       end case;
