@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -25,7 +25,12 @@ package Config is
       PlayerGender: Character; -- Default player gender
       ShipName: Unbounded_String; -- Default ship name
    end record;
+   type GameSettingsRecord is -- Data for game settings
+   record
+      AutoRest: Boolean; -- If true, rest when pilot/engineer need rest
+   end record;
    NewGameSettings: NewGameRecord;
+   GameSettings: GameSettingsRecord;
 
    procedure LoadConfig; -- Load game configuration from file
    procedure SaveConfig; -- Save game configuration to file

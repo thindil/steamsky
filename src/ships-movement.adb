@@ -23,6 +23,7 @@ with Statistics; use Statistics;
 with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
+with Config; use Config;
 
 package body Ships.Movement is
 
@@ -177,10 +178,16 @@ package body Ships.Movement is
          end if;
       end if;
       if NeedRest(Pilot) then
-         return 6;
+         if not GameSettings.AutoRest then
+            return 6;
+         end if;
+         return 8;
       end if;
       if NeedRest(Engineer) then
-         return 7;
+         if not GameSettings.AutoRest then
+            return 7;
+         end if;
+         return 8;
       end if;
       return 1;
    end MoveShip;
