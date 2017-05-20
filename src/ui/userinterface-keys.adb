@@ -57,6 +57,7 @@ package body UserInterface.Keys is
          'v',
          'g',
          'h',
+         'p',
          'q',
          'l');
       NewKey: Key_Code;
@@ -153,6 +154,9 @@ package body UserInterface.Keys is
            Character'Pos('I') => -- List of accepted missions
             DrawGame(Missions_View);
             return Missions_View;
+         when Character'Pos('p') | Character'Pos('P') => -- Game options
+            DrawGame(GameOptions_View);
+            return GameOptions_View;
          when others =>
             if CurrentState /= GameMenu then
                DrawGame(CurrentState);
