@@ -25,11 +25,12 @@ package body Config is
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex: Natural;
    begin
+      NewGameSettings :=
+        (PlayerName => To_Unbounded_String("Laeran"),
+         PlayerGender => 'M',
+         ShipName => To_Unbounded_String("Anaria"));
+      GameSettings := (AutoRest => True);
       if not Exists("data/game.cfg") then
-         NewGameSettings :=
-           (PlayerName => To_Unbounded_String("Laeran"),
-            PlayerGender => 'M',
-            ShipName => To_Unbounded_String("Anaria"));
          return;
       end if;
       Open(ConfigFile, In_File, "data/game.cfg");
@@ -45,6 +46,12 @@ package body Config is
                NewGameSettings.PlayerGender := Element(Value, 1);
             elsif FieldName = To_Unbounded_String("ShipName") then
                NewGameSettings.ShipName := Value;
+            elsif FieldName = To_Unbounded_String("AutoRest") then
+               if Value = To_Unbounded_String("Yes") then
+                  GameSettings.AutoRest := True;
+               else
+                  GameSettings.AutoRest := False;
+               end if;
             end if;
          end if;
       end loop;
@@ -62,6 +69,11 @@ package body Config is
       Put_Line
         (ConfigFile,
          "ShipName = " & To_String(NewGameSettings.ShipName));
+      if GameSettings.AutoRest then
+         Put_Line(ConfigFile, "AutoRest = Yes");
+      else
+         Put_Line(ConfigFile, "AutoRest = No");
+      end if;
       Close(ConfigFile);
    end SaveConfig;
 

@@ -28,6 +28,7 @@ with Messages; use Messages;
 with Events; use Events;
 with Missions; use Missions;
 with Items; use Items;
+with Crew; use Crew;
 
 package body Maps.UI is
 
@@ -521,7 +522,17 @@ package body Maps.UI is
                   NewY := -1;
                end if;
                Result := MoveShip(0, NewX, NewY);
-               exit when Result = 0 or Result = 6 or Result = 7;
+               exit when Result = 0;
+               if CheckForEvent(Sky_Map_View) /= Sky_Map_View then
+                  return 5;
+               end if;
+               if Result = 8 then
+                  WaitForRest;
+                  Result := 1;
+                  if CheckForEvent(Sky_Map_View) /= Sky_Map_View then
+                     return 5;
+                  end if;
+               end if;
                if PlayerShip.DestinationX = PlayerShip.SkyX and
                  PlayerShip.DestinationY = PlayerShip.SkyY then
                   AddMessage
@@ -531,9 +542,7 @@ package body Maps.UI is
                   PlayerShip.DestinationY := 0;
                   return 4;
                end if;
-               if CheckForEvent(Sky_Map_View) /= Sky_Map_View then
-                  return 5;
-               end if;
+               exit when Result = 6 or Result = 7;
             end loop;
             if Result = 0 then
                Result := 4;

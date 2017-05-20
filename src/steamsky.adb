@@ -31,6 +31,7 @@ with Maps.UI; use Maps.UI;
 with Game; use Game;
 with Game.SaveLoad; use Game.SaveLoad;
 with Messages.UI; use Messages.UI;
+with Crew; use Crew;
 with Crew.UI; use Crew.UI;
 with Ships; use Ships;
 with Ships.UI; use Ships.UI;
@@ -180,6 +181,13 @@ begin
                   DrawGame(GameState);
                when 7 =>
                   GameState := EngineerRest_Confirm;
+                  DrawGame(GameState);
+               when 8 =>
+                  GameState := CheckForEvent(GameState);
+                  if GameState = Sky_Map_View then
+                     WaitForRest;
+                     GameState := CheckForEvent(GameState);
+                  end if;
                   DrawGame(GameState);
                when others =>
                   DrawGame(GameState);
