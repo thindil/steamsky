@@ -29,7 +29,7 @@ package body Config is
         (PlayerName => To_Unbounded_String("Laeran"),
          PlayerGender => 'M',
          ShipName => To_Unbounded_String("Anaria"));
-      GameSettings := (AutoRest => True);
+      GameSettings := (AutoRest => True, UndockSpeed => QUARTER_SPEED);
       if not Exists("data/game.cfg") then
          return;
       end if;
@@ -52,6 +52,8 @@ package body Config is
                else
                   GameSettings.AutoRest := False;
                end if;
+            elsif FieldName = To_Unbounded_String("UndockSpeed") then
+               GameSettings.UndockSpeed := ShipSpeed'Value(To_String(Value));
             end if;
          end if;
       end loop;
@@ -74,6 +76,9 @@ package body Config is
       else
          Put_Line(ConfigFile, "AutoRest = No");
       end if;
+      Put_Line
+        (ConfigFile,
+         "UndockSpeed = " & ShipSpeed'Image(GameSettings.UndockSpeed));
       Close(ConfigFile);
    end SaveConfig;
 

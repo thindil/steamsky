@@ -293,7 +293,7 @@ package body Ships.Movement is
          PlayerShip.Speed := DOCKED;
          UpdateGame(10);
       else
-         PlayerShip.Speed := QUARTER_SPEED;
+         PlayerShip.Speed := GameSettings.UndockSpeed;
          AddMessage
            ("Ship undocked from base " & To_String(SkyBases(BaseIndex).Name),
             OrderMessage);
