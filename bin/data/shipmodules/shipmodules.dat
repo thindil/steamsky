@@ -1478,4 +1478,17 @@ InstallTime = 60
 Size = 1
 Unique = Yes
 Description = Allow treat wounded crew members. Made of steel.
+[117]
+Name = Advanced steel cabin
+Type = Cabin
+Weight = 500
+Value = 40
+MaxValue = 40
+Durability = 140
+Material = Steel
+Skill = Engineering
+Price = 1500
+InstallTime = 90
+Size = 1
+Description = Small, decorated cabin made of steel.
 []
