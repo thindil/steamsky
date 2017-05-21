@@ -119,4 +119,5 @@ Some details about different types of missions:
 * Which orders are available for crew members, depends on orders prerequisites. For example, if you don't have set any crafting order set, you can't assign crew member to manufacturing.
 * Ship gets dirty with start of every day. You can send as much as you want crew members to clean ship or give order to clean ship for whole crew. It is only order which don't give any experience to assigned crew members. You need any type of bucket to execute this order.
 * Bases population may change with time. Don't be surprised when small base may be abandoned after successful attack on it or after disease. Same, bases population may growth with time.
+* You may set some game options during play by selecting 'Game Options' menu (key 'p'). To navigate between settings, use Up and Down arrows keys. To change selected setting value use keys Right and Left arrows. To save options press key 'q' (to quit from settings). Changes done to options are used in current and each next game.
 []
