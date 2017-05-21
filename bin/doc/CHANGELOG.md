@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
 - Faster gaining reputation in bases
 - Gain more reputation from finished missions
 - Updated interface
+- Updated help
 
 ### Fixed
 - Counting enemy evasion during combat
