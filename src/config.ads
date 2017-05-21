@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ships; use Ships;
 
 package Config is
 
@@ -28,6 +29,7 @@ package Config is
    type GameSettingsRecord is -- Data for game settings
    record
       AutoRest: Boolean; -- If true, rest when pilot/engineer need rest
+      UndockSpeed: ShipSpeed; -- Default player ship speed after undock
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
