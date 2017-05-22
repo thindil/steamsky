@@ -210,11 +210,6 @@ package body Game is
             CabinAssigned := True;
          end if;
       end loop;
-      -- Set known recipes
-      Known_Recipes.Append(New_Item => FindRecipe(To_Unbounded_String("1")));
-      Known_Recipes.Append(New_Item => FindRecipe(To_Unbounded_String("2")));
-      Known_Recipes.Append(New_Item => FindRecipe(To_Unbounded_String("4")));
-      Known_Recipes.Append(New_Item => FindRecipe(To_Unbounded_String("20")));
       -- Set current map field/sky base info
       SkyBases(Integer(RandomBase)).Visited := GameDate;
       SkyBases(Integer(RandomBase)).Known := True;
