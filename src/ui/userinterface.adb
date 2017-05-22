@@ -492,16 +492,17 @@ package body UserInterface is
                   end if;
                end loop;
             end if;
+         elsif Event = Disease then
+            if HaveTrader then
+               if FindCargo(ItemType => To_Unbounded_String("Medicines")) >
+                 0 then
+                  OrdersAmount := OrdersAmount + 2;
+               end if;
+            end if;
          else
             OrdersAmount := OrdersAmount + 1;
          end if;
          Orders_Items := new Item_Array(1 .. OrdersAmount);
-         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
-            Event :=
-              Events_List.Element
-              (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                .EType;
-         end if;
          if BaseIndex > 0 and (Event = None or Event = DoublePrice) then
             if SkyBases(BaseIndex).Reputation(1) > -25 then
                Orders_Items.all(MenuIndex) := New_Item("Dock");
