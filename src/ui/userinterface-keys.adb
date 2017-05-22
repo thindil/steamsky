@@ -267,10 +267,6 @@ package body UserInterface.Keys is
                   Events_List.Update_Element
                   (Index => EventIndex, Process => UpdateEvent'Access);
                end if;
-               UpdateCargo
-                 (PlayerShip,
-                  PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
-                  (0 - PlayerShip.Cargo.Element(ItemIndex).Amount));
                GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 10);
                AddMessage
                  ("You gave " &
@@ -278,6 +274,10 @@ package body UserInterface.Keys is
                     (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Name) &
                   " for free to base.",
                   TradeMessage);
+               UpdateCargo
+                 (PlayerShip,
+                  PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+                  (0 - PlayerShip.Cargo.Element(ItemIndex).Amount));
             elsif Order = "Deliver medicines for price" then
                ItemIndex := FindCargo(ItemType => HealingTools);
                NewTime :=
