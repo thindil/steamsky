@@ -5,6 +5,7 @@ Cargo = 2000x1, 100x2, 200x3, 500x4, 100x5, 20x13, 1x47, 1x49, 1x50, 1x61, 1x53
 Skills = 1x5, 5x5; 2x5; 3x5, 5x5
 Orders = Pilot, Engineer, Gunner
 Priorities = Piloting:Normal; Engineering:Normal; Operating guns:Normal
+Recipes = 1, 2, 4, 20
 [2]
 Name = Tiny pirates ship
 Modules = 1, 3, 4, 4, 5, 7, 8, 11
