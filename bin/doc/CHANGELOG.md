@@ -52,6 +52,7 @@ All notable changes to this project will be documented in this file.
 - Crash on damaging tools during ship upgrade
 - Info about free/taken guns
 - Gunner back to work from rest when more than one gun is used
+- Crash on overloaded ship
 
 ## [1.1] - 2017-04-30
 
