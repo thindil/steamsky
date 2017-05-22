@@ -24,6 +24,7 @@ with Utils; use Utils;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Log; use Log;
+with Crafts; use Crafts;
 
 package body Ships is
 
@@ -233,6 +234,11 @@ package body Ships is
          Amount := Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
       end loop;
       UpdateModule(TmpShip, HullIndex, "Current_Value", Natural'Image(Amount));
+      if ProtoShip.Index = PlayerShipIndex then
+         for Recipe of ProtoShip.KnownRecipes loop
+            Known_Recipes.Append(New_Item => Recipe);
+         end loop;
+      end if;
       return TmpShip;
    end CreateShip;
 
@@ -253,9 +259,10 @@ package body Ships is
       EndIndex2,
       StartIndex2,
       ModuleIndex,
-      ItemIndex: Natural;
+      ItemIndex,
+      RecipeIndex: Natural;
       TempRecord: ProtoShipData;
-      TempModules: Positive_Container.Vector;
+      TempModules, TempRecipes: Positive_Container.Vector;
       TempCargo: Skills_Container.Vector;
       TempCrew: ProtoCrew_Container.Vector;
       TempSkills: Skills_Container.Vector;
@@ -308,7 +315,8 @@ package body Ships is
             Crew => TempCrew,
             Description => Null_Unbounded_String,
             Owner => Poleis,
-            Index => Null_Unbounded_String);
+            Index => Null_Unbounded_String,
+            KnownRecipes => TempRecipes);
          LogMessage("Loading ships file: " & Full_Name(FoundFile), Everything);
          Open(ShipsFile, In_File, Full_Name(FoundFile));
          while not End_Of_File(ShipsFile) loop
@@ -571,6 +579,30 @@ package body Ships is
                      TempPriorities := (others => 0);
                      StartIndex := EndIndex + 2;
                   end loop;
+               elsif FieldName = To_Unbounded_String("Recipes") then
+                  StartIndex := 1;
+                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                  for I in 1 .. Amount loop
+                     EndIndex := Index(Value, ", ", StartIndex);
+                     if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                     end if;
+                     RecipeIndex :=
+                       FindRecipe
+                         (Unbounded_Slice(Value, StartIndex, EndIndex - 1));
+                     if RecipeIndex = 0 then
+                        Close(ShipsFile);
+                        End_Search(Files);
+                        raise Ships_Invalid_Data
+                          with "Invalid recipe index: |" &
+                          Slice(Value, StartIndex, EndIndex - 1) &
+                          "| in " &
+                          To_String(TempRecord.Name) &
+                          ".";
+                     end if;
+                     TempRecord.KnownRecipes.Append(New_Item => RecipeIndex);
+                     StartIndex := EndIndex + 2;
+                  end loop;
                end if;
             else
                if TempRecord.Name /= Null_Unbounded_String then
@@ -616,7 +648,8 @@ package body Ships is
                      Crew => TempCrew,
                      Description => Null_Unbounded_String,
                      Owner => Poleis,
-                     Index => Null_Unbounded_String);
+                     Index => Null_Unbounded_String,
+                     KnownRecipes => TempRecipes);
                   TempRecord.Name := Null_Unbounded_String;
                end if;
                if Length(RawData) > 2 then
