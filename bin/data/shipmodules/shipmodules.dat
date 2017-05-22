@@ -1491,4 +1491,17 @@ Price = 1500
 InstallTime = 90
 Size = 1
 Description = Small, decorated cabin made of steel.
+[118]
+Name = Extended steel cabin
+Type = Cabin
+Weight = 800
+Value = 60
+MaxValue = 60
+Durability = 140
+Material = Steel
+Skill = Engineering
+Price = 2500
+InstallTime = 120
+Size = 1
+Description = Small, decorated cabin made of steel with few better quality furnitures.
 []
