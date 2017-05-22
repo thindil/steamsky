@@ -141,6 +141,11 @@ package body Ships.Movement is
                ").");
             return 0;
          end if;
+         Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
+         if Speed < 0.01 then
+            ShowDialog("You can't fly because your ship is overloaded.");
+            return 0;
+         end if;
          NewX := PlayerShip.SkyX + X;
          NewY := PlayerShip.SkyY + Y;
       end if;
@@ -154,7 +159,6 @@ package body Ships.Movement is
            (PlayerShip,
             PlayerShip.Cargo.Element(FuelIndex).ProtoIndex,
             FuelNeeded);
-         Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
          TimePassed := Integer(100.0 / Speed);
          if TimePassed > 0 then
             case PlayerShip.Speed is
