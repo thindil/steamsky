@@ -54,6 +54,7 @@ All notable changes to this project will be documented in this file.
 - Info about free/taken guns
 - Gunner back to work from rest when more than one gun is used
 - Crash on overloaded ship
+- Crash when recipe don't have set difficulty
 
 ## [1.1] - 2017-04-30
 
