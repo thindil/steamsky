@@ -144,7 +144,7 @@ must be existing item index from any items file from *data/items* directory.
   one material for recipe, you must set amount for each of them. Each material
   amount must be separated with `, ` (comma and space)
 - Result: Item index which will be produced by recipe (you can check this index
-  in *items.dat* file)
+  in *items* directory)
 - Crafted: Amount of items crafted from one recipe
 - Workplace: Type of ship module in which recipe is made. Available options
   are: Alchemy\_Lab, Furnace, Water\_Collector, Workshop, Greenhouse
@@ -210,9 +210,9 @@ must be existing item index from any items file from *data/items* directory.
 - Each ship start from `[` symbol. Any value between `[` and `]` is a index 
   (it can be number or text) and must be unique. This value is used at this
   moment only to set player ship.
-- Name: Type of ship. Will be visible during combat information
-- Modules: List of modules indexes (from *shipmodules.dat* file), separated by
-  `, ` (comma and space)
+- Name: Type of ship. Will be visible during combat information.
+- Modules: List of modules indexes (from *shipmodules* directory), separated 
+  by `, ` (comma and space).
 - Accuracy: Bonus to accuracy for ship. Can be constant value (example: 1) or 
   range from minimum value to max value, separated by `..` (double dots)
   (example: 1..5).
@@ -230,7 +230,7 @@ must be existing item index from any items file from *data/items* directory.
 - Perception: Bonus to perception for ship. Can be constant value or range 
   from minimum value to max value, separated by `..` (double dots).
 - Cargo: List of cargo of ship. Each item in cargo is separated by `, ` (comma
-  and space). Each item entry is Amount`x`Item index (from *items.dat* file).
+  and space). Each item entry is Amount`x`Item index (from *items* directory).
   Amount can be constant value or range from minimum value to max value, 
   separated by `..` (double dots).
 - Skills: List of crew members skills and its levels. Each crew member skills
@@ -248,11 +248,13 @@ must be existing item index from any items file from *data/items* directory.
   Repair ship, Manufacturing, Upgrading ship, Talking in bases, Healing 
   wounded, Cleaning ship and Priority is: Normal or Highest (one per crew 
   member).
+- Recipes: List of know recipes indexes (from *recipes* directory, player ship
+  only), separated by `, ` (comma and space).
 
 ## Help
 
 ### General informations
-- Open file *help.dat* in *data/help* directory or create newfile with *dat* 
+- Open file *help.dat* in *data/help* directory or create new file with *dat* 
   extension in that directory (example: *myhelp.dat*).
 - File must end with `[]`.
 
