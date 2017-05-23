@@ -59,7 +59,7 @@ package body Crafts is
             Workplace => ALCHEMY_LAB,
             Skill => 1,
             Time => 15,
-            Difficulty => 0,
+            Difficulty => 1,
             BaseType => 0,
             Tool => To_Unbounded_String("None"),
             Index => Null_Unbounded_String);
@@ -147,7 +147,7 @@ package body Crafts is
                      Workplace => ALCHEMY_LAB,
                      Skill => 1,
                      Time => 15,
-                     Difficulty => 0,
+                     Difficulty => 1,
                      BaseType => 0,
                      Tool => To_Unbounded_String("None"),
                      Index => Null_Unbounded_String);
@@ -187,7 +187,7 @@ package body Crafts is
                exit;
             end if;
          end loop;
-         Recipe.Difficulty := 0;
+         Recipe.Difficulty := 1;
          Recipe.Tool := AlchemyTools;
          RecipeName :=
            To_Unbounded_String("Deconstructing ") &
@@ -326,7 +326,7 @@ package body Crafts is
                         exit;
                      end if;
                   end loop;
-                  Recipe.Difficulty := 0;
+                  Recipe.Difficulty := 1;
                   Recipe.BaseType := 0;
                   Recipe.Tool := AlchemyTools;
                   RecipeName :=

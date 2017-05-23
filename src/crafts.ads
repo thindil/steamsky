@@ -33,7 +33,7 @@ package Crafts is
       Workplace: ModuleType; -- Ship module needed for crafting
       Skill: Positive; -- Skill used in crafting item
       Time: Positive; -- Minutes needed for finish recipe
-      Difficulty: Natural; -- How difficult is recipe to discover
+      Difficulty: Positive; -- How difficult is recipe to discover
       BaseType: Natural; -- Sky base type in which recipe can be bought
       Tool: Unbounded_String; -- Type of tool used to craft item
       Index: Unbounded_String; -- Index of recipe
