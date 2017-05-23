@@ -59,7 +59,7 @@ package body Crafts.UI is
                exit;
             end if;
          end loop;
-         Recipe.Difficulty := 0;
+         Recipe.Difficulty := 1;
          Recipe.BaseType := 0;
          Recipe.Tool := AlchemyTools;
       end if;
