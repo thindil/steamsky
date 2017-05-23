@@ -1504,4 +1504,17 @@ Price = 2500
 InstallTime = 120
 Size = 1
 Description = Small, decorated cabin made of steel with few better quality furnitures.
+[119]
+Name = Luxury steel cabin
+Type = Cabin
+Weight = 1200
+Value = 80
+MaxValue = 80
+Durability = 140
+Material = Steel
+Skill = Engineering
+Price = 5000
+InstallTime = 150
+Size = 1
+Description = Small, decorated, cabin made of steel, well equiped with hight quality furniture.
 []
