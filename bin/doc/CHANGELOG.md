@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Option to auto rest when pilot/engineer is too tired to work
 - Ability to set game options in game
 - Option to set default ship speed after undock from base
+- Read starting recipes from ships data file
 
 ### Changed
 - Updated MODDING.md
