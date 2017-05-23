@@ -5,6 +5,7 @@ Result = 2
 Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Cooking
+BaseType = 2
 Tool = CookingSet
 [2]
 Material = Wood
@@ -13,6 +14,7 @@ Result = 1
 Crafted = 5
 Workplace = Alchemy_Lab
 Skill = Alchemy
+BaseType = 3
 Tool = AlchemySet
 [3]
 Material = RawFood
@@ -41,7 +43,6 @@ Result = 14
 Crafted = 10
 Workplace = Alchemy_Lab
 Skill = Gunsmith
-Difficulty = 1
 BaseType = 1
 Tool = GunsmithSet
 [6]
@@ -51,7 +52,6 @@ Result = 17
 Crafted = 1
 Workplace = Furnace
 Skill = Metalsmith
-Difficulty = 1
 BaseType = 1
 Tool = Mold
 [7]
@@ -61,7 +61,6 @@ Result = 18
 Crafted = 1
 Workplace = Furnace
 Skill = Metalsmith
-Difficulty = 1
 BaseType = 1
 Tool = Mold
 [8]
@@ -71,7 +70,6 @@ Result = 5
 Crafted = 1
 Workplace = Furnace
 Skill = Metalsmith
-Difficulty = 1
 BaseType = 1
 Tool = Mold
 [9]
@@ -122,7 +120,6 @@ Result = 24
 Crafted = 10
 Workplace = Alchemy_Lab
 Skill = Gunsmith
-Difficulty = 1
 BaseType = 1
 Tool = GunsmithSet
 [14]
@@ -173,7 +170,6 @@ Crafted = 2
 Workplace = Greenhouse
 Skill = Farming
 Time = 120
-Difficulty = 1
 BaseType = 2
 Tool = Sickle
 [19]
@@ -184,7 +180,6 @@ Crafted = 2
 Workplace = Greenhouse
 Skill = Farming
 Time = 60
-Difficulty = 1
 BaseType = 2
 Tool = Sickle
 [20]
@@ -195,6 +190,7 @@ Crafted = 3
 Workplace = Water_collector
 Skill = Engineering
 Time = 60
+BaseType = 2
 Tool = Bucket
 [21]
 Material = Iron, Gunpowder
@@ -270,7 +266,6 @@ Crafted = 3
 Workplace = Greenhouse
 Skill = Woodcutting
 Time = 240
-Difficulty = 1
 BaseType = 3
 Tool = Saw
 [28]
@@ -281,7 +276,6 @@ Crafted = 3
 Workplace = Greenhouse
 Skill = Woodcutting
 Time = 240
-Difficulty = 1
 BaseType = 3
 Tool = Saw
 [29]
@@ -291,7 +285,6 @@ Result = 54
 Crafted = 3
 Workplace = Alchemy_Lab
 Skill = Farming
-Difficulty = 1
 BaseType = 2
 Tool = AlchemySet
 [30]
@@ -302,7 +295,6 @@ Crafted = 2
 Workplace = Greenhouse
 Skill = Farming
 Time = 60
-Difficulty = 1
 BaseType = 2
 Tool = Sickle
 [31]
@@ -312,7 +304,6 @@ Result = 44
 Crafted = 2
 Workplace = Alchemy_Lab
 Skill = Brewery
-Difficulty = 1
 BaseType = 2
 Tool = AlchemySet
 [32]
@@ -364,7 +355,6 @@ Result = 47
 Crafted = 1
 Workplace = Furnace
 Skill = Alchemy
-Difficulty = 1
 BaseType = 1
 Tool = Mold
 [37]
@@ -374,7 +364,6 @@ Result = 48
 Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
-Difficulty = 1
 BaseType = 1
 Tool = BlacksmithSet
 [38]
@@ -394,7 +383,6 @@ Result = 51
 Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
-Difficulty = 1
 BaseType = 1
 Tool = BlacksmithSet
 [39]
