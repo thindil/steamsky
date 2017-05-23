@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Gain more reputation from finished missions
 - Updated interface
 - Updated help
+- Updated recipes data
 
 ### Fixed
 - Counting enemy evasion during combat
