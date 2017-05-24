@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- How ship speed is calculated to prevent some bugs
+
 ### Fixed
 - Showing this same deconstruct option few times
 - Sending crew member on break on selling cabin
