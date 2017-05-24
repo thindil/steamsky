@@ -298,9 +298,7 @@ package body Ships.Movement is
    end ChangeShipSpeed;
 
    function RealSpeed(Ship: ShipRecord) return Natural is
-      Weight: Positive;
-      BaseSpeed: Natural := 0;
-      Speed: Integer := 0;
+      BaseSpeed, Speed: Natural := 0;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
    begin
@@ -309,10 +307,9 @@ package body Ships.Movement is
             return 0;
          end if;
       end if;
-      Weight := CountShipWeight(Ship) / 500;
       for Module of Ship.Modules loop
          if Modules_List.Element(Module.ProtoIndex).MType = ENGINE then
-            BaseSpeed := Module.Max_Value * 100;
+            BaseSpeed := Module.Max_Value * 10;
             Damage :=
               1.0 -
               DamageFactor
@@ -321,31 +318,29 @@ package body Ships.Movement is
               Speed + (BaseSpeed - Integer(Float(BaseSpeed) * Float(Damage)));
          end if;
       end loop;
-      Speed := Speed - Integer((Float(Weight) / 100.0) * Float(Speed));
+      Speed :=
+        Natural((Float(Speed) / Float(CountShipWeight(Ship))) * 100000.0);
       for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
          if Ship.Crew.Element(I).Order = Pilot then
             Speed :=
               Speed +
-              Integer(Float(Speed) * (Float(GetSkillLevel(I, 1)) / 300.0));
+              Natural(Float(Speed) * (Float(GetSkillLevel(I, 1)) / 300.0));
          elsif Ship.Crew.Element(I).Order = Engineer then
             Speed :=
               Speed +
-              Integer(Float(Speed) * (Float(GetSkillLevel(I, 2)) / 300.0));
+              Natural(Float(Speed) * (Float(GetSkillLevel(I, 2)) / 300.0));
          end if;
       end loop;
       case Ship.Speed is
          when QUARTER_SPEED =>
-            Speed := Integer(Float(Speed) * 0.25);
+            Speed := Natural(Float(Speed) * 0.25);
          when HALF_SPEED =>
-            Speed := Integer(Float(Speed) * 0.5);
+            Speed := Natural(Float(Speed) * 0.5);
          when FULL_SPEED =>
             null;
          when others =>
-            Speed := 0;
+            return 0;
       end case;
-      if Speed < 0 then
-         Speed := 0;
-      end if;
       Speed := (Speed / 60);
       return Speed;
    end RealSpeed;
