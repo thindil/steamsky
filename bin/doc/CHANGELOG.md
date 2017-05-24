@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
   advanced medium steel hull, large steel hull, advanced large steel hull,
   steel armor, heavy steel armor, steel turret, small steel greenhouse,
   small steel water collector, small steel medical room, advanced steel cabin,
-  extended steel cabin and luxury steel cabin
+  extended steel cabin, luxury steel cabin and heavy steel turret
 - Option to set which item type is used for delivery missions items
 - Option to set which item type is used as drinks
 - Option to set which item type is used as corpses
