@@ -267,7 +267,9 @@ package body UserInterface.Keys is
                   Events_List.Update_Element
                   (Index => EventIndex, Process => UpdateEvent'Access);
                end if;
-               GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 10);
+               GainRep
+                 (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
+                  (PlayerShip.Cargo(ItemIndex).Amount / 10));
                AddMessage
                  ("You gave " &
                   To_String
@@ -292,7 +294,9 @@ package body UserInterface.Keys is
                SellItems
                  (ItemIndex,
                   Integer'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
-               GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, -2);
+               GainRep
+                 (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
+                  ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
             elsif Order(1 .. 3) = "Com" then
                FinishMission
                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
