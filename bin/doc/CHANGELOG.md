@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated help
 - Updated recipes data
+- How ships speed is calculated to prevent some bugs
 
 ### Fixed
 - Counting enemy evasion during combat
