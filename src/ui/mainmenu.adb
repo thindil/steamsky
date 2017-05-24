@@ -340,6 +340,9 @@ package body MainMenu is
       LoadShipModules;
       LoadRecipes;
       LoadShips;
+      if not NewGame then
+         LoadGame;
+      end if;
       return True;
    exception
       when Help_Directory_Not_Found =>
@@ -392,12 +395,22 @@ package body MainMenu is
          ShowErrorInfo
            ("Can't load ships data. Invalid value in file. Run game in debug mode to get more info.");
          return False;
+      when SaveGame_Invalid_Version =>
+         ShowErrorInfo
+           ("This saved game is incompatible with this version of game and can't be loaded.");
+         return False;
+      when An_Exception : SaveGame_Invalid_Data =>
+         LogMessage
+           ("Invalid data in savegame: " & Exception_Message(An_Exception),
+            Everything);
+         ShowErrorInfo
+           ("Can't load savegame file. Invalid data. Run game in debug mode to get more info.");
+         return False;
    end LoadGameData;
 
    function MainMenuKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
       Option: constant String := Name(Current(GameMenu));
-      LoadError: Unbounded_String;
    begin
       case Key is
          when 56 | KEY_UP => -- Select previous option
@@ -424,17 +437,9 @@ package body MainMenu is
                if not LoadGameData(False) then
                   return Main_Menu;
                end if;
-               LoadError := LoadGame;
-               if LoadError = Null_Unbounded_String then
-                  CenterMap;
-                  DrawGame(Sky_Map_View);
-                  return Sky_Map_View;
-               else
-                  ShowDialog(To_String(LoadError));
-                  Update_Panels;
-                  Update_Screen;
-                  return Main_Menu;
-               end if;
+               CenterMap;
+               DrawGame(Sky_Map_View);
+               return Sky_Map_View;
             elsif Option = "News" then
                StartIndex := 0;
                Erase;

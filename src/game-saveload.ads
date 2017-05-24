@@ -17,9 +17,10 @@
 
 package Game.SaveLoad is
 
+   SaveGame_Invalid_Version : exception; -- Raised when trying to load unsuported version of savegame
+   SaveGame_Invalid_Data : exception; -- Raised when invalid data found in savegame
+
    procedure SaveGame; -- Save game to file
-   function LoadGame
-     return Unbounded_String; -- Load game from file, return empty string if game loaded,
---  otherwise reason why game can't be loaded
+   procedure LoadGame; -- Load game from file
 
 end Game.SaveLoad;
