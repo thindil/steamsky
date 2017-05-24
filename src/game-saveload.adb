@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Exceptions; use Ada.Exceptions;
 with Bases; use Bases;
 with Maps; use Maps;
 with Ships; use Ships;
@@ -422,7 +423,7 @@ package body Game.SaveLoad is
       Close(SaveGame);
    end SaveGame;
 
-   function LoadGame return Unbounded_String is
+   procedure LoadGame is
       SaveGame: File_Type;
       VectorLength, SkillsLength: Natural;
       Skills: Skills_Container.Vector;
@@ -465,8 +466,7 @@ package body Game.SaveLoad is
       -- Check save version
       if ReadData /= SaveVersion then
          Close(SaveGame);
-         return To_Unbounded_String
-             ("This saved game is incompatible with this version of game and can't be loaded.");
+         raise SaveGame_Invalid_Version;
       end if;
       -- Load game date
       GameDate.Year := Natural'Value(To_String(ReadData));
@@ -739,11 +739,10 @@ package body Game.SaveLoad is
       GameStats.AcceptedMissions := Positive'Value(To_String(ReadData));
       GameStats.FinishedMissions := Positive'Value(To_String(ReadData));
       Close(SaveGame);
-      return Null_Unbounded_String;
    exception
-      when Constraint_Error | End_Error =>
+      when An_Exception : Constraint_Error | End_Error =>
          Close(SaveGame);
-         return To_Unbounded_String("Can't load savegame file. Invalid data.");
+         raise SaveGame_Invalid_Data with Exception_Message(An_Exception);
    end LoadGame;
 
 end Game.SaveLoad;
