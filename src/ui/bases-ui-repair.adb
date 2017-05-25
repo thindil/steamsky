@@ -31,39 +31,31 @@ package body Bases.UI.Repair is
             (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
                .BaseType) +
         1;
+      ProtoIndex: Positive;
    begin
-      for I in PlayerShip.Modules.Iterate loop
-         if To_String(PlayerShip.Modules(I).Name) =
-           Name(Current(TradeMenu)) then
-            Time :=
-              PlayerShip.Modules(I).MaxDurability -
-              PlayerShip.Modules(I).Durability;
-            for Item of Items_List loop
-               if Item.IType =
-                 Modules_List(PlayerShip.Modules(I).ProtoIndex)
-                   .RepairMaterial then
-                  Cost := Time * Item.Prices(BaseType);
-                  ModuleIndex := Modules_Container.To_Index(I);
-                  exit;
-               end if;
-            end loop;
-            exit;
-         end if;
-      end loop;
-      if Cost = 0 then
+      ModuleIndex := Integer'Value(Description(Current(TradeMenu)));
+      if ModuleIndex > 0 then
+         Time :=
+           PlayerShip.Modules(ModuleIndex).MaxDurability -
+           PlayerShip.Modules(ModuleIndex).Durability;
+         ProtoIndex :=
+           FindProtoItem
+             (ItemType =>
+                Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                  .RepairMaterial);
+         Cost := Time * Items_List(ProtoIndex).Prices(BaseType);
+      else
          for Module of PlayerShip.Modules loop
             if Module.Durability < Module.MaxDurability then
                Time := Time + Module.MaxDurability - Module.Durability;
-               for Item of Items_List loop
-                  if Item.IType =
-                    Modules_List(Module.ProtoIndex).RepairMaterial then
-                     Cost :=
-                       Cost +
-                       ((Module.MaxDurability - Module.Durability) *
-                        Item.Prices(BaseType));
-                     exit;
-                  end if;
-               end loop;
+               ProtoIndex :=
+                 FindProtoItem
+                   (ItemType =>
+                      Modules_List(Module.ProtoIndex).RepairMaterial);
+               Cost :=
+                 Cost +
+                 ((Module.MaxDurability - Module.Durability) *
+                  Items_List(ProtoIndex).Prices(BaseType));
             end if;
          end loop;
          if Name(Current(TradeMenu))(1) = 'R' then
@@ -118,9 +110,13 @@ package body Bases.UI.Repair is
       MenuIndex: Integer := 1;
       MoneyIndex2: Natural := 0;
    begin
-      for Module of PlayerShip.Modules loop
-         if Module.Durability < Module.MaxDurability then
-            Repair_Items.all(MenuIndex) := New_Item(To_String(Module.Name));
+      for I in PlayerShip.Modules.Iterate loop
+         if PlayerShip.Modules(I).Durability <
+           PlayerShip.Modules(I).MaxDurability then
+            Repair_Items.all(MenuIndex) :=
+              New_Item
+                (To_String(PlayerShip.Modules(I).Name),
+                 Positive'Image(Modules_Container.To_Index(I)));
             MenuIndex := MenuIndex + 1;
          end if;
       end loop;
@@ -134,14 +130,15 @@ package body Bases.UI.Repair is
          Refresh;
          return;
       end if;
-      Repair_Items.all(MenuIndex) := New_Item("Slowly repair whole ship");
+      Repair_Items.all(MenuIndex) := New_Item("Slowly repair whole ship", "0");
       if SkyBases(BaseIndex).Population > 149 then
          MenuIndex := MenuIndex + 1;
-         Repair_Items.all(MenuIndex) := New_Item("Repair whole ship");
+         Repair_Items.all(MenuIndex) := New_Item("Repair whole ship", "0");
       end if;
       if SkyBases(BaseIndex).Population > 299 then
          MenuIndex := MenuIndex + 1;
-         Repair_Items.all(MenuIndex) := New_Item("Fast repair whole ship");
+         Repair_Items.all(MenuIndex) :=
+           New_Item("Fast repair whole ship", "0");
       end if;
       MenuIndex := MenuIndex + 1;
       for I in MenuIndex .. Repair_Items'Last loop
@@ -149,6 +146,7 @@ package body Bases.UI.Repair is
       end loop;
       Repair_Items.all(MenuIndex + 1) := Null_Item;
       TradeMenu := New_Menu(Repair_Items);
+      Set_Options(TradeMenu, (Show_Descriptions => False, others => True));
       Set_Format(TradeMenu, Lines - 10, 1);
       Set_Mark(TradeMenu, "");
       Scale(TradeMenu, MenuHeight, MenuLength);
