@@ -61,6 +61,7 @@ All notable changes to this project will be documented in this file.
 - Crash on overloaded ship
 - Crash when recipe don't have set difficulty
 - Repair selected module in bases
+- Crash on repair whole ship in bases
 
 ## [1.1] - 2017-04-30
 
