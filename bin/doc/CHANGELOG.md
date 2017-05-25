@@ -62,6 +62,7 @@ All notable changes to this project will be documented in this file.
 - Crash when recipe don't have set difficulty
 - Repair selected module in bases
 - Crash on repair whole ship in bases
+- Showing dialog with long messages
 
 ## [1.1] - 2017-04-30
 
