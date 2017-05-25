@@ -1530,4 +1530,18 @@ Price = 1200
 InstallTime = 120
 Size = 1
 Description = Heaviest steel turret. If turret is destroyed, gun is destroyed too and gunner killed.
+[121]
+Name = Heavy steel battering ram
+Type = Battering_ram
+Weight = 850
+Value = 0
+MaxValue = 24
+Durability = 200
+Material = Steel
+Skill = Engineering
+Price = 1400
+InstallTime = 150
+Unique = Yes
+Size = 1
+Description = Heavy battering ram, made of steel. Attack enemies automatically when in close range.
 []
