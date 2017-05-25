@@ -666,12 +666,13 @@ package body UserInterface is
    procedure ShowDialog(Message: String) is
       DialogWindow: Window;
       Width: Positive;
-      Height: Positive := 1;
+      Height, StartIndex, EndIndex: Positive := 1;
+      CurrentLine: Line_Position := 1;
    begin
       Width := Message'Length + 2;
       if Width >= Positive(Columns - 4) then
-         Height := (Width / Positive(Columns - 4) + 2);
-         Width := (Width / Height) + 2;
+         Height := (Width / Positive(Columns - 4)) + 1;
+         Width := Positive(Columns - 4);
       end if;
       Height := Height + 2;
       DialogWindow :=
@@ -681,7 +682,23 @@ package body UserInterface is
            ((Lines / 2) - Line_Position(Height / 2)),
            ((Columns / 2) - Column_Position(Width / 2)));
       Box(DialogWindow);
-      Add(Win => DialogWindow, Str => Message, Line => 1, Column => 1);
+      if Height = 3 then
+         Add(Win => DialogWindow, Str => Message, Line => 1, Column => 1);
+      else
+         while StartIndex < Message'Length loop
+            EndIndex := StartIndex + Width - 3;
+            if EndIndex > Message'Length then
+               EndIndex := Message'Length;
+            end if;
+            Add
+              (Win => DialogWindow,
+               Str => Message(StartIndex .. EndIndex),
+               Line => CurrentLine,
+               Column => 1);
+            CurrentLine := CurrentLine + 1;
+            StartIndex := EndIndex;
+         end loop;
+      end if;
       if DialogPanel = Null_Panel then
          DialogPanel := New_Panel(DialogWindow);
       else
