@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Crash on delivering medicines to diseased bases
 - Repair selected module in bases
 - Crash on repair whole ship in bases
+- Showing dialog with long messages
 
 ## [1.0.2] - 2017-05-14
 
