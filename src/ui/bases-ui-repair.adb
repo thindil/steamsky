@@ -73,6 +73,9 @@ package body Bases.UI.Repair is
       if Bases_Types'Val(BaseType - 1) = Shipyard then
          Cost := Cost / 2;
       end if;
+      if Time = 0 then
+         Time := 1;
+      end if;
    end RepairCost;
 
    procedure ShowRepairInfo is
