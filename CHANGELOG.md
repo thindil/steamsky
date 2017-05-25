@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Gunner back to work from rest when more than one gun is used
 - Crash on overloaded ship
 - Crash on delivering medicines to diseased bases
+- Repair selected module in bases
 
 ## [1.0.2] - 2017-05-14
 
