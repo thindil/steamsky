@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Ability to set game options in game
 - Option to set default ship speed after undock from base
 - Read starting recipes from ships data file
+- Option to heal wounded crew members in bases
 
 ### Changed
 - Updated MODDING.md
