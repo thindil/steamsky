@@ -1544,4 +1544,17 @@ InstallTime = 150
 Unique = Yes
 Size = 1
 Description = Heavy battering ram, made of steel. Attack enemies automatically when in close range.
+[122]
+Name = Small steel workshop
+Type = Workshop
+Weight = 450
+Value = 0
+MaxValue = 0
+Durability = 300
+Material = Steel
+Skill = Engineering
+Price = 3000
+InstallTime = 60
+Size = 1
+Description = Allow craft some tools. Made of steel.
 []
