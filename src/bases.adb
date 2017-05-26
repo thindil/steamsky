@@ -272,7 +272,7 @@ package body Bases is
    end GenerateBaseName;
 
    procedure RepairShip is
-      Cost, Time, ModuleIndex, MoneyIndex2, RepairValue: Natural := 0;
+      Cost, Time, ModuleIndex, MoneyIndex2: Natural := 0;
       TraderIndex, ProtoMoneyIndex: Positive;
    begin
       RepairCost(Cost, Time, ModuleIndex);
@@ -301,14 +301,8 @@ package body Bases is
          end if;
       end loop;
       if ModuleIndex > 0 then
-         RepairValue :=
-           PlayerShip.Modules(ModuleIndex).MaxDurability -
-           PlayerShip.Modules(ModuleIndex).Durability;
-         UpdateModule
-           (PlayerShip,
-            ModuleIndex,
-            "Durability",
-            Positive'Image(RepairValue));
+         PlayerShip.Modules(ModuleIndex).Durability :=
+           PlayerShip.Modules(ModuleIndex).MaxDurability;
          AddMessage
            ("You bought " &
             To_String(PlayerShip.Modules(ModuleIndex).Name) &
@@ -444,17 +438,10 @@ package body Bases is
          end if;
          case Modules_List(ModuleIndex).MType is
             when GUN =>
-               UpdateModule
-                 (PlayerShip,
-                  FreeTurretIndex,
-                  "Current_Value",
-                  Positive'Image(PlayerShip.Modules.Last_Index));
+               PlayerShip.Modules(FreeTurretIndex).Current_Value :=
+                 PlayerShip.Modules.Last_Index;
             when others =>
-               UpdateModule
-                 (PlayerShip,
-                  HullIndex,
-                  "Current_Value",
-                  Positive'Image(ModulesAmount));
+               PlayerShip.Modules(HullIndex).Current_Value := ModulesAmount;
          end case;
          AddMessage
            ("You installed " &
@@ -514,11 +501,7 @@ package body Bases is
          ModulesAmount :=
            ModulesAmount -
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size;
-         UpdateModule
-           (PlayerShip,
-            HullIndex,
-            "Current_Value",
-            Positive'Image(ModulesAmount));
+         PlayerShip.Modules(HullIndex).Current_Value := ModulesAmount;
          if PlayerShip.UpgradeModule = ModuleIndex then
             PlayerShip.UpgradeModule := 0;
             for C in PlayerShip.Crew.Iterate loop
@@ -582,11 +565,6 @@ package body Bases is
       Gender: Character;
       Price: Natural;
       SkillIndex: Integer;
-      procedure UpdateRecruit(Recruit: in out Recruit_Data) is
-      begin
-         Recruit.Skills := Skills;
-         Recruit.Price := Price;
-      end UpdateRecruit;
    begin
       TimeDiff :=
         (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
@@ -650,8 +628,8 @@ package body Bases is
             Price := Price + Skills(C)(2);
          end loop;
          Price := Price * 100;
-         BaseRecruits.Update_Element
-         (Index => BaseRecruits.Last_Index, Process => UpdateRecruit'Access);
+         BaseRecruits(BaseRecruits.Last_Index).Skills := Skills;
+         BaseRecruits(BaseRecruits.Last_Index).Price := Price;
       end loop;
       SkyBases(BaseIndex).RecruitDate := GameDate;
       SkyBases(BaseIndex).Recruits := BaseRecruits;
