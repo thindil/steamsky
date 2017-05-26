@@ -211,6 +211,9 @@ package body UserInterface.Keys is
                AskForEvents;
             elsif Order = "Ask for bases" then
                AskForBases;
+            elsif Order = "Heal wounded" then
+               DrawGame(Heal_View);
+               return Heal_View;
             elsif Order = "Repair" then
                DrawGame(Repairs_View);
                return Repairs_View;

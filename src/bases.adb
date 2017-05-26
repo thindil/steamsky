@@ -21,6 +21,7 @@ with Messages; use Messages;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Bases.UI.Repair; use Bases.UI.Repair;
+with Bases.UI.Heal; use Bases.UI.Heal;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
@@ -1118,4 +1119,64 @@ package body Bases is
          end loop;
       end if;
    end UpdatePopulation;
+
+   procedure HealWounded is
+      Cost, Time, MemberIndex, MoneyIndex2: Natural := 0;
+      TraderIndex, ProtoMoneyIndex: Positive;
+   begin
+      HealCost(Cost, Time, MemberIndex);
+      if Cost = 0 then
+         return;
+      end if;
+      ProtoMoneyIndex := FindProtoItem(MoneyIndex);
+      MoneyIndex2 := FindCargo(ProtoMoneyIndex);
+      if MoneyIndex2 = 0 then
+         ShowDialog
+           ("You don't have " &
+            To_String(MoneyName) &
+            " to pay for healing wounded crew members.");
+         return;
+      end if;
+      TraderIndex := FindMember(Talk);
+      CountPrice(Cost, TraderIndex);
+      if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+         ShowDialog
+           ("You don't have enough " &
+            To_String(MoneyName) &
+            " to pay for healing wounded crew members.");
+         return;
+      end if;
+      if MemberIndex > 0 then
+         PlayerShip.Crew(MemberIndex).Health := 100;
+         AddMessage
+           ("You bought healing " &
+            To_String(PlayerShip.Crew(MemberIndex).Name) &
+            " for" &
+            Positive'Image(Cost) &
+            " " &
+            To_String(MoneyName) &
+            ".",
+            TradeMessage);
+         GiveOrders(MemberIndex, Rest, 0, False);
+      else
+         for I in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(I).Health < 100 then
+               PlayerShip.Crew(I).Health := 100;
+               GiveOrders(Crew_Container.To_Index(I), Rest, 0, False);
+            end if;
+         end loop;
+         AddMessage
+           ("You bought healing all wounded crew members for" &
+            Positive'Image(Cost) &
+            " " &
+            To_String(MoneyName) &
+            ".",
+            TradeMessage);
+      end if;
+      UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
+      GainExp(1, 4, TraderIndex);
+      GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
+      UpdateGame(Time);
+   end HealWounded;
+
 end Bases;

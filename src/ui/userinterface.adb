@@ -37,6 +37,7 @@ with Bases.UI.Shipyard; use Bases.UI.Shipyard;
 with Bases.UI.Recruits; use Bases.UI.Recruits;
 with Bases.UI.Recipes; use Bases.UI.Recipes;
 with Bases.UI.Missions; use Bases.UI.Missions;
+with Bases.UI.Heal; use Bases.UI.Heal;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
 with Combat; use Combat;
@@ -139,6 +140,9 @@ package body UserInterface is
          when GameOptions_View =>
             Add(Str => "Game options [Quit]");
             Change_Attributes(Line => 0, Column => 14, Count => 1, Color => 1);
+         when Heal_View =>
+            Add(Str => "Heal wounded crew members [Quit]");
+            Change_Attributes(Line => 0, Column => 27, Count => 1, Color => 1);
          when others =>
             null;
       end case;
@@ -361,6 +365,12 @@ package body UserInterface is
             if not SkyBases(BaseIndex).AskedForBases then
                OrdersAmount := OrdersAmount + 1;
             end if;
+            for Member of PlayerShip.Crew loop
+               if Member.Health < 100 then
+                  OrdersAmount := OrdersAmount + 1;
+                  exit;
+               end if;
+            end loop;
             for Module of PlayerShip.Modules loop
                if Module.Durability < Module.MaxDurability then
                   OrdersAmount := OrdersAmount + 1;
@@ -436,6 +446,13 @@ package body UserInterface is
                Orders_Items.all(MenuIndex) := New_Item("Ask for events");
                MenuIndex := MenuIndex + 1;
             end if;
+            for Member of PlayerShip.Crew loop
+               if Member.Health < 100 then
+                  Orders_Items.all(MenuIndex) := New_Item("Heal wounded");
+                  MenuIndex := MenuIndex + 1;
+                  exit;
+               end if;
+            end loop;
             for Module of PlayerShip.Modules loop
                if Module.Durability < Module.MaxDurability then
                   Orders_Items.all(MenuIndex) := New_Item("Repair");
@@ -916,6 +933,8 @@ package body UserInterface is
               ("You don't have engineer on duty. Did you want to wait until your engineer rest?");
          when GameOptions_View =>
             ShowOptions;
+         when Heal_View =>
+            ShowHeal;
          when others =>
             null;
       end case;

@@ -89,5 +89,6 @@ package Bases is
    procedure BuyRecipe(RecipeIndex: Positive); -- Buy new crafting recipe
    procedure UpdatePopulation
      (BaseIndex: Positive); -- Update base population if needed
+   procedure HealWounded; -- Heals wounded crew members in bases
 
 end Bases;
