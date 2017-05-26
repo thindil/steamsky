@@ -85,10 +85,10 @@ package body BasesList is
            SkyBases(BaseIndex).Reputation(1) > -25 then
             TimeDiff :=
               30 -
-              ((GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+              ((GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
                (SkyBases(BaseIndex).RecruitDate.Day +
-                ((30 * SkyBases(BaseIndex).RecruitDate.Month) *
-                 SkyBases(BaseIndex).RecruitDate.Year)));
+                (30 * SkyBases(BaseIndex).RecruitDate.Month) +
+                (SkyBases(BaseIndex).RecruitDate.Year * 360)));
             if TimeDiff > 0 then
                Add
                  (Win => InfoWindow,
@@ -108,10 +108,10 @@ package body BasesList is
          if SkyBases(BaseIndex).Owner /= Abandoned and
            SkyBases(BaseIndex).Reputation(1) > -25 then
             TimeDiff :=
-              (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+              (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
               (SkyBases(BaseIndex).AskedForEvents.Day +
-               ((30 * SkyBases(BaseIndex).AskedForEvents.Month) *
-                SkyBases(BaseIndex).AskedForEvents.Year));
+               (30 * SkyBases(BaseIndex).AskedForEvents.Month) +
+               (SkyBases(BaseIndex).AskedForEvents.Year * 360));
             if TimeDiff < 7 then
                Add
                  (Win => InfoWindow,
@@ -132,10 +132,10 @@ package body BasesList is
            SkyBases(BaseIndex).Reputation(1) > -1 then
             TimeDiff :=
               7 -
-              ((GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+              ((GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
                (SkyBases(BaseIndex).MissionsDate.Day +
-                ((30 * SkyBases(BaseIndex).MissionsDate.Month) *
-                 SkyBases(BaseIndex).MissionsDate.Year)));
+                (30 * SkyBases(BaseIndex).MissionsDate.Month) +
+                (SkyBases(BaseIndex).MissionsDate.Year * 360)));
             if TimeDiff > 0 then
                Add
                  (Win => InfoWindow,
