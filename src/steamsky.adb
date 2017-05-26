@@ -43,6 +43,7 @@ with Bases.UI.Shipyard; use Bases.UI.Shipyard;
 with Bases.UI.Recruits; use Bases.UI.Recruits;
 with Bases.UI.Recipes; use Bases.UI.Recipes;
 with Bases.UI.Missions; use Bases.UI.Missions;
+with Bases.UI.Heal; use Bases.UI.Heal;
 with Events; use Events;
 with Events.UI; use Events.UI;
 with Combat.UI; use Combat.UI;
@@ -283,6 +284,8 @@ begin
             GameState := WaitFormKeys(Key);
          when GameOptions_View =>
             GameState := GameOptionsKeys(Key);
+         when Heal_View =>
+            GameState := HealKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;
