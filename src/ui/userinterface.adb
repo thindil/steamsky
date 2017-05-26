@@ -355,10 +355,10 @@ package body UserInterface is
                OrdersAmount := OrdersAmount + 1;
             end if;
             TimeDiff :=
-              (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+              (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
               (SkyBases(BaseIndex).AskedForEvents.Day +
-               ((30 * SkyBases(BaseIndex).AskedForEvents.Month) *
-                SkyBases(BaseIndex).AskedForEvents.Year));
+               (30 * SkyBases(BaseIndex).AskedForEvents.Month) +
+               (SkyBases(BaseIndex).AskedForEvents.Year * 360));
             if TimeDiff > 6 then
                OrdersAmount := OrdersAmount + 1;
             end if;
