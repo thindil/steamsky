@@ -64,6 +64,7 @@ All notable changes to this project will be documented in this file.
 - Repair selected module in bases
 - Crash on repair whole ship in bases
 - Showing dialog with long messages
+- Crash on updating population in bases
 
 ## [1.1] - 2017-04-30
 
