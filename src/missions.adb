@@ -47,10 +47,10 @@ package body Missions is
       PlayerValue: Natural := 0;
    begin
       TimeDiff :=
-        (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+        (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
         (SkyBases(BaseIndex).MissionsDate.Day +
-         ((30 * SkyBases(BaseIndex).MissionsDate.Month) *
-          SkyBases(BaseIndex).MissionsDate.Year));
+         (30 * SkyBases(BaseIndex).MissionsDate.Month) +
+         (SkyBases(BaseIndex).MissionsDate.Year * 360));
       if TimeDiff < 7 or SkyBases(BaseIndex).Owner = Abandoned then
          return;
       end if;

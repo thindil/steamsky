@@ -586,10 +586,10 @@ package body Bases is
       end UpdateRecruit;
    begin
       TimeDiff :=
-        (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+        (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
         (SkyBases(BaseIndex).RecruitDate.Day +
-         ((30 * SkyBases(BaseIndex).RecruitDate.Month) *
-          SkyBases(BaseIndex).RecruitDate.Year));
+         (30 * SkyBases(BaseIndex).RecruitDate.Month) +
+         (SkyBases(BaseIndex).RecruitDate.Year * 360));
       if TimeDiff < 30 or SkyBases(BaseIndex).Owner = Abandoned then
          return;
       end if;
@@ -819,10 +819,10 @@ package body Bases is
       Attempts: Natural;
    begin
       TimeDiff :=
-        (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+        (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
         (SkyBases(BaseIndex).AskedForEvents.Day +
-         ((30 * SkyBases(BaseIndex).AskedForEvents.Month) *
-          SkyBases(BaseIndex).AskedForEvents.Year));
+         (30 * SkyBases(BaseIndex).AskedForEvents.Month) +
+         (SkyBases(BaseIndex).AskedForEvents.Year * 360));
       if TimeDiff < 7 then
          ShowDialog("You asked for know events in this base not so long ago.");
          return;
@@ -1069,10 +1069,10 @@ package body Bases is
       PopulationDiff: Integer;
    begin
       TimeDiff :=
-        (GameDate.Day + ((30 * GameDate.Month) * GameDate.Year)) -
+        (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
         (SkyBases(BaseIndex).RecruitDate.Day +
-         ((30 * SkyBases(BaseIndex).RecruitDate.Month) *
-          SkyBases(BaseIndex).RecruitDate.Year));
+         (30 * SkyBases(BaseIndex).RecruitDate.Month) +
+         (SkyBases(BaseIndex).RecruitDate.Year * 360));
       if TimeDiff < 30 then
          return;
       end if;
