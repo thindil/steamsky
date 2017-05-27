@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Option to set default ship speed after undock from base
 - Read starting recipes from ships data file
 - Option to heal wounded crew members in bases
+- Last 5 messages to sky map
 
 ### Changed
 - Updated MODDING.md
