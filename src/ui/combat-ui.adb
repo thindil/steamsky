@@ -24,6 +24,7 @@ with ShipModules; use ShipModules;
 with Items; use Items;
 with Help.UI; use Help.UI;
 with Ships.Crew; use Ships.Crew;
+with Messages.UI; use Messages.UI;
 
 package body Combat.UI is
 
@@ -129,10 +130,8 @@ package body Combat.UI is
       EngineerName,
       GunnerName: Unbounded_String :=
         To_Unbounded_String("Vacant");
-      LoopStart: Integer;
       DamagePercent: Natural;
       CurrentLine: Line_Position;
-      Message: Message_Data;
       Crew_Items: Item_Array_Access;
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
@@ -384,30 +383,9 @@ package body Combat.UI is
             Count => 3,
             Color => 1);
       end if;
-      LoopStart := 0 - MessagesAmount;
-      if LoopStart < -10 then
-         LoopStart := -10;
-      end if;
-      CurrentLine := Lines - 11;
-      Move_Cursor(Line => CurrentLine, Column => 2);
-      for I in reverse LoopStart .. -1 loop
-         Message := GetMessage((I + 1));
-         if Message.MessageIndex < MessagesStarts then
-            exit;
-         end if;
-         CurrentLine := CurrentLine + 1;
-         if Length(Message.Message) > Integer(Columns - 2) then
-            CurrentLine :=
-              CurrentLine +
-              (Line_Position(Length(Message.Message)) /
-               Line_Position(Columns - 2));
-         end if;
-         exit when CurrentLine >= Lines;
-         Add(Str => To_String(Message.Message));
-         Move_Cursor(Line => CurrentLine, Column => 2);
-      end loop;
       LastMessage := To_Unbounded_String("");
       Refresh;
+      ShowLastMessages(MessagesStarts);
       Refresh(MenuWindow);
    end ShowCombat;
 
