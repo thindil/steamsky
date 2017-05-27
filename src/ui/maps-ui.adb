@@ -29,6 +29,7 @@ with Events; use Events;
 with Missions; use Missions;
 with Items; use Items;
 with Crew; use Crew;
+with Messages.UI; use Messages.UI;
 
 package body Maps.UI is
 
@@ -59,12 +60,12 @@ package body Maps.UI is
       elsif PlayerShip.SkyX + MoveX > 1024 then
          MoveX := 1024 - PlayerShip.SkyX;
       end if;
-      StartY := PlayerShip.SkyY - Integer(Lines / 2);
+      StartY := PlayerShip.SkyY - Integer((Lines - 7) / 2);
       StartY := StartY + MoveY;
       if StartY < 0 then
          StartY := 0;
-      elsif (StartY + Integer(Lines)) > 1025 then
-         StartY := 1025 - Integer(Lines);
+      elsif (StartY + Integer(Lines - 7)) > 1025 then
+         StartY := 1025 - Integer(Lines - 7);
       end if;
       if PlayerShip.SkyY + MoveY <= 1 then
          MoveY := 1 - PlayerShip.SkyY;
@@ -72,7 +73,7 @@ package body Maps.UI is
          MoveY := 1024 - PlayerShip.SkyY;
       end if;
       for X in 1 .. Integer(Columns) - 1 loop
-         for Y in 1 .. Integer(Lines) - 1 loop
+         for Y in 1 .. Integer(Lines) - 8 loop
             BaseIndex := SkyMap(StartX + X, StartY + Y).BaseIndex;
             if BaseIndex > 0 then
                if SkyBases(BaseIndex).Known then
@@ -364,6 +365,8 @@ package body Maps.UI is
       end if;
       Refresh(InfoWindow);
       Delete(InfoWindow);
+      ShowLastMessages;
+      LastMessage := To_Unbounded_String("");
    end ShowSkyMap;
 
    procedure ShowMoveMapForm is
