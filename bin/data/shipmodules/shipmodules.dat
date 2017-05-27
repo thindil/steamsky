@@ -1557,4 +1557,16 @@ Price = 3000
 InstallTime = 60
 Size = 1
 Description = Allow craft some tools. Made of steel.
+[123]
+Name = Huge steel hull
+Type = Hull
+Weight = 11000
+Value = 0
+MaxValue = 44
+Durability = 350
+Material = Steel
+Skill = Engineering
+Price = 22000
+InstallTime = 300
+Description = Base module of each ship, made of steel. Whole ship is destroyed if hull is destroyed.
 []
