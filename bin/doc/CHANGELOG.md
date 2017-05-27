@@ -66,6 +66,7 @@ All notable changes to this project will be documented in this file.
 - Crash on repair whole ship in bases
 - Showing dialog with long messages
 - Crash on updating population in bases
+- Showing bases coordinates on bases list
 
 ## [1.1] - 2017-04-30
 
