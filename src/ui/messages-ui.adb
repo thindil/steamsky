@@ -109,6 +109,51 @@ package body Messages.UI is
          (Columns - 2));
    end ShowMessages;
 
+   procedure ShowLastMessages(StartIndex: Natural := 0) is
+      LoopStart: Integer;
+      CurrentLine, WindowHeight: Line_Position;
+      Message: Message_Data;
+      MessagesWindow: Window;
+   begin
+      LoopStart := 0 - MessagesAmount;
+      CurrentLine := 1;
+      if StartIndex > 0 then
+         WindowHeight := 12;
+         if LoopStart < -10 then
+            LoopStart := -10;
+         end if;
+      else
+         WindowHeight := 7;
+         if LoopStart < -5 then
+            LoopStart := -5;
+         end if;
+      end if;
+      MessagesWindow :=
+        Create(WindowHeight, Columns, (Lines - WindowHeight), 0);
+      Box(MessagesWindow);
+      Move_Cursor(Win => MessagesWindow, Line => 0, Column => 2);
+      Add(Win => MessagesWindow, Str => "[Last messages]");
+      Move_Cursor(Win => MessagesWindow, Line => CurrentLine, Column => 2);
+      for I in reverse LoopStart .. -1 loop
+         Message := GetMessage((I + 1));
+         if Message.MessageIndex < StartIndex then
+            exit;
+         end if;
+         CurrentLine := CurrentLine + 1;
+         if Length(Message.Message) > Integer(Columns - 2) then
+            CurrentLine :=
+              CurrentLine +
+              (Line_Position(Length(Message.Message)) /
+               Line_Position(Columns - 4));
+         end if;
+         exit when CurrentLine >= WindowHeight;
+         Add(Win => MessagesWindow, Str => To_String(Message.Message));
+         Move_Cursor(Win => MessagesWindow, Line => CurrentLine, Column => 2);
+      end loop;
+      Refresh(MessagesWindow);
+      Delete(MessagesWindow);
+   end ShowLastMessages;
+
    function MessagesKeys
      (Key: Key_Code;
       OldState: GameStates) return GameStates is

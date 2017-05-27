@@ -20,6 +20,9 @@ with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 package Messages.UI is
 
    procedure ShowMessages; -- Show messages list
+   procedure ShowLastMessages
+     (StartIndex: Natural :=
+        0); -- Show last messages, with index higher than startindex
    function MessagesKeys
      (Key: Key_Code;
       OldState: GameStates) return GameStates; -- Handle keys in messages list
