@@ -57,7 +57,7 @@ package body BasesList is
               "X:" &
               Positive'Image(SkyBases(BaseIndex).SkyX) &
               " Y:" &
-              Positive'Image(SkyBases(BaseIndex).SkyX));
+              Positive'Image(SkyBases(BaseIndex).SkyY));
          Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
          Add
            (Win => InfoWindow,
