@@ -274,11 +274,7 @@ package body Combat is
                               if Ship.Cargo(J).ProtoIndex =
                                 Objects_Container.To_Index(I) then
                                  AmmoIndex := Cargo_Container.To_Index(J);
-                                 UpdateModule
-                                   (Ship,
-                                    Modules_Container.To_Index(K),
-                                    "Current_Value",
-                                    Positive'Image(AmmoIndex));
+                                 Ship.Modules(K).Current_Value := AmmoIndex;
                                  exit;
                               end if;
                            end loop;
@@ -472,11 +468,14 @@ package body Combat is
                              Items_List(Ship.Cargo(AmmoIndex).ProtoIndex)
                                .Value;
                         end if;
-                        UpdateModule
-                          (EnemyShip,
-                           HitLocation,
-                           "Durability",
-                           Integer'Image(0 - WeaponDamage));
+                        if WeaponDamage >
+                          EnemyShip.Modules(HitLocation).Durability then
+                           WeaponDamage :=
+                             EnemyShip.Modules(HitLocation).Durability;
+                        end if;
+                        EnemyShip.Modules(HitLocation).Durability :=
+                          EnemyShip.Modules(HitLocation).Durability -
+                          WeaponDamage;
                         if EnemyShip.Modules(HitLocation).Durability = 0 then
                            DeathReason := To_Unbounded_String("enemy fire");
                            case Modules_List
@@ -494,11 +493,9 @@ package body Combat is
                                    EnemyShip.Modules(HitLocation)
                                      .Current_Value;
                                  if WeaponIndex > 0 then
-                                    UpdateModule
-                                      (EnemyShip,
-                                       WeaponIndex,
-                                       "Durability",
-                                       "-1000");
+                                    EnemyShip.Modules(WeaponIndex)
+                                      .Durability :=
+                                      0;
                                     RemoveGun(WeaponIndex);
                                  end if;
                               when GUN =>
@@ -545,13 +542,7 @@ package body Combat is
                      end if;
                      if EndCombat then
                         if Ship = PlayerShip then
-                           UpdateModule
-                             (EnemyShip,
-                              1,
-                              "Durability",
-                              Integer'
-                                Image
-                                  (0 - EnemyShip.Modules(1).MaxDurability));
+                           EnemyShip.Modules(1).Durability := 0;
                            AddMessage
                              (To_String(EnemyName) & " is destroyed!",
                               CombatMessage);
