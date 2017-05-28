@@ -45,6 +45,7 @@ All notable changes to this project will be documented in this file.
 - How ships speed is calculated to prevent some bugs
 - Amount of gained/lost reputation from deliver medicines to diseased bases
   depends on amount of delivered medicines
+- Updated README.md
 
 ### Fixed
 - Counting enemy evasion during combat
