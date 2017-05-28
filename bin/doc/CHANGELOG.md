@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.2] - 2017-05-28
 
 ### Added
 - New ship modules: small steel turret, steel battering ram, small steel
