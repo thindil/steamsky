@@ -255,16 +255,8 @@ package body Crafts is
          ShowDialog("You don't have that much free space in your ship cargo.");
          return;
       end if;
-      UpdateModule
-        (PlayerShip,
-         ModuleIndex,
-         "Current_Value",
-         Integer'Image(RecipeIndex));
-      UpdateModule
-        (PlayerShip,
-         ModuleIndex,
-         "Max_Value",
-         Positive'Image(Recipe.Time));
+      PlayerShip.Modules(ModuleIndex).Current_Value := RecipeIndex;
+      PlayerShip.Modules(ModuleIndex).Max_Value := Recipe.Time;
       AddMessage
         (To_String(RecipeName) &
          " was set as manufacturing order in " &
@@ -290,14 +282,6 @@ package body Crafts is
       subtype Workplaces is ModuleType range ALCHEMY_LAB .. GREENHOUSE;
       RecipeName: Unbounded_String;
       HaveMaterial: Boolean;
-      procedure UpdateMember(Member: in out Member_Data) is
-      begin
-         Member.OrderTime := WorkTime;
-      end UpdateMember;
-      procedure UpdateMaterial(Item: in out CargoData) is
-      begin
-         Item.Amount := NewAmount;
-      end UpdateMaterial;
    begin
       for Module of PlayerShip.Modules loop
          if Module.Owner > 0 and
@@ -458,10 +442,7 @@ package body Crafts is
                                    PlayerShip.Cargo(CargoIndex).Amount -
                                    Recipe.MaterialAmounts
                                      (Positive_Container.To_Index(J));
-                                 PlayerShip.Cargo.Update_Element
-                                 (Index =>
-                                    CargoIndex, Process =>
-                                    UpdateMaterial'Access);
+                                 PlayerShip.Cargo(CargoIndex).Amount := NewAmount;
                                  exit;
                               elsif PlayerShip.Cargo(CargoIndex).Amount =
                                 Recipe.MaterialAmounts
@@ -548,8 +529,7 @@ package body Crafts is
                   if GainedExp > 0 then
                      GainExp(GainedExp, Recipe.Skill, CrafterIndex);
                   end if;
-                  PlayerShip.Crew.Update_Element
-                  (Index => CrafterIndex, Process => UpdateMember'Access);
+                  PlayerShip.Crew(CrafterIndex).OrderTime := WorkTime;
                   if Module.Current_Value < 0 and CraftedAmount > 0 then
                      Module.Current_Value := 0;
                      Module.Max_Value := 0;
