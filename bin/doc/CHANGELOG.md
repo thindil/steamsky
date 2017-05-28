@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
   steel armor, heavy steel armor, steel turret, small steel greenhouse,
   small steel water collector, small steel medical room, advanced steel cabin,
   extended steel cabin, luxury steel cabin, heavy steel turret, heavy steel
-  battering ram, small steel workshop and huge steel hull
+  battering ram, small steel workshop, huge steel hull and advanced huge steel
+  hull
 - Option to set which item type is used for delivery missions items
 - Option to set which item type is used as drinks
 - Option to set which item type is used as corpses
