@@ -54,6 +54,9 @@ For detailed informations about contributing to project (bugs reporting, ideas
 propositions, code conduct, etc), see [CONTRIBUTING.md](bin/doc/CONTRIBUTING.md)
 
 
+More documentation about game (changelog, license) you can find in
+[doc](bin/doc) directory.
+
 That's all for now, as usual, probably I forgot about something important ;)
 
 Bartek thindil Jasicki
