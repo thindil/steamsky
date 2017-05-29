@@ -33,20 +33,11 @@ package body Crew is
       GivenOrder: Crew_Orders;
       ModuleIndex: Natural := 0;
       CheckPriorities: Boolean := True) is
-      NewOrder: Crew_Orders;
       MemberName: constant String :=
         To_String(PlayerShip.Crew(MemberIndex).Name);
       ModuleIndex2, ToolsIndex: Natural := 0;
       MType: ModuleType := ENGINE;
       RequiredTool: Unbounded_String;
-      procedure UpdateOrder(Member: in out Member_Data) is
-      begin
-         Member.Order := NewOrder;
-         if NewOrder = Rest then
-            Member.PreviousOrder := Rest;
-         end if;
-         Member.OrderTime := 15;
-      end UpdateOrder;
    begin
       if GivenOrder = PlayerShip.Crew(MemberIndex).Order then
          return;
@@ -59,14 +50,7 @@ package body Crew is
          else
             RequiredTool := RepairTools;
          end if;
-         for I in
-           PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-            if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
-              RequiredTool then
-               ToolsIndex := I;
-               exit;
-            end if;
-         end loop;
+         ToolsIndex := FindCargo(ItemType => RequiredTool);
          if ToolsIndex = 0 then
             case GivenOrder is
                when Repair =>
@@ -185,31 +169,19 @@ package body Crew is
       case GivenOrder is
          when Pilot =>
             AddMessage(MemberName & " starts piloting.", OrderMessage);
-            UpdateModule
-              (PlayerShip,
-               ModuleIndex2,
-               "Owner",
-               Positive'Image(MemberIndex));
+            PlayerShip.Modules(ModuleIndex2).Owner := MemberIndex;
          when Engineer =>
             AddMessage(MemberName & " starts engineers duty.", OrderMessage);
          when Gunner =>
             AddMessage(MemberName & " starts operating gun.", OrderMessage);
-            UpdateModule
-              (PlayerShip,
-               ModuleIndex2,
-               "Owner",
-               Positive'Image(MemberIndex));
+            PlayerShip.Modules(ModuleIndex2).Owner := MemberIndex;
          when Rest =>
             AddMessage(MemberName & " going on break.", OrderMessage);
          when Repair =>
             AddMessage(MemberName & " starts repair ship.", OrderMessage);
          when Craft =>
             AddMessage(MemberName & " starts manufacturing.", OrderMessage);
-            UpdateModule
-              (PlayerShip,
-               ModuleIndex2,
-               "Owner",
-               Positive'Image(MemberIndex));
+            PlayerShip.Modules(ModuleIndex2).Owner := MemberIndex;
          when Upgrading =>
             AddMessage
               (MemberName &
@@ -225,17 +197,15 @@ package body Crew is
             AddMessage
               (MemberName & " starts healing wounded crew members.",
                OrderMessage);
-            UpdateModule
-              (PlayerShip,
-               ModuleIndex2,
-               "Owner",
-               Positive'Image(MemberIndex));
+            PlayerShip.Modules(ModuleIndex2).Owner := MemberIndex;
          when Clean =>
             AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
       end case;
-      NewOrder := GivenOrder;
-      PlayerShip.Crew.Update_Element
-      (Index => MemberIndex, Process => UpdateOrder'Access);
+      PlayerShip.Crew(MemberIndex).Order := GivenOrder;
+      if GivenOrder = Rest then
+         PlayerShip.Crew(MemberIndex).PreviousOrder := Rest;
+      end if;
+      PlayerShip.Crew(MemberIndex).OrderTime := 15;
       if CheckPriorities then
          UpdateOrders;
       end if;
@@ -243,21 +213,6 @@ package body Crew is
 
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) is
       SkillExp, SkillLevel, SkillIndex: Natural := 0;
-      procedure UpdateSkill(Skill: in out Skill_Array) is
-      begin
-         Skill(2) := SkillLevel;
-         Skill(3) := SkillExp;
-      end UpdateSkill;
-      procedure UpdateSkills(Member: in out Member_Data) is
-      begin
-         if SkillIndex > 0 then
-            Member.Skills.Update_Element
-            (Index => SkillIndex, Process => UpdateSkill'Access);
-         else
-            Member.Skills.Append
-            (New_Item => (SkillNumber, SkillLevel, SkillExp));
-         end if;
-      end UpdateSkills;
    begin
       for I in
         PlayerShip.Crew(CrewIndex).Skills.First_Index ..
@@ -277,8 +232,13 @@ package body Crew is
          SkillExp := SkillExp - (SkillLevel * 50);
          SkillLevel := SkillLevel + 1;
       end if;
-      PlayerShip.Crew.Update_Element
-      (Index => CrewIndex, Process => UpdateSkills'Access);
+      if SkillIndex > 0 then
+         PlayerShip.Crew(CrewIndex).Skills(SkillIndex)(2) := SkillLevel;
+         PlayerShip.Crew(CrewIndex).Skills(SkillIndex)(3) := SkillExp;
+      else
+         PlayerShip.Crew(CrewIndex).Skills.Append
+         (New_Item => (SkillNumber, SkillLevel, SkillExp));
+      end if;
    end GainExp;
 
    function GenerateMemberName
@@ -461,13 +421,6 @@ package body Crew is
             Member.OrderTime := OrderTime;
          end if;
       end UpdateMember;
-      procedure Heal(Member: in out Member_Data) is
-      begin
-         Member.Health := Member.Health + HealAmount;
-         if Member.Health > 100 then
-            Member.Health := 100;
-         end if;
-      end Heal;
    begin
       I := PlayerShip.Crew.First_Index;
       while I <= PlayerShip.Crew.Last_Index loop
@@ -580,8 +533,11 @@ package body Crew is
                         for J in PlayerShip.Crew.Iterate loop
                            if PlayerShip.Crew(J).Health < 100 and
                              Crew_Container.To_Index(J) /= I then
-                              PlayerShip.Crew.Update_Element
-                              (Position => J, Process => Heal'Access);
+                              PlayerShip.Crew(J).Health :=
+                                PlayerShip.Crew(J).Health + HealAmount;
+                              if PlayerShip.Crew(J).Health > 100 then
+                                 PlayerShip.Crew(J).Health := 100;
+                              end if;
                               AddMessage
                                 (To_String(PlayerShip.Crew(I).Name) &
                                  " healed " &
