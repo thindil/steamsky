@@ -85,7 +85,7 @@ package Game is
       Minutes: Natural;
    end record;
    GameDate: Date_Record;
-   GameVersion: constant String := "Version: 1.2";
+   GameVersion: constant String := "Version: 1.3";
    package UnboundedString_Container is new Vectors
      (Positive,
       Unbounded_String);
