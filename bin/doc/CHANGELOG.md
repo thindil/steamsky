@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship module: huge steel engine
 
+### Fixed
+- Crash in empty list of missions
+
 ## [1.2] - 2017-05-28
 
 ### Added
