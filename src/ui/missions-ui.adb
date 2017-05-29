@@ -189,6 +189,10 @@ package body Missions.UI is
       if PlayerShip.Missions.Length = 0 then
          Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
          Add(Str => "You didn't accepted any mission yet.");
+         if MissionsMenu /= Null_Menu then
+            Post(MissionsMenu, False);
+            Delete(MissionsMenu);
+         end if;
          Refresh;
          return;
       end if;
