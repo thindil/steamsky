@@ -1581,4 +1581,17 @@ Skill = Engineering
 Price = 25500
 InstallTime = 320
 Description = Base module of each ship, made of steel. Whole ship is destroyed if hull is destroyed.
+[125]
+Name = Huge steel engine
+Type = Engine
+Weight = 7000
+Value = 10
+MaxValue = 35000
+Durability = 350
+Material = Steel
+Skill = Engineering
+Price = 35000
+InstallTime = 250
+Size = 4
+Description = Huge engine made of steel. Each ship needs at least one engine to fly.
 []
