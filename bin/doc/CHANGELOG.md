@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New ship module: huge steel engine
+
 ## [1.2] - 2017-05-28
 
 ### Added
