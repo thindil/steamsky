@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Showing dialog with long messages
 - Crash on updating population in bases
 - Showing bases coordinates on bases list
+- Crash in empty list of missions
 
 ## [1.0.2] - 2017-05-14
 
