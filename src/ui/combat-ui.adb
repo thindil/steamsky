@@ -131,12 +131,15 @@ package body Combat.UI is
       GunnerName: Unbounded_String :=
         To_Unbounded_String("Vacant");
       DamagePercent: Natural;
-      CurrentLine: Line_Position;
       Crew_Items: Item_Array_Access;
-      MenuHeight: Line_Position;
+      CurrentLine, MenuHeight: Line_Position;
       MenuLength: Column_Position;
       MenuOptions: Menu_Option_Set;
       EnemyStatus: Unbounded_String;
+      EnemyInfo, DamageInfo: Window;
+      ShipDamaged: Boolean;
+      WindowHeight: Line_Position := 2;
+      WindowWidth: Column_Position := 17;
    begin
       Crew_Items := new Item_Array(1 .. Natural(Guns.Length) + 3);
       for I in PlayerShip.Crew.Iterate loop
@@ -191,121 +194,149 @@ package body Combat.UI is
       Set_Options(CrewMenu, MenuOptions);
       Set_Mark(CrewMenu, "");
       Scale(CrewMenu, MenuHeight, MenuLength);
-      MenuWindow := Create(MenuHeight, MenuLength, 1, 2);
+      MenuWindow := Create(MenuHeight + 2, MenuLength + 2, 1, 2);
+      Box(MenuWindow);
+      Move_Cursor(Win => MenuWindow, Line => 0, Column => 2);
+      Add(Win => MenuWindow, Str => "[Crew Orders]");
       Set_Window(CrewMenu, MenuWindow);
       Set_Sub_Window
         (CrewMenu,
-         Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+         Derived_Window(MenuWindow, MenuHeight, MenuLength, 1, 1));
       Post(CrewMenu);
       if CurrentMenuIndex >= Crew_Items'Last then
          CurrentMenuIndex := 1;
       end if;
       Set_Current(CrewMenu, Crew_Items.all(CurrentMenuIndex));
-      CurrentLine := Line_Position(MenuHeight + 2);
+      CurrentLine := Line_Position(MenuHeight + 3);
       Move_Cursor(Line => CurrentLine, Column => 2);
-      Add(Str => "ENTER to give orders");
-      Change_Attributes
-        (Line => CurrentLine,
-         Column => 2,
-         Count => 5,
-         Color => 1);
-      CurrentLine := CurrentLine + 2;
-      Move_Cursor(Line => CurrentLine, Column => 2);
-      Add(Str => "Crew Info");
-      Change_Attributes
-        (Line => CurrentLine,
-         Column => 2,
-         Count => 1,
-         Color => 1);
-      CurrentLine := CurrentLine + 1;
-      Move_Cursor(Line => CurrentLine, Column => 2);
-      Add(Str => "Ship cargo");
-      Change_Attributes
-        (Line => CurrentLine,
-         Column => 8,
-         Count => 1,
-         Color => 1);
-      CurrentLine := CurrentLine + 1;
-      Move_Cursor(Line => CurrentLine, Column => 2);
-      Add(Str => "Ship modules");
-      Change_Attributes
-        (Line => CurrentLine,
-         Column => 2,
-         Count => 1,
-         Color => 1);
-      CurrentLine := CurrentLine + 1;
-      Move_Cursor(Line => CurrentLine, Column => 2);
-      Add(Str => "Messages");
-      Change_Attributes
-        (Line => CurrentLine,
-         Column => 2,
-         Count => 1,
-         Color => 1);
-      CurrentLine := CurrentLine + 2;
-      Move_Cursor(Line => CurrentLine, Column => 2);
-      Add(Str => "Damage:");
-      CurrentLine := CurrentLine + 1;
+      if not EndCombat then
+         Add(Str => "Crew Info");
+         Change_Attributes
+           (Line => CurrentLine,
+            Column => 2,
+            Count => 1,
+            Color => 1);
+         CurrentLine := CurrentLine + 1;
+         Move_Cursor(Line => CurrentLine, Column => 2);
+         Add(Str => "Ship cargo");
+         Change_Attributes
+           (Line => CurrentLine,
+            Column => 8,
+            Count => 1,
+            Color => 1);
+         CurrentLine := CurrentLine + 1;
+         Move_Cursor(Line => CurrentLine, Column => 2);
+         Add(Str => "Ship modules");
+         Change_Attributes
+           (Line => CurrentLine,
+            Column => 2,
+            Count => 1,
+            Color => 1);
+         CurrentLine := CurrentLine + 1;
+         Move_Cursor(Line => CurrentLine, Column => 2);
+         Add(Str => "Messages");
+         Change_Attributes
+           (Line => CurrentLine,
+            Column => 2,
+            Count => 1,
+            Color => 1);
+         CurrentLine := CurrentLine + 2;
+         Move_Cursor(Line => CurrentLine, Column => 2);
+      end if;
+      WindowHeight := 2;
       for Module of PlayerShip.Modules loop
-         DamagePercent :=
-           100 -
-           Natural
-             ((Float(Module.Durability) / Float(Module.MaxDurability)) *
-              100.0);
-         if DamagePercent > 0 then
-            Move_Cursor(Line => CurrentLine, Column => 2);
-            Add(Str => To_String(Module.Name));
-            if DamagePercent > 19 and DamagePercent < 50 then
-               Change_Attributes
-                 (Line => CurrentLine,
-                  Column => 2,
-                  Count => Length(Module.Name),
-                  Color => 2);
-            elsif DamagePercent > 49 and DamagePercent < 80 then
-               Change_Attributes
-                 (Line => CurrentLine,
-                  Column => 2,
-                  Count => Length(Module.Name),
-                  Color => 1);
-            elsif DamagePercent > 79 and DamagePercent < 100 then
-               Change_Attributes
-                 (Line => CurrentLine,
-                  Column => 2,
-                  Count => Length(Module.Name),
-                  Color => 3);
-            elsif DamagePercent = 100 then
-               Change_Attributes
-                 (Line => CurrentLine,
-                  Column => 2,
-                  Count => Length(Module.Name),
-                  Color => 4);
+         if Module.Durability < Module.MaxDurability then
+            WindowHeight := WindowHeight + 1;
+            if WindowWidth < Column_Position(Length(Module.Name) + 4) then
+               WindowWidth := Column_Position(Length(Module.Name) + 4);
             end if;
-            CurrentLine := CurrentLine + 1;
+            ShipDamaged := True;
          end if;
       end loop;
-      Move_Cursor(Line => 5, Column => (Columns / 2));
-      Add(Str => "Enemy status:");
-      Move_Cursor(Line => 7, Column => (Columns / 2));
-      Add(Str => "Name: " & To_String(EnemyName));
-      Move_Cursor(Line => 8, Column => (Columns / 2));
-      Add(Str => "Type: " & To_String(Enemy.Ship.Name));
-      Move_Cursor(Line => 9, Column => (Columns / 2));
-      Add(Str => "Distance: ");
-      if Enemy.Distance >= 15000 then
-         Add(Str => "Escaped");
-      elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
-         Add(Str => "Long");
-      elsif Enemy.Distance < 10000 and Enemy.Distance >= 5000 then
-         Add(Str => "Medium");
-      elsif Enemy.Distance < 5000 and Enemy.Distance >= 1000 then
-         Add(Str => "Short");
-      else
-         Add(Str => "Close");
+      if ShipDamaged then
+         if (WindowHeight + CurrentLine) >= (Lines - 12) then
+            WindowHeight := Lines - CurrentLine - 12;
+            if WindowHeight < 3 then
+               WindowHeight := 3;
+            end if;
+         end if;
+         DamageInfo := Create(WindowHeight, WindowWidth, CurrentLine, 2);
+         Box(DamageInfo);
+         Move_Cursor(Win => DamageInfo, Line => 0, Column => 2);
+         Add(Win => DamageInfo, Str => "[Ship damage]");
+         CurrentLine := 1;
+         for Module of PlayerShip.Modules loop
+            DamagePercent :=
+              100 -
+              Natural
+                ((Float(Module.Durability) / Float(Module.MaxDurability)) *
+                 100.0);
+            if DamagePercent > 0 then
+               Move_Cursor
+                 (Win => DamageInfo,
+                  Line => CurrentLine,
+                  Column => 2);
+               Add(Win => DamageInfo, Str => To_String(Module.Name));
+               if DamagePercent > 19 and DamagePercent < 50 then
+                  Change_Attributes
+                    (Win => DamageInfo,
+                     Line => CurrentLine,
+                     Column => 2,
+                     Count => Length(Module.Name),
+                     Color => 2);
+               elsif DamagePercent > 49 and DamagePercent < 80 then
+                  Change_Attributes
+                    (Win => DamageInfo,
+                     Line => CurrentLine,
+                     Column => 2,
+                     Count => Length(Module.Name),
+                     Color => 1);
+               elsif DamagePercent > 79 and DamagePercent < 100 then
+                  Change_Attributes
+                    (Win => DamageInfo,
+                     Line => CurrentLine,
+                     Column => 2,
+                     Count => Length(Module.Name),
+                     Color => 3);
+               elsif DamagePercent = 100 then
+                  Change_Attributes
+                    (Win => DamageInfo,
+                     Line => CurrentLine,
+                     Column => 2,
+                     Count => Length(Module.Name),
+                     Color => 4);
+               end if;
+               CurrentLine := CurrentLine + 1;
+               exit when CurrentLine = WindowHeight;
+            end if;
+         end loop;
       end if;
-      Move_Cursor(Line => 10, Column => (Columns / 2));
-      Add(Str => "Status: ");
+      EnemyInfo := Create(7, (Columns / 2), 1, (Columns / 2));
+      Box(EnemyInfo);
+      Move_Cursor(Win => EnemyInfo, Line => 0, Column => 2);
+      Add(Win => EnemyInfo, Str => "[Enemy status]");
+      Move_Cursor(Win => EnemyInfo, Line => 1, Column => 2);
+      Add(Win => EnemyInfo, Str => "Name: " & To_String(EnemyName));
+      Move_Cursor(Win => EnemyInfo, Line => 2, Column => 2);
+      Add(Win => EnemyInfo, Str => "Type: " & To_String(Enemy.Ship.Name));
+      Move_Cursor(Win => EnemyInfo, Line => 3, Column => 2);
+      Add(Win => EnemyInfo, Str => "Distance: ");
+      if Enemy.Distance >= 15000 then
+         Add(Win => EnemyInfo, Str => "Escaped");
+      elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
+         Add(Win => EnemyInfo, Str => "Long");
+      elsif Enemy.Distance < 10000 and Enemy.Distance >= 5000 then
+         Add(Win => EnemyInfo, Str => "Medium");
+      elsif Enemy.Distance < 5000 and Enemy.Distance >= 1000 then
+         Add(Win => EnemyInfo, Str => "Short");
+      else
+         Add(Win => EnemyInfo, Str => "Close");
+      end if;
+      Move_Cursor(Win => EnemyInfo, Line => 4, Column => 2);
+      Add(Win => EnemyInfo, Str => "Status: ");
       if Enemy.Distance < 15000 then
          if Enemy.Ship.Modules(1).Durability = 0 then
-            Add(Str => "Destroyed");
+            Add(Win => EnemyInfo, Str => "Destroyed");
          else
             EnemyStatus := To_Unbounded_String("Ok");
             for Module of Enemy.Ship.Modules loop
@@ -314,16 +345,16 @@ package body Combat.UI is
                   exit;
                end if;
             end loop;
-            Add(Str => To_String(EnemyStatus));
+            Add(Win => EnemyInfo, Str => To_String(EnemyStatus));
             for Module of Enemy.Ship.Modules loop
                if Module.Durability > 0 then
                   case Modules_List(Module.ProtoIndex).MType is
                      when ARMOR =>
-                        Add(Str => " (armored)");
+                        Add(Win => EnemyInfo, Str => " (armored)");
                      when GUN =>
-                        Add(Str => " (gun)");
+                        Add(Win => EnemyInfo, Str => " (gun)");
                      when BATTERING_RAM =>
-                        Add(Str => " (battering ram)");
+                        Add(Win => EnemyInfo, Str => " (battering ram)");
                      when others =>
                         null;
                   end case;
@@ -331,55 +362,61 @@ package body Combat.UI is
             end loop;
          end if;
       else
-         Add(Str => "Unknown");
+         Add(Win => EnemyInfo, Str => "Unknown");
       end if;
-      Move_Cursor(Line => 11, Column => (Columns / 2));
-      Add(Str => "Speed: ");
+      Move_Cursor(Win => EnemyInfo, Line => 5, Column => 2);
+      Add(Win => EnemyInfo, Str => "Speed: ");
       if Enemy.Distance < 15000 then
          case Enemy.Ship.Speed is
             when FULL_STOP =>
-               Add(Str => "Stopped");
+               Add(Win => EnemyInfo, Str => "Stopped");
             when QUARTER_SPEED =>
-               Add(Str => "Slow");
+               Add(Win => EnemyInfo, Str => "Slow");
             when HALF_SPEED =>
-               Add(Str => "Medium");
+               Add(Win => EnemyInfo, Str => "Medium");
             when FULL_SPEED =>
-               Add(Str => "Fast");
+               Add(Win => EnemyInfo, Str => "Fast");
             when others =>
                null;
          end case;
       else
-         Add(Str => "Unknown");
+         Add(Win => EnemyInfo, Str => "Unknown");
       end if;
-      Move_Cursor(Line => 12, Column => (Columns / 2));
-      Add(Str => "Detailed enemy info");
       if not EndCombat then
+         Move_Cursor(Line => 8, Column => (Columns / 2));
+         Add(Str => "Detailed enemy info");
          Change_Attributes
-           (Line => 12,
+           (Line => 8,
             Column => (Columns / 2),
             Count => 1,
             Color => 1);
-      end if;
-      Move_Cursor(Line => 15, Column => (Columns / 2));
-      if not EndCombat then
-         Add(Str => "SPACE for next turn");
+         Move_Cursor(Line => 9, Column => (Columns / 2));
+         Add(Str => "ENTER to give orders");
          Change_Attributes
-           (Line => 15,
+           (Line => 9,
             Column => (Columns / 2),
             Count => 5,
             Color => 1);
-         Move_Cursor(Line => 16, Column => (Columns / 2));
+         Move_Cursor(Line => 10, Column => (Columns / 2));
+         Add(Str => "SPACE for next turn");
+         Change_Attributes
+           (Line => 10,
+            Column => (Columns / 2),
+            Count => 5,
+            Color => 1);
+         Move_Cursor(Line => 11, Column => (Columns / 2));
          Add(Str => "F1 for help");
          Change_Attributes
-           (Line => 16,
+           (Line => 11,
             Column => (Columns / 2),
             Count => 2,
             Color => 1);
       else
-         Add(Str => "Hit any key for back to sky map");
+         Move_Cursor(Line => 10, Column => (Columns / 3));
+         Add(Str => "Press any key for back to sky map");
          Change_Attributes
-           (Line => 15,
-            Column => (Columns / 2),
+           (Line => 10,
+            Column => (Columns / 3) + 6,
             Count => 3,
             Color => 1);
       end if;
@@ -387,6 +424,12 @@ package body Combat.UI is
       Refresh;
       ShowLastMessages(MessagesStarts);
       Refresh(MenuWindow);
+      Refresh(EnemyInfo);
+      Delete(EnemyInfo);
+      if ShipDamaged then
+         Refresh(DamageInfo);
+         Delete(DamageInfo);
+      end if;
    end ShowCombat;
 
    procedure ShowOrdersMenu is
