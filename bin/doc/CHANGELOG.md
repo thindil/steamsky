@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New ship module: huge steel engine
+- New ship modules: huge steel engine and advanced huge steel engine
 
 ### Changed
 - Updated interface
