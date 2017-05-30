@@ -127,8 +127,13 @@ package body Events is
                               Engines.Append(New_Item => I);
                            end if;
                         end loop;
-                        EngineIndex := Engines(GetRandom(Engines.First_Index, Engines.Last_Index));
-                        PlayerShip.Modules(EngineIndex).Durability := PlayerShip.Modules(EngineIndex).Durability - 1;
+                        EngineIndex :=
+                          Engines
+                            (GetRandom
+                               (Engines.First_Index,
+                                Engines.Last_Index));
+                        PlayerShip.Modules(EngineIndex).Durability :=
+                          PlayerShip.Modules(EngineIndex).Durability - 1;
                         UpdateOrders;
                      else
                         AddMessage
