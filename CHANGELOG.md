@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Crash on updating population in bases
 - Showing bases coordinates on bases list
 - Crash in empty list of missions
+- Typo in advanced huge iron engine description
 
 ## [1.0.2] - 2017-05-14
 
