@@ -683,4 +683,14 @@ Skills = 1x50..70, 5x8..20; 3x40..60, 5x8..20; 3x40..60, 5x8..20; 3x40..60, 5x8.
 Orders = Pilot, Gunner, Gunner, Gunner, Gunner
 Description = Advanced and upgraded version of huge, good armored, inquisition flying vessel.
 Owner = Inquisition
+[67]
+Name = Small pirates ship mk III
+Modules = 90, 92, 93, 93, 93, 94, 96, 96, 97, 49
+CombatAI = Disarmer
+Loot = 20..200
+Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x23, 80..100x21
+Skills = 1x3, 5x2..4; 3x3, 5x2..4; 2x3..6
+Orders = Pilot, Gunner, Engineer
+Description = Small, fast pirate vessel (upgraded version). As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
 []
