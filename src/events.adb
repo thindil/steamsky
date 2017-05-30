@@ -33,7 +33,7 @@ package body Events is
    function CheckForEvent(OldState: GameStates) return GameStates is
       TimePassed: Integer;
       CrewIndex, PlayerValue: Natural := 0;
-      Roll, Roll2, ItemIndex, EnemyIndex: Positive;
+      Roll, Roll2, ItemIndex, EnemyIndex, EngineIndex: Positive;
       Enemies, Engines: Positive_Container.Vector;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -127,14 +127,8 @@ package body Events is
                               Engines.Append(New_Item => I);
                            end if;
                         end loop;
-                        UpdateModule
-                          (PlayerShip,
-                           Engines
-                             (GetRandom
-                                (Engines.First_Index,
-                                 Engines.Last_Index)),
-                           "Durability",
-                           "-1");
+                        EngineIndex := Engines(GetRandom(Engines.First_Index, Engines.Last_Index));
+                        PlayerShip.Modules(EngineIndex).Durability := PlayerShip.Modules(EngineIndex).Durability - 1;
                         UpdateOrders;
                      else
                         AddMessage
@@ -272,10 +266,6 @@ package body Events is
       NewTime: Integer;
       EventsAmount: constant Natural := Natural(Events_List.Length);
       PopulationLost, BaseIndex: Positive;
-      procedure UpdateEvent(Event: in out EventData) is
-      begin
-         Event.Time := NewTime;
-      end UpdateEvent;
    begin
       if EventsAmount = 0 then
          return;
@@ -308,8 +298,7 @@ package body Events is
               0;
             Events_List.Delete(Index => CurrentIndex, Count => 1);
          else
-            Events_List.Update_Element
-            (Index => CurrentIndex, Process => UpdateEvent'Access);
+            Events_List(CurrentIndex).Time := NewTime;
             CurrentIndex := CurrentIndex + 1;
          end if;
       end loop;
