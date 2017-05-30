@@ -995,7 +995,7 @@ Skill = Engineering
 Price = 37500
 InstallTime = 270
 Size = 4
-Description = Updated version of huge engine made of bronze. Each ship needs at least one engine to fly.
+Description = Updated version of huge engine made of iron. Each ship needs at least one engine to fly.
 [80]
 Name = Basic iron cabin
 Type = Cabin
