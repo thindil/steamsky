@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New ship modules: huge steel engine and advanced huge steel engine
+- New enemy ship: small pirates ship mk III
 
 ### Changed
 - Updated interface
