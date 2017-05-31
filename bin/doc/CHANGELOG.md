@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash in empty list of missions
 - Typo in advaced huge iron engine description
+- Don't finish mission if ship can't dock to base
 
 ## [1.2] - 2017-05-28
 
