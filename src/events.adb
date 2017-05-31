@@ -19,6 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
+with Ships.Movement; use Ships.Movement;
 with Maps; use Maps;
 with Combat; use Combat;
 with Messages; use Messages;
@@ -157,7 +158,7 @@ package body Events is
                      UpdateCargo
                        (PlayerShip,
                         FindProtoItem(ItemType => FuelType),
-                        -1);
+                        CountFuelNeeded);
                      UpdateGame(TimePassed);
                   end if;
                when others => -- Combat

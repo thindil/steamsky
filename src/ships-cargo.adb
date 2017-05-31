@@ -28,7 +28,7 @@ package body Ships.Cargo is
       Amount: Integer;
       Durability: Natural := 100) is
       ItemIndex: Natural := 0;
-      NewAmount: Natural;
+      NewAmount: Integer;
       procedure UpdateItem(Item: in out CargoData) is
       begin
          Item.Amount := NewAmount;
