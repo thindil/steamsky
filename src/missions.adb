@@ -321,6 +321,9 @@ package body Missions is
    begin
       if PlayerShip.Speed /= DOCKED then
          DockShip(True);
+         if PlayerShip.Speed /= DOCKED then
+            return;
+         end if;
       end if;
       UpdateGame(5);
       case PlayerShip.Missions.Element(MissionIndex).MType is
