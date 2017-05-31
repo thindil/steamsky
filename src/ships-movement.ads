@@ -26,5 +26,7 @@ package Ships.Movement is
    function RealSpeed
      (Ship: ShipRecord)
      return Natural; -- Return real ship speed in meters per minute
+   function CountFuelNeeded
+     return Integer; -- Return fuel needed by player ship to travel
 
 end Ships.Movement;
