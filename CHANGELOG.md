@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Showing bases coordinates on bases list
 - Crash in empty list of missions
 - Typo in advanced huge iron engine description
+- Don't finish mission if ship can't dock to base
 
 ## [1.0.2] - 2017-05-14
 
