@@ -111,28 +111,12 @@ package body Ships.Movement is
          if not HaveOrderRequirements then
             return 0;
          end if;
-         for Module of PlayerShip.Modules loop
-            if Modules_List(Module.ProtoIndex).MType = ENGINE then
-               case PlayerShip.Speed is
-                  when QUARTER_SPEED =>
-                     FuelNeeded := FuelNeeded - (Module.Current_Value / 4);
-                  when HALF_SPEED =>
-                     FuelNeeded := FuelNeeded - (Module.Current_Value / 2);
-                  when FULL_SPEED =>
-                     FuelNeeded := FuelNeeded - Module.Current_Value;
-                  when others =>
-                     null;
-               end case;
-            end if;
-         end loop;
-         if FuelNeeded = 0 then
-            FuelNeeded := -1;
-         end if;
          FuelIndex := FindCargo(ItemType => FuelType);
          if FuelIndex = 0 then
             ShowDialog("You don't have any fuel.");
             return 0;
          end if;
+         FuelNeeded := CountFuelNeeded;
          if PlayerShip.Cargo(FuelIndex).Amount < abs FuelNeeded then
             ShowDialog
               ("You don't have enough fuel (" &
@@ -392,5 +376,28 @@ package body Ships.Movement is
       Speed := (Speed / 60);
       return Speed;
    end RealSpeed;
+
+   function CountFuelNeeded return Integer is
+      FuelNeeded: Integer := 0;
+   begin
+      for Module of PlayerShip.Modules loop
+         if Modules_List(Module.ProtoIndex).MType = ENGINE then
+            case PlayerShip.Speed is
+               when QUARTER_SPEED =>
+                  FuelNeeded := FuelNeeded - (Module.Current_Value / 4);
+               when HALF_SPEED =>
+                  FuelNeeded := FuelNeeded - (Module.Current_Value / 2);
+               when FULL_SPEED =>
+                  FuelNeeded := FuelNeeded - Module.Current_Value;
+               when others =>
+                  null;
+            end case;
+         end if;
+      end loop;
+      if FuelNeeded = 0 then
+         FuelNeeded := -1;
+      end if;
+      return FuelNeeded;
+   end CountFuelNeeded;
 
 end Ships.Movement;
