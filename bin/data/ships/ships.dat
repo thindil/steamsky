@@ -693,4 +693,14 @@ Skills = 1x3, 5x2..4; 3x3, 5x2..4; 2x3..6
 Orders = Pilot, Gunner, Engineer
 Description = Small, fast pirate vessel (upgraded version). As many pirates they prefer to dismarm enemies first.
 Owner = Pirates
+[68]
+Name = Small undead ship mk III
+Modules = 90, 91, 92, 94, 96, 96, 98
+CombatAI = Berserker
+Loot = 20..200
+Cargo = 1500..2000x1, 80..100x21
+Skills = 1x1, 5x1..4
+Orders = Pilot
+Description = Small undead flying vessel (upgraded version). Dangerous at close range.
+Owner = Undead
 []
