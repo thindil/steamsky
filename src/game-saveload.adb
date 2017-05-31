@@ -435,7 +435,6 @@ package body Game.SaveLoad is
       BaseRecruits: Recruit_Container.Vector;
       VisitedFields: Positive;
       BaseMissions: Mission_Container.Vector;
-      Finished: Boolean;
       TmpOrders: Orders_Array;
       function ReadData return Unbounded_String is
          RawData: Unbounded_String := To_Unbounded_String("");
@@ -448,19 +447,6 @@ package body Game.SaveLoad is
          end loop;
          return RawData;
       end ReadData;
-      procedure UpdateMember(Member: in out Member_Data) is
-      begin
-         Member.Skills := Skills;
-         Member.Orders := TmpOrders;
-      end UpdateMember;
-      procedure UpdateRecruit(Recruit: in out Recruit_Data) is
-      begin
-         Recruit.Skills := Skills;
-      end UpdateRecruit;
-      procedure UpdateMission(Mission: in out Mission_Data) is
-      begin
-         Mission.Finished := Finished;
-      end UpdateMission;
    begin
       Open(SaveGame, In_File, "data/savegame.dat");
       -- Check save version
@@ -543,10 +529,7 @@ package body Game.SaveLoad is
                          Natural'Value(To_String(ReadData)),
                          Natural'Value(To_String(ReadData))));
                   end loop;
-                  BaseRecruits.Update_Element
-                  (Index =>
-                     BaseRecruits.Last_Index, Process =>
-                     UpdateRecruit'Access);
+                  BaseRecruits(BaseRecruits.Last_Index).Skills := Skills;
                end loop;
                SkyBases(I).Recruits := BaseRecruits;
                BaseRecruits.Clear;
@@ -659,8 +642,8 @@ package body Game.SaveLoad is
          for J in TmpOrders'Range loop
             TmpOrders(J) := Natural'Value(To_String(ReadData));
          end loop;
-         ShipCrew.Update_Element
-         (Index => ShipCrew.Last_Index, Process => UpdateMember'Access);
+         ShipCrew(ShipCrew.Last_Index).Skills := Skills;
+         ShipCrew(ShipCrew.Last_Index).Orders := TmpOrders;
       end loop;
       PlayerShip.Crew := ShipCrew;
       VectorLength := Natural'Value(To_String(ReadData));
@@ -678,14 +661,10 @@ package body Game.SaveLoad is
                 StartBase => Integer'Value(To_String(ReadData)),
                 Finished => False));
             if To_String(ReadData) = "Y" then
-               Finished := True;
+               BaseMissions(BaseMissions.Last_Index).Finished := True;
             else
-               Finished := False;
+               BaseMissions(BaseMissions.Last_Index).Finished := False;
             end if;
-            BaseMissions.Update_Element
-            (Index =>
-               BaseMissions.Last_Index, Process =>
-               UpdateMission'Access);
             if not BaseMissions(I).Finished then
                SkyMap(BaseMissions(I).TargetX, BaseMissions(I).TargetY)
                  .MissionIndex :=
