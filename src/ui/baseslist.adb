@@ -36,15 +36,33 @@ package body BasesList is
    BasesOwner: Bases_Owners := Any;
 
    procedure ShowBaseInfo is
-      InfoWindow: Window;
+      InfoWindow, SearchWindow: Window;
       BaseIndex: constant Positive :=
         Positive'Value(Description(Current(BasesMenu)));
       SearchPattern: String(1 .. 250);
       TrimedSearchPattern: Unbounded_String;
-      CurrentLine: Line_Position := 1;
+      CurrentLine: Line_Position := 2;
       TimeDiff: Integer;
+      SearchLength: Natural;
+      WindowWidth: Column_Position := 10;
    begin
-      InfoWindow := Create(20, (Columns / 2), 4, (Columns / 2));
+      InfoWindow := Create(12, (Columns / 2), 4, (Columns / 2));
+      Refresh(InfoWindow);
+      Move_Cursor(Line => 19, Column => (Columns / 2));
+      Clear_To_End_Of_Line;
+      Move_Cursor(Line => 20, Column => (Columns / 2));
+      Clear_To_End_Of_Line;
+      if SkyBases(BaseIndex).Visited.Year = 0 then
+         Resize(InfoWindow, 4, (Columns / 2));
+         Move_Cursor(Line => 16, Column => (Columns / 2));
+         Clear_To_End_Of_Line;
+         Move_Cursor(Line => 17, Column => (Columns / 2));
+         Clear_To_End_Of_Line;
+      end if;
+      Box(InfoWindow);
+      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
+      Add(Win => InfoWindow, Str => "[Base Info]");
+      Move_Cursor(Win => InfoWindow, Line => 1, Column => 1);
       if SkyBases(BaseIndex).Visited.Year > 0 then
          Add
            (Win => InfoWindow,
@@ -53,19 +71,19 @@ package body BasesList is
               Positive'Image(SkyBases(BaseIndex).SkyX) &
               " Y:" &
               Positive'Image(SkyBases(BaseIndex).SkyY));
-         Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => 2, Column => 1);
          Add
            (Win => InfoWindow,
             Str =>
               "Type: " &
               To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
-         Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => 3, Column => 1);
          Add
            (Win => InfoWindow,
             Str =>
               "Owner: " &
               To_Lower(Bases_Owners'Image(SkyBases(BaseIndex).Owner)));
-         Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => 4, Column => 1);
          Add(Win => InfoWindow, Str => "Size: ");
          if SkyBases(BaseIndex).Population < 150 then
             Add(Win => InfoWindow, Str => "small");
@@ -75,12 +93,12 @@ package body BasesList is
          else
             Add(Win => InfoWindow, Str => "large");
          end if;
-         Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => 5, Column => 1);
          Add
            (Win => InfoWindow,
             Str =>
               "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
-         Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => 6, Column => 1);
          if SkyBases(BaseIndex).Owner /= Abandoned and
            SkyBases(BaseIndex).Reputation(1) > -25 then
             TimeDiff :=
@@ -104,7 +122,7 @@ package body BasesList is
               (Win => InfoWindow,
                Str => "You can't recruit crew members on this base.");
          end if;
-         Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => 7, Column => 1);
          if SkyBases(BaseIndex).Owner /= Abandoned and
            SkyBases(BaseIndex).Reputation(1) > -25 then
             TimeDiff :=
@@ -127,7 +145,7 @@ package body BasesList is
               (Win => InfoWindow,
                Str => "You can't ask for events in this base.");
          end if;
-         Move_Cursor(Win => InfoWindow, Line => 7, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => 8, Column => 1);
          if SkyBases(BaseIndex).Owner /= Abandoned and
            SkyBases(BaseIndex).Reputation(1) > -1 then
             TimeDiff :=
@@ -151,7 +169,7 @@ package body BasesList is
               (Win => InfoWindow,
                Str => "You can't take missions in this base.");
          end if;
-         Move_Cursor(Win => InfoWindow, Line => 8, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => 9, Column => 1);
          Add(Win => InfoWindow, Str => "Reputation: ");
          case SkyBases(BaseIndex).Reputation(1) is
             when -100 .. -75 =>
@@ -175,11 +193,11 @@ package body BasesList is
             when others =>
                null;
          end case;
-         CurrentLine := 9;
+         CurrentLine := 10;
       else
          Add(Win => InfoWindow, Str => "Not visited yet.");
       end if;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 1);
       Add
         (Win => InfoWindow,
          Str =>
@@ -190,34 +208,45 @@ package body BasesList is
                   (CountDistance
                      (SkyBases(BaseIndex).SkyX,
                       SkyBases(BaseIndex).SkyY))));
-      CurrentLine := CurrentLine + 2;
+      CurrentLine := CurrentLine + 6;
       Pattern(BasesMenu, SearchPattern);
       TrimedSearchPattern :=
         Trim(To_Unbounded_String(SearchPattern), Ada.Strings.Both);
-      if Length(TrimedSearchPattern) > 0 then
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-         Add
-           (Win => InfoWindow,
-            Str => "Search: " & To_String(TrimedSearchPattern));
-         CurrentLine := CurrentLine + 2;
+      SearchLength := Length(TrimedSearchPattern);
+      if SearchLength > 0 then
+         if (SearchLength + 2) > Natural(WindowWidth) then
+            WindowWidth := Column_Position(SearchLength + 2);
+         end if;
+         Move_Cursor(Line => 16, Column => (Columns / 2) + WindowWidth);
+         Clear_To_End_Of_Line;
+         Move_Cursor(Line => 17, Column => (Columns / 2) + WindowWidth);
+         Clear_To_End_Of_Line;
+         SearchWindow := Create(3, WindowWidth, CurrentLine, (Columns / 2));
+         Box(SearchWindow);
+         Move_Cursor(Win => SearchWindow, Line => 0, Column => 1);
+         Add(Win => SearchWindow, Str => "[Search]");
+         Move_Cursor(Win => SearchWindow, Line => 1, Column => 1);
+         Add(Win => SearchWindow, Str => To_String(TrimedSearchPattern));
+         Refresh(SearchWindow);
+         Delete(SearchWindow);
+         CurrentLine := CurrentLine + 3;
+      else
+         Move_Cursor(Line => 18, Column => (Columns / 2));
+         Clear_To_End_Of_Line;
       end if;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-      Add(Win => InfoWindow, Str => "Press SPACE to show base on map");
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      Add(Str => "Press F5 to show base on map");
       Change_Attributes
-        (Win => InfoWindow,
-         Line => CurrentLine,
-         Column => 6,
-         Count => 5,
+        (Line => CurrentLine,
+         Column => (Columns / 2) + 6,
+         Count => 2,
          Color => 1);
       CurrentLine := CurrentLine + 1;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-      Add
-        (Win => InfoWindow,
-         Str => "Press ENTER to set base as a destination for ship");
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      Add(Str => "Press ENTER to set base as a destination for ship");
       Change_Attributes
-        (Win => InfoWindow,
-         Line => CurrentLine,
-         Column => 6,
+        (Line => CurrentLine,
+         Column => (Columns / 2) + 6,
          Count => 5,
          Color => 1);
       Refresh;
@@ -444,7 +473,7 @@ package body BasesList is
                Result := Driver(BasesMenu, M_First_Item);
             when Key_End => -- Scroll list to end
                Result := Driver(BasesMenu, M_Last_Item);
-            when 32 => -- Show selected base on map
+            when Key_F5 => -- Show selected base on map
                MoveMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
