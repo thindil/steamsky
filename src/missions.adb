@@ -295,18 +295,13 @@ package body Missions is
    procedure UpdateMissions(Minutes: Positive) is
       Time: Integer;
       I: Positive := PlayerShip.Missions.First_Index;
-      procedure UpdateMission(Mission: in out Mission_Data) is
-      begin
-         Mission.Time := Time;
-      end UpdateMission;
    begin
       while I <= PlayerShip.Missions.Last_Index loop
          Time := PlayerShip.Missions(I).Time - Minutes;
          if Time < 1 then
             DeleteMission(I);
          else
-            PlayerShip.Missions.Update_Element
-            (Index => I, Process => UpdateMission'Access);
+            PlayerShip.Missions(I).Time := Time;
             I := I + 1;
          end if;
       end loop;
@@ -434,14 +429,9 @@ package body Missions is
         To_Unbounded_String("Return to ") &
         SkyBases(Mission.StartBase).Name &
         To_Unbounded_String(" to finish mission ");
-      procedure UpdateFinished(Mission: in out Mission_Data) is
-      begin
-         Mission.Finished := True;
-      end UpdateFinished;
    begin
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := 0;
-      PlayerShip.Missions.Update_Element
-      (Index => MissionIndex, Process => UpdateFinished'Access);
+      PlayerShip.Missions(MissionIndex).Finished := True;
       SkyMap
         (SkyBases(Mission.StartBase).SkyX,
          SkyBases(Mission.StartBase).SkyY)
