@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Crash in empty list of missions
 - Typo in advanced huge iron engine description
 - Don't finish mission if ship can't dock to base
+- Showing info about event and mission on this same map cell
 
 ## [1.0.2] - 2017-05-14
 
