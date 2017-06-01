@@ -52,25 +52,31 @@ package body Bases.UI.Heal is
    procedure ShowHealInfo is
       Cost, Time, ModuleIndex: Natural := 0;
       InfoWindow: Window;
+      CostInfo, TimeInfo: Unbounded_String;
+      WindowWidth: Column_Position;
    begin
       HealCost(Cost, Time, ModuleIndex);
-      InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
-      Add
-        (Win => InfoWindow,
-         Str =>
-           "Heal cost:" & Natural'Image(Cost) & " " & To_String(MoneyName));
-      Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
-      Add
-        (Win => InfoWindow,
-         Str => "Heal time:" & Natural'Image(Time) & " minutes");
-      Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
-      Add(Win => InfoWindow, Str => "Press Enter to start healing");
-      Change_Attributes
-        (Win => InfoWindow,
-         Line => 3,
-         Column => 6,
-         Count => 5,
-         Color => 1);
+      CostInfo :=
+        To_Unbounded_String
+          ("Heal cost:" & Natural'Image(Cost) & " " & To_String(MoneyName));
+      TimeInfo :=
+        To_Unbounded_String("Heal time:" & Natural'Image(Time) & " minutes");
+      if Length(CostInfo) > Length(TimeInfo) then
+         WindowWidth := Column_Position(Length(CostInfo)) + 4;
+      else
+         WindowWidth := Column_Position(Length(TimeInfo)) + 4;
+      end if;
+      if WindowWidth > Columns / 2 then
+         WindowWidth := Columns / 2;
+      end if;
+      InfoWindow := Create(4, WindowWidth, 3, (Columns / 2));
+      Box(InfoWindow);
+      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
+      Add(Win => InfoWindow, Str => "[Info]");
+      Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
+      Add(Win => InfoWindow, Str => To_String(CostInfo));
+      Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
+      Add(Win => InfoWindow, Str => To_String(TimeInfo));
       Refresh;
       Refresh(InfoWindow);
       Delete(InfoWindow);
@@ -127,7 +133,7 @@ package body Bases.UI.Heal is
       end if;
       Set_Current(TradeMenu, Heal_Items.all(CurrentMenuIndex));
       MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
-      Move_Cursor(Line => (MenuHeight + 4), Column => 2);
+      Move_Cursor(Line => 7, Column => (Columns / 2));
       if MoneyIndex2 > 0 then
          Add
            (Str =>
@@ -143,6 +149,13 @@ package body Bases.UI.Heal is
               To_String(MoneyName) &
               " to heal anyone.");
       end if;
+      Move_Cursor(Line => 9, Column => (Columns / 2));
+      Add(Str => "Press Enter to start healing");
+      Change_Attributes
+        (Line => 9,
+         Column => (Columns / 2) + 6,
+         Count => 5,
+         Color => 1);
       ShowHealInfo;
       Refresh(MenuWindow);
    end ShowHeal;
