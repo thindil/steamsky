@@ -188,8 +188,11 @@ package body Maps is
         SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).EventIndex;
       MissionIndex :=
         SkyMap(PlayerShip.SkyX + MoveX, PlayerShip.SkyY + MoveY).MissionIndex;
-      if EventIndex > 0 and MissionIndex = 0 then
-         WindowHeight := WindowHeight + 2;
+      if EventIndex > 0 or MissionIndex > 0 then
+         WindowHeight := WindowHeight + 1;
+      end if;
+      if EventIndex > 0 then
+         WindowHeight := WindowHeight + 1;
          if Events_List.Element(EventIndex).EType = EnemyShip then
             NewWindowWidth :=
               4 +
@@ -211,7 +214,8 @@ package body Maps is
          if NewWindowWidth > WindowWidth then
             WindowWidth := NewWindowWidth;
          end if;
-      elsif EventIndex = 0 and MissionIndex > 0 then
+      end if;
+      if MissionIndex > 0 then
          WindowHeight := WindowHeight + 2;
          if PlayerShip.Missions.Element(MissionIndex).MType = Kill then
             NewWindowWidth :=
@@ -301,7 +305,7 @@ package body Maps is
             end if;
          end if;
       end if;
-      if EventIndex > 0 and MissionIndex = 0 then
+      if EventIndex > 0 then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          case Events_List.Element(EventIndex).EType is
             when EnemyShip =>
@@ -331,7 +335,9 @@ package body Maps is
             when None =>
                null;
          end case;
-      elsif EventIndex = 0 and MissionIndex > 0 then
+         CurrentLine := CurrentLine + 1;
+      end if;
+      if MissionIndex > 0 then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          case PlayerShip.Missions.Element(MissionIndex).MType is
             when Deliver =>
