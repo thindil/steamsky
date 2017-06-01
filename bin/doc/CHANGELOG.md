@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 - Fuel usage during bad weather event depends on ship engines fuel usage
+- Updated help
 
 ### Fixed
 - Crash in empty list of missions
