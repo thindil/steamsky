@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Fuel usage during bad weather event depends on ship engines fuel usage
 - Updated help
+- Amount of gained/lost reputation from finished missions
 
 ### Fixed
 - Crash in empty list of missions
