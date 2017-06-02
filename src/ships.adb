@@ -33,35 +33,11 @@ package body Ships is
       ModuleIndex: Positive;
       Field: String;
       Value: String) is
-      NewDurability,
-      NewValue,
-      NewMaxDurability,
-      NewMaxValue,
-      NewUpgradeProgress: Integer;
+      NewDurability: Integer;
       NewName: Unbounded_String;
-      NewOwner, NewWeight: Natural;
-      NewUpgradeAction: ShipUpgrade;
       procedure UpdateMod(Module: in out ModuleData) is
       begin
-         if Field = "Durability" then
-            Module.Durability := NewDurability;
-         elsif Field = "Name" then
-            Module.Name := NewName;
-         elsif Field = "Current_Value" then
-            Module.Current_Value := NewValue;
-         elsif Field = "Owner" then
-            Module.Owner := NewOwner;
-         elsif Field = "MaxDurability" then
-            Module.MaxDurability := NewMaxDurability;
-         elsif Field = "Max_Value" then
-            Module.Max_Value := NewMaxValue;
-         elsif Field = "UpgradeProgress" then
-            Module.UpgradeProgress := NewUpgradeProgress;
-         elsif Field = "UpgradeAction" then
-            Module.UpgradeAction := NewUpgradeAction;
-         elsif Field = "Weight" then
-            Module.Weight := NewWeight;
-         end if;
+         Module.Name := NewName;
       end UpdateMod;
    begin
       if ModuleIndex > Positive(Ship.Modules.Length) then
@@ -73,27 +49,29 @@ package body Ships is
          if NewDurability < 0 then
             NewDurability := 0;
          end if;
+         Ship.Modules(ModuleIndex).Durability := NewDurability;
       elsif Field = "Name" then
          NewName := To_Unbounded_String(Value);
+         Ship.Modules.Update_Element
+         (Index => ModuleIndex, Process => UpdateMod'Access);
       elsif Field = "Current_Value" then
-         NewValue := Integer'Value(Value);
+         Ship.Modules(ModuleIndex).Current_Value := Integer'Value(Value);
       elsif Field = "Owner" then
-         NewOwner := Natural'Value(Value);
+         Ship.Modules(ModuleIndex).Owner := Natural'Value(Value);
       elsif Field = "MaxDurability" then
-         NewMaxDurability :=
+         Ship.Modules(ModuleIndex).MaxDurability :=
            Ship.Modules(ModuleIndex).MaxDurability + Integer'Value(Value);
       elsif Field = "Max_Value" then
-         NewMaxValue :=
+         Ship.Modules(ModuleIndex).Max_Value :=
            Ship.Modules(ModuleIndex).Max_Value + Integer'Value(Value);
       elsif Field = "UpgradeProgress" then
-         NewUpgradeProgress := Integer'Value(Value);
+         Ship.Modules(ModuleIndex).UpgradeProgress := Integer'Value(Value);
       elsif Field = "UpgradeAction" then
-         NewUpgradeAction := ShipUpgrade'Value(Value);
+         Ship.Modules(ModuleIndex).UpgradeAction := ShipUpgrade'Value(Value);
       elsif Field = "Weight" then
-         NewWeight := Ship.Modules(ModuleIndex).Weight + Natural'Value(Value);
+         Ship.Modules(ModuleIndex).Weight :=
+           Ship.Modules(ModuleIndex).Weight + Natural'Value(Value);
       end if;
-      Ship.Modules.Update_Element
-      (Index => ModuleIndex, Process => UpdateMod'Access);
    end UpdateModule;
 
    function CreateShip
@@ -223,17 +201,13 @@ package body Ships is
                null;
          end case;
          if TurretIndex > 0 and GunIndex > 0 then
-            UpdateModule
-              (TmpShip,
-               TurretIndex,
-               "Current_Value",
-               Positive'Image(GunIndex));
+            TmpShip.Modules(TurretIndex).Current_Value := GunIndex;
             TurretIndex := 0;
             GunIndex := 0;
          end if;
          Amount := Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
       end loop;
-      UpdateModule(TmpShip, HullIndex, "Current_Value", Natural'Image(Amount));
+      TmpShip.Modules(HullIndex).Current_Value := Amount;
       if ProtoShip.Index = PlayerShipIndex then
          for Recipe of ProtoShip.KnownRecipes loop
             Known_Recipes.Append(New_Item => Recipe);
@@ -281,14 +255,6 @@ package body Ships is
          To_Unbounded_String("Talking in bases"),
          To_Unbounded_String("Healing wounded"),
          To_Unbounded_String("Cleaning ship"));
-      procedure UpdateMember(Member: in out ProtoCrewData) is
-      begin
-         Member.Order := TempOrder;
-      end UpdateMember;
-      procedure UpdateMember2(Member: in out ProtoCrewData) is
-      begin
-         Member.Orders := TempPriorities;
-      end UpdateMember2;
    begin
       if ProtoShips_List.Length > 0 then
          return;
@@ -525,8 +491,7 @@ package body Ships is
                        Crew_Orders'
                          Value
                            (Slice(Value, StartIndex, EndIndex - 1));
-                     TempRecord.Crew.Update_Element
-                     (Index => I, Process => UpdateMember'Access);
+                     TempRecord.Crew(I).Order := TempOrder;
                      StartIndex := EndIndex + 2;
                   end loop;
                   TempOrder := Rest;
@@ -574,8 +539,7 @@ package body Ships is
                         end loop;
                         StartIndex2 := EndIndex2 + 2;
                      end loop;
-                     TempRecord.Crew.Update_Element
-                     (Index => I, Process => UpdateMember2'Access);
+                     TempRecord.Crew(I).Orders := TempPriorities;
                      TempPriorities := (others => 0);
                      StartIndex := EndIndex + 2;
                   end loop;
@@ -682,10 +646,6 @@ package body Ships is
       RepairNeeded, RepairStopped: Boolean := False;
       package Natural_Container is new Vectors(Positive, Natural);
       CrewRepairPoints: Natural_Container.Vector;
-      procedure UpdatePoints(Points: in out Natural) is
-      begin
-         Points := RepairPoints;
-      end UpdatePoints;
       procedure RepairModule(ModuleIndex: Positive) is
          PointsIndex, PointsBonus, RepairMaterial, ToolsIndex: Natural;
          ProtoIndex, RepairValue: Positive;
@@ -761,11 +721,8 @@ package body Ships is
                      RepairValue := RepairPoints;
                   end if;
                   UpdateCargo(PlayerShip, ProtoIndex, (0 - RepairValue));
-                  UpdateModule
-                    (PlayerShip,
-                     ModuleIndex,
-                     "Durability",
-                     Integer'Image(RepairValue));
+                  PlayerShip.Modules(ModuleIndex).Durability :=
+                    PlayerShip.Modules(ModuleIndex).Durability + RepairValue;
                   if RepairValue > CrewRepairPoints(PointsIndex) then
                      RepairValue := CrewRepairPoints(PointsIndex);
                      RepairPoints := 0;
@@ -778,8 +735,7 @@ package body Ships is
                      Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                        .RepairSkill,
                      Crew_Container.To_Index(J));
-                  CrewRepairPoints.Update_Element
-                  (Index => PointsIndex, Process => UpdatePoints'Access);
+                  CrewRepairPoints(PointsIndex) := RepairPoints;
                   DamageCargo
                     (ToolsIndex,
                      Crew_Container.To_Index(J),
