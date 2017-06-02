@@ -22,31 +22,75 @@ with Items; use Items;
 
 package body Bases.UI.Missions is
 
+   function CountMissionsLimit return Natural is
+      MissionsLimit: Natural;
+   begin
+      case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+        .Reputation
+        (1) is
+         when 0 .. 25 =>
+            MissionsLimit := 1;
+         when 26 .. 50 =>
+            MissionsLimit := 3;
+         when 51 .. 75 =>
+            MissionsLimit := 5;
+         when 76 .. 100 =>
+            MissionsLimit := 10;
+         when others =>
+            MissionsLimit := 0;
+      end case;
+      for Mission of PlayerShip.Missions loop
+         if Mission.StartBase =
+           SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex then
+            MissionsLimit := MissionsLimit - 1;
+         end if;
+      end loop;
+      return MissionsLimit;
+   end CountMissionsLimit;
+
    procedure ShowMissionInfo is
       Mission: constant Mission_Data :=
         SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Missions
           (Get_Index(Current(TradeMenu)));
       InfoWindow: Window;
-      CurrentLine: Line_Position := 1;
+      CurrentLine: Line_Position := 2;
       MinutesDiff: Natural;
       MissionTime: Date_Record :=
         (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
-      MissionsLimit: Natural;
+      WindowWidth: Line_Position;
    begin
-      InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
+      case Mission.MType is
+         when Deliver =>
+            WindowWidth := 8;
+         when others =>
+            WindowWidth := 6;
+            Move_Cursor(Line => 9, Column => (Columns / 2));
+            Clear_To_End_Of_Line;
+            Move_Cursor(Line => 10, Column => (Columns / 2));
+            Clear_To_End_Of_Line;
+            Move_Cursor(Line => 11, Column => (Columns / 2));
+            Clear_To_End_Of_Line;
+            Move_Cursor(Line => 12, Column => (Columns / 2));
+            Clear_To_End_Of_Line;
+      end case;
+      InfoWindow := Create(WindowWidth, (Columns / 2), 3, (Columns / 2));
+      Box(InfoWindow);
+      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
+      Add(Win => InfoWindow, Str => "[Mission info]");
+      Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       case Mission.MType is
          when Deliver =>
             Add
               (Win => InfoWindow,
                Str => "Item: " & To_String(Items_List(Mission.Target).Name));
-            Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
             Add
               (Win => InfoWindow,
                Str =>
                  "Weight:" &
                  Positive'Image(Items_List(Mission.Target).Weight) &
                  " kg");
-            Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
             Add
               (Win => InfoWindow,
                Str =>
@@ -55,7 +99,7 @@ package body Bases.UI.Missions is
                    (SkyBases
                       (SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                       .Name));
-            CurrentLine := 3;
+            CurrentLine := 4;
          when Patrol =>
             Add(Win => InfoWindow, Str => "Patrol selected area");
          when Kill =>
@@ -66,7 +110,7 @@ package body Bases.UI.Missions is
          when Explore =>
             Add(Win => InfoWindow, Str => "Explore selected area");
       end case;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
       Add
         (Win => InfoWindow,
          Str =>
@@ -92,7 +136,7 @@ package body Bases.UI.Missions is
          end if;
       end loop;
       CurrentLine := CurrentLine + 1;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
       Add(Win => InfoWindow, Str => "Time limit:");
       if MissionTime.Year > 0 then
          Add(Win => InfoWindow, Str => Positive'Image(MissionTime.Year) & "y");
@@ -114,7 +158,7 @@ package body Bases.UI.Missions is
             Str => Positive'Image(MissionTime.Minutes) & "mins");
       end if;
       CurrentLine := CurrentLine + 1;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
       Add
         (Win => InfoWindow,
          Str =>
@@ -122,49 +166,21 @@ package body Bases.UI.Missions is
            Positive'Image(Mission.Reward) &
            " " &
            To_String(MoneyName));
-      case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-        .Reputation
-        (1) is
-         when 0 .. 25 =>
-            MissionsLimit := 1;
-         when 26 .. 50 =>
-            MissionsLimit := 3;
-         when 51 .. 75 =>
-            MissionsLimit := 5;
-         when 76 .. 100 =>
-            MissionsLimit := 10;
-         when others =>
-            MissionsLimit := 0;
-      end case;
-      for Mission of PlayerShip.Missions loop
-         if Mission.StartBase =
-           SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex then
-            MissionsLimit := MissionsLimit - 1;
-         end if;
-      end loop;
-      CurrentLine := CurrentLine + 2;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-      if MissionsLimit > 0 then
-         Add
-           (Win => InfoWindow,
-            Str =>
-              "You can take" &
-              Natural'Image(MissionsLimit) &
-              " more missions in this base.");
-         CurrentLine := CurrentLine + 1;
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-         Add(Win => InfoWindow, Str => "ENTER to accept selected mission.");
-         Change_Attributes
-           (Win => InfoWindow,
-            Line => CurrentLine,
-            Column => 0,
-            Count => 5,
-            Color => 1);
-      else
-         Add
-           (Win => InfoWindow,
-            Str => "You can't take any more mission in this base.");
-      end if;
+      CurrentLine := WindowWidth + 3;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      Add
+        (Str =>
+           "You can take" &
+           Natural'Image(CountMissionsLimit) &
+           " more missions in this base.");
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      Add(Str => "ENTER to accept selected mission.");
+      Change_Attributes
+        (Line => CurrentLine,
+         Column => (Columns / 2),
+         Count => 5,
+         Color => 1);
       Refresh;
       Refresh(InfoWindow);
       Delete(InfoWindow);
@@ -186,6 +202,16 @@ package body Bases.UI.Missions is
          end if;
          Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
          Add(Str => "No available missions in this base.");
+         Refresh;
+         return;
+      end if;
+      if CountMissionsLimit < 1 then
+         if TradeMenu /= Null_Menu then
+            Post(TradeMenu, False);
+            Delete(TradeMenu);
+         end if;
+         Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
+         Add(Str => "You can't take any more missions from this base.");
          Refresh;
          return;
       end if;
