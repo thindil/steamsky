@@ -855,9 +855,11 @@ package body Bases is
             end case;
          end loop;
          for Item of PlayerShip.Cargo loop
-            if Slice(Items_List(Item.ProtoIndex).IType, 1, 4) = "Ammo" then
-               PlayerValue :=
-                 PlayerValue + (Items_List(Item.ProtoIndex).Value * 10);
+            if Length(Items_List(Item.ProtoIndex).IType) >= 4 then
+               if Slice(Items_List(Item.ProtoIndex).IType, 1, 4) = "Ammo" then
+                  PlayerValue :=
+                    PlayerValue + (Items_List(Item.ProtoIndex).Value * 10);
+               end if;
             end if;
          end loop;
          for C in ProtoShips_List.Iterate loop
