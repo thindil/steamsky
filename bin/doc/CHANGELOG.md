@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Typo in advaced huge iron engine description
 - Don't finish mission if ship can't dock to base
 - Showing info about event and mission on this same map cell
+- Crash when asking for events in bases
 
 ## [1.2] - 2017-05-28
 
