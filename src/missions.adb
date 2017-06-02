@@ -350,9 +350,14 @@ package body Missions is
         To_Unbounded_String("You failed mission ");
       Mission: constant Mission_Data := PlayerShip.Missions(MissionIndex);
       FreeSpace, RewardAmount: Integer;
+      Reputation: Natural;
    begin
+      Reputation := Mission.Reward / 100;
+      if Reputation < 2 then
+         Reputation := 2;
+      end if;
       if Failed then
-         GainRep(Mission.StartBase, -10);
+         GainRep(Mission.StartBase, (Reputation * (-1)));
          case Mission.MType is
             when Deliver =>
                Append
@@ -374,10 +379,12 @@ package body Missions is
          AddMessage(To_String(MessageText), MissionMessage);
       else
          if Mission.MType = Deliver then
-            GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 5);
-            GainRep(Mission.StartBase, 5);
+            GainRep
+              (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
+               (Reputation / 2));
+            GainRep(Mission.StartBase, (Reputation / 2));
          else
-            GainRep(Mission.StartBase, 10);
+            GainRep(Mission.StartBase, Reputation);
          end if;
          RewardAmount := Mission.Reward;
          FreeSpace := FreeCargo((0 - RewardAmount));
