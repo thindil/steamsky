@@ -714,4 +714,14 @@ Perception = 7..12
 Cargo = 500..1000x1
 Description = Small flying clockwork drone (upgraded version). Dangerous at close range.
 Owner = Drones
+[70]
+Name = Pirate ship mk III
+Modules = 103, 101, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 113, 50
+CombatAI = Disarmer
+Loot = 100..200
+Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x25, 150..200x21
+Skills = 1x3..6, 5x3..6; 3x7..14, 5x3..6; 2x7..12
+Orders = Pilot, Gunner, Engineer
+Description = Standard pirate vessel (upgraded version). As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
 []
