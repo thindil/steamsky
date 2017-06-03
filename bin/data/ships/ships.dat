@@ -724,4 +724,14 @@ Skills = 1x3..6, 5x3..6; 3x7..14, 5x3..6; 2x7..12
 Orders = Pilot, Gunner, Engineer
 Description = Standard pirate vessel (upgraded version). As many pirates they prefer to dismarm enemies first.
 Owner = Pirates
+[71]
+Name = Armored pirate ship mk III
+Modules = 103, 111, 101, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 113, 50
+CombatAI = Disarmer
+Loot = 150..300
+Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x25, 100..200x21
+Skills = 1x6..12, 5x3..6; 3x7..14, 5x3..6; 2x7..12
+Orders = Pilot, Gunner, Engineer
+Description = Armored version of pirate ship (upgraded version). As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
 []
