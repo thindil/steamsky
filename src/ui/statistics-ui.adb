@@ -36,7 +36,7 @@ package body Statistics.UI is
       type VisitedFactor is digits 4 range 0.0 .. 100.0;
       VisitedPercent: VisitedFactor;
       VisitedString: String(1 .. 5);
-      MissionsPercent: Natural := 0;
+      MissionsPercent, TotalDestroyed: Natural := 0;
    begin
       if not RefreshOnly then
          MinutesDiff :=
@@ -83,7 +83,6 @@ package body Statistics.UI is
               New_Pad
                 (Line_Position(GameStats.DestroyedShips.Length + 2),
                  (Columns / 2));
-            Add(Win => DestroyedShipsPad, Str => "Destroyed ships:");
             for I in GameStats.DestroyedShips.Iterate loop
                Move_Cursor
                  (Win => DestroyedShipsPad,
@@ -97,7 +96,16 @@ package body Statistics.UI is
                          .Name) &
                     ":" &
                     Positive'Image(GameStats.DestroyedShips(I).Amount));
+               TotalDestroyed :=
+                 TotalDestroyed + GameStats.DestroyedShips(I).Amount;
             end loop;
+            Move_Cursor(Win => DestroyedShipsPad, Line => 0, Column => 0);
+            Add
+              (Win => DestroyedShipsPad,
+               Str =>
+                 "Destroyed ships (Total:" &
+                 Natural'Image(TotalDestroyed) &
+                 ")");
             EndIndex :=
               Integer(GameStats.DestroyedShips.Length) - Integer(Lines - 2);
          else
