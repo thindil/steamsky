@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - How ship speed is calculated to prevent some bugs
+- Updated MODDING.md
 
 ### Fixed
 - Showing this same deconstruct option few times
