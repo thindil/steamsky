@@ -29,10 +29,6 @@ package body Ships.Cargo is
       Durability: Natural := 100) is
       ItemIndex: Natural := 0;
       NewAmount: Integer;
-      procedure UpdateItem(Item: in out CargoData) is
-      begin
-         Item.Amount := NewAmount;
-      end UpdateItem;
    begin
       for I in Ship.Cargo.Iterate loop
          if Ship.Cargo(I).ProtoIndex = ProtoIndex and
@@ -62,8 +58,7 @@ package body Ships.Cargo is
                end if;
             end loop;
          else
-            Ship.Cargo.Update_Element
-            (Index => ItemIndex, Process => UpdateItem'Access);
+            Ship.Cargo(ItemIndex).Amount := NewAmount;
          end if;
       end if;
    end UpdateCargo;
@@ -123,13 +118,6 @@ package body Ships.Cargo is
       DamageChance: Integer := 0;
       SelectedItem: constant CargoData := PlayerShip.Cargo(CargoIndex);
       I: Natural := PlayerShip.Cargo.First_Index;
-      procedure UpdateItem(DamagedItem: in out CargoData) is
-      begin
-         if DamagedItem.Amount > 1 and DamagedItem.Durability > 1 then
-            DamagedItem.Amount := 1;
-         end if;
-         DamagedItem.Durability := DamagedItem.Durability - 1;
-      end UpdateItem;
    begin
       if CrewIndex > 0 then
          DamageChance :=
@@ -150,8 +138,13 @@ package body Ships.Cargo is
              Name => SelectedItem.Name,
              Durability => SelectedItem.Durability));
       end if;
-      PlayerShip.Cargo.Update_Element
-      (Index => CargoIndex, Process => UpdateItem'Access);
+      if PlayerShip.Cargo(CargoIndex).Amount > 1 and
+        PlayerShip.Cargo(CargoIndex).Durability > 1 then
+         PlayerShip.Cargo(CargoIndex).Amount :=
+           PlayerShip.Cargo(CargoIndex).Amount - 1;
+      end if;
+      PlayerShip.Cargo(CargoIndex).Durability :=
+        PlayerShip.Cargo(CargoIndex).Durability - 1;
       if PlayerShip.Cargo(CargoIndex).Durability = 0 then -- Cargo destroyed
          UpdateCargo
            (PlayerShip,
