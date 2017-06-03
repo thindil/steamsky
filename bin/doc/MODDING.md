@@ -36,6 +36,7 @@ ships, ships modules, etc.)
 
 ### Adding new items types
 - To add new item type, just append it name to ItemsTypes entry.
+- Each new ammunition type must starts with `Ammo` (example: *Ammo150*).
 
 ## Repair tools type
 To change which item type is used for repair/upgrading tools, open file 
