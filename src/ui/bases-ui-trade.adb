@@ -35,10 +35,9 @@ package body Bases.UI.Trade is
       ItemIndex, Price: Positive;
       InfoWindow: Window;
       BaseType: constant Positive :=
-        Bases_Types'
-          Pos
-            (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-               .BaseType) +
+        Bases_Types'Pos
+          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+             .BaseType) +
         1;
       CurrentLine: Line_Position := 4;
       DamagePercent: Natural;
@@ -173,10 +172,9 @@ package body Bases.UI.Trade is
    procedure ShowTrade is
       Trade_Items: Item_Array_Access;
       BaseType: constant Positive :=
-        Bases_Types'
-          Pos
-            (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-               .BaseType) +
+        Bases_Types'Pos
+          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+             .BaseType) +
         1;
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
@@ -277,17 +275,16 @@ package body Bases.UI.Trade is
    function ShowTradeForm return GameStates is
       Trade_Fields: constant Field_Array_Access := new Field_Array(1 .. 6);
       BaseType: constant Positive :=
-        Bases_Types'
-          Pos
-            (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-               .BaseType) +
+        Bases_Types'Pos
+          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+             .BaseType) +
         1;
       FieldOptions: Field_Option_Set;
       FormHeight: Line_Position;
       FormLength: Column_Position;
       Visibility: Cursor_Visibility := Normal;
       ItemIndex, Price: Positive;
-      CargoIndex, MaxAmount: Natural := 0;
+      MaxAmount: Natural := 0;
       FieldText: Unbounded_String := To_Unbounded_String("Enter amount of ");
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
@@ -324,15 +321,7 @@ package body Bases.UI.Trade is
          end loop;
          Append(FieldText, " to buy");
       else
-         for I in
-           PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-            if PlayerShip.Cargo.Element(I).ProtoIndex = ItemIndex then
-               CargoIndex := I;
-               MaxAmount := PlayerShip.Cargo.Element(I).Amount;
-               exit;
-            end if;
-         end loop;
-         if CargoIndex = 0 then
+         if Description(Current(TradeMenu)) = "0" then
             ShowDialog
               ("You don't have any " &
                To_String(Items_List.Element(ItemIndex).Name) &
@@ -340,6 +329,10 @@ package body Bases.UI.Trade is
             DrawGame(Trade_View);
             return Trade_View;
          end if;
+         MaxAmount :=
+           PlayerShip.Cargo.Element
+           (Integer'Value(Description(Current(TradeMenu))))
+             .Amount;
          Append(FieldText, " to sell");
       end if;
       Append(FieldText, " (max" & Natural'Image(MaxAmount) & "): ");
