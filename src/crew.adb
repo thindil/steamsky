@@ -40,7 +40,16 @@ package body Crew is
       RequiredTool: Unbounded_String;
    begin
       if GivenOrder = PlayerShip.Crew(MemberIndex).Order then
-         return;
+         if GivenOrder = Craft then
+            for I in PlayerShip.Modules.Iterate loop
+               if PlayerShip.Modules(I).Owner = MemberIndex and
+                 Modules_Container.To_Index(I) = ModuleIndex then
+                  return;
+               end if;
+            end loop;
+         else
+            return;
+         end if;
       end if;
       if GivenOrder = Upgrading or
         GivenOrder = Repair or
