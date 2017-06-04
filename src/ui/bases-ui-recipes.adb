@@ -28,10 +28,9 @@ package body Bases.UI.Recipes is
       RecipeIndex: Positive;
       InfoWindow: Window;
       BaseType: constant Positive :=
-        Bases_Types'
-          Pos
-            (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-               .BaseType) +
+        Bases_Types'Pos
+          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+             .BaseType) +
         1;
       Cost: Positive;
    begin
@@ -72,10 +71,9 @@ package body Bases.UI.Recipes is
    procedure ShowTradeRecipes is
       Trade_Items: Item_Array_Access;
       BaseType: constant Positive :=
-        Bases_Types'
-          Pos
-            (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-               .BaseType) +
+        Bases_Types'Pos
+          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+             .BaseType) +
         1;
       MenuHeight: Line_Position;
       MenuLength: Column_Position;

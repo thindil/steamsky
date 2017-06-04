@@ -363,11 +363,10 @@ package body Maps.UI is
            (Win => InfoWindow,
             Str =>
               "Distance:" &
-              Positive'
-                Image
-                  (CountDistance
-                     (PlayerShip.SkyX + MoveX,
-                      PlayerShip.SkyY + MoveY)));
+              Positive'Image
+                (CountDistance
+                   (PlayerShip.SkyX + MoveX,
+                    PlayerShip.SkyY + MoveY)));
       end if;
       Refresh(InfoWindow);
       Delete(InfoWindow);

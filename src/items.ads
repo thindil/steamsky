@@ -47,6 +47,6 @@ package Items is
      (Index,
       ItemType: Unbounded_String :=
         Null_Unbounded_String)
-     return Natural; -- Return vector index of item or zero if item not found
+      return Natural; -- Return vector index of item or zero if item not found
 
 end Items;

@@ -202,12 +202,11 @@ package body BasesList is
         (Win => InfoWindow,
          Str =>
            "Distance:" &
-           Integer'
-             Image
-               (Integer
-                  (CountDistance
-                     (SkyBases(BaseIndex).SkyX,
-                      SkyBases(BaseIndex).SkyY))));
+           Integer'Image
+             (Integer
+                (CountDistance
+                   (SkyBases(BaseIndex).SkyX,
+                    SkyBases(BaseIndex).SkyY))));
       CurrentLine := CurrentLine + 6;
       Pattern(BasesMenu, SearchPattern);
       TrimedSearchPattern :=
