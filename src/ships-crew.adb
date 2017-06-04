@@ -62,11 +62,6 @@ package body Ships.Crew is
      (MemberIndex: Positive;
       Reason: Unbounded_String;
       Ship: in out ShipRecord) is
-      procedure UpdateDeath(Member: in out Member_Data) is
-      begin
-         Member.Order := Rest;
-         Member.Health := 0;
-      end UpdateDeath;
    begin
       if MemberIndex > 1 then
          if Ship = PlayerShip then
@@ -82,8 +77,8 @@ package body Ships.Crew is
             AddMessage
               ("You died from " & To_String(Reason) & ".",
                CombatMessage);
-            PlayerShip.Crew.Update_Element
-            (Index => MemberIndex, Process => UpdateDeath'Access);
+            PlayerShip.Crew(MemberIndex).Order := Rest;
+            PlayerShip.Crew(MemberIndex).Health := 0;
             return;
          end if;
       end if;
