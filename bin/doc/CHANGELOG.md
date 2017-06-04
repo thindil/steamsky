@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship modules: huge steel engine and advanced huge steel engine
 - New enemy ships: small pirates ship mk III, small undead ship mk III, small
-  clockwork drone mk III, pirate ship mk III and armored pirate ship mk III
+  clockwork drone mk III, pirate ship mk III, armored pirate ship mk III and
+  small attackig drone mk III
 - Info about amount of destroyed ships to game statistics
 
 ### Changed
