@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Don't finish mission if ship can't dock to base
 - Showing info about event and mission on this same map cell
 - Crash when asking for events in bases
+- Count max allowed amount when selling items
 
 ## [1.0.2] - 2017-05-14
 
