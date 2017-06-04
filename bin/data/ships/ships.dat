@@ -734,4 +734,15 @@ Skills = 1x6..12, 5x3..6; 3x7..14, 5x3..6; 2x7..12
 Orders = Pilot, Gunner, Engineer
 Description = Armored version of pirate ship (upgraded version). As many pirates they prefer to dismarm enemies first.
 Owner = Pirates
+[72]
+Name = Small attacking drone mk III
+Modules = 90, 92, 96, 98, 97, 48
+Accuracy = 3..7
+CombatAI = Berserker
+Evasion = 3..7
+Loot = 20..200
+Perception = 3..7
+Cargo = 200..1000x1, 200..500x24
+Description = Small, more aggresive, upgraded version of clockwork drone.
+Owner = Drones
 []
