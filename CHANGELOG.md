@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.0.3] - 2017-06-04
 
 ### Changed
 - How ship speed is calculated to prevent some bugs
