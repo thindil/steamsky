@@ -25,10 +25,9 @@ package body Bases.UI.Heal is
 
    procedure HealCost(Cost, Time, MemberIndex: in out Natural) is
       BaseType: constant Positive :=
-        Bases_Types'
-          Pos
-            (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-               .BaseType) +
+        Bases_Types'Pos
+          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+             .BaseType) +
         1;
    begin
       MemberIndex := Integer'Value(Description(Current(TradeMenu)));

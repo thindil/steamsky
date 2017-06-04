@@ -132,7 +132,7 @@ package body Items is
      (Index,
       ItemType: Unbounded_String :=
         Null_Unbounded_String)
-     return Natural is
+      return Natural is
    begin
       if Index /= Null_Unbounded_String then
          for I in Items_List.Iterate loop

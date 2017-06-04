@@ -140,9 +140,8 @@ package body Missions is
       end loop;
       for I in 1 .. MissionsAmount loop
          Mission.MType :=
-           Missions_Types'
-             Val
-               (GetRandom(0, Missions_Types'Pos(Missions_Types'Last)));
+           Missions_Types'Val
+             (GetRandom(0, Missions_Types'Pos(Missions_Types'Last)));
          case Mission.MType is
             when Deliver =>
                Mission.Target :=

@@ -82,11 +82,10 @@ package body Events.UI is
         (Win => InfoWindow,
          Str =>
            "Distance:" &
-           Integer'
-             Image
-               (CountDistance
-                  (Events_List(EventIndex).SkyX,
-                   Events_List(EventIndex).SkyY)));
+           Integer'Image
+             (CountDistance
+                (Events_List(EventIndex).SkyX,
+                 Events_List(EventIndex).SkyY)));
       Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
       Add(Win => InfoWindow, Str => "Press SPACE to show event on map");
       Change_Attributes

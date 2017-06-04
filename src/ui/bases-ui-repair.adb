@@ -26,10 +26,9 @@ package body Bases.UI.Repair is
 
    procedure RepairCost(Cost, Time, ModuleIndex: in out Natural) is
       BaseType: constant Positive :=
-        Bases_Types'
-          Pos
-            (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-               .BaseType) +
+        Bases_Types'Pos
+          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+             .BaseType) +
         1;
       ProtoIndex: Positive;
    begin

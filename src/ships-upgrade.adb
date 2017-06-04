@@ -471,11 +471,10 @@ package body Ships.Upgrade is
                     (PlayerShip,
                      PlayerShip.UpgradeModule,
                      "Current_Value",
-                     Integer'
-                       Image
-                         (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .Current_Value -
-                          1));
+                     Integer'Image
+                       (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                          .Current_Value -
+                        1));
                   case Modules_List
                     (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
                     .MType is
