@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about event and mission on this same map cell
 - Crash when asking for events in bases
 - Count max allowed amount when selling items
+- Changing workplace when manufacturing
 
 ## [1.2] - 2017-05-28
 
