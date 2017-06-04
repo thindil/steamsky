@@ -99,9 +99,8 @@ package body Statistics.UI is
                        (GameStats.DestroyedShips.Element(I).ProtoIndex)
                          .Name) &
                     ":" &
-                    Positive'
-                      Image
-                        (GameStats.DestroyedShips.Element(I).Amount));
+                    Positive'Image
+                      (GameStats.DestroyedShips.Element(I).Amount));
             end loop;
             EndIndex :=
               Integer(GameStats.DestroyedShips.Length) - Integer(Lines - 2);

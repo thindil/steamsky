@@ -87,11 +87,10 @@ package body Ships.UI.Cargo is
         (Win => InfoWindow,
          Str =>
            "Weight:" &
-           Positive'
-             Image
-               (Items_List.Element
-                (PlayerShip.Cargo.Element(ItemIndex).ProtoIndex)
-                  .Weight) &
+           Positive'Image
+             (Items_List.Element
+              (PlayerShip.Cargo.Element(ItemIndex).ProtoIndex)
+                .Weight) &
            " kg");
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);

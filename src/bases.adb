@@ -96,10 +96,9 @@ package body Bases is
    procedure BuyItems(ItemIndex: Positive; Amount: String) is
       BuyAmount, TraderIndex, Price: Positive;
       BaseType: constant Positive :=
-        Bases_Types'
-          Pos
-            (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-               .BaseType) +
+        Bases_Types'Pos
+          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+             .BaseType) +
         1;
       ItemName: constant String :=
         To_String(Items_List.Element(ItemIndex).Name);
@@ -161,10 +160,9 @@ package body Bases is
    procedure SellItems(ItemIndex: Positive; Amount: String) is
       SellAmount, TraderIndex: Positive;
       BaseType: constant Positive :=
-        Bases_Types'
-          Pos
-            (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-               .BaseType) +
+        Bases_Types'Pos
+          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+             .BaseType) +
         1;
       ProtoIndex: constant Positive :=
         PlayerShip.Cargo.Element(ItemIndex).ProtoIndex;
@@ -1103,11 +1101,10 @@ package body Bases is
          SkyBases(BaseIndex).Population := GetRandom(5, 10);
          loop
             SkyBases(BaseIndex).Owner :=
-              Bases_Owners'
-                Val
-                  (GetRandom
-                     (Bases_Owners'Pos(Bases_Owners'First),
-                      Bases_Owners'Pos(Bases_Owners'Last)));
+              Bases_Owners'Val
+                (GetRandom
+                   (Bases_Owners'Pos(Bases_Owners'First),
+                    Bases_Owners'Pos(Bases_Owners'Last)));
             exit when SkyBases(BaseIndex).Owner /= Abandoned and
               SkyBases(BaseIndex).Owner /= Any;
          end loop;

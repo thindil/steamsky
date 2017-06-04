@@ -506,11 +506,10 @@ package body Ships.Upgrade is
                     (PlayerShip,
                      PlayerShip.UpgradeModule,
                      "Current_Value",
-                     Integer'
-                       Image
-                         (PlayerShip.Modules.Element(PlayerShip.UpgradeModule)
-                            .Current_Value -
-                          1));
+                     Integer'Image
+                       (PlayerShip.Modules.Element(PlayerShip.UpgradeModule)
+                          .Current_Value -
+                        1));
                   case Modules_List.Element
                   (PlayerShip.Modules.Element(PlayerShip.UpgradeModule)
                      .ProtoIndex)

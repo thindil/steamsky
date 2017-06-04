@@ -617,11 +617,10 @@ package body Combat.UI is
             if Enemy.Distance > 1000 then
                ModuleName :=
                  To_Unbounded_String
-                   (ModuleType'
-                      Image
-                        (Modules_List.Element
-                         (Enemy.Ship.Modules.Element(I).ProtoIndex)
-                           .MType));
+                   (ModuleType'Image
+                      (Modules_List.Element
+                       (Enemy.Ship.Modules.Element(I).ProtoIndex)
+                         .MType));
                Replace_Slice
                  (ModuleName,
                   2,
@@ -723,9 +722,8 @@ package body Combat.UI is
                end case;
                ShowOrdersMenu;
                return Combat_Orders;
-            when Character'
-                Pos
-                  (' ') => -- Next combat turn or back to sky map if end combat
+            when Character'Pos
+                (' ') => -- Next combat turn or back to sky map if end combat
                CombatTurn;
                DrawGame(Combat_State);
                return Combat_State;
