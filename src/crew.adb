@@ -49,7 +49,18 @@ package body Crew is
       end UpdateOrder;
    begin
       if GivenOrder = PlayerShip.Crew.Element(MemberIndex).Order then
-         return;
+         if GivenOrder = Craft then
+            for I in
+              PlayerShip.Modules.First_Index ..
+                  PlayerShip.Modules.Last_Index loop
+               if PlayerShip.Modules.Element(I).Owner = MemberIndex and
+                 I = ModuleIndex then
+                  return;
+               end if;
+            end loop;
+         else
+            return;
+         end if;
       end if;
       if GivenOrder = Upgrading or
         GivenOrder = Repair or
