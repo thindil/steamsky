@@ -106,18 +106,16 @@ package body Bases.UI.Shipyard is
                  (Win => InfoWindow,
                   Str =>
                     "Modules space:" &
-                    Positive'
-                      Image
-                        (Modules_List.Element(ModuleIndex).MaxValue));
+                    Positive'Image
+                      (Modules_List.Element(ModuleIndex).MaxValue));
                CurrentLine := 5;
             when ENGINE =>
                Add
                  (Win => InfoWindow,
                   Str =>
                     "Max power:" &
-                    Positive'
-                      Image
-                        (Modules_List.Element(ModuleIndex).MaxValue));
+                    Positive'Image
+                      (Modules_List.Element(ModuleIndex).MaxValue));
                Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
                Add
                  (Win => InfoWindow,
@@ -130,9 +128,8 @@ package body Bases.UI.Shipyard is
                  (Win => InfoWindow,
                   Str =>
                     "Max cargo:" &
-                    Positive'
-                      Image
-                        (Modules_List.Element(ModuleIndex).MaxValue) &
+                    Positive'Image
+                      (Modules_List.Element(ModuleIndex).MaxValue) &
                     " kg");
                CurrentLine := 4;
             when CABIN =>
@@ -246,18 +243,16 @@ package body Bases.UI.Shipyard is
                  (Win => InfoWindow,
                   Str =>
                     "Max power:" &
-                    Positive'
-                      Image
-                        (PlayerShip.Modules.Element(ModuleIndex).Max_Value));
+                    Positive'Image
+                      (PlayerShip.Modules.Element(ModuleIndex).Max_Value));
                CurrentLine := 4;
             when ShipModules.CARGO =>
                Add
                  (Win => InfoWindow,
                   Str =>
                     "Max cargo:" &
-                    Positive'
-                      Image
-                        (PlayerShip.Modules.Element(ModuleIndex).Max_Value) &
+                    Positive'Image
+                      (PlayerShip.Modules.Element(ModuleIndex).Max_Value) &
                     " kg");
                CurrentLine := 4;
             when CABIN =>
@@ -308,11 +303,10 @@ package body Bases.UI.Shipyard is
               (Win => InfoWindow,
                Str =>
                  "Size:" &
-                 Natural'
-                   Image
-                     (Modules_List.Element
-                      (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
-                        .Size));
+                 Natural'Image
+                   (Modules_List.Element
+                    (PlayerShip.Modules.Element(ModuleIndex).ProtoIndex)
+                      .Size));
             CurrentLine := CurrentLine + 1;
          end if;
          if PlayerShip.Modules.Element(ModuleIndex).Weight > 0 then
@@ -324,9 +318,8 @@ package body Bases.UI.Shipyard is
               (Win => InfoWindow,
                Str =>
                  "Weight:" &
-                 Natural'
-                   Image
-                     (PlayerShip.Modules.Element(ModuleIndex).Weight) &
+                 Natural'Image
+                   (PlayerShip.Modules.Element(ModuleIndex).Weight) &
                  " kg");
             CurrentLine := CurrentLine + 1;
          end if;

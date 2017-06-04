@@ -544,11 +544,9 @@ package body Combat is
                              (EnemyShip,
                               1,
                               "Durability",
-                              Integer'
-                                Image
-                                  (0 -
-                                   EnemyShip.Modules.Element(1)
-                                     .MaxDurability));
+                              Integer'Image
+                                (0 -
+                                 EnemyShip.Modules.Element(1).MaxDurability));
                            AddMessage
                              (To_String(EnemyName) & " is destroyed!",
                               CombatMessage);
