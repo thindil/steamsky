@@ -325,9 +325,8 @@ package body Ships is
                   else
                      TempRecord.Accuracy :=
                        (Integer'Value(Slice(Value, 1, DotIndex - 1)),
-                        Integer'
-                          Value
-                            (Slice(Value, DotIndex + 2, Length(Value))));
+                        Integer'Value
+                          (Slice(Value, DotIndex + 2, Length(Value))));
                   end if;
                elsif FieldName = To_Unbounded_String("CombatAI") then
                   TempRecord.CombatAI := ShipCombatAi'Value(To_String(Value));
@@ -339,9 +338,8 @@ package body Ships is
                   else
                      TempRecord.Evasion :=
                        (Integer'Value(Slice(Value, 1, DotIndex - 1)),
-                        Integer'
-                          Value
-                            (Slice(Value, DotIndex + 2, Length(Value))));
+                        Integer'Value
+                          (Slice(Value, DotIndex + 2, Length(Value))));
                   end if;
                elsif FieldName = To_Unbounded_String("Loot") then
                   DotIndex := Index(Value, "..");
@@ -350,9 +348,8 @@ package body Ships is
                   else
                      TempRecord.Loot :=
                        (Integer'Value(Slice(Value, 1, DotIndex - 1)),
-                        Integer'
-                          Value
-                            (Slice(Value, DotIndex + 2, Length(Value))));
+                        Integer'Value
+                          (Slice(Value, DotIndex + 2, Length(Value))));
                   end if;
                elsif FieldName = To_Unbounded_String("Perception") then
                   DotIndex := Index(Value, "..");
@@ -362,9 +359,8 @@ package body Ships is
                   else
                      TempRecord.Perception :=
                        (Integer'Value(Slice(Value, 1, DotIndex - 1)),
-                        Integer'
-                          Value
-                            (Slice(Value, DotIndex + 2, Length(Value))));
+                        Integer'Value
+                          (Slice(Value, DotIndex + 2, Length(Value))));
                   end if;
                elsif FieldName = To_Unbounded_String("Cargo") then
                   StartIndex := 1;
@@ -393,20 +389,17 @@ package body Ships is
                         TempRecord.Cargo.Append
                         (New_Item =>
                            (ItemIndex,
-                            Integer'
-                              Value
-                                (Slice(Value, StartIndex, XIndex - 1)),
+                            Integer'Value
+                              (Slice(Value, StartIndex, XIndex - 1)),
                             0));
                      else
                         TempRecord.Cargo.Append
                         (New_Item =>
                            (ItemIndex,
-                            Integer'
-                              Value
-                                (Slice(Value, StartIndex, DotIndex - 1)),
-                            Integer'
-                              Value
-                                (Slice(Value, DotIndex + 2, XIndex - 1))));
+                            Integer'Value
+                              (Slice(Value, StartIndex, DotIndex - 1)),
+                            Integer'Value
+                              (Slice(Value, DotIndex + 2, XIndex - 1))));
                      end if;
                      StartIndex := EndIndex + 2;
                   end loop;
@@ -434,40 +427,29 @@ package body Ships is
                         if DotIndex = 0 or DotIndex > EndIndex2 then
                            TempSkills.Append
                            (New_Item =>
-                              (Integer'
-                                 Value
-                                   (Slice
-                                      (SkillsValue,
-                                       StartIndex2,
-                                       XIndex - 1)),
-                               Integer'
-                                 Value
-                                   (Slice
-                                      (SkillsValue,
-                                       XIndex + 1,
-                                       EndIndex2 - 1)),
+                              (Integer'Value
+                                 (Slice(SkillsValue, StartIndex2, XIndex - 1)),
+                               Integer'Value
+                                 (Slice
+                                    (SkillsValue,
+                                     XIndex + 1,
+                                     EndIndex2 - 1)),
                                0));
                         else
                            TempSkills.Append
                            (New_Item =>
-                              (Integer'
-                                 Value
-                                   (Slice
-                                      (SkillsValue,
-                                       StartIndex2,
-                                       XIndex - 1)),
-                               Integer'
-                                 Value
-                                   (Slice
-                                      (SkillsValue,
-                                       XIndex + 1,
-                                       DotIndex - 1)),
-                               Integer'
-                                 Value
-                                   (Slice
-                                      (SkillsValue,
-                                       DotIndex + 2,
-                                       EndIndex2 - 1))));
+                              (Integer'Value
+                                 (Slice(SkillsValue, StartIndex2, XIndex - 1)),
+                               Integer'Value
+                                 (Slice
+                                    (SkillsValue,
+                                     XIndex + 1,
+                                     DotIndex - 1)),
+                               Integer'Value
+                                 (Slice
+                                    (SkillsValue,
+                                     DotIndex + 2,
+                                     EndIndex2 - 1))));
                         end if;
                         StartIndex2 := EndIndex2 + 2;
                      end loop;
@@ -488,9 +470,8 @@ package body Ships is
                         EndIndex := Length(Value) + 1;
                      end if;
                      TempOrder :=
-                       Crew_Orders'
-                         Value
-                           (Slice(Value, StartIndex, EndIndex - 1));
+                       Crew_Orders'Value
+                         (Slice(Value, StartIndex, EndIndex - 1));
                      TempRecord.Crew(I).Order := TempOrder;
                      StartIndex := EndIndex + 2;
                   end loop;
@@ -830,22 +811,20 @@ package body Ships is
             for I in 1 .. LettersAmount loop
                Append
                  (NewName,
-                  Letters'
-                    Val
-                      (GetRandom
-                         (Letters'Pos(Letters'First),
-                          Letters'Pos(Letters'Last))));
+                  Letters'Val
+                    (GetRandom
+                       (Letters'Pos(Letters'First),
+                        Letters'Pos(Letters'Last))));
             end loop;
             Append(NewName, '-');
             NumbersAmount := GetRandom(2, 4);
             for I in 1 .. NumbersAmount loop
                Append
                  (NewName,
-                  Numbers'
-                    Val
-                      (GetRandom
-                         (Numbers'Pos(Numbers'First),
-                          Numbers'Pos(Numbers'Last))));
+                  Numbers'Val
+                    (GetRandom
+                       (Numbers'Pos(Numbers'First),
+                        Numbers'Pos(Numbers'Last))));
             end loop;
          when others =>
             null;

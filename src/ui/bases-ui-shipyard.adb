@@ -283,10 +283,9 @@ package body Bases.UI.Shipyard is
               (Win => InfoWindow,
                Str =>
                  "Size:" &
-                 Natural'
-                   Image
-                     (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                        .Size));
+                 Natural'Image
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .Size));
             CurrentLine := CurrentLine + 1;
          end if;
          if PlayerShip.Modules(ModuleIndex).Weight > 0 then
