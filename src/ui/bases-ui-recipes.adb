@@ -33,6 +33,7 @@ package body Bases.UI.Recipes is
              .BaseType) +
         1;
       Cost: Positive;
+      CostInfo: Unbounded_String;
    begin
       for I in Recipes_List.Iterate loop
          if To_String(Items_List(Recipes_List(I).ResultIndex).Name) =
@@ -41,7 +42,6 @@ package body Bases.UI.Recipes is
             exit;
          end if;
       end loop;
-      InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
       if Items_List(Recipes_List(RecipeIndex).ResultIndex).Prices(BaseType) >
         0 then
          Cost :=
@@ -51,18 +51,25 @@ package body Bases.UI.Recipes is
       else
          Cost := Recipes_List(RecipeIndex).Difficulty * 100;
       end if;
+      Move_Cursor(Line => 3, Column => (Columns / 2));
+      Clear_To_End_Of_Line;
+      Move_Cursor(Line => 4, Column => (Columns / 2));
+      Clear_To_End_Of_Line;
+      Move_Cursor(Line => 5, Column => (Columns / 2));
+      Clear_To_End_Of_Line;
+      CostInfo :=
+        To_Unbounded_String
+          ("Base price:" & Positive'Image(Cost) & " " & To_String(MoneyName));
+      InfoWindow :=
+        Create(3, Column_Position(Length(CostInfo) + 4), 3, (Columns / 2));
+      Box(InfoWindow);
+      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
+      Add(Win => InfoWindow, Str => "[Info]");
+      Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       Add
         (Win => InfoWindow,
          Str =>
            "Base price:" & Positive'Image(Cost) & " " & To_String(MoneyName));
-      Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
-      Add(Win => InfoWindow, Str => "ENTER to buy selected recipe.");
-      Change_Attributes
-        (Win => InfoWindow,
-         Line => 2,
-         Column => 0,
-         Count => 5,
-         Color => 1);
       Refresh;
       Refresh(InfoWindow);
       Delete(InfoWindow);
@@ -116,7 +123,7 @@ package body Bases.UI.Recipes is
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
       Post(TradeMenu);
       MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
-      Move_Cursor(Line => (MenuHeight + 4), Column => 2);
+      Move_Cursor(Line => 6, Column => (Columns / 2));
       if MoneyIndex2 > 0 then
          Add
            (Str =>
@@ -132,6 +139,13 @@ package body Bases.UI.Recipes is
               To_String(MoneyName) &
               " to buy anything.");
       end if;
+      Move_Cursor(Line => 7, Column => (Columns / 2));
+      Add(Str => "ENTER to buy selected recipe.");
+      Change_Attributes
+        (Line => 7,
+         Column => (Columns / 2),
+         Count => 5,
+         Color => 1);
       ShowRecipeInfo;
       Refresh(MenuWindow);
    end ShowTradeRecipes;
