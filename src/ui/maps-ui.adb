@@ -595,6 +595,7 @@ package body Maps.UI is
             AddMessage
               ("You set travel destination for your ship.",
                OrderMessage);
+            CenterMap;
             return 4;
          when others =>
             Result := 0;

@@ -273,6 +273,7 @@ package body Missions.UI is
                AddMessage
                  ("You set travel destination for your ship.",
                   OrderMessage);
+               CenterMap;
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             when others =>
