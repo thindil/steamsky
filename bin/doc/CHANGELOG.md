@@ -9,7 +9,8 @@ All notable changes to this project will be documented in this file.
   clockwork drone mk III, pirate ship mk III, armored pirate ship mk III, small
   attackig drone mk III and attacking clockwork drone mk III
 - Info about amount of destroyed ships to game statistics
-- Center map after set destination for player ship
+- Auto center map after set destination for player ship (and option to enable
+  or disable it)
 
 ### Changed
 - Updated interface
