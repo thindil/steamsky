@@ -30,11 +30,12 @@ package body GameOptions is
    FormWindow: Window;
 
    procedure ShowOptions is
-      Options_Fields: constant Field_Array_Access := new Field_Array(1 .. 6);
+      Options_Fields: constant Field_Array_Access := new Field_Array(1 .. 8);
       FormHeight: Line_Position;
       FormLength: Column_Position;
       FieldOptions: Field_Option_Set;
-      YesNo: constant Enumeration_Info :=
+      YesNo,
+      YesNo2: constant Enumeration_Info :=
         (C => 2,
          Names => (new String'("Yes ->"), new String'("No ->")),
          Case_Sensitive => False,
@@ -48,12 +49,18 @@ package body GameOptions is
             new String'("Full Speed ->")),
          Case_Sensitive => False,
          Match_Must_Be_Unique => False);
+      procedure CreateLabel(Line: Line_Position; Text: String) is
+         FormIndex: constant Positive := Natural(Line * 2) + 1;
+      begin
+         Options_Fields.all(FormIndex) :=
+           New_Field(1, (Columns / 2), Line, 0, 0, 0);
+         Set_Buffer(Options_Fields.all(FormIndex), 0, Text);
+         FieldOptions := Get_Options(Options_Fields.all(FormIndex));
+         FieldOptions.Active := False;
+         Set_Options(Options_Fields.all(FormIndex), FieldOptions);
+      end CreateLabel;
    begin
-      Options_Fields.all(1) := New_Field(1, (Columns / 2), 0, 0, 0, 0);
-      Set_Buffer(Options_Fields.all(1), 0, "Auto rest: ");
-      FieldOptions := Get_Options(Options_Fields.all(1));
-      FieldOptions.Active := False;
-      Set_Options(Options_Fields.all(1), FieldOptions);
+      CreateLabel(0, "Auto rest: ");
       Options_Fields.all(2) := New_Field(1, 6, 0, ((Columns / 2) + 1), 0, 0);
       Set_Field_Type(Options_Fields.all(2), Create(YesNo, True));
       if GameSettings.AutoRest then
@@ -67,11 +74,7 @@ package body GameOptions is
       Set_Background
         (Options_Fields.all(2),
          (Reverse_Video => True, others => False));
-      Options_Fields.all(3) := New_Field(1, (Columns / 2), 1, 0, 0, 0);
-      Set_Buffer(Options_Fields.all(3), 0, "Undock Speed: ");
-      FieldOptions := Get_Options(Options_Fields.all(3));
-      FieldOptions.Active := False;
-      Set_Options(Options_Fields.all(3), FieldOptions);
+      CreateLabel(1, "Undock speed: ");
       Options_Fields.all(4) := New_Field(1, 16, 1, ((Columns / 2) + 1), 0, 0);
       Set_Field_Type(Options_Fields.all(4), Create(SpeedEnum, True));
       case GameSettings.UndockSpeed is
@@ -89,15 +92,26 @@ package body GameOptions is
       FieldOptions := Get_Options(Options_Fields.all(4));
       FieldOptions.Edit := False;
       Set_Options(Options_Fields.all(4), FieldOptions);
-      Options_Fields.all(5) := New_Field(5, Columns, 4, 0, 0, 0);
+      CreateLabel(2, "Auto center: ");
+      Options_Fields.all(6) := New_Field(1, 6, 2, ((Columns / 2) + 1), 0, 0);
+      Set_Field_Type(Options_Fields.all(6), Create(YesNo2, True));
+      if GameSettings.AutoCenter then
+         Set_Buffer(Options_Fields.all(6), 0, "Yes ->");
+      else
+         Set_Buffer(Options_Fields.all(6), 0, "No ->");
+      end if;
+      FieldOptions := Get_Options(Options_Fields.all(6));
+      FieldOptions.Edit := False;
+      Set_Options(Options_Fields.all(6), FieldOptions);
+      Options_Fields.all(7) := New_Field(6, Columns, 4, 0, 0, 0);
       Set_Buffer
-        (Options_Fields.all(5),
+        (Options_Fields.all(7),
          0,
          "Wait for crew is rested when pilot or engineer are too tired to work.");
-      FieldOptions := Get_Options(Options_Fields.all(5));
+      FieldOptions := Get_Options(Options_Fields.all(7));
       FieldOptions.Active := False;
-      Set_Options(Options_Fields.all(5), FieldOptions);
-      Options_Fields.all(6) := Null_Field;
+      Set_Options(Options_Fields.all(7), FieldOptions);
+      Options_Fields.all(8) := Null_Field;
       OptionsForm := New_Form(Options_Fields);
       Set_Options(OptionsForm, (others => False));
       Scale(OptionsForm, FormHeight, FormLength);
@@ -147,6 +161,13 @@ package body GameOptions is
             elsif FieldValue = To_Unbounded_String("Full Speed ->") then
                GameSettings.UndockSpeed := FULL_SPEED;
             end if;
+            FieldValue :=
+              To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 6)));
+            if FieldValue = To_Unbounded_String("Yes ->") then
+               GameSettings.AutoCenter := True;
+            else
+               GameSettings.AutoCenter := False;
+            end if;
             SaveConfig;
             Post(OptionsForm, False);
             Delete(OptionsForm);
@@ -160,25 +181,40 @@ package body GameOptions is
             Result := Driver(OptionsForm, Key);
       end case;
       if Result = Form_Ok then
-         if FieldIndex = 4 then
-            Set_Buffer
-              (Fields(OptionsForm, 5),
-               0,
-               "Default speed of ship after undock from base.");
-            Set_Background
-              (Current(OptionsForm),
-               (Reverse_Video => True, others => False));
-            Set_Background(Fields(OptionsForm, 2), (others => False));
-         elsif FieldIndex = 2 then
-            Set_Buffer
-              (Fields(OptionsForm, 5),
-               0,
-               "Wait for crew is rested when pilot or engineer are too tired to work.");
-            Set_Background
-              (Current(OptionsForm),
-               (Reverse_Video => True, others => False));
-            Set_Background(Fields(OptionsForm, 4), (others => False));
-         end if;
+         case FieldIndex is
+            when 2 =>
+               Set_Buffer
+                 (Fields(OptionsForm, 7),
+                  0,
+                  "Wait for crew is rested when pilot or engineer are too tired to work.");
+               Set_Background
+                 (Current(OptionsForm),
+                  (Reverse_Video => True, others => False));
+               Set_Background(Fields(OptionsForm, 4), (others => False));
+               Set_Background(Fields(OptionsForm, 6), (others => False));
+            when 4 =>
+               Set_Buffer
+                 (Fields(OptionsForm, 7),
+                  0,
+                  "Default speed of ship after undock from base.");
+               Set_Background
+                 (Current(OptionsForm),
+                  (Reverse_Video => True, others => False));
+               Set_Background(Fields(OptionsForm, 2), (others => False));
+               Set_Background(Fields(OptionsForm, 6), (others => False));
+            when 6 =>
+               Set_Buffer
+                 (Fields(OptionsForm, 7),
+                  0,
+                  "After set destination for player ship, center map on ship.");
+               Set_Background
+                 (Current(OptionsForm),
+                  (Reverse_Video => True, others => False));
+               Set_Background(Fields(OptionsForm, 2), (others => False));
+               Set_Background(Fields(OptionsForm, 4), (others => False));
+            when others =>
+               null;
+         end case;
          Refresh(FormWindow);
       end if;
       return GameOptions_View;

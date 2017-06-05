@@ -30,6 +30,7 @@ with Missions; use Missions;
 with Items; use Items;
 with Crew; use Crew;
 with Messages.UI; use Messages.UI;
+with Config; use Config;
 
 package body Maps.UI is
 
@@ -595,7 +596,9 @@ package body Maps.UI is
             AddMessage
               ("You set travel destination for your ship.",
                OrderMessage);
-            CenterMap;
+            if GameSettings.AutoCenter then
+               CenterMap;
+            end if;
             return 4;
          when others =>
             Result := 0;
