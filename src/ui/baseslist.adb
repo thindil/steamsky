@@ -25,6 +25,7 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Help.UI; use Help.UI;
+with Config; use Config;
 
 package body BasesList is
 
@@ -490,7 +491,9 @@ package body BasesList is
                   To_String(SkyBases(BaseIndex).Name) &
                   " as a destination for your ship.",
                   OrderMessage);
-               CenterMap;
+               if GameSettings.AutoCenter then
+                  CenterMap;
+               end if;
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             when Key_Backspace => -- Delete last searching character
