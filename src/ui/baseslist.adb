@@ -490,6 +490,7 @@ package body BasesList is
                   To_String(SkyBases(BaseIndex).Name) &
                   " as a destination for your ship.",
                   OrderMessage);
+               CenterMap;
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             when Key_Backspace => -- Delete last searching character
