@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -29,7 +29,8 @@ package body Config is
         (PlayerName => To_Unbounded_String("Laeran"),
          PlayerGender => 'M',
          ShipName => To_Unbounded_String("Anaria"));
-      GameSettings := (AutoRest => True, UndockSpeed => QUARTER_SPEED);
+      GameSettings :=
+        (AutoRest => True, UndockSpeed => QUARTER_SPEED, AutoCenter => True);
       if not Exists("data/game.cfg") then
          return;
       end if;
@@ -54,6 +55,12 @@ package body Config is
                end if;
             elsif FieldName = To_Unbounded_String("UndockSpeed") then
                GameSettings.UndockSpeed := ShipSpeed'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("AutoCenter") then
+               if Value = To_Unbounded_String("Yes") then
+                  GameSettings.AutoCenter := True;
+               else
+                  GameSettings.AutoCenter := False;
+               end if;
             end if;
          end if;
       end loop;
@@ -79,6 +86,11 @@ package body Config is
       Put_Line
         (ConfigFile,
          "UndockSpeed = " & ShipSpeed'Image(GameSettings.UndockSpeed));
+      if GameSettings.AutoCenter then
+         Put_Line(ConfigFile, "AutoCenter = Yes");
+      else
+         Put_Line(ConfigFile, "AutoCenter = No");
+      end if;
       Close(ConfigFile);
    end SaveConfig;
 

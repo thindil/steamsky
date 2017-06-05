@@ -24,6 +24,7 @@ with Messages; use Messages;
 with UserInterface; use UserInterface;
 with Bases; use Bases;
 with Items; use Items;
+with Config; use Config;
 
 package body Events.UI is
 
@@ -196,7 +197,9 @@ package body Events.UI is
                AddMessage
                  ("You set travel destination for your ship.",
                   OrderMessage);
-               CenterMap;
+               if GameSettings.AutoCenter then
+                  CenterMap;
+               end if;
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             when others =>
