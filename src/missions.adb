@@ -465,6 +465,9 @@ package body Missions is
             Append(MessageText, "'Explore selected area'.");
       end case;
       AddMessage(To_String(MessageText), MissionMessage);
+      PlayerShip.DestinationX := SkyBases(Mission.StartBase).SkyX;
+      PlayerShip.DestinationY := SkyBases(Mission.StartBase).SkyY;
+      AddMessage("You set travel destination for your ship.", OrderMessage);
    end UpdateMission;
 
 end Missions;
