@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Searching for ammunition during combat for enemy ships
+
 ## [1.0.3] - 2017-06-04
 
 ### Changed
