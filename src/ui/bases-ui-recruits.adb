@@ -24,22 +24,34 @@ with Items; use Items;
 package body Bases.UI.Recruits is
 
    procedure ShowRecruitInfo is
-      InfoWindow: Window;
+      InfoWindow, ClearWindow: Window;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       RecruitIndex: constant Positive := Get_Index(Current(TradeMenu));
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
-      CurrentLine: Line_Position := 1;
+      CurrentLine: Line_Position := 3;
       SkillLevel: Unbounded_String;
+      WindowWidth: Line_Position;
+      MoneyIndex2: Natural := 0;
    begin
-      InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
+      ClearWindow := Create((Lines - 1), (Columns / 2), 3, (Columns / 2));
+      Refresh(ClearWindow);
+      Delete(ClearWindow);
+      WindowWidth := 4 + Line_Position(Recruit.Skills.Length);
+      if WindowWidth > (Lines - 5) then
+         WindowWidth := Lines - 5;
+      end if;
+      InfoWindow := Create(WindowWidth, (Columns / 2), 3, (Columns / 2));
+      Box(InfoWindow);
+      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
+      Add(Win => InfoWindow, Str => "[Recruit info]");
+      Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       if Recruit.Gender = 'M' then
          Add(Win => InfoWindow, Str => "Male");
       else
          Add(Win => InfoWindow, Str => "Female");
       end if;
-      CurrentLine := CurrentLine + 1;
       for Skill of Recruit.Skills loop
          case Skill(2) is
             when 1 .. 10 =>
@@ -65,7 +77,7 @@ package body Bases.UI.Recruits is
             when others =>
                SkillLevel := To_Unbounded_String("Ultimate");
          end case;
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add
            (Win => InfoWindow,
             Str =>
@@ -74,22 +86,36 @@ package body Bases.UI.Recruits is
               To_String(SkillLevel));
          CurrentLine := CurrentLine + 1;
       end loop;
-      CurrentLine := CurrentLine + 1;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-      Add
-        (Win => InfoWindow,
-         Str =>
-           "Press ENTER to hire for" &
-           Positive'Image(Recruit.Price) &
-           " " &
-           To_String(MoneyName) &
-           ".");
-      Change_Attributes
-        (Win => InfoWindow,
-         Line => CurrentLine,
-         Column => 6,
-         Count => 5,
-         Color => 1);
+      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
+      Move_Cursor(Line => WindowWidth + 3, Column => (Columns / 2));
+      if MoneyIndex2 > 0 then
+         Add
+           (Str =>
+              "Press ENTER to hire for" &
+              Positive'Image(Recruit.Price) &
+              " " &
+              To_String(MoneyName) &
+              ".");
+         Change_Attributes
+           (Line => WindowWidth + 3,
+            Column => (Columns / 2) + 6,
+            Count => 5,
+            Color => 1);
+         Move_Cursor(Line => WindowWidth + 4, Column => (Columns / 2));
+         Add
+           (Str =>
+              "You have" &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
+              " " &
+              To_String(MoneyName) &
+              ".");
+      else
+         Add
+           (Str =>
+              "You don't have any " &
+              To_String(MoneyName) &
+              " to hire anyone.");
+      end if;
       Refresh;
       Refresh(InfoWindow);
       Delete(InfoWindow);
@@ -101,7 +127,6 @@ package body Bases.UI.Recruits is
       Recruits_Items: Item_Array_Access;
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
-      MoneyIndex2: Natural := 0;
    begin
       if SkyBases(BaseIndex).Recruits.Length = 0 then
          Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
@@ -134,23 +159,6 @@ package body Bases.UI.Recruits is
          CurrentMenuIndex := 1;
       end if;
       Set_Current(TradeMenu, Recruits_Items.all(CurrentMenuIndex));
-      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
-      Move_Cursor(Line => (MenuHeight + 4), Column => 2);
-      if MoneyIndex2 > 0 then
-         Add
-           (Str =>
-              "You have" &
-              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-              " " &
-              To_String(MoneyName) &
-              ".");
-      else
-         Add
-           (Str =>
-              "You don't have any " &
-              To_String(MoneyName) &
-              " to hire anyone.");
-      end if;
       ShowRecruitInfo;
       Refresh(MenuWindow);
    end ShowRecruits;
