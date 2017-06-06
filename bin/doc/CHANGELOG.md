@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Crash when asking for events in bases
 - Count max allowed amount when selling items
 - Changing workplace when manufacturing
+- Searching for ammunition during combat for enemy ship
 
 ## [1.2] - 2017-05-28
 
