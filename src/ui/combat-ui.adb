@@ -59,10 +59,6 @@ package body Combat.UI is
         Positive'Value(Description(Current(OrdersMenu)));
       OrderIndex: constant Positive := Get_Index(Current(OrdersMenu));
       ModuleIndex: Natural := 0;
-      procedure UpdateGun(Gun: in out GunsInfoArray) is
-      begin
-         Gun(2) := OrderIndex;
-      end UpdateGun;
    begin
       if Order = Pilot or Order = Engineer then
          MemberIndex := FindMember(Order);
@@ -95,10 +91,8 @@ package body Combat.UI is
                   To_String(EngineerOrders(EngineerOrder)),
                   CombatMessage);
             when Gunner =>
-               Guns.Update_Element
-               (Index =>
-                  Positive'Value(Description(Current(CrewMenu))), Process =>
-                  UpdateGun'Access);
+               Guns(Positive'Value(Description(Current(CrewMenu))))(2) :=
+                 OrderIndex;
                AddMessage
                  ("Order for " &
                   To_String(PlayerShip.Crew(MemberIndex).Name) &
@@ -109,11 +103,7 @@ package body Combat.UI is
                null;
          end case;
       else
-         UpdateModule
-           (PlayerShip,
-            ModuleIndex,
-            "Current_Value",
-            Positive'Image(abs (CrewIndex)));
+         PlayerShip.Modules(ModuleIndex).Current_Value := abs (CrewIndex);
          AddMessage
            ("You assigned " &
             To_String
@@ -137,7 +127,7 @@ package body Combat.UI is
       MenuOptions: Menu_Option_Set;
       EnemyStatus: Unbounded_String;
       EnemyInfo, DamageInfo: Window;
-      ShipDamaged: Boolean;
+      ShipDamaged: Boolean := False;
       WindowHeight: Line_Position := 2;
       WindowWidth: Column_Position := 17;
    begin
