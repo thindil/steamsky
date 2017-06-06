@@ -714,7 +714,6 @@ package body Combat is
                               exit;
                            end if;
                         end loop;
-                        exit;
                      end if;
                   end loop;
                end if;
