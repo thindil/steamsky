@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Count max allowed amount when selling items
 - Changing workplace when manufacturing
 - Searching for ammunition during combat for enemy ship
+- User interface for buying recipes in bases
 
 ## [1.2] - 2017-05-28
 
