@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
 - Info about amount of destroyed ships to game statistics
 - Auto center map after set destination for player ship (and option to enable
   or disable it)
-- Auto set skybase as player ship destination after finished mission
+- Auto set skybase as player ship destination after finished mission (and
+  option to enable or disable it)
 
 ### Changed
 - Updated interface
