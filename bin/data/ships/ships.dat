@@ -767,4 +767,14 @@ Perception = 5..15
 Cargo = 900..1000x1, 450..500x23, 90..100x21
 Description = Armored, very aggresive, upgraded version of clockwork drone.
 Owner = Drones
+[75]
+Name = Small inquisition ship mk III
+Modules = 90, 92, 93, 93, 93, 93, 94, 96, 96, 98
+CombatAI = Attacker
+Loot = 15..150
+Cargo = 1000..2000x1, 30..100x2, 150..200x3, 20..100x21
+Skills = 1x3..7, 5x3..7
+Orders = Pilot
+Description = Small flying vessel of inquisition (upgraded version), dangerous at close range.
+Owner = Inquisition
 []
