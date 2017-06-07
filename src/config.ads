@@ -31,6 +31,7 @@ package Config is
       AutoRest: Boolean; -- If true, rest when pilot/engineer need rest
       UndockSpeed: ShipSpeed; -- Default player ship speed after undock
       AutoCenter: Boolean; -- If true, back to ship after sets destination for it
+      AutoReturn: Boolean; -- If true, set base as destination for ship after finished mission
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;

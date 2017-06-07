@@ -30,7 +30,10 @@ package body Config is
          PlayerGender => 'M',
          ShipName => To_Unbounded_String("Anaria"));
       GameSettings :=
-        (AutoRest => True, UndockSpeed => QUARTER_SPEED, AutoCenter => True);
+        (AutoRest => True,
+         UndockSpeed => QUARTER_SPEED,
+         AutoCenter => True,
+         AutoReturn => True);
       if not Exists("data/game.cfg") then
          return;
       end if;
@@ -61,6 +64,12 @@ package body Config is
                else
                   GameSettings.AutoCenter := False;
                end if;
+            elsif FieldName = To_Unbounded_String("AutoReturn") then
+               if Value = To_Unbounded_String("Yes") then
+                  GameSettings.AutoReturn := True;
+               else
+                  GameSettings.AutoReturn := False;
+               end if;
             end if;
          end if;
       end loop;
@@ -90,6 +99,11 @@ package body Config is
          Put_Line(ConfigFile, "AutoCenter = Yes");
       else
          Put_Line(ConfigFile, "AutoCenter = No");
+      end if;
+      if GameSettings.AutoReturn then
+         Put_Line(ConfigFile, "AutoReturn = Yes");
+      else
+         Put_Line(ConfigFile, "AutoReturn = No");
       end if;
       Close(ConfigFile);
    end SaveConfig;

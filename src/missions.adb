@@ -31,6 +31,7 @@ with Statistics; use Statistics;
 with Game; use Game;
 with Utils; use Utils;
 with ShipModules; use ShipModules;
+with Config; use Config;
 
 package body Missions is
 
@@ -465,9 +466,11 @@ package body Missions is
             Append(MessageText, "'Explore selected area'.");
       end case;
       AddMessage(To_String(MessageText), MissionMessage);
-      PlayerShip.DestinationX := SkyBases(Mission.StartBase).SkyX;
-      PlayerShip.DestinationY := SkyBases(Mission.StartBase).SkyY;
-      AddMessage("You set travel destination for your ship.", OrderMessage);
+      if GameSettings.AutoReturn then
+         PlayerShip.DestinationX := SkyBases(Mission.StartBase).SkyX;
+         PlayerShip.DestinationY := SkyBases(Mission.StartBase).SkyY;
+         AddMessage("You set travel destination for your ship.", OrderMessage);
+      end if;
    end UpdateMission;
 
 end Missions;
