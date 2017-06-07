@@ -92,6 +92,10 @@ package body Bases.UI.Recipes is
          end if;
       end loop;
       if MenuAmount = 0 then
+         if TradeMenu /= Null_Menu then
+            Post(TradeMenu, False);
+            Delete(TradeMenu);
+         end if;
          Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
          Add(Str => "You bought all available crafting recipes in this base.");
          Refresh;
@@ -140,43 +144,55 @@ package body Bases.UI.Recipes is
       Result: Menus.Driver_Result;
       RecipeIndex: Positive;
    begin
-      case Key is
-         when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
-            CurrentMenuIndex := 1;
-            DrawGame(Sky_Map_View);
-            return Sky_Map_View;
-         when 56 | KEY_UP => -- Select previous recipe to buy
-            Result := Driver(TradeMenu, M_Up_Item);
-            if Result = Request_Denied then
-               Result := Driver(TradeMenu, M_Last_Item);
-            end if;
-         when 50 | KEY_DOWN => -- Select next recipe to buy
-            Result := Driver(TradeMenu, M_Down_Item);
-            if Result = Request_Denied then
-               Result := Driver(TradeMenu, M_First_Item);
-            end if;
-         when 10 => -- Buy recipe
-            for I in Recipes_List.First_Index .. Recipes_List.Last_Index loop
-               if To_String
-                   (Items_List.Element(Recipes_List.Element(I).ResultIndex)
-                      .Name) =
-                 Name(Current(TradeMenu)) then
-                  RecipeIndex := I;
-                  exit;
+      if TradeMenu /= Null_Menu then
+         case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+               CurrentMenuIndex := 1;
+               DrawGame(Sky_Map_View);
+               return Sky_Map_View;
+            when 56 | KEY_UP => -- Select previous recipe to buy
+               Result := Driver(TradeMenu, M_Up_Item);
+               if Result = Request_Denied then
+                  Result := Driver(TradeMenu, M_Last_Item);
                end if;
-            end loop;
-            BuyRecipe(RecipeIndex);
-            DrawGame(TradeRecipes_View);
-         when others =>
-            Result := Driver(TradeMenu, Key);
-            if Result /= Menu_Ok then
-               Result := Driver(TradeMenu, M_Clear_Pattern);
+            when 50 | KEY_DOWN => -- Select next recipe to buy
+               Result := Driver(TradeMenu, M_Down_Item);
+               if Result = Request_Denied then
+                  Result := Driver(TradeMenu, M_First_Item);
+               end if;
+            when 10 => -- Buy recipe
+               for I in
+                 Recipes_List.First_Index .. Recipes_List.Last_Index loop
+                  if To_String
+                      (Items_List.Element(Recipes_List.Element(I).ResultIndex)
+                         .Name) =
+                    Name(Current(TradeMenu)) then
+                     RecipeIndex := I;
+                     exit;
+                  end if;
+               end loop;
+               BuyRecipe(RecipeIndex);
+               DrawGame(TradeRecipes_View);
+               return TradeRecipes_View;
+            when others =>
                Result := Driver(TradeMenu, Key);
-            end if;
-      end case;
-      if Result = Menu_Ok then
-         ShowRecipeInfo;
-         Refresh(MenuWindow);
+               if Result /= Menu_Ok then
+                  Result := Driver(TradeMenu, M_Clear_Pattern);
+                  Result := Driver(TradeMenu, Key);
+               end if;
+         end case;
+         if Result = Menu_Ok then
+            ShowRecipeInfo;
+            Refresh(MenuWindow);
+         end if;
+      else
+         case Key is
+            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+               DrawGame(Sky_Map_View);
+               return Sky_Map_View;
+            when others =>
+               null;
+         end case;
       end if;
       return TradeRecipes_View;
    end TradeRecipesKeys;
