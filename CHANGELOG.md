@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Searching for ammunition during combat for enemy ships
+- User interface for buying recipes in bases
 
 ## [1.0.3] - 2017-06-04
 
