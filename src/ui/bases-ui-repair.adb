@@ -75,26 +75,35 @@ package body Bases.UI.Repair is
 
    procedure ShowRepairInfo is
       Cost, Time, ModuleIndex: Natural := 0;
-      InfoWindow: Window;
+      InfoWindow, ClearWindow: Window;
+      CostInfo, TimeInfo: Unbounded_String;
+      WindowWidth: Column_Position;
    begin
+      ClearWindow := Create(4, (Columns / 2), 3, (Columns / 2));
+      Refresh(ClearWindow);
+      Delete(ClearWindow);
       RepairCost(Cost, Time, ModuleIndex);
-      InfoWindow := Create(5, (Columns / 2), 3, (Columns / 2));
-      Add
-        (Win => InfoWindow,
-         Str =>
-           "Repair cost:" & Natural'Image(Cost) & " " & To_String(MoneyName));
-      Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
-      Add
-        (Win => InfoWindow,
-         Str => "Repair time:" & Natural'Image(Time) & " minutes");
-      Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
-      Add(Win => InfoWindow, Str => "Press Enter to start repairing");
-      Change_Attributes
-        (Win => InfoWindow,
-         Line => 3,
-         Column => 6,
-         Count => 5,
-         Color => 1);
+      CostInfo :=
+        To_Unbounded_String
+          ("Repair cost:" & Natural'Image(Cost) & " " & To_String(MoneyName));
+      TimeInfo :=
+        To_Unbounded_String("Repair time:" & Natural'Image(Time) & " minutes");
+      if Length(CostInfo) > Length(TimeInfo) then
+         WindowWidth := Column_Position(Length(CostInfo)) + 4;
+      else
+         WindowWidth := Column_Position(Length(TimeInfo)) + 4;
+      end if;
+      if WindowWidth > Columns / 2 then
+         WindowWidth := Columns / 2;
+      end if;
+      InfoWindow := Create(4, WindowWidth, 3, (Columns / 2));
+      Box(InfoWindow);
+      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
+      Add(Win => InfoWindow, Str => "[Info]");
+      Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
+      Add(Win => InfoWindow, Str => To_String(CostInfo));
+      Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
+      Add(Win => InfoWindow, Str => To_String(TimeInfo));
       Refresh;
       Refresh(InfoWindow);
       Delete(InfoWindow);
@@ -163,7 +172,7 @@ package body Bases.UI.Repair is
       end if;
       Set_Current(TradeMenu, Repair_Items.all(CurrentMenuIndex));
       MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
-      Move_Cursor(Line => (MenuHeight + 4), Column => 2);
+      Move_Cursor(Line => 7, Column => (Columns / 2));
       if MoneyIndex2 > 0 then
          Add
            (Str =>
@@ -179,6 +188,13 @@ package body Bases.UI.Repair is
               To_String(MoneyName) &
               " to repair anything.");
       end if;
+      Move_Cursor(Line => 8, Column => (Columns / 2));
+      Add(Str => "Press Enter to start repairing");
+      Change_Attributes
+        (Line => 8,
+         Column => (Columns / 2) + 6,
+         Count => 5,
+         Color => 1);
       ShowRepairInfo;
       Refresh(MenuWindow);
    end ShowRepair;
