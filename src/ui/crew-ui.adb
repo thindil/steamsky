@@ -730,10 +730,6 @@ package body Crew.UI is
       Result: Driver_Result;
       OptionIndex: Positive := PriorityIndex;
       NewPriority: Integer := -1;
-      procedure UpdatePriorities(Member: in out Member_Data) is
-      begin
-         Member.Orders(OptionIndex) := NewPriority;
-      end UpdatePriorities;
    begin
       case Key is
          when 56 | KEY_UP => -- Select previous order
@@ -759,33 +755,28 @@ package body Crew.UI is
               PlayerShip.Crew(MemberIndex).Orders(OptionIndex) - 1;
             if NewPriority > -1 then
                DrawGame(Crew_Info);
-               PlayerShip.Crew.Update_Element
-               (Index => MemberIndex, Process => UpdatePriorities'Access);
+               PlayerShip.Crew(MemberIndex).Orders(OptionIndex) := NewPriority;
             end if;
          when 54 | KEY_RIGHT => -- Set higher priority
             NewPriority :=
               PlayerShip.Crew(MemberIndex).Orders(OptionIndex) + 1;
             if NewPriority = 1 then
                DrawGame(Crew_Info);
-               PlayerShip.Crew.Update_Element
-               (Index => MemberIndex, Process => UpdatePriorities'Access);
+               PlayerShip.Crew(MemberIndex).Orders(OptionIndex) := NewPriority;
             elsif NewPriority = 2 then
                DrawGame(Crew_Info);
                for I in PlayerShip.Crew.Element(MemberIndex).Orders'Range loop
                   if PlayerShip.Crew(MemberIndex).Orders(I) = 2 then
                      NewPriority := 1;
                      OptionIndex := I;
-                     PlayerShip.Crew.Update_Element
-                     (Index =>
-                        MemberIndex, Process =>
-                        UpdatePriorities'Access);
+                     PlayerShip.Crew(MemberIndex).Orders(OptionIndex) :=
+                       NewPriority;
                      exit;
                   end if;
                end loop;
                NewPriority := 2;
                OptionIndex := Get_Index(Current(PrioritiesMenu));
-               PlayerShip.Crew.Update_Element
-               (Index => MemberIndex, Process => UpdatePriorities'Access);
+               PlayerShip.Crew(MemberIndex).Orders(OptionIndex) := NewPriority;
             else
                NewPriority := -1;
             end if;
