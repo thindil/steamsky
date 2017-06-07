@@ -361,9 +361,8 @@ package body Ships is
                      (New_Item =>
                         (Integer'Value(Slice(Value, XIndex + 1, EndIndex - 1)),
                          Integer'Value(Slice(Value, StartIndex, DotIndex - 1)),
-                         Integer'
-                           Value
-                             (Slice(Value, DotIndex + 2, XIndex - 1))));
+                         Integer'Value
+                           (Slice(Value, DotIndex + 2, XIndex - 1))));
                   end if;
                   StartIndex := EndIndex + 2;
                end loop;
@@ -391,31 +390,23 @@ package body Ships is
                      if DotIndex = 0 or DotIndex > EndIndex2 then
                         TempSkills.Append
                         (New_Item =>
-                           (Integer'
-                              Value
-                                (Slice(SkillsValue, StartIndex2, XIndex - 1)),
-                            Integer'
-                              Value
-                                (Slice
-                                   (SkillsValue,
-                                    XIndex + 1,
-                                    EndIndex2 - 1)),
+                           (Integer'Value
+                              (Slice(SkillsValue, StartIndex2, XIndex - 1)),
+                            Integer'Value
+                              (Slice(SkillsValue, XIndex + 1, EndIndex2 - 1)),
                             0));
                      else
                         TempSkills.Append
                         (New_Item =>
-                           (Integer'
-                              Value
-                                (Slice(SkillsValue, StartIndex2, XIndex - 1)),
-                            Integer'
-                              Value
-                                (Slice(SkillsValue, XIndex + 1, DotIndex - 1)),
-                            Integer'
-                              Value
-                                (Slice
-                                   (SkillsValue,
-                                    DotIndex + 2,
-                                    EndIndex2 - 1))));
+                           (Integer'Value
+                              (Slice(SkillsValue, StartIndex2, XIndex - 1)),
+                            Integer'Value
+                              (Slice(SkillsValue, XIndex + 1, DotIndex - 1)),
+                            Integer'Value
+                              (Slice
+                                 (SkillsValue,
+                                  DotIndex + 2,
+                                  EndIndex2 - 1))));
                      end if;
                      StartIndex2 := EndIndex2 + 2;
                   end loop;
@@ -739,22 +730,20 @@ package body Ships is
             for I in 1 .. LettersAmount loop
                Append
                  (NewName,
-                  Letters'
-                    Val
-                      (GetRandom
-                         (Letters'Pos(Letters'First),
-                          Letters'Pos(Letters'Last))));
+                  Letters'Val
+                    (GetRandom
+                       (Letters'Pos(Letters'First),
+                        Letters'Pos(Letters'Last))));
             end loop;
             Append(NewName, '-');
             NumbersAmount := GetRandom(2, 4);
             for I in 1 .. NumbersAmount loop
                Append
                  (NewName,
-                  Numbers'
-                    Val
-                      (GetRandom
-                         (Numbers'Pos(Numbers'First),
-                          Numbers'Pos(Numbers'Last))));
+                  Numbers'Val
+                    (GetRandom
+                       (Numbers'Pos(Numbers'First),
+                        Numbers'Pos(Numbers'Last))));
             end loop;
          when others =>
             null;
