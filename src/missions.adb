@@ -32,6 +32,7 @@ with Game; use Game;
 with Utils; use Utils;
 with ShipModules; use ShipModules;
 with Config; use Config;
+with Events; use Events;
 
 package body Missions is
 
@@ -472,5 +473,34 @@ package body Missions is
          AddMessage("You set travel destination for your ship.", OrderMessage);
       end if;
    end UpdateMission;
+
+   procedure AutoFinishMissions is
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      if BaseIndex = 0 then
+         return;
+      end if;
+      if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+         if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+             .EType /=
+           DoublePrice then
+            return;
+         end if;
+      end if;
+      if FindMember(Talk) = 0 then
+         return;
+      end if;
+      for I in
+        PlayerShip.Missions.First_Index .. PlayerShip.Missions.Last_Index loop
+         if
+           (PlayerShip.Missions(I).Finished and
+            PlayerShip.Missions(I).StartBase = BaseIndex) or
+           (PlayerShip.Missions(I).TargetX = PlayerShip.SkyX and
+            PlayerShip.Missions(I).TargetY = PlayerShip.SkyY) then
+            FinishMission(I);
+         end if;
+      end loop;
+   end AutoFinishMissions;
 
 end Missions;

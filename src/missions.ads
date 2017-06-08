@@ -43,5 +43,6 @@ package Missions is
      (MissionIndex: Positive;
       Failed: Boolean := True); -- Delete selected mission
    procedure UpdateMission(MissionIndex: Positive); -- Update status of mission
+   procedure AutoFinishMissions; -- Finish all possible missions
 
 end Missions;
