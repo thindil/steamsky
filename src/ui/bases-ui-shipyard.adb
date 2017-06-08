@@ -49,7 +49,7 @@ package body Bases.UI.Shipyard is
    procedure ShowModuleInfo is
       ModuleIndex: constant Positive :=
         Positive'Value(Description(Current(TradeMenu)));
-      InfoWindow: Window;
+      InfoWindow, BoxWindow: Window;
       TextCost, TextTime: Unbounded_String;
       CurrentLine: Line_Position := 3;
       Cost, MTime: Positive;
@@ -82,7 +82,11 @@ package body Bases.UI.Shipyard is
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
              .InstallTime;
       end if;
-      InfoWindow := Create(15, (Columns / 2), 4, (Columns / 2));
+      BoxWindow := Create(15, (Columns / 2), 4, (Columns / 2));
+      Box(BoxWindow);
+      Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
+      Add(Win => BoxWindow, Str => "[Module info]");
+      InfoWindow := Create(13, (Columns / 2) - 2, 5, (Columns / 2) + 1);
       Add
         (Win => InfoWindow,
          Str =>
@@ -212,15 +216,6 @@ package body Bases.UI.Shipyard is
                Line => CurrentLine,
                Column => StartColumn);
          end if;
-         CurrentLine := CurrentLine + 2;
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-         Add(Win => InfoWindow, Str => "Press ENTER to install module");
-         Change_Attributes
-           (Win => InfoWindow,
-            Line => CurrentLine,
-            Column => 6,
-            Count => 5,
-            Color => 1);
       else
          case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
             when ENGINE =>
@@ -311,22 +306,11 @@ package body Bases.UI.Shipyard is
                  To_String
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .Description));
-            Get_Cursor_Position
-              (Win => InfoWindow,
-               Line => CurrentLine,
-               Column => StartColumn);
-            CurrentLine := CurrentLine + 2;
          end if;
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-         Add(Win => InfoWindow, Str => "Press ENTER to remove module");
-         Change_Attributes
-           (Win => InfoWindow,
-            Line => CurrentLine,
-            Column => 6,
-            Count => 5,
-            Color => 1);
       end if;
       Refresh;
+      Refresh(BoxWindow);
+      Delete(BoxWindow);
       Refresh(InfoWindow);
       Delete(InfoWindow);
    end ShowModuleInfo;
@@ -338,6 +322,7 @@ package body Bases.UI.Shipyard is
       MenuIndex: Integer := 1;
       MenuOptions: Menu_Option_Set;
       MoneyIndex2: Natural;
+      ActionWindow: Window;
       procedure AddMenuItems(MType: ModuleType) is
       begin
          for I in Modules_List.Iterate loop
@@ -397,7 +382,7 @@ package body Bases.UI.Shipyard is
       MenuOptions := Get_Options(TradeMenu);
       MenuOptions.Show_Descriptions := False;
       Set_Options(TradeMenu, MenuOptions);
-      Set_Format(TradeMenu, Lines - 7, 1);
+      Set_Format(TradeMenu, Lines - 4, 1);
       Set_Mark(TradeMenu, "");
       Scale(TradeMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 4, 2);
@@ -413,11 +398,24 @@ package body Bases.UI.Shipyard is
          CurrentMenuIndex := 1;
       end if;
       Set_Current(TradeMenu, Modules_Items.all(CurrentMenuIndex));
+      ActionWindow := Create(4, (Columns / 2), 19, (Columns / 2));
+      if InstallView then
+         Add(Win => ActionWindow, Str => "Press ENTER to install module.");
+      else
+         Add(Win => ActionWindow, Str => "Press ENTER to remove module.");
+      end if;
+      Change_Attributes
+        (Win => ActionWindow,
+         Line => 0,
+         Column => 6,
+         Count => 5,
+         Color => 1);
       MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
-      Move_Cursor(Line => (MenuHeight + 5), Column => 2);
+      Move_Cursor(Win => ActionWindow, Line => 1, Column => 0);
       if MoneyIndex2 > 0 then
          Add
-           (Str =>
+           (Win => ActionWindow,
+            Str =>
               "You have" &
               Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
               " " &
@@ -425,16 +423,18 @@ package body Bases.UI.Shipyard is
               ".");
       elsif InstallView then
          Add
-           (Str =>
+           (Win => ActionWindow,
+            Str =>
               "You don't have any " &
               To_String(MoneyName) &
               " to install anything.");
       end if;
-      Move_Cursor(Line => (MenuHeight + 6), Column => 2);
+      Move_Cursor(Win => ActionWindow, Line => 2, Column => 0);
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = HULL then
             Add
-              (Str =>
+              (Win => ActionWindow,
+               Str =>
                  "You have used" &
                  Natural'Image(Module.Current_Value) &
                  " modules space from max" &
@@ -444,6 +444,8 @@ package body Bases.UI.Shipyard is
          end if;
       end loop;
       ShowModuleInfo;
+      Refresh(ActionWindow);
+      Delete(ActionWindow);
       Refresh(MenuWindow);
    end ShowShipyard;
 
