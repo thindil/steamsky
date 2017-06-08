@@ -92,6 +92,10 @@ package body Ships.UI is
       FieldIndex: constant Positive := Get_Index(Current(RenameForm));
       NewName: Unbounded_String;
       SemicolonIndex: Natural;
+      procedure UpdateName(Module: in out ModuleData) is
+      begin
+         Module.Name := NewName;
+      end UpdateName;
    begin
       if FieldIndex < 3 then
          return CurrentState;
@@ -107,11 +111,8 @@ package body Ships.UI is
                SemicolonIndex := Index(NewName, ";");
             end loop;
             if CurrentState = Rename_Module then
-               UpdateModule
-                 (PlayerShip,
-                  ModuleIndex,
-                  "Name",
-                  To_String(NewName));
+               PlayerShip.Modules.Update_Element
+               (Index => ModuleIndex, Process => UpdateName'Access);
             else
                PlayerShip.Name := NewName;
             end if;
