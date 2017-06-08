@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
   or disable it)
 - Auto set skybase as player ship destination after finished mission (and
   option to enable or disable it)
+- Auto finish missions when player ship is near corresponding skybase
 
 ### Changed
 - Updated interface
