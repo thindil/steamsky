@@ -404,7 +404,8 @@ package body Bases.UI.Trade is
 
    function TradeResult return GameStates is
       ItemIndex: Positive;
-      CargoIndex: Natural := 0;
+      CargoIndex: constant Natural :=
+        Integer'Value(Description(Current(TradeMenu)));
       Visibility: Cursor_Visibility := Invisible;
       FieldIndex: constant Positive := Get_Index(Current(TradeForm));
    begin
@@ -418,12 +419,6 @@ package body Bases.UI.Trade is
             end if;
          end loop;
          if not Buy then
-            for I in PlayerShip.Cargo.Iterate loop
-               if PlayerShip.Cargo(I).ProtoIndex = ItemIndex then
-                  CargoIndex := Cargo_Container.To_Index(I);
-                  exit;
-               end if;
-            end loop;
             if FieldIndex = 4 then
                SellItems(CargoIndex, Get_Buffer(Fields(TradeForm, 2)));
             else
