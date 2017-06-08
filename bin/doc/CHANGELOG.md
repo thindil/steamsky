@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Changing workplace when manufacturing
 - Searching for ammunition during combat for enemy ship
 - User interface for buying recipes in bases
+- Selling items in bases when more than one of that item type is in cargo
 
 ## [1.2] - 2017-05-28
 
