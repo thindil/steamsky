@@ -53,6 +53,7 @@ with MainMenu; use MainMenu;
 with BasesList; use BasesList;
 with Config; use Config;
 with Statistics.UI; use Statistics.UI;
+with Missions; use Missions;
 with Missions.UI; use Missions.UI;
 with Log; use Log;
 with GameOptions; use GameOptions;
@@ -168,6 +169,9 @@ begin
                   GameState := GameMenuKeys(GameState, Key);
                when 1 =>
                   GameState := CheckForEvent(GameState);
+                  if GameState = Sky_Map_View then
+                     AutoFinishMissions;
+                  end if;
                   DrawGame(GameState);
                when 2 =>
                   GameState := Control_Speed;
@@ -189,6 +193,9 @@ begin
                   if GameState = Sky_Map_View then
                      WaitForRest;
                      GameState := CheckForEvent(GameState);
+                  end if;
+                  if GameState = Sky_Map_View then
+                     AutoFinishMissions;
                   end if;
                   DrawGame(GameState);
                when others =>
