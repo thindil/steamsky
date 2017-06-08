@@ -509,6 +509,7 @@ package body Maps.UI is
                      OrderMessage);
                   PlayerShip.DestinationX := 0;
                   PlayerShip.DestinationY := 0;
+                  AutoFinishMissions;
                   return 4;
                end if;
             end if;
@@ -549,6 +550,7 @@ package body Maps.UI is
                      OrderMessage);
                   PlayerShip.DestinationX := 0;
                   PlayerShip.DestinationY := 0;
+                  AutoFinishMissions;
                   return 4;
                end if;
                exit when Result = 6 or Result = 7;
