@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file.
 - New enemy ships: small pirates ship mk III, small undead ship mk III, small
   clockwork drone mk III, pirate ship mk III, armored pirate ship mk III, small
   attackig drone mk III, attacking clockwork drone mk III, armored attacking
-  drone mk III, small inquisition ship mk III and inquisition ship mk III
+  drone mk III, small inquisition ship mk III, inquisition ship mk III and
+  armored inquisition ship mk III
 - Info about amount of destroyed ships to game statistics
 - Auto center map after set destination for player ship (and option to enable
   or disable it)
