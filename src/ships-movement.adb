@@ -187,6 +187,7 @@ package body Ships.Movement is
       MoneyIndex2: constant Natural := FindCargo(ProtoMoneyIndex);
       DockingCost: Positive;
       TraderIndex: Natural := 0;
+      FuelIndex: constant Natural := FindCargo(ItemType => FuelType);
    begin
       if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
          ShowDialog("Here no base to dock or undock.");
@@ -281,6 +282,11 @@ package body Ships.Movement is
          PlayerShip.Speed := DOCKED;
          UpdateGame(10);
       else
+         if FuelIndex = 0 then
+            ShowDialog
+              ("You can't undock from base because you don't have any fuel.");
+            return;
+         end if;
          PlayerShip.Speed := GameSettings.UndockSpeed;
          AddMessage
            ("Ship undocked from base " & To_String(SkyBases(BaseIndex).Name),
