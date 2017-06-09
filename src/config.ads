@@ -32,6 +32,7 @@ package Config is
       UndockSpeed: ShipSpeed; -- Default player ship speed after undock
       AutoCenter: Boolean; -- If true, back to ship after sets destination for it
       AutoReturn: Boolean; -- If true, set base as destination for ship after finished mission
+      AutoFinish: Boolean; -- If true, complete mission if ship is near corresponding base
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;

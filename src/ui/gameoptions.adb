@@ -30,13 +30,14 @@ package body GameOptions is
    FormWindow: Window;
 
    procedure ShowOptions is
-      Options_Fields: constant Field_Array_Access := new Field_Array(1 .. 10);
+      Options_Fields: constant Field_Array_Access := new Field_Array(1 .. 12);
       FormHeight: Line_Position;
       FormLength: Column_Position;
       FieldOptions: Field_Option_Set;
       YesNo,
       YesNo2,
-      YesNo3: constant Enumeration_Info :=
+      YesNo3,
+      YesNo4: constant Enumeration_Info :=
         (C => 2,
          Names => (new String'("Yes ->"), new String'("No ->")),
          Case_Sensitive => False,
@@ -115,15 +116,26 @@ package body GameOptions is
       FieldOptions := Get_Options(Options_Fields.all(8));
       FieldOptions.Edit := False;
       Set_Options(Options_Fields.all(8), FieldOptions);
-      Options_Fields.all(9) := New_Field(6, Columns, 5, 0, 0, 0);
+      CreateLabel(4, "Auto finish missions: ");
+      Options_Fields.all(10) := New_Field(1, 6, 4, ((Columns / 2) + 1), 0, 0);
+      Set_Field_Type(Options_Fields.all(10), Create(YesNo4, True));
+      if GameSettings.AutoFinish then
+         Set_Buffer(Options_Fields.all(10), 0, "Yes ->");
+      else
+         Set_Buffer(Options_Fields.all(10), 0, "No ->");
+      end if;
+      FieldOptions := Get_Options(Options_Fields.all(10));
+      FieldOptions.Edit := False;
+      Set_Options(Options_Fields.all(10), FieldOptions);
+      Options_Fields.all(11) := New_Field(6, Columns, 7, 0, 0, 0);
       Set_Buffer
-        (Options_Fields.all(9),
+        (Options_Fields.all(11),
          0,
          "Wait for crew is rested when pilot or engineer are too tired to work.");
-      FieldOptions := Get_Options(Options_Fields.all(9));
+      FieldOptions := Get_Options(Options_Fields.all(11));
       FieldOptions.Active := False;
-      Set_Options(Options_Fields.all(9), FieldOptions);
-      Options_Fields.all(10) := Null_Field;
+      Set_Options(Options_Fields.all(11), FieldOptions);
+      Options_Fields.all(12) := Null_Field;
       OptionsForm := New_Form(Options_Fields);
       Set_Options(OptionsForm, (others => False));
       Scale(OptionsForm, FormHeight, FormLength);
@@ -143,9 +155,9 @@ package body GameOptions is
       FieldValue: Unbounded_String;
       procedure SetDescription(Description: String; Field: Positive) is
          FieldsNumbers: constant array(Positive range <>) of Positive :=
-           (2, 4, 6, 8);
+           (2, 4, 6, 8, 10);
       begin
-         Set_Buffer(Fields(OptionsForm, 9), 0, Description);
+         Set_Buffer(Fields(OptionsForm, 11), 0, Description);
          Set_Background
            (Current(OptionsForm),
             (Reverse_Video => True, others => False));
@@ -203,6 +215,13 @@ package body GameOptions is
             else
                GameSettings.AutoReturn := False;
             end if;
+            FieldValue :=
+              To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 10)));
+            if FieldValue = To_Unbounded_String("Yes ->") then
+               GameSettings.AutoFinish := True;
+            else
+               GameSettings.AutoFinish := False;
+            end if;
             SaveConfig;
             Post(OptionsForm, False);
             Delete(OptionsForm);
@@ -233,6 +252,10 @@ package body GameOptions is
                SetDescription
                  ("After finished mission, set skybase from which mission was taken as a destination for ship.",
                   8);
+            when 10 =>
+               SetDescription
+                 ("Auto finish missions when ship is near corresponding skybase.",
+                  10);
             when others =>
                null;
          end case;
