@@ -1037,11 +1037,7 @@ package body Ships.UI.Ship is
                            PlayerShip.Modules(I).Owner := 0;
                         end if;
                      end loop;
-                     UpdateModule
-                       (PlayerShip,
-                        CurrentMenuIndex,
-                        "Owner",
-                        Positive'Image(OptionIndex));
+                     PlayerShip.Modules(CurrentMenuIndex).Owner := OptionIndex;
                      AddMessage
                        ("You assigned " &
                         ModuleName &
@@ -1094,11 +1090,8 @@ package body Ships.UI.Ship is
          when 10 => -- Select new ammo for gun
             Post(OptionsMenu, False);
             if OptionIndex /= 0 then
-               UpdateModule
-                 (PlayerShip,
-                  CurrentMenuIndex,
-                  "Current_Value",
-                  Positive'Image(OptionIndex));
+               PlayerShip.Modules(CurrentMenuIndex).Current_Value :=
+                 OptionIndex;
                AddMessage
                  ("You assigned " &
                   To_String
