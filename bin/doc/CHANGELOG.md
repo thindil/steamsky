@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Amount of gained/lost reputation from finished missions
 - Updated MODDING.md
+- Ship require fuel to undock from base
 
 ### Fixed
 - Crash in empty list of missions
