@@ -169,7 +169,7 @@ begin
                   GameState := GameMenuKeys(GameState, Key);
                when 1 =>
                   GameState := CheckForEvent(GameState);
-                  if GameState = Sky_Map_View then
+                  if GameState = Sky_Map_View and GameSettings.AutoFinish then
                      AutoFinishMissions;
                   end if;
                   DrawGame(GameState);
@@ -194,7 +194,7 @@ begin
                      WaitForRest;
                      GameState := CheckForEvent(GameState);
                   end if;
-                  if GameState = Sky_Map_View then
+                  if GameState = Sky_Map_View and GameSettings.AutoFinish then
                      AutoFinishMissions;
                   end if;
                   DrawGame(GameState);
