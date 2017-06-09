@@ -33,7 +33,7 @@ package body Bases.UI.Trade is
 
    procedure ShowItemInfo is
       ItemIndex, Price: Positive;
-      InfoWindow: Window;
+      InfoWindow, ClearWindow, BoxWindow: Window;
       BaseType: constant Positive :=
         Bases_Types'Pos
           (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
@@ -46,14 +46,35 @@ package body Bases.UI.Trade is
       StartColumn: Column_Position;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+      WindowHeight: Line_Position := 8;
+      MoneyIndex2: Natural := 0;
+      FreeSpace: Integer;
    begin
+      ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
+      Refresh(ClearWindow);
+      Delete(ClearWindow);
       for I in Items_List.Iterate loop
          if To_String(Items_List(I).Name) = Name(Current(TradeMenu)) then
             ItemIndex := Objects_Container.To_Index(I);
             exit;
          end if;
       end loop;
-      InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
+      if CargoIndex > 0 then
+         WindowHeight := WindowHeight + 1;
+         if PlayerShip.Cargo(CargoIndex).Durability < 100 then
+            WindowHeight := WindowHeight + 1;
+         end if;
+      end if;
+      WindowHeight :=
+        WindowHeight +
+        Line_Position
+          ((Length(Items_List(ItemIndex).Description) / Natural(Columns / 2)));
+      BoxWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
+      Box(BoxWindow);
+      Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
+      Add(Win => BoxWindow, Str => "[Item info]");
+      InfoWindow :=
+        Create(WindowHeight - 2, (Columns / 2) - 4, 4, (Columns / 2) + 2);
       Add(Win => InfoWindow, Str => "Type: ");
       if Items_List(ItemIndex).ShowType = Null_Unbounded_String then
          Add(Win => InfoWindow, Str => To_String(Items_List(ItemIndex).IType));
@@ -119,43 +140,64 @@ package body Bases.UI.Trade is
            (Win => InfoWindow,
             Line => CurrentLine,
             Column => StartColumn);
-         CurrentLine := CurrentLine + 2;
       end if;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+      CurrentLine := WindowHeight + 4;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
       if Items_List(ItemIndex).Buyable(BaseType) and CargoIndex > 0 then
-         Add
-           (Win => InfoWindow,
-            Str => "ENTER to buy selected item, SPACE for sell.");
+         Add(Str => "Press ENTER to buy, SPACE for sell.");
          Change_Attributes
-           (Win => InfoWindow,
-            Line => CurrentLine,
-            Column => 0,
+           (Line => CurrentLine,
+            Column => (Columns / 2) + 6,
             Count => 5,
             Color => 1);
          Change_Attributes
-           (Win => InfoWindow,
-            Line => CurrentLine,
-            Column => 28,
+           (Line => CurrentLine,
+            Column => (Columns / 2) + 20,
             Count => 5,
             Color => 1);
       elsif Items_List(ItemIndex).Buyable(BaseType) and CargoIndex = 0 then
-         Add(Win => InfoWindow, Str => "ENTER to buy selected item.");
+         Add(Str => "Press ENTER to buy.");
          Change_Attributes
-           (Win => InfoWindow,
-            Line => CurrentLine,
-            Column => 0,
+           (Line => CurrentLine,
+            Column => (Columns / 2) + 6,
             Count => 5,
             Color => 1);
       elsif not Items_List(ItemIndex).Buyable(BaseType) and CargoIndex > 0 then
-         Add(Win => InfoWindow, Str => "SPACE for sell selected item.");
+         Add(Str => "Press SPACE for sell.");
          Change_Attributes
-           (Win => InfoWindow,
-            Line => CurrentLine,
-            Column => 0,
+           (Line => CurrentLine,
+            Column => (Columns / 2) + 6,
             Count => 5,
             Color => 1);
       end if;
+      CurrentLine := CurrentLine + 1;
+      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      if MoneyIndex2 > 0 then
+         Add
+           (Str =>
+              "You have" &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
+              " " &
+              To_String(MoneyName) &
+              ".");
+      else
+         Add
+           (Str =>
+              "You don't have any " &
+              To_String(MoneyName) &
+              " to buy anything.");
+      end if;
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      FreeSpace := FreeCargo(0);
+      if FreeSpace < 0 then
+         FreeSpace := 0;
+      end if;
+      Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
       Refresh;
+      Refresh(BoxWindow);
+      Delete(BoxWindow);
       Refresh(InfoWindow);
       Delete(InfoWindow);
    end ShowItemInfo;
@@ -169,9 +211,7 @@ package body Bases.UI.Trade is
         1;
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
-      MoneyIndex2: Natural := 0;
       MenuIndex: Integer := 1;
-      FreeSpace: Integer;
       ItemsAmount: Positive := 1;
       Added: Boolean;
    begin
@@ -226,7 +266,7 @@ package body Bases.UI.Trade is
       Trade_Items.all(MenuIndex) := Null_Item;
       TradeMenu := New_Menu(Trade_Items);
       Set_Options(TradeMenu, (Show_Descriptions => False, others => True));
-      Set_Format(TradeMenu, Lines - 10, 1);
+      Set_Format(TradeMenu, Lines - 3, 1);
       Set_Mark(TradeMenu, "");
       Scale(TradeMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
@@ -239,29 +279,6 @@ package body Bases.UI.Trade is
          CurrentMenuIndex := 1;
       end if;
       Set_Current(TradeMenu, Trade_Items.all(CurrentMenuIndex));
-      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
-      Move_Cursor(Line => (MenuHeight + 4), Column => 2);
-      if MoneyIndex2 > 0 then
-         Add
-           (Str =>
-              "You have" &
-              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-              " " &
-              To_String(MoneyName) &
-              ".");
-      else
-         Add
-           (Str =>
-              "You don't have any " &
-              To_String(MoneyName) &
-              " to buy anything.");
-      end if;
-      Move_Cursor(Line => (MenuHeight + 5), Column => 2);
-      FreeSpace := FreeCargo(0);
-      if FreeSpace < 0 then
-         FreeSpace := 0;
-      end if;
-      Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
       ShowItemInfo;
       Refresh(MenuWindow);
    end ShowTrade;
