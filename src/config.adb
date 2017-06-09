@@ -33,7 +33,8 @@ package body Config is
         (AutoRest => True,
          UndockSpeed => QUARTER_SPEED,
          AutoCenter => True,
-         AutoReturn => True);
+         AutoReturn => True,
+         AutoFinish => True);
       if not Exists("data/game.cfg") then
          return;
       end if;
@@ -70,6 +71,12 @@ package body Config is
                else
                   GameSettings.AutoReturn := False;
                end if;
+            elsif FieldName = To_Unbounded_String("AutoFinish") then
+               if Value = To_Unbounded_String("Yes") then
+                  GameSettings.AutoFinish := True;
+               else
+                  GameSettings.AutoFinish := False;
+               end if;
             end if;
          end if;
       end loop;
@@ -104,6 +111,11 @@ package body Config is
          Put_Line(ConfigFile, "AutoReturn = Yes");
       else
          Put_Line(ConfigFile, "AutoReturn = No");
+      end if;
+      if GameSettings.AutoFinish then
+         Put_Line(ConfigFile, "AutoFinish = Yes");
+      else
+         Put_Line(ConfigFile, "AutoFinish = No");
       end if;
       Close(ConfigFile);
    end SaveConfig;
