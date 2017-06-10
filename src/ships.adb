@@ -28,52 +28,6 @@ with Crafts; use Crafts;
 
 package body Ships is
 
-   procedure UpdateModule
-     (Ship: in out ShipRecord;
-      ModuleIndex: Positive;
-      Field: String;
-      Value: String) is
-      NewDurability: Integer;
-      NewName: Unbounded_String;
-      procedure UpdateMod(Module: in out ModuleData) is
-      begin
-         Module.Name := NewName;
-      end UpdateMod;
-   begin
-      if ModuleIndex > Positive(Ship.Modules.Length) then
-         return;
-      end if;
-      if Field = "Durability" then
-         NewDurability :=
-           Ship.Modules(ModuleIndex).Durability + Integer'Value(Value);
-         if NewDurability < 0 then
-            NewDurability := 0;
-         end if;
-         Ship.Modules(ModuleIndex).Durability := NewDurability;
-      elsif Field = "Name" then
-         NewName := To_Unbounded_String(Value);
-         Ship.Modules.Update_Element
-         (Index => ModuleIndex, Process => UpdateMod'Access);
-      elsif Field = "Current_Value" then
-         Ship.Modules(ModuleIndex).Current_Value := Integer'Value(Value);
-      elsif Field = "Owner" then
-         Ship.Modules(ModuleIndex).Owner := Natural'Value(Value);
-      elsif Field = "MaxDurability" then
-         Ship.Modules(ModuleIndex).MaxDurability :=
-           Ship.Modules(ModuleIndex).MaxDurability + Integer'Value(Value);
-      elsif Field = "Max_Value" then
-         Ship.Modules(ModuleIndex).Max_Value :=
-           Ship.Modules(ModuleIndex).Max_Value + Integer'Value(Value);
-      elsif Field = "UpgradeProgress" then
-         Ship.Modules(ModuleIndex).UpgradeProgress := Integer'Value(Value);
-      elsif Field = "UpgradeAction" then
-         Ship.Modules(ModuleIndex).UpgradeAction := ShipUpgrade'Value(Value);
-      elsif Field = "Weight" then
-         Ship.Modules(ModuleIndex).Weight :=
-           Ship.Modules(ModuleIndex).Weight + Natural'Value(Value);
-      end if;
-   end UpdateModule;
-
    function CreateShip
      (ProtoIndex: Positive;
       Name: Unbounded_String;
