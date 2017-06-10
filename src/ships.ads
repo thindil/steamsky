@@ -98,11 +98,6 @@ package Ships is
    Ships_Files_Not_Found : exception; -- Raised when no files with ships
    Ships_Invalid_Data : exception; -- Raised when invalid data in ships file
 
-   procedure UpdateModule
-     (Ship: in out ShipRecord;
-      ModuleIndex: Positive;
-      Field: String;
-      Value: String); -- Update selected module
    function CreateShip
      (ProtoIndex: Positive;
       Name: Unbounded_String;
