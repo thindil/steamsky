@@ -62,7 +62,7 @@ package body GameOptions is
          Set_Options(Options_Fields.all(FormIndex), FieldOptions);
       end CreateLabel;
    begin
-      CreateLabel(0, "Auto rest: ");
+      CreateLabel(0, "Auto rest when crew is tired: ");
       Options_Fields.all(2) := New_Field(1, 6, 0, ((Columns / 2) + 1), 0, 0);
       Set_Field_Type(Options_Fields.all(2), Create(YesNo, True));
       if GameSettings.AutoRest then
@@ -76,7 +76,7 @@ package body GameOptions is
       Set_Background
         (Options_Fields.all(2),
          (Reverse_Video => True, others => False));
-      CreateLabel(1, "Undock speed: ");
+      CreateLabel(1, "Default speed after undocking: ");
       Options_Fields.all(4) := New_Field(1, 16, 1, ((Columns / 2) + 1), 0, 0);
       Set_Field_Type(Options_Fields.all(4), Create(SpeedEnum, True));
       case GameSettings.UndockSpeed is
@@ -94,7 +94,7 @@ package body GameOptions is
       FieldOptions := Get_Options(Options_Fields.all(4));
       FieldOptions.Edit := False;
       Set_Options(Options_Fields.all(4), FieldOptions);
-      CreateLabel(2, "Auto center: ");
+      CreateLabel(2, "Auto center map after set destination: ");
       Options_Fields.all(6) := New_Field(1, 6, 2, ((Columns / 2) + 1), 0, 0);
       Set_Field_Type(Options_Fields.all(6), Create(YesNo2, True));
       if GameSettings.AutoCenter then
@@ -105,7 +105,7 @@ package body GameOptions is
       FieldOptions := Get_Options(Options_Fields.all(6));
       FieldOptions.Edit := False;
       Set_Options(Options_Fields.all(6), FieldOptions);
-      CreateLabel(3, "Auto return: ");
+      CreateLabel(3, "Auto set base after finished mission: ");
       Options_Fields.all(8) := New_Field(1, 6, 3, ((Columns / 2) + 1), 0, 0);
       Set_Field_Type(Options_Fields.all(8), Create(YesNo3, True));
       if GameSettings.AutoReturn then
@@ -246,7 +246,7 @@ package body GameOptions is
                   4);
             when 6 =>
                SetDescription
-                 ("After set destination for player ship, center map on ship.",
+                 ("After set destination for ship, center map on ship.",
                   6);
             when 8 =>
                SetDescription
