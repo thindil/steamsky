@@ -163,6 +163,14 @@ package body Ships.Movement is
             end case;
             GameStats.DistanceTraveled := GameStats.DistanceTraveled + 1;
             UpdateGame(TimePassed);
+            FuelIndex := FindCargo(ItemType => FuelType);
+            if FuelIndex = 0 then
+               AddMessage
+                 ("Ship fall from sky due to lack of fuel.",
+                  OtherMessage);
+               Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
+               return 0;
+            end if;
          end if;
       end if;
       if NeedRest(Pilot) then
