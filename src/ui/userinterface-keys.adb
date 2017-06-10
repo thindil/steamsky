@@ -173,10 +173,6 @@ package body UserInterface.Keys is
       Order: constant String := Name(Current(OrdersMenu));
       Result: Menus.Driver_Result;
       NewTime: Integer;
-      procedure UpdateEvent(Event: in out EventData) is
-      begin
-         Event.Time := NewTime;
-      end UpdateEvent;
    begin
       if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
          EventIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
@@ -267,8 +263,7 @@ package body UserInterface.Keys is
                if NewTime < 1 then
                   DeleteEvent(EventIndex);
                else
-                  Events_List.Update_Element
-                  (Index => EventIndex, Process => UpdateEvent'Access);
+                  Events_List(EventIndex).Time := NewTime;
                end if;
                GainRep
                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
@@ -291,8 +286,7 @@ package body UserInterface.Keys is
                if NewTime < 1 then
                   DeleteEvent(EventIndex);
                else
-                  Events_List.Update_Element
-                  (Index => EventIndex, Process => UpdateEvent'Access);
+                  Events_List(EventIndex).Time := NewTime;
                end if;
                SellItems
                  (ItemIndex,
