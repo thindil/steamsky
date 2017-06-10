@@ -29,7 +29,7 @@ package body Crafts.UI is
    RecipeIndex: Integer := 1;
 
    procedure ShowRecipeInfo is
-      InfoWindow: Window;
+      InfoWindow, ClearWindow, BoxWindow: Window;
       Recipe: Craft_Data;
       CurrentLine: Line_Position := 2;
       MAmount, TextLength: Natural := 0;
@@ -42,7 +42,11 @@ package body Crafts.UI is
       StartLine: Line_Position;
       StartColumn, EndColumn: Column_Position;
       WorkplaceName: Unbounded_String := Null_Unbounded_String;
+      WindowHeight: Line_Position := 9;
    begin
+      ClearWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
+      Refresh(ClearWindow);
+      Delete(ClearWindow);
       if RecipeIndex > 0 then
          Recipe := Recipes_List(RecipeIndex);
       else
@@ -63,7 +67,14 @@ package body Crafts.UI is
          Recipe.BaseType := 0;
          Recipe.Tool := AlchemyTools;
       end if;
-      InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
+      WindowHeight :=
+        WindowHeight + Line_Position(Recipe.MaterialTypes.Length);
+      BoxWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
+      Box(BoxWindow);
+      Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
+      Add(Win => BoxWindow, Str => "[Recipe info]");
+      InfoWindow :=
+        Create(WindowHeight - 2, (Columns / 2) - 2, 4, (Columns / 2) + 1);
       if RecipeIndex > 0 then
          Add
            (Win => InfoWindow,
@@ -242,15 +253,16 @@ package body Crafts.UI is
       Add
         (Win => InfoWindow,
          Str => "Time needed:" & Positive'Image(Recipe.Time) & " minutes");
-      Move_Cursor(Win => InfoWindow, Line => (CurrentLine + 2), Column => 0);
-      Add(Win => InfoWindow, Str => "Press ENTER for set manufacturing order");
+      Move_Cursor(Line => (WindowHeight + 3), Column => (Columns / 2));
+      Add(Str => "Press ENTER for set manufacturing order");
       Change_Attributes
-        (Win => InfoWindow,
-         Line => (CurrentLine + 2),
-         Column => 6,
+        (Line => (WindowHeight + 3),
+         Column => (Columns / 2) + 6,
          Count => 5,
          Color => 1);
       Refresh;
+      Refresh(BoxWindow);
+      Delete(BoxWindow);
       Refresh(InfoWindow);
       Delete(InfoWindow);
    end ShowRecipeInfo;
