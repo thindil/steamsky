@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Auto finish missions when player ship is near corresponding skybase (and
   optionto enable or disable it)
 - End game after losing all fuel during fly
+- Option to location of game directories via console parameters
 
 ### Changed
 - Updated interface
