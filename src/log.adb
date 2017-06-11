@@ -18,6 +18,8 @@
 with Ada.Calendar; use Ada.Calendar;
 with Ada.Calendar.Formatting;
 with Ada.Directories; use Ada.Directories;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Game; use Game;
 
 package body Log is
 
@@ -26,10 +28,10 @@ package body Log is
       if DebugMode = None then
          return;
       end if;
-      if Exists("data/debug.log") then
-         Open(LogFile, Append_File, "data/debug.log");
+      if Exists(To_String(SaveDirectory) & "debug.log") then
+         Open(LogFile, Append_File, To_String(SaveDirectory) & "debug.log");
       else
-         Create(LogFile, Append_File, "data/debug.log");
+         Create(LogFile, Append_File, To_String(SaveDirectory) & "debug.log");
       end if;
       LogMessage
         ("Start game in debug mode: " & Debug_Types'Image(DebugMode) & ".",

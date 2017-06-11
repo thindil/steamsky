@@ -17,6 +17,7 @@
 
 with Ada.Directories; use Ada.Directories;
 with Ada.Text_IO; use Ada.Text_IO;
+with Game; use Game;
 
 package body Config is
 
@@ -35,10 +36,10 @@ package body Config is
          AutoCenter => True,
          AutoReturn => True,
          AutoFinish => True);
-      if not Exists("data/game.cfg") then
+      if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
-      Open(ConfigFile, In_File, "data/game.cfg");
+      Open(ConfigFile, In_File, To_String(SaveDirectory) & "game.cfg");
       while not End_Of_File(ConfigFile) loop
          RawData := To_Unbounded_String(Get_Line(ConfigFile));
          if Length(RawData) > 0 then
@@ -86,7 +87,7 @@ package body Config is
    procedure SaveConfig is
       ConfigFile: File_Type;
    begin
-      Create(ConfigFile, Append_File, "data/game.cfg");
+      Create(ConfigFile, Append_File, To_String(SaveDirectory) & "game.cfg");
       Put_Line
         (ConfigFile,
          "PlayerName = " & To_String(NewGameSettings.PlayerName));

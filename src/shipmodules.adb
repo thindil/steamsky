@@ -33,10 +33,10 @@ package body ShipModules is
       if Modules_List.Length > 0 then
          return;
       end if;
-      if not Exists("data/shipmodules/") then
+      if not Exists(To_String(DataDirectory) & "shipmodules/") then
          raise Modules_Directory_Not_Found;
       end if;
-      Start_Search(Files, "data/shipmodules/", "*.dat");
+      Start_Search(Files, To_String(DataDirectory) & "shipmodules/", "*.dat");
       if not More_Entries(Files) then
          raise Modules_Files_Not_Found;
       end if;

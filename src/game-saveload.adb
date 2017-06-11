@@ -41,7 +41,7 @@ package body Game.SaveLoad is
       Message: Message_Data;
       VisitedFields: Natural := 0;
    begin
-      Create(SaveGame, Out_File, "data/savegame.dat");
+      Create(SaveGame, Out_File, To_String(SaveDirectory) & "savegame.dat");
       -- Save version
       Put(SaveGame, SaveVersion & ";");
       -- Save game date
@@ -448,7 +448,7 @@ package body Game.SaveLoad is
          return RawData;
       end ReadData;
    begin
-      Open(SaveGame, In_File, "data/savegame.dat");
+      Open(SaveGame, In_File, To_String(SaveDirectory) & "savegame.dat");
       -- Check save version
       if ReadData /= SaveVersion then
          Close(SaveGame);
