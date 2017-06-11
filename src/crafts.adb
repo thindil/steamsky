@@ -317,6 +317,20 @@ package body Crafts is
                     To_Unbounded_String("deconstructing ") &
                     Items_List(Recipe.ResultIndex).Name;
                end if;
+               if Module.Durability = 0 then
+                  AddMessage
+                    (To_String(Module.Name) &
+                     " is destroyed, so " &
+                     To_String(PlayerShip.Crew(CrafterIndex).Name) &
+                     " can't work on " &
+                     To_String(RecipeName) &
+                     ".",
+                     CraftMessage);
+                  Module.Current_Value := 0;
+                  Module.Max_Value := 0;
+                  GiveOrders(CrafterIndex, Rest);
+                  CurrentMinutes := 0;
+               end if;
                WorkTime := PlayerShip.Crew(CrafterIndex).OrderTime;
                CraftedAmount := 0;
                Craft_Loop:
