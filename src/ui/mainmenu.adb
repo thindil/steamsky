@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Directories; use Ada.Directories;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Exceptions; use Ada.Exceptions;
@@ -76,7 +75,7 @@ package body MainMenu is
       Add(Str => GameVersion);
       -- Game menu
       Menu_Items.all(1) := New_Item("New game");
-      if Exists("data/savegame.dat") then
+      if Exists(To_String(SaveDirectory) & "savegame.dat") then
          Menu_Items.all(2) := New_Item("Load game");
          MenuIndex := 3;
       end if;
@@ -233,12 +232,14 @@ package body MainMenu is
    begin
       if LicensePad = Null_Window then
          LinesAmount := 0;
-         if not Exists("doc/COPYING") then
+         if not Exists(To_String(DocDirectory) & "COPYING") then
             LicenseText :=
               To_Unbounded_String
-                ("Can't find license file. Did COPYING file is in doc directory?");
+                ("Can't find license file. Did 'COPYING' file is in '" &
+                 To_String(DocDirectory) &
+                 "' directory?");
          else
-            Open(LicenseFile, In_File, "doc/COPYING");
+            Open(LicenseFile, In_File, To_String(DocDirectory) & "COPYING");
             while not End_Of_File(LicenseFile) loop
                Append(LicenseText, Get_Line(LicenseFile));
                Append(LicenseText, ASCII.LF);
@@ -279,12 +280,17 @@ package body MainMenu is
    begin
       if NewsPad = Null_Window then
          LinesAmount := 0;
-         if not Exists("doc/CHANGELOG.md") then
+         if not Exists(To_String(DocDirectory) & "CHANGELOG.md") then
             NewsText :=
               To_Unbounded_String
-                ("Can't find changelog file. Did CHANGELOG.md file is in doc directory?");
+                ("Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
+                 To_String(DocDirectory) &
+                 "' directory?");
          else
-            Open(ChangesFile, In_File, "doc/CHANGELOG.md");
+            Open
+              (ChangesFile,
+               In_File,
+               To_String(DocDirectory) & "CHANGELOG.md");
             Set_Line(ChangesFile, 6);
             while not End_Of_File(ChangesFile) loop
                FileText := To_Unbounded_String(Get_Line(ChangesFile));

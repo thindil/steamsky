@@ -32,10 +32,10 @@ package body Items is
       if Items_List.Length > 0 then
          return;
       end if;
-      if not Exists("data/items/") then
+      if not Exists(To_String(DataDirectory) & "items/") then
          raise Items_Directory_Not_Found;
       end if;
-      Start_Search(Files, "data/items/", "*.dat");
+      Start_Search(Files, To_String(DataDirectory) & "items/", "*.dat");
       if not More_Entries(Files) then
          raise Items_Files_Not_Found;
       end if;

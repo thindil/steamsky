@@ -22,6 +22,7 @@ with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Calendar; use Ada.Calendar;
 with Ada.Calendar.Formatting;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Terminal_Interface.Curses_Constants;
 use Terminal_Interface.Curses_Constants;
@@ -77,13 +78,34 @@ begin
                end if;
             end loop;
             StartLogging;
-            exit;
+         elsif Argument(I)(1 .. 8) = "--datadi" then
+            DataDirectory :=
+              To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
+            LogMessage
+              ("Data directory sets to: " & To_String(DataDirectory),
+               Everything);
+         elsif Argument(I)(1 .. 8) = "--savedi" then
+            SaveDirectory :=
+              To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
+            LogMessage
+              ("Save directory sets to: " & To_String(SaveDirectory),
+               Everything);
+         elsif Argument(I)(1 .. 8) = "--docdir" then
+            DocDirectory :=
+              To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
+            LogMessage
+              ("Documentation directory sets to: " & To_String(DocDirectory),
+               Everything);
          end if;
       end if;
    end loop;
    if not LoadData then
       Move_Cursor(Line => (Lines / 2), Column => 2);
-      Add(Str => "Can't load game data. Probably missing file data/game.dat");
+      Add
+        (Str =>
+           "Can't load game data. Probably missing file " &
+           To_String(DataDirectory) &
+           "game.dat");
       Key := Get_Keystroke;
       End_Windows;
       return;
@@ -307,10 +329,13 @@ exception
         GameState /= Quit then
          SaveGame;
       end if;
-      if Exists("data/error.log") then
-         Open(ErrorFile, Append_File, "data/error.log");
+      if Exists(To_String(SaveDirectory) & "error.log") then
+         Open(ErrorFile, Append_File, To_String(SaveDirectory) & "error.log");
       else
-         Create(ErrorFile, Append_File, "data/error.log");
+         Create
+           (ErrorFile,
+            Append_File,
+            To_String(SaveDirectory) & "error.log");
       end if;
       Put_Line(ErrorFile, Ada.Calendar.Formatting.Image(Clock));
       Put_Line(ErrorFile, GameVersion);
@@ -321,7 +346,9 @@ exception
       Move_Cursor(Line => (Lines / 2), Column => 2);
       Add
         (Str =>
-           "Oops, something bad happens and game crashed. Game should save your progress, but better check it. Also, please, remember what you done before crash and report this problem at https://github.com/thindil/steamsky/issues (or if you prefer, on mail thindil@laeran.pl) and attach (if possible) file error.log from data directory. Hit any key to quit game.");
+           "Oops, something bad happens and game crashed. Game should save your progress, but better check it. Also, please, remember what you done before crash and report this problem at https://github.com/thindil/steamsky/issues (or if you prefer, on mail thindil@laeran.pl) and attach (if possible) file 'error.log' from '" &
+           To_String(SaveDirectory) &
+           "' directory. Hit any key to quit game.");
       Key := Get_Keystroke;
       End_Windows;
       EndLogging;

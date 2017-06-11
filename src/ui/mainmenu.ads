@@ -15,10 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Game; use Game;
 
 package MainMenu is
+
+   DocDirectory: Unbounded_String :=
+     To_Unbounded_String("doc/"); -- Path to directory where documentation is
 
    procedure ShowMainMenu; -- Show main game menu
    function MainMenuKeys

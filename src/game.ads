@@ -119,6 +119,12 @@ package Game is
    FuelType: Unbounded_String;
    MoneyIndex: Unbounded_String;
    MoneyName: Unbounded_String;
+   SaveDirectory: Unbounded_String :=
+     To_Unbounded_String
+       ("data/"); -- Path to directory where are savegame and logs
+   DataDirectory: Unbounded_String :=
+     To_Unbounded_String
+       ("data/"); -- Path to directory where are game data files
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
