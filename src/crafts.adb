@@ -42,10 +42,10 @@ package body Crafts is
       if Recipes_List.Length > 0 then
          return;
       end if;
-      if not Exists("data/recipes/") then
+      if not Exists(To_String(DataDirectory) & "recipes/") then
          raise Recipes_Directory_Not_Found;
       end if;
-      Start_Search(Files, "data/recipes/", "*.dat");
+      Start_Search(Files, To_String(DataDirectory) & "recipes/", "*.dat");
       if not More_Entries(Files) then
          raise Recipes_Files_Not_Found;
       end if;

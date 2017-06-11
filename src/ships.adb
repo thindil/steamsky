@@ -213,10 +213,10 @@ package body Ships is
       if ProtoShips_List.Length > 0 then
          return;
       end if;
-      if not Exists("data/ships/") then
+      if not Exists(To_String(DataDirectory) & "ships/") then
          raise Ships_Directory_Not_Found;
       end if;
-      Start_Search(Files, "data/ships/", "*.dat");
+      Start_Search(Files, To_String(DataDirectory) & "ships/", "*.dat");
       if not More_Entries(Files) then
          raise Ships_Files_Not_Found;
       end if;

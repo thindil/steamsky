@@ -337,10 +337,10 @@ package body Game is
       if BaseSyllablesStart.Length > 0 then
          return True;
       end if;
-      if not Exists("data/game.dat") then
+      if not Exists(To_String(DataDirectory) & "game.dat") then
          return False;
       end if;
-      Open(DataFile, In_File, "data/game.dat");
+      Open(DataFile, In_File, To_String(DataDirectory) & "game.dat");
       while not End_Of_File(DataFile) loop
          RawData := To_Unbounded_String(Get_Line(DataFile));
          EqualIndex := Index(RawData, "=");
