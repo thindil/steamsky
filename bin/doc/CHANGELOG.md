@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Searching for ammunition during combat for enemy ship
 - User interface for buying recipes in bases
 - Selling items in bases when more than one of that item type is in cargo
+- Stop crafting orders when workplace module is destroyed
 
 ## [1.2] - 2017-05-28
 
