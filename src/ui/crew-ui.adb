@@ -41,7 +41,6 @@ package body Crew.UI is
       Tired,
       Hungry,
       Thirsty,
-      SkillLevel,
       OrderName: Unbounded_String :=
         Null_Unbounded_String;
       WindowHeight: Line_Position := 3;
@@ -150,37 +149,13 @@ package body Crew.UI is
       Move_Cursor(Win => SkillsWindow, Line => 0, Column => 2);
       Add(Win => SkillsWindow, Str => "[Skills]");
       for Skill of Member.Skills loop
-         case Skill(2) is
-            when 1 .. 10 =>
-               SkillLevel := To_Unbounded_String("Beginner");
-            when 11 .. 20 =>
-               SkillLevel := To_Unbounded_String("Novice");
-            when 21 .. 30 =>
-               SkillLevel := To_Unbounded_String("Apprentice");
-            when 31 .. 40 =>
-               SkillLevel := To_Unbounded_String("Practitioner");
-            when 41 .. 50 =>
-               SkillLevel := To_Unbounded_String("Competent");
-            when 51 .. 60 =>
-               SkillLevel := To_Unbounded_String("Respected");
-            when 61 .. 70 =>
-               SkillLevel := To_Unbounded_String("Renowned");
-            when 71 .. 80 =>
-               SkillLevel := To_Unbounded_String("Master");
-            when 81 .. 90 =>
-               SkillLevel := To_Unbounded_String("Grand-Master");
-            when 91 .. 99 =>
-               SkillLevel := To_Unbounded_String("Legendary");
-            when others =>
-               SkillLevel := To_Unbounded_String("Ultimate");
-         end case;
          Move_Cursor(Win => SkillsWindow, Line => CurrentLine, Column => 2);
          Add
            (Win => SkillsWindow,
             Str =>
               To_String(Skills_Names(Skill(1))) &
               ": " &
-              To_String(SkillLevel));
+              GetSkillLevelName(Skill(2)));
          CurrentLine := CurrentLine + 1;
       end loop;
       case Member.Order is

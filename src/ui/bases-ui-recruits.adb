@@ -31,7 +31,6 @@ package body Bases.UI.Recruits is
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       CurrentLine: Line_Position := 3;
-      SkillLevel: Unbounded_String;
       WindowWidth: Line_Position;
       MoneyIndex2: Natural := 0;
    begin
@@ -48,42 +47,18 @@ package body Bases.UI.Recruits is
       Add(Win => InfoWindow, Str => "[Recruit info]");
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       if Recruit.Gender = 'M' then
-         Add(Win => InfoWindow, Str => "Male");
+         Add(Win => InfoWindow, Str => "Gender: Male");
       else
-         Add(Win => InfoWindow, Str => "Female");
+         Add(Win => InfoWindow, Str => "Gender: Female");
       end if;
       for Skill of Recruit.Skills loop
-         case Skill(2) is
-            when 1 .. 10 =>
-               SkillLevel := To_Unbounded_String("Beginner");
-            when 11 .. 20 =>
-               SkillLevel := To_Unbounded_String("Novice");
-            when 21 .. 30 =>
-               SkillLevel := To_Unbounded_String("Apprentice");
-            when 31 .. 40 =>
-               SkillLevel := To_Unbounded_String("Practitioner");
-            when 41 .. 50 =>
-               SkillLevel := To_Unbounded_String("Competent");
-            when 51 .. 60 =>
-               SkillLevel := To_Unbounded_String("Respected");
-            when 61 .. 70 =>
-               SkillLevel := To_Unbounded_String("Renowned");
-            when 71 .. 80 =>
-               SkillLevel := To_Unbounded_String("Master");
-            when 81 .. 90 =>
-               SkillLevel := To_Unbounded_String("Grand-Master");
-            when 91 .. 99 =>
-               SkillLevel := To_Unbounded_String("Legendary");
-            when others =>
-               SkillLevel := To_Unbounded_String("Ultimate");
-         end case;
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add
            (Win => InfoWindow,
             Str =>
               To_String(Skills_Names(Skill(1))) &
               ": " &
-              To_String(SkillLevel));
+              GetSkillLevelName(Skill(2)));
          CurrentLine := CurrentLine + 1;
       end loop;
       MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
