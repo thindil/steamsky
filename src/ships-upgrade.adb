@@ -236,6 +236,16 @@ package body Ships.Upgrade is
       end if;
       CurrentMinutes := Minutes;
       OrderTime := PlayerShip.Crew(WorkerIndex).OrderTime;
+      if PlayerShip.Modules(PlayerShip.UpgradeModule).Durability = 0 then
+         AddMessage
+           (To_String(PlayerShip.Crew(WorkerIndex).Name) &
+            " stops upgrading " &
+            To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
+            " because it is destroyed.",
+            OrderMessage);
+         GiveOrders(WorkerIndex, Rest);
+         return;
+      end if;
       while CurrentMinutes > 0 loop
          if CurrentMinutes >= OrderTime then
             CurrentMinutes := CurrentMinutes - OrderTime;
