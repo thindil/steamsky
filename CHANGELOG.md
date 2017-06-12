@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - User interface for buying recipes in bases
 - Selling items in bases when more than one of that item type is in cargo
 - Stop crafting orders when workplace module is destroyed
+- Stop upgrading module when it is destroyed
 
 ## [1.0.3] - 2017-06-04
 
