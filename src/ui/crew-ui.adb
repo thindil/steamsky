@@ -34,9 +34,9 @@ package body Crew.UI is
    NeedClean, NeedRepairs: Boolean := False;
 
    procedure ShowMemberInfo is
-      InfoWindow: Window;
+      InfoWindow, ClearWindow, SkillsWindow, OrderWindow: Window;
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
-      CurrentLine: Line_Position := 1;
+      CurrentLine: Line_Position := 2;
       Health,
       Tired,
       Hungry,
@@ -44,13 +44,25 @@ package body Crew.UI is
       SkillLevel,
       OrderName: Unbounded_String :=
         Null_Unbounded_String;
+      WindowHeight: Line_Position := 3;
+      WindowHeight2: Line_Position;
+      WindowWidth: Column_Position := 18;
    begin
+      ClearWindow := Create((Lines - 3), (Columns / 2), 3, (Columns / 2));
+      Refresh(ClearWindow);
+      Delete(ClearWindow);
       if Member.Health < 100 and Member.Health > 80 then
          Health := To_Unbounded_String("Slightly wounded");
       elsif Member.Health < 81 and Member.Health > 50 then
          Health := To_Unbounded_String("Wounded");
       elsif Member.Health < 51 then
          Health := To_Unbounded_String("Heavily Wounded");
+      end if;
+      if Health /= Null_Unbounded_String then
+         WindowHeight := WindowHeight + 1;
+         if Length(Health) + 4 > Natural(WindowWidth) then
+            WindowWidth := Column_Position(Length(Health)) + 4;
+         end if;
       end if;
       if Member.Tired > 20 and Member.Tired < 41 then
          Tired := To_Unbounded_String("Bit tired");
@@ -61,6 +73,12 @@ package body Crew.UI is
       elsif Member.Tired = 100 then
          Tired := To_Unbounded_String("Unconscious");
       end if;
+      if Tired /= Null_Unbounded_String then
+         WindowHeight := WindowHeight + 1;
+         if Length(Tired) + 4 > Natural(WindowWidth) then
+            WindowWidth := Column_Position(Length(Tired)) + 4;
+         end if;
+      end if;
       if Member.Thirst > 20 and Member.Thirst < 41 then
          Thirsty := To_Unbounded_String("Bit thirsty");
       elsif Member.Thirst > 40 and Member.Thirst < 81 then
@@ -69,6 +87,12 @@ package body Crew.UI is
          Thirsty := To_Unbounded_String("Very thirsty");
       elsif Member.Thirst = 100 then
          Thirsty := To_Unbounded_String("Dehydrated");
+      end if;
+      if Thirsty /= Null_Unbounded_String then
+         WindowHeight := WindowHeight + 1;
+         if Length(Thirsty) + 4 > Natural(WindowWidth) then
+            WindowWidth := Column_Position(Length(Thirsty)) + 4;
+         end if;
       end if;
       if Member.Hunger > 20 and Member.Hunger < 41 then
          Hungry := To_Unbounded_String("Bit hungry");
@@ -79,33 +103,52 @@ package body Crew.UI is
       elsif Member.Hunger = 100 then
          Hungry := To_Unbounded_String("Starving");
       end if;
-      InfoWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
+      if Hungry /= Null_Unbounded_String then
+         WindowHeight := WindowHeight + 1;
+         if Length(Hungry) + 4 > Natural(WindowWidth) then
+            WindowWidth := Column_Position(Length(Hungry)) + 4;
+         end if;
+      end if;
+      if WindowWidth > (Columns / 2) then
+         WindowWidth := Columns / 2;
+      end if;
+      InfoWindow := Create(WindowHeight, WindowWidth, 3, (Columns / 2));
+      Box(InfoWindow);
+      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
+      Add(Win => InfoWindow, Str => "[General info]");
+      Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       if Member.Gender = 'M' then
-         Add(Win => InfoWindow, Str => "Male");
+         Add(Win => InfoWindow, Str => "Gender: Male");
       else
-         Add(Win => InfoWindow, Str => "Female");
+         Add(Win => InfoWindow, Str => "Gender: Female");
       end if;
       if Health /= Null_Unbounded_String then
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add(Win => InfoWindow, Str => To_String(Health));
          CurrentLine := CurrentLine + 1;
       end if;
       if Tired /= Null_Unbounded_String then
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add(Win => InfoWindow, Str => To_String(Tired));
          CurrentLine := CurrentLine + 1;
       end if;
       if Thirsty /= Null_Unbounded_String then
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add(Win => InfoWindow, Str => To_String(Thirsty));
          CurrentLine := CurrentLine + 1;
       end if;
       if Hungry /= Null_Unbounded_String then
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add(Win => InfoWindow, Str => To_String(Hungry));
          CurrentLine := CurrentLine + 1;
       end if;
-      CurrentLine := CurrentLine + 1;
+      CurrentLine := 1;
+      WindowHeight2 := Line_Position(Member.Skills.Length) + 2;
+      SkillsWindow :=
+        Create(WindowHeight2, (Columns / 2), WindowHeight + 3, (Columns / 2));
+      Box(SkillsWindow);
+      Move_Cursor(Win => SkillsWindow, Line => 0, Column => 2);
+      Add(Win => SkillsWindow, Str => "[Skills]");
       for Skill of Member.Skills loop
          case Skill(2) is
             when 1 .. 10 =>
@@ -131,16 +174,15 @@ package body Crew.UI is
             when others =>
                SkillLevel := To_Unbounded_String("Ultimate");
          end case;
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         Move_Cursor(Win => SkillsWindow, Line => CurrentLine, Column => 2);
          Add
-           (Win => InfoWindow,
+           (Win => SkillsWindow,
             Str =>
               To_String(Skills_Names(Skill(1))) &
               ": " &
               To_String(SkillLevel));
          CurrentLine := CurrentLine + 1;
       end loop;
-      CurrentLine := CurrentLine + 1;
       case Member.Order is
          when Pilot =>
             OrderName := To_Unbounded_String("Piloting");
@@ -163,20 +205,36 @@ package body Crew.UI is
          when Clean =>
             OrderName := To_Unbounded_String("Cleans ship");
       end case;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-      Add(Win => InfoWindow, Str => "Order: " & To_String(OrderName));
-      CurrentLine := CurrentLine + 2;
+      WindowWidth := 11;
+      if Length(OrderName) + 4 > Natural(WindowWidth) then
+         WindowWidth := Column_Position(Length(OrderName)) + 4;
+      end if;
+      if WindowWidth > (Columns / 2) then
+         WindowWidth := Columns / 2;
+      end if;
+      OrderWindow :=
+        Create
+          (3,
+           WindowWidth,
+           (WindowHeight + WindowHeight2 + 3),
+           (Columns / 2));
+      Box(OrderWindow);
+      Move_Cursor(Win => OrderWindow, Line => 0, Column => 2);
+      Add(Win => OrderWindow, Str => "[Order]");
+      Move_Cursor(Win => OrderWindow, Line => 1, Column => 2);
+      Add(Win => OrderWindow, Str => To_String(OrderName));
+      CurrentLine := (WindowHeight + WindowHeight2 + 6);
+      if CurrentLine >= Lines - 1 then
+         CurrentLine := Lines - 2;
+      end if;
       if Member.Tired < 100 and
         Member.Hunger < 100 and
         Member.Thirst < 100 then
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-         Add
-           (Win => InfoWindow,
-            Str => "Press Enter to give orders to crew member");
+         Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+         Add(Str => "Press Enter to give orders to crew member");
          Change_Attributes
-           (Win => InfoWindow,
-            Line => CurrentLine,
-            Column => 6,
+           (Line => CurrentLine,
+            Column => (Columns / 2) + 6,
             Count => 5,
             Color => 1);
          CurrentLine := CurrentLine + 1;
@@ -200,20 +258,21 @@ package body Crew.UI is
          end if;
       end loop;
       if NeedClean or NeedRepairs then
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-         Add
-           (Win => InfoWindow,
-            Str => "Press Space to give orders to all crew");
+         Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+         Add(Str => "Press Space to give orders to all crew");
          Change_Attributes
-           (Win => InfoWindow,
-            Line => CurrentLine,
-            Column => 6,
+           (Line => CurrentLine,
+            Column => (Columns / 2) + 6,
             Count => 5,
             Color => 1);
       end if;
       Refresh;
       Refresh(InfoWindow);
       Delete(InfoWindow);
+      Refresh(SkillsWindow);
+      Delete(SkillsWindow);
+      Refresh(OrderWindow);
+      Delete(OrderWindow);
    end ShowMemberInfo;
 
    procedure ShowCrewInfo is
