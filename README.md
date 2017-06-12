@@ -45,6 +45,28 @@ Enter *bin* directory (if you build game from sources) or in main game
 directory (if you use released binary) and type `./steamsky`. Game works 
 only in terminal.
 
+### Starting parameters
+You can set game directories by starting parameters. Possible options are:
+
+* --datadir=[directory] set directory where all game data files (and
+  directories like ships, items, etc.) are. Example: `./steamsky
+  --datadir=/home/user/game/tmp`. Default value is *data/*
+
+* --savedir=[directory] set directory where game (or logs) will be saved. Game
+  must have write permission to this directory. Example: `./steamsky
+  --savedir=/home/user/.saves`. Default value is *data/*
+
+* --docdir=[directory] set directory where game documentation is (at this
+  moment important only for license and changelog files). Example `./steamsky
+  --docdir=/usr/share/steamsky/doc`. Default value is *doc/*.
+
+Of course, you can set all parameters together: `./steamsky --datadir=somedir/
+--savedir=otherdir/ --docdir=anotherdir/`
+
+Important: all set in that way directories must end with slash.
+
+Paths to directories can be absolute or relative where file `steamsky` is.
+
 ## Modify game
 For detailed informations about modifying various game elements or debugging
 game, see [MODDING.md](bin/doc/MODDING.md)
