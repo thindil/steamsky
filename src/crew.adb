@@ -986,4 +986,32 @@ package body Crew is
       end if;
    end WaitForRest;
 
+   function GetSkillLevelName(SkillLevel: Positive) return String is
+   begin
+      case SkillLevel is
+         when 1 .. 10 =>
+            return "Beginner";
+         when 11 .. 20 =>
+            return "Novice";
+         when 21 .. 30 =>
+            return "Apprentice";
+         when 31 .. 40 =>
+            return "Practitioner";
+         when 41 .. 50 =>
+            return "Competent";
+         when 51 .. 60 =>
+            return "Respected";
+         when 61 .. 70 =>
+            return "Renowned";
+         when 71 .. 80 =>
+            return "Master";
+         when 81 .. 90 =>
+            return "Grand-Master";
+         when 91 .. 99 =>
+            return "Legendary";
+         when others =>
+            return "Ultimate";
+      end case;
+   end GetSkillLevelName;
+
 end Crew;
