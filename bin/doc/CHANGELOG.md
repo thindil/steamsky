@@ -9,8 +9,8 @@ All notable changes to this project will be documented in this file.
   clockwork drone mk III, pirate ship mk III, armored pirate ship mk III, small
   attackig drone mk III, attacking clockwork drone mk III, armored attacking
   drone mk III, small inquisition ship mk III, inquisition ship mk III, armored
-  inquisition ship mk III, large cloclwork drone mk III and large pirate ship
-  mk III
+  inquisition ship mk III, large cloclwork drone mk III, large pirate ship mk
+  III and undead ship mk III
 - Info about amount of destroyed ships to game statistics
 - Auto center map after set destination for player ship (and option to enable
   or disable it)
