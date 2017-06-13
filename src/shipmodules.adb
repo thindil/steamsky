@@ -17,6 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Game; use Game;
 with Log; use Log;
 
@@ -33,10 +34,14 @@ package body ShipModules is
       if Modules_List.Length > 0 then
          return;
       end if;
-      if not Exists(To_String(DataDirectory) & "shipmodules/") then
+      if not Exists
+          (To_String(DataDirectory) & "shipmodules" & Dir_Separator) then
          raise Modules_Directory_Not_Found;
       end if;
-      Start_Search(Files, To_String(DataDirectory) & "shipmodules/", "*.dat");
+      Start_Search
+        (Files,
+         To_String(DataDirectory) & "shipmodules" & Dir_Separator,
+         "*.dat");
       if not More_Entries(Files) then
          raise Modules_Files_Not_Found;
       end if;

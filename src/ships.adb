@@ -17,6 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Messages; use Messages;
 with Items; use Items;
 with ShipModules; use ShipModules;
@@ -213,10 +214,13 @@ package body Ships is
       if ProtoShips_List.Length > 0 then
          return;
       end if;
-      if not Exists(To_String(DataDirectory) & "ships/") then
+      if not Exists(To_String(DataDirectory) & "ships" & Dir_Separator) then
          raise Ships_Directory_Not_Found;
       end if;
-      Start_Search(Files, To_String(DataDirectory) & "ships/", "*.dat");
+      Start_Search
+        (Files,
+         To_String(DataDirectory) & "ships" & Dir_Separator,
+         "*.dat");
       if not More_Entries(Files) then
          raise Ships_Files_Not_Found;
       end if;

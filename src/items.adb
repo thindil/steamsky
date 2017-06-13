@@ -17,6 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Log; use Log;
 
 package body Items is
@@ -32,10 +33,13 @@ package body Items is
       if Items_List.Length > 0 then
          return;
       end if;
-      if not Exists(To_String(DataDirectory) & "items/") then
+      if not Exists(To_String(DataDirectory) & "items" & Dir_Separator) then
          raise Items_Directory_Not_Found;
       end if;
-      Start_Search(Files, To_String(DataDirectory) & "items/", "*.dat");
+      Start_Search
+        (Files,
+         To_String(DataDirectory) & "items" & Dir_Separator,
+         "*.dat");
       if not More_Entries(Files) then
          raise Items_Files_Not_Found;
       end if;
