@@ -32,10 +32,21 @@ package body Events.UI is
    MenuWindow: Window;
 
    procedure ShowEventInfo is
-      InfoWindow: Window;
+      InfoWindow, ClearWindow: Window;
       EventIndex: constant Positive := Get_Index(Current(EventsMenu));
+      WindowHeight: Line_Position := 5;
    begin
-      InfoWindow := Create(10, (Columns / 2), 4, (Columns / 2));
+      ClearWindow := Create(10, (Columns / 2), 4, (Columns / 2));
+      Refresh(ClearWindow);
+      Delete(ClearWindow);
+      if Events_List(EventIndex).EType = DoublePrice then
+         WindowHeight := 6;
+      end if;
+      InfoWindow := Create(WindowHeight, (Columns / 2), 4, (Columns / 2));
+      Box(InfoWindow);
+      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
+      Add(Win => InfoWindow, Str => "[Event info]");
+      Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       Add
         (Win => InfoWindow,
          Str =>
@@ -43,18 +54,20 @@ package body Events.UI is
            Positive'Image(Events_List(EventIndex).SkyX) &
            " Y:" &
            Positive'Image(Events_List(EventIndex).SkyY));
-      Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+      Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
       case Events_List(EventIndex).EType is
          when EnemyShip | EnemyPatrol =>
             Add
               (Win => InfoWindow,
                Str =>
+                 "Ship type: " &
                  To_String
                    (ProtoShips_List(Events_List(EventIndex).Data).Name));
          when FullDocks | AttackOnBase | Disease =>
             Add
               (Win => InfoWindow,
                Str =>
+                 "Base name: " &
                  To_String
                    (SkyBases
                       (SkyMap
@@ -66,19 +79,24 @@ package body Events.UI is
             Add
               (Win => InfoWindow,
                Str =>
+                 "Base name: " &
                  To_String
                    (SkyBases
                       (SkyMap
                          (Events_List(EventIndex).SkyX,
                           Events_List(EventIndex).SkyY)
                          .BaseIndex)
-                      .Name) &
-                 " - " &
+                      .Name));
+            Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
+            Add
+              (Win => InfoWindow,
+               Str =>
+                 "Item: " &
                  To_String(Items_List(Events_List(EventIndex).Data).Name));
          when None =>
             null;
       end case;
-      Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+      Move_Cursor(Win => InfoWindow, Line => WindowHeight - 2, Column => 2);
       Add
         (Win => InfoWindow,
          Str =>
@@ -87,22 +105,18 @@ package body Events.UI is
              (CountDistance
                 (Events_List(EventIndex).SkyX,
                  Events_List(EventIndex).SkyY)));
-      Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
-      Add(Win => InfoWindow, Str => "Press SPACE to show event on map");
+      Move_Cursor(Line => WindowHeight + 4, Column => (Columns / 2));
+      Add(Str => "Press SPACE to show event on map");
       Change_Attributes
-        (Win => InfoWindow,
-         Line => 4,
-         Column => 6,
+        (Line => WindowHeight + 4,
+         Column => (Columns / 2) + 6,
          Count => 5,
          Color => 1);
-      Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
-      Add
-        (Win => InfoWindow,
-         Str => "Press ENTER to set event as a destination for ship");
+      Move_Cursor(Line => WindowHeight + 5, Column => (Columns / 2));
+      Add(Str => "Press ENTER to set event as a destination for ship");
       Change_Attributes
-        (Win => InfoWindow,
-         Line => 5,
-         Column => 6,
+        (Line => WindowHeight + 5,
+         Column => (Columns / 2) + 6,
          Count => 5,
          Color => 1);
       Refresh;
