@@ -167,7 +167,8 @@ package body Ships.Movement is
             if FuelIndex = 0 then
                AddMessage
                  ("Ship fall from sky due to lack of fuel.",
-                  OtherMessage);
+                  OtherMessage,
+                  3);
                Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
                return 0;
             end if;

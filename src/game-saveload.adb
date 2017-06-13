@@ -31,7 +31,7 @@ with Items; use Items;
 
 package body Game.SaveLoad is
 
-   SaveVersion: constant String := "1.1";
+   SaveVersion: constant String := "1.3";
 
    procedure SaveGame is
       SaveGame: File_Type;
@@ -367,15 +367,13 @@ package body Game.SaveLoad is
          StartLoop := MessagesAmount - Messages + 1;
          for I in StartLoop .. MessagesAmount loop
             Message := GetMessage(I);
+            Put(SaveGame, To_String(Message.Message) & ";");
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(Message_Type'Pos(Message.MType)));
-            Put
-              (SaveGame,
-               To_String(Message.Message) &
-               ";" &
-               To_String(Trim(RawValue, Ada.Strings.Left)) &
-               ";");
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(Message.Color));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
          end loop;
       end if;
       -- Save events
@@ -689,7 +687,7 @@ package body Game.SaveLoad is
       for I in 1 .. VectorLength loop
          Message := ReadData;
          MType := Message_Type'Val(Integer'Value(To_String(ReadData)));
-         RestoreMessage(Message, MType);
+         RestoreMessage(Message, MType, Natural'Value(To_String(ReadData)));
       end loop;
       -- Load events
       VectorLength := Positive'Value(To_String(ReadData));

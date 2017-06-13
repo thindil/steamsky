@@ -288,7 +288,8 @@ package body Combat is
                           ("You don't have ammo to " &
                            To_String(Ship.Modules(K).Name) &
                            "!",
-                           CombatMessage);
+                           CombatMessage,
+                           3);
                      end if;
                      Shoots := 0;
                   elsif Ship.Cargo(AmmoIndex).Amount < Shoots then

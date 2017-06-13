@@ -48,7 +48,10 @@ package body Messages is
       return To_String(Result);
    end FormatedTime;
 
-   procedure AddMessage(Message: String; MType: Message_Type) is
+   procedure AddMessage
+     (Message: String;
+      MType: Message_Type;
+      Color: Natural := 0) is
    begin
       if Messages_List.Length = 500 then
          Messages_List.Delete(Index => 1, Count => 1);
@@ -61,7 +64,8 @@ package body Messages is
             ": " &
             To_Unbounded_String(Message),
           MType => MType,
-          MessageIndex => LastIndex));
+          MessageIndex => LastIndex,
+          Color => Color));
       LastMessage := To_Unbounded_String(Message);
    end AddMessage;
 
@@ -74,7 +78,8 @@ package body Messages is
          return
            (Message => Null_Unbounded_String,
             MType => Default,
-            MessageIndex => 1);
+            MessageIndex => 1,
+            Color => 0);
       end if;
       if MessageIndex < 1 then
          Index := 1;
@@ -91,7 +96,8 @@ package body Messages is
          return
            (Message => Null_Unbounded_String,
             MType => Default,
-            MessageIndex => 1);
+            MessageIndex => 1,
+            Color => 0);
       end if;
       Index := 0;
       for Message of Messages_List loop
@@ -105,7 +111,8 @@ package body Messages is
       return
         (Message => Null_Unbounded_String,
          MType => Default,
-         MessageIndex => 1);
+         MessageIndex => 1,
+         Color => 0);
    end GetMessage;
 
    procedure ClearMessages is
@@ -131,12 +138,16 @@ package body Messages is
 
    procedure RestoreMessage
      (Message: Unbounded_String;
-      MType: Message_Type := Default) is
+      MType: Message_Type := Default;
+      Color: Natural := 0) is
    begin
       LastIndex := LastIndex + 1;
       Messages_List.Append
       (New_Item =>
-         (Message => Message, MType => MType, MessageIndex => LastIndex));
+         (Message => Message,
+          MType => MType,
+          MessageIndex => LastIndex,
+          Color => Color));
    end RestoreMessage;
 
    function GetLastMessageIndex return Natural is
