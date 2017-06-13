@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - Selling items in bases when more than one of that item type is in cargo
 - Stop crafting orders when workplace module is destroyed
 - Stop upgrading module when it is destroyed
+- Crash when can't load game data
 
 ## [1.2] - 2017-05-28
 
