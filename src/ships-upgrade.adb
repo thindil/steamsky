@@ -223,7 +223,8 @@ package body Ships.Upgrade is
            (MessageText &
             To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
             ".",
-            OrderMessage);
+            OrderMessage,
+            1);
          PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress := 0;
          PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction := NONE;
          PlayerShip.UpgradeModule := 0;
@@ -242,7 +243,8 @@ package body Ships.Upgrade is
             " stops upgrading " &
             To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
             " because it is destroyed.",
-            OrderMessage);
+            OrderMessage,
+            3);
          GiveOrders(WorkerIndex, Rest);
          return;
       end if;
@@ -282,7 +284,8 @@ package body Ships.Upgrade is
             AddMessage
               ("You don't have enough materials to upgrade " &
                To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name),
-               OrderMessage);
+               OrderMessage,
+               3);
             GiveOrders(WorkerIndex, Rest);
             exit;
          end if;
@@ -290,7 +293,8 @@ package body Ships.Upgrade is
             AddMessage
               ("You don't have repair tools to upgrade " &
                To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name),
-               OrderMessage);
+               OrderMessage,
+               3);
             GiveOrders(WorkerIndex, Rest);
             exit;
          end if;
@@ -344,7 +348,8 @@ package body Ships.Upgrade is
                      To_String
                        (PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
                      ".",
-                     OrderMessage);
+                     OrderMessage,
+                     2);
                   MaxValue :=
                     Positive
                       (Float
@@ -385,7 +390,8 @@ package body Ships.Upgrade is
                      To_String
                        (PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
                      ".",
-                     OrderMessage);
+                     OrderMessage,
+                     2);
                   MaxValue :=
                     Positive
                       (Float
@@ -441,7 +447,8 @@ package body Ships.Upgrade is
                      To_String
                        (PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
                      ".",
-                     OrderMessage);
+                     OrderMessage,
+                     2);
                   MaxValue :=
                     Positive
                       (Float

@@ -383,7 +383,8 @@ package body Crew is
                Member.OrderTime := 15;
                AddMessage
                  (To_String(Member.Name) & " back to work, fully rested.",
-                  OrderMessage);
+                  OrderMessage,
+                  1);
             end if;
             Member.PreviousOrder := Rest;
          end if;
@@ -393,7 +394,8 @@ package body Crew is
             Member.OrderTime := 15;
             AddMessage
               (To_String(Member.Name) & " is too tired to work, going rest.",
-               OrderMessage);
+               OrderMessage,
+               1);
          end if;
          if HungerLevel > 80 then
             ConsumeResult := Consume(FoodTypes(1));
@@ -405,7 +407,8 @@ package body Crew is
                AddMessage
                  (To_String(Member.Name) &
                   " is hungry, but can't find anything to eat.",
-                  OtherMessage);
+                  OtherMessage,
+                  3);
             end if;
          end if;
          Member.Hunger := HungerLevel;
@@ -419,7 +422,8 @@ package body Crew is
                AddMessage
                  (To_String(Member.Name) &
                   " is thirsty, but can't find anything to drink.",
-                  OtherMessage);
+                  OtherMessage,
+                  3);
             end if;
          end if;
          Member.Thirst := ThirstLevel;
@@ -517,7 +521,8 @@ package body Crew is
                         HealAmount := 0;
                         AddMessage
                           ("You don't have medical room to continue healing wounded crew members.",
-                           OrderMessage);
+                           OrderMessage,
+                           3);
                      end if;
                      if HealAmount > 0 then
                         HealAmount := HealAmount * (-1);
@@ -568,12 +573,14 @@ package body Crew is
                            AddMessage
                              (To_String(PlayerShip.Crew(I).Name) &
                               " finished healing wounded.",
-                              OrderMessage);
+                              OrderMessage,
+                              2);
                         end if;
                      else
                         AddMessage
                           ("You don't have any medical supplies to continue healing wounded crew members.",
-                           OrderMessage);
+                           OrderMessage,
+                           3);
                      end if;
                      if HealAmount /= 0 then
                         GiveOrders(I, Rest);
@@ -615,7 +622,8 @@ package body Crew is
                         if ToolIndex = 0 then
                            AddMessage
                              ("You can't continue cleaning ship because you don't have any cleaning tools.",
-                              OrderMessage);
+                              OrderMessage,
+                              3);
                         end if;
                         for J in PlayerShip.Crew.Iterate loop
                            if PlayerShip.Crew(J).Order = Clean then
