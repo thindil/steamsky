@@ -329,7 +329,8 @@ package body Crafts is
                      " can't work on " &
                      To_String(RecipeName) &
                      ".",
-                     CraftMessage);
+                     CraftMessage,
+                     3);
                   Module.Current_Value := 0;
                   Module.Max_Value := 0;
                   GiveOrders(CrafterIndex, Rest);
@@ -372,7 +373,8 @@ package body Crafts is
                              ("You don't have crafting materials for " &
                               To_String(RecipeName) &
                               ".",
-                              CraftMessage);
+                              CraftMessage,
+                              3);
                            Module.Current_Value := 0;
                            Module.Max_Value := 0;
                            GiveOrders(CrafterIndex, Rest);
@@ -390,7 +392,8 @@ package body Crafts is
                           ("You don't have tool for " &
                            To_String(RecipeName) &
                            ".",
-                           CraftMessage);
+                           CraftMessage,
+                           3);
                         Module.Current_Value := 0;
                         Module.Max_Value := 0;
                         GiveOrders(CrafterIndex, Rest);
@@ -441,7 +444,8 @@ package body Crafts is
                           ("You don't have enough crafting materials for " &
                            To_String(RecipeName) &
                            ".",
-                           CraftMessage);
+                           CraftMessage,
+                           3);
                         Module.Current_Value := 0;
                         Module.Max_Value := 0;
                         GiveOrders(CrafterIndex, Rest);
@@ -490,7 +494,8 @@ package body Crafts is
                              ("You don't have free cargo space for " &
                               To_String(RecipeName) &
                               ".",
-                              CraftMessage);
+                              CraftMessage,
+                              3);
                            Module.Current_Value := 0;
                            Module.Max_Value := 0;
                            GiveOrders(CrafterIndex, Rest);
@@ -530,14 +535,16 @@ package body Crafts is
                         " " &
                         To_String(Items_List(Recipe.ResultIndex).Name) &
                         ".",
-                        CraftMessage);
+                        CraftMessage,
+                        2);
                   else
                      AddMessage
                        (To_String(PlayerShip.Crew(CrafterIndex).Name) &
                         " was discovered recipe for " &
                         To_String(Items_List(Recipe.ResultIndex).Name) &
                         ".",
-                        CraftMessage);
+                        CraftMessage,
+                        2);
                   end if;
                end if;
                if PlayerShip.Crew(CrafterIndex).Order = Craft then

@@ -324,7 +324,8 @@ package body Missions is
                To_String
                  (Items_List(PlayerShip.Missions(MissionIndex).Target).Name) &
                "'.",
-               MissionMessage);
+               MissionMessage,
+               2);
          when Kill =>
             AddMessage
               ("You finished mission 'Destroy " &
@@ -336,11 +337,13 @@ package body Missions is
          when Patrol =>
             AddMessage
               ("You finished mission 'Patrol selected area'.",
-               MissionMessage);
+               MissionMessage,
+               2);
          when Explore =>
             AddMessage
               ("You finished mission 'Explore selected area'.",
-               MissionMessage);
+               MissionMessage,
+               2);
       end case;
       DeleteMission(MissionIndex, False);
       GameStats.FinishedMissions := GameStats.FinishedMissions + 1;
@@ -377,7 +380,7 @@ package body Missions is
             when Explore =>
                Append(MessageText, "'Explore selected area'.");
          end case;
-         AddMessage(To_String(MessageText), MissionMessage);
+         AddMessage(To_String(MessageText), MissionMessage, 3);
       else
          if Mission.MType = Deliver then
             GainRep

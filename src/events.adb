@@ -118,7 +118,8 @@ package body Events is
                      if Roll2 > GetSkillLevel(CrewIndex, 2) then
                         AddMessage
                           ("One of your engines is taking damage.",
-                           OtherMessage);
+                           OtherMessage,
+                           3);
                         for I in
                           PlayerShip.Modules.First_Index ..
                               PlayerShip.Modules.Last_Index loop
@@ -140,7 +141,8 @@ package body Events is
                         AddMessage
                           (To_String(PlayerShip.Crew(CrewIndex).Name) &
                            " has prevented engine damage.",
-                           OtherMessage);
+                           OtherMessage,
+                           2);
                      end if;
                      GainExp(1, 2, CrewIndex);
                   end if;
@@ -149,7 +151,8 @@ package body Events is
                   if CrewIndex > 0 then
                      AddMessage
                        ("Sudden bad weather makes your travel takes longer.",
-                        OtherMessage);
+                        OtherMessage,
+                        3);
                      TimePassed := 60 - GetSkillLevel(CrewIndex, 1);
                      if TimePassed < 1 then
                         TimePassed := 1;

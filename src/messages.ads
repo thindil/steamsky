@@ -31,9 +31,10 @@ package Messages is
       MissionMessage); -- Types of messages
    type Message_Data is -- Data structure for messages
    record
-      Message: Unbounded_String;
-      MType: Message_Type;
-      MessageIndex: Positive;
+      Message: Unbounded_String; -- Text of message
+      MType: Message_Type; -- Type of message
+      MessageIndex: Positive; -- Index of message
+      Color: Natural; -- Color used for show message
    end record;
    package Messages_Container is new Vectors(Positive, Message_Data);
    Messages_List: Messages_Container.Vector; -- List of all messages
@@ -44,7 +45,8 @@ package Messages is
      (Time: Date_Record := GameDate) return String; -- Format game time
    procedure AddMessage
      (Message: String;
-      MType: Message_Type); -- Add new message to list
+      MType: Message_Type;
+      Color: Natural := 0); -- Add new message to list
    function GetMessage
      (MessageIndex: Integer;
       MType: Message_Type :=
@@ -57,7 +59,8 @@ package Messages is
      return Natural; -- Return amount of selected type messages
    procedure RestoreMessage
      (Message: Unbounded_String;
-      MType: Message_Type := Default); -- Restore message from save file
+      MType: Message_Type := Default;
+      Color: Natural := 0); -- Restore message from save file
    function GetLastMessageIndex return Natural; -- Return last message index
 
 end Messages;

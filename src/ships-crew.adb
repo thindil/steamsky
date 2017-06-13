@@ -70,13 +70,15 @@ package body Ships.Crew is
                " died from " &
                To_String(Reason) &
                ".",
-               CombatMessage);
+               CombatMessage,
+               3);
          end if;
       else
          if Ship = PlayerShip then
             AddMessage
               ("You died from " & To_String(Reason) & ".",
-               CombatMessage);
+               CombatMessage,
+               3);
             PlayerShip.Crew(MemberIndex).Order := Rest;
             PlayerShip.Crew(MemberIndex).Health := 0;
             return;

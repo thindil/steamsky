@@ -28,9 +28,8 @@ package body Messages.UI is
 
    procedure ShowMessages is
       LinesAmount: Line_Position := 0;
-      TextMessages: Unbounded_String;
       Messages_Items: constant Item_Array_Access := new Item_Array(1 .. 8);
-      MenuHeight: Line_Position;
+      MenuHeight, CurrentLine: Line_Position;
       MenuLength: Column_Position;
    begin
       if Messages_List.Length = 0 then
@@ -74,8 +73,6 @@ package body Messages.UI is
       if MessagesPad = Null_Window then
          for Message of reverse Messages_List loop
             if Message.MType = MessagesType or MessagesType = Default then
-               Append(TextMessages, Message.Message);
-               Append(TextMessages, ASCII.LF);
                LinesAmount := LinesAmount + 1;
                if Length(Message.Message) > Positive(Columns - 2) then
                   LinesAmount :=
@@ -87,11 +84,29 @@ package body Messages.UI is
          end loop;
          if LinesAmount < 1 then
             LinesAmount := 1;
-            TextMessages :=
-              To_Unbounded_String("There no messages of that type.");
          end if;
          MessagesPad := New_Pad(LinesAmount + 1, Columns - 2);
-         Add(Win => MessagesPad, Str => To_String(TextMessages));
+         if MessagesAmount(MessagesType) = 0 then
+            Add(Win => MessagesPad, Str => "There no messages of that type.");
+         else
+            CurrentLine := 0;
+            for Message of reverse Messages_List loop
+               if Message.MType = MessagesType or MessagesType = Default then
+                  Add(Win => MessagesPad, Str => To_String(Message.Message));
+                  Change_Attributes
+                    (Win => MessagesPad,
+                     Line => CurrentLine,
+                     Column => 0,
+                     Count => Length(Message.Message),
+                     Color => Color_Pair(Message.Color));
+                  CurrentLine := CurrentLine + 1;
+                  Move_Cursor
+                    (Win => MessagesPad,
+                     Line => CurrentLine,
+                     Column => 0);
+               end if;
+            end loop;
+         end if;
          EndIndex := Integer(LinesAmount - (Lines - 4));
          if EndIndex < 0 then
             EndIndex := 0;
@@ -148,6 +163,12 @@ package body Messages.UI is
          end if;
          exit when CurrentLine >= WindowHeight;
          Add(Win => MessagesWindow, Str => To_String(Message.Message));
+         Change_Attributes
+           (Win => MessagesWindow,
+            Line => CurrentLine - 1,
+            Column => 2,
+            Count => Length(Message.Message),
+            Color => Color_Pair(Message.Color));
          Move_Cursor(Win => MessagesWindow, Line => CurrentLine, Column => 2);
       end loop;
       Refresh(MessagesWindow);
