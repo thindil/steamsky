@@ -17,9 +17,10 @@ All notable changes to this project will be documented in this file.
 - Auto set skybase as player ship destination after finished mission (and
   option to enable or disable it)
 - Auto finish missions when player ship is near corresponding skybase (and
-  optionto enable or disable it)
+  option to enable or disable it)
 - End game after losing all fuel during fly
 - Option to location of game directories via console parameters
+- Coloring messages which made saves from previous versions incompatible
 
 ### Changed
 - Updated interface
