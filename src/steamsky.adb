@@ -99,17 +99,6 @@ begin
          end if;
       end if;
    end loop;
-   if not LoadData then
-      Move_Cursor(Line => (Lines / 2), Column => 2);
-      Add
-        (Str =>
-           "Can't load game data. Probably missing file " &
-           To_String(DataDirectory) &
-           "game.dat");
-      Key := Get_Keystroke;
-      End_Windows;
-      return;
-   end if;
    Init_Screen;
    Start_Color;
    Set_Timeout_Mode(Standard_Window, Blocking, 0);
@@ -133,6 +122,18 @@ begin
       Add
         (Str =>
            "Your terminal size is too small for game. Minimal size is 40x24. Press any key, to exit from game.");
+      Key := Get_Keystroke;
+      End_Windows;
+      return;
+   end if;
+
+   if not LoadData then
+      Move_Cursor(Line => (Lines / 2), Column => 2);
+      Add
+        (Str =>
+           "Can't load game data. Probably missing file " &
+           To_String(DataDirectory) &
+           "game.dat");
       Key := Get_Keystroke;
       End_Windows;
       return;
