@@ -17,6 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Log; use Log;
 with Game; use Game;
 
@@ -32,10 +33,13 @@ package body Help is
       if Help_List.Length > 0 then
          return;
       end if;
-      if not Exists(To_String(DataDirectory) & "help/") then
+      if not Exists(To_String(DataDirectory) & "help" & Dir_Separator) then
          raise Help_Directory_Not_Found;
       end if;
-      Start_Search(Files, To_String(DataDirectory) & "help/", "*.dat");
+      Start_Search
+        (Files,
+         To_String(DataDirectory) & "help" & Dir_Separator,
+         "*.dat");
       if not More_Entries(Files) then
          raise Help_Files_Not_Found;
       end if;

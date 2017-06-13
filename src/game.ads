@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 
 package Game is
 
@@ -121,10 +122,11 @@ package Game is
    MoneyName: Unbounded_String;
    SaveDirectory: Unbounded_String :=
      To_Unbounded_String
-       ("data/"); -- Path to directory where are savegame and logs
+       ("data" &
+        Dir_Separator); -- Path to directory where are savegame and logs
    DataDirectory: Unbounded_String :=
      To_Unbounded_String
-       ("data/"); -- Path to directory where are game data files
+       ("data" & Dir_Separator); -- Path to directory where are game data files
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
