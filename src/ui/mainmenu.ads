@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,13 +16,15 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Game; use Game;
 
 package MainMenu is
 
    DocDirectory: Unbounded_String :=
-     To_Unbounded_String("doc/"); -- Path to directory where documentation is
+     To_Unbounded_String
+       ("doc" & Dir_Separator); -- Path to directory where documentation is
 
    procedure ShowMainMenu; -- Show main game menu
    function MainMenuKeys
