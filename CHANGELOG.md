@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Stop crafting orders when workplace module is destroyed
 - Stop upgrading module when it is destroyed
 - Crash when can't load game data
+- Info about minimal screen size
 
 ## [1.0.3] - 2017-06-04
 
