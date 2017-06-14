@@ -68,6 +68,11 @@ package Bases is
    procedure GainRep
      (BaseIndex: Positive;
       Points: Integer); -- Gain reputation in selected base
+   procedure CountPrice
+     (Price: in out Positive;
+      TraderIndex: Natural;
+      Reduce: Boolean :=
+        True); -- Count price for actions with bases (buying/selling/docking/ect)
    procedure BuyItems
      (ItemIndex: Positive;
       Amount: String); -- Buy items from bases

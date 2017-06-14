@@ -231,36 +231,7 @@ package body Ships.Movement is
                end if;
             end loop;
             TraderIndex := FindMember(Talk);
-            if TraderIndex > 0 then
-               DockingCost :=
-                 DockingCost -
-                 Integer
-                   (Float'Floor
-                      (Float(DockingCost) *
-                       (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
-            end if;
-            case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-              .Reputation
-              (1) is
-               when -24 .. -1 =>
-                  DockingCost :=
-                    DockingCost +
-                    Integer(Float'Floor(Float(DockingCost) * 0.05));
-               when 26 .. 50 =>
-                  DockingCost :=
-                    DockingCost -
-                    Integer(Float'Floor(Float(DockingCost) * 0.05));
-               when 51 .. 75 =>
-                  DockingCost :=
-                    DockingCost -
-                    Integer(Float'Floor(Float(DockingCost) * 0.1));
-               when 76 .. 100 =>
-                  DockingCost :=
-                    DockingCost -
-                    Integer(Float'Floor(Float(DockingCost) * 0.15));
-               when others =>
-                  null;
-            end case;
+            CountPrice(DockingCost, TraderIndex);
             if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
                ShowDialog
                  ("You can't dock to base because you don't have enough " &
