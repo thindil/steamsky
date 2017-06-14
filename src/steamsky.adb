@@ -81,7 +81,7 @@ begin
       Move_Cursor(Line => (Lines / 2), Column => 2);
       Add
         (Str =>
-           "Your terminal size is too small for game. Minimal size is 40x24. Press any key, to exit from game.");
+           "Your terminal size is too small for game. Minimal size is 60x24. Press any key, to exit from game.");
       Key := Get_Keystroke;
       End_Windows;
       return;
