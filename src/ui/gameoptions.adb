@@ -54,8 +54,7 @@ package body GameOptions is
       procedure CreateLabel(Line: Line_Position; Text: String) is
          FormIndex: constant Positive := Natural(Line * 2) + 1;
       begin
-         Options_Fields.all(FormIndex) :=
-           New_Field(1, (Columns / 2), Line, 0, 0, 0);
+         Options_Fields.all(FormIndex) := New_Field(1, 40, Line, 0, 0, 0);
          Set_Buffer(Options_Fields.all(FormIndex), 0, Text);
          FieldOptions := Get_Options(Options_Fields.all(FormIndex));
          FieldOptions.Active := False;
@@ -63,7 +62,7 @@ package body GameOptions is
       end CreateLabel;
    begin
       CreateLabel(0, "Auto rest when crew is tired: ");
-      Options_Fields.all(2) := New_Field(1, 6, 0, ((Columns / 2) + 1), 0, 0);
+      Options_Fields.all(2) := New_Field(1, 6, 0, 41, 0, 0);
       Set_Field_Type(Options_Fields.all(2), Create(YesNo, True));
       if GameSettings.AutoRest then
          Set_Buffer(Options_Fields.all(2), 0, "Yes ->");
@@ -77,7 +76,7 @@ package body GameOptions is
         (Options_Fields.all(2),
          (Reverse_Video => True, others => False));
       CreateLabel(1, "Default speed after undocking: ");
-      Options_Fields.all(4) := New_Field(1, 16, 1, ((Columns / 2) + 1), 0, 0);
+      Options_Fields.all(4) := New_Field(1, 16, 1, 41, 0, 0);
       Set_Field_Type(Options_Fields.all(4), Create(SpeedEnum, True));
       case GameSettings.UndockSpeed is
          when FULL_STOP =>
@@ -95,7 +94,7 @@ package body GameOptions is
       FieldOptions.Edit := False;
       Set_Options(Options_Fields.all(4), FieldOptions);
       CreateLabel(2, "Auto center map after set destination: ");
-      Options_Fields.all(6) := New_Field(1, 6, 2, ((Columns / 2) + 1), 0, 0);
+      Options_Fields.all(6) := New_Field(1, 6, 2, 41, 0, 0);
       Set_Field_Type(Options_Fields.all(6), Create(YesNo2, True));
       if GameSettings.AutoCenter then
          Set_Buffer(Options_Fields.all(6), 0, "Yes ->");
@@ -106,7 +105,7 @@ package body GameOptions is
       FieldOptions.Edit := False;
       Set_Options(Options_Fields.all(6), FieldOptions);
       CreateLabel(3, "Auto set base after finished mission: ");
-      Options_Fields.all(8) := New_Field(1, 6, 3, ((Columns / 2) + 1), 0, 0);
+      Options_Fields.all(8) := New_Field(1, 6, 3, 41, 0, 0);
       Set_Field_Type(Options_Fields.all(8), Create(YesNo3, True));
       if GameSettings.AutoReturn then
          Set_Buffer(Options_Fields.all(8), 0, "Yes ->");
@@ -117,7 +116,7 @@ package body GameOptions is
       FieldOptions.Edit := False;
       Set_Options(Options_Fields.all(8), FieldOptions);
       CreateLabel(4, "Auto finish missions: ");
-      Options_Fields.all(10) := New_Field(1, 6, 4, ((Columns / 2) + 1), 0, 0);
+      Options_Fields.all(10) := New_Field(1, 6, 4, 41, 0, 0);
       Set_Field_Type(Options_Fields.all(10), Create(YesNo4, True));
       if GameSettings.AutoFinish then
          Set_Buffer(Options_Fields.all(10), 0, "Yes ->");
