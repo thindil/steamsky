@@ -462,4 +462,12 @@ package body Game is
       return True;
    end LoadData;
 
+   function DaysDifference(DateToCompare: Date_Record) return Natural is
+   begin
+      return (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
+        (DateToCompare.Day +
+         (30 * DateToCompare.Month) +
+         (DateToCompare.Year * 360));
+   end DaysDifference;
+
 end Game;

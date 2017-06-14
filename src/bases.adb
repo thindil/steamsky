@@ -552,7 +552,6 @@ package body Bases is
    end UpgradeShip;
 
    procedure GenerateRecruits(BaseIndex: Positive) is
-      TimeDiff: Natural;
       MaxRecruits,
       RecruitsAmount,
       SkillsAmount,
@@ -564,12 +563,8 @@ package body Bases is
       Price: Natural;
       SkillIndex: Integer;
    begin
-      TimeDiff :=
-        (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
-        (SkyBases(BaseIndex).RecruitDate.Day +
-         (30 * SkyBases(BaseIndex).RecruitDate.Month) +
-         (SkyBases(BaseIndex).RecruitDate.Year * 360));
-      if TimeDiff < 30 or SkyBases(BaseIndex).Owner = Abandoned then
+      if DaysDifference(SkyBases(BaseIndex).RecruitDate) < 30 or
+        SkyBases(BaseIndex).Owner = Abandoned then
          return;
       end if;
       if SkyBases(BaseIndex).Population < 150 then
@@ -791,7 +786,6 @@ package body Bases is
    procedure AskForEvents is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      TimeDiff: Natural;
       MaxEvents, EventsAmount, TmpBaseIndex, TraderIndex, ItemIndex: Positive;
       Event: Events_Types;
       EventX, EventY, EventTime, DiffX, DiffY: Positive;
@@ -803,12 +797,7 @@ package body Bases is
       PlayerValue: Natural := 0;
       Attempts: Natural;
    begin
-      TimeDiff :=
-        (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
-        (SkyBases(BaseIndex).AskedForEvents.Day +
-         (30 * SkyBases(BaseIndex).AskedForEvents.Month) +
-         (SkyBases(BaseIndex).AskedForEvents.Year * 360));
-      if TimeDiff < 7 then
+      if DaysDifference(SkyBases(BaseIndex).AskedForEvents) < 7 then
          ShowDialog("You asked for know events in this base not so long ago.");
          return;
       end if;
@@ -1051,15 +1040,9 @@ package body Bases is
    end BuyRecipe;
 
    procedure UpdatePopulation(BaseIndex: Positive) is
-      TimeDiff: Natural;
       PopulationDiff: Integer;
    begin
-      TimeDiff :=
-        (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
-        (SkyBases(BaseIndex).RecruitDate.Day +
-         (30 * SkyBases(BaseIndex).RecruitDate.Month) +
-         (SkyBases(BaseIndex).RecruitDate.Year * 360));
-      if TimeDiff < 30 then
+      if DaysDifference(SkyBases(BaseIndex).RecruitDate) < 30 then
          return;
       end if;
       if SkyBases(BaseIndex).Owner /= Abandoned then
