@@ -37,7 +37,6 @@ with Events; use Events;
 package body Missions is
 
    procedure GenerateMissions(BaseIndex: Positive) is
-      TimeDiff: Natural;
       MissionsAmount, MissionX, MissionY, TmpBaseIndex, DiffX, DiffY: Positive;
       Mission: Mission_Data;
       MissionsItems, BasesInRange: Positive_Container.Vector;
@@ -48,12 +47,8 @@ package body Missions is
       Enemies: Positive_Container.Vector;
       PlayerValue: Natural := 0;
    begin
-      TimeDiff :=
-        (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
-        (SkyBases(BaseIndex).MissionsDate.Day +
-         (30 * SkyBases(BaseIndex).MissionsDate.Month) +
-         (SkyBases(BaseIndex).MissionsDate.Year * 360));
-      if TimeDiff < 7 or SkyBases(BaseIndex).Owner = Abandoned then
+      if DaysDifference(SkyBases(BaseIndex).MissionsDate) < 7 or
+        SkyBases(BaseIndex).Owner = Abandoned then
          return;
       end if;
       case SkyBases(BaseIndex).Population is
