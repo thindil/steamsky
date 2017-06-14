@@ -1,3 +1,5 @@
 *.ads
 *.adb
 *.bexch
+*.stderr
+*.stdout
