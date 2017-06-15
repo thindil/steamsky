@@ -34,23 +34,37 @@ package body Missions.UI is
    procedure ShowMissionInfo is
       Mission: constant Mission_Data :=
         PlayerShip.Missions(Get_Index(Current(MissionsMenu)));
-      InfoWindow: Window;
+      InfoWindow, ClearWindow: Window;
       CurrentLine: Line_Position := 2;
       MinutesDiff, Distance: Natural;
       MissionTime: Date_Record :=
         (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
+      WindowHeight: Line_Position := 6;
    begin
-      InfoWindow := Create(15, (Columns / 2), 3, (Columns / 2));
+      ClearWindow := Create(15, (Columns / 2), 3, (Columns / 2));
+      Refresh(ClearWindow);
+      Delete(ClearWindow);
+      if Mission.Finished then
+         WindowHeight := WindowHeight + 1;
+      end if;
+      if Mission.MType = Deliver or Mission.MType = Passenger then
+         WindowHeight := WindowHeight + 1;
+      end if;
+      InfoWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
+      Box(InfoWindow);
+      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
+      Add(Win => InfoWindow, Str => "[Mission info]");
+      Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       Add
         (Win => InfoWindow,
          Str => "From base: " & To_String(SkyBases(Mission.StartBase).Name));
-      Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
+      Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
       case Mission.MType is
          when Deliver =>
             Add
               (Win => InfoWindow,
                Str => "Item: " & To_String(Items_List(Mission.Target).Name));
-            Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
             Add
               (Win => InfoWindow,
                Str =>
@@ -75,7 +89,7 @@ package body Missions.UI is
                Str =>
                  "Passenger: " &
                  To_String(PlayerShip.Crew(Mission.Target).Name));
-            Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
             Add
               (Win => InfoWindow,
                Str =>
@@ -94,7 +108,7 @@ package body Missions.UI is
              (SkyBases(Mission.StartBase).SkyX,
               SkyBases(Mission.StartBase).SkyY);
       end if;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
       Add(Win => InfoWindow, Str => "Distance:" & Integer'Image(Distance));
       MinutesDiff := Mission.Time;
       while MinutesDiff > 0 loop
@@ -116,7 +130,7 @@ package body Missions.UI is
          end if;
       end loop;
       CurrentLine := CurrentLine + 1;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
       Add(Win => InfoWindow, Str => "Time limit:");
       if MissionTime.Year > 0 then
          Add(Win => InfoWindow, Str => Positive'Image(MissionTime.Year) & "y");
@@ -138,7 +152,7 @@ package body Missions.UI is
             Str => Positive'Image(MissionTime.Minutes) & "mins");
       end if;
       CurrentLine := CurrentLine + 1;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
       Add
         (Win => InfoWindow,
          Str =>
@@ -148,45 +162,35 @@ package body Missions.UI is
            To_String(MoneyName));
       if Mission.Finished then
          CurrentLine := CurrentLine + 1;
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add(Win => InfoWindow, Str => "Mission is ready to return.");
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine + 2, Column => 0);
-         Add
-           (Win => InfoWindow,
-            Str => "Press SPACE to show start base on map");
+         Move_Cursor(Line => WindowHeight + 3, Column => (Columns / 2));
+         Add(Str => "Press SPACE to show start base on map");
          Change_Attributes
-           (Win => InfoWindow,
-            Line => CurrentLine + 2,
-            Column => 6,
+           (Line => WindowHeight + 3,
+            Column => (Columns / 2) + 6,
             Count => 5,
             Color => 1);
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine + 3, Column => 0);
-         Add
-           (Win => InfoWindow,
-            Str => "Press ENTER to set start base as a destination for ship");
+         Move_Cursor(Line => WindowHeight + 4, Column => (Columns / 2));
+         Add(Str => "Press ENTER to set start base as a destination for ship");
          Change_Attributes
-           (Win => InfoWindow,
-            Line => CurrentLine + 3,
-            Column => 6,
+           (Line => WindowHeight + 4,
+            Column => (Columns / 2) + 6,
             Count => 5,
             Color => 1);
       else
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine + 2, Column => 0);
-         Add(Win => InfoWindow, Str => "Press SPACE to show mission on map");
+         Move_Cursor(Line => WindowHeight + 3, Column => (Columns / 2));
+         Add(Str => "Press SPACE to show mission on map");
          Change_Attributes
-           (Win => InfoWindow,
-            Line => CurrentLine + 2,
-            Column => 6,
+           (Line => WindowHeight + 3,
+            Column => (Columns / 2) + 6,
             Count => 5,
             Color => 1);
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine + 3, Column => 0);
-         Add
-           (Win => InfoWindow,
-            Str => "Press ENTER to set mission as a destination for ship");
+         Move_Cursor(Line => WindowHeight + 4, Column => (Columns / 2));
+         Add(Str => "Press ENTER to set mission as a destination for ship");
          Change_Attributes
-           (Win => InfoWindow,
-            Line => CurrentLine + 3,
-            Column => 6,
+           (Line => WindowHeight + 4,
+            Column => (Columns / 2) + 6,
             Count => 5,
             Color => 1);
       end if;
