@@ -63,8 +63,6 @@ You can set game directories by starting parameters. Possible options are:
 Of course, you can set all parameters together: `./steamsky --datadir=somedir/
 --savedir=otherdir/ --docdir=anotherdir/`
 
-Important: all set in that way directories must end with slash.
-
 Paths to directories can be absolute or relative where file `steamsky` is.
 
 ## Modify game
