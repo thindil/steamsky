@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - End game after losing all fuel during fly
 - Option to location of game directories via console parameters
 - Coloring messages which made saves from previous versions incompatible
+- New type of missions: transport of passengers
 
 ### Changed
 - Updated interface
