@@ -425,6 +425,12 @@ package body UserInterface is
                              New_Item("Complete Explore area mission");
                            MenuIndex := MenuIndex + 1;
                         end if;
+                     when Passenger =>
+                        if Mission.Finished then
+                           Orders_Items.all(MenuIndex) :=
+                             New_Item("Complete Transport passenger mission");
+                           MenuIndex := MenuIndex + 1;
+                        end if;
                   end case;
                end if;
             end loop;
@@ -588,6 +594,14 @@ package body UserInterface is
                                    New_Item("Complete Explore area mission");
                                  MenuIndex := MenuIndex + 1;
                               end if;
+                           when Passenger =>
+                              if Mission.Finished and
+                                Mission.StartBase = BaseIndex then
+                                 Orders_Items.all(MenuIndex) :=
+                                   New_Item
+                                     ("Complete Transport passenger mission");
+                                 MenuIndex := MenuIndex + 1;
+                              end if;
                         end case;
                      end if;
                   end loop;
@@ -597,7 +611,7 @@ package body UserInterface is
                        Mission.TargetY = PlayerShip.SkyY and
                        not Mission.Finished then
                         case Mission.MType is
-                           when Deliver =>
+                           when Deliver | Passenger =>
                               null;
                            when Kill =>
                               Orders_Items.all(MenuIndex) :=

@@ -19,11 +19,11 @@ with Ada.Containers.Vectors; use Ada.Containers;
 
 package Missions is
 
-   type Missions_Types is (Deliver, Kill, Patrol, Explore);
+   type Missions_Types is (Deliver, Kill, Patrol, Explore, Passenger);
    type Mission_Data is -- Data structure for missions
    record
       MType: Missions_Types; -- Type of mission
-      Target: Natural; -- Target for mission (ship or item index)
+      Target: Natural; -- Target for mission (ship, item or passenger index)
       Time: Positive; -- Amount of minutes to finish mission
       TargetX: Natural; -- Skymap X-axis for mission target
       TargetY: Natural; -- Skymap Y-axis for mission target

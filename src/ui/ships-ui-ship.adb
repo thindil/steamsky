@@ -602,6 +602,7 @@ package body Ships.UI.Ship is
       MenuLength: Column_Position;
       MaxValue: Positive;
       MenuIndex: Positive := 1;
+      IsPassenger: Boolean := False;
    begin
       MaxValue :=
         Natural
@@ -649,8 +650,17 @@ package body Ships.UI.Ship is
                  New_Item("Upgrade quality", "2");
                MenuIndex := MenuIndex + 1;
             end if;
-            Options_Items.all(MenuIndex) := New_Item("Assign owner", "7");
-            MenuIndex := MenuIndex + 1;
+            for Mission of PlayerShip.Missions loop
+               if Mission.MType = Passenger and
+                 Mission.Target = PlayerShip.Modules(ModuleIndex).Owner then
+                  IsPassenger := True;
+                  exit;
+               end if;
+            end loop;
+            if not IsPassenger then
+               Options_Items.all(MenuIndex) := New_Item("Assign owner", "7");
+               MenuIndex := MenuIndex + 1;
+            end if;
          when GUN =>
             MaxValue :=
               Natural
@@ -759,7 +769,8 @@ package body Ships.UI.Ship is
       MenuIndex: Positive := 1;
    begin
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-         if PlayerShip.Modules(ModuleIndex).Owner /= I then
+         if PlayerShip.Modules(ModuleIndex).Owner /= I and
+           PlayerShip.Crew(I).Skills.Length > 0 then
             case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
               .MType is
                when MEDICAL_ROOM =>
