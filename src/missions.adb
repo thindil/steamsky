@@ -39,7 +39,7 @@ package body Missions is
    procedure GenerateMissions(BaseIndex: Positive) is
       MissionsAmount, MissionX, MissionY, TmpBaseIndex, DiffX, DiffY: Positive;
       Mission: Mission_Data;
-      MissionsItems, BasesInRange: Positive_Container.Vector;
+      MissionsItems, BasesInRange, Cabins: Positive_Container.Vector;
       MinX, MinY, MaxX, MaxY: Integer;
       type Value_Type is digits 2 range 0.0 .. 9999999.0;
       package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions
@@ -74,6 +74,11 @@ package body Missions is
       for I in Items_List.Iterate loop
          if Items_List(I).IType = MissionItemsType then
             MissionsItems.Append(New_Item => Objects_Container.To_Index(I));
+         end if;
+      end loop;
+      for I in Modules_List.Iterate loop
+         if Modules_List(I).MType = CABIN then
+            Cabins.Append(New_Item => BaseModules_Container.To_Index(I));
          end if;
       end loop;
       MinX := PlayerShip.SkyX - 100;
@@ -165,9 +170,12 @@ package body Missions is
                   Mission.Target := 0;
                   Mission.MType := Patrol;
                end if;
+            when Passenger =>
+               Mission.Target :=
+                 Cabins(GetRandom(Cabins.First_Index, Cabins.Last_Index));
          end case;
          loop
-            if Mission.MType /= Deliver then
+            if Mission.MType /= Deliver and Mission.MType /= Passenger then
                MissionX := GetRandom(MinX, MaxX);
                MissionY := GetRandom(MinY, MaxY);
                exit when SkyMap(MissionX, MissionY).BaseIndex = 0 and
@@ -193,7 +201,7 @@ package body Missions is
                    (Value_Type(80) *
                     Value_Functions.Sqrt(Value_Type((DiffX**2) + (DiffY**2))));
                Mission.Reward := (Mission.Time / 4);
-            when Kill =>
+            when Kill | Passenger =>
                Mission.Time :=
                  Positive
                    (Value_Type(180) *
@@ -220,6 +228,9 @@ package body Missions is
       Mission: Mission_Data := SkyBases(BaseIndex).Missions(MissionIndex);
       AcceptMessage: Unbounded_String;
       TraderIndex: Positive;
+      HaveCabin: Boolean := False;
+      Gender: Character;
+      Skills: Skills_Container.Vector;
    begin
       if SkyBases(BaseIndex).Reputation(1) < 0 then
          ShowDialog
@@ -255,6 +266,19 @@ package body Missions is
             return;
          end if;
       end if;
+      if Mission.MType = Passenger then
+         for Module of PlayerShip.Modules loop
+            if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
+               HaveCabin := True;
+               exit;
+            end if;
+         end loop;
+         if not HaveCabin then
+            ShowDialog
+              ("You don't have proper (or free) cabin for this passenger.");
+            return;
+         end if;
+      end if;
       TraderIndex := FindMember(Talk);
       Mission.StartBase := BaseIndex;
       Mission.Finished := False;
@@ -277,6 +301,33 @@ package body Missions is
             Append(AcceptMessage, "'Patrol selected area'.");
          when Explore =>
             Append(AcceptMessage, "'Explore selected area'.");
+         when Passenger =>
+            Append(AcceptMessage, "'Transport passenger to base'.");
+            if GetRandom(1, 2) = 1 then
+               Gender := 'M';
+            else
+               Gender := 'F';
+            end if;
+            PlayerShip.Crew.Append
+            (New_Item =>
+               (Name => GenerateMemberName(Gender),
+                Gender => Gender,
+                Health => 100,
+                Tired => 0,
+                Skills => Skills,
+                Hunger => 0,
+                Thirst => 0,
+                Order => Rest,
+                PreviousOrder => Rest,
+                OrderTime => 15,
+                Orders => (others => 0)));
+            for Module of PlayerShip.Modules loop
+               if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
+                  Module.Owner := PlayerShip.Crew.Last_Index;
+                  exit;
+               end if;
+            end loop;
+            Mission.Target := PlayerShip.Crew.Last_Index;
       end case;
       SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex, Count => 1);
       PlayerShip.Missions.Append(New_Item => Mission);
@@ -339,6 +390,11 @@ package body Missions is
               ("You finished mission 'Explore selected area'.",
                MissionMessage,
                2);
+         when Passenger =>
+            AddMessage
+              ("You finished mission 'Transport passenger to base'.",
+               MissionMessage,
+               2);
       end case;
       DeleteMission(MissionIndex, False);
       GameStats.FinishedMissions := GameStats.FinishedMissions + 1;
@@ -374,10 +430,12 @@ package body Missions is
                Append(MessageText, "'Patrol selected area'.");
             when Explore =>
                Append(MessageText, "'Explore selected area'.");
+            when Passenger =>
+               Append(MessageText, "'Transport passenger to base'.");
          end case;
          AddMessage(To_String(MessageText), MissionMessage, 3);
       else
-         if Mission.MType = Deliver then
+         if Mission.MType = Deliver or Mission.MType = Passenger then
             GainRep
               (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
                (Reputation / 2));
@@ -407,10 +465,12 @@ package body Missions is
          SkyBases(Mission.StartBase).SkyY)
         .MissionIndex :=
         0;
+      PlayerShip.Missions.Delete(Index => MissionIndex, Count => 1);
       if Mission.MType = Deliver then
          UpdateCargo(PlayerShip, Mission.Target, -1);
+      elsif Mission.MType = Passenger then
+         DeleteMember(Mission.Target, PlayerShip);
       end if;
-      PlayerShip.Missions.Delete(Index => MissionIndex, Count => 1);
       for I in
         PlayerShip.Missions.First_Index .. PlayerShip.Missions.Last_Index loop
          if PlayerShip.Missions(I).Finished then
@@ -463,6 +523,8 @@ package body Missions is
             Append(MessageText, "'Patrol selected area'.");
          when Explore =>
             Append(MessageText, "'Explore selected area'.");
+         when Passenger =>
+            Append(MessageText, "'Transport passenger to base'.");
       end case;
       AddMessage(To_String(MessageText), MissionMessage);
       if GameSettings.AutoReturn then
