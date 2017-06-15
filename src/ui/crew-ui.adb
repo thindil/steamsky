@@ -108,6 +108,9 @@ package body Crew.UI is
             WindowWidth := Column_Position(Length(Hungry)) + 4;
          end if;
       end if;
+      if Member.Skills.Length = 0 then
+         WindowHeight := WindowHeight + 1;
+      end if;
       if WindowWidth > (Columns / 2) then
          WindowWidth := Columns / 2;
       end if;
@@ -120,6 +123,11 @@ package body Crew.UI is
          Add(Win => InfoWindow, Str => "Gender: Male");
       else
          Add(Win => InfoWindow, Str => "Gender: Female");
+      end if;
+      if Member.Skills.Length = 0 then
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
+         Add(Win => InfoWindow, Str => "Passenger");
+         CurrentLine := CurrentLine + 1;
       end if;
       if Health /= Null_Unbounded_String then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
@@ -141,64 +149,72 @@ package body Crew.UI is
          Add(Win => InfoWindow, Str => To_String(Hungry));
          CurrentLine := CurrentLine + 1;
       end if;
-      CurrentLine := 1;
-      WindowHeight2 := Line_Position(Member.Skills.Length) + 2;
-      SkillsWindow :=
-        Create(WindowHeight2, (Columns / 2), WindowHeight + 3, (Columns / 2));
-      Box(SkillsWindow);
-      Move_Cursor(Win => SkillsWindow, Line => 0, Column => 2);
-      Add(Win => SkillsWindow, Str => "[Skills]");
-      for Skill of Member.Skills loop
-         Move_Cursor(Win => SkillsWindow, Line => CurrentLine, Column => 2);
-         Add
-           (Win => SkillsWindow,
-            Str =>
-              To_String(Skills_Names(Skill(1))) &
-              ": " &
-              GetSkillLevelName(Skill(2)));
-         CurrentLine := CurrentLine + 1;
-      end loop;
-      case Member.Order is
-         when Pilot =>
-            OrderName := To_Unbounded_String("Piloting");
-         when Engineer =>
-            OrderName := To_Unbounded_String("Engineering");
-         when Gunner =>
-            OrderName := To_Unbounded_String("Gunner");
-         when Rest =>
-            OrderName := To_Unbounded_String("On break");
-         when Repair =>
-            OrderName := To_Unbounded_String("Repair ship");
-         when Craft =>
-            OrderName := To_Unbounded_String("Manufacturing");
-         when Upgrading =>
-            OrderName := To_Unbounded_String("Upgrading module");
-         when Talk =>
-            OrderName := To_Unbounded_String("Talking in bases");
-         when Heal =>
-            OrderName := To_Unbounded_String("Healing wounded");
-         when Clean =>
-            OrderName := To_Unbounded_String("Cleans ship");
-      end case;
-      WindowWidth := 11;
-      if Length(OrderName) + 4 > Natural(WindowWidth) then
-         WindowWidth := Column_Position(Length(OrderName)) + 4;
+      if Member.Skills.Length > 0 then
+         CurrentLine := 1;
+         WindowHeight2 := Line_Position(Member.Skills.Length) + 2;
+         SkillsWindow :=
+           Create
+             (WindowHeight2,
+              (Columns / 2),
+              WindowHeight + 3,
+              (Columns / 2));
+         Box(SkillsWindow);
+         Move_Cursor(Win => SkillsWindow, Line => 0, Column => 2);
+         Add(Win => SkillsWindow, Str => "[Skills]");
+         for Skill of Member.Skills loop
+            Move_Cursor(Win => SkillsWindow, Line => CurrentLine, Column => 2);
+            Add
+              (Win => SkillsWindow,
+               Str =>
+                 To_String(Skills_Names(Skill(1))) &
+                 ": " &
+                 GetSkillLevelName(Skill(2)));
+            CurrentLine := CurrentLine + 1;
+         end loop;
+         case Member.Order is
+            when Pilot =>
+               OrderName := To_Unbounded_String("Piloting");
+            when Engineer =>
+               OrderName := To_Unbounded_String("Engineering");
+            when Gunner =>
+               OrderName := To_Unbounded_String("Gunner");
+            when Rest =>
+               OrderName := To_Unbounded_String("On break");
+            when Repair =>
+               OrderName := To_Unbounded_String("Repair ship");
+            when Craft =>
+               OrderName := To_Unbounded_String("Manufacturing");
+            when Upgrading =>
+               OrderName := To_Unbounded_String("Upgrading module");
+            when Talk =>
+               OrderName := To_Unbounded_String("Talking in bases");
+            when Heal =>
+               OrderName := To_Unbounded_String("Healing wounded");
+            when Clean =>
+               OrderName := To_Unbounded_String("Cleans ship");
+         end case;
+         WindowWidth := 11;
+         if Length(OrderName) + 4 > Natural(WindowWidth) then
+            WindowWidth := Column_Position(Length(OrderName)) + 4;
+         end if;
+         if WindowWidth > (Columns / 2) then
+            WindowWidth := Columns / 2;
+         end if;
+         OrderWindow :=
+           Create
+             (3,
+              WindowWidth,
+              (WindowHeight + WindowHeight2 + 3),
+              (Columns / 2));
+         Box(OrderWindow);
+         Move_Cursor(Win => OrderWindow, Line => 0, Column => 2);
+         Add(Win => OrderWindow, Str => "[Order]");
+         Move_Cursor(Win => OrderWindow, Line => 1, Column => 2);
+         Add(Win => OrderWindow, Str => To_String(OrderName));
+         CurrentLine := (WindowHeight + WindowHeight2 + 6);
+      else
+         CurrentLine := (WindowHeight + 3);
       end if;
-      if WindowWidth > (Columns / 2) then
-         WindowWidth := Columns / 2;
-      end if;
-      OrderWindow :=
-        Create
-          (3,
-           WindowWidth,
-           (WindowHeight + WindowHeight2 + 3),
-           (Columns / 2));
-      Box(OrderWindow);
-      Move_Cursor(Win => OrderWindow, Line => 0, Column => 2);
-      Add(Win => OrderWindow, Str => "[Order]");
-      Move_Cursor(Win => OrderWindow, Line => 1, Column => 2);
-      Add(Win => OrderWindow, Str => To_String(OrderName));
-      CurrentLine := (WindowHeight + WindowHeight2 + 6);
       if CurrentLine >= Lines - 1 then
          CurrentLine := Lines - 2;
       end if;
@@ -244,10 +260,12 @@ package body Crew.UI is
       Refresh;
       Refresh(InfoWindow);
       Delete(InfoWindow);
-      Refresh(SkillsWindow);
-      Delete(SkillsWindow);
-      Refresh(OrderWindow);
-      Delete(OrderWindow);
+      if Member.Skills.Length > 0 then
+         Refresh(SkillsWindow);
+         Delete(SkillsWindow);
+         Refresh(OrderWindow);
+         Delete(OrderWindow);
+      end if;
    end ShowMemberInfo;
 
    procedure ShowCrewInfo is
@@ -287,12 +305,26 @@ package body Crew.UI is
       MenuIndex: Positive := 1;
       NeedHealer, HealOrder: Boolean := False;
    begin
-      if PlayerShip.Crew(MemberIndex).Tired = 100 or
-        PlayerShip.Crew(MemberIndex).Hunger = 100 or
-        PlayerShip.Crew(MemberIndex).Thirst = 100 then
+      if
+        (PlayerShip.Crew(MemberIndex).Tired = 100 or
+         PlayerShip.Crew(MemberIndex).Hunger = 100 or
+         PlayerShip.Crew(MemberIndex).Thirst = 100) and
+        PlayerShip.Crew(MemberIndex).Order /= Rest then
          Orders_Items := new Item_Array(1 .. 3);
          Orders_Items.all(1) := New_Item("Go on break", "0");
          MenuIndex := 2;
+      elsif PlayerShip.Crew(MemberIndex).Skills.Length = 0 then
+         if PlayerShip.Speed = DOCKED then
+            if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+                .Owner /=
+              Abandoned then
+               Orders_Items := new Item_Array(1 .. 3);
+               Orders_Items.all(1) := New_Item("Dismiss", "0");
+               MenuIndex := 2;
+            end if;
+         else
+            Orders_Items := new Item_Array(1 .. 2);
+         end if;
       else
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Health < 100 and
@@ -435,8 +467,10 @@ package body Crew.UI is
             end if;
          end if;
       end if;
-      Orders_Items.all(MenuIndex) := New_Item("Set orders priorities", "0");
-      MenuIndex := MenuIndex + 1;
+      if PlayerShip.Crew(MemberIndex).Skills.Length > 0 then
+         Orders_Items.all(MenuIndex) := New_Item("Set orders priorities", "0");
+         MenuIndex := MenuIndex + 1;
+      end if;
       Orders_Items.all(MenuIndex) := New_Item("Quit", "0");
       Orders_Items.all(Orders_Items'Last) := Null_Item;
       OrdersMenu := New_Menu(Orders_Items);
@@ -735,12 +769,16 @@ package body Crew.UI is
             if OrderName = "Repair ship everyone" then
                for I in
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-                  GiveOrders(I, Repair);
+                  if PlayerShip.Crew(I).Skills.Length > 0 then
+                     GiveOrders(I, Repair);
+                  end if;
                end loop;
             elsif OrderName = "Clean ship everyone" then
                for I in
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-                  GiveOrders(I, Clean);
+                  if PlayerShip.Crew(I).Skills.Length > 0 then
+                     GiveOrders(I, Clean);
+                  end if;
                end loop;
             end if;
             DrawGame(Crew_Info);

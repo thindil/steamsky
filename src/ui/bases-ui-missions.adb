@@ -19,6 +19,7 @@ with Maps; use Maps;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Items; use Items;
+with ShipModules; use ShipModules;
 
 package body Bases.UI.Missions is
 
@@ -62,6 +63,8 @@ package body Bases.UI.Missions is
       case Mission.MType is
          when Deliver =>
             WindowWidth := 8;
+         when Passenger =>
+            WindowWidth := 7;
          when others =>
             WindowWidth := 6;
             Move_Cursor(Line => 9, Column => (Columns / 2));
@@ -109,6 +112,22 @@ package body Bases.UI.Missions is
                  "Target: " & To_String(ProtoShips_List(Mission.Target).Name));
          when Explore =>
             Add(Win => InfoWindow, Str => "Explore selected area");
+         when Passenger =>
+            Add
+              (Win => InfoWindow,
+               Str =>
+                 "Needed cabin: " &
+                 To_String(Modules_List(Mission.Target).Name));
+            Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
+            Add
+              (Win => InfoWindow,
+               Str =>
+                 "To base: " &
+                 To_String
+                   (SkyBases
+                      (SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
+                      .Name));
+            CurrentLine := 3;
       end case;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
       Add
@@ -227,6 +246,9 @@ package body Bases.UI.Missions is
                Missions_Items.all(I) := New_Item("Destroy ship");
             when Explore =>
                Missions_Items.all(I) := New_Item("Explore area");
+            when Passenger =>
+               Missions_Items.all(I) :=
+                 New_Item("Transport passenger to base");
          end case;
       end loop;
       Missions_Items.all(Missions_Items'Last) := Null_Item;

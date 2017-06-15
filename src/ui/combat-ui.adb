@@ -502,7 +502,7 @@ package body Combat.UI is
          end case;
       end loop;
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-         if I /= MemberIndex then
+         if I /= MemberIndex and PlayerShip.Crew(I).Skills.Length > 0 then
             SkillString := Null_Unbounded_String;
             case Order is
                when Pilot =>

@@ -229,6 +229,8 @@ package body Maps.UI is
                 (Length
                    (Items_List(PlayerShip.Missions(MissionIndex).Target)
                       .Name));
+         elsif PlayerShip.Missions(MissionIndex).MType = Passenger then
+            NewWindowWidth := 23;
          end if;
          if NewWindowWidth > WindowWidth then
             WindowWidth := NewWindowWidth;
@@ -356,6 +358,8 @@ package body Maps.UI is
                Add(Win => InfoWindow, Str => "Patrol area");
             when Explore =>
                Add(Win => InfoWindow, Str => "Explore area");
+            when Passenger =>
+               Add(Win => InfoWindow, Str => "Transport passenger");
          end case;
       end if;
       if MoveX /= 0 or MoveY /= 0 then

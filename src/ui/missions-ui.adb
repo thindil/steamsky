@@ -69,6 +69,22 @@ package body Missions.UI is
                  "Target: " & To_String(ProtoShips_List(Mission.Target).Name));
          when Explore =>
             Add(Win => InfoWindow, Str => "Explore selected area");
+         when Passenger =>
+            Add
+              (Win => InfoWindow,
+               Str =>
+                 "Passenger: " &
+                 To_String(PlayerShip.Crew(Mission.Target).Name));
+            Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+            Add
+              (Win => InfoWindow,
+               Str =>
+                 "To base: " &
+                 To_String
+                   (SkyBases
+                      (SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
+                      .Name));
+            CurrentLine := 3;
       end case;
       if not Mission.Finished then
          Distance := CountDistance(Mission.TargetX, Mission.TargetY);
@@ -208,6 +224,9 @@ package body Missions.UI is
                Missions_Items.all(I) := New_Item("Destroy ship");
             when Explore =>
                Missions_Items.all(I) := New_Item("Explore area");
+            when Passenger =>
+               Missions_Items.all(I) :=
+                 New_Item("Transport passenger to base");
          end case;
       end loop;
       Missions_Items.all(Missions_Items'Last) := Null_Item;

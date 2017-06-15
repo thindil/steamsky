@@ -104,6 +104,18 @@ package body Ships.Crew is
             Module.Owner := Module.Owner - 1;
          end if;
       end loop;
+      for I in Ship.Missions.First_Index .. Ship.Missions.Last_Index loop
+         if Ship.Missions(I).MType = Passenger and
+           Ship.Missions(I).Target = MemberIndex then
+            DeleteMission(I);
+            exit;
+         end if;
+      end loop;
+      for Mission of Ship.Missions loop
+         if Mission.MType = Passenger and Mission.Target > MemberIndex then
+            Mission.Target := Mission.Target - 1;
+         end if;
+      end loop;
    end DeleteMember;
 
    function FindMember
