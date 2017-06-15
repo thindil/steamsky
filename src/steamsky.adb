@@ -23,6 +23,7 @@ with Ada.Calendar; use Ada.Calendar;
 with Ada.Calendar.Formatting;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Terminal_Interface.Curses_Constants;
 use Terminal_Interface.Curses_Constants;
@@ -65,40 +66,17 @@ procedure SteamSky is
    Key: Key_Code;
    Result: Integer;
    ErrorFile: File_Type;
+   procedure ErrorInfo(Message: String) is
+   begin
+      Move_Cursor(Line => (Lines / 2), Column => 2);
+      Add(Str => Message);
+      Key := Get_Keystroke;
+      End_Windows;
+      EndLogging;
+   end ErrorInfo;
 begin
    Set_Directory(Command_Name(Command_Name'First .. Command_Name'Last - 9));
-   for I in 1 .. Argument_Count loop
-      if Argument(I)'Length > 8 then
-         if Argument(I)(1 .. 8) = "--debug=" then
-            for J in Debug_Types loop
-               if To_Upper(Argument(I)(9 .. (Argument(I)'Last))) =
-                 Debug_Types'Image(J) then
-                  DebugMode := J;
-                  exit;
-               end if;
-            end loop;
-            StartLogging;
-         elsif Argument(I)(1 .. 8) = "--datadi" then
-            DataDirectory :=
-              To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
-            LogMessage
-              ("Data directory sets to: " & To_String(DataDirectory),
-               Everything);
-         elsif Argument(I)(1 .. 8) = "--savedi" then
-            SaveDirectory :=
-              To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
-            LogMessage
-              ("Save directory sets to: " & To_String(SaveDirectory),
-               Everything);
-         elsif Argument(I)(1 .. 8) = "--docdir" then
-            DocDirectory :=
-              To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
-            LogMessage
-              ("Documentation directory sets to: " & To_String(DocDirectory),
-               Everything);
-         end if;
-      end if;
-   end loop;
+   -- Initiate ncurses
    Init_Screen;
    Start_Color;
    Set_Timeout_Mode(Standard_Window, Blocking, 0);
@@ -118,24 +96,83 @@ begin
    Set_KeyPad_Mode(SwitchOn => True);
 
    if Columns < 60 or Lines < 24 then
-      Move_Cursor(Line => (Lines / 2), Column => 2);
-      Add
-        (Str =>
-           "Your terminal size is too small for game. Minimal size is 60x24. Press any key, to exit from game.");
-      Key := Get_Keystroke;
-      End_Windows;
+      ErrorInfo
+        ("Your terminal size is too small for game. Minimal size is 60x24. Press any key, to exit from game.");
       return;
    end if;
 
+   -- Command line arguments
+   for I in 1 .. Argument_Count loop
+      if Argument(I)'Length > 8 then
+         if Argument(I)(1 .. 8) = "--debug=" then
+            for J in Debug_Types loop
+               if To_Upper(Argument(I)(9 .. (Argument(I)'Last))) =
+                 Debug_Types'Image(J) then
+                  DebugMode := J;
+                  exit;
+               end if;
+            end loop;
+            StartLogging;
+         elsif Argument(I)(1 .. 8) = "--datadi" then
+            DataDirectory :=
+              To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
+            if Element(DataDirectory, Length(DataDirectory)) /=
+              Dir_Separator then
+               Append(DataDirectory, Dir_Separator);
+            end if;
+            LogMessage
+              ("Data directory sets to: " & To_String(DataDirectory),
+               Everything);
+            if not Exists(To_String(DataDirectory)) then
+               ErrorInfo
+                 ("Directory " &
+                  To_String(DataDirectory) &
+                  " not exists. You must use existing directory as data directory.");
+               return;
+            end if;
+         elsif Argument(I)(1 .. 8) = "--savedi" then
+            SaveDirectory :=
+              To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
+            if Element(SaveDirectory, Length(SaveDirectory)) /=
+              Dir_Separator then
+               Append(SaveDirectory, Dir_Separator);
+            end if;
+            LogMessage
+              ("Save directory sets to: " & To_String(SaveDirectory),
+               Everything);
+            if not Exists(To_String(SaveDirectory)) then
+               ErrorInfo
+                 ("Directory " &
+                  To_String(SaveDirectory) &
+                  " not exists. You must use existing directory as save directory.");
+               return;
+            end if;
+         elsif Argument(I)(1 .. 8) = "--docdir" then
+            DocDirectory :=
+              To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
+            if Element(DocDirectory, Length(DocDirectory)) /=
+              Dir_Separator then
+               Append(DocDirectory, Dir_Separator);
+            end if;
+            LogMessage
+              ("Documentation directory sets to: " & To_String(DocDirectory),
+               Everything);
+            if not Exists(To_String(DocDirectory)) then
+               ErrorInfo
+                 ("Directory " &
+                  To_String(DocDirectory) &
+                  " not exists. You must use existing directory as documentation directory.");
+               return;
+            end if;
+         end if;
+      end if;
+   end loop;
+
    if not LoadData then
-      Move_Cursor(Line => (Lines / 2), Column => 2);
-      Add
-        (Str =>
-           "Can't load game data. Probably missing file " &
-           To_String(DataDirectory) &
-           "game.dat");
-      Key := Get_Keystroke;
-      End_Windows;
+      ErrorInfo
+        ("Can't load game data. Probably missing file " &
+         To_String(DataDirectory) &
+         "game.dat");
       return;
    end if;
 
