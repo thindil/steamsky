@@ -132,15 +132,15 @@ package body MainMenu is
       CreateLabel(0, "Character Name: ");
       NewGame_Fields.all(2) := New_Field(1, 12, 0, 18, 0, 0);
       Set_Buffer
-         (NewGame_Fields.all(2),
-      0,
-      To_String(NewGameSettings.PlayerName));
+        (NewGame_Fields.all(2),
+         0,
+         To_String(NewGameSettings.PlayerName));
       FieldOptions := Get_Options(NewGame_Fields.all(2));
       FieldOptions.Auto_Skip := False;
       Set_Options(NewGame_Fields.all(2), FieldOptions);
       Set_Background
-         (NewGame_Fields.all(2),
-      (Reverse_Video => True, others => False));
+        (NewGame_Fields.all(2),
+         (Reverse_Video => True, others => False));
       CreateLabel(1, "Character Gender: ");
       NewGame_Fields.all(4) := New_Field(1, 12, 1, 18, 0, 0);
       Set_Field_Type(NewGame_Fields.all(4), Create(Genders, True));
@@ -155,9 +155,9 @@ package body MainMenu is
       CreateLabel(2, "Ship Name: ");
       NewGame_Fields.all(6) := New_Field(1, 12, 2, 18, 0, 0);
       Set_Buffer
-         (NewGame_Fields.all(6),
-      0,
-      To_String(NewGameSettings.ShipName));
+        (NewGame_Fields.all(6),
+         0,
+         To_String(NewGameSettings.ShipName));
       FieldOptions := Get_Options(NewGame_Fields.all(6));
       FieldOptions.Auto_Skip := False;
       Set_Options(NewGame_Fields.all(6), FieldOptions);
@@ -187,17 +187,17 @@ package body MainMenu is
       Set_Options(NewGameForm, (others => False));
       Scale(NewGameForm, FormHeight, FormLength);
       FormWindow :=
-         Create
-            (FormHeight + 2,
-            FormLength + 2,
-            ((Lines / 3) - (FormHeight / 2)),
-            ((Columns / 2) - (FormLength / 2)));
-         Box(FormWindow);
-         Set_Window(NewGameForm, FormWindow);
-         Set_Sub_Window
-            (NewGameForm,
-            Derived_Window(FormWindow, FormHeight, FormLength, 1, 1));
-         Post(NewGameForm);
+        Create
+          (FormHeight + 2,
+           FormLength + 2,
+           ((Lines / 3) - (FormHeight / 2)),
+           ((Columns / 2) - (FormLength / 2)));
+      Box(FormWindow);
+      Set_Window(NewGameForm, FormWindow);
+      Set_Sub_Window
+        (NewGameForm,
+         Derived_Window(FormWindow, FormHeight, FormLength, 1, 1));
+      Post(NewGameForm);
       Refresh;
       Refresh(FormWindow);
    end ShowNewGameForm;
@@ -445,11 +445,11 @@ package body MainMenu is
       exception
          when Goals_Directory_Not_Found =>
             ShowErrorInfo
-               ("Can't load goals data. Directory with goals files not found.");
+              ("Can't load goals data. Directory with goals files not found.");
             return False;
          when Goals_Files_Not_Found =>
             ShowErrorInfo
-               ("Can't load goals data. Files with goals data not found.");
+              ("Can't load goals data. Files with goals data not found.");
             return False;
       end LoadGoalsData;
    begin

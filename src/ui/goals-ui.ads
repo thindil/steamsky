@@ -22,6 +22,8 @@ package Goals.UI is
 
    procedure ShowGoalsTypes; -- Show menu with goals types
    function GoalsMenuKeys
-     (Key: Key_Code; CurrentState: GameStates) return GameStates; -- Handle keys in goals list menu window
+     (Key: Key_Code;
+      CurrentState: GameStates)
+     return GameStates; -- Handle keys in goals list menu window
 
 end Goals.UI;

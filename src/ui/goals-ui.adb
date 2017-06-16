@@ -25,7 +25,8 @@ package body Goals.UI is
    MenuWindow: Window;
 
    procedure ShowGoalsList(GType: GoalTypes) is
-      Goals_Items: constant Item_Array_Access := new Item_Array(Goals_List.First_Index..Goals_List.Last_Index);
+      Goals_Items: constant Item_Array_Access :=
+        new Item_Array(Goals_List.First_Index .. Goals_List.Last_Index);
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
       MenuIndex: Integer := 1;
@@ -35,7 +36,10 @@ package body Goals.UI is
       Set_Cursor_Visibility(Visibility);
       for I in Goals_List.Iterate loop
          if Goals_List(I).GType = GType then
-            Goals_Items.all(MenuIndex) := New_Item(GoalText(Goals_Container.To_Index(I)), Positive'Image(Goals_Container.To_Index(I)));
+            Goals_Items.all(MenuIndex) :=
+              New_Item
+                (GoalText(Goals_Container.To_Index(I)),
+                 Positive'Image(Goals_Container.To_Index(I)));
             MenuIndex := MenuIndex + 1;
          end if;
       end loop;
@@ -68,13 +72,16 @@ package body Goals.UI is
    end ShowGoalsList;
 
    procedure ShowGoalsTypes is
-      GoalsTypes_Items: constant Item_Array_Access := new Item_Array(1..7);
+      GoalsTypes_Items: constant Item_Array_Access := new Item_Array(1 .. 7);
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
       MenuOptions: Menu_Option_Set;
    begin
-      for I in 1..5 loop
-         GoalsTypes_Items.all(I) := New_Item(To_Lower(GoalTypes'Image(GoalTypes'Val(I))), Positive'Image(I));
+      for I in 1 .. 5 loop
+         GoalsTypes_Items.all(I) :=
+           New_Item
+             (To_Lower(GoalTypes'Image(GoalTypes'Val(I))),
+              Positive'Image(I));
       end loop;
       GoalsTypes_Items.all(6) := New_Item("quit", "0");
       GoalsTypes_Items.all(7) := Null_Item;
@@ -101,9 +108,12 @@ package body Goals.UI is
       Refresh(MenuWindow);
    end ShowGoalsTypes;
 
-   function GoalsMenuKeys(Key: Key_Code; CurrentState: GameStates) return GameStates is
+   function GoalsMenuKeys
+     (Key: Key_Code;
+      CurrentState: GameStates) return GameStates is
       Result: Driver_Result;
-      GoalIndex: constant Natural := Natural'Value(Description(Current(GoalsMenu)));
+      GoalIndex: constant Natural :=
+        Natural'Value(Description(Current(GoalsMenu)));
    begin
       case Key is
          when 56 | KEY_UP => -- Select previous goal
