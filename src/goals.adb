@@ -37,8 +37,7 @@ package body Goals is
       if Goals_List.Length > 0 then
          return;
       end if;
-      if not Exists
-          (To_String(DataDirectory) & "goals" & Dir_Separator) then
+      if not Exists(To_String(DataDirectory) & "goals" & Dir_Separator) then
          raise Goals_Directory_Not_Found;
       end if;
       Start_Search
@@ -52,12 +51,10 @@ package body Goals is
          Get_Next_Entry(Files, FoundFile);
          TempRecord :=
            (Index => Null_Unbounded_String,
-           GType => RANDOM,
-           Amount => 0,
-           TargetIndex => Null_Unbounded_String);
-         LogMessage
-           ("Loading goals file: " & Full_Name(FoundFile),
-            Everything);
+            GType => RANDOM,
+            Amount => 0,
+            TargetIndex => Null_Unbounded_String);
+         LogMessage("Loading goals file: " & Full_Name(FoundFile), Everything);
          Open(GoalsFile, In_File, Full_Name(FoundFile));
          while not End_Of_File(GoalsFile) loop
             RawData := To_Unbounded_String(Get_Line(GoalsFile));
@@ -79,7 +76,7 @@ package body Goals is
                      Everything);
                   Goals_List.Append(New_Item => TempRecord);
                   TempRecord :=
-                     (Index => Null_Unbounded_String,
+                    (Index => Null_Unbounded_String,
                      GType => RANDOM,
                      Amount => 0,
                      TargetIndex => Null_Unbounded_String);
@@ -130,16 +127,23 @@ package body Goals is
          if Goals_List(Index).TargetIndex /= Null_Unbounded_String then
             case Goals_List(Index).GType is
                when REPUTATION | VISIT =>
-                  Append(Text, " of " & To_String(Goals_List(Index).TargetIndex));
+                  Append
+                    (Text,
+                     " of " & To_String(Goals_List(Index).TargetIndex));
                when KILL =>
                   for I in ProtoShips_List.Iterate loop
-                     if ProtoShips_List(I).Index = Goals_List(Index).TargetIndex then
-                        Append(Text, ": " & To_String(ProtoShips_List(I).Name));
+                     if ProtoShips_List(I).Index =
+                       Goals_List(Index).TargetIndex then
+                        Append
+                          (Text,
+                           ": " & To_String(ProtoShips_List(I).Name));
                         exit;
                      end if;
                   end loop;
                when CRAFT =>
-                  ItemIndex := Recipes_List(FindRecipe(Goals_List(Index).TargetIndex)).ResultIndex;
+                  ItemIndex :=
+                    Recipes_List(FindRecipe(Goals_List(Index).TargetIndex))
+                      .ResultIndex;
                   Append(Text, ": " & To_String(Items_List(ItemIndex).Name));
                when RANDOM | DISCOVER =>
                   null;
