@@ -1,0 +1,15 @@
+[1]
+Type = Reputation
+Amount = 1
+[2]
+Type = Kill
+Amount = 200
+[3]
+Type = Discover
+Amount = 1000
+[4]
+Type = Visit
+Amount = 50
+[5]
+Type = Craft
+Amount = 1000

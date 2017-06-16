@@ -59,6 +59,7 @@ with Missions; use Missions;
 with Missions.UI; use Missions.UI;
 with Log; use Log;
 with GameOptions; use GameOptions;
+with Goals.UI; use Goals.UI;
 
 procedure SteamSky is
    GameState: GameStates := Main_Menu;
@@ -209,7 +210,8 @@ begin
         GameState /= License_Info and
         GameState /= License_Full and
         GameState /= News_View and
-        GameState /= GameStats_View then
+        GameState /= GameStats_View and
+        GameState /= Goals_Menu then
          if PlayerShip.Crew.Element(1).Health = 0 then -- Player is dead
             GameState := Death_Confirm;
             DrawGame(Death_Confirm);
@@ -353,6 +355,8 @@ begin
             GameState := GameOptionsKeys(Key);
          when Heal_View =>
             GameState := HealKeys(Key);
+         when Goals_Menu =>
+            GameState := GoalsMenuKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;
