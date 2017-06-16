@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Option to location of game directories via console parameters
 - Coloring messages which made saves from previous versions incompatible
 - New type of missions: transport of passengers
+- New random event: brawl in base
 
 ### Changed
 - Updated interface
