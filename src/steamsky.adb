@@ -211,7 +211,8 @@ begin
         GameState /= License_Full and
         GameState /= News_View and
         GameState /= GameStats_View and
-        GameState /= Goals_Menu then
+        GameState /= GoalsList_View and
+        GameState /= GoalsTypes_View then
          if PlayerShip.Crew.Element(1).Health = 0 then -- Player is dead
             GameState := Death_Confirm;
             DrawGame(Death_Confirm);
@@ -355,8 +356,8 @@ begin
             GameState := GameOptionsKeys(Key);
          when Heal_View =>
             GameState := HealKeys(Key);
-         when Goals_Menu =>
-            GameState := GoalsMenuKeys(Key);
+         when GoalsList_View | GoalsTypes_View =>
+            GameState := GoalsMenuKeys(Key, GameState);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;

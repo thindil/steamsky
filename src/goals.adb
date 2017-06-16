@@ -20,6 +20,9 @@ with Ada.Directories; use Ada.Directories;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Game; use Game;
 with Log; use Log;
+with Ships; use Ships;
+with Crafts; use Crafts;
+with Items; use Items;
 
 package body Goals is
 
@@ -91,6 +94,60 @@ package body Goals is
       end loop;
       End_Search(Files);
    end LoadGoals;
+
+   function GoalText(Index: Natural) return String is
+      Text: Unbounded_String;
+      ItemIndex: Positive;
+   begin
+      if Index > 0 then
+         case Goals_List(Index).GType is
+            when REPUTATION =>
+               Text := To_Unbounded_String("Gain max reputation in");
+            when KILL =>
+               Text := To_Unbounded_String("Destroy");
+            when DISCOVER =>
+               Text := To_Unbounded_String("Discover");
+            when VISIT =>
+               Text := To_Unbounded_String("Visit");
+            when CRAFT =>
+               Text := To_Unbounded_String("Craft");
+            when RANDOM =>
+               null;
+         end case;
+         Append(Text, Positive'Image(Goals_List(Index).Amount));
+         case Goals_List(Index).GType is
+            when REPUTATION | VISIT =>
+               Append(Text, " bases");
+            when KILL =>
+               Append(Text, " ships");
+            when DISCOVER =>
+               Append(Text, " fields of map");
+            when CRAFT =>
+               Append(Text, " items");
+            when RANDOM =>
+               null;
+         end case;
+         if Goals_List(Index).TargetIndex /= Null_Unbounded_String then
+            case Goals_List(Index).GType is
+               when REPUTATION | VISIT =>
+                  Append(Text, " of " & To_String(Goals_List(Index).TargetIndex));
+               when KILL =>
+                  for I in ProtoShips_List.Iterate loop
+                     if ProtoShips_List(I).Index = Goals_List(Index).TargetIndex then
+                        Append(Text, ": " & To_String(ProtoShips_List(I).Name));
+                        exit;
+                     end if;
+                  end loop;
+               when CRAFT =>
+                  ItemIndex := Recipes_List(FindRecipe(Goals_List(Index).TargetIndex)).ResultIndex;
+                  Append(Text, ": " & To_String(Items_List(ItemIndex).Name));
+               when RANDOM | DISCOVER =>
+                  null;
+            end case;
+         end if;
+      end if;
+      return To_String(Text);
+   end GoalText;
 
    procedure UpdateGoal(GType: GoalTypes; Index: Unbounded_String) is
    begin

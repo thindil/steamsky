@@ -35,6 +35,7 @@ package Goals is
    Goals_Files_Not_Found : exception; -- Raised when no files with modules
 
    procedure LoadGoals; -- Load player goals from files
+   function GoalText(Index: Natural) return String; -- return info about selected goal or current goal if Index = 0
    procedure UpdateGoal(GType: GoalTypes; Index: Unbounded_String); -- Update current goal
 
 end Goals;
