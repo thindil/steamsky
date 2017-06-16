@@ -35,6 +35,7 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Log; use Log;
 with Game.SaveLoad; use Game.SaveLoad;
+with Goals; use Goals;
 
 package body MainMenu is
 
@@ -106,7 +107,7 @@ package body MainMenu is
    end ShowMainMenu;
 
    procedure ShowNewGameForm is
-      NewGame_Fields: constant Field_Array_Access := new Field_Array(1 .. 10);
+      NewGame_Fields: constant Field_Array_Access := new Field_Array(1 .. 12);
       FormHeight: Line_Position;
       FormLength: Column_Position;
       Visibility: Cursor_Visibility := Normal;
@@ -116,14 +117,24 @@ package body MainMenu is
          Names => (new String'("Male ->"), new String'("Female ->")),
          Case_Sensitive => False,
          Match_Must_Be_Unique => False);
+      GoalsTypes: constant Enumeration_Info :=
+         (C => 5,
+         Names => (new String'("Random ->"), new String'("Max rep ->"), new String'("Destroy ->"), new String'("Visit ->"), new String'("Craft ->")),
+         Case_Sensitive => False,
+         Match_Must_Be_Unique => False);
+      procedure CreateLabel(Line: Line_Position; Text: String) is
+         FormIndex: constant Positive := Natural(Line * 2) + 1;
+      begin
+         NewGame_Fields.all(FormIndex) := New_Field(1, 18, Line, 0, 0, 0);
+         Set_Buffer(NewGame_Fields.all(FormIndex), 0, Text);
+         FieldOptions := Get_Options(NewGame_Fields.all(FormIndex));
+         FieldOptions.Active := False;
+         Set_Options(NewGame_Fields.all(FormIndex), FieldOptions);
+      end CreateLabel;
    begin
       if NewGameForm = Null_Form then
          Set_Cursor_Visibility(Visibility);
-         NewGame_Fields.all(1) := New_Field(1, 18, 0, 0, 0, 0);
-         Set_Buffer(NewGame_Fields.all(1), 0, "Character Name: ");
-         FieldOptions := Get_Options(NewGame_Fields.all(1));
-         FieldOptions.Active := False;
-         Set_Options(NewGame_Fields.all(1), FieldOptions);
+         CreateLabel(0, "Character Name: ");
          NewGame_Fields.all(2) := New_Field(1, 12, 0, 18, 0, 0);
          Set_Buffer
            (NewGame_Fields.all(2),
@@ -135,11 +146,7 @@ package body MainMenu is
          Set_Background
            (NewGame_Fields.all(2),
             (Reverse_Video => True, others => False));
-         NewGame_Fields.all(3) := New_Field(1, 18, 1, 0, 0, 0);
-         Set_Buffer(NewGame_Fields.all(3), 0, "Character Gender: ");
-         FieldOptions := Get_Options(NewGame_Fields.all(3));
-         FieldOptions.Active := False;
-         Set_Options(NewGame_Fields.all(3), FieldOptions);
+         CreateLabel(1, "Character Gender: ");
          NewGame_Fields.all(4) := New_Field(1, 12, 1, 18, 0, 0);
          Set_Field_Type(NewGame_Fields.all(4), Create(Genders, True));
          if NewGameSettings.PlayerGender = 'M' then
@@ -150,11 +157,7 @@ package body MainMenu is
          FieldOptions := Get_Options(NewGame_Fields.all(4));
          FieldOptions.Edit := False;
          Set_Options(NewGame_Fields.all(4), FieldOptions);
-         NewGame_Fields.all(5) := New_Field(1, 18, 2, 0, 0, 0);
-         Set_Buffer(NewGame_Fields.all(5), 0, "Ship Name: ");
-         FieldOptions := Get_Options(NewGame_Fields.all(5));
-         FieldOptions.Active := False;
-         Set_Options(NewGame_Fields.all(5), FieldOptions);
+         CreateLabel(2, "Ship Name: ");
          NewGame_Fields.all(6) := New_Field(1, 12, 2, 18, 0, 0);
          Set_Buffer
            (NewGame_Fields.all(6),
@@ -163,22 +166,29 @@ package body MainMenu is
          FieldOptions := Get_Options(NewGame_Fields.all(6));
          FieldOptions.Auto_Skip := False;
          Set_Options(NewGame_Fields.all(6), FieldOptions);
-         NewGame_Fields.all(7) := New_Field(2, 30, 4, 0, 0, 0);
-         Set_Buffer(NewGame_Fields.all(7), 0, "Press Enter for random name.");
-         FieldOptions := Get_Options(NewGame_Fields.all(7));
-         FieldOptions.Active := False;
-         Set_Options(NewGame_Fields.all(7), FieldOptions);
-         NewGame_Fields.all(8) := New_Field(1, 6, 7, 5, 0, 0);
-         Set_Buffer(NewGame_Fields.all(8), 0, "[Quit]");
+         CreateLabel(3, "Character Goal: ");
+         NewGame_Fields.all(8) := New_Field(1, 12, 3, 18, 0, 0);
+         Set_Field_Type(NewGame_Fields.all(8), Create(GoalsTypes, True));
+         Set_Buffer(NewGame_Fields.all(8), 0, "Random ->");
          FieldOptions := Get_Options(NewGame_Fields.all(8));
          FieldOptions.Edit := False;
          Set_Options(NewGame_Fields.all(8), FieldOptions);
-         NewGame_Fields.all(9) := New_Field(1, 7, 7, 13, 0, 0);
+         NewGame_Fields.all(9) := New_Field(3, 30, 5, 0, 0, 0);
+         Set_Buffer(NewGame_Fields.all(9), 0, "Press Enter for random name.");
          FieldOptions := Get_Options(NewGame_Fields.all(9));
-         FieldOptions.Edit := False;
+         FieldOptions.Active := False;
          Set_Options(NewGame_Fields.all(9), FieldOptions);
-         Set_Buffer(NewGame_Fields.all(9), 0, "[Start]");
-         NewGame_Fields.all(10) := Null_Field;
+         NewGame_Fields.all(10) := New_Field(1, 6, 9, 5, 0, 0);
+         Set_Buffer(NewGame_Fields.all(10), 0, "[Quit]");
+         FieldOptions := Get_Options(NewGame_Fields.all(10));
+         FieldOptions.Edit := False;
+         Set_Options(NewGame_Fields.all(10), FieldOptions);
+         NewGame_Fields.all(11) := New_Field(1, 7, 9, 13, 0, 0);
+         FieldOptions := Get_Options(NewGame_Fields.all(11));
+         FieldOptions.Edit := False;
+         Set_Options(NewGame_Fields.all(11), FieldOptions);
+         Set_Buffer(NewGame_Fields.all(11), 0, "[Start]");
+         NewGame_Fields.all(12) := Null_Field;
          NewGameForm := New_Form(NewGame_Fields);
          Set_Options(NewGameForm, (others => False));
          Scale(NewGameForm, FormHeight, FormLength);
@@ -347,6 +357,7 @@ package body MainMenu is
       LoadRecipes;
       LoadShips;
       if not NewGame then
+         LoadGoals;
          LoadGame;
       end if;
       return True;
@@ -412,11 +423,42 @@ package body MainMenu is
          ShowErrorInfo
            ("Can't load savegame file. Invalid data. Run game in debug mode to get more info.");
          return False;
+      when Goals_Directory_Not_Found =>
+         ShowErrorInfo
+           ("Can't load goals data. Directory with goals files not found.");
+         return False;
+      when Goals_Files_Not_Found =>
+         ShowErrorInfo
+           ("Can't load goals data. Files with goals data not found.");
+         return False;
    end LoadGameData;
 
    function MainMenuKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
       Option: constant String := Name(Current(GameMenu));
+      function LoadGoalsData return Boolean is
+         procedure ShowErrorInfo(Message: String) is
+         begin
+            Erase;
+            ShowMainMenu;
+            Refresh_Without_Update;
+            ShowDialog(Message);
+            Update_Panels;
+            Update_Screen;
+         end ShowErrorInfo;
+      begin
+         LoadGoals;
+         return True;
+      exception
+         when Goals_Directory_Not_Found =>
+            ShowErrorInfo
+               ("Can't load goals data. Directory with goals files not found.");
+            return False;
+         when Goals_Files_Not_Found =>
+            ShowErrorInfo
+               ("Can't load goals data. Files with goals data not found.");
+            return False;
+      end LoadGoalsData;
    begin
       case Key is
          when 56 | KEY_UP => -- Select previous option
@@ -437,6 +479,9 @@ package body MainMenu is
             end if;
          when 10 => -- Select option
             if Option = "New game" then
+               if not LoadGoalsData then
+                  return Main_Menu;
+               end if;
                ShowNewGameForm;
                return New_Game;
             elsif Option = "Load game" then
@@ -510,7 +555,7 @@ package body MainMenu is
             if FieldIndex = 2 or FieldIndex = 6 then
                Result := Driver(NewGameForm, F_End_Line);
             end if;
-         when 10 => -- quit/start game or change character gender, depends on form field
+         when 10 => -- quit/start game, change gender or show goals list, depends on form field
             CharGender := Get_Buffer(Fields(NewGameForm, 4))(1);
             if FieldIndex = 2 then
                NewCharName := GenerateMemberName(CharGender);
@@ -528,10 +573,10 @@ package body MainMenu is
                Result := Driver(NewGameForm, F_End_Line);
                Refresh(FormWindow);
             end if;
-            if FieldIndex < 8 then
+            if FieldIndex < 10 then
                return New_Game;
             end if;
-            if FieldIndex = 8 then
+            if FieldIndex = 10 then
                Set_Cursor_Visibility(Visibility);
                Post(NewGameForm, False);
                Delete(NewGameForm);
@@ -575,7 +620,7 @@ package body MainMenu is
          when KEY_RIGHT => -- Move cursor right
             if FieldIndex = 2 or FieldIndex = 6 then
                Result := Driver(NewGameForm, F_Right_Char);
-            elsif FieldIndex = 4 then
+            elsif FieldIndex = 4 or FieldIndex = 8 then
                Result := Driver(NewGameForm, F_Next_Choice);
             end if;
          when Character'Pos('m') | Character'Pos('M') => -- Select male gender
@@ -594,7 +639,7 @@ package body MainMenu is
          when KEY_LEFT => -- Move cursor left
             if FieldIndex = 2 or FieldIndex = 6 then
                Result := Driver(NewGameForm, F_Left_Char);
-            elsif FieldIndex = 4 then
+            elsif FieldIndex = 4 or FieldIndex = 8 then
                Result := Driver(NewGameForm, F_Previous_Choice);
             end if;
          when others =>
@@ -603,7 +648,7 @@ package body MainMenu is
       if Result = Form_Ok then
          if FieldIndex = 2 or FieldIndex = 6 then
             Set_Buffer
-              (Fields(NewGameForm, 7),
+              (Fields(NewGameForm, 9),
                0,
                "Press Enter for random name.");
             Set_Background
@@ -612,11 +657,16 @@ package body MainMenu is
          else
             if FieldIndex = 4 then
                Set_Buffer
-                 (Fields(NewGameForm, 7),
+                 (Fields(NewGameForm, 9),
                   0,
                   "Left or Right arrow to change gender.");
+            elsif FieldIndex = 8 then
+               Set_Buffer
+                 (Fields(NewGameForm, 9),
+                  0,
+                  "Left or Right arrow to change goal type. Press Enter to show list of selected goals types.");
             else
-               Set_Buffer(Fields(NewGameForm, 7), 0, "");
+               Set_Buffer(Fields(NewGameForm, 9), 0, "");
             end if;
             Set_Background(Fields(NewGameForm, 2), (others => False));
             Set_Background(Fields(NewGameForm, 6), (others => False));
