@@ -27,6 +27,7 @@ package MainMenu is
        ("doc" & Dir_Separator); -- Path to directory where documentation is
 
    procedure ShowMainMenu; -- Show main game menu
+   procedure ShowNewGameForm; -- Show new game setting form
    function MainMenuKeys
      (Key: Key_Code) return GameStates; -- Handle keys on main menu
    function NewGameKeys

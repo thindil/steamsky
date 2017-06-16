@@ -36,6 +36,7 @@ with Maps.UI; use Maps.UI;
 with Log; use Log;
 with Game.SaveLoad; use Game.SaveLoad;
 with Goals; use Goals;
+with Goals.UI; use Goals.UI;
 
 package body MainMenu is
 
@@ -117,11 +118,6 @@ package body MainMenu is
          Names => (new String'("Male ->"), new String'("Female ->")),
          Case_Sensitive => False,
          Match_Must_Be_Unique => False);
-      GoalsTypes: constant Enumeration_Info :=
-         (C => 5,
-         Names => (new String'("Random ->"), new String'("Max rep ->"), new String'("Destroy ->"), new String'("Visit ->"), new String'("Craft ->")),
-         Case_Sensitive => False,
-         Match_Must_Be_Unique => False);
       procedure CreateLabel(Line: Line_Position; Text: String) is
          FormIndex: constant Positive := Natural(Line * 2) + 1;
       begin
@@ -132,79 +128,76 @@ package body MainMenu is
          Set_Options(NewGame_Fields.all(FormIndex), FieldOptions);
       end CreateLabel;
    begin
-      if NewGameForm = Null_Form then
-         Set_Cursor_Visibility(Visibility);
-         CreateLabel(0, "Character Name: ");
-         NewGame_Fields.all(2) := New_Field(1, 12, 0, 18, 0, 0);
-         Set_Buffer
-           (NewGame_Fields.all(2),
-            0,
-            To_String(NewGameSettings.PlayerName));
-         FieldOptions := Get_Options(NewGame_Fields.all(2));
-         FieldOptions.Auto_Skip := False;
-         Set_Options(NewGame_Fields.all(2), FieldOptions);
-         Set_Background
-           (NewGame_Fields.all(2),
-            (Reverse_Video => True, others => False));
-         CreateLabel(1, "Character Gender: ");
-         NewGame_Fields.all(4) := New_Field(1, 12, 1, 18, 0, 0);
-         Set_Field_Type(NewGame_Fields.all(4), Create(Genders, True));
-         if NewGameSettings.PlayerGender = 'M' then
-            Set_Buffer(NewGame_Fields.all(4), 0, "Male ->");
-         else
-            Set_Buffer(NewGame_Fields.all(4), 0, "Female ->");
-         end if;
-         FieldOptions := Get_Options(NewGame_Fields.all(4));
-         FieldOptions.Edit := False;
-         Set_Options(NewGame_Fields.all(4), FieldOptions);
-         CreateLabel(2, "Ship Name: ");
-         NewGame_Fields.all(6) := New_Field(1, 12, 2, 18, 0, 0);
-         Set_Buffer
-           (NewGame_Fields.all(6),
-            0,
-            To_String(NewGameSettings.ShipName));
-         FieldOptions := Get_Options(NewGame_Fields.all(6));
-         FieldOptions.Auto_Skip := False;
-         Set_Options(NewGame_Fields.all(6), FieldOptions);
-         CreateLabel(3, "Character Goal: ");
-         NewGame_Fields.all(8) := New_Field(1, 12, 3, 18, 0, 0);
-         Set_Field_Type(NewGame_Fields.all(8), Create(GoalsTypes, True));
-         Set_Buffer(NewGame_Fields.all(8), 0, "Random ->");
-         FieldOptions := Get_Options(NewGame_Fields.all(8));
-         FieldOptions.Edit := False;
-         Set_Options(NewGame_Fields.all(8), FieldOptions);
-         NewGame_Fields.all(9) := New_Field(3, 30, 5, 0, 0, 0);
-         Set_Buffer(NewGame_Fields.all(9), 0, "Press Enter for random name.");
-         FieldOptions := Get_Options(NewGame_Fields.all(9));
-         FieldOptions.Active := False;
-         Set_Options(NewGame_Fields.all(9), FieldOptions);
-         NewGame_Fields.all(10) := New_Field(1, 6, 9, 5, 0, 0);
-         Set_Buffer(NewGame_Fields.all(10), 0, "[Quit]");
-         FieldOptions := Get_Options(NewGame_Fields.all(10));
-         FieldOptions.Edit := False;
-         Set_Options(NewGame_Fields.all(10), FieldOptions);
-         NewGame_Fields.all(11) := New_Field(1, 7, 9, 13, 0, 0);
-         FieldOptions := Get_Options(NewGame_Fields.all(11));
-         FieldOptions.Edit := False;
-         Set_Options(NewGame_Fields.all(11), FieldOptions);
-         Set_Buffer(NewGame_Fields.all(11), 0, "[Start]");
-         NewGame_Fields.all(12) := Null_Field;
-         NewGameForm := New_Form(NewGame_Fields);
-         Set_Options(NewGameForm, (others => False));
-         Scale(NewGameForm, FormHeight, FormLength);
-         FormWindow :=
-           Create
-             (FormHeight + 2,
-              FormLength + 2,
-              ((Lines / 3) - (FormHeight / 2)),
-              ((Columns / 2) - (FormLength / 2)));
+      Set_Cursor_Visibility(Visibility);
+      CreateLabel(0, "Character Name: ");
+      NewGame_Fields.all(2) := New_Field(1, 12, 0, 18, 0, 0);
+      Set_Buffer
+         (NewGame_Fields.all(2),
+      0,
+      To_String(NewGameSettings.PlayerName));
+      FieldOptions := Get_Options(NewGame_Fields.all(2));
+      FieldOptions.Auto_Skip := False;
+      Set_Options(NewGame_Fields.all(2), FieldOptions);
+      Set_Background
+         (NewGame_Fields.all(2),
+      (Reverse_Video => True, others => False));
+      CreateLabel(1, "Character Gender: ");
+      NewGame_Fields.all(4) := New_Field(1, 12, 1, 18, 0, 0);
+      Set_Field_Type(NewGame_Fields.all(4), Create(Genders, True));
+      if NewGameSettings.PlayerGender = 'M' then
+         Set_Buffer(NewGame_Fields.all(4), 0, "Male ->");
+      else
+         Set_Buffer(NewGame_Fields.all(4), 0, "Female ->");
+      end if;
+      FieldOptions := Get_Options(NewGame_Fields.all(4));
+      FieldOptions.Edit := False;
+      Set_Options(NewGame_Fields.all(4), FieldOptions);
+      CreateLabel(2, "Ship Name: ");
+      NewGame_Fields.all(6) := New_Field(1, 12, 2, 18, 0, 0);
+      Set_Buffer
+         (NewGame_Fields.all(6),
+      0,
+      To_String(NewGameSettings.ShipName));
+      FieldOptions := Get_Options(NewGame_Fields.all(6));
+      FieldOptions.Auto_Skip := False;
+      Set_Options(NewGame_Fields.all(6), FieldOptions);
+      CreateLabel(3, "Character Goal: ");
+      NewGame_Fields.all(8) := New_Field(1, 12, 3, 18, 0, 0);
+      Set_Buffer(NewGame_Fields.all(8), 0, "Random");
+      FieldOptions := Get_Options(NewGame_Fields.all(8));
+      FieldOptions.Edit := False;
+      Set_Options(NewGame_Fields.all(8), FieldOptions);
+      NewGame_Fields.all(9) := New_Field(2, 30, 5, 0, 0, 0);
+      Set_Buffer(NewGame_Fields.all(9), 0, "Press Enter for random name.");
+      FieldOptions := Get_Options(NewGame_Fields.all(9));
+      FieldOptions.Active := False;
+      Set_Options(NewGame_Fields.all(9), FieldOptions);
+      NewGame_Fields.all(10) := New_Field(1, 6, 8, 5, 0, 0);
+      Set_Buffer(NewGame_Fields.all(10), 0, "[Quit]");
+      FieldOptions := Get_Options(NewGame_Fields.all(10));
+      FieldOptions.Edit := False;
+      Set_Options(NewGame_Fields.all(10), FieldOptions);
+      NewGame_Fields.all(11) := New_Field(1, 7, 8, 13, 0, 0);
+      FieldOptions := Get_Options(NewGame_Fields.all(11));
+      FieldOptions.Edit := False;
+      Set_Options(NewGame_Fields.all(11), FieldOptions);
+      Set_Buffer(NewGame_Fields.all(11), 0, "[Start]");
+      NewGame_Fields.all(12) := Null_Field;
+      NewGameForm := New_Form(NewGame_Fields);
+      Set_Options(NewGameForm, (others => False));
+      Scale(NewGameForm, FormHeight, FormLength);
+      FormWindow :=
+         Create
+            (FormHeight + 2,
+            FormLength + 2,
+            ((Lines / 3) - (FormHeight / 2)),
+            ((Columns / 2) - (FormLength / 2)));
          Box(FormWindow);
          Set_Window(NewGameForm, FormWindow);
          Set_Sub_Window
-           (NewGameForm,
+            (NewGameForm,
             Derived_Window(FormWindow, FormHeight, FormLength, 1, 1));
          Post(NewGameForm);
-      end if;
       Refresh;
       Refresh(FormWindow);
    end ShowNewGameForm;
@@ -555,7 +548,7 @@ package body MainMenu is
             if FieldIndex = 2 or FieldIndex = 6 then
                Result := Driver(NewGameForm, F_End_Line);
             end if;
-         when 10 => -- quit/start game, change gender or show goals list, depends on form field
+         when 10 => -- quit/start game, change gender or show goals types list, depends on form field
             CharGender := Get_Buffer(Fields(NewGameForm, 4))(1);
             if FieldIndex = 2 then
                NewCharName := GenerateMemberName(CharGender);
@@ -572,6 +565,11 @@ package body MainMenu is
                Set_Buffer(Fields(NewGameForm, 6), 0, To_String(NewShipName));
                Result := Driver(NewGameForm, F_End_Line);
                Refresh(FormWindow);
+            end if;
+            if FieldIndex = 8 then
+               Set_Cursor_Visibility(Visibility);
+               ShowGoalsTypes;
+               return GoalsTypes_View;
             end if;
             if FieldIndex < 10 then
                return New_Game;
@@ -620,7 +618,7 @@ package body MainMenu is
          when KEY_RIGHT => -- Move cursor right
             if FieldIndex = 2 or FieldIndex = 6 then
                Result := Driver(NewGameForm, F_Right_Char);
-            elsif FieldIndex = 4 or FieldIndex = 8 then
+            elsif FieldIndex = 4 then
                Result := Driver(NewGameForm, F_Next_Choice);
             end if;
          when Character'Pos('m') | Character'Pos('M') => -- Select male gender
@@ -639,7 +637,7 @@ package body MainMenu is
          when KEY_LEFT => -- Move cursor left
             if FieldIndex = 2 or FieldIndex = 6 then
                Result := Driver(NewGameForm, F_Left_Char);
-            elsif FieldIndex = 4 or FieldIndex = 8 then
+            elsif FieldIndex = 4 then
                Result := Driver(NewGameForm, F_Previous_Choice);
             end if;
          when others =>
@@ -664,7 +662,7 @@ package body MainMenu is
                Set_Buffer
                  (Fields(NewGameForm, 9),
                   0,
-                  "Left or Right arrow to change goal type. Press Enter to show list of selected goals types.");
+                  "Press Enter to start selecting character goal.");
             else
                Set_Buffer(Fields(NewGameForm, 9), 0, "");
             end if;
