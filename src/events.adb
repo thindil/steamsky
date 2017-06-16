@@ -34,7 +34,7 @@ package body Events is
    function CheckForEvent(OldState: GameStates) return GameStates is
       TimePassed: Integer;
       CrewIndex, PlayerValue: Natural := 0;
-      Roll, Roll2, ItemIndex, EnemyIndex, EngineIndex: Positive;
+      Roll, Roll2, ItemIndex, EnemyIndex, EngineIndex, Injuries: Positive;
       Enemies, Engines: Positive_Container.Vector;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -179,8 +179,10 @@ package body Events is
                   return StartCombat(Events_List(Events_List.Last_Index).Data);
             end case;
          else
-            if PlayerShip.Speed /= DOCKED and
-              SkyBases(BaseIndex).Owner /= Abandoned then
+            if SkyBases(BaseIndex).Owner = Abandoned then
+               return OldState;
+            end if;
+            if PlayerShip.Speed /= DOCKED then
                if Roll in 21 .. 30 and
                  (SkyBases(BaseIndex).Owner = Drones or
                   SkyBases(BaseIndex).Owner = Undead) then
@@ -264,6 +266,27 @@ package body Events is
                end case;
                SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                  Events_List.Last_Index;
+            else
+               if Roll < 5 and
+                 PlayerShip.Crew.Last_Index > 1 then -- Brawl in base
+                  Roll2 := GetRandom(2, PlayerShip.Crew.Last_Index);
+                  Injuries := GetRandom(1, 10);
+                  if Injuries > PlayerShip.Crew(Roll2).Health then
+                     Injuries := PlayerShip.Crew(Roll2).Health;
+                  end if;
+                  PlayerShip.Crew(Roll2).Health :=
+                    PlayerShip.Crew(Roll2).Health - Injuries;
+                  AddMessage
+                    (To_String(PlayerShip.Crew(Roll2).Name) &
+                     " was injured in brawl in base.",
+                     OtherMessage);
+                  if PlayerShip.Crew(Roll2).Health = 0 then
+                     Death
+                       (Roll2,
+                        To_Unbounded_String("injuries in brawl in base"),
+                        PlayerShip);
+                  end if;
+               end if;
             end if;
          end if;
       end if;
