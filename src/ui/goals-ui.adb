@@ -141,7 +141,7 @@ package body Goals.UI is
                Delete(GoalsMenu);
                Erase;
                ShowMainMenu;
-               ShowNewGameForm;
+               ShowNewGameForm(8);
                Refresh;
                return New_Game;
             else
@@ -149,7 +149,7 @@ package body Goals.UI is
                Delete(GoalsMenu);
                Erase;
                ShowMainMenu;
-               ShowNewGameForm;
+               ShowNewGameForm(8);
                if GoalIndex > 0 then
                   ShowGoalsList(GoalTypes'Val(GoalIndex));
                end if;
