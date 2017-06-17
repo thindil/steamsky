@@ -419,6 +419,13 @@ package body Game.SaveLoad is
       RawValue :=
         To_Unbounded_String(Positive'Image(GameStats.FinishedMissions));
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      RawValue := To_Unbounded_String(GameStats.FinishedGoals.Length'Img);
+      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      for FinishedGoal of GameStats.FinishedGoals loop
+         Put(SaveGame, To_String(FinishedGoal.ProtoIndex) & ";");
+         RawValue := To_Unbounded_String(Integer'Image(FinishedGoal.Amount));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      end loop;
       -- Save current goal
       Put(SaveGame, To_String(CurrentGoal.Index) & ";");
       RawValue :=
@@ -724,6 +731,13 @@ package body Game.SaveLoad is
       GameStats.CraftingOrders := Positive'Value(To_String(ReadData));
       GameStats.AcceptedMissions := Positive'Value(To_String(ReadData));
       GameStats.FinishedMissions := Positive'Value(To_String(ReadData));
+      VectorLength := Positive'Value(To_String(ReadData));
+      for I in 1 .. VectorLength loop
+         GameStats.FinishedGoals.Append
+         (New_Item =>
+            (ProtoIndex => ReadData,
+             Amount => Positive'Value(To_String(ReadData))));
+      end loop;
       -- Load current goal
       CurrentGoal.Index := ReadData;
       CurrentGoal.GType := GoalTypes'Val(Integer'Value(To_String(ReadData)));
