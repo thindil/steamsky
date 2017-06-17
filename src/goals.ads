@@ -39,7 +39,8 @@ package Goals is
    procedure LoadGoals; -- Load player goals from files
    function GoalText
      (Index: Natural)
-     return String; -- return info about selected goal or current goal if Index = 0
+     return String; -- Return info about selected goal or current goal if Index = 0
+   procedure ClearCurrentGoal; -- Reset current goal
    procedure UpdateGoal
      (GType: GoalTypes;
       Index: Unbounded_String); -- Update current goal
