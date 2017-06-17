@@ -107,7 +107,7 @@ package body MainMenu is
       Refresh(MenuWindow);
    end ShowMainMenu;
 
-   procedure ShowNewGameForm is
+   procedure ShowNewGameForm(CurrentField: Positive := 2) is
       NewGame_Fields: constant Field_Array_Access := new Field_Array(1 .. 12);
       FormHeight: Line_Position;
       FormLength: Column_Position;
@@ -138,9 +138,6 @@ package body MainMenu is
       FieldOptions := Get_Options(NewGame_Fields.all(2));
       FieldOptions.Auto_Skip := False;
       Set_Options(NewGame_Fields.all(2), FieldOptions);
-      Set_Background
-        (NewGame_Fields.all(2),
-         (Reverse_Video => True, others => False));
       CreateLabel(1, "Character Gender: ");
       NewGame_Fields.all(4) := New_Field(1, 12, 1, 18, 0, 0);
       Set_Field_Type(NewGame_Fields.all(4), Create(Genders, True));
@@ -162,28 +159,43 @@ package body MainMenu is
       FieldOptions.Auto_Skip := False;
       Set_Options(NewGame_Fields.all(6), FieldOptions);
       CreateLabel(3, "Character Goal: ");
-      NewGame_Fields.all(8) := New_Field(1, 12, 3, 18, 0, 0);
-      Set_Buffer(NewGame_Fields.all(8), 0, "Random");
+      NewGame_Fields.all(8) := New_Field(1, 32, 3, 18, 0, 0);
+      if CurrentGoal.GType = RANDOM then
+         Set_Buffer(NewGame_Fields.all(8), 0, "Random");
+      else
+         Set_Buffer(NewGame_Fields.all(8), 0, GoalText(0));
+      end if;
       FieldOptions := Get_Options(NewGame_Fields.all(8));
       FieldOptions.Edit := False;
       Set_Options(NewGame_Fields.all(8), FieldOptions);
-      NewGame_Fields.all(9) := New_Field(2, 30, 5, 0, 0, 0);
-      Set_Buffer(NewGame_Fields.all(9), 0, "Press Enter for random name.");
+      NewGame_Fields.all(9) := New_Field(2, 50, 5, 0, 0, 0);
       FieldOptions := Get_Options(NewGame_Fields.all(9));
       FieldOptions.Active := False;
       Set_Options(NewGame_Fields.all(9), FieldOptions);
-      NewGame_Fields.all(10) := New_Field(1, 6, 8, 5, 0, 0);
+      NewGame_Fields.all(10) := New_Field(1, 6, 8, 15, 0, 0);
       Set_Buffer(NewGame_Fields.all(10), 0, "[Quit]");
       FieldOptions := Get_Options(NewGame_Fields.all(10));
       FieldOptions.Edit := False;
       Set_Options(NewGame_Fields.all(10), FieldOptions);
-      NewGame_Fields.all(11) := New_Field(1, 7, 8, 13, 0, 0);
+      NewGame_Fields.all(11) := New_Field(1, 7, 8, 23, 0, 0);
       FieldOptions := Get_Options(NewGame_Fields.all(11));
       FieldOptions.Edit := False;
       Set_Options(NewGame_Fields.all(11), FieldOptions);
       Set_Buffer(NewGame_Fields.all(11), 0, "[Start]");
       NewGame_Fields.all(12) := Null_Field;
+      if CurrentField = 2 then
+         Set_Background
+           (NewGame_Fields.all(2),
+            (Reverse_Video => True, others => False));
+         Set_Buffer(NewGame_Fields.all(9), 0, "Press Enter for random name.");
+      else
+         Set_Buffer
+           (NewGame_Fields.all(9),
+            0,
+            "Press Enter to start selecting character goal.");
+      end if;
       NewGameForm := New_Form(NewGame_Fields);
+      Set_Current(NewGameForm, NewGame_Fields(CurrentField));
       Set_Options(NewGameForm, (others => False));
       Scale(NewGameForm, FormHeight, FormLength);
       FormWindow :=
@@ -566,7 +578,25 @@ package body MainMenu is
                Result := Driver(NewGameForm, F_End_Line);
                Refresh(FormWindow);
             end if;
+            NewCharName :=
+              To_Unbounded_String(Get_Buffer(Fields(NewGameForm, 2)));
+            NewShipName :=
+              To_Unbounded_String(Get_Buffer(Fields(NewGameForm, 6)));
+            RemoveSemicolons(NewCharName);
+            RemoveSemicolons(NewShipName);
+            Trim(NewCharName, Ada.Strings.Both);
+            Trim(NewShipName, Ada.Strings.Both);
+            if Length(NewCharName) = 0 then
+               NewCharName := NewGameSettings.PlayerName;
+            end if;
+            if Length(NewShipName) = 0 then
+               NewShipName := NewGameSettings.ShipName;
+            end if;
             if FieldIndex = 8 then
+               NewGameSettings :=
+                 (PlayerName => NewCharName,
+                  PlayerGender => CharGender,
+                  ShipName => NewShipName);
                Set_Cursor_Visibility(Visibility);
                ShowGoalsTypes;
                return GoalsTypes_View;
@@ -585,20 +615,6 @@ package body MainMenu is
             end if;
             if not LoadGameData then
                return Main_Menu;
-            end if;
-            NewCharName :=
-              To_Unbounded_String(Get_Buffer(Fields(NewGameForm, 2)));
-            NewShipName :=
-              To_Unbounded_String(Get_Buffer(Fields(NewGameForm, 6)));
-            RemoveSemicolons(NewCharName);
-            RemoveSemicolons(NewShipName);
-            Trim(NewCharName, Ada.Strings.Both);
-            Trim(NewShipName, Ada.Strings.Both);
-            if Length(NewCharName) = 0 then
-               NewCharName := NewGameSettings.PlayerName;
-            end if;
-            if Length(NewShipName) = 0 then
-               NewShipName := NewGameSettings.ShipName;
             end if;
             Set_Cursor_Visibility(Visibility);
             Post(NewGameForm, False);

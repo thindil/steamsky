@@ -31,6 +31,7 @@ with Config; use Config;
 with Statistics; use Statistics;
 with Missions; use Missions;
 with Utils; use Utils;
+with Goals; use Goals;
 
 package body Game is
 
@@ -216,6 +217,12 @@ package body Game is
       SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
       GenerateRecruits(Integer(RandomBase));
       GenerateMissions(Integer(RandomBase));
+      -- Set player goal if not set yet
+      if CurrentGoal.GType = RANDOM then
+         CurrentGoal :=
+           Goals_List
+             (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
+      end if;
    end NewGame;
 
    procedure UpdateGame(Minutes: Positive) is

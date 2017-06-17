@@ -36,6 +36,7 @@ with Missions; use Missions;
 with Utils; use Utils;
 with Game.SaveLoad; use Game.SaveLoad;
 with Items; use Items;
+with Goals; use Goals;
 
 package body UserInterface.Keys is
 
@@ -358,6 +359,8 @@ package body UserInterface.Keys is
                ClearMessages;
                Events_List.Clear;
                ClearGameStats;
+               Known_Recipes.Clear;
+               ClearCurrentGoal;
                Erase;
                Refresh;
                ShowMainMenu;

@@ -23,6 +23,7 @@ with Events; use Events;
 with Messages; use Messages;
 with MainMenu; use MainMenu;
 with Crafts; use Crafts;
+with Goals; use Goals;
 
 package body Statistics.UI is
 
@@ -194,6 +195,7 @@ package body Statistics.UI is
                Events_List.Clear;
                ClearGameStats;
                Known_Recipes.Clear;
+               ClearCurrentGoal;
                Erase;
                Refresh;
                ShowMainMenu;
