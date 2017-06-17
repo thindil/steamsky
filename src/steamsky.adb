@@ -286,6 +286,7 @@ begin
            EngineerRest_Confirm =>
             GameState := ConfirmKeys(GameState, Key);
          when New_Game =>
+            OldState := GameState;
             GameState := NewGameKeys(Key);
          when Combat_State =>
             OldState := GameState;
@@ -335,6 +336,7 @@ begin
          when GameMenu =>
             GameState := GameMenuKeys(GameState, Key);
          when GameStats_View =>
+            OldState := GameState;
             GameState := ShowGameStatsKeys(Key);
          when TradeRecipes_View =>
             GameState := TradeRecipesKeys(Key);
@@ -357,7 +359,7 @@ begin
          when Heal_View =>
             GameState := HealKeys(Key);
          when GoalsList_View | GoalsTypes_View =>
-            GameState := GoalsMenuKeys(Key, GameState);
+            GameState := GoalsMenuKeys(Key, GameState, OldState);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;

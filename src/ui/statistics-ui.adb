@@ -24,6 +24,7 @@ with Messages; use Messages;
 with MainMenu; use MainMenu;
 with Crafts; use Crafts;
 with Goals; use Goals;
+with Goals.UI; use Goals.UI;
 
 package body Statistics.UI is
 
@@ -174,6 +175,7 @@ package body Statistics.UI is
               "%)");
          Move_Cursor(Line => 8, Column => 2);
          Add(Str => "Current goal: " & GoalText(0));
+         Change_Attributes(Line => 8, Column => 2, Count => 1, Color => 1);
          if GameStats.FinishedGoals.Length > 0 then
             FinishedGoalsPad :=
               New_Pad
@@ -266,6 +268,10 @@ package body Statistics.UI is
             StartIndex := 0;
          when 49 | Key_End => -- Scroll destroyed ship list to end
             StartIndex := EndIndex;
+         when Character'Pos('c') |
+           Character'Pos('C') => -- Set new current goal
+            ShowGoalsTypes;
+            return GoalsTypes_View;
          when others =>
             null;
       end case;
