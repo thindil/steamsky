@@ -28,6 +28,12 @@ package Statistics is
    package DestroyedShips_Container is new Vectors
      (Positive,
       DestroyedShips_Data);
+   type Statistics_Data is -- Data for finished goals
+   record
+      ProtoIndex: Unbounded_String; -- Index of goal
+      Amount: Positive; -- Amount of finished goals of that type
+   end record;
+   package Statistics_Container is new Vectors(Positive, Statistics_Data);
    type GameStats_Data is -- Data for game statistics
    record
       DestroyedShips: DestroyedShips_Container
@@ -38,6 +44,8 @@ package Statistics is
       CraftingOrders: Natural; -- Amount of finished crafting orders
       AcceptedMissions: Natural; -- Amount of accepted missions
       FinishedMissions: Natural; -- Amount of finished missions
+      FinishedGoals: Statistics_Container
+        .Vector; -- Data for all finished goals
    end record;
    GameStats: GameStats_Data; -- Game statistics
 

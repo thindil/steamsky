@@ -51,6 +51,7 @@ package body Statistics is
       GameStats.CraftingOrders := 0;
       GameStats.AcceptedMissions := 0;
       GameStats.FinishedMissions := 0;
+      GameStats.FinishedGoals.Clear;
    end ClearGameStats;
 
 end Statistics;
