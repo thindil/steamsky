@@ -28,6 +28,7 @@ with Statistics; use Statistics;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
 with Items; use Items;
+with Goals; use Goals;
 
 package body Game.SaveLoad is
 
@@ -418,6 +419,14 @@ package body Game.SaveLoad is
       RawValue :=
         To_Unbounded_String(Positive'Image(GameStats.FinishedMissions));
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      -- Save current goal
+      Put(SaveGame, To_String(CurrentGoal.Index) & ";");
+      RawValue :=
+        To_Unbounded_String(Integer'Image(GoalTypes'Pos(CurrentGoal.GType)));
+      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      RawValue := To_Unbounded_String(Natural'Image(CurrentGoal.Amount));
+      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      Put(SaveGame, To_String(CurrentGoal.TargetIndex) & ";");
       Close(SaveGame);
    end SaveGame;
 
@@ -715,6 +724,11 @@ package body Game.SaveLoad is
       GameStats.CraftingOrders := Positive'Value(To_String(ReadData));
       GameStats.AcceptedMissions := Positive'Value(To_String(ReadData));
       GameStats.FinishedMissions := Positive'Value(To_String(ReadData));
+      -- Load current goal
+      CurrentGoal.Index := ReadData;
+      CurrentGoal.GType := GoalTypes'Val(Integer'Value(To_String(ReadData)));
+      CurrentGoal.Amount := Natural'Value(To_String(ReadData));
+      CurrentGoal.TargetIndex := ReadData;
       Close(SaveGame);
    exception
       when An_Exception : Constraint_Error | End_Error =>
