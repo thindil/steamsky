@@ -375,6 +375,7 @@ package body UserInterface.Keys is
                Events_List.Clear;
                ClearGameStats;
                Known_Recipes.Clear;
+               ClearCurrentGoal;
                Erase;
                Refresh;
                ShowMainMenu;
