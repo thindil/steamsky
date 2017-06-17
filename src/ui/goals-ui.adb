@@ -18,6 +18,7 @@
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with MainMenu; use MainMenu;
+with UserInterface; use UserInterface;
 
 package body Goals.UI is
 
@@ -110,7 +111,7 @@ package body Goals.UI is
 
    function GoalsMenuKeys
      (Key: Key_Code;
-      CurrentState: GameStates) return GameStates is
+      CurrentState, OldState: GameStates) return GameStates is
       Result: Driver_Result;
       GoalIndex: constant Natural :=
         Natural'Value(Description(Current(GoalsMenu)));
@@ -139,17 +140,25 @@ package body Goals.UI is
                end if;
                Post(GoalsMenu, False);
                Delete(GoalsMenu);
-               Erase;
-               ShowMainMenu;
-               ShowNewGameForm(8);
-               Refresh;
-               return New_Game;
+               if OldState = New_Game then
+                  Erase;
+                  ShowMainMenu;
+                  ShowNewGameForm(8);
+                  Refresh;
+               else
+                  DrawGame(GameStats_View);
+               end if;
+               return OldState;
             else
                Post(GoalsMenu, False);
                Delete(GoalsMenu);
-               Erase;
-               ShowMainMenu;
-               ShowNewGameForm(8);
+               if OldState = New_Game then
+                  Erase;
+                  ShowMainMenu;
+                  ShowNewGameForm(8);
+               else
+                  DrawGame(GameStats_View);
+               end if;
                if GoalIndex > 0 then
                   ShowGoalsList(GoalTypes'Val(GoalIndex));
                end if;
@@ -157,7 +166,7 @@ package body Goals.UI is
                if GoalIndex > 0 then
                   return GoalsList_View;
                else
-                  return New_Game;
+                  return OldState;
                end if;
             end if;
          when others =>
