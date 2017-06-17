@@ -27,8 +27,8 @@ with Goals; use Goals;
 
 package body Statistics.UI is
 
-   DestroyedShipsPad: Window;
-   StartIndex, EndIndex: Integer := 0;
+   DestroyedShipsPad, FinishedGoalsPad: Window;
+   StartIndex, StartIndex2, EndIndex, EndIndex2: Integer := 0;
 
    procedure ShowGameStats(RefreshOnly: Boolean := False) is
       MinutesDiff: Natural;
@@ -37,7 +37,8 @@ package body Statistics.UI is
       type VisitedFactor is digits 4 range 0.0 .. 100.0;
       VisitedPercent: VisitedFactor;
       VisitedString: String(1 .. 5);
-      MissionsPercent, TotalDestroyed: Natural := 0;
+      MissionsPercent, TotalDestroyed, TotalFinished: Natural := 0;
+      ProtoIndex: Positive;
    begin
       if not RefreshOnly then
          MinutesDiff :=
@@ -171,6 +172,47 @@ package body Statistics.UI is
                    (To_Unbounded_String(Natural'Image(MissionsPercent)),
                     Ada.Strings.Left)) &
               "%)");
+         Move_Cursor(Line => 8, Column => 2);
+         Add(Str => "Current goal: " & GoalText(0));
+         if GameStats.FinishedGoals.Length > 0 then
+            FinishedGoalsPad :=
+              New_Pad
+                (Line_Position(GameStats.FinishedGoals.Length + 2),
+                 (Columns / 2));
+            for I in GameStats.FinishedGoals.Iterate loop
+               Move_Cursor
+                 (Win => FinishedGoalsPad,
+                  Line => Line_Position(Statistics_Container.To_Index(I)),
+                  Column => 0);
+               for J in Goals_List.Iterate loop
+                  if GameStats.FinishedGoals(I).ProtoIndex =
+                    Goals_List(J).Index then
+                     ProtoIndex := Goals_Container.To_Index(J);
+                     exit;
+                  end if;
+               end loop;
+               Add
+                 (Win => FinishedGoalsPad,
+                  Str =>
+                    GoalText(ProtoIndex) &
+                    ":" &
+                    Positive'Image(GameStats.FinishedGoals(I).Amount));
+               TotalFinished :=
+                 TotalFinished + GameStats.FinishedGoals(I).Amount;
+            end loop;
+            Move_Cursor(Win => FinishedGoalsPad, Line => 0, Column => 0);
+            Add
+              (Win => FinishedGoalsPad,
+               Str =>
+                 "Finished goals (Total:" &
+                 Natural'Image(TotalFinished) &
+                 ")");
+            EndIndex2 :=
+              Integer(GameStats.FinishedGoals.Length) - Integer(Lines - 2);
+         else
+            FinishedGoalsPad := New_Pad(2, (Columns / 2));
+            Add(Win => FinishedGoalsPad, Str => "Finished goals: none");
+         end if;
          Refresh;
       end if;
       Refresh
@@ -181,6 +223,14 @@ package body Statistics.UI is
          (Columns / 2),
          (Lines - 1),
          Columns);
+      Refresh
+        (FinishedGoalsPad,
+         Line_Position(StartIndex2),
+         0,
+         9,
+         2,
+         (Lines - 1),
+         (Columns / 2));
    end ShowGameStats;
 
    function ShowGameStatsKeys(Key: Key_Code) return GameStates is
@@ -208,10 +258,10 @@ package body Statistics.UI is
             StartIndex := StartIndex - 1;
          when 50 | KEY_DOWN => -- Scroll destroyed ships list one line down
             StartIndex := StartIndex + 1;
-         when 51 | KEY_NPAGE => -- Scroll destroyed ship list one screen down
-            StartIndex := StartIndex + Integer(Lines - 2);
-         when 57 | KEY_PPAGE => -- Scroll destroyed ship list one screen up
-            StartIndex := StartIndex - Integer(Lines - 2);
+         when 51 | KEY_NPAGE => -- Scroll finished goals list one line down
+            StartIndex2 := StartIndex2 + 1;
+         when 57 | KEY_PPAGE => -- Scroll finished goals list one line up
+            StartIndex2 := StartIndex2 - 1;
          when 55 | Key_Home => -- Scroll destroyed ship list to start
             StartIndex := 0;
          when 49 | Key_End => -- Scroll destroyed ship list to end
@@ -224,6 +274,12 @@ package body Statistics.UI is
       end if;
       if StartIndex > EndIndex then
          StartIndex := EndIndex;
+      end if;
+      if StartIndex2 < 0 then
+         StartIndex2 := 0;
+      end if;
+      if StartIndex2 > EndIndex2 then
+         StartIndex2 := EndIndex2;
       end if;
       ShowGameStats(True);
       return GameStats_View;
