@@ -50,7 +50,9 @@ package Statistics is
    GameStats: GameStats_Data; -- Game statistics
 
    procedure UpdateDestroyedShips
-     (ShipName: Unbounded_String); -- Add new destroyed ship do list
+     (ShipName: Unbounded_String); -- Add new destroyed ship to list
    procedure ClearGameStats; -- Clear game statistics
+   procedure UpdateFinishedGoals
+     (Index: Unbounded_String); -- Add new finished goal to list
 
 end Statistics;

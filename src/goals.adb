@@ -17,12 +17,16 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Game; use Game;
 with Log; use Log;
 with Ships; use Ships;
 with Crafts; use Crafts;
 with Items; use Items;
+with Utils; use Utils;
+with Statistics; use Statistics;
+with Messages; use Messages;
 
 package body Goals is
 
@@ -169,9 +173,34 @@ package body Goals is
          TargetIndex => Null_Unbounded_String);
    end ClearCurrentGoal;
 
-   procedure UpdateGoal(GType: GoalTypes; Index: Unbounded_String) is
+   procedure UpdateGoal
+     (GType: GoalTypes;
+      TargetIndex: Unbounded_String;
+      Amount: Positive := 1) is
    begin
-      null;
+      if GType /= CurrentGoal.GType then
+         return;
+      end if;
+      if To_Lower(To_String(TargetIndex)) /=
+        To_Lower(To_String(CurrentGoal.TargetIndex)) and
+        CurrentGoal.TargetIndex /= Null_Unbounded_String then
+         return;
+      end if;
+      if Amount >= CurrentGoal.Amount then
+         CurrentGoal.Amount := 0;
+      else
+         CurrentGoal.Amount := CurrentGoal.Amount - Amount;
+      end if;
+      if CurrentGoal.Amount = 0 then
+         UpdateFinishedGoals(CurrentGoal.Index);
+         AddMessage
+           ("You finished your goal. New goal is set.",
+            OtherMessage,
+            4);
+         CurrentGoal :=
+           Goals_List
+             (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
+      end if;
    end UpdateGoal;
 
 end Goals;

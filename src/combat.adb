@@ -30,8 +30,11 @@ with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Utils; use Utils;
 with Log; use Log;
+with Goals; use Goals;
 
 package body Combat is
+
+   EnemyShipIndex: Positive;
 
    function StartCombat
      (EnemyIndex: Positive;
@@ -70,6 +73,7 @@ package body Combat is
          return Result;
       end CountPerception;
    begin
+      EnemyShipIndex := EnemyIndex;
       EnemyShip :=
         CreateShip
           (EnemyIndex,
@@ -597,6 +601,9 @@ package body Combat is
                               end if;
                            end if;
                            UpdateDestroyedShips(EnemyShip.Name);
+                           UpdateGoal
+                             (KILL,
+                              ProtoShips_List(EnemyShipIndex).Index);
                         else
                            DrawGame(Combat_State);
                            return;

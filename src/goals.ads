@@ -43,6 +43,7 @@ package Goals is
    procedure ClearCurrentGoal; -- Reset current goal
    procedure UpdateGoal
      (GType: GoalTypes;
-      Index: Unbounded_String); -- Update current goal
+      TargetIndex: Unbounded_String;
+      Amount: Positive := 1); -- Update current goal
 
 end Goals;

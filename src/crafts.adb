@@ -27,6 +27,7 @@ with Crew; use Crew;
 with Items; use Items;
 with Statistics; use Statistics;
 with Log; use Log;
+with Goals; use Goals;
 
 package body Crafts is
 
@@ -537,6 +538,7 @@ package body Crafts is
                         ".",
                         CraftMessage,
                         2);
+                     UpdateGoal(CRAFT, Recipe.Index, CraftedAmount);
                   else
                      AddMessage
                        (To_String(PlayerShip.Crew(CrafterIndex).Name) &
@@ -545,6 +547,7 @@ package body Crafts is
                         ".",
                         CraftMessage,
                         2);
+                     UpdateGoal(CRAFT, Null_Unbounded_String);
                   end if;
                end if;
                if PlayerShip.Crew(CrafterIndex).Order = Craft then

@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ships; use Ships;
+with Goals; use Goals;
 
 package body Statistics is
 
@@ -53,5 +54,26 @@ package body Statistics is
       GameStats.FinishedMissions := 0;
       GameStats.FinishedGoals.Clear;
    end ClearGameStats;
+
+   procedure UpdateFinishedGoals(Index: Unbounded_String) is
+      Updated: Boolean := False;
+   begin
+      for FinishedGoal of GameStats.FinishedGoals loop
+         if FinishedGoal.ProtoIndex = Index then
+            FinishedGoal.Amount := FinishedGoal.Amount + 1;
+            Updated := True;
+            exit;
+         end if;
+      end loop;
+      if not Updated then
+         for Goal of Goals_List loop
+            if Goal.Index = Index then
+               GameStats.FinishedGoals.Append
+               (New_Item => (ProtoIndex => Goal.Index, Amount => 1));
+               exit;
+            end if;
+         end loop;
+      end if;
+   end UpdateFinishedGoals;
 
 end Statistics;
