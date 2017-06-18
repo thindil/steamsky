@@ -70,7 +70,8 @@ package body Goals is
                   TempRecord.GType := GoalTypes'Value(To_String(Value));
                elsif FieldName = To_Unbounded_String("Amount") then
                   TempRecord.Amount := Natural'Value(To_String(Value));
-               elsif FieldName = To_Unbounded_String("Target") then
+               elsif FieldName = To_Unbounded_String("Target") and
+                 TempRecord.GType /= DISCOVER then
                   TempRecord.TargetIndex := Value;
                end if;
             else
@@ -143,7 +144,7 @@ package body Goals is
             null;
       end case;
       if Goal.TargetIndex /= Null_Unbounded_String then
-         case Goals_List(Index).GType is
+         case Goal.GType is
             when REPUTATION | VISIT =>
                Append(Text, " of " & To_String(Goal.TargetIndex));
             when DESTROY =>
