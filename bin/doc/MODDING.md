@@ -138,7 +138,7 @@ must be existing item index from any items file from *data/items* directory.
 ### Recipe data structure
 - Each recipe start from `[` symbol. Any value between `[` and `]` is a recipe 
   index (it can be number or text) and must be unique. This value is used at
-  this moment only for set starting recipes.
+  this moment for set starting recipes and in Craft types of goals.
 - Material: Item type of materials need for recipe. Each material must be
   separated with `, ` (comma and space)
 - Amount: Amount of crafting materials needed for recipe. If you set more than
@@ -210,7 +210,7 @@ must be existing item index from any items file from *data/items* directory.
 ### Ship data structure
 - Each ship start from `[` symbol. Any value between `[` and `]` is a index 
   (it can be number or text) and must be unique. This value is used at this
-  moment only to set player ship.
+  moment to set player ship and in Destroy types of goals.
 - Name: Type of ship. Will be visible during combat information.
 - Modules: List of modules indexes (from *shipmodules* directory), separated 
   by `, ` (comma and space).
@@ -264,6 +264,30 @@ must be existing item index from any items file from *data/items* directory.
   menu entry in main help menu. It can be number or text.
 - Whole text below (until next new line which starts from `[`) is help entry
   text visible when player select this option from help menu.
+
+## Goals
+
+### General informations
+- Open file *goals.dat* in *data/goals* directory or create new file with *dat*
+  extension in that directory (example: *mygoals.dat*).
+- Each value in goal data structure must be one line length.
+- File must end with `[]`.
+
+### Goal data structure
+- Each ship start from `[` symbol. Any value between `[` and `]` is a index 
+  (it can be number or text) and must be unique. At this moment this value is
+  used to set/update goal in game.
+- Type: Type/category of goal which define what is needed to do for finish
+  selected goal. Possible values: Reputation - gain max reputation in X bases,
+  Destroy - destroy X ships, Discover - discover X fields of map, Visit - visit
+  (discover) X bases, Craft - craft X items
+- Amount: Amount of target for selected goal to do for finish it. For example
+  100 ships to destroy, etc.
+- Target: Optional parameter, ignored for Discover type, exact target for 
+  goal, depends on type of goal. Possible values: for Reputation and Visit, 
+  bases owners names: Poleis, Independent, Pirates, Undead, Drones, 
+  Inquisition. For Destroy, any enemy ship index (from *ships* directory). For
+  Craft, recipe index (from *recipes* directory).
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
