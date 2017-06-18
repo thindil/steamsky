@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Coloring messages which made saves from previous versions incompatible
 - New type of missions: transport of passengers
 - New random event: brawl in base
+- Player goals (achievements)
 
 ### Changed
 - Updated interface
