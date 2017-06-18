@@ -343,118 +343,94 @@ package body MainMenu is
          Columns);
    end ShowNews;
 
-   function LoadGameData(NewGame: Boolean := True) return Boolean is
-      procedure ShowErrorInfo(Message: String) is
-      begin
-         if NewGame then
-            Erase;
-            ShowMainMenu;
-            Refresh_Without_Update;
-         end if;
-         ShowDialog(Message);
-         Update_Panels;
-         Update_Screen;
-      end ShowErrorInfo;
-   begin
-      LoadHelp;
-      LoadItems;
-      LoadShipModules;
-      LoadRecipes;
-      LoadShips;
-      if not NewGame then
-         LoadGoals;
-         LoadGame;
-      end if;
-      return True;
-   exception
-      when Help_Directory_Not_Found =>
-         ShowErrorInfo
-           ("Can't load help data. Directory with help files not found.");
-         return False;
-      when Help_Files_Not_Found =>
-         ShowErrorInfo
-           ("Can't load help data. Files with help data not found.");
-         return False;
-      when Items_Directory_Not_Found =>
-         ShowErrorInfo
-           ("Can't load items data. Directory with items data files not found.");
-         return False;
-      when Items_Files_Not_Found =>
-         ShowErrorInfo
-           ("Can't load items data. Files with items data not found.");
-         return False;
-      when Modules_Directory_Not_Found =>
-         ShowErrorInfo
-           ("Can't load ship modules data. Directory with modules data files not found.");
-         return False;
-      when Modules_Files_Not_Found =>
-         ShowErrorInfo
-           ("Can't load ship modules data. Files with modules data not found.");
-         return False;
-      when Recipes_Directory_Not_Found =>
-         ShowErrorInfo
-           ("Can't load recipes data. Directory with recipes data files not found.");
-         return False;
-      when Recipes_Files_Not_Found =>
-         ShowErrorInfo
-           ("Can't load recipes data. Files with recipes data not found.");
-         return False;
-      when An_Exception : Recipes_Invalid_Data =>
-         LogMessage(Exception_Message(An_Exception), Everything);
-         ShowErrorInfo
-           ("Can't load recipess data. Invalid value in file. Run game in debug mode to get more info.");
-         return False;
-      when Ships_Directory_Not_Found =>
-         ShowErrorInfo
-           ("Can't load ships data. Directory with ships data files not found.");
-         return False;
-      when Ships_Files_Not_Found =>
-         ShowErrorInfo
-           ("Can't load ships data. Files with ships data not found.");
-         return False;
-      when An_Exception : Ships_Invalid_Data =>
-         LogMessage(Exception_Message(An_Exception), Everything);
-         ShowErrorInfo
-           ("Can't load ships data. Invalid value in file. Run game in debug mode to get more info.");
-         return False;
-      when SaveGame_Invalid_Version =>
-         ShowErrorInfo
-           ("This saved game is incompatible with this version of game and can't be loaded.");
-         return False;
-      when An_Exception : SaveGame_Invalid_Data =>
-         LogMessage
-           ("Invalid data in savegame: " & Exception_Message(An_Exception),
-            Everything);
-         ShowErrorInfo
-           ("Can't load savegame file. Invalid data. Run game in debug mode to get more info.");
-         return False;
-      when Goals_Directory_Not_Found =>
-         ShowErrorInfo
-           ("Can't load goals data. Directory with goals files not found.");
-         return False;
-      when Goals_Files_Not_Found =>
-         ShowErrorInfo
-           ("Can't load goals data. Files with goals data not found.");
-         return False;
-   end LoadGameData;
-
    function MainMenuKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
       Option: constant String := Name(Current(GameMenu));
-      function LoadGoalsData return Boolean is
+      function LoadGameData(NewGame: Boolean := True) return Boolean is
          procedure ShowErrorInfo(Message: String) is
          begin
-            Erase;
-            ShowMainMenu;
-            Refresh_Without_Update;
+            if NewGame then
+               Erase;
+               ShowMainMenu;
+               Refresh_Without_Update;
+            end if;
             ShowDialog(Message);
             Update_Panels;
             Update_Screen;
          end ShowErrorInfo;
       begin
+         LoadHelp;
+         LoadItems;
+         LoadShipModules;
+         LoadRecipes;
+         LoadShips;
          LoadGoals;
+         if not NewGame then
+            LoadGame;
+         end if;
          return True;
       exception
+         when Help_Directory_Not_Found =>
+            ShowErrorInfo
+              ("Can't load help data. Directory with help files not found.");
+            return False;
+         when Help_Files_Not_Found =>
+            ShowErrorInfo
+              ("Can't load help data. Files with help data not found.");
+            return False;
+         when Items_Directory_Not_Found =>
+            ShowErrorInfo
+              ("Can't load items data. Directory with items data files not found.");
+            return False;
+         when Items_Files_Not_Found =>
+            ShowErrorInfo
+              ("Can't load items data. Files with items data not found.");
+            return False;
+         when Modules_Directory_Not_Found =>
+            ShowErrorInfo
+              ("Can't load ship modules data. Directory with modules data files not found.");
+            return False;
+         when Modules_Files_Not_Found =>
+            ShowErrorInfo
+              ("Can't load ship modules data. Files with modules data not found.");
+            return False;
+         when Recipes_Directory_Not_Found =>
+            ShowErrorInfo
+              ("Can't load recipes data. Directory with recipes data files not found.");
+            return False;
+         when Recipes_Files_Not_Found =>
+            ShowErrorInfo
+              ("Can't load recipes data. Files with recipes data not found.");
+            return False;
+         when An_Exception : Recipes_Invalid_Data =>
+            LogMessage(Exception_Message(An_Exception), Everything);
+            ShowErrorInfo
+              ("Can't load recipess data. Invalid value in file. Run game in debug mode to get more info.");
+            return False;
+         when Ships_Directory_Not_Found =>
+            ShowErrorInfo
+              ("Can't load ships data. Directory with ships data files not found.");
+            return False;
+         when Ships_Files_Not_Found =>
+            ShowErrorInfo
+              ("Can't load ships data. Files with ships data not found.");
+            return False;
+         when An_Exception : Ships_Invalid_Data =>
+            LogMessage(Exception_Message(An_Exception), Everything);
+            ShowErrorInfo
+              ("Can't load ships data. Invalid value in file. Run game in debug mode to get more info.");
+            return False;
+         when SaveGame_Invalid_Version =>
+            ShowErrorInfo
+              ("This saved game is incompatible with this version of game and can't be loaded.");
+            return False;
+         when An_Exception : SaveGame_Invalid_Data =>
+            LogMessage
+              ("Invalid data in savegame: " & Exception_Message(An_Exception),
+               Everything);
+            ShowErrorInfo
+              ("Can't load savegame file. Invalid data. Run game in debug mode to get more info.");
+            return False;
          when Goals_Directory_Not_Found =>
             ShowErrorInfo
               ("Can't load goals data. Directory with goals files not found.");
@@ -463,7 +439,7 @@ package body MainMenu is
             ShowErrorInfo
               ("Can't load goals data. Files with goals data not found.");
             return False;
-      end LoadGoalsData;
+      end LoadGameData;
    begin
       case Key is
          when 56 | KEY_UP => -- Select previous option
@@ -484,7 +460,7 @@ package body MainMenu is
             end if;
          when 10 => -- Select option
             if Option = "New game" then
-               if not LoadGoalsData then
+               if not LoadGameData then
                   return Main_Menu;
                end if;
                ShowNewGameForm;
@@ -611,9 +587,6 @@ package body MainMenu is
                Erase;
                Refresh;
                ShowMainMenu;
-               return Main_Menu;
-            end if;
-            if not LoadGameData then
                return Main_Menu;
             end if;
             Set_Cursor_Visibility(Visibility);
