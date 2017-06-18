@@ -880,4 +880,14 @@ Skills = 1x7..20, 5x4..12; 3x7..20, 5x3..10; 2x7..20
 Orders = Pilot, Gunner, Engineer
 Description = Advanced and upgraded version of standard pirate ship. As many pirates they prefer to dismarm enemies first.
 Owner = Pirates
+[86]
+Name = Advanced undead ship mk III
+Modules = 108, 111, 104, 94, 96, 96, 96, 96, 96, 121
+CombatAI = Berserker
+Loot = 200..300
+Cargo = 2500..3000x1, 200..350x21
+Skills = 1x5..15, 5x5..15
+Orders = Pilot
+Description = Advanced and upgraded version of standard undead ship. Dangerous at close range.
+Owner = Undead
 []
