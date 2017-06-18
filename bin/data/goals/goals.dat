@@ -2,7 +2,7 @@
 Type = Reputation
 Amount = 1
 [2]
-Type = Kill
+Type = Destroy
 Amount = 200
 [3]
 Type = Discover
