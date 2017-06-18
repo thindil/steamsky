@@ -602,7 +602,7 @@ package body Combat is
                            end if;
                            UpdateDestroyedShips(EnemyShip.Name);
                            UpdateGoal
-                             (KILL,
+                             (DESTROY,
                               ProtoShips_List(EnemyShipIndex).Index);
                         else
                            DrawGame(Combat_State);

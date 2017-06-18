@@ -109,7 +109,7 @@ package body Goals is
       case Goal.GType is
          when REPUTATION =>
             Text := To_Unbounded_String("Gain max reputation in");
-         when KILL =>
+         when DESTROY =>
             Text := To_Unbounded_String("Destroy");
          when DISCOVER =>
             Text := To_Unbounded_String("Discover");
@@ -127,7 +127,7 @@ package body Goals is
             if Goal.Amount > 1 then
                Append(Text, "s");
             end if;
-         when KILL =>
+         when DESTROY =>
             Append(Text, " ship");
             if Goal.Amount > 1 then
                Append(Text, "s");
@@ -146,7 +146,7 @@ package body Goals is
          case Goals_List(Index).GType is
             when REPUTATION | VISIT =>
                Append(Text, " of " & To_String(Goal.TargetIndex));
-            when KILL =>
+            when DESTROY =>
                for I in ProtoShips_List.Iterate loop
                   if ProtoShips_List(I).Index = Goal.TargetIndex then
                      Append(Text, ": " & To_String(ProtoShips_List(I).Name));
