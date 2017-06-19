@@ -29,6 +29,7 @@ with Ships.Crew; use Ships.Crew;
 with Events; use Events;
 with Crafts; use Crafts;
 with Utils; use Utils;
+with Goals; use Goals;
 
 package body Bases is
 
@@ -55,6 +56,12 @@ package body Bases is
            SkyBases(BaseIndex).Reputation(1) + 1;
       end loop;
       SkyBases(BaseIndex).Reputation(2) := NewPoints;
+      if SkyBases(BaseIndex).Reputation(1) = 100 then
+         UpdateGoal
+           (REPUTATION,
+            To_Unbounded_String
+              (Bases_Owners'Image(SkyBases(BaseIndex).Owner)));
+      end if;
    end GainRep;
 
    procedure CountPrice
