@@ -397,9 +397,7 @@ package body Game.SaveLoad is
       RawValue := To_Unbounded_String(GameStats.DestroyedShips.Length'Img);
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       for DestroyedShip of GameStats.DestroyedShips loop
-         RawValue :=
-           To_Unbounded_String(Integer'Image(DestroyedShip.ProtoIndex));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         Put(SaveGame, To_String(DestroyedShip.Index) & ";");
          RawValue := To_Unbounded_String(Integer'Image(DestroyedShip.Amount));
          Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       end loop;
@@ -422,7 +420,7 @@ package body Game.SaveLoad is
       RawValue := To_Unbounded_String(GameStats.FinishedGoals.Length'Img);
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       for FinishedGoal of GameStats.FinishedGoals loop
-         Put(SaveGame, To_String(FinishedGoal.ProtoIndex) & ";");
+         Put(SaveGame, To_String(FinishedGoal.Index) & ";");
          RawValue := To_Unbounded_String(Integer'Image(FinishedGoal.Amount));
          Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       end loop;
@@ -722,7 +720,7 @@ package body Game.SaveLoad is
       for I in 1 .. VectorLength loop
          GameStats.DestroyedShips.Append
          (New_Item =>
-            (ProtoIndex => Positive'Value(To_String(ReadData)),
+            (Index => ReadData,
              Amount => Positive'Value(To_String(ReadData))));
       end loop;
       GameStats.BasesVisited := Positive'Value(To_String(ReadData));
@@ -735,7 +733,7 @@ package body Game.SaveLoad is
       for I in 1 .. VectorLength loop
          GameStats.FinishedGoals.Append
          (New_Item =>
-            (ProtoIndex => ReadData,
+            (Index => ReadData,
              Amount => Positive'Value(To_String(ReadData))));
       end loop;
       -- Load current goal
