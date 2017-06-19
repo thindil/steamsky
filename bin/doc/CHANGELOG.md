@@ -52,6 +52,7 @@ All notable changes to this project will be documented in this file.
 - Stop upgrading module when it is destroyed
 - Crash when can't load game data
 - Info about minimal screen size
+- Gun for advanced inquisition ship mk II
 
 ## [1.2] - 2017-05-28
 
