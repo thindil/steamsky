@@ -20,23 +20,15 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Statistics is
 
-   type DestroyedShips_Data is -- Data for destroyed ships
+   type Statistics_Data is -- Data for finished goals and destroyed ships
    record
-      ProtoIndex: Positive; -- Prototype index of destroyed ship
-      Amount: Positive; -- Amount of destroyed that ships
-   end record;
-   package DestroyedShips_Container is new Vectors
-     (Positive,
-      DestroyedShips_Data);
-   type Statistics_Data is -- Data for finished goals
-   record
-      ProtoIndex: Unbounded_String; -- Index of goal
-      Amount: Positive; -- Amount of finished goals of that type
+      Index: Unbounded_String; -- Index of goal or ship name
+      Amount: Positive; -- Amount of finished goals or ships of that type
    end record;
    package Statistics_Container is new Vectors(Positive, Statistics_Data);
    type GameStats_Data is -- Data for game statistics
    record
-      DestroyedShips: DestroyedShips_Container
+      DestroyedShips: Statistics_Container
         .Vector; -- Data for all destroyed ships by player
       BasesVisited: Positive; -- Amount of visited bases
       MapVisited: Positive; -- Amount of visited map fields
