@@ -55,7 +55,7 @@ package ShipModules is
    end record;
    package BaseModules_Container is new Vectors(Positive, BaseModule_Data);
    Modules_List: BaseModules_Container
-     .Vector; -- Lost of ship modules available in game
+     .Vector; -- List of ship modules available in game
 
    function LoadShipModules
      return Boolean; -- Load modules from file, returns False if file not found
