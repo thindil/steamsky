@@ -590,7 +590,7 @@ Description = Advanced and upgraded version of standard undead ship. Dangerous a
 Owner = Undead
 [58]
 Name = Advanced inquisition ship mk II
-Modules = 67, 56, 75, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 89, 85, 29
+Modules = 67, 56, 75, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 89, 85, 27
 Accuracy = 15
 CombatAI = Attacker
 Evasion = 15
