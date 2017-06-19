@@ -890,4 +890,17 @@ Skills = 1x5..15, 5x5..15
 Orders = Pilot
 Description = Advanced and upgraded version of standard undead ship. Dangerous at close range.
 Owner = Undead
+[87]
+Name = Advanced inquisition ship mk III
+Modules = 108, 111, 104, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 121, 113, 50
+Accuracy = 15
+CombatAI = Attacker
+Evasion = 15
+Loot = 120..240
+Perception = 15
+Cargo = 2000..2200x1, 150..220x2, 400..500x3, 400..600x25, 150..250x21
+Skills = 1x7..20, 5x5..15; 3x10..20, 5x5..15
+Orders = Pilot, Gunner
+Description = Advanced and upgraded version of standard flying vessel of inquisition.
+Owner = Inquisition
 []
