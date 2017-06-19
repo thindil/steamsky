@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ships; use Ships;
 with Goals; use Goals;
 
 package body Statistics is
@@ -24,22 +23,15 @@ package body Statistics is
       Updated: Boolean := False;
    begin
       for DestroyedShip of GameStats.DestroyedShips loop
-         if ProtoShips_List(DestroyedShip.ProtoIndex).Name = ShipName then
+         if DestroyedShip.Index = ShipName then
             DestroyedShip.Amount := DestroyedShip.Amount + 1;
             Updated := True;
             exit;
          end if;
       end loop;
       if not Updated then
-         for I in ProtoShips_List.Iterate loop
-            if ProtoShips_List(I).Name = ShipName then
-               GameStats.DestroyedShips.Append
-               (New_Item =>
-                  (ProtoIndex => ProtoShips_Container.To_Index(I),
-                   Amount => 1));
-               exit;
-            end if;
-         end loop;
+         GameStats.DestroyedShips.Append
+         (New_Item => (Index => ShipName, Amount => 1));
       end if;
    end UpdateDestroyedShips;
 
@@ -59,7 +51,7 @@ package body Statistics is
       Updated: Boolean := False;
    begin
       for FinishedGoal of GameStats.FinishedGoals loop
-         if FinishedGoal.ProtoIndex = Index then
+         if FinishedGoal.Index = Index then
             FinishedGoal.Amount := FinishedGoal.Amount + 1;
             Updated := True;
             exit;
@@ -69,7 +61,7 @@ package body Statistics is
          for Goal of Goals_List loop
             if Goal.Index = Index then
                GameStats.FinishedGoals.Append
-               (New_Item => (ProtoIndex => Goal.Index, Amount => 1));
+               (New_Item => (Index => Goal.Index, Amount => 1));
                exit;
             end if;
          end loop;

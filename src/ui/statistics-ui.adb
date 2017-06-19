@@ -89,14 +89,12 @@ package body Statistics.UI is
             for I in GameStats.DestroyedShips.Iterate loop
                Move_Cursor
                  (Win => DestroyedShipsPad,
-                  Line => Line_Position(DestroyedShips_Container.To_Index(I)),
+                  Line => Line_Position(Statistics_Container.To_Index(I)),
                   Column => 0);
                Add
                  (Win => DestroyedShipsPad,
                   Str =>
-                    To_String
-                      (ProtoShips_List(GameStats.DestroyedShips(I).ProtoIndex)
-                         .Name) &
+                    To_String(GameStats.DestroyedShips(I).Index) &
                     ":" &
                     Positive'Image(GameStats.DestroyedShips(I).Amount));
                TotalDestroyed :=
@@ -187,7 +185,7 @@ package body Statistics.UI is
                   Line => Line_Position(Statistics_Container.To_Index(I)),
                   Column => 0);
                for J in Goals_List.Iterate loop
-                  if GameStats.FinishedGoals(I).ProtoIndex =
+                  if GameStats.FinishedGoals(I).Index =
                     Goals_List(J).Index then
                      ProtoIndex := Goals_Container.To_Index(J);
                      exit;
