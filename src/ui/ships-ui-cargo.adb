@@ -25,34 +25,32 @@ package body Ships.UI.Cargo is
    CurrentMenuIndex: Positive := 1;
 
    procedure ShowItemInfo is
-      InfoWindow: Window;
+      InfoWindow, ClearWindow, BoxWindow: Window;
       ItemIndex: constant Positive := Get_Index(Current(ShipsMenu));
       ItemWeight: constant Positive :=
         PlayerShip.Cargo(ItemIndex).Amount *
         Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Weight;
       CurrentLine: Line_Position := 1;
       DamagePercent: Natural;
-      StartColumn: Column_Position;
+      WindowHeight: Line_Position := 9;
+      FreeSpace: Integer;
    begin
-      InfoWindow := Create(10, (Columns / 2), 3, (Columns / 2));
+      ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
+      Refresh(ClearWindow);
+      Delete(ClearWindow);
       if PlayerShip.Cargo(ItemIndex).Durability < 100 then
-         Add(Win => InfoWindow, Str => "Status: ");
-         DamagePercent :=
-           100 -
-           Natural
-             ((Float(PlayerShip.Cargo(ItemIndex).Durability) / 100.0) * 100.0);
-         if DamagePercent > 0 and DamagePercent < 20 then
-            Add(Win => InfoWindow, Str => "Slightly used");
-         elsif DamagePercent > 19 and DamagePercent < 50 then
-            Add(Win => InfoWindow, Str => "Damaged");
-         elsif DamagePercent > 49 and DamagePercent < 80 then
-            Add(Win => InfoWindow, Str => "Heavily damaged");
-         elsif DamagePercent > 79 and DamagePercent < 100 then
-            Add(Win => InfoWindow, Str => "Almost destroyed");
-         end if;
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-         CurrentLine := 2;
+         WindowHeight := WindowHeight + 1;
       end if;
+      WindowHeight :=
+        WindowHeight +
+        Line_Position
+          ((Length(Items_List(ItemIndex).Description) / Natural(Columns / 2)));
+      BoxWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
+      Box(BoxWindow);
+      Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
+      Add(Win => BoxWindow, Str => "[Item info]");
+      InfoWindow :=
+        Create(WindowHeight - 2, (Columns / 2) - 4, 4, (Columns / 2) + 2);
       Add(Win => InfoWindow, Str => "Type: ");
       if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).ShowType =
         Null_Unbounded_String then
@@ -84,13 +82,32 @@ package body Ships.UI.Cargo is
            " kg");
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-      CurrentLine := CurrentLine + 1;
       Add
         (Win => InfoWindow,
          Str => "Total weight:" & Positive'Image(ItemWeight) & " kg");
       CurrentLine := CurrentLine + 1;
+      if PlayerShip.Cargo(ItemIndex).Durability < 100 then
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         Add(Win => InfoWindow, Str => "Status: ");
+         DamagePercent :=
+           100 -
+           Natural
+             ((Float(PlayerShip.Cargo(ItemIndex).Durability) / 100.0) * 100.0);
+         if DamagePercent > 0 and DamagePercent < 20 then
+            Add(Win => InfoWindow, Str => "Slightly used");
+         elsif DamagePercent > 19 and DamagePercent < 50 then
+            Add(Win => InfoWindow, Str => "Damaged");
+         elsif DamagePercent > 49 and DamagePercent < 80 then
+            Add(Win => InfoWindow, Str => "Heavily damaged");
+         elsif DamagePercent > 79 and DamagePercent < 100 then
+            Add(Win => InfoWindow, Str => "Almost destroyed");
+         end if;
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         CurrentLine := CurrentLine + 1;
+      end if;
       if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Description /=
         Null_Unbounded_String then
+         CurrentLine := CurrentLine + 1;
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
          Add
            (Win => InfoWindow,
@@ -98,21 +115,25 @@ package body Ships.UI.Cargo is
               To_String
                 (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex)
                    .Description));
-         Get_Cursor_Position
-           (Win => InfoWindow,
-            Line => CurrentLine,
-            Column => StartColumn);
-         CurrentLine := CurrentLine + 2;
       end if;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-      Add(Win => InfoWindow, Str => "Press Enter to drop cargo");
+      CurrentLine := WindowHeight + 3;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      Add(Str => "Press Enter to drop cargo");
       Change_Attributes
-        (Win => InfoWindow,
-         Line => CurrentLine,
-         Column => 6,
+        (Line => CurrentLine,
+         Column => (Columns / 2) + 6,
          Count => 5,
          Color => 1);
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      FreeSpace := FreeCargo(0);
+      if FreeSpace < 0 then
+         FreeSpace := 0;
+      end if;
+      Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
       Refresh;
+      Refresh(BoxWindow);
+      Delete(BoxWindow);
       Refresh(InfoWindow);
       Delete(InfoWindow);
    end ShowItemInfo;
@@ -122,7 +143,6 @@ package body Ships.UI.Cargo is
         new Item_Array(1 .. (PlayerShip.Cargo.Last_Index + 1));
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
-      FreeSpace: Integer;
    begin
       for I in PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
          Cargo_Items.all(I) := New_Item(GetCargoName(I));
@@ -144,12 +164,6 @@ package body Ships.UI.Cargo is
       Set_Current(ShipsMenu, Cargo_Items.all(CurrentMenuIndex));
       ShowItemInfo;
       Refresh(MenuWindow);
-      Move_Cursor(Line => MenuHeight + 4, Column => 2);
-      FreeSpace := FreeCargo(0);
-      if FreeSpace < 0 then
-         FreeSpace := 0;
-      end if;
-      Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
    end ShowCargoInfo;
 
    function CargoInfoKeys
