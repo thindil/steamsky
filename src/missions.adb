@@ -33,6 +33,7 @@ with Utils; use Utils;
 with ShipModules; use ShipModules;
 with Config; use Config;
 with Events; use Events;
+with Goals; use Goals;
 
 package body Missions is
 
@@ -396,6 +397,10 @@ package body Missions is
                MissionMessage,
                2);
       end case;
+      UpdateGoal
+        (MISSION,
+         To_Unbounded_String
+           (Missions_Types'Image(PlayerShip.Missions(MissionIndex).MType)));
       DeleteMission(MissionIndex, False);
       GameStats.FinishedMissions := GameStats.FinishedMissions + 1;
    end FinishMission;

@@ -27,6 +27,7 @@ with Items; use Items;
 with Utils; use Utils;
 with Statistics; use Statistics;
 with Messages; use Messages;
+with Missions; use Missions;
 
 package body Goals is
 
@@ -118,6 +119,8 @@ package body Goals is
             Text := To_Unbounded_String("Visit");
          when CRAFT =>
             Text := To_Unbounded_String("Craft");
+         when MISSION =>
+            Text := To_Unbounded_String("Finish");
          when RANDOM =>
             null;
       end case;
@@ -125,24 +128,23 @@ package body Goals is
       case Goal.GType is
          when REPUTATION | VISIT =>
             Append(Text, " base");
-            if Goal.Amount > 1 then
-               Append(Text, "s");
-            end if;
          when DESTROY =>
             Append(Text, " ship");
-            if Goal.Amount > 1 then
-               Append(Text, "s");
-            end if;
          when DISCOVER =>
-            Append(Text, " fields of map");
+            Append(Text, " field");
          when CRAFT =>
             Append(Text, " item");
-            if Goal.Amount > 1 then
-               Append(Text, "s");
-            end if;
+         when MISSION =>
+            Append(Text, " mission");
          when RANDOM =>
             null;
       end case;
+      if Goal.GType /= RANDOM and Goal.Amount > 1 then
+         Append(Text, "s");
+      end if;
+      if Goal.GType = DISCOVER then
+         Append(Text, " of map");
+      end if;
       if Goal.TargetIndex /= Null_Unbounded_String then
          case Goal.GType is
             when REPUTATION | VISIT =>
@@ -158,6 +160,19 @@ package body Goals is
                ItemIndex :=
                  Recipes_List(FindRecipe(Goal.TargetIndex)).ResultIndex;
                Append(Text, ": " & To_String(Items_List(ItemIndex).Name));
+            when MISSION =>
+               case Missions_Types'Value(To_String(Goal.TargetIndex)) is
+                  when Deliver =>
+                     Append(Text, ": Deliver item to base");
+                  when Patrol =>
+                     Append(Text, ": Patrol area");
+                  when Kill =>
+                     Append(Text, ": Destroy ship");
+                  when Explore =>
+                     Append(Text, ": Explore area");
+                  when Passenger =>
+                     Append(Text, ": Transport passenger to base");
+               end case;
             when RANDOM | DISCOVER =>
                null;
          end case;

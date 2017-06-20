@@ -73,19 +73,19 @@ package body Goals.UI is
    end ShowGoalsList;
 
    procedure ShowGoalsTypes is
-      GoalsTypes_Items: constant Item_Array_Access := new Item_Array(1 .. 7);
+      GoalsTypes_Items: constant Item_Array_Access := new Item_Array(1 .. 8);
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
       MenuOptions: Menu_Option_Set;
    begin
-      for I in 1 .. 5 loop
+      for I in 1 .. 6 loop
          GoalsTypes_Items.all(I) :=
            New_Item
              (To_Lower(GoalTypes'Image(GoalTypes'Val(I))),
               Positive'Image(I));
       end loop;
-      GoalsTypes_Items.all(6) := New_Item("quit", "0");
-      GoalsTypes_Items.all(7) := Null_Item;
+      GoalsTypes_Items.all(7) := New_Item("quit", "0");
+      GoalsTypes_Items.all(8) := Null_Item;
       GoalsMenu := New_Menu(GoalsTypes_Items);
       MenuOptions := Get_Options(GoalsMenu);
       MenuOptions.Show_Descriptions := False;
