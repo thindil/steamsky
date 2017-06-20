@@ -140,5 +140,7 @@ package Game is
    function DaysDifference
      (DateToCompare: Date_Record)
      return Natural; -- Return days difference between selected date and current game date
+   procedure EndGame
+     (Save: Boolean); -- Save (or not) game and clear all temporary data
 
 end Game;

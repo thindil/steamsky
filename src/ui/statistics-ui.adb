@@ -15,14 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Directories; use Ada.Directories;
 with Ada.Float_Text_IO; use Ada.Float_Text_IO;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
-with Events; use Events;
-with Messages; use Messages;
 with MainMenu; use MainMenu;
-with Crafts; use Crafts;
 with Goals; use Goals;
 with Goals.UI; use Goals.UI;
 
@@ -238,14 +234,7 @@ package body Statistics.UI is
       case Key is
          when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
             if PlayerShip.Crew(1).Health = 0 then -- Player is dead
-               if Exists("data/savegame.dat") then
-                  Delete_File("data/savegame.dat");
-               end if;
-               ClearMessages;
-               Events_List.Clear;
-               ClearGameStats;
-               Known_Recipes.Clear;
-               ClearCurrentGoal;
+               EndGame(False);
                Erase;
                Refresh;
                ShowMainMenu;
