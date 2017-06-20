@@ -53,6 +53,7 @@ All notable changes to this project will be documented in this file.
 - Crash when can't load game data
 - Info about minimal screen size
 - Gun for advanced inquisition ship mk II
+- Gaining reputation with bases
 
 ## [1.2] - 2017-05-28
 
