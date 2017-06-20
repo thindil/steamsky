@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Directories; use Ada.Directories;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
@@ -27,16 +26,12 @@ with Crew.UI; use Crew.UI;
 with Bases; use Bases;
 with Messages; use Messages;
 with Combat; use Combat;
-with Crafts; use Crafts;
 with MainMenu; use MainMenu;
 with Events; use Events;
 with ShipModules; use ShipModules;
-with Statistics; use Statistics;
 with Missions; use Missions;
 with Utils; use Utils;
-with Game.SaveLoad; use Game.SaveLoad;
 with Items; use Items;
-with Goals; use Goals;
 
 package body UserInterface.Keys is
 
@@ -353,14 +348,7 @@ package body UserInterface.Keys is
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             elsif OldState = Death_Confirm then
-               if Exists("data/savegame.dat") then
-                  Delete_File("data/savegame.dat");
-               end if;
-               ClearMessages;
-               Events_List.Clear;
-               ClearGameStats;
-               Known_Recipes.Clear;
-               ClearCurrentGoal;
+               EndGame(False);
                Erase;
                Refresh;
                ShowMainMenu;
@@ -370,12 +358,7 @@ package body UserInterface.Keys is
             end if;
          when Character'Pos('y') | Character'Pos('Y') => -- Confirm action
             if OldState = Quit_Confirm then
-               SaveGame;
-               ClearMessages;
-               Events_List.Clear;
-               ClearGameStats;
-               Known_Recipes.Clear;
-               ClearCurrentGoal;
+               EndGame(True);
                Erase;
                Refresh;
                ShowMainMenu;
