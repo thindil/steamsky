@@ -50,7 +50,7 @@ package body Bases is
             return;
          end if;
       end loop;
-      while NewPoints > abs (SkyBases(BaseIndex).Reputation(1) * 25) loop
+      while NewPoints > abs (SkyBases(BaseIndex).Reputation(1) * 10) loop
          NewPoints := NewPoints - abs (SkyBases(BaseIndex).Reputation(1) * 10);
          SkyBases(BaseIndex).Reputation(1) :=
            SkyBases(BaseIndex).Reputation(1) + 1;
