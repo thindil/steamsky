@@ -21,7 +21,13 @@ with Ada.Containers.Vectors; use Ada.Containers;
 package Goals is
 
    type GoalTypes is
-     (RANDOM, REPUTATION, DESTROY, DISCOVER, VISIT, CRAFT); -- Types of goals
+     (RANDOM,
+      REPUTATION,
+      DESTROY,
+      DISCOVER,
+      VISIT,
+      CRAFT,
+      MISSION); -- Types of goals
    type Goal_Data is -- Data structure for each goal
    record
       Index: Unbounded_String; -- Index of goal
