@@ -32,6 +32,7 @@ with Statistics; use Statistics;
 with Missions; use Missions;
 with Utils; use Utils;
 with Goals; use Goals;
+with Game.SaveLoad; use Game.SaveLoad;
 
 package body Game is
 
@@ -481,5 +482,21 @@ package body Game is
          (30 * DateToCompare.Month) +
          (DateToCompare.Year * 360));
    end DaysDifference;
+
+   procedure EndGame(Save: Boolean) is
+   begin
+      if Save then
+         SaveGame;
+      else
+         if Exists("data/savegame.dat") then
+            Delete_File("data/savegame.dat");
+         end if;
+      end if;
+      ClearMessages;
+      Events_List.Clear;
+      ClearGameStats;
+      Known_Recipes.Clear;
+      ClearCurrentGoal;
+   end EndGame;
 
 end Game;
