@@ -903,4 +903,14 @@ Skills = 1x7..20, 5x5..15; 3x10..20, 5x5..15
 Orders = Pilot, Gunner
 Description = Advanced and upgraded version of standard flying vessel of inquisition.
 Owner = Inquisition
+[88]
+Name = Huge pirate ship mk III
+Modules = 123, 112, 125, 125, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 120, 52, 120, 52, 120, 52, 120, 52
+CombatAI = Disarmer
+Loot = 500..1000
+Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x32, 500..750x21
+Skills = 1x30..50, 5x4..12; 3x30..50, 5x4..12; 2x30..50; 3x30..50, 5x4..12; 3x30..50, 5x4..12; 3x30..50, 5x4..12
+Orders = Pilot, Gunner, Engineer, Gunner, Gunner, Gunner
+Description = Huge, well armored pirate ship (upgraded version). As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
 []
