@@ -166,7 +166,7 @@ package body Goals is
                      Append(Text, ": Deliver item to base");
                   when Patrol =>
                      Append(Text, ": Patrol area");
-                  when Kill =>
+                  when Destroy =>
                      Append(Text, ": Destroy ship");
                   when Explore =>
                      Append(Text, ": Explore area");

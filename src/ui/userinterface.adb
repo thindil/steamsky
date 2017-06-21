@@ -404,7 +404,7 @@ package body UserInterface is
                             ("Complete delivery of " &
                              To_String(Items_List(Mission.Target).Name));
                         MenuIndex := MenuIndex + 1;
-                     when Kill =>
+                     when Destroy =>
                         if Mission.Finished then
                            Orders_Items.all(MenuIndex) :=
                              New_Item
@@ -569,7 +569,7 @@ package body UserInterface is
                                         (Items_List(Mission.Target).Name));
                                  MenuIndex := MenuIndex + 1;
                               end if;
-                           when Kill =>
+                           when Destroy =>
                               if Mission.Finished and
                                 Mission.StartBase = BaseIndex then
                                  Orders_Items.all(MenuIndex) :=
@@ -613,7 +613,7 @@ package body UserInterface is
                         case Mission.MType is
                            when Deliver | Passenger =>
                               null;
-                           when Kill =>
+                           when Destroy =>
                               Orders_Items.all(MenuIndex) :=
                                 New_Item
                                   ("Search for " &

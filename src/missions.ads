@@ -19,7 +19,7 @@ with Ada.Containers.Vectors; use Ada.Containers;
 
 package Missions is
 
-   type Missions_Types is (Deliver, Kill, Patrol, Explore, Passenger);
+   type Missions_Types is (Deliver, Destroy, Patrol, Explore, Passenger);
    type Mission_Data is -- Data structure for missions
    record
       MType: Missions_Types; -- Type of mission

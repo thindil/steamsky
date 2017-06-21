@@ -152,7 +152,7 @@ package body Missions is
                    (GetRandom
                       (MissionsItems.First_Index,
                        MissionsItems.Last_Index));
-            when Kill =>
+            when Destroy =>
                Mission.Target :=
                  Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
             when Patrol =>
@@ -202,7 +202,7 @@ package body Missions is
                    (Value_Type(80) *
                     Value_Functions.Sqrt(Value_Type((DiffX**2) + (DiffY**2))));
                Mission.Reward := (Mission.Time / 4);
-            when Kill | Passenger =>
+            when Destroy | Passenger =>
                Mission.Time :=
                  Positive
                    (Value_Type(180) *
@@ -292,7 +292,7 @@ package body Missions is
                To_String(Items_List(Mission.Target).Name) &
                "'.");
             UpdateCargo(PlayerShip, Mission.Target, 1);
-         when Kill =>
+         when Destroy =>
             Append
               (AcceptMessage,
                "'Destroy " &
@@ -373,7 +373,7 @@ package body Missions is
                "'.",
                MissionMessage,
                2);
-         when Kill =>
+         when Destroy =>
             AddMessage
               ("You finished mission 'Destroy " &
                To_String
@@ -425,7 +425,7 @@ package body Missions is
                   "'Deliver " &
                   To_String(Items_List(Mission.Target).Name) &
                   "'.");
-            when Kill =>
+            when Destroy =>
                Append
                  (MessageText,
                   "'Destroy " &
@@ -516,7 +516,7 @@ package body Missions is
                To_String
                  (Items_List(PlayerShip.Missions(MissionIndex).Target).Name) &
                "'.");
-         when Kill =>
+         when Destroy =>
             Append
               (MessageText,
                "'Destroy " &
