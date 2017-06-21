@@ -22,6 +22,7 @@ with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
+with Ships.UI.Cargo; use Ships.UI.Cargo;
 with Help.UI; use Help.UI;
 with Events; use Events;
 
@@ -40,7 +41,6 @@ package body Bases.UI.Trade is
              .BaseType) +
         1;
       CurrentLine: Line_Position := 4;
-      DamagePercent: Natural;
       CargoIndex: constant Natural :=
         Integer'Value(Description(Current(TradeMenu)));
       StartColumn: Column_Position;
@@ -113,20 +113,7 @@ package body Bases.UI.Trade is
          if PlayerShip.Cargo(CargoIndex).Durability < 100 then
             Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
             Add(Win => InfoWindow, Str => "Status: ");
-            DamagePercent :=
-              100 -
-              Natural
-                ((Float(PlayerShip.Cargo(CargoIndex).Durability) / 100.0) *
-                 100.0);
-            if DamagePercent > 0 and DamagePercent < 20 then
-               Add(Win => InfoWindow, Str => "Slightly used");
-            elsif DamagePercent > 19 and DamagePercent < 50 then
-               Add(Win => InfoWindow, Str => "Damaged");
-            elsif DamagePercent > 49 and DamagePercent < 80 then
-               Add(Win => InfoWindow, Str => "Heavily damaged");
-            elsif DamagePercent > 79 and DamagePercent < 100 then
-               Add(Win => InfoWindow, Str => "Almost destroyed");
-            end if;
+            ShowCargoStatus(CargoIndex, InfoWindow, 4);
             CurrentLine := 5;
          end if;
          CurrentLine := CurrentLine + 1;
