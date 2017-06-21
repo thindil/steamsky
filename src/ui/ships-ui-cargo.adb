@@ -31,7 +31,6 @@ package body Ships.UI.Cargo is
         PlayerShip.Cargo(ItemIndex).Amount *
         Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Weight;
       CurrentLine: Line_Position := 1;
-      DamagePercent: Natural;
       WindowHeight: Line_Position := 9;
       FreeSpace: Integer;
    begin
@@ -89,20 +88,7 @@ package body Ships.UI.Cargo is
       if PlayerShip.Cargo(ItemIndex).Durability < 100 then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
          Add(Win => InfoWindow, Str => "Status: ");
-         DamagePercent :=
-           100 -
-           Natural
-             ((Float(PlayerShip.Cargo(ItemIndex).Durability) / 100.0) * 100.0);
-         if DamagePercent > 0 and DamagePercent < 20 then
-            Add(Win => InfoWindow, Str => "Slightly used");
-         elsif DamagePercent > 19 and DamagePercent < 50 then
-            Add(Win => InfoWindow, Str => "Damaged");
-         elsif DamagePercent > 49 and DamagePercent < 80 then
-            Add(Win => InfoWindow, Str => "Heavily damaged");
-         elsif DamagePercent > 79 and DamagePercent < 100 then
-            Add(Win => InfoWindow, Str => "Almost destroyed");
-         end if;
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         ShowCargoStatus(ItemIndex, InfoWindow, CurrentLine);
          CurrentLine := CurrentLine + 1;
       end if;
       if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Description /=
@@ -165,6 +151,43 @@ package body Ships.UI.Cargo is
       ShowItemInfo;
       Refresh(MenuWindow);
    end ShowCargoInfo;
+
+   procedure ShowCargoStatus
+     (CargoIndex: Positive;
+      InfoWindow: Window;
+      Line: Line_Position) is
+      DamagePercent: Natural;
+      TextLength: Positive;
+      TextColor: Color_Pair;
+   begin
+      DamagePercent :=
+        100 -
+        Natural
+          ((Float(PlayerShip.Cargo(CargoIndex).Durability) / 100.0) * 100.0);
+      if DamagePercent > 0 and DamagePercent < 20 then
+         Add(Win => InfoWindow, Str => "Slightly used");
+         TextLength := 13;
+         TextColor := 2;
+      elsif DamagePercent > 19 and DamagePercent < 50 then
+         Add(Win => InfoWindow, Str => "Damaged");
+         TextLength := 7;
+         TextColor := 1;
+      elsif DamagePercent > 49 and DamagePercent < 80 then
+         Add(Win => InfoWindow, Str => "Heavily damaged");
+         TextLength := 15;
+         TextColor := 3;
+      elsif DamagePercent > 79 and DamagePercent < 100 then
+         Add(Win => InfoWindow, Str => "Almost destroyed");
+         TextLength := 15;
+         TextColor := 4;
+      end if;
+      Change_Attributes
+        (Win => InfoWindow,
+         Line => Line,
+         Column => 8,
+         Count => TextLength,
+         Color => TextColor);
+   end ShowCargoStatus;
 
    function CargoInfoKeys
      (Key: Key_Code;

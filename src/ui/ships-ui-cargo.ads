@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,6 +18,10 @@
 package Ships.UI.Cargo is
 
    procedure ShowCargoInfo; -- Show informations about ship cargo
+   procedure ShowCargoStatus
+     (CargoIndex: Positive;
+      InfoWindow: Window;
+      Line: Line_Position); -- Get information about cargo damage status
    function CargoInfoKeys
      (Key: Key_Code;
       OldState: GameStates)
