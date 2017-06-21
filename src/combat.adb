@@ -586,7 +586,7 @@ package body Combat is
                               if Ship.Missions
                                   (SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex)
                                   .MType =
-                                Kill then
+                                Destroy then
                                  if ProtoShips_List
                                      (Ship.Missions
                                         (SkyMap(Ship.SkyX, Ship.SkyY)
