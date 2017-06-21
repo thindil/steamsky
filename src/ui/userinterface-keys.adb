@@ -21,6 +21,7 @@ with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;
+with Ships.Crew; use Ships.Crew;
 with Crew; use Crew;
 with Crew.UI; use Crew.UI;
 with Bases; use Bases;
@@ -55,6 +56,7 @@ package body UserInterface.Keys is
          'h',
          'p',
          'q',
+         'x',
          'l');
       NewKey: Key_Code;
    begin
@@ -153,6 +155,9 @@ package body UserInterface.Keys is
          when Character'Pos('p') | Character'Pos('P') => -- Game options
             DrawGame(GameOptions_View);
             return GameOptions_View;
+         when Character'Pos('x') | Character'Pos('X') => -- Resign from game
+            DrawGame(Resign_Confirm);
+            return Resign_Confirm;
          when others =>
             if CurrentState /= GameMenu then
                DrawGame(CurrentState);
@@ -344,7 +349,8 @@ package body UserInterface.Keys is
                return Crew_Info;
             elsif OldState = Quit_Confirm or
               OldState = PilotRest_Confirm or
-              OldState = EngineerRest_Confirm then
+              OldState = EngineerRest_Confirm or
+              OldState = Resign_Confirm then
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             elsif OldState = Death_Confirm then
@@ -379,6 +385,10 @@ package body UserInterface.Keys is
                WaitForRest;
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
+            elsif OldState = Resign_Confirm then
+               Death(1, To_Unbounded_String("resignation"), PlayerShip);
+               DrawGame(Death_Confirm);
+               return Death_Confirm;
             else
                return OldState;
             end if;
