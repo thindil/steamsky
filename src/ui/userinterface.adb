@@ -824,7 +824,7 @@ package body UserInterface is
    end ShowWaitOrder;
 
    procedure ShowGameMenu is
-      Menu_Items: constant Item_Array_Access := new Item_Array(1 .. 17);
+      Menu_Items: constant Item_Array_Access := new Item_Array(1 .. 18);
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
    begin
@@ -844,6 +844,7 @@ package body UserInterface is
          New_Item("h) Help"),
          New_Item("p) Game options"),
          New_Item("q) Quit from game"),
+         New_Item("x) Resign from game"),
          New_Item("l) Close menu"),
          Null_Item);
       OrdersMenu := New_Menu(Menu_Items);
@@ -945,6 +946,10 @@ package body UserInterface is
             ShowOptions;
          when Heal_View =>
             ShowHeal;
+         when Resign_Confirm =>
+            ShowSkyMap;
+            Refresh_Without_Update;
+            ShowConfirm("Are you sure want to resign from game?");
          when others =>
             null;
       end case;
