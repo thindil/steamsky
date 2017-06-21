@@ -280,14 +280,17 @@ must be existing item index from any items file from *data/items* directory.
 - Type: Type/category of goal which define what is needed to do for finish
   selected goal. Possible values: Reputation - gain max reputation in X bases,
   Destroy - destroy X ships, Discover - discover X fields of map, Visit - visit
-  (discover) X bases, Craft - craft X items
+  (discover) X bases, Craft - craft X items, Mission - Finish X missions
 - Amount: Amount of target for selected goal to do for finish it. For example
   100 ships to destroy, etc.
 - Target: Optional parameter, ignored for Discover type, exact target for 
   goal, depends on type of goal. Possible values: for Reputation and Visit, 
   bases owners names: Poleis, Independent, Pirates, Undead, Drones, 
   Inquisition. For Destroy, any enemy ship index (from *ships* directory). For
-  Craft, recipe index (from *recipes* directory).
+  Craft, recipe index (from *recipes* directory). For Mission, missions types:
+  Deliver for deliver item to bases, Destroy for destroy enemy ship, Patrol
+  for patrol missions, Explore for explore missions, Passenger for transport
+  passengers missions.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
