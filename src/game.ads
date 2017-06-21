@@ -78,7 +78,8 @@ package Game is
       GameOptions_View,
       Heal_View,
       GoalsList_View,
-      GoalsTypes_View); -- Game states
+      GoalsTypes_View,
+      Resign_Confirm); -- Game states
    type Date_Record is -- Data for game date/time
    record
       Year: Natural;
