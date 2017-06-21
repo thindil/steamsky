@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - New type of missions: transport of passengers
 - New random event: brawl in base
 - Player goals (achievements)
+- Option to resign from game
 
 ### Changed
 - Updated interface
