@@ -32,7 +32,7 @@ package body Ships.UI.Ship is
    CurrentMenuIndex: Positive := 1;
 
    procedure ShowModuleInfo is
-      InfoWindow: Window;
+      InfoWindow, ClearWindow, BoxWindow: Window;
       ModuleIndex: constant Positive := Get_Index(Current(ShipsMenu));
       DamagePercent: Natural;
       MAmount, TextLength: Natural := 0;
@@ -42,8 +42,37 @@ package body Ships.UI.Ship is
       HaveAmmo, HaveMaterial: Boolean := False;
       StartColumn, EndColumn: Column_Position;
       Module: constant ModuleData := PlayerShip.Modules(ModuleIndex);
+      WindowHeight: Line_Position := 10;
    begin
-      InfoWindow := Create((Lines - 3), (Columns / 2), 2, (Columns / 2));
+      ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
+      Refresh(ClearWindow);
+      Delete(ClearWindow);
+      case Modules_List(Module.ProtoIndex).MType is
+         when ShipModules.CARGO | TURRET | MEDICAL_ROOM | GUN =>
+            WindowHeight := WindowHeight + 1;
+         when CABIN =>
+            WindowHeight := WindowHeight + 3;
+         when ENGINE | ALCHEMY_LAB .. GREENHOUSE =>
+            WindowHeight := WindowHeight + 2;
+         when ARMOR =>
+            WindowHeight := WindowHeight - 1;
+         when others =>
+            null;
+      end case;
+      if Module.UpgradeAction /= NONE then
+         WindowHeight := WindowHeight + 2;
+      end if;
+      WindowHeight :=
+        WindowHeight +
+        Line_Position
+          (Length(Modules_List(Module.ProtoIndex).Description) /
+           Natural(Columns / 2));
+      BoxWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
+      Box(BoxWindow);
+      Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
+      Add(Win => BoxWindow, Str => "[Module info]");
+      InfoWindow :=
+        Create(WindowHeight - 2, (Columns / 2) - 4, 4, (Columns / 2) + 2);
       Add(Win => InfoWindow, Str => "Status: ");
       DamagePercent :=
         100 -
@@ -439,18 +468,16 @@ package body Ships.UI.Ship is
             Column => StartColumn);
          CurrentLine := CurrentLine + 1;
       end if;
-      CurrentLine := CurrentLine + 1;
-      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-      Add
-        (Win => InfoWindow,
-         Str => "Press Enter to see selected module options");
+      Move_Cursor(Line => WindowHeight + 3, Column => (Columns / 2));
+      Add(Str => "Press Enter to see selected module options");
       Change_Attributes
-        (Win => InfoWindow,
-         Line => CurrentLine,
-         Column => 6,
+        (Line => WindowHeight + 3,
+         Column => (Columns / 2) + 6,
          Count => 5,
          Color => 1);
       Refresh;
+      Refresh(BoxWindow);
+      Delete(BoxWindow);
       Refresh(InfoWindow);
       Delete(InfoWindow);
    end ShowModuleInfo;
@@ -464,14 +491,14 @@ package body Ships.UI.Ship is
       UpgradePercent, MaxUpgrade: Natural;
    begin
       Weight := CountShipWeight(PlayerShip);
-      Move_Cursor(Line => 2, Column => 2);
-      Add(Str => "Name: " & To_String(PlayerShip.Name));
-      Change_Attributes(Line => 2, Column => 2, Count => 1, Color => 1);
       Move_Cursor(Line => 3, Column => 2);
+      Add(Str => "Name: " & To_String(PlayerShip.Name));
+      Change_Attributes(Line => 3, Column => 2, Count => 1, Color => 1);
+      Move_Cursor(Line => 4, Column => 2);
       Add(Str => "Upgrading: ");
       if PlayerShip.UpgradeModule = 0 then
          Add(Str => "Nothing");
-         CurrentLine := 4;
+         CurrentLine := 5;
       else
          Add
            (Str =>
@@ -513,7 +540,7 @@ package body Ships.UI.Ship is
             when others =>
                null;
          end case;
-         Move_Cursor(Line => 4, Column => 2);
+         Move_Cursor(Line => 5, Column => 2);
          Add(Str => "Upgrade progress: ");
          UpgradePercent :=
            100 -
@@ -534,7 +561,7 @@ package body Ships.UI.Ship is
          else
             Add(Str => "final upgrades");
          end if;
-         CurrentLine := 5;
+         CurrentLine := 6;
       end if;
       Move_Cursor(Line => CurrentLine, Column => 2);
       Add(Str => "Repair first: ");
