@@ -76,7 +76,7 @@ package body Missions.UI is
             CurrentLine := 3;
          when Patrol =>
             Add(Win => InfoWindow, Str => "Patrol selected area");
-         when Kill =>
+         when Destroy =>
             Add
               (Win => InfoWindow,
                Str =>
@@ -224,7 +224,7 @@ package body Missions.UI is
                Missions_Items.all(I) := New_Item("Deliver item to base");
             when Patrol =>
                Missions_Items.all(I) := New_Item("Patrol area");
-            when Kill =>
+            when Destroy =>
                Missions_Items.all(I) := New_Item("Destroy ship");
             when Explore =>
                Missions_Items.all(I) := New_Item("Explore area");

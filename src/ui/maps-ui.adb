@@ -215,7 +215,7 @@ package body Maps.UI is
       end if;
       if MissionIndex > 0 then
          WindowHeight := WindowHeight + 1;
-         if PlayerShip.Missions(MissionIndex).MType = Kill then
+         if PlayerShip.Missions(MissionIndex).MType = Destroy then
             NewWindowWidth :=
               12 +
               Column_Position
@@ -345,7 +345,7 @@ package body Maps.UI is
                     To_String
                       (Items_List(PlayerShip.Missions(MissionIndex).Target)
                          .Name));
-            when Kill =>
+            when Destroy =>
                Add
                  (Win => InfoWindow,
                   Str =>
