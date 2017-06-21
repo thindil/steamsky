@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
   III, undead ship mk III, large undead ship mk III, large inquisition ship mk
   III, large attacking drone mk III, advanced attacking drone mk III, advanced
   pirate ship mk III, advanced undead ship mk III, advanced inquisition ship mk
-  III and huge pirate ship mk III
+  III, huge pirate ship mk III and advanced huge pirate ship mk III
 - Info about amount of destroyed ships to game statistics
 - Auto center map after set destination for player ship (and option to enable
   or disable it)
