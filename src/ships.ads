@@ -94,9 +94,9 @@ package Ships is
    package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
    ProtoShips_List: ProtoShips_Container.Vector;
    PlayerShip: ShipRecord;
-   Ships_Directory_Not_Found : exception; -- Raised when no directory with ships files
-   Ships_Files_Not_Found : exception; -- Raised when no files with ships
-   Ships_Invalid_Data : exception; -- Raised when invalid data in ships file
+   Ships_Directory_Not_Found: exception; -- Raised when no directory with ships files
+   Ships_Files_Not_Found: exception; -- Raised when no files with ships
+   Ships_Invalid_Data: exception; -- Raised when invalid data in ships file
 
    function CreateShip
      (ProtoIndex: Positive;

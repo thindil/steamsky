@@ -57,8 +57,8 @@ package ShipModules is
    package BaseModules_Container is new Vectors(Positive, BaseModule_Data);
    Modules_List: BaseModules_Container
      .Vector; -- List of ship modules available in game
-   Modules_Directory_Not_Found : exception; -- Raised when no directory with modules files
-   Modules_Files_Not_Found : exception; -- Raised when no files with modules
+   Modules_Directory_Not_Found: exception; -- Raised when no directory with modules files
+   Modules_Files_Not_Found: exception; -- Raised when no files with modules
 
    procedure LoadShipModules; -- Load modules from files
    function FindProtoModule
