@@ -21,6 +21,7 @@ with Ships; use Ships;
 with MainMenu; use MainMenu;
 with Goals; use Goals;
 with Goals.UI; use Goals.UI;
+with Help.UI; use Help.UI;
 
 package body Statistics.UI is
 
@@ -259,6 +260,11 @@ package body Statistics.UI is
            Character'Pos('C') => -- Set new current goal
             ShowGoalsTypes;
             return GoalsTypes_View;
+         when Key_F1 => -- Show help
+            Erase;
+            ShowGameHeader(Help_Topic);
+            ShowHelp(GameStats_View, 10);
+            return Help_Topic;
          when others =>
             null;
       end case;
