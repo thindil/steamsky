@@ -126,8 +126,9 @@ package body UserInterface is
             Add(Str => "List of know events [Quit]");
             Change_Attributes(Line => 0, Column => 21, Count => 1, Color => 1);
          when GameStats_View =>
-            Add(Str => "Game statistics [Quit]");
+            Add(Str => "Game statistics [Quit] [F1 Help]");
             Change_Attributes(Line => 0, Column => 17, Count => 1, Color => 1);
+            Change_Attributes(Line => 0, Column => 24, Count => 2, Color => 1);
          when TradeRecipes_View =>
             Add(Str => "Buy crafting recipes [Quit]");
             Change_Attributes(Line => 0, Column => 22, Count => 1, Color => 1);
