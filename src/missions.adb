@@ -401,8 +401,11 @@ package body Missions is
         (MISSION,
          To_Unbounded_String
            (Missions_Types'Image(PlayerShip.Missions(MissionIndex).MType)));
+      UpdateFinishedMissions
+        (To_Unbounded_String
+           (Natural'Image
+              (Missions_Types'Pos(PlayerShip.Missions(MissionIndex).MType))));
       DeleteMission(MissionIndex, False);
-      GameStats.FinishedMissions := GameStats.FinishedMissions + 1;
    end FinishMission;
 
    procedure DeleteMission(MissionIndex: Positive; Failed: Boolean := True) is

@@ -22,11 +22,18 @@ with MainMenu; use MainMenu;
 with Goals; use Goals;
 with Goals.UI; use Goals.UI;
 with Help.UI; use Help.UI;
+with Missions; use Missions;
 
 package body Statistics.UI is
 
-   DestroyedShipsPad, FinishedGoalsPad: Window;
-   StartIndex, StartIndex2, EndIndex, EndIndex2: Integer := 0;
+   DestroyedShipsPad, FinishedGoalsPad, DetailedStatsPad: Window;
+   StartIndex,
+   StartIndex2,
+   EndIndex,
+   EndIndex2,
+   StartIndex3,
+   EndIndex3: Integer :=
+     0;
 
    procedure ShowGameStats(RefreshOnly: Boolean := False) is
       MinutesDiff: Natural;
@@ -153,7 +160,7 @@ package body Statistics.UI is
          if GameStats.AcceptedMissions > 0 then
             MissionsPercent :=
               Natural
-                ((Float(GameStats.FinishedMissions) /
+                ((Float(GameStats.FinishedMissions.Length) /
                   Float(GameStats.AcceptedMissions)) *
                  100.0);
          end if;
@@ -161,13 +168,14 @@ package body Statistics.UI is
          Add
            (Str =>
               "Missions finished:" &
-              Natural'Image(GameStats.FinishedMissions) &
+              Natural'Image(Natural(GameStats.FinishedMissions.Length)) &
               " (" &
               To_String
                 (Trim
                    (To_Unbounded_String(Natural'Image(MissionsPercent)),
                     Ada.Strings.Left)) &
               "%)");
+         Change_Attributes(Line => 7, Column => 2, Count => 1, Color => 1);
          Move_Cursor(Line => 8, Column => 2);
          Add(Str => "Current goal: " & GoalText(0));
          Change_Attributes(Line => 8, Column => 2, Count => 1, Color => 1);
@@ -230,6 +238,91 @@ package body Statistics.UI is
          (Columns / 2));
    end ShowGameStats;
 
+   procedure ShowDetailedStats(StatsType: String; RefreshOnly: Boolean) is
+      BoxWindow: Window;
+      WindowHeight: Line_Position := 3;
+   begin
+      if not RefreshOnly then
+         if StatsType = "Missions" then
+            if GameStats.FinishedMissions.Length > 0 then
+               WindowHeight :=
+                 Line_Position(GameStats.FinishedMissions.Length) + 2;
+               if WindowHeight > (Lines - (Lines / 4) - 1) then
+                  WindowHeight := Lines - (Lines / 4) - 1;
+               end if;
+               EndIndex3 :=
+                 Integer(GameStats.FinishedMissions.Length) -
+                 Integer(Lines - 2);
+               DetailedStatsPad :=
+                 New_Pad((WindowHeight - 2), (Columns / 2) - 1);
+               for I in GameStats.FinishedMissions.Iterate loop
+                  Move_Cursor
+                    (Win => DetailedStatsPad,
+                     Line =>
+                       Line_Position(Statistics_Container.To_Index(I)) - 1,
+                     Column => 0);
+                  case Missions_Types'Val
+                    (Integer'Value
+                       (To_String(GameStats.FinishedMissions(I).Index))) is
+                     when Deliver =>
+                        Add
+                          (Win => DetailedStatsPad,
+                           Str =>
+                             "Delivered items:" &
+                             Positive'Image
+                               (GameStats.FinishedMissions(I).Amount));
+                     when Patrol =>
+                        Add
+                          (Win => DetailedStatsPad,
+                           Str =>
+                             "Patroled areas:" &
+                             Positive'Image
+                               (GameStats.FinishedMissions(I).Amount));
+                     when Destroy =>
+                        Add
+                          (Win => DetailedStatsPad,
+                           Str =>
+                             "Destroyed ships:" &
+                             Positive'Image
+                               (GameStats.FinishedMissions(I).Amount));
+                     when Explore =>
+                        Add
+                          (Win => DetailedStatsPad,
+                           Str =>
+                             "Explored areas:" &
+                             Positive'Image
+                               (GameStats.FinishedMissions(I).Amount));
+                     when Passenger =>
+                        Add
+                          (Win => DetailedStatsPad,
+                           Str =>
+                             "Passengers transported:" &
+                             Positive'Image
+                               (GameStats.FinishedMissions(I).Amount));
+                  end case;
+               end loop;
+            else
+               DetailedStatsPad := New_Pad(1, (Columns / 2) - 1);
+               Add(Win => DetailedStatsPad, Str => "No finished missions yet");
+            end if;
+         end if;
+         BoxWindow :=
+           Create(WindowHeight, (Columns / 2), (Lines / 4), (Columns / 4));
+         Box(BoxWindow);
+         Refresh;
+         Refresh(BoxWindow);
+         Delete(BoxWindow);
+      end if;
+      Refresh
+        (DetailedStatsPad,
+         Line_Position(StartIndex3),
+         0,
+         (Lines / 4) + 1,
+         (Columns / 4) + 1,
+         (Lines - 1),
+         (Columns - (Columns / 4) - 3));
+   end ShowDetailedStats;
+
    function ShowGameStatsKeys(Key: Key_Code) return GameStates is
    begin
       case Key is
@@ -242,6 +335,8 @@ package body Statistics.UI is
                return Main_Menu;
             end if;
             StartIndex := 0;
+            StartIndex2 := 0;
+            StartIndex3 := 0;
             DrawGame(Sky_Map_View);
             return Sky_Map_View;
          when 56 | KEY_UP => -- Scroll destroyed ships list one line up
@@ -265,6 +360,10 @@ package body Statistics.UI is
             ShowGameHeader(Help_Topic);
             ShowHelp(GameStats_View, 10);
             return Help_Topic;
+         when Character'Pos('m') |
+           Character'Pos('M') => -- Show details about finished missions
+            ShowDetailedStats("Missions", False);
+            return DetailedStats_View;
          when others =>
             null;
       end case;
@@ -283,5 +382,27 @@ package body Statistics.UI is
       ShowGameStats(True);
       return GameStats_View;
    end ShowGameStatsKeys;
+
+   function DetailedStatsKeys(Key: Key_Code) return GameStates is
+   begin
+      case Key is
+         when 56 | KEY_UP => -- Scroll detailed stats list one line up
+            StartIndex3 := StartIndex3 - 1;
+         when 50 | KEY_DOWN => -- Scroll detailed stats list one line down
+            StartIndex3 := StartIndex3 + 1;
+         when others => -- Back to game statistics
+            StartIndex3 := 0;
+            DrawGame(GameStats_View);
+            return GameStats_View;
+      end case;
+      if StartIndex3 < 0 then
+         StartIndex3 := 0;
+      end if;
+      if StartIndex3 > EndIndex3 then
+         StartIndex3 := EndIndex3;
+      end if;
+      ShowDetailedStats("", True);
+      return DetailedStats_View;
+   end DetailedStatsKeys;
 
 end Statistics.UI;
