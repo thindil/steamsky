@@ -43,7 +43,7 @@ package body Statistics is
       GameStats.DistanceTraveled := 0;
       GameStats.CraftingOrders := 0;
       GameStats.AcceptedMissions := 0;
-      GameStats.FinishedMissions := 0;
+      GameStats.FinishedMissions.Clear;
       GameStats.FinishedGoals.Clear;
    end ClearGameStats;
 
@@ -67,5 +67,21 @@ package body Statistics is
          end loop;
       end if;
    end UpdateFinishedGoals;
+
+   procedure UpdateFinishedMissions(MType: Unbounded_String) is
+      Updated: Boolean := False;
+   begin
+      for FinishedMission of GameStats.FinishedMissions loop
+         if FinishedMission.Index = MType then
+            FinishedMission.Amount := FinishedMission.Amount + 1;
+            Updated := True;
+            exit;
+         end if;
+      end loop;
+      if not Updated then
+         GameStats.FinishedMissions.Append
+         (New_Item => (Index => MType, Amount => 1));
+      end if;
+   end UpdateFinishedMissions;
 
 end Statistics;

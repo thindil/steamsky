@@ -414,9 +414,14 @@ package body Game.SaveLoad is
       RawValue :=
         To_Unbounded_String(Positive'Image(GameStats.AcceptedMissions));
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      RawValue :=
-        To_Unbounded_String(Positive'Image(GameStats.FinishedMissions));
+      RawValue := To_Unbounded_String(GameStats.FinishedMissions.Length'Img);
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      for FinishedMission of GameStats.FinishedMissions loop
+         Put(SaveGame, To_String(FinishedMission.Index) & ";");
+         RawValue :=
+           To_Unbounded_String(Integer'Image(FinishedMission.Amount));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      end loop;
       RawValue := To_Unbounded_String(GameStats.FinishedGoals.Length'Img);
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       for FinishedGoal of GameStats.FinishedGoals loop
@@ -728,7 +733,13 @@ package body Game.SaveLoad is
       GameStats.DistanceTraveled := Positive'Value(To_String(ReadData));
       GameStats.CraftingOrders := Positive'Value(To_String(ReadData));
       GameStats.AcceptedMissions := Positive'Value(To_String(ReadData));
-      GameStats.FinishedMissions := Positive'Value(To_String(ReadData));
+      VectorLength := Positive'Value(To_String(ReadData));
+      for I in 1 .. VectorLength loop
+         GameStats.FinishedMissions.Append
+         (New_Item =>
+            (Index => ReadData,
+             Amount => Positive'Value(To_String(ReadData))));
+      end loop;
       VectorLength := Positive'Value(To_String(ReadData));
       for I in 1 .. VectorLength loop
          GameStats.FinishedGoals.Append

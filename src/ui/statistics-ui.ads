@@ -25,5 +25,7 @@ package Statistics.UI is
    function ShowGameStatsKeys
      (Key: Key_Code)
      return GameStates; -- Handle keys on game statistics screen
+   function DetailedStatsKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in detailed stats info
 
 end Statistics.UI;
