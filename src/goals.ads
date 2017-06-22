@@ -39,8 +39,8 @@ package Goals is
    Goals_List: Goals_Container
      .Vector; -- List of player goals available in game
    CurrentGoal: Goal_Data; -- Player current goal
-   Goals_Directory_Not_Found : exception; -- Raised when no directory with modules files
-   Goals_Files_Not_Found : exception; -- Raised when no files with modules
+   Goals_Directory_Not_Found: exception; -- Raised when no directory with modules files
+   Goals_Files_Not_Found: exception; -- Raised when no files with modules
 
    procedure LoadGoals; -- Load player goals from files
    function GoalText
