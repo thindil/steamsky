@@ -361,6 +361,8 @@ begin
             GameState := HealKeys(Key);
          when GoalsList_View | GoalsTypes_View =>
             GameState := GoalsMenuKeys(Key, GameState, OldState);
+         when DetailedStats_View =>
+            GameState := DetailedStatsKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;

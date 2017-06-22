@@ -35,7 +35,8 @@ package Statistics is
       DistanceTraveled: Natural; -- Amount of map fields travelled
       CraftingOrders: Natural; -- Amount of finished crafting orders
       AcceptedMissions: Natural; -- Amount of accepted missions
-      FinishedMissions: Natural; -- Amount of finished missions
+      FinishedMissions: Statistics_Container
+        .Vector; -- Data for all finished missions
       FinishedGoals: Statistics_Container
         .Vector; -- Data for all finished goals
    end record;
@@ -46,5 +47,7 @@ package Statistics is
    procedure ClearGameStats; -- Clear game statistics
    procedure UpdateFinishedGoals
      (Index: Unbounded_String); -- Add new finished goal to list
+   procedure UpdateFinishedMissions
+     (MType: Unbounded_String); -- Add new finished mission to list
 
 end Statistics;
