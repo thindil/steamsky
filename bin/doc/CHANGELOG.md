@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - New random event: brawl in base
 - Player goals (achievements)
 - Option to resign from game
+- More detailed info about finished missions in game statistics
 
 ### Changed
 - Updated interface
