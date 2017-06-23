@@ -44,52 +44,68 @@ package body Crew.UI is
       OrderName: Unbounded_String :=
         Null_Unbounded_String;
       WindowHeight: Line_Position := 3;
+      TextColor: array(1 .. 4) of Color_Pair;
    begin
       ClearWindow := Create((Lines - 3), (Columns / 2), 3, (Columns / 2));
       Refresh(ClearWindow);
       Delete(ClearWindow);
       if Member.Health < 100 and Member.Health > 80 then
          Health := To_Unbounded_String("Slightly wounded");
+         TextColor(1) := 2;
       elsif Member.Health < 81 and Member.Health > 50 then
          Health := To_Unbounded_String("Wounded");
+         TextColor(1) := 1;
       elsif Member.Health < 51 then
          Health := To_Unbounded_String("Heavily Wounded");
+         TextColor(1) := 3;
       end if;
       if Health /= Null_Unbounded_String then
          WindowHeight := WindowHeight + 1;
       end if;
       if Member.Tired > 20 and Member.Tired < 41 then
          Tired := To_Unbounded_String("Bit tired");
+         TextColor(2) := 2;
       elsif Member.Tired > 40 and Member.Tired < 81 then
          Tired := To_Unbounded_String("Tired");
+         TextColor(2) := 1;
       elsif Member.Tired > 80 and Member.Tired < 100 then
          Tired := To_Unbounded_String("Very tired");
+         TextColor(2) := 3;
       elsif Member.Tired = 100 then
          Tired := To_Unbounded_String("Unconscious");
+         TextColor(2) := 4;
       end if;
       if Tired /= Null_Unbounded_String then
          WindowHeight := WindowHeight + 1;
       end if;
       if Member.Thirst > 20 and Member.Thirst < 41 then
          Thirsty := To_Unbounded_String("Bit thirsty");
+         TextColor(3) := 2;
       elsif Member.Thirst > 40 and Member.Thirst < 81 then
          Thirsty := To_Unbounded_String("Thirsty");
+         TextColor(3) := 1;
       elsif Member.Thirst > 80 and Member.Thirst < 100 then
          Thirsty := To_Unbounded_String("Very thirsty");
+         TextColor(3) := 3;
       elsif Member.Thirst = 100 then
          Thirsty := To_Unbounded_String("Dehydrated");
+         TextColor(3) := 4;
       end if;
       if Thirsty /= Null_Unbounded_String then
          WindowHeight := WindowHeight + 1;
       end if;
       if Member.Hunger > 20 and Member.Hunger < 41 then
          Hungry := To_Unbounded_String("Bit hungry");
+         TextColor(4) := 2;
       elsif Member.Hunger > 40 and Member.Hunger < 81 then
          Hungry := To_Unbounded_String("Hungry");
+         TextColor(4) := 1;
       elsif Member.Hunger > 80 and Member.Hunger < 100 then
          Hungry := To_Unbounded_String("Very hungry");
+         TextColor(4) := 3;
       elsif Member.Hunger = 100 then
          Hungry := To_Unbounded_String("Starving");
+         TextColor(4) := 4;
       end if;
       if Hungry /= Null_Unbounded_String then
          WindowHeight := WindowHeight + 1;
@@ -119,21 +135,45 @@ package body Crew.UI is
       if Health /= Null_Unbounded_String then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add(Win => InfoWindow, Str => To_String(Health));
+         Change_Attributes
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => 2,
+            Count => Length(Health),
+            Color => TextColor(1));
          CurrentLine := CurrentLine + 1;
       end if;
       if Tired /= Null_Unbounded_String then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add(Win => InfoWindow, Str => To_String(Tired));
+         Change_Attributes
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => 2,
+            Count => Length(Tired),
+            Color => TextColor(2));
          CurrentLine := CurrentLine + 1;
       end if;
       if Thirsty /= Null_Unbounded_String then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add(Win => InfoWindow, Str => To_String(Thirsty));
+         Change_Attributes
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => 2,
+            Count => Length(Thirsty),
+            Color => TextColor(3));
          CurrentLine := CurrentLine + 1;
       end if;
       if Hungry /= Null_Unbounded_String then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add(Win => InfoWindow, Str => To_String(Hungry));
+         Change_Attributes
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => 2,
+            Count => Length(Hungry),
+            Color => TextColor(4));
          CurrentLine := CurrentLine + 1;
       end if;
       if Member.Skills.Length > 0 then
