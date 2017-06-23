@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Player goals (achievements)
 - Option to resign from game
 - More detailed info about finished missions in game statistics
+- More detailed info about finished crafting orders in game statistics
 
 ### Changed
 - Updated interface
