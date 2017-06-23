@@ -157,18 +157,21 @@ package body Statistics.UI is
            (Str =>
               "Crafting orders finished:" &
               Natural'Image(GameStats.CraftingOrders));
+         TotalFinished := 0;
+         for FinishedMission of GameStats.FinishedMissions loop
+            TotalFinished := TotalFinished + FinishedMission.Amount;
+         end loop;
          if GameStats.AcceptedMissions > 0 then
             MissionsPercent :=
               Natural
-                ((Float(GameStats.FinishedMissions.Length) /
-                  Float(GameStats.AcceptedMissions)) *
+                ((Float(TotalFinished) / Float(GameStats.AcceptedMissions)) *
                  100.0);
          end if;
          Move_Cursor(Line => 7, Column => 2);
          Add
            (Str =>
               "Missions finished:" &
-              Natural'Image(Natural(GameStats.FinishedMissions.Length)) &
+              Natural'Image(TotalFinished) &
               " (" &
               To_String
                 (Trim
