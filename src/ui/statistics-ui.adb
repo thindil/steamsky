@@ -183,7 +183,7 @@ package body Statistics.UI is
             FinishedGoalsPad :=
               New_Pad
                 (Line_Position(GameStats.FinishedGoals.Length + 2),
-                 (Columns / 2));
+                 (Columns / 2) - 2);
             for I in GameStats.FinishedGoals.Iterate loop
                Move_Cursor
                  (Win => FinishedGoalsPad,
@@ -235,7 +235,7 @@ package body Statistics.UI is
          9,
          2,
          (Lines - 1),
-         (Columns / 2));
+         (Columns / 2) - 2);
    end ShowGameStats;
 
    procedure ShowDetailedStats(StatsType: String; RefreshOnly: Boolean) is
