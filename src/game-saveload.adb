@@ -408,9 +408,13 @@ package body Game.SaveLoad is
       RawValue :=
         To_Unbounded_String(Positive'Image(GameStats.DistanceTraveled));
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      RawValue :=
-        To_Unbounded_String(Positive'Image(GameStats.CraftingOrders));
+      RawValue := To_Unbounded_String(GameStats.CraftingOrders.Length'Img);
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      for CraftingOrder of GameStats.CraftingOrders loop
+         Put(SaveGame, To_String(CraftingOrder.Index) & ";");
+         RawValue := To_Unbounded_String(Integer'Image(CraftingOrder.Amount));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      end loop;
       RawValue :=
         To_Unbounded_String(Positive'Image(GameStats.AcceptedMissions));
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -731,7 +735,13 @@ package body Game.SaveLoad is
       GameStats.BasesVisited := Positive'Value(To_String(ReadData));
       GameStats.MapVisited := Positive'Value(To_String(ReadData));
       GameStats.DistanceTraveled := Positive'Value(To_String(ReadData));
-      GameStats.CraftingOrders := Positive'Value(To_String(ReadData));
+      VectorLength := Positive'Value(To_String(ReadData));
+      for I in 1 .. VectorLength loop
+         GameStats.CraftingOrders.Append
+         (New_Item =>
+            (Index => ReadData,
+             Amount => Positive'Value(To_String(ReadData))));
+      end loop;
       GameStats.AcceptedMissions := Positive'Value(To_String(ReadData));
       VectorLength := Positive'Value(To_String(ReadData));
       for I in 1 .. VectorLength loop

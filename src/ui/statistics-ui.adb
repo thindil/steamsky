@@ -23,6 +23,8 @@ with Goals; use Goals;
 with Goals.UI; use Goals.UI;
 with Help.UI; use Help.UI;
 with Missions; use Missions;
+with Crafts; use Crafts;
+with Items; use Items;
 
 package body Statistics.UI is
 
@@ -152,11 +154,14 @@ package body Statistics.UI is
            (Str =>
               "Distance traveled:" &
               Natural'Image(GameStats.DistanceTraveled));
+         TotalFinished := 0;
+         for CraftingOrder of GameStats.CraftingOrders loop
+            TotalFinished := TotalFinished + CraftingOrder.Amount;
+         end loop;
          Move_Cursor(Line => 6, Column => 2);
          Add
-           (Str =>
-              "Crafting orders finished:" &
-              Natural'Image(GameStats.CraftingOrders));
+           (Str => "Crafting orders finished:" & Natural'Image(TotalFinished));
+         Change_Attributes(Line => 6, Column => 3, Count => 1, Color => 1);
          TotalFinished := 0;
          for FinishedMission of GameStats.FinishedMissions loop
             TotalFinished := TotalFinished + FinishedMission.Amount;
@@ -182,6 +187,7 @@ package body Statistics.UI is
          Move_Cursor(Line => 8, Column => 2);
          Add(Str => "Current goal: " & GoalText(0));
          Change_Attributes(Line => 8, Column => 2, Count => 1, Color => 1);
+         TotalFinished := 0;
          if GameStats.FinishedGoals.Length > 0 then
             FinishedGoalsPad :=
               New_Pad
@@ -244,15 +250,13 @@ package body Statistics.UI is
    procedure ShowDetailedStats(StatsType: String; RefreshOnly: Boolean) is
       BoxWindow: Window;
       WindowHeight: Line_Position := 3;
+      ItemIndex: Positive;
    begin
       if not RefreshOnly then
-         if StatsType = "Missions" then
+         if StatsType = "missions" then
             if GameStats.FinishedMissions.Length > 0 then
                WindowHeight :=
                  Line_Position(GameStats.FinishedMissions.Length) + 2;
-               if WindowHeight > (Lines - (Lines / 4) - 1) then
-                  WindowHeight := Lines - (Lines / 4) - 1;
-               end if;
                EndIndex3 :=
                  Integer(GameStats.FinishedMissions.Length) -
                  Integer(Lines - 2);
@@ -308,10 +312,42 @@ package body Statistics.UI is
                DetailedStatsPad := New_Pad(1, (Columns / 2) - 1);
                Add(Win => DetailedStatsPad, Str => "No finished missions yet");
             end if;
+         elsif StatsType = "crafting orders" then
+            if GameStats.CraftingOrders.Length > 0 then
+               WindowHeight :=
+                 Line_Position(GameStats.CraftingOrders.Length) + 2;
+               EndIndex3 :=
+                 Integer(GameStats.CraftingOrders.Length) - Integer(Lines - 2);
+               DetailedStatsPad :=
+                 New_Pad((WindowHeight - 2), (Columns / 2) - 1);
+               for I in GameStats.CraftingOrders.Iterate loop
+                  Move_Cursor
+                    (Win => DetailedStatsPad,
+                     Line =>
+                       Line_Position(Statistics_Container.To_Index(I)) - 1,
+                     Column => 0);
+                  ItemIndex :=
+                    Recipes_List(FindRecipe(GameStats.CraftingOrders(I).Index))
+                      .ResultIndex;
+                  Add
+                    (Win => DetailedStatsPad,
+                     Str =>
+                       To_String(Items_List(ItemIndex).Name) &
+                       ":" &
+                       Positive'Image(GameStats.CraftingOrders(I).Amount));
+               end loop;
+            else
+               DetailedStatsPad := New_Pad(1, (Columns / 2) - 1);
+               Add
+                 (Win => DetailedStatsPad,
+                  Str => "No finished crafting orders yet");
+            end if;
          end if;
          BoxWindow :=
            Create(WindowHeight, (Columns / 2), (Lines / 4), (Columns / 4));
          Box(BoxWindow);
+         Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
+         Add(Win => BoxWindow, Str => "[Finished " & StatsType & "]");
          Refresh;
          Refresh(BoxWindow);
          Delete(BoxWindow);
@@ -365,7 +401,11 @@ package body Statistics.UI is
             return Help_Topic;
          when Character'Pos('m') |
            Character'Pos('M') => -- Show details about finished missions
-            ShowDetailedStats("Missions", False);
+            ShowDetailedStats("missions", False);
+            return DetailedStats_View;
+         when Character'Pos('r') |
+           Character'Pos('R') => -- Show details about finished crafting orders
+            ShowDetailedStats("crafting orders", False);
             return DetailedStats_View;
          when others =>
             null;

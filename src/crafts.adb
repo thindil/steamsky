@@ -507,8 +507,7 @@ package body Crafts is
                            Recipes_List.Element(Module.Current_Value)
                              .ResultIndex,
                            ResultAmount);
-                        GameStats.CraftingOrders :=
-                          GameStats.CraftingOrders + 1;
+                        UpdateCraftingOrders(Recipe.Index);
                      else
                         for I in Recipes_List.Iterate loop
                            if Recipes_List(I).ResultIndex =

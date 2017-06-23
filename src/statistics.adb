@@ -41,7 +41,7 @@ package body Statistics is
       GameStats.BasesVisited := 1;
       GameStats.MapVisited := 1;
       GameStats.DistanceTraveled := 0;
-      GameStats.CraftingOrders := 0;
+      GameStats.CraftingOrders.Clear;
       GameStats.AcceptedMissions := 0;
       GameStats.FinishedMissions.Clear;
       GameStats.FinishedGoals.Clear;
@@ -83,5 +83,21 @@ package body Statistics is
          (New_Item => (Index => MType, Amount => 1));
       end if;
    end UpdateFinishedMissions;
+
+   procedure UpdateCraftingOrders(Index: Unbounded_String) is
+      Updated: Boolean := False;
+   begin
+      for CraftingOrder of GameStats.CraftingOrders loop
+         if CraftingOrder.Index = Index then
+            CraftingOrder.Amount := CraftingOrder.Amount + 1;
+            Updated := True;
+            exit;
+         end if;
+      end loop;
+      if not Updated then
+         GameStats.CraftingOrders.Append
+         (New_Item => (Index => Index, Amount => 1));
+      end if;
+   end UpdateCraftingOrders;
 
 end Statistics;
