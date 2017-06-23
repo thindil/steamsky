@@ -33,7 +33,8 @@ package Statistics is
       BasesVisited: Positive; -- Amount of visited bases
       MapVisited: Positive; -- Amount of visited map fields
       DistanceTraveled: Natural; -- Amount of map fields travelled
-      CraftingOrders: Natural; -- Amount of finished crafting orders
+      CraftingOrders: Statistics_Container
+        .Vector; -- Data for finished crafting orders
       AcceptedMissions: Natural; -- Amount of accepted missions
       FinishedMissions: Statistics_Container
         .Vector; -- Data for all finished missions
@@ -49,5 +50,7 @@ package Statistics is
      (Index: Unbounded_String); -- Add new finished goal to list
    procedure UpdateFinishedMissions
      (MType: Unbounded_String); -- Add new finished mission to list
+   procedure UpdateCraftingOrders
+     (Index: Unbounded_String); -- Add new finished crafting order to list
 
 end Statistics;
