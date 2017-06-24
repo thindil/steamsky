@@ -33,7 +33,7 @@ package body Events.UI is
    procedure ShowEventInfo is
       InfoWindow: Window;
       EventIndex: constant Positive := Get_Index(Current(EventsMenu));
-      type Value_Type is digits 2 range 0.0 .. 9999999.0;
+      type Value_Type is new Float range 0.0 .. 9999999.0;
       package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions
         (Value_Type);
       DiffX, DiffY: Natural;

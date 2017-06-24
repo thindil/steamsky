@@ -39,7 +39,7 @@ package body Missions.UI is
       MinutesDiff: Natural;
       MissionTime: Date_Record :=
         (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
-      type Value_Type is digits 2 range 0.0 .. 9999999.0;
+      type Value_Type is new Float range 0.0 .. 9999999.0;
       package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions
         (Value_Type);
       Distance: Value_Type;
