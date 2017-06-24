@@ -84,12 +84,36 @@ package body Ships.UI.Ship is
          Add(Win => InfoWindow, Str => "Slightly damaged");
       elsif DamagePercent > 19 and DamagePercent < 50 then
          Add(Win => InfoWindow, Str => "Damaged");
+         Change_Attributes
+           (Win => InfoWindow,
+            Line => 0,
+            Column => 8,
+            Count => 7,
+            Color => 2);
       elsif DamagePercent > 49 and DamagePercent < 80 then
          Add(Win => InfoWindow, Str => "Heavily damaged");
+         Change_Attributes
+           (Win => InfoWindow,
+            Line => 0,
+            Column => 8,
+            Count => 15,
+            Color => 1);
       elsif DamagePercent > 79 and DamagePercent < 100 then
          Add(Win => InfoWindow, Str => "Almost destroyed");
+         Change_Attributes
+           (Win => InfoWindow,
+            Line => 0,
+            Column => 8,
+            Count => 16,
+            Color => 3);
       else
          Add(Win => InfoWindow, Str => "Destroyed");
+         Change_Attributes
+           (Win => InfoWindow,
+            Line => 0,
+            Column => 8,
+            Count => 9,
+            Color => 4);
       end if;
       MaxValue :=
         Positive(Float(Modules_List(Module.ProtoIndex).Durability) * 1.5);
