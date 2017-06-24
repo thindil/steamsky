@@ -178,7 +178,7 @@ package body Ships.UI.Cargo is
          TextColor := 3;
       elsif DamagePercent > 79 and DamagePercent < 100 then
          Add(Win => InfoWindow, Str => "Almost destroyed");
-         TextLength := 15;
+         TextLength := 16;
          TextColor := 4;
       end if;
       Change_Attributes
