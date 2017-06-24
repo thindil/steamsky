@@ -944,4 +944,14 @@ Perception = 40..60
 Cargo = 2000..4000x1, 500..1000x32, 500..750x21
 Description = Huge, good armored and upgraded version of attacking clockwork drone.
 Owner = Drones
+[92]
+Name = Advanced huge undead ship mk III
+Modules = 124, 112, 126, 94, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 121
+CombatAI = Berserker
+Loot = 600..900
+Cargo = 6000..8000x1, 600..800x21
+Skills = 1x40..60, 5x40..60
+Orders = Pilot
+Description = Advanced and upgraded version of huge, good armored undead flying vessel. Dangerous at close range.
+Owner = Undead
 []
