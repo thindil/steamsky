@@ -65,6 +65,7 @@ package Bases is
       Owner: Bases_Owners; -- Owner of base
    end record;
    SkyBases: array(1 .. 1024) of BaseRecord; -- List of sky bases
+
    procedure GainRep
      (BaseIndex: Positive;
       Points: Integer); -- Gain reputation in selected base
@@ -73,27 +74,13 @@ package Bases is
       TraderIndex: Natural;
       Reduce: Boolean :=
         True); -- Count price for actions with bases (buying/selling/docking/ect)
-   procedure BuyItems
-     (ItemIndex: Positive;
-      Amount: String); -- Buy items from bases
-   procedure SellItems
-     (ItemIndex: Positive;
-      Amount: String); -- Sell items from bases
    function GenerateBaseName
      return Unbounded_String; -- Generate random name for base
-   procedure RepairShip; -- Repairs playership in bases
-   procedure UpgradeShip
-     (Install: Boolean;
-      ModuleIndex: Positive); -- Install/remove modules on ship
    procedure GenerateRecruits
      (BaseIndex: Positive); -- Generate if needed new recruits in base
-   procedure HireRecruit
-     (RecruitIndex: Positive); -- Hire selected recruit from bases
    procedure AskForBases; -- Ask in base for direction for other bases
    procedure AskForEvents; -- Ask in base for direction for random events
-   procedure BuyRecipe(RecipeIndex: Positive); -- Buy new crafting recipe
    procedure UpdatePopulation
      (BaseIndex: Positive); -- Update base population if needed
-   procedure HealWounded; -- Heals wounded crew members in bases
 
 end Bases;
