@@ -102,7 +102,8 @@ package Ships is
      (ProtoIndex: Positive;
       Name: Unbounded_String;
       X, Y: Integer;
-      Speed: ShipSpeed) return ShipRecord; -- Create new ship
+      Speed: ShipSpeed;
+      RandomUpgrades: Boolean := True) return ShipRecord; -- Create new ship
    procedure LoadShips; -- Load ships from files
    function CountShipWeight
      (Ship: ShipRecord)

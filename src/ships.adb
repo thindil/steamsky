@@ -33,29 +33,107 @@ package body Ships is
      (ProtoIndex: Positive;
       Name: Unbounded_String;
       X, Y: Integer;
-      Speed: ShipSpeed) return ShipRecord is
+      Speed: ShipSpeed;
+      RandomUpgrades: Boolean := True) return ShipRecord is
       TmpShip: ShipRecord;
       ShipModules: Modules_Container.Vector;
       ShipCrew: Crew_Container.Vector;
       ShipMissions: Mission_Container.Vector;
       NewName: Unbounded_String;
-      TurretIndex, GunIndex, HullIndex, Amount: Natural := 0;
+      TurretIndex,
+      GunIndex,
+      HullIndex,
+      Amount,
+      UpgradesAmount,
+      WeightGain: Natural :=
+        0;
       Gender: Character;
       MemberName: Unbounded_String;
       TmpSkills: Skills_Container.Vector;
       ProtoShip: constant ProtoShipData := ProtoShips_List(ProtoIndex);
       ShipCargo: Cargo_Container.Vector;
+      TempModule: BaseModule_Data;
+      MaxValue, Roll: Positive;
    begin
+      if RandomUpgrades then
+         UpgradesAmount := GetRandom(0, Positive(ProtoShip.Modules.Length));
+      end if;
       for Module of ProtoShip.Modules loop
+         TempModule := Modules_List(Module);
+         if UpgradesAmount > 0 then
+            WeightGain :=
+              Modules_List(Module).Weight / Modules_List(Module).Durability;
+            if WeightGain < 1 then
+               WeightGain := 1;
+            end if;
+            if GetRandom(1, 100) > 50 then
+               Roll := GetRandom(1, 100);
+               case Roll is
+                  when 1 .. 50 => -- Upgrade durability of module
+                     MaxValue :=
+                       Positive(Float(Modules_List(Module).Durability) * 1.5);
+                     TempModule.Durability :=
+                       GetRandom(Modules_List(Module).Durability, MaxValue);
+                     TempModule.Weight :=
+                       TempModule.Weight +
+                       (WeightGain *
+                        (TempModule.Durability -
+                         Modules_List(Module).Durability));
+                  when
+                      51 ..
+                        75 => -- Upgrade value (depends on module) of module
+                     if Modules_List(Module).MType = ENGINE then
+                        WeightGain := WeightGain * 10;
+                        MaxValue :=
+                          Positive(Float(Modules_List(Module).Value) / 2.0);
+                        TempModule.Value :=
+                          GetRandom(MaxValue, Modules_List(Module).Value);
+                        TempModule.Weight :=
+                          TempModule.Weight +
+                          (WeightGain *
+                           (Modules_List(Module).Value - TempModule.Value));
+                     end if;
+                  when
+                      76 ..
+                        100 => -- Upgrade max_value (depends on module) of module
+                     case Modules_List(Module).MType is
+                        when HULL =>
+                           WeightGain := WeightGain * 10;
+                        when ENGINE =>
+                           WeightGain := 1;
+                        when others =>
+                           null;
+                     end case;
+                     if TempModule.MType = ENGINE or
+                       TempModule.MType = CABIN or
+                       TempModule.MType = GUN or
+                       TempModule.MType = BATTERING_RAM or
+                       TempModule.MType = HULL then
+                        MaxValue :=
+                          Positive(Float(Modules_List(Module).MaxValue) * 1.5);
+                        TempModule.MaxValue :=
+                          GetRandom(Modules_List(Module).MaxValue, MaxValue);
+                        TempModule.Weight :=
+                          TempModule.Weight +
+                          (WeightGain *
+                           (TempModule.MaxValue -
+                            Modules_List(Module).MaxValue));
+                     end if;
+                  when others =>
+                     null;
+               end case;
+               UpgradesAmount := UpgradesAmount - 1;
+            end if;
+         end if;
          ShipModules.Append
          (New_Item =>
             (Name => Modules_List(Module).Name,
              ProtoIndex => Module,
-             Weight => Modules_List(Module).Weight,
-             Current_Value => Modules_List(Module).Value,
-             Max_Value => Modules_List(Module).MaxValue,
-             Durability => Modules_List(Module).Durability,
-             MaxDurability => Modules_List(Module).Durability,
+             Weight => TempModule.Weight,
+             Current_Value => TempModule.Value,
+             Max_Value => TempModule.MaxValue,
+             Durability => TempModule.Durability,
+             MaxDurability => TempModule.Durability,
              Owner => 0,
              UpgradeProgress => 0,
              UpgradeAction => NONE));

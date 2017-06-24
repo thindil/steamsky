@@ -184,7 +184,8 @@ package body Game is
            ShipName,
            SkyBases(Integer(RandomBase)).SkyX,
            SkyBases(Integer(RandomBase)).SkyY,
-           DOCKED);
+           DOCKED,
+           False);
       -- Add player to ship
       TmpSkills.Append(New_Item => (4, 5, 0));
       PlayerShip.Crew.Prepend
