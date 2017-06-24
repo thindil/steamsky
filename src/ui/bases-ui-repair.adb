@@ -21,6 +21,7 @@ with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with ShipModules; use ShipModules;
+with Bases.Ship; use Bases.Ship;
 
 package body Bases.UI.Repair is
 

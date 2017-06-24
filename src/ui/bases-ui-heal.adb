@@ -20,6 +20,7 @@ with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
+with Bases.Trade; use Bases.Trade;
 
 package body Bases.UI.Heal is
 
