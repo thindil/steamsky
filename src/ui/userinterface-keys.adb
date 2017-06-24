@@ -25,6 +25,7 @@ with Ships.Crew; use Ships.Crew;
 with Crew; use Crew;
 with Crew.UI; use Crew.UI;
 with Bases; use Bases;
+with Bases.Trade; use Bases.Trade;
 with Messages; use Messages;
 with Combat; use Combat;
 with MainMenu; use MainMenu;

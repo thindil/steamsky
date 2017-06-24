@@ -19,6 +19,7 @@ with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
+with Bases.Ship; use Bases.Ship;
 with Ships.Cargo; use Ships.Cargo;
 with ShipModules; use ShipModules;
 
@@ -521,7 +522,7 @@ package body Bases.UI.Shipyard is
                return ShipyardTypesMenu;
             end if;
          when 10 => -- Install/remove module
-            Bases.UpgradeShip
+            Bases.Ship.UpgradeShip
               (InstallView,
                Positive'Value(Description(Current(TradeMenu))));
             DrawGame(Shipyard_View);
