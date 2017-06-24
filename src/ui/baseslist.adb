@@ -37,7 +37,7 @@ package body BasesList is
    BasesOwner: Bases_Owners := Any;
 
    procedure ShowBaseInfo is
-      InfoWindow, SearchWindow: Window;
+      InfoWindow, SearchWindow, ClearWindow: Window;
       BaseIndex: constant Positive :=
         Positive'Value(Description(Current(BasesMenu)));
       SearchPattern: String(1 .. 250);
@@ -47,18 +47,12 @@ package body BasesList is
       SearchLength: Natural;
       WindowWidth: Column_Position := 10;
    begin
+      ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
+      Refresh_Without_Update(ClearWindow);
+      Delete(ClearWindow);
       InfoWindow := Create(12, (Columns / 2), 4, (Columns / 2));
-      Refresh(InfoWindow);
-      Move_Cursor(Line => 19, Column => (Columns / 2));
-      Clear_To_End_Of_Line;
-      Move_Cursor(Line => 20, Column => (Columns / 2));
-      Clear_To_End_Of_Line;
       if SkyBases(BaseIndex).Visited.Year = 0 then
          Resize(InfoWindow, 4, (Columns / 2));
-         Move_Cursor(Line => 16, Column => (Columns / 2));
-         Clear_To_End_Of_Line;
-         Move_Cursor(Line => 17, Column => (Columns / 2));
-         Clear_To_End_Of_Line;
       end if;
       Box(InfoWindow);
       Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
@@ -213,7 +207,7 @@ package body BasesList is
          Add(Win => SearchWindow, Str => "[Search]");
          Move_Cursor(Win => SearchWindow, Line => 1, Column => 1);
          Add(Win => SearchWindow, Str => To_String(TrimedSearchPattern));
-         Refresh(SearchWindow);
+         Refresh_Without_Update(SearchWindow);
          Delete(SearchWindow);
          CurrentLine := CurrentLine + 3;
       else
@@ -235,9 +229,11 @@ package body BasesList is
          Column => (Columns / 2) + 6,
          Count => 5,
          Color => 1);
-      Refresh;
-      Refresh(InfoWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowBaseInfo;
 
    procedure ShowBasesList is
@@ -364,7 +360,6 @@ package body BasesList is
          Post(BasesMenu);
          Set_Current(BasesMenu, Bases_Items.all(CurrentMenuIndex));
          ShowBaseInfo;
-         Refresh(MenuWindow);
       else
          Move_Cursor(Line => (Lines / 3), Column => (Columns / 2) - 21);
          Add(Str => "You don't visited yet any base that type.");
@@ -505,7 +500,6 @@ package body BasesList is
          end case;
          if Result = Menu_Ok then
             ShowBaseInfo;
-            Refresh(MenuWindow);
          end if;
          CurrentMenuIndex := Get_Index(Current(BasesMenu));
       else
