@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Option to resign from game
 - More detailed info about finished missions in game statistics
 - More detailed info about finished crafting orders in game statistics
+- Random modules upgrades to enemy ships
 
 ### Changed
 - Updated interface
