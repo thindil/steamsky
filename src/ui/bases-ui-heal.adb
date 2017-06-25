@@ -77,9 +77,11 @@ package body Bases.UI.Heal is
       Add(Win => InfoWindow, Str => To_String(CostInfo));
       Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
       Add(Win => InfoWindow, Str => To_String(TimeInfo));
-      Refresh;
-      Refresh(InfoWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowHealInfo;
 
    procedure ShowHeal is
@@ -157,7 +159,6 @@ package body Bases.UI.Heal is
          Count => 5,
          Color => 1);
       ShowHealInfo;
-      Refresh(MenuWindow);
    end ShowHeal;
 
    function HealKeys(Key: Key_Code) return GameStates is
@@ -180,7 +181,6 @@ package body Bases.UI.Heal is
                end if;
                if Result = Menu_Ok then
                   ShowHealInfo;
-                  Refresh(MenuWindow);
                end if;
             when 50 | KEY_DOWN => -- Select next wounded crew member
                Result := Driver(TradeMenu, M_Down_Item);
@@ -189,7 +189,6 @@ package body Bases.UI.Heal is
                end if;
                if Result = Menu_Ok then
                   ShowHealInfo;
-                  Refresh(MenuWindow);
                end if;
             when 10 => -- Heal wounded crew member(s)
                HealWounded;
@@ -199,13 +198,11 @@ package body Bases.UI.Heal is
                Result := Driver(TradeMenu, Key);
                if Result = Menu_Ok then
                   ShowHealInfo;
-                  Refresh(MenuWindow);
                else
                   Result := Driver(TradeMenu, M_Clear_Pattern);
                   Result := Driver(TradeMenu, Key);
                   if Result = Menu_Ok then
                      ShowHealInfo;
-                     Refresh(MenuWindow);
                   end if;
                end if;
          end case;
