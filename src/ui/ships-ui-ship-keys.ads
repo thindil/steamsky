@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2017 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,19 +15,17 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-package Ships.UI.Ship is
+package Ships.UI.Ship.Keys is
 
-   procedure ShowShipInfo; -- Show informations about ship status
+   function ShipInfoKeys
+     (Key: Key_Code;
+      OldState: GameStates) return GameStates; -- Handle keys in ship info menu
+   function ModuleOptionsKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in modules options menu
+   function AssignOwnerKeys
+     (Key: Key_Code)
+     return GameStates; -- Handle keys in assign module owner menu
+   function AssignAmmoKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in assign gun ammo menu
 
-private
-
-   OptionsMenu: Menu;
-   MenuWindow, MenuWindow2: Window;
-   CurrentMenuIndex: Positive := 1;
-   procedure ShowModuleInfo; -- Show info about selected module
-   procedure ShowModuleOptions; -- Show options for selected module
-   procedure ShowAssignMenu; -- Show assign owner menu for selected module
-   function ShowAssignAmmoMenu
-     return GameStates; -- Show assign ammo menu for selected gun
-
-end Ships.UI.Ship;
+end Ships.UI.Ship.Keys;
