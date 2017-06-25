@@ -38,7 +38,7 @@ with Crew.UI; use Crew.UI;
 with Ships; use Ships;
 with Ships.UI; use Ships.UI;
 with Ships.UI.Cargo; use Ships.UI.Cargo;
-with Ships.UI.Ship; use Ships.UI.Ship;
+with Ships.UI.Ship.Keys; use Ships.UI.Ship.Keys;
 with Bases.UI.Trade; use Bases.UI.Trade;
 with Bases.UI.Repair; use Bases.UI.Repair;
 with Bases.UI.Shipyard; use Bases.UI.Shipyard;
