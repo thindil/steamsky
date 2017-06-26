@@ -15,9 +15,9 @@ All notable changes to this project will be documented in this file.
 - New ship modules: huge steel engine and advanced huge steel engine
 - New enemy ships: small pirates ship mk III, small undead ship mk III, small
   clockwork drone mk III, pirate ship mk III, armored pirate ship mk III, small
-  attackig drone mk III, attacking clockwork drone mk III, armored attacking
+  attacking drone mk III, attacking clockwork drone mk III, armored attacking
   drone mk III, small inquisition ship mk III, inquisition ship mk III, armored
-  inquisition ship mk III, large cloclwork drone mk III, large pirate ship mk
+  inquisition ship mk III, large clockwork drone mk III, large pirate ship mk
   III, undead ship mk III, large undead ship mk III, large inquisition ship mk
   III, large attacking drone mk III, advanced attacking drone mk III, advanced
   pirate ship mk III, advanced undead ship mk III, advanced inquisition ship mk
@@ -53,7 +53,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash in empty list of missions
-- Typo in advaced huge iron engine description
+- Typo in advanced huge iron engine description
 - Don't finish mission if ship can't dock to base
 - Showing info about event and mission on this same map cell
 - Crash when asking for events in bases
