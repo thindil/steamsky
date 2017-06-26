@@ -53,30 +53,25 @@ package body Bases.UI.Missions is
       Mission: constant Mission_Data :=
         SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Missions
           (Get_Index(Current(TradeMenu)));
-      InfoWindow: Window;
+      InfoWindow, ClearWindow: Window;
       CurrentLine: Line_Position := 2;
       MinutesDiff: Natural;
       MissionTime: Date_Record :=
         (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
-      WindowWidth: Line_Position;
+      WindowHeight: Line_Position;
    begin
+      ClearWindow := Create(14, (Columns / 2), 3, (Columns / 2));
+      Refresh_Without_Update(ClearWindow);
+      Delete(ClearWindow);
       case Mission.MType is
          when Deliver =>
-            WindowWidth := 8;
+            WindowHeight := 8;
          when Passenger =>
-            WindowWidth := 7;
+            WindowHeight := 7;
          when others =>
-            WindowWidth := 6;
-            Move_Cursor(Line => 9, Column => (Columns / 2));
-            Clear_To_End_Of_Line;
-            Move_Cursor(Line => 10, Column => (Columns / 2));
-            Clear_To_End_Of_Line;
-            Move_Cursor(Line => 11, Column => (Columns / 2));
-            Clear_To_End_Of_Line;
-            Move_Cursor(Line => 12, Column => (Columns / 2));
-            Clear_To_End_Of_Line;
+            WindowHeight := 6;
       end case;
-      InfoWindow := Create(WindowWidth, (Columns / 2), 3, (Columns / 2));
+      InfoWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
       Box(InfoWindow);
       Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
       Add(Win => InfoWindow, Str => "[Mission info]");
@@ -185,7 +180,7 @@ package body Bases.UI.Missions is
            Positive'Image(Mission.Reward) &
            " " &
            To_String(MoneyName));
-      CurrentLine := WindowWidth + 3;
+      CurrentLine := WindowHeight + 3;
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
       Add
         (Str =>
@@ -200,9 +195,11 @@ package body Bases.UI.Missions is
          Column => (Columns / 2),
          Count => 5,
          Color => 1);
-      Refresh;
-      Refresh(InfoWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowMissionInfo;
 
    procedure ShowBaseMissions is
@@ -263,7 +260,6 @@ package body Bases.UI.Missions is
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
       Post(TradeMenu);
       ShowMissionInfo;
-      Refresh(MenuWindow);
    end ShowBaseMissions;
 
    function BaseMissionsKeys(Key: Key_Code) return GameStates is
@@ -300,7 +296,6 @@ package body Bases.UI.Missions is
          end case;
          if Result = Menu_Ok then
             ShowMissionInfo;
-            Refresh(MenuWindow);
          end if;
       else
          case Key is
