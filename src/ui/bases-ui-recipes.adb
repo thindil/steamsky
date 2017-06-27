@@ -27,7 +27,7 @@ package body Bases.UI.Recipes is
 
    procedure ShowRecipeInfo is
       RecipeIndex: Positive;
-      InfoWindow: Window;
+      InfoWindow, ClearWindow: Window;
       BaseType: constant Positive :=
         Bases_Types'Pos
           (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
@@ -36,6 +36,9 @@ package body Bases.UI.Recipes is
       Cost: Positive;
       CostInfo: Unbounded_String;
    begin
+      ClearWindow := Create(3, (Columns / 2), 3, (Columns / 2));
+      Refresh_Without_Update(ClearWindow);
+      Delete(ClearWindow);
       for I in Recipes_List.Iterate loop
          if To_String(Items_List(Recipes_List(I).ResultIndex).Name) =
            Name(Current(TradeMenu)) then
@@ -52,12 +55,6 @@ package body Bases.UI.Recipes is
       else
          Cost := Recipes_List(RecipeIndex).Difficulty * 100;
       end if;
-      Move_Cursor(Line => 3, Column => (Columns / 2));
-      Clear_To_End_Of_Line;
-      Move_Cursor(Line => 4, Column => (Columns / 2));
-      Clear_To_End_Of_Line;
-      Move_Cursor(Line => 5, Column => (Columns / 2));
-      Clear_To_End_Of_Line;
       CostInfo :=
         To_Unbounded_String
           ("Base price:" & Positive'Image(Cost) & " " & To_String(MoneyName));
@@ -67,13 +64,12 @@ package body Bases.UI.Recipes is
       Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
       Add(Win => InfoWindow, Str => "[Info]");
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
-      Add
-        (Win => InfoWindow,
-         Str =>
-           "Base price:" & Positive'Image(Cost) & " " & To_String(MoneyName));
-      Refresh;
-      Refresh(InfoWindow);
+      Add(Win => InfoWindow, Str => To_String(CostInfo));
+      Refresh_Without_Update;
+      Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowRecipeInfo;
 
    procedure ShowTradeRecipes is
@@ -152,7 +148,6 @@ package body Bases.UI.Recipes is
          Count => 5,
          Color => 1);
       ShowRecipeInfo;
-      Refresh(MenuWindow);
    end ShowTradeRecipes;
 
    function TradeRecipesKeys(Key: Key_Code) return GameStates is
@@ -197,7 +192,6 @@ package body Bases.UI.Recipes is
          end case;
          if Result = Menu_Ok then
             ShowRecipeInfo;
-            Refresh(MenuWindow);
          end if;
       else
          case Key is
