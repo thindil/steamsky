@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Numerics.Generic_Elementary_Functions;
+with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
@@ -42,9 +42,6 @@ package body Missions is
       Mission: Mission_Data;
       MissionsItems, BasesInRange, Cabins: Positive_Container.Vector;
       MinX, MinY, MaxX, MaxY: Integer;
-      type Value_Type is new Float range 0.0 .. 9999999.0;
-      package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions
-        (Value_Type);
       Enemies: Positive_Container.Vector;
       PlayerValue: Natural := 0;
    begin
@@ -198,21 +195,15 @@ package body Missions is
          case Mission.MType is
             when Deliver =>
                Mission.Time :=
-                 Positive
-                   (Value_Type(80) *
-                    Value_Functions.Sqrt(Value_Type((DiffX**2) + (DiffY**2))));
+                 Positive(80.0 * Sqrt(Float((DiffX**2) + (DiffY**2))));
                Mission.Reward := (Mission.Time / 4);
             when Destroy | Passenger =>
                Mission.Time :=
-                 Positive
-                   (Value_Type(180) *
-                    Value_Functions.Sqrt(Value_Type((DiffX**2) + (DiffY**2))));
+                 Positive(180.0 * Sqrt(Float((DiffX**2) + (DiffY**2))));
                Mission.Reward := (Mission.Time / 4);
             when Patrol | Explore =>
                Mission.Time :=
-                 Positive
-                   (Value_Type(180) *
-                    Value_Functions.Sqrt(Value_Type((DiffX**2) + (DiffY**2))));
+                 Positive(180.0 * Sqrt(Float((DiffX**2) + (DiffY**2))));
                Mission.Reward := (Mission.Time / 5);
          end case;
          Mission.StartBase := BaseIndex;

@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Generic_Elementary_Functions;
+with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
 with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
@@ -314,9 +314,6 @@ package body Bases is
       Event: Events_Types;
       EventX, EventY, EventTime, DiffX, DiffY: Positive;
       MinX, MinY, MaxX, MaxY: Integer;
-      type Value_Type is new Float range 0.0 .. 9999999.0;
-      package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions
-        (Value_Type);
       Enemies: Positive_Container.Vector;
       PlayerValue: Natural := 0;
       Attempts: Natural;
@@ -442,10 +439,7 @@ package body Bases is
          end loop;
          DiffX := abs (PlayerShip.SkyX - EventX);
          DiffY := abs (PlayerShip.SkyY - EventY);
-         EventTime :=
-           Positive
-             (Value_Type(60) *
-              Value_Functions.Sqrt(Value_Type((DiffX**2) + (DiffY**2))));
+         EventTime := Positive(60.0 * Sqrt(Float((DiffX**2) + (DiffY**2))));
          case Event is
             when EnemyShip =>
                Events_List.Append
