@@ -59,6 +59,8 @@ package body Bases.UI.Missions is
       MissionTime: Date_Record :=
         (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
       WindowHeight: Line_Position;
+      HaveCabin: Boolean := False;
+      CabinColor: Color_Pair := 3;
    begin
       ClearWindow := Create(14, (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
@@ -108,11 +110,29 @@ package body Bases.UI.Missions is
          when Explore =>
             Add(Win => InfoWindow, Str => "Explore selected area");
          when Passenger =>
+            for Module of PlayerShip.Modules loop
+               if Module.ProtoIndex = Mission.Target then
+                  if Module.Owner = 0 then
+                     HaveCabin := True;
+                     exit;
+                  else
+                     CabinColor := 1;
+                  end if;
+               end if;
+            end loop;
             Add
               (Win => InfoWindow,
                Str =>
                  "Needed cabin: " &
                  To_String(Modules_List(Mission.Target).Name));
+            if not HaveCabin then
+               Change_Attributes
+                 (Win => InfoWindow,
+                  Line => 1,
+                  Column => 16,
+                  Count => Length(Modules_List(Mission.Target).Name),
+                  Color => CabinColor);
+            end if;
             Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
             Add
               (Win => InfoWindow,
