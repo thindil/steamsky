@@ -15,23 +15,20 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Numerics.Generic_Elementary_Functions;
+with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
 with Ships; use Ships;
 
 package body Maps is
 
    function CountDistance
      (DestinationX, DestinationY: Positive) return Natural is
-      type Value_Type is new Float range 0.0 .. 9999999.0;
-      package Value_Functions is new Ada.Numerics.Generic_Elementary_Functions
-        (Value_Type);
       DiffX, DiffY: Natural;
-      Distance: Value_Type;
+      Distance: Float;
    begin
       DiffX := abs (PlayerShip.SkyX - DestinationX);
       DiffY := abs (PlayerShip.SkyY - DestinationY);
-      Distance := Value_Functions.Sqrt(Value_Type((DiffX**2) + (DiffY**2)));
-      return Natural(Value_Type'Floor(Distance));
+      Distance := Sqrt(Float((DiffX**2) + (DiffY**2)));
+      return Natural(Float'Floor(Distance));
    end CountDistance;
 
 end Maps;
