@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New enemy ship: huge inquisition ship mk III
+- New enemy ships: huge inquisition ship mk III and advanced huge inquisition
+  ship mk III
 
 ### Changed
 - Updated REAMDE.md
