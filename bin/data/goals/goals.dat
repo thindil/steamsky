@@ -16,4 +16,7 @@ Amount = 1000
 [6]
 Type = Mission
 Amount = 200
+[7]
+Type = Reputation
+Amount = 3
 []
