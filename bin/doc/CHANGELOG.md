@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New enemy ships: huge inquisition ship mk III and advanced huge inquisition
   ship mk III
+- New goal: gain max reputation in 3 bases
 
 ### Changed
 - Updated REAMDE.md
