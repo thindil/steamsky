@@ -13,6 +13,9 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated help
 
+### Fixed
+- Not working 'Wait Orders' entry in main menu
+
 ## [1.3] - 2017-06-25
 
 ### Added
