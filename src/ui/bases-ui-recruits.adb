@@ -36,7 +36,7 @@ package body Bases.UI.Recruits is
       MoneyIndex2: Natural := 0;
    begin
       ClearWindow := Create((Lines - 1), (Columns / 2), 3, (Columns / 2));
-      Refresh(ClearWindow);
+      Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
       WindowWidth := 4 + Line_Position(Recruit.Skills.Length);
       if WindowWidth > (Lines - 5) then
@@ -92,9 +92,11 @@ package body Bases.UI.Recruits is
               To_String(MoneyName) &
               " to hire anyone.");
       end if;
-      Refresh;
-      Refresh(InfoWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowRecruitInfo;
 
    procedure ShowRecruits is
@@ -136,7 +138,6 @@ package body Bases.UI.Recruits is
       end if;
       Set_Current(TradeMenu, Recruits_Items.all(CurrentMenuIndex));
       ShowRecruitInfo;
-      Refresh(MenuWindow);
    end ShowRecruits;
 
    function RecruitKeys(Key: Key_Code) return GameStates is
@@ -152,36 +153,24 @@ package body Bases.UI.Recruits is
             if Result = Request_Denied then
                Result := Driver(TradeMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               ShowRecruitInfo;
-               Refresh(MenuWindow);
-            end if;
          when 50 | KEY_DOWN => -- Select next recruit to hire
             Result := Driver(TradeMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(TradeMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               ShowRecruitInfo;
-               Refresh(MenuWindow);
             end if;
          when 10 => -- Hire recruit
             HireRecruit(Get_Index(Current(TradeMenu)));
             DrawGame(Recruits_View);
          when others =>
             Result := Driver(TradeMenu, Key);
-            if Result = Menu_Ok then
-               ShowRecruitInfo;
-               Refresh(MenuWindow);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(TradeMenu, M_Clear_Pattern);
                Result := Driver(TradeMenu, Key);
-               if Result = Menu_Ok then
-                  ShowRecruitInfo;
-                  Refresh(MenuWindow);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         ShowRecruitInfo;
+      end if;
       CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
       return Recruits_View;
    end RecruitKeys;
