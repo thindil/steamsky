@@ -16,7 +16,7 @@ error=$($comm -P steamsky.gpr -XMode=$buildmode 2>&1 > /dev/tty)
 if [ -n "$error" ]
 then
    # if compiler can't find adacurses project file
-   if [[ $error == *"steamsky.gpr:1:06:"* ]]
+   if [ "${error#*"steamsky.gpr:1:06:"}" != "$error" ]
    then
       # replace name of project file
       sed -i '1s/adacurses/ncursesada/' steamsky.gpr
