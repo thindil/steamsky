@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Not working 'Wait Orders' entry in main menu
+
 ## [1.0.4] - 2017-06-25
 
 ### Fixed
