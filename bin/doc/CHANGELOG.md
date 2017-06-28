@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated REAMDE.md
 - Updated interface
+- Updated help
 
 ## [1.3] - 2017-06-25
 
