@@ -125,6 +125,9 @@ package body UserInterface.Keys is
          when Character'Pos('a') | Character'Pos('A') => -- Cargo info screen
             DrawGame(Cargo_Info);
             return Cargo_Info;
+         when Character'Pos('w') | Character'Pos('W') => -- Wait orders menu
+            DrawGame(Wait_Order);
+            return Wait_Order;
          when Character'Pos('v') | Character'Pos('V') => -- Move map form
             DrawGame(Sky_Map_View);
             ShowMoveMapForm;
