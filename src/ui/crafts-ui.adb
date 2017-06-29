@@ -31,7 +31,7 @@ package body Crafts.UI is
    procedure ShowRecipeInfo is
       InfoWindow, ClearWindow, BoxWindow: Window;
       Recipe: Craft_Data;
-      CurrentLine: Line_Position := 2;
+      CurrentLine: Line_Position := 1;
       MAmount, TextLength: Natural := 0;
       HaveMaterial,
       HaveWorkplace,
@@ -42,13 +42,37 @@ package body Crafts.UI is
       StartLine: Line_Position;
       StartColumn, EndColumn: Column_Position;
       WorkplaceName: Unbounded_String := Null_Unbounded_String;
-      WindowHeight: Line_Position := 9;
+      WindowHeight: Line_Position := 7;
    begin
       ClearWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
       Refresh(ClearWindow);
       Delete(ClearWindow);
       if RecipeIndex > 0 then
          Recipe := Recipes_List(RecipeIndex);
+         WindowHeight := WindowHeight + 1;
+         for I in
+           Recipe.MaterialTypes.First_Index ..
+               Recipe.MaterialTypes.Last_Index loop
+            TextLength := 0;
+            for Item of Items_List loop
+               if Item.IType = Recipe.MaterialTypes(I) then
+                  if TextLength > 0 then
+                     TextLength := TextLength + 3;
+                  end if;
+                  TextLength :=
+                    TextLength +
+                    Integer'Image(Recipe.MaterialAmounts(I))'Length +
+                    1 +
+                    Length(Item.Name);
+               end if;
+            end loop;
+            if TextLength > (Natural(Columns / 2) - 3) then
+               WindowHeight :=
+                 WindowHeight +
+                 Line_Position(TextLength / (Natural(Columns / 2) - 3));
+            end if;
+         end loop;
+         TextLength := 0;
       else
          Recipe.MaterialTypes.Append
          (New_Item => Items_List(abs (RecipeIndex)).IType);
@@ -79,8 +103,9 @@ package body Crafts.UI is
          Add
            (Win => InfoWindow,
             Str => "Amount:" & Integer'Image(Recipe.ResultAmount));
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         CurrentLine := CurrentLine + 1;
       end if;
-      Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
       Add(Win => InfoWindow, Str => "Materials needed: ");
       for I in
         Recipe.MaterialTypes.First_Index ..
