@@ -21,13 +21,20 @@ To build it, you need:
   distributions, if not, download from: http://libre.adacore.com/download/
 
 
-If you have all, in main source code directory (where this file is) type: 
+If you have all, in main source code directory (where this file is):
 
-* if you don't have gprbuild: `gnatmake -Psteamsky.gpr` for debug build or for
-  release version: `gnatmake -Psteamsky.gpr -XMode=release`
+* Best option, is to use build.sh script. It can detect did you have gprbuild
+  installed and use it or gnatmake automatically. Additionally, if you use
+  Debian or Debian based distribution (like Ubuntu, etc.) it can fix
+  *steamsky.gpr* file automatically. This is recommended option for first time
+  build. Type `./build.sh` for debug build or `./build.sh release` for release
+  version.
 
-* if you have gprbuild: `gprbuild` for debug mode build or for release mode: 
-  `gprbuild -XMode=release`
+* if you don't have gprbuild: type `gnatmake -P steamsky.gpr` for debug build 
+  or for release version: `gnatmake -P steamsky.gpr -XMode=release`
+
+* if you have gprbuild: type `gprbuild` for debug mode build or for release 
+  mode: `gprbuild -XMode=release`
 
 
 ## Running game
