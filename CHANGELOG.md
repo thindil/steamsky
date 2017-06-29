@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated README.md
+
 ### Fixed
 - Not working 'Wait Orders' entry in main menu
 
