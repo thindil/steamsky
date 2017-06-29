@@ -81,7 +81,7 @@ package body Bases.UI.Repair is
       WindowWidth: Column_Position;
    begin
       ClearWindow := Create(4, (Columns / 2), 3, (Columns / 2));
-      Refresh(ClearWindow);
+      Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
       RepairCost(Cost, Time, ModuleIndex);
       CostInfo :=
@@ -105,9 +105,11 @@ package body Bases.UI.Repair is
       Add(Win => InfoWindow, Str => To_String(CostInfo));
       Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
       Add(Win => InfoWindow, Str => To_String(TimeInfo));
-      Refresh;
-      Refresh(InfoWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowRepairInfo;
 
    procedure ShowRepair is
@@ -197,7 +199,6 @@ package body Bases.UI.Repair is
          Count => 5,
          Color => 1);
       ShowRepairInfo;
-      Refresh(MenuWindow);
    end ShowRepair;
 
    function RepairKeys(Key: Key_Code) return GameStates is
@@ -218,18 +219,10 @@ package body Bases.UI.Repair is
                if Result = Request_Denied then
                   Result := Driver(TradeMenu, M_Last_Item);
                end if;
-               if Result = Menu_Ok then
-                  ShowRepairInfo;
-                  Refresh(MenuWindow);
-               end if;
             when 50 | KEY_DOWN => -- Select next repair option
                Result := Driver(TradeMenu, M_Down_Item);
                if Result = Request_Denied then
                   Result := Driver(TradeMenu, M_First_Item);
-               end if;
-               if Result = Menu_Ok then
-                  ShowRepairInfo;
-                  Refresh(MenuWindow);
                end if;
             when 10 => -- Repair ship
                RepairShip;
@@ -237,18 +230,14 @@ package body Bases.UI.Repair is
                return Repairs_View;
             when others =>
                Result := Driver(TradeMenu, Key);
-               if Result = Menu_Ok then
-                  ShowRepairInfo;
-                  Refresh(MenuWindow);
-               else
+               if Result /= Menu_Ok then
                   Result := Driver(TradeMenu, M_Clear_Pattern);
                   Result := Driver(TradeMenu, Key);
-                  if Result = Menu_Ok then
-                     ShowRepairInfo;
-                     Refresh(MenuWindow);
-                  end if;
                end if;
          end case;
+         if Result = Menu_Ok then
+            ShowRepairInfo;
+         end if;
          CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
       else
          case Key is
