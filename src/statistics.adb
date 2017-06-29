@@ -16,14 +16,22 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Goals; use Goals;
+with Ships; use Ships;
 
 package body Statistics is
 
    procedure UpdateDestroyedShips(ShipName: Unbounded_String) is
       Updated: Boolean := False;
+      ShipIndex: Unbounded_String;
    begin
+      for ProtoShip of ProtoShips_List loop
+         if ProtoShip.Name = ShipName then
+            ShipIndex := ProtoShip.Index;
+            exit;
+         end if;
+      end loop;
       for DestroyedShip of GameStats.DestroyedShips loop
-         if DestroyedShip.Index = ShipName then
+         if DestroyedShip.Index = ShipIndex then
             DestroyedShip.Amount := DestroyedShip.Amount + 1;
             Updated := True;
             exit;
@@ -31,7 +39,7 @@ package body Statistics is
       end loop;
       if not Updated then
          GameStats.DestroyedShips.Append
-         (New_Item => (Index => ShipName, Amount => 1));
+         (New_Item => (Index => ShipIndex, Amount => 1));
       end if;
    end UpdateDestroyedShips;
 
