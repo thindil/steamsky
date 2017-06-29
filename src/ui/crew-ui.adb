@@ -29,9 +29,10 @@ with Ships.Crew; use Ships.Crew;
 package body Crew.UI is
 
    CrewMenu, OrdersMenu, PrioritiesMenu: Menu;
-   MenuWindow, MenuWindow2: Window;
+   MenuWindow, MenuWindow2, SkillsPad: Window;
    MemberIndex, PriorityIndex: Positive := 1;
    NeedClean, NeedRepairs: Boolean := False;
+   StartIndex, EndIndex: Integer := 0;
 
    procedure ShowMemberInfo is
       InfoWindow, ClearWindow: Window;
@@ -45,6 +46,7 @@ package body Crew.UI is
         Null_Unbounded_String;
       WindowHeight: Line_Position := 3;
       TextColor: array(1 .. 4) of Color_Pair;
+      SkillsLine, SkillsStartsLine: Line_Position := 0;
    begin
       ClearWindow := Create((Lines - 3), (Columns / 2), 3, (Columns / 2));
       Refresh(ClearWindow);
@@ -112,10 +114,12 @@ package body Crew.UI is
       end if;
       if Member.Skills.Length = 0 then
          WindowHeight := WindowHeight + 1;
-      end if;
-      if Member.Skills.Length > 0 then
+      else
          WindowHeight :=
            WindowHeight + Line_Position(Member.Skills.Length) + 3;
+         if WindowHeight > (Lines - 5) then
+            WindowHeight := Lines - 5;
+         end if;
       end if;
       InfoWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
       Box(InfoWindow);
@@ -190,15 +194,24 @@ package body Crew.UI is
             Column => (Columns / 2) - 1);
          Add(Win => InfoWindow, Ch => ACS_Map(ACS_Right_Tee));
          CurrentLine := CurrentLine + 1;
+         SkillsPad :=
+           New_Pad(Line_Position(Member.Skills.Length), (Columns / 2) - 2);
+         SkillsStartsLine := CurrentLine + 3;
+         EndIndex :=
+           Integer(Member.Skills.Length) -
+           Integer(WindowHeight - SkillsStartsLine);
+         if EndIndex < 0 then
+            EndIndex := 0;
+         end if;
          for Skill of Member.Skills loop
-            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
+            Move_Cursor(Win => SkillsPad, Line => SkillsLine, Column => 0);
             Add
-              (Win => InfoWindow,
+              (Win => SkillsPad,
                Str =>
                  To_String(Skills_Names(Skill(1))) &
                  ": " &
                  GetSkillLevelName(Skill(2)));
-            CurrentLine := CurrentLine + 1;
+            SkillsLine := SkillsLine + 1;
          end loop;
          case Member.Order is
             when Pilot =>
@@ -222,6 +235,7 @@ package body Crew.UI is
             when Clean =>
                OrderName := To_Unbounded_String("Cleans ship");
          end case;
+         CurrentLine := WindowHeight - 3;
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
          Add(Win => InfoWindow, Ch => ACS_Map(ACS_Left_Tee));
          Horizontal_Line
@@ -283,6 +297,16 @@ package body Crew.UI is
       Refresh;
       Refresh(InfoWindow);
       Delete(InfoWindow);
+      if SkillsPad /= Null_Window then
+         Refresh
+           (SkillsPad,
+            Line_Position(StartIndex),
+            0,
+            SkillsStartsLine,
+            (Columns / 2) + 2,
+            WindowHeight - 1,
+            Columns - 2);
+      end if;
    end ShowMemberInfo;
 
    procedure ShowCrewInfo is
@@ -627,6 +651,7 @@ package body Crew.UI is
      (Key: Key_Code;
       OldState: GameStates) return GameStates is
       Result: Driver_Result;
+      RefreshSkills: Boolean := False;
    begin
       case Key is
          when Character'Pos('q') |
@@ -656,6 +681,12 @@ package body Crew.UI is
                ShowMemberInfo;
                Refresh(MenuWindow);
             end if;
+         when 51 | KEY_NPAGE => -- Scroll skills one line down
+            StartIndex := StartIndex + 1;
+            RefreshSkills := True;
+         when 57 | KEY_PPAGE => -- Scroll skills one line up
+            StartIndex := StartIndex - 1;
+            RefreshSkills := True;
          when 10 => -- Give orders to selected crew member
             ShowOrdersMenu;
             return Giving_Orders;
@@ -685,6 +716,15 @@ package body Crew.UI is
                end if;
             end if;
       end case;
+      if StartIndex < 0 then
+         StartIndex := 0;
+      end if;
+      if StartIndex > EndIndex then
+         StartIndex := EndIndex;
+      end if;
+      if RefreshSkills then
+         ShowMemberInfo;
+      end if;
       return Crew_Info;
    end CrewInfoKeys;
 
