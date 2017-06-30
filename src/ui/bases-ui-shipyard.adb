@@ -309,11 +309,13 @@ package body Bases.UI.Shipyard is
                       .Description));
          end if;
       end if;
-      Refresh;
-      Refresh(BoxWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(BoxWindow);
       Delete(BoxWindow);
-      Refresh(InfoWindow);
+      Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowModuleInfo;
 
    procedure ShowShipyard is
@@ -447,7 +449,6 @@ package body Bases.UI.Shipyard is
       ShowModuleInfo;
       Refresh(ActionWindow);
       Delete(ActionWindow);
-      Refresh(MenuWindow);
    end ShowShipyard;
 
    procedure ShowTypesMenu is
@@ -476,8 +477,9 @@ package body Bases.UI.Shipyard is
         (TypesMenu,
          Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
       Post(TypesMenu);
-      Refresh;
-      Refresh(MenuWindow2);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow2);
+      Update_Screen;
    end ShowTypesMenu;
 
    function ShipyardKeys(Key: Key_Code) return GameStates is
@@ -495,18 +497,10 @@ package body Bases.UI.Shipyard is
             if Result = Request_Denied then
                Result := Driver(TradeMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               ShowModuleInfo;
-               Refresh(MenuWindow);
-            end if;
          when 50 | KEY_DOWN => -- Select next repair option
             Result := Driver(TradeMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(TradeMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               ShowModuleInfo;
-               Refresh(MenuWindow);
             end if;
          when Key_F2 => -- Switch modules to install/remove
             if not InstallView then
@@ -516,6 +510,7 @@ package body Bases.UI.Shipyard is
             end if;
             CurrentMenuIndex := 1;
             DrawGame(Shipyard_View);
+            return Shipyard_View;
          when Key_F3 => -- Show select modules type menu
             if InstallView then
                ShowTypesMenu;
@@ -528,18 +523,14 @@ package body Bases.UI.Shipyard is
             DrawGame(Shipyard_View);
          when others =>
             Result := Driver(TradeMenu, Key);
-            if Result = Menu_Ok then
-               ShowModuleInfo;
-               Refresh(MenuWindow);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(TradeMenu, M_Clear_Pattern);
                Result := Driver(TradeMenu, Key);
-               if Result = Menu_Ok then
-                  ShowModuleInfo;
-                  Refresh(MenuWindow);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         ShowModuleInfo;
+      end if;
       CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
       return Shipyard_View;
    end ShipyardKeys;
