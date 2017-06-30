@@ -40,6 +40,7 @@ package Statistics is
         .Vector; -- Data for all finished missions
       FinishedGoals: Statistics_Container
         .Vector; -- Data for all finished goals
+      Points: Natural; -- Amount of gained points
    end record;
    GameStats: GameStats_Data; -- Game statistics
 

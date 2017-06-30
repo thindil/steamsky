@@ -60,6 +60,7 @@ with Missions.UI; use Missions.UI;
 with Log; use Log;
 with GameOptions; use GameOptions;
 with Goals.UI; use Goals.UI;
+with HallOfFame; use HallOfFame;
 
 procedure SteamSky is
    GameState: GameStates := Main_Menu;
@@ -178,6 +179,7 @@ begin
    end if;
 
    LoadConfig;
+   LoadHallOfFame;
    ShowMainMenu;
 
    while GameState /= Quit loop
@@ -212,7 +214,8 @@ begin
         GameState /= News_View and
         GameState /= GameStats_View and
         GameState /= GoalsList_View and
-        GameState /= GoalsTypes_View then
+        GameState /= GoalsTypes_View and
+        GameState /= Hall_Of_Fame then
          if PlayerShip.Crew.Element(1).Health = 0 then -- Player is dead
             GameState := Death_Confirm;
             DrawGame(Death_Confirm);
