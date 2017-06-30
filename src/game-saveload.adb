@@ -32,7 +32,7 @@ with Goals; use Goals;
 
 package body Game.SaveLoad is
 
-   SaveVersion: constant String := "1.3";
+   SaveVersion: constant String := "1.4";
 
    procedure SaveGame is
       SaveGame: File_Type;
@@ -433,6 +433,8 @@ package body Game.SaveLoad is
          RawValue := To_Unbounded_String(Integer'Image(FinishedGoal.Amount));
          Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       end loop;
+      RawValue := To_Unbounded_String(Natural'Image(GameStats.Points));
+      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       -- Save current goal
       Put(SaveGame, To_String(CurrentGoal.Index) & ";");
       RawValue :=
@@ -757,6 +759,7 @@ package body Game.SaveLoad is
             (Index => ReadData,
              Amount => Positive'Value(To_String(ReadData))));
       end loop;
+      GameStats.Points := Natural'Value(To_String(ReadData));
       -- Load current goal
       CurrentGoal.Index := ReadData;
       CurrentGoal.GType := GoalTypes'Val(Integer'Value(To_String(ReadData)));

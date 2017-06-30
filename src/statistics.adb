@@ -27,6 +27,7 @@ package body Statistics is
       for ProtoShip of ProtoShips_List loop
          if ProtoShip.Name = ShipName then
             ShipIndex := ProtoShip.Index;
+            GameStats.Points := GameStats.Points + ProtoShip.CombatValue;
             exit;
          end if;
       end loop;
@@ -53,11 +54,18 @@ package body Statistics is
       GameStats.AcceptedMissions := 0;
       GameStats.FinishedMissions.Clear;
       GameStats.FinishedGoals.Clear;
+      GameStats.Points := 0;
    end ClearGameStats;
 
    procedure UpdateFinishedGoals(Index: Unbounded_String) is
       Updated: Boolean := False;
    begin
+      for Goal of Goals_List loop
+         if Goal.Index = Index then
+            GameStats.Points := GameStats.Points + Goal.Amount;
+            exit;
+         end if;
+      end loop;
       for FinishedGoal of GameStats.FinishedGoals loop
          if FinishedGoal.Index = Index then
             FinishedGoal.Amount := FinishedGoal.Amount + 1;
@@ -90,6 +98,7 @@ package body Statistics is
          GameStats.FinishedMissions.Append
          (New_Item => (Index => MType, Amount => 1));
       end if;
+      GameStats.Points := GameStats.Points + 50;
    end UpdateFinishedMissions;
 
    procedure UpdateCraftingOrders(Index: Unbounded_String) is
@@ -106,6 +115,7 @@ package body Statistics is
          GameStats.CraftingOrders.Append
          (New_Item => (Index => Index, Amount => 1));
       end if;
+      GameStats.Points := GameStats.Points + 5;
    end UpdateCraftingOrders;
 
 end Statistics;
