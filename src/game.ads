@@ -80,7 +80,8 @@ package Game is
       GoalsList_View,
       GoalsTypes_View,
       Resign_Confirm,
-      DetailedStats_View); -- Game states
+      DetailedStats_View,
+      Hall_Of_Fame); -- Game states
    type Date_Record is -- Data for game date/time
    record
       Year: Natural;

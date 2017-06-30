@@ -282,6 +282,7 @@ package body Game is
       if BaseIndex > 0 then
          if SkyBases(BaseIndex).Visited.Year = 0 then
             GameStats.BasesVisited := GameStats.BasesVisited + 1;
+            GameStats.Points := GameStats.Points + 1;
             UpdateGoal
               (VISIT,
                To_Unbounded_String
@@ -304,6 +305,7 @@ package body Game is
       -- Update map cell
       if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited = False then
          GameStats.MapVisited := GameStats.MapVisited + 1;
+         GameStats.Points := GameStats.Points + 1;
          UpdateGoal(DISCOVER, Null_Unbounded_String);
          SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
       end if;

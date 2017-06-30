@@ -17,6 +17,7 @@
 
 with Messages; use Messages;
 with Items; use Items;
+with HallOfFame; use HallOfFame;
 
 package body Ships.Crew is
 
@@ -81,6 +82,7 @@ package body Ships.Crew is
                3);
             PlayerShip.Crew(MemberIndex).Order := Rest;
             PlayerShip.Crew(MemberIndex).Health := 0;
+            UpdateHallOfFame(PlayerShip.Crew(MemberIndex).Name, Reason);
             return;
          end if;
       end if;
