@@ -25,4 +25,7 @@ Amount = 5
 [9]
 Type = Reputation
 Amount = 7
+[10]
+Type = Reputation
+Amount = 10
 []
