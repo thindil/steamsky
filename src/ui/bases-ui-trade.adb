@@ -52,7 +52,7 @@ package body Bases.UI.Trade is
       FreeSpace: Integer;
    begin
       ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
-      Refresh(ClearWindow);
+      Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
       for I in Items_List.Iterate loop
          if To_String(Items_List(I).Name) = Name(Current(TradeMenu)) then
@@ -129,7 +129,7 @@ package body Bases.UI.Trade is
             Line => CurrentLine,
             Column => StartColumn);
       end if;
-      CurrentLine := WindowHeight + 4;
+      CurrentLine := WindowHeight + 3;
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
       if Items_List(ItemIndex).Buyable(BaseType) and CargoIndex > 0 then
          Add(Str => "Press ENTER to buy, SPACE for sell.");
@@ -183,11 +183,13 @@ package body Bases.UI.Trade is
          FreeSpace := 0;
       end if;
       Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
-      Refresh;
-      Refresh(BoxWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(BoxWindow);
       Delete(BoxWindow);
-      Refresh(InfoWindow);
+      Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowItemInfo;
 
    procedure ShowTrade is
@@ -268,7 +270,6 @@ package body Bases.UI.Trade is
       end if;
       Set_Current(TradeMenu, Trade_Items.all(CurrentMenuIndex));
       ShowItemInfo;
-      Refresh(MenuWindow);
    end ShowTrade;
 
    function ShowTradeForm return GameStates is
@@ -402,8 +403,9 @@ package body Bases.UI.Trade is
             Derived_Window(FormWindow, FormHeight, FormLength, 1, 1));
          Post(TradeForm);
       end if;
-      Refresh;
-      Refresh(FormWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(FormWindow);
+      Update_Screen;
       return Trade_Form;
    end ShowTradeForm;
 
@@ -455,18 +457,10 @@ package body Bases.UI.Trade is
             if Result = Request_Denied then
                Result := Driver(TradeMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               ShowItemInfo;
-               Refresh(MenuWindow);
-            end if;
          when 50 | KEY_DOWN => -- Select next item to trade
             Result := Driver(TradeMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(TradeMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               ShowItemInfo;
-               Refresh(MenuWindow);
             end if;
          when 32 => -- Sell item
             Buy := False;
@@ -481,18 +475,14 @@ package body Bases.UI.Trade is
             return Help_Topic;
          when others =>
             Result := Driver(TradeMenu, Key);
-            if Result = Menu_Ok then
-               ShowItemInfo;
-               Refresh(MenuWindow);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(TradeMenu, M_Clear_Pattern);
                Result := Driver(TradeMenu, Key);
-               if Result = Menu_Ok then
-                  ShowItemInfo;
-                  Refresh(MenuWindow);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         ShowItemInfo;
+      end if;
       CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
       return Trade_View;
    end TradeKeys;
