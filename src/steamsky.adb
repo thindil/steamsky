@@ -100,29 +100,21 @@ begin
 
    while GameState /= Quit loop
       Key := Get_Keystroke;
-      if Key = Terminal_Interface.Curses.Key_Resize then
+      while Key = Terminal_Interface.Curses.Key_Resize loop
          Erase;
          case GameState is
             when Main_Menu =>
                ShowMainMenu;
-            when New_Game =>
-               ShowMainMenu;
-               Refresh;
-               GameState := Main_Menu;
-               Key := Character'Pos('n');
-            when License_Info =>
-               GameState := Main_Menu;
-               Key := Character'Pos('i');
-            when License_Full =>
-               GameState := License_Info;
-               Key := Character'Pos('f');
-            when News_View =>
-               GameState := Main_Menu;
-               Key := Character'Pos('e');
+            when New_Game |
+              License_Info |
+              License_Full |
+              News_View =>
+               RedrawMainMenu(GameState);
             when others =>
                DrawGame(GameState);
          end case;
-      end if;
+         Key := Get_Keystroke;
+      end loop;
       if GameState /= Main_Menu and
         GameState /= New_Game and
         GameState /= License_Info and
