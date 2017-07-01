@@ -39,5 +39,7 @@ package MainMenu is
      (Key: Key_Code) return GameStates; -- Handle keys on full license screen
    function NewsKeys
      (Key: Key_Code) return GameStates; -- Handle keys on news screen
+   function HallOfFameKeys
+     (Key: Key_Code) return GameStates; -- Handle keys on hall of fame screen
 
 end MainMenu;
