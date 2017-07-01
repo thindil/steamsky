@@ -404,6 +404,46 @@ package body MainMenu is
          Columns);
    end ShowHallOfFame;
 
+   procedure RedrawMainMenu(GameState: GameStates) is
+   begin
+      case GameState is
+         when New_Game =>
+            ShowMainMenu;
+            ShowNewGameForm;
+         when License_Info =>
+            Refresh_Without_Update;
+            ShowLicenseInfo;
+            Update_Screen;
+         when License_Full =>
+            Delete(LicensePad);
+            StartIndex := 0;
+            Add
+              (Str =>
+                 "Up/down arrows to scroll on line, PgUp/PgDown to scroll one screen, Home/End to go begining or end, any other key - back to main menu.");
+            Refresh_Without_Update;
+            ShowFullLicense;
+            Update_Screen;
+         when News_View =>
+            Delete(NewsPad);
+            Add
+              (Str =>
+                 "Up/down arrows to scroll one line, PgUp/PgDown to scroll one screen, Home/End to go begining or end, any other key - back to main menu.");
+            Refresh_Without_Update;
+            ShowNews;
+            Update_Screen;
+         when Hall_Of_Fame =>
+            Delete(HallOfFamePad);
+            Add
+              (Str =>
+                 "Up/down arrows to scroll one line, any other key - back to main menu.");
+            Refresh_Without_Update;
+            ShowHallOfFame;
+            Update_Screen;
+         when others =>
+            null;
+      end case;
+   end RedrawMainMenu;
+
    function MainMenuKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
       Option: constant String := Name(Current(GameMenu));
