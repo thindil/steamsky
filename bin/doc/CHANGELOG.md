@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - New goals: gain max reputation in 3 bases, gain max reputation in 5 bases,
   gain max reputation in 7 bases, gain max reputation in 10 bases and gain max
   reputation in 15 bases
+- Hall of fame
 
 ### Changed
 - Updated REAMDE.md
