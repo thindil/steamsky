@@ -27,7 +27,8 @@ package body Statistics is
       for ProtoShip of ProtoShips_List loop
          if ProtoShip.Name = ShipName then
             ShipIndex := ProtoShip.Index;
-            GameStats.Points := GameStats.Points + ProtoShip.CombatValue;
+            GameStats.Points :=
+              GameStats.Points + (ProtoShip.CombatValue / 10);
             exit;
          end if;
       end loop;
