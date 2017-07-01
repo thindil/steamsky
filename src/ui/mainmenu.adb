@@ -37,12 +37,13 @@ with Log; use Log;
 with Game.SaveLoad; use Game.SaveLoad;
 with Goals; use Goals;
 with Goals.UI; use Goals.UI;
+with HallOfFame; use HallOfFame;
 
 package body MainMenu is
 
    StartIndex: Integer := 0;
    EndIndex: Integer;
-   LicensePad, NewsPad: Window := Null_Window;
+   LicensePad, NewsPad, HallOfFamePad: Window := Null_Window;
    NewGameForm: Forms.Form;
    FormWindow: Window;
    GameMenu: Menu;
@@ -50,7 +51,7 @@ package body MainMenu is
 
    procedure ShowMainMenu is
       Visibility: Cursor_Visibility := Invisible;
-      Menu_Items: constant Item_Array_Access := new Item_Array(1 .. 6);
+      Menu_Items: constant Item_Array_Access := new Item_Array(1 .. 7);
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
       MenuIndex: Positive := 2;
@@ -80,6 +81,10 @@ package body MainMenu is
       if Exists(To_String(SaveDirectory) & "savegame.dat") then
          Menu_Items.all(2) := New_Item("Load game");
          MenuIndex := 3;
+      end if;
+      if HallOfFame_Array(1).Name /= Null_Unbounded_String then
+         Menu_Items.all(MenuIndex) := New_Item("Hall of Fame");
+         MenuIndex := MenuIndex + 1;
       end if;
       Menu_Items.all(MenuIndex) := New_Item("News");
       MenuIndex := MenuIndex + 1;
@@ -343,6 +348,62 @@ package body MainMenu is
          Columns);
    end ShowNews;
 
+   procedure ShowHallOfFame is
+      CurrentLine, LinesAmount: Line_Position := 0;
+   begin
+      if HallOfFamePad = Null_Window then
+         for I in HallOfFame_Array'Range loop
+            exit when HallOfFame_Array(I).Name = Null_Unbounded_String;
+            LinesAmount := LinesAmount + 2;
+            if I < 10 then
+               LinesAmount := LinesAmount + 2;
+            end if;
+         end loop;
+         HallOfFamePad := New_Pad(LinesAmount, Columns);
+         for I in HallOfFame_Array'Range loop
+            exit when HallOfFame_Array(I).Name = Null_Unbounded_String;
+            Move_Cursor
+              (Win => HallOfFamePad,
+               Line => CurrentLine,
+               Column => 4);
+            Add
+              (Win => HallOfFamePad,
+               Str =>
+                 Positive'Image(I) &
+                 ". Name: " &
+                 To_String(HallOfFame_Array(I).Name));
+            Move_Cursor
+              (Win => HallOfFamePad,
+               Line => CurrentLine,
+               Column => (Columns / 2));
+            Add
+              (Win => HallOfFamePad,
+               Str => "Points:" & Natural'Image(HallOfFame_Array(I).Points));
+            Move_Cursor
+              (Win => HallOfFamePad,
+               Line => CurrentLine + 1,
+               Column => 5);
+            Add
+              (Win => HallOfFamePad,
+               Str =>
+                 "Died from " & To_String(HallOfFame_Array(I).DeathReason));
+            CurrentLine := CurrentLine + 3;
+         end loop;
+         EndIndex := Integer(LinesAmount - (Lines - 3));
+         if EndIndex < 0 then
+            EndIndex := 0;
+         end if;
+      end if;
+      Refresh
+        (HallOfFamePad,
+         Line_Position(StartIndex),
+         0,
+         3,
+         0,
+         (Lines - 1),
+         Columns);
+   end ShowHallOfFame;
+
    function MainMenuKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
       Option: constant String := Name(Current(GameMenu));
@@ -488,6 +549,15 @@ package body MainMenu is
                ShowLicenseInfo;
                Update_Screen;
                return License_Info;
+            elsif Option = "Hall of Fame" then
+               Erase;
+               Add
+                 (Str =>
+                    "Up/down arrows to scroll one line, any other key - back to main menu.");
+               Refresh_Without_Update;
+               ShowHallOfFame;
+               Update_Screen;
+               return Hall_Of_Fame;
             else
                return Quit;
             end if;
@@ -742,5 +812,29 @@ package body MainMenu is
       ShowNews;
       return News_View;
    end NewsKeys;
+
+   function HallOfFameKeys(Key: Key_Code) return GameStates is
+   begin
+      case Key is
+         when 56 | KEY_UP => -- Scroll hall of fame up one line
+            StartIndex := StartIndex - 1;
+         when 50 | KEY_DOWN => -- Scroll hall of fame down one line
+            StartIndex := StartIndex + 1;
+         when others => -- Back to main menu
+            Delete(HallOfFamePad);
+            Erase;
+            Refresh;
+            ShowMainMenu;
+            return Main_Menu;
+      end case;
+      if StartIndex < 0 then
+         StartIndex := 0;
+      end if;
+      if StartIndex > EndIndex then
+         StartIndex := EndIndex;
+      end if;
+      ShowHallOfFame;
+      return Hall_Of_Fame;
+   end HallOfFameKeys;
 
 end MainMenu;
