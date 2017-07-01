@@ -203,6 +203,9 @@ begin
             when News_View =>
                GameState := Main_Menu;
                Key := Character'Pos('e');
+            when Hall_Of_Fame =>
+               GameState := Main_Menu;
+               ShowMainMenu;
             when others =>
                DrawGame(GameState);
          end case;
@@ -366,6 +369,8 @@ begin
             GameState := GoalsMenuKeys(Key, GameState, OldState);
          when DetailedStats_View =>
             GameState := DetailedStatsKeys(Key);
+         when Hall_Of_Fame =>
+            GameState := HallOfFameKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;
@@ -377,7 +382,8 @@ exception
    when An_Exception : others =>
       if GameState /= Main_Menu and
         GameState /= New_Game and
-        GameState /= Quit then
+        GameState /= Quit and 
+        GameState /= Hall_Of_Fame then
          SaveGame;
       end if;
       if Exists(To_String(SaveDirectory) & "error.log") then

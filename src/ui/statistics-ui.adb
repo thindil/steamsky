@@ -192,6 +192,8 @@ package body Statistics.UI is
          Move_Cursor(Line => 8, Column => 2);
          Add(Str => "Current goal: " & GoalText(0));
          Change_Attributes(Line => 8, Column => 2, Count => 1, Color => 1);
+         Move_Cursor(Line => 9, Column => 2);
+         Add(Str => "Points:" & Natural'Image(GameStats.Points));
          TotalFinished := 0;
          if GameStats.FinishedGoals.Length > 0 then
             FinishedGoalsPad :=
@@ -246,7 +248,7 @@ package body Statistics.UI is
         (FinishedGoalsPad,
          Line_Position(StartIndex2),
          0,
-         9,
+         10,
          2,
          (Lines - 1),
          (Columns / 2) - 2);
