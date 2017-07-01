@@ -29,6 +29,8 @@ package MainMenu is
    procedure ShowMainMenu; -- Show main game menu
    procedure ShowNewGameForm
      (CurrentField: Positive := 2); -- Show new game setting form
+   procedure RedrawMainMenu
+     (GameState: GameStates); -- Redraw screen after resize
    function MainMenuKeys
      (Key: Key_Code) return GameStates; -- Handle keys on main menu
    function NewGameKeys
