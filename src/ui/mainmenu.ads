@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -21,6 +21,8 @@ with Game; use Game;
 package MainMenu is
 
    procedure ShowMainMenu; -- Show main game menu
+   procedure RedrawMainMenu
+     (GameState: GameStates); -- Redraw screen after resize
    function MainMenuKeys
      (Key: Key_Code) return GameStates; -- Handle keys on main menu
    function NewGameKeys
