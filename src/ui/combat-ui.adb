@@ -411,15 +411,16 @@ package body Combat.UI is
             Color => 1);
       end if;
       LastMessage := To_Unbounded_String("");
-      Refresh;
+      Refresh_Without_Update;
       ShowLastMessages(MessagesStarts);
-      Refresh(MenuWindow);
-      Refresh(EnemyInfo);
+      Refresh_Without_Update(MenuWindow);
+      Refresh_Without_Update(EnemyInfo);
       Delete(EnemyInfo);
       if ShipDamaged then
          Refresh(DamageInfo);
          Delete(DamageInfo);
       end if;
+      Update_Screen;
    end ShowCombat;
 
    procedure ShowOrdersMenu is
@@ -582,8 +583,9 @@ package body Combat.UI is
         (OrdersMenu,
          Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
       Post(OrdersMenu);
-      Refresh;
-      Refresh(MenuWindow2);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow2);
+      Update_Screen;
    end ShowOrdersMenu;
 
    procedure ShowEnemyInfo is
@@ -695,21 +697,11 @@ package body Combat.UI is
                if Result = Request_Denied then
                   Result := Driver(CrewMenu, M_Last_Item);
                end if;
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow);
-               end if;
-               CurrentMenuIndex := Get_Index(Current(CrewMenu));
-               return Combat_State;
             when 50 | KEY_DOWN => -- Select next crew position
                Result := Driver(CrewMenu, M_Down_Item);
                if Result = Request_Denied then
                   Result := Driver(CrewMenu, M_First_Item);
                end if;
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow);
-               end if;
-               CurrentMenuIndex := Get_Index(Current(CrewMenu));
-               return Combat_State;
             when 10 => -- Give orders to selected position
                case Get_Index(Current(CrewMenu)) is
                   when 1 =>
@@ -750,18 +742,16 @@ package body Combat.UI is
                return Help_Topic;
             when others =>
                Result := Driver(CrewMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow);
-               else
+               if Result /= Menu_Ok then
                   Result := Driver(CrewMenu, M_Clear_Pattern);
                   Result := Driver(CrewMenu, Key);
-                  if Result = Menu_Ok then
-                     Refresh(MenuWindow);
-                  end if;
                end if;
-               CurrentMenuIndex := Get_Index(Current(CrewMenu));
-               return Combat_State;
          end case;
+         if Result = Menu_Ok then
+            Refresh(MenuWindow);
+         end if;
+         CurrentMenuIndex := Get_Index(Current(CrewMenu));
+         return Combat_State;
       else
          CurrentMenuIndex := 1;
          PlayerShip.Speed := OldSpeed;
@@ -781,16 +771,10 @@ package body Combat.UI is
             if Result = Request_Denied then
                Result := Driver(OrdersMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            end if;
          when 50 | KEY_DOWN => -- Select next order
             Result := Driver(OrdersMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(OrdersMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
             end if;
          when 10 => -- Give order
             CombatOrders;
@@ -798,16 +782,14 @@ package body Combat.UI is
             return Combat_State;
          when others =>
             Result := Driver(OrdersMenu, Key);
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(OrdersMenu, M_Clear_Pattern);
                Result := Driver(OrdersMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow2);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow2);
+      end if;
       return Combat_Orders;
    end CombatOrdersKeys;
 
