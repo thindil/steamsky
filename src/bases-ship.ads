@@ -21,5 +21,6 @@ package Bases.Ship is
    procedure UpgradeShip
      (Install: Boolean;
       ModuleIndex: Positive); -- Install/remove modules on ship
+   procedure PayForDock; -- Pay daily fee for docking
 
 end Bases.Ship;

@@ -309,4 +309,45 @@ package body Bases.Ship is
       end if;
    end UpgradeShip;
 
+   procedure PayForDock is
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      ProtoMoneyIndex: constant Positive := FindProtoItem(MoneyIndex);
+      MoneyIndex2: constant Natural := FindCargo(ProtoMoneyIndex);
+      DockingCost: Positive;
+      TraderIndex: constant Natural := FindMember(Talk);
+   begin
+      if SkyBases(BaseIndex).Owner = Abandoned then
+         return;
+      end if;
+      if MoneyIndex2 = 0 then
+         GainRep(BaseIndex, -10);
+         AddMessage
+           ("You don't have " & To_String(MoneyName) & " for pay for docking!",
+            OtherMessage);
+         return;
+      end if;
+      for Module of PlayerShip.Modules loop
+         if Modules_List(Module.ProtoIndex).MType = HULL then
+            DockingCost := Module.Max_Value;
+            exit;
+         end if;
+      end loop;
+      CountPrice(DockingCost, TraderIndex);
+      if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
+         DockingCost := PlayerShip.Cargo(MoneyIndex2).Amount;
+      end if;
+      UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - DockingCost));
+      AddMessage
+        ("You pay" &
+         Positive'Image(DockingCost) &
+         " " &
+         To_String(MoneyName) &
+         " docking fee.",
+         OtherMessage);
+      if TraderIndex > 0 then
+         GainExp(1, 4, TraderIndex);
+      end if;
+   end PayForDock;
+
 end Bases.Ship;

@@ -18,6 +18,7 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Bases; use Bases;
+with Bases.Ship; use Bases.Ship;
 with Maps; use Maps;
 with Ships; use Ships;
 with Ships.Upgrade; use Ships.Upgrade;
@@ -260,6 +261,9 @@ package body Game is
          end loop;
          if NeedCleaning then
             UpdateOrders;
+         end if;
+         if PlayerShip.Speed = DOCKED then
+            PayForDock;
          end if;
       end if;
       if GameDate.Day > 30 then
