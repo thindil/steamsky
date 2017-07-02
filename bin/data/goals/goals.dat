@@ -31,4 +31,7 @@ Amount = 10
 [11]
 Type = Reputation
 Amount = 15
+[12]
+Type = Reputation
+Amount = 20
 []
