@@ -105,10 +105,7 @@ begin
          case GameState is
             when Main_Menu =>
                ShowMainMenu;
-            when New_Game |
-              License_Info |
-              License_Full |
-              News_View =>
+            when New_Game | License_Info | License_Full | News_View =>
                RedrawMainMenu(GameState);
             when others =>
                DrawGame(GameState);
