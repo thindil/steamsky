@@ -45,7 +45,7 @@ package body Crafts.UI is
       WindowHeight: Line_Position := 7;
    begin
       ClearWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
-      Refresh(ClearWindow);
+      Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
       if RecipeIndex > 0 then
          Recipe := Recipes_List(RecipeIndex);
@@ -285,11 +285,13 @@ package body Crafts.UI is
          Column => (Columns / 2) + 6,
          Count => 5,
          Color => 1);
-      Refresh;
-      Refresh(BoxWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(BoxWindow);
       Delete(BoxWindow);
-      Refresh(InfoWindow);
+      Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowRecipeInfo;
 
    procedure ShowRecipes is
@@ -350,7 +352,6 @@ package body Crafts.UI is
          end if;
       end loop;
       ShowRecipeInfo;
-      Refresh(MenuWindow);
    end ShowRecipes;
 
    function ShowRecipeMenu return GameStates is
@@ -404,8 +405,9 @@ package body Crafts.UI is
         (ModulesMenu,
          Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
       Post(ModulesMenu);
-      Refresh;
-      Refresh(MenuWindow2);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow2);
+      Update_Screen;
       return Recipe_Setting;
    end ShowRecipeMenu;
 
@@ -424,20 +426,10 @@ package body Crafts.UI is
             if Result = Request_Denied then
                Result := Driver(RecipesMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               RecipeIndex := Integer'Value(Description(Current(RecipesMenu)));
-               ShowRecipeInfo;
-               Refresh(MenuWindow);
-            end if;
          when 50 | KEY_DOWN => -- Select next recipe
             Result := Driver(RecipesMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(RecipesMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               RecipeIndex := Integer'Value(Description(Current(RecipesMenu)));
-               ShowRecipeInfo;
-               Refresh(MenuWindow);
             end if;
          when Key_F1 => -- Show help
             Erase;
@@ -446,21 +438,15 @@ package body Crafts.UI is
             return Help_Topic;
          when others =>
             Result := Driver(RecipesMenu, Key);
-            if Result = Menu_Ok then
-               RecipeIndex := Integer'Value(Description(Current(RecipesMenu)));
-               ShowRecipeInfo;
-               Refresh(MenuWindow);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(RecipesMenu, M_Clear_Pattern);
                Result := Driver(RecipesMenu, Key);
-               if Result = Menu_Ok then
-                  RecipeIndex :=
-                    Integer'Value(Description(Current(RecipesMenu)));
-                  ShowRecipeInfo;
-                  Refresh(MenuWindow);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         RecipeIndex := Integer'Value(Description(Current(RecipesMenu)));
+         ShowRecipeInfo;
+      end if;
       return Craft_View;
    end CraftKeys;
 
@@ -481,29 +467,21 @@ package body Crafts.UI is
             if Result = Request_Denied then
                Result := Driver(ModulesMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            end if;
          when 50 | KEY_DOWN => -- Select next recipe
             Result := Driver(ModulesMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(ModulesMenu, M_First_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            end if;
          when others =>
             Result := Driver(ModulesMenu, Key);
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(ModulesMenu, M_Clear_Pattern);
                Result := Driver(ModulesMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow2);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow2);
+      end if;
       return Recipe_Setting;
    end RecipeSettingKeys;
 
