@@ -7,8 +7,8 @@ All notable changes to this project will be documented in this file.
 - New enemy ships: huge inquisition ship mk III and advanced huge inquisition
   ship mk III
 - New goals: gain max reputation in 3 bases, gain max reputation in 5 bases,
-  gain max reputation in 7 bases, gain max reputation in 10 bases and gain max
-  reputation in 15 bases
+  gain max reputation in 7 bases, gain max reputation in 10 bases, gain max
+  reputation in 15 bases and gain max reputation in 20 bases
 - Hall of fame
 
 ### Changed
