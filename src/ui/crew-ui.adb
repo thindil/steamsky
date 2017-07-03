@@ -49,7 +49,7 @@ package body Crew.UI is
       SkillsLine, SkillsStartsLine: Line_Position := 0;
    begin
       ClearWindow := Create((Lines - 3), (Columns / 2), 3, (Columns / 2));
-      Refresh(ClearWindow);
+      Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
       if Member.Health < 100 and Member.Health > 80 then
          Health := To_Unbounded_String("Slightly wounded");
@@ -294,8 +294,10 @@ package body Crew.UI is
             Count => 5,
             Color => 1);
       end if;
-      Refresh;
-      Refresh(InfoWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
       Delete(InfoWindow);
       if SkillsPad /= Null_Window then
          Refresh
@@ -335,7 +337,6 @@ package body Crew.UI is
       end if;
       Set_Current(CrewMenu, Crew_Items.all(MemberIndex));
       ShowMemberInfo;
-      Refresh(MenuWindow);
    end ShowCrewInfo;
 
    procedure ShowOrdersMenu is
@@ -530,7 +531,6 @@ package body Crew.UI is
         (OrdersMenu,
          Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
       Post(OrdersMenu);
-      Refresh;
       Refresh(MenuWindow2);
    end ShowOrdersMenu;
 
@@ -590,7 +590,6 @@ package body Crew.UI is
         (OrdersMenu,
          Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
       Post(OrdersMenu);
-      Refresh;
       Refresh(MenuWindow2);
    end ShowOrdersForAll;
 
@@ -643,7 +642,6 @@ package body Crew.UI is
          Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
       Post(PrioritiesMenu);
       Set_Current(PrioritiesMenu, Orders_Items.all(PriorityIndex));
-      Refresh;
       Refresh(MenuWindow2);
    end ShowPrioritiesMenu;
 
@@ -666,20 +664,10 @@ package body Crew.UI is
             if Result = Request_Denied then
                Result := Driver(CrewMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               MemberIndex := Get_Index(Current(CrewMenu));
-               ShowMemberInfo;
-               Refresh(MenuWindow);
-            end if;
          when 50 | KEY_DOWN => -- Select next crew member
             Result := Driver(CrewMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(CrewMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               MemberIndex := Get_Index(Current(CrewMenu));
-               ShowMemberInfo;
-               Refresh(MenuWindow);
             end if;
          when 51 | KEY_NPAGE => -- Scroll skills one line down
             StartIndex := StartIndex + 1;
@@ -702,20 +690,15 @@ package body Crew.UI is
             return Help_Topic;
          when others =>
             Result := Driver(CrewMenu, Key);
-            if Result = Menu_Ok then
-               MemberIndex := Get_Index(Current(CrewMenu));
-               ShowMemberInfo;
-               Refresh(MenuWindow);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(CrewMenu, M_Clear_Pattern);
                Result := Driver(CrewMenu, Key);
-               if Result = Menu_Ok then
-                  MemberIndex := Get_Index(Current(CrewMenu));
-                  ShowMemberInfo;
-                  Refresh(MenuWindow);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         MemberIndex := Get_Index(Current(CrewMenu));
+         ShowMemberInfo;
+      end if;
       if StartIndex < 0 then
          StartIndex := 0;
       end if;
@@ -740,16 +723,10 @@ package body Crew.UI is
             if Result = Request_Denied then
                Result := Driver(OrdersMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            end if;
          when 50 | KEY_DOWN => -- Select next order
             Result := Driver(OrdersMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(OrdersMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
             end if;
          when 10 => -- Select order
             if OrderName = "Piloting" then
@@ -788,16 +765,14 @@ package body Crew.UI is
             return Crew_Info;
          when others =>
             Result := Driver(OrdersMenu, Key);
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(OrdersMenu, M_Clear_Pattern);
                Result := Driver(OrdersMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow2);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow2);
+      end if;
       return Giving_Orders;
    end CrewOrdersKeys;
 
@@ -811,16 +786,10 @@ package body Crew.UI is
             if Result = Request_Denied then
                Result := Driver(OrdersMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            end if;
          when 50 | KEY_DOWN => -- Select next order
             Result := Driver(OrdersMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(OrdersMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
             end if;
          when 10 => -- Select order
             if OrderName = "Repair ship everyone" then
@@ -842,16 +811,14 @@ package body Crew.UI is
             return Crew_Info;
          when others =>
             Result := Driver(OrdersMenu, Key);
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(OrdersMenu, M_Clear_Pattern);
                Result := Driver(OrdersMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow2);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow2);
+      end if;
       return Orders_For_All;
    end CrewOrdersAllKeys;
 
@@ -866,18 +833,10 @@ package body Crew.UI is
             if Result = Request_Denied then
                Result := Driver(PrioritiesMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               PriorityIndex := Get_Index(Current(PrioritiesMenu));
-               Refresh(MenuWindow2);
-            end if;
          when 50 | KEY_DOWN => -- Select next order
             Result := Driver(PrioritiesMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(PrioritiesMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               PriorityIndex := Get_Index(Current(PrioritiesMenu));
-               Refresh(MenuWindow2);
             end if;
          when 52 | KEY_LEFT => -- Set lower priority
             NewPriority :=
@@ -923,16 +882,15 @@ package body Crew.UI is
             end if;
          when others =>
             Result := Driver(PrioritiesMenu, Key);
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(PrioritiesMenu, M_Clear_Pattern);
                Result := Driver(PrioritiesMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow2);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         PriorityIndex := Get_Index(Current(PrioritiesMenu));
+         Refresh(MenuWindow2);
+      end if;
       if NewPriority > -1 then
          ShowPrioritiesMenu;
       end if;
