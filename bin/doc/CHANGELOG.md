@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Not working 'Wait Orders' entry in main menu
 - Crafting interface
 - Crash on redrawing main menu after resize screen
+- Info about having materials/tools in crafting screen
 
 ## [1.3] - 2017-06-25
 
