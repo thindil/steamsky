@@ -33,12 +33,7 @@ package body Crafts.UI is
       Recipe: Craft_Data;
       CurrentLine: Line_Position := 2;
       MAmount, TextLength: Natural := 0;
-      HaveMaterial,
-      HaveWorkplace,
-      IsMaterial,
-      HaveTool,
-      IsTool: Boolean :=
-        False;
+      HaveWorkplace, IsMaterial, IsTool: Boolean := False;
       StartLine: Line_Position;
       StartColumn, EndColumn: Column_Position;
       WorkplaceName: Unbounded_String := Null_Unbounded_String;
@@ -77,14 +72,15 @@ package body Crafts.UI is
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add(Win => InfoWindow, Str => "-");
          MAmount := 0;
-         for Item of Items_List loop
+         for J in Items_List.First_Index .. Items_List.Last_Index loop
             IsMaterial := False;
             if RecipeIndex > 0 then
-               if Item.IType = Recipe.MaterialTypes(I) then
+               if Items_List.Element(J).IType = Recipe.MaterialTypes(I) then
                   IsMaterial := True;
                end if;
             else
-               if Item.Name = Items_List.Element(Recipe.ResultIndex).Name then
+               if Items_List.Element(J).Name =
+                 Items_List.Element(Recipe.ResultIndex).Name then
                   IsMaterial := True;
                end if;
             end if;
@@ -101,15 +97,12 @@ package body Crafts.UI is
                   Str =>
                     Integer'Image(Recipe.MaterialAmounts(I)) &
                     "x" &
-                    To_String(Item.Name));
+                    To_String(Items_List.Element(J).Name));
                Get_Cursor_Position
                  (Win => InfoWindow,
                   Line => CurrentLine,
                   Column => EndColumn);
-               if FindCargo(ItemType => Recipe.MaterialTypes(I)) > 0 then
-                  HaveMaterial := True;
-               end if;
-               if not HaveMaterial then
+               if FindCargo(ProtoIndex => J) = 0 then
                   if StartLine = CurrentLine then
                      TextLength := Natural(EndColumn - StartColumn);
                      Change_Attributes
@@ -138,7 +131,6 @@ package body Crafts.UI is
                      Line => CurrentLine,
                      Column => EndColumn);
                end if;
-               HaveMaterial := False;
                MAmount := MAmount + 1;
             end if;
          end loop;
@@ -148,9 +140,9 @@ package body Crafts.UI is
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
          Add(Win => InfoWindow, Str => "Tool: ");
          MAmount := 0;
-         for Item of Items_List loop
+         for I in Items_List.First_Index .. Items_List.Last_Index loop
             IsTool := False;
-            if Item.IType = Recipe.Tool then
+            if Items_List.Element(I).IType = Recipe.Tool then
                IsTool := True;
             end if;
             if IsTool then
@@ -161,15 +153,14 @@ package body Crafts.UI is
                  (Win => InfoWindow,
                   Line => StartLine,
                   Column => StartColumn);
-               Add(Win => InfoWindow, Str => To_String(Item.Name));
+               Add
+                 (Win => InfoWindow,
+                  Str => To_String(Items_List.Element(I).Name));
                Get_Cursor_Position
                  (Win => InfoWindow,
                   Line => CurrentLine,
                   Column => EndColumn);
-               if FindCargo(ItemType => Recipe.Tool) > 0 then
-                  HaveTool := True;
-               end if;
-               if not HaveTool then
+               if FindCargo(ProtoIndex => I) = 0 then
                   if StartLine = CurrentLine then
                      TextLength := Natural(EndColumn - StartColumn);
                      Change_Attributes
@@ -198,7 +189,6 @@ package body Crafts.UI is
                      Line => CurrentLine,
                      Column => EndColumn);
                end if;
-               HaveMaterial := False;
                MAmount := MAmount + 1;
             end if;
          end loop;
@@ -209,11 +199,11 @@ package body Crafts.UI is
       for Module of PlayerShip.Modules loop
          if Modules_List.Element(Module.ProtoIndex).MType =
            Recipe.Workplace then
+            WorkplaceName := Module.Name;
             if Module.Durability > 0 then
                HaveWorkplace := True;
+               exit;
             end if;
-            WorkplaceName := Module.Name;
-            exit;
          end if;
       end loop;
       if WorkplaceName = Null_Unbounded_String then
