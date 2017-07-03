@@ -77,7 +77,7 @@ procedure SteamSky is
       EndLogging;
    end ErrorInfo;
 begin
-   Set_Directory(Command_Name(Command_Name'First .. Command_Name'Last - 9));
+   Set_Directory(Dir_Name(Command_Name));
    -- Initiate ncurses
    Init_Screen;
    Start_Color;
