@@ -147,7 +147,7 @@ package body Crafts.UI is
             end if;
             if IsTool then
                if MAmount > 0 then
-                  Add(Win => InfoWindow, Str => " or");
+                  Add(Win => InfoWindow, Str => " or ");
                end if;
                Get_Cursor_Position
                  (Win => InfoWindow,
