@@ -68,8 +68,9 @@ package body Goals.UI is
         (GoalsMenu,
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 1, 1));
       Post(GoalsMenu);
-      Refresh;
-      Refresh(MenuWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowGoalsList;
 
    procedure ShowGoalsTypes is
@@ -105,8 +106,9 @@ package body Goals.UI is
         (GoalsMenu,
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 1, 1));
       Post(GoalsMenu);
-      Refresh;
-      Refresh(MenuWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowGoalsTypes;
 
    function GoalsMenuKeys
@@ -122,16 +124,10 @@ package body Goals.UI is
             if Result = Request_Denied then
                Result := Driver(GoalsMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow);
-            end if;
          when 50 | KEY_DOWN => -- Select next goal
             Result := Driver(GoalsMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(GoalsMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow);
             end if;
          when 10 => -- Select goal/goal type or quit
             if CurrentState = GoalsList_View then
@@ -171,16 +167,14 @@ package body Goals.UI is
             end if;
          when others =>
             Result := Driver(GoalsMenu, Key);
-            if Result = Menu_Ok then
-               Refresh(MenuWindow);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(GoalsMenu, M_Clear_Pattern);
                Result := Driver(GoalsMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow);
+      end if;
       return CurrentState;
    end GoalsMenuKeys;
 
