@@ -32,7 +32,7 @@ package body Crafts.UI is
       InfoWindow, ClearWindow, BoxWindow: Window;
       Recipe: Craft_Data;
       CurrentLine: Line_Position := 1;
-      MAmount, TextLength: Natural := 0;
+      MAmount, TextLength, CargoIndex: Natural := 0;
       HaveWorkplace, IsMaterial, IsTool: Boolean := False;
       StartLine: Line_Position;
       StartColumn, EndColumn: Column_Position;
@@ -45,29 +45,6 @@ package body Crafts.UI is
       if RecipeIndex > 0 then
          Recipe := Recipes_List(RecipeIndex);
          WindowHeight := WindowHeight + 1;
-         for I in
-           Recipe.MaterialTypes.First_Index ..
-               Recipe.MaterialTypes.Last_Index loop
-            TextLength := 2;
-            for Item of Items_List loop
-               if Item.IType = Recipe.MaterialTypes(I) then
-                  if TextLength > 2 then
-                     TextLength := TextLength + 3;
-                  end if;
-                  TextLength :=
-                    TextLength +
-                    Integer'Image(Recipe.MaterialAmounts(I))'Length +
-                    1 +
-                    Length(Item.Name);
-               end if;
-            end loop;
-            if TextLength > (Natural(Columns / 2) - 3) then
-               WindowHeight :=
-                 WindowHeight +
-                 Line_Position(TextLength / (Natural(Columns / 2) - 3));
-            end if;
-            TextLength := 0;
-         end loop;
       else
          Recipe.MaterialTypes.Append
          (New_Item => Items_List(abs (RecipeIndex)).IType);
@@ -86,6 +63,37 @@ package body Crafts.UI is
          Recipe.BaseType := 0;
          Recipe.Tool := AlchemyTools;
       end if;
+      for I in
+        Recipe.MaterialTypes.First_Index ..
+            Recipe.MaterialTypes.Last_Index loop
+         TextLength := 2;
+         for J in Items_List.Iterate loop
+            if Items_List(J).IType = Recipe.MaterialTypes(I) then
+               if TextLength > 2 then
+                  TextLength := TextLength + 3;
+               end if;
+               TextLength :=
+                 TextLength +
+                 Integer'Image(Recipe.MaterialAmounts(I))'Length +
+                 1 +
+                 Length(Items_List(J).Name);
+               CargoIndex :=
+                 FindCargo(ProtoIndex => Objects_Container.To_Index(J));
+               if CargoIndex > 0 then
+                  TextLength :=
+                    TextLength +
+                    Integer'Image(PlayerShip.Cargo(CargoIndex).Amount)'Length +
+                    1;
+               end if;
+            end if;
+         end loop;
+         if TextLength > (Natural(Columns / 2) - 3) then
+            WindowHeight :=
+              WindowHeight +
+              Line_Position(TextLength / (Natural(Columns / 2) - 3));
+         end if;
+         TextLength := 0;
+      end loop;
       if Recipe.Tool /= To_Unbounded_String("None") then
          TextLength := 6;
          for Item of Items_List loop
@@ -98,8 +106,8 @@ package body Crafts.UI is
          end loop;
          if TextLength > (Natural(Columns / 2) - 3) then
             WindowHeight :=
-               WindowHeight +
-               Line_Position(TextLength / (Natural(Columns / 2) - 3));
+              WindowHeight +
+              Line_Position(TextLength / (Natural(Columns / 2) - 3));
          end if;
       end if;
       WindowHeight :=
@@ -153,8 +161,23 @@ package body Crafts.UI is
                  (Win => InfoWindow,
                   Line => CurrentLine,
                   Column => EndColumn);
-               if FindCargo(ProtoIndex => Objects_Container.To_Index(J)) =
-                 0 then
+               CargoIndex :=
+                 FindCargo(ProtoIndex => Objects_Container.To_Index(J));
+               if CargoIndex > 0 then
+                  TextLength :=
+                    Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)'Length;
+                  Add
+                    (Win => InfoWindow,
+                     Str =>
+                       "(" &
+                       Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)
+                         (2 .. TextLength) &
+                       ")");
+                  Get_Cursor_Position
+                    (Win => InfoWindow,
+                     Line => CurrentLine,
+                     Column => EndColumn);
+               else
                   if StartLine = CurrentLine then
                      TextLength := Natural(EndColumn - StartColumn);
                      Change_Attributes
