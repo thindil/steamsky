@@ -37,7 +37,7 @@ package body Events.UI is
       WindowHeight: Line_Position := 5;
    begin
       ClearWindow := Create(10, (Columns / 2), 4, (Columns / 2));
-      Refresh(ClearWindow);
+      Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
       if Events_List(EventIndex).EType = DoublePrice then
          WindowHeight := 6;
@@ -119,9 +119,11 @@ package body Events.UI is
          Column => (Columns / 2) + 6,
          Count => 5,
          Color => 1);
-      Refresh;
-      Refresh(InfoWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowEventInfo;
 
    procedure ShowEvents is
@@ -163,7 +165,6 @@ package body Events.UI is
             Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
          Post(EventsMenu);
          ShowEventInfo;
-         Refresh(MenuWindow);
       else
          Move_Cursor(Line => (Lines / 3), Column => (Columns / 2) - 21);
          Add(Str => "You don't know about any events.");
@@ -218,19 +219,13 @@ package body Events.UI is
                return Sky_Map_View;
             when others =>
                Result := Driver(EventsMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow);
-               else
+               if Result /= Menu_Ok then
                   Result := Driver(EventsMenu, M_Clear_Pattern);
                   Result := Driver(EventsMenu, Key);
-                  if Result = Menu_Ok then
-                     Refresh(MenuWindow);
-                  end if;
                end if;
          end case;
          if Result = Menu_Ok then
             ShowEventInfo;
-            Refresh(MenuWindow);
          end if;
       else
          case Key is
