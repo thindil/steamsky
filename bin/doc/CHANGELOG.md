@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
   in 25 bases and gain max reputation in 50 bases
 - Hall of fame
 - Charges for docking
+- Info about amount of owned materials in crafting screen
 
 ### Changed
 - Updated REAMDE.md
