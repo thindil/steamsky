@@ -8,8 +8,8 @@ All notable changes to this project will be documented in this file.
   ship mk III
 - New goals: gain max reputation in 3 bases, gain max reputation in 5 bases,
   gain max reputation in 7 bases, gain max reputation in 10 bases, gain max
-  reputation in 15 bases, gain max reputation in 20 bases and gain max
-  reputation in 25 bases
+  reputation in 15 bases, gain max reputation in 20 bases, gain max reputation
+  in 25 bases and gain max reputation in 50 bases
 - Hall of fame
 - Charges for docking
 
