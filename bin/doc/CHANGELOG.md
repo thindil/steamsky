@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Crash on redrawing main menu after resize screen
 - Info about having materials/tools in crafting screen
 - Typo in info about tools in crafting screen
+- Crash in crafting screen when more than one tools is used in recipe
 
 ## [1.3] - 2017-06-25
 
