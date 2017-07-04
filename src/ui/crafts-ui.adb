@@ -51,7 +51,7 @@ package body Crafts.UI is
             TextLength := 2;
             for Item of Items_List loop
                if Item.IType = Recipe.MaterialTypes(I) then
-                  if TextLength > 0 then
+                  if TextLength > 2 then
                      TextLength := TextLength + 3;
                   end if;
                   TextLength :=
@@ -85,6 +85,22 @@ package body Crafts.UI is
          Recipe.Difficulty := 1;
          Recipe.BaseType := 0;
          Recipe.Tool := AlchemyTools;
+      end if;
+      if Recipe.Tool /= To_Unbounded_String("None") then
+         TextLength := 6;
+         for Item of Items_List loop
+            if Item.IType = Recipe.Tool then
+               if TextLength > 6 then
+                  TextLength := TextLength + 4;
+               end if;
+               TextLength := TextLength + Length(Item.Name);
+            end if;
+         end loop;
+         if TextLength > (Natural(Columns / 2) - 3) then
+            WindowHeight :=
+               WindowHeight +
+               Line_Position(TextLength / (Natural(Columns / 2) - 3));
+         end if;
       end if;
       WindowHeight :=
         WindowHeight + Line_Position(Recipe.MaterialTypes.Length);
