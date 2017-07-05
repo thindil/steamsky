@@ -40,4 +40,7 @@ Amount = 25
 [14]
 Type = Reputation
 Amount = 50
+[15]
+Type = Destroy
+Amount = 250
 []
