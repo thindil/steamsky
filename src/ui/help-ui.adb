@@ -52,8 +52,9 @@ package body Help.UI is
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
       Post(HelpMenu);
       Set_Current(HelpMenu, Help_Items.all(TopicIndex));
-      Refresh;
-      Refresh(MenuWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowHelpMenu;
 
    procedure ShowHelp
@@ -123,32 +124,24 @@ package body Help.UI is
             if Result = Request_Denied then
                Result := Driver(HelpMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow);
-            end if;
          when 50 | KEY_DOWN => -- Select next help topic
             Result := Driver(HelpMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(HelpMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow);
             end if;
          when 10 => -- Select topic to read
             DrawGame(Help_Topic);
             return Help_Topic;
          when others =>
             Result := Driver(HelpMenu, Key);
-            if Result = Menu_Ok then
-               Refresh(MenuWindow);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(HelpMenu, M_Clear_Pattern);
                Result := Driver(HelpMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow);
+      end if;
       return Help_View;
    end HelpMenuKeys;
 
