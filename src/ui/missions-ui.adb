@@ -42,7 +42,7 @@ package body Missions.UI is
       WindowHeight: Line_Position := 6;
    begin
       ClearWindow := Create(15, (Columns / 2), 3, (Columns / 2));
-      Refresh(ClearWindow);
+      Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
       if Mission.Finished then
          WindowHeight := WindowHeight + 1;
@@ -194,9 +194,11 @@ package body Missions.UI is
             Count => 5,
             Color => 1);
       end if;
-      Refresh;
-      Refresh(InfoWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowMissionInfo;
 
    procedure ShowMissions is
@@ -245,7 +247,6 @@ package body Missions.UI is
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
       Post(MissionsMenu);
       ShowMissionInfo;
-      Refresh(MenuWindow);
    end ShowMissions;
 
    function ShowMissionsKeys(Key: Key_Code) return GameStates is
@@ -304,19 +305,13 @@ package body Missions.UI is
                return Sky_Map_View;
             when others =>
                Result := Driver(MissionsMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow);
-               else
+               if Result /= Menu_Ok then
                   Result := Driver(MissionsMenu, M_Clear_Pattern);
                   Result := Driver(MissionsMenu, Key);
-                  if Result = Menu_Ok then
-                     Refresh(MenuWindow);
-                  end if;
                end if;
          end case;
          if Result = Menu_Ok then
             ShowMissionInfo;
-            Refresh(MenuWindow);
          end if;
       else
          case Key is
