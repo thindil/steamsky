@@ -26,6 +26,7 @@ package Config is
       PlayerGender: Character; -- Default player gender
       ShipName: Unbounded_String; -- Default ship name
    end record;
+   type Keys_Array is array(1 .. 8) of Integer; -- Keys used in ship movement
    type GameSettingsRecord is -- Data for game settings
    record
       AutoRest: Boolean; -- If true, rest when pilot/engineer need rest
@@ -33,6 +34,7 @@ package Config is
       AutoCenter: Boolean; -- If true, back to ship after sets destination for it
       AutoReturn: Boolean; -- If true, set base as destination for ship after finished mission
       AutoFinish: Boolean; -- If true, complete mission if ship is near corresponding base
+      Keys: Keys_Array; -- Settings for ship movement keys
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
