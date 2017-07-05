@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Hall of fame
 - Charges for docking
 - Info about amount of owned materials in crafting screen
+- Option to set ship movement keys
 
 ### Changed
 - Updated REAMDE.md
