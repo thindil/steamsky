@@ -24,7 +24,7 @@ package body Config is
    procedure LoadConfig is
       ConfigFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
-      EqualIndex: Natural;
+      EqualIndex, StartIndex, EndIndex: Natural;
    begin
       NewGameSettings :=
         (PlayerName => To_Unbounded_String("Laeran"),
@@ -35,7 +35,8 @@ package body Config is
          UndockSpeed => QUARTER_SPEED,
          AutoCenter => True,
          AutoReturn => True,
-         AutoFinish => True);
+         AutoFinish => True,
+         Keys => (56, 50, 54, 52, 49, 51, 55, 57));
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -78,6 +79,17 @@ package body Config is
                else
                   GameSettings.AutoFinish := False;
                end if;
+            elsif FieldName = To_Unbounded_String("Keys") then
+               StartIndex := 1;
+               for I in GameSettings.Keys'Range loop
+                  EndIndex := Index(Value, ", ", StartIndex);
+                  if EndIndex = 0 then
+                     EndIndex := Length(Value) + 1;
+                  end if;
+                  GameSettings.Keys(I) :=
+                    Integer'Value(Slice(Value, StartIndex, EndIndex - 1));
+                  StartIndex := EndIndex + 2;
+               end loop;
             end if;
          end if;
       end loop;
@@ -118,6 +130,14 @@ package body Config is
       else
          Put_Line(ConfigFile, "AutoFinish = No");
       end if;
+      Put(ConfigFile, "Keys = ");
+      for I in GameSettings.Keys'Range loop
+         if I < GameSettings.Keys'Last then
+            Put(ConfigFile, Integer'Image(GameSettings.Keys(I)) & ", ");
+         else
+            Put_Line(ConfigFile, Integer'Image(GameSettings.Keys(I)));
+         end if;
+      end loop;
       Close(ConfigFile);
    end SaveConfig;
 
