@@ -28,6 +28,39 @@ package body GameOptions is
 
    OptionsForm: Forms.Form;
    FormWindow: Window;
+   KeySetting: Boolean := False;
+
+   function GetKeyName(Key: Key_Code) return String is
+   begin
+      case Key is
+         when 56 =>
+            return "Keypad Up";
+         when 50 =>
+            return "Keypad Down";
+         when 54 =>
+            return "Keypad Right";
+         when 52 =>
+            return "Keypad Left";
+         when 49 =>
+            return "Keypad End";
+         when 51 =>
+            return "Keypad PageDown";
+         when 55 =>
+            return "Keypad Home";
+         when 57 =>
+            return "Keypad PageUp";
+         when KEY_UP =>
+            return "Arrow Up";
+         when KEY_DOWN =>
+            return "Arrow Down";
+         when KEY_RIGHT =>
+            return "Arrow Right";
+         when KEY_LEFT =>
+            return "Arrow Left";
+         when others =>
+            return "" & Character'Val(Key);
+      end case;
+   end GetKeyName;
 
    procedure ShowOptions is
       Options_Fields: constant Field_Array_Access := new Field_Array(1 .. 31);
@@ -75,37 +108,7 @@ package body GameOptions is
          FieldOptions := Get_Options(Options_Fields.all(FormIndex));
          FieldOptions.Edit := False;
          Set_Options(Options_Fields.all(FormIndex), FieldOptions);
-         case Key is
-            when 56 =>
-               Set_Buffer(Options_Fields.all(FormIndex), 0, "Keypad Up");
-            when 50 =>
-               Set_Buffer(Options_Fields.all(FormIndex), 0, "Keypad Down");
-            when 54 =>
-               Set_Buffer(Options_Fields.all(FormIndex), 0, "Keypad Right");
-            when 52 =>
-               Set_Buffer(Options_Fields.all(FormIndex), 0, "Keypad Left");
-            when 49 =>
-               Set_Buffer(Options_Fields.all(FormIndex), 0, "Keypad End");
-            when 51 =>
-               Set_Buffer(Options_Fields.all(FormIndex), 0, "Keypad PageDown");
-            when 55 =>
-               Set_Buffer(Options_Fields.all(FormIndex), 0, "Keypad Home");
-            when 57 =>
-               Set_Buffer(Options_Fields.all(FormIndex), 0, "Keypad PageUp");
-            when KEY_UP =>
-               Set_Buffer(Options_Fields.all(FormIndex), 0, "Arrow Up");
-            when KEY_DOWN =>
-               Set_Buffer(Options_Fields.all(FormIndex), 0, "Arrow Down");
-            when KEY_RIGHT =>
-               Set_Buffer(Options_Fields.all(FormIndex), 0, "Arrow Right");
-            when KEY_LEFT =>
-               Set_Buffer(Options_Fields.all(FormIndex), 0, "Arrow Left");
-            when others =>
-               Set_Buffer
-                 (Options_Fields.all(FormIndex),
-                  0,
-                  "" & Character'Val(Key));
-         end case;
+         Set_Buffer(Options_Fields.all(FormIndex), 0, GetKeyName(Key));
       end CreateKeyField;
    begin
       CreateLabel(0, "Auto rest when crew is tired: ");
@@ -254,14 +257,55 @@ package body GameOptions is
             end if;
          end loop;
       end SetDescription;
+      function SetKey(KeyName: String) return Integer is
+      begin
+         if KeyName = "Keypad Up" then
+            return 56;
+         elsif KeyName = "Keypad Down" then
+            return 50;
+         elsif KeyName = "Keypad Right" then
+            return 54;
+         elsif KeyName = "Keypad Left" then
+            return 52;
+         elsif KeyName = "Keypad End" then
+            return 49;
+         elsif KeyName = "Keypad PageDown" then
+            return 51;
+         elsif KeyName = "Keypad Home" then
+            return 55;
+         elsif KeyName = "Keypad PageUp" then
+            return 57;
+         elsif KeyName = "Arrow Up" then
+            return Integer(KEY_UP);
+         elsif KeyName = "Arrow Down" then
+            return Integer(KEY_DOWN);
+         elsif KeyName = "Arrow Right" then
+            return Integer(KEY_RIGHT);
+         elsif KeyName = "Arrow Left" then
+            return Integer(KEY_LEFT);
+         end if;
+         return Character'Pos(KeyName(KeyName'First));
+      end SetKey;
    begin
       case Key is
-         when KEY_UP => -- Select previous field
-            Result := Driver(OptionsForm, F_Previous_Field);
-            FieldIndex := Get_Index(Current(OptionsForm));
-         when KEY_DOWN => -- Select next field
-            Result := Driver(OptionsForm, F_Next_Field);
-            FieldIndex := Get_Index(Current(OptionsForm));
+         when KEY_UP => -- Select previous field or set up arrow for key shortcut
+            if not KeySetting then
+               Result := Driver(OptionsForm, F_Previous_Field);
+               FieldIndex := Get_Index(Current(OptionsForm));
+            else
+               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
+               Result := Form_Ok;
+               KeySetting := False;
+            end if;
+         when KEY_DOWN => -- Select next field or set down arrow for key shortcut
+            if not KeySetting then
+               Result := Driver(OptionsForm, F_Next_Field);
+               FieldIndex := Get_Index(Current(OptionsForm));
+            else
+               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
+               Result := Form_Ok;
+               KeySetting := False;
+            end if;
          when 10 => -- change option value
             if FieldIndex < 11 then
                Result := Driver(OptionsForm, F_Next_Choice);
@@ -271,6 +315,13 @@ package body GameOptions is
                Set_Background
                  (Current(OptionsForm),
                   (Reverse_Video => True, others => False));
+            elsif FieldIndex > 13 and FieldIndex < 29 then
+               SetDescription
+                 ("Press new key for set this shortcut.",
+                  FieldIndex);
+               KeySetting := True;
+               Refresh(FormWindow);
+               return GameOptions_View;
             elsif FieldIndex = 29 then
                Result := Driver(OptionsForm, F_Previous_Page);
                FieldIndex := 2;
@@ -279,59 +330,91 @@ package body GameOptions is
                   (Reverse_Video => True, others => False));
             end if;
          when Character'Pos('q') |
-           Character'Pos('Q') => -- Save options and quit to map
-            FieldValue :=
-              To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 2)));
-            if FieldValue = To_Unbounded_String("Yes ->") then
-               GameSettings.AutoRest := True;
+           Character'Pos
+             ('Q') => -- Save options and quit to map or set Q as key shortcut
+            if not KeySetting then
+               FieldValue :=
+                 To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 2)));
+               if FieldValue = To_Unbounded_String("Yes ->") then
+                  GameSettings.AutoRest := True;
+               else
+                  GameSettings.AutoRest := False;
+               end if;
+               FieldValue :=
+                 Trim
+                   (To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 4))),
+                    Side => Both);
+               if FieldValue = To_Unbounded_String("Full Stop ->") then
+                  GameSettings.UndockSpeed := FULL_STOP;
+               elsif FieldValue = To_Unbounded_String("Half Speed ->") then
+                  GameSettings.UndockSpeed := HALF_SPEED;
+               elsif FieldValue = To_Unbounded_String("Quarter Speed ->") then
+                  GameSettings.UndockSpeed := QUARTER_SPEED;
+               elsif FieldValue = To_Unbounded_String("Full Speed ->") then
+                  GameSettings.UndockSpeed := FULL_SPEED;
+               end if;
+               FieldValue :=
+                 To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 6)));
+               if FieldValue = To_Unbounded_String("Yes ->") then
+                  GameSettings.AutoCenter := True;
+               else
+                  GameSettings.AutoCenter := False;
+               end if;
+               FieldValue :=
+                 To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 8)));
+               if FieldValue = To_Unbounded_String("Yes ->") then
+                  GameSettings.AutoReturn := True;
+               else
+                  GameSettings.AutoReturn := False;
+               end if;
+               FieldValue :=
+                 To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 10)));
+               if FieldValue = To_Unbounded_String("Yes ->") then
+                  GameSettings.AutoFinish := True;
+               else
+                  GameSettings.AutoFinish := False;
+               end if;
+               for I in GameSettings.Keys'Range loop
+                  FieldIndex := 12 + (I * 2);
+                  FieldValue :=
+                    Trim
+                      (To_Unbounded_String
+                         (Get_Buffer(Fields(OptionsForm, FieldIndex))),
+                       Side => Both);
+                  GameSettings.Keys(I) := SetKey(To_String(FieldValue));
+               end loop;
+               SaveConfig;
+               Post(OptionsForm, False);
+               Delete(OptionsForm);
+               DrawGame(Sky_Map_View);
+               return Sky_Map_View;
             else
-               GameSettings.AutoRest := False;
+               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
+               Result := Form_Ok;
+               KeySetting := False;
             end if;
-            FieldValue :=
-              Trim
-                (To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 4))),
-                 Side => Both);
-            if FieldValue = To_Unbounded_String("Full Stop ->") then
-               GameSettings.UndockSpeed := FULL_STOP;
-            elsif FieldValue = To_Unbounded_String("Half Speed ->") then
-               GameSettings.UndockSpeed := HALF_SPEED;
-            elsif FieldValue = To_Unbounded_String("Quarter Speed ->") then
-               GameSettings.UndockSpeed := QUARTER_SPEED;
-            elsif FieldValue = To_Unbounded_String("Full Speed ->") then
-               GameSettings.UndockSpeed := FULL_SPEED;
-            end if;
-            FieldValue :=
-              To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 6)));
-            if FieldValue = To_Unbounded_String("Yes ->") then
-               GameSettings.AutoCenter := True;
-            else
-               GameSettings.AutoCenter := False;
-            end if;
-            FieldValue :=
-              To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 8)));
-            if FieldValue = To_Unbounded_String("Yes ->") then
-               GameSettings.AutoReturn := True;
-            else
-               GameSettings.AutoReturn := False;
-            end if;
-            FieldValue :=
-              To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 10)));
-            if FieldValue = To_Unbounded_String("Yes ->") then
-               GameSettings.AutoFinish := True;
-            else
-               GameSettings.AutoFinish := False;
-            end if;
-            SaveConfig;
-            Post(OptionsForm, False);
-            Delete(OptionsForm);
-            DrawGame(Sky_Map_View);
-            return Sky_Map_View;
          when KEY_RIGHT => -- Select next value
-            Result := Driver(OptionsForm, F_Next_Choice);
+            if not KeySetting then
+               Result := Driver(OptionsForm, F_Next_Choice);
+            else
+               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
+               Result := Form_Ok;
+               KeySetting := False;
+            end if;
          when KEY_LEFT => -- Select previous value
-            Result := Driver(OptionsForm, F_Previous_Choice);
+            if not KeySetting then
+               Result := Driver(OptionsForm, F_Previous_Choice);
+            else
+               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
+               Result := Form_Ok;
+               KeySetting := False;
+            end if;
          when others =>
-            Result := Driver(OptionsForm, Key);
+            if KeySetting then
+               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
+               Result := Form_Ok;
+               KeySetting := False;
+            end if;
       end case;
       if Result = Form_Ok then
          case FieldIndex is
