@@ -58,7 +58,11 @@ package body GameOptions is
          when KEY_LEFT =>
             return "Arrow Left";
          when others =>
-            return "" & Character'Val(Key);
+            if Key in Normal_Key_Code then
+               return "" & Character'Val(Key);
+            else
+               return To_String(Trim(To_Unbounded_String(Key_Code'Image(Key)), Side => Both));
+            end if;
       end case;
    end GetKeyName;
 
@@ -287,8 +291,10 @@ package body GameOptions is
             return Integer(KEY_RIGHT);
          elsif KeyName = "Arrow Left" then
             return Integer(KEY_LEFT);
+         elsif KeyName'Length = 1 then
+            return Character'Pos(KeyName(KeyName'First));
          end if;
-         return Character'Pos(KeyName(KeyName'First));
+         return Integer'Value(KeyName);
       end SetKey;
    begin
       case Key is
