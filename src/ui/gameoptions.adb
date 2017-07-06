@@ -63,7 +63,7 @@ package body GameOptions is
    end GetKeyName;
 
    procedure ShowOptions is
-      Options_Fields: constant Field_Array_Access := new Field_Array(1 .. 31);
+      Options_Fields: constant Field_Array_Access := new Field_Array(1 .. 35);
       FormHeight: Line_Position;
       FormLength: Column_Position;
       FieldOptions: Field_Option_Set;
@@ -206,20 +206,24 @@ package body GameOptions is
       CreateKeyField(6);
       CreateLabel(7, "Move ship up/right: ", 2);
       CreateKeyField(7);
-      Options_Fields.all(29) := New_Field(1, 7, 9, 0, 0, 0);
-      Set_Buffer(Options_Fields.all(29), 0, "<- Back");
-      FieldOptions := Get_Options(Options_Fields.all(29));
+      CreateLabel(8, "Wait 1 min or move 1 field: ", 2);
+      CreateKeyField(8);
+      CreateLabel(9, "Auto move ship: ", 2);
+      CreateKeyField(9);
+      Options_Fields.all(33) := New_Field(1, 7, 11, 0, 0, 0);
+      Set_Buffer(Options_Fields.all(33), 0, "<- Back");
+      FieldOptions := Get_Options(Options_Fields.all(33));
       FieldOptions.Edit := False;
-      Set_Options(Options_Fields.all(29), FieldOptions);
-      Options_Fields.all(30) := New_Field(6, Columns, 11, 0, 0, 0);
+      Set_Options(Options_Fields.all(33), FieldOptions);
+      Options_Fields.all(34) := New_Field(6, Columns, 13, 0, 0, 0);
       Set_Buffer
-        (Options_Fields.all(30),
+        (Options_Fields.all(34),
          0,
          "Press Enter to start setting new key.");
-      FieldOptions := Get_Options(Options_Fields.all(30));
+      FieldOptions := Get_Options(Options_Fields.all(34));
       FieldOptions.Active := False;
-      Set_Options(Options_Fields.all(30), FieldOptions);
-      Options_Fields.all(31) := Null_Field;
+      Set_Options(Options_Fields.all(34), FieldOptions);
+      Options_Fields.all(35) := Null_Field;
       OptionsForm := New_Form(Options_Fields);
       Set_Options(OptionsForm, (others => False));
       Scale(OptionsForm, FormHeight, FormLength);
@@ -239,12 +243,12 @@ package body GameOptions is
       FieldValue: Unbounded_String;
       procedure SetDescription(Description: String; Field: Positive) is
          FieldsNumbers: constant array(Positive range <>) of Positive :=
-           (2, 4, 6, 8, 10, 11, 14, 16, 18, 20, 22, 24, 26, 28, 29);
+           (2, 4, 6, 8, 10, 11, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 33);
       begin
          if Field < 14 then
             Set_Buffer(Fields(OptionsForm, 12), 0, Description);
          else
-            Set_Buffer(Fields(OptionsForm, 30), 0, Description);
+            Set_Buffer(Fields(OptionsForm, 34), 0, Description);
          end if;
          Set_Background
            (Current(OptionsForm),
@@ -315,14 +319,14 @@ package body GameOptions is
                Set_Background
                  (Current(OptionsForm),
                   (Reverse_Video => True, others => False));
-            elsif FieldIndex > 13 and FieldIndex < 29 then
+            elsif FieldIndex > 13 and FieldIndex < 33 then
                SetDescription
                  ("Press new key for set this shortcut.",
                   FieldIndex);
                KeySetting := True;
                Refresh(FormWindow);
                return GameOptions_View;
-            elsif FieldIndex = 29 then
+            elsif FieldIndex = 33 then
                Result := Driver(OptionsForm, F_Previous_Page);
                FieldIndex := 2;
                Set_Background
@@ -442,10 +446,10 @@ package body GameOptions is
                SetDescription
                  ("Set ship movement keys (directions, auto-move key, etc).",
                   11);
-            when 14 .. 28 =>
+            when 14 .. 32 =>
                SetDescription("Press Enter to start setting key.", FieldIndex);
-            when 29 =>
-               SetDescription("Back to general game settings.", 29);
+            when 33 =>
+               SetDescription("Back to general game settings.", 33);
             when others =>
                null;
          end case;
