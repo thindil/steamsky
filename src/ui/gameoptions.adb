@@ -57,11 +57,28 @@ package body GameOptions is
             return "Arrow Right";
          when KEY_LEFT =>
             return "Arrow Left";
+         when 32 =>
+            return "Space";
+         when KEY_PPAGE =>
+            return "Page Up";
+         when KEY_NPAGE =>
+            return "Page Down";
+         when Key_Home =>
+            return "Home";
+         when Key_End =>
+            return "End";
+         when KEY_DC =>
+            return "Delete";
+         when KEY_IC =>
+            return "Insert";
          when others =>
             if Key in Normal_Key_Code then
                return "" & Character'Val(Key);
             else
-               return To_String(Trim(To_Unbounded_String(Key_Code'Image(Key)), Side => Both));
+               return To_String
+                   (Trim
+                      (To_Unbounded_String(Key_Code'Image(Key)),
+                       Side => Both));
             end if;
       end case;
    end GetKeyName;
@@ -291,6 +308,20 @@ package body GameOptions is
             return Integer(KEY_RIGHT);
          elsif KeyName = "Arrow Left" then
             return Integer(KEY_LEFT);
+         elsif KeyName = "Space" then
+            return 32;
+         elsif KeyName = "Page Up" then
+            return Integer(KEY_PPAGE);
+         elsif KeyName = "Page Down" then
+            return Integer(KEY_NPAGE);
+         elsif KeyName = "Home" then
+            return Integer(Key_Home);
+         elsif KeyName = "End" then
+            return Integer(Key_End);
+         elsif KeyName = "Delete" then
+            return Integer(KEY_DC);
+         elsif KeyName = "Insert" then
+            return Integer(KEY_IC);
          elsif KeyName'Length = 1 then
             return Character'Pos(KeyName(KeyName'First));
          end if;
