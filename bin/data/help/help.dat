@@ -27,8 +27,8 @@ Ship speed depends on engine power, engine damage, ship weight (with cargo) and 
 With higher set ship speed, there is bigger chance that one of engines will be damaged. More experienced Engineer have better chances to prevent engine damage during fly.
 As you fly near bases (you are in this same cell where base is), you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are in default text color. All bases marked on map as 'o'.
 You can set your destination travel point on map by selecting map cell (with SHIFT + arrow keys) and then press Enter.
-If you have set travel destination, press key 5 on keypad to auto travel by one map field. If you want move further, you can press '%' key (shift + '5' key) - then you been move until you reach destination, combat happen or you can't move anymore (no pilot/engineer, too damaged engines, no fuel, etc.).
-If destination is not set, pressing key 5 on keypad allow you to wait 1 game minute without moving.
+If you have set travel destination, press (by default) key 5 on keypad to auto travel by one map field. If you want move further, you can press (by default) '%' key (shift + '5' key) - then you been move until you reach destination, combat happen or you can't move anymore (no pilot/engineer, too damaged engines, no fuel, etc.).
+If destination is not set, pressing (by default) key 5 on keypad allow you to wait 1 game minute without moving.
 [Trading]
 To buy/sell items from bases you must first dock to base and having assigned crew member to talking in bases. All bases buy all items, but which items are sold, depends on base type.
 Prices in bases depends on skill Rhetoric of assigned to trade crew member - with higher skill you can sell items for more and buy for less. Additionally, prices depends on your reputation in base. With high reputation you earn more or pay less for goods, new recruits or services. 
