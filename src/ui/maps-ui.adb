@@ -486,89 +486,92 @@ package body Maps.UI is
          Result := MoveShip(0, -1, -1);
       elsif Key = Key_Code(GameSettings.Keys(8)) then -- Move up/right
          Result := MoveShip(0, 1, -1);
+      elsif Key =
+        Key_Code
+          (GameSettings.Keys
+             (9)) then -- Wait 1 minute or travel to destination if set
+         if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
+            UpdateGame(1);
+         else
+            if PlayerShip.DestinationX > PlayerShip.SkyX then
+               NewX := 1;
+            elsif PlayerShip.DestinationX < PlayerShip.SkyX then
+               NewX := -1;
+            end if;
+            if PlayerShip.DestinationY > PlayerShip.SkyY then
+               NewY := 1;
+            elsif PlayerShip.DestinationY < PlayerShip.SkyY then
+               NewY := -1;
+            end if;
+            Result := MoveShip(0, NewX, NewY);
+            if PlayerShip.DestinationX = PlayerShip.SkyX and
+              PlayerShip.DestinationY = PlayerShip.SkyY then
+               AddMessage
+                 ("You reached your travel destination.",
+                  OrderMessage);
+               PlayerShip.DestinationX := 0;
+               PlayerShip.DestinationY := 0;
+               if GameSettings.AutoFinish then
+                  AutoFinishMissions;
+               end if;
+               return 4;
+            end if;
+         end if;
+      elsif Key =
+        Key_Code
+          (GameSettings.Keys
+             (10)) then -- Move to destination until combat happen or reach destination or can't move
+         if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
+            return 0;
+         end if;
+         loop
+            NewX := 0;
+            NewY := 0;
+            if PlayerShip.DestinationX > PlayerShip.SkyX then
+               NewX := 1;
+            elsif PlayerShip.DestinationX < PlayerShip.SkyX then
+               NewX := -1;
+            end if;
+            if PlayerShip.DestinationY > PlayerShip.SkyY then
+               NewY := 1;
+            elsif PlayerShip.DestinationY < PlayerShip.SkyY then
+               NewY := -1;
+            end if;
+            Result := MoveShip(0, NewX, NewY);
+            exit when Result = 0;
+            if CheckForEvent(Sky_Map_View) /= Sky_Map_View then
+               return 5;
+            end if;
+            if Result = 8 then
+               WaitForRest;
+               Result := 1;
+               if CheckForEvent(Sky_Map_View) /= Sky_Map_View then
+                  return 5;
+               end if;
+            end if;
+            if PlayerShip.DestinationX = PlayerShip.SkyX and
+              PlayerShip.DestinationY = PlayerShip.SkyY then
+               AddMessage
+                 ("You reached your travel destination.",
+                  OrderMessage);
+               PlayerShip.DestinationX := 0;
+               PlayerShip.DestinationY := 0;
+               if GameSettings.AutoFinish then
+                  AutoFinishMissions;
+               end if;
+               return 4;
+            end if;
+            exit when Result = 6 or Result = 7;
+         end loop;
+         if Result = 0 then
+            Result := 4;
+         end if;
       else
          case Key is
             when Character'Pos('o') | Character'Pos('O') => -- Ship orders menu
                Result := 2;
             when Character'Pos('w') | Character'Pos('W') => -- Wait order menu
                Result := 3;
-            when 53 => -- Wait 1 minute or travel to destination if set
-               if PlayerShip.DestinationX = 0 and
-                 PlayerShip.DestinationY = 0 then
-                  UpdateGame(1);
-               else
-                  if PlayerShip.DestinationX > PlayerShip.SkyX then
-                     NewX := 1;
-                  elsif PlayerShip.DestinationX < PlayerShip.SkyX then
-                     NewX := -1;
-                  end if;
-                  if PlayerShip.DestinationY > PlayerShip.SkyY then
-                     NewY := 1;
-                  elsif PlayerShip.DestinationY < PlayerShip.SkyY then
-                     NewY := -1;
-                  end if;
-                  Result := MoveShip(0, NewX, NewY);
-                  if PlayerShip.DestinationX = PlayerShip.SkyX and
-                    PlayerShip.DestinationY = PlayerShip.SkyY then
-                     AddMessage
-                       ("You reached your travel destination.",
-                        OrderMessage);
-                     PlayerShip.DestinationX := 0;
-                     PlayerShip.DestinationY := 0;
-                     if GameSettings.AutoFinish then
-                        AutoFinishMissions;
-                     end if;
-                     return 4;
-                  end if;
-               end if;
-            when Character'Pos('%') => -- Move to destination until combat
-               -- happen or reach destination or can't move
-               if PlayerShip.DestinationX = 0 and
-                 PlayerShip.DestinationY = 0 then
-                  return 0;
-               end if;
-               loop
-                  NewX := 0;
-                  NewY := 0;
-                  if PlayerShip.DestinationX > PlayerShip.SkyX then
-                     NewX := 1;
-                  elsif PlayerShip.DestinationX < PlayerShip.SkyX then
-                     NewX := -1;
-                  end if;
-                  if PlayerShip.DestinationY > PlayerShip.SkyY then
-                     NewY := 1;
-                  elsif PlayerShip.DestinationY < PlayerShip.SkyY then
-                     NewY := -1;
-                  end if;
-                  Result := MoveShip(0, NewX, NewY);
-                  exit when Result = 0;
-                  if CheckForEvent(Sky_Map_View) /= Sky_Map_View then
-                     return 5;
-                  end if;
-                  if Result = 8 then
-                     WaitForRest;
-                     Result := 1;
-                     if CheckForEvent(Sky_Map_View) /= Sky_Map_View then
-                        return 5;
-                     end if;
-                  end if;
-                  if PlayerShip.DestinationX = PlayerShip.SkyX and
-                    PlayerShip.DestinationY = PlayerShip.SkyY then
-                     AddMessage
-                       ("You reached your travel destination.",
-                        OrderMessage);
-                     PlayerShip.DestinationX := 0;
-                     PlayerShip.DestinationY := 0;
-                     if GameSettings.AutoFinish then
-                        AutoFinishMissions;
-                     end if;
-                     return 4;
-                  end if;
-                  exit when Result = 6 or Result = 7;
-               end loop;
-               if Result = 0 then
-                  Result := 4;
-               end if;
             when KEY_SRIGHT =>
                MoveX := MoveX + 1;
                Result := 4;
