@@ -9,7 +9,8 @@ All notable changes to this project will be documented in this file.
 - New goals: gain max reputation in 3 bases, gain max reputation in 5 bases,
   gain max reputation in 7 bases, gain max reputation in 10 bases, gain max
   reputation in 15 bases, gain max reputation in 20 bases, gain max reputation
-  in 25 bases, gain max reputation in 50 bases and destroy 250 ships
+  in 25 bases, gain max reputation in 50 bases, destroy 250 ships and destroy
+  500 ships
 - Hall of fame
 - Charges for docking
 - Info about amount of owned materials in crafting screen
