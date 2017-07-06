@@ -35,7 +35,7 @@ package body Ships.UI.Cargo is
       FreeSpace: Integer;
    begin
       ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
-      Refresh(ClearWindow);
+      Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
       if PlayerShip.Cargo(ItemIndex).Durability < 100 then
          WindowHeight := WindowHeight + 1;
@@ -117,11 +117,13 @@ package body Ships.UI.Cargo is
          FreeSpace := 0;
       end if;
       Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
-      Refresh;
-      Refresh(BoxWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(BoxWindow);
       Delete(BoxWindow);
-      Refresh(InfoWindow);
+      Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowItemInfo;
 
    procedure ShowCargoInfo is
@@ -149,7 +151,6 @@ package body Ships.UI.Cargo is
       end if;
       Set_Current(ShipsMenu, Cargo_Items.all(CurrentMenuIndex));
       ShowItemInfo;
-      Refresh(MenuWindow);
    end ShowCargoInfo;
 
    procedure ShowCargoStatus
@@ -208,18 +209,10 @@ package body Ships.UI.Cargo is
             if Result = Request_Denied then
                Result := Driver(ShipsMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               ShowItemInfo;
-               Refresh(MenuWindow);
-            end if;
          when 50 | KEY_DOWN => -- Select next item
             Result := Driver(ShipsMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(ShipsMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               ShowItemInfo;
-               Refresh(MenuWindow);
             end if;
          when 10 => -- Drop selected cargo
             ShowShipForm
@@ -228,18 +221,14 @@ package body Ships.UI.Cargo is
             return Drop_Cargo;
          when others =>
             Result := Driver(ShipsMenu, Key);
-            if Result = Menu_Ok then
-               ShowItemInfo;
-               Refresh(MenuWindow);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(ShipsMenu, M_Clear_Pattern);
                Result := Driver(ShipsMenu, Key);
-               if Result = Menu_Ok then
-                  ShowItemInfo;
-                  Refresh(MenuWindow);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         ShowItemInfo;
+      end if;
       CurrentMenuIndex := Get_Index(Current(ShipsMenu));
       return Cargo_Info;
    end CargoInfoKeys;
