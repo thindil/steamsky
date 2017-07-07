@@ -71,6 +71,22 @@ package body GameOptions is
             return "Delete";
          when KEY_IC =>
             return "Insert";
+         when 337 =>
+            return "Shift + Arrow Up";
+         when 336 =>
+            return "Shift + Arrow Down";
+         when KEY_SRIGHT =>
+            return "Shift + Arrow Right";
+         when KEY_SLEFT =>
+            return "Shift + Arrow Left";
+         when KEY_SHOME =>
+            return "Shift + Home";
+         when KEY_SPREVIOUS =>
+            return "Shift + Page Up";
+         when KEY_SEND =>
+            return "Shift + End";
+         when KEY_SNEXT =>
+            return "Shift + Page Down";
          when others =>
             if Key in Normal_Key_Code then
                return "" & Character'Val(Key);
@@ -322,6 +338,22 @@ package body GameOptions is
             return Integer(KEY_DC);
          elsif KeyName = "Insert" then
             return Integer(KEY_IC);
+         elsif KeyName = "Shift + Arrow Up" then
+            return 337;
+         elsif KeyName = "Shift + Arrow Down" then
+            return 336;
+         elsif KeyName = "Shift + Arrow Right" then
+            return Integer(KEY_SRIGHT);
+         elsif KeyName = "Shift + Arrow Left" then
+            return Integer(KEY_SLEFT);
+         elsif KeyName = "Shift + Home" then
+            return Integer(KEY_SHOME);
+         elsif KeyName = "Shift + Page Up" then
+            return Integer(KEY_SPREVIOUS);
+         elsif KeyName = "Shift + End" then
+            return Integer(KEY_SEND);
+         elsif KeyName = "Shift + Page Down" then
+            return Integer(KEY_SNEXT);
          elsif KeyName'Length = 1 then
             return Character'Pos(KeyName(KeyName'First));
          end if;
