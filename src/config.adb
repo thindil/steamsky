@@ -24,7 +24,7 @@ package body Config is
    procedure LoadConfig is
       ConfigFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
-      EqualIndex, StartIndex, EndIndex: Natural;
+      EqualIndex, StartIndex, EndIndex, KeysAmount: Natural;
    begin
       NewGameSettings :=
         (PlayerName => To_Unbounded_String("Laeran"),
@@ -81,7 +81,8 @@ package body Config is
                end if;
             elsif FieldName = To_Unbounded_String("Keys") then
                StartIndex := 1;
-               for I in GameSettings.Keys'Range loop
+               KeysAmount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+               for I in 1 .. KeysAmount loop
                   EndIndex := Index(Value, ", ", StartIndex);
                   if EndIndex = 0 then
                      EndIndex := Length(Value) + 1;
