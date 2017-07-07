@@ -363,6 +363,35 @@ package body GameOptions is
          end if;
          return Integer'Value(KeyName);
       end SetKey;
+      procedure SetNewKey is
+         NewFieldIndex: Positive;
+      begin
+         Result := Unknown_Request;
+         for I in GameSettings.Keys'Range loop
+            NewFieldIndex := 12 + (I * 2);
+            FieldValue :=
+              Trim
+                (To_Unbounded_String
+                   (Get_Buffer(Fields(OptionsForm, NewFieldIndex))),
+                 Side => Both);
+            if SetKey(To_String(FieldValue)) = Integer(Key) and
+              NewFieldIndex /= FieldIndex then
+               SetDescription
+                 ("You can't use '" &
+                  To_String(FieldValue) &
+                  "' because it is set for other action. Please choice another key.",
+                  FieldIndex);
+               Refresh(FormWindow);
+               return;
+            end if;
+         end loop;
+         Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
+         SetDescription
+           ("New key was set. Press Enter again to start setting key.",
+            FieldIndex);
+         Refresh(FormWindow);
+         KeySetting := False;
+      end SetNewKey;
    begin
       case Key is
          when KEY_UP => -- Select previous field or set up arrow for key shortcut
@@ -370,18 +399,14 @@ package body GameOptions is
                Result := Driver(OptionsForm, F_Previous_Field);
                FieldIndex := Get_Index(Current(OptionsForm));
             else
-               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
-               Result := Form_Ok;
-               KeySetting := False;
+               SetNewKey;
             end if;
          when KEY_DOWN => -- Select next field or set down arrow for key shortcut
             if not KeySetting then
                Result := Driver(OptionsForm, F_Next_Field);
                FieldIndex := Get_Index(Current(OptionsForm));
             else
-               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
-               Result := Form_Ok;
-               KeySetting := False;
+               SetNewKey;
             end if;
          when 10 => -- change option value or start setting key
             if not KeySetting then
@@ -408,9 +433,7 @@ package body GameOptions is
                      (Reverse_Video => True, others => False));
                end if;
             else
-               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
-               Result := Form_Ok;
-               KeySetting := False;
+               SetNewKey;
             end if;
          when Character'Pos('q') |
            Character'Pos
@@ -472,31 +495,23 @@ package body GameOptions is
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             else
-               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
-               Result := Form_Ok;
-               KeySetting := False;
+               SetNewKey;
             end if;
          when KEY_RIGHT => -- Select next value
             if not KeySetting then
                Result := Driver(OptionsForm, F_Next_Choice);
             else
-               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
-               Result := Form_Ok;
-               KeySetting := False;
+               SetNewKey;
             end if;
          when KEY_LEFT => -- Select previous value
             if not KeySetting then
                Result := Driver(OptionsForm, F_Previous_Choice);
             else
-               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
-               Result := Form_Ok;
-               KeySetting := False;
+               SetNewKey;
             end if;
          when others =>
             if KeySetting then
-               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
-               Result := Form_Ok;
-               KeySetting := False;
+               SetNewKey;
             end if;
       end case;
       if Result = Form_Ok then
