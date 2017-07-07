@@ -87,6 +87,8 @@ package body GameOptions is
             return "Shift + End";
          when KEY_SNEXT =>
             return "Shift + Page Down";
+         when 10 =>
+            return "Enter";
          when others =>
             if Key in Normal_Key_Code then
                return "" & Character'Val(Key);
@@ -354,6 +356,8 @@ package body GameOptions is
             return Integer(KEY_SEND);
          elsif KeyName = "Shift + Page Down" then
             return Integer(KEY_SNEXT);
+         elsif KeyName = "Enter" then
+            return 10;
          elsif KeyName'Length = 1 then
             return Character'Pos(KeyName(KeyName'First));
          end if;
@@ -379,28 +383,34 @@ package body GameOptions is
                Result := Form_Ok;
                KeySetting := False;
             end if;
-         when 10 => -- change option value
-            if FieldIndex < 11 then
-               Result := Driver(OptionsForm, F_Next_Choice);
-            elsif FieldIndex = 11 then
-               Result := Driver(OptionsForm, F_Next_Page);
-               FieldIndex := 14;
-               Set_Background
-                 (Current(OptionsForm),
-                  (Reverse_Video => True, others => False));
-            elsif FieldIndex > 13 and FieldIndex < 33 then
-               SetDescription
-                 ("Press new key for set this shortcut.",
-                  FieldIndex);
-               KeySetting := True;
-               Refresh(FormWindow);
-               return GameOptions_View;
-            elsif FieldIndex = 33 then
-               Result := Driver(OptionsForm, F_Previous_Page);
-               FieldIndex := 2;
-               Set_Background
-                 (Current(OptionsForm),
-                  (Reverse_Video => True, others => False));
+         when 10 => -- change option value or start setting key
+            if not KeySetting then
+               if FieldIndex < 11 then
+                  Result := Driver(OptionsForm, F_Next_Choice);
+               elsif FieldIndex = 11 then
+                  Result := Driver(OptionsForm, F_Next_Page);
+                  FieldIndex := 14;
+                  Set_Background
+                    (Current(OptionsForm),
+                     (Reverse_Video => True, others => False));
+               elsif FieldIndex > 13 and FieldIndex < 33 then
+                  SetDescription
+                    ("Press new key for set this shortcut.",
+                     FieldIndex);
+                  KeySetting := True;
+                  Refresh(FormWindow);
+                  return GameOptions_View;
+               elsif FieldIndex = 33 then
+                  Result := Driver(OptionsForm, F_Previous_Page);
+                  FieldIndex := 2;
+                  Set_Background
+                    (Current(OptionsForm),
+                     (Reverse_Video => True, others => False));
+               end if;
+            else
+               Set_Buffer(Fields(OptionsForm, FieldIndex), 0, GetKeyName(Key));
+               Result := Form_Ok;
+               KeySetting := False;
             end if;
          when Character'Pos('q') |
            Character'Pos
