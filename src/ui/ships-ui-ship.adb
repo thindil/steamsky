@@ -35,17 +35,17 @@ package body Ships.UI.Ship is
       HaveAmmo, HaveMaterial: Boolean := False;
       StartColumn, EndColumn: Column_Position;
       Module: constant ModuleData := PlayerShip.Modules(ModuleIndex);
-      WindowHeight: Line_Position := 10;
+      WindowHeight: Line_Position := 9;
    begin
       ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
-      Refresh(ClearWindow);
+      Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
       case Modules_List(Module.ProtoIndex).MType is
-         when ShipModules.CARGO | TURRET | MEDICAL_ROOM | GUN =>
+         when ShipModules.CARGO | TURRET | MEDICAL_ROOM =>
             WindowHeight := WindowHeight + 1;
          when CABIN =>
             WindowHeight := WindowHeight + 3;
-         when ENGINE | ALCHEMY_LAB .. GREENHOUSE =>
+         when ENGINE | GUN | ALCHEMY_LAB .. GREENHOUSE =>
             WindowHeight := WindowHeight + 2;
          when ARMOR =>
             WindowHeight := WindowHeight - 1;
@@ -59,7 +59,7 @@ package body Ships.UI.Ship is
         WindowHeight +
         Line_Position
           (Length(Modules_List(Module.ProtoIndex).Description) /
-           Natural(Columns / 2));
+           (Natural(Columns / 2) - 4));
       BoxWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
       Box(BoxWindow);
       Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
@@ -492,11 +492,13 @@ package body Ships.UI.Ship is
          Column => (Columns / 2) + 6,
          Count => 5,
          Color => 1);
-      Refresh;
-      Refresh(BoxWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(BoxWindow);
       Delete(BoxWindow);
-      Refresh(InfoWindow);
+      Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowModuleInfo;
 
    procedure ShowShipInfo is
@@ -636,7 +638,6 @@ package body Ships.UI.Ship is
       Post(ShipsMenu);
       Set_Current(ShipsMenu, Modules_Items.all(CurrentMenuIndex));
       ShowModuleInfo;
-      Refresh(MenuWindow);
    end ShowShipInfo;
 
    procedure ShowModuleOptions is
@@ -800,8 +801,9 @@ package body Ships.UI.Ship is
         (OptionsMenu,
          Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
       Post(OptionsMenu);
-      Refresh;
-      Refresh(MenuWindow2);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow2);
+      Update_Screen;
    end ShowModuleOptions;
 
    procedure ShowAssignMenu is
@@ -855,8 +857,9 @@ package body Ships.UI.Ship is
         (OptionsMenu,
          Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
       Post(OptionsMenu);
-      Refresh;
-      Refresh(MenuWindow2);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow2);
+      Update_Screen;
    end ShowAssignMenu;
 
    function ShowAssignAmmoMenu return GameStates is
@@ -906,8 +909,9 @@ package body Ships.UI.Ship is
         (OptionsMenu,
          Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
       Post(OptionsMenu);
-      Refresh;
-      Refresh(MenuWindow2);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow2);
+      Update_Screen;
       return Assign_Ammo;
    end ShowAssignAmmoMenu;
 
