@@ -31,7 +31,7 @@ package body Ships.UI.Cargo is
         PlayerShip.Cargo(ItemIndex).Amount *
         Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Weight;
       CurrentLine: Line_Position := 1;
-      WindowHeight: Line_Position := 9;
+      WindowHeight: Line_Position := 8;
       FreeSpace: Integer;
    begin
       ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
@@ -43,7 +43,8 @@ package body Ships.UI.Cargo is
       WindowHeight :=
         WindowHeight +
         Line_Position
-          ((Length(Items_List(ItemIndex).Description) / Natural(Columns / 2)));
+          ((Length(Items_List(ItemIndex).Description) /
+            (Natural(Columns / 2) - 4)));
       BoxWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
       Box(BoxWindow);
       Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
