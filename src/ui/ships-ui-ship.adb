@@ -823,14 +823,14 @@ package body Ships.UI.Ship is
                   if PlayerShip.Crew(I).Health = 100 then
                      Assign_Items.all(MenuIndex) :=
                        New_Item
-                         ("Assign " & To_String(PlayerShip.Crew(I).Name),
+                         (To_String(PlayerShip.Crew(I).Name),
                           Positive'Image(I));
                      MenuIndex := MenuIndex + 1;
                   end if;
                when others =>
                   Assign_Items.all(MenuIndex) :=
                     New_Item
-                      ("Assign " & To_String(PlayerShip.Crew(I).Name),
+                      (To_String(PlayerShip.Crew(I).Name),
                        Positive'Image(I));
                   MenuIndex := MenuIndex + 1;
             end case;
