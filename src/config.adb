@@ -36,7 +36,27 @@ package body Config is
          AutoCenter => True,
          AutoReturn => True,
          AutoFinish => True,
-         Keys => (56, 50, 54, 52, 49, 51, 55, 57, 53, 37));
+         Keys =>
+           (56,
+            50,
+            54,
+            52,
+            49,
+            51,
+            55,
+            57,
+            53,
+            37,
+            337,
+            336,
+            402,
+            393,
+            391,
+            398,
+            386,
+            396,
+            32,
+            10));
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
