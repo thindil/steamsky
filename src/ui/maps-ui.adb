@@ -566,56 +566,57 @@ package body Maps.UI is
          if Result = 0 then
             Result := 4;
          end if;
+      elsif Key = Key_Code(GameSettings.Keys(11)) then -- Move map up
+         MoveY := MoveY - 1;
+         Result := 4;
+      elsif Key = Key_Code(GameSettings.Keys(12)) then -- Move map down
+         MoveY := MoveY + 1;
+         Result := 4;
+      elsif Key = Key_Code(GameSettings.Keys(13)) then -- Move map right
+         MoveX := MoveX + 1;
+         Result := 4;
+      elsif Key = Key_Code(GameSettings.Keys(14)) then -- Move map left
+         MoveX := MoveX - 1;
+         Result := 4;
+      elsif Key = Key_Code(GameSettings.Keys(15)) then -- Move map up/left
+         MoveX := MoveX - 1;
+         MoveY := MoveY - 1;
+         Result := 4;
+      elsif Key = Key_Code(GameSettings.Keys(16)) then -- Move map up/right
+         MoveX := MoveX + 1;
+         MoveY := MoveY - 1;
+         Result := 4;
+      elsif Key = Key_Code(GameSettings.Keys(17)) then -- Move map down/left
+         MoveX := MoveX - 1;
+         MoveY := MoveY + 1;
+         Result := 4;
+      elsif Key = Key_Code(GameSettings.Keys(18)) then -- Move map down/right
+         MoveX := MoveX + 1;
+         MoveY := MoveY + 1;
+         Result := 4;
+      elsif Key = Key_Code(GameSettings.Keys(19)) then -- Center map on ship
+         CenterMap;
+         Result := 4;
+      elsif Key =
+        Key_Code
+          (GameSettings.Keys
+             (20)) then -- Set current map cell as destination point for ship
+         if MoveX = 0 and MoveY = 0 then
+            return 0;
+         end if;
+         PlayerShip.DestinationX := PlayerShip.SkyX + MoveX;
+         PlayerShip.DestinationY := PlayerShip.SkyY + MoveY;
+         AddMessage("You set travel destination for your ship.", OrderMessage);
+         if GameSettings.AutoCenter then
+            CenterMap;
+         end if;
+         return 4;
       else
          case Key is
             when Character'Pos('o') | Character'Pos('O') => -- Ship orders menu
                Result := 2;
             when Character'Pos('w') | Character'Pos('W') => -- Wait order menu
                Result := 3;
-            when KEY_SRIGHT =>
-               MoveX := MoveX + 1;
-               Result := 4;
-            when KEY_SLEFT =>
-               MoveX := MoveX - 1;
-               Result := 4;
-            when KEY_SHOME => -- Move map up/left
-               MoveX := MoveX - 1;
-               MoveY := MoveY - 1;
-               Result := 4;
-            when KEY_SPREVIOUS => -- Move map up/right
-               MoveX := MoveX + 1;
-               MoveY := MoveY - 1;
-               Result := 4;
-            when KEY_SEND => -- Move map down/left
-               MoveX := MoveX - 1;
-               MoveY := MoveY + 1;
-               Result := 4;
-            when KEY_SNEXT => -- Move map down/right
-               MoveX := MoveX + 1;
-               MoveY := MoveY + 1;
-               Result := 4;
-            when 337 => -- Move map up
-               MoveY := MoveY - 1;
-               Result := 4;
-            when 336 => -- Move map down
-               MoveY := MoveY + 1;
-               Result := 4;
-            when Character'Pos(' ') => -- Center on ship
-               CenterMap;
-               Result := 4;
-            when 10 => -- Set base as destination point for ship
-               if MoveX = 0 and MoveY = 0 then
-                  return 0;
-               end if;
-               PlayerShip.DestinationX := PlayerShip.SkyX + MoveX;
-               PlayerShip.DestinationY := PlayerShip.SkyY + MoveY;
-               AddMessage
-                 ("You set travel destination for your ship.",
-                  OrderMessage);
-               if GameSettings.AutoCenter then
-                  CenterMap;
-               end if;
-               return 4;
             when others =>
                Result := 0;
          end case;

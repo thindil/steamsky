@@ -26,7 +26,7 @@ package Config is
       PlayerGender: Character; -- Default player gender
       ShipName: Unbounded_String; -- Default ship name
    end record;
-   type Keys_Array is array(1 .. 10) of Integer; -- Keys used in ship movement
+   type Keys_Array is array(1 .. 20) of Integer; -- Keys used in ship movement
    type GameSettingsRecord is -- Data for game settings
    record
       AutoRest: Boolean; -- If true, rest when pilot/engineer need rest
