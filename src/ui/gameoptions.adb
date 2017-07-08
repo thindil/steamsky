@@ -89,6 +89,18 @@ package body GameOptions is
             return "Shift + Page Down";
          when 10 =>
             return "Enter";
+         when 27 =>
+            return "Escape";
+         when KEY_SIC =>
+            return "Shift + Insert";
+         when KEY_SDC =>
+            return "Shift + Delete";
+         when Key_Backspace =>
+            return "Backspace";
+         when 9 =>
+            return "Tab";
+         when 353 =>
+            return "Shift + Tab";
          when others =>
             if Key in Normal_Key_Code then
                return "" & Character'Val(Key);
@@ -358,6 +370,18 @@ package body GameOptions is
             return Integer(KEY_SNEXT);
          elsif KeyName = "Enter" then
             return 10;
+         elsif KeyName = "Escape" then
+            return 27;
+         elsif KeyName = "Shift + Insert" then
+            return Integer(KEY_SIC);
+         elsif KeyName = "Shift + Delete" then
+            return Integer(KEY_SDC);
+         elsif KeyName = "Backspace" then
+            return Integer(Key_Backspace);
+         elsif KeyName = "Tab" then
+            return 9;
+         elsif KeyName = "Shift + Tab" then
+            return 353;
          elsif KeyName'Length = 1 then
             return Character'Pos(KeyName(KeyName'First));
          end if;
