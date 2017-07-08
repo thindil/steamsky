@@ -40,18 +40,10 @@ package body Ships.UI.Ship.Keys is
             if Result = Request_Denied then
                Result := Driver(ShipsMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               ShowModuleInfo;
-               Refresh(MenuWindow);
-            end if;
          when 50 | KEY_DOWN => -- Select next module
             Result := Driver(ShipsMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(ShipsMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               ShowModuleInfo;
-               Refresh(MenuWindow);
             end if;
          when 10 => -- Show module options menu
             ShowModuleOptions;
@@ -66,18 +58,14 @@ package body Ships.UI.Ship.Keys is
             return Help_Topic;
          when others =>
             Result := Driver(ShipsMenu, Key);
-            if Result = Menu_Ok then
-               ShowModuleInfo;
-               Refresh(MenuWindow);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(ShipsMenu, M_Clear_Pattern);
                Result := Driver(ShipsMenu, Key);
-               if Result = Menu_Ok then
-                  ShowModuleInfo;
-                  Refresh(MenuWindow);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         ShowModuleInfo;
+      end if;
       CurrentMenuIndex := Get_Index(Current(ShipsMenu));
       return Ship_Info;
    end ShipInfoKeys;
@@ -95,16 +83,10 @@ package body Ships.UI.Ship.Keys is
             if Result = Request_Denied then
                Result := Driver(OptionsMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            end if;
          when 50 | KEY_DOWN => -- Select next item
             Result := Driver(OptionsMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(OptionsMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
             end if;
          when 10 => -- Select option from menu
             Post(OptionsMenu, False);
@@ -153,16 +135,14 @@ package body Ships.UI.Ship.Keys is
             end if;
          when others =>
             Result := Driver(OptionsMenu, Key);
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(OptionsMenu, M_Clear_Pattern);
                Result := Driver(OptionsMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow2);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow2);
+      end if;
       return Module_Options;
    end ModuleOptionsKeys;
 
@@ -179,16 +159,10 @@ package body Ships.UI.Ship.Keys is
             if Result = Request_Denied then
                Result := Driver(OptionsMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            end if;
          when 50 | KEY_DOWN => -- Select next item
             Result := Driver(OptionsMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(OptionsMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
             end if;
          when 10 => -- Select new module owner
             Post(OptionsMenu, False);
@@ -226,8 +200,15 @@ package body Ships.UI.Ship.Keys is
             DrawGame(Ship_Info);
             return Ship_Info;
          when others =>
-            null;
+            Result := Driver(OptionsMenu, Key);
+            if Result /= Menu_Ok then
+               Result := Driver(OptionsMenu, M_Clear_Pattern);
+               Result := Driver(OptionsMenu, Key);
+            end if;
       end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow2);
+      end if;
       return Assign_Owner;
    end AssignOwnerKeys;
 
@@ -244,16 +225,10 @@ package body Ships.UI.Ship.Keys is
             if Result = Request_Denied then
                Result := Driver(OptionsMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            end if;
          when 50 | KEY_DOWN => -- Select next item
             Result := Driver(OptionsMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(OptionsMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
             end if;
          when 10 => -- Select new ammo for gun
             Post(OptionsMenu, False);
@@ -273,8 +248,15 @@ package body Ships.UI.Ship.Keys is
             DrawGame(Ship_Info);
             return Ship_Info;
          when others =>
-            null;
+            Result := Driver(OptionsMenu, Key);
+            if Result /= Menu_Ok then
+               Result := Driver(OptionsMenu, M_Clear_Pattern);
+               Result := Driver(OptionsMenu, Key);
+            end if;
       end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow2);
+      end if;
       return Assign_Owner;
    end AssignAmmoKeys;
 
