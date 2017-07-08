@@ -391,7 +391,7 @@ package body GameOptions is
          NewFieldIndex: Positive;
       begin
          Result := Unknown_Request;
-         for I in GameSettings.Keys'Range loop
+         for I in 1 .. 10 loop
             NewFieldIndex := 12 + (I * 2);
             FieldValue :=
               Trim
@@ -504,7 +504,7 @@ package body GameOptions is
                else
                   GameSettings.AutoFinish := False;
                end if;
-               for I in GameSettings.Keys'Range loop
+               for I in 1 .. 10 loop
                   FieldIndex := 12 + (I * 2);
                   FieldValue :=
                     Trim
