@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Charges for docking
 - Info about amount of owned materials in crafting screen
 - Option to set ship movement keys
+- Option to set map manipulation keys
 
 ### Changed
 - Updated REAMDE.md
