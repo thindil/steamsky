@@ -101,6 +101,30 @@ package body GameOptions is
             return "Tab";
          when 353 =>
             return "Shift + Tab";
+         when Key_F1 =>
+            return "F1";
+         when Key_F2 =>
+            return "F2";
+         when Key_F3 =>
+            return "F3";
+         when Key_F4 =>
+            return "F4";
+         when Key_F5 =>
+            return "F5";
+         when Key_F6 =>
+            return "F6";
+         when Key_F7 =>
+            return "F7";
+         when Key_F8 =>
+            return "F8";
+         when Key_F9 =>
+            return "F9";
+         when Key_F10 =>
+            return "F10";
+         when Key_F11 =>
+            return "F11";
+         when Key_F12 =>
+            return "F12";
          when others =>
             if Key in Normal_Key_Code then
                return "" & Character'Val(Key);
@@ -462,6 +486,30 @@ package body GameOptions is
             return 9;
          elsif KeyName = "Shift + Tab" then
             return 353;
+         elsif KeyName = "F1" then
+            return Integer(Key_F1);
+         elsif KeyName = "F2" then
+            return Integer(Key_F2);
+         elsif KeyName = "F3" then
+            return Integer(Key_F3);
+         elsif KeyName = "F4" then
+            return Integer(Key_F4);
+         elsif KeyName = "F5" then
+            return Integer(Key_F5);
+         elsif KeyName = "F6" then
+            return Integer(Key_F6);
+         elsif KeyName = "F7" then
+            return Integer(Key_F7);
+         elsif KeyName = "F8" then
+            return Integer(Key_F8);
+         elsif KeyName = "F9" then
+            return Integer(Key_F9);
+         elsif KeyName = "F10" then
+            return Integer(Key_F10);
+         elsif KeyName = "F11" then
+            return Integer(Key_F11);
+         elsif KeyName = "F12" then
+            return Integer(Key_F12);
          elsif KeyName'Length = 1 then
             return Character'Pos(KeyName(KeyName'First));
          end if;
