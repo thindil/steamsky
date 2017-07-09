@@ -8,7 +8,7 @@ On mosts screens you can see in top right corner informations about needed crew 
 For pilot and engineer if letter is green, position is taken by crew member, red means you don't have anyone assigned to this position.
 For gunners and manufacturing - green letter mean all positions are taken (all guns, all crafting modules), red letter mean you have free positions (not all guns/crafting modules are taken), white letter mean, you don't have or no need anyone assigned to this positions.
 For repairs, upgrading ship modules, talking in bases and cleaning ship, green you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white letter means you don't have anyone assigned to this position and you don't need anyone.
-To move map without moving ship, hold SHIFT and use keypad keys this same which are used for moving ship. Hit SPACE to center map on ship. In that way, you can see informations about selected map cell (for example, bases info). Window in right up corner of screen always show info about your current map cell.
+To move map without moving ship (with default keys settings), hold SHIFT and use keypad keys this same which are used for moving ship. Press (by default) SPACE to center map on ship. In that way, you can see informations about selected map cell (for example, bases info). Window in right up corner of screen always show info about your current map cell.
 At this moment, help is under development (as whole game).
 [Ship movement]
 Your ship starts docked to base. To move it, you must first give order "Undock" from base. Press 'o' key (or first 'e' key for see game menu) for open orders menu.
@@ -26,7 +26,7 @@ During travel you may encounter various events. Some events may bring new option
 Ship speed depends on engine power, engine damage, ship weight (with cargo) and bit on Engineer and Pilot experience.
 With higher set ship speed, there is bigger chance that one of engines will be damaged. More experienced Engineer have better chances to prevent engine damage during fly.
 As you fly near bases (you are in this same cell where base is), you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are in default text color. All bases marked on map as 'o'.
-You can set your destination travel point on map by selecting map cell (with SHIFT + arrow keys) and then press Enter.
+You can set your destination travel point on map by selecting map cell (by default SHIFT + arrow keys) and then press (by default) Enter.
 If you have set travel destination, press (by default) key 5 on keypad to auto travel by one map field. If you want move further, you can press (by default) '%' key (shift + '5' key) - then you been move until you reach destination, combat happen or you can't move anymore (no pilot/engineer, too damaged engines, no fuel, etc.).
 If destination is not set, pressing (by default) key 5 on keypad allow you to wait 1 game minute without moving.
 [Trading]
