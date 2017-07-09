@@ -355,9 +355,10 @@ package body Statistics.UI is
          Box(BoxWindow);
          Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
          Add(Win => BoxWindow, Str => "[Finished " & StatsType & "]");
-         Refresh;
-         Refresh(BoxWindow);
+         Refresh_Without_Update;
+         Refresh_Without_Update(BoxWindow);
          Delete(BoxWindow);
+         Update_Screen;
       end if;
       Refresh
         (DetailedStatsPad,
