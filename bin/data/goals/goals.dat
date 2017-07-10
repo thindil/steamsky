@@ -55,4 +55,7 @@ Amount = 1500
 [19]
 Type = Destroy
 Amount = 2000
+[20]
+Type = Destroy
+Amount = 2500
 []
