@@ -125,6 +125,30 @@ package body GameOptions is
             return "F11";
          when Key_F12 =>
             return "F12";
+         when 277 =>
+            return "Shift + F1";
+         when 278 =>
+            return "Shift + F2";
+         when 279 =>
+            return "Shift + F3";
+         when 280 =>
+            return "Shift + F4";
+         when 281 =>
+            return "Shift + F5";
+         when 282 =>
+            return "Shift + F6";
+         when 283 =>
+            return "Shift + F7";
+         when 284 =>
+            return "Shift + F8";
+         when 285 =>
+            return "Shift + F9";
+         when 286 =>
+            return "Shift + F10";
+         when 287 =>
+            return "Shift + F11";
+         when 288 =>
+            return "Shift + F12";
          when others =>
             if Key in Normal_Key_Code then
                return "" & Character'Val(Key);
@@ -510,6 +534,30 @@ package body GameOptions is
             return Integer(Key_F11);
          elsif KeyName = "F12" then
             return Integer(Key_F12);
+         elsif KeyName = "Shift + F1" then
+            return 277;
+         elsif KeyName = "Shift + F2" then
+            return 278;
+         elsif KeyName = "Shift + F3" then
+            return 279;
+         elsif KeyName = "Shift + F4" then
+            return 280;
+         elsif KeyName = "Shift + F5" then
+            return 281;
+         elsif KeyName = "Shift + F6" then
+            return 282;
+         elsif KeyName = "Shift + F7" then
+            return 283;
+         elsif KeyName = "Shift + F8" then
+            return 284;
+         elsif KeyName = "Shift + F9" then
+            return 285;
+         elsif KeyName = "Shift + F10" then
+            return 286;
+         elsif KeyName = "Shift + F11" then
+            return 287;
+         elsif KeyName = "Shift + F12" then
+            return 288;
          elsif KeyName'Length = 1 then
             return Character'Pos(KeyName(KeyName'First));
          end if;
