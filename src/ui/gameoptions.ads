@@ -20,6 +20,8 @@ with Game; use Game;
 
 package GameOptions is
 
+   function GetKeyName
+     (Key: Key_Code) return String; -- Return text representation of key
    procedure ShowOptions; -- Show game options form
    function GameOptionsKeys
      (Key: Key_Code) return GameStates; -- Handle keys in game options window
