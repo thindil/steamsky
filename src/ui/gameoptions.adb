@@ -162,7 +162,7 @@ package body GameOptions is
    end GetKeyName;
 
    procedure ShowOptions is
-      Options_Fields: constant Field_Array_Access := new Field_Array(1 .. 58);
+      Options_Fields: constant Field_Array_Access := new Field_Array(1 .. 95);
       FormHeight: Line_Position;
       FormLength: Column_Position;
       FieldOptions: Field_Option_Set;
@@ -190,9 +190,11 @@ package body GameOptions is
          FormIndex: Positive := Natural(Line * 2) + 1;
       begin
          if Page = 2 then
-            FormIndex := FormIndex + 13;
+            FormIndex := FormIndex + 14;
          elsif Page = 3 then
-            FormIndex := FormIndex + 35;
+            FormIndex := FormIndex + 36;
+         elsif Page = 4 then
+            FormIndex := FormIndex + 58;
          end if;
          Options_Fields.all(FormIndex) := New_Field(1, 40, Line, 0, 0, 0);
          Set_Buffer(Options_Fields.all(FormIndex), 0, Text);
@@ -205,11 +207,14 @@ package body GameOptions is
          Key: Key_Code;
       begin
          if Page = 2 then
-            FormIndex := FormIndex + 14;
+            FormIndex := FormIndex + 15;
             Key := Key_Code(GameSettings.Keys(Positive(Line + 1)));
          elsif Page = 3 then
-            FormIndex := FormIndex + 36;
+            FormIndex := FormIndex + 37;
             Key := Key_Code(GameSettings.Keys(Positive(Line + 11)));
+         elsif Page = 4 then
+            FormIndex := FormIndex + 59;
+            Key := Key_Code(GameSettings.Keys(Positive(Line + 21)));
          end if;
          Options_Fields.all(FormIndex) := New_Field(1, 20, Line, 41, 0, 0);
          FieldOptions := Get_Options(Options_Fields.all(FormIndex));
@@ -296,16 +301,21 @@ package body GameOptions is
       FieldOptions := Get_Options(Options_Fields.all(12));
       FieldOptions.Edit := False;
       Set_Options(Options_Fields.all(12), FieldOptions);
-      Options_Fields.all(13) := New_Field(6, Columns, 9, 0, 0, 0);
+      Options_Fields.all(13) := New_Field(1, 26, 8, 0, 0, 0);
+      Set_Buffer(Options_Fields.all(13), 0, "Menu shortcuts settings ->");
+      FieldOptions := Get_Options(Options_Fields.all(13));
+      FieldOptions.Edit := False;
+      Set_Options(Options_Fields.all(13), FieldOptions);
+      Options_Fields.all(14) := New_Field(6, Columns, 10, 0, 0, 0);
       Set_Buffer
-        (Options_Fields.all(13),
+        (Options_Fields.all(14),
          0,
          "Wait for crew is rested when pilot or engineer are too tired to work.");
-      FieldOptions := Get_Options(Options_Fields.all(13));
+      FieldOptions := Get_Options(Options_Fields.all(14));
       FieldOptions.Active := False;
-      Set_Options(Options_Fields.all(13), FieldOptions);
+      Set_Options(Options_Fields.all(14), FieldOptions);
       CreateLabel(0, "Move ship up: ", 2);
-      Set_New_Page(Options_Fields.all(14));
+      Set_New_Page(Options_Fields.all(15));
       CreateKeyField(0);
       CreateLabel(1, "Move ship down: ", 2);
       CreateKeyField(1);
@@ -325,21 +335,21 @@ package body GameOptions is
       CreateKeyField(8);
       CreateLabel(9, "Auto move ship: ", 2);
       CreateKeyField(9);
-      Options_Fields.all(34) := New_Field(1, 7, 11, 0, 0, 0);
-      Set_Buffer(Options_Fields.all(34), 0, "<- Back");
-      FieldOptions := Get_Options(Options_Fields.all(34));
+      Options_Fields.all(35) := New_Field(1, 7, 11, 0, 0, 0);
+      Set_Buffer(Options_Fields.all(35), 0, "<- Back");
+      FieldOptions := Get_Options(Options_Fields.all(35));
       FieldOptions.Edit := False;
-      Set_Options(Options_Fields.all(34), FieldOptions);
-      Options_Fields.all(35) := New_Field(6, Columns, 13, 0, 0, 0);
+      Set_Options(Options_Fields.all(35), FieldOptions);
+      Options_Fields.all(36) := New_Field(6, Columns, 13, 0, 0, 0);
       Set_Buffer
-        (Options_Fields.all(35),
+        (Options_Fields.all(36),
          0,
          "Press Enter to start setting new key.");
-      FieldOptions := Get_Options(Options_Fields.all(35));
+      FieldOptions := Get_Options(Options_Fields.all(36));
       FieldOptions.Active := False;
-      Set_Options(Options_Fields.all(35), FieldOptions);
+      Set_Options(Options_Fields.all(36), FieldOptions);
       CreateLabel(0, "Move map up: ", 3);
-      Set_New_Page(Options_Fields.all(36));
+      Set_New_Page(Options_Fields.all(37));
       CreateKeyField(0, 3);
       CreateLabel(1, "Move map down: ", 3);
       CreateKeyField(1, 3);
@@ -359,20 +369,68 @@ package body GameOptions is
       CreateKeyField(8, 3);
       CreateLabel(9, "Set destination for ship: ", 3);
       CreateKeyField(9, 3);
-      Options_Fields.all(56) := New_Field(1, 7, 11, 0, 0, 0);
-      Set_Buffer(Options_Fields.all(56), 0, "<- Back");
-      FieldOptions := Get_Options(Options_Fields.all(56));
+      Options_Fields.all(57) := New_Field(1, 7, 11, 0, 0, 0);
+      Set_Buffer(Options_Fields.all(57), 0, "<- Back");
+      FieldOptions := Get_Options(Options_Fields.all(57));
       FieldOptions.Edit := False;
-      Set_Options(Options_Fields.all(56), FieldOptions);
-      Options_Fields.all(57) := New_Field(6, Columns, 13, 0, 0, 0);
+      Set_Options(Options_Fields.all(57), FieldOptions);
+      Options_Fields.all(58) := New_Field(6, Columns, 13, 0, 0, 0);
       Set_Buffer
-        (Options_Fields.all(57),
+        (Options_Fields.all(58),
          0,
          "Press Enter to start setting new key.");
-      FieldOptions := Get_Options(Options_Fields.all(57));
+      FieldOptions := Get_Options(Options_Fields.all(58));
       FieldOptions.Active := False;
-      Set_Options(Options_Fields.all(57), FieldOptions);
-      Options_Fields.all(58) := Null_Field;
+      Set_Options(Options_Fields.all(58), FieldOptions);
+      CreateLabel(0, "Ship informations: ", 4);
+      Set_New_Page(Options_Fields.all(59));
+      CreateKeyField(0, 4);
+      CreateLabel(1, "Ship cargo: ", 4);
+      CreateKeyField(1, 4);
+      CreateLabel(2, "Crew informations: ", 4);
+      CreateKeyField(2, 4);
+      CreateLabel(3, "Ship orders: ", 4);
+      CreateKeyField(3, 4);
+      CreateLabel(4, "Crafting: ", 4);
+      CreateKeyField(4, 4);
+      CreateLabel(5, "Last messages: ", 4);
+      CreateKeyField(5, 4);
+      CreateLabel(6, "List of known bases: ", 4);
+      CreateKeyField(6, 4);
+      CreateLabel(7, "List of known events: ", 4);
+      CreateKeyField(7, 4);
+      CreateLabel(8, "Accepted missions: ", 4);
+      CreateKeyField(8, 4);
+      CreateLabel(9, "Wait orders: ", 4);
+      CreateKeyField(9, 4);
+      CreateLabel(10, "Move map position: ", 4);
+      CreateKeyField(10, 4);
+      CreateLabel(11, "Game statistics: ", 4);
+      CreateKeyField(11, 4);
+      CreateLabel(12, "Help: ", 4);
+      CreateKeyField(12, 4);
+      CreateLabel(13, "Game options: ", 4);
+      CreateKeyField(13, 4);
+      CreateLabel(14, "Quit from game: ", 4);
+      CreateKeyField(14, 4);
+      CreateLabel(15, "Resign from game: ", 4);
+      CreateKeyField(15, 4);
+      CreateLabel(16, "Close menu: ", 4);
+      CreateKeyField(16, 4);
+      Options_Fields.all(93) := New_Field(1, 7, 18, 0, 0, 0);
+      Set_Buffer(Options_Fields.all(93), 0, "<- Back");
+      FieldOptions := Get_Options(Options_Fields.all(93));
+      FieldOptions.Edit := False;
+      Set_Options(Options_Fields.all(93), FieldOptions);
+      Options_Fields.all(94) := New_Field(6, Columns, 20, 0, 0, 0);
+      Set_Buffer
+        (Options_Fields.all(94),
+         0,
+         "Press Enter to start setting new key.");
+      FieldOptions := Get_Options(Options_Fields.all(94));
+      FieldOptions.Active := False;
+      Set_Options(Options_Fields.all(94), FieldOptions);
+      Options_Fields.all(95) := Null_Field;
       OptionsForm := New_Form(Options_Fields);
       Set_Options(OptionsForm, (others => False));
       Scale(OptionsForm, FormHeight, FormLength);
@@ -399,35 +457,56 @@ package body GameOptions is
             10,
             11,
             12,
-            15,
-            17,
-            19,
-            21,
-            23,
-            25,
-            27,
-            29,
-            31,
-            33,
+            13,
+            16,
+            18,
+            20,
+            22,
+            24,
+            26,
+            28,
+            30,
+            32,
             34,
-            37,
-            39,
-            41,
-            43,
-            45,
-            47,
-            49,
-            51,
-            53,
-            55,
-            56);
+            35,
+            38,
+            40,
+            42,
+            44,
+            46,
+            48,
+            50,
+            52,
+            54,
+            56,
+            57,
+            60,
+            62,
+            64,
+            66,
+            68,
+            70,
+            72,
+            74,
+            76,
+            78,
+            80,
+            82,
+            84,
+            86,
+            88,
+            90,
+            92,
+            93);
       begin
          if Field < 14 then
-            Set_Buffer(Fields(OptionsForm, 13), 0, Description);
+            Set_Buffer(Fields(OptionsForm, 14), 0, Description);
          elsif Field < 36 then
-            Set_Buffer(Fields(OptionsForm, 35), 0, Description);
+            Set_Buffer(Fields(OptionsForm, 36), 0, Description);
+         elsif Field < 58 then
+            Set_Buffer(Fields(OptionsForm, 58), 0, Description);
          else
-            Set_Buffer(Fields(OptionsForm, 57), 0, Description);
+            Set_Buffer(Fields(OptionsForm, 94), 0, Description);
          end if;
          Set_Background
            (Current(OptionsForm),
@@ -567,11 +646,13 @@ package body GameOptions is
          NewFieldIndex: Positive;
       begin
          Result := Unknown_Request;
-         for I in 1 .. 20 loop
+         for I in 1 .. 37 loop
             if I < 11 then
-               NewFieldIndex := 13 + (I * 2);
+               NewFieldIndex := 14 + (I * 2);
+            elsif I < 21 then
+               NewFieldIndex := 16 + (I * 2);
             else
-               NewFieldIndex := 15 + (I * 2);
+               NewFieldIndex := 18 + (I * 2);
             end if;
             FieldValue :=
               Trim
@@ -619,26 +700,34 @@ package body GameOptions is
                elsif FieldIndex = 11 then
                   Set_Page(OptionsForm, 1);
                   Result := Form_Ok;
-                  FieldIndex := 14;
+                  FieldIndex := 15;
                   Set_Background
                     (Current(OptionsForm),
                      (Reverse_Video => True, others => False));
                elsif FieldIndex = 12 then
                   Set_Page(OptionsForm, 2);
                   Result := Form_Ok;
-                  FieldIndex := 37;
+                  FieldIndex := 38;
                   Set_Background
                     (Current(OptionsForm),
                      (Reverse_Video => True, others => False));
-               elsif (FieldIndex > 14 and FieldIndex < 34) or
-                 (FieldIndex > 36 and FieldIndex < 56) then
+               elsif FieldIndex = 13 then
+                  Set_Page(OptionsForm, 3);
+                  Result := Form_Ok;
+                  FieldIndex := 60;
+                  Set_Background
+                    (Current(OptionsForm),
+                     (Reverse_Video => True, others => False));
+               elsif (FieldIndex > 15 and FieldIndex < 35) or
+                 (FieldIndex > 37 and FieldIndex < 57) or
+                 (FieldIndex > 59 and FieldIndex < 93) then
                   SetDescription
                     ("Press new key for set this shortcut.",
                      FieldIndex);
                   KeySetting := True;
                   Refresh(FormWindow);
                   return GameOptions_View;
-               elsif FieldIndex = 34 or FieldIndex = 56 then
+               elsif FieldIndex = 35 or FieldIndex = 57 or FieldIndex = 93 then
                   Result := Driver(OptionsForm, F_First_Page);
                   FieldIndex := 2;
                   Set_Background
@@ -693,11 +782,13 @@ package body GameOptions is
                else
                   GameSettings.AutoFinish := False;
                end if;
-               for I in 1 .. 20 loop
+               for I in 1 .. 37 loop
                   if I < 11 then
-                     FieldIndex := 13 + (I * 2);
+                     FieldIndex := 14 + (I * 2);
+                  elsif I < 21 then
+                     FieldIndex := 16 + (I * 2);
                   else
-                     FieldIndex := 15 + (I * 2);
+                     FieldIndex := 18 + (I * 2);
                   end if;
                   FieldValue :=
                     Trim
@@ -761,11 +852,17 @@ package body GameOptions is
                SetDescription
                  ("Set map manipulation keys (move map, center on ship, set destination, etc).",
                   12);
-            when 15 .. 33 =>
+            when 13 =>
+               SetDescription
+                 ("Set menu shortcuts keys (ship/crew/cargo info, crafting screen, etc).",
+                  13);
+            when 16 .. 34 =>
                SetDescription("Press Enter to start setting key.", FieldIndex);
-            when 34 | 56 =>
+            when 35 | 57 | 93 =>
                SetDescription("Back to general game settings.", FieldIndex);
-            when 36 .. 55 =>
+            when 37 .. 56 =>
+               SetDescription("Press Enter to start setting key.", FieldIndex);
+            when 60 .. 92 =>
                SetDescription("Press Enter to start setting key.", FieldIndex);
             when others =>
                null;
