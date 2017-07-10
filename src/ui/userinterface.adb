@@ -54,6 +54,7 @@ with Statistics.UI; use Statistics.UI;
 with Missions; use Missions;
 with Missions.UI; use Missions.UI;
 with GameOptions; use GameOptions;
+with Config; use Config;
 
 package body UserInterface is
 
@@ -832,23 +833,45 @@ package body UserInterface is
       MenuLength: Column_Position;
    begin
       Menu_Items.all :=
-        (New_Item("s) Ship informations"),
-         New_Item("a) Ship cargo"),
-         New_Item("c) Crew informations"),
-         New_Item("o) Ship orders"),
-         New_Item("r) Crafting"),
-         New_Item("m) Last messages"),
-         New_Item("b) List of known bases"),
-         New_Item("n) List of known events"),
-         New_Item("i) Accepted missions"),
-         New_Item("w) Wait orders"),
-         New_Item("v) Move map position"),
-         New_Item("g) Game statistics"),
-         New_Item("h) Help"),
-         New_Item("p) Game options"),
-         New_Item("q) Quit from game"),
-         New_Item("x) Resign from game"),
-         New_Item("l) Close menu"),
+        (New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(21))) &
+            ") Ship informations"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(22))) & ") Ship cargo"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(23))) &
+            ") Crew informations"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(24))) & ") Ship orders"),
+         New_Item(GetKeyName(Key_Code(GameSettings.Keys(25))) & ") Crafting"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(26))) & ") Last messages"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(27))) &
+            ") List of known bases"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(28))) &
+            ") List of known events"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(29))) &
+            ") Accepted missions"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(30))) & ") Wait orders"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(31))) &
+            ") Move map position"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(32))) & ") Game statistics"),
+         New_Item(GetKeyName(Key_Code(GameSettings.Keys(33))) & ") Help"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(34))) & ") Game options"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(35))) & ") Quit from game"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(36))) &
+            ") Resign from game"),
+         New_Item
+           (GetKeyName(Key_Code(GameSettings.Keys(37))) & ") Close menu"),
          Null_Item);
       OrdersMenu := New_Menu(Menu_Items);
       Set_Format(OrdersMenu, Lines - 4, 1);

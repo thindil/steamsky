@@ -56,7 +56,24 @@ package body Config is
             386,
             396,
             32,
-            10));
+            10,
+            115,
+            97,
+            99,
+            111,
+            114,
+            109,
+            98,
+            110,
+            105,
+            119,
+            118,
+            103,
+            104,
+            112,
+            113,
+            120,
+            108));
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
