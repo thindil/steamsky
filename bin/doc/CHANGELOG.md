@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Info about amount of owned materials in crafting screen
 - Option to set ship movement keys
 - Option to set map manipulation keys
+- Option to set menu shortcut keys
 
 ### Changed
 - Updated REAMDE.md
