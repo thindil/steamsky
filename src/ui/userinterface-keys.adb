@@ -34,6 +34,7 @@ with ShipModules; use ShipModules;
 with Missions; use Missions;
 with Utils; use Utils;
 with Items; use Items;
+with Config; use Config;
 
 package body UserInterface.Keys is
 
@@ -41,25 +42,7 @@ package body UserInterface.Keys is
      (CurrentState: GameStates;
       Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
-      MenuOptions: constant array(Positive range <>) of Character :=
-        ('s',
-         'a',
-         'c',
-         'o',
-         'r',
-         'm',
-         'b',
-         'n',
-         'i',
-         'w',
-         'v',
-         'g',
-         'h',
-         'p',
-         'q',
-         'x',
-         'l');
-      NewKey: Key_Code;
+      NewKey: Integer;
    begin
       case Key is
          when KEY_UP => -- Select previous order
@@ -73,7 +56,7 @@ package body UserInterface.Keys is
                end if;
                return GameMenu;
             else
-               NewKey := Key;
+               NewKey := Integer(Key);
             end if;
          when KEY_DOWN => -- Select next order
             if CurrentState = GameMenu then
@@ -86,88 +69,83 @@ package body UserInterface.Keys is
                end if;
                return GameMenu;
             else
-               NewKey := Key;
+               NewKey := Integer(Key);
             end if;
          when 10 => -- Select option from menu
             if CurrentState = GameMenu then
                NewKey :=
-                 Character'Pos(MenuOptions(Get_Index(Current(OrdersMenu))));
+                 GameSettings.Keys(Get_Index(Current(OrdersMenu)) + 20);
             else
-               NewKey := Key;
+               NewKey := Integer(Key);
             end if;
          when others =>
-            NewKey := Key;
+            NewKey := Integer(Key);
       end case;
-      case NewKey is
-         when Character'Pos('q') | Character'Pos('Q') => -- Back to main menu
-            DrawGame(Quit_Confirm);
-            return Quit_Confirm;
-         when Character'Pos('s') | Character'Pos('S') => -- Ship info screen
-            DrawGame(Ship_Info);
-            return Ship_Info;
-         when Character'Pos('c') | Character'Pos('C') => -- Crew info screen
-            DrawGame(Crew_Info);
-            return Crew_Info;
-         when Character'Pos('o') | Character'Pos('O') => -- Ship orders menu
-            DrawGame(Control_Speed);
-            return Control_Speed;
-         when Character'Pos('r') | Character'Pos('R') => -- Crafting screen
-            DrawGame(Craft_View);
-            return Craft_View;
-         when Character'Pos('m') |
-           Character'Pos('M') => -- Messages list screen
-            DrawGame(Messages_View);
-            return Messages_View;
-         when Character'Pos('h') | Character'Pos('H') => -- Help screen
-            DrawGame(Help_View);
-            return Help_View;
-         when Character'Pos('e') | Character'Pos('E') => -- Show game menu
-            ShowGameMenu;
-            return GameMenu;
-         when Character'Pos('a') | Character'Pos('A') => -- Cargo info screen
-            DrawGame(Cargo_Info);
-            return Cargo_Info;
-         when Character'Pos('w') | Character'Pos('W') => -- Wait orders menu
-            DrawGame(Wait_Order);
-            return Wait_Order;
-         when Character'Pos('v') | Character'Pos('V') => -- Move map form
+      if NewKey = GameSettings.Keys(35) then -- Back to main menu
+         DrawGame(Quit_Confirm);
+         return Quit_Confirm;
+      elsif NewKey = GameSettings.Keys(21) then -- Ship info screen
+         DrawGame(Ship_Info);
+         return Ship_Info;
+      elsif NewKey = GameSettings.Keys(23) then -- Crew info screen
+         DrawGame(Crew_Info);
+         return Crew_Info;
+      elsif NewKey = GameSettings.Keys(24) then -- Ship orders menu
+         DrawGame(Control_Speed);
+         return Control_Speed;
+      elsif NewKey = GameSettings.Keys(25) then -- Crafting screen
+         DrawGame(Craft_View);
+         return Craft_View;
+      elsif NewKey = GameSettings.Keys(26) then -- Messages list screen
+         DrawGame(Messages_View);
+         return Messages_View;
+      elsif NewKey = GameSettings.Keys(33) then -- Help screen
+         DrawGame(Help_View);
+         return Help_View;
+      elsif NewKey = GameSettings.Keys(22) then -- Cargo info screen
+         DrawGame(Cargo_Info);
+         return Cargo_Info;
+      elsif NewKey = GameSettings.Keys(30) then -- Wait orders menu
+         DrawGame(Wait_Order);
+         return Wait_Order;
+      elsif NewKey = GameSettings.Keys(31) then -- Move map form
+         DrawGame(Sky_Map_View);
+         ShowMoveMapForm;
+         return Move_Map;
+      elsif NewKey = GameSettings.Keys(27) then -- List of bases screen
+         DrawGame(Bases_List);
+         return Bases_List;
+      elsif NewKey = GameSettings.Keys(28) then -- List of events screen
+         DrawGame(Events_View);
+         return Events_View;
+      elsif NewKey = GameSettings.Keys(37) then -- Close menu
+         if CurrentState = GameMenu then
             DrawGame(Sky_Map_View);
-            ShowMoveMapForm;
-            return Move_Map;
-         when Character'Pos('b') |
-           Character'Pos('B') => -- List of bases screen
-            DrawGame(Bases_List);
-            return Bases_List;
-         when Character'Pos('n') |
-           Character'Pos('N') => -- List of events screen
-            DrawGame(Events_View);
-            return Events_View;
-         when Character'Pos('l') | Character'Pos('L') => -- Close menu
-            if CurrentState = GameMenu then
-               DrawGame(Sky_Map_View);
-               return Sky_Map_View;
-            else
-               return CurrentState;
-            end if;
-         when Character'Pos('g') | Character'Pos('G') => -- Game statistics
-            DrawGame(GameStats_View);
-            return GameStats_View;
-         when Character'Pos('i') |
-           Character'Pos('I') => -- List of accepted missions
-            DrawGame(Missions_View);
-            return Missions_View;
-         when Character'Pos('p') | Character'Pos('P') => -- Game options
-            DrawGame(GameOptions_View);
-            return GameOptions_View;
-         when Character'Pos('x') | Character'Pos('X') => -- Resign from game
-            DrawGame(Resign_Confirm);
-            return Resign_Confirm;
-         when others =>
-            if CurrentState /= GameMenu then
-               DrawGame(CurrentState);
-            end if;
+            return Sky_Map_View;
+         else
             return CurrentState;
-      end case;
+         end if;
+      elsif NewKey = GameSettings.Keys(32) then -- Game statistics
+         DrawGame(GameStats_View);
+         return GameStats_View;
+      elsif NewKey = GameSettings.Keys(29) then -- List of accepted missions
+         DrawGame(Missions_View);
+         return Missions_View;
+      elsif NewKey = GameSettings.Keys(34) then -- Game options
+         DrawGame(GameOptions_View);
+         return GameOptions_View;
+      elsif NewKey = GameSettings.Keys(36) then -- Ship info screen
+         DrawGame(Resign_Confirm);
+         return Resign_Confirm;
+      elsif NewKey = Character'Pos('e') then -- Show game menu
+         ShowGameMenu;
+         return GameMenu;
+      else
+         if CurrentState /= GameMenu then
+            DrawGame(CurrentState);
+         end if;
+         return CurrentState;
+      end if;
    end GameMenuKeys;
 
    function OrdersMenuKeys
