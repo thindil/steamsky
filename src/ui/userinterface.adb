@@ -662,8 +662,9 @@ package body UserInterface is
         (OrdersMenu,
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 1, 1));
       Post(OrdersMenu);
-      Refresh;
-      Refresh(MenuWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowOrdersMenu;
 
    procedure ShowConfirm(Message: String) is
@@ -820,8 +821,9 @@ package body UserInterface is
         (OrdersMenu,
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 1, 1));
       Post(OrdersMenu);
-      Refresh;
-      Refresh(MenuWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowWaitOrder;
 
    procedure ShowGameMenu is
@@ -864,8 +866,9 @@ package body UserInterface is
         (OrdersMenu,
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 1, 1));
       Post(OrdersMenu);
-      Refresh;
-      Refresh(MenuWindow);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
    end ShowGameMenu;
 
    procedure DrawGame(CurrentState: GameStates) is
@@ -1015,8 +1018,9 @@ package body UserInterface is
       Post(WaitForm);
       Result := Driver(WaitForm, F_End_Line);
       if Result = Form_Ok then
-         Refresh;
-         Refresh(MenuWindow);
+         Refresh_Without_Update;
+         Refresh_Without_Update(MenuWindow);
+         Update_Screen;
       end if;
    end ShowWaitForm;
 
