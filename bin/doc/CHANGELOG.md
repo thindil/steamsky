@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Option to set ship movement keys
 - Option to set map manipulation keys
 - Option to set menu shortcut keys
+- Showing current keys in help
 
 ### Changed
 - Updated REAMDE.md
