@@ -72,18 +72,18 @@ package body Help.UI is
              (Ada.Strings.Unbounded.Count
                 (Help_List.Element(TopicIndex).Text,
                  To_Set(ASCII.LF)));
-         while TextPosition > 0 loop
+         loop
             TextPosition :=
               Index
                 (Help_List.Element(TopicIndex).Text,
                  To_Set(ASCII.LF),
                  OldTextPosition);
-            if TextPosition > 0 and
-              Column_Position(TextPosition - OldTextPosition) > Columns then
+            exit when TextPosition = 0;
+            if Column_Position(TextPosition - OldTextPosition) >= Columns then
                LinesAmount :=
                  LinesAmount +
                  (Line_Position((TextPosition - OldTextPosition)) /
-                  Line_Position(Columns));
+                  Line_Position(Columns - 1));
             end if;
             OldTextPosition := TextPosition + 1;
          end loop;
