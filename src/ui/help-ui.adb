@@ -18,6 +18,8 @@
 with Ada.Strings.Maps; use Ada.Strings.Maps;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
+with GameOptions; use GameOptions;
+with Config; use Config;
 
 package body Help.UI is
 
@@ -62,25 +64,34 @@ package body Help.UI is
       HelpIndex: Natural := 0) is
       LinesAmount: Line_Position;
       TextPosition, OldTextPosition: Natural := 1;
+      NewText: Unbounded_String;
+      KeyIndex: Natural;
    begin
       if HelpIndex > 0 then
          TopicIndex := HelpIndex;
       end if;
       if OldState /= Help_Topic then
          PreviousState := OldState;
+         NewText := Help_List(TopicIndex).Text;
+         for I in 1 .. 37 loop
+            loop
+               KeyIndex :=
+                 Index(NewText, "{GameKey" & Positive'Image(I) & "}");
+               exit when KeyIndex = 0;
+               Replace_Slice
+                 (NewText,
+                  KeyIndex,
+                  (KeyIndex + 8 + Positive'Image(I)'Length),
+                  "'" & GetKeyName(Key_Code(GameSettings.Keys(I))) & "'");
+            end loop;
+         end loop;
          LinesAmount :=
            Line_Position
-             (Ada.Strings.Unbounded.Count
-                (Help_List(TopicIndex).Text,
-                 To_Set(ASCII.LF)));
-         while TextPosition > 0 loop
-            TextPosition :=
-              Index
-                (Help_List(TopicIndex).Text,
-                 To_Set(ASCII.LF),
-                 OldTextPosition);
-            if TextPosition > 0 and
-              Column_Position(TextPosition - OldTextPosition) > Columns then
+             (Ada.Strings.Unbounded.Count(NewText, To_Set(ASCII.LF)));
+         loop
+            TextPosition := Index(NewText, To_Set(ASCII.LF), OldTextPosition);
+            exit when TextPosition = 0;
+            if Column_Position(TextPosition - OldTextPosition) > Columns then
                LinesAmount :=
                  LinesAmount +
                  (Line_Position((TextPosition - OldTextPosition)) /
@@ -92,7 +103,7 @@ package body Help.UI is
             LinesAmount := 1;
          end if;
          HelpPad := New_Pad(LinesAmount + 1, Columns);
-         Add(Win => HelpPad, Str => To_String(Help_List(TopicIndex).Text));
+         Add(Win => HelpPad, Str => To_String(NewText));
          EndIndex := Integer(LinesAmount - (Lines - 2));
          if EndIndex < 0 then
             EndIndex := 0;
