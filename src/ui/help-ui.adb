@@ -91,11 +91,11 @@ package body Help.UI is
          loop
             TextPosition := Index(NewText, To_Set(ASCII.LF), OldTextPosition);
             exit when TextPosition = 0;
-            if Column_Position(TextPosition - OldTextPosition) > Columns then
+            if Column_Position(TextPosition - OldTextPosition) >= Columns then
                LinesAmount :=
                  LinesAmount +
                  (Line_Position((TextPosition - OldTextPosition)) /
-                  Line_Position(Columns));
+                  Line_Position(Columns - 1));
             end if;
             OldTextPosition := TextPosition + 1;
          end loop;
