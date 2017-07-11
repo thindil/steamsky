@@ -264,6 +264,19 @@ must be existing item index from any items file from *data/items* directory.
   menu entry in main help menu. It can be number or text.
 - Whole text below (until next new line which starts from `[`) is help entry
   text visible when player select this option from help menu.
+- Inside help text you can use special variables which later will be replaced
+  by proper keys names. All variables have name `{GameKey [number]}` where
+  `[number]` is between 1 and 37 (example: `{GameKey 9}`). Proper game keys in
+  order: move ship up, move ship down, move ship right, move ship left, move
+  ship down/left, move ship down/right, move ship up/left, move ship up/right,
+  wait 1 min or move ship 1 field, auto move ship, move map up, move map down,
+  move map right, move map left, move map up/left, move map up/right, move map
+  down/left, move map down/right, center map on ship, set destination for ship,
+  ship informations, ship cargo, crew informations, ship orders, crafting, last
+  messages, list of known bases, list of known event, accepted missions, wait
+  orders, move map position, game statistics, help, game options, quit from
+  game, resign from game, close menu. (example: `{GameKey 10}` will be
+  translated to key used for auto move ship).
 
 ## Goals
 
