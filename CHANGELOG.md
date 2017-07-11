@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Possible crash when showing help text
+
 ## [1.0.5] - 2017-07-09
 
 ### Changed
