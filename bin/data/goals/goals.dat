@@ -58,4 +58,7 @@ Amount = 2000
 [20]
 Type = Destroy
 Amount = 2500
+[21]
+Type = Discover
+Amount = 1500
 []
