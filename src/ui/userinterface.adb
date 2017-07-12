@@ -71,6 +71,8 @@ package body UserInterface is
       NeedClean: Boolean :=
         False;
       GunnersCheck, CraftersCheck: Natural := 0;
+      CurrentColumn: Column_Position;
+      CurrentLine: Line_Position;
    begin
       case CurrentState is
          when Sky_Map_View | Control_Speed | Wait_Order =>
@@ -163,6 +165,38 @@ package body UserInterface is
          end case;
          Move_Cursor(Line => 0, Column => (Columns / 3));
          Add(Str => FormatedTime & " Speed: " & To_String(Speed));
+         Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
+         CurrentColumn := CurrentColumn + 1;
+         if FindCargo(ItemType => FuelType) = 0 then
+            Move_Cursor(Line => 0, Column => CurrentColumn);
+            Add(Str => "[No Fuel]");
+            Change_Attributes
+              (Line => 0,
+               Column => CurrentColumn,
+               Count => 10,
+               Color => 3);
+            CurrentColumn := CurrentColumn + 9;
+         end if;
+         if FindCargo(ItemType => DrinksType) = 0 then
+            Move_Cursor(Line => 0, Column => CurrentColumn);
+            Add(Str => "[No Drinks]");
+            Change_Attributes
+              (Line => 0,
+               Column => CurrentColumn,
+               Count => 11,
+               Color => 3);
+            CurrentColumn := CurrentColumn + 11;
+         end if;
+         if FindCargo(ItemType => FoodTypes(1)) = 0 and
+           FindCargo(ItemType => FoodTypes(2)) = 0 then
+            Move_Cursor(Line => 0, Column => CurrentColumn);
+            Add(Str => "[No Food]");
+            Change_Attributes
+              (Line => 0,
+               Column => CurrentColumn,
+               Count => 10,
+               Color => 3);
+         end if;
          Move_Cursor(Line => 0, Column => (Columns - 25));
          Add(Str => "[P][E][G][R][M][U][T][C]");
          for Module of PlayerShip.Modules loop
