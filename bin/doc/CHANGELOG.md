@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Updated REAMDE.md
 - Updated interface
 - Updated help
+- Updated MODDING.md
 
 ### Fixed
 - Not working 'Wait Orders' entry in main menu
