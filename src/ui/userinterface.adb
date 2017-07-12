@@ -70,7 +70,7 @@ package body UserInterface is
       HaveCleaner,
       NeedClean: Boolean :=
         False;
-      GunnersCheck, CraftersCheck: Natural := 0;
+      GunnersCheck, CraftersCheck, ItemIndex, ItemAmount: Natural := 0;
       CurrentColumn: Column_Position;
       CurrentLine: Line_Position;
    begin
@@ -167,7 +167,8 @@ package body UserInterface is
          Add(Str => FormatedTime & " Speed: " & To_String(Speed));
          Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
          CurrentColumn := CurrentColumn + 1;
-         if FindCargo(ItemType => FuelType) = 0 then
+         ItemIndex := FindCargo(ItemType => FuelType);
+         if ItemIndex = 0 then
             Move_Cursor(Line => 0, Column => CurrentColumn);
             Add(Str => "[No Fuel]");
             Change_Attributes
@@ -176,8 +177,26 @@ package body UserInterface is
                Count => 10,
                Color => 3);
             CurrentColumn := CurrentColumn + 9;
+         else
+            for Item of PlayerShip.Cargo loop
+               if Items_List(Item.ProtoIndex).IType = FuelType then
+                  ItemAmount := ItemAmount + Item.Amount;
+               end if;
+               exit when ItemAmount > 99;
+            end loop;
+            if ItemAmount < 100 then
+               Move_Cursor(Line => 0, Column => CurrentColumn);
+               Add(Str => "[Low Fuel]");
+               Change_Attributes
+                 (Line => 0,
+                  Column => CurrentColumn,
+                  Count => 11,
+                  Color => 1);
+               CurrentColumn := CurrentColumn + 10;
+            end if;
          end if;
-         if FindCargo(ItemType => DrinksType) = 0 then
+         ItemIndex := FindCargo(ItemType => DrinksType);
+         if ItemIndex = 0 then
             Move_Cursor(Line => 0, Column => CurrentColumn);
             Add(Str => "[No Drinks]");
             Change_Attributes
@@ -186,9 +205,30 @@ package body UserInterface is
                Count => 11,
                Color => 3);
             CurrentColumn := CurrentColumn + 11;
+         else
+            ItemAmount := 0;
+            for Item of PlayerShip.Cargo loop
+               if Items_List(Item.ProtoIndex).IType = DrinksType then
+                  ItemAmount := ItemAmount + Item.Amount;
+               end if;
+               exit when ItemAmount > 49;
+            end loop;
+            if ItemAmount < 50 then
+               Move_Cursor(Line => 0, Column => CurrentColumn);
+               Add(Str => "[Low Drinks]");
+               Change_Attributes
+                 (Line => 0,
+                  Column => CurrentColumn,
+                  Count => 12,
+                  Color => 1);
+               CurrentColumn := CurrentColumn + 12;
+            end if;
          end if;
-         if FindCargo(ItemType => FoodTypes(1)) = 0 and
-           FindCargo(ItemType => FoodTypes(2)) = 0 then
+         ItemIndex := FindCargo(ItemType => FoodTypes(1));
+         if ItemIndex = 0 then
+            ItemIndex := FindCargo(ItemType => FoodTypes(2));
+         end if;
+         if ItemIndex = 0 then
             Move_Cursor(Line => 0, Column => CurrentColumn);
             Add(Str => "[No Food]");
             Change_Attributes
@@ -196,6 +236,24 @@ package body UserInterface is
                Column => CurrentColumn,
                Count => 10,
                Color => 3);
+         else
+            ItemAmount := 0;
+            for Item of PlayerShip.Cargo loop
+               if Items_List(Item.ProtoIndex).IType = FoodTypes(1) or
+                 Items_List(Item.ProtoIndex).IType = FoodTypes(2) then
+                  ItemAmount := ItemAmount + Item.Amount;
+               end if;
+               exit when ItemAmount > 49;
+            end loop;
+            if ItemAmount < 50 then
+               Move_Cursor(Line => 0, Column => CurrentColumn);
+               Add(Str => "[Low Food]");
+               Change_Attributes
+                 (Line => 0,
+                  Column => CurrentColumn,
+                  Count => 11,
+                  Color => 1);
+            end if;
          end if;
          Move_Cursor(Line => 0, Column => (Columns - 25));
          Add(Str => "[P][E][G][R][M][U][T][C]");
