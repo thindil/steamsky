@@ -20,6 +20,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Terminal_Interface.Curses.Forms.Field_Types.Enumeration;
 use Terminal_Interface.Curses.Forms.Field_Types.Enumeration;
+with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Config; use Config;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
@@ -162,7 +163,7 @@ package body GameOptions is
    end GetKeyName;
 
    procedure ShowOptions is
-      Options_Fields: constant Field_Array_Access := new Field_Array(1 .. 95);
+      Options_Fields: constant Field_Array_Access := new Field_Array(1 .. 101);
       FormHeight: Line_Position;
       FormLength: Column_Position;
       FieldOptions: Field_Option_Set;
@@ -190,11 +191,11 @@ package body GameOptions is
          FormIndex: Positive := Natural(Line * 2) + 1;
       begin
          if Page = 2 then
-            FormIndex := FormIndex + 14;
+            FormIndex := FormIndex + 20;
          elsif Page = 3 then
-            FormIndex := FormIndex + 36;
+            FormIndex := FormIndex + 42;
          elsif Page = 4 then
-            FormIndex := FormIndex + 58;
+            FormIndex := FormIndex + 64;
          end if;
          Options_Fields.all(FormIndex) := New_Field(1, 40, Line, 0, 0, 0);
          Set_Buffer(Options_Fields.all(FormIndex), 0, Text);
@@ -207,13 +208,13 @@ package body GameOptions is
          Key: Key_Code;
       begin
          if Page = 2 then
-            FormIndex := FormIndex + 15;
+            FormIndex := FormIndex + 21;
             Key := Key_Code(GameSettings.Keys(Positive(Line + 1)));
          elsif Page = 3 then
-            FormIndex := FormIndex + 37;
+            FormIndex := FormIndex + 43;
             Key := Key_Code(GameSettings.Keys(Positive(Line + 11)));
          elsif Page = 4 then
-            FormIndex := FormIndex + 59;
+            FormIndex := FormIndex + 65;
             Key := Key_Code(GameSettings.Keys(Positive(Line + 21)));
          end if;
          Options_Fields.all(FormIndex) := New_Field(1, 20, Line, 41, 0, 0);
@@ -288,34 +289,61 @@ package body GameOptions is
       FieldOptions := Get_Options(Options_Fields.all(10));
       FieldOptions.Edit := False;
       Set_Options(Options_Fields.all(10), FieldOptions);
-      Options_Fields.all(11) := New_Field(1, 30, 6, 0, 0, 0);
-      Set_Buffer(Options_Fields.all(11), 0, "Ship movement keys settings ->");
-      FieldOptions := Get_Options(Options_Fields.all(11));
-      FieldOptions.Edit := False;
-      Set_Options(Options_Fields.all(11), FieldOptions);
-      Options_Fields.all(12) := New_Field(1, 33, 7, 0, 0, 0);
+      CreateLabel(5, "Low level of fuel: ");
+      Options_Fields.all(12) := New_Field(1, 8, 5, 41, 0, 0);
       Set_Buffer
         (Options_Fields.all(12),
          0,
-         "Map manipulation keys settings ->");
-      FieldOptions := Get_Options(Options_Fields.all(12));
-      FieldOptions.Edit := False;
-      Set_Options(Options_Fields.all(12), FieldOptions);
-      Options_Fields.all(13) := New_Field(1, 26, 8, 0, 0, 0);
-      Set_Buffer(Options_Fields.all(13), 0, "Menu shortcuts settings ->");
-      FieldOptions := Get_Options(Options_Fields.all(13));
-      FieldOptions.Edit := False;
-      Set_Options(Options_Fields.all(13), FieldOptions);
-      Options_Fields.all(14) := New_Field(6, Columns, 10, 0, 0, 0);
+         Positive'Image(GameSettings.LowFuel));
+      Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type
+        (Options_Fields.all(12),
+         (0, 1, 10000));
+      CreateLabel(6, "Low level of drinks: ");
+      Options_Fields.all(14) := New_Field(1, 8, 6, 41, 0, 0);
       Set_Buffer
         (Options_Fields.all(14),
          0,
+         Positive'Image(GameSettings.LowDrinks));
+      Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type
+        (Options_Fields.all(14),
+         (0, 1, 10000));
+      CreateLabel(7, "Low level of food: ");
+      Options_Fields.all(16) := New_Field(1, 8, 7, 41, 0, 0);
+      Set_Buffer
+        (Options_Fields.all(16),
+         0,
+         Positive'Image(GameSettings.LowFood));
+      Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type
+        (Options_Fields.all(16),
+         (0, 1, 10000));
+      Options_Fields.all(17) := New_Field(1, 30, 9, 0, 0, 0);
+      Set_Buffer(Options_Fields.all(17), 0, "Ship movement keys settings ->");
+      FieldOptions := Get_Options(Options_Fields.all(17));
+      FieldOptions.Edit := False;
+      Set_Options(Options_Fields.all(17), FieldOptions);
+      Options_Fields.all(18) := New_Field(1, 33, 10, 0, 0, 0);
+      Set_Buffer
+        (Options_Fields.all(18),
+         0,
+         "Map manipulation keys settings ->");
+      FieldOptions := Get_Options(Options_Fields.all(18));
+      FieldOptions.Edit := False;
+      Set_Options(Options_Fields.all(18), FieldOptions);
+      Options_Fields.all(19) := New_Field(1, 26, 11, 0, 0, 0);
+      Set_Buffer(Options_Fields.all(19), 0, "Menu shortcuts settings ->");
+      FieldOptions := Get_Options(Options_Fields.all(19));
+      FieldOptions.Edit := False;
+      Set_Options(Options_Fields.all(19), FieldOptions);
+      Options_Fields.all(20) := New_Field(6, Columns, 13, 0, 0, 0);
+      Set_Buffer
+        (Options_Fields.all(20),
+         0,
          "Wait for crew is rested when pilot or engineer are too tired to work.");
-      FieldOptions := Get_Options(Options_Fields.all(14));
+      FieldOptions := Get_Options(Options_Fields.all(20));
       FieldOptions.Active := False;
-      Set_Options(Options_Fields.all(14), FieldOptions);
+      Set_Options(Options_Fields.all(20), FieldOptions);
       CreateLabel(0, "Move ship up: ", 2);
-      Set_New_Page(Options_Fields.all(15));
+      Set_New_Page(Options_Fields.all(21));
       CreateKeyField(0);
       CreateLabel(1, "Move ship down: ", 2);
       CreateKeyField(1);
@@ -335,21 +363,21 @@ package body GameOptions is
       CreateKeyField(8);
       CreateLabel(9, "Auto move ship: ", 2);
       CreateKeyField(9);
-      Options_Fields.all(35) := New_Field(1, 7, 11, 0, 0, 0);
-      Set_Buffer(Options_Fields.all(35), 0, "<- Back");
-      FieldOptions := Get_Options(Options_Fields.all(35));
+      Options_Fields.all(41) := New_Field(1, 7, 11, 0, 0, 0);
+      Set_Buffer(Options_Fields.all(41), 0, "<- Back");
+      FieldOptions := Get_Options(Options_Fields.all(41));
       FieldOptions.Edit := False;
-      Set_Options(Options_Fields.all(35), FieldOptions);
-      Options_Fields.all(36) := New_Field(6, Columns, 13, 0, 0, 0);
+      Set_Options(Options_Fields.all(41), FieldOptions);
+      Options_Fields.all(42) := New_Field(6, Columns, 13, 0, 0, 0);
       Set_Buffer
-        (Options_Fields.all(36),
+        (Options_Fields.all(42),
          0,
          "Press Enter to start setting new key.");
-      FieldOptions := Get_Options(Options_Fields.all(36));
+      FieldOptions := Get_Options(Options_Fields.all(42));
       FieldOptions.Active := False;
-      Set_Options(Options_Fields.all(36), FieldOptions);
+      Set_Options(Options_Fields.all(42), FieldOptions);
       CreateLabel(0, "Move map up: ", 3);
-      Set_New_Page(Options_Fields.all(37));
+      Set_New_Page(Options_Fields.all(43));
       CreateKeyField(0, 3);
       CreateLabel(1, "Move map down: ", 3);
       CreateKeyField(1, 3);
@@ -369,21 +397,21 @@ package body GameOptions is
       CreateKeyField(8, 3);
       CreateLabel(9, "Set destination for ship: ", 3);
       CreateKeyField(9, 3);
-      Options_Fields.all(57) := New_Field(1, 7, 11, 0, 0, 0);
-      Set_Buffer(Options_Fields.all(57), 0, "<- Back");
-      FieldOptions := Get_Options(Options_Fields.all(57));
+      Options_Fields.all(63) := New_Field(1, 7, 11, 0, 0, 0);
+      Set_Buffer(Options_Fields.all(63), 0, "<- Back");
+      FieldOptions := Get_Options(Options_Fields.all(63));
       FieldOptions.Edit := False;
-      Set_Options(Options_Fields.all(57), FieldOptions);
-      Options_Fields.all(58) := New_Field(6, Columns, 13, 0, 0, 0);
+      Set_Options(Options_Fields.all(63), FieldOptions);
+      Options_Fields.all(64) := New_Field(6, Columns, 13, 0, 0, 0);
       Set_Buffer
-        (Options_Fields.all(58),
+        (Options_Fields.all(64),
          0,
          "Press Enter to start setting new key.");
-      FieldOptions := Get_Options(Options_Fields.all(58));
+      FieldOptions := Get_Options(Options_Fields.all(64));
       FieldOptions.Active := False;
-      Set_Options(Options_Fields.all(58), FieldOptions);
+      Set_Options(Options_Fields.all(64), FieldOptions);
       CreateLabel(0, "Ship informations: ", 4);
-      Set_New_Page(Options_Fields.all(59));
+      Set_New_Page(Options_Fields.all(65));
       CreateKeyField(0, 4);
       CreateLabel(1, "Ship cargo: ", 4);
       CreateKeyField(1, 4);
@@ -417,20 +445,20 @@ package body GameOptions is
       CreateKeyField(15, 4);
       CreateLabel(16, "Close menu: ", 4);
       CreateKeyField(16, 4);
-      Options_Fields.all(93) := New_Field(1, 7, 18, 0, 0, 0);
-      Set_Buffer(Options_Fields.all(93), 0, "<- Back");
-      FieldOptions := Get_Options(Options_Fields.all(93));
+      Options_Fields.all(99) := New_Field(1, 7, 18, 0, 0, 0);
+      Set_Buffer(Options_Fields.all(99), 0, "<- Back");
+      FieldOptions := Get_Options(Options_Fields.all(99));
       FieldOptions.Edit := False;
-      Set_Options(Options_Fields.all(93), FieldOptions);
-      Options_Fields.all(94) := New_Field(6, Columns, 20, 0, 0, 0);
+      Set_Options(Options_Fields.all(99), FieldOptions);
+      Options_Fields.all(100) := New_Field(6, Columns, 20, 0, 0, 0);
       Set_Buffer
-        (Options_Fields.all(94),
+        (Options_Fields.all(100),
          0,
          "Press Enter to start setting new key.");
-      FieldOptions := Get_Options(Options_Fields.all(94));
+      FieldOptions := Get_Options(Options_Fields.all(100));
       FieldOptions.Active := False;
-      Set_Options(Options_Fields.all(94), FieldOptions);
-      Options_Fields.all(95) := Null_Field;
+      Set_Options(Options_Fields.all(100), FieldOptions);
+      Options_Fields.all(101) := Null_Field;
       OptionsForm := New_Form(Options_Fields);
       Set_Options(OptionsForm, (others => False));
       Scale(OptionsForm, FormHeight, FormLength);
@@ -448,6 +476,7 @@ package body GameOptions is
       Result: Forms.Driver_Result;
       FieldIndex: Positive := Get_Index(Current(OptionsForm));
       FieldValue: Unbounded_String;
+      Visibility: Cursor_Visibility := Normal;
       procedure SetDescription(Description: String; Field: Positive) is
          FieldsNumbers: constant array(Positive range <>) of Positive :=
            (2,
@@ -455,12 +484,12 @@ package body GameOptions is
             6,
             8,
             10,
-            11,
             12,
-            13,
+            14,
             16,
+            17,
             18,
-            20,
+            19,
             22,
             24,
             26,
@@ -468,10 +497,10 @@ package body GameOptions is
             30,
             32,
             34,
-            35,
+            36,
             38,
             40,
-            42,
+            41,
             44,
             46,
             48,
@@ -479,10 +508,10 @@ package body GameOptions is
             52,
             54,
             56,
-            57,
+            58,
             60,
             62,
-            64,
+            63,
             66,
             68,
             70,
@@ -497,16 +526,19 @@ package body GameOptions is
             88,
             90,
             92,
-            93);
+            94,
+            96,
+            98,
+            99);
       begin
-         if Field < 14 then
-            Set_Buffer(Fields(OptionsForm, 14), 0, Description);
-         elsif Field < 36 then
-            Set_Buffer(Fields(OptionsForm, 36), 0, Description);
-         elsif Field < 58 then
-            Set_Buffer(Fields(OptionsForm, 58), 0, Description);
+         if Field < 20 then
+            Set_Buffer(Fields(OptionsForm, 20), 0, Description);
+         elsif Field < 42 then
+            Set_Buffer(Fields(OptionsForm, 42), 0, Description);
+         elsif Field < 64 then
+            Set_Buffer(Fields(OptionsForm, 64), 0, Description);
          else
-            Set_Buffer(Fields(OptionsForm, 94), 0, Description);
+            Set_Buffer(Fields(OptionsForm, 100), 0, Description);
          end if;
          Set_Background
            (Current(OptionsForm),
@@ -648,11 +680,11 @@ package body GameOptions is
          Result := Unknown_Request;
          for I in 1 .. 37 loop
             if I < 11 then
-               NewFieldIndex := 14 + (I * 2);
+               NewFieldIndex := 20 + (I * 2);
             elsif I < 21 then
-               NewFieldIndex := 16 + (I * 2);
+               NewFieldIndex := 22 + (I * 2);
             else
-               NewFieldIndex := 18 + (I * 2);
+               NewFieldIndex := 24 + (I * 2);
             end if;
             FieldValue :=
               Trim
@@ -683,6 +715,13 @@ package body GameOptions is
             if not KeySetting then
                Result := Driver(OptionsForm, F_Previous_Field);
                FieldIndex := Get_Index(Current(OptionsForm));
+               if FieldIndex > 11 and FieldIndex < 17 then
+                  Set_Cursor_Visibility(Visibility);
+                  Result := Driver(OptionsForm, F_End_Line);
+               else
+                  Visibility := Invisible;
+                  Set_Cursor_Visibility(Visibility);
+               end if;
             else
                SetNewKey;
             end if;
@@ -690,6 +729,13 @@ package body GameOptions is
             if not KeySetting then
                Result := Driver(OptionsForm, F_Next_Field);
                FieldIndex := Get_Index(Current(OptionsForm));
+               if FieldIndex > 11 and FieldIndex < 17 then
+                  Set_Cursor_Visibility(Visibility);
+                  Result := Driver(OptionsForm, F_End_Line);
+               else
+                  Visibility := Invisible;
+                  Set_Cursor_Visibility(Visibility);
+               end if;
             else
                SetNewKey;
             end if;
@@ -697,37 +743,37 @@ package body GameOptions is
             if not KeySetting then
                if FieldIndex < 11 then
                   Result := Driver(OptionsForm, F_Next_Choice);
-               elsif FieldIndex = 11 then
+               elsif FieldIndex = 17 then
                   Set_Page(OptionsForm, 1);
                   Result := Form_Ok;
-                  FieldIndex := 15;
+                  FieldIndex := 21;
                   Set_Background
                     (Current(OptionsForm),
                      (Reverse_Video => True, others => False));
-               elsif FieldIndex = 12 then
+               elsif FieldIndex = 18 then
                   Set_Page(OptionsForm, 2);
                   Result := Form_Ok;
-                  FieldIndex := 38;
+                  FieldIndex := 44;
                   Set_Background
                     (Current(OptionsForm),
                      (Reverse_Video => True, others => False));
-               elsif FieldIndex = 13 then
+               elsif FieldIndex = 19 then
                   Set_Page(OptionsForm, 3);
                   Result := Form_Ok;
-                  FieldIndex := 60;
+                  FieldIndex := 66;
                   Set_Background
                     (Current(OptionsForm),
                      (Reverse_Video => True, others => False));
-               elsif (FieldIndex > 15 and FieldIndex < 35) or
-                 (FieldIndex > 37 and FieldIndex < 57) or
-                 (FieldIndex > 59 and FieldIndex < 93) then
+               elsif (FieldIndex > 21 and FieldIndex < 41) or
+                 (FieldIndex > 43 and FieldIndex < 63) or
+                 (FieldIndex > 65 and FieldIndex < 99) then
                   SetDescription
                     ("Press new key for set this shortcut.",
                      FieldIndex);
                   KeySetting := True;
                   Refresh(FormWindow);
                   return GameOptions_View;
-               elsif FieldIndex = 35 or FieldIndex = 57 or FieldIndex = 93 then
+               elsif FieldIndex = 41 or FieldIndex = 63 or FieldIndex = 99 then
                   Result := Driver(OptionsForm, F_First_Page);
                   FieldIndex := 2;
                   Set_Background
@@ -741,6 +787,8 @@ package body GameOptions is
            Character'Pos
              ('Q') => -- Save options and quit to map or set Q as key shortcut
             if not KeySetting then
+               Visibility := Invisible;
+               Set_Cursor_Visibility(Visibility);
                FieldValue :=
                  To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 2)));
                if FieldValue = To_Unbounded_String("Yes ->") then
@@ -784,11 +832,11 @@ package body GameOptions is
                end if;
                for I in 1 .. 37 loop
                   if I < 11 then
-                     FieldIndex := 14 + (I * 2);
+                     FieldIndex := 20 + (I * 2);
                   elsif I < 21 then
-                     FieldIndex := 16 + (I * 2);
+                     FieldIndex := 22 + (I * 2);
                   else
-                     FieldIndex := 18 + (I * 2);
+                     FieldIndex := 24 + (I * 2);
                   end if;
                   FieldValue :=
                     Trim
@@ -797,6 +845,15 @@ package body GameOptions is
                        Side => Both);
                   GameSettings.Keys(I) := SetKey(To_String(FieldValue));
                end loop;
+               FieldValue :=
+                 To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 12)));
+               GameSettings.LowFuel := Positive'Value(To_String(FieldValue));
+               FieldValue :=
+                 To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 14)));
+               GameSettings.LowDrinks := Positive'Value(To_String(FieldValue));
+               FieldValue :=
+                 To_Unbounded_String(Get_Buffer(Fields(OptionsForm, 16)));
+               GameSettings.LowFood := Positive'Value(To_String(FieldValue));
                SaveConfig;
                Post(OptionsForm, False);
                Delete(OptionsForm);
@@ -807,19 +864,52 @@ package body GameOptions is
             end if;
          when KEY_RIGHT => -- Select next value
             if not KeySetting then
-               Result := Driver(OptionsForm, F_Next_Choice);
+               if FieldIndex < 12 then
+                  Result := Driver(OptionsForm, F_Next_Choice);
+               elsif FieldIndex < 17 then
+                  Result := Driver(OptionsForm, F_Right_Char);
+               end if;
             else
                SetNewKey;
             end if;
          when KEY_LEFT => -- Select previous value
             if not KeySetting then
-               Result := Driver(OptionsForm, F_Previous_Choice);
+               if FieldIndex < 12 then
+                  Result := Driver(OptionsForm, F_Previous_Choice);
+               elsif FieldIndex < 17 then
+                  Result := Driver(OptionsForm, F_Left_Char);
+               end if;
+            else
+               SetNewKey;
+            end if;
+         when Key_Backspace => -- delete last character
+            if not KeySetting then
+               if FieldIndex > 11 and FieldIndex < 17 then
+                  Result := Driver(OptionsForm, F_Delete_Previous);
+                  if Result = Form_Ok then
+                     FieldIndex := Get_Index(Current(OptionsForm));
+                     if FieldIndex < 12 then
+                        Set_Current(OptionsForm, Fields(OptionsForm, 12));
+                        FieldIndex := 12;
+                     end if;
+                  end if;
+               end if;
+            else
+               SetNewKey;
+            end if;
+         when KEY_DC => -- delete character at cursor
+            if not KeySetting then
+               if FieldIndex > 11 and FieldIndex < 17 then
+                  Result := Driver(OptionsForm, F_Delete_Char);
+               end if;
             else
                SetNewKey;
             end if;
          when others =>
             if KeySetting then
                SetNewKey;
+            else
+               Result := Driver(OptionsForm, Key);
             end if;
       end case;
       if Result = Form_Ok then
@@ -844,25 +934,37 @@ package body GameOptions is
                SetDescription
                  ("Auto finish missions when ship is near corresponding skybase.",
                   10);
-            when 11 =>
-               SetDescription
-                 ("Set ship movement keys (directions, auto-move key, etc).",
-                  11);
             when 12 =>
                SetDescription
-                 ("Set map manipulation keys (move map, center on ship, set destination, etc).",
+                 ("Amount of fuel below which you will see warning about low level of. Between 1 and 10000.",
                   12);
-            when 13 =>
+            when 14 =>
+               SetDescription
+                 ("Amount of drinks below which you will see warning about low level of. Between 1 and 10000.",
+                  14);
+            when 16 =>
+               SetDescription
+                 ("Amount of food below which you will see warning about low level of. Between 1 and 10000.",
+                  16);
+            when 17 =>
+               SetDescription
+                 ("Set ship movement keys (directions, auto-move key, etc).",
+                  17);
+            when 18 =>
+               SetDescription
+                 ("Set map manipulation keys (move map, center on ship, set destination, etc).",
+                  18);
+            when 19 =>
                SetDescription
                  ("Set menu shortcuts keys (ship/crew/cargo info, crafting screen, etc).",
-                  13);
-            when 16 .. 34 =>
+                  19);
+            when 22 .. 40 =>
                SetDescription("Press Enter to start setting key.", FieldIndex);
-            when 35 | 57 | 93 =>
+            when 41 | 63 | 99 =>
                SetDescription("Back to general game settings.", FieldIndex);
-            when 37 .. 56 =>
+            when 43 .. 62 =>
                SetDescription("Press Enter to start setting key.", FieldIndex);
-            when 60 .. 92 =>
+            when 66 .. 98 =>
                SetDescription("Press Enter to start setting key.", FieldIndex);
             when others =>
                null;
