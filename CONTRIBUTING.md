@@ -1,1 +1,0 @@
-bin/doc/CONTRIBUTING.md
