@@ -46,6 +46,12 @@ package Bases is
       Drones,
       Inquisition,
       Any);
+   type Base_Cargo is -- Data structure for bases cargo
+   record
+      ProtoIndex: Positive; -- Index of item prototype
+      Amount: Natural; -- Amount of items
+   end record;
+   package BaseCargo_Container is new Vectors(Positive, Base_Cargo);
    type BaseRecord is -- Data structure for bases
    record
       Name: Unbounded_String; -- Base name
@@ -63,6 +69,7 @@ package Bases is
       MissionsDate: Date_Record; -- Time when missions was generated
       Missions: Mission_Container.Vector; -- List of available missions
       Owner: Bases_Owners; -- Owner of base
+      Cargo: BaseCargo_Container.Vector; -- List of all cargo in base
    end record;
    SkyBases: array(1 .. 1024) of BaseRecord; -- List of sky bases
 
@@ -82,5 +89,6 @@ package Bases is
    procedure AskForEvents; -- Ask in base for direction for random events
    procedure UpdatePopulation
      (BaseIndex: Positive); -- Update base population if needed
+   procedure GenerateCargo; -- Generate base cargo
 
 end Bases;
