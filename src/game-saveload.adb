@@ -225,6 +225,19 @@ package body Game.SaveLoad is
                      To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
                end loop;
             end if;
+            RawValue := To_Unbounded_String(SkyBases(I).Cargo.Length'Img);
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            if SkyBases(I).Cargo.Length > 0 then
+               for Item of SkyBases(I).Cargo loop
+                  Put
+                    (SaveGame,
+                     To_String(Items_List(Item.ProtoIndex).Index) & ";");
+                  RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+               end loop;
+            end if;
          end if;
          if SkyBases(I).Known then
             Put(SaveGame, "Y;");
@@ -459,6 +472,7 @@ package body Game.SaveLoad is
       VisitedFields: Positive;
       BaseMissions: Mission_Container.Vector;
       TmpOrders: Orders_Array;
+      BaseCargo: BaseCargo_Container.Vector;
       function ReadData return Unbounded_String is
          RawData: Unbounded_String := To_Unbounded_String("");
          Char: Character;
@@ -516,7 +530,8 @@ package body Game.SaveLoad is
             Reputation => (0, 0),
             MissionsDate => (0, 0, 0, 0, 0),
             Missions => BaseMissions,
-            Owner => Poleis);
+            Owner => Poleis,
+            Cargo => BaseCargo);
          SkyBases(I).Visited.Year := Natural'Value(To_String(ReadData));
          if SkyBases(I).Visited.Year > 0 then
             SkyBases(I).Visited.Month := Natural'Value(To_String(ReadData));
@@ -592,6 +607,17 @@ package body Game.SaveLoad is
                end loop;
                SkyBases(I).Missions := BaseMissions;
                BaseMissions.Clear;
+            end if;
+            VectorLength := Natural'Value(To_String(ReadData));
+            if VectorLength > 0 then
+               for J in 1 .. VectorLength loop
+                  BaseCargo.Append
+                  (New_Item =>
+                     (ProtoIndex => FindProtoItem(ReadData),
+                      Amount => Positive'Value(To_String(ReadData))));
+               end loop;
+               SkyBases(I).Cargo := BaseCargo;
+               BaseCargo.Clear;
             end if;
          end if;
          if ReadData = To_Unbounded_String("Y") then

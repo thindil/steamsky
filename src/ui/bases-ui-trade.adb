@@ -36,11 +36,10 @@ package body Bases.UI.Trade is
    procedure ShowItemInfo is
       ItemIndex, Price: Positive;
       InfoWindow, ClearWindow, BoxWindow: Window;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
-        Bases_Types'Pos
-          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-             .BaseType) +
-        1;
+        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       CurrentLine: Line_Position := 4;
       CargoIndex: constant Natural :=
         Integer'Value(Description(Current(TradeMenu)));
@@ -183,6 +182,23 @@ package body Bases.UI.Trade is
          FreeSpace := 0;
       end if;
       Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      if SkyBases(BaseIndex).Cargo(1).Amount = 0 then
+         Add
+           (Str =>
+              "Base don't have any " &
+              To_String(MoneyName) &
+              "to buy anything.");
+      else
+         Add
+           (Str =>
+              "Base have" &
+              Positive'Image(SkyBases(BaseIndex).Cargo(1).Amount) &
+              " " &
+              To_String(MoneyName) &
+              ".");
+      end if;
       Refresh_Without_Update;
       Refresh_Without_Update(BoxWindow);
       Delete(BoxWindow);

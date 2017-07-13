@@ -532,4 +532,47 @@ package body Bases is
       end if;
    end UpdatePopulation;
 
+   procedure GenerateCargo is
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      Chance, Roll: Positive;
+   begin
+      if SkyBases(BaseIndex).Population < 150 then
+         Chance := 5;
+      elsif SkyBases(BaseIndex).Population > 149 and
+        SkyBases(BaseIndex).Population < 300 then
+         Chance := 10;
+      else
+         Chance := 15;
+      end if;
+      Chance := Chance + DaysDifference(SkyBases(BaseIndex).Visited);
+      if SkyBases(BaseIndex).Cargo.Length = 0 then
+         Chance := 101;
+      end if;
+      if GetRandom(1, 100) > Chance then
+         return;
+      end if;
+      if SkyBases(BaseIndex).Cargo.Length = 0 then
+         SkyBases(BaseIndex).Cargo.Append
+         (New_Item =>
+            (ProtoIndex => FindProtoItem(MoneyIndex),
+             Amount => (GetRandom(50, 200) * SkyBases(BaseIndex).Population)));
+      else
+         for Item of SkyBases(BaseIndex).Cargo loop
+            Roll := GetRandom(1, 100);
+            if Roll < 30 and Item.Amount > 0 then
+               Item.Amount := Item.Amount - (GetRandom(1, (Item.Amount / 2)));
+            elsif Roll < 60 then
+               if Item.Amount = 0 then
+                  Item.Amount :=
+                    GetRandom(1, 10) * SkyBases(BaseIndex).Population;
+               else
+                  Item.Amount :=
+                    Item.Amount + (GetRandom(1, (Item.Amount / 2)));
+               end if;
+            end if;
+         end loop;
+      end if;
+   end GenerateCargo;
+
 end Bases;

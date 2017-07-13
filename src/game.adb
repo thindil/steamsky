@@ -49,6 +49,7 @@ package body Game is
       CabinAssigned: Boolean := False;
       BaseOwner: Bases_Owners;
       BasePopulation: Natural;
+      TmpCargo: BaseCargo_Container.Vector;
    begin
       -- Save new game configuration
       NewGameSettings :=
@@ -164,7 +165,8 @@ package body Game is
             Reputation => (BaseReputation, 0),
             MissionsDate => (0, 0, 0, 0, 0),
             Missions => TmpMissions,
-            Owner => BaseOwner);
+            Owner => BaseOwner,
+            Cargo => TmpCargo);
       end loop;
       -- Place player ship in random large base
       loop
@@ -220,6 +222,7 @@ package body Game is
       SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
       GenerateRecruits(Integer(RandomBase));
       GenerateMissions(Integer(RandomBase));
+      GenerateCargo;
       -- Set player goal if not set yet
       if CurrentGoal.GType = RANDOM then
          CurrentGoal :=
@@ -304,6 +307,7 @@ package body Game is
          UpdatePopulation(BaseIndex);
          GenerateRecruits(BaseIndex);
          GenerateMissions(BaseIndex);
+         GenerateCargo;
          UpdateOrders;
       end if;
       -- Update map cell

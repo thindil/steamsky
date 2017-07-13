@@ -30,11 +30,10 @@ package body Bases.Trade is
 
    procedure BuyItems(ItemIndex: Positive; Amount: String) is
       BuyAmount, TraderIndex, Price, ProtoMoneyIndex: Positive;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
-        Bases_Types'Pos
-          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-             .BaseType) +
-        1;
+        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       ItemName: constant String := To_String(Items_List(ItemIndex).Name);
       Cost, MoneyIndex2: Natural;
       EventIndex: constant Natural :=
@@ -80,9 +79,11 @@ package body Bases.Trade is
          return;
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
+      SkyBases(BaseIndex).Cargo(1).Amount :=
+        SkyBases(BaseIndex).Cargo(1).Amount + Cost;
       UpdateCargo(PlayerShip, ItemIndex, BuyAmount);
       GainExp(1, 4, TraderIndex);
-      GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
+      GainRep(BaseIndex, 1);
       AddMessage
         ("You bought" &
          Positive'Image(BuyAmount) &
@@ -102,11 +103,10 @@ package body Bases.Trade is
 
    procedure SellItems(ItemIndex: Positive; Amount: String) is
       SellAmount, TraderIndex: Positive;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
-        Bases_Types'Pos
-          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-             .BaseType) +
-        1;
+        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       ProtoIndex: constant Positive := PlayerShip.Cargo(ItemIndex).ProtoIndex;
       ItemName: constant String := To_String(Items_List(ProtoIndex).Name);
       Profit, Price: Positive;
@@ -143,14 +143,25 @@ package body Bases.Trade is
             ".");
          return;
       end if;
+      if Profit > SkyBases(BaseIndex).Cargo(1).Amount then
+         ShowDialog
+           ("You can't sell so much " &
+            ItemName &
+            " because base don't have that much " &
+            To_String(MoneyName) &
+            " to buy it.");
+         return;
+      end if;
       UpdateCargo
         (PlayerShip,
          ProtoIndex,
          (0 - SellAmount),
          PlayerShip.Cargo.Element(ItemIndex).Durability);
       UpdateCargo(PlayerShip, FindProtoItem(MoneyIndex), Profit);
+      SkyBases(BaseIndex).Cargo(1).Amount :=
+        SkyBases(BaseIndex).Cargo(1).Amount - Profit;
       GainExp(1, 4, TraderIndex);
-      GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
+      GainRep(BaseIndex, 1);
       AddMessage
         ("You sold" &
          Positive'Image(SellAmount) &
@@ -276,6 +287,8 @@ package body Bases.Trade is
          return;
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
+      SkyBases(BaseIndex).Cargo(1).Amount :=
+        SkyBases(BaseIndex).Cargo(1).Amount + Cost;
       Known_Recipes.Append(New_Item => RecipeIndex);
       AddMessage
         ("You bought recipe for " &
@@ -292,6 +305,8 @@ package body Bases.Trade is
    end BuyRecipe;
 
    procedure HealWounded is
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost, Time, MemberIndex, MoneyIndex2: Natural := 0;
       TraderIndex, ProtoMoneyIndex: Positive;
    begin
@@ -345,8 +360,10 @@ package body Bases.Trade is
             TradeMessage);
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
+      SkyBases(BaseIndex).Cargo(1).Amount :=
+        SkyBases(BaseIndex).Cargo(1).Amount + Cost;
       GainExp(1, 4, TraderIndex);
-      GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
+      GainRep(BaseIndex, 1);
       UpdateGame(Time);
    end HealWounded;
 
