@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Showing current keys in help
 - Warnings about lack of fuel/food/drinks
 - Warnings about low level of fuel/food/drinks
+- Option to set when show warnings about low level fuel/food/drinks
 
 ### Changed
 - Updated REAMDE.md
