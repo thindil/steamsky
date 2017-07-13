@@ -35,6 +35,9 @@ package Config is
       AutoReturn: Boolean; -- If true, set base as destination for ship after finished mission
       AutoFinish: Boolean; -- If true, complete mission if ship is near corresponding base
       Keys: Keys_Array; -- Settings for ship movement keys
+      LowFuel: Positive; -- Amount of fuel below which warning about low level is show
+      LowDrinks: Positive; -- Amount of drinkis below which warning about low level is show
+      LowFood: Positive; -- Amount of food below which warning about low level is show
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;

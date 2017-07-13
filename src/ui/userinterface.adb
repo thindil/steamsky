@@ -184,7 +184,7 @@ package body UserInterface is
                end if;
                exit when ItemAmount > 99;
             end loop;
-            if ItemAmount < 100 then
+            if ItemAmount < GameSettings.LowFuel then
                Move_Cursor(Line => 0, Column => CurrentColumn);
                Add(Str => "[Low Fuel]");
                Change_Attributes
@@ -213,7 +213,7 @@ package body UserInterface is
                end if;
                exit when ItemAmount > 49;
             end loop;
-            if ItemAmount < 50 then
+            if ItemAmount < GameSettings.LowDrinks then
                Move_Cursor(Line => 0, Column => CurrentColumn);
                Add(Str => "[Low Drinks]");
                Change_Attributes
@@ -245,7 +245,7 @@ package body UserInterface is
                end if;
                exit when ItemAmount > 49;
             end loop;
-            if ItemAmount < 50 then
+            if ItemAmount < GameSettings.LowFood then
                Move_Cursor(Line => 0, Column => CurrentColumn);
                Add(Str => "[Low Food]");
                Change_Attributes
