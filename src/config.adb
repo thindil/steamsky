@@ -73,7 +73,10 @@ package body Config is
             112,
             113,
             120,
-            108));
+            108),
+         LowFuel => 100,
+         LowDrinks => 50,
+         LowFood => 25);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -128,6 +131,12 @@ package body Config is
                     Integer'Value(Slice(Value, StartIndex, EndIndex - 1));
                   StartIndex := EndIndex + 2;
                end loop;
+            elsif FieldName = To_Unbounded_String("LowFuel") then
+               GameSettings.LowFuel := Positive'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("LowDrinks") then
+               GameSettings.LowDrinks := Positive'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("LowFood") then
+               GameSettings.LowFood := Positive'Value(To_String(Value));
             end if;
          end if;
       end loop;
@@ -176,6 +185,11 @@ package body Config is
             Put_Line(ConfigFile, Integer'Image(GameSettings.Keys(I)));
          end if;
       end loop;
+      Put_Line(ConfigFile, "LowFuel =" & Positive'Image(GameSettings.LowFuel));
+      Put_Line
+        (ConfigFile,
+         "LowDrinks =" & Positive'Image(GameSettings.LowDrinks));
+      Put_Line(ConfigFile, "LowFood =" & Positive'Image(GameSettings.LowFood));
       Close(ConfigFile);
    end SaveConfig;
 
