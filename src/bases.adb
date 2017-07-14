@@ -535,6 +535,8 @@ package body Bases is
    procedure GenerateCargo is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      BaseType: constant Positive :=
+        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       Chance, Roll: Positive;
    begin
       if SkyBases(BaseIndex).Population < 150 then
@@ -557,6 +559,15 @@ package body Bases is
          (New_Item =>
             (ProtoIndex => FindProtoItem(MoneyIndex),
              Amount => (GetRandom(50, 200) * SkyBases(BaseIndex).Population)));
+         for I in Items_List.Iterate loop
+            if Items_List(I).Buyable(BaseType) then
+               SkyBases(BaseIndex).Cargo.Append
+               (New_Item =>
+                  (ProtoIndex => Objects_Container.To_Index(I),
+                   Amount =>
+                     (GetRandom(0, 100) * SkyBases(BaseIndex).Population)));
+            end if;
+         end loop;
       else
          for Item of SkyBases(BaseIndex).Cargo loop
             Roll := GetRandom(1, 100);
