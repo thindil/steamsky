@@ -29,7 +29,7 @@ with Crafts; use Crafts;
 package body Bases.Trade is
 
    procedure BuyItems(ItemIndex: Positive; Amount: String) is
-      BuyAmount, TraderIndex, Price, ProtoMoneyIndex: Positive;
+      BuyAmount, TraderIndex, Price, ProtoMoneyIndex, BaseItemIndex: Positive;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
@@ -42,6 +42,20 @@ package body Bases.Trade is
       BuyAmount := Positive'Value(Amount);
       if not Items_List(ItemIndex).Buyable(BaseType) then
          ShowDialog("You can't buy " & ItemName & " in this base.");
+         return;
+      end if;
+      for I in SkyBases(BaseIndex).Cargo.Iterate loop
+         if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ItemIndex then
+            BaseItemIndex := BaseCargo_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
+      if SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount = 0 then
+         ShowDialog
+           ("You can't buy " & ItemName & " in this base at this moment.");
+         return;
+      elsif SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount < BuyAmount then
+         ShowDialog("Base don't have that much " & ItemName & " to sell.");
          return;
       end if;
       TraderIndex := FindMember(Talk);
@@ -82,6 +96,8 @@ package body Bases.Trade is
       SkyBases(BaseIndex).Cargo(1).Amount :=
         SkyBases(BaseIndex).Cargo(1).Amount + Cost;
       UpdateCargo(PlayerShip, ItemIndex, BuyAmount);
+      SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount :=
+        SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount - BuyAmount;
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       AddMessage
@@ -151,6 +167,14 @@ package body Bases.Trade is
             To_String(MoneyName) &
             " to buy it.");
          return;
+      end if;
+      if PlayerShip.Cargo(ItemIndex).Durability = 100 then
+         for Item of SkyBases(BaseIndex).Cargo loop
+            if Item.ProtoIndex = ProtoIndex then
+               Item.Amount := Item.Amount + SellAmount;
+               exit;
+            end if;
+         end loop;
       end if;
       UpdateCargo
         (PlayerShip,
