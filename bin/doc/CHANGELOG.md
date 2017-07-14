@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Warnings about lack of fuel/food/drinks
 - Warnings about low level of fuel/food/drinks
 - Option to set when show warnings about low level fuel/food/drinks
+- Limited amount of money in bases
 
 ### Changed
 - Updated REAMDE.md
