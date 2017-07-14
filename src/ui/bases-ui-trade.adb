@@ -46,8 +46,8 @@ package body Bases.UI.Trade is
       StartColumn: Column_Position;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      WindowHeight: Line_Position := 8;
-      MoneyIndex2: Natural := 0;
+      WindowHeight: Line_Position := 7;
+      MoneyIndex2, BaseItemIndex: Natural := 0;
       FreeSpace: Integer;
    begin
       ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
@@ -65,10 +65,18 @@ package body Bases.UI.Trade is
             WindowHeight := WindowHeight + 1;
          end if;
       end if;
+      for I in SkyBases(BaseIndex).Cargo.Iterate loop
+         if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ItemIndex then
+            BaseItemIndex := BaseCargo_Container.To_Index(I);
+            WindowHeight := WindowHeight + 1;
+            exit;
+         end if;
+      end loop;
       WindowHeight :=
         WindowHeight +
         Line_Position
-          ((Length(Items_List(ItemIndex).Description) / Natural(Columns / 2)));
+          ((Length(Items_List(ItemIndex).Description) /
+            (Natural(Columns / 2) - 4)));
       BoxWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
       Box(BoxWindow);
       Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
@@ -116,6 +124,15 @@ package body Bases.UI.Trade is
             ShowCargoStatus(CargoIndex, InfoWindow, 4);
             CurrentLine := 5;
          end if;
+         CurrentLine := CurrentLine + 1;
+      end if;
+      if BaseItemIndex > 0 then
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
+         Add
+           (Win => InfoWindow,
+            Str =>
+              "In base:" &
+              Integer'Image(SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount));
          CurrentLine := CurrentLine + 1;
       end if;
       if Items_List(ItemIndex).Description /= Null_Unbounded_String then
