@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated help
 - Updated MODDING.md
+- Name of ship modules from cargo bay to small cargo bay
 
 ### Fixed
 - Not working 'Wait Orders' entry in main menu
