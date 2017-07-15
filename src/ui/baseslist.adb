@@ -37,7 +37,7 @@ package body BasesList is
    BasesOwner: Bases_Owners := Any;
 
    procedure ShowBaseInfo is
-      InfoWindow, SearchWindow, ClearWindow: Window;
+      InfoWindow, SearchWindow, ClearWindow, OptionsWindow: Window;
       BaseIndex: constant Positive :=
         Positive'Value(Description(Current(BasesMenu)));
       SearchPattern: String(1 .. 250);
@@ -46,17 +46,12 @@ package body BasesList is
       TimeDiff: Integer;
       SearchLength: Natural;
       WindowWidth: Column_Position := 10;
+      InfoWindowWidth, NewWindowWidth: Column_Position := 1;
    begin
       ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
       InfoWindow := Create(12, (Columns / 2), 4, (Columns / 2));
-      if SkyBases(BaseIndex).Visited.Year = 0 then
-         Resize(InfoWindow, 4, (Columns / 2));
-      end if;
-      Box(InfoWindow);
-      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
-      Add(Win => InfoWindow, Str => "[Base Info]");
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 1);
       if SkyBases(BaseIndex).Visited.Year > 0 then
          Add
@@ -93,6 +88,13 @@ package body BasesList is
            (Win => InfoWindow,
             Str =>
               "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
+         Get_Cursor_Position
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => NewWindowWidth);
+         if NewWindowWidth > InfoWindowWidth then
+            InfoWindowWidth := NewWindowWidth;
+         end if;
          Move_Cursor(Win => InfoWindow, Line => 6, Column => 1);
          if SkyBases(BaseIndex).Owner /= Abandoned and
            SkyBases(BaseIndex).Reputation(1) > -25 then
@@ -111,6 +113,13 @@ package body BasesList is
             Add
               (Win => InfoWindow,
                Str => "You can't recruit crew members on this base.");
+         end if;
+         Get_Cursor_Position
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => NewWindowWidth);
+         if NewWindowWidth > InfoWindowWidth then
+            InfoWindowWidth := NewWindowWidth;
          end if;
          Move_Cursor(Win => InfoWindow, Line => 7, Column => 1);
          if SkyBases(BaseIndex).Owner /= Abandoned and
@@ -131,6 +140,13 @@ package body BasesList is
               (Win => InfoWindow,
                Str => "You can't ask for events in this base.");
          end if;
+         Get_Cursor_Position
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => NewWindowWidth);
+         if NewWindowWidth > InfoWindowWidth then
+            InfoWindowWidth := NewWindowWidth;
+         end if;
          Move_Cursor(Win => InfoWindow, Line => 8, Column => 1);
          if SkyBases(BaseIndex).Owner /= Abandoned and
            SkyBases(BaseIndex).Reputation(1) > -1 then
@@ -149,6 +165,13 @@ package body BasesList is
             Add
               (Win => InfoWindow,
                Str => "You can't take missions in this base.");
+         end if;
+         Get_Cursor_Position
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => NewWindowWidth);
+         if NewWindowWidth > InfoWindowWidth then
+            InfoWindowWidth := NewWindowWidth;
          end if;
          Move_Cursor(Win => InfoWindow, Line => 9, Column => 1);
          Add(Win => InfoWindow, Str => "Reputation: ");
@@ -175,9 +198,16 @@ package body BasesList is
                null;
          end case;
          CurrentLine := 10;
+         Resize(InfoWindow, 12, InfoWindowWidth + 1);
       else
          Add(Win => InfoWindow, Str => "Not visited yet.");
+         Resize(InfoWindow, 4, 18);
       end if;
+      Set_Color(InfoWindow, 2);
+      Box(InfoWindow);
+      Set_Color(InfoWindow, Color_Pair'First);
+      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
+      Add(Win => InfoWindow, Str => "[Base Info]");
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 1);
       Add
         (Win => InfoWindow,
@@ -214,24 +244,29 @@ package body BasesList is
          Move_Cursor(Line => 18, Column => (Columns / 2));
          Clear_To_End_Of_Line;
       end if;
-      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
-      Add(Str => "Press F5 to show base on map");
+      OptionsWindow := Create(4, (Columns / 2), CurrentLine, (Columns / 2));
+      Add(Win => OptionsWindow, Str => "Press F5 to show base on map");
       Change_Attributes
-        (Line => CurrentLine,
-         Column => (Columns / 2) + 6,
+        (Win => OptionsWindow,
+         Line => 0,
+         Column => 6,
          Count => 2,
          Color => 1);
-      CurrentLine := CurrentLine + 1;
-      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
-      Add(Str => "Press ENTER to set base as a destination for ship");
+      Move_Cursor(Win => OptionsWindow, Line => 1, Column => 0);
+      Add
+        (Win => OptionsWindow,
+         Str => "Press ENTER to set base as a destination for ship");
       Change_Attributes
-        (Line => CurrentLine,
-         Column => (Columns / 2) + 6,
+        (Win => OptionsWindow,
+         Line => 1,
+         Column => 6,
          Count => 5,
          Color => 1);
       Refresh_Without_Update;
       Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(OptionsWindow);
+      Delete(OptionsWindow);
       Refresh_Without_Update(MenuWindow);
       Update_Screen;
    end ShowBaseInfo;
@@ -328,23 +363,35 @@ package body BasesList is
       end loop;
       Bases_Items.all(Bases_Items'Last) := Null_Item;
       Move_Cursor(Line => 2, Column => 5);
-      Add(Str => "F2 Type: " & To_Lower(Bases_Types'Image(BasesType)));
+      Add
+        (Str =>
+           "F2 Type: " &
+           Bases_Types'Image(BasesType)(1) &
+           To_Lower
+             (Bases_Types'Image(BasesType)
+                (2 .. Bases_Types'Image(BasesType)'Last)));
       Change_Attributes(Line => 2, Column => 5, Count => 2, Color => 1);
       Move_Cursor(Line => 2, Column => 30);
       Add(Str => "F3 Status: ");
       case BasesStatus is
          when 1 =>
-            Add(Str => "any");
+            Add(Str => "Any");
          when 2 =>
-            Add(Str => "only visited");
+            Add(Str => "Only visited");
          when 3 =>
-            Add(Str => "only not visited");
+            Add(Str => "Only not visited");
          when others =>
             null;
       end case;
       Change_Attributes(Line => 2, Column => 30, Count => 2, Color => 1);
       Move_Cursor(Line => 2, Column => 60);
-      Add(Str => "F4 Owner: " & To_Lower(Bases_Owners'Image(BasesOwner)));
+      Add
+        (Str =>
+           "F4 Owner: " &
+           Bases_Owners'Image(BasesOwner)(1) &
+           To_Lower
+             (Bases_Owners'Image(BasesOwner)
+                (2 .. Bases_Owners'Image(BasesOwner)'Last)));
       Change_Attributes(Line => 2, Column => 60, Count => 2, Color => 1);
       if Bases_Items.all(1) /= Null_Item then
          BasesMenu := New_Menu(Bases_Items);
@@ -372,6 +419,7 @@ package body BasesList is
       MenuIndex: Positive;
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
+      MenuCaption: Unbounded_String;
    begin
       case CurrentState is
          when BasesList_Types =>
@@ -379,39 +427,56 @@ package body BasesList is
               new Item_Array(1 .. (Bases_Types'Pos(Bases_Types'Last) + 3));
             for I in Bases_Types loop
                Options_Items.all(Bases_Types'Pos(I) + 1) :=
-                 New_Item(To_Lower(Bases_Types'Image(I)));
+                 New_Item
+                   (Bases_Types'Image(I)(1) &
+                    To_Lower
+                      (Bases_Types'Image(I)(2 .. Bases_Types'Image(I)'Last)));
             end loop;
             MenuIndex := Bases_Types'Pos(Bases_Types'Last) + 2;
+            MenuCaption := To_Unbounded_String("[Bases type]");
          when BasesList_Statuses =>
             Options_Items := new Item_Array(1 .. 5);
-            Options_Items.all(1) := New_Item("any");
-            Options_Items.all(2) := New_Item("only visited");
-            Options_Items.all(3) := New_Item("only not visited");
+            Options_Items.all(1) := New_Item("Any");
+            Options_Items.all(2) := New_Item("Only visited");
+            Options_Items.all(3) := New_Item("Only not visited");
             MenuIndex := 4;
+            MenuCaption := To_Unbounded_String("[Bases status]");
          when BasesList_Owners =>
             Options_Items :=
               new Item_Array(1 .. (Bases_Owners'Pos(Bases_Owners'Last) + 3));
             for I in Bases_Owners loop
                Options_Items.all(Bases_Owners'Pos(I) + 1) :=
-                 New_Item(To_Lower(Bases_Owners'Image(I)));
+                 New_Item
+                   (Bases_Owners'Image(I)(1) &
+                    To_Lower
+                      (Bases_Owners'Image(I)
+                         (2 .. Bases_Owners'Image(I)'Last)));
             end loop;
             MenuIndex := Bases_Owners'Pos(Bases_Owners'Last) + 2;
+            MenuCaption := To_Unbounded_String("[Bases owner]");
          when others =>
             null;
       end case;
-      Options_Items.all(MenuIndex) := New_Item("quit");
+      Options_Items.all(MenuIndex) := New_Item("Quit");
       MenuIndex := MenuIndex + 1;
       Options_Items.all(MenuIndex) := Null_Item;
       OptionsMenu := New_Menu(Options_Items);
       Set_Mark(OptionsMenu, "");
       Scale(OptionsMenu, MenuHeight, MenuLength);
+      if Positive(MenuLength) < Length(MenuCaption) + 2 then
+         MenuLength := Column_Position(Length(MenuCaption)) + 2;
+      end if;
       MenuWindow2 :=
         Create
           (MenuHeight + 2,
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
+      Set_Color(MenuWindow2, 5);
       Box(MenuWindow2);
+      Set_Color(MenuWindow2, Color_Pair'First);
+      Move_Cursor(Win => MenuWindow2, Line => 0, Column => 2);
+      Add(Win => MenuWindow2, Str => To_String(MenuCaption));
       Set_Window(OptionsMenu, MenuWindow2);
       Set_Sub_Window
         (OptionsMenu,
@@ -545,7 +610,7 @@ package body BasesList is
                Result := Driver(OptionsMenu, M_First_Item);
             end if;
          when 10 => -- Select option from menu
-            if Name(Current(OptionsMenu)) = "quit" then
+            if Name(Current(OptionsMenu)) = "Quit" then
                DrawGame(Bases_List);
                return Bases_List;
             end if;
