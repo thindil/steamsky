@@ -70,4 +70,7 @@ Amount = 2500
 [24]
 Type = Discover
 Amount = 5000
+[25]
+Type = Discover
+Amount = 7500
 []
