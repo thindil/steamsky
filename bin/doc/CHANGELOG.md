@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Option to set when show warnings about low level fuel/food/drinks
 - Limited and randomly changing amount of money in bases
 - Limited and randomly changing amount of items in bases
+- Showing current money name in help
 
 ### Changed
 - Updated REAMDE.md
