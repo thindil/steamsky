@@ -65,7 +65,7 @@ package body Help.UI is
       LinesAmount: Line_Position;
       TextPosition, OldTextPosition: Natural := 1;
       NewText: Unbounded_String;
-      KeyIndex: Natural;
+      VariableIndex: Natural;
    begin
       if HelpIndex > 0 then
          TopicIndex := HelpIndex;
@@ -75,15 +75,24 @@ package body Help.UI is
          NewText := Help_List(TopicIndex).Text;
          for I in 1 .. 37 loop
             loop
-               KeyIndex :=
+               VariableIndex :=
                  Index(NewText, "{GameKey" & Positive'Image(I) & "}");
-               exit when KeyIndex = 0;
+               exit when VariableIndex = 0;
                Replace_Slice
                  (NewText,
-                  KeyIndex,
-                  (KeyIndex + 8 + Positive'Image(I)'Length),
+                  VariableIndex,
+                  (VariableIndex + 8 + Positive'Image(I)'Length),
                   "'" & GetKeyName(Key_Code(GameSettings.Keys(I))) & "'");
             end loop;
+         end loop;
+         loop
+            VariableIndex := Index(NewText, "{MoneyName}");
+            exit when VariableIndex = 0;
+            Replace_Slice
+              (NewText,
+               VariableIndex,
+               VariableIndex + 10,
+               To_String(MoneyName));
          end loop;
          LinesAmount :=
            Line_Position
