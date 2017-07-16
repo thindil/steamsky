@@ -12,8 +12,8 @@ All notable changes to this project will be documented in this file.
   in 25 bases, gain max reputation in 50 bases, destroy 250 ships, destroy 500
   ships, destroy 1000 ships, destroy 1500 ships, destroy 2000 ships, destroy
   2500 ships, discover 1500 fields of map, discover 2000 fields of map,
-  discover 2500 fields of map, discover 5000 fields of map and discover 7500
-  fields of map
+  discover 2500 fields of map, discover 5000 fields of map, discover 7500
+  fields of map and discover 10000 fields of map
 - Hall of fame which made saves from previous version incompatible
 - Charges for docking
 - Info about amount of owned materials in crafting screen
