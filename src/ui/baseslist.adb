@@ -26,6 +26,7 @@ with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Help.UI; use Help.UI;
 with Config; use Config;
+with Utils.UI; use Utils.UI;
 
 package body BasesList is
 
@@ -45,7 +46,7 @@ package body BasesList is
       CurrentLine: Line_Position := 2;
       TimeDiff: Integer;
       SearchLength: Natural;
-      WindowWidth: Column_Position := 10;
+      WindowWidth: Column_Position := 12;
       InfoWindowWidth, NewWindowWidth: Column_Position := 1;
    begin
       ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
@@ -203,11 +204,7 @@ package body BasesList is
          Add(Win => InfoWindow, Str => "Not visited yet.");
          Resize(InfoWindow, 4, 18);
       end if;
-      Set_Color(InfoWindow, 2);
-      Box(InfoWindow);
-      Set_Color(InfoWindow, Color_Pair'First);
-      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
-      Add(Win => InfoWindow, Str => "[Base Info]");
+      WindowFrame(InfoWindow, 2, "Base Info");
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 1);
       Add
         (Win => InfoWindow,
@@ -232,9 +229,7 @@ package body BasesList is
          Move_Cursor(Line => 17, Column => (Columns / 2) + WindowWidth);
          Clear_To_End_Of_Line;
          SearchWindow := Create(3, WindowWidth, CurrentLine, (Columns / 2));
-         Box(SearchWindow);
-         Move_Cursor(Win => SearchWindow, Line => 0, Column => 1);
-         Add(Win => SearchWindow, Str => "[Search]");
+         WindowFrame(SearchWindow, 4, "Search");
          Move_Cursor(Win => SearchWindow, Line => 1, Column => 1);
          Add(Win => SearchWindow, Str => To_String(TrimedSearchPattern));
          Refresh_Without_Update(SearchWindow);
@@ -433,14 +428,14 @@ package body BasesList is
                       (Bases_Types'Image(I)(2 .. Bases_Types'Image(I)'Last)));
             end loop;
             MenuIndex := Bases_Types'Pos(Bases_Types'Last) + 2;
-            MenuCaption := To_Unbounded_String("[Bases type]");
+            MenuCaption := To_Unbounded_String("Bases type");
          when BasesList_Statuses =>
             Options_Items := new Item_Array(1 .. 5);
             Options_Items.all(1) := New_Item("Any");
             Options_Items.all(2) := New_Item("Only visited");
             Options_Items.all(3) := New_Item("Only not visited");
             MenuIndex := 4;
-            MenuCaption := To_Unbounded_String("[Bases status]");
+            MenuCaption := To_Unbounded_String("Bases status");
          when BasesList_Owners =>
             Options_Items :=
               new Item_Array(1 .. (Bases_Owners'Pos(Bases_Owners'Last) + 3));
@@ -453,7 +448,7 @@ package body BasesList is
                          (2 .. Bases_Owners'Image(I)'Last)));
             end loop;
             MenuIndex := Bases_Owners'Pos(Bases_Owners'Last) + 2;
-            MenuCaption := To_Unbounded_String("[Bases owner]");
+            MenuCaption := To_Unbounded_String("Bases owner");
          when others =>
             null;
       end case;
@@ -463,8 +458,8 @@ package body BasesList is
       OptionsMenu := New_Menu(Options_Items);
       Set_Mark(OptionsMenu, "");
       Scale(OptionsMenu, MenuHeight, MenuLength);
-      if Positive(MenuLength) < Length(MenuCaption) + 2 then
-         MenuLength := Column_Position(Length(MenuCaption)) + 2;
+      if Positive(MenuLength) < Length(MenuCaption) + 4 then
+         MenuLength := Column_Position(Length(MenuCaption)) + 4;
       end if;
       MenuWindow2 :=
         Create
@@ -472,11 +467,7 @@ package body BasesList is
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Set_Color(MenuWindow2, 5);
-      Box(MenuWindow2);
-      Set_Color(MenuWindow2, Color_Pair'First);
-      Move_Cursor(Win => MenuWindow2, Line => 0, Column => 2);
-      Add(Win => MenuWindow2, Str => To_String(MenuCaption));
+      WindowFrame(MenuWindow2, 5, To_String(MenuCaption));
       Set_Window(OptionsMenu, MenuWindow2);
       Set_Sub_Window
         (OptionsMenu,
