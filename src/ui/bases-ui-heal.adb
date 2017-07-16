@@ -21,6 +21,7 @@ with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Bases.Trade; use Bases.Trade;
+with Utils.UI; use Utils.UI;
 
 package body Bases.UI.Heal is
 
@@ -51,10 +52,13 @@ package body Bases.UI.Heal is
 
    procedure ShowHealInfo is
       Cost, Time, ModuleIndex: Natural := 0;
-      InfoWindow: Window;
+      InfoWindow, ClearWindow: Window;
       CostInfo, TimeInfo: Unbounded_String;
       WindowWidth: Column_Position;
    begin
+      ClearWindow := Create(4, (Columns / 2), 3, (Columns / 2));
+      Refresh_Without_Update(ClearWindow);
+      Delete(ClearWindow);
       HealCost(Cost, Time, ModuleIndex);
       CostInfo :=
         To_Unbounded_String
@@ -70,9 +74,7 @@ package body Bases.UI.Heal is
          WindowWidth := Columns / 2;
       end if;
       InfoWindow := Create(4, WindowWidth, 3, (Columns / 2));
-      Box(InfoWindow);
-      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
-      Add(Win => InfoWindow, Str => "[Info]");
+      WindowFrame(InfoWindow, 2, "Info");
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       Add(Win => InfoWindow, Str => To_String(CostInfo));
       Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
@@ -151,10 +153,10 @@ package body Bases.UI.Heal is
               To_String(MoneyName) &
               " to heal anyone.");
       end if;
-      Move_Cursor(Line => 9, Column => (Columns / 2));
+      Move_Cursor(Line => 8, Column => (Columns / 2));
       Add(Str => "Press Enter to start healing");
       Change_Attributes
-        (Line => 9,
+        (Line => 8,
          Column => (Columns / 2) + 6,
          Count => 5,
          Color => 1);
