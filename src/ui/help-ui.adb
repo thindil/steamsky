@@ -20,6 +20,7 @@ with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 with GameOptions; use GameOptions;
 with Config; use Config;
+with Items; use Items;
 
 package body Help.UI is
 
@@ -66,6 +67,11 @@ package body Help.UI is
       TextPosition, OldTextPosition: Natural := 1;
       NewText: Unbounded_String;
       VariableIndex: Natural;
+      VariablesNames: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("{MoneyName}"),
+         To_Unbounded_String("{FuelName}"));
+      VariablesValues: constant array(Positive range <>) of Unbounded_String :=
+        (MoneyName, Items_List(FindProtoItem(ItemType => FuelType)).Name);
    begin
       if HelpIndex > 0 then
          TopicIndex := HelpIndex;
@@ -85,14 +91,16 @@ package body Help.UI is
                   "'" & GetKeyName(Key_Code(GameSettings.Keys(I))) & "'");
             end loop;
          end loop;
-         loop
-            VariableIndex := Index(NewText, "{MoneyName}");
-            exit when VariableIndex = 0;
-            Replace_Slice
-              (NewText,
-               VariableIndex,
-               VariableIndex + 10,
-               To_String(MoneyName));
+         for I in VariablesNames'Range loop
+            loop
+               VariableIndex := Index(NewText, To_String(VariablesNames(I)));
+               exit when VariableIndex = 0;
+               Replace_Slice
+                 (NewText,
+                  VariableIndex,
+                  VariableIndex + (Length(VariablesNames(I)) - 1),
+                  To_String(VariablesValues(I)));
+            end loop;
          end loop;
          LinesAmount :=
            Line_Position
