@@ -76,4 +76,7 @@ Amount = 7500
 [26]
 Type = Discover
 Amount = 10000
+[27]
+Type = Visit
+Amount = 75
 []
