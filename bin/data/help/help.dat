@@ -18,7 +18,7 @@ At game start, you know only one base. You can discover others by flying on it o
 When you undocked from base, in this same menu, you can set ship speed or dock again. Faster speed means you travel faster but you use more fuel too.
 You can gain or lost reputation with each base. Generally, you gain reputation when you interact with base (trade, repair ship, recruit new crew members, ask for events, etc.). You can check your reputation level in your list of known bases. If your reputation with base is low, you can't dock to that base.
 Reputation levels, starting from lowest: Hated, Outlaw, Hostile, Unfriendly, Unknown, Visitor, Trader, Friend, Well Known.
-To move your ship, you must set it speed, have fuel (called Charcollum, which works as moneys too), and someone from ship crew assigned to pilot and engineer role. To assign crew members to selected role, open crew menu - press key {GameKey 23}, select desired crew member and give order by press 'Enter' key.
+To move your ship, you must set it speed, have fuel (called {FuelName}, which works as moneys too), and someone from ship crew assigned to pilot and engineer role. To assign crew members to selected role, open crew menu - press key {GameKey 23}, select desired crew member and give order by press 'Enter' key.
 Travel time depends on skills of Pilot and Engineer (current members on this positions) and selected ship speed. 
 Fuel cost of travel depends on selected speed (faster = more fuel usage) and each engine fuel usage installed on ship. You can check fuel usage for each engine on ship information screen.
 To move ship in desired direction, use (by default) keys on keypad (with enabled Num Lock at your keyboard). You may change which keys move ship in game options.
