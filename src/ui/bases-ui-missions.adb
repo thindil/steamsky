@@ -20,6 +20,7 @@ with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Items; use Items;
 with ShipModules; use ShipModules;
+with Utils.UI; use Utils.UI;
 
 package body Bases.UI.Missions is
 
@@ -54,13 +55,14 @@ package body Bases.UI.Missions is
         SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Missions
           (Get_Index(Current(TradeMenu)));
       InfoWindow, ClearWindow: Window;
-      CurrentLine: Line_Position := 2;
+      CurrentLine: Line_Position := 1;
       MinutesDiff: Natural;
       MissionTime: Date_Record :=
         (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
       WindowHeight: Line_Position;
       HaveCabin: Boolean := False;
       CabinColor: Color_Pair := 3;
+      InfoWindowWidth, NewWindowWidth: Column_Position := 1;
    begin
       ClearWindow := Create(14, (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
@@ -74,15 +76,20 @@ package body Bases.UI.Missions is
             WindowHeight := 6;
       end case;
       InfoWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
-      Box(InfoWindow);
-      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
-      Add(Win => InfoWindow, Str => "[Mission info]");
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       case Mission.MType is
          when Deliver =>
             Add
               (Win => InfoWindow,
                Str => "Item: " & To_String(Items_List(Mission.Target).Name));
+            Get_Cursor_Position
+              (Win => InfoWindow,
+               Line => CurrentLine,
+               Column => NewWindowWidth);
+            NewWindowWidth := NewWindowWidth + 1;
+            if NewWindowWidth > InfoWindowWidth then
+               InfoWindowWidth := NewWindowWidth;
+            end if;
             Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
             Add
               (Win => InfoWindow,
@@ -99,7 +106,14 @@ package body Bases.UI.Missions is
                    (SkyBases
                       (SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                       .Name));
-            CurrentLine := 4;
+            Get_Cursor_Position
+              (Win => InfoWindow,
+               Line => CurrentLine,
+               Column => NewWindowWidth);
+            NewWindowWidth := NewWindowWidth + 1;
+            if NewWindowWidth > InfoWindowWidth then
+               InfoWindowWidth := NewWindowWidth;
+            end if;
          when Patrol =>
             Add(Win => InfoWindow, Str => "Patrol selected area");
          when Destroy =>
@@ -107,6 +121,14 @@ package body Bases.UI.Missions is
               (Win => InfoWindow,
                Str =>
                  "Target: " & To_String(ProtoShips_List(Mission.Target).Name));
+            Get_Cursor_Position
+              (Win => InfoWindow,
+               Line => CurrentLine,
+               Column => NewWindowWidth);
+            NewWindowWidth := NewWindowWidth + 1;
+            if NewWindowWidth > InfoWindowWidth then
+               InfoWindowWidth := NewWindowWidth;
+            end if;
          when Explore =>
             Add(Win => InfoWindow, Str => "Explore selected area");
          when Passenger =>
@@ -125,6 +147,14 @@ package body Bases.UI.Missions is
                Str =>
                  "Needed cabin: " &
                  To_String(Modules_List(Mission.Target).Name));
+            Get_Cursor_Position
+              (Win => InfoWindow,
+               Line => CurrentLine,
+               Column => NewWindowWidth);
+            NewWindowWidth := NewWindowWidth + 1;
+            if NewWindowWidth > InfoWindowWidth then
+               InfoWindowWidth := NewWindowWidth;
+            end if;
             if not HaveCabin then
                Change_Attributes
                  (Win => InfoWindow,
@@ -142,8 +172,16 @@ package body Bases.UI.Missions is
                    (SkyBases
                       (SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                       .Name));
-            CurrentLine := 3;
+            Get_Cursor_Position
+              (Win => InfoWindow,
+               Line => CurrentLine,
+               Column => NewWindowWidth);
+            NewWindowWidth := NewWindowWidth + 1;
+            if NewWindowWidth > InfoWindowWidth then
+               InfoWindowWidth := NewWindowWidth;
+            end if;
       end case;
+      CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
       Add
         (Win => InfoWindow,
@@ -191,6 +229,14 @@ package body Bases.UI.Missions is
            (Win => InfoWindow,
             Str => Positive'Image(MissionTime.Minutes) & "mins");
       end if;
+      Get_Cursor_Position
+        (Win => InfoWindow,
+         Line => CurrentLine,
+         Column => NewWindowWidth);
+      NewWindowWidth := NewWindowWidth + 1;
+      if NewWindowWidth > InfoWindowWidth then
+         InfoWindowWidth := NewWindowWidth;
+      end if;
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
       Add
@@ -200,6 +246,19 @@ package body Bases.UI.Missions is
            Positive'Image(Mission.Reward) &
            " " &
            To_String(MoneyName));
+      Get_Cursor_Position
+        (Win => InfoWindow,
+         Line => CurrentLine,
+         Column => NewWindowWidth);
+      NewWindowWidth := NewWindowWidth + 1;
+      if NewWindowWidth > InfoWindowWidth then
+         InfoWindowWidth := NewWindowWidth;
+      end if;
+      if InfoWindowWidth > (Columns / 2) then
+         InfoWindowWidth := (Columns / 2);
+      end if;
+      Resize(InfoWindow, WindowHeight, InfoWindowWidth + 1);
+      WindowFrame(InfoWindow, 2, "Mission info");
       CurrentLine := WindowHeight + 3;
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
       Add
