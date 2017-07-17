@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Limited and randomly changing amount of money in bases
 - Limited and randomly changing amount of items in bases
 - Showing current money name in help
+- Showing current fuel name in help
 
 ### Changed
 - Updated REAMDE.md
