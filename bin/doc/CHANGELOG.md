@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
 - Typo in info about tools in crafting screen
 - Crash in crafting screen when more than one tools is used in recipe
 - Possible crash when showing help text
+- Few misspellings in help
 
 ## [1.3] - 2017-06-25
 
