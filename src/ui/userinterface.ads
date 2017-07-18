@@ -22,12 +22,15 @@ with Game; use Game;
 
 package UserInterface is
 
+   type Dialog_Types is (ERROR, WARNING, INFO); -- Type of dialog messages
    OrdersMenu: Menu; -- Menu for orders/game menu
    MenuWindow: Window; -- Window for menu
    WaitForm: Form; -- Form for wait X minutes
 
    procedure ShowGameHeader(CurrentState: GameStates); -- Show in-game header
-   procedure ShowDialog(Message: String); -- Show dialog window with message
+   procedure ShowDialog
+     (Message: String;
+      DType: Dialog_Types := ERROR); -- Show dialog window with message
    function HideDialog
      return Boolean; -- Hide dialog if visible, return True if dialog was hidden
    procedure DrawGame(CurrentState: GameStates); -- Draw game screen
