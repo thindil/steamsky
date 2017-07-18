@@ -79,4 +79,7 @@ Amount = 10000
 [27]
 Type = Visit
 Amount = 75
+[28]
+Type = Visit
+Amount = 100
 []
