@@ -27,6 +27,7 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Terminal_Interface.Curses_Constants;
 use Terminal_Interface.Curses_Constants;
+with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 with UserInterface.Keys; use UserInterface.Keys;
 with Maps.UI; use Maps.UI;
@@ -102,6 +103,10 @@ begin
         ("Your terminal size is too small for game. Minimal size is 60x24. Press any key, to exit from game.");
       return;
    end if;
+
+   -- Set default attributes for menus
+   Set_Foreground(Null_Menu, (Bold_Character => True, others => False), 1);
+   Set_Background(Null_Menu, (Dim_Character => True, others => False));
 
    -- Command line arguments
    for I in 1 .. Argument_Count loop
