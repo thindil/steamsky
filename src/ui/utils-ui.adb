@@ -22,11 +22,13 @@ package body Utils.UI is
       Set_Color(Win, Color);
       Box(Win);
       Move_Cursor(Win => Win, Line => 0, Column => 2);
-      Add(Win => Win, Str => "[");
-      Set_Color(Win, Color_Pair'First);
-      Add(Win => Win, Str => Caption);
-      Set_Color(Win, Color);
-      Add(Win => Win, Str => "]");
+      if Caption'Length > 0 then
+         Add(Win => Win, Str => "[");
+         Set_Color(Win, Color_Pair'First);
+         Add(Win => Win, Str => Caption);
+         Set_Color(Win, Color);
+         Add(Win => Win, Str => "]");
+      end if;
       Set_Color(Win, Color_Pair'First);
    end WindowFrame;
 
