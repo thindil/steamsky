@@ -279,6 +279,8 @@ must be existing item index from any items file from *data/items* directory.
   `{GameKey 10}` will be translated to key used for auto move ship).
 - Inside help text you can use special variable `{MoneyName}` which later will
   be replaced with name of game money.
+- Inside help text you can use special variable `{FuelName}` which later will
+  be replaced with name of fuel for ship.
 
 ## Goals
 
