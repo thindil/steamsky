@@ -22,6 +22,7 @@ with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Crafts; use Crafts;
 with Bases.Trade; use Bases.Trade;
+with Utils.UI; use Utils.UI;
 
 package body Bases.UI.Recipes is
 
@@ -60,9 +61,7 @@ package body Bases.UI.Recipes is
           ("Base price:" & Positive'Image(Cost) & " " & To_String(MoneyName));
       InfoWindow :=
         Create(3, Column_Position(Length(CostInfo) + 4), 3, (Columns / 2));
-      Box(InfoWindow);
-      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
-      Add(Win => InfoWindow, Str => "[Info]");
+      WindowFrame(InfoWindow, 2, "Info");
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       Add(Win => InfoWindow, Str => To_String(CostInfo));
       Refresh_Without_Update;
