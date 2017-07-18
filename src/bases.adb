@@ -539,6 +539,10 @@ package body Bases is
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       Chance, Roll: Positive;
    begin
+      if SkyBases(BaseIndex).Owner = Abandoned and
+        SkyBases(BaseIndex).Cargo.Length > 0 then
+         return;
+      end if;
       if SkyBases(BaseIndex).Population < 150 then
          Chance := 5;
       elsif SkyBases(BaseIndex).Population > 149 and
