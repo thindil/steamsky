@@ -55,6 +55,7 @@ with Missions; use Missions;
 with Missions.UI; use Missions.UI;
 with GameOptions; use GameOptions;
 with Config; use Config;
+with Utils.UI; use Utils.UI;
 
 package body UserInterface is
 
@@ -786,7 +787,7 @@ package body UserInterface is
       Refresh(ConfirmWindow);
    end ShowConfirm;
 
-   procedure ShowDialog(Message: String) is
+   procedure ShowDialog(Message: String; DType: Dialog_Types := ERROR) is
       DialogWindow: Window;
       Width: Positive;
       Height, StartIndex, EndIndex: Positive := 1;
@@ -804,7 +805,14 @@ package body UserInterface is
            Column_Position(Width),
            ((Lines / 2) - Line_Position(Height / 2)),
            ((Columns / 2) - Column_Position(Width / 2)));
-      Box(DialogWindow);
+      case DType is
+         when ERROR =>
+            WindowFrame(DialogWindow, 3, "");
+         when WARNING =>
+            WindowFrame(DialogWindow, 1, "");
+         when INFO =>
+            WindowFrame(DialogWindow, 2, "");
+      end case;
       if Height = 3 then
          Add(Win => DialogWindow, Str => Message, Line => 1, Column => 1);
       else
