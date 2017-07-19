@@ -24,6 +24,7 @@ with Ada.Calendar.Formatting;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Terminal_Interface.Curses_Constants;
 use Terminal_Interface.Curses_Constants;
@@ -79,6 +80,7 @@ procedure SteamSky is
    end ErrorInfo;
 begin
    Set_Directory(Dir_Name(Command_Name));
+   Setenv("ESCDELAY", "10");
    -- Initiate ncurses
    Init_Screen;
    Start_Color;
