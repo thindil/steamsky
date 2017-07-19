@@ -21,6 +21,7 @@ with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Items; use Items;
 with Help.UI; use Help.UI;
+with Header; use Header;
 
 package body Crafts.UI is
 

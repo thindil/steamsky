@@ -21,6 +21,7 @@ with UserInterface; use UserInterface;
 with GameOptions; use GameOptions;
 with Config; use Config;
 with Items; use Items;
+with Header; use Header;
 
 package body Help.UI is
 

@@ -25,6 +25,7 @@ with Items; use Items;
 with Help.UI; use Help.UI;
 with Ships.Crew; use Ships.Crew;
 with Messages.UI; use Messages.UI;
+with Header; use Header;
 
 package body Combat.UI is
 
