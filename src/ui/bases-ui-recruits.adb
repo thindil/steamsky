@@ -158,6 +158,7 @@ package body Bases.UI.Recruits is
 
    function RecruitKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
+      Message: Unbounded_String;
    begin
       case Key is
          when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -175,7 +176,11 @@ package body Bases.UI.Recruits is
                Result := Driver(TradeMenu, M_First_Item);
             end if;
          when 10 => -- Hire recruit
-            HireRecruit(Get_Index(Current(TradeMenu)));
+            Message :=
+              To_Unbounded_String(HireRecruit(Get_Index(Current(TradeMenu))));
+            if Length(Message) > 0 then
+               ShowDialog(To_String(Message));
+            end if;
             DrawGame(Recruits_View);
          when others =>
             Result := Driver(TradeMenu, Key);

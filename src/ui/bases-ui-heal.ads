@@ -17,8 +17,6 @@
 
 package Bases.UI.Heal is
 
-   procedure HealCost
-     (Cost, Time, MemberIndex: in out Natural); -- Count cost/time of heal crew
    procedure ShowHeal; -- Show heal window
    function HealKeys
      (Key: Key_Code) return GameStates; -- Handle keys in heal crew

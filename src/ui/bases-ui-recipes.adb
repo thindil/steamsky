@@ -152,6 +152,7 @@ package body Bases.UI.Recipes is
    function TradeRecipesKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
       RecipeIndex: Positive;
+      Message: Unbounded_String;
    begin
       if TradeMenu /= Null_Menu then
          case Key is
@@ -179,8 +180,11 @@ package body Bases.UI.Recipes is
                      exit;
                   end if;
                end loop;
-               BuyRecipe(RecipeIndex);
+               Message := To_Unbounded_String(BuyRecipe(RecipeIndex));
                DrawGame(TradeRecipes_View);
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
                return TradeRecipes_View;
             when others =>
                Result := Driver(TradeMenu, Key);

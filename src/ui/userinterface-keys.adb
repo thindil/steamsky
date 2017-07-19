@@ -156,6 +156,7 @@ package body UserInterface.Keys is
       Order: constant String := Name(Current(OrdersMenu));
       Result: Menus.Driver_Result;
       NewTime: Integer;
+      Message: Unbounded_String;
    begin
       if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
          EventIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
@@ -271,9 +272,15 @@ package body UserInterface.Keys is
                else
                   Events_List(EventIndex).Time := NewTime;
                end if;
-               SellItems
-                 (ItemIndex,
-                  Integer'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
+               Message :=
+                 To_Unbounded_String
+                   (SellItems
+                      (ItemIndex,
+                       Integer'Image
+                         (PlayerShip.Cargo.Element(ItemIndex).Amount)));
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
                GainRep
                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
                   ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));

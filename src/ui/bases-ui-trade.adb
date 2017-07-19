@@ -449,6 +449,7 @@ package body Bases.UI.Trade is
         Integer'Value(Description(Current(TradeMenu)));
       Visibility: Cursor_Visibility := Invisible;
       FieldIndex: constant Positive := Get_Index(Current(TradeForm));
+      Message: Unbounded_String;
    begin
       if FieldIndex < 3 then
          return Trade_Form;
@@ -461,20 +462,30 @@ package body Bases.UI.Trade is
          end loop;
          if not Buy then
             if FieldIndex = 4 then
-               SellItems(CargoIndex, Get_Buffer(Fields(TradeForm, 2)));
+               Message :=
+                 To_Unbounded_String
+                   (SellItems(CargoIndex, Get_Buffer(Fields(TradeForm, 2))));
             else
-               SellItems
-                 (CargoIndex,
-                  Positive'Image(PlayerShip.Cargo.Element(CargoIndex).Amount));
+               Message :=
+                 To_Unbounded_String
+                   (SellItems
+                      (CargoIndex,
+                       Positive'Image
+                         (PlayerShip.Cargo.Element(CargoIndex).Amount)));
             end if;
          else
-            BuyItems(ItemIndex, Get_Buffer(Fields(TradeForm, 2)));
+            Message :=
+              To_Unbounded_String
+                (BuyItems(ItemIndex, Get_Buffer(Fields(TradeForm, 2))));
          end if;
       end if;
       Set_Cursor_Visibility(Visibility);
       Post(TradeForm, False);
       Delete(TradeForm);
       DrawGame(Trade_View);
+      if Length(Message) > 0 then
+         ShowDialog(To_String(Message));
+      end if;
       return Trade_View;
    end TradeResult;
 
