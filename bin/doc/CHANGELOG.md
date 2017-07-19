@@ -46,6 +46,7 @@ All notable changes to this project will be documented in this file.
 - Crash in crafting screen when more than one tools is used in recipe
 - Possible crash when showing help text
 - Few misspellings in help
+- Crash on showing ship cargo
 
 ## [1.3] - 2017-06-25
 
