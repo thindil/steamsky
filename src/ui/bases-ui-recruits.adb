@@ -21,31 +21,30 @@ with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Items; use Items;
 with Bases.Trade; use Bases.Trade;
+with Utils.UI; use Utils.UI;
 
 package body Bases.UI.Recruits is
 
    procedure ShowRecruitInfo is
-      InfoWindow, ClearWindow: Window;
+      InfoWindow, ClearWindow, OptionsWindow: Window;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       RecruitIndex: constant Positive := Get_Index(Current(TradeMenu));
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       CurrentLine: Line_Position := 3;
-      WindowWidth: Line_Position;
+      WindowHeight: Line_Position;
       MoneyIndex2: Natural := 0;
+      InfoWindowWidth, NewWindowWidth: Column_Position := 1;
    begin
       ClearWindow := Create((Lines - 1), (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
-      WindowWidth := 4 + Line_Position(Recruit.Skills.Length);
-      if WindowWidth > (Lines - 5) then
-         WindowWidth := Lines - 5;
+      WindowHeight := 4 + Line_Position(Recruit.Skills.Length);
+      if WindowHeight > (Lines - 5) then
+         WindowHeight := Lines - 5;
       end if;
-      InfoWindow := Create(WindowWidth, (Columns / 2), 3, (Columns / 2));
-      Box(InfoWindow);
-      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
-      Add(Win => InfoWindow, Str => "[Recruit info]");
+      InfoWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       if Recruit.Gender = 'M' then
          Add(Win => InfoWindow, Str => "Gender: Male");
@@ -60,26 +59,40 @@ package body Bases.UI.Recruits is
               To_String(Skills_Names(Skill(1))) &
               ": " &
               GetSkillLevelName(Skill(2)));
+         Get_Cursor_Position
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => NewWindowWidth);
+         NewWindowWidth := NewWindowWidth + 2;
+         if NewWindowWidth > InfoWindowWidth then
+            InfoWindowWidth := NewWindowWidth;
+         end if;
          CurrentLine := CurrentLine + 1;
       end loop;
+      Resize(InfoWindow, WindowHeight, InfoWindowWidth);
+      WindowFrame(InfoWindow, 2, "Recruit info");
+      OptionsWindow :=
+        Create(4, (Columns / 2), WindowHeight + 3, (Columns / 2));
       MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
-      Move_Cursor(Line => WindowWidth + 3, Column => (Columns / 2));
       if MoneyIndex2 > 0 then
          Add
-           (Str =>
+           (Win => OptionsWindow,
+            Str =>
               "Press ENTER to hire for" &
               Positive'Image(Recruit.Price) &
               " " &
               To_String(MoneyName) &
               ".");
          Change_Attributes
-           (Line => WindowWidth + 3,
-            Column => (Columns / 2) + 6,
+           (Win => OptionsWindow,
+            Line => 0,
+            Column => 6,
             Count => 5,
             Color => 1);
-         Move_Cursor(Line => WindowWidth + 4, Column => (Columns / 2));
+         Move_Cursor(Win => OptionsWindow, Line => 1, Column => 0);
          Add
-           (Str =>
+           (Win => OptionsWindow,
+            Str =>
               "You have" &
               Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
               " " &
@@ -87,7 +100,8 @@ package body Bases.UI.Recruits is
               ".");
       else
          Add
-           (Str =>
+           (Win => OptionsWindow,
+            Str =>
               "You don't have any " &
               To_String(MoneyName) &
               " to hire anyone.");
@@ -95,6 +109,8 @@ package body Bases.UI.Recruits is
       Refresh_Without_Update;
       Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(OptionsWindow);
+      Delete(OptionsWindow);
       Refresh_Without_Update(MenuWindow);
       Update_Screen;
    end ShowRecruitInfo;
