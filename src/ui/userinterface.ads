@@ -27,7 +27,6 @@ package UserInterface is
    MenuWindow: Window; -- Window for menu
    WaitForm: Form; -- Form for wait X minutes
 
-   procedure ShowGameHeader(CurrentState: GameStates); -- Show in-game header
    procedure ShowDialog
      (Message: String;
       DType: Dialog_Types := ERROR); -- Show dialog window with message

@@ -25,6 +25,7 @@ with Help.UI; use Help.UI;
 with Missions; use Missions;
 with Crafts; use Crafts;
 with Items; use Items;
+with Header; use Header;
 
 package body Statistics.UI is
 

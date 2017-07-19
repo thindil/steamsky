@@ -21,6 +21,7 @@ with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Help.UI; use Help.UI;
 with Ships.Upgrade; use Ships.Upgrade;
+with Header; use Header;
 
 package body Ships.UI.Ship.Keys is
 

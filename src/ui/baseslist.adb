@@ -27,6 +27,7 @@ with Ships; use Ships;
 with Help.UI; use Help.UI;
 with Config; use Config;
 with Utils.UI; use Utils.UI;
+with Header; use Header;
 
 package body BasesList is
 
