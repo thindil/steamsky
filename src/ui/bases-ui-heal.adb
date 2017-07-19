@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Maps; use Maps;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
@@ -25,41 +24,18 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.UI.Heal is
 
-   procedure HealCost(Cost, Time, MemberIndex: in out Natural) is
-      BaseType: constant Positive :=
-        Bases_Types'Pos
-          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-             .BaseType) +
-        1;
-   begin
-      MemberIndex := Integer'Value(Description(Current(TradeMenu)));
-      if MemberIndex > 0 then
-         Time := 5 * (100 - PlayerShip.Crew(MemberIndex).Health);
-      else
-         for Member of PlayerShip.Crew loop
-            if Member.Health < 100 then
-               Time := Time + (5 * (100 - Member.Health));
-            end if;
-         end loop;
-      end if;
-      Cost :=
-        Time *
-        Items_List(FindProtoItem(ItemType => HealingTools)).Prices(BaseType);
-      if Time = 0 then
-         Time := 1;
-      end if;
-   end HealCost;
-
    procedure ShowHealInfo is
-      Cost, Time, ModuleIndex: Natural := 0;
+      Cost, Time: Natural := 0;
       InfoWindow, ClearWindow: Window;
       CostInfo, TimeInfo: Unbounded_String;
       WindowWidth: Column_Position;
+      MemberIndex: constant Natural :=
+        Natural'Value(Description(Current(TradeMenu)));
    begin
       ClearWindow := Create(4, (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
-      HealCost(Cost, Time, ModuleIndex);
+      HealCost(Cost, Time, MemberIndex);
       CostInfo :=
         To_Unbounded_String
           ("Heal cost:" & Natural'Image(Cost) & " " & To_String(MoneyName));
@@ -165,6 +141,8 @@ package body Bases.UI.Heal is
 
    function HealKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
+      Message: Unbounded_String;
+      MemberIndex: Natural;
    begin
       if TradeMenu /= Null_Menu then
          case Key is
@@ -193,8 +171,12 @@ package body Bases.UI.Heal is
                   ShowHealInfo;
                end if;
             when 10 => -- Heal wounded crew member(s)
-               HealWounded;
+               MemberIndex := Natural'Value(Description(Current(TradeMenu)));
+               Message := To_Unbounded_String(HealWounded(MemberIndex));
                DrawGame(Heal_View);
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
                return Heal_View;
             when others =>
                Result := Driver(TradeMenu, Key);

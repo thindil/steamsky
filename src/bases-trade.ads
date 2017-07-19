@@ -17,15 +17,25 @@
 
 package Bases.Trade is
 
-   procedure BuyItems
+   function BuyItems
      (ItemIndex: Positive;
-      Amount: String); -- Buy items from bases
-   procedure SellItems
+      Amount: String)
+     return String; -- Buy items from bases, returns empty string if all ok
+   function SellItems
      (ItemIndex: Positive;
-      Amount: String); -- Sell items from bases
-   procedure HireRecruit
-     (RecruitIndex: Positive); -- Hire selected recruit from bases
-   procedure BuyRecipe(RecipeIndex: Positive); -- Buy new crafting recipe
-   procedure HealWounded; -- Heals wounded crew members in bases
+      Amount: String)
+     return String; -- Sell items from bases, returns empty string if all ok
+   function HireRecruit
+     (RecruitIndex: Positive)
+     return String; -- Hire selected recruit from bases, returns empty string if all ok
+   function BuyRecipe
+     (RecipeIndex: Positive)
+     return String; -- Buy new crafting recipe, returns empty string if all ok
+   function HealWounded
+     (MemberIndex: Natural)
+     return String; -- Heals wounded crew members in bases, returns empty string if all ok
+   procedure HealCost
+     (Cost, Time: in out Natural;
+      MemberIndex: Natural); -- Count cost of healing action
 
 end Bases.Trade;

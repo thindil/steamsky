@@ -43,7 +43,9 @@ package body Ships.UI.Cargo is
       WindowHeight :=
         WindowHeight +
         Line_Position
-          ((Length(Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Description) /
+          ((Length
+              (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex)
+                 .Description) /
             (Natural(Columns / 2) - 4)));
       BoxWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
       Box(BoxWindow);

@@ -18,17 +18,15 @@
 with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
-with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
-with Bases.UI.Heal; use Bases.UI.Heal;
 with Crafts; use Crafts;
 
 package body Bases.Trade is
 
-   procedure BuyItems(ItemIndex: Positive; Amount: String) is
+   function BuyItems(ItemIndex: Positive; Amount: String) return String is
       BuyAmount, TraderIndex, Price, ProtoMoneyIndex, BaseItemIndex: Positive;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -41,8 +39,7 @@ package body Bases.Trade is
    begin
       BuyAmount := Positive'Value(Amount);
       if not Items_List(ItemIndex).Buyable(BaseType) then
-         ShowDialog("You can't buy " & ItemName & " in this base.");
-         return;
+         return "You can't buy " & ItemName & " in this base.";
       end if;
       for I in SkyBases(BaseIndex).Cargo.Iterate loop
          if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ItemIndex then
@@ -51,12 +48,9 @@ package body Bases.Trade is
          end if;
       end loop;
       if SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount = 0 then
-         ShowDialog
-           ("You can't buy " & ItemName & " in this base at this moment.");
-         return;
+         return "You can't buy " & ItemName & " in this base at this moment.";
       elsif SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount < BuyAmount then
-         ShowDialog("Base don't have that much " & ItemName & " to sell.");
-         return;
+         return "Base don't have that much " & ItemName & " to sell.";
       end if;
       TraderIndex := FindMember(Talk);
       Price := Items_List(ItemIndex).Prices(BaseType);
@@ -71,26 +65,21 @@ package body Bases.Trade is
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
       MoneyIndex2 := FindCargo(ProtoMoneyIndex);
       if FreeCargo(Cost - (Items_List(ItemIndex).Weight * BuyAmount)) < 0 then
-         ShowDialog("You don't have that much free space in your ship cargo.");
-         return;
+         return "You don't have that much free space in your ship cargo.";
       end if;
       if MoneyIndex2 = 0 then
-         ShowDialog
-           ("You don't have " &
-            To_String(MoneyName) &
-            " to buy " &
-            ItemName &
-            ".");
-         return;
+         return "You don't have " &
+           To_String(MoneyName) &
+           " to buy " &
+           ItemName &
+           ".";
       end if;
       if Cost > PlayerShip.Cargo(MoneyIndex2).Amount then
-         ShowDialog
-           ("You don't have enough " &
-            To_String(MoneyName) &
-            " to buy so much " &
-            ItemName &
-            ".");
-         return;
+         return "You don't have enough " &
+           To_String(MoneyName) &
+           " to buy so much " &
+           ItemName &
+           ".";
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
       SkyBases(BaseIndex).Cargo(1).Amount :=
@@ -112,12 +101,13 @@ package body Bases.Trade is
          ".",
          TradeMessage);
       UpdateGame(5);
+      return "";
    exception
       when Constraint_Error =>
-         return;
+         return "You entered invalid amount to buy.";
    end BuyItems;
 
-   procedure SellItems(ItemIndex: Positive; Amount: String) is
+   function SellItems(ItemIndex: Positive; Amount: String) return String is
       SellAmount, TraderIndex: Positive;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -131,8 +121,7 @@ package body Bases.Trade is
    begin
       SellAmount := Positive'Value(Amount);
       if PlayerShip.Cargo(ItemIndex).Amount < SellAmount then
-         ShowDialog("You dont have that much " & ItemName & " in ship cargo.");
-         return;
+         return "You dont have that much " & ItemName & " in ship cargo.";
       end if;
       TraderIndex := FindMember(Talk);
       Price := Items_List(ProtoIndex).Prices(BaseType);
@@ -153,20 +142,16 @@ package body Bases.Trade is
       CountPrice(Profit, TraderIndex, False);
       if FreeCargo((Items_List(ProtoIndex).Weight * SellAmount) - Profit) <
         0 then
-         ShowDialog
-           ("You don't have enough free cargo space in your ship for " &
-            To_String(MoneyName) &
-            ".");
-         return;
+         return "You don't have enough free cargo space in your ship for " &
+           To_String(MoneyName) &
+           ".";
       end if;
       if Profit > SkyBases(BaseIndex).Cargo(1).Amount then
-         ShowDialog
-           ("You can't sell so much " &
-            ItemName &
-            " because base don't have that much " &
-            To_String(MoneyName) &
-            " to buy it.");
-         return;
+         return "You can't sell so much " &
+           ItemName &
+           " because base don't have that much " &
+           To_String(MoneyName) &
+           " to buy it.";
       end if;
       if PlayerShip.Cargo(ItemIndex).Durability = 100 then
          for Item of SkyBases(BaseIndex).Cargo loop
@@ -198,12 +183,13 @@ package body Bases.Trade is
          ".",
          TradeMessage);
       UpdateGame(5);
+      return "";
    exception
       when Constraint_Error =>
-         return;
+         return "You entered invalid amount to sell.";
    end SellItems;
 
-   procedure HireRecruit(RecruitIndex: Positive) is
+   function HireRecruit(RecruitIndex: Positive) return String is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2, Price: Natural;
@@ -214,21 +200,17 @@ package body Bases.Trade is
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
       MoneyIndex2 := FindCargo(ProtoMoneyIndex);
       if MoneyIndex2 = 0 then
-         ShowDialog
-           ("You don't have " & To_String(MoneyName) & " to hire anyone.");
-         return;
+         return "You don't have " & To_String(MoneyName) & " to hire anyone.";
       end if;
       TraderIndex := FindMember(Talk);
       Price := Recruit.Price;
       CountPrice(Price, TraderIndex);
       if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
-         ShowDialog
-           ("You don't have enough " &
-            To_String(MoneyName) &
-            " to hire " &
-            To_String(Recruit.Name) &
-            ".");
-         return;
+         return "You don't have enough " &
+           To_String(MoneyName) &
+           " to hire " &
+           To_String(Recruit.Name) &
+           ".";
       end if;
       PlayerShip.Crew.Append
       (New_Item =>
@@ -258,9 +240,10 @@ package body Bases.Trade is
       SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex, Count => 1);
       SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population - 1;
       UpdateGame(5);
+      return "";
    end HireRecruit;
 
-   procedure BuyRecipe(RecipeIndex: Positive) is
+   function BuyRecipe(RecipeIndex: Positive) return String is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost, MoneyIndex2: Natural;
@@ -271,13 +254,11 @@ package body Bases.Trade is
       TraderIndex, ProtoMoneyIndex: Positive;
    begin
       if BaseType /= Recipes_List(RecipeIndex).BaseType then
-         ShowDialog("You can't buy this recipe in this base.");
-         return;
+         return "You can't buy this recipe in this base.";
       end if;
       if Known_Recipes.Find_Index(Item => RecipeIndex) /=
         Positive_Container.No_Index then
-         ShowDialog("You already known this recipe.");
-         return;
+         return "You already known this recipe.";
       end if;
       TraderIndex := FindMember(Talk);
       if Items_List(Recipes_List(RecipeIndex).ResultIndex).Prices(BaseType) >
@@ -293,22 +274,18 @@ package body Bases.Trade is
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
       MoneyIndex2 := FindCargo(ProtoMoneyIndex);
       if MoneyIndex2 = 0 then
-         ShowDialog
-           ("You don't have " &
-            To_String(MoneyName) &
-            " to buy recipe for " &
-            RecipeName &
-            ".");
-         return;
+         return "You don't have " &
+           To_String(MoneyName) &
+           " to buy recipe for " &
+           RecipeName &
+           ".";
       end if;
       if Cost > PlayerShip.Cargo(MoneyIndex2).Amount then
-         ShowDialog
-           ("You don't have enough" &
-            To_String(MoneyName) &
-            "  to buy recipe for " &
-            RecipeName &
-            ".");
-         return;
+         return "You don't have enough" &
+           To_String(MoneyName) &
+           "  to buy recipe for " &
+           RecipeName &
+           ".";
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
       SkyBases(BaseIndex).Cargo(1).Amount :=
@@ -326,35 +303,32 @@ package body Bases.Trade is
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       UpdateGame(5);
+      return "";
    end BuyRecipe;
 
-   procedure HealWounded is
+   function HealWounded(MemberIndex: Natural) return String is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      Cost, Time, MemberIndex, MoneyIndex2: Natural := 0;
+      Cost, Time, MoneyIndex2: Natural := 0;
       TraderIndex, ProtoMoneyIndex: Positive;
    begin
       HealCost(Cost, Time, MemberIndex);
       if Cost = 0 then
-         return;
+         return "You don't have anyone to heal.";
       end if;
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
       MoneyIndex2 := FindCargo(ProtoMoneyIndex);
       if MoneyIndex2 = 0 then
-         ShowDialog
-           ("You don't have " &
-            To_String(MoneyName) &
-            " to pay for healing wounded crew members.");
-         return;
+         return "You don't have " &
+           To_String(MoneyName) &
+           " to pay for healing wounded crew members.";
       end if;
       TraderIndex := FindMember(Talk);
       CountPrice(Cost, TraderIndex);
       if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
-         ShowDialog
-           ("You don't have enough " &
-            To_String(MoneyName) &
-            " to pay for healing wounded crew members.");
-         return;
+         return "You don't have enough " &
+           To_String(MoneyName) &
+           " to pay for healing wounded crew members.";
       end if;
       if MemberIndex > 0 then
          PlayerShip.Crew(MemberIndex).Health := 100;
@@ -389,6 +363,31 @@ package body Bases.Trade is
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       UpdateGame(Time);
+      return "";
    end HealWounded;
+
+   procedure HealCost(Cost, Time: in out Natural; MemberIndex: Natural) is
+      BaseType: constant Positive :=
+        Bases_Types'Pos
+          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+             .BaseType) +
+        1;
+   begin
+      if MemberIndex > 0 then
+         Time := 5 * (100 - PlayerShip.Crew(MemberIndex).Health);
+      else
+         for Member of PlayerShip.Crew loop
+            if Member.Health < 100 then
+               Time := Time + (5 * (100 - Member.Health));
+            end if;
+         end loop;
+      end if;
+      Cost :=
+        Time *
+        Items_List(FindProtoItem(ItemType => HealingTools)).Prices(BaseType);
+      if Time = 0 then
+         Time := 1;
+      end if;
+   end HealCost;
 
 end Bases.Trade;
