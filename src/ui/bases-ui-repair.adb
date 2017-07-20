@@ -22,6 +22,7 @@ with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with ShipModules; use ShipModules;
 with Bases.Ship; use Bases.Ship;
+with Utils.UI; use Utils.UI;
 
 package body Bases.UI.Repair is
 
@@ -98,9 +99,7 @@ package body Bases.UI.Repair is
          WindowWidth := Columns / 2;
       end if;
       InfoWindow := Create(4, WindowWidth, 3, (Columns / 2));
-      Box(InfoWindow);
-      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
-      Add(Win => InfoWindow, Str => "[Info]");
+      WindowFrame(InfoWindow, 2, "Info");
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       Add(Win => InfoWindow, Str => To_String(CostInfo));
       Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
@@ -162,7 +161,6 @@ package body Bases.UI.Repair is
       TradeMenu := New_Menu(Repair_Items);
       Set_Options(TradeMenu, (Show_Descriptions => False, others => True));
       Set_Format(TradeMenu, Lines - 10, 1);
-      Set_Mark(TradeMenu, "");
       Scale(TradeMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
       Set_Window(TradeMenu, MenuWindow);
