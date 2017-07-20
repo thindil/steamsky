@@ -330,7 +330,6 @@ package body Bases.UI.Missions is
       Missions_Items.all(Missions_Items'Last) := Null_Item;
       TradeMenu := New_Menu(Missions_Items);
       Set_Format(TradeMenu, Lines - 10, 1);
-      Set_Mark(TradeMenu, "");
       Scale(TradeMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
       Set_Window(TradeMenu, MenuWindow);
