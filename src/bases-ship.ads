@@ -17,10 +17,16 @@
 
 package Bases.Ship is
 
-   procedure RepairShip; -- Repairs playership in bases
-   procedure UpgradeShip
+   function RepairShip
+     (ModuleIndex: Integer)
+     return String; -- Repairs playership in bases, returns empty string if all ok otherwise error message
+   function UpgradeShip
      (Install: Boolean;
-      ModuleIndex: Positive); -- Install/remove modules on ship
+      ModuleIndex: Positive)
+     return String; -- Install/remove modules on ship, returns empty string if all ok otherwise error message
    procedure PayForDock; -- Pay daily fee for docking
+   procedure RepairCost
+     (Cost, Time: in out Natural;
+      ModuleIndex: Integer); -- Count cost/time of repairs of ship
 
 end Bases.Ship;
