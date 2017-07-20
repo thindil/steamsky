@@ -18,8 +18,6 @@
 with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
-with UserInterface; use UserInterface;
-with Bases.UI.Repair; use Bases.UI.Repair;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
@@ -27,29 +25,27 @@ with Ships.Crew; use Ships.Crew;
 
 package body Bases.Ship is
 
-   procedure RepairShip is
-      Cost, Time, ModuleIndex, MoneyIndex2: Natural := 0;
+   function RepairShip(ModuleIndex: Integer) return String is
+      Cost, Time, MoneyIndex2: Natural := 0;
       TraderIndex, ProtoMoneyIndex: Positive;
    begin
       RepairCost(Cost, Time, ModuleIndex);
       if Cost = 0 then
-         return;
+         return "You have nothing to repair.";
       end if;
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
       MoneyIndex2 := FindCargo(ProtoMoneyIndex);
       if MoneyIndex2 = 0 then
-         ShowDialog
-           ("You don't have " & To_String(MoneyName) & " to pay for repairs.");
-         return;
+         return "You don't have " &
+           To_String(MoneyName) &
+           " to pay for repairs.";
       end if;
       TraderIndex := FindMember(Talk);
       CountPrice(Cost, TraderIndex);
       if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
-         ShowDialog
-           ("You don't have enough " &
-            To_String(MoneyName) &
-            " to pay for repairs.");
-         return;
+         return "You don't have enough " &
+           To_String(MoneyName) &
+           " to pay for repairs.";
       end if;
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Order = Repair then
@@ -86,9 +82,12 @@ package body Bases.Ship is
       GainExp(1, 4, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
       UpdateGame(Time);
+      return "";
    end RepairShip;
 
-   procedure UpgradeShip(Install: Boolean; ModuleIndex: Positive) is
+   function UpgradeShip
+     (Install: Boolean;
+      ModuleIndex: Positive) return String is
       ProtoMoneyIndex: constant Positive := FindProtoItem(MoneyIndex);
       MoneyIndex2: constant Natural := FindCargo(ProtoMoneyIndex);
       HullIndex, ModulesAmount, TraderIndex: Positive;
@@ -97,9 +96,9 @@ package body Bases.Ship is
       Damage: DamageFactor := 0.0;
    begin
       if MoneyIndex2 = 0 then
-         ShowDialog
-           ("You don't have " & To_String(MoneyName) & " to pay for modules.");
-         return;
+         return "You don't have " &
+           To_String(MoneyName) &
+           " to pay for modules.";
       end if;
       for C in PlayerShip.Modules.Iterate loop
          case Modules_List(PlayerShip.Modules(C).ProtoIndex).MType is
@@ -119,44 +118,34 @@ package body Bases.Ship is
          Price := Modules_List(ModuleIndex).Price;
          CountPrice(Price, TraderIndex);
          if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
-            ShowDialog
-              ("You don't have enough " &
-               To_String(MoneyName) &
-               " to pay for " &
-               To_String(Modules_List(ModuleIndex).Name) &
-               ".");
-            return;
+            return "You don't have enough " &
+              To_String(MoneyName) &
+              " to pay for " &
+              To_String(Modules_List(ModuleIndex).Name) &
+              ".";
          end if;
          for Module of PlayerShip.Modules loop
             if Modules_List(Module.ProtoIndex).MType =
               Modules_List(ModuleIndex).MType and
               Modules_List(ModuleIndex).Unique then
-               ShowDialog
-                 ("You can't install another " &
-                  To_String(Modules_List(ModuleIndex).Name) &
-                  " because you have installed one module that type. Remove old first.");
-               return;
+               return "You can't install another " &
+                 To_String(Modules_List(ModuleIndex).Name) &
+                 " because you have installed one module that type. Remove old first.";
             end if;
          end loop;
          if Modules_List(ModuleIndex).MType /= HULL then
             ModulesAmount := ModulesAmount + Modules_List(ModuleIndex).Size;
             if ModulesAmount > PlayerShip.Modules(HullIndex).Max_Value and
               Modules_List(ModuleIndex).MType /= GUN then
-               ShowDialog
-                 ("You don't have free modules space for more modules.");
-               return;
+               return "You don't have free modules space for more modules.";
             end if;
             if Modules_List(ModuleIndex).MType = GUN and
               FreeTurretIndex = 0 then
-               ShowDialog
-                 ("You don't have free turret for next gun. Install new turret or remove old gun first.");
-               return;
+               return "You don't have free turret for next gun. Install new turret or remove old gun first.";
             end if;
          else
             if Modules_List(ModuleIndex).MaxValue < ModulesAmount then
-               ShowDialog
-                 ("This hull is too small for your ship. Remove some modules first.");
-               return;
+               return "This hull is too small for your ship. Remove some modules first.";
             end if;
             PlayerShip.Modules.Delete(HullIndex, 1);
          end if;
@@ -223,18 +212,14 @@ package body Bases.Ship is
               Float(Damage));
          CountPrice(Price, TraderIndex, False);
          if FreeCargo((0 - Price)) < 0 then
-            ShowDialog
-              ("You don't have enough free space for " &
-               To_String(MoneyName) &
-               " in ship cargo.");
-            return;
+            return "You don't have enough free space for " &
+              To_String(MoneyName) &
+              " in ship cargo.";
          end if;
          case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
             when TURRET =>
                if PlayerShip.Modules(ModuleIndex).Current_Value > 0 then
-                  ShowDialog
-                    ("You have installed gun in this turret, remove it before you remove this turret.");
-                  return;
+                  return "You have installed gun in this turret, remove it before you remove this turret.";
                end if;
             when GUN =>
                for Module of PlayerShip.Modules loop
@@ -247,9 +232,7 @@ package body Bases.Ship is
             when ShipModules.CARGO =>
                if FreeCargo((0 - PlayerShip.Modules(ModuleIndex).Max_Value)) <
                  0 then
-                  ShowDialog
-                    ("You can't sell this cargo bay, because you have items in it.");
-                  return;
+                  return "You can't sell this cargo bay, because you have items in it.";
                end if;
             when others =>
                null;
@@ -307,6 +290,7 @@ package body Bases.Ship is
             end if;
          end loop;
       end if;
+      return "";
    end UpgradeShip;
 
    procedure PayForDock is
@@ -349,5 +333,53 @@ package body Bases.Ship is
          GainExp(1, 4, TraderIndex);
       end if;
    end PayForDock;
+
+   procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer) is
+      BaseType: constant Positive :=
+        Bases_Types'Pos
+          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+             .BaseType) +
+        1;
+      ProtoIndex: Positive;
+   begin
+      if ModuleIndex > 0 then
+         Time :=
+           PlayerShip.Modules(ModuleIndex).MaxDurability -
+           PlayerShip.Modules(ModuleIndex).Durability;
+         ProtoIndex :=
+           FindProtoItem
+             (ItemType =>
+                Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                  .RepairMaterial);
+         Cost := Time * Items_List(ProtoIndex).Prices(BaseType);
+      else
+         for Module of PlayerShip.Modules loop
+            if Module.Durability < Module.MaxDurability then
+               Time := Time + Module.MaxDurability - Module.Durability;
+               ProtoIndex :=
+                 FindProtoItem
+                   (ItemType =>
+                      Modules_List(Module.ProtoIndex).RepairMaterial);
+               Cost :=
+                 Cost +
+                 ((Module.MaxDurability - Module.Durability) *
+                  Items_List(ProtoIndex).Prices(BaseType));
+            end if;
+         end loop;
+         if ModuleIndex = -1 then
+            Cost := Cost * 2;
+            Time := Time / 2;
+         elsif ModuleIndex = -2 then
+            Cost := Cost * 4;
+            Time := Time / 4;
+         end if;
+      end if;
+      if Bases_Types'Val(BaseType - 1) = Shipyard then
+         Cost := Cost / 2;
+      end if;
+      if Time = 0 then
+         Time := 1;
+      end if;
+   end RepairCost;
 
 end Bases.Ship;

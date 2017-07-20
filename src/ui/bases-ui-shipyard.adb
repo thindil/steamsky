@@ -484,6 +484,7 @@ package body Bases.UI.Shipyard is
 
    function ShipyardKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
+      Message: Unbounded_String;
    begin
       case Key is
          when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -517,9 +518,14 @@ package body Bases.UI.Shipyard is
                return ShipyardTypesMenu;
             end if;
          when 10 => -- Install/remove module
-            Bases.Ship.UpgradeShip
-              (InstallView,
-               Positive'Value(Description(Current(TradeMenu))));
+            Message :=
+              To_Unbounded_String
+                (Bases.Ship.UpgradeShip
+                   (InstallView,
+                    Positive'Value(Description(Current(TradeMenu)))));
+            if Length(Message) > 0 then
+               ShowDialog(To_String(Message));
+            end if;
             DrawGame(Shipyard_View);
          when others =>
             Result := Driver(TradeMenu, Key);
