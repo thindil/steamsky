@@ -393,7 +393,6 @@ package body BasesList is
          BasesMenu := New_Menu(Bases_Items);
          Set_Options(BasesMenu, (Show_Descriptions => False, others => True));
          Set_Format(BasesMenu, Lines - 4, 1);
-         Set_Mark(BasesMenu, "");
          Scale(BasesMenu, MenuHeight, MenuLength);
          MenuWindow := Create(MenuHeight, MenuLength, 4, 2);
          Set_Window(BasesMenu, MenuWindow);
@@ -457,7 +456,6 @@ package body BasesList is
       MenuIndex := MenuIndex + 1;
       Options_Items.all(MenuIndex) := Null_Item;
       OptionsMenu := New_Menu(Options_Items);
-      Set_Mark(OptionsMenu, "");
       Scale(OptionsMenu, MenuHeight, MenuLength);
       if Positive(MenuLength) < Length(MenuCaption) + 4 then
          MenuLength := Column_Position(Length(MenuCaption)) + 4;

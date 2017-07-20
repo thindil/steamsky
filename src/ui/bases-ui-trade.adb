@@ -482,10 +482,10 @@ package body Bases.UI.Trade is
       Set_Cursor_Visibility(Visibility);
       Post(TradeForm, False);
       Delete(TradeForm);
-      DrawGame(Trade_View);
       if Length(Message) > 0 then
          ShowDialog(To_String(Message));
       end if;
+      DrawGame(Trade_View);
       return Trade_View;
    end TradeResult;
 

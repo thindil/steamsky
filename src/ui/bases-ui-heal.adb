@@ -100,7 +100,6 @@ package body Bases.UI.Heal is
       TradeMenu := New_Menu(Heal_Items);
       Set_Options(TradeMenu, (Show_Descriptions => False, others => True));
       Set_Format(TradeMenu, Lines - 10, 1);
-      Set_Mark(TradeMenu, "");
       Scale(TradeMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
       Set_Window(TradeMenu, MenuWindow);
