@@ -41,10 +41,10 @@ project steamsky is
 
     package Linker is
         case Mode is
+            when "debug" =>
+              for Default_Switches ("ada") use ("-no-pie");
             when "release" =>
                 for Default_Switches ("ada") use ("-s", "-Wl,--gc-sections");
-            when others =>
-                null;
         end case;
     end Linker;
 
