@@ -25,7 +25,7 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.UI.Recruits is
 
-   procedure ShowRecruitInfo is
+   procedure ShowRecruitInfo(ClearInfo: Boolean := False) is
       InfoWindow, ClearWindow, OptionsWindow: Window;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -37,9 +37,11 @@ package body Bases.UI.Recruits is
       MoneyIndex2: Natural := 0;
       InfoWindowWidth, NewWindowWidth: Column_Position := 1;
    begin
-      ClearWindow := Create((Lines - 1), (Columns / 2), 3, (Columns / 2));
-      Refresh_Without_Update(ClearWindow);
-      Delete(ClearWindow);
+      if ClearInfo then
+         ClearWindow := Create((Lines - 1), (Columns / 2), 3, (Columns / 2));
+         Refresh_Without_Update(ClearWindow);
+         Delete(ClearWindow);
+      end if;
       WindowHeight := 4 + Line_Position(Recruit.Skills.Length);
       if WindowHeight > (Lines - 5) then
          WindowHeight := Lines - 5;
@@ -182,6 +184,7 @@ package body Bases.UI.Recruits is
                ShowDialog(To_String(Message));
             end if;
             DrawGame(Recruits_View);
+            Result := Request_Denied;
          when others =>
             Result := Driver(TradeMenu, Key);
             if Result /= Menu_Ok then
@@ -190,7 +193,7 @@ package body Bases.UI.Recruits is
             end if;
       end case;
       if Result = Menu_Ok then
-         ShowRecruitInfo;
+         ShowRecruitInfo(True);
       end if;
       CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
       return Recruits_View;
