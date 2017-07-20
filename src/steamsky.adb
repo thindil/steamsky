@@ -109,6 +109,7 @@ begin
    -- Set default attributes for menus
    Set_Foreground(Null_Menu, (Bold_Character => True, others => False), 1);
    Set_Background(Null_Menu, (Dim_Character => True, others => False));
+   Set_Mark(Null_Menu, "");
 
    -- Command line arguments
    for I in 1 .. Argument_Count loop

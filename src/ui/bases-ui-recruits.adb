@@ -143,7 +143,6 @@ package body Bases.UI.Recruits is
       Recruits_Items.all(Recruits_Items'Last) := Null_Item;
       TradeMenu := New_Menu(Recruits_Items);
       Set_Format(TradeMenu, Lines - 10, 1);
-      Set_Mark(TradeMenu, "");
       Scale(TradeMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
       Set_Window(TradeMenu, MenuWindow);
