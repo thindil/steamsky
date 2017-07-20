@@ -17,10 +17,6 @@
 
 package Bases.UI.Repair is
 
-   procedure RepairCost
-     (Cost,
-      Time,
-      ModuleIndex: in out Natural); -- Count cost/time of repairs of ship
    procedure ShowRepair; -- Show repair window
    function RepairKeys
      (Key: Key_Code) return GameStates; -- Handle keys in ship repairs

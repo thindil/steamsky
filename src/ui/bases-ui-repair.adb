@@ -20,66 +20,18 @@ with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
-with ShipModules; use ShipModules;
 with Bases.Ship; use Bases.Ship;
 with Utils.UI; use Utils.UI;
 
 package body Bases.UI.Repair is
 
-   procedure RepairCost(Cost, Time, ModuleIndex: in out Natural) is
-      BaseType: constant Positive :=
-        Bases_Types'Pos
-          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-             .BaseType) +
-        1;
-      ProtoIndex: Positive;
-   begin
-      ModuleIndex := Integer'Value(Description(Current(TradeMenu)));
-      if ModuleIndex > 0 then
-         Time :=
-           PlayerShip.Modules(ModuleIndex).MaxDurability -
-           PlayerShip.Modules(ModuleIndex).Durability;
-         ProtoIndex :=
-           FindProtoItem
-             (ItemType =>
-                Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                  .RepairMaterial);
-         Cost := Time * Items_List(ProtoIndex).Prices(BaseType);
-      else
-         for Module of PlayerShip.Modules loop
-            if Module.Durability < Module.MaxDurability then
-               Time := Time + Module.MaxDurability - Module.Durability;
-               ProtoIndex :=
-                 FindProtoItem
-                   (ItemType =>
-                      Modules_List(Module.ProtoIndex).RepairMaterial);
-               Cost :=
-                 Cost +
-                 ((Module.MaxDurability - Module.Durability) *
-                  Items_List(ProtoIndex).Prices(BaseType));
-            end if;
-         end loop;
-         if Name(Current(TradeMenu))(1) = 'R' then
-            Cost := Cost * 2;
-            Time := Time / 2;
-         elsif Name(Current(TradeMenu))(1) = 'F' then
-            Cost := Cost * 4;
-            Time := Time / 4;
-         end if;
-      end if;
-      if Bases_Types'Val(BaseType - 1) = Shipyard then
-         Cost := Cost / 2;
-      end if;
-      if Time = 0 then
-         Time := 1;
-      end if;
-   end RepairCost;
-
    procedure ShowRepairInfo is
-      Cost, Time, ModuleIndex: Natural := 0;
+      Cost, Time: Natural := 0;
       InfoWindow, ClearWindow: Window;
       CostInfo, TimeInfo: Unbounded_String;
       WindowWidth: Column_Position;
+      ModuleIndex: constant Integer :=
+        Integer'Value(Description(Current(TradeMenu)));
    begin
       ClearWindow := Create(4, (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
@@ -146,12 +98,12 @@ package body Bases.UI.Repair is
       Repair_Items.all(MenuIndex) := New_Item("Slowly repair whole ship", "0");
       if SkyBases(BaseIndex).Population > 149 then
          MenuIndex := MenuIndex + 1;
-         Repair_Items.all(MenuIndex) := New_Item("Repair whole ship", "0");
+         Repair_Items.all(MenuIndex) := New_Item("Repair whole ship", "-1");
       end if;
       if SkyBases(BaseIndex).Population > 299 then
          MenuIndex := MenuIndex + 1;
          Repair_Items.all(MenuIndex) :=
-           New_Item("Fast repair whole ship", "0");
+           New_Item("Fast repair whole ship", "-2");
       end if;
       MenuIndex := MenuIndex + 1;
       for I in MenuIndex .. Repair_Items'Last loop
@@ -201,8 +153,11 @@ package body Bases.UI.Repair is
 
    function RepairKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
+      Message: Unbounded_String;
+      ModuleIndex: Integer;
    begin
       if TradeMenu /= Null_Menu then
+         ModuleIndex := Integer'Value(Description(Current(TradeMenu)));
          case Key is
             when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
                CurrentMenuIndex := 1;
@@ -223,7 +178,11 @@ package body Bases.UI.Repair is
                   Result := Driver(TradeMenu, M_First_Item);
                end if;
             when 10 => -- Repair ship
-               RepairShip;
+               Message :=
+                 To_Unbounded_String(Bases.Ship.RepairShip(ModuleIndex));
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
                DrawGame(Repairs_View);
                return Repairs_View;
             when others =>
