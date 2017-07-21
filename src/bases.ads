@@ -85,8 +85,10 @@ package Bases is
      return Unbounded_String; -- Generate random name for base
    procedure GenerateRecruits
      (BaseIndex: Positive); -- Generate if needed new recruits in base
-   procedure AskForBases; -- Ask in base for direction for other bases
-   procedure AskForEvents; -- Ask in base for direction for random events
+   function AskForBases
+     return String; -- Ask in base for direction for other bases, returns empty string if all ok otherwise error message
+   function AskForEvents
+     return String; -- Ask in base for direction for random events, returns empty string if all ok otherwise error message
    procedure UpdatePopulation
      (BaseIndex: Positive); -- Update base population if needed
    procedure GenerateCargo; -- Generate base cargo
