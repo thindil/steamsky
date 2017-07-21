@@ -21,6 +21,8 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Calendar; use Ada.Calendar;
 with Ada.Calendar.Formatting;
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Terminal_Interface.Curses_Constants;
 use Terminal_Interface.Curses_Constants;
@@ -58,7 +60,8 @@ procedure SteamSky is
    Result: Integer;
    ErrorFile: File_Type;
 begin
-   Set_Directory(Command_Name(Command_Name'First .. Command_Name'Last - 9));
+   Set_Directory(Dir_Name(Command_Name));
+   Setenv("TERMINFO", "terminfo");
    Init_Screen;
    Start_Color;
    Set_Timeout_Mode(Standard_Window, Blocking, 0);
