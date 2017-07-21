@@ -50,7 +50,7 @@ If you have all, in main source code directory (where this file is):
 If you build game from sources you need only ncurses library to run game. Enter
 *bin* directory and type `./steamsky`.
 If you use released binaries, you don't need any additional libraries, just in
-main game directory (where this file is) type `./steamsky.sh`.
+main game directory (where this file is) type `./steamsky`.
 Game works only in terminal.
 
 ### Starting parameters
@@ -72,8 +72,6 @@ Of course, you can set all parameters together: `./steamsky --datadir=somedir/
 --savedir=otherdir/ --docdir=anotherdir/`
 
 Paths to directories can be absolute or relative where file `steamsky` is. 
-Of course, all this parameters can be set for starting script too: 
-`./steamsky.sh --datadir=somedir/`.
 
 ## Modify game
 For detailed informations about modifying various game elements or debugging
