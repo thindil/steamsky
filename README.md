@@ -42,7 +42,7 @@ If you build game from sources you need only ncurses library to run game. Enter
 *bin* directory and type `./steamsky`. Additionally, copy files COPYING and
 CHANGELOG.md to *bin* directory.
 If you use released binaries, you don't need any additional libraries, just in
-main game directory (where this file is) type `./steamsky.sh`.
+main game directory (where this file is) type `./steamsky`.
 Game works only in terminal.
 
 ## Modify game
