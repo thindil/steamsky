@@ -188,9 +188,15 @@ package body UserInterface.Keys is
                DrawGame(Recruits_View);
                return Recruits_View;
             elsif Order = "Ask for events" then
-               AskForEvents;
+               Message := To_Unbounded_String(AskForEvents);
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
             elsif Order = "Ask for bases" then
-               AskForBases;
+               Message := To_Unbounded_String(AskForBases);
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
             elsif Order = "Heal wounded" then
                DrawGame(Heal_View);
                return Heal_View;

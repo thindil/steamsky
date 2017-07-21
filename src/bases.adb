@@ -19,7 +19,6 @@ with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
 with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
-with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
@@ -209,7 +208,7 @@ package body Bases is
       SkyBases(BaseIndex).Recruits := BaseRecruits;
    end GenerateRecruits;
 
-   procedure AskForBases is
+   function AskForBases return String is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Radius, TempX, TempY: Integer;
@@ -218,9 +217,7 @@ package body Bases is
       UnknownBases: Natural := 0;
    begin
       if SkyBases(BaseIndex).AskedForBases then
-         ShowDialog
-           ("You can't ask again for direction to other bases in this base.");
-         return;
+         return "You can't ask again for direction to other bases in this base.";
       end if;
       if SkyBases(BaseIndex).Population < 150 then
          Amount := 10;
@@ -305,9 +302,10 @@ package body Bases is
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       UpdateGame(30);
+      return "";
    end AskForBases;
 
-   procedure AskForEvents is
+   function AskForEvents return String is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MaxEvents, EventsAmount, TmpBaseIndex, TraderIndex, ItemIndex: Positive;
@@ -319,8 +317,7 @@ package body Bases is
       Attempts: Natural;
    begin
       if DaysDifference(SkyBases(BaseIndex).AskedForEvents) < 7 then
-         ShowDialog("You asked for know events in this base not so long ago.");
-         return;
+         return "You asked for know events in this base not so long ago.";
       end if;
       TraderIndex := FindMember(Talk);
       if SkyBases(BaseIndex).Population < 150 then
@@ -489,6 +486,7 @@ package body Bases is
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       UpdateGame(30);
+      return "";
    end AskForEvents;
 
    procedure UpdatePopulation(BaseIndex: Positive) is
