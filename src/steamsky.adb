@@ -81,6 +81,7 @@ procedure SteamSky is
 begin
    Set_Directory(Dir_Name(Command_Name));
    Setenv("ESCDELAY", "10");
+   Setenv("TERMINFO", "terminfo");
    -- Initiate ncurses
    Init_Screen;
    Start_Color;
