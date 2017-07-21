@@ -31,7 +31,7 @@ All notable changes to this project will be documented in this file.
 - Showing current fuel name in help
 
 ### Changed
-- Updated REAMDE.md
+- Updated README.md
 - Updated interface
 - Updated help
 - Updated MODDING.md
