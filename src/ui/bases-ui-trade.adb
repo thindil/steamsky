@@ -27,6 +27,7 @@ with Help.UI; use Help.UI;
 with Events; use Events;
 with Bases.Trade; use Bases.Trade;
 with Header; use Header;
+with Utils.UI; use Utils.UI;
 
 package body Bases.UI.Trade is
 
@@ -44,12 +45,13 @@ package body Bases.UI.Trade is
       CurrentLine: Line_Position := 4;
       CargoIndex: constant Natural :=
         Integer'Value(Description(Current(TradeMenu)));
-      StartColumn: Column_Position;
+      StartColumn, WindowWidth: Column_Position;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       WindowHeight: Line_Position := 7;
       MoneyIndex2, BaseItemIndex: Natural := 0;
       FreeSpace: Integer;
+      PriceText: Unbounded_String;
    begin
       ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
@@ -78,10 +80,14 @@ package body Bases.UI.Trade is
         Line_Position
           ((Length(Items_List(ItemIndex).Description) /
             (Natural(Columns / 2) - 4)));
+      if Length(Items_List(ItemIndex).Description) >=
+        (Natural(Columns / 2) - 4) then
+         WindowWidth := Columns / 2;
+      else
+         WindowWidth :=
+           Column_Position(Length(Items_List(ItemIndex).Description)) + 4;
+      end if;
       BoxWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
-      Box(BoxWindow);
-      Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
-      Add(Win => BoxWindow, Str => "[Item info]");
       InfoWindow :=
         Create(WindowHeight - 2, (Columns / 2) - 4, 4, (Columns / 2) + 2);
       Add(Win => InfoWindow, Str => "Type: ");
@@ -94,9 +100,9 @@ package body Bases.UI.Trade is
       end if;
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 0);
       if Items_List(ItemIndex).Buyable(BaseType) then
-         Add(Win => InfoWindow, Str => "Base buy/sell price:");
+         PriceText := To_Unbounded_String("Base buy/sell price:");
       else
-         Add(Win => InfoWindow, Str => "Base sell price:");
+         PriceText := To_Unbounded_String("Base sell price:");
       end if;
       Price := Items_List(ItemIndex).Prices(BaseType);
       if EventIndex > 0 then
@@ -105,9 +111,13 @@ package body Bases.UI.Trade is
             Price := Price * 2;
          end if;
       end if;
-      Add
-        (Win => InfoWindow,
-         Str => Integer'Image(Price) & " " & To_String(MoneyName));
+      Append(PriceText, Integer'Image(Price));
+      Append(PriceText, " ");
+      Append(PriceText, MoneyName);
+      if WindowWidth < Column_Position(Length(PriceText) + 4) then
+         WindowWidth := Column_Position(Length(PriceText) + 4);
+      end if;
+      Add(Win => InfoWindow, Str => To_String(PriceText));
       Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
       Add
         (Win => InfoWindow,
@@ -146,6 +156,9 @@ package body Bases.UI.Trade is
             Line => CurrentLine,
             Column => StartColumn);
       end if;
+      Resize(BoxWindow, WindowHeight, WindowWidth);
+      WindowFrame(BoxWindow, 2, "Item info");
+      Resize(InfoWindow, WindowHeight - 2, WindowWidth - 4);
       CurrentLine := WindowHeight + 3;
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
       if Items_List(ItemIndex).Buyable(BaseType) and CargoIndex > 0 then
@@ -291,7 +304,6 @@ package body Bases.UI.Trade is
       TradeMenu := New_Menu(Trade_Items);
       Set_Options(TradeMenu, (Show_Descriptions => False, others => True));
       Set_Format(TradeMenu, Lines - 3, 1);
-      Set_Mark(TradeMenu, "");
       Scale(TradeMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
       Set_Window(TradeMenu, MenuWindow);
@@ -319,9 +331,10 @@ package body Bases.UI.Trade is
       Visibility: Cursor_Visibility := Normal;
       ItemIndex, Price: Positive;
       MaxAmount: Natural := 0;
-      FieldText: Unbounded_String := To_Unbounded_String("Enter amount of ");
+      FieldText: Unbounded_String := To_Unbounded_String("Enter amount");
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+      CaptionText: Unbounded_String;
    begin
       for I in Items_List.Iterate loop
          if To_String(Items_List(I).Name) = Name(Current(TradeMenu)) then
@@ -329,7 +342,6 @@ package body Bases.UI.Trade is
             exit;
          end if;
       end loop;
-      Append(FieldText, Items_List(ItemIndex).Name);
       Price := Items_List(ItemIndex).Prices(BaseType);
       if EventIndex > 0 then
          if Events_List(EventIndex).EType = DoublePrice and
@@ -353,6 +365,8 @@ package body Bases.UI.Trade is
             end if;
          end loop;
          Append(FieldText, " to buy");
+         CaptionText := To_Unbounded_String("Buying ");
+         Append(CaptionText, Items_List(ItemIndex).Name);
       else
          if Description(Current(TradeMenu)) = "0" then
             ShowDialog
@@ -366,6 +380,8 @@ package body Bases.UI.Trade is
            PlayerShip.Cargo(Integer'Value(Description(Current(TradeMenu))))
              .Amount;
          Append(FieldText, " to sell");
+         CaptionText := To_Unbounded_String("Selling ");
+         Append(CaptionText, Items_List(ItemIndex).Name);
       end if;
       Append(FieldText, " (max" & Natural'Image(MaxAmount) & "): ");
       if TradeForm = Null_Form then
@@ -381,9 +397,13 @@ package body Bases.UI.Trade is
          FieldOptions := Get_Options(Trade_Fields.all(2));
          FieldOptions.Auto_Skip := False;
          Set_Options(Trade_Fields.all(2), FieldOptions);
+         Set_Foreground
+           (Trade_Fields.all(2),
+            (Bold_Character => True, others => False),
+            1);
          Set_Background
            (Trade_Fields.all(2),
-            (Reverse_Video => True, others => False));
+            (Under_Line => True, others => False));
          Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type
            (Trade_Fields.all(2),
             (0, 0, MaxAmount));
@@ -431,6 +451,7 @@ package body Bases.UI.Trade is
               ((Lines / 3) - (FormHeight / 2)),
               ((Columns / 2) - (FormLength / 2)));
          Box(FormWindow);
+         WindowFrame(FormWindow, 5, To_String(CaptionText));
          Set_Window(TradeForm, FormWindow);
          Set_Sub_Window
            (TradeForm,
@@ -535,6 +556,8 @@ package body Bases.UI.Trade is
    function TradeFormKeys(Key: Key_Code) return GameStates is
       Result: Forms.Driver_Result;
       FieldIndex: Positive := Get_Index(Current(TradeForm));
+      Visibility: Cursor_Visibility := Invisible;
+      MaxIndex: Positive;
    begin
       case Key is
          when KEY_UP => -- Select previous field
@@ -550,13 +573,31 @@ package body Bases.UI.Trade is
                Result := Driver(TradeForm, F_End_Line);
             end if;
          when 10 => -- quit/buy/sell
-            return TradeResult;
+            if FieldIndex = 2 then
+               Result := Driver(TradeForm, F_Next_Field);
+               if Result = Form_Ok then
+                  if Get_Buffer(Fields(TradeForm, 2)) =
+                    "                    " then
+                     if Buy then
+                        FieldIndex := 3;
+                     else
+                        FieldIndex := 5;
+                     end if;
+                  else
+                     FieldIndex := 4;
+                  end if;
+                  Set_Current(TradeForm, Fields(TradeForm, FieldIndex));
+               end if;
+            else
+               return TradeResult;
+            end if;
          when Key_Backspace => -- delete last character
             if FieldIndex = 2 then
                Result := Driver(TradeForm, F_Delete_Previous);
                if Result = Form_Ok then
                   FieldIndex := Get_Index(Current(TradeForm));
                   if FieldIndex /= 2 then
+                     FieldIndex := 2;
                      Set_Current(TradeForm, Fields(TradeForm, 2));
                   end if;
                end if;
@@ -573,17 +614,40 @@ package body Bases.UI.Trade is
             if FieldIndex = 2 then
                Result := Driver(TradeForm, F_Left_Char);
             end if;
+         when 27 => -- Escape select cancel button
+            FieldIndex := 3;
+            Set_Current(TradeForm, Fields(TradeForm, 3));
+            Result := Form_Ok;
          when others =>
             Result := Driver(TradeForm, Key);
       end case;
       if Result = Form_Ok then
+         if Buy then
+            MaxIndex := 4;
+         else
+            MaxIndex := 5;
+         end if;
          if FieldIndex = 2 then
             Set_Background
               (Current(TradeForm),
-               (Reverse_Video => True, others => False));
+               (Under_Line => True, others => False));
+            Visibility := Normal;
+            for I in 3 .. MaxIndex loop
+               Set_Foreground(Fields(TradeForm, I));
+            end loop;
          else
-            Set_Background(Fields(TradeForm, 2), (others => False));
+            Set_Background(Fields(TradeForm, 2));
+            for I in 2 .. MaxIndex loop
+               if I /= FieldIndex then
+                  Set_Foreground(Fields(TradeForm, I));
+               end if;
+            end loop;
          end if;
+         Set_Foreground
+           (Current(TradeForm),
+            (Bold_Character => True, others => False),
+            1);
+         Set_Cursor_Visibility(Visibility);
          Refresh(FormWindow);
       end if;
       return Trade_Form;
