@@ -28,6 +28,8 @@ package body Bases.Ship is
    function RepairShip(ModuleIndex: Integer) return String is
       Cost, Time, MoneyIndex2: Natural := 0;
       TraderIndex, ProtoMoneyIndex: Positive;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       RepairCost(Cost, Time, ModuleIndex);
       if Cost = 0 then
@@ -79,6 +81,8 @@ package body Bases.Ship is
             TradeMessage);
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
+      SkyBases(BaseIndex).Cargo(1).Amount :=
+        SkyBases(BaseIndex).Cargo(1).Amount + Cost;
       GainExp(1, 4, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
       UpdateGame(Time);
@@ -94,6 +98,8 @@ package body Bases.Ship is
       FreeTurretIndex, Price: Natural := 0;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       if MoneyIndex2 = 0 then
          return "You don't have " &
@@ -151,6 +157,8 @@ package body Bases.Ship is
          end if;
          UpdateGame(Modules_List(ModuleIndex).InstallTime);
          UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Price));
+         SkyBases(BaseIndex).Cargo(1).Amount :=
+           SkyBases(BaseIndex).Cargo(1).Amount + Price;
          GainExp(1, 4, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          if Modules_List(ModuleIndex).MType /= HULL then
@@ -216,6 +224,11 @@ package body Bases.Ship is
               To_String(MoneyName) &
               " in ship cargo.";
          end if;
+         if Price > SkyBases(BaseIndex).Cargo(1).Amount then
+            return "Base don't have enough " &
+              To_String(MoneyName) &
+              " for buy this module.";
+         end if;
          case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
             when TURRET =>
                if PlayerShip.Modules(ModuleIndex).Current_Value > 0 then
@@ -262,6 +275,8 @@ package body Bases.Ship is
                CheckPriorities => False);
          end if;
          UpdateCargo(PlayerShip, ProtoMoneyIndex, Price);
+         SkyBases(BaseIndex).Cargo(1).Amount :=
+           SkyBases(BaseIndex).Cargo(1).Amount - Price;
          GainExp(1, 4, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          AddMessage
