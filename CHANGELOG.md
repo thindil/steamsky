@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Possible crash when showing help text
 - Few misspellings in help
-- Redrawing trade menu after resize screen
+- Redrawing screens after resize terminal
 
 ## [1.0.5] - 2017-07-09
 
