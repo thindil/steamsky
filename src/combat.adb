@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Crew; use Crew;
-with UserInterface; use UserInterface;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Items; use Items;
@@ -151,11 +150,9 @@ package body Combat is
                OtherMessage);
          else
             if RealSpeed(PlayerShip) < RealSpeed(Enemy.Ship) then
-               ShowDialog
-                 ("You was attacked by " & To_String(Enemy.Ship.Name) & ".");
                OldSpeed := PlayerShip.Speed;
                LogMessage
-                 ("Started combat with " & To_String(Enemy.Ship.Name),
+                 ("You was attacked by " & To_String(Enemy.Ship.Name),
                   Log.Combat);
                return Combat_State;
             end if;
@@ -605,7 +602,6 @@ package body Combat is
                              (DESTROY,
                               ProtoShips_List(EnemyShipIndex).Index);
                         else
-                           DrawGame(Combat_State);
                            return;
                         end if;
                         exit Attack_Loop;
