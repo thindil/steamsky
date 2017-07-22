@@ -59,6 +59,7 @@ procedure SteamSky is
    Key: Key_Code;
    Result: Integer;
    ErrorFile: File_Type;
+   Visibility: Cursor_Visibility := Invisible;
 begin
    Set_Directory(Dir_Name(Command_Name));
    Setenv("TERMINFO", "terminfo");
@@ -110,6 +111,10 @@ begin
                ShowMainMenu;
             when New_Game | License_Info | License_Full | News_View =>
                RedrawMainMenu(GameState);
+            when Trade_Form =>
+               Set_Cursor_Visibility(Visibility);
+               GameState := Trade_View;
+               DrawGame(Trade_View);               
             when others =>
                DrawGame(GameState);
          end case;
