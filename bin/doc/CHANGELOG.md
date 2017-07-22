@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 - Possible crash when showing help text
 - Few misspellings in help
 - Crash on showing ship cargo
+- Redrawing trade menu after resize screen
 
 ## [1.3] - 2017-06-25
 
