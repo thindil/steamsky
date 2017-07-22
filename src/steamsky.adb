@@ -115,6 +115,12 @@ begin
                Set_Cursor_Visibility(Visibility);
                GameState := Trade_View;
                DrawGame(Trade_View);               
+            when BasesList_Types | BasesList_Statuses | BasesList_Owners =>
+               GameState := Bases_List;
+               DrawGame(Bases_List);
+            when ShipyardTypesMenu =>
+               GameState := Shipyard_View;
+               DrawGame(Shipyard_View);
             when others =>
                DrawGame(GameState);
          end case;
