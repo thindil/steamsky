@@ -70,6 +70,7 @@ procedure SteamSky is
    Key: Key_Code;
    Result: Integer;
    ErrorFile: File_Type;
+   Visibility: Cursor_Visibility := Invisible;
    procedure ErrorInfo(Message: String) is
    begin
       Move_Cursor(Line => (Lines / 2), Column => 2);
@@ -204,6 +205,10 @@ begin
               News_View |
               Hall_Of_Fame =>
                RedrawMainMenu(GameState);
+            when Trade_Form =>
+               Set_Cursor_Visibility(Visibility);
+               GameState := Trade_View;
+               DrawGame(Trade_View);               
             when others =>
                DrawGame(GameState);
          end case;
