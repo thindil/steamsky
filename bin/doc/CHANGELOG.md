@@ -14,7 +14,8 @@ All notable changes to this project will be documented in this file.
   2500 ships, discover 1500 fields of map, discover 2000 fields of map,
   discover 2500 fields of map, discover 5000 fields of map, discover 7500
   fields of map, discover 10000 fields of map, visit 75 bases, visit 100 bases,
-  visit 125 bases, visit 150 bases, visit 175 bases and visit 200 bases
+  visit 125 bases, visit 150 bases, visit 175 bases, visit 200 bases and visit
+  250 bases
 - Hall of fame which made saves from previous version incompatible
 - Charges for docking
 - Info about amount of owned materials in crafting screen
