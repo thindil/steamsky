@@ -26,6 +26,7 @@ with Help.UI; use Help.UI;
 with Ships.Crew; use Ships.Crew;
 with Messages.UI; use Messages.UI;
 with Header; use Header;
+with Utils.UI; use Utils.UI;
 
 package body Combat.UI is
 
@@ -183,12 +184,9 @@ package body Combat.UI is
       MenuOptions := Get_Options(CrewMenu);
       MenuOptions.Show_Descriptions := False;
       Set_Options(CrewMenu, MenuOptions);
-      Set_Mark(CrewMenu, "");
       Scale(CrewMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight + 2, MenuLength + 2, 1, 2);
-      Box(MenuWindow);
-      Move_Cursor(Win => MenuWindow, Line => 0, Column => 2);
-      Add(Win => MenuWindow, Str => "[Crew Orders]");
+      WindowFrame(MenuWindow, 2, "Crew orders");
       Set_Window(CrewMenu, MenuWindow);
       Set_Sub_Window
         (CrewMenu,
@@ -231,8 +229,7 @@ package body Combat.UI is
             Column => 2,
             Count => 1,
             Color => 1);
-         CurrentLine := CurrentLine + 2;
-         Move_Cursor(Line => CurrentLine, Column => 2);
+         CurrentLine := CurrentLine + 1;
       end if;
       WindowHeight := 2;
       for Module of PlayerShip.Modules loop
@@ -252,9 +249,7 @@ package body Combat.UI is
             end if;
          end if;
          DamageInfo := Create(WindowHeight, WindowWidth, CurrentLine, 2);
-         Box(DamageInfo);
-         Move_Cursor(Win => DamageInfo, Line => 0, Column => 2);
-         Add(Win => DamageInfo, Str => "[Ship damage]");
+         WindowFrame(DamageInfo, 3, "Ship damage");
          CurrentLine := 1;
          for Module of PlayerShip.Modules loop
             DamagePercent :=
@@ -303,9 +298,7 @@ package body Combat.UI is
          end loop;
       end if;
       EnemyInfo := Create(7, (Columns / 2), 1, (Columns / 2));
-      Box(EnemyInfo);
-      Move_Cursor(Win => EnemyInfo, Line => 0, Column => 2);
-      Add(Win => EnemyInfo, Str => "[Enemy status]");
+      WindowFrame(EnemyInfo, 1, "Enemy status");
       Move_Cursor(Win => EnemyInfo, Line => 1, Column => 2);
       Add(Win => EnemyInfo, Str => "Name: " & To_String(EnemyName));
       Move_Cursor(Win => EnemyInfo, Line => 2, Column => 2);
@@ -570,7 +563,6 @@ package body Combat.UI is
       MenuOptions := Get_Options(OrdersMenu);
       MenuOptions.Show_Descriptions := False;
       Set_Options(OrdersMenu, MenuOptions);
-      Set_Mark(OrdersMenu, "");
       Scale(OrdersMenu, MenuHeight, MenuLength);
       MenuWindow2 :=
         Create
@@ -578,7 +570,7 @@ package body Combat.UI is
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Box(MenuWindow2);
+      WindowFrame(MenuWindow2, 5, "Give order");
       Set_Window(OrdersMenu, MenuWindow2);
       Set_Sub_Window
         (OrdersMenu,
@@ -673,7 +665,7 @@ package body Combat.UI is
               ((Columns / 2) + 2),
               ((Lines / 5) - 1),
               ((Columns / 5) - 1));
-         Box(MenuWindow2);
+         WindowFrame(MenuWindow2, 1, "Detailed enemy info");
          Refresh(MenuWindow2);
          EnemyPad := New_Pad(LinesAmount, (Columns / 2));
          Add(Win => EnemyPad, Str => To_String(InfoText));
