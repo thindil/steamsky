@@ -483,11 +483,16 @@ package body Crafts.UI is
       Result: Driver_Result;
       ModuleIndex: constant Natural :=
         Natural'Value(Description(Current(ModulesMenu)));
+      Message: Unbounded_String;
    begin
       case Key is
          when 10 => -- Set selected manufacturing order
             if ModuleIndex > 0 then
-               SetRecipe(RecipeIndex, ModuleIndex);
+               Message :=
+                 To_Unbounded_String(SetRecipe(RecipeIndex, ModuleIndex));
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
             end if;
             DrawGame(Craft_View);
             return Craft_View;
