@@ -18,7 +18,6 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
@@ -168,7 +167,9 @@ package body Crafts is
       End_Search(Files);
    end LoadRecipes;
 
-   procedure SetRecipe(RecipeIndex: Integer; ModuleIndex: Positive) is
+   function SetRecipe
+     (RecipeIndex: Integer;
+      ModuleIndex: Positive) return String is
       Recipe: Craft_Data;
       SpaceNeeded: Integer := 0;
       MaterialIndexes: Positive_Container.Vector;
@@ -222,11 +223,9 @@ package body Crafts is
          end loop;
       end if;
       if MaterialIndexes.Length < Recipe.MaterialTypes.Length then
-         ShowDialog
-           ("You don't have enough materials to start manufacturing " &
-            To_String(RecipeName) &
-            ".");
-         return;
+         return "You don't have enough materials to start manufacturing " &
+           To_String(RecipeName) &
+           ".";
       end if;
       -- Check for tool
       if Recipe.Tool /= To_Unbounded_String("None") then
@@ -240,11 +239,9 @@ package body Crafts is
          HaveTool := True;
       end if;
       if not HaveTool then
-         ShowDialog
-           ("You don't have proper tool to start manufacturing " &
-            To_String(RecipeName) &
-            ".");
-         return;
+         return "You don't have proper tool to start manufacturing " &
+           To_String(RecipeName) &
+           ".";
       end if;
       -- Check for free space
       for I in MaterialIndexes.Iterate loop
@@ -257,8 +254,7 @@ package body Crafts is
           (SpaceNeeded -
            (Items_List(Recipe.ResultIndex).Weight * Recipe.ResultAmount)) <
         0 then
-         ShowDialog("You don't have that much free space in your ship cargo.");
-         return;
+         return "You don't have that much free space in your ship cargo.";
       end if;
       PlayerShip.Modules(ModuleIndex).Current_Value := RecipeIndex;
       PlayerShip.Modules(ModuleIndex).Max_Value := Recipe.Time;
@@ -268,6 +264,7 @@ package body Crafts is
          To_String(PlayerShip.Modules(ModuleIndex).Name) &
          ".",
          CraftMessage);
+      return "";
    end SetRecipe;
 
    procedure Manufacturing(Minutes: Positive) is

@@ -48,9 +48,10 @@ package Crafts is
 
    procedure LoadRecipes; -- Load recipes from files
    procedure Manufacturing(Minutes: Positive); -- Craft selected items
-   procedure SetRecipe
+   function SetRecipe
      (RecipeIndex: Integer;
-      ModuleIndex: Positive); -- Set recipe to craft
+      ModuleIndex: Positive)
+     return String; -- Set recipe to craft, returns empty string if all ok otherwise error message
    function FindRecipe
      (Index: Unbounded_String)
      return Natural; -- Return vector index of recipe or zero if recipe not found
