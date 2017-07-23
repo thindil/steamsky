@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.4] - 2017-07-23
 
 ### Added
 - New enemy ships: huge inquisition ship mk III and advanced huge inquisition
