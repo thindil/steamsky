@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New goal: craft 1500 items
+
 ## [1.4] - 2017-07-23
 
 ### Added
