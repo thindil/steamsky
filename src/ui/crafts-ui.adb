@@ -22,6 +22,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Items; use Items;
 with Help.UI; use Help.UI;
 with Header; use Header;
+with Utils.UI; use Utils.UI;
 
 package body Crafts.UI is
 
@@ -39,6 +40,7 @@ package body Crafts.UI is
       StartColumn, EndColumn: Column_Position;
       WorkplaceName: Unbounded_String := Null_Unbounded_String;
       WindowHeight: Line_Position := 7;
+      WindowWidth: Column_Position := 1;
    begin
       ClearWindow := Create((Lines - 5), (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
@@ -92,6 +94,9 @@ package body Crafts.UI is
             WindowHeight :=
               WindowHeight +
               Line_Position(TextLength / (Natural(Columns / 2) - 3));
+            WindowWidth := Columns / 2;
+         elsif (TextLength + 3) > Positive(WindowWidth) then
+            WindowWidth := Column_Position(TextLength) + 3;
          end if;
          TextLength := 0;
       end loop;
@@ -109,14 +114,14 @@ package body Crafts.UI is
             WindowHeight :=
               WindowHeight +
               Line_Position(TextLength / (Natural(Columns / 2) - 3));
+            WindowWidth := Columns / 2;
+         elsif (TextLength + 3) > Positive(WindowWidth) then
+            WindowWidth := Column_Position(TextLength) + 3;
          end if;
       end if;
       WindowHeight :=
         WindowHeight + Line_Position(Recipe.MaterialTypes.Length);
       BoxWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
-      Box(BoxWindow);
-      Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
-      Add(Win => BoxWindow, Str => "[Recipe info]");
       InfoWindow :=
         Create(WindowHeight - 2, (Columns / 2) - 2, 4, (Columns / 2) + 1);
       if RecipeIndex > 0 then
@@ -288,6 +293,12 @@ package body Crafts.UI is
             end if;
          end loop;
       end if;
+      if Length(WorkplaceName) + 13 > Positive(WindowWidth) then
+         WindowWidth := Column_Position(Length(WorkplaceName)) + 13;
+         if WindowWidth > (Columns / 2) then
+            WindowWidth := Columns / 2;
+         end if;
+      end if;
       Add(Win => InfoWindow, Str => To_String(WorkplaceName));
       if not HaveWorkplace then
          Change_Attributes
@@ -307,6 +318,9 @@ package body Crafts.UI is
       Add
         (Win => InfoWindow,
          Str => "Time needed:" & Positive'Image(Recipe.Time) & " minutes");
+      Resize(BoxWindow, WindowHeight, WindowWidth);
+      WindowFrame(BoxWindow, 2, "Recipe info");
+      Resize(InfoWindow, WindowHeight - 2, WindowWidth - 2);
       Move_Cursor(Line => (WindowHeight + 3), Column => (Columns / 2));
       Add(Str => "Press ENTER for set manufacturing order");
       Change_Attributes
@@ -365,7 +379,6 @@ package body Crafts.UI is
       Recipes_Items.all(Recipes_Items'Last) := Null_Item;
       RecipesMenu := New_Menu(Recipes_Items);
       Set_Format(RecipesMenu, Lines - 10, 1);
-      Set_Mark(RecipesMenu, "");
       Set_Options(RecipesMenu, (Show_Descriptions => False, others => True));
       Scale(RecipesMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
@@ -419,7 +432,6 @@ package body Crafts.UI is
       Modules_Items.all(Modules_Items'Last - 1) := New_Item("Quit", "0");
       Modules_Items.all(Modules_Items'Last) := Null_Item;
       ModulesMenu := New_Menu(Modules_Items);
-      Set_Mark(ModulesMenu, "");
       Set_Options(ModulesMenu, (Show_Descriptions => False, others => True));
       Scale(ModulesMenu, MenuHeight, MenuLength);
       MenuWindow2 :=
@@ -428,7 +440,7 @@ package body Crafts.UI is
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Box(MenuWindow2);
+      WindowFrame(MenuWindow2, 5, "Set recipe");
       Set_Window(ModulesMenu, MenuWindow2);
       Set_Sub_Window
         (ModulesMenu,

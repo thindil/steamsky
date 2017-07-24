@@ -77,6 +77,7 @@ package body Ships.UI.Ship.Keys is
         Positive'Value(Description(Current(OptionsMenu)));
       ModuleName: constant String :=
         To_String(PlayerShip.Modules(CurrentMenuIndex).Name);
+      Message: Unbounded_String;
    begin
       case Key is
          when 56 | KEY_UP => -- Select previous item
@@ -111,7 +112,10 @@ package body Ships.UI.Ship.Keys is
                for I in
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
                   if PlayerShip.Crew(I).Order = Upgrading then
-                     GiveOrders(I, Rest);
+                     Message := To_Unbounded_String(GiveOrders(I, Rest));
+                     if Length(Message) > 0 then
+                        ShowDialog(To_String(Message));
+                     end if;
                      exit;
                   end if;
                end loop;
@@ -153,6 +157,7 @@ package body Ships.UI.Ship.Keys is
         Positive'Value(Description(Current(OptionsMenu)));
       ModuleName: constant String :=
         To_String(PlayerShip.Modules(CurrentMenuIndex).Name);
+      Message: Unbounded_String;
    begin
       case Key is
          when 56 | KEY_UP => -- Select previous item
@@ -189,14 +194,23 @@ package body Ships.UI.Ship.Keys is
                         ".",
                         OrderMessage);
                   when GUN =>
-                     GiveOrders(OptionIndex, Gunner, CurrentMenuIndex);
+                     Message :=
+                       To_Unbounded_String
+                         (GiveOrders(OptionIndex, Gunner, CurrentMenuIndex));
                   when ALCHEMY_LAB .. GREENHOUSE =>
-                     GiveOrders(OptionIndex, Craft, CurrentMenuIndex);
+                     Message :=
+                       To_Unbounded_String
+                         (GiveOrders(OptionIndex, Craft, CurrentMenuIndex));
                   when MEDICAL_ROOM =>
-                     GiveOrders(OptionIndex, Heal, CurrentMenuIndex);
+                     Message :=
+                       To_Unbounded_String
+                         (GiveOrders(OptionIndex, Heal, CurrentMenuIndex));
                   when others =>
                      null;
                end case;
+            end if;
+            if Length(Message) > 0 then
+               ShowDialog(To_String(Message));
             end if;
             DrawGame(Ship_Info);
             return Ship_Info;
