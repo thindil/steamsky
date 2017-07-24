@@ -50,12 +50,13 @@ package Crew is
       Orders: Orders_Array; -- Priority of orders of member
    end record;
 
-   procedure GiveOrders
+   function GiveOrders
      (MemberIndex: Positive;
       GivenOrder: Crew_Orders;
       ModuleIndex: Natural := 0;
       CheckPriorities: Boolean :=
-        True); -- Change order for selected crew member
+        True)
+     return String; -- Change order for selected crew member, returns empty string if all ok otherwise error message
    procedure GainExp
      (Amount: Natural;
       SkillNumber, CrewIndex: Positive); -- Gain experience in selected skill.
