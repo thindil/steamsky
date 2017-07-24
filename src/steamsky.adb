@@ -121,6 +121,18 @@ begin
             when ShipyardTypesMenu =>
                GameState := Shipyard_View;
                DrawGame(Shipyard_View);
+            when Combat_Orders | Enemy_Info =>
+               GameState := Combat_State;
+               DrawGame(Combat_State);
+            when Recipe_Setting =>
+               GameState := Craft_View;
+               DrawGame(Craft_View);
+            when Drop_Cargo =>
+               GameState := Cargo_Info;
+               DrawGame(Cargo_Info);
+            when Rename_Module | Assign_Ammo | Module_Options | Assign_Owner =>
+               GameState := Ship_Info;
+               DrawGame(Ship_Info);
             when others =>
                DrawGame(GameState);
          end case;
