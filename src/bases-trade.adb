@@ -311,6 +311,7 @@ package body Bases.Trade is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost, Time, MoneyIndex2: Natural := 0;
       TraderIndex, ProtoMoneyIndex: Positive;
+      Message: Unbounded_String := Null_Unbounded_String;
    begin
       HealCost(Cost, Time, MemberIndex);
       if Cost = 0 then
@@ -341,12 +342,15 @@ package body Bases.Trade is
             To_String(MoneyName) &
             ".",
             TradeMessage);
-         GiveOrders(MemberIndex, Rest, 0, False);
+         Message :=
+           To_Unbounded_String(GiveOrders(MemberIndex, Rest, 0, False));
       else
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Health < 100 then
                PlayerShip.Crew(I).Health := 100;
-               GiveOrders(Crew_Container.To_Index(I), Rest, 0, False);
+               Message :=
+                 To_Unbounded_String
+                   (GiveOrders(Crew_Container.To_Index(I), Rest, 0, False));
             end if;
          end loop;
          AddMessage
@@ -363,7 +367,7 @@ package body Bases.Trade is
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       UpdateGame(Time);
-      return "";
+      return To_String(Message);
    end HealWounded;
 
    procedure HealCost(Cost, Time: in out Natural; MemberIndex: Natural) is

@@ -200,6 +200,7 @@ package body Ships.Upgrade is
       WeightGain: Natural;
       Times: Natural := 0;
       OrderTime, CurrentMinutes: Integer;
+      Message: Unbounded_String;
       procedure FindMatsAndTools is
       begin
          UpgradeMaterial := 0;
@@ -228,7 +229,10 @@ package body Ships.Upgrade is
          PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress := 0;
          PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction := NONE;
          PlayerShip.UpgradeModule := 0;
-         GiveOrders(WorkerIndex, Rest);
+         Message := To_Unbounded_String(GiveOrders(WorkerIndex, Rest));
+         if Length(Message) > 0 then
+            AddMessage(To_String(Message), OrderMessage, 3);
+         end if;
       end MaxUpgradeReached;
    begin
       WorkerIndex := FindMember(Upgrading);
@@ -245,7 +249,10 @@ package body Ships.Upgrade is
             " because it is destroyed.",
             OrderMessage,
             3);
-         GiveOrders(WorkerIndex, Rest);
+         Message := To_Unbounded_String(GiveOrders(WorkerIndex, Rest));
+         if Length(Message) > 0 then
+            AddMessage(To_String(Message), OrderMessage, 3);
+         end if;
          return;
       end if;
       while CurrentMinutes > 0 loop
@@ -286,7 +293,7 @@ package body Ships.Upgrade is
                To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name),
                OrderMessage,
                3);
-            GiveOrders(WorkerIndex, Rest);
+            Message := To_Unbounded_String(GiveOrders(WorkerIndex, Rest));
             exit;
          end if;
          if UpgradeTools = 0 then
@@ -295,7 +302,7 @@ package body Ships.Upgrade is
                To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name),
                OrderMessage,
                3);
-            GiveOrders(WorkerIndex, Rest);
+            Message := To_Unbounded_String(GiveOrders(WorkerIndex, Rest));
             exit;
          end if;
          if ResultAmount > PlayerShip.Cargo(UpgradeMaterial).Amount then
@@ -483,6 +490,9 @@ package body Ships.Upgrade is
               UpgradeProgress;
          end if;
       end loop;
+      if Length(Message) > 0 then
+         AddMessage(To_String(Message), OrderMessage, 3);
+      end if;
    end UpgradeShip;
 
 end Ships.Upgrade;

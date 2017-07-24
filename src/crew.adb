@@ -17,7 +17,6 @@
 
 with Ships; use Ships;
 with Messages; use Messages;
-with UserInterface; use UserInterface;
 with ShipModules; use ShipModules;
 with Game; use Game;
 with Items; use Items;
@@ -28,27 +27,27 @@ with Maps; use Maps;
 
 package body Crew is
 
-   procedure GiveOrders
+   function GiveOrders
      (MemberIndex: Positive;
       GivenOrder: Crew_Orders;
       ModuleIndex: Natural := 0;
-      CheckPriorities: Boolean := True) is
+      CheckPriorities: Boolean := True) return String is
       MemberName: constant String :=
         To_String(PlayerShip.Crew(MemberIndex).Name);
       ModuleIndex2, ToolsIndex: Natural := 0;
       MType: ModuleType := ENGINE;
-      RequiredTool: Unbounded_String;
+      RequiredTool, Message: Unbounded_String;
    begin
       if GivenOrder = PlayerShip.Crew(MemberIndex).Order then
          if GivenOrder = Craft then
             for I in PlayerShip.Modules.Iterate loop
                if PlayerShip.Modules(I).Owner = MemberIndex and
                  Modules_Container.To_Index(I) = ModuleIndex then
-                  return;
+                  return "";
                end if;
             end loop;
          else
-            return;
+            return "";
          end if;
       end if;
       if GivenOrder = Upgrading or
@@ -63,21 +62,17 @@ package body Crew is
          if ToolsIndex = 0 then
             case GivenOrder is
                when Repair =>
-                  ShowDialog
-                    (MemberName &
-                     " can't starts repairing ship because you don't have repair tools.");
+                  return MemberName &
+                    " can't starts repairing ship because you don't have repair tools.";
                when Clean =>
-                  ShowDialog
-                    (MemberName &
-                     " can't starts cleaning ship because you don't have any cleaning tools.");
+                  return MemberName &
+                    " can't starts cleaning ship because you don't have any cleaning tools.";
                when Upgrading =>
-                  ShowDialog
-                    (MemberName &
-                     " can't starts upgrading module because you don't have repair tools.");
+                  return MemberName &
+                    " can't starts upgrading module because you don't have repair tools.";
                when others =>
-                  null;
+                  return "";
             end case;
-            return;
          end if;
       end if;
       if GivenOrder = Pilot or
@@ -87,13 +82,19 @@ package body Crew is
          for I in
            PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew(I).Order = GivenOrder then
-               GiveOrders(I, Rest, 0, False);
+               Message := To_Unbounded_String(GiveOrders(I, Rest, 0, False));
                exit;
             end if;
          end loop;
       elsif GivenOrder = Gunner or GivenOrder = Craft or GivenOrder = Heal then
          if PlayerShip.Modules(ModuleIndex).Owner > 0 then
-            GiveOrders(PlayerShip.Modules(ModuleIndex).Owner, Rest, 0, False);
+            Message :=
+              To_Unbounded_String
+                (GiveOrders
+                   (PlayerShip.Modules(ModuleIndex).Owner,
+                    Rest,
+                    0,
+                    False));
          end if;
       end if;
       if ModuleIndex = 0 and
@@ -114,7 +115,13 @@ package body Crew is
                  MType and
                  PlayerShip.Modules(I).Durability > 0 then
                   if PlayerShip.Modules(I).Owner /= 0 then
-                     GiveOrders(PlayerShip.Modules(I).Owner, Rest, 0, False);
+                     Message :=
+                       To_Unbounded_String
+                         (GiveOrders
+                            (PlayerShip.Modules(I).Owner,
+                             Rest,
+                             0,
+                             False));
                   end if;
                   ModuleIndex2 := Modules_Container.To_Index(I);
                   exit;
@@ -135,20 +142,14 @@ package body Crew is
       if ModuleIndex2 = 0 then
          case GivenOrder is
             when Pilot =>
-               ShowDialog
-                 (MemberName &
-                  " can't starts piloting because cockpit is destroyed or you don't have cockpit.");
-               return;
+               return MemberName &
+                 " can't starts piloting because cockpit is destroyed or you don't have cockpit.";
             when Engineer =>
-               ShowDialog
-                 (MemberName &
-                  " can't starts engineers duty because all engines are destroyed or you don't have engine.");
-               return;
+               return MemberName &
+                 " can't starts engineers duty because all engines are destroyed or you don't have engine.";
             when Gunner =>
-               ShowDialog
-                 (MemberName &
-                  " can't starts operating gun because all guns are destroyed or you don't have installed any.");
-               return;
+               return MemberName &
+                 " can't starts operating gun because all guns are destroyed or you don't have installed any.";
             when Rest =>
                for Module of PlayerShip.Modules loop
                   if Modules_List(Module.ProtoIndex).MType = CABIN and
@@ -218,6 +219,10 @@ package body Crew is
       if CheckPriorities then
          UpdateOrders;
       end if;
+      if Length(Message) > 0 then
+         AddMessage(To_String(Message), OrderMessage, 3);
+      end if;
+      return "";
    end GiveOrders;
 
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) is
@@ -322,7 +327,7 @@ package body Crew is
    procedure UpdateCrew(Minutes: Positive; TiredPoints: Natural) is
       TiredLevel, HungerLevel, ThirstLevel: Integer := 0;
       HealthLevel: Integer := 100;
-      DeathReason: Unbounded_String;
+      DeathReason, Message: Unbounded_String;
       CabinIndex, Times, RestAmount, I, ToolIndex: Natural;
       OrderTime, CurrentMinutes, HealAmount: Integer;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
@@ -583,7 +588,7 @@ package body Crew is
                            3);
                      end if;
                      if HealAmount /= 0 then
-                        GiveOrders(I, Rest);
+                        Message := To_Unbounded_String(GiveOrders(I, Rest));
                      end if;
                   when Clean =>
                      ToolIndex := 0;
@@ -627,19 +632,26 @@ package body Crew is
                         end if;
                         for J in PlayerShip.Crew.Iterate loop
                            if PlayerShip.Crew(J).Order = Clean then
-                              GiveOrders(Crew_Container.To_Index(J), Rest);
+                              Message :=
+                                To_Unbounded_String
+                                  (GiveOrders
+                                     (Crew_Container.To_Index(J),
+                                      Rest));
                            end if;
                         end loop;
                      end if;
                   when Talk =>
                      if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex =
                        0 then
-                        GiveOrders(I, Rest);
+                        Message := To_Unbounded_String(GiveOrders(I, Rest));
                      end if;
                   when others =>
                      null;
                end case;
             end if;
+         end if;
+         if Length(Message) > 0 then
+            AddMessage(To_String(Message), OrderMessage, 3);
          end if;
          if TiredPoints > 0 then
             HungerLevel := HungerLevel + TiredPoints;
@@ -693,6 +705,7 @@ package body Crew is
         (Order: Crew_Orders;
          MaxPriority: Boolean := True) return Boolean is
          ModuleIndex, MemberIndex: Natural := 0;
+         Message: Unbounded_String;
       begin
          if MaxPriority then
             for I in PlayerShip.Crew.Iterate loop
@@ -771,7 +784,12 @@ package body Crew is
                return False;
             end if;
          end if;
-         GiveOrders(MemberIndex, Order, ModuleIndex);
+         Message :=
+           To_Unbounded_String(GiveOrders(MemberIndex, Order, ModuleIndex));
+         if Length(Message) > 0 then
+            AddMessage(To_String(Message), OrderMessage, 3);
+            return False;
+         end if;
          return True;
       end UpdatePosition;
    begin

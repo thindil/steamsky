@@ -663,6 +663,7 @@ package body Ships is
       RepairNeeded, RepairStopped: Boolean := False;
       package Natural_Container is new Vectors(Positive, Natural);
       CrewRepairPoints: Natural_Container.Vector;
+      Message: Unbounded_String;
       procedure RepairModule(ModuleIndex: Positive) is
          PointsIndex, PointsBonus, RepairMaterial, ToolsIndex: Natural;
          ProtoIndex, RepairValue: Positive;
@@ -809,7 +810,12 @@ package body Ships is
          end if;
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Order = Repair then
-               GiveOrders(Crew_Container.To_Index(I), Rest);
+               Message :=
+                 To_Unbounded_String
+                   (GiveOrders(Crew_Container.To_Index(I), Rest));
+               if Length(Message) > 0 then
+                  AddMessage(To_String(Message), OrderMessage, 3);
+               end if;
             end if;
          end loop;
       end if;

@@ -61,6 +61,7 @@ package body Combat.UI is
         Positive'Value(Description(Current(OrdersMenu)));
       OrderIndex: constant Positive := Get_Index(Current(OrdersMenu));
       ModuleIndex: Natural := 0;
+      Message: Unbounded_String;
    begin
       if Order = Pilot or Order = Engineer then
          MemberIndex := FindMember(Order);
@@ -70,7 +71,11 @@ package body Combat.UI is
          MemberIndex := PlayerShip.Modules(ModuleIndex).Owner;
       end if;
       if CrewIndex > 0 then
-         GiveOrders(CrewIndex, Order, ModuleIndex);
+         Message :=
+           To_Unbounded_String(GiveOrders(CrewIndex, Order, ModuleIndex));
+         if Length(Message) > 0 then
+            ShowDialog(To_String(Message));
+         end if;
       elsif CrewIndex = 0 then
          if Name(Current(OrdersMenu)) = "Quit" then
             return;
