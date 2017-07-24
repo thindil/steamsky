@@ -65,8 +65,7 @@ with Goals.UI; use Goals.UI;
 with HallOfFame; use HallOfFame;
 
 procedure SteamSky is
-   GameState: GameStates := Main_Menu;
-   OldState: GameStates;
+   GameState, OldState: GameStates := Main_Menu;
    Key: Key_Code;
    Result: Integer;
    ErrorFile: File_Type;
@@ -215,6 +214,25 @@ begin
             when ShipyardTypesMenu =>
                GameState := Shipyard_View;
                DrawGame(Shipyard_View);
+            when Combat_Orders | Enemy_Info =>
+               GameState := Combat_State;
+               DrawGame(Combat_State);
+            when Recipe_Setting =>
+               GameState := Craft_View;
+               DrawGame(Craft_View);
+            when Drop_Cargo =>
+               GameState := Cargo_Info;
+               DrawGame(Cargo_Info);
+            when Rename_Module | Assign_Ammo | Module_Options | Assign_Owner =>
+               GameState := Ship_Info;
+               DrawGame(Ship_Info);
+            when GoalsList_View | GoalsTypes_View =>
+               GameState := OldState;
+               if GameState = GameStats_View then
+                  DrawGame(OldState);
+               else
+                  RedrawMainMenu(GameState);
+               end if;
             when others =>
                DrawGame(GameState);
          end case;
