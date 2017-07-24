@@ -717,6 +717,7 @@ package body Crew.UI is
       ModuleIndex: constant Natural :=
         Natural'Value(Description(Current(OrdersMenu)));
       OrderName: constant String := Name(Current(OrdersMenu));
+      Message: Unbounded_String;
    begin
       case Key is
          when 56 | KEY_UP => -- Select previous order
@@ -731,21 +732,25 @@ package body Crew.UI is
             end if;
          when 10 => -- Select order
             if OrderName = "Piloting" then
-               GiveOrders(MemberIndex, Pilot);
+               Message := To_Unbounded_String(GiveOrders(MemberIndex, Pilot));
             elsif OrderName = "Engineering" then
-               GiveOrders(MemberIndex, Engineer);
+               Message :=
+                 To_Unbounded_String(GiveOrders(MemberIndex, Engineer));
             elsif OrderName = "Go on break" then
-               GiveOrders(MemberIndex, Rest);
+               Message := To_Unbounded_String(GiveOrders(MemberIndex, Rest));
             elsif OrderName = "Repair ship" then
-               GiveOrders(MemberIndex, Repair);
+               Message := To_Unbounded_String(GiveOrders(MemberIndex, Repair));
             elsif OrderName = "Upgrade module" then
-               GiveOrders(MemberIndex, Upgrading);
+               Message :=
+                 To_Unbounded_String(GiveOrders(MemberIndex, Upgrading));
             elsif OrderName = "Talking in bases" then
-               GiveOrders(MemberIndex, Talk);
+               Message := To_Unbounded_String(GiveOrders(MemberIndex, Talk));
             elsif OrderName = "Heal wounded crew members" then
-               GiveOrders(MemberIndex, Heal, ModuleIndex);
+               Message :=
+                 To_Unbounded_String
+                   (GiveOrders(MemberIndex, Heal, ModuleIndex));
             elsif OrderName = "Clean ship" then
-               GiveOrders(MemberIndex, Clean);
+               Message := To_Unbounded_String(GiveOrders(MemberIndex, Clean));
             elsif OrderName = "Dismiss" then
                DrawGame(Dismiss_Confirm);
                return Dismiss_Confirm;
@@ -757,10 +762,17 @@ package body Crew.UI is
                if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                    .MType =
                  GUN then
-                  GiveOrders(MemberIndex, Gunner, ModuleIndex);
+                  Message :=
+                    To_Unbounded_String
+                      (GiveOrders(MemberIndex, Gunner, ModuleIndex));
                else
-                  GiveOrders(MemberIndex, Craft, ModuleIndex);
+                  Message :=
+                    To_Unbounded_String
+                      (GiveOrders(MemberIndex, Craft, ModuleIndex));
                end if;
+            end if;
+            if Length(Message) > 0 then
+               ShowDialog(To_String(Message));
             end if;
             DrawGame(Crew_Info);
             return Crew_Info;
@@ -780,6 +792,7 @@ package body Crew.UI is
    function CrewOrdersAllKeys(Key: Key_Code) return GameStates is
       Result: Driver_Result;
       OrderName: constant String := Name(Current(OrdersMenu));
+      Message: Unbounded_String;
    begin
       case Key is
          when 56 | KEY_UP => -- Select previous order
@@ -797,16 +810,19 @@ package body Crew.UI is
                for I in
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
                   if PlayerShip.Crew(I).Skills.Length > 0 then
-                     GiveOrders(I, Repair);
+                     Message := To_Unbounded_String(GiveOrders(I, Repair));
                   end if;
                end loop;
             elsif OrderName = "Clean ship everyone" then
                for I in
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
                   if PlayerShip.Crew(I).Skills.Length > 0 then
-                     GiveOrders(I, Clean);
+                     Message := To_Unbounded_String(GiveOrders(I, Clean));
                   end if;
                end loop;
+            end if;
+            if Length(Message) > 0 then
+               ShowDialog(To_String(Message));
             end if;
             DrawGame(Crew_Info);
             return Crew_Info;
