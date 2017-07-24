@@ -97,4 +97,7 @@ Amount = 200
 [33]
 Type = Visit
 Amount = 250
+[34]
+Type = Craft
+Amount = 1500
 []
