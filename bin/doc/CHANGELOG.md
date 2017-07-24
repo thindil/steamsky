@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 
+### Fixed
+- Redrawing screens after resize terminal
+
 ## [1.4] - 2017-07-23
 
 ### Added
