@@ -1167,7 +1167,7 @@ package body Ships.UI.Ship is
          when others =>
             null;
       end case;
-      return Assign_Owner;
+      return Assign_Ammo;
    end AssignAmmoKeys;
 
 end Ships.UI.Ship;
