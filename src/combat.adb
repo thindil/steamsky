@@ -525,11 +525,32 @@ package body Combat is
                                  end if;
                            end case;
                         end if;
+                        if Ship = PlayerShip then
+                           AddMessage
+                             (To_String(ShootMessage),
+                              CombatMessage,
+                              2);
+                        else
+                           AddMessage
+                             (To_String(ShootMessage),
+                              CombatMessage,
+                              1);
+                        end if;
                      else
                         ShootMessage :=
                           ShootMessage & To_Unbounded_String(" and miss.");
+                        if Ship = PlayerShip then
+                           AddMessage
+                             (To_String(ShootMessage),
+                              CombatMessage,
+                              4);
+                        else
+                           AddMessage
+                             (To_String(ShootMessage),
+                              CombatMessage,
+                              5);
+                        end if;
                      end if;
-                     AddMessage(To_String(ShootMessage), CombatMessage);
                      if AmmoIndex > 0 then
                         UpdateCargo
                           (Ship,
