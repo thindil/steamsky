@@ -342,6 +342,7 @@ package body Bases.UI.Missions is
 
    function BaseMissionsKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result := Request_Denied;
+      Message: Unbounded_String;
    begin
       if TradeMenu /= Null_Menu then
          case Key is
@@ -363,7 +364,12 @@ package body Bases.UI.Missions is
                   Result := Driver(TradeMenu, M_First_Item);
                end if;
             when 10 => -- Accept mission
-               AcceptMission(Get_Index(Current(TradeMenu)));
+               Message :=
+                 To_Unbounded_String
+                   (AcceptMission(Get_Index(Current(TradeMenu))));
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
                DrawGame(BaseMissions_View);
             when others =>
                Result := Driver(TradeMenu, Key);

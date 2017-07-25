@@ -35,8 +35,9 @@ package Missions is
 
    procedure GenerateMissions
      (BaseIndex: Positive); -- Generate if needed new missions in selected base
-   procedure AcceptMission
-     (MissionIndex: Positive); -- Accept selected mission from base
+   function AcceptMission
+     (MissionIndex: Positive)
+     return String; -- Accept selected mission from base, returns empty string if all ok otherwise error message
    procedure UpdateMissions(Minutes: Positive); -- Update accepted missions
    procedure FinishMission(MissionIndex: Positive); -- Finish selected mission
    procedure DeleteMission
