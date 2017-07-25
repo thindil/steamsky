@@ -26,6 +26,7 @@ with ShipModules; use ShipModules;
 with Help.UI; use Help.UI;
 with Ships.Crew; use Ships.Crew;
 with Header; use Header;
+with Utils.UI; use Utils.UI;
 
 package body Crew.UI is
 
@@ -36,7 +37,7 @@ package body Crew.UI is
    StartIndex, EndIndex: Integer := 0;
 
    procedure ShowMemberInfo is
-      InfoWindow, ClearWindow: Window;
+      InfoWindow, ClearWindow, ActionsWindow: Window;
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
       CurrentLine: Line_Position := 2;
       Health,
@@ -48,6 +49,30 @@ package body Crew.UI is
       WindowHeight: Line_Position := 3;
       TextColor: array(1 .. 4) of Color_Pair;
       SkillsLine, SkillsStartsLine: Line_Position := 0;
+      WindowWidth: Column_Position := 18;
+      CurrentColumn: Column_Position;
+      SkillsHeaderLine, OrderHeaderLine: Line_Position;
+      procedure SubHeader(Caption: String; HeaderLine: Line_Position) is
+      begin
+         Set_Color(InfoWindow, 2);
+         Move_Cursor(Win => InfoWindow, Line => HeaderLine, Column => 0);
+         Add(Win => InfoWindow, Ch => ACS_Map(ACS_Left_Tee));
+         Horizontal_Line
+           (Win => InfoWindow,
+            Line_Size => Integer(WindowWidth - 2));
+         Move_Cursor(Win => InfoWindow, Line => HeaderLine, Column => 2);
+         Add(Win => InfoWindow, Str => "[");
+         Set_Color(InfoWindow, Color_Pair'First);
+         Add(Win => InfoWindow, Str => Caption);
+         Set_Color(InfoWindow, 2);
+         Add(Win => InfoWindow, Str => "]");
+         Move_Cursor
+           (Win => InfoWindow,
+            Line => HeaderLine,
+            Column => WindowWidth - 1);
+         Add(Win => InfoWindow, Ch => ACS_Map(ACS_Right_Tee));
+         Set_Color(InfoWindow, Color_Pair'First);
+      end SubHeader;
    begin
       ClearWindow := Create((Lines - 3), (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
@@ -123,9 +148,6 @@ package body Crew.UI is
          end if;
       end if;
       InfoWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
-      Box(InfoWindow);
-      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
-      Add(Win => InfoWindow, Str => "[General info]");
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       if Member.Gender = 'M' then
          Add(Win => InfoWindow, Str => "Gender: Male");
@@ -182,18 +204,7 @@ package body Crew.UI is
          CurrentLine := CurrentLine + 1;
       end if;
       if Member.Skills.Length > 0 then
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-         Add(Win => InfoWindow, Ch => ACS_Map(ACS_Left_Tee));
-         Horizontal_Line
-           (Win => InfoWindow,
-            Line_Size => Natural(Columns / 2) - 2);
-         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
-         Add(Win => InfoWindow, Str => "[Skills]");
-         Move_Cursor
-           (Win => InfoWindow,
-            Line => CurrentLine,
-            Column => (Columns / 2) - 1);
-         Add(Win => InfoWindow, Ch => ACS_Map(ACS_Right_Tee));
+         SkillsHeaderLine := CurrentLine;
          CurrentLine := CurrentLine + 1;
          SkillsPad :=
            New_Pad(Line_Position(Member.Skills.Length), (Columns / 2) - 2);
@@ -212,7 +223,14 @@ package body Crew.UI is
                  To_String(Skills_Names(Skill(1))) &
                  ": " &
                  GetSkillLevelName(Skill(2)));
+            Get_Cursor_Position
+              (Win => SkillsPad,
+               Line => SkillsLine,
+               Column => CurrentColumn);
             SkillsLine := SkillsLine + 1;
+            if WindowWidth < (CurrentColumn + 4) then
+               WindowWidth := CurrentColumn + 4;
+            end if;
          end loop;
          case Member.Order is
             when Pilot =>
@@ -237,6 +255,7 @@ package body Crew.UI is
                OrderName := To_Unbounded_String("Cleans ship");
          end case;
          CurrentLine := WindowHeight - 3;
+         OrderHeaderLine := CurrentLine;
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
          Add(Win => InfoWindow, Ch => ACS_Map(ACS_Left_Tee));
          Horizontal_Line
@@ -252,21 +271,37 @@ package body Crew.UI is
          Move_Cursor(Win => InfoWindow, Line => CurrentLine + 1, Column => 2);
          Add(Win => InfoWindow, Str => To_String(OrderName));
       end if;
-      CurrentLine := WindowHeight + 3;
-      if CurrentLine >= Lines - 1 then
-         CurrentLine := Lines - 2;
+      Resize(InfoWindow, WindowHeight, WindowWidth);
+      WindowFrame(InfoWindow, 2, "Member info");
+      if Member.Skills.Length > 0 then
+         SubHeader("Skills", SkillsHeaderLine);
+         SubHeader("Order", OrderHeaderLine);
+         Resize
+           (SkillsPad,
+            Line_Position(Member.Skills.Length),
+            WindowWidth - 4);
       end if;
+      CurrentLine := WindowHeight + 3;
+      if CurrentLine >= Lines - 2 then
+         CurrentLine := Lines - 3;
+      end if;
+      ActionsWindow := Create(3, (Columns / 2), CurrentLine, (Columns / 2));
       if Member.Tired < 100 and
         Member.Hunger < 100 and
         Member.Thirst < 100 then
-         Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
-         Add(Str => "Press Enter to give orders to crew member");
+         Add
+           (Win => ActionsWindow,
+            Str => "Press Enter to give orders to crew member");
+         Get_Cursor_Position
+           (Win => ActionsWindow,
+            Line => CurrentLine,
+            Column => CurrentColumn);
          Change_Attributes
-           (Line => CurrentLine,
-            Column => (Columns / 2) + 6,
+           (Win => ActionsWindow,
+            Line => 0,
+            Column => 6,
             Count => 5,
             Color => 1);
-         CurrentLine := CurrentLine + 1;
       end if;
       for Module of PlayerShip.Modules loop
          if Module.Durability > 0 and
@@ -287,20 +322,26 @@ package body Crew.UI is
          end if;
       end loop;
       if NeedClean or NeedRepairs then
-         Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
-         Add(Str => "Press Space to give orders to all crew");
+         CurrentLine := CurrentLine + 1;
+         Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
+         Add
+           (Win => ActionsWindow,
+            Str => "Press Space to give orders to all crew");
          Change_Attributes
-           (Line => CurrentLine,
-            Column => (Columns / 2) + 6,
+           (Win => ActionsWindow,
+            Line => CurrentLine,
+            Column => 6,
             Count => 5,
             Color => 1);
       end if;
       Refresh_Without_Update;
       Refresh_Without_Update(InfoWindow);
+      Refresh_Without_Update(ActionsWindow);
       Refresh_Without_Update(MenuWindow);
       Update_Screen;
       Delete(InfoWindow);
-      if SkillsPad /= Null_Window then
+      Delete(ActionsWindow);
+      if Member.Skills.Length > 0 then
          Refresh
            (SkillsPad,
             Line_Position(StartIndex),
@@ -517,7 +558,6 @@ package body Crew.UI is
       Orders_Items.all(MenuIndex) := New_Item("Quit", "0");
       Orders_Items.all(Orders_Items'Last) := Null_Item;
       OrdersMenu := New_Menu(Orders_Items);
-      Set_Mark(OrdersMenu, "");
       Set_Options(OrdersMenu, (Show_Descriptions => False, others => True));
       Scale(OrdersMenu, MenuHeight, MenuLength);
       MenuWindow2 :=
@@ -526,7 +566,7 @@ package body Crew.UI is
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Box(MenuWindow2);
+      WindowFrame(MenuWindow2, 5, "Give order");
       Set_Window(OrdersMenu, MenuWindow2);
       Set_Sub_Window
         (OrdersMenu,
@@ -577,15 +617,15 @@ package body Crew.UI is
          Orders_Items.all(I) := Null_Item;
       end loop;
       OrdersMenu := New_Menu(Orders_Items);
-      Set_Mark(OrdersMenu, "");
       Scale(OrdersMenu, MenuHeight, MenuLength);
+      MenuLength := 25;
       MenuWindow2 :=
         Create
           (MenuHeight + 2,
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Box(MenuWindow2);
+      WindowFrame(MenuWindow2, 5, "Give order whole crew");
       Set_Window(OrdersMenu, MenuWindow2);
       Set_Sub_Window
         (OrdersMenu,
@@ -628,15 +668,15 @@ package body Crew.UI is
       Orders_Items.all(Orders_Items'Last - 1) := New_Item("Quit");
       Orders_Items.all(Orders_Items'Last) := Null_Item;
       PrioritiesMenu := New_Menu(Orders_Items);
-      Set_Mark(PrioritiesMenu, "");
       Scale(PrioritiesMenu, MenuHeight, MenuLength);
+      MenuLength := 25;
       MenuWindow2 :=
         Create
           (MenuHeight + 2,
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Box(MenuWindow2);
+      WindowFrame(MenuWindow2, 5, "Set orders priorities");
       Set_Window(PrioritiesMenu, MenuWindow2);
       Set_Sub_Window
         (PrioritiesMenu,
