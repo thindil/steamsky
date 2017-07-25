@@ -229,10 +229,13 @@ begin
             when GoalsList_View | GoalsTypes_View =>
                GameState := OldState;
                if GameState = GameStats_View then
-                  DrawGame(OldState);
+                  DrawGame(GameState);
                else
                   RedrawMainMenu(GameState);
                end if;
+            when Giving_Orders | Orders_For_All | Orders_Priorities =>
+               GameState := Crew_Info;
+               DrawGame(Crew_Info);
             when others =>
                DrawGame(GameState);
          end case;
