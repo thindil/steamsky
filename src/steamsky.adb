@@ -133,6 +133,9 @@ begin
             when Rename_Module | Assign_Ammo | Module_Options | Assign_Owner =>
                GameState := Ship_Info;
                DrawGame(Ship_Info);
+            when Giving_Orders | Orders_For_All | Orders_Priorities =>
+               GameState := Crew_Info;
+               DrawGame(Crew_Info);
             when others =>
                DrawGame(GameState);
          end case;
