@@ -272,7 +272,7 @@ package body Ships.UI.Ship.Keys is
       if Result = Menu_Ok then
          Refresh(MenuWindow2);
       end if;
-      return Assign_Owner;
+      return Assign_Ammo;
    end AssignAmmoKeys;
 
 end Ships.UI.Ship.Keys;
