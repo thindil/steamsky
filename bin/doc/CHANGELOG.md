@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Redrawing screens after resize terminal
+- Manual assigning ammo to guns
 
 ## [1.4] - 2017-07-23
 
