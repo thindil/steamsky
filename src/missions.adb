@@ -26,7 +26,6 @@ with Items; use Items;
 with Bases; use Bases;
 with Messages; use Messages;
 with Crew; use Crew;
-with UserInterface; use UserInterface;
 with Statistics; use Statistics;
 with Game; use Game;
 with Utils; use Utils;
@@ -213,7 +212,7 @@ package body Missions is
       SkyBases(BaseIndex).MissionsDate := GameDate;
    end GenerateMissions;
 
-   procedure AcceptMission(MissionIndex: Positive) is
+   function AcceptMission(MissionIndex: Positive) return String is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MissionsLimit: Integer;
@@ -225,9 +224,7 @@ package body Missions is
       Skills: Skills_Container.Vector;
    begin
       if SkyBases(BaseIndex).Reputation(1) < 0 then
-         ShowDialog
-           ("Your reputation in this base is too low to receive any mission.");
-         return;
+         return "Your reputation in this base is too low to receive any mission.";
       end if;
       case SkyBases(BaseIndex).Reputation(1) is
          when 0 .. 25 =>
@@ -248,14 +245,11 @@ package body Missions is
          exit when MissionsLimit = 0;
       end loop;
       if MissionsLimit < 1 then
-         ShowDialog("You can't take any more missions from this base. ");
-         return;
+         return "You can't take any more missions from this base. ";
       end if;
       if Mission.MType = Deliver then
          if FreeCargo((0 - Items_List(Mission.Target).Weight)) < 0 then
-            ShowDialog
-              ("You don't have enough cargo space for take this mission.");
-            return;
+            return "You don't have enough cargo space for take this mission.";
          end if;
       end if;
       if Mission.MType = Passenger then
@@ -266,9 +260,7 @@ package body Missions is
             end if;
          end loop;
          if not HaveCabin then
-            ShowDialog
-              ("You don't have proper (or free) cabin for this passenger.");
-            return;
+            return "You don't have proper (or free) cabin for this passenger.";
          end if;
       end if;
       TraderIndex := FindMember(Talk);
@@ -329,6 +321,7 @@ package body Missions is
       GainExp(1, 4, TraderIndex);
       GameStats.AcceptedMissions := GameStats.AcceptedMissions + 1;
       UpdateGame(5);
+      return "";
    end AcceptMission;
 
    procedure UpdateMissions(Minutes: Positive) is
