@@ -133,7 +133,7 @@ package body Ships.Cargo is
       I: Positive := PlayerShip.Cargo.First_Index;
       procedure UpdateItem(DamagedItem: in out CargoData) is
       begin
-         if DamagedItem.Amount > 1 and DamagedItem.Durability > 1 then
+         if DamagedItem.Amount > 1 then
             DamagedItem.Amount := 1;
          end if;
          DamagedItem.Durability := DamagedItem.Durability - 1;
