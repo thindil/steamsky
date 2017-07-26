@@ -18,11 +18,14 @@
 package Ships.Movement is
 
    function MoveShip
-     (ShipIndex, X, Y: Integer) return Natural; -- Move selected ship
-   procedure DockShip(Docking: Boolean); -- Dock/Undock ship at base
-   procedure ChangeShipSpeed
-     (SpeedValue: ShipSpeed;
-      ShowInfo: Boolean := True); -- Change speed of ship
+     (ShipIndex, X, Y: Integer;
+      Message: in out Unbounded_String) return Natural; -- Move selected ship
+   function DockShip
+     (Docking: Boolean)
+     return String; -- Dock/Undock ship at base, returns empty string if all ok otherwise error message
+   function ChangeShipSpeed
+     (SpeedValue: ShipSpeed)
+     return String; -- Change speed of ship, returns empty string if all ok otherwise error message
    function RealSpeed
      (Ship: ShipRecord)
      return Natural; -- Return real ship speed in meters per minute

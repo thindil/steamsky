@@ -39,11 +39,14 @@ package Missions is
      (MissionIndex: Positive)
      return String; -- Accept selected mission from base, returns empty string if all ok otherwise error message
    procedure UpdateMissions(Minutes: Positive); -- Update accepted missions
-   procedure FinishMission(MissionIndex: Positive); -- Finish selected mission
+   function FinishMission
+     (MissionIndex: Positive)
+     return String; -- Finish selected mission, returns empty string if all ok otherwise error message
    procedure DeleteMission
      (MissionIndex: Positive;
       Failed: Boolean := True); -- Delete selected mission
    procedure UpdateMission(MissionIndex: Positive); -- Update status of mission
-   procedure AutoFinishMissions; -- Finish all possible missions
+   function AutoFinishMissions
+     return String; -- Finish all possible missions, returns empty string if all ok otherwise error message
 
 end Missions;
