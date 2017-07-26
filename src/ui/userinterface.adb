@@ -38,6 +38,7 @@ with Bases.UI.Recruits; use Bases.UI.Recruits;
 with Bases.UI.Recipes; use Bases.UI.Recipes;
 with Bases.UI.Missions; use Bases.UI.Missions;
 with Bases.UI.Heal; use Bases.UI.Heal;
+with Bases.UI.Loot; use Bases.UI.Loot;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
 with Combat; use Combat;
@@ -77,10 +78,9 @@ package body UserInterface is
          HaveTrader := True;
       end if;
       if PlayerShip.Speed = DOCKED then
-         OrdersAmount := 3;
+         OrdersAmount := 4;
          MenuIndex := 2;
          if HaveTrader and SkyBases(BaseIndex).Owner /= Abandoned then
-            OrdersAmount := OrdersAmount + 1;
             case SkyBases(BaseIndex).Reputation(1) is
                when 0 .. 25 =>
                   MissionsLimit := 1;
@@ -144,6 +144,10 @@ package body UserInterface is
          end if;
          Orders_Items := new Item_Array(1 .. OrdersAmount);
          Orders_Items.all(1) := New_Item("Undock");
+         if SkyBases(BaseIndex).Owner = Abandoned then
+            Orders_Items.all(2) := New_Item("Loot");
+            MenuIndex := MenuIndex + 1;
+         end if;
          if HaveTrader and SkyBases(BaseIndex).Owner /= Abandoned then
             for Mission of PlayerShip.Missions loop
                if (Mission.Finished and Mission.StartBase = BaseIndex) or
@@ -734,6 +738,8 @@ package body UserInterface is
             ShowSkyMap;
             Refresh_Without_Update;
             ShowConfirm("Are you sure want to resign from game?");
+         when Loot_View =>
+            ShowLoot;
          when others =>
             null;
       end case;

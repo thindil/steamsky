@@ -48,6 +48,7 @@ with Bases.UI.Recruits; use Bases.UI.Recruits;
 with Bases.UI.Recipes; use Bases.UI.Recipes;
 with Bases.UI.Missions; use Bases.UI.Missions;
 with Bases.UI.Heal; use Bases.UI.Heal;
+with Bases.UI.Loot; use Bases.UI.Loot;
 with Events; use Events;
 with Events.UI; use Events.UI;
 with Combat.UI; use Combat.UI;
@@ -409,6 +410,10 @@ begin
             GameState := DetailedStatsKeys(Key);
          when Hall_Of_Fame =>
             GameState := HallOfFameKeys(Key);
+         when Loot_View =>
+            GameState := LootKeys(Key);
+         when Loot_Form =>
+            GameState := LootFormKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;
