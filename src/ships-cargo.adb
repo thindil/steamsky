@@ -137,14 +137,9 @@ package body Ships.Cargo is
              Amount => (SelectedItem.Amount - 1),
              Name => SelectedItem.Name,
              Durability => SelectedItem.Durability));
+         PlayerShip.Cargo(CargoIndex).Amount := 1;
       end if;
-      if PlayerShip.Cargo(CargoIndex).Amount > 1 and
-        PlayerShip.Cargo(CargoIndex).Durability > 1 then
-         PlayerShip.Cargo(CargoIndex).Amount :=
-           PlayerShip.Cargo(CargoIndex).Amount - 1;
-      end if;
-      PlayerShip.Cargo(CargoIndex).Durability :=
-        PlayerShip.Cargo(CargoIndex).Durability - 1;
+      PlayerShip.Cargo(CargoIndex).Durability := SelectedItem.Durability - 1;
       if PlayerShip.Cargo(CargoIndex).Durability = 0 then -- Cargo destroyed
          UpdateCargo
            (PlayerShip,
