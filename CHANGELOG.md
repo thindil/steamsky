@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Few misspellings in help
 - Redrawing screens after resize terminal
 - Manual assigning ammo to guns
+- Grouping damaged items in cargo
 
 ## [1.0.5] - 2017-07-09
 
