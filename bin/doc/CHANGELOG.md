@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New goals: craft 1500 items and craft 2000 items
+- New goals: craft 1500 items, craft 2000 items and craft 2500 items
 
 ### Changed
 - Updated interface
