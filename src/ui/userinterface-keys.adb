@@ -335,6 +335,9 @@ package body UserInterface.Keys is
                UpdateGame(GetRandom(30, 60));
                UpdateMission
                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+            elsif Order = "Loot" then
+               DrawGame(Loot_View);
+               return Loot_View;
             end if;
             DrawGame(Sky_Map_View);
             return OldState;
