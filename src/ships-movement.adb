@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with ShipModules; use ShipModules;
-with UserInterface; use UserInterface;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Statistics; use Statistics;
@@ -27,7 +26,7 @@ with Config; use Config;
 
 package body Ships.Movement is
 
-   function HaveOrderRequirements(ShowInfo: Boolean := True) return Boolean is
+   function HaveOrderRequirements return String is
       HaveCockpit, HaveEngine, HavePilot, HaveEngineer: Boolean := False;
    begin
       for Module of PlayerShip.Modules loop
@@ -41,18 +40,10 @@ package body Ships.Movement is
          exit when HaveEngine and HaveCockpit;
       end loop;
       if not HaveEngine then
-         if ShowInfo then
-            ShowDialog
-              ("You don't have working engine on ship or all engines are destroyed.");
-         end if;
-         return False;
+         return "You don't have working engine on ship or all engines are destroyed.";
       end if;
       if not HaveCockpit then
-         if ShowInfo then
-            ShowDialog
-              ("You don't have cockpit on ship or cockpit is destroyed.");
-         end if;
-         return False;
+         return "You don't have cockpit on ship or cockpit is destroyed.";
       end if;
       for Member of PlayerShip.Crew loop
          if Member.Order = Pilot then
@@ -63,21 +54,17 @@ package body Ships.Movement is
          exit when HavePilot and HaveEngineer;
       end loop;
       if not HavePilot then
-         if ShowInfo then
-            ShowDialog("You don't have pilot on duty.");
-         end if;
-         return False;
+         return "You don't have pilot on duty.";
       end if;
       if not HaveEngineer then
-         if ShowInfo then
-            ShowDialog("You don't have enginner on duty.");
-         end if;
-         return False;
+         return "You don't have enginner on duty.";
       end if;
-      return True;
+      return "";
    end HaveOrderRequirements;
 
-   function MoveShip(ShipIndex, X, Y: Integer) return Natural is
+   function MoveShip
+     (ShipIndex, X, Y: Integer;
+      Message: in out Unbounded_String) return Natural is
       NewX, NewY: Integer;
       TimePassed, FuelNeeded: Integer := 0;
       type SpeedType is digits 2;
@@ -100,34 +87,40 @@ package body Ships.Movement is
       if ShipIndex = 0 then
          case PlayerShip.Speed is
             when DOCKED =>
-               ShowDialog("First you must undock ship from base.");
+               Message :=
+                 To_Unbounded_String("First you must undock ship from base.");
                return 0;
             when FULL_STOP =>
-               ShowDialog("First you must set speed for ship.");
+               Message :=
+                 To_Unbounded_String("First you must set speed for ship.");
                return 0;
             when others =>
                null;
          end case;
-         if not HaveOrderRequirements then
+         Message := To_Unbounded_String(HaveOrderRequirements);
+         if Length(Message) > 0 then
             return 0;
          end if;
          FuelIndex := FindCargo(ItemType => FuelType);
          if FuelIndex = 0 then
-            ShowDialog("You don't have any fuel.");
+            Message := To_Unbounded_String("You don't have any fuel.");
             return 0;
          end if;
          FuelNeeded := CountFuelNeeded;
          if PlayerShip.Cargo(FuelIndex).Amount < abs FuelNeeded then
-            ShowDialog
-              ("You don't have enough fuel (" &
-               To_String
-                 (Items_List(PlayerShip.Cargo(FuelIndex).ProtoIndex).Name) &
-               ").");
+            Message :=
+              To_Unbounded_String
+                ("You don't have enough fuel (" &
+                 To_String
+                   (Items_List(PlayerShip.Cargo(FuelIndex).ProtoIndex).Name) &
+                 ").");
             return 0;
          end if;
          Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
          if Speed < 0.01 then
-            ShowDialog("You can't fly because your ship is overloaded.");
+            Message :=
+              To_Unbounded_String
+                ("You can't fly because your ship is overloaded.");
             return 0;
          end if;
          NewX := PlayerShip.SkyX + X;
@@ -189,7 +182,7 @@ package body Ships.Movement is
       return 1;
    end MoveShip;
 
-   procedure DockShip(Docking: Boolean) is
+   function DockShip(Docking: Boolean) return String is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ProtoMoneyIndex: constant Positive := FindProtoItem(MoneyIndex);
@@ -197,32 +190,29 @@ package body Ships.Movement is
       DockingCost: Positive;
       TraderIndex: Natural := 0;
       FuelIndex: constant Natural := FindCargo(ItemType => FuelType);
+      Message: Unbounded_String;
    begin
       if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
-         ShowDialog("Here no base to dock or undock.");
-         return;
+         return "Here no base to dock or undock.";
       end if;
       if Docking and PlayerShip.Speed = DOCKED then
-         ShowDialog("Ship is docked to base.");
-         return;
+         return "Ship is docked to base.";
       end if;
       if not Docking and PlayerShip.Speed > DOCKED then
-         ShowDialog("Ship isn't docked to base.");
-         return;
+         return "Ship isn't docked to base.";
       end if;
-      if not HaveOrderRequirements then
-         return;
+      Message := To_Unbounded_String(HaveOrderRequirements);
+      if Length(Message) > 0 then
+         return To_String(Message);
       end if;
       if Docking then
          if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
              .Owner /=
            Abandoned then
             if MoneyIndex2 = 0 then
-               ShowDialog
-                 ("You can't dock to base because you don't have " &
-                  To_String(MoneyName) &
-                  " to pay for docking.");
-               return;
+               return "You can't dock to base because you don't have " &
+                 To_String(MoneyName) &
+                 " to pay for docking.";
             end if;
             for Module of PlayerShip.Modules loop
                if Modules_List(Module.ProtoIndex).MType = HULL then
@@ -233,11 +223,9 @@ package body Ships.Movement is
             TraderIndex := FindMember(Talk);
             CountPrice(DockingCost, TraderIndex);
             if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
-               ShowDialog
-                 ("You can't dock to base because you don't have enough " &
-                  To_String(MoneyName) &
-                  " to pay for docking.");
-               return;
+               return "You can't dock to base because you don't have enough " &
+                 To_String(MoneyName) &
+                 " to pay for docking.";
             end if;
             UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - DockingCost));
             AddMessage
@@ -263,9 +251,7 @@ package body Ships.Movement is
          UpdateGame(10);
       else
          if FuelIndex = 0 then
-            ShowDialog
-              ("You can't undock from base because you don't have any fuel.");
-            return;
+            return "You can't undock from base because you don't have any fuel.";
          end if;
          PlayerShip.Speed := GameSettings.UndockSpeed;
          AddMessage
@@ -273,18 +259,14 @@ package body Ships.Movement is
             OrderMessage);
          UpdateGame(5);
       end if;
+      return "";
    end DockShip;
 
-   procedure ChangeShipSpeed
-     (SpeedValue: ShipSpeed;
-      ShowInfo: Boolean := True) is
+   function ChangeShipSpeed(SpeedValue: ShipSpeed) return String is
       HaveEngine: Boolean := False;
    begin
       if PlayerShip.Speed = DOCKED then
-         if ShowInfo then
-            ShowDialog("First undock from base before you set ship speed.");
-         end if;
-         return;
+         return "First undock from base before you set ship speed.";
       end if;
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = ENGINE and
@@ -294,28 +276,24 @@ package body Ships.Movement is
          end if;
       end loop;
       if not HaveEngine then
-         if ShowInfo then
-            ShowDialog
-              ("You don't have working engine on ship or all engines are destroyed.");
-         end if;
-         return;
+         return "You don't have working engine on ship or all engines are destroyed.";
       end if;
       if FindMember(Engineer) = 0 then
-         if ShowInfo then
-            ShowDialog("You don't have enginner on duty.");
-         end if;
-         return;
+         return "You don't have enginner on duty.";
       end if;
       PlayerShip.Speed := SpeedValue;
+      return "";
    end ChangeShipSpeed;
 
    function RealSpeed(Ship: ShipRecord) return Natural is
       BaseSpeed, Speed: Natural := 0;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
+      Message: Unbounded_String;
    begin
       if Ship = PlayerShip then
-         if not HaveOrderRequirements(False) then
+         Message := To_Unbounded_String(HaveOrderRequirements);
+         if Length(Message) > 0 then
             return 0;
          end if;
       end if;
