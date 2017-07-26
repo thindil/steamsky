@@ -25,6 +25,7 @@ with UserInterface; use UserInterface;
 with Bases; use Bases;
 with Items; use Items;
 with Config; use Config;
+with Utils.UI; use Utils.UI;
 
 package body Events.UI is
 
@@ -32,9 +33,13 @@ package body Events.UI is
    MenuWindow: Window;
 
    procedure ShowEventInfo is
-      InfoWindow, ClearWindow: Window;
+      InfoWindow, ClearWindow, ActionsWindow: Window;
       EventIndex: constant Positive := Get_Index(Current(EventsMenu));
       WindowHeight: Line_Position := 5;
+      WindowWidth: Column_Position := 1;
+      BaseIndex: constant Natural :=
+        SkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY)
+          .BaseIndex;
    begin
       ClearWindow := Create(10, (Columns / 2), 4, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
@@ -43,9 +48,6 @@ package body Events.UI is
          WindowHeight := 6;
       end if;
       InfoWindow := Create(WindowHeight, (Columns / 2), 4, (Columns / 2));
-      Box(InfoWindow);
-      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
-      Add(Win => InfoWindow, Str => "[Event info]");
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       Add
         (Win => InfoWindow,
@@ -63,36 +65,50 @@ package body Events.UI is
                  "Ship type: " &
                  To_String
                    (ProtoShips_List(Events_List(EventIndex).Data).Name));
+            if WindowWidth <
+              Column_Position
+                  (Length
+                     (ProtoShips_List(Events_List(EventIndex).Data).Name)) +
+                15 then
+               WindowWidth :=
+                 Column_Position
+                   (Length
+                      (ProtoShips_List(Events_List(EventIndex).Data).Name)) +
+                 15;
+            end if;
          when FullDocks | AttackOnBase | Disease =>
             Add
               (Win => InfoWindow,
-               Str =>
-                 "Base name: " &
-                 To_String
-                   (SkyBases
-                      (SkyMap
-                         (Events_List(EventIndex).SkyX,
-                          Events_List(EventIndex).SkyY)
-                         .BaseIndex)
-                      .Name));
+               Str => "Base name: " & To_String(SkyBases(BaseIndex).Name));
+            if WindowWidth <
+              Column_Position(Length(SkyBases(BaseIndex).Name)) + 15 then
+               WindowWidth :=
+                 Column_Position(Length(SkyBases(BaseIndex).Name)) + 15;
+            end if;
          when DoublePrice =>
             Add
               (Win => InfoWindow,
-               Str =>
-                 "Base name: " &
-                 To_String
-                   (SkyBases
-                      (SkyMap
-                         (Events_List(EventIndex).SkyX,
-                          Events_List(EventIndex).SkyY)
-                         .BaseIndex)
-                      .Name));
+               Str => "Base name: " & To_String(SkyBases(BaseIndex).Name));
+            if WindowWidth <
+              Column_Position(Length(SkyBases(BaseIndex).Name)) + 15 then
+               WindowWidth :=
+                 Column_Position(Length(SkyBases(BaseIndex).Name)) + 15;
+            end if;
             Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
             Add
               (Win => InfoWindow,
                Str =>
                  "Item: " &
                  To_String(Items_List(Events_List(EventIndex).Data).Name));
+            if WindowWidth <
+              Column_Position
+                  (Length(Items_List(Events_List(EventIndex).Data).Name)) +
+                10 then
+               WindowWidth :=
+                 Column_Position
+                   (Length(Items_List(Events_List(EventIndex).Data).Name)) +
+                 10;
+            end if;
          when None =>
             null;
       end case;
@@ -105,23 +121,35 @@ package body Events.UI is
              (CountDistance
                 (Events_List(EventIndex).SkyX,
                  Events_List(EventIndex).SkyY)));
-      Move_Cursor(Line => WindowHeight + 4, Column => (Columns / 2));
-      Add(Str => "Press SPACE to show event on map");
+      if WindowWidth > (Columns / 2) then
+         WindowWidth := Columns / 2;
+      end if;
+      Resize(InfoWindow, WindowHeight, WindowWidth);
+      WindowFrame(InfoWindow, 2, "Event info");
+      ActionsWindow :=
+        Create(3, (Columns / 2), WindowHeight + 4, (Columns / 2));
+      Add(Win => ActionsWindow, Str => "Press SPACE to show event on map");
       Change_Attributes
-        (Line => WindowHeight + 4,
-         Column => (Columns / 2) + 6,
+        (Win => ActionsWindow,
+         Line => 0,
+         Column => 6,
          Count => 5,
          Color => 1);
-      Move_Cursor(Line => WindowHeight + 5, Column => (Columns / 2));
-      Add(Str => "Press ENTER to set event as a destination for ship");
+      Move_Cursor(Win => ActionsWindow, Line => 1, Column => 0);
+      Add
+        (Win => ActionsWindow,
+         Str => "Press ENTER to set event as a destination for ship");
       Change_Attributes
-        (Line => WindowHeight + 5,
-         Column => (Columns / 2) + 6,
+        (Win => ActionsWindow,
+         Line => 1,
+         Column => 6,
          Count => 5,
          Color => 1);
       Refresh_Without_Update;
       Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(ActionsWindow);
+      Delete(ActionsWindow);
       Refresh_Without_Update(MenuWindow);
       Update_Screen;
    end ShowEventInfo;
@@ -156,7 +184,6 @@ package body Events.UI is
          EventsMenu := New_Menu(Events_Items);
          Set_Options(EventsMenu, (Show_Descriptions => False, others => True));
          Set_Format(EventsMenu, Lines - 4, 1);
-         Set_Mark(EventsMenu, "");
          Scale(EventsMenu, MenuHeight, MenuLength);
          MenuWindow := Create(MenuHeight, MenuLength, 4, 2);
          Set_Window(EventsMenu, MenuWindow);
