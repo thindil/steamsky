@@ -70,6 +70,7 @@ procedure SteamSky is
    Result: Integer;
    ErrorFile: File_Type;
    Visibility: Cursor_Visibility := Invisible;
+   Message: Unbounded_String;
    procedure ErrorInfo(Message: String) is
    begin
       Move_Cursor(Line => (Lines / 2), Column => 2);
@@ -270,7 +271,10 @@ begin
                when 1 =>
                   GameState := CheckForEvent(GameState);
                   if GameState = Sky_Map_View and GameSettings.AutoFinish then
-                     AutoFinishMissions;
+                     Message := To_Unbounded_String(AutoFinishMissions);
+                     if Length(Message) > 0 then
+                        ShowDialog(To_String(Message));
+                     end if;
                   end if;
                   DrawGame(GameState);
                when 2 =>
@@ -295,7 +299,10 @@ begin
                      GameState := CheckForEvent(GameState);
                   end if;
                   if GameState = Sky_Map_View and GameSettings.AutoFinish then
-                     AutoFinishMissions;
+                     Message := To_Unbounded_String(AutoFinishMissions);
+                     if Length(Message) > 0 then
+                        ShowDialog(To_String(Message));
+                     end if;
                   end if;
                   DrawGame(GameState);
                when others =>

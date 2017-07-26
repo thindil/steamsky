@@ -339,12 +339,13 @@ package body Missions is
       end loop;
    end UpdateMissions;
 
-   procedure FinishMission(MissionIndex: Positive) is
+   function FinishMission(MissionIndex: Positive) return String is
+      Message: Unbounded_String;
    begin
       if PlayerShip.Speed /= DOCKED then
-         DockShip(True);
-         if PlayerShip.Speed /= DOCKED then
-            return;
+         Message := To_Unbounded_String(DockShip(True));
+         if Length(Message) > 0 then
+            return To_String(Message);
          end if;
       end if;
       UpdateGame(5);
@@ -390,6 +391,7 @@ package body Missions is
            (Natural'Image
               (Missions_Types'Pos(PlayerShip.Missions(MissionIndex).MType))));
       DeleteMission(MissionIndex, False);
+      return "";
    end FinishMission;
 
    procedure DeleteMission(MissionIndex: Positive; Failed: Boolean := True) is
@@ -526,22 +528,22 @@ package body Missions is
       end if;
    end UpdateMission;
 
-   procedure AutoFinishMissions is
+   function AutoFinishMissions return String is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       if BaseIndex = 0 then
-         return;
+         return "";
       end if;
       if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
          if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
              .EType /=
            DoublePrice then
-            return;
+            return "";
          end if;
       end if;
       if FindMember(Talk) = 0 then
-         return;
+         return "";
       end if;
       for I in
         PlayerShip.Missions.First_Index .. PlayerShip.Missions.Last_Index loop
@@ -550,9 +552,10 @@ package body Missions is
             PlayerShip.Missions(I).StartBase = BaseIndex) or
            (PlayerShip.Missions(I).TargetX = PlayerShip.SkyX and
             PlayerShip.Missions(I).TargetY = PlayerShip.SkyY) then
-            FinishMission(I);
+            return FinishMission(I);
          end if;
       end loop;
+      return "";
    end AutoFinishMissions;
 
 end Missions;

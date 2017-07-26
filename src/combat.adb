@@ -181,6 +181,7 @@ package body Combat is
       EnemyPilotOrder: Positive := 2;
       HaveFuel: Boolean := False;
       DamageRange: Positive;
+      Message: Unbounded_String;
       procedure Attack(Ship, EnemyShip: in out ShipRecord) is
          GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex: Natural;
          GunnerOrder: Positive;
@@ -683,7 +684,11 @@ package body Combat is
            AccuracyBonus - GetSkillLevel(EnemyPilotIndex, 1, Enemy.Ship.Crew);
       end if;
       if EngineerIndex > 0 and HaveFuel then
-         ChangeShipSpeed(ShipSpeed'Val(EngineerOrder), False);
+         Message :=
+           To_Unbounded_String(ChangeShipSpeed(ShipSpeed'Val(EngineerOrder)));
+         if Length(Message) > 0 then
+            AddMessage(To_String(Message), OrderMessage, 3);
+         end if;
       end if;
       SpeedBonus := 20 - (RealSpeed(PlayerShip) / 100);
       if SpeedBonus < -10 then

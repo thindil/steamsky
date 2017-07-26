@@ -469,23 +469,24 @@ package body Maps.UI is
    function SkyMapKeys(Key: Key_Code) return Integer is
       Result: Integer := 1;
       NewX, NewY: Integer := 0;
+      Message: Unbounded_String;
    begin
       if Key = Key_Code(GameSettings.Keys(1)) then -- Move up
-         Result := MoveShip(0, 0, -1);
+         Result := MoveShip(0, 0, -1, Message);
       elsif Key = Key_Code(GameSettings.Keys(2)) then -- Move down
-         Result := MoveShip(0, 0, 1);
+         Result := MoveShip(0, 0, 1, Message);
       elsif Key = Key_Code(GameSettings.Keys(3)) then -- Move right
-         Result := MoveShip(0, 1, 0);
+         Result := MoveShip(0, 1, 0, Message);
       elsif Key = Key_Code(GameSettings.Keys(4)) then -- Move left
-         Result := MoveShip(0, -1, 0);
+         Result := MoveShip(0, -1, 0, Message);
       elsif Key = Key_Code(GameSettings.Keys(5)) then -- Move down/left
-         Result := MoveShip(0, -1, 1);
+         Result := MoveShip(0, -1, 1, Message);
       elsif Key = Key_Code(GameSettings.Keys(6)) then -- Move down/right
-         Result := MoveShip(0, 1, 1);
+         Result := MoveShip(0, 1, 1, Message);
       elsif Key = Key_Code(GameSettings.Keys(7)) then -- Move up/left
-         Result := MoveShip(0, -1, -1);
+         Result := MoveShip(0, -1, -1, Message);
       elsif Key = Key_Code(GameSettings.Keys(8)) then -- Move up/right
-         Result := MoveShip(0, 1, -1);
+         Result := MoveShip(0, 1, -1, Message);
       elsif Key =
         Key_Code
           (GameSettings.Keys
@@ -503,7 +504,7 @@ package body Maps.UI is
             elsif PlayerShip.DestinationY < PlayerShip.SkyY then
                NewY := -1;
             end if;
-            Result := MoveShip(0, NewX, NewY);
+            Result := MoveShip(0, NewX, NewY, Message);
             if PlayerShip.DestinationX = PlayerShip.SkyX and
               PlayerShip.DestinationY = PlayerShip.SkyY then
                AddMessage
@@ -512,7 +513,10 @@ package body Maps.UI is
                PlayerShip.DestinationX := 0;
                PlayerShip.DestinationY := 0;
                if GameSettings.AutoFinish then
-                  AutoFinishMissions;
+                  Message := To_Unbounded_String(AutoFinishMissions);
+                  if Length(Message) > 0 then
+                     ShowDialog(To_String(Message));
+                  end if;
                end if;
                return 4;
             end if;
@@ -537,7 +541,7 @@ package body Maps.UI is
             elsif PlayerShip.DestinationY < PlayerShip.SkyY then
                NewY := -1;
             end if;
-            Result := MoveShip(0, NewX, NewY);
+            Result := MoveShip(0, NewX, NewY, Message);
             exit when Result = 0;
             if CheckForEvent(Sky_Map_View) /= Sky_Map_View then
                return 5;
@@ -557,7 +561,10 @@ package body Maps.UI is
                PlayerShip.DestinationX := 0;
                PlayerShip.DestinationY := 0;
                if GameSettings.AutoFinish then
-                  AutoFinishMissions;
+                  Message := To_Unbounded_String(AutoFinishMissions);
+                  if Length(Message) > 0 then
+                     ShowDialog(To_String(Message));
+                  end if;
                end if;
                return 4;
             end if;
@@ -620,6 +627,9 @@ package body Maps.UI is
             when others =>
                Result := 0;
          end case;
+      end if;
+      if Length(Message) > 0 then
+         ShowDialog(To_String(Message));
       end if;
       return Result;
    end SkyMapKeys;

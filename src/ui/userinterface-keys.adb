@@ -213,11 +213,20 @@ package body UserInterface.Keys is
                DrawGame(BaseMissions_View);
                return BaseMissions_View;
             elsif Order = "Undock" then
-               DockShip(False);
+               Message := To_Unbounded_String(DockShip(False));
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
             elsif Order = "Quarter speed" then
-               ChangeShipSpeed(QUARTER_SPEED);
+               Message := To_Unbounded_String(ChangeShipSpeed(QUARTER_SPEED));
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
             elsif Order = "Dock" then
-               DockShip(True);
+               Message := To_Unbounded_String(DockShip(True));
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
             elsif Order = "Defend" then
                OldSpeed := PlayerShip.Speed;
                NewState := Combat_State;
@@ -228,7 +237,10 @@ package body UserInterface.Keys is
                DrawGame(NewState);
                return NewState;
             elsif Order = "All stop" then
-               ChangeShipSpeed(FULL_STOP);
+               Message := To_Unbounded_String(ChangeShipSpeed(FULL_STOP));
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
             elsif Order = "Attack" then
                OldSpeed := PlayerShip.Speed;
                NewState := Combat_State;
@@ -239,9 +251,15 @@ package body UserInterface.Keys is
                DrawGame(NewState);
                return NewState;
             elsif Order = "Half speed" then
-               ChangeShipSpeed(HALF_SPEED);
+               Message := To_Unbounded_String(ChangeShipSpeed(HALF_SPEED));
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
             elsif Order = "Full speed" then
-               ChangeShipSpeed(FULL_SPEED);
+               Message := To_Unbounded_String(ChangeShipSpeed(FULL_SPEED));
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
             elsif Order = "Wait" then
                DrawGame(Wait_Order);
                return Wait_Order;
@@ -291,8 +309,13 @@ package body UserInterface.Keys is
                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
                   ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
             elsif Order(1 .. 3) = "Com" then
-               FinishMission
-                 (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+               Message :=
+                 To_Unbounded_String
+                   (FinishMission
+                      (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex));
+               if Length(Message) > 0 then
+                  ShowDialog(To_String(Message));
+               end if;
             elsif Order(1 .. 3) = "Sea" then
                OldSpeed := PlayerShip.Speed;
                UpdateGame(GetRandom(15, 45));
