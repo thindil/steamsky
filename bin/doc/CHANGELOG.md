@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Redrawing screens after resize terminal
 - Manual assigning ammo to guns
 - Grouping damaged items in cargo
+- Trading with bases when money item was changed in game settings
 
 ## [1.4] - 2017-07-23
 
