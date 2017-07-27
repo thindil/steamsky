@@ -335,6 +335,7 @@ package body Bases.UI.Trade is
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       CaptionText: Unbounded_String;
+      MoneyIndex2: constant Natural := FindCargo(FindProtoItem(MoneyIndex));
    begin
       for I in Items_List.Iterate loop
          if To_String(Items_List(I).Name) = Name(Current(TradeMenu)) then
@@ -358,12 +359,17 @@ package body Bases.UI.Trade is
             DrawGame(Trade_View);
             return Trade_View;
          end if;
-         for Item of PlayerShip.Cargo loop
-            if Item.ProtoIndex = 1 then
-               MaxAmount := Item.Amount / Price;
-               exit;
-            end if;
-         end loop;
+         if MoneyIndex2 = 0 then
+            ShowDialog
+              ("You can't buy " &
+               To_String(Items_List(ItemIndex).Name) &
+               " because you don't have any " &
+               To_String(MoneyName) &
+               ".");
+            DrawGame(Trade_View);
+            return Trade_View;
+         end if;
+         MaxAmount := PlayerShip.Cargo(MoneyIndex2).Amount / Price;
          Append(FieldText, " to buy");
          CaptionText := To_Unbounded_String("Buying ");
          Append(CaptionText, Items_List(ItemIndex).Name);
