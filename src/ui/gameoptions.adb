@@ -235,9 +235,10 @@ package body GameOptions is
       FieldOptions := Get_Options(Options_Fields.all(2));
       FieldOptions.Edit := False;
       Set_Options(Options_Fields.all(2), FieldOptions);
-      Set_Background
+      Set_Foreground
         (Options_Fields.all(2),
-         (Reverse_Video => True, others => False));
+         (Bold_Character => True, others => False),
+         1);
       CreateLabel(1, "Default speed after undocking: ");
       Options_Fields.all(4) := New_Field(1, 16, 1, 41, 0, 0);
       Set_Field_Type(Options_Fields.all(4), Create(SpeedEnum, True));
@@ -476,7 +477,7 @@ package body GameOptions is
       Result: Forms.Driver_Result;
       FieldIndex: Positive := Get_Index(Current(OptionsForm));
       FieldValue: Unbounded_String;
-      Visibility: Cursor_Visibility := Normal;
+      Visibility: Cursor_Visibility := Invisible;
       procedure SetDescription(Description: String; Field: Positive) is
          FieldsNumbers: constant array(Positive range <>) of Positive :=
            (2,
@@ -530,6 +531,8 @@ package body GameOptions is
             96,
             98,
             99);
+         CursorFieldsNumbers: constant array(1 .. 3) of Positive :=
+           (12, 14, 16);
       begin
          if Field < 20 then
             Set_Buffer(Fields(OptionsForm, 20), 0, Description);
@@ -540,11 +543,25 @@ package body GameOptions is
          else
             Set_Buffer(Fields(OptionsForm, 100), 0, Description);
          end if;
-         Set_Background
+         Set_Foreground
            (Current(OptionsForm),
-            (Reverse_Video => True, others => False));
+            (Bold_Character => True, others => False),
+            1);
+         for CursorField of CursorFieldsNumbers loop
+            if CursorField = Field then
+               Visibility := Normal;
+               Set_Background
+                 (Current(OptionsForm),
+                  (Under_Line => True, others => False),
+                  1);
+               Result := Driver(OptionsForm, F_End_Line);
+               exit;
+            end if;
+         end loop;
+         Set_Cursor_Visibility(Visibility);
          for FieldNumber of FieldsNumbers loop
             if FieldNumber /= Field then
+               Set_Foreground(Fields(OptionsForm, FieldNumber));
                Set_Background
                  (Fields(OptionsForm, FieldNumber),
                   (others => False));
@@ -715,13 +732,6 @@ package body GameOptions is
             if not KeySetting then
                Result := Driver(OptionsForm, F_Previous_Field);
                FieldIndex := Get_Index(Current(OptionsForm));
-               if FieldIndex > 11 and FieldIndex < 17 then
-                  Set_Cursor_Visibility(Visibility);
-                  Result := Driver(OptionsForm, F_End_Line);
-               else
-                  Visibility := Invisible;
-                  Set_Cursor_Visibility(Visibility);
-               end if;
             else
                SetNewKey;
             end if;
@@ -729,13 +739,6 @@ package body GameOptions is
             if not KeySetting then
                Result := Driver(OptionsForm, F_Next_Field);
                FieldIndex := Get_Index(Current(OptionsForm));
-               if FieldIndex > 11 and FieldIndex < 17 then
-                  Set_Cursor_Visibility(Visibility);
-                  Result := Driver(OptionsForm, F_End_Line);
-               else
-                  Visibility := Invisible;
-                  Set_Cursor_Visibility(Visibility);
-               end if;
             else
                SetNewKey;
             end if;
@@ -746,24 +749,15 @@ package body GameOptions is
                elsif FieldIndex = 17 then
                   Set_Page(OptionsForm, 1);
                   Result := Form_Ok;
-                  FieldIndex := 21;
-                  Set_Background
-                    (Current(OptionsForm),
-                     (Reverse_Video => True, others => False));
+                  FieldIndex := 22;
                elsif FieldIndex = 18 then
                   Set_Page(OptionsForm, 2);
                   Result := Form_Ok;
                   FieldIndex := 44;
-                  Set_Background
-                    (Current(OptionsForm),
-                     (Reverse_Video => True, others => False));
                elsif FieldIndex = 19 then
                   Set_Page(OptionsForm, 3);
                   Result := Form_Ok;
                   FieldIndex := 66;
-                  Set_Background
-                    (Current(OptionsForm),
-                     (Reverse_Video => True, others => False));
                elsif (FieldIndex > 21 and FieldIndex < 41) or
                  (FieldIndex > 43 and FieldIndex < 63) or
                  (FieldIndex > 65 and FieldIndex < 99) then
@@ -776,9 +770,6 @@ package body GameOptions is
                elsif FieldIndex = 41 or FieldIndex = 63 or FieldIndex = 99 then
                   Result := Driver(OptionsForm, F_First_Page);
                   FieldIndex := 2;
-                  Set_Background
-                    (Current(OptionsForm),
-                     (Reverse_Video => True, others => False));
                end if;
             else
                SetNewKey;
