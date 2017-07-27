@@ -531,6 +531,8 @@ package body Missions is
    function AutoFinishMissions return String is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      Message: Unbounded_String;
+      I: Natural := PlayerShip.Missions.First_Index;
    begin
       if BaseIndex = 0 then
          return "";
@@ -545,15 +547,19 @@ package body Missions is
       if FindMember(Talk) = 0 then
          return "";
       end if;
-      for I in
-        PlayerShip.Missions.First_Index .. PlayerShip.Missions.Last_Index loop
+      while I <= PlayerShip.Missions.Last_Index loop
          if
            (PlayerShip.Missions(I).Finished and
             PlayerShip.Missions(I).StartBase = BaseIndex) or
            (PlayerShip.Missions(I).TargetX = PlayerShip.SkyX and
             PlayerShip.Missions(I).TargetY = PlayerShip.SkyY) then
-            return FinishMission(I);
+            Message := To_Unbounded_String(FinishMission(I));
+            if Length(Message) > 0 then
+               return To_String(Message);
+            end if;
+            I := I - 1;
          end if;
+         I := I + 1;
       end loop;
       return "";
    end AutoFinishMissions;
