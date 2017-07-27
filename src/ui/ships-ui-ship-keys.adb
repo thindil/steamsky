@@ -94,8 +94,14 @@ package body Ships.UI.Ship.Keys is
             Post(OptionsMenu, False);
             if OptionIndex /= 5 and OptionIndex < 7 then
                if OptionIndex < 5 then
-                  StartUpgrading(CurrentMenuIndex, OptionIndex);
-                  UpdateOrders;
+                  Message :=
+                    To_Unbounded_String
+                      (StartUpgrading(CurrentMenuIndex, OptionIndex));
+                  if Length(Message) > 0 then
+                     ShowDialog(To_String(Message));
+                  else
+                     UpdateOrders;
+                  end if;
                end if;
                DrawGame(Ship_Info);
                return Ship_Info;

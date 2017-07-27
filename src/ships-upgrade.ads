@@ -17,8 +17,10 @@
 
 package Ships.Upgrade is
 
-   procedure StartUpgrading
-     (ModuleIndex, UpgradeType: Positive); -- Set upgrading order
+   function StartUpgrading
+     (ModuleIndex,
+      UpgradeType: Positive)
+     return String; -- Set upgrading order, returns empty string if all ok otherwise error message
    procedure UpgradeShip(Minutes: Positive); -- Upgrade selected module on ship
 
 end Ships.Upgrade;
