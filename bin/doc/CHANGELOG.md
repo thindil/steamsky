@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - New goals: craft 1500 items, craft 2000 items, craft 2500 items, craft 3000
   items and craft 3500 items
 - Ability to loot abandoned bases
+- Remove items from abandoned bases over time
 
 ### Changed
 - Updated interface
