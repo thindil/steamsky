@@ -208,7 +208,7 @@ package body Bases is
       SkyBases(BaseIndex).Recruits := BaseRecruits;
    end GenerateRecruits;
 
-   function AskForBases return String is
+   procedure AskForBases is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Radius, TempX, TempY: Integer;
@@ -216,9 +216,6 @@ package body Bases is
       TraderIndex: Positive;
       UnknownBases: Natural := 0;
    begin
-      if SkyBases(BaseIndex).AskedForBases then
-         return "You can't ask again for direction to other bases in this base.";
-      end if;
       if SkyBases(BaseIndex).Population < 150 then
          Amount := 10;
          Radius := 10;
@@ -302,10 +299,9 @@ package body Bases is
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       UpdateGame(30);
-      return "";
    end AskForBases;
 
-   function AskForEvents return String is
+   procedure AskForEvents is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MaxEvents, EventsAmount, TmpBaseIndex, TraderIndex, ItemIndex: Positive;
@@ -316,9 +312,6 @@ package body Bases is
       PlayerValue: Natural := 0;
       Attempts: Natural;
    begin
-      if DaysDifference(SkyBases(BaseIndex).AskedForEvents) < 7 then
-         return "You asked for know events in this base not so long ago.";
-      end if;
       TraderIndex := FindMember(Talk);
       if SkyBases(BaseIndex).Population < 150 then
          MaxEvents := 5;
@@ -486,7 +479,6 @@ package body Bases is
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       UpdateGame(30);
-      return "";
    end AskForEvents;
 
    procedure UpdatePopulation(BaseIndex: Positive) is
