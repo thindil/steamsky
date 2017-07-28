@@ -28,8 +28,6 @@ package body Bases.Ship is
    function RepairShip(ModuleIndex: Integer) return String is
       Cost, Time, MoneyIndex2: Natural := 0;
       TraderIndex, ProtoMoneyIndex: Positive;
-      BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Message: Unbounded_String := Null_Unbounded_String;
    begin
       RepairCost(Cost, Time, ModuleIndex);
@@ -84,8 +82,7 @@ package body Bases.Ship is
             TradeMessage);
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
-      SkyBases(BaseIndex).Cargo(1).Amount :=
-        SkyBases(BaseIndex).Cargo(1).Amount + Cost;
+      UpdateBaseCargo(ProtoMoneyIndex, Cost);
       GainExp(1, 4, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
       UpdateGame(Time);
@@ -161,8 +158,7 @@ package body Bases.Ship is
          end if;
          UpdateGame(Modules_List(ModuleIndex).InstallTime);
          UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Price));
-         SkyBases(BaseIndex).Cargo(1).Amount :=
-           SkyBases(BaseIndex).Cargo(1).Amount + Price;
+         UpdateBaseCargo(ProtoMoneyIndex, Price);
          GainExp(1, 4, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          if Modules_List(ModuleIndex).MType /= HULL then
@@ -283,8 +279,7 @@ package body Bases.Ship is
                     CheckPriorities => False));
          end if;
          UpdateCargo(PlayerShip, ProtoMoneyIndex, Price);
-         SkyBases(BaseIndex).Cargo(1).Amount :=
-           SkyBases(BaseIndex).Cargo(1).Amount - Price;
+         UpdateBaseCargo(ProtoMoneyIndex, Price);
          GainExp(1, 4, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          AddMessage
@@ -345,6 +340,7 @@ package body Bases.Ship is
          DockingCost := PlayerShip.Cargo(MoneyIndex2).Amount;
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - DockingCost));
+      UpdateBaseCargo(ProtoMoneyIndex, DockingCost);
       AddMessage
         ("You pay" &
          Positive'Image(DockingCost) &

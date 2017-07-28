@@ -82,11 +82,9 @@ package body Bases.Trade is
            ".";
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
-      SkyBases(BaseIndex).Cargo(1).Amount :=
-        SkyBases(BaseIndex).Cargo(1).Amount + Cost;
+      UpdateBaseCargo(ProtoMoneyIndex, Cost);
       UpdateCargo(PlayerShip, ItemIndex, BuyAmount);
-      SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount :=
-        SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount - BuyAmount;
+      UpdateBaseCargo(ItemIndex, (0 - BuyAmount));
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       AddMessage
@@ -118,6 +116,7 @@ package body Bases.Trade is
       Profit, Price: Positive;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+      MoneyIndex2: constant Positive := FindProtoItem(MoneyIndex);
    begin
       SellAmount := Positive'Value(Amount);
       if PlayerShip.Cargo(ItemIndex).Amount < SellAmount then
@@ -166,9 +165,9 @@ package body Bases.Trade is
          ProtoIndex,
          (0 - SellAmount),
          PlayerShip.Cargo.Element(ItemIndex).Durability);
-      UpdateCargo(PlayerShip, FindProtoItem(MoneyIndex), Profit);
-      SkyBases(BaseIndex).Cargo(1).Amount :=
-        SkyBases(BaseIndex).Cargo(1).Amount - Profit;
+      UpdateCargo(PlayerShip, MoneyIndex2, Profit);
+      UpdateBaseCargo(ProtoIndex, SellAmount);
+      UpdateBaseCargo(MoneyIndex2, (0 - Profit));
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       AddMessage
@@ -288,8 +287,7 @@ package body Bases.Trade is
            ".";
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
-      SkyBases(BaseIndex).Cargo(1).Amount :=
-        SkyBases(BaseIndex).Cargo(1).Amount + Cost;
+      UpdateBaseCargo(MoneyIndex2, Cost);
       Known_Recipes.Append(New_Item => RecipeIndex);
       AddMessage
         ("You bought recipe for " &
@@ -362,8 +360,7 @@ package body Bases.Trade is
             TradeMessage);
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
-      SkyBases(BaseIndex).Cargo(1).Amount :=
-        SkyBases(BaseIndex).Cargo(1).Amount + Cost;
+      UpdateBaseCargo(ProtoMoneyIndex, Cost);
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       UpdateGame(Time);

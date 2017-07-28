@@ -576,4 +576,36 @@ package body Bases is
       end if;
    end GenerateCargo;
 
+   procedure UpdateBaseCargo(ProtoIndex: Positive; Amount: Integer) is
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      BaseType: constant Positive :=
+        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+      ItemIndex: Natural := 0;
+   begin
+      for I in SkyBases(BaseIndex).Cargo.Iterate loop
+         if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex then
+            ItemIndex := BaseCargo_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
+      if Amount > 0 then
+         if ItemIndex = 0 then
+            SkyBases(BaseIndex).Cargo.Append
+            (New_Item => (ProtoIndex => ProtoIndex, Amount => Amount));
+         else
+            SkyBases(BaseIndex).Cargo(ItemIndex).Amount :=
+              SkyBases(BaseIndex).Cargo(ItemIndex).Amount + Amount;
+         end if;
+      else
+         SkyBases(BaseIndex).Cargo(ItemIndex).Amount :=
+           SkyBases(BaseIndex).Cargo(ItemIndex).Amount - Amount;
+         if SkyBases(BaseIndex).Cargo(ItemIndex).Amount = 0 and
+           not Items_List(ProtoIndex).Buyable(BaseType) and
+           ItemIndex > 1 then
+            SkyBases(BaseIndex).Cargo.Delete(Index => ItemIndex, Count => 1);
+         end if;
+      end if;
+   end UpdateBaseCargo;
+
 end Bases;

@@ -90,5 +90,8 @@ package Bases is
    procedure UpdatePopulation
      (BaseIndex: Positive); -- Update base population if needed
    procedure GenerateCargo; -- Generate base cargo
+   procedure UpdateBaseCargo
+     (ProtoIndex: Positive;
+      Amount: Integer); -- Update cargo in base
 
 end Bases;
