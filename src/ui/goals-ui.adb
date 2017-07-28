@@ -19,6 +19,7 @@ with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with MainMenu; use MainMenu;
 with UserInterface; use UserInterface;
+with Utils.UI; use Utils.UI;
 
 package body Goals.UI is
 
@@ -54,7 +55,6 @@ package body Goals.UI is
       MenuOptions.Show_Descriptions := False;
       Set_Options(GoalsMenu, MenuOptions);
       Set_Format(GoalsMenu, Lines - 4, 1);
-      Set_Mark(GoalsMenu, "");
       Scale(GoalsMenu, MenuHeight, MenuLength);
       MenuWindow :=
         Create
@@ -62,7 +62,7 @@ package body Goals.UI is
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Box(MenuWindow);
+      WindowFrame(MenuWindow, 5, "Select goal");
       Set_Window(GoalsMenu, MenuWindow);
       Set_Sub_Window
         (GoalsMenu,
@@ -82,25 +82,27 @@ package body Goals.UI is
       for I in 1 .. 6 loop
          GoalsTypes_Items.all(I) :=
            New_Item
-             (To_Lower(GoalTypes'Image(GoalTypes'Val(I))),
+             (GoalTypes'Image(GoalTypes'Val(I))(1) & To_Lower(GoalTypes'Image(GoalTypes'Val(I))(2..GoalTypes'Image(GoalTypes'Val(I))'Last)),
               Positive'Image(I));
       end loop;
-      GoalsTypes_Items.all(7) := New_Item("quit", "0");
+      GoalsTypes_Items.all(7) := New_Item("Quit", "0");
       GoalsTypes_Items.all(8) := Null_Item;
       GoalsMenu := New_Menu(GoalsTypes_Items);
       MenuOptions := Get_Options(GoalsMenu);
       MenuOptions.Show_Descriptions := False;
       Set_Options(GoalsMenu, MenuOptions);
       Set_Format(GoalsMenu, Lines - 4, 1);
-      Set_Mark(GoalsMenu, "");
       Scale(GoalsMenu, MenuHeight, MenuLength);
+      if MenuLength < 15 then
+         MenuLength := 15;
+      end if;
       MenuWindow :=
         Create
           (MenuHeight + 2,
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Box(MenuWindow);
+      WindowFrame(MenuWindow, 5, "Select type");
       Set_Window(GoalsMenu, MenuWindow);
       Set_Sub_Window
         (GoalsMenu,
@@ -140,7 +142,6 @@ package body Goals.UI is
                   Erase;
                   ShowMainMenu;
                   ShowNewGameForm(8);
-                  Refresh;
                else
                   DrawGame(GameStats_View);
                end if;
@@ -157,8 +158,8 @@ package body Goals.UI is
                end if;
                if GoalIndex > 0 then
                   ShowGoalsList(GoalTypes'Val(GoalIndex));
+                  Refresh;
                end if;
-               Refresh;
                if GoalIndex > 0 then
                   return GoalsList_View;
                else
