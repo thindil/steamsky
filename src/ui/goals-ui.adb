@@ -82,7 +82,10 @@ package body Goals.UI is
       for I in 1 .. 6 loop
          GoalsTypes_Items.all(I) :=
            New_Item
-             (GoalTypes'Image(GoalTypes'Val(I))(1) & To_Lower(GoalTypes'Image(GoalTypes'Val(I))(2..GoalTypes'Image(GoalTypes'Val(I))'Last)),
+             (GoalTypes'Image(GoalTypes'Val(I))(1) &
+              To_Lower
+                (GoalTypes'Image(GoalTypes'Val(I))
+                   (2 .. GoalTypes'Image(GoalTypes'Val(I))'Last)),
               Positive'Image(I));
       end loop;
       GoalsTypes_Items.all(7) := New_Item("Quit", "0");
