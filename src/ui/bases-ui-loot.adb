@@ -387,7 +387,6 @@ package body Bases.UI.Loot is
       FieldIndex: constant Positive := Get_Index(Current(LootForm));
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      Added: Boolean;
    begin
       if FieldIndex < 3 then
          return Loot_Form;
@@ -425,12 +424,7 @@ package body Bases.UI.Loot is
                return Loot_View;
             end if;
             UpdateCargo(PlayerShip, ItemIndex, Amount);
-            for Item of SkyBases(BaseIndex).Cargo loop
-               if Item.ProtoIndex = ItemIndex then
-                  Item.Amount := Item.Amount - Amount;
-                  exit;
-               end if;
-            end loop;
+            UpdateBaseCargo(ItemIndex, (0 - Amount));
             AddMessage
               ("You took" &
                Positive'Image(Amount) &
@@ -444,17 +438,7 @@ package body Bases.UI.Loot is
                ItemIndex,
                (0 - Amount),
                PlayerShip.Cargo.Element(CargoIndex).Durability);
-            for Item of SkyBases(BaseIndex).Cargo loop
-               if Item.ProtoIndex = ItemIndex then
-                  Item.Amount := Item.Amount + Amount;
-                  Added := True;
-                  exit;
-               end if;
-            end loop;
-            if not Added then
-               SkyBases(BaseIndex).Cargo.Append
-               (New_Item => (ProtoIndex => ItemIndex, Amount => Amount));
-            end if;
+            UpdateBaseCargo(ItemIndex, Amount);
             AddMessage
               ("You drop" &
                Positive'Image(Amount) &
