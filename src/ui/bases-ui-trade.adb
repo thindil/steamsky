@@ -43,13 +43,11 @@ package body Bases.UI.Trade is
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       CurrentLine: Line_Position := 4;
-      CargoIndex: constant Natural :=
-        Integer'Value(Description(Current(TradeMenu)));
       StartColumn, WindowWidth: Column_Position;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       WindowHeight: Line_Position := 7;
-      MoneyIndex2, BaseItemIndex: Natural := 0;
+      MoneyIndex2, BaseItemIndex, CargoIndex: Natural := 0;
       FreeSpace: Integer;
       PriceText: Unbounded_String;
    begin
@@ -62,19 +60,30 @@ package body Bases.UI.Trade is
             exit;
          end if;
       end loop;
+      if Integer'Value(Description(Current(TradeMenu))) > 0 then
+         CargoIndex := Integer'Value(Description(Current(TradeMenu)));
+         for I in SkyBases(BaseIndex).Cargo.Iterate loop
+            if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ItemIndex and
+              SkyBases(BaseIndex).Cargo(I).Durability =
+                PlayerShip.Cargo(CargoIndex).Durability then
+               BaseItemIndex := BaseCargo_Container.To_Index(I);
+               exit;
+            end if;
+         end loop;
+      else
+         BaseItemIndex :=
+           Integer'Value(Description(Current(TradeMenu))) * (-1);
+         CargoIndex := FindCargo(ItemIndex);
+      end if;
       if CargoIndex > 0 then
          WindowHeight := WindowHeight + 1;
          if PlayerShip.Cargo(CargoIndex).Durability < 100 then
             WindowHeight := WindowHeight + 1;
          end if;
       end if;
-      for I in SkyBases(BaseIndex).Cargo.Iterate loop
-         if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ItemIndex then
-            BaseItemIndex := BaseCargo_Container.To_Index(I);
-            WindowHeight := WindowHeight + 1;
-            exit;
-         end if;
-      end loop;
+      if BaseItemIndex > 0 then
+         WindowHeight := WindowHeight + 1;
+      end if;
       WindowHeight :=
         WindowHeight +
         Line_Position
@@ -241,16 +250,15 @@ package body Bases.UI.Trade is
 
    procedure ShowTrade is
       Trade_Items: Item_Array_Access;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
-        Bases_Types'Pos
-          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-             .BaseType) +
-        1;
+        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
       MenuIndex: Integer := 1;
       ItemsAmount: Positive := 1;
-      Added: Boolean;
+      BaseItemIndex: Positive;
    begin
       for Item of PlayerShip.Cargo loop
          if Items_List(Item.ProtoIndex).Prices(BaseType) > 0 then
@@ -258,18 +266,9 @@ package body Bases.UI.Trade is
          end if;
       end loop;
       for I in Items_List.Iterate loop
-         if Items_List(I).Buyable(BaseType) then
-            Added := False;
-            for Item of PlayerShip.Cargo loop
-               if Item.ProtoIndex = Objects_Container.To_Index(I) and
-                 Items_List(I).Prices(BaseType) > 0 then
-                  Added := True;
-                  exit;
-               end if;
-            end loop;
-            if not Added then
-               ItemsAmount := ItemsAmount + 1;
-            end if;
+         if Items_List(I).Buyable(BaseType) and
+           FindCargo(Objects_Container.To_Index(I)) = 0 then
+            ItemsAmount := ItemsAmount + 1;
          end if;
       end loop;
       Trade_Items := new Item_Array(1 .. ItemsAmount);
@@ -284,20 +283,20 @@ package body Bases.UI.Trade is
          end if;
       end loop;
       for I in Items_List.Iterate loop
-         if Items_List(I).Buyable(BaseType) then
-            Added := False;
-            for Item of PlayerShip.Cargo loop
-               if Item.ProtoIndex = Objects_Container.To_Index(I) and
-                 Items_List(I).Prices(BaseType) > 0 then
-                  Added := True;
+         if Items_List(I).Buyable(BaseType) and
+           FindCargo(Objects_Container.To_Index(I)) = 0 then
+            for J in SkyBases(BaseIndex).Cargo.Iterate loop
+               if SkyBases(BaseIndex).Cargo(J).ProtoIndex =
+                 Objects_Container.To_Index(I) then
+                  BaseItemIndex := BaseCargo_Container.To_Index(J);
                   exit;
                end if;
             end loop;
-            if not Added then
-               Trade_Items.all(MenuIndex) :=
-                 New_Item(To_String(Items_List(I).Name), "0");
-               MenuIndex := MenuIndex + 1;
-            end if;
+            Trade_Items.all(MenuIndex) :=
+              New_Item
+                (To_String(Items_List(I).Name),
+                 Integer'Image(BaseItemIndex * (-1)));
+            MenuIndex := MenuIndex + 1;
          end if;
       end loop;
       Trade_Items.all(MenuIndex) := Null_Item;
@@ -471,22 +470,33 @@ package body Bases.UI.Trade is
    end ShowTradeForm;
 
    function TradeResult return GameStates is
-      ItemIndex: Positive;
-      CargoIndex: constant Natural :=
-        Integer'Value(Description(Current(TradeMenu)));
       Visibility: Cursor_Visibility := Invisible;
       FieldIndex: constant Positive := Get_Index(Current(TradeForm));
       Message: Unbounded_String;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      BaseItemIndex, CargoIndex: Natural := 0;
    begin
       if FieldIndex < 3 then
          return Trade_Form;
       elsif FieldIndex > 3 then
-         for I in Items_List.Iterate loop
-            if To_String(Items_List(I).Name) = Name(Current(TradeMenu)) then
-               ItemIndex := Objects_Container.To_Index(I);
-               exit;
-            end if;
-         end loop;
+         if Integer'Value(Description(Current(TradeMenu))) > 0 then
+            CargoIndex := Integer'Value(Description(Current(TradeMenu)));
+            for I in SkyBases(BaseIndex).Cargo.Iterate loop
+               if SkyBases(BaseIndex).Cargo(I).ProtoIndex =
+                 PlayerShip.Cargo(CargoIndex).ProtoIndex and
+                 SkyBases(BaseIndex).Cargo(I).Durability =
+                   PlayerShip.Cargo(CargoIndex).Durability then
+                  BaseItemIndex := BaseCargo_Container.To_Index(I);
+                  exit;
+               end if;
+            end loop;
+         else
+            BaseItemIndex :=
+              Integer'Value(Description(Current(TradeMenu))) * (-1);
+            CargoIndex :=
+              FindCargo(SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex);
+         end if;
          if not Buy then
             if FieldIndex = 4 then
                Message :=
@@ -503,7 +513,7 @@ package body Bases.UI.Trade is
          else
             Message :=
               To_Unbounded_String
-                (BuyItems(ItemIndex, Get_Buffer(Fields(TradeForm, 2))));
+                (BuyItems(BaseItemIndex, Get_Buffer(Fields(TradeForm, 2))));
          end if;
       end if;
       Set_Cursor_Visibility(Visibility);

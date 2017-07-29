@@ -38,34 +38,40 @@ package body Bases.UI.Loot is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       CurrentLine: Line_Position := 3;
-      CargoIndex: constant Natural :=
-        Integer'Value(Description(Current(TradeMenu)));
       StartColumn, WindowWidth: Column_Position;
       WindowHeight: Line_Position := 6;
-      BaseItemIndex: Natural := 0;
+      CargoIndex, BaseItemIndex: Natural := 0;
       ItemIndex: Positive;
       FreeSpace: Integer;
    begin
       ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
-      for I in SkyBases(BaseIndex).Cargo.Iterate loop
-         if Items_List(SkyBases(BaseIndex).Cargo(I).ProtoIndex).Name =
-           To_Unbounded_String(Name(Current(TradeMenu))) then
-            BaseItemIndex := BaseCargo_Container.To_Index(I);
-            ItemIndex := SkyBases(BaseIndex).Cargo(I).ProtoIndex;
-            exit;
-         end if;
-      end loop;
-      if BaseItemIndex > 0 then
-         if SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount > 0 then
-            WindowHeight := WindowHeight + 1;
-         end if;
+      if Integer'Value(Description(Current(TradeMenu))) > 0 then
+         CargoIndex := Integer'Value(Description(Current(TradeMenu)));
+         ItemIndex := PlayerShip.Cargo(CargoIndex).ProtoIndex;
+         for I in SkyBases(BaseIndex).Cargo.Iterate loop
+            if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ItemIndex and
+              SkyBases(BaseIndex).Cargo(I).Durability =
+                PlayerShip.Cargo(CargoIndex).Durability then
+               BaseItemIndex := BaseCargo_Container.To_Index(I);
+               exit;
+            end if;
+         end loop;
+      else
+         BaseItemIndex :=
+           Integer'Value(Description(Current(TradeMenu))) * (-1);
+         ItemIndex := SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex;
+         CargoIndex := FindCargo(ItemIndex);
       end if;
       if CargoIndex > 0 then
          WindowHeight := WindowHeight + 1;
-         ItemIndex := PlayerShip.Cargo(CargoIndex).ProtoIndex;
          if PlayerShip.Cargo(CargoIndex).Durability < 100 then
+            WindowHeight := WindowHeight + 1;
+         end if;
+      end if;
+      if BaseItemIndex > 0 then
+         if SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount > 0 then
             WindowHeight := WindowHeight + 1;
          end if;
       end if;
@@ -220,10 +226,14 @@ package body Bases.UI.Loot is
               Positive'Image(Cargo_Container.To_Index(I)));
          MenuIndex := MenuIndex + 1;
       end loop;
-      for Item of SkyBases(BaseIndex).Cargo loop
-         if FindCargo(ProtoIndex => Item.ProtoIndex) = 0 then
+      for I in SkyBases(BaseIndex).Cargo.Iterate loop
+         if FindCargo(ProtoIndex => SkyBases(BaseIndex).Cargo(I).ProtoIndex) =
+           0 then
             Loot_Items.all(MenuIndex) :=
-              New_Item(To_String(Items_List(Item.ProtoIndex).Name), "0");
+              New_Item
+                (To_String
+                   (Items_List(SkyBases(BaseIndex).Cargo(I).ProtoIndex).Name),
+                 Integer'Image(BaseCargo_Container.To_Index(I) * (-1)));
             MenuIndex := MenuIndex + 1;
          end if;
       end loop;
@@ -381,12 +391,11 @@ package body Bases.UI.Loot is
 
    function LootResult return GameStates is
       ItemIndex, Amount: Positive;
-      CargoIndex: constant Natural :=
-        Integer'Value(Description(Current(TradeMenu)));
       Visibility: Cursor_Visibility := Invisible;
       FieldIndex: constant Positive := Get_Index(Current(LootForm));
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      BaseItemIndex, CargoIndex: Natural := 0;
    begin
       if FieldIndex < 3 then
          return Loot_Form;
@@ -397,6 +406,21 @@ package body Bases.UI.Loot is
                exit;
             end if;
          end loop;
+         if Integer'Value(Description(Current(TradeMenu))) > 0 then
+            CargoIndex := Integer'Value(Description(Current(TradeMenu)));
+            for I in SkyBases(BaseIndex).Cargo.Iterate loop
+               if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ItemIndex and
+                 SkyBases(BaseIndex).Cargo(I).Durability =
+                   PlayerShip.Cargo(CargoIndex).Durability then
+                  BaseItemIndex := BaseCargo_Container.To_Index(I);
+                  exit;
+               end if;
+            end loop;
+         else
+            BaseItemIndex :=
+              Integer'Value(Description(Current(TradeMenu))) * (-1);
+            CargoIndex := FindCargo(ItemIndex);
+         end if;
          if FieldIndex = 4 then
             Amount := Positive'Value(Get_Buffer(Fields(LootForm, 2)));
          else
@@ -423,8 +447,15 @@ package body Bases.UI.Loot is
                DrawGame(Loot_View);
                return Loot_View;
             end if;
-            UpdateCargo(PlayerShip, ItemIndex, Amount);
-            UpdateBaseCargo(ItemIndex, (0 - Amount));
+            UpdateCargo
+              (PlayerShip,
+               ItemIndex,
+               Amount,
+               SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
+            UpdateBaseCargo
+              (ItemIndex,
+               (0 - Amount),
+               SkyBases(BaseIndex).Cargo.Element(BaseItemIndex).Durability);
             AddMessage
               ("You took" &
                Positive'Image(Amount) &
@@ -433,12 +464,15 @@ package body Bases.UI.Loot is
                ".",
                OrderMessage);
          else
+            UpdateBaseCargo
+              (ItemIndex,
+               Amount,
+               PlayerShip.Cargo.Element(CargoIndex).Durability);
             UpdateCargo
               (PlayerShip,
                ItemIndex,
                (0 - Amount),
                PlayerShip.Cargo.Element(CargoIndex).Durability);
-            UpdateBaseCargo(ItemIndex, Amount);
             AddMessage
               ("You drop" &
                Positive'Image(Amount) &
