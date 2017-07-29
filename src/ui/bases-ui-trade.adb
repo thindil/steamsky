@@ -82,7 +82,7 @@ package body Bases.UI.Trade is
             WindowHeight := WindowHeight + 1;
          end if;
       end if;
-      if BaseItemIndex > 0 then
+      if BaseItemIndex > 0 and Items_List(ItemIndex).Buyable(BaseType) then
          WindowHeight := WindowHeight + 1;
       end if;
       WindowHeight :=
@@ -147,7 +147,7 @@ package body Bases.UI.Trade is
          end if;
          CurrentLine := CurrentLine + 1;
       end if;
-      if BaseItemIndex > 0 then
+      if BaseItemIndex > 0 and Items_List(ItemIndex).Buyable(BaseType) then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
          Add
            (Win => InfoWindow,
