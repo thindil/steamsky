@@ -38,6 +38,7 @@ with Game.SaveLoad; use Game.SaveLoad;
 with Goals; use Goals;
 with Goals.UI; use Goals.UI;
 with HallOfFame; use HallOfFame;
+with Utils.UI; use Utils.UI;
 
 package body MainMenu is
 
@@ -97,7 +98,6 @@ package body MainMenu is
       end loop;
       GameMenu := New_Menu(Menu_Items);
       Set_Format(GameMenu, Lines - 5, 1);
-      Set_Mark(GameMenu, "");
       Scale(GameMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 14, (Columns - 17) / 2);
       Set_Window(GameMenu, MenuWindow);
@@ -133,7 +133,9 @@ package body MainMenu is
          Set_Options(NewGame_Fields.all(FormIndex), FieldOptions);
       end CreateLabel;
    begin
-      Set_Cursor_Visibility(Visibility);
+      if CurrentField = 2 then
+         Set_Cursor_Visibility(Visibility);
+      end if;
       CreateLabel(0, "Character Name: ");
       NewGame_Fields.all(2) := New_Field(1, 12, 0, 18, 0, 0);
       Set_Buffer
@@ -189,11 +191,19 @@ package body MainMenu is
       Set_Buffer(NewGame_Fields.all(11), 0, "[Start]");
       NewGame_Fields.all(12) := Null_Field;
       if CurrentField = 2 then
+         Set_Foreground
+           (NewGame_Fields.all(2),
+            (Bold_Character => True, others => False),
+            1);
          Set_Background
            (NewGame_Fields.all(2),
-            (Reverse_Video => True, others => False));
+            (Under_Line => True, others => False));
          Set_Buffer(NewGame_Fields.all(9), 0, "Press Enter for random name.");
       else
+         Set_Foreground
+           (NewGame_Fields.all(8),
+            (Bold_Character => True, others => False),
+            1);
          Set_Buffer
            (NewGame_Fields.all(9),
             0,
@@ -209,7 +219,7 @@ package body MainMenu is
            FormLength + 2,
            ((Lines / 3) - (FormHeight / 2)),
            ((Columns / 2) - (FormLength / 2)));
-      Box(FormWindow);
+      WindowFrame(FormWindow, 5, "New game settings");
       Set_Window(NewGameForm, FormWindow);
       Set_Sub_Window
         (NewGameForm,
@@ -548,16 +558,10 @@ package body MainMenu is
             if Result = Request_Denied then
                Result := Driver(GameMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow);
-            end if;
          when 50 | KEY_DOWN => -- Select next option
             Result := Driver(GameMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(GameMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow);
             end if;
          when 10 => -- Select option
             if Option = "New game" then
@@ -601,18 +605,18 @@ package body MainMenu is
             else
                return Quit;
             end if;
+         when 27 => -- Escape select quit option
+            Result := Driver(GameMenu, M_Last_Item);
          when others =>
             Result := Driver(GameMenu, Key);
-            if Result = Menu_Ok then
-               Refresh(MenuWindow);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(GameMenu, M_Clear_Pattern);
                Result := Driver(GameMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow);
+      end if;
       return Main_Menu;
    end MainMenuKeys;
 
@@ -739,10 +743,18 @@ package body MainMenu is
             elsif FieldIndex = 4 then
                Result := Driver(NewGameForm, F_Previous_Choice);
             end if;
+         when 27 => -- Escape select cancel button
+            FieldIndex := 10;
+            Set_Current(NewGameForm, Fields(NewGameForm, 10));
+            Result := Form_Ok;
          when others =>
             Result := Driver(NewGameForm, Key);
       end case;
       if Result = Form_Ok then
+         Set_Foreground
+           (Current(NewGameForm),
+            (Bold_Character => True, others => False),
+            1);
          if FieldIndex = 2 or FieldIndex = 6 then
             Set_Buffer
               (Fields(NewGameForm, 9),
@@ -750,7 +762,8 @@ package body MainMenu is
                "Press Enter for random name.");
             Set_Background
               (Current(NewGameForm),
-               (Reverse_Video => True, others => False));
+               (Under_Line => True, others => False));
+            Visibility := Normal;
          else
             if FieldIndex = 4 then
                Set_Buffer
@@ -765,9 +778,15 @@ package body MainMenu is
             else
                Set_Buffer(Fields(NewGameForm, 9), 0, "");
             end if;
-            Set_Background(Fields(NewGameForm, 2), (others => False));
-            Set_Background(Fields(NewGameForm, 6), (others => False));
+            Set_Background(Fields(NewGameForm, 2));
+            Set_Background(Fields(NewGameForm, 6));
          end if;
+         Set_Cursor_Visibility(Visibility);
+         for I in 2 .. 11 loop
+            if FieldIndex /= I then
+               Set_Foreground(Fields(NewGameForm, I));
+            end if;
+         end loop;
          Refresh(FormWindow);
       end if;
       return New_Game;
