@@ -264,7 +264,7 @@ package body Bases.Trade is
          raise Trade_Not_Enough_Money with RecipeName;
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
-      UpdateBaseCargo(MoneyIndex2, Cost);
+      UpdateBaseCargo(ProtoMoneyIndex, Cost);
       Known_Recipes.Append(New_Item => RecipeIndex);
       AddMessage
         ("You bought recipe for " &
