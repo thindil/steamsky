@@ -548,14 +548,16 @@ package body Bases is
          SkyBases(BaseIndex).Cargo.Append
          (New_Item =>
             (ProtoIndex => FindProtoItem(MoneyIndex),
-             Amount => (GetRandom(50, 200) * SkyBases(BaseIndex).Population)));
+             Amount => (GetRandom(50, 200) * SkyBases(BaseIndex).Population),
+             Durability => 100));
          for I in Items_List.Iterate loop
             if Items_List(I).Buyable(BaseType) then
                SkyBases(BaseIndex).Cargo.Append
                (New_Item =>
                   (ProtoIndex => Objects_Container.To_Index(I),
                    Amount =>
-                     (GetRandom(0, 100) * SkyBases(BaseIndex).Population)));
+                     (GetRandom(0, 100) * SkyBases(BaseIndex).Population),
+                   Durability => 100));
             end if;
          end loop;
       else
@@ -576,7 +578,10 @@ package body Bases is
       end if;
    end GenerateCargo;
 
-   procedure UpdateBaseCargo(ProtoIndex: Positive; Amount: Integer) is
+   procedure UpdateBaseCargo
+     (ProtoIndex: Positive;
+      Amount: Integer;
+      Durability: Natural := 100) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
@@ -584,7 +589,8 @@ package body Bases is
       ItemIndex: Natural := 0;
    begin
       for I in SkyBases(BaseIndex).Cargo.Iterate loop
-         if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex then
+         if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex and
+           SkyBases(BaseIndex).Cargo(I).Durability = Durability then
             ItemIndex := BaseCargo_Container.To_Index(I);
             exit;
          end if;
@@ -592,14 +598,17 @@ package body Bases is
       if Amount > 0 then
          if ItemIndex = 0 then
             SkyBases(BaseIndex).Cargo.Append
-            (New_Item => (ProtoIndex => ProtoIndex, Amount => Amount));
+            (New_Item =>
+               (ProtoIndex => ProtoIndex,
+                Amount => Amount,
+                Durability => Durability));
          else
             SkyBases(BaseIndex).Cargo(ItemIndex).Amount :=
               SkyBases(BaseIndex).Cargo(ItemIndex).Amount + Amount;
          end if;
       else
          SkyBases(BaseIndex).Cargo(ItemIndex).Amount :=
-           SkyBases(BaseIndex).Cargo(ItemIndex).Amount - Amount;
+           SkyBases(BaseIndex).Cargo(ItemIndex).Amount + Amount;
          if SkyBases(BaseIndex).Cargo(ItemIndex).Amount = 0 and
            not Items_List(ProtoIndex).Buyable(BaseType) and
            ItemIndex > 1 then

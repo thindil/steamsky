@@ -18,7 +18,7 @@
 package Bases.Trade is
 
    function BuyItems
-     (ItemIndex: Positive;
+     (BaseItemIndex: Positive;
       Amount: String)
      return String; -- Buy items from bases, returns empty string if all ok
    function SellItems
