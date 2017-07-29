@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Exceptions; use Ada.Exceptions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
@@ -290,15 +291,9 @@ package body UserInterface.Keys is
                else
                   Events_List(EventIndex).Time := NewTime;
                end if;
-               Message :=
-                 To_Unbounded_String
-                   (SellItems
-                      (ItemIndex,
-                       Integer'Image
-                         (PlayerShip.Cargo.Element(ItemIndex).Amount)));
-               if Length(Message) > 0 then
-                  ShowDialog(To_String(Message));
-               end if;
+               SellItems
+                 (ItemIndex,
+                  Integer'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
                GainRep
                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
                   ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
@@ -348,6 +343,16 @@ package body UserInterface.Keys is
             end if;
       end case;
       return Control_Speed;
+   exception
+      when An_Exception : Trade_No_Money_In_Base =>
+         ShowDialog
+           ("You can't sell so much " &
+            Exception_Message(An_Exception) &
+            " because base don't have that much " &
+            To_String(MoneyName) &
+            " to buy it.");
+         DrawGame(Sky_Map_View);
+         return Sky_Map_View;
    end OrdersMenuKeys;
 
    function ConfirmKeys
