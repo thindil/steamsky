@@ -95,5 +95,10 @@ package Bases is
      (ProtoIndex: Positive;
       Amount: Integer;
       Durability: Natural := 100); -- Update cargo in base
+   function FindBaseCargo
+     (ProtoIndex: Positive;
+      Durability: Natural :=
+        100)
+     return Natural; -- Find index of item in base cargo, return 0 if no item found
 
 end Bases;

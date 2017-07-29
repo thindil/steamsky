@@ -586,15 +586,8 @@ package body Bases is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
-      ItemIndex: Natural := 0;
+      ItemIndex: constant Natural := FindBaseCargo(ProtoIndex, Durability);
    begin
-      for I in SkyBases(BaseIndex).Cargo.Iterate loop
-         if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex and
-           SkyBases(BaseIndex).Cargo(I).Durability = Durability then
-            ItemIndex := BaseCargo_Container.To_Index(I);
-            exit;
-         end if;
-      end loop;
       if Amount > 0 then
          if ItemIndex = 0 then
             SkyBases(BaseIndex).Cargo.Append
@@ -616,5 +609,20 @@ package body Bases is
          end if;
       end if;
    end UpdateBaseCargo;
+
+   function FindBaseCargo
+     (ProtoIndex: Positive;
+      Durability: Natural := 100) return Natural is
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      for I in SkyBases(BaseIndex).Cargo.Iterate loop
+         if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex and
+           SkyBases(BaseIndex).Cargo(I).Durability = Durability then
+            return BaseCargo_Container.To_Index(I);
+         end if;
+      end loop;
+      return 0;
+   end FindBaseCargo;
 
 end Bases;
