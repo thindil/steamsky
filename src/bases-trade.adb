@@ -26,27 +26,23 @@ with Crafts; use Crafts;
 
 package body Bases.Trade is
 
-   function BuyItems(ItemIndex: Positive; Amount: String) return String is
-      BuyAmount, TraderIndex, Price, ProtoMoneyIndex, BaseItemIndex: Positive;
+   function BuyItems(BaseItemIndex: Positive; Amount: String) return String is
+      BuyAmount, TraderIndex, Price, ProtoMoneyIndex: Positive;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
-      ItemName: constant String := To_String(Items_List(ItemIndex).Name);
       Cost, MoneyIndex2: Natural;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+      ItemIndex: constant Positive :=
+        SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex;
+      ItemName: constant String := To_String(Items_List(ItemIndex).Name);
    begin
       BuyAmount := Positive'Value(Amount);
       if not Items_List(ItemIndex).Buyable(BaseType) then
          return "You can't buy " & ItemName & " in this base.";
       end if;
-      for I in SkyBases(BaseIndex).Cargo.Iterate loop
-         if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ItemIndex then
-            BaseItemIndex := BaseCargo_Container.To_Index(I);
-            exit;
-         end if;
-      end loop;
       if SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount = 0 then
          return "You can't buy " & ItemName & " in this base at this moment.";
       elsif SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount < BuyAmount then
@@ -83,8 +79,15 @@ package body Bases.Trade is
       end if;
       UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
       UpdateBaseCargo(ProtoMoneyIndex, Cost);
-      UpdateCargo(PlayerShip, ItemIndex, BuyAmount);
-      UpdateBaseCargo(ItemIndex, (0 - BuyAmount));
+      UpdateCargo
+        (PlayerShip,
+         ItemIndex,
+         BuyAmount,
+         SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
+      UpdateBaseCargo
+        (ItemIndex,
+         (0 - BuyAmount),
+         SkyBases(BaseIndex).Cargo.Element(BaseItemIndex).Durability);
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       AddMessage
@@ -160,13 +163,16 @@ package body Bases.Trade is
             end if;
          end loop;
       end if;
+      UpdateBaseCargo
+        (ProtoIndex,
+         SellAmount,
+         PlayerShip.Cargo.Element(ItemIndex).Durability);
       UpdateCargo
         (PlayerShip,
          ProtoIndex,
          (0 - SellAmount),
          PlayerShip.Cargo.Element(ItemIndex).Durability);
       UpdateCargo(PlayerShip, MoneyIndex2, Profit);
-      UpdateBaseCargo(ProtoIndex, SellAmount);
       UpdateBaseCargo(MoneyIndex2, (0 - Profit));
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);

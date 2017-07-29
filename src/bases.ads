@@ -50,6 +50,7 @@ package Bases is
    record
       ProtoIndex: Positive; -- Index of item prototype
       Amount: Natural; -- Amount of items
+      Durability: Positive; -- Durability of items
    end record;
    package BaseCargo_Container is new Vectors(Positive, Base_Cargo);
    type BaseRecord is -- Data structure for bases
@@ -92,6 +93,7 @@ package Bases is
    procedure GenerateCargo; -- Generate base cargo
    procedure UpdateBaseCargo
      (ProtoIndex: Positive;
-      Amount: Integer); -- Update cargo in base
+      Amount: Integer;
+      Durability: Natural := 100); -- Update cargo in base
 
 end Bases;
