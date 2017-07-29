@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Exceptions; use Ada.Exceptions;
 with Maps; use Maps;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
@@ -159,7 +160,6 @@ package body Bases.UI.Recruits is
 
    function RecruitKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
-      Message: Unbounded_String;
    begin
       case Key is
          when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -177,11 +177,7 @@ package body Bases.UI.Recruits is
                Result := Driver(TradeMenu, M_First_Item);
             end if;
          when 10 => -- Hire recruit
-            Message :=
-              To_Unbounded_String(HireRecruit(Get_Index(Current(TradeMenu))));
-            if Length(Message) > 0 then
-               ShowDialog(To_String(Message));
-            end if;
+            HireRecruit(Get_Index(Current(TradeMenu)));
             DrawGame(Recruits_View);
             Result := Request_Denied;
          when others =>
@@ -196,6 +192,21 @@ package body Bases.UI.Recruits is
       end if;
       CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
       return Recruits_View;
+   exception
+      when Trade_No_Money =>
+         ShowDialog
+           ("You don't have any " & To_String(MoneyName) & " to hire anyone.");
+         DrawGame(Recruits_View);
+         return Recruits_View;
+      when An_Exception : Trade_Not_Enough_Money =>
+         ShowDialog
+           ("You don't have enough " &
+            To_String(MoneyName) &
+            " to hire " &
+            Exception_Message(An_Exception) &
+            ".");
+         DrawGame(Recruits_View);
+         return Recruits_View;
    end RecruitKeys;
 
 end Bases.UI.Recruits;

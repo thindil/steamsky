@@ -140,7 +140,6 @@ package body Bases.UI.Heal is
 
    function HealKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
-      Message: Unbounded_String;
       MemberIndex: Natural;
    begin
       if TradeMenu /= Null_Menu then
@@ -171,12 +170,8 @@ package body Bases.UI.Heal is
                end if;
             when 10 => -- Heal wounded crew member(s)
                MemberIndex := Natural'Value(Description(Current(TradeMenu)));
-               Message := To_Unbounded_String(HealWounded(MemberIndex));
+               HealWounded(MemberIndex);
                DrawGame(Heal_View);
-               if Length(Message) > 0 then
-                  ShowDialog(To_String(Message));
-               end if;
-               return Heal_View;
             when others =>
                Result := Driver(TradeMenu, Key);
                if Result = Menu_Ok then
@@ -200,6 +195,25 @@ package body Bases.UI.Heal is
          end case;
       end if;
       return Heal_View;
+   exception
+      when Trade_Cant_Heal =>
+         ShowDialog("You don't have anyone to heal.");
+         DrawGame(Heal_View);
+         return Heal_View;
+      when Trade_No_Money =>
+         ShowDialog
+           ("You don't have any " &
+            To_String(MoneyName) &
+            " to pay for healing wounded crew members.");
+         DrawGame(Heal_View);
+         return Heal_View;
+      when Trade_Not_Enough_Money =>
+         ShowDialog
+           ("You don't have enough " &
+            To_String(MoneyName) &
+            " to pay for healing wounded crew members.");
+         DrawGame(Heal_View);
+         return Heal_View;
    end HealKeys;
 
 end Bases.UI.Heal;

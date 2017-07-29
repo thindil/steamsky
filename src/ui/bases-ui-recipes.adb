@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Exceptions; use Ada.Exceptions;
 with Maps; use Maps;
 with Items; use Items;
 with UserInterface; use UserInterface;
@@ -151,7 +152,6 @@ package body Bases.UI.Recipes is
    function TradeRecipesKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
       RecipeIndex: Positive;
-      Message: Unbounded_String;
    begin
       if TradeMenu /= Null_Menu then
          case Key is
@@ -179,12 +179,8 @@ package body Bases.UI.Recipes is
                      exit;
                   end if;
                end loop;
-               Message := To_Unbounded_String(BuyRecipe(RecipeIndex));
+               BuyRecipe(RecipeIndex);
                DrawGame(TradeRecipes_View);
-               if Length(Message) > 0 then
-                  ShowDialog(To_String(Message));
-               end if;
-               return TradeRecipes_View;
             when others =>
                Result := Driver(TradeMenu, Key);
                if Result /= Menu_Ok then
@@ -205,6 +201,33 @@ package body Bases.UI.Recipes is
          end case;
       end if;
       return TradeRecipes_View;
+   exception
+      when Trade_Cant_Buy =>
+         ShowDialog("You can't buy this recipe in this base.");
+         DrawGame(TradeRecipes_View);
+         return TradeRecipes_View;
+      when Trade_Already_Known =>
+         ShowDialog("You already known this recipe.");
+         DrawGame(TradeRecipes_View);
+         return TradeRecipes_View;
+      when An_Exception : Trade_No_Money =>
+         ShowDialog
+           ("You don't have any " &
+            To_String(MoneyName) &
+            " to buy recipe for " &
+            Exception_Message(An_Exception) &
+            ".");
+         DrawGame(TradeRecipes_View);
+         return TradeRecipes_View;
+      when An_Exception : Trade_Not_Enough_Money =>
+         ShowDialog
+           ("You don't have enough " &
+            To_String(MoneyName) &
+            " to buy recipe for " &
+            Exception_Message(An_Exception) &
+            ".");
+         DrawGame(TradeRecipes_View);
+         return TradeRecipes_View;
    end TradeRecipesKeys;
 
 end Bases.UI.Recipes;
