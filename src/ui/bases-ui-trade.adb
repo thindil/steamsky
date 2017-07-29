@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Exceptions; use Ada.Exceptions;
 with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Maps; use Maps;
@@ -472,10 +473,17 @@ package body Bases.UI.Trade is
    function TradeResult return GameStates is
       Visibility: Cursor_Visibility := Invisible;
       FieldIndex: constant Positive := Get_Index(Current(TradeForm));
-      Message: Unbounded_String;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseItemIndex, CargoIndex: Natural := 0;
+      procedure ShowErrorMessage(Message: String) is
+      begin
+         Set_Cursor_Visibility(Visibility);
+         Post(TradeForm, False);
+         Delete(TradeForm);
+         ShowDialog(Message);
+         DrawGame(Trade_View);
+      end ShowErrorMessage;
    begin
       if FieldIndex < 3 then
          return Trade_Form;
@@ -499,31 +507,81 @@ package body Bases.UI.Trade is
          end if;
          if not Buy then
             if FieldIndex = 4 then
-               Message :=
-                 To_Unbounded_String
-                   (SellItems(CargoIndex, Get_Buffer(Fields(TradeForm, 2))));
+               SellItems(CargoIndex, Get_Buffer(Fields(TradeForm, 2)));
             else
-               Message :=
-                 To_Unbounded_String
-                   (SellItems
-                      (CargoIndex,
-                       Positive'Image
-                         (PlayerShip.Cargo.Element(CargoIndex).Amount)));
+               SellItems
+                 (CargoIndex,
+                  Positive'Image(PlayerShip.Cargo.Element(CargoIndex).Amount));
             end if;
          else
-            Message :=
-              To_Unbounded_String
-                (BuyItems(BaseItemIndex, Get_Buffer(Fields(TradeForm, 2))));
+            BuyItems(BaseItemIndex, Get_Buffer(Fields(TradeForm, 2)));
          end if;
       end if;
       Set_Cursor_Visibility(Visibility);
       Post(TradeForm, False);
       Delete(TradeForm);
-      if Length(Message) > 0 then
-         ShowDialog(To_String(Message));
-      end if;
       DrawGame(Trade_View);
       return Trade_View;
+   exception
+      when An_Exception : Trade_Cant_Buy =>
+         ShowErrorMessage
+           ("You can't buy " &
+            Exception_Message(An_Exception) &
+            " in this base.");
+         return Trade_View;
+      when An_Exception : Trade_Not_For_Sale_Now =>
+         ShowErrorMessage
+           ("You can't buy " &
+            Exception_Message(An_Exception) &
+            " in this base at this moment.");
+         return Trade_View;
+      when An_Exception : Trade_Buying_Too_Much =>
+         ShowErrorMessage
+           ("Base don't have that much " &
+            Exception_Message(An_Exception) &
+            " for sale.");
+         return Trade_View;
+      when Trade_No_Free_Cargo =>
+         ShowErrorMessage
+           ("You don't have that much free space in your ship cargo.");
+         return Trade_View;
+      when An_Exception : Trade_No_Money =>
+         ShowErrorMessage
+           ("You don't have any " &
+            To_String(MoneyName) &
+            " to buy " &
+            Exception_Message(An_Exception) &
+            ".");
+         return Trade_View;
+      when An_Exception : Trade_Not_Enough_Money =>
+         ShowErrorMessage
+           ("You don't have enough " &
+            To_String(MoneyName) &
+            " to buy so much " &
+            Exception_Message(An_Exception) &
+            ".");
+         return Trade_View;
+      when Trade_Invalid_Amount =>
+         if Buy then
+            ShowErrorMessage("You entered invalid amount to buy.");
+         else
+            ShowErrorMessage("You entered invalid amount to sell.");
+         end if;
+         return Trade_View;
+      when An_Exception : Trade_Too_Much_For_Sale =>
+         ShowErrorMessage
+           ("You dont have that much " &
+            Exception_Message(An_Exception) &
+            " in ship cargo.");
+         return Trade_View;
+      when An_Exception : Trade_No_Money_In_Base =>
+         ShowErrorMessage
+           ("You can't sell so much " &
+            Exception_Message(An_Exception) &
+            " because base don't have that much " &
+            To_String(MoneyName) &
+            " to buy it.");
+         return Trade_View;
    end TradeResult;
 
    function TradeKeys(Key: Key_Code) return GameStates is
