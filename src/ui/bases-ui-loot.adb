@@ -50,14 +50,8 @@ package body Bases.UI.Loot is
       if Integer'Value(Description(Current(TradeMenu))) > 0 then
          CargoIndex := Integer'Value(Description(Current(TradeMenu)));
          ItemIndex := PlayerShip.Cargo(CargoIndex).ProtoIndex;
-         for I in SkyBases(BaseIndex).Cargo.Iterate loop
-            if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ItemIndex and
-              SkyBases(BaseIndex).Cargo(I).Durability =
-                PlayerShip.Cargo(CargoIndex).Durability then
-               BaseItemIndex := BaseCargo_Container.To_Index(I);
-               exit;
-            end if;
-         end loop;
+         BaseItemIndex :=
+           FindBaseCargo(ItemIndex, PlayerShip.Cargo(CargoIndex).Durability);
       else
          BaseItemIndex :=
            Integer'Value(Description(Current(TradeMenu))) * (-1);
@@ -408,14 +402,10 @@ package body Bases.UI.Loot is
          end loop;
          if Integer'Value(Description(Current(TradeMenu))) > 0 then
             CargoIndex := Integer'Value(Description(Current(TradeMenu)));
-            for I in SkyBases(BaseIndex).Cargo.Iterate loop
-               if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ItemIndex and
-                 SkyBases(BaseIndex).Cargo(I).Durability =
-                   PlayerShip.Cargo(CargoIndex).Durability then
-                  BaseItemIndex := BaseCargo_Container.To_Index(I);
-                  exit;
-               end if;
-            end loop;
+            BaseItemIndex :=
+              FindBaseCargo
+                (ItemIndex,
+                 PlayerShip.Cargo(CargoIndex).Durability);
          else
             BaseItemIndex :=
               Integer'Value(Description(Current(TradeMenu))) * (-1);
