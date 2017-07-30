@@ -28,9 +28,8 @@ package Ships.Cargo is
      return Integer; -- Return available space in cargo after adding/extracting Amount
    function FindCargo
      (ProtoIndex: Natural := 0;
-      ItemType: Unbounded_String :=
-        Null_Unbounded_String)
-     return Natural; -- Return
+      ItemType: Unbounded_String := Null_Unbounded_String;
+      Durability: Natural := 100) return Natural; -- Return
    -- index of item, 0 if no item in ship cargo
    function GetCargoName
      (CargoIndex: Positive) return String; -- Get name of cargo
