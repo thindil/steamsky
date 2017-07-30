@@ -68,7 +68,11 @@ package body Bases.UI.Trade is
       else
          BaseItemIndex :=
            Integer'Value(Description(Current(TradeMenu))) * (-1);
-         CargoIndex := FindCargo(ItemIndex);
+         CargoIndex :=
+           FindCargo
+             (ProtoIndex => ItemIndex,
+              Durability =>
+                SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
       end if;
       if CargoIndex > 0 then
          WindowHeight := WindowHeight + 1;
@@ -492,7 +496,11 @@ package body Bases.UI.Trade is
             BaseItemIndex :=
               Integer'Value(Description(Current(TradeMenu))) * (-1);
             CargoIndex :=
-              FindCargo(SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex);
+              FindCargo
+                (ProtoIndex =>
+                   SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex,
+                 Durability =>
+                   SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
          end if;
          if not Buy then
             if FieldIndex = 4 then
