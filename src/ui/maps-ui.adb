@@ -31,6 +31,7 @@ with Items; use Items;
 with Crew; use Crew;
 with Messages.UI; use Messages.UI;
 with Config; use Config;
+with Utils.UI; use Utils.UI;
 
 package body Maps.UI is
 
@@ -402,9 +403,13 @@ package body Maps.UI is
       FieldOptions.Auto_Skip := False;
       FieldOptions.Null_Ok := False;
       Set_Options(Move_Fields.all(2), FieldOptions);
+      Set_Foreground
+        (Move_Fields.all(2),
+         (Bold_Character => True, others => False),
+         1);
       Set_Background
         (Move_Fields.all(2),
-         (Reverse_Video => True, others => False));
+         (Under_Line => True, others => False));
       Set_Field_Type(Move_Fields.all(2), (0, 1, 1024));
       Move_Fields.all(3) := New_Field(1, 2, 0, 8, 0, 0);
       FieldOptions := Get_Options(Move_Fields.all(3));
@@ -441,7 +446,7 @@ package body Maps.UI is
            FormLength + 2,
            ((Lines / 3) - (FormHeight / 2)),
            ((Columns / 2) - (FormLength / 2)));
-      Box(FormWindow);
+      WindowFrame(FormWindow, 5, "Move map");
       Set_Window(MoveForm, FormWindow);
       Set_Sub_Window
         (MoveForm,
@@ -653,16 +658,22 @@ package body Maps.UI is
                Result := Driver(MoveForm, F_End_Line);
             end if;
          when 10 => -- quit/move map
-            if FieldIndex = 6 then
-               MoveMap
-                 (Integer'Value(Get_Buffer(Fields(MoveForm, 2))),
-                  Integer'Value(Get_Buffer(Fields(MoveForm, 4))));
+            if FieldIndex = 2 or FieldIndex = 4 then
+               FieldIndex := 6;
+               Set_Current(MoveForm, Fields(MoveForm, 6));
+               Result := Form_Ok;
+            else
+               if FieldIndex = 6 then
+                  MoveMap
+                    (Integer'Value(Get_Buffer(Fields(MoveForm, 2))),
+                     Integer'Value(Get_Buffer(Fields(MoveForm, 4))));
+               end if;
+               Set_Cursor_Visibility(Visibility);
+               Post(MoveForm, False);
+               Delete(MoveForm);
+               DrawGame(Sky_Map_View);
+               return Sky_Map_View;
             end if;
-            Set_Cursor_Visibility(Visibility);
-            Post(MoveForm, False);
-            Delete(MoveForm);
-            DrawGame(Sky_Map_View);
-            return Sky_Map_View;
          when Key_Backspace => -- delete last character
             if FieldIndex = 2 or FieldIndex = 4 then
                Result := Driver(MoveForm, F_Delete_Previous);
@@ -679,16 +690,26 @@ package body Maps.UI is
             if FieldIndex = 2 or FieldIndex = 4 then
                Result := Driver(MoveForm, F_Left_Char);
             end if;
+         when 27 => -- Escape select cancel button
+            FieldIndex := 5;
+            Set_Current(MoveForm, Fields(MoveForm, 5));
+            Result := Form_Ok;
          when others =>
             Result := Driver(MoveForm, Key);
       end case;
       if Result = Form_Ok then
-         Set_Background(Fields(MoveForm, 2), (others => False));
-         Set_Background(Fields(MoveForm, 4), (others => False));
+         for I in 2 .. 6 loop
+            Set_Foreground(Fields(MoveForm, I));
+            Set_Background(Fields(MoveForm, I));
+         end loop;
+         Set_Foreground
+           (Current(MoveForm),
+            (Bold_Character => True, others => False),
+            1);
          if FieldIndex = 2 or FieldIndex = 4 then
             Set_Background
               (Current(MoveForm),
-               (Reverse_Video => True, others => False));
+               (Under_Line => True, others => False));
          end if;
          Refresh(FormWindow);
       end if;
