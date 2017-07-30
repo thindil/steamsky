@@ -56,7 +56,11 @@ package body Bases.UI.Loot is
          BaseItemIndex :=
            Integer'Value(Description(Current(TradeMenu))) * (-1);
          ItemIndex := SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex;
-         CargoIndex := FindCargo(ItemIndex);
+         CargoIndex :=
+           FindCargo
+             (ProtoIndex => ItemIndex,
+              Durability =>
+                SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
       end if;
       if CargoIndex > 0 then
          WindowHeight := WindowHeight + 1;
@@ -409,7 +413,11 @@ package body Bases.UI.Loot is
          else
             BaseItemIndex :=
               Integer'Value(Description(Current(TradeMenu))) * (-1);
-            CargoIndex := FindCargo(ItemIndex);
+            CargoIndex :=
+              FindCargo
+                (ProtoIndex => ItemIndex,
+                 Durability =>
+                   SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
          end if;
          if FieldIndex = 4 then
             Amount := Positive'Value(Get_Buffer(Fields(LootForm, 2)));
