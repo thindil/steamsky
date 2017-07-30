@@ -45,13 +45,14 @@ package Crafts is
    Recipes_Directory_Not_Found: exception;
    Recipes_Files_Not_Found: exception;
    Recipes_Invalid_Data: exception;
+   Crafting_No_Materials: exception; -- Raised when no materials needed for selected recipe
+   Crafting_No_Tools: exception; -- Raised when no tool needed for selected recipe
 
    procedure LoadRecipes; -- Load recipes from files
    procedure Manufacturing(Minutes: Positive); -- Craft selected items
-   function SetRecipe
+   procedure SetRecipe
      (RecipeIndex: Integer;
-      ModuleIndex: Positive)
-     return String; -- Set recipe to craft, returns empty string if all ok otherwise error message
+      ModuleIndex: Positive); -- Set recipe to craft
    function FindRecipe
      (Index: Unbounded_String)
      return Natural; -- Return vector index of recipe or zero if recipe not found

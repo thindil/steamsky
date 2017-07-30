@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Exceptions; use Ada.Exceptions;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
@@ -23,6 +24,7 @@ with Items; use Items;
 with Help.UI; use Help.UI;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
+with Bases.Trade; use Bases.Trade;
 
 package body Crafts.UI is
 
@@ -495,16 +497,11 @@ package body Crafts.UI is
       Result: Driver_Result;
       ModuleIndex: constant Natural :=
         Natural'Value(Description(Current(ModulesMenu)));
-      Message: Unbounded_String;
    begin
       case Key is
          when 10 => -- Set selected manufacturing order
             if ModuleIndex > 0 then
-               Message :=
-                 To_Unbounded_String(SetRecipe(RecipeIndex, ModuleIndex));
-               if Length(Message) > 0 then
-                  ShowDialog(To_String(Message));
-               end if;
+               SetRecipe(RecipeIndex, ModuleIndex);
             end if;
             DrawGame(Craft_View);
             return Craft_View;
@@ -529,6 +526,25 @@ package body Crafts.UI is
          Refresh(MenuWindow2);
       end if;
       return Recipe_Setting;
+   exception
+      when An_Exception : Crafting_No_Materials =>
+         ShowDialog
+           ("You don't have enough materials to start manufacturing " &
+            Exception_Message(An_Exception) &
+            ".");
+         DrawGame(Craft_View);
+         return Craft_View;
+      when An_Exception : Crafting_No_Tools =>
+         ShowDialog
+           ("You don't have proper tool to start manufacturing " &
+            Exception_Message(An_Exception) &
+            ".");
+         DrawGame(Craft_View);
+         return Craft_View;
+      when Trade_No_Free_Cargo =>
+         ShowDialog("You don't have that much free space in your ship cargo.");
+         DrawGame(Craft_View);
+         return Craft_View;
    end RecipeSettingKeys;
 
 end Crafts.UI;

@@ -27,6 +27,7 @@ with Items; use Items;
 with Statistics; use Statistics;
 with Log; use Log;
 with Goals; use Goals;
+with Bases.Trade; use Bases.Trade;
 
 package body Crafts is
 
@@ -167,9 +168,7 @@ package body Crafts is
       End_Search(Files);
    end LoadRecipes;
 
-   function SetRecipe
-     (RecipeIndex: Integer;
-      ModuleIndex: Positive) return String is
+   procedure SetRecipe(RecipeIndex: Integer; ModuleIndex: Positive) is
       Recipe: Craft_Data;
       SpaceNeeded: Integer := 0;
       MaterialIndexes: Positive_Container.Vector;
@@ -223,9 +222,7 @@ package body Crafts is
          end loop;
       end if;
       if MaterialIndexes.Length < Recipe.MaterialTypes.Length then
-         return "You don't have enough materials to start manufacturing " &
-           To_String(RecipeName) &
-           ".";
+         raise Crafting_No_Materials with To_String(RecipeName);
       end if;
       -- Check for tool
       if Recipe.Tool /= To_Unbounded_String("None") then
@@ -239,9 +236,7 @@ package body Crafts is
          HaveTool := True;
       end if;
       if not HaveTool then
-         return "You don't have proper tool to start manufacturing " &
-           To_String(RecipeName) &
-           ".";
+         raise Crafting_No_Tools with To_String(RecipeName);
       end if;
       -- Check for free space
       for I in MaterialIndexes.Iterate loop
@@ -254,7 +249,7 @@ package body Crafts is
           (SpaceNeeded -
            (Items_List(Recipe.ResultIndex).Weight * Recipe.ResultAmount)) <
         0 then
-         return "You don't have that much free space in your ship cargo.";
+         raise Trade_No_Free_Cargo;
       end if;
       PlayerShip.Modules(ModuleIndex).Current_Value := RecipeIndex;
       PlayerShip.Modules(ModuleIndex).Max_Value := Recipe.Time;
@@ -264,7 +259,6 @@ package body Crafts is
          To_String(PlayerShip.Modules(ModuleIndex).Name) &
          ".",
          CraftMessage);
-      return "";
    end SetRecipe;
 
    procedure Manufacturing(Minutes: Positive) is
