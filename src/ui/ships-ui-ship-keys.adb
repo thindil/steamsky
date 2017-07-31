@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Exceptions; use Ada.Exceptions;
 with Items; use Items;
 with ShipModules; use ShipModules;
 with UserInterface; use UserInterface;
@@ -118,10 +119,7 @@ package body Ships.UI.Ship.Keys is
                for I in
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
                   if PlayerShip.Crew(I).Order = Upgrading then
-                     Message := To_Unbounded_String(GiveOrders(I, Rest));
-                     if Length(Message) > 0 then
-                        ShowDialog(To_String(Message));
-                     end if;
+                     GiveOrders(I, Rest);
                      exit;
                   end if;
                end loop;
@@ -200,17 +198,11 @@ package body Ships.UI.Ship.Keys is
                         ".",
                         OrderMessage);
                   when GUN =>
-                     Message :=
-                       To_Unbounded_String
-                         (GiveOrders(OptionIndex, Gunner, CurrentMenuIndex));
+                     GiveOrders(OptionIndex, Gunner, CurrentMenuIndex);
                   when ALCHEMY_LAB .. GREENHOUSE =>
-                     Message :=
-                       To_Unbounded_String
-                         (GiveOrders(OptionIndex, Craft, CurrentMenuIndex));
+                     GiveOrders(OptionIndex, Craft, CurrentMenuIndex);
                   when MEDICAL_ROOM =>
-                     Message :=
-                       To_Unbounded_String
-                         (GiveOrders(OptionIndex, Heal, CurrentMenuIndex));
+                     GiveOrders(OptionIndex, Heal, CurrentMenuIndex);
                   when others =>
                      null;
                end case;
@@ -231,6 +223,11 @@ package body Ships.UI.Ship.Keys is
          Refresh(MenuWindow2);
       end if;
       return Assign_Owner;
+   exception
+      when An_Exception : Crew_Order_Error =>
+         ShowDialog(Exception_Message(An_Exception));
+         DrawGame(Ship_Info);
+         return Ship_Info;
    end AssignOwnerKeys;
 
    function AssignAmmoKeys(Key: Key_Code) return GameStates is

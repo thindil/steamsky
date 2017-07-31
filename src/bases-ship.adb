@@ -28,7 +28,6 @@ package body Bases.Ship is
    function RepairShip(ModuleIndex: Integer) return String is
       Cost, Time, MoneyIndex2: Natural := 0;
       TraderIndex, ProtoMoneyIndex: Positive;
-      Message: Unbounded_String := Null_Unbounded_String;
    begin
       RepairCost(Cost, Time, ModuleIndex);
       if Cost = 0 then
@@ -50,9 +49,7 @@ package body Bases.Ship is
       end if;
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Order = Repair then
-            Message :=
-              To_Unbounded_String
-                (GiveOrders(Crew_Container.To_Index(I), Rest));
+            GiveOrders(Crew_Container.To_Index(I), Rest);
          end if;
       end loop;
       if ModuleIndex > 0 then
@@ -86,7 +83,7 @@ package body Bases.Ship is
       GainExp(1, 4, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
       UpdateGame(Time);
-      return To_String(Message);
+      return "";
    end RepairShip;
 
    function UpgradeShip
@@ -100,7 +97,6 @@ package body Bases.Ship is
       Damage: DamageFactor := 0.0;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      Message: Unbounded_String := Null_Unbounded_String;
    begin
       if MoneyIndex2 = 0 then
          return "You don't have " &
@@ -258,9 +254,7 @@ package body Bases.Ship is
             PlayerShip.UpgradeModule := 0;
             for C in PlayerShip.Crew.Iterate loop
                if PlayerShip.Crew(C).Order = Upgrading then
-                  Message :=
-                    To_Unbounded_String
-                      (GiveOrders(Crew_Container.To_Index(C), Rest));
+                  GiveOrders(Crew_Container.To_Index(C), Rest);
                   exit;
                end if;
             end loop;
@@ -271,12 +265,10 @@ package body Bases.Ship is
          if PlayerShip.Modules(ModuleIndex).Owner > 0 and
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType /=
              CABIN then
-            Message :=
-              To_Unbounded_String
-                (GiveOrders
-                   (MemberIndex => PlayerShip.Modules(ModuleIndex).Owner,
-                    GivenOrder => Rest,
-                    CheckPriorities => False));
+            GiveOrders
+              (MemberIndex => PlayerShip.Modules(ModuleIndex).Owner,
+               GivenOrder => Rest,
+               CheckPriorities => False);
          end if;
          UpdateCargo(PlayerShip, ProtoMoneyIndex, Price);
          UpdateBaseCargo(ProtoMoneyIndex, Price);
@@ -308,7 +300,7 @@ package body Bases.Ship is
             end if;
          end loop;
       end if;
-      return To_String(Message);
+      return "";
    end UpgradeShip;
 
    procedure PayForDock is

@@ -49,14 +49,14 @@ package Crew is
       OrderTime: Integer; -- Minutes to next check for order result
       Orders: Orders_Array; -- Priority of orders of member
    end record;
+   Crew_Order_Error: exception; -- Raised when new order can't be set for selected crew member
 
-   function GiveOrders
+   procedure GiveOrders
      (MemberIndex: Positive;
       GivenOrder: Crew_Orders;
       ModuleIndex: Natural := 0;
       CheckPriorities: Boolean :=
-        True)
-     return String; -- Change order for selected crew member, returns empty string if all ok otherwise error message
+        True); -- Change order for selected crew member
    procedure GainExp
      (Amount: Natural;
       SkillNumber, CrewIndex: Positive); -- Gain experience in selected skill.
