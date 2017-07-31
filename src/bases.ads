@@ -98,7 +98,7 @@ package Bases is
    function FindBaseCargo
      (ProtoIndex: Positive;
       Durability: Natural :=
-        100)
+        101)
      return Natural; -- Find index of item in base cargo, return 0 if no item found
 
 end Bases;

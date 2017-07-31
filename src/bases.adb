@@ -612,14 +612,20 @@ package body Bases is
 
    function FindBaseCargo
      (ProtoIndex: Positive;
-      Durability: Natural := 100) return Natural is
+      Durability: Natural := 101) return Natural is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       for I in SkyBases(BaseIndex).Cargo.Iterate loop
-         if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex and
-           SkyBases(BaseIndex).Cargo(I).Durability = Durability then
-            return BaseCargo_Container.To_Index(I);
+         if Durability < 101 then
+            if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex and
+              SkyBases(BaseIndex).Cargo(I).Durability = Durability then
+               return BaseCargo_Container.To_Index(I);
+            end if;
+         else
+            if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex then
+               return BaseCargo_Container.To_Index(I);
+            end if;
          end if;
       end loop;
       return 0;
