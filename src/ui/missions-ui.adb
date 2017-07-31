@@ -25,6 +25,7 @@ with Bases; use Bases;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Config; use Config;
+with Utils.UI; use Utils.UI;
 
 package body Missions.UI is
 
@@ -34,12 +35,13 @@ package body Missions.UI is
    procedure ShowMissionInfo is
       Mission: constant Mission_Data :=
         PlayerShip.Missions(Get_Index(Current(MissionsMenu)));
-      InfoWindow, ClearWindow: Window;
+      InfoWindow, ClearWindow, ActionsWindow: Window;
       CurrentLine: Line_Position := 2;
       MinutesDiff, Distance: Natural;
       MissionTime: Date_Record :=
         (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
       WindowHeight: Line_Position := 6;
+      WindowWidth, TextLength: Column_Position := 31;
    begin
       ClearWindow := Create(15, (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
@@ -51,19 +53,32 @@ package body Missions.UI is
          WindowHeight := WindowHeight + 1;
       end if;
       InfoWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
-      Box(InfoWindow);
-      Move_Cursor(Win => InfoWindow, Line => 0, Column => 2);
-      Add(Win => InfoWindow, Str => "[Mission info]");
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
       Add
         (Win => InfoWindow,
          Str => "From base: " & To_String(SkyBases(Mission.StartBase).Name));
+      Get_Cursor_Position
+        (Win => InfoWindow,
+         Line => CurrentLine,
+         Column => TextLength);
+      CurrentLine := CurrentLine + 1;
+      if TextLength + 4 > WindowWidth then
+         WindowWidth := TextLength + 4;
+      end if;
       Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
       case Mission.MType is
          when Deliver =>
             Add
               (Win => InfoWindow,
                Str => "Item: " & To_String(Items_List(Mission.Target).Name));
+            Get_Cursor_Position
+              (Win => InfoWindow,
+               Line => CurrentLine,
+               Column => TextLength);
+            CurrentLine := CurrentLine + 1;
+            if TextLength + 4 > WindowWidth then
+               WindowWidth := TextLength + 4;
+            end if;
             Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
             Add
               (Win => InfoWindow,
@@ -73,7 +88,14 @@ package body Missions.UI is
                    (SkyBases
                       (SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                       .Name));
-            CurrentLine := 3;
+            Get_Cursor_Position
+              (Win => InfoWindow,
+               Line => CurrentLine,
+               Column => TextLength);
+            CurrentLine := CurrentLine + 1;
+            if TextLength + 4 > WindowWidth then
+               WindowWidth := TextLength + 4;
+            end if;
          when Patrol =>
             Add(Win => InfoWindow, Str => "Patrol selected area");
          when Destroy =>
@@ -89,6 +111,14 @@ package body Missions.UI is
                Str =>
                  "Passenger: " &
                  To_String(PlayerShip.Crew(Mission.Target).Name));
+            Get_Cursor_Position
+              (Win => InfoWindow,
+               Line => CurrentLine,
+               Column => TextLength);
+            CurrentLine := CurrentLine + 1;
+            if TextLength + 4 > WindowWidth then
+               WindowWidth := TextLength + 4;
+            end if;
             Move_Cursor(Win => InfoWindow, Line => 3, Column => 2);
             Add
               (Win => InfoWindow,
@@ -98,7 +128,14 @@ package body Missions.UI is
                    (SkyBases
                       (SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                       .Name));
-            CurrentLine := 3;
+            Get_Cursor_Position
+              (Win => InfoWindow,
+               Line => CurrentLine,
+               Column => TextLength);
+            CurrentLine := CurrentLine + 1;
+            if TextLength + 2 > WindowWidth then
+               WindowWidth := TextLength + 2;
+            end if;
       end case;
       if not Mission.Finished then
          Distance := CountDistance(Mission.TargetX, Mission.TargetY);
@@ -110,6 +147,14 @@ package body Missions.UI is
       end if;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
       Add(Win => InfoWindow, Str => "Distance:" & Integer'Image(Distance));
+      Get_Cursor_Position
+        (Win => InfoWindow,
+         Line => CurrentLine,
+         Column => TextLength);
+      CurrentLine := CurrentLine + 1;
+      if TextLength + 4 > WindowWidth then
+         WindowWidth := TextLength + 4;
+      end if;
       MinutesDiff := Mission.Time;
       while MinutesDiff > 0 loop
          if MinutesDiff >= 518400 then
@@ -129,7 +174,6 @@ package body Missions.UI is
             MinutesDiff := 0;
          end if;
       end loop;
-      CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
       Add(Win => InfoWindow, Str => "Time limit:");
       if MissionTime.Year > 0 then
@@ -151,7 +195,14 @@ package body Missions.UI is
            (Win => InfoWindow,
             Str => Positive'Image(MissionTime.Minutes) & "mins");
       end if;
+      Get_Cursor_Position
+        (Win => InfoWindow,
+         Line => CurrentLine,
+         Column => TextLength);
       CurrentLine := CurrentLine + 1;
+      if TextLength + 4 > WindowWidth then
+         WindowWidth := TextLength + 4;
+      end if;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
       Add
         (Win => InfoWindow,
@@ -160,43 +211,66 @@ package body Missions.UI is
            Positive'Image(Mission.Reward) &
            " " &
            To_String(MoneyName));
+      Get_Cursor_Position
+        (Win => InfoWindow,
+         Line => CurrentLine,
+         Column => TextLength);
+      CurrentLine := CurrentLine + 1;
+      if TextLength + 4 > WindowWidth then
+         WindowWidth := TextLength + 4;
+      end if;
+      ActionsWindow :=
+        Create(3, (Columns / 2), WindowHeight + 3, (Columns / 2));
       if Mission.Finished then
-         CurrentLine := CurrentLine + 1;
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add(Win => InfoWindow, Str => "Mission is ready to return.");
-         Move_Cursor(Line => WindowHeight + 3, Column => (Columns / 2));
-         Add(Str => "Press SPACE to show start base on map");
+         Add
+           (Win => ActionsWindow,
+            Str => "Press SPACE to show start base on map");
          Change_Attributes
-           (Line => WindowHeight + 3,
-            Column => (Columns / 2) + 6,
+           (Win => ActionsWindow,
+            Line => 0,
+            Column => 6,
             Count => 5,
             Color => 1);
-         Move_Cursor(Line => WindowHeight + 4, Column => (Columns / 2));
-         Add(Str => "Press ENTER to set start base as a destination for ship");
+         Move_Cursor(Win => ActionsWindow, Line => 1, Column => 0);
+         Add
+           (Win => ActionsWindow,
+            Str => "Press ENTER to set start base as a destination for ship");
          Change_Attributes
-           (Line => WindowHeight + 4,
-            Column => (Columns / 2) + 6,
+           (Win => ActionsWindow,
+            Line => 1,
+            Column => 6,
             Count => 5,
             Color => 1);
       else
-         Move_Cursor(Line => WindowHeight + 3, Column => (Columns / 2));
-         Add(Str => "Press SPACE to show mission on map");
+         Add
+           (Win => ActionsWindow,
+            Str => "Press SPACE to show mission on map");
          Change_Attributes
-           (Line => WindowHeight + 3,
-            Column => (Columns / 2) + 6,
+           (Win => ActionsWindow,
+            Line => 0,
+            Column => 6,
             Count => 5,
             Color => 1);
-         Move_Cursor(Line => WindowHeight + 4, Column => (Columns / 2));
-         Add(Str => "Press ENTER to set mission as a destination for ship");
+         Move_Cursor(Win => ActionsWindow, Line => 1, Column => 0);
+         Add
+           (Win => ActionsWindow,
+            Str => "Press ENTER to set mission as a destination for ship");
          Change_Attributes
-           (Line => WindowHeight + 4,
-            Column => (Columns / 2) + 6,
+           (Win => ActionsWindow,
+            Line => 1,
+            Column => 6,
             Count => 5,
             Color => 1);
       end if;
+      Resize(InfoWindow, WindowHeight, WindowWidth);
+      WindowFrame(InfoWindow, 2, "Mission info");
       Refresh_Without_Update;
       Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(ActionsWindow);
+      Delete(ActionsWindow);
       Refresh_Without_Update(MenuWindow);
       Update_Screen;
    end ShowMissionInfo;
