@@ -83,23 +83,39 @@ package body Ships.Cargo is
    function FindCargo
      (ProtoIndex: Natural := 0;
       ItemType: Unbounded_String := Null_Unbounded_String;
-      Durability: Natural := 100) return Natural is
+      Durability: Natural := 101) return Natural is
       CargoIndex: Natural := 0;
    begin
       if ProtoIndex > 0 then
          for I in PlayerShip.Cargo.Iterate loop
-            if PlayerShip.Cargo(I).ProtoIndex = ProtoIndex and
-              PlayerShip.Cargo(I).Durability = Durability then
-               CargoIndex := Cargo_Container.To_Index(I);
-               exit;
+            if Durability < 101 then
+               if PlayerShip.Cargo(I).ProtoIndex = ProtoIndex and
+                 PlayerShip.Cargo(I).Durability = Durability then
+                  CargoIndex := Cargo_Container.To_Index(I);
+                  exit;
+               end if;
+            else
+               if PlayerShip.Cargo(I).ProtoIndex = ProtoIndex then
+                  CargoIndex := Cargo_Container.To_Index(I);
+                  exit;
+               end if;
             end if;
          end loop;
       elsif ItemType /= Null_Unbounded_String then
          for I in PlayerShip.Cargo.Iterate loop
-            if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType = ItemType and
-              PlayerShip.Cargo(I).Durability = Durability then
-               CargoIndex := Cargo_Container.To_Index(I);
-               exit;
+            if Durability < 101 then
+               if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
+                 ItemType and
+                 PlayerShip.Cargo(I).Durability = Durability then
+                  CargoIndex := Cargo_Container.To_Index(I);
+                  exit;
+               end if;
+            else
+               if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
+                 ItemType then
+                  CargoIndex := Cargo_Container.To_Index(I);
+                  exit;
+               end if;
             end if;
          end loop;
       end if;
