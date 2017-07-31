@@ -69,7 +69,10 @@ package body Bases.Trade is
       if Cost > PlayerShip.Cargo(MoneyIndex2).Amount then
          raise Trade_Not_Enough_Money with ItemName;
       end if;
-      UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
+      UpdateCargo
+        (Ship => PlayerShip,
+         CargoIndex => MoneyIndex2,
+         Amount => (0 - Cost));
       UpdateBaseCargo(ProtoMoneyIndex, Cost);
       UpdateCargo
         (PlayerShip,
@@ -153,10 +156,10 @@ package body Bases.Trade is
          SellAmount,
          PlayerShip.Cargo.Element(ItemIndex).Durability);
       UpdateCargo
-        (PlayerShip,
-         ProtoIndex,
-         (0 - SellAmount),
-         PlayerShip.Cargo.Element(ItemIndex).Durability);
+        (Ship => PlayerShip,
+         CargoIndex => ItemIndex,
+         Amount => (0 - SellAmount),
+         Durability => PlayerShip.Cargo.Element(ItemIndex).Durability);
       UpdateCargo(PlayerShip, MoneyIndex2, Profit);
       UpdateBaseCargo(MoneyIndex2, (0 - Profit));
       GainExp(1, 4, TraderIndex);
@@ -184,10 +187,9 @@ package body Bases.Trade is
       MoneyIndex2, Price: Natural;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
-      TraderIndex, ProtoMoneyIndex: Positive;
+      TraderIndex: Positive;
    begin
-      ProtoMoneyIndex := FindProtoItem(MoneyIndex);
-      MoneyIndex2 := FindCargo(ProtoMoneyIndex);
+      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
       if MoneyIndex2 = 0 then
          raise Trade_No_Money;
       end if;
@@ -210,7 +212,10 @@ package body Bases.Trade is
           PreviousOrder => Rest,
           OrderTime => 15,
           Orders => (others => 0)));
-      UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Price));
+      UpdateCargo
+        (Ship => PlayerShip,
+         CargoIndex => MoneyIndex2,
+         Amount => (0 - Price));
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       AddMessage
@@ -263,7 +268,10 @@ package body Bases.Trade is
       if Cost > PlayerShip.Cargo(MoneyIndex2).Amount then
          raise Trade_Not_Enough_Money with RecipeName;
       end if;
-      UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
+      UpdateCargo
+        (Ship => PlayerShip,
+         CargoIndex => MoneyIndex2,
+         Amount => (0 - Cost));
       UpdateBaseCargo(ProtoMoneyIndex, Cost);
       Known_Recipes.Append(New_Item => RecipeIndex);
       AddMessage
@@ -327,7 +335,10 @@ package body Bases.Trade is
             ".",
             TradeMessage);
       end if;
-      UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
+      UpdateCargo
+        (Ship => PlayerShip,
+         CargoIndex => MoneyIndex2,
+         Amount => (0 - Cost));
       UpdateBaseCargo(ProtoMoneyIndex, Cost);
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);

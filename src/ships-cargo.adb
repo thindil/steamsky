@@ -24,19 +24,24 @@ package body Ships.Cargo is
 
    procedure UpdateCargo
      (Ship: in out ShipRecord;
-      ProtoIndex: Positive;
+      ProtoIndex: Natural := 0;
       Amount: Integer;
-      Durability: Natural := 100) is
+      Durability: Natural := 100;
+      CargoIndex: Natural := 0) is
       ItemIndex: Natural := 0;
       NewAmount: Integer;
    begin
-      for I in Ship.Cargo.Iterate loop
-         if Ship.Cargo(I).ProtoIndex = ProtoIndex and
-           Ship.Cargo(I).Durability = Durability then
-            ItemIndex := Cargo_Container.To_Index(I);
-            exit;
-         end if;
-      end loop;
+      if ProtoIndex > 0 then
+         for I in Ship.Cargo.Iterate loop
+            if Ship.Cargo(I).ProtoIndex = ProtoIndex and
+              Ship.Cargo(I).Durability = Durability then
+               ItemIndex := Cargo_Container.To_Index(I);
+               exit;
+            end if;
+         end loop;
+      else
+         ItemIndex := CargoIndex;
+      end if;
       if ItemIndex = 0 then
          Ship.Cargo.Append
          (New_Item =>

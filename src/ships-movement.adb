@@ -185,8 +185,7 @@ package body Ships.Movement is
    function DockShip(Docking: Boolean) return String is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      ProtoMoneyIndex: constant Positive := FindProtoItem(MoneyIndex);
-      MoneyIndex2: constant Natural := FindCargo(ProtoMoneyIndex);
+      MoneyIndex2: constant Natural := FindCargo(FindProtoItem(MoneyIndex));
       DockingCost: Positive;
       TraderIndex: Natural := 0;
       FuelIndex: constant Natural := FindCargo(ItemType => FuelType);
@@ -227,7 +226,10 @@ package body Ships.Movement is
                  To_String(MoneyName) &
                  " to pay for docking.";
             end if;
-            UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - DockingCost));
+            UpdateCargo
+              (Ship => PlayerShip,
+               CargoIndex => MoneyIndex2,
+               Amount => (0 - DockingCost));
             AddMessage
               ("Ship docked to base " &
                To_String(SkyBases(BaseIndex).Name) &
