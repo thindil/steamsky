@@ -585,7 +585,10 @@ package body Combat is
                                  To_String(EnemyName) &
                                  ".",
                                  CombatMessage);
-                              UpdateCargo(Ship, 1, LootAmount);
+                              UpdateCargo
+                                (Ship,
+                                 FindProtoItem(MoneyIndex),
+                                 LootAmount);
                            end if;
                            EnemyShip.Speed := FULL_STOP;
                            if SkyMap(Ship.SkyX, Ship.SkyY).EventIndex > 0 then
