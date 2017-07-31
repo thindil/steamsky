@@ -554,9 +554,9 @@ package body Combat is
                      end if;
                      if AmmoIndex > 0 then
                         UpdateCargo
-                          (Ship,
-                           Ship.Cargo.Element(AmmoIndex).ProtoIndex,
-                           -1);
+                          (Ship => Ship,
+                           CargoIndex => AmmoIndex,
+                           Amount => -1);
                      end if;
                      if Ship = PlayerShip then
                         GainExp(1, 3, GunnerIndex);
