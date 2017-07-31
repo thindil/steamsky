@@ -276,7 +276,7 @@ package body Crafts is
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       subtype Workplaces is ModuleType range ALCHEMY_LAB .. GREENHOUSE;
-      RecipeName, Message: Unbounded_String;
+      RecipeName: Unbounded_String;
       HaveMaterial: Boolean;
    begin
       for Module of PlayerShip.Modules loop
@@ -325,8 +325,7 @@ package body Crafts is
                      3);
                   Module.Current_Value := 0;
                   Module.Max_Value := 0;
-                  Message :=
-                    To_Unbounded_String(GiveOrders(CrafterIndex, Rest));
+                  GiveOrders(CrafterIndex, Rest);
                   CurrentMinutes := 0;
                end if;
                WorkTime := PlayerShip.Crew(CrafterIndex).OrderTime;
@@ -370,9 +369,7 @@ package body Crafts is
                               3);
                            Module.Current_Value := 0;
                            Module.Max_Value := 0;
-                           Message :=
-                             To_Unbounded_String
-                               (GiveOrders(CrafterIndex, Rest));
+                           GiveOrders(CrafterIndex, Rest);
                            exit Craft_Loop;
                         end if;
                      end loop;
@@ -391,8 +388,7 @@ package body Crafts is
                            3);
                         Module.Current_Value := 0;
                         Module.Max_Value := 0;
-                        Message :=
-                          To_Unbounded_String(GiveOrders(CrafterIndex, Rest));
+                        GiveOrders(CrafterIndex, Rest);
                         exit Craft_Loop;
                      end if;
                      Amount := 0;
@@ -444,8 +440,7 @@ package body Crafts is
                            3);
                         Module.Current_Value := 0;
                         Module.Max_Value := 0;
-                        Message :=
-                          To_Unbounded_String(GiveOrders(CrafterIndex, Rest));
+                        GiveOrders(CrafterIndex, Rest);
                         exit Craft_Loop;
                      end if;
                      CraftedAmount := CraftedAmount + ResultAmount;
@@ -495,9 +490,7 @@ package body Crafts is
                               3);
                            Module.Current_Value := 0;
                            Module.Max_Value := 0;
-                           Message :=
-                             To_Unbounded_String
-                               (GiveOrders(CrafterIndex, Rest));
+                           GiveOrders(CrafterIndex, Rest);
                            exit Craft_Loop;
                         end if;
                         UpdateCargo
@@ -559,16 +552,12 @@ package body Crafts is
                   if Module.Current_Value < 0 and CraftedAmount > 0 then
                      Module.Current_Value := 0;
                      Module.Max_Value := 0;
-                     Message :=
-                       To_Unbounded_String(GiveOrders(CrafterIndex, Rest));
+                     GiveOrders(CrafterIndex, Rest);
                   end if;
                end if;
             end if;
          end if;
       end loop;
-      if Length(Message) > 0 then
-         AddMessage(To_String(Message), OrderMessage, 3);
-      end if;
    end Manufacturing;
 
    function FindRecipe(Index: Unbounded_String) return Natural is

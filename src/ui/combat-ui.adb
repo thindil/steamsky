@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Exceptions; use Ada.Exceptions;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Crew; use Crew;
 with Messages; use Messages;
@@ -61,7 +62,6 @@ package body Combat.UI is
         Positive'Value(Description(Current(OrdersMenu)));
       OrderIndex: constant Positive := Get_Index(Current(OrdersMenu));
       ModuleIndex: Natural := 0;
-      Message: Unbounded_String;
    begin
       if Order = Pilot or Order = Engineer then
          MemberIndex := FindMember(Order);
@@ -71,11 +71,7 @@ package body Combat.UI is
          MemberIndex := PlayerShip.Modules(ModuleIndex).Owner;
       end if;
       if CrewIndex > 0 then
-         Message :=
-           To_Unbounded_String(GiveOrders(CrewIndex, Order, ModuleIndex));
-         if Length(Message) > 0 then
-            ShowDialog(To_String(Message));
-         end if;
+         GiveOrders(CrewIndex, Order, ModuleIndex);
       elsif CrewIndex = 0 then
          if Name(Current(OrdersMenu)) = "Quit" then
             return;
@@ -120,6 +116,9 @@ package body Combat.UI is
             ".",
             OrderMessage);
       end if;
+   exception
+      when An_Exception : Crew_Order_Error =>
+         ShowDialog(Exception_Message(An_Exception));
    end CombatOrders;
 
    procedure ShowCombat is
