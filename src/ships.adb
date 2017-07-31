@@ -665,7 +665,7 @@ package body Ships is
       CrewRepairPoints: Natural_Container.Vector;
       procedure RepairModule(ModuleIndex: Positive) is
          PointsIndex, PointsBonus, RepairMaterial, ToolsIndex: Natural;
-         ProtoIndex, RepairValue: Positive;
+         RepairValue: Positive;
       begin
          PointsIndex := 0;
          RepairNeeded := True;
@@ -689,7 +689,6 @@ package body Ships is
                      if Items_List(PlayerShip.Cargo(K).ProtoIndex).IType =
                        Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                          .RepairMaterial then
-                        ProtoIndex := PlayerShip.Cargo(K).ProtoIndex;
                         RepairMaterial := Cargo_Container.To_Index(K);
                   -- Limit repair point depends on amount of repair materials
                         if PlayerShip.Cargo(K).Amount < RepairPoints then
@@ -740,7 +739,10 @@ package body Ships is
                   else
                      RepairValue := RepairPoints;
                   end if;
-                  UpdateCargo(PlayerShip, ProtoIndex, (0 - RepairValue));
+                  UpdateCargo
+                    (Ship => PlayerShip,
+                     CargoIndex => RepairMaterial,
+                     Amount => (0 - RepairValue));
                   PlayerShip.Modules(ModuleIndex).Durability :=
                     PlayerShip.Modules(ModuleIndex).Durability + RepairValue;
                   if RepairValue > CrewRepairPoints(PointsIndex) then

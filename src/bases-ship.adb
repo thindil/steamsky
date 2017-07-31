@@ -78,7 +78,10 @@ package body Bases.Ship is
             ".",
             TradeMessage);
       end if;
-      UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Cost));
+      UpdateCargo
+        (Ship => PlayerShip,
+         CargoIndex => MoneyIndex2,
+         Amount => (0 - Cost));
       UpdateBaseCargo(ProtoMoneyIndex, Cost);
       GainExp(1, 4, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
@@ -153,7 +156,10 @@ package body Bases.Ship is
             PlayerShip.Modules.Delete(HullIndex, 1);
          end if;
          UpdateGame(Modules_List(ModuleIndex).InstallTime);
-         UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - Price));
+         UpdateCargo
+           (Ship => PlayerShip,
+            CargoIndex => MoneyIndex2,
+            Amount => (0 - Price));
          UpdateBaseCargo(ProtoMoneyIndex, Price);
          GainExp(1, 4, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
@@ -270,7 +276,10 @@ package body Bases.Ship is
                GivenOrder => Rest,
                CheckPriorities => False);
          end if;
-         UpdateCargo(PlayerShip, ProtoMoneyIndex, Price);
+         UpdateCargo
+           (Ship => PlayerShip,
+            CargoIndex => MoneyIndex2,
+            Amount => Price);
          UpdateBaseCargo(ProtoMoneyIndex, Price);
          GainExp(1, 4, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
@@ -331,7 +340,10 @@ package body Bases.Ship is
       if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
          DockingCost := PlayerShip.Cargo(MoneyIndex2).Amount;
       end if;
-      UpdateCargo(PlayerShip, ProtoMoneyIndex, (0 - DockingCost));
+      UpdateCargo
+        (Ship => PlayerShip,
+         CargoIndex => MoneyIndex2,
+         Amount => (0 - DockingCost));
       UpdateBaseCargo(ProtoMoneyIndex, DockingCost);
       AddMessage
         ("You pay" &
