@@ -298,13 +298,8 @@ package body UserInterface.Keys is
                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
                   ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
             elsif Order(1 .. 3) = "Com" then
-               Message :=
-                 To_Unbounded_String
-                   (FinishMission
-                      (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex));
-               if Length(Message) > 0 then
-                  ShowDialog(To_String(Message));
-               end if;
+               FinishMission
+                 (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
             elsif Order(1 .. 3) = "Sea" then
                OldSpeed := PlayerShip.Speed;
                UpdateGame(GetRandom(15, 45));
@@ -351,6 +346,10 @@ package body UserInterface.Keys is
             " because base don't have that much " &
             To_String(MoneyName) &
             " to buy it.");
+         DrawGame(Sky_Map_View);
+         return Sky_Map_View;
+      when An_Exception : Missions_Finishing_Error =>
+         ShowDialog(Exception_Message(An_Exception));
          DrawGame(Sky_Map_View);
          return Sky_Map_View;
    end OrdersMenuKeys;

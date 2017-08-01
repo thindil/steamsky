@@ -32,21 +32,20 @@ package Missions is
       Finished: Boolean; -- Did mission is finished
    end record;
    package Mission_Container is new Vectors(Positive, Mission_Data);
+   Missions_Accepting_Error: exception; -- Raised when mission can't be accepted
+   Missions_Finishing_Error: exception; -- Raised when mission can't be finished
 
    procedure GenerateMissions
      (BaseIndex: Positive); -- Generate if needed new missions in selected base
-   function AcceptMission
-     (MissionIndex: Positive)
-     return String; -- Accept selected mission from base, returns empty string if all ok otherwise error message
+   procedure AcceptMission
+     (MissionIndex: Positive); -- Accept selected mission from base
    procedure UpdateMissions(Minutes: Positive); -- Update accepted missions
-   function FinishMission
-     (MissionIndex: Positive)
-     return String; -- Finish selected mission, returns empty string if all ok otherwise error message
+   procedure FinishMission(MissionIndex: Positive); -- Finish selected mission
    procedure DeleteMission
      (MissionIndex: Positive;
       Failed: Boolean := True); -- Delete selected mission
    procedure UpdateMission(MissionIndex: Positive); -- Update status of mission
    function AutoFinishMissions
-     return String; -- Finish all possible missions, returns empty string if all ok otherwise error message
+     return String; -- Finish all possible missions, return empty string if all ok
 
 end Missions;

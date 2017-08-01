@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Exceptions; use Ada.Exceptions;
 with Maps; use Maps;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
@@ -342,7 +343,6 @@ package body Bases.UI.Missions is
 
    function BaseMissionsKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result := Request_Denied;
-      Message: Unbounded_String;
    begin
       if TradeMenu /= Null_Menu then
          case Key is
@@ -353,23 +353,18 @@ package body Bases.UI.Missions is
                end if;
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
-            when 56 | KEY_UP => -- Select previous recipe to buy
+            when 56 | KEY_UP => -- Select previous mission
                Result := Driver(TradeMenu, M_Up_Item);
                if Result = Request_Denied then
                   Result := Driver(TradeMenu, M_Last_Item);
                end if;
-            when 50 | KEY_DOWN => -- Select next recipe to buy
+            when 50 | KEY_DOWN => -- Select next mission
                Result := Driver(TradeMenu, M_Down_Item);
                if Result = Request_Denied then
                   Result := Driver(TradeMenu, M_First_Item);
                end if;
             when 10 => -- Accept mission
-               Message :=
-                 To_Unbounded_String
-                   (AcceptMission(Get_Index(Current(TradeMenu))));
-               if Length(Message) > 0 then
-                  ShowDialog(To_String(Message));
-               end if;
+               AcceptMission(Get_Index(Current(TradeMenu)));
                DrawGame(BaseMissions_View);
             when others =>
                Result := Driver(TradeMenu, Key);
@@ -391,6 +386,11 @@ package body Bases.UI.Missions is
          end case;
       end if;
       return BaseMissions_View;
+   exception
+      when An_Exception : Missions_Accepting_Error =>
+         ShowDialog(Exception_Message(An_Exception));
+         DrawGame(BaseMissions_View);
+         return BaseMissions_View;
    end BaseMissionsKeys;
 
 end Bases.UI.Missions;

@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
+with Ada.Exceptions; use Ada.Exceptions;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
@@ -212,7 +213,7 @@ package body Missions is
       SkyBases(BaseIndex).MissionsDate := GameDate;
    end GenerateMissions;
 
-   function AcceptMission(MissionIndex: Positive) return String is
+   procedure AcceptMission(MissionIndex: Positive) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MissionsLimit: Integer;
@@ -224,7 +225,8 @@ package body Missions is
       Skills: Skills_Container.Vector;
    begin
       if SkyBases(BaseIndex).Reputation(1) < 0 then
-         return "Your reputation in this base is too low to receive any mission.";
+         raise Missions_Accepting_Error
+           with "Your reputation in this base is too low to receive any mission.";
       end if;
       case SkyBases(BaseIndex).Reputation(1) is
          when 0 .. 25 =>
@@ -245,11 +247,13 @@ package body Missions is
          exit when MissionsLimit = 0;
       end loop;
       if MissionsLimit < 1 then
-         return "You can't take any more missions from this base. ";
+         raise Missions_Accepting_Error
+           with "You can't take any more missions from this base. ";
       end if;
       if Mission.MType = Deliver then
          if FreeCargo((0 - Items_List(Mission.Target).Weight)) < 0 then
-            return "You don't have enough cargo space for take this mission.";
+            raise Missions_Accepting_Error
+              with "You don't have enough cargo space for take this mission.";
          end if;
       end if;
       if Mission.MType = Passenger then
@@ -260,7 +264,8 @@ package body Missions is
             end if;
          end loop;
          if not HaveCabin then
-            return "You don't have proper (or free) cabin for this passenger.";
+            raise Missions_Accepting_Error
+              with "You don't have proper (or free) cabin for this passenger.";
          end if;
       end if;
       TraderIndex := FindMember(Talk);
@@ -321,7 +326,6 @@ package body Missions is
       GainExp(1, 4, TraderIndex);
       GameStats.AcceptedMissions := GameStats.AcceptedMissions + 1;
       UpdateGame(5);
-      return "";
    end AcceptMission;
 
    procedure UpdateMissions(Minutes: Positive) is
@@ -339,13 +343,13 @@ package body Missions is
       end loop;
    end UpdateMissions;
 
-   function FinishMission(MissionIndex: Positive) return String is
+   procedure FinishMission(MissionIndex: Positive) is
       Message: Unbounded_String;
    begin
       if PlayerShip.Speed /= DOCKED then
          Message := To_Unbounded_String(DockShip(True));
          if Length(Message) > 0 then
-            return To_String(Message);
+            raise Missions_Finishing_Error with To_String(Message);
          end if;
       end if;
       UpdateGame(5);
@@ -391,7 +395,6 @@ package body Missions is
            (Natural'Image
               (Missions_Types'Pos(PlayerShip.Missions(MissionIndex).MType))));
       DeleteMission(MissionIndex, False);
-      return "";
    end FinishMission;
 
    procedure DeleteMission(MissionIndex: Positive; Failed: Boolean := True) is
@@ -531,7 +534,6 @@ package body Missions is
    function AutoFinishMissions return String is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      Message: Unbounded_String;
       I: Natural := PlayerShip.Missions.First_Index;
    begin
       if BaseIndex = 0 then
@@ -553,15 +555,15 @@ package body Missions is
             PlayerShip.Missions(I).StartBase = BaseIndex) or
            (PlayerShip.Missions(I).TargetX = PlayerShip.SkyX and
             PlayerShip.Missions(I).TargetY = PlayerShip.SkyY) then
-            Message := To_Unbounded_String(FinishMission(I));
-            if Length(Message) > 0 then
-               return To_String(Message);
-            end if;
+            FinishMission(I);
             I := I - 1;
          end if;
          I := I + 1;
       end loop;
       return "";
+   exception
+      when An_Exception : Missions_Finishing_Error =>
+         return Exception_Message(An_Exception);
    end AutoFinishMissions;
 
 end Missions;
