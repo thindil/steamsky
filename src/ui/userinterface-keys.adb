@@ -26,7 +26,6 @@ with Ships.Crew; use Ships.Crew;
 with Crew; use Crew;
 with Crew.UI; use Crew.UI;
 with Bases; use Bases;
-with Bases.Trade; use Bases.Trade;
 with Messages; use Messages;
 with Combat; use Combat;
 with MainMenu; use MainMenu;
@@ -36,6 +35,7 @@ with Missions; use Missions;
 with Utils; use Utils;
 with Items; use Items;
 with Config; use Config;
+with Trades; use Trades;
 
 package body UserInterface.Keys is
 

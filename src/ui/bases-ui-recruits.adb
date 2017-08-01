@@ -23,6 +23,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Items; use Items;
 with Bases.Trade; use Bases.Trade;
 with Utils.UI; use Utils.UI;
+with Trades; use Trades;
 
 package body Bases.UI.Recruits is
 

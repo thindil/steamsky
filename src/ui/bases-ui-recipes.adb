@@ -24,6 +24,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Crafts; use Crafts;
 with Bases.Trade; use Bases.Trade;
 with Utils.UI; use Utils.UI;
+with Trades; use Trades;
 
 package body Bases.UI.Recipes is
 
