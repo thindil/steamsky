@@ -121,4 +121,7 @@ Amount = 5000
 [41]
 Type = Craft
 Amount = 7500
+[42]
+Type = Craft
+Amount = 10000
 []
