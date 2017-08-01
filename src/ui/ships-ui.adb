@@ -22,6 +22,7 @@ with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Items; use Items;
 with UserInterface; use UserInterface;
+with Utils.UI; use Utils.UI;
 
 package body Ships.UI is
 
@@ -46,9 +47,13 @@ package body Ships.UI is
          FieldOptions := Get_Options(Rename_Fields.all(2));
          FieldOptions.Auto_Skip := False;
          Set_Options(Rename_Fields.all(2), FieldOptions);
+         Set_Foreground
+           (Rename_Fields.all(2),
+            (Bold_Character => True, others => False),
+            1);
          Set_Background
            (Rename_Fields.all(2),
-            (Reverse_Video => True, others => False));
+            (Under_Line => True, others => False));
          if MaxRange > 0 then
             Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type
               (Rename_Fields.all(2),
@@ -75,7 +80,7 @@ package body Ships.UI is
               FormLength + 2,
               ((Lines / 3) - (FormHeight / 2)),
               ((Columns / 2) - (FormLength / 2)));
-         Box(FormWindow);
+         WindowFrame(FormWindow, 5, "");
          Set_Window(RenameForm, FormWindow);
          Set_Sub_Window
            (RenameForm,
@@ -86,8 +91,21 @@ package body Ships.UI is
       Refresh(FormWindow);
    end ShowShipForm;
 
-   function RenameResult(CurrentState: GameStates) return GameStates is
+   procedure SetCurrentField(FieldNumber: Positive) is
       Visibility: Cursor_Visibility := Invisible;
+   begin
+      Set_Foreground(Fields(RenameForm, 2));
+      Set_Background(Fields(RenameForm, 2));
+      Set_Current(RenameForm, Fields(RenameForm, FieldNumber));
+      Set_Foreground
+        (Current(RenameForm),
+         (Bold_Character => True, others => False),
+         1);
+      Set_Cursor_Visibility(Visibility);
+      Refresh(FormWindow);
+   end SetCurrentField;
+
+   function RenameResult(CurrentState: GameStates) return GameStates is
       ModuleIndex: constant Positive := Get_Index(Current(ShipsMenu));
       FieldIndex: constant Positive := Get_Index(Current(RenameForm));
       NewName: Unbounded_String;
@@ -97,13 +115,18 @@ package body Ships.UI is
          Module.Name := NewName;
       end UpdateName;
    begin
-      if FieldIndex < 3 then
+      NewName :=
+        Trim
+          (To_Unbounded_String(Get_Buffer(Fields(RenameForm, 2))),
+           Ada.Strings.Both);
+      if FieldIndex = 2 then
+         if Length(NewName) > 0 then
+            SetCurrentField(4);
+         else
+            SetCurrentField(3);
+         end if;
          return CurrentState;
       elsif FieldIndex = 4 then
-         NewName :=
-           Trim
-             (To_Unbounded_String(Get_Buffer(Fields(RenameForm, 2))),
-              Ada.Strings.Both);
          if Length(NewName) > 0 then
             SemicolonIndex := Index(NewName, ";");
             while SemicolonIndex > 0 loop
@@ -118,7 +141,6 @@ package body Ships.UI is
             end if;
          end if;
       end if;
-      Set_Cursor_Visibility(Visibility);
       Post(RenameForm, False);
       Delete(RenameForm);
       DrawGame(Ship_Info);
@@ -128,13 +150,13 @@ package body Ships.UI is
    function DropCargoResult return GameStates is
       ItemIndex: constant Positive := Get_Index(Current(ShipsMenu));
       DropAmount, DropAmount2: Natural;
-      Visibility: Cursor_Visibility := Invisible;
       FieldIndex: constant Positive := Get_Index(Current(RenameForm));
    begin
-      if FieldIndex < 3 then
+      DropAmount := Natural'Value(Get_Buffer(Fields(RenameForm, 2)));
+      if FieldIndex = 2 then
+         SetCurrentField(4);
          return Drop_Cargo;
       elsif FieldIndex = 4 then
-         DropAmount := Natural'Value(Get_Buffer(Fields(RenameForm, 2)));
          if DropAmount > 0 and
            Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
              MissionItemsType then
@@ -168,18 +190,20 @@ package body Ships.UI is
                PlayerShip.Cargo.Element(ItemIndex).Durability);
          end if;
       end if;
-      Set_Cursor_Visibility(Visibility);
       Post(RenameForm, False);
       Delete(RenameForm);
       DrawGame(Cargo_Info);
       return Cargo_Info;
    exception
       when Constraint_Error =>
-         Set_Cursor_Visibility(Visibility);
-         Post(RenameForm, False);
-         Delete(RenameForm);
-         DrawGame(Cargo_Info);
-         return Cargo_Info;
+         if FieldIndex > 2 then
+            Post(RenameForm, False);
+            Delete(RenameForm);
+            DrawGame(Cargo_Info);
+            return Cargo_Info;
+         end if;
+         SetCurrentField(3);
+         return Drop_Cargo;
    end DropCargoResult;
 
    function ShipFormKeys
@@ -187,6 +211,7 @@ package body Ships.UI is
       CurrentState: GameStates) return GameStates is
       Result: Forms.Driver_Result;
       FieldIndex: Positive := Get_Index(Current(RenameForm));
+      Visibility: Cursor_Visibility := Invisible;
    begin
       case Key is
          when KEY_UP => -- Select previous field
@@ -229,17 +254,30 @@ package body Ships.UI is
             if FieldIndex = 2 then
                Result := Driver(RenameForm, F_Left_Char);
             end if;
+         when 27 => -- Escape select cancel button
+            FieldIndex := 3;
+            Set_Current(RenameForm, Fields(RenameForm, 3));
+            Result := Form_Ok;
          when others =>
             Result := Driver(RenameForm, Key);
       end case;
       if Result = Form_Ok then
+         for I in 2 .. 4 loop
+            Set_Foreground(Fields(RenameForm, I));
+         end loop;
+         Set_Foreground
+           (Current(RenameForm),
+            (Bold_Character => True, others => False),
+            1);
          if FieldIndex = 2 then
             Set_Background
               (Current(RenameForm),
-               (Reverse_Video => True, others => False));
+               (Under_Line => True, others => False));
+            Visibility := Normal;
          else
-            Set_Background(Fields(RenameForm, 2), (others => False));
+            Set_Background(Fields(RenameForm, 2));
          end if;
+         Set_Cursor_Visibility(Visibility);
          Refresh(FormWindow);
       end if;
       return CurrentState;
