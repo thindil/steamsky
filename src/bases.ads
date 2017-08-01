@@ -92,9 +92,10 @@ package Bases is
      (BaseIndex: Positive); -- Update base population if needed
    procedure GenerateCargo; -- Generate base cargo
    procedure UpdateBaseCargo
-     (ProtoIndex: Positive;
+     (ProtoIndex: Natural := 0;
       Amount: Integer;
-      Durability: Natural := 100); -- Update cargo in base
+      Durability: Natural := 100;
+      CargoIndex: Natural := 0); -- Update cargo in base
    function FindBaseCargo
      (ProtoIndex: Positive;
       Durability: Natural :=
