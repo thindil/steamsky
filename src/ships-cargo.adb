@@ -166,10 +166,9 @@ package body Ships.Cargo is
       PlayerShip.Cargo(CargoIndex).Durability := SelectedItem.Durability - 1;
       if PlayerShip.Cargo(CargoIndex).Durability = 0 then -- Cargo destroyed
          UpdateCargo
-           (PlayerShip,
-            PlayerShip.Cargo.Element(CargoIndex).ProtoIndex,
-            -1,
-            0);
+           (Ship => PlayerShip,
+            CargoIndex => CargoIndex,
+            Amount => -1);
          return;
       end if;
       while I <= PlayerShip.Cargo.Last_Index loop
@@ -181,15 +180,13 @@ package body Ships.Cargo is
                 PlayerShip.Cargo(J).Durability and
               I /= J then
                UpdateCargo
-                 (PlayerShip,
-                  PlayerShip.Cargo.Element(J).ProtoIndex,
-                  (0 - PlayerShip.Cargo.Element(J).Amount),
-                  PlayerShip.Cargo.Element(J).Durability);
+                 (Ship => PlayerShip,
+                  CargoIndex => J,
+                  Amount => (0 - PlayerShip.Cargo.Element(J).Amount));
                UpdateCargo
-                 (PlayerShip,
-                  PlayerShip.Cargo(I).ProtoIndex,
-                  PlayerShip.Cargo(J).Amount,
-                  PlayerShip.Cargo(I).Durability);
+                 (Ship => PlayerShip,
+                  CargoIndex => I,
+                  Amount => PlayerShip.Cargo(J).Amount);
                I := I - 1;
                exit;
             end if;
