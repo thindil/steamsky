@@ -579,15 +579,21 @@ package body Bases is
    end GenerateCargo;
 
    procedure UpdateBaseCargo
-     (ProtoIndex: Positive;
+     (ProtoIndex: Natural := 0;
       Amount: Integer;
-      Durability: Natural := 100) is
+      Durability: Natural := 100;
+      CargoIndex: Natural := 0) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
-      ItemIndex: constant Natural := FindBaseCargo(ProtoIndex, Durability);
+      ItemIndex: Natural;
    begin
+      if ProtoIndex > 0 then
+         ItemIndex := FindBaseCargo(ProtoIndex, Durability);
+      else
+         ItemIndex := CargoIndex;
+      end if;
       if Amount > 0 then
          if ItemIndex = 0 then
             SkyBases(BaseIndex).Cargo.Append
@@ -603,7 +609,9 @@ package body Bases is
          SkyBases(BaseIndex).Cargo(ItemIndex).Amount :=
            SkyBases(BaseIndex).Cargo(ItemIndex).Amount + Amount;
          if SkyBases(BaseIndex).Cargo(ItemIndex).Amount = 0 and
-           not Items_List(ProtoIndex).Buyable(BaseType) and
+           not Items_List(SkyBases(BaseIndex).Cargo(ItemIndex).ProtoIndex)
+             .Buyable
+             (BaseType) and
            ItemIndex > 1 then
             SkyBases(BaseIndex).Cargo.Delete(Index => ItemIndex, Count => 1);
          end if;
