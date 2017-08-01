@@ -423,12 +423,7 @@ package body Bases.UI.Loot is
             Amount := Positive'Value(Get_Buffer(Fields(LootForm, 2)));
          else
             if Take then
-               for Item of SkyBases(BaseIndex).Cargo loop
-                  if Item.ProtoIndex = ItemIndex then
-                     Amount := Item.Amount;
-                     exit;
-                  end if;
-               end loop;
+               Amount := SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount;
             else
                Amount := PlayerShip.Cargo.Element(CargoIndex).Amount;
             end if;
@@ -446,14 +441,16 @@ package body Bases.UI.Loot is
                return Loot_View;
             end if;
             UpdateCargo
-              (PlayerShip,
-               ItemIndex,
-               Amount,
-               SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
+              (Ship => PlayerShip,
+               CargoIndex => CargoIndex,
+               Amount => Amount,
+               Durability =>
+                 SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
             UpdateBaseCargo
-              (ItemIndex,
-               (0 - Amount),
-               SkyBases(BaseIndex).Cargo.Element(BaseItemIndex).Durability);
+              (CargoIndex => BaseItemIndex,
+               Amount => (0 - Amount),
+               Durability =>
+                 SkyBases(BaseIndex).Cargo.Element(BaseItemIndex).Durability);
             AddMessage
               ("You took" &
                Positive'Image(Amount) &
@@ -463,14 +460,14 @@ package body Bases.UI.Loot is
                OrderMessage);
          else
             UpdateBaseCargo
-              (ItemIndex,
-               Amount,
-               PlayerShip.Cargo.Element(CargoIndex).Durability);
+              (CargoIndex => BaseItemIndex,
+               Amount => Amount,
+               Durability => PlayerShip.Cargo.Element(CargoIndex).Durability);
             UpdateCargo
-              (PlayerShip,
-               ItemIndex,
-               (0 - Amount),
-               PlayerShip.Cargo.Element(CargoIndex).Durability);
+              (Ship => PlayerShip,
+               CargoIndex => ItemIndex,
+               Amount => (0 - Amount),
+               Durability => PlayerShip.Cargo.Element(CargoIndex).Durability);
             AddMessage
               ("You drop" &
                Positive'Image(Amount) &

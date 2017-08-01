@@ -80,9 +80,10 @@ package body Bases.Trade is
          BuyAmount,
          SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
       UpdateBaseCargo
-        (ItemIndex,
-         (0 - BuyAmount),
-         SkyBases(BaseIndex).Cargo.Element(BaseItemIndex).Durability);
+        (CargoIndex => BaseItemIndex,
+         Amount => (0 - BuyAmount),
+         Durability =>
+           SkyBases(BaseIndex).Cargo.Element(BaseItemIndex).Durability);
       GainExp(1, 4, TraderIndex);
       GainRep(BaseIndex, 1);
       AddMessage
@@ -142,14 +143,6 @@ package body Bases.Trade is
       end if;
       if Profit > SkyBases(BaseIndex).Cargo(1).Amount then
          raise Trade_No_Money_In_Base with ItemName;
-      end if;
-      if PlayerShip.Cargo(ItemIndex).Durability = 100 then
-         for Item of SkyBases(BaseIndex).Cargo loop
-            if Item.ProtoIndex = ProtoIndex then
-               Item.Amount := Item.Amount + SellAmount;
-               exit;
-            end if;
-         end loop;
       end if;
       UpdateBaseCargo
         (ProtoIndex,
