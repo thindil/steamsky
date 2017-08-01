@@ -26,9 +26,9 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.UI.Cargo; use Ships.UI.Cargo;
 with Help.UI; use Help.UI;
 with Events; use Events;
-with Bases.Trade; use Bases.Trade;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
+with Trades; use Trades;
 
 package body Bases.UI.Trade is
 

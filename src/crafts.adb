@@ -27,7 +27,7 @@ with Items; use Items;
 with Statistics; use Statistics;
 with Log; use Log;
 with Goals; use Goals;
-with Bases.Trade; use Bases.Trade;
+with Trades; use Trades;
 
 package body Crafts is
 

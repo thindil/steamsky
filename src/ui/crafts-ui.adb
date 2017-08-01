@@ -24,7 +24,7 @@ with Items; use Items;
 with Help.UI; use Help.UI;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
-with Bases.Trade; use Bases.Trade;
+with Trades; use Trades;
 
 package body Crafts.UI is
 
