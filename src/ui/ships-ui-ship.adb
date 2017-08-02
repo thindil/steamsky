@@ -21,19 +21,20 @@ with UserInterface; use UserInterface;
 with Crafts; use Crafts;
 with Maps; use Maps;
 with Ships.Cargo; use Ships.Cargo;
+with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Ship is
 
    procedure ShowModuleInfo is
-      InfoWindow, ClearWindow, BoxWindow: Window;
+      InfoWindow, ClearWindow, BoxWindow, ActionsWindow: Window;
       ModuleIndex: constant Positive := Get_Index(Current(ShipsMenu));
       DamagePercent: Natural;
       MAmount, TextLength: Natural := 0;
       CurrentLine, StartLine: Line_Position;
       MaxUpgrade, UpgradePercent: Natural;
       MaxValue: Positive;
-      HaveAmmo, HaveMaterial: Boolean := False;
-      StartColumn, EndColumn: Column_Position;
+      HaveAmmo: Boolean := False;
+      StartColumn, EndColumn, WindowWidth: Column_Position;
       Module: constant ModuleData := PlayerShip.Modules(ModuleIndex);
       WindowHeight: Line_Position := 9;
    begin
@@ -60,10 +61,9 @@ package body Ships.UI.Ship is
         Line_Position
           (Length(Modules_List(Module.ProtoIndex).Description) /
            (Natural(Columns / 2) - 4));
+      WindowWidth :=
+        Column_Position(Length(Modules_List(Module.ProtoIndex).Description));
       BoxWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
-      Box(BoxWindow);
-      Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
-      Add(Win => BoxWindow, Str => "[Module info]");
       InfoWindow :=
         Create(WindowHeight - 2, (Columns / 2) - 4, 4, (Columns / 2) + 2);
       Add(Win => InfoWindow, Str => "Status: ");
@@ -133,10 +133,10 @@ package body Ships.UI.Ship is
               (Win => InfoWindow,
                Line => CurrentLine,
                Column => EndColumn);
-            if FindCargo(ItemType => Item.IType) > 0 then
-               HaveMaterial := True;
+            if EndColumn > WindowWidth then
+               WindowWidth := EndColumn;
             end if;
-            if not HaveMaterial then
+            if FindCargo(ItemType => Item.IType) = 0 then
                if StartLine = CurrentLine then
                   TextLength := Natural(EndColumn - StartColumn);
                   Change_Attributes
@@ -165,11 +165,9 @@ package body Ships.UI.Ship is
                   Line => CurrentLine,
                   Column => EndColumn);
             end if;
-            HaveMaterial := False;
             MAmount := MAmount + 1;
          end if;
       end loop;
-      CurrentLine := 5;
       Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
       Add
         (Win => InfoWindow,
@@ -177,6 +175,14 @@ package body Ships.UI.Ship is
            "Repair/Upgrade skill: " &
            To_String
              (Skills_Names(Modules_List(Module.ProtoIndex).RepairSkill)));
+      Get_Cursor_Position
+        (Win => InfoWindow,
+         Line => CurrentLine,
+         Column => EndColumn);
+      if EndColumn > WindowWidth then
+         WindowWidth := EndColumn;
+      end if;
+      CurrentLine := 5;
       Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
       case Modules_List(Module.ProtoIndex).MType is
          when ENGINE =>
@@ -336,6 +342,14 @@ package body Ships.UI.Ship is
                end loop;
                CurrentLine := CurrentLine + 1;
             end if;
+            Get_Cursor_Position
+              (Win => InfoWindow,
+               Line => CurrentLine,
+               Column => EndColumn);
+            if EndColumn > WindowWidth then
+               WindowWidth := EndColumn;
+            end if;
+            CurrentLine := CurrentLine + 1;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             if Module.Owner > 0 then
                Add
@@ -385,6 +399,13 @@ package body Ships.UI.Ship is
                        "Deconstructing " &
                        To_String(Items_List(abs (Module.Current_Value)).Name));
                end if;
+               Get_Cursor_Position
+                 (Win => InfoWindow,
+                  Line => CurrentLine,
+                  Column => EndColumn);
+               if EndColumn > WindowWidth then
+                  WindowWidth := EndColumn;
+               end if;
                Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
                Add
                  (Win => InfoWindow,
@@ -392,7 +413,7 @@ package body Ships.UI.Ship is
                     "Time to complete:" &
                     Positive'Image(Module.Max_Value) &
                     " minutes");
-               CurrentLine := CurrentLine + 1;
+               CurrentLine := CurrentLine + 2;
             else
                Add(Win => InfoWindow, Str => "Manufacturing: nothing");
             end if;
@@ -482,21 +503,34 @@ package body Ships.UI.Ship is
          Get_Cursor_Position
            (Win => InfoWindow,
             Line => CurrentLine,
-            Column => StartColumn);
+            Column => EndColumn);
          CurrentLine := CurrentLine + 1;
       end if;
-      Move_Cursor(Line => WindowHeight + 3, Column => (Columns / 2));
-      Add(Str => "Press Enter to see selected module options");
+      ActionsWindow :=
+        Create(2, (Columns / 2), WindowHeight + 3, (Columns / 2));
+      Add
+        (Win => ActionsWindow,
+         Str => "Press Enter to see selected module options");
       Change_Attributes
-        (Line => WindowHeight + 3,
-         Column => (Columns / 2) + 6,
+        (Win => ActionsWindow,
+         Line => 0,
+         Column => 6,
          Count => 5,
          Color => 1);
+      WindowWidth := WindowWidth + 4;
+      if WindowWidth > (Columns / 2) then
+         WindowWidth := (Columns / 2);
+      end if;
+      Resize(BoxWindow, WindowHeight, WindowWidth);
+      WindowFrame(BoxWindow, 2, "Module info");
+      Resize(InfoWindow, WindowHeight - 2, WindowWidth - 4);
       Refresh_Without_Update;
       Refresh_Without_Update(BoxWindow);
       Delete(BoxWindow);
       Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(ActionsWindow);
+      Delete(ActionsWindow);
       Refresh_Without_Update(MenuWindow);
       Update_Screen;
    end ShowModuleInfo;
@@ -627,7 +661,6 @@ package body Ships.UI.Ship is
       Modules_Items.all(Modules_Items'Last) := Null_Item;
       ShipsMenu := New_Menu(Modules_Items);
       Set_Format(ShipsMenu, Lines - 10, 1);
-      Set_Mark(ShipsMenu, "");
       Scale(ShipsMenu, MenuHeight, MenuLength);
       CurrentLine := CurrentLine + 2;
       MenuWindow := Create(MenuHeight, MenuLength, CurrentLine, 2);
@@ -786,7 +819,6 @@ package body Ships.UI.Ship is
          Options_Items.all(I) := Null_Item;
       end loop;
       OptionsMenu := New_Menu(Options_Items);
-      Set_Mark(OptionsMenu, "");
       Set_Options(OptionsMenu, (Show_Descriptions => False, others => True));
       Scale(OptionsMenu, MenuHeight, MenuLength);
       MenuWindow2 :=
@@ -795,7 +827,7 @@ package body Ships.UI.Ship is
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Box(MenuWindow2);
+      WindowFrame(MenuWindow2, 5, "Module options");
       Set_Window(OptionsMenu, MenuWindow2);
       Set_Sub_Window
         (OptionsMenu,
@@ -843,7 +875,6 @@ package body Ships.UI.Ship is
       end loop;
       OptionsMenu := New_Menu(Assign_Items);
       Set_Options(OptionsMenu, (Show_Descriptions => False, others => True));
-      Set_Mark(OptionsMenu, "");
       Scale(OptionsMenu, MenuHeight, MenuLength);
       MenuWindow2 :=
         Create
@@ -851,7 +882,7 @@ package body Ships.UI.Ship is
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Box(MenuWindow2);
+      WindowFrame(MenuWindow2, 5, "Assign");
       Set_Window(OptionsMenu, MenuWindow2);
       Set_Sub_Window
         (OptionsMenu,
@@ -895,7 +926,6 @@ package body Ships.UI.Ship is
       end loop;
       OptionsMenu := New_Menu(Assign_Items);
       Set_Options(OptionsMenu, (Show_Descriptions => False, others => True));
-      Set_Mark(OptionsMenu, "");
       Scale(OptionsMenu, MenuHeight, MenuLength);
       MenuWindow2 :=
         Create
@@ -903,7 +933,7 @@ package body Ships.UI.Ship is
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Box(MenuWindow2);
+      WindowFrame(MenuWindow2, 5, "Assign ammo");
       Set_Window(OptionsMenu, MenuWindow2);
       Set_Sub_Window
         (OptionsMenu,
