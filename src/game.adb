@@ -280,7 +280,7 @@ package body Game is
       -- Update crew
       UpdateCrew(Minutes, TiredPoints);
       -- Repair ship (if needed)
-      RepairShip(Minutes);
+      Ships.RepairShip(Minutes);
       -- Craft items
       Manufacturing(Minutes);
       -- Upgrade ship module

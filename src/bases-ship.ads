@@ -17,13 +17,15 @@
 
 package Bases.Ship is
 
-   function RepairShip
-     (ModuleIndex: Integer)
-     return String; -- Repairs playership in bases, returns empty string if all ok otherwise error message
-   function UpgradeShip
+   BasesShip_Nothing_To_Repair: exception; -- Raised when there is nothing to repair
+   BasesShip_Unique_Module: exception; -- Raised when player try install another same unique module
+   BasesShip_Installation_Error: exception; -- Raised when problems with installing ship module occurs
+   BasesShip_Removing_Error: exception; -- Raised when problems with removing ship module occurs
+
+   procedure RepairShip(ModuleIndex: Integer); -- Repairs playership in bases
+   procedure UpgradeShip
      (Install: Boolean;
-      ModuleIndex: Positive)
-     return String; -- Install/remove modules on ship, returns empty string if all ok otherwise error message
+      ModuleIndex: Positive); -- Install/remove modules on ship
    procedure PayForDock; -- Pay daily fee for docking
    procedure RepairCost
      (Cost, Time: in out Natural;
