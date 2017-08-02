@@ -41,7 +41,6 @@ with Ships; use Ships;
 with Ships.UI; use Ships.UI;
 with Ships.UI.Cargo; use Ships.UI.Cargo;
 with Ships.UI.Ship.Keys; use Ships.UI.Ship.Keys;
-with Bases.UI.Trade; use Bases.UI.Trade;
 with Bases.UI.Repair; use Bases.UI.Repair;
 with Bases.UI.Shipyard; use Bases.UI.Shipyard;
 with Bases.UI.Recruits; use Bases.UI.Recruits;
@@ -64,6 +63,7 @@ with Log; use Log;
 with GameOptions; use GameOptions;
 with Goals.UI; use Goals.UI;
 with HallOfFame; use HallOfFame;
+with Trades.UI; use Trades.UI;
 
 procedure SteamSky is
    GameState, OldState: GameStates := Main_Menu;

@@ -16,8 +16,10 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Terminal_Interface.Curses.Forms.Field_Types.IntField;
+with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Maps; use Maps;
 with Items; use Items;
 with UserInterface; use UserInterface;
@@ -28,9 +30,10 @@ with Help.UI; use Help.UI;
 with Events; use Events;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
-with Trades; use Trades;
+with Bases; use Bases;
+with Bases.UI; use Bases.UI;
 
-package body Bases.UI.Trade is
+package body Trades.UI is
 
    Buy: Boolean;
    TradeForm: Form;
@@ -243,7 +246,7 @@ package body Bases.UI.Trade is
       Delete(BoxWindow);
       Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
-      Refresh_Without_Update(MenuWindow);
+      Refresh_Without_Update(Bases.UI.MenuWindow);
       Update_Screen;
    end ShowItemInfo;
 
@@ -303,11 +306,11 @@ package body Bases.UI.Trade is
       Set_Options(TradeMenu, (Show_Descriptions => False, others => True));
       Set_Format(TradeMenu, Lines - 3, 1);
       Scale(TradeMenu, MenuHeight, MenuLength);
-      MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
-      Set_Window(TradeMenu, MenuWindow);
+      Bases.UI.MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
+      Set_Window(TradeMenu, Bases.UI.MenuWindow);
       Set_Sub_Window
         (TradeMenu,
-         Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+         Derived_Window(Bases.UI.MenuWindow, MenuHeight, MenuLength, 0, 0));
       Post(TradeMenu);
       if Trade_Items.all(CurrentMenuIndex) = Null_Item then
          CurrentMenuIndex := 1;
@@ -724,4 +727,4 @@ package body Bases.UI.Trade is
       return Trade_Form;
    end TradeFormKeys;
 
-end Bases.UI.Trade;
+end Trades.UI;
