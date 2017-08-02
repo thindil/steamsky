@@ -118,6 +118,8 @@ package body Header is
          when Loot_View =>
             Add(Str => "Loot base [Quit]");
             Change_Attributes(Line => 0, Column => 11, Count => 1, Color => 1);
+         when Death_Confirm =>
+            return;
          when others =>
             null;
       end case;
