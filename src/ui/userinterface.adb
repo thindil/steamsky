@@ -31,7 +31,6 @@ with Ships.UI.Ship; use Ships.UI.Ship;
 with Crew; use Crew;
 with Crew.UI; use Crew.UI;
 with Bases; use Bases;
-with Bases.UI.Trade; use Bases.UI.Trade;
 with Bases.UI.Repair; use Bases.UI.Repair;
 with Bases.UI.Shipyard; use Bases.UI.Shipyard;
 with Bases.UI.Recruits; use Bases.UI.Recruits;
@@ -58,6 +57,7 @@ with GameOptions; use GameOptions;
 with Config; use Config;
 with Utils.UI; use Utils.UI;
 with Header; use Header;
+with Trades.UI; use Trades.UI;
 
 package body UserInterface is
 
