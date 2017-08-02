@@ -22,30 +22,27 @@ with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
+with Trades; use Trades;
 
 package body Bases.Ship is
 
-   function RepairShip(ModuleIndex: Integer) return String is
+   procedure RepairShip(ModuleIndex: Integer) is
       Cost, Time, MoneyIndex2: Natural := 0;
       TraderIndex, ProtoMoneyIndex: Positive;
    begin
       RepairCost(Cost, Time, ModuleIndex);
       if Cost = 0 then
-         return "You have nothing to repair.";
+         raise BasesShip_Nothing_To_Repair;
       end if;
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
       MoneyIndex2 := FindCargo(ProtoMoneyIndex);
       if MoneyIndex2 = 0 then
-         return "You don't have " &
-           To_String(MoneyName) &
-           " to pay for repairs.";
+         raise Trade_No_Money;
       end if;
       TraderIndex := FindMember(Talk);
       CountPrice(Cost, TraderIndex);
       if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
-         return "You don't have enough " &
-           To_String(MoneyName) &
-           " to pay for repairs.";
+         raise Trade_Not_Enough_Money;
       end if;
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Order = Repair then
@@ -86,12 +83,9 @@ package body Bases.Ship is
       GainExp(1, 4, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
       UpdateGame(Time);
-      return "";
    end RepairShip;
 
-   function UpgradeShip
-     (Install: Boolean;
-      ModuleIndex: Positive) return String is
+   procedure UpgradeShip(Install: Boolean; ModuleIndex: Positive) is
       ProtoMoneyIndex: constant Positive := FindProtoItem(MoneyIndex);
       MoneyIndex2: constant Natural := FindCargo(ProtoMoneyIndex);
       HullIndex, ModulesAmount, TraderIndex: Positive;
@@ -102,9 +96,7 @@ package body Bases.Ship is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       if MoneyIndex2 = 0 then
-         return "You don't have " &
-           To_String(MoneyName) &
-           " to pay for modules.";
+         raise Trade_No_Money;
       end if;
       for C in PlayerShip.Modules.Iterate loop
          case Modules_List(PlayerShip.Modules(C).ProtoIndex).MType is
@@ -124,34 +116,33 @@ package body Bases.Ship is
          Price := Modules_List(ModuleIndex).Price;
          CountPrice(Price, TraderIndex);
          if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
-            return "You don't have enough " &
-              To_String(MoneyName) &
-              " to pay for " &
-              To_String(Modules_List(ModuleIndex).Name) &
-              ".";
+            raise Trade_Not_Enough_Money
+              with To_String(Modules_List(ModuleIndex).Name);
          end if;
          for Module of PlayerShip.Modules loop
             if Modules_List(Module.ProtoIndex).MType =
               Modules_List(ModuleIndex).MType and
               Modules_List(ModuleIndex).Unique then
-               return "You can't install another " &
-                 To_String(Modules_List(ModuleIndex).Name) &
-                 " because you have installed one module that type. Remove old first.";
+               raise BasesShip_Unique_Module
+                 with To_String(Modules_List(ModuleIndex).Name);
             end if;
          end loop;
          if Modules_List(ModuleIndex).MType /= HULL then
             ModulesAmount := ModulesAmount + Modules_List(ModuleIndex).Size;
             if ModulesAmount > PlayerShip.Modules(HullIndex).Max_Value and
               Modules_List(ModuleIndex).MType /= GUN then
-               return "You don't have free modules space for more modules.";
+               raise BasesShip_Installation_Error
+                 with "You don't have free modules space for more modules.";
             end if;
             if Modules_List(ModuleIndex).MType = GUN and
               FreeTurretIndex = 0 then
-               return "You don't have free turret for next gun. Install new turret or remove old gun first.";
+               raise BasesShip_Installation_Error
+                 with "You don't have free turret for next gun. Install new turret or remove old gun first.";
             end if;
          else
             if Modules_List(ModuleIndex).MaxValue < ModulesAmount then
-               return "This hull is too small for your ship. Remove some modules first.";
+               raise BasesShip_Installation_Error
+                 with "This hull is too small for your ship. Remove some modules first.";
             end if;
             PlayerShip.Modules.Delete(HullIndex, 1);
          end if;
@@ -222,19 +213,16 @@ package body Bases.Ship is
               Float(Damage));
          CountPrice(Price, TraderIndex, False);
          if FreeCargo((0 - Price)) < 0 then
-            return "You don't have enough free space for " &
-              To_String(MoneyName) &
-              " in ship cargo.";
+            raise Trade_No_Free_Cargo;
          end if;
          if Price > SkyBases(BaseIndex).Cargo(1).Amount then
-            return "Base don't have enough " &
-              To_String(MoneyName) &
-              " for buy this module.";
+            raise Trade_No_Money_In_Base;
          end if;
          case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
             when TURRET =>
                if PlayerShip.Modules(ModuleIndex).Current_Value > 0 then
-                  return "You have installed gun in this turret, remove it before you remove this turret.";
+                  raise BasesShip_Removing_Error
+                    with "You have installed gun in this turret, remove it before you remove this turret.";
                end if;
             when GUN =>
                for Module of PlayerShip.Modules loop
@@ -247,7 +235,8 @@ package body Bases.Ship is
             when ShipModules.CARGO =>
                if FreeCargo((0 - PlayerShip.Modules(ModuleIndex).Max_Value)) <
                  0 then
-                  return "You can't sell this cargo bay, because you have items in it.";
+                  raise BasesShip_Removing_Error
+                    with "You can't sell this cargo bay, because you have items in it.";
                end if;
             when others =>
                null;
@@ -309,7 +298,6 @@ package body Bases.Ship is
             end if;
          end loop;
       end if;
-      return "";
    end UpgradeShip;
 
    procedure PayForDock is

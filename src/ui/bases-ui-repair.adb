@@ -22,6 +22,7 @@ with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Bases.Ship; use Bases.Ship;
 with Utils.UI; use Utils.UI;
+with Trades; use Trades;
 
 package body Bases.UI.Repair is
 
@@ -153,7 +154,6 @@ package body Bases.UI.Repair is
 
    function RepairKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
-      Message: Unbounded_String;
       ModuleIndex: Integer;
    begin
       if TradeMenu /= Null_Menu then
@@ -178,11 +178,7 @@ package body Bases.UI.Repair is
                   Result := Driver(TradeMenu, M_First_Item);
                end if;
             when 10 => -- Repair ship
-               Message :=
-                 To_Unbounded_String(Bases.Ship.RepairShip(ModuleIndex));
-               if Length(Message) > 0 then
-                  ShowDialog(To_String(Message));
-               end if;
+               Bases.Ship.RepairShip(ModuleIndex);
                DrawGame(Repairs_View);
                return Repairs_View;
             when others =>
@@ -206,6 +202,23 @@ package body Bases.UI.Repair is
          end case;
       end if;
       return Repairs_View;
+   exception
+      when BasesShip_Nothing_To_Repair =>
+         ShowDialog("You have nothing to repair.");
+         DrawGame(Repairs_View);
+         return Repairs_View;
+      when Trade_No_Money =>
+         ShowDialog
+           ("You don't have " & To_String(MoneyName) & " to pay for repairs.");
+         DrawGame(Repairs_View);
+         return Repairs_View;
+      when Trade_Not_Enough_Money =>
+         ShowDialog
+           ("You don't have enough " &
+            To_String(MoneyName) &
+            " to pay for repairs.");
+         DrawGame(Repairs_View);
+         return Repairs_View;
    end RepairKeys;
 
 end Bases.UI.Repair;
