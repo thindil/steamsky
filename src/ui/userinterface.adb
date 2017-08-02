@@ -55,7 +55,6 @@ with Missions; use Missions;
 with Missions.UI; use Missions.UI;
 with GameOptions; use GameOptions;
 with Config; use Config;
-with Utils.UI; use Utils.UI;
 with Header; use Header;
 with Trades.UI; use Trades.UI;
 
@@ -468,12 +467,13 @@ package body UserInterface is
            ((Columns / 2) - Column_Position(Width / 2)));
       case DType is
          when ERROR =>
-            WindowFrame(DialogWindow, 3, "");
+            Set_Color(DialogWindow, 8);
          when WARNING =>
-            WindowFrame(DialogWindow, 1, "");
+            Set_Color(DialogWindow, 9);
          when INFO =>
-            WindowFrame(DialogWindow, 2, "");
+            Set_Color(DialogWindow, 10);
       end case;
+      Box(DialogWindow);
       if Height = 3 then
          Add(Win => DialogWindow, Str => Message, Line => 1, Column => 1);
       else
@@ -491,6 +491,7 @@ package body UserInterface is
             StartIndex := EndIndex;
          end loop;
       end if;
+      Set_Color(DialogWindow, Color_Pair'First);
       if DialogPanel = Null_Panel then
          DialogPanel := New_Panel(DialogWindow);
       else
