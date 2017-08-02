@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
   items, craft 10000 items and finish 250 missions
 - Ability to loot abandoned bases
 - Remove items from abandoned bases over time
+- Death screen
 
 ### Changed
 - Updated interface
