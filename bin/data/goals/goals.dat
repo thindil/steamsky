@@ -124,4 +124,7 @@ Amount = 7500
 [42]
 Type = Craft
 Amount = 10000
+[43]
+Type = Mission
+Amount = 250
 []
