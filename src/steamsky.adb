@@ -101,6 +101,9 @@ begin
       Init_Pair(6, COLOR_BLACK, COLOR_BLACK);
       Init_Pair(7, COLOR_WHITE, COLOR_BLACK);
    end if;
+   Init_Pair(8, COLOR_WHITE, COLOR_RED);
+   Init_Pair(9, COLOR_WHITE, COLOR_YELLOW);
+   Init_Pair(10, COLOR_BLACK, COLOR_WHITE);
    Set_KeyPad_Mode(SwitchOn => True);
 
    if Columns < 60 or Lines < 24 then
