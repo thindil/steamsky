@@ -57,6 +57,7 @@ with GameOptions; use GameOptions;
 with Config; use Config;
 with Header; use Header;
 with Trades.UI; use Trades.UI;
+with DeathScreen; use DeathScreen;
 
 package body UserInterface is
 
@@ -712,9 +713,8 @@ package body UserInterface is
          when GameStats_View =>
             ShowGameStats;
          when Death_Confirm =>
+            ShowDeathScreen;
             Refresh_Without_Update;
-            ShowConfirm
-              ("You are dead. Did you want to see your game statistics?");
          when TradeRecipes_View =>
             ShowTradeRecipes;
          when BaseMissions_View =>
