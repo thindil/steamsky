@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Exceptions; use Ada.Exceptions;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
@@ -23,6 +24,7 @@ with Bases.Ship; use Bases.Ship;
 with Ships.Cargo; use Ships.Cargo;
 with ShipModules; use ShipModules;
 with Utils.UI; use Utils.UI;
+with Trades; use Trades;
 
 package body Bases.UI.Shipyard is
 
@@ -567,7 +569,6 @@ package body Bases.UI.Shipyard is
 
    function ShipyardKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
-      Message: Unbounded_String;
    begin
       case Key is
          when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
@@ -601,14 +602,9 @@ package body Bases.UI.Shipyard is
                return ShipyardTypesMenu;
             end if;
          when 10 => -- Install/remove module
-            Message :=
-              To_Unbounded_String
-                (Bases.Ship.UpgradeShip
-                   (InstallView,
-                    Positive'Value(Description(Current(TradeMenu)))));
-            if Length(Message) > 0 then
-               ShowDialog(To_String(Message));
-            end if;
+            Bases.Ship.UpgradeShip
+              (InstallView,
+               Positive'Value(Description(Current(TradeMenu))));
             DrawGame(Shipyard_View);
             Result := Request_Denied;
          when others =>
@@ -623,6 +619,47 @@ package body Bases.UI.Shipyard is
       end if;
       CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
       return Shipyard_View;
+   exception
+      when Trade_No_Money =>
+         ShowDialog
+           ("You don't have " & To_String(MoneyName) & " to pay for modules.");
+         DrawGame(Shipyard_View);
+         return Shipyard_View;
+      when An_Exception : Trade_Not_Enough_Money =>
+         ShowDialog
+           ("You don't have enough " &
+            To_String(MoneyName) &
+            " to pay for " &
+            Exception_Message(An_Exception) &
+            ".");
+         DrawGame(Shipyard_View);
+         return Shipyard_View;
+      when An_Exception : BasesShip_Unique_Module =>
+         ShowDialog
+           ("You can't install another " &
+            Exception_Message(An_Exception) &
+            " because you have installed one module that type. Remove old first.");
+         DrawGame(Shipyard_View);
+         return Shipyard_View;
+      when An_Exception : BasesShip_Installation_Error |
+        BasesShip_Removing_Error =>
+         ShowDialog(Exception_Message(An_Exception));
+         DrawGame(Shipyard_View);
+         return Shipyard_View;
+      when Trade_No_Free_Cargo =>
+         ShowDialog
+           ("You don't have enough free space for " &
+            To_String(MoneyName) &
+            " in ship cargo.");
+         DrawGame(Shipyard_View);
+         return Shipyard_View;
+      when Trade_No_Money_In_Base =>
+         ShowDialog
+           ("Base don't have enough " &
+            To_String(MoneyName) &
+            " for buy this module.");
+         DrawGame(Shipyard_View);
+         return Shipyard_View;
    end ShipyardKeys;
 
    function ShipyardTypesKeys(Key: Key_Code) return GameStates is
