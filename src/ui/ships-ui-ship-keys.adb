@@ -78,7 +78,6 @@ package body Ships.UI.Ship.Keys is
         Positive'Value(Description(Current(OptionsMenu)));
       ModuleName: constant String :=
         To_String(PlayerShip.Modules(CurrentMenuIndex).Name);
-      Message: Unbounded_String;
    begin
       case Key is
          when 56 | KEY_UP => -- Select previous item
@@ -95,14 +94,8 @@ package body Ships.UI.Ship.Keys is
             Post(OptionsMenu, False);
             if OptionIndex /= 5 and OptionIndex < 7 then
                if OptionIndex < 5 then
-                  Message :=
-                    To_Unbounded_String
-                      (StartUpgrading(CurrentMenuIndex, OptionIndex));
-                  if Length(Message) > 0 then
-                     ShowDialog(To_String(Message));
-                  else
-                     UpdateOrders;
-                  end if;
+                  StartUpgrading(CurrentMenuIndex, OptionIndex);
+                  UpdateOrders;
                end if;
                DrawGame(Ship_Info);
                return Ship_Info;
@@ -153,6 +146,11 @@ package body Ships.UI.Ship.Keys is
          Refresh(MenuWindow2);
       end if;
       return Module_Options;
+   exception
+      when An_Exception : Ship_Upgrade_Error =>
+         ShowDialog(Exception_Message(An_Exception));
+         DrawGame(Ship_Info);
+         return Ship_Info;
    end ModuleOptionsKeys;
 
    function AssignOwnerKeys(Key: Key_Code) return GameStates is

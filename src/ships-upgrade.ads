@@ -17,10 +17,10 @@
 
 package Ships.Upgrade is
 
-   function StartUpgrading
-     (ModuleIndex,
-      UpgradeType: Positive)
-     return String; -- Set upgrading order, returns empty string if all ok otherwise error message
+   Ship_Upgrade_Error: exception; -- Raised when player can't start upgrading module
+
+   procedure StartUpgrading
+     (ModuleIndex, UpgradeType: Positive); -- Set upgrading order
    procedure UpgradeShip(Minutes: Positive); -- Upgrade selected module on ship
 
 end Ships.Upgrade;
