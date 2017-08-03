@@ -69,6 +69,7 @@ package body Header is
          when Help_View =>
             Add(Str => "Help Index [Quit]");
             Change_Attributes(Line => 0, Column => 12, Count => 1, Color => 1);
+            return;
          when Craft_View =>
             Add(Str => "Manufacturing [Quit] [F1 Help]");
             Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
@@ -80,6 +81,7 @@ package body Header is
             Add(Str => "Help [Menu] [Quit]");
             Change_Attributes(Line => 0, Column => 6, Count => 1, Color => 1);
             Change_Attributes(Line => 0, Column => 13, Count => 1, Color => 1);
+            return;
          when Repairs_View =>
             Add(Str => "Ship repairs [Quit]");
             Change_Attributes(Line => 0, Column => 14, Count => 1, Color => 1);
@@ -100,6 +102,7 @@ package body Header is
             Add(Str => "Game statistics [Quit] [F1 Help]");
             Change_Attributes(Line => 0, Column => 17, Count => 1, Color => 1);
             Change_Attributes(Line => 0, Column => 24, Count => 2, Color => 1);
+            return;
          when TradeRecipes_View =>
             Add(Str => "Buy crafting recipes [Quit]");
             Change_Attributes(Line => 0, Column => 22, Count => 1, Color => 1);
@@ -112,6 +115,7 @@ package body Header is
          when GameOptions_View =>
             Add(Str => "Game options [Quit]");
             Change_Attributes(Line => 0, Column => 14, Count => 1, Color => 1);
+            return;
          when Heal_View =>
             Add(Str => "Heal wounded crew members [Quit]");
             Change_Attributes(Line => 0, Column => 27, Count => 1, Color => 1);
@@ -123,257 +127,255 @@ package body Header is
          when others =>
             null;
       end case;
-      if CurrentState /= Help_View and CurrentState /= Help_Topic then
-         case PlayerShip.Speed is
-            when DOCKED =>
-               Speed := To_Unbounded_String("Docked");
-            when FULL_STOP =>
-               Speed := To_Unbounded_String("Stopped");
-            when QUARTER_SPEED =>
-               Speed := To_Unbounded_String("Quarter Speed");
-            when HALF_SPEED =>
-               Speed := To_Unbounded_String("Half Speed");
-            when FULL_SPEED =>
-               Speed := To_Unbounded_String("Full Speed");
-         end case;
-         Move_Cursor(Line => 0, Column => (Columns / 3));
-         Add(Str => FormatedTime & " Speed: " & To_String(Speed));
-         Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
-         CurrentColumn := CurrentColumn + 1;
-         ItemIndex := FindCargo(ItemType => FuelType);
-         if ItemIndex = 0 then
-            Move_Cursor(Line => 0, Column => CurrentColumn);
-            Add(Str => "[No Fuel]");
-            Change_Attributes
-              (Line => 0,
-               Column => CurrentColumn,
-               Count => 10,
-               Color => 3);
-            CurrentColumn := CurrentColumn + 9;
-         else
-            for Item of PlayerShip.Cargo loop
-               if Items_List(Item.ProtoIndex).IType = FuelType then
-                  ItemAmount := ItemAmount + Item.Amount;
-               end if;
-               exit when ItemAmount > 99;
-            end loop;
-            if ItemAmount < GameSettings.LowFuel then
-               Move_Cursor(Line => 0, Column => CurrentColumn);
-               Add(Str => "[Low Fuel]");
-               Change_Attributes
-                 (Line => 0,
-                  Column => CurrentColumn,
-                  Count => 11,
-                  Color => 1);
-               CurrentColumn := CurrentColumn + 10;
+      case PlayerShip.Speed is
+         when DOCKED =>
+            Speed := To_Unbounded_String("Docked");
+         when FULL_STOP =>
+            Speed := To_Unbounded_String("Stopped");
+         when QUARTER_SPEED =>
+            Speed := To_Unbounded_String("Quarter Speed");
+         when HALF_SPEED =>
+            Speed := To_Unbounded_String("Half Speed");
+         when FULL_SPEED =>
+            Speed := To_Unbounded_String("Full Speed");
+      end case;
+      Move_Cursor(Line => 0, Column => (Columns / 3));
+      Add(Str => FormatedTime & " Speed: " & To_String(Speed));
+      Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
+      CurrentColumn := CurrentColumn + 1;
+      ItemIndex := FindCargo(ItemType => FuelType);
+      if ItemIndex = 0 then
+         Move_Cursor(Line => 0, Column => CurrentColumn);
+         Add(Str => "[No Fuel]");
+         Change_Attributes
+           (Line => 0,
+            Column => CurrentColumn,
+            Count => 10,
+            Color => 3);
+         CurrentColumn := CurrentColumn + 9;
+      else
+         for Item of PlayerShip.Cargo loop
+            if Items_List(Item.ProtoIndex).IType = FuelType then
+               ItemAmount := ItemAmount + Item.Amount;
             end if;
-         end if;
-         ItemIndex := FindCargo(ItemType => DrinksType);
-         if ItemIndex = 0 then
+            exit when ItemAmount > 99;
+         end loop;
+         if ItemAmount < GameSettings.LowFuel then
             Move_Cursor(Line => 0, Column => CurrentColumn);
-            Add(Str => "[No Drinks]");
+            Add(Str => "[Low Fuel]");
             Change_Attributes
               (Line => 0,
                Column => CurrentColumn,
                Count => 11,
-               Color => 3);
-            CurrentColumn := CurrentColumn + 11;
-         else
-            ItemAmount := 0;
-            for Item of PlayerShip.Cargo loop
-               if Items_List(Item.ProtoIndex).IType = DrinksType then
-                  ItemAmount := ItemAmount + Item.Amount;
-               end if;
-               exit when ItemAmount > 49;
-            end loop;
-            if ItemAmount < GameSettings.LowDrinks then
-               Move_Cursor(Line => 0, Column => CurrentColumn);
-               Add(Str => "[Low Drinks]");
-               Change_Attributes
-                 (Line => 0,
-                  Column => CurrentColumn,
-                  Count => 12,
-                  Color => 1);
-               CurrentColumn := CurrentColumn + 12;
+               Color => 1);
+            CurrentColumn := CurrentColumn + 10;
+         end if;
+      end if;
+      ItemIndex := FindCargo(ItemType => DrinksType);
+      if ItemIndex = 0 then
+         Move_Cursor(Line => 0, Column => CurrentColumn);
+         Add(Str => "[No Drinks]");
+         Change_Attributes
+           (Line => 0,
+            Column => CurrentColumn,
+            Count => 11,
+            Color => 3);
+         CurrentColumn := CurrentColumn + 11;
+      else
+         ItemAmount := 0;
+         for Item of PlayerShip.Cargo loop
+            if Items_List(Item.ProtoIndex).IType = DrinksType then
+               ItemAmount := ItemAmount + Item.Amount;
             end if;
-         end if;
-         ItemIndex := FindCargo(ItemType => FoodTypes(1));
-         if ItemIndex = 0 then
-            ItemIndex := FindCargo(ItemType => FoodTypes(2));
-         end if;
-         if ItemIndex = 0 then
+            exit when ItemAmount > 49;
+         end loop;
+         if ItemAmount < GameSettings.LowDrinks then
             Move_Cursor(Line => 0, Column => CurrentColumn);
-            Add(Str => "[No Food]");
+            Add(Str => "[Low Drinks]");
             Change_Attributes
               (Line => 0,
                Column => CurrentColumn,
-               Count => 10,
-               Color => 3);
-         else
-            ItemAmount := 0;
-            for Item of PlayerShip.Cargo loop
-               if Items_List(Item.ProtoIndex).IType = FoodTypes(1) or
-                 Items_List(Item.ProtoIndex).IType = FoodTypes(2) then
-                  ItemAmount := ItemAmount + Item.Amount;
+               Count => 12,
+               Color => 1);
+            CurrentColumn := CurrentColumn + 12;
+         end if;
+      end if;
+      ItemIndex := FindCargo(ItemType => FoodTypes(1));
+      if ItemIndex = 0 then
+         ItemIndex := FindCargo(ItemType => FoodTypes(2));
+      end if;
+      if ItemIndex = 0 then
+         Move_Cursor(Line => 0, Column => CurrentColumn);
+         Add(Str => "[No Food]");
+         Change_Attributes
+           (Line => 0,
+            Column => CurrentColumn,
+            Count => 10,
+            Color => 3);
+      else
+         ItemAmount := 0;
+         for Item of PlayerShip.Cargo loop
+            if Items_List(Item.ProtoIndex).IType = FoodTypes(1) or
+              Items_List(Item.ProtoIndex).IType = FoodTypes(2) then
+               ItemAmount := ItemAmount + Item.Amount;
+            end if;
+            exit when ItemAmount > 49;
+         end loop;
+         if ItemAmount < GameSettings.LowFood then
+            Move_Cursor(Line => 0, Column => CurrentColumn);
+            Add(Str => "[Low Food]");
+            Change_Attributes
+              (Line => 0,
+               Column => CurrentColumn,
+               Count => 11,
+               Color => 1);
+         end if;
+      end if;
+      Move_Cursor(Line => 0, Column => (Columns - 25));
+      Add(Str => "[P][E][G][R][M][U][T][C]");
+      for Module of PlayerShip.Modules loop
+         case Modules_List(Module.ProtoIndex).MType is
+            when GUN =>
+               GunnersCheck := GunnersCheck + 1;
+            when ALCHEMY_LAB .. GREENHOUSE =>
+               if Module.Current_Value /= 0 then
+                  if Module.Owner > 0 and CraftersCheck < 2 then
+                     CraftersCheck := 1;
+                  else
+                     CraftersCheck := 2;
+                  end if;
                end if;
-               exit when ItemAmount > 49;
-            end loop;
-            if ItemAmount < GameSettings.LowFood then
-               Move_Cursor(Line => 0, Column => CurrentColumn);
-               Add(Str => "[Low Food]");
+            when CABIN =>
+               if Module.Current_Value < Module.Max_Value then
+                  NeedClean := True;
+               end if;
+            when others =>
+               null;
+         end case;
+      end loop;
+      for Member of PlayerShip.Crew loop
+         case Member.Order is
+            when Pilot =>
+               HavePilot := True;
                Change_Attributes
                  (Line => 0,
-                  Column => CurrentColumn,
-                  Count => 11,
-                  Color => 1);
-            end if;
-         end if;
-         Move_Cursor(Line => 0, Column => (Columns - 25));
-         Add(Str => "[P][E][G][R][M][U][T][C]");
+                  Column => (Columns - 24),
+                  Count => 1,
+                  Color => 2);
+            when Engineer =>
+               HaveEngineer := True;
+               Change_Attributes
+                 (Line => 0,
+                  Column => (Columns - 21),
+                  Count => 1,
+                  Color => 2);
+            when Repair =>
+               HaveRepair := True;
+               Change_Attributes
+                 (Line => 0,
+                  Column => (Columns - 15),
+                  Count => 1,
+                  Color => 2);
+            when Upgrading =>
+               HaveUpgrade := True;
+               Change_Attributes
+                 (Line => 0,
+                  Column => (Columns - 9),
+                  Count => 1,
+                  Color => 2);
+            when Talk =>
+               HaveTrader := True;
+               Change_Attributes
+                 (Line => 0,
+                  Column => (Columns - 6),
+                  Count => 1,
+                  Color => 2);
+            when Clean =>
+               HaveCleaner := True;
+               Change_Attributes
+                 (Line => 0,
+                  Column => (Columns - 3),
+                  Count => 1,
+                  Color => 2);
+            when Gunner =>
+               GunnersCheck := GunnersCheck - 1;
+            when others =>
+               null;
+         end case;
+      end loop;
+      if not HavePilot then
+         Change_Attributes
+           (Line => 0,
+            Column => (Columns - 24),
+            Count => 1,
+            Color => 3);
+      end if;
+      if not HaveEngineer then
+         Change_Attributes
+           (Line => 0,
+            Column => (Columns - 21),
+            Count => 1,
+            Color => 3);
+      end if;
+      if GunnersCheck = 0 then
+         Change_Attributes
+           (Line => 0,
+            Column => (Columns - 18),
+            Count => 1,
+            Color => 2);
+      else
+         Change_Attributes
+           (Line => 0,
+            Column => (Columns - 18),
+            Count => 1,
+            Color => 3);
+      end if;
+      if not HaveRepair then
          for Module of PlayerShip.Modules loop
-            case Modules_List(Module.ProtoIndex).MType is
-               when GUN =>
-                  GunnersCheck := GunnersCheck + 1;
-               when ALCHEMY_LAB .. GREENHOUSE =>
-                  if Module.Current_Value /= 0 then
-                     if Module.Owner > 0 and CraftersCheck < 2 then
-                        CraftersCheck := 1;
-                     else
-                        CraftersCheck := 2;
-                     end if;
-                  end if;
-               when CABIN =>
-                  if Module.Current_Value < Module.Max_Value then
-                     NeedClean := True;
-                  end if;
-               when others =>
-                  null;
-            end case;
+            if Module.Durability < Module.MaxDurability then
+               Change_Attributes
+                 (Line => 0,
+                  Column => (Columns - 15),
+                  Count => 1,
+                  Color => 3);
+               exit;
+            end if;
          end loop;
-         for Member of PlayerShip.Crew loop
-            case Member.Order is
-               when Pilot =>
-                  HavePilot := True;
-                  Change_Attributes
-                    (Line => 0,
-                     Column => (Columns - 24),
-                     Count => 1,
-                     Color => 2);
-               when Engineer =>
-                  HaveEngineer := True;
-                  Change_Attributes
-                    (Line => 0,
-                     Column => (Columns - 21),
-                     Count => 1,
-                     Color => 2);
-               when Repair =>
-                  HaveRepair := True;
-                  Change_Attributes
-                    (Line => 0,
-                     Column => (Columns - 15),
-                     Count => 1,
-                     Color => 2);
-               when Upgrading =>
-                  HaveUpgrade := True;
-                  Change_Attributes
-                    (Line => 0,
-                     Column => (Columns - 9),
-                     Count => 1,
-                     Color => 2);
-               when Talk =>
-                  HaveTrader := True;
-                  Change_Attributes
-                    (Line => 0,
-                     Column => (Columns - 6),
-                     Count => 1,
-                     Color => 2);
-               when Clean =>
-                  HaveCleaner := True;
-                  Change_Attributes
-                    (Line => 0,
-                     Column => (Columns - 3),
-                     Count => 1,
-                     Color => 2);
-               when Gunner =>
-                  GunnersCheck := GunnersCheck - 1;
-               when others =>
-                  null;
-            end case;
-         end loop;
-         if not HavePilot then
-            Change_Attributes
-              (Line => 0,
-               Column => (Columns - 24),
-               Count => 1,
-               Color => 3);
-         end if;
-         if not HaveEngineer then
-            Change_Attributes
-              (Line => 0,
-               Column => (Columns - 21),
-               Count => 1,
-               Color => 3);
-         end if;
-         if GunnersCheck = 0 then
-            Change_Attributes
-              (Line => 0,
-               Column => (Columns - 18),
-               Count => 1,
-               Color => 2);
-         else
-            Change_Attributes
-              (Line => 0,
-               Column => (Columns - 18),
-               Count => 1,
-               Color => 3);
-         end if;
-         if not HaveRepair then
-            for Module of PlayerShip.Modules loop
-               if Module.Durability < Module.MaxDurability then
-                  Change_Attributes
-                    (Line => 0,
-                     Column => (Columns - 15),
-                     Count => 1,
-                     Color => 3);
-                  exit;
-               end if;
-            end loop;
-         end if;
-         if CraftersCheck = 1 then
-            Change_Attributes
-              (Line => 0,
-               Column => (Columns - 12),
-               Count => 1,
-               Color => 2);
-         elsif CraftersCheck = 2 then
-            Change_Attributes
-              (Line => 0,
-               Column => (Columns - 12),
-               Count => 1,
-               Color => 3);
-         end if;
-         if not HaveUpgrade and PlayerShip.UpgradeModule > 0 then
-            Change_Attributes
-              (Line => 0,
-               Column => (Columns - 9),
-               Count => 1,
-               Color => 3);
-         end if;
-         if not HaveTrader and
-           SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
-            Change_Attributes
-              (Line => 0,
-               Column => (Columns - 6),
-               Count => 1,
-               Color => 3);
-         end if;
-         if not HaveCleaner and NeedClean then
-            Change_Attributes
-              (Line => 0,
-               Column => (Columns - 3),
-               Count => 1,
-               Color => 3);
-         end if;
+      end if;
+      if CraftersCheck = 1 then
+         Change_Attributes
+           (Line => 0,
+            Column => (Columns - 12),
+            Count => 1,
+            Color => 2);
+      elsif CraftersCheck = 2 then
+         Change_Attributes
+           (Line => 0,
+            Column => (Columns - 12),
+            Count => 1,
+            Color => 3);
+      end if;
+      if not HaveUpgrade and PlayerShip.UpgradeModule > 0 then
+         Change_Attributes
+           (Line => 0,
+            Column => (Columns - 9),
+            Count => 1,
+            Color => 3);
+      end if;
+      if not HaveTrader and
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+         Change_Attributes
+           (Line => 0,
+            Column => (Columns - 6),
+            Count => 1,
+            Color => 3);
+      end if;
+      if not HaveCleaner and NeedClean then
+         Change_Attributes
+           (Line => 0,
+            Column => (Columns - 3),
+            Count => 1,
+            Color => 3);
       end if;
    end ShowGameHeader;
 
