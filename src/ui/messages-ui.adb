@@ -17,6 +17,7 @@
 
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
+with Utils.UI; use Utils.UI;
 
 package body Messages.UI is
 
@@ -144,9 +145,7 @@ package body Messages.UI is
       end if;
       MessagesWindow :=
         Create(WindowHeight, Columns, (Lines - WindowHeight), 0);
-      Box(MessagesWindow);
-      Move_Cursor(Win => MessagesWindow, Line => 0, Column => 2);
-      Add(Win => MessagesWindow, Str => "[Last messages]");
+      WindowFrame(MessagesWindow, Color_Pair'First, "Last messages");
       Move_Cursor(Win => MessagesWindow, Line => CurrentLine, Column => 2);
       for I in reverse LoopStart .. -1 loop
          Message := GetMessage((I + 1));
