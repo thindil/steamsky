@@ -127,4 +127,7 @@ Amount = 10000
 [43]
 Type = Mission
 Amount = 250
+[44]
+Type = Mission
+Amount = 500
 []
