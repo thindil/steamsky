@@ -312,7 +312,6 @@ package body Missions.UI is
       Missions_Items.all(Missions_Items'Last) := Null_Item;
       MissionsMenu := New_Menu(Missions_Items);
       Set_Format(MissionsMenu, Lines - 10, 1);
-      Set_Mark(MissionsMenu, "");
       Scale(MissionsMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
       Set_Window(MissionsMenu, MenuWindow);

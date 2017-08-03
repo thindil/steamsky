@@ -367,7 +367,6 @@ package body Crew.UI is
       Crew_Items.all(Crew_Items'Last) := Null_Item;
       CrewMenu := New_Menu(Crew_Items);
       Set_Format(CrewMenu, Lines - 10, 1);
-      Set_Mark(CrewMenu, "");
       Scale(CrewMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
       Set_Window(CrewMenu, MenuWindow);

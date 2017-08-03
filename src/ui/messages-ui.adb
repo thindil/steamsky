@@ -52,7 +52,6 @@ package body Messages.UI is
          Null_Item);
       MessagesMenu := New_Menu(Messages_Items);
       Set_Format(MessagesMenu, 1, 7);
-      Set_Mark(MessagesMenu, "");
       Scale(MessagesMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 2, 2);
       Set_Window(MessagesMenu, MenuWindow);
