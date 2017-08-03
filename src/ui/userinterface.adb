@@ -439,12 +439,14 @@ package body UserInterface is
            Column_Position(Width),
            ((Lines / 2) - Line_Position(Height / 2)),
            ((Columns / 2) - Column_Position(Width / 2)));
+      Set_Color(ConfirmWindow, 10);
       Box(ConfirmWindow);
       Add
         (Win => ConfirmWindow,
          Str => Message & " (Y/N)",
          Line => 1,
          Column => 1);
+      Set_Color(ConfirmWindow, Color_Pair'First);
       Refresh(ConfirmWindow);
    end ShowConfirm;
 
