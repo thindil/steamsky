@@ -517,7 +517,6 @@ package body Bases.UI.Shipyard is
       MenuOptions.Show_Descriptions := False;
       Set_Options(TradeMenu, MenuOptions);
       Set_Format(TradeMenu, Lines - 4, 1);
-      Set_Mark(TradeMenu, "");
       Scale(TradeMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 4, 2);
       Set_Window(TradeMenu, MenuWindow);
@@ -547,7 +546,6 @@ package body Bases.UI.Shipyard is
       Types_Items.all(Types_Items'Last - 1) := New_Item("Quit");
       Types_Items.all(Types_Items'Last) := Null_Item;
       TypesMenu := New_Menu(Types_Items);
-      Set_Mark(TypesMenu, "");
       Scale(TypesMenu, MenuHeight, MenuLength);
       MenuWindow2 :=
         Create

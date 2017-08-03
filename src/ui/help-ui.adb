@@ -47,7 +47,6 @@ package body Help.UI is
       Help_Items.all(Help_Items'Last) := Null_Item;
       HelpMenu := New_Menu(Help_Items);
       Set_Format(HelpMenu, Lines - 5, 1);
-      Set_Mark(HelpMenu, "");
       Scale(HelpMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 2, (Columns / 3));
       Set_Window(HelpMenu, MenuWindow);
