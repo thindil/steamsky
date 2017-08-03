@@ -18,6 +18,7 @@
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships.Cargo; use Ships.Cargo;
+with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Cargo is
 
@@ -33,6 +34,7 @@ package body Ships.UI.Cargo is
       CurrentLine: Line_Position := 1;
       WindowHeight: Line_Position := 8;
       FreeSpace: Integer;
+      WindowWidth: Column_Position;
    begin
       ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
@@ -47,12 +49,31 @@ package body Ships.UI.Cargo is
               (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex)
                  .Description) /
             (Natural(Columns / 2) - 4)));
-      BoxWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
-      Box(BoxWindow);
-      Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
-      Add(Win => BoxWindow, Str => "[Item info]");
+      WindowWidth :=
+        Column_Position
+          (Length
+             (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Description) +
+           5);
+      if WindowWidth <
+        Column_Position
+          (Positive'Image
+             (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Weight)'
+             Length +
+           5) then
+         WindowWidth :=
+           Column_Position
+             (Positive'Image
+                (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Weight)'
+                Length +
+              5);
+      end if;
+      if WindowWidth > (Columns / 2) then
+         WindowWidth := Columns / 2;
+      end if;
+      BoxWindow := Create(WindowHeight, WindowWidth, 3, (Columns / 2));
+      WindowFrame(BoxWindow, 2, "Item info");
       InfoWindow :=
-        Create(WindowHeight - 2, (Columns / 2) - 4, 4, (Columns / 2) + 2);
+        Create(WindowHeight - 2, WindowWidth - 4, 4, (Columns / 2) + 2);
       Add(Win => InfoWindow, Str => "Type: ");
       if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).ShowType =
         Null_Unbounded_String then
@@ -141,7 +162,6 @@ package body Ships.UI.Cargo is
       Cargo_Items.all(Cargo_Items'Last) := Null_Item;
       ShipsMenu := New_Menu(Cargo_Items);
       Set_Format(ShipsMenu, Lines - 10, 1);
-      Set_Mark(ShipsMenu, "");
       Scale(ShipsMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
       Set_Window(ShipsMenu, MenuWindow);
