@@ -308,6 +308,7 @@ package body Game is
          GenerateRecruits(BaseIndex);
          GenerateMissions(BaseIndex);
          GenerateCargo;
+         UpdatePrices(BaseIndex);
          UpdateOrders;
       end if;
       -- Update map cell

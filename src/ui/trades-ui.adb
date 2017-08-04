@@ -51,7 +51,7 @@ package body Trades.UI is
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       WindowHeight: Line_Position := 7;
-      MoneyIndex2, BaseItemIndex, CargoIndex: Natural := 0;
+      MoneyIndex2, BaseItemIndex, BaseItemIndex2, CargoIndex: Natural := 0;
       FreeSpace: Integer;
       PriceText: Unbounded_String;
    begin
@@ -115,7 +115,12 @@ package body Trades.UI is
       else
          PriceText := To_Unbounded_String("Base sell price:");
       end if;
-      Price := Items_List(ItemIndex).Prices(BaseType);
+      BaseItemIndex2 := FindBaseCargo(ItemIndex);
+      if BaseItemIndex2 = 0 then
+         Price := Items_List(ItemIndex).Prices(BaseType);
+      else
+         Price := SkyBases(BaseIndex).Cargo(BaseItemIndex2).Price;
+      end if;
       if EventIndex > 0 then
          if Events_List(EventIndex).EType = DoublePrice and
            Events_List(EventIndex).Data = ItemIndex then
@@ -321,11 +326,10 @@ package body Trades.UI is
 
    function ShowTradeForm return GameStates is
       Trade_Fields: constant Field_Array_Access := new Field_Array(1 .. 6);
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
-        Bases_Types'Pos
-          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-             .BaseType) +
-        1;
+        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       FieldOptions: Field_Option_Set;
       FormHeight: Line_Position;
       FormLength: Column_Position;
@@ -337,6 +341,7 @@ package body Trades.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       CaptionText: Unbounded_String;
       MoneyIndex2: constant Natural := FindCargo(FindProtoItem(MoneyIndex));
+      BaseItemIndex: Natural;
    begin
       for I in Items_List.Iterate loop
          if To_String(Items_List(I).Name) = Name(Current(TradeMenu)) then
@@ -344,7 +349,12 @@ package body Trades.UI is
             exit;
          end if;
       end loop;
-      Price := Items_List(ItemIndex).Prices(BaseType);
+      BaseItemIndex := FindBaseCargo(ItemIndex);
+      if BaseItemIndex = 0 then
+         Price := Items_List(ItemIndex).Prices(BaseType);
+      else
+         Price := SkyBases(BaseIndex).Cargo(BaseItemIndex).Price;
+      end if;
       if EventIndex > 0 then
          if Events_List(EventIndex).EType = DoublePrice and
            Events_List(EventIndex).Data = ItemIndex then

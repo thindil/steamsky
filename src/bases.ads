@@ -51,6 +51,7 @@ package Bases is
       ProtoIndex: Positive; -- Index of item prototype
       Amount: Natural; -- Amount of items
       Durability: Positive; -- Durability of items
+      Price: Natural; -- Current price of item
    end record;
    package BaseCargo_Container is new Vectors(Positive, Base_Cargo);
    type BaseRecord is -- Data structure for bases
@@ -101,5 +102,7 @@ package Bases is
       Durability: Natural :=
         101)
      return Natural; -- Find index of item in base cargo, return 0 if no item found
+   procedure UpdatePrices
+     (BaseIndex: Positive); -- Random changes of items prices in base
 
 end Bases;
