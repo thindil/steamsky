@@ -58,6 +58,7 @@ with Config; use Config;
 with Header; use Header;
 with Trades.UI; use Trades.UI;
 with DeathScreen; use DeathScreen;
+with Utils.UI; use Utils.UI;
 
 package body UserInterface is
 
@@ -403,7 +404,6 @@ package body UserInterface is
       Orders_Items.all(MenuIndex) := Null_Item;
       OrdersMenu := New_Menu(Orders_Items);
       Set_Format(OrdersMenu, Lines - 4, 1);
-      Set_Mark(OrdersMenu, "");
       Scale(OrdersMenu, MenuHeight, MenuLength);
       MenuWindow :=
         Create
@@ -411,7 +411,7 @@ package body UserInterface is
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Box(MenuWindow);
+      WindowFrame(MenuWindow, 5, "Orders");
       Set_Window(OrdersMenu, MenuWindow);
       Set_Sub_Window
         (OrdersMenu,
@@ -573,7 +573,6 @@ package body UserInterface is
       MenuIndex := MenuIndex + 1;
       Wait_Items.all(MenuIndex) := Null_Item;
       OrdersMenu := New_Menu(Wait_Items);
-      Set_Mark(OrdersMenu, "");
       Scale(OrdersMenu, MenuHeight, MenuLength);
       MenuWindow :=
         Create
@@ -581,7 +580,7 @@ package body UserInterface is
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Box(MenuWindow);
+      WindowFrame(MenuWindow, 5, "Wait orders");
       Set_Window(OrdersMenu, MenuWindow);
       Set_Sub_Window
         (OrdersMenu,
@@ -640,7 +639,6 @@ package body UserInterface is
          Null_Item);
       OrdersMenu := New_Menu(Menu_Items);
       Set_Format(OrdersMenu, Lines - 4, 1);
-      Set_Mark(OrdersMenu, "");
       Scale(OrdersMenu, MenuHeight, MenuLength);
       MenuWindow :=
         Create
@@ -648,7 +646,7 @@ package body UserInterface is
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      Box(MenuWindow);
+      WindowFrame(MenuWindow, 5, "Main menu");
       Set_Window(OrdersMenu, MenuWindow);
       Set_Sub_Window
         (OrdersMenu,
@@ -775,9 +773,13 @@ package body UserInterface is
       FieldOptions.Auto_Skip := False;
       FieldOptions.Null_Ok := False;
       Set_Options(Wait_Fields.all(2), FieldOptions);
+      Set_Foreground
+        (Wait_Fields.all(2),
+         (Bold_Character => True, others => False),
+         1);
       Set_Background
         (Wait_Fields.all(2),
-         (Reverse_Video => True, others => False));
+         (Under_Line => True, others => False));
       Set_Field_Type(Wait_Fields.all(2), (0, 1, 1024));
       Wait_Fields.all(3) := New_Field(1, 8, 2, 1, 0, 0);
       Set_Buffer(Wait_Fields.all(3), 0, "[Cancel]");
@@ -799,7 +801,7 @@ package body UserInterface is
            FormLength + 2,
            ((Lines / 3) - (FormHeight / 2)),
            ((Columns / 2) - (FormLength / 2)));
-      Box(MenuWindow);
+      WindowFrame(MenuWindow, 5, "Wait");
       Set_Window(WaitForm, MenuWindow);
       Set_Sub_Window
         (WaitForm,
