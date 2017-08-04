@@ -519,23 +519,40 @@ package body UserInterface.Keys is
             Result := Driver(WaitForm, F_Previous_Field);
             FieldIndex := Get_Index(Current(WaitForm));
             if FieldIndex = 2 then
+               Visibility := Normal;
                Result := Driver(WaitForm, F_End_Line);
             end if;
          when KEY_DOWN => -- Select next field
             Result := Driver(WaitForm, F_Next_Field);
             FieldIndex := Get_Index(Current(WaitForm));
             if FieldIndex = 2 then
+               Visibility := Normal;
                Result := Driver(WaitForm, F_End_Line);
             end if;
          when 10 => -- quit/move map
-            if FieldIndex = 4 then
-               UpdateGame(Integer'Value(Get_Buffer(Fields(WaitForm, 2))));
+            if FieldIndex = 2 then
+               if Get_Buffer(Fields(WaitForm, 2)) /= "     " then
+                  FieldIndex := 4;
+                  Result := Driver(WaitForm, F_Last_Field);
+               else
+                  Visibility := Normal;
+               end if;
+            elsif FieldIndex = 3 then
+               Set_Cursor_Visibility(Visibility);
+               Post(WaitForm, False);
+               Delete(WaitForm);
+               DrawGame(Sky_Map_View);
+               return Sky_Map_View;
+            elsif FieldIndex = 4 then
+               if Get_Buffer(Fields(WaitForm, 2)) /= "    " then
+                  UpdateGame(Integer'Value(Get_Buffer(Fields(WaitForm, 2))));
+               end if;
+               Set_Cursor_Visibility(Visibility);
+               Post(WaitForm, False);
+               Delete(WaitForm);
+               DrawGame(Sky_Map_View);
+               return Sky_Map_View;
             end if;
-            Set_Cursor_Visibility(Visibility);
-            Post(WaitForm, False);
-            Delete(WaitForm);
-            DrawGame(Sky_Map_View);
-            return Sky_Map_View;
          when Key_Backspace => -- delete last character
             if FieldIndex = 2 then
                Result := Driver(WaitForm, F_Delete_Previous);
@@ -552,15 +569,28 @@ package body UserInterface.Keys is
             if FieldIndex = 2 then
                Result := Driver(WaitForm, F_Left_Char);
             end if;
+         when 27 => -- Escape select cancel button
+            FieldIndex := 3;
+            Set_Current(WaitForm, Fields(WaitForm, 3));
+            Result := Form_Ok;
          when others =>
             Result := Driver(WaitForm, Key);
       end case;
       if Result = Form_Ok then
-         Set_Background(Fields(WaitForm, 2), (others => False));
+         Set_Cursor_Visibility(Visibility);
+         for I in 2 .. 4 loop
+            Set_Foreground(Fields(WaitForm, I));
+         end loop;
+         Set_Foreground
+           (Fields(WaitForm, FieldIndex),
+            (Bold_Character => True, others => False),
+            1);
          if FieldIndex = 2 then
             Set_Background
-              (Current(WaitForm),
-               (Reverse_Video => True, others => False));
+              (Fields(WaitForm, 2),
+               (Under_Line => True, others => False));
+         else
+            Set_Background(Fields(WaitForm, 2));
          end if;
          Refresh(MenuWindow);
       end if;
