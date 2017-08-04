@@ -241,6 +241,10 @@ package body Game.SaveLoad is
                   Put
                     (SaveGame,
                      To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  RawValue := To_Unbounded_String(Integer'Image(Item.Price));
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
                end loop;
             end if;
          end if;
@@ -619,8 +623,9 @@ package body Game.SaveLoad is
                   BaseCargo.Append
                   (New_Item =>
                      (ProtoIndex => FindProtoItem(ReadData),
-                      Amount => Positive'Value(To_String(ReadData)),
-                      Durability => Positive'Value(To_String(ReadData))));
+                      Amount => Natural'Value(To_String(ReadData)),
+                      Durability => Positive'Value(To_String(ReadData)),
+                      Price => Positive'Value(To_String(ReadData))));
                end loop;
                SkyBases(I).Cargo := BaseCargo;
                BaseCargo.Clear;
