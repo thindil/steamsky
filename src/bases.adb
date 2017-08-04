@@ -549,7 +549,8 @@ package body Bases is
          (New_Item =>
             (ProtoIndex => FindProtoItem(MoneyIndex),
              Amount => (GetRandom(50, 200) * SkyBases(BaseIndex).Population),
-             Durability => 100));
+             Durability => 100,
+             Price => 0));
          for I in Items_List.Iterate loop
             if Items_List(I).Buyable(BaseType) then
                SkyBases(BaseIndex).Cargo.Append
@@ -557,7 +558,8 @@ package body Bases is
                   (ProtoIndex => Objects_Container.To_Index(I),
                    Amount =>
                      (GetRandom(0, 100) * SkyBases(BaseIndex).Population),
-                   Durability => 100));
+                   Durability => 100,
+                   Price => Items_List(I).Prices(BaseType)));
             end if;
          end loop;
       else
@@ -600,7 +602,8 @@ package body Bases is
             (New_Item =>
                (ProtoIndex => ProtoIndex,
                 Amount => Amount,
-                Durability => Durability));
+                Durability => Durability,
+                Price => Items_List(ProtoIndex).Prices(BaseType)));
          else
             SkyBases(BaseIndex).Cargo(ItemIndex).Amount :=
               SkyBases(BaseIndex).Cargo(ItemIndex).Amount + Amount;
@@ -638,5 +641,36 @@ package body Bases is
       end loop;
       return 0;
    end FindBaseCargo;
+
+   procedure UpdatePrices(BaseIndex: Positive) is
+      Chance, Roll: Positive;
+   begin
+      if SkyBases(BaseIndex).Owner = Abandoned then
+         return;
+      end if;
+      if SkyBases(BaseIndex).Population < 150 then
+         Chance := 1;
+      elsif SkyBases(BaseIndex).Population > 149 and
+        SkyBases(BaseIndex).Population < 300 then
+         Chance := 2;
+      else
+         Chance := 5;
+      end if;
+      Chance := Chance + (DaysDifference(SkyBases(BaseIndex).Visited) / 10);
+      if GetRandom(1, 100) > Chance then
+         return;
+      end if;
+      for Item of SkyBases(BaseIndex).Cargo loop
+         Roll := GetRandom(1, 100);
+         if Roll < 30 then
+            Item.Price := Item.Price - 1;
+            if Item.Price = 0 then
+               Item.Price := 1;
+            end if;
+         elsif Roll < 60 then
+            Item.Price := Item.Price + 1;
+         end if;
+      end loop;
+   end UpdatePrices;
 
 end Bases;

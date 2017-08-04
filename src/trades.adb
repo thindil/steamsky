@@ -52,7 +52,7 @@ package body Trades is
          raise Trade_Buying_Too_Much with ItemName;
       end if;
       TraderIndex := FindMember(Talk);
-      Price := Items_List(ItemIndex).Prices(BaseType);
+      Price := SkyBases(BaseIndex).Cargo(BaseItemIndex).Price;
       if EventIndex > 0 then
          if Events_List(EventIndex).EType = DoublePrice and
            Events_List(EventIndex).Data = ItemIndex then
@@ -118,13 +118,18 @@ package body Trades is
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       MoneyIndex2: constant Positive := FindProtoItem(MoneyIndex);
+      BaseItemIndex: constant Natural := FindBaseCargo(ProtoIndex);
    begin
       SellAmount := Positive'Value(Amount);
       if PlayerShip.Cargo(ItemIndex).Amount < SellAmount then
          raise Trade_Too_Much_For_Sale with ItemName;
       end if;
       TraderIndex := FindMember(Talk);
-      Price := Items_List(ProtoIndex).Prices(BaseType);
+      if BaseItemIndex = 0 then
+         Price := Items_List(ProtoIndex).Prices(BaseType);
+      else
+         Price := SkyBases(BaseIndex).Cargo(BaseItemIndex).Price;
+      end if;
       if EventIndex > 0 then
          if Events_List(EventIndex).EType = DoublePrice and
            Events_List(EventIndex).Data = ProtoIndex then
