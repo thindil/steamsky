@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New goals: craft 1500 items, craft 2000 items, craft 2500 items, craft 3000
   items, craft 3500 items, craft 4000 items, craft 5000 items, craft 7500
-  items, craft 10000 items, finish 250 missions and finish 500 missions
+  items, craft 10000 items, finish 250 missions, finish 500 missions and
+  finsish 1000 missions
 - Ability to loot abandoned bases
 - Remove items from abandoned bases over time
 - Death screen
