@@ -826,6 +826,8 @@ package body MainMenu is
          when 49 | Key_End => -- Scroll license to end
             StartIndex := EndIndex;
          when others => -- Back to main menu
+            StartIndex := 0;
+            Delete(LicensePad);
             Erase;
             Refresh;
             ShowMainMenu;
@@ -857,6 +859,8 @@ package body MainMenu is
          when 49 | Key_End => -- Scroll news to end
             StartIndex := EndIndex;
          when others => -- Back to main menu
+            StartIndex := 0;
+            Delete(NewsPad);
             Erase;
             Refresh;
             ShowMainMenu;
@@ -880,6 +884,7 @@ package body MainMenu is
          when 50 | KEY_DOWN => -- Scroll hall of fame down one line
             StartIndex := StartIndex + 1;
          when others => -- Back to main menu
+            StartIndex := 0;
             Delete(HallOfFamePad);
             Erase;
             Refresh;
