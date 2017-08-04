@@ -104,6 +104,7 @@ begin
    Init_Pair(8, COLOR_WHITE, COLOR_RED);
    Init_Pair(9, COLOR_WHITE, COLOR_YELLOW);
    Init_Pair(10, COLOR_BLACK, COLOR_WHITE);
+   Init_Pair(11, COLOR_YELLOW, COLOR_BLUE);
    Set_KeyPad_Mode(SwitchOn => True);
 
    if Columns < 60 or Lines < 24 then
@@ -113,8 +114,7 @@ begin
    end if;
 
    -- Set default attributes for menus
-   Set_Foreground(Null_Menu, (Bold_Character => True, others => False), 1);
-   Set_Background(Null_Menu, (Dim_Character => True, others => False));
+   Set_Foreground(Null_Menu, (Bold_Character => True, others => False), 11);
    Set_Mark(Null_Menu, "");
 
    -- Command line arguments
