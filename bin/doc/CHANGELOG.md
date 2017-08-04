@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Ability to loot abandoned bases
 - Remove items from abandoned bases over time
 - Death screen
+- Random prices changes in bases
 
 ### Changed
 - Updated interface
