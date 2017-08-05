@@ -19,6 +19,9 @@ with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 
 package Utils.UI is
 
+   BoldCharacters: constant Character_Attribute_Set :=
+     (Bold_Character => True, others => False);
+
    procedure WindowFrame
      (Win: Window;
       Color: Color_Pair;
