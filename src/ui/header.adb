@@ -92,9 +92,7 @@ package body Header is
             Add(Str => "Recruit new crew members [Quit]");
             Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
          when Bases_List =>
-            Add(Str => "List of know bases [Quit] [F1 Help]");
-            Change_Attributes(Line => 0, Column => 20, Count => 1, Color => 1);
-            Change_Attributes(Line => 0, Column => 27, Count => 2, Color => 1);
+            Add(Str => "List of know bases");
          when Events_View =>
             Add(Str => "List of know events [Quit]");
             Change_Attributes(Line => 0, Column => 21, Count => 1, Color => 1);

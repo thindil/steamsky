@@ -240,23 +240,49 @@ package body BasesList is
          Move_Cursor(Line => 18, Column => (Columns / 2));
          Clear_To_End_Of_Line;
       end if;
-      OptionsWindow := Create(4, (Columns / 2), CurrentLine, (Columns / 2));
+      OptionsWindow := Create(5, (Columns / 2), CurrentLine, (Columns / 2));
       Add(Win => OptionsWindow, Str => "Press F5 to show base on map");
       Change_Attributes
         (Win => OptionsWindow,
          Line => 0,
          Column => 6,
          Count => 2,
+         Attr => BoldCharacters,
          Color => 1);
       Move_Cursor(Win => OptionsWindow, Line => 1, Column => 0);
       Add
         (Win => OptionsWindow,
          Str => "Press ENTER to set base as a destination for ship");
+      Get_Cursor_Position
+        (Win => OptionsWindow,
+         Line => CurrentLine,
+         Column => NewWindowWidth);
       Change_Attributes
         (Win => OptionsWindow,
          Line => 1,
          Column => 6,
          Count => 5,
+         Attr => BoldCharacters,
+         Color => 1);
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => OptionsWindow, Line => CurrentLine, Column => 0);
+      Add(Win => OptionsWindow, Str => "Press ESCAPE to back to sky map");
+      Change_Attributes
+        (Win => OptionsWindow,
+         Line => CurrentLine,
+         Column => 6,
+         Count => 6,
+         Attr => BoldCharacters,
+         Color => 1);
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => OptionsWindow, Line => CurrentLine, Column => 0);
+      Add(Win => OptionsWindow, Str => "Press F1 for help");
+      Change_Attributes
+        (Win => OptionsWindow,
+         Line => CurrentLine,
+         Column => 6,
+         Count => 2,
+         Attr => BoldCharacters,
          Color => 1);
       Refresh_Without_Update;
       Refresh_Without_Update(InfoWindow);
@@ -366,7 +392,12 @@ package body BasesList is
            To_Lower
              (Bases_Types'Image(BasesType)
                 (2 .. Bases_Types'Image(BasesType)'Last)));
-      Change_Attributes(Line => 2, Column => 5, Count => 2, Color => 1);
+      Change_Attributes
+        (Line => 2,
+         Column => 5,
+         Count => 2,
+         Attr => BoldCharacters,
+         Color => 1);
       Move_Cursor(Line => 2, Column => 30);
       Add(Str => "F3 Status: ");
       case BasesStatus is
@@ -379,7 +410,12 @@ package body BasesList is
          when others =>
             null;
       end case;
-      Change_Attributes(Line => 2, Column => 30, Count => 2, Color => 1);
+      Change_Attributes
+        (Line => 2,
+         Column => 30,
+         Count => 2,
+         Attr => BoldCharacters,
+         Color => 1);
       Move_Cursor(Line => 2, Column => 60);
       Add
         (Str =>
@@ -388,7 +424,12 @@ package body BasesList is
            To_Lower
              (Bases_Owners'Image(BasesOwner)
                 (2 .. Bases_Owners'Image(BasesOwner)'Last)));
-      Change_Attributes(Line => 2, Column => 60, Count => 2, Color => 1);
+      Change_Attributes
+        (Line => 2,
+         Column => 60,
+         Count => 2,
+         Attr => BoldCharacters,
+         Color => 1);
       if Bases_Items.all(1) /= Null_Item then
          BasesMenu := New_Menu(Bases_Items);
          Set_Options(BasesMenu, (Show_Descriptions => False, others => True));
@@ -452,7 +493,7 @@ package body BasesList is
          when others =>
             null;
       end case;
-      Options_Items.all(MenuIndex) := New_Item("Quit");
+      Options_Items.all(MenuIndex) := New_Item("Close");
       MenuIndex := MenuIndex + 1;
       Options_Items.all(MenuIndex) := Null_Item;
       OptionsMenu := New_Menu(Options_Items);
@@ -483,7 +524,7 @@ package body BasesList is
       if BasesMenu /= Null_Menu then
          BaseIndex := Positive'Value(Description(Current(BasesMenu)));
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                CurrentMenuIndex := 1;
                BasesStatus := 1;
                BasesType := Any;
@@ -559,7 +600,7 @@ package body BasesList is
          CurrentMenuIndex := Get_Index(Current(BasesMenu));
       else
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                CurrentMenuIndex := 1;
                BasesType := Any;
                BasesStatus := 1;
@@ -600,7 +641,7 @@ package body BasesList is
                Result := Driver(OptionsMenu, M_First_Item);
             end if;
          when 10 => -- Select option from menu
-            if Name(Current(OptionsMenu)) = "Quit" then
+            if Name(Current(OptionsMenu)) = "Close" then
                DrawGame(Bases_List);
                return Bases_List;
             end if;
@@ -616,6 +657,13 @@ package body BasesList is
             CurrentMenuIndex := 1;
             DrawGame(Bases_List);
             return Bases_List;
+         when 27 => -- Esc select close option, used second time, close menu
+            if Name(Current(OptionsMenu)) = "Close" then
+               DrawGame(Bases_List);
+               return Bases_List;
+            else
+               Result := Driver(OptionsMenu, M_Last_Item);
+            end if;
          when others =>
             Result := Driver(OptionsMenu, Key);
             if Result = Menu_Ok then
