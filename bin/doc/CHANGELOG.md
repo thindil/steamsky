@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Trading with bases when money item was changed in game settings
 - Gaining loot when money index is different than default
 - Crash on viewing Hall of Fame
+- Crash during buying items in bases
 
 ## [1.4] - 2017-07-23
 
