@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 - Auto finish missions now finish all which are ready
+- Updated help
 
 ### Fixed
 - Redrawing screens after resize terminal
