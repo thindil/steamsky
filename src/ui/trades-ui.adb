@@ -342,6 +342,7 @@ package body Trades.UI is
       CaptionText: Unbounded_String;
       MoneyIndex2: constant Natural := FindCargo(FindProtoItem(MoneyIndex));
       BaseItemIndex: Natural;
+      CargoIndex: Integer;
    begin
       for I in Items_List.Iterate loop
          if To_String(Items_List(I).Name) = Name(Current(TradeMenu)) then
@@ -385,7 +386,8 @@ package body Trades.UI is
          CaptionText := To_Unbounded_String("Buying ");
          Append(CaptionText, Items_List(ItemIndex).Name);
       else
-         if Description(Current(TradeMenu)) = "0" then
+         CargoIndex := Integer'Value(Description(Current(TradeMenu))); 
+         if CargoIndex < 1 then
             ShowDialog
               ("You don't have any " &
                To_String(Items_List(ItemIndex).Name) &
@@ -393,9 +395,7 @@ package body Trades.UI is
             DrawGame(Trade_View);
             return Trade_View;
          end if;
-         MaxAmount :=
-           PlayerShip.Cargo(Integer'Value(Description(Current(TradeMenu))))
-             .Amount;
+         MaxAmount := PlayerShip.Cargo(CargoIndex).Amount;
          Append(FieldText, " to sell");
          CaptionText := To_Unbounded_String("Selling ");
          Append(CaptionText, Items_List(ItemIndex).Name);
