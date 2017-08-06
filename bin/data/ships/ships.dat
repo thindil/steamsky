@@ -985,4 +985,14 @@ Skills = 1x50..70, 5x8..20; 3x40..60, 5x8..20; 3x40..60, 5x8..20; 3x40..60, 5x8.
 Orders = Pilot, Gunner, Gunner, Gunner, Gunner
 Description = Advanced and upgraded version of huge, good armored, inquisition flying vessel.
 Owner = Inquisition
+[96]
+Name = Tiny poleis trader
+Modules = 1, 3, 4, 4, 5, 7, 7, 8, 11
+CombatAI = Coward
+Loot = 10..100
+Cargo = 800..1000x1, 80..100x2, 150..200x3, 100..200x14
+Skills = 1x1, 5x1; 3x1, 5x1
+Orders = Pilot, Gunner
+Description = Smallest known poleis trader. Avoids any fights.
+Owner = Poleis
 []
