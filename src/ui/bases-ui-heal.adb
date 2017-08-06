@@ -135,6 +135,15 @@ package body Bases.UI.Heal is
         (Line => 8,
          Column => (Columns / 2) + 6,
          Count => 5,
+         Attr => BoldCharacters,
+         Color => 1);
+      Move_Cursor(Line => 9, Column => (Columns / 2));
+      Add(Str => "Press Escape to back to sky map");
+      Change_Attributes
+        (Line => 9,
+         Column => (Columns / 2) + 6,
+         Count => 6,
+         Attr => BoldCharacters,
          Color => 1);
       ShowHealInfo;
    end ShowHeal;
@@ -145,7 +154,7 @@ package body Bases.UI.Heal is
    begin
       if TradeMenu /= Null_Menu then
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                CurrentMenuIndex := 1;
                if TradeMenu /= Null_Menu then
                   Post(TradeMenu, False);
@@ -158,37 +167,30 @@ package body Bases.UI.Heal is
                if Result = Request_Denied then
                   Result := Driver(TradeMenu, M_Last_Item);
                end if;
-               if Result = Menu_Ok then
-                  ShowHealInfo;
-               end if;
             when 50 | KEY_DOWN => -- Select next wounded crew member
                Result := Driver(TradeMenu, M_Down_Item);
                if Result = Request_Denied then
                   Result := Driver(TradeMenu, M_First_Item);
                end if;
-               if Result = Menu_Ok then
-                  ShowHealInfo;
-               end if;
             when 10 => -- Heal wounded crew member(s)
                MemberIndex := Natural'Value(Description(Current(TradeMenu)));
                HealWounded(MemberIndex);
                DrawGame(Heal_View);
+               return Heal_View;
             when others =>
                Result := Driver(TradeMenu, Key);
-               if Result = Menu_Ok then
-                  ShowHealInfo;
-               else
+               if Result /= Menu_Ok then
                   Result := Driver(TradeMenu, M_Clear_Pattern);
                   Result := Driver(TradeMenu, Key);
-                  if Result = Menu_Ok then
-                     ShowHealInfo;
-                  end if;
                end if;
          end case;
+         if Result = Menu_Ok then
+            ShowHealInfo;
+         end if;
          CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
       else
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             when others =>
