@@ -64,6 +64,7 @@ with GameOptions; use GameOptions;
 with Goals.UI; use Goals.UI;
 with HallOfFame; use HallOfFame;
 with Trades.UI; use Trades.UI;
+with Utils.UI; use Utils.UI;
 
 procedure SteamSky is
    GameState, OldState: GameStates := Main_Menu;
@@ -114,7 +115,7 @@ begin
    end if;
 
    -- Set default attributes for menus
-   Set_Foreground(Null_Menu, (Bold_Character => True, others => False), 11);
+   Set_Foreground(Null_Menu, BoldCharacters, 11);
    Set_Mark(Null_Menu, "");
 
    -- Command line arguments
