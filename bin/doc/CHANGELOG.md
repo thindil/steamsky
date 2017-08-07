@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
 - Remove items from abandoned bases over time
 - Death screen
 - Random prices changes in bases
-- New friendly ship: tiny poleis trader
+- New friendly ships: tiny poleis trader and tiny independent trader
 
 ### Changed
 - Updated interface
