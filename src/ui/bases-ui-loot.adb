@@ -153,19 +153,22 @@ package body Bases.UI.Loot is
                  (Line => CurrentLine,
                   Column => (Columns / 2) + 6,
                   Count => 5,
-                  Color => 1);
+                  Color => 1,
+                  Attr => BoldCharacters);
                Change_Attributes
                  (Line => CurrentLine,
                   Column => (Columns / 2) + 21,
                   Count => 5,
-                  Color => 1);
+                  Color => 1,
+                  Attr => BoldCharacters);
             else
                Add(Str => "Press SPACE for drop.");
                Change_Attributes
                  (Line => CurrentLine,
                   Column => (Columns / 2) + 6,
                   Count => 5,
-                  Color => 1);
+                  Color => 1,
+                  Attr => BoldCharacters);
             end if;
          else
             Add(Str => "Press SPACE for drop.");
@@ -173,7 +176,8 @@ package body Bases.UI.Loot is
               (Line => CurrentLine,
                Column => (Columns / 2) + 6,
                Count => 5,
-               Color => 1);
+               Color => 1,
+               Attr => BoldCharacters);
          end if;
       elsif BaseItemIndex > 0 then
          if SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount > 0 then
@@ -182,7 +186,8 @@ package body Bases.UI.Loot is
               (Line => CurrentLine,
                Column => (Columns / 2) + 6,
                Count => 5,
-               Color => 1);
+               Color => 1,
+               Attr => BoldCharacters);
          end if;
       end if;
       CurrentLine := CurrentLine + 1;
@@ -192,6 +197,15 @@ package body Bases.UI.Loot is
          FreeSpace := 0;
       end if;
       Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      Add(Str => "Press ESCAPE to back to sky map");
+      Change_Attributes
+        (Line => CurrentLine,
+         Column => (Columns / 2) + 6,
+         Count => 6,
+         Color => 1,
+         Attr => BoldCharacters);
       Refresh_Without_Update;
       Refresh_Without_Update(BoxWindow);
       Delete(BoxWindow);
@@ -320,13 +334,8 @@ package body Bases.UI.Loot is
          FieldOptions := Get_Options(Loot_Fields.all(2));
          FieldOptions.Auto_Skip := False;
          Set_Options(Loot_Fields.all(2), FieldOptions);
-         Set_Foreground
-           (Loot_Fields.all(2),
-            (Bold_Character => True, others => False),
-            1);
-         Set_Background
-           (Loot_Fields.all(2),
-            (Under_Line => True, others => False));
+         Set_Foreground(Loot_Fields.all(2), BoldCharacters, 11);
+         Set_Background(Fld => Loot_Fields.all(2), Color => 11);
          Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type
            (Loot_Fields.all(2),
             (0, 0, MaxAmount));
@@ -351,7 +360,7 @@ package body Bases.UI.Loot is
          Loot_Fields.all(5) :=
            New_Field
              (1,
-              11,
+              10,
               2,
               (Column_Position(Length(FieldText)) / 2) + 16,
               0,
@@ -410,6 +419,10 @@ package body Bases.UI.Loot is
               FindBaseCargo
                 (ItemIndex,
                  PlayerShip.Cargo(CargoIndex).Durability);
+            if BaseItemIndex = 0 then
+               BaseItemIndex :=
+                 FindBaseCargo(PlayerShip.Cargo(CargoIndex).ProtoIndex);
+            end if;
          else
             BaseItemIndex :=
               Integer'Value(Description(Current(TradeMenu))) * (-1);
@@ -418,6 +431,11 @@ package body Bases.UI.Loot is
                 (ProtoIndex => ItemIndex,
                  Durability =>
                    SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
+            if CargoIndex = 0 then
+               CargoIndex :=
+                 FindCargo
+                   (SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex);
+            end if;
          end if;
          if FieldIndex = 4 then
             Amount := Positive'Value(Get_Buffer(Fields(LootForm, 2)));
@@ -489,7 +507,7 @@ package body Bases.UI.Loot is
       Result: Menus.Driver_Result;
    begin
       case Key is
-         when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+         when 27 => -- Back to sky map
             CurrentMenuIndex := 1;
             DrawGame(Sky_Map_View);
             return Sky_Map_View;
@@ -527,7 +545,6 @@ package body Bases.UI.Loot is
       Result: Forms.Driver_Result;
       FieldIndex: Positive := Get_Index(Current(LootForm));
       Visibility: Cursor_Visibility := Invisible;
-      MaxIndex: Positive;
    begin
       case Key is
          when KEY_UP => -- Select previous field
@@ -580,7 +597,10 @@ package body Bases.UI.Loot is
             if FieldIndex = 2 then
                Result := Driver(LootForm, F_Left_Char);
             end if;
-         when 27 => -- Escape select cancel button
+         when 27 => -- Escape select cancel button or close form
+            if FieldIndex = 3 then
+               return LootResult;
+            end if;
             FieldIndex := 3;
             Set_Current(LootForm, Fields(LootForm, 3));
             Result := Form_Ok;
@@ -588,27 +608,17 @@ package body Bases.UI.Loot is
             Result := Driver(LootForm, Key);
       end case;
       if Result = Form_Ok then
-         MaxIndex := 5;
-         if FieldIndex = 2 then
-            Set_Background
-              (Current(LootForm),
-               (Under_Line => True, others => False));
-            Visibility := Normal;
-            for I in 3 .. MaxIndex loop
+         for I in 2 .. 5 loop
+            if I /= FieldIndex then
                Set_Foreground(Fields(LootForm, I));
-            end loop;
-         else
-            Set_Background(Fields(LootForm, 2));
-            for I in 2 .. MaxIndex loop
-               if I /= FieldIndex then
-                  Set_Foreground(Fields(LootForm, I));
-               end if;
-            end loop;
+               Set_Background(Fields(LootForm, I));
+            end if;
+         end loop;
+         if FieldIndex = 2 then
+            Visibility := Normal;
          end if;
-         Set_Foreground
-           (Current(LootForm),
-            (Bold_Character => True, others => False),
-            1);
+         Set_Foreground(Current(LootForm), BoldCharacters, 11);
+         Set_Background(Fld => Current(LootForm), Color => 11);
          Set_Cursor_Visibility(Visibility);
          Refresh(FormWindow);
       end if;
