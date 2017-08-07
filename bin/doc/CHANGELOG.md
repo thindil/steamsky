@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
 - Ability to loot abandoned bases
 - Remove items from abandoned bases over time
 - Death screen
-- Random prices changes in bases
+- Random prices changes in bases which made saves from previous version 
+  incompatible
 - New friendly ships: tiny poleis trader and tiny independent trader
 
 ### Changed
