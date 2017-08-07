@@ -429,7 +429,9 @@ exception
    when An_Exception : others =>
       if GameState /= Main_Menu and
         GameState /= New_Game and
-        GameState /= Quit and
+        GameState /= License_Info and
+        GameState /= License_Full and
+        GameState /= News_View and
         GameState /= Hall_Of_Fame then
          SaveGame;
       end if;
