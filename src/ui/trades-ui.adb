@@ -386,7 +386,7 @@ package body Trades.UI is
          CaptionText := To_Unbounded_String("Buying ");
          Append(CaptionText, Items_List(ItemIndex).Name);
       else
-         CargoIndex := Integer'Value(Description(Current(TradeMenu))); 
+         CargoIndex := Integer'Value(Description(Current(TradeMenu)));
          if CargoIndex < 1 then
             ShowDialog
               ("You don't have any " &
@@ -505,6 +505,10 @@ package body Trades.UI is
               FindBaseCargo
                 (PlayerShip.Cargo(CargoIndex).ProtoIndex,
                  PlayerShip.Cargo(CargoIndex).Durability);
+            if BaseItemIndex = 0 then
+               BaseItemIndex :=
+                 FindBaseCargo(PlayerShip.Cargo(CargoIndex).ProtoIndex);
+            end if;
          else
             BaseItemIndex :=
               Integer'Value(Description(Current(TradeMenu))) * (-1);
@@ -514,6 +518,11 @@ package body Trades.UI is
                    SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex,
                  Durability =>
                    SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
+            if CargoIndex = 0 then
+               CargoIndex :=
+                 FindCargo
+                   (SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex);
+            end if;
          end if;
          if not Buy then
             if FieldIndex = 4 then
