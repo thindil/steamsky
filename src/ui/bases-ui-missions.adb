@@ -55,7 +55,7 @@ package body Bases.UI.Missions is
       Mission: constant Mission_Data :=
         SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Missions
           (Get_Index(Current(TradeMenu)));
-      InfoWindow, ClearWindow: Window;
+      InfoWindow, ClearWindow, ActionsWindow: Window;
       CurrentLine: Line_Position := 1;
       MinutesDiff: Natural;
       MissionTime: Date_Record :=
@@ -65,7 +65,7 @@ package body Bases.UI.Missions is
       CabinColor: Color_Pair := 3;
       InfoWindowWidth, NewWindowWidth: Column_Position := 1;
    begin
-      ClearWindow := Create(14, (Columns / 2), 3, (Columns / 2));
+      ClearWindow := Create(Lines - 4, (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
       case Mission.MType is
@@ -260,24 +260,45 @@ package body Bases.UI.Missions is
       end if;
       Resize(InfoWindow, WindowHeight, InfoWindowWidth + 1);
       WindowFrame(InfoWindow, 2, "Mission info");
-      CurrentLine := WindowHeight + 3;
-      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      ActionsWindow :=
+        Create(4, (Columns / 2), WindowHeight + 3, (Columns / 2));
       Add
-        (Str =>
+        (Win => ActionsWindow,
+         Str =>
            "You can take" &
            Natural'Image(CountMissionsLimit) &
            " more missions in this base.");
+      Get_Cursor_Position
+        (Win => ActionsWindow,
+         Line => CurrentLine,
+         Column => NewWindowWidth);
       CurrentLine := CurrentLine + 1;
-      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
-      Add(Str => "ENTER to accept selected mission.");
+      Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
+      Add
+        (Win => ActionsWindow,
+         Str => "Press ENTER to accept selected mission.");
       Change_Attributes
-        (Line => CurrentLine,
-         Column => (Columns / 2),
+        (Win => ActionsWindow,
+         Line => CurrentLine,
+         Column => 6,
          Count => 5,
-         Color => 1);
+         Color => 1,
+         Attr => BoldCharacters);
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
+      Add(Win => ActionsWindow, Str => "Press ESCAPE to back to sky map.");
+      Change_Attributes
+        (Win => ActionsWindow,
+         Line => CurrentLine,
+         Column => 6,
+         Count => 6,
+         Color => 1,
+         Attr => BoldCharacters);
       Refresh_Without_Update;
       Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
+      Refresh_Without_Update(ActionsWindow);
+      Delete(ActionsWindow);
       Refresh_Without_Update(MenuWindow);
       Update_Screen;
    end ShowMissionInfo;
@@ -296,8 +317,16 @@ package body Bases.UI.Missions is
             Post(TradeMenu, False);
             Delete(TradeMenu);
          end if;
-         Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
-         Add(Str => "No available missions in this base.");
+         Move_Cursor(Line => (Lines / 3), Column => (Columns / 5));
+         Add
+           (Str =>
+              "No available missions in this base. Press Escape to back to sky map.");
+         Change_Attributes
+           (Line => (Lines / 3),
+            Column => (Columns / 5) + 44,
+            Count => 6,
+            Color => 1,
+            Attr => BoldCharacters);
          Refresh;
          return;
       end if;
@@ -306,8 +335,16 @@ package body Bases.UI.Missions is
             Post(TradeMenu, False);
             Delete(TradeMenu);
          end if;
-         Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
-         Add(Str => "You can't take any more missions from this base.");
+         Move_Cursor(Line => (Lines / 3), Column => (Columns / 5));
+         Add
+           (Str =>
+              "You can't take any more missions from this base. Press Escape to back to sky map.");
+         Change_Attributes
+           (Line => (Lines / 3),
+            Column => (Columns / 5) + 55,
+            Count => 6,
+            Color => 1,
+            Attr => BoldCharacters);
          Refresh;
          return;
       end if;
@@ -346,7 +383,7 @@ package body Bases.UI.Missions is
    begin
       if TradeMenu /= Null_Menu then
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                if TradeMenu /= Null_Menu then
                   Post(TradeMenu, False);
                   Delete(TradeMenu);
@@ -378,7 +415,7 @@ package body Bases.UI.Missions is
          end if;
       else
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             when others =>
