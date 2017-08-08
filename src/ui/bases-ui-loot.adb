@@ -501,6 +501,18 @@ package body Bases.UI.Loot is
       Delete(LootForm);
       DrawGame(Loot_View);
       return Loot_View;
+   exception
+      when Constraint_Error =>
+         if Take then
+            ShowDialog("You must enter proper amount of items to take");
+         else
+            ShowDialog("You must enter proper amount of items to drop");
+         end if;
+         Set_Cursor_Visibility(Visibility);
+         Post(LootForm, False);
+         Delete(LootForm);
+         DrawGame(Loot_View);
+         return Loot_View;
    end LootResult;
 
    function LootKeys(Key: Key_Code) return GameStates is
