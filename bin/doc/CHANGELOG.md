@@ -7,8 +7,8 @@ All notable changes to this project will be documented in this file.
 - New goals: craft 1500 items, craft 2000 items, craft 2500 items, craft 3000
   items, craft 3500 items, craft 4000 items, craft 5000 items, craft 7500
   items, craft 10000 items, finish 250 missions, finish 500 missions, finish
-  1000 missions, finish 1500 missions, finish 2000 missions and finish 2500
-  missions
+  1000 missions, finish 1500 missions, finish 2000 missions, finish 2500
+  missions and gain max reputation in 1 poleis base
 - Ability to loot abandoned bases
 - Remove items from abandoned bases over time
 - Death screen
