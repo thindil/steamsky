@@ -105,8 +105,7 @@ package body Header is
             Add(Str => "Buy crafting recipes [Quit]");
             Change_Attributes(Line => 0, Column => 22, Count => 1, Color => 1);
          when BaseMissions_View =>
-            Add(Str => "Available missions [Quit]");
-            Change_Attributes(Line => 0, Column => 20, Count => 1, Color => 1);
+            Add(Str => "Available missions");
          when Missions_View =>
             Add(Str => "Accepted missions [Quit]");
             Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
