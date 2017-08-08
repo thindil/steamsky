@@ -142,4 +142,8 @@ Amount = 2000
 [48]
 Type = Mission
 Amount = 2500
+[49]
+Type = Reputation
+Amount = 1
+Target = Poleis
 []
