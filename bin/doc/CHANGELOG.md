@@ -14,7 +14,8 @@ All notable changes to this project will be documented in this file.
 - Death screen
 - Random prices changes in bases which made saves from previous version 
   incompatible
-- New friendly ships: tiny poleis trader and tiny independent trader
+- New friendly ships: tiny poleis trader, tiny independent trader and small
+  poleis trader
 
 ### Changed
 - Updated interface
