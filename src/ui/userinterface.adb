@@ -405,6 +405,9 @@ package body UserInterface is
       OrdersMenu := New_Menu(Orders_Items);
       Set_Format(OrdersMenu, Lines - 4, 1);
       Scale(OrdersMenu, MenuHeight, MenuLength);
+      if MenuLength < 10 then
+         MenuLength := 10;
+      end if;
       MenuWindow :=
         Create
           (MenuHeight + 2,
