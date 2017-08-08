@@ -102,6 +102,7 @@ package body Goals is
       Text: Unbounded_String;
       ItemIndex: Positive;
       Goal: Goal_Data;
+      InsertPosition: Positive;
    begin
       if Index > 0 then
          Goal := Goals_List(Index);
@@ -148,7 +149,11 @@ package body Goals is
       if Goal.TargetIndex /= Null_Unbounded_String then
          case Goal.GType is
             when REPUTATION | VISIT =>
-               Append(Text, " of " & To_String(Goal.TargetIndex));
+               InsertPosition := Length(Text) - 3;
+               if Goal.Amount > 1 then
+                  InsertPosition := InsertPosition - 1;
+               end if;
+               Insert(Text, InsertPosition, To_String(Goal.TargetIndex) & " ");
             when DESTROY =>
                for I in ProtoShips_List.Iterate loop
                   if ProtoShips_List(I).Index = Goal.TargetIndex then
