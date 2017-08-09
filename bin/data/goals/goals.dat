@@ -146,4 +146,8 @@ Amount = 2500
 Type = Reputation
 Amount = 1
 Target = Poleis
+[50]
+Type = Reputation
+Amount = 3
+Target = Poleis
 []
