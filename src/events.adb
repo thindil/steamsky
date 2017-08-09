@@ -34,8 +34,14 @@ package body Events is
    function CheckForEvent(OldState: GameStates) return GameStates is
       TimePassed: Integer;
       CrewIndex, PlayerValue: Natural := 0;
-      Roll, Roll2, ItemIndex, EnemyIndex, EngineIndex, Injuries: Positive;
-      Enemies, Engines: Positive_Container.Vector;
+      Roll,
+      Roll2,
+      ItemIndex,
+      EnemyIndex,
+      EngineIndex,
+      Injuries,
+      TraderIndex: Positive;
+      Enemies, Engines, Traders: Positive_Container.Vector;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       procedure GenerateEnemies(Owner: Bases_Owners := Any) is
@@ -164,6 +170,25 @@ package body Events is
                         CountFuelNeeded);
                      UpdateGame(TimePassed);
                   end if;
+               when 21 .. 30 => -- Friendly trader
+                  TraderIndex := ProtoShips_List.First_Index;
+                  for Ship of ProtoShips_List loop
+                     if Index(Ship.Name, "trader") > 0 then
+                        Traders.Append(New_Item => TraderIndex);
+                     end if;
+                     TraderIndex := TraderIndex + 1;
+                  end loop;
+                  Events_List.Append
+                  (New_Item =>
+                     (Trader,
+                      PlayerShip.SkyX,
+                      PlayerShip.SkyY,
+                      GetRandom(30, 45),
+                      Traders
+                        (GetRandom(Traders.First_Index, Traders.Last_Index))));
+                  SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
+                    Events_List.Last_Index;
+                  AddMessage("You meet friendly trader.", OtherMessage);
                when others => -- Combat
                   GenerateEnemies;
                   Events_List.Append
