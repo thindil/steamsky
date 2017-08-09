@@ -302,9 +302,14 @@ package body Bases is
    end AskForBases;
 
    procedure AskForEvents is
-      BaseIndex: constant Positive :=
+      BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MaxEvents, EventsAmount, TmpBaseIndex, TraderIndex, ItemIndex: Positive;
+      MaxEvents,
+      EventsAmount,
+      TmpBaseIndex,
+      ItemIndex,
+      ShipIndex,
+      TraderIndex: Positive;
       Event: Events_Types;
       EventX, EventY, EventTime, DiffX, DiffY: Positive;
       MinX, MinY, MaxX, MaxY: Integer;
@@ -313,13 +318,41 @@ package body Bases is
       Attempts: Natural;
    begin
       TraderIndex := FindMember(Talk);
-      if SkyBases(BaseIndex).Population < 150 then
-         MaxEvents := 5;
-      elsif SkyBases(BaseIndex).Population > 149 and
-        SkyBases(BaseIndex).Population < 300 then
-         MaxEvents := 10;
-      else
-         MaxEvents := 15;
+      if BaseIndex > 0 then -- asking in base
+         if SkyBases(BaseIndex).Population < 150 then
+            MaxEvents := 5;
+         elsif SkyBases(BaseIndex).Population > 149 and
+           SkyBases(BaseIndex).Population < 300 then
+            MaxEvents := 10;
+         else
+            MaxEvents := 15;
+         end if;
+         SkyBases(BaseIndex).AskedForEvents := GameDate;
+         AddMessage
+           (To_String(PlayerShip.Crew(TraderIndex).Name) &
+            " asked for events in base '" &
+            To_String(SkyBases(BaseIndex).Name) &
+            "'.",
+            OrderMessage);
+         GainRep(BaseIndex, 1);
+      else -- asking friendly ship
+         ShipIndex :=
+           Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+             .Data;
+         if ProtoShips_List(ShipIndex).Crew.Length < 5 then
+            MaxEvents := 1;
+         elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then
+            MaxEvents := 3;
+         else
+            MaxEvents := 5;
+         end if;
+         AddMessage
+           (To_String(PlayerShip.Crew(TraderIndex).Name) &
+            " asked ship '" &
+            To_String(GenerateShipName) &
+            "' for events.",
+            OrderMessage);
+         DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
       end if;
       EventsAmount := GetRandom(1, MaxEvents);
       MinX := PlayerShip.SkyX - 100;
@@ -471,13 +504,7 @@ package body Bases is
          end case;
          SkyMap(EventX, EventY).EventIndex := Events_List.Last_Index;
       end loop;
-      SkyBases(BaseIndex).AskedForEvents := GameDate;
-      AddMessage
-        (To_String(PlayerShip.Crew(TraderIndex).Name) &
-         " asked for events in base.",
-         OrderMessage);
       GainExp(1, 4, TraderIndex);
-      GainRep(BaseIndex, 1);
       UpdateGame(30);
    end AskForEvents;
 
