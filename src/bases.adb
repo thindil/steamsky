@@ -662,12 +662,9 @@ package body Bases is
       end if;
       for Item of SkyBases(BaseIndex).Cargo loop
          Roll := GetRandom(1, 100);
-         if Roll < 30 then
+         if Roll < 30 and Item.Price > 1 then
             Item.Price := Item.Price - 1;
-            if Item.Price = 0 then
-               Item.Price := 1;
-            end if;
-         elsif Roll < 60 then
+         elsif Roll < 60 and Item.Price > 0 then
             Item.Price := Item.Price + 1;
          end if;
       end loop;
