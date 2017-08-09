@@ -27,7 +27,8 @@ package Events is
       Disease,
       DoublePrice,
       FullDocks,
-      EnemyPatrol); -- Types of events
+      EnemyPatrol,
+      Trader); -- Types of events
    type EventData is -- Data structure for random events
    record
       EType: Events_Types; -- Type of event
