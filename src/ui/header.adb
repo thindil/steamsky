@@ -102,8 +102,7 @@ package body Header is
             Change_Attributes(Line => 0, Column => 24, Count => 2, Color => 1);
             return;
          when TradeRecipes_View =>
-            Add(Str => "Buy crafting recipes [Quit]");
-            Change_Attributes(Line => 0, Column => 22, Count => 1, Color => 1);
+            Add(Str => "Buy crafting recipes");
          when BaseMissions_View =>
             Add(Str => "Available missions");
          when Missions_View =>
