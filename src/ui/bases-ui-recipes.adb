@@ -141,11 +141,20 @@ package body Bases.UI.Recipes is
               " to buy anything.");
       end if;
       Move_Cursor(Line => 7, Column => (Columns / 2));
-      Add(Str => "ENTER to buy selected recipe.");
+      Add(Str => "Press Enter to buy selected recipe.");
       Change_Attributes
         (Line => 7,
-         Column => (Columns / 2),
+         Column => (Columns / 2) + 6,
          Count => 5,
+         Color => 1,
+         Attr => BoldCharacters);
+      Move_Cursor(Line => 8, Column => (Columns / 2));
+      Add(Str => "Press Escape to back to sky map.");
+      Change_Attributes
+        (Line => 8,
+         Column => (Columns / 2) + 6,
+         Count => 6,
+         Attr => BoldCharacters,
          Color => 1);
       ShowRecipeInfo;
    end ShowTradeRecipes;
@@ -156,7 +165,7 @@ package body Bases.UI.Recipes is
    begin
       if TradeMenu /= Null_Menu then
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                CurrentMenuIndex := 1;
                Post(TradeMenu, False);
                Delete(TradeMenu);
@@ -194,7 +203,7 @@ package body Bases.UI.Recipes is
          end if;
       else
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             when others =>
