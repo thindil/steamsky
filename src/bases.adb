@@ -209,25 +209,54 @@ package body Bases is
    end GenerateRecruits;
 
    procedure AskForBases is
-      BaseIndex: constant Positive :=
+      BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Radius, TempX, TempY: Integer;
       Amount, TmpBaseIndex: Natural;
-      TraderIndex: Positive;
+      TraderIndex, ShipIndex: Positive;
       UnknownBases: Natural := 0;
    begin
-      if SkyBases(BaseIndex).Population < 150 then
-         Amount := 10;
-         Radius := 10;
-      elsif SkyBases(BaseIndex).Population > 149 and
-        SkyBases(BaseIndex).Population < 300 then
-         Amount := 20;
-         Radius := 20;
-      else
-         Amount := 40;
-         Radius := 40;
-      end if;
       TraderIndex := FindMember(Talk);
+      if BaseIndex > 0 then -- asking in base
+         if SkyBases(BaseIndex).Population < 150 then
+            Amount := 10;
+            Radius := 10;
+         elsif SkyBases(BaseIndex).Population > 149 and
+           SkyBases(BaseIndex).Population < 300 then
+            Amount := 20;
+            Radius := 20;
+         else
+            Amount := 40;
+            Radius := 40;
+         end if;
+         GainRep(BaseIndex, 1);
+         SkyBases(BaseIndex).AskedForBases := True;
+         AddMessage
+           (To_String(PlayerShip.Crew(TraderIndex).Name) &
+            " asked for directions to other bases in base '" &
+            To_String(SkyBases(BaseIndex).Name) &
+            "'.",
+            OrderMessage);
+      else -- asking friendly ship
+         Radius := 40;
+         ShipIndex :=
+           Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+             .Data;
+         if ProtoShips_List(ShipIndex).Crew.Length < 5 then
+            Amount := 3;
+         elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then
+            Amount := 5;
+         else
+            Amount := 10;
+         end if;
+         AddMessage
+           (To_String(PlayerShip.Crew(TraderIndex).Name) &
+            " asked ship '" &
+            To_String(GenerateShipName) &
+            "' for directions to other bases.",
+            OrderMessage);
+         DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
+      end if;
       Bases_Loop:
       for X in -Radius .. Radius loop
          for Y in -Radius .. Radius loop
@@ -254,17 +283,27 @@ package body Bases is
          end loop;
       end loop Bases_Loop;
       if Amount > 0 then
-         if SkyBases(BaseIndex).Population < 150 then
-            if Amount > 1 then
+         if BaseIndex > 0 then -- asking in base
+            if SkyBases(BaseIndex).Population < 150 then
+               if Amount > 1 then
+                  Amount := 1;
+               end if;
+            elsif SkyBases(BaseIndex).Population > 149 and
+              SkyBases(BaseIndex).Population < 300 then
+               if Amount > 2 then
+                  Amount := 2;
+               end if;
+            else
+               if Amount > 4 then
+                  Amount := 4;
+               end if;
+            end if;
+         else -- asking friendly ship
+            if ProtoShips_List(ShipIndex).Crew.Length < 5 then
                Amount := 1;
-            end if;
-         elsif SkyBases(BaseIndex).Population > 149 and
-           SkyBases(BaseIndex).Population < 300 then
-            if Amount > 2 then
+            elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then
                Amount := 2;
-            end if;
-         else
-            if Amount > 4 then
+            else
                Amount := 4;
             end if;
          end if;
@@ -291,13 +330,7 @@ package body Bases is
             end loop;
          end if;
       end if;
-      SkyBases(BaseIndex).AskedForBases := True;
-      AddMessage
-        (To_String(PlayerShip.Crew(TraderIndex).Name) &
-         " asked for directions to other bases.",
-         OrderMessage);
       GainExp(1, 4, TraderIndex);
-      GainRep(BaseIndex, 1);
       UpdateGame(30);
    end AskForBases;
 
