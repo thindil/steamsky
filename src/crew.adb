@@ -25,6 +25,7 @@ with Utils; use Utils;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Maps; use Maps;
+with Events; use Events;
 
 package body Crew is
 
@@ -683,8 +684,11 @@ package body Crew is
       NeedGunners,
       NeedCrafters,
       NeedHealer,
-      CanHeal: Boolean :=
+      CanHeal,
+      NeedTrader: Boolean :=
         False;
+      EventIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       function UpdatePosition
         (Order: Crew_Orders;
          MaxPriority: Boolean := True) return Boolean is
@@ -831,6 +835,14 @@ package body Crew is
             end loop;
          end if;
       end loop;
+      if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+         NeedTrader := True;
+      end if;
+      if not NeedTrader and EventIndex > 0 then
+         if Events_List(EventIndex).EType = Trader then
+            NeedTrader := True;
+         end if;
+      end if;
       if not HavePilot then
          if UpdatePosition(Pilot) then
             UpdateOrders;
@@ -865,8 +877,7 @@ package body Crew is
             end if;
          end if;
       end if;
-      if not HaveTrader and
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+      if not HaveTrader and NeedTrader then
          if UpdatePosition(Talk) then
             UpdateOrders;
          end if;
