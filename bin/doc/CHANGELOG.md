@@ -8,8 +8,8 @@ All notable changes to this project will be documented in this file.
   items, craft 3500 items, craft 4000 items, craft 5000 items, craft 7500
   items, craft 10000 items, finish 250 missions, finish 500 missions, finish
   1000 missions, finish 1500 missions, finish 2000 missions, finish 2500
-  missions, gain max reputation in 1 poleis base and gain max reputation in 3
-  poleis bases
+  missions, gain max reputation in 1 poleis base, gain max reputation in 3
+  poleis bases and gain max reputation in 5 poleis bases
 - Ability to loot abandoned bases
 - Remove items from abandoned bases over time
 - Death screen
