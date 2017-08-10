@@ -31,17 +31,13 @@ with Utils; use Utils;
 
 package body Events is
 
+   Traders: Positive_Container.Vector;
+
    function CheckForEvent(OldState: GameStates) return GameStates is
       TimePassed: Integer;
       CrewIndex, PlayerValue: Natural := 0;
-      Roll,
-      Roll2,
-      ItemIndex,
-      EnemyIndex,
-      EngineIndex,
-      Injuries,
-      TraderIndex: Positive;
-      Enemies, Engines, Traders: Positive_Container.Vector;
+      Roll, Roll2, ItemIndex, EnemyIndex, EngineIndex, Injuries: Positive;
+      Enemies, Engines: Positive_Container.Vector;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       procedure GenerateEnemies(Owner: Bases_Owners := Any) is
@@ -171,13 +167,6 @@ package body Events is
                      UpdateGame(TimePassed);
                   end if;
                when 21 .. 30 => -- Friendly trader
-                  TraderIndex := ProtoShips_List.First_Index;
-                  for Ship of ProtoShips_List loop
-                     if Index(Ship.Name, "trader") > 0 then
-                        Traders.Append(New_Item => TraderIndex);
-                     end if;
-                     TraderIndex := TraderIndex + 1;
-                  end loop;
                   Events_List.Append
                   (New_Item =>
                      (Trader,
@@ -376,5 +365,17 @@ package body Events is
          SkyMap(Events_List(I).SkyX, Events_List(I).SkyY).EventIndex := I;
       end loop;
    end DeleteEvent;
+
+   procedure GenerateTraders is
+      TraderIndex: Positive;
+   begin
+      TraderIndex := ProtoShips_List.First_Index;
+      for Ship of ProtoShips_List loop
+         if Index(Ship.Name, "trader") > 0 then
+            Traders.Append(New_Item => TraderIndex);
+         end if;
+         TraderIndex := TraderIndex + 1;
+      end loop;
+   end GenerateTraders;
 
 end Events;

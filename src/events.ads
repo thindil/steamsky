@@ -44,5 +44,6 @@ package Events is
      (OldState: GameStates) return GameStates; -- Check if event happen
    procedure UpdateEvents(Minutes: Positive); -- Update all events timers
    procedure DeleteEvent(EventIndex: Positive); -- Delete selected event
+   procedure GenerateTraders; -- Create list of traders needed for trader event
 
 end Events;
