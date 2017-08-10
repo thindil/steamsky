@@ -178,6 +178,7 @@ package body Events is
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
                   AddMessage("You meet friendly trader.", OtherMessage);
+                  UpdateOrders;
                when others => -- Combat
                   GenerateEnemies;
                   Events_List.Append
