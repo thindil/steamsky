@@ -26,6 +26,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Log; use Log;
 with Crafts; use Crafts;
+with Events; use Events;
 
 package body Ships is
 
@@ -642,6 +643,7 @@ package body Ships is
          Close(ShipsFile);
       end loop;
       End_Search(Files);
+      GenerateTraders;
    end LoadShips;
 
    function CountShipWeight(Ship: ShipRecord) return Positive is
