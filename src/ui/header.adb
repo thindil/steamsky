@@ -89,8 +89,7 @@ package body Header is
             Add(Str => "Shipyard [Quit]");
             Change_Attributes(Line => 0, Column => 10, Count => 1, Color => 1);
          when Recruits_View =>
-            Add(Str => "Recruit new crew members [Quit]");
-            Change_Attributes(Line => 0, Column => 26, Count => 1, Color => 1);
+            Add(Str => "Recruit new crew members");
          when Bases_List =>
             Add(Str => "List of know bases");
          when Events_View =>

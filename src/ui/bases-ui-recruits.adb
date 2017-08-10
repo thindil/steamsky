@@ -82,7 +82,7 @@ package body Bases.UI.Recruits is
          Add
            (Win => OptionsWindow,
             Str =>
-              "Press ENTER to hire for" &
+              "Press Enter to hire for" &
               Positive'Image(Recruit.Price) &
               " " &
               To_String(MoneyName) &
@@ -92,7 +92,8 @@ package body Bases.UI.Recruits is
             Line => 0,
             Column => 6,
             Count => 5,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          Move_Cursor(Win => OptionsWindow, Line => 1, Column => 0);
          Add
            (Win => OptionsWindow,
@@ -102,6 +103,7 @@ package body Bases.UI.Recruits is
               " " &
               To_String(MoneyName) &
               ".");
+         CurrentLine := 2;
       else
          Add
            (Win => OptionsWindow,
@@ -109,7 +111,17 @@ package body Bases.UI.Recruits is
               "You don't have any " &
               To_String(MoneyName) &
               " to hire anyone.");
+         CurrentLine := 1;
       end if;
+      Move_Cursor(Win => OptionsWindow, Line => CurrentLine, Column => 0);
+      Add(Win => OptionsWindow, Str => "Press Escape to back to sky map.");
+      Change_Attributes
+        (Win => OptionsWindow,
+         Line => CurrentLine,
+         Column => 6,
+         Count => 6,
+         Color => 1,
+         Attr => BoldCharacters);
       Refresh_Without_Update;
       Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
@@ -163,7 +175,7 @@ package body Bases.UI.Recruits is
       Result: Menus.Driver_Result;
    begin
       case Key is
-         when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+         when 27 => -- Back to sky map
             CurrentMenuIndex := 1;
             DrawGame(Sky_Map_View);
             return Sky_Map_View;
