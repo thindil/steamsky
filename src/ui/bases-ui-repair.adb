@@ -75,6 +75,7 @@ package body Bases.UI.Repair is
       MenuLength: Column_Position;
       MenuIndex: Integer := 1;
       MoneyIndex2: Natural := 0;
+      CurrentLine: Line_Position := 8;
    begin
       for I in PlayerShip.Modules.Iterate loop
          if PlayerShip.Modules(I).Durability <
@@ -91,8 +92,16 @@ package body Bases.UI.Repair is
             Post(TradeMenu, False);
             Delete(TradeMenu);
          end if;
-         Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
-         Add(Str => "You have nothing to repair.");
+         Move_Cursor(Line => (Lines / 3), Column => (Columns / 5));
+         Add
+           (Str =>
+              "You have nothing to repair. Press Escape to back to sky map.");
+         Change_Attributes
+           (Line => (Lines / 3),
+            Column => (Columns / 5) + 34,
+            Count => 6,
+            Color => 1,
+            Attr => BoldCharacters);
          Refresh;
          return;
       end if;
@@ -135,6 +144,15 @@ package body Bases.UI.Repair is
               " " &
               To_String(MoneyName) &
               ".");
+         Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+         Add(Str => "Press Enter to start repairing");
+         Change_Attributes
+           (Line => CurrentLine,
+            Column => (Columns / 2) + 6,
+            Count => 5,
+            Color => 1,
+            Attr => BoldCharacters);
+         CurrentLine := CurrentLine + 1;
       else
          Add
            (Str =>
@@ -142,12 +160,13 @@ package body Bases.UI.Repair is
               To_String(MoneyName) &
               " to repair anything.");
       end if;
-      Move_Cursor(Line => 8, Column => (Columns / 2));
-      Add(Str => "Press Enter to start repairing");
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      Add(Str => "Press Escape to back to sky map");
       Change_Attributes
-        (Line => 8,
+        (Line => CurrentLine,
          Column => (Columns / 2) + 6,
-         Count => 5,
+         Count => 6,
+         Attr => BoldCharacters,
          Color => 1);
       ShowRepairInfo;
    end ShowRepair;
@@ -159,7 +178,7 @@ package body Bases.UI.Repair is
       if TradeMenu /= Null_Menu then
          ModuleIndex := Integer'Value(Description(Current(TradeMenu)));
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                CurrentMenuIndex := 1;
                if TradeMenu /= Null_Menu then
                   Post(TradeMenu, False);
@@ -194,7 +213,7 @@ package body Bases.UI.Repair is
          CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
       else
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             when others =>
