@@ -44,6 +44,7 @@ package body Trades is
       if BaseIndex > 0 then
          BaseType := Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
          ItemIndex := SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex;
+         ItemName := Items_List(ItemIndex).Name;
          if not Items_List(ItemIndex).Buyable(BaseType) then
             raise Trade_Cant_Buy with To_String(ItemName);
          end if;
@@ -61,12 +62,12 @@ package body Trades is
          end if;
       else
          ItemIndex := TraderCargo(BaseItemIndex).ProtoIndex;
+         ItemName := Items_List(ItemIndex).Name;
          if TraderCargo(BaseItemIndex).Amount < BuyAmount then
             raise Trade_Buying_Too_Much with To_String(ItemName);
          end if;
          Price := TraderCargo(BaseItemIndex).Price;
       end if;
-      ItemName := Items_List(ItemIndex).Name;
       TraderIndex := FindMember(Talk);
       Cost := BuyAmount * Price;
       CountPrice(Cost, TraderIndex);
@@ -160,7 +161,11 @@ package body Trades is
       if BaseItemIndex = 0 then
          Price := Items_List(ProtoIndex).Prices(BaseType);
       else
-         Price := SkyBases(BaseIndex).Cargo(BaseItemIndex).Price;
+         if BaseIndex > 0 then
+            Price := SkyBases(BaseIndex).Cargo(BaseItemIndex).Price;
+         else
+            Price := TraderCargo(BaseItemIndex).Price;
+         end if;
       end if;
       if EventIndex > 0 then
          if Events_List(EventIndex).EType = DoublePrice and
@@ -289,7 +294,7 @@ package body Trades is
          else
             if FreeCargo(0 - (Items_List(ItemIndex).Weight * ItemAmount)) >
               -1 then
-               BaseType := GetRandom(0, 3);
+               BaseType := GetRandom(1, 4);
                TraderCargo.Append
                (New_Item =>
                   (ProtoIndex => ItemIndex,
