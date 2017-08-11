@@ -68,16 +68,18 @@ package body Ships.Cargo is
       end if;
    end UpdateCargo;
 
-   function FreeCargo(Amount: Integer) return Integer is
+   function FreeCargo
+     (Amount: Integer;
+      Ship: ShipRecord := PlayerShip) return Integer is
       FreeCargo: Integer := 0;
    begin
-      for Module of PlayerShip.Modules loop
+      for Module of Ship.Modules loop
          if Modules_List(Module.ProtoIndex).MType = ShipModules.CARGO and
            Module.Durability > 0 then
             FreeCargo := FreeCargo + Module.Max_Value;
          end if;
       end loop;
-      for Item of PlayerShip.Cargo loop
+      for Item of Ship.Cargo loop
          FreeCargo :=
            FreeCargo - (Items_List(Item.ProtoIndex).Weight * Item.Amount);
       end loop;
@@ -88,36 +90,35 @@ package body Ships.Cargo is
    function FindCargo
      (ProtoIndex: Natural := 0;
       ItemType: Unbounded_String := Null_Unbounded_String;
-      Durability: Natural := 101) return Natural is
+      Durability: Natural := 101;
+      Ship: ShipRecord := PlayerShip) return Natural is
       CargoIndex: Natural := 0;
    begin
       if ProtoIndex > 0 then
-         for I in PlayerShip.Cargo.Iterate loop
+         for I in Ship.Cargo.Iterate loop
             if Durability < 101 then
-               if PlayerShip.Cargo(I).ProtoIndex = ProtoIndex and
-                 PlayerShip.Cargo(I).Durability = Durability then
+               if Ship.Cargo(I).ProtoIndex = ProtoIndex and
+                 Ship.Cargo(I).Durability = Durability then
                   CargoIndex := Cargo_Container.To_Index(I);
                   exit;
                end if;
             else
-               if PlayerShip.Cargo(I).ProtoIndex = ProtoIndex then
+               if Ship.Cargo(I).ProtoIndex = ProtoIndex then
                   CargoIndex := Cargo_Container.To_Index(I);
                   exit;
                end if;
             end if;
          end loop;
       elsif ItemType /= Null_Unbounded_String then
-         for I in PlayerShip.Cargo.Iterate loop
+         for I in Ship.Cargo.Iterate loop
             if Durability < 101 then
-               if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
-                 ItemType and
-                 PlayerShip.Cargo(I).Durability = Durability then
+               if Items_List(Ship.Cargo(I).ProtoIndex).IType = ItemType and
+                 Ship.Cargo(I).Durability = Durability then
                   CargoIndex := Cargo_Container.To_Index(I);
                   exit;
                end if;
             else
-               if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
-                 ItemType then
+               if Items_List(Ship.Cargo(I).ProtoIndex).IType = ItemType then
                   CargoIndex := Cargo_Container.To_Index(I);
                   exit;
                end if;

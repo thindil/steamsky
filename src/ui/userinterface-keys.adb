@@ -183,6 +183,9 @@ package body UserInterface.Keys is
             Post(OrdersMenu, False);
             Delete(OrdersMenu);
             if Order = "Trade" then
+               if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
+                  GenerateTraderCargo(Events_List(EventIndex).Data);
+               end if;
                DrawGame(Trade_View);
                return Trade_View;
             elsif Order = "Recruit" then

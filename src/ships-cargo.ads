@@ -25,12 +25,15 @@ package Ships.Cargo is
       CargoIndex: Natural := 0); -- Update
    -- selected item in ship cargo
    function FreeCargo
-     (Amount: Integer)
+     (Amount: Integer;
+      Ship: ShipRecord :=
+        PlayerShip)
      return Integer; -- Return available space in cargo after adding/extracting Amount
    function FindCargo
      (ProtoIndex: Natural := 0;
       ItemType: Unbounded_String := Null_Unbounded_String;
-      Durability: Natural := 101) return Natural; -- Return
+      Durability: Natural := 101;
+      Ship: ShipRecord := PlayerShip) return Natural; -- Return
    -- index of item, 0 if no item in ship cargo
    function GetCargoName
      (CargoIndex: Positive) return String; -- Get name of cargo

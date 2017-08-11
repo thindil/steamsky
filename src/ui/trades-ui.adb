@@ -30,7 +30,6 @@ with Help.UI; use Help.UI;
 with Events; use Events;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
-with Bases; use Bases;
 with Bases.UI; use Bases.UI;
 
 package body Trades.UI is

@@ -281,7 +281,7 @@ package body UserInterface is
             end if;
          elsif Event = Trader then
             if HaveTrader then
-               OrdersAmount := OrdersAmount + 2;
+               OrdersAmount := OrdersAmount + 3;
             end if;
          else
             OrdersAmount := OrdersAmount + 1;
@@ -395,9 +395,11 @@ package body UserInterface is
                end if;
             when Trader =>
                if HaveTrader then
-                  Orders_Items.all(MenuIndex) := New_Item("Ask for events");
+                  Orders_Items.all(MenuIndex) := New_Item("Trade");
                   MenuIndex := MenuIndex + 1;
                   Orders_Items.all(MenuIndex) := New_Item("Ask for bases");
+                  MenuIndex := MenuIndex + 1;
+                  Orders_Items.all(MenuIndex) := New_Item("Ask for events");
                   MenuIndex := MenuIndex + 1;
                end if;
          end case;
