@@ -63,7 +63,11 @@ package body Header is
          when Clear_Confirm =>
             Add(Str => "Last Messages");
          when Trade_View =>
-            Add(Str => "Trade with base [Quit] [F1 Help]");
+            if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+               Add(Str => "Trade with base [Quit] [F1 Help]");
+            else
+               Add(Str => "Trade with ship [Quit] [F1 Help]");
+            end if;
             Change_Attributes(Line => 0, Column => 17, Count => 1, Color => 1);
             Change_Attributes(Line => 0, Column => 24, Count => 2, Color => 1);
          when Help_View =>
