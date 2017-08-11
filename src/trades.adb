@@ -129,21 +129,32 @@ package body Trades is
 
    procedure SellItems(ItemIndex: Positive; Amount: String) is
       SellAmount, TraderIndex: Positive;
-      BaseIndex: constant Positive :=
+      BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType: constant Positive :=
-        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       ProtoIndex: constant Positive := PlayerShip.Cargo(ItemIndex).ProtoIndex;
       ItemName: constant String := To_String(Items_List(ProtoIndex).Name);
-      Profit, Price: Positive;
+      Profit, Price, BaseType: Positive;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       MoneyIndex2: constant Positive := FindProtoItem(MoneyIndex);
-      BaseItemIndex: constant Natural := FindBaseCargo(ProtoIndex);
+      BaseItemIndex: Natural;
+      CargoAdded: Boolean := False;
    begin
       SellAmount := Positive'Value(Amount);
       if PlayerShip.Cargo(ItemIndex).Amount < SellAmount then
          raise Trade_Too_Much_For_Sale with ItemName;
+      end if;
+      if BaseIndex > 0 then
+         BaseType := Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+         BaseItemIndex := FindBaseCargo(ProtoIndex);
+      else
+         BaseType := 1;
+         for I in TraderCargo.Iterate loop
+            if TraderCargo(I).ProtoIndex = ProtoIndex then
+               BaseItemIndex := BaseCargo_Container.To_Index(I);
+               exit;
+            end if;
+         end loop;
       end if;
       TraderIndex := FindMember(Talk);
       if BaseItemIndex = 0 then
@@ -170,22 +181,50 @@ package body Trades is
         0 then
          raise Trade_No_Free_Cargo;
       end if;
-      if Profit > SkyBases(BaseIndex).Cargo(1).Amount then
-         raise Trade_No_Money_In_Base with ItemName;
+      if BaseIndex > 0 then
+         if Profit > SkyBases(BaseIndex).Cargo(1).Amount then
+            raise Trade_No_Money_In_Base with ItemName;
+         end if;
+         UpdateBaseCargo
+           (ProtoIndex,
+            SellAmount,
+            PlayerShip.Cargo.Element(ItemIndex).Durability);
+      else
+         if Profit > TraderCargo(1).Amount then
+            raise Trade_No_Money_In_Base with ItemName;
+         end if;
+         for I in TraderCargo.Iterate loop
+            if TraderCargo(I).ProtoIndex = ProtoIndex and
+              TraderCargo(I).Durability =
+                PlayerShip.Cargo(ItemIndex).Durability then
+               TraderCargo(I).Amount := TraderCargo(I).Amount + SellAmount;
+               CargoAdded := True;
+               exit;
+            end if;
+         end loop;
+         if not CargoAdded then
+            BaseType := GetRandom(1, 4);
+            TraderCargo.Append
+            (New_Item =>
+               (ProtoIndex => ProtoIndex,
+                Amount => SellAmount,
+                Durability => PlayerShip.Cargo(ItemIndex).Durability,
+                Price => Items_List(ItemIndex).Prices(BaseType)));
+         end if;
       end if;
-      UpdateBaseCargo
-        (ProtoIndex,
-         SellAmount,
-         PlayerShip.Cargo.Element(ItemIndex).Durability);
       UpdateCargo
         (Ship => PlayerShip,
          CargoIndex => ItemIndex,
          Amount => (0 - SellAmount),
          Durability => PlayerShip.Cargo.Element(ItemIndex).Durability);
       UpdateCargo(PlayerShip, MoneyIndex2, Profit);
-      UpdateBaseCargo(MoneyIndex2, (0 - Profit));
+      if BaseIndex > 0 then
+         UpdateBaseCargo(MoneyIndex2, (0 - Profit));
+         GainRep(BaseIndex, 1);
+      else
+         TraderCargo(1).Amount := TraderCargo(1).Amount - Profit;
+      end if;
       GainExp(1, 4, TraderIndex);
-      GainRep(BaseIndex, 1);
       AddMessage
         ("You sold" &
          Positive'Image(SellAmount) &
@@ -216,7 +255,7 @@ package body Trades is
    begin
       TraderCargo.Clear;
       for Item of TraderShip.Cargo loop
-         BaseType := GetRandom(0, 3);
+         BaseType := GetRandom(1, 4);
          TraderCargo.Append
          (New_Item =>
             (ProtoIndex => Item.ProtoIndex,
