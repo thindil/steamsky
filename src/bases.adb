@@ -72,20 +72,22 @@ package body Bases is
                 (Float(Price) *
                  (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
       end if;
-      case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-        .Reputation
-        (1) is
-         when -24 .. -1 =>
-            Bonus := Bonus - Integer(Float'Floor(Float(Price) * 0.05));
-         when 26 .. 50 =>
-            Bonus := Bonus + Integer(Float'Floor(Float(Price) * 0.05));
-         when 51 .. 75 =>
-            Bonus := Bonus + Integer(Float'Floor(Float(Price) * 0.1));
-         when 76 .. 100 =>
-            Bonus := Bonus + Integer(Float'Floor(Float(Price) * 0.15));
-         when others =>
-            null;
-      end case;
+      if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+         case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+           .Reputation
+           (1) is
+            when -24 .. -1 =>
+               Bonus := Bonus - Integer(Float'Floor(Float(Price) * 0.05));
+            when 26 .. 50 =>
+               Bonus := Bonus + Integer(Float'Floor(Float(Price) * 0.05));
+            when 51 .. 75 =>
+               Bonus := Bonus + Integer(Float'Floor(Float(Price) * 0.1));
+            when 76 .. 100 =>
+               Bonus := Bonus + Integer(Float'Floor(Float(Price) * 0.15));
+            when others =>
+               null;
+         end case;
+      end if;
       if Reduce then
          if Bonus >= Price then
             Bonus := Price - 1;
