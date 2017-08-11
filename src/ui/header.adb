@@ -83,8 +83,7 @@ package body Header is
             Change_Attributes(Line => 0, Column => 13, Count => 1, Color => 1);
             return;
          when Repairs_View =>
-            Add(Str => "Ship repairs [Quit]");
-            Change_Attributes(Line => 0, Column => 14, Count => 1, Color => 1);
+            Add(Str => "Ship repairs");
          when Shipyard_View =>
             Add(Str => "Shipyard [Quit]");
             Change_Attributes(Line => 0, Column => 10, Count => 1, Color => 1);
