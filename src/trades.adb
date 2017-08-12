@@ -31,7 +31,7 @@ with Utils; use Utils;
 package body Trades is
 
    procedure BuyItems(BaseItemIndex: Positive; Amount: String) is
-      BuyAmount, TraderIndex, Price, ProtoMoneyIndex: Positive;
+      BuyAmount, Price, ProtoMoneyIndex: Positive;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType, ItemIndex: Positive;
@@ -39,8 +39,12 @@ package body Trades is
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       ItemName: Unbounded_String;
+      TraderIndex: constant Natural := FindMember(Talk);
    begin
       BuyAmount := Positive'Value(Amount);
+      if TraderIndex = 0 then
+         raise Trade_No_Trader;
+      end if;
       if BaseIndex > 0 then
          BaseType := Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
          ItemIndex := SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex;
@@ -68,7 +72,6 @@ package body Trades is
          end if;
          Price := TraderCargo(BaseItemIndex).Price;
       end if;
-      TraderIndex := FindMember(Talk);
       Cost := BuyAmount * Price;
       CountPrice(Cost, TraderIndex);
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
@@ -91,12 +94,12 @@ package body Trades is
       else
          TraderCargo(1).Amount := TraderCargo(1).Amount + Cost;
       end if;
-      UpdateCargo
-        (PlayerShip,
-         ItemIndex,
-         BuyAmount,
-         SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
       if BaseIndex > 0 then
+         UpdateCargo
+           (PlayerShip,
+            ItemIndex,
+            BuyAmount,
+            SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
          UpdateBaseCargo
            (CargoIndex => BaseItemIndex,
             Amount => (0 - BuyAmount),
@@ -104,6 +107,11 @@ package body Trades is
               SkyBases(BaseIndex).Cargo.Element(BaseItemIndex).Durability);
          GainRep(BaseIndex, 1);
       else
+         UpdateCargo
+           (PlayerShip,
+            ItemIndex,
+            BuyAmount,
+            TraderCargo(BaseItemIndex).Durability);
          TraderCargo(BaseItemIndex).Amount :=
            TraderCargo(BaseItemIndex).Amount - BuyAmount;
          if TraderCargo(BaseItemIndex).Amount = 0 then
@@ -122,6 +130,9 @@ package body Trades is
          To_String(MoneyName) &
          ".",
          TradeMessage);
+      if BaseIndex = 0 and EventIndex > 0 then
+         Events_List(EventIndex).Time := Events_List(EventIndex).Time + 5;
+      end if;
       UpdateGame(5);
    exception
       when Constraint_Error =>
@@ -129,7 +140,7 @@ package body Trades is
    end BuyItems;
 
    procedure SellItems(ItemIndex: Positive; Amount: String) is
-      SellAmount, TraderIndex: Positive;
+      SellAmount: Positive;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ProtoIndex: constant Positive := PlayerShip.Cargo(ItemIndex).ProtoIndex;
@@ -138,10 +149,14 @@ package body Trades is
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       MoneyIndex2: constant Positive := FindProtoItem(MoneyIndex);
-      BaseItemIndex: Natural;
+      BaseItemIndex: Natural := 0;
       CargoAdded: Boolean := False;
+      TraderIndex: constant Natural := FindMember(Talk);
    begin
       SellAmount := Positive'Value(Amount);
+      if TraderIndex = 0 then
+         raise Trade_No_Trader;
+      end if;
       if PlayerShip.Cargo(ItemIndex).Amount < SellAmount then
          raise Trade_Too_Much_For_Sale with ItemName;
       end if;
@@ -157,7 +172,6 @@ package body Trades is
             end if;
          end loop;
       end if;
-      TraderIndex := FindMember(Talk);
       if BaseItemIndex = 0 then
          Price := Items_List(ProtoIndex).Prices(BaseType);
       else
@@ -241,6 +255,9 @@ package body Trades is
          To_String(MoneyName) &
          ".",
          TradeMessage);
+      if BaseIndex = 0 and EventIndex > 0 then
+         Events_List(EventIndex).Time := Events_List(EventIndex).Time + 5;
+      end if;
       UpdateGame(5);
    exception
       when Constraint_Error =>

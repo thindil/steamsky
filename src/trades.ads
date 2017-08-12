@@ -38,5 +38,6 @@ package Trades is
    Trade_Invalid_Amount: exception; -- Raised when player enter invalid amount
    Trade_Too_Much_For_Sale: exception; -- Raised when player try sell more than have
    Trade_No_Money_In_Base: exception; -- Raised when base don't have enough money for buy item
+   Trade_No_Trader: exception; -- Raised when no one is assigned to talk in bases duty
 
 end Trades;

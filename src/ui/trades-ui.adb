@@ -361,7 +361,7 @@ package body Trades.UI is
          end loop;
       else
          for Item of TraderCargo loop
-            if FindCargo(Item.ProtoIndex) = 0 then
+            if FindCargo(Item.ProtoIndex) = 0 and Item.Price > 0 then
                ItemsAmount := ItemsAmount + 1;
             end if;
          end loop;
@@ -391,7 +391,8 @@ package body Trades.UI is
          end loop;
       else
          for I in TraderCargo.Iterate loop
-            if FindCargo(TraderCargo(I).ProtoIndex) = 0 then
+            if FindCargo(TraderCargo(I).ProtoIndex) = 0 and
+              TraderCargo(I).Price > 0 then
                BaseItemIndex := BaseCargo_Container.To_Index(I);
                Trade_Items.all(MenuIndex) :=
                  New_Item
@@ -760,13 +761,24 @@ package body Trades.UI is
             To_String(MoneyName) &
             " to buy it.");
          return Trade_View;
+      when Trade_No_Trader =>
+         ShowErrorMessage
+           ("You don't have assigned anyone in crew to talk in bases duty.");
+         return Trade_View;
    end TradeResult;
 
    function TradeKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      EventIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
    begin
       case Key is
          when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            if BaseIndex = 0 and EventIndex > 0 then
+               DeleteEvent(EventIndex);
+            end if;
             CurrentMenuIndex := 1;
             DrawGame(Sky_Map_View);
             return Sky_Map_View;
