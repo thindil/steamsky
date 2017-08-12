@@ -17,7 +17,8 @@ All notable changes to this project will be documented in this file.
 - Random prices changes in bases which made saves from previous version 
   incompatible
 - New friendly ships: tiny poleis trader, tiny independent trader, small poleis
-  trader, small independent trader, poleis trader and independent trader
+  trader, small independent trader, poleis trader, independent trader and 
+  advanced poleis trader
 
 ### Changed
 - Updated interface
