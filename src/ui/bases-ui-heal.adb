@@ -86,8 +86,16 @@ package body Bases.UI.Heal is
             Post(TradeMenu, False);
             Delete(TradeMenu);
          end if;
-         Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
-         Add(Str => "You have no one to heal.");
+         Move_Cursor(Line => (Lines / 3), Column => (Columns / 5));
+         Add
+           (Str =>
+              "You have no one to heal. Press Escape to back to sky map.");
+         Change_Attributes
+           (Line => (Lines / 3),
+            Column => (Columns / 5) + 31,
+            Count => 6,
+            Color => 1,
+            Attr => BoldCharacters);
          Refresh;
          return;
       end if;
