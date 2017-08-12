@@ -1045,4 +1045,14 @@ Skills = 1x3..6, 5x3..6; 3x7..14, 5x3..6; 2x7..12
 Orders = Pilot, Gunner, Engineer
 Description = Standard independent traders vessel. Avoids any fights.
 Owner = Independent
+[102]
+Name = Advanced poleis trader
+Modules = 22, 25, 18, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 28, 27
+CombatAI = Disarmer
+Loot = 200..250
+Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x5, 20..40x13
+Skills = 1x7..20, 5x4..12; 3x7..20, 5x3..10; 2x7..20
+Orders = Pilot, Gunner, Engineer
+Description = Advanced version of standard poleis traders vessel. Avoids any fights.
+Owner = Poleis
 []
