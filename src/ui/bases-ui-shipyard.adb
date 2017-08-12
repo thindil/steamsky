@@ -395,7 +395,7 @@ package body Bases.UI.Shipyard is
       WindowFrame(BoxWindow, 2, "Module info");
       Resize(InfoWindow, WindowHeight + 1, WindowWidth - 2);
       ActionWindow :=
-        Create(4, (Columns / 2), WindowHeight + 7, (Columns / 2));
+        Create(5, (Columns / 2), WindowHeight + 7, (Columns / 2));
       if InstallView then
          Add(Win => ActionWindow, Str => "Press ENTER to install module.");
       else
@@ -406,7 +406,8 @@ package body Bases.UI.Shipyard is
          Line => 0,
          Column => 6,
          Count => 5,
-         Color => 1);
+         Color => 1,
+         Attr => BoldCharacters);
       MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
       Move_Cursor(Win => ActionWindow, Line => 1, Column => 0);
       if MoneyIndex2 > 0 then
@@ -440,6 +441,20 @@ package body Bases.UI.Shipyard is
             exit;
          end if;
       end loop;
+      Get_Cursor_Position
+        (Win => ActionWindow,
+         Line => CurrentLine,
+         Column => StartColumn);
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => ActionWindow, Line => CurrentLine, Column => 0);
+      Add(Win => ActionWindow, Str => "Press ESCAPE to back to sky map.");
+      Change_Attributes
+        (Win => ActionWindow,
+         Line => CurrentLine,
+         Column => 6,
+         Count => 6,
+         Attr => BoldCharacters,
+         Color => 1);
       Refresh_Without_Update;
       Refresh_Without_Update(BoxWindow);
       Delete(BoxWindow);
@@ -473,14 +488,24 @@ package body Bases.UI.Shipyard is
       Move_Cursor(Line => 2, Column => 2);
       if InstallView then
          Add(Str => "[Install] [F2 Remove]");
-         Change_Attributes(Line => 2, Column => 13, Count => 2, Color => 1);
+         Change_Attributes
+           (Line => 2,
+            Column => 13,
+            Count => 2,
+            Color => 1,
+            Attr => BoldCharacters);
          Move_Cursor(Line => 2, Column => 24);
          Add
            (Str =>
               "[F3 Show modules: " &
               To_Lower(To_String(ModulesNames(ModuleType'Pos(ModulesType)))) &
               "]");
-         Change_Attributes(Line => 2, Column => 25, Count => 2, Color => 1);
+         Change_Attributes
+           (Line => 2,
+            Column => 25,
+            Count => 2,
+            Color => 1,
+            Attr => BoldCharacters);
          Modules_Items :=
            new Item_Array
            (Modules_List.First_Index .. (Modules_List.Last_Index + 1));
@@ -493,7 +518,12 @@ package body Bases.UI.Shipyard is
          end if;
       else
          Add(Str => "[F2 Install] [Remove]");
-         Change_Attributes(Line => 2, Column => 3, Count => 2, Color => 1);
+         Change_Attributes
+           (Line => 2,
+            Column => 3,
+            Count => 2,
+            Color => 1,
+            Attr => BoldCharacters);
          Modules_Items :=
            new Item_Array
            (PlayerShip.Modules.First_Index ..
@@ -543,7 +573,7 @@ package body Bases.UI.Shipyard is
       for I in ModulesNames'Range loop
          Types_Items.all(I + 1) := New_Item(To_String(ModulesNames(I)));
       end loop;
-      Types_Items.all(Types_Items'Last - 1) := New_Item("Quit");
+      Types_Items.all(Types_Items'Last - 1) := New_Item("Close");
       Types_Items.all(Types_Items'Last) := Null_Item;
       TypesMenu := New_Menu(Types_Items);
       Scale(TypesMenu, MenuHeight, MenuLength);
@@ -569,7 +599,7 @@ package body Bases.UI.Shipyard is
       Result: Menus.Driver_Result;
    begin
       case Key is
-         when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+         when 27 => -- Back to sky map
             CurrentMenuIndex := 1;
             InstallView := True;
             ModulesType := ANY;
@@ -669,37 +699,36 @@ package body Bases.UI.Shipyard is
             if Result = Request_Denied then
                Result := Driver(TypesMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            end if;
          when 50 | KEY_DOWN => -- Select next type option
             Result := Driver(TypesMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(TypesMenu, M_First_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            end if;
          when 10 => -- Set modules type to show
-            if Name(Current(TypesMenu)) /= "Quit" then
+            if Name(Current(TypesMenu)) /= "Close" then
                CurrentMenuIndex := 1;
                ModulesType :=
                  ModuleType'Val(Get_Index(Current(TypesMenu)) - 1);
             end if;
             DrawGame(Shipyard_View);
             return Shipyard_View;
+         when 27 => -- Esc select close option, used second time, close menu
+            if Name(Current(TypesMenu)) = "Close" then
+               DrawGame(Shipyard_View);
+               return Shipyard_View;
+            else
+               Result := Driver(TypesMenu, M_Last_Item);
+            end if;
          when others =>
             Result := Driver(TypesMenu, Key);
-            if Result = Menu_Ok then
-               Refresh(MenuWindow2);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(TypesMenu, M_Clear_Pattern);
                Result := Driver(TypesMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow2);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow2);
+      end if;
       return ShipyardTypesMenu;
    end ShipyardTypesKeys;
 
