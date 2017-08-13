@@ -73,7 +73,7 @@ package body Combat.UI is
       if CrewIndex > 0 then
          GiveOrders(CrewIndex, Order, ModuleIndex);
       elsif CrewIndex = 0 then
-         if Name(Current(OrdersMenu)) = "Quit" then
+         if Name(Current(OrdersMenu)) = "Close" then
             return;
          end if;
          case Order is
@@ -208,7 +208,8 @@ package body Combat.UI is
            (Line => CurrentLine,
             Column => 2,
             Count => 1,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          CurrentLine := CurrentLine + 1;
          Move_Cursor(Line => CurrentLine, Column => 2);
          Add(Str => "Ship cargo");
@@ -216,7 +217,8 @@ package body Combat.UI is
            (Line => CurrentLine,
             Column => 8,
             Count => 1,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          CurrentLine := CurrentLine + 1;
          Move_Cursor(Line => CurrentLine, Column => 2);
          Add(Str => "Ship modules");
@@ -224,7 +226,8 @@ package body Combat.UI is
            (Line => CurrentLine,
             Column => 2,
             Count => 1,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          CurrentLine := CurrentLine + 1;
          Move_Cursor(Line => CurrentLine, Column => 2);
          Add(Str => "Messages");
@@ -232,7 +235,8 @@ package body Combat.UI is
            (Line => CurrentLine,
             Column => 2,
             Count => 1,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          CurrentLine := CurrentLine + 1;
       end if;
       WindowHeight := 2;
@@ -377,28 +381,32 @@ package body Combat.UI is
            (Line => 8,
             Column => (Columns / 2),
             Count => 1,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          Move_Cursor(Line => 9, Column => (Columns / 2));
          Add(Str => "ENTER to give orders");
          Change_Attributes
            (Line => 9,
             Column => (Columns / 2),
             Count => 5,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          Move_Cursor(Line => 10, Column => (Columns / 2));
          Add(Str => "SPACE for next turn");
          Change_Attributes
            (Line => 10,
             Column => (Columns / 2),
             Count => 5,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          Move_Cursor(Line => 11, Column => (Columns / 2));
          Add(Str => "F1 for help");
          Change_Attributes
            (Line => 11,
             Column => (Columns / 2),
             Count => 2,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
       else
          Move_Cursor(Line => 10, Column => (Columns / 3));
          Add(Str => "Press any key for back to sky map");
@@ -406,7 +414,8 @@ package body Combat.UI is
            (Line => 10,
             Column => (Columns / 3) + 6,
             Count => 3,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
       end if;
       LastMessage := To_Unbounded_String("");
       Refresh_Without_Update;
@@ -558,7 +567,7 @@ package body Combat.UI is
             end if;
          end loop;
       end if;
-      Orders_Items.all(MenuIndex) := New_Item("Quit", "0");
+      Orders_Items.all(MenuIndex) := New_Item("Close", "0");
       MenuIndex := MenuIndex + 1;
       for I in MenuIndex .. LastIndex loop
          Orders_Items.all(I) := Null_Item;
@@ -777,6 +786,13 @@ package body Combat.UI is
             CombatOrders;
             DrawGame(Combat_State);
             return Combat_State;
+         when 27 => -- Esc select close option, used second time, close menu
+            if Name(Current(OrdersMenu)) = "Close" then
+               DrawGame(Combat_State);
+               return Combat_State;
+            else
+               Result := Driver(OrdersMenu, M_Last_Item);
+            end if;
          when others =>
             Result := Driver(OrdersMenu, Key);
             if Result /= Menu_Ok then
