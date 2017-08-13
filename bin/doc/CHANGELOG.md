@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
   1000 missions, finish 1500 missions, finish 2000 missions, finish 2500
   missions, gain max reputation in 1 poleis base, gain max reputation in 3
   poleis bases, gain max reputation in 5 poleis bases, gain max reputation in
-  7 poleis bases and gain max reputation in 10 poleis bases
+  7 poleis bases, gain max reputation in 10 poleis bases and gain max
+  reputation in 15 poleis bases
 - Ability to loot abandoned bases
 - Remove items from abandoned bases over time
 - Death screen
