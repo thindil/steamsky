@@ -19,7 +19,7 @@ All notable changes to this project will be documented in this file.
   incompatible
 - New friendly ships: tiny poleis trader, tiny independent trader, small poleis
   trader, small independent trader, poleis trader, independent trader, advanced 
-  poleis trader and advanced independent trader
+  poleis trader, advanced independent trader and large poleis trader
 - New random event: friendly trader ship
 
 ### Changed
