@@ -75,9 +75,7 @@ package body Header is
             Change_Attributes(Line => 0, Column => 12, Count => 1, Color => 1);
             return;
          when Craft_View =>
-            Add(Str => "Manufacturing [Quit] [F1 Help]");
-            Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
-            Change_Attributes(Line => 0, Column => 22, Count => 2, Color => 1);
+            Add(Str => "Manufacturing");
          when Cargo_Info =>
             Add(Str => "Ship Cargo [Quit]");
             Change_Attributes(Line => 0, Column => 12, Count => 1, Color => 1);

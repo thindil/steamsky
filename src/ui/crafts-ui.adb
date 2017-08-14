@@ -329,7 +329,24 @@ package body Crafts.UI is
         (Line => (WindowHeight + 3),
          Column => (Columns / 2) + 6,
          Count => 5,
-         Color => 1);
+         Color => 1,
+         Attr => BoldCharacters);
+      Move_Cursor(Line => (WindowHeight + 4), Column => (Columns / 2));
+      Add(Str => "Press ESCAPE to back to sky map");
+      Change_Attributes
+        (Line => (WindowHeight + 4),
+         Column => (Columns / 2) + 6,
+         Count => 6,
+         Color => 1,
+         Attr => BoldCharacters);
+      Move_Cursor(Line => (WindowHeight + 5), Column => (Columns / 2));
+      Add(Str => "Press F1 for help");
+      Change_Attributes
+        (Line => (WindowHeight + 5),
+         Column => (Columns / 2) + 6,
+         Count => 2,
+         Color => 1,
+         Attr => BoldCharacters);
       Refresh_Without_Update;
       Refresh_Without_Update(BoxWindow);
       Delete(BoxWindow);
@@ -431,7 +448,7 @@ package body Crafts.UI is
             MenuIndex := MenuIndex + 1;
          end if;
       end loop;
-      Modules_Items.all(Modules_Items'Last - 1) := New_Item("Quit", "0");
+      Modules_Items.all(Modules_Items'Last - 1) := New_Item("Close", "0");
       Modules_Items.all(Modules_Items'Last) := Null_Item;
       ModulesMenu := New_Menu(Modules_Items);
       Set_Options(ModulesMenu, (Show_Descriptions => False, others => True));
@@ -458,7 +475,7 @@ package body Crafts.UI is
       Result: Driver_Result;
    begin
       case Key is
-         when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+         when 27 => -- Back to sky map
             RecipeIndex := 1;
             DrawGame(Sky_Map_View);
             return Sky_Map_View;
@@ -514,6 +531,13 @@ package body Crafts.UI is
             Result := Driver(ModulesMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(ModulesMenu, M_First_Item);
+            end if;
+         when 27 => -- Esc select close option, used second time, close menu
+            if Name(Current(ModulesMenu)) = "Close" then
+               DrawGame(Craft_View);
+               return Craft_View;
+            else
+               Result := Driver(ModulesMenu, M_Last_Item);
             end if;
          when others =>
             Result := Driver(ModulesMenu, Key);
