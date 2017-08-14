@@ -211,7 +211,9 @@ must be existing item index from any items file from *data/items* directory.
 - Each ship start from `[` symbol. Any value between `[` and `]` is a index 
   (it can be number or text) and must be unique. This value is used at this
   moment to set player ship and in Destroy types of goals.
-- Name: Type of ship. Will be visible during combat information.
+- Name: Type of ship. Will be visible during combat information. If you want
+  that ship will be used in friendly trader random event, you must have word
+  "trader" in ship name (example: *small poleis trader*).
 - Modules: List of modules indexes (from *shipmodules* directory), separated 
   by `, ` (comma and space).
 - Accuracy: Bonus to accuracy for ship. Can be constant value (example: 1) or 
