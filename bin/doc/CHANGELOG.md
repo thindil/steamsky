@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Auto finish missions now finish all which are ready
 - Updated help
+- Updated MODDING.md
 
 ### Fixed
 - Redrawing screens after resize terminal
