@@ -27,3 +27,4 @@ MissionItemsType = MissionItem
 FoodTypes = Food, RawFood
 FuelType = Fuel
 MoneyIndex = 1
+TradersName = trader
