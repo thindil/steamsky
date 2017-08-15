@@ -372,7 +372,7 @@ package body Events is
    begin
       TraderIndex := ProtoShips_List.First_Index;
       for Ship of ProtoShips_List loop
-         if Index(Ship.Name, "trader") > 0 then
+         if Index(Ship.Name, To_String(TradersName)) > 0 then
             Traders.Append(New_Item => TraderIndex);
          end if;
          TraderIndex := TraderIndex + 1;
