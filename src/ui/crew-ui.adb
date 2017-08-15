@@ -283,10 +283,10 @@ package body Crew.UI is
             WindowWidth - 4);
       end if;
       CurrentLine := WindowHeight + 3;
-      if CurrentLine >= Lines - 2 then
-         CurrentLine := Lines - 3;
+      if CurrentLine >= Lines - 4 then
+         CurrentLine := Lines - 5;
       end if;
-      ActionsWindow := Create(3, (Columns / 2), CurrentLine, (Columns / 2));
+      ActionsWindow := Create(5, (Columns / 2), CurrentLine, (Columns / 2));
       if Member.Tired < 100 and
         Member.Hunger < 100 and
         Member.Thirst < 100 then
@@ -302,7 +302,8 @@ package body Crew.UI is
             Line => 0,
             Column => 6,
             Count => 5,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
       end if;
       for Module of PlayerShip.Modules loop
          if Module.Durability > 0 and
@@ -333,8 +334,29 @@ package body Crew.UI is
             Line => CurrentLine,
             Column => 6,
             Count => 5,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
       end if;
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
+      Add(Win => ActionsWindow, Str => "Press Escape to back to sky map");
+      Change_Attributes
+        (Win => ActionsWindow,
+         Line => CurrentLine,
+         Column => 6,
+         Count => 6,
+         Attr => BoldCharacters,
+         Color => 1);
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
+      Add(Win => ActionsWindow, Str => "Press F1 for help");
+      Change_Attributes
+        (Win => ActionsWindow,
+         Line => CurrentLine,
+         Column => 6,
+         Count => 2,
+         Attr => BoldCharacters,
+         Color => 1);
       Refresh_Without_Update;
       Refresh_Without_Update(InfoWindow);
       Refresh_Without_Update(ActionsWindow);
@@ -555,7 +577,7 @@ package body Crew.UI is
          Orders_Items.all(MenuIndex) := New_Item("Set orders priorities", "0");
          MenuIndex := MenuIndex + 1;
       end if;
-      Orders_Items.all(MenuIndex) := New_Item("Quit", "0");
+      Orders_Items.all(MenuIndex) := New_Item("Close", "0");
       Orders_Items.all(Orders_Items'Last) := Null_Item;
       OrdersMenu := New_Menu(Orders_Items);
       Set_Options(OrdersMenu, (Show_Descriptions => False, others => True));
@@ -611,7 +633,7 @@ package body Crew.UI is
          Orders_Items.all(MenuIndex) := New_Item("Repair ship everyone");
          MenuIndex := MenuIndex + 1;
       end if;
-      Orders_Items.all(MenuIndex) := New_Item("Quit");
+      Orders_Items.all(MenuIndex) := New_Item("Close");
       MenuIndex := MenuIndex + 1;
       for I in MenuIndex .. Orders_Items'Last loop
          Orders_Items.all(I) := Null_Item;
@@ -665,7 +687,7 @@ package body Crew.UI is
          Orders_Items.all(I) :=
            New_Item(To_String(OrdersNames(I)), To_String(OrderPriority));
       end loop;
-      Orders_Items.all(Orders_Items'Last - 1) := New_Item("Quit");
+      Orders_Items.all(Orders_Items'Last - 1) := New_Item("Close");
       Orders_Items.all(Orders_Items'Last) := Null_Item;
       PrioritiesMenu := New_Menu(Orders_Items);
       Scale(PrioritiesMenu, MenuHeight, MenuLength);
@@ -693,8 +715,7 @@ package body Crew.UI is
       RefreshSkills: Boolean := False;
    begin
       case Key is
-         when Character'Pos('q') |
-           Character'Pos('Q') => -- Back to sky map or combat screen
+         when 27 => -- Back to sky map or combat screen
             MemberIndex := 1;
             NeedRepairs := False;
             NeedClean := False;
@@ -793,7 +814,7 @@ package body Crew.UI is
                DrawGame(Crew_Info);
                ShowPrioritiesMenu;
                return Orders_Priorities;
-            elsif OrderName /= "Quit" then
+            elsif OrderName /= "Close" then
                if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                    .MType =
                  GUN then
@@ -804,6 +825,13 @@ package body Crew.UI is
             end if;
             DrawGame(Crew_Info);
             return Crew_Info;
+         when 27 => -- Esc select close option, used second time, close menu
+            if OrderName = "Close" then
+               DrawGame(Crew_Info);
+               return Crew_Info;
+            else
+               Result := Driver(OrdersMenu, M_Last_Item);
+            end if;
          when others =>
             Result := Driver(OrdersMenu, Key);
             if Result /= Menu_Ok then
@@ -855,6 +883,13 @@ package body Crew.UI is
             end if;
             DrawGame(Crew_Info);
             return Crew_Info;
+         when 27 => -- Esc select close option, used second time, close menu
+            if OrderName = "Close" then
+               DrawGame(Crew_Info);
+               return Crew_Info;
+            else
+               Result := Driver(OrdersMenu, M_Last_Item);
+            end if;
          when others =>
             Result := Driver(OrdersMenu, Key);
             if Result /= Menu_Ok then
@@ -930,6 +965,13 @@ package body Crew.UI is
                  ("Use Left arrow to lower order priority or Right arrow to raise order priority.");
                DrawGame(Crew_Info);
                ShowPrioritiesMenu;
+            end if;
+         when 27 => -- Esc select close option, used second time, close menu
+            if Name(Current(PrioritiesMenu)) = "Close" then
+               DrawGame(Crew_Info);
+               return Crew_Info;
+            else
+               Result := Driver(PrioritiesMenu, M_Last_Item);
             end if;
          when others =>
             Result := Driver(PrioritiesMenu, Key);
