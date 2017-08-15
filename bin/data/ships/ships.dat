@@ -1073,6 +1073,16 @@ Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
 Skills = 1x15..25, 5x3..6; 3x15..25, 5x3..6; 2x15..25; 3x15..25, 5x3..6; 3x15..25, 5x3..6
 Orders = Pilot, Gunner, Engineer, Gunner, Gunner
-Description = Large, good armored version of poleis traders ship. Avoids any fights
+Description = Large, good armored version of poleis traders ship. Avoids any fights.
 Owner = Poleis
+[105]
+Name = Large independent trader
+Modules = 23, 26, 19, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 28, 29, 28, 29, 28, 29
+CombatAI = Coward
+Loot = 300..500
+Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
+Skills = 1x15..25, 5x3..6; 3x15..25, 5x3..6; 2x15..25; 3x15..25, 5x3..6; 3x15..25, 5x3..6
+Orders = Pilot, Gunner, Engineer, Gunner, Gunner
+Description = Large, good armored version of independent traders ship. Avoids any fights.
+Owner = Independent
 []
