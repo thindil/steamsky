@@ -50,11 +50,7 @@ package body Header is
             Add(Str => "Ship Informations [Quit] [F1 Help]");
             Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
             Change_Attributes(Line => 0, Column => 26, Count => 2, Color => 1);
-         when Crew_Info | Giving_Orders =>
-            Add(Str => "Crew Informations [Quit] [F1 Help]");
-            Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
-            Change_Attributes(Line => 0, Column => 26, Count => 2, Color => 1);
-         when Dismiss_Confirm =>
+         when Crew_Info | Giving_Orders | Dismiss_Confirm =>
             Add(Str => "Crew Informations");
          when Messages_View =>
             Add(Str => "Last Messages [Quit]");
