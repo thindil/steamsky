@@ -97,6 +97,12 @@ To change which item is used as a money, open file *game.dat* in *data*
 directory and edit line which starts with MoneyIndex. Value after equal sign 
 must be existing item index from any items file from *data/items* directory.
 
+## Traders ships name
+To change which word in ship names is used to determine trader ship (needed for
+friendly trader random event), open file *game.dat* in *data* directory and
+edit like which starts with TradersName. Value after equal sign can be any
+single word.
+
 ## Items
 
 ### General informations
@@ -213,7 +219,8 @@ must be existing item index from any items file from *data/items* directory.
   moment to set player ship and in Destroy types of goals.
 - Name: Type of ship. Will be visible during combat information. If you want
   that ship will be used in friendly trader random event, you must have word
-  "trader" in ship name (example: *small poleis trader*).
+  which you set in *game.dat* as *TraderNames* in ship name. Example: if you
+  use *trader* word, ship name can be *small poleis trader*.
 - Modules: List of modules indexes (from *shipmodules* directory), separated 
   by `, ` (comma and space).
 - Accuracy: Bonus to accuracy for ship. Can be constant value (example: 1) or 
