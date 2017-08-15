@@ -134,6 +134,7 @@ package Game is
    DataDirectory: Unbounded_String :=
      To_Unbounded_String
        ("data" & Dir_Separator); -- Path to directory where are game data files
+   TradersName: Unbounded_String; -- Word used in ships names for traders ships (for events)
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;

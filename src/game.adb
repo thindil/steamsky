@@ -328,7 +328,7 @@ package body Game is
       DataFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex, StartIndex, EndIndex, Amount: Natural;
-      FieldsNames: constant array(1 .. 29) of Unbounded_String :=
+      FieldsNames: constant array(1 .. 30) of Unbounded_String :=
         (To_Unbounded_String("BasesSyllablesPre"),
          To_Unbounded_String("BasesSyllablesStart"),
          To_Unbounded_String("BasesSyllablesEnd"),
@@ -357,7 +357,8 @@ package body Game is
          To_Unbounded_String("MissionItemsType"),
          To_Unbounded_String("FoodTypes"),
          To_Unbounded_String("FuelType"),
-         To_Unbounded_String("MoneyIndex"));
+         To_Unbounded_String("MoneyIndex"),
+         To_Unbounded_String("TradersName"));
    begin
       if BaseSyllablesStart.Length > 0 then
          return True;
@@ -476,6 +477,8 @@ package body Game is
                         FuelType := Value;
                      when 29 =>
                         MoneyIndex := Value;
+                     when 30 =>
+                        TradersName := Value;
                   end case;
                   StartIndex := EndIndex + 2;
                end loop;
