@@ -174,4 +174,8 @@ Target = Poleis
 Type = Reputation
 Amount = 25
 Target = Poleis
+[57]
+Type = Reputation
+Amount = 50
+Target = Poleis
 []
