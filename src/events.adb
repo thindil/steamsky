@@ -31,7 +31,7 @@ with Utils; use Utils;
 
 package body Events is
 
-   Traders: Positive_Container.Vector;
+   Traders, FriendlyShips: Positive_Container.Vector;
 
    function CheckForEvent(OldState: GameStates) return GameStates is
       TimePassed: Integer;
@@ -166,7 +166,7 @@ package body Events is
                         CountFuelNeeded);
                      UpdateGame(TimePassed);
                   end if;
-               when 21 .. 30 => -- Friendly trader
+               when 21 .. 23 => -- Friendly trader
                   Events_List.Append
                   (New_Item =>
                      (Trader,
@@ -178,6 +178,21 @@ package body Events is
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
                   AddMessage("You meet friendly trader.", OtherMessage);
+                  UpdateOrders;
+               when 24 .. 30 => -- Friendly trader
+                  Events_List.Append
+                  (New_Item =>
+                     (FriendlyShip,
+                      PlayerShip.SkyX,
+                      PlayerShip.SkyY,
+                      GetRandom(30, 45),
+                      FriendlyShips
+                        (GetRandom
+                           (FriendlyShips.First_Index,
+                            FriendlyShips.Last_Index))));
+                  SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
+                    Events_List.Last_Index;
+                  AddMessage("You spotted friendly ship.", OtherMessage);
                   UpdateOrders;
                when others => -- Combat
                   GenerateEnemies;
@@ -374,6 +389,13 @@ package body Events is
       for Ship of ProtoShips_List loop
          if Index(Ship.Name, To_String(TradersName)) > 0 then
             Traders.Append(New_Item => TraderIndex);
+         end if;
+         TraderIndex := TraderIndex + 1;
+      end loop;
+      TraderIndex := ProtoShips_List.First_Index;
+      for Ship of ProtoShips_List loop
+         if Ship.Owner = Poleis or Ship.Owner = Independent then
+            FriendlyShips.Append(New_Item => TraderIndex);
          end if;
          TraderIndex := TraderIndex + 1;
       end loop;

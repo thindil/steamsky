@@ -283,6 +283,21 @@ package body UserInterface is
             if HaveTrader then
                OrdersAmount := OrdersAmount + 3;
             end if;
+         elsif Event = FriendlyShip then
+            if HaveTrader then
+               if Index
+                   (ProtoShips_List
+                      (Events_List
+                         (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                         .Data)
+                      .Name,
+                    To_String(TradersName)) >
+                 0 then
+                  OrdersAmount := OrdersAmount + 3;
+               else
+                  OrdersAmount := OrdersAmount + 1;
+               end if;
+            end if;
          else
             OrdersAmount := OrdersAmount + 1;
          end if;
@@ -399,6 +414,25 @@ package body UserInterface is
                   MenuIndex := MenuIndex + 1;
                   Orders_Items.all(MenuIndex) := New_Item("Ask for bases");
                   MenuIndex := MenuIndex + 1;
+                  Orders_Items.all(MenuIndex) := New_Item("Ask for events");
+                  MenuIndex := MenuIndex + 1;
+               end if;
+            when FriendlyShip =>
+               if HaveTrader then
+                  if Index
+                      (ProtoShips_List
+                         (Events_List
+                            (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                               .EventIndex)
+                            .Data)
+                         .Name,
+                       To_String(TradersName)) >
+                    0 then
+                     Orders_Items.all(MenuIndex) := New_Item("Trade");
+                     MenuIndex := MenuIndex + 1;
+                     Orders_Items.all(MenuIndex) := New_Item("Ask for bases");
+                     MenuIndex := MenuIndex + 1;
+                  end if;
                   Orders_Items.all(MenuIndex) := New_Item("Ask for events");
                   MenuIndex := MenuIndex + 1;
                end if;
