@@ -110,7 +110,7 @@ package body Trades.UI is
         BaseItemIndex > 0 and
         Items_List(ItemIndex).Buyable(BaseType) then
          WindowHeight := WindowHeight + 1;
-      elsif BaseItemIndex > 0 then
+      elsif BaseIndex = 0 and BaseItemIndex > 0 then
          WindowHeight := WindowHeight + 1;
       end if;
       WindowHeight :=
@@ -203,7 +203,7 @@ package body Trades.UI is
               "In base:" &
               Integer'Image(SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount));
          CurrentLine := CurrentLine + 1;
-      elsif BaseItemIndex > 0 then
+      elsif BaseIndex = 0 and BaseItemIndex > 0 then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
          Add
            (Win => InfoWindow,
