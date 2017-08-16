@@ -40,6 +40,8 @@ package body Events.UI is
       BaseIndex: constant Natural :=
         SkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY)
           .BaseIndex;
+      CurrentLine: Line_Position;
+      CurrentColumn: Column_Position;
    begin
       ClearWindow := Create(10, (Columns / 2), 4, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
@@ -127,24 +129,40 @@ package body Events.UI is
       Resize(InfoWindow, WindowHeight, WindowWidth);
       WindowFrame(InfoWindow, 2, "Event info");
       ActionsWindow :=
-        Create(3, (Columns / 2), WindowHeight + 4, (Columns / 2));
+        Create(4, (Columns / 2), WindowHeight + 4, (Columns / 2));
       Add(Win => ActionsWindow, Str => "Press SPACE to show event on map");
       Change_Attributes
         (Win => ActionsWindow,
          Line => 0,
          Column => 6,
          Count => 5,
-         Color => 1);
+         Color => 1,
+         Attr => BoldCharacters);
       Move_Cursor(Win => ActionsWindow, Line => 1, Column => 0);
       Add
         (Win => ActionsWindow,
          Str => "Press ENTER to set event as a destination for ship");
+      Get_Cursor_Position
+        (Win => ActionsWindow,
+         Line => CurrentLine,
+         Column => CurrentColumn);
       Change_Attributes
         (Win => ActionsWindow,
          Line => 1,
          Column => 6,
          Count => 5,
-         Color => 1);
+         Color => 1,
+         Attr => BoldCharacters);
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
+      Add(Win => ActionsWindow, Str => "Press ESCAPE to back to sky map");
+      Change_Attributes
+        (Win => ActionsWindow,
+         Line => CurrentLine,
+         Column => 6,
+         Count => 6,
+         Color => 1,
+         Attr => BoldCharacters);
       Refresh_Without_Update;
       Refresh_Without_Update(InfoWindow);
       Delete(InfoWindow);
@@ -197,9 +215,16 @@ package body Events.UI is
          Post(EventsMenu);
          ShowEventInfo;
       else
-         Move_Cursor(Line => (Lines / 3), Column => (Columns / 2) - 21);
-         Add(Str => "You don't know about any events.");
-         Refresh;
+         Move_Cursor(Line => (Lines / 3), Column => (Columns / 5));
+         Add
+           (Str =>
+              "You don't know about any events. Press Escape to back to sky map.");
+         Change_Attributes
+           (Line => (Lines / 3),
+            Column => (Columns / 5) + 39,
+            Count => 6,
+            Color => 1,
+            Attr => BoldCharacters);
       end if;
    end ShowEvents;
 
@@ -210,7 +235,7 @@ package body Events.UI is
       if EventsMenu /= Null_Menu then
          EventIndex := Get_Index(Current(EventsMenu));
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                Post(EventsMenu, False);
                Delete(EventsMenu);
                DrawGame(Sky_Map_View);
@@ -260,7 +285,7 @@ package body Events.UI is
          end if;
       else
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             when others =>
