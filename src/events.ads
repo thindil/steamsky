@@ -28,7 +28,8 @@ package Events is
       DoublePrice,
       FullDocks,
       EnemyPatrol,
-      Trader); -- Types of events
+      Trader,
+      FriendlyShip); -- Types of events
    type EventData is -- Data structure for random events
    record
       EType: Events_Types; -- Type of event

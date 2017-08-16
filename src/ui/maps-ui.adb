@@ -198,7 +198,8 @@ package body Maps.UI is
       if EventIndex > 0 then
          WindowHeight := WindowHeight + 1;
          if Events_List(EventIndex).EType = EnemyShip or
-           Events_List(EventIndex).EType = Trader then
+           Events_List(EventIndex).EType = Trader or
+           Events_List(EventIndex).EType = FriendlyShip then
             NewWindowWidth :=
               4 +
               Column_Position
@@ -311,7 +312,7 @@ package body Maps.UI is
       if EventIndex > 0 then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          case Events_List(EventIndex).EType is
-            when EnemyShip | Trader =>
+            when EnemyShip | Trader | FriendlyShip =>
                Add
                  (Win => InfoWindow,
                   Str =>

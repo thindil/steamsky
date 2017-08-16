@@ -58,7 +58,7 @@ package body Events.UI is
            Positive'Image(Events_List(EventIndex).SkyY));
       Move_Cursor(Win => InfoWindow, Line => 2, Column => 2);
       case Events_List(EventIndex).EType is
-         when EnemyShip | EnemyPatrol | Trader =>
+         when EnemyShip | EnemyPatrol | Trader | FriendlyShip =>
             Add
               (Win => InfoWindow,
                Str =>
@@ -176,7 +176,9 @@ package body Events.UI is
             when DoublePrice =>
                Events_Items.all(I) := New_Item("Double price in base");
             when Trader =>
-               Events_Items.all(I) := New_Item("Friendly trader");
+               Events_Items.all(I) := New_Item("Friendly trader spotted");
+            when FriendlyShip =>
+               Events_Items.all(I) := New_Item("Friendly ship spotted");
             when None =>
                null;
          end case;
