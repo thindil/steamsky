@@ -89,8 +89,7 @@ package body Header is
          when Bases_List =>
             Add(Str => "List of know bases");
          when Events_View =>
-            Add(Str => "List of know events [Quit]");
-            Change_Attributes(Line => 0, Column => 21, Count => 1, Color => 1);
+            Add(Str => "List of know events");
          when GameStats_View =>
             Add(Str => "Game statistics [Quit] [F1 Help]");
             Change_Attributes(Line => 0, Column => 17, Count => 1, Color => 1);
