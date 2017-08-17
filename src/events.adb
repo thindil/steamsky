@@ -84,6 +84,15 @@ package body Events is
             end loop;
          end if;
       end GenerateEnemies;
+      procedure GainPerception is
+      begin
+         for I in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(I).Order = Pilot or
+              PlayerShip.Crew(I).Order = Gunner then
+               GainExp(1, 5, Crew_Container.To_Index(I));
+            end if;
+         end loop;
+      end GainPerception;
    begin
       if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
          case Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
@@ -178,6 +187,7 @@ package body Events is
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
                   AddMessage("You meet friendly trader.", OtherMessage);
+                  GainPerception;
                   UpdateOrders;
                when 24 .. 30 => -- Friendly trader
                   Events_List.Append
@@ -193,6 +203,7 @@ package body Events is
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
                   AddMessage("You spotted friendly ship.", OtherMessage);
+                  GainPerception;
                   UpdateOrders;
                when others => -- Combat
                   GenerateEnemies;
