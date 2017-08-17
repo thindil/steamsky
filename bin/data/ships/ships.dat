@@ -1095,4 +1095,14 @@ Skills = 1x30..50, 5x4..12; 3x30..50, 5x4..12; 2x30..50; 3x30..50, 5x4..12; 3x30
 Orders = Pilot, Gunner, Engineer, Gunner, Gunner, Gunner
 Description = Huge, well armored version of poleis traders ship. Avoids any fights.
 Owner = Poleis
+[107]
+Name = Huge independent trader
+Modules = 60, 26, 62, 62, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 33, 39, 33, 39, 33, 39, 33
+CombatAI = Coward
+Loot = 500..1000
+Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13
+Skills = 1x30..50, 5x4..12; 3x30..50, 5x4..12; 2x30..50; 3x30..50, 5x4..12; 3x30..50, 5x4..12; 3x30..50, 5x4..12
+Orders = Pilot, Gunner, Engineer, Gunner, Gunner, Gunner
+Description = Huge, well armored version of independent traders ship. Avoids any fights.
+Owner = Independent
 []
