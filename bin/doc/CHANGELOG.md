@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file.
 - New friendly ships: tiny poleis trader, tiny independent trader, small poleis
   trader, small independent trader, poleis trader, independent trader, advanced 
   poleis trader, advanced independent trader, large poleis trader, large
-  independent trader and huge poleis trader
+  independent trader, huge poleis trader and huge independent trader
 - New random events: friendly trader ship and friendly ship
 
 ### Changed
