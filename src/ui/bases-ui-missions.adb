@@ -323,7 +323,7 @@ package body Bases.UI.Missions is
               "No available missions in this base. Press Escape to back to sky map.");
          Change_Attributes
            (Line => (Lines / 3),
-            Column => (Columns / 5) + 44,
+            Column => (Columns / 5) + 42,
             Count => 6,
             Color => 1,
             Attr => BoldCharacters);
