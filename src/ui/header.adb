@@ -25,6 +25,7 @@ with Config; use Config;
 with ShipModules; use ShipModules;
 with Crew; use Crew;
 with Maps; use Maps;
+with Utils.UI; use Utils.UI;
 
 package body Header is
 
@@ -103,8 +104,13 @@ package body Header is
             Add(Str => "Accepted missions [Quit]");
             Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
          when GameOptions_View =>
-            Add(Str => "Game options [Quit]");
-            Change_Attributes(Line => 0, Column => 14, Count => 1, Color => 1);
+            Add(Str => "Game options [Escape closes]");
+            Change_Attributes
+              (Line => 0,
+               Column => 14,
+               Count => 6,
+               Color => 1,
+               Attr => BoldCharacters);
             return;
          when Heal_View =>
             Add(Str => "Heal wounded crew members");

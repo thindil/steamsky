@@ -24,6 +24,7 @@ with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Config; use Config;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
+with Utils.UI; use Utils.UI;
 
 package body GameOptions is
 
@@ -235,10 +236,8 @@ package body GameOptions is
       FieldOptions := Get_Options(Options_Fields.all(2));
       FieldOptions.Edit := False;
       Set_Options(Options_Fields.all(2), FieldOptions);
-      Set_Foreground
-        (Options_Fields.all(2),
-         (Bold_Character => True, others => False),
-         1);
+      Set_Foreground(Options_Fields.all(2), BoldCharacters, 11);
+      Set_Background(Options_Fields.all(2), BoldCharacters, 11);
       CreateLabel(1, "Default speed after undocking: ");
       Options_Fields.all(4) := New_Field(1, 16, 1, 41, 0, 0);
       Set_Field_Type(Options_Fields.all(4), Create(SpeedEnum, True));
@@ -543,17 +542,11 @@ package body GameOptions is
          else
             Set_Buffer(Fields(OptionsForm, 100), 0, Description);
          end if;
-         Set_Foreground
-           (Current(OptionsForm),
-            (Bold_Character => True, others => False),
-            1);
+         Set_Foreground(Current(OptionsForm), BoldCharacters, 11);
          for CursorField of CursorFieldsNumbers loop
             if CursorField = Field then
                Visibility := Normal;
-               Set_Background
-                 (Current(OptionsForm),
-                  (Under_Line => True, others => False),
-                  1);
+               Set_Background(Current(OptionsForm), BoldCharacters, 11);
                Result := Driver(OptionsForm, F_End_Line);
                exit;
             end if;
@@ -562,9 +555,7 @@ package body GameOptions is
          for FieldNumber of FieldsNumbers loop
             if FieldNumber /= Field then
                Set_Foreground(Fields(OptionsForm, FieldNumber));
-               Set_Background
-                 (Fields(OptionsForm, FieldNumber),
-                  (others => False));
+               Set_Background(Fields(OptionsForm, FieldNumber));
             end if;
          end loop;
       end SetDescription;
@@ -774,9 +765,7 @@ package body GameOptions is
             else
                SetNewKey;
             end if;
-         when Character'Pos('q') |
-           Character'Pos
-             ('Q') => -- Save options and quit to map or set Q as key shortcut
+         when 27 => -- Save options and quit to map or set Esc as key shortcut
             if not KeySetting then
                Visibility := Invisible;
                Set_Cursor_Visibility(Visibility);
