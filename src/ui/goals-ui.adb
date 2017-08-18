@@ -45,7 +45,7 @@ package body Goals.UI is
             MenuIndex := MenuIndex + 1;
          end if;
       end loop;
-      Goals_Items.all(MenuIndex) := New_Item("Quit", "0");
+      Goals_Items.all(MenuIndex) := New_Item("Close", "0");
       MenuIndex := MenuIndex + 1;
       for I in MenuIndex .. Goals_Items'Last loop
          Goals_Items.all(I) := Null_Item;
@@ -88,7 +88,7 @@ package body Goals.UI is
                    (2 .. GoalTypes'Image(GoalTypes'Val(I))'Last)),
               Positive'Image(I));
       end loop;
-      GoalsTypes_Items.all(7) := New_Item("Quit", "0");
+      GoalsTypes_Items.all(7) := New_Item("Close", "0");
       GoalsTypes_Items.all(8) := Null_Item;
       GoalsMenu := New_Menu(GoalsTypes_Items);
       MenuOptions := Get_Options(GoalsMenu);
@@ -168,6 +168,21 @@ package body Goals.UI is
                else
                   return OldState;
                end if;
+            end if;
+         when 27 => -- Esc select close option, used second time, close menu
+            if Name(Current(GoalsMenu)) = "Close" then
+               Post(GoalsMenu, False);
+               Delete(GoalsMenu);
+               if OldState = New_Game then
+                  Erase;
+                  ShowMainMenu;
+                  ShowNewGameForm(8);
+               else
+                  DrawGame(OldState);
+               end if;
+               return OldState;
+            else
+               Result := Driver(GoalsMenu, M_Last_Item);
             end if;
          when others =>
             Result := Driver(GoalsMenu, Key);
