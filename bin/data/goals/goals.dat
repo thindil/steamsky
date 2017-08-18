@@ -182,4 +182,8 @@ Target = Poleis
 Type = Reputation
 Amount = 1
 Target = Independent
+[59]
+Type = Reputation
+Amount = 3
+Target = Independent
 []
