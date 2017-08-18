@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 - Gaining loot when money index is different than default
 - Crash on viewing Hall of Fame
 - Crash during buying items in bases
+- Damaging tools during cleaning ship
 
 ## [1.4] - 2017-07-23
 
