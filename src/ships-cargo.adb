@@ -140,14 +140,13 @@ package body Ships.Cargo is
    procedure DamageCargo
      (CargoIndex: Positive;
       CrewIndex, SkillIndex: Natural := 0) is
-      DamageChance: Integer := 0;
       SelectedItem: constant CargoData := PlayerShip.Cargo(CargoIndex);
+      DamageChance: Integer := Items_List(SelectedItem.ProtoIndex).Value;
       I: Natural := PlayerShip.Cargo.First_Index;
    begin
       if CrewIndex > 0 then
          DamageChance :=
-           Items_List(SelectedItem.ProtoIndex).Value -
-           (GetSkillLevel(CrewIndex, SkillIndex) / 5);
+           DamageChance - (GetSkillLevel(CrewIndex, SkillIndex) / 5);
          if DamageChance < 0 then
             DamageChance := 0;
          end if;
