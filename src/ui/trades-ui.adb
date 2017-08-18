@@ -52,6 +52,7 @@ package body Trades.UI is
       MoneyIndex2, BaseItemIndex, BaseItemIndex2, CargoIndex: Natural := 0;
       FreeSpace: Integer;
       PriceText: Unbounded_String;
+      Buyable: Boolean := False;
    begin
       ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
@@ -106,11 +107,11 @@ package body Trades.UI is
             WindowHeight := WindowHeight + 1;
          end if;
       end if;
-      if BaseIndex > 0 and
-        BaseItemIndex > 0 and
-        Items_List(ItemIndex).Buyable(BaseType) then
-         WindowHeight := WindowHeight + 1;
-      elsif BaseIndex = 0 and BaseItemIndex > 0 then
+      if
+        (BaseIndex > 0 and
+         BaseItemIndex > 0 and
+         Items_List(ItemIndex).Buyable(BaseType)) or
+        (BaseIndex = 0 and BaseItemIndex > 0) then
          WindowHeight := WindowHeight + 1;
       end if;
       WindowHeight :=
@@ -225,9 +226,19 @@ package body Trades.UI is
       WindowFrame(BoxWindow, 2, "Item info");
       Resize(InfoWindow, WindowHeight - 2, WindowWidth - 4);
       CurrentLine := WindowHeight + 3;
+      if BaseIndex > 0 and BaseItemIndex > 0 then
+         if Items_List(ItemIndex).Buyable(BaseType) and
+           SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount > 0 then
+            Buyable := True;
+         end if;
+      elsif BaseIndex = 0 and BaseItemIndex > 0 then
+         if TraderCargo(BaseItemIndex).Amount > 0 then
+            Buyable := True;
+         end if;
+      end if;
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
       if
-        ((BaseIndex > 0 and Items_List(ItemIndex).Buyable(BaseType)) or
+        ((BaseIndex > 0 and Buyable) or
          (BaseIndex = 0 and BaseItemIndex > 0)) and
         CargoIndex > 0 then
          Add(Str => "Press ENTER to buy, SPACE for sell.");
@@ -241,8 +252,9 @@ package body Trades.UI is
             Column => (Columns / 2) + 20,
             Count => 5,
             Color => 1);
+         CurrentLine := CurrentLine + 1;
       elsif
-        ((BaseIndex > 0 and Items_List(ItemIndex).Buyable(BaseType)) or
+        ((BaseIndex > 0 and Buyable) or
          (BaseIndex = 0 and BaseItemIndex > 0)) and
         CargoIndex = 0 then
          Add(Str => "Press ENTER to buy.");
@@ -251,8 +263,9 @@ package body Trades.UI is
             Column => (Columns / 2) + 6,
             Count => 5,
             Color => 1);
+         CurrentLine := CurrentLine + 1;
       elsif
-        ((BaseIndex > 0 and not Items_List(ItemIndex).Buyable(BaseType)) or
+        ((BaseIndex > 0 and not Buyable) or
          (BaseIndex = 0 and BaseItemIndex = 0)) and
         CargoIndex > 0 then
          Add(Str => "Press SPACE for sell.");
@@ -261,8 +274,8 @@ package body Trades.UI is
             Column => (Columns / 2) + 6,
             Count => 5,
             Color => 1);
+         CurrentLine := CurrentLine + 1;
       end if;
-      CurrentLine := CurrentLine + 1;
       MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
       if MoneyIndex2 > 0 then
@@ -473,13 +486,24 @@ package body Trades.UI is
          end if;
       end if;
       if Buy then
-         if BaseIndex > 0 and not Items_List(ItemIndex).Buyable(BaseType) then
-            ShowDialog
-              ("You can't buy " &
-               To_String(Items_List(ItemIndex).Name) &
-               " in this base.");
-            DrawGame(Trade_View);
-            return Trade_View;
+         if BaseIndex > 0 then
+            if not Items_List(ItemIndex).Buyable(BaseType) then
+               ShowDialog
+                 ("You can't buy " &
+                  To_String(Items_List(ItemIndex).Name) &
+                  " in this base.");
+               DrawGame(Trade_View);
+               return Trade_View;
+            elsif BaseItemIndex > 0 then
+               if SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount = 0 then
+                  ShowDialog
+                    ("Base don't have any " &
+                     To_String(Items_List(ItemIndex).Name) &
+                     " for sale at this moment.");
+                  DrawGame(Trade_View);
+                  return Trade_View;
+               end if;
+            end if;
          elsif BaseIndex = 0 and BaseItemIndex = 0 then
             ShowDialog
               ("You can't buy " &
