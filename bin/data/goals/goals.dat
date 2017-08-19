@@ -186,4 +186,8 @@ Target = Independent
 Type = Reputation
 Amount = 3
 Target = Independent
+[60]
+Type = Reputation
+Amount = 5
+Target = Independent
 []
