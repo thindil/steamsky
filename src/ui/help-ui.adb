@@ -142,8 +142,7 @@ package body Help.UI is
    begin
       TopicIndex := Menus.Get_Index(Current(HelpMenu));
       case Key is
-         when Character'Pos('q') |
-           Character'Pos('Q') => -- Back to previous screen
+         when 27 => -- Back to previous screen
             TopicIndex := 1;
             DrawGame(PreviousState);
             return PreviousState;
@@ -176,8 +175,7 @@ package body Help.UI is
    function HelpKeys(Key: Key_Code) return GameStates is
    begin
       case Key is
-         when Character'Pos('q') |
-           Character'Pos('Q') => -- Back to previous screen
+         when 27 => -- Back to previous screen
             StartIndex := 0;
             DrawGame(PreviousState);
             return PreviousState;
