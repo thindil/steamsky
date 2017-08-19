@@ -68,8 +68,13 @@ package body Header is
             Change_Attributes(Line => 0, Column => 17, Count => 1, Color => 1);
             Change_Attributes(Line => 0, Column => 24, Count => 2, Color => 1);
          when Help_View =>
-            Add(Str => "Help Index [Quit]");
-            Change_Attributes(Line => 0, Column => 12, Count => 1, Color => 1);
+            Add(Str => "Help Index [Escape closes]");
+            Change_Attributes
+              (Line => 0,
+               Column => 12,
+               Count => 6,
+               Color => 1,
+               Attr => BoldCharacters);
             return;
          when Craft_View =>
             Add(Str => "Manufacturing");
@@ -77,9 +82,19 @@ package body Header is
             Add(Str => "Ship Cargo [Quit]");
             Change_Attributes(Line => 0, Column => 12, Count => 1, Color => 1);
          when Help_Topic =>
-            Add(Str => "Help [Menu] [Quit]");
-            Change_Attributes(Line => 0, Column => 6, Count => 1, Color => 1);
-            Change_Attributes(Line => 0, Column => 13, Count => 1, Color => 1);
+            Add(Str => "Help [Menu] [Escape closes]");
+            Change_Attributes
+              (Line => 0,
+               Column => 6,
+               Count => 1,
+               Color => 1,
+               Attr => BoldCharacters);
+            Change_Attributes
+              (Line => 0,
+               Column => 13,
+               Count => 6,
+               Color => 1,
+               Attr => BoldCharacters);
             return;
          when Repairs_View =>
             Add(Str => "Ship repairs");
