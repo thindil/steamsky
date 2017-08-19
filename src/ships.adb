@@ -741,6 +741,10 @@ package body Ships is
                   else
                      RepairValue := RepairPoints;
                   end if;
+                  if RepairValue = PlayerShip.Cargo(RepairMaterial).Amount and
+                    ToolsIndex > RepairMaterial then
+                     ToolsIndex := ToolsIndex - 1;
+                  end if;
                   UpdateCargo
                     (Ship => PlayerShip,
                      CargoIndex => RepairMaterial,
