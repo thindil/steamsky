@@ -191,19 +191,12 @@ package body MainMenu is
       Set_Buffer(NewGame_Fields.all(11), 0, "[Start]");
       NewGame_Fields.all(12) := Null_Field;
       if CurrentField = 2 then
-         Set_Foreground
-           (NewGame_Fields.all(2),
-            (Bold_Character => True, others => False),
-            1);
-         Set_Background
-           (NewGame_Fields.all(2),
-            (Under_Line => True, others => False));
+         Set_Foreground(NewGame_Fields.all(2), BoldCharacters, 11);
+         Set_Background(NewGame_Fields.all(2), BoldCharacters, 11);
          Set_Buffer(NewGame_Fields.all(9), 0, "Press Enter for random name.");
       else
-         Set_Foreground
-           (NewGame_Fields.all(8),
-            (Bold_Character => True, others => False),
-            1);
+         Set_Foreground(NewGame_Fields.all(8), BoldCharacters, 11);
+         Set_Background(NewGame_Fields.all(8), BoldCharacters, 11);
          Set_Buffer
            (NewGame_Fields.all(9),
             0,
@@ -605,8 +598,12 @@ package body MainMenu is
             else
                return Quit;
             end if;
-         when 27 => -- Escape select quit option
-            Result := Driver(GameMenu, M_Last_Item);
+         when 27 => -- Escape select quit option, second time exit from game
+            if Option /= "Quit game" then
+               Result := Driver(GameMenu, M_Last_Item);
+            else
+               return Quit;
+            end if;
          when others =>
             Result := Driver(GameMenu, Key);
             if Result /= Menu_Ok then
@@ -636,6 +633,15 @@ package body MainMenu is
             SemicolonIndex := Index(Name, ";");
          end loop;
       end RemoveSemicolons;
+      procedure CloseForm is
+      begin
+         Set_Cursor_Visibility(Visibility);
+         Post(NewGameForm, False);
+         Delete(NewGameForm);
+         Erase;
+         Refresh;
+         ShowMainMenu;
+      end CloseForm;
    begin
       case Key is
          when KEY_UP => -- Select previous field
@@ -695,12 +701,7 @@ package body MainMenu is
                return New_Game;
             end if;
             if FieldIndex = 10 then
-               Set_Cursor_Visibility(Visibility);
-               Post(NewGameForm, False);
-               Delete(NewGameForm);
-               Erase;
-               Refresh;
-               ShowMainMenu;
+               CloseForm;
                return Main_Menu;
             end if;
             Set_Cursor_Visibility(Visibility);
@@ -743,26 +744,26 @@ package body MainMenu is
             elsif FieldIndex = 4 then
                Result := Driver(NewGameForm, F_Previous_Choice);
             end if;
-         when 27 => -- Escape select cancel button
-            FieldIndex := 10;
-            Set_Current(NewGameForm, Fields(NewGameForm, 10));
-            Result := Form_Ok;
+         when 27 => -- Escape select quit button, second time closes form
+            if FieldIndex /= 10 then
+               FieldIndex := 10;
+               Set_Current(NewGameForm, Fields(NewGameForm, 10));
+               Result := Form_Ok;
+            else
+               CloseForm;
+               return Main_Menu;
+            end if;
          when others =>
             Result := Driver(NewGameForm, Key);
       end case;
       if Result = Form_Ok then
-         Set_Foreground
-           (Current(NewGameForm),
-            (Bold_Character => True, others => False),
-            1);
+         Set_Foreground(Current(NewGameForm), BoldCharacters, 11);
+         Set_Background(Current(NewGameForm), BoldCharacters, 11);
          if FieldIndex = 2 or FieldIndex = 6 then
             Set_Buffer
               (Fields(NewGameForm, 9),
                0,
                "Press Enter for random name.");
-            Set_Background
-              (Current(NewGameForm),
-               (Under_Line => True, others => False));
             Visibility := Normal;
          else
             if FieldIndex = 4 then
@@ -778,13 +779,12 @@ package body MainMenu is
             else
                Set_Buffer(Fields(NewGameForm, 9), 0, "");
             end if;
-            Set_Background(Fields(NewGameForm, 2));
-            Set_Background(Fields(NewGameForm, 6));
          end if;
          Set_Cursor_Visibility(Visibility);
          for I in 2 .. 11 loop
             if FieldIndex /= I then
                Set_Foreground(Fields(NewGameForm, I));
+               Set_Background(Fields(NewGameForm, I));
             end if;
          end loop;
          Refresh(FormWindow);
