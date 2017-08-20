@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.5] - 2017-08-20
 
 ### Added
 - New goals: craft 1500 items, craft 2000 items, craft 2500 items, craft 3000
