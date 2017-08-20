@@ -14,7 +14,8 @@ All notable changes to this project will be documented in this file.
   in 15 poleis bases, gain max reputation in 20 poleis bases, gain max
   reputation in 25 poleis bases, gain max reputation in 50 poleis bases, gain
   max reputation in 1 independent base, gain max reputation in 3 independent
-  bases and gain max reputation in 5 independent bases
+  bases, gain max reputation in 5 independent bases and gain max reputation in
+  7 independent bases
 - Ability to loot abandoned bases
 - Remove items from abandoned bases over time
 - Death screen
