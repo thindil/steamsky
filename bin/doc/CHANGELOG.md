@@ -25,7 +25,8 @@ All notable changes to this project will be documented in this file.
   trader, small independent trader, poleis trader, independent trader, advanced 
   poleis trader, advanced independent trader, large poleis trader, large
   independent trader, huge poleis trader, huge independent trader, advanced
-  huge poleis trader and advanced huge independent trader
+  huge poleis trader, advanced huge independent trader and tiny poleis patrol
+  ship
 - New random events: friendly trader ship and friendly ship
 
 ### Changed
