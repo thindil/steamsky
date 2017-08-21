@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New goal: gain max reputation in 10 independent bases
+- New friendly ship: tiny independent patrol ship
 
 ## [1.5] - 2017-08-20
 
