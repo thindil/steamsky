@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New goal: gain max reputation in 10 independent bases
+
 ## [1.5] - 2017-08-20
 
 ### Added
