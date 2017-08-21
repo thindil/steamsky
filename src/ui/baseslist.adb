@@ -100,7 +100,7 @@ package body BasesList is
          Move_Cursor(Win => InfoWindow, Line => 6, Column => 1);
          if SkyBases(BaseIndex).Owner /= Abandoned and
            SkyBases(BaseIndex).Reputation(1) > -25 then
-            TimeDiff := DaysDifference(SkyBases(BaseIndex).RecruitDate);
+            TimeDiff := 30 - DaysDifference(SkyBases(BaseIndex).RecruitDate);
             if TimeDiff > 0 then
                Add
                  (Win => InfoWindow,
@@ -152,7 +152,7 @@ package body BasesList is
          Move_Cursor(Win => InfoWindow, Line => 8, Column => 1);
          if SkyBases(BaseIndex).Owner /= Abandoned and
            SkyBases(BaseIndex).Reputation(1) > -1 then
-            TimeDiff := DaysDifference(SkyBases(BaseIndex).MissionsDate);
+            TimeDiff := 7 - DaysDifference(SkyBases(BaseIndex).MissionsDate);
             if TimeDiff > 0 then
                Add
                  (Win => InfoWindow,
