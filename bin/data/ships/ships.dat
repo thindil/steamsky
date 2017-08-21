@@ -1135,4 +1135,14 @@ Skills = 1x1, 5x1; 3x1, 5x1
 Orders = Pilot, Gunner
 Description = Smallest known poleis patrol ship. As law enforcers they trying to dismarm enemies first.
 Owner = Poleis
+[111]
+Name = Tiny independent patrol ship
+Modules = 1, 3, 4, 4, 5, 7, 8, 11
+CombatAI = Disarmer
+Loot = 10..100
+Cargo = 800..1000x1, 80..100x2, 150..200x3, 300..500x14
+Skills = 1x1, 5x1; 3x1, 5x1
+Orders = Pilot, Gunner
+Description = Smallest known independent patrol ship. As law enforcers they trying to dismarm enemies first.
+Owner = Independent
 []
