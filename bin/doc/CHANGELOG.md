@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
 - New friendly ships: tiny independent patrol ship and small poleis patrol
   ship
 
+### Changed
+- Updated interface
+
 ### Fixed
 - Info about time for new recruits/missions in bases list
 
