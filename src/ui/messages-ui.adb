@@ -69,7 +69,8 @@ package body Messages.UI is
         (Line => 2,
          Column => MenuLength + 5,
          Count => 1,
-         Color => 1);
+         Color => 1,
+         Attr => BoldCharacters);
       if MessagesPad = Null_Window then
          for Message of reverse Messages_List loop
             if Message.MType = MessagesType or MessagesType = Default then
@@ -189,7 +190,7 @@ package body Messages.UI is
       end SetMessagesType;
    begin
       case Key is
-         when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+         when 27 => -- Back to sky map
             StartIndex := 0;
             MessagesType := Default;
             if MessagesPad /= Null_Window then
