@@ -54,9 +54,13 @@ package body Header is
          when Crew_Info | Giving_Orders | Dismiss_Confirm =>
             Add(Str => "Crew Informations");
          when Messages_View =>
-            Add(Str => "Last Messages [Quit]");
-            Change_Attributes(Line => 0, Column => 15, Count => 1, Color => 1);
-            Change_Attributes(Line => 0, Column => 22, Count => 2, Color => 1);
+            Add(Str => "Last Messages [Escape closes]");
+            Change_Attributes
+              (Line => 0,
+               Column => 15,
+               Count => 6,
+               Color => 1,
+               Attr => BoldCharacters);
          when Clear_Confirm =>
             Add(Str => "Last Messages");
          when Trade_View =>
