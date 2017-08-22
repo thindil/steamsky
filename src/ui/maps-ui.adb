@@ -621,14 +621,7 @@ package body Maps.UI is
          end if;
          return 4;
       else
-         case Key is
-            when Character'Pos('o') | Character'Pos('O') => -- Ship orders menu
-               Result := 2;
-            when Character'Pos('w') | Character'Pos('W') => -- Wait order menu
-               Result := 3;
-            when others =>
-               Result := 0;
-         end case;
+         Result := 0;
       end if;
       if Length(Message) > 0 then
          ShowDialog(To_String(Message));
