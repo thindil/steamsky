@@ -282,12 +282,6 @@ begin
                      end if;
                   end if;
                   DrawGame(GameState);
-               when 2 =>
-                  GameState := Control_Speed;
-                  DrawGame(GameState);
-               when 3 =>
-                  GameState := Wait_Order;
-                  DrawGame(GameState);
                when 5 =>
                   GameState := Combat_State;
                   DrawGame(GameState);
