@@ -198,4 +198,8 @@ Target = Independent
 Type = Reputation
 Amount = 10
 Target = Independent
+[63]
+Type = Reputation
+Amount = 1
+Target = Pirates
 []
