@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New goal: gain max reputation in 10 independent bases
+- New goals: gain max reputation in 10 independent bases and gain max
+  reputation in 1 pirates base
 - New friendly ship: tiny independent patrol ship
 
 ### Fixed
