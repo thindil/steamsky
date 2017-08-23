@@ -839,7 +839,8 @@ package body Crew is
          NeedTrader := True;
       end if;
       if not NeedTrader and EventIndex > 0 then
-         if Events_List(EventIndex).EType = Trader or Events_List(EventIndex).EType = FriendlyShip then
+         if Events_List(EventIndex).EType = Trader or
+           Events_List(EventIndex).EType = FriendlyShip then
             NeedTrader := True;
          end if;
       end if;
