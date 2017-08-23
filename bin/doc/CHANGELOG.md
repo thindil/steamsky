@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated interface
+- Auto assign crew member to talk in bases order when meet friendly ship
 
 ### Fixed
 - Info about time for new recruits/missions in bases list
