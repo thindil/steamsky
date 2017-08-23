@@ -220,7 +220,7 @@ package body Missions.UI is
          WindowWidth := TextLength + 4;
       end if;
       ActionsWindow :=
-        Create(3, (Columns / 2), WindowHeight + 3, (Columns / 2));
+        Create(4, (Columns / 2), WindowHeight + 3, (Columns / 2));
       if Mission.Finished then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add(Win => InfoWindow, Str => "Mission is ready to return.");
@@ -232,17 +232,23 @@ package body Missions.UI is
             Line => 0,
             Column => 6,
             Count => 5,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          Move_Cursor(Win => ActionsWindow, Line => 1, Column => 0);
          Add
            (Win => ActionsWindow,
             Str => "Press ENTER to set start base as a destination for ship");
+         Get_Cursor_Position
+           (Win => ActionsWindow,
+            Line => CurrentLine,
+            Column => TextLength);
          Change_Attributes
            (Win => ActionsWindow,
             Line => 1,
             Column => 6,
             Count => 5,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
       else
          Add
            (Win => ActionsWindow,
@@ -252,18 +258,34 @@ package body Missions.UI is
             Line => 0,
             Column => 6,
             Count => 5,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          Move_Cursor(Win => ActionsWindow, Line => 1, Column => 0);
          Add
            (Win => ActionsWindow,
             Str => "Press ENTER to set mission as a destination for ship");
+         Get_Cursor_Position
+           (Win => ActionsWindow,
+            Line => CurrentLine,
+            Column => TextLength);
          Change_Attributes
            (Win => ActionsWindow,
             Line => 1,
             Column => 6,
             Count => 5,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
       end if;
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
+      Add(Win => ActionsWindow, Str => "Press ESCAPE to back to sky map");
+      Change_Attributes
+        (Win => ActionsWindow,
+         Line => CurrentLine,
+         Column => 6,
+         Count => 6,
+         Color => 1,
+         Attr => BoldCharacters);
       Resize(InfoWindow, WindowHeight, WindowWidth);
       WindowFrame(InfoWindow, 2, "Mission info");
       Refresh_Without_Update;
@@ -284,8 +306,16 @@ package body Missions.UI is
       MenuLength: Column_Position;
    begin
       if PlayerShip.Missions.Length = 0 then
-         Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
-         Add(Str => "You didn't accepted any mission yet.");
+         Move_Cursor(Line => (Lines / 3), Column => (Columns / 4));
+         Add
+           (Str =>
+              "You didn't accepted any mission yet. Press Escape to back to sky map.");
+         Change_Attributes
+           (Line => (Lines / 3),
+            Column => (Columns / 4) + 43,
+            Count => 6,
+            Color => 1,
+            Attr => BoldCharacters);
          if MissionsMenu /= Null_Menu then
             Post(MissionsMenu, False);
             Delete(MissionsMenu);
@@ -330,7 +360,7 @@ package body Missions.UI is
       if MissionsMenu /= Null_Menu then
          MissionIndex := Get_Index(Current(MissionsMenu));
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                Post(MissionsMenu, False);
                Delete(MissionsMenu);
                DrawGame(Sky_Map_View);
@@ -388,7 +418,7 @@ package body Missions.UI is
          end if;
       else
          case Key is
-            when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+            when 27 => -- Back to sky map
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             when others =>

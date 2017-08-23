@@ -120,8 +120,7 @@ package body Header is
          when BaseMissions_View =>
             Add(Str => "Available missions");
          when Missions_View =>
-            Add(Str => "Accepted missions [Quit]");
-            Change_Attributes(Line => 0, Column => 19, Count => 1, Color => 1);
+            Add(Str => "Accepted missions");
          when GameOptions_View =>
             Add(Str => "Game options [Escape closes]");
             Change_Attributes
