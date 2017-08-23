@@ -405,7 +405,8 @@ package body Events is
       end loop;
       TraderIndex := ProtoShips_List.First_Index;
       for Ship of ProtoShips_List loop
-         if Ship.Owner = Poleis or Ship.Owner = Independent then
+         if (Ship.Owner = Poleis or Ship.Owner = Independent) and
+           Ship.Index /= PlayerShipIndex then
             FriendlyShips.Append(New_Item => TraderIndex);
          end if;
          TraderIndex := TraderIndex + 1;
