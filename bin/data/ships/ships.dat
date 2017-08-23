@@ -1155,4 +1155,14 @@ Skills = 1x3, 5x2..4; 3x3, 5x2..4; 2x3..6
 Orders = Pilot, Gunner, Engineer
 Description = Small, fast poleis patrol vessel. As a law enforcers they trying to dismarm enemies first.
 Owner = Poleis
+[113]
+Name = Small independent patrol ship
+Modules = 1, 3, 4, 4, 4, 5, 7, 7, 8, 9
+CombatAI = Disarmer
+Loot = 20..200
+Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13
+Skills = 1x3, 5x2..4; 3x3, 5x2..4; 2x3..6
+Orders = Pilot, Gunner, Engineer
+Description = Small, fast independent patrol vessel. As a law enforcers they trying to dismarm enemies first.
+Owner = Independent
 []
