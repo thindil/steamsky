@@ -206,4 +206,8 @@ Target = Pirates
 Type = Reputation
 Amount = 3
 Target = Pirates
+[65]
+Type = Reputation
+Amount = 5
+Target = Pirates
 []
