@@ -47,13 +47,8 @@ package body Ships.UI is
          FieldOptions := Get_Options(Rename_Fields.all(2));
          FieldOptions.Auto_Skip := False;
          Set_Options(Rename_Fields.all(2), FieldOptions);
-         Set_Foreground
-           (Rename_Fields.all(2),
-            (Bold_Character => True, others => False),
-            1);
-         Set_Background
-           (Rename_Fields.all(2),
-            (Under_Line => True, others => False));
+         Set_Foreground(Rename_Fields.all(2), BoldCharacters, 11);
+         Set_Background(Rename_Fields.all(2), BoldCharacters, 11);
          if MaxRange > 0 then
             Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type
               (Rename_Fields.all(2),
@@ -97,10 +92,8 @@ package body Ships.UI is
       Set_Foreground(Fields(RenameForm, 2));
       Set_Background(Fields(RenameForm, 2));
       Set_Current(RenameForm, Fields(RenameForm, FieldNumber));
-      Set_Foreground
-        (Current(RenameForm),
-         (Bold_Character => True, others => False),
-         1);
+      Set_Foreground(Current(RenameForm), BoldCharacters, 11);
+      Set_Background(Current(RenameForm), BoldCharacters, 11);
       Set_Cursor_Visibility(Visibility);
       Refresh(FormWindow);
    end SetCurrentField;
@@ -254,28 +247,30 @@ package body Ships.UI is
             if FieldIndex = 2 then
                Result := Driver(RenameForm, F_Left_Char);
             end if;
-         when 27 => -- Escape select cancel button
-            FieldIndex := 3;
-            Set_Current(RenameForm, Fields(RenameForm, 3));
-            Result := Form_Ok;
+         when 27 => -- Escape select cancel button, second time closes form
+            if FieldIndex /= 3 then
+               FieldIndex := 3;
+               Set_Current(RenameForm, Fields(RenameForm, 3));
+               Result := Form_Ok;
+            else
+               if CurrentState = Drop_Cargo then
+                  return DropCargoResult;
+               else
+                  return RenameResult(CurrentState);
+               end if;
+            end if;
          when others =>
             Result := Driver(RenameForm, Key);
       end case;
       if Result = Form_Ok then
          for I in 2 .. 4 loop
             Set_Foreground(Fields(RenameForm, I));
+            Set_Background(Fields(RenameForm, I));
          end loop;
-         Set_Foreground
-           (Current(RenameForm),
-            (Bold_Character => True, others => False),
-            1);
+         Set_Foreground(Current(RenameForm), BoldCharacters, 11);
+         Set_Background(Current(RenameForm), BoldCharacters, 11);
          if FieldIndex = 2 then
-            Set_Background
-              (Current(RenameForm),
-               (Under_Line => True, others => False));
             Visibility := Normal;
-         else
-            Set_Background(Fields(RenameForm, 2));
          end if;
          Set_Cursor_Visibility(Visibility);
          Refresh(FormWindow);
