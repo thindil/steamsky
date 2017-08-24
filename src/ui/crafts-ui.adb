@@ -475,8 +475,6 @@ package body Crafts.UI is
    end ShowWorkshopsMenu;
 
    function ShowRecipeForm return GameStates is
-      HaveWorkshop: Boolean := False;
-      MType: ModuleType;
       Recipe_Fields: constant Field_Array_Access := new Field_Array(1 .. 7);
       FieldOptions: Field_Option_Set;
       FormHeight: Line_Position;
@@ -484,22 +482,6 @@ package body Crafts.UI is
       Visibility: Cursor_Visibility := Normal;
       MaxAmount: Positive;
    begin
-      if RecipeIndex > 0 then
-         MType := Recipes_List(RecipeIndex).Workplace;
-      else
-         MType := ALCHEMY_LAB;
-      end if;
-      for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = MType then
-            HaveWorkshop := True;
-            exit;
-         end if;
-      end loop;
-      if not HaveWorkshop then
-         ShowDialog("You don't have proper workplace for this recipe.");
-         DrawGame(Craft_View);
-         return Craft_View;
-      end if;
       MaxAmount := CheckRecipe(RecipeIndex);
       Set_Cursor_Visibility(Visibility);
       Recipe_Fields.all(1) := New_Field(1, 20, 0, 0, 0, 0);
@@ -583,6 +565,13 @@ package body Crafts.UI is
          return Craft_View;
       when Trade_No_Free_Cargo =>
          ShowDialog("You don't have that much free space in your ship cargo.");
+         DrawGame(Craft_View);
+         return Craft_View;
+      when An_Exception : Crafting_No_Workshop =>
+         ShowDialog
+           ("You don't have proper workplace to start manufacturing " &
+            Exception_Message(An_Exception) &
+            ".");
          DrawGame(Craft_View);
          return Craft_View;
    end ShowRecipeForm;
