@@ -83,7 +83,8 @@ package Game is
       DetailedStats_View,
       Hall_Of_Fame,
       Loot_View,
-      Loot_Form); -- Game states
+      Loot_Form,
+      Workshops_Menu); -- Game states
    type Date_Record is -- Data for game date/time
    record
       Year: Natural;

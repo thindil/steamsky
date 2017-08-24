@@ -365,8 +365,8 @@ begin
             GameState := TradeFormKeys(Key);
          when Assign_Owner =>
             GameState := AssignOwnerKeys(Key);
-         when Recipe_Setting =>
-            GameState := RecipeSettingKeys(Key);
+         when Workshops_Menu =>
+            GameState := WorkshopsMenuKeys(Key);
          when Move_Map =>
             GameState := MoveFormKeys(Key);
          when Bases_List =>
@@ -412,6 +412,8 @@ begin
             GameState := LootKeys(Key);
          when Loot_Form =>
             GameState := LootFormKeys(Key);
+         when Recipe_Setting =>
+            GameState := RecipeFormKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;
