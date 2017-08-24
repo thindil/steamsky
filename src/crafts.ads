@@ -47,6 +47,7 @@ package Crafts is
    Recipes_Invalid_Data: exception;
    Crafting_No_Materials: exception; -- Raised when no materials needed for selected recipe
    Crafting_No_Tools: exception; -- Raised when no tool needed for selected recipe
+   Crafting_No_Workshop: exception; -- Raised when no workshop needed for selected recipe
 
    procedure LoadRecipes; -- Load recipes from files
    procedure Manufacturing(Minutes: Positive); -- Craft selected items

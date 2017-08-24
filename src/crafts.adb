@@ -173,12 +173,14 @@ package body Crafts is
       SpaceNeeded: Integer := 0;
       MaterialIndexes: Positive_Container.Vector;
       RecipeName: Unbounded_String;
-      HaveTool: Boolean := False;
+      HaveTool, HaveWorkshop: Boolean := False;
       MaxAmount: Positive := Positive'Last;
+      MType: ModuleType;
    begin
       if RecipeIndex > 0 then
          Recipe := Recipes_List(RecipeIndex);
          RecipeName := Items_List(Recipe.ResultIndex).Name;
+         MType := Recipes_List(RecipeIndex).Workplace;
       else
          Recipe.MaterialTypes.Append
          (New_Item => Items_List(abs (RecipeIndex)).IType);
@@ -198,6 +200,18 @@ package body Crafts is
          RecipeName :=
            To_Unbounded_String("Deconstructing ") &
            Items_List(Recipe.ResultIndex).Name;
+         MType := ALCHEMY_LAB;
+      end if;
+      -- Check for workshop
+      for Module of PlayerShip.Modules loop
+         if Modules_List(Module.ProtoIndex).MType = MType and
+           Module.Durability > 0 then
+            HaveWorkshop := True;
+            exit;
+         end if;
+      end loop;
+      if not HaveWorkshop then
+         raise Crafting_No_Workshop with To_String(RecipeName);
       end if;
       -- Check for materials
       if RecipeIndex > 0 then
