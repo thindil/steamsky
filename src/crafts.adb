@@ -168,12 +168,13 @@ package body Crafts is
       End_Search(Files);
    end LoadRecipes;
 
-   procedure SetRecipe(RecipeIndex: Integer; ModuleIndex: Positive) is
+   function CheckRecipe(RecipeIndex: Integer) return Positive is
       Recipe: Craft_Data;
       SpaceNeeded: Integer := 0;
       MaterialIndexes: Positive_Container.Vector;
       RecipeName: Unbounded_String;
       HaveTool: Boolean := False;
+      MaxAmount: Positive := Positive'Last;
    begin
       if RecipeIndex > 0 then
          Recipe := Recipes_List(RecipeIndex);
@@ -209,6 +210,15 @@ package body Crafts is
                      (UnboundedString_Container.To_Index(J)) then
                   MaterialIndexes.Append
                   (New_Item => Cargo_Container.To_Index(I));
+                  if MaxAmount >
+                    PlayerShip.Cargo(I).Amount /
+                      Recipe.MaterialAmounts
+                        (UnboundedString_Container.To_Index(J)) then
+                     MaxAmount :=
+                       PlayerShip.Cargo(I).Amount /
+                       Recipe.MaterialAmounts
+                         (UnboundedString_Container.To_Index(J));
+                  end if;
                end if;
             end loop;
          end loop;
@@ -220,6 +230,7 @@ package body Crafts is
                exit;
             end if;
          end loop;
+         MaxAmount := 1;
       end if;
       if MaterialIndexes.Length < Recipe.MaterialTypes.Length then
          raise Crafting_No_Materials with To_String(RecipeName);
@@ -251,15 +262,8 @@ package body Crafts is
         0 then
          raise Trade_No_Free_Cargo;
       end if;
-      PlayerShip.Modules(ModuleIndex).Current_Value := RecipeIndex;
-      PlayerShip.Modules(ModuleIndex).Max_Value := Recipe.Time;
-      AddMessage
-        (To_String(RecipeName) &
-         " was set as manufacturing order in " &
-         To_String(PlayerShip.Modules(ModuleIndex).Name) &
-         ".",
-         CraftMessage);
-   end SetRecipe;
+      return MaxAmount;
+   end CheckRecipe;
 
    procedure Manufacturing(Minutes: Positive) is
       CrafterIndex,

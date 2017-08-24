@@ -17,6 +17,8 @@
 
 with Ada.Exceptions; use Ada.Exceptions;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
+with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
+with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
@@ -25,12 +27,16 @@ with Help.UI; use Help.UI;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
 with Trades; use Trades;
+with Messages; use Messages;
+with Crew; use Crew;
 
 package body Crafts.UI is
 
    RecipesMenu, ModulesMenu: Menu;
-   MenuWindow, MenuWindow2: Window;
+   MenuWindow, MenuWindow2, FormWindow: Window;
    RecipeIndex: Integer := 1;
+   RecipeForm: Form;
+   Workshop: Natural;
 
    procedure ShowRecipeInfo is
       InfoWindow, ClearWindow, BoxWindow: Window;
@@ -406,8 +412,10 @@ package body Crafts.UI is
         (RecipesMenu,
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
       Post(RecipesMenu);
-      for I in Known_Recipes.First_Index .. Known_Recipes.Last_Index loop
-         if Known_Recipes(I) = RecipeIndex then
+      for I in
+        1 ..
+            (Integer(Known_Recipes.Length) + Integer(Deconstructs.Length)) loop
+         if Integer'Value(Description(Recipes_Items.all(I))) = RecipeIndex then
             Set_Current(RecipesMenu, Recipes_Items.all(I));
             exit;
          end if;
@@ -415,7 +423,7 @@ package body Crafts.UI is
       ShowRecipeInfo;
    end ShowRecipes;
 
-   function ShowRecipeMenu return GameStates is
+   procedure ShowWorkshopsMenu is
       Modules_Items: Item_Array_Access;
       ModulesAmount: Positive := 2;
       MenuIndex: Positive := 1;
@@ -433,17 +441,12 @@ package body Crafts.UI is
             ModulesAmount := ModulesAmount + 1;
          end if;
       end loop;
-      if ModulesAmount = 2 then
-         ShowDialog("You don't have proper workplace for this recipe.");
-         DrawGame(Craft_View);
-         return Craft_View;
-      end if;
       Modules_Items := new Item_Array(1 .. ModulesAmount);
       for I in PlayerShip.Modules.Iterate loop
          if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType = MType then
             Modules_Items.all(MenuIndex) :=
               New_Item
-                ("Manufacture in " & To_String(PlayerShip.Modules(I).Name),
+                (To_String(PlayerShip.Modules(I).Name),
                  Positive'Image(Modules_Container.To_Index(I)));
             MenuIndex := MenuIndex + 1;
          end if;
@@ -459,20 +462,133 @@ package body Crafts.UI is
            MenuLength + 2,
            ((Lines / 3) - (MenuHeight / 2)),
            ((Columns / 2) - (MenuLength / 2)));
-      WindowFrame(MenuWindow2, 5, "Set recipe");
+      WindowFrame(MenuWindow2, 5, "Set workshop");
       Set_Window(ModulesMenu, MenuWindow2);
       Set_Sub_Window
         (ModulesMenu,
          Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
       Post(ModulesMenu);
       Refresh_Without_Update;
+      Refresh_Without_Update(FormWindow);
       Refresh_Without_Update(MenuWindow2);
       Update_Screen;
+   end ShowWorkshopsMenu;
+
+   function ShowRecipeForm return GameStates is
+      HaveWorkshop: Boolean := False;
+      MType: ModuleType;
+      Recipe_Fields: constant Field_Array_Access := new Field_Array(1 .. 7);
+      FieldOptions: Field_Option_Set;
+      FormHeight: Line_Position;
+      FormLength: Column_Position;
+      Visibility: Cursor_Visibility := Normal;
+      MaxAmount: Positive;
+   begin
+      if RecipeIndex > 0 then
+         MType := Recipes_List(RecipeIndex).Workplace;
+      else
+         MType := ALCHEMY_LAB;
+      end if;
+      for Module of PlayerShip.Modules loop
+         if Modules_List(Module.ProtoIndex).MType = MType then
+            HaveWorkshop := True;
+            exit;
+         end if;
+      end loop;
+      if not HaveWorkshop then
+         ShowDialog("You don't have proper workplace for this recipe.");
+         DrawGame(Craft_View);
+         return Craft_View;
+      end if;
+      MaxAmount := CheckRecipe(RecipeIndex);
+      Set_Cursor_Visibility(Visibility);
+      Recipe_Fields.all(1) := New_Field(1, 20, 0, 0, 0, 0);
+      FieldOptions := Get_Options(Recipe_Fields.all(1));
+      FieldOptions.Active := False;
+      Set_Options(Recipe_Fields.all(1), FieldOptions);
+      Set_Buffer
+        (Recipe_Fields.all(1),
+         0,
+         "Amount (max" & Positive'Image(MaxAmount) & "):");
+      Recipe_Fields.all(2) := New_Field(1, 10, 0, 20, 0, 0);
+      FieldOptions := Get_Options(Recipe_Fields.all(2));
+      FieldOptions.Auto_Skip := False;
+      Set_Options(Recipe_Fields.all(2), FieldOptions);
+      Set_Buffer(Recipe_Fields.all(2), 0, Positive'Image(MaxAmount));
+      Set_Foreground(Recipe_Fields.all(2), BoldCharacters, 11);
+      Set_Background(Recipe_Fields.all(2), BoldCharacters, 11);
+      Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type
+        (Recipe_Fields.all(2),
+         (0, 0, MaxAmount));
+      Recipe_Fields.all(3) := New_Field(1, 20, 1, 0, 0, 0);
+      FieldOptions := Get_Options(Recipe_Fields.all(3));
+      FieldOptions.Active := False;
+      Set_Options(Recipe_Fields.all(3), FieldOptions);
+      Set_Buffer(Recipe_Fields.all(3), 0, "Workshop:");
+      Recipe_Fields.all(4) := New_Field(1, 30, 1, 20, 0, 0);
+      FieldOptions := Get_Options(Recipe_Fields.all(4));
+      FieldOptions.Auto_Skip := False;
+      Set_Options(Recipe_Fields.all(4), FieldOptions);
+      if Workshop = 0 then
+         Set_Buffer(Recipe_Fields.all(4), 0, "Not set");
+      else
+         Set_Buffer
+           (Recipe_Fields.all(4),
+            0,
+            To_String(PlayerShip.Modules(Workshop).Name));
+      end if;
+      Recipe_Fields.all(5) := New_Field(1, 8, 3, 10, 0, 0);
+      Set_Buffer(Recipe_Fields.all(5), 0, "[Cancel]");
+      FieldOptions := Get_Options(Recipe_Fields.all(5));
+      FieldOptions.Edit := False;
+      Set_Options(Recipe_Fields.all(5), FieldOptions);
+      Recipe_Fields.all(6) := New_Field(1, 4, 3, 20, 0, 0);
+      FieldOptions := Get_Options(Recipe_Fields.all(6));
+      FieldOptions.Edit := False;
+      Set_Options(Recipe_Fields.all(6), FieldOptions);
+      Set_Buffer(Recipe_Fields.all(6), 0, "[Ok]");
+      Recipe_Fields.all(7) := Null_Field;
+      RecipeForm := New_Form(Recipe_Fields);
+      Scale(RecipeForm, FormHeight, FormLength);
+      FormWindow :=
+        Create
+          (FormHeight + 2,
+           FormLength + 2,
+           ((Lines / 3) - (FormHeight / 2)),
+           ((Columns / 2) - (FormLength / 2)));
+      WindowFrame(FormWindow, 5, "Set recipe");
+      Set_Window(RecipeForm, FormWindow);
+      Set_Sub_Window
+        (RecipeForm,
+         Derived_Window(FormWindow, FormHeight, FormLength, 1, 1));
+      Post(RecipeForm);
+      Refresh_Without_Update;
+      Refresh_Without_Update(FormWindow);
+      Update_Screen;
       return Recipe_Setting;
-   end ShowRecipeMenu;
+   exception
+      when An_Exception : Crafting_No_Materials =>
+         ShowDialog
+           ("You don't have enough materials to start manufacturing " &
+            Exception_Message(An_Exception) &
+            ".");
+         DrawGame(Craft_View);
+         return Craft_View;
+      when An_Exception : Crafting_No_Tools =>
+         ShowDialog
+           ("You don't have proper tool to start manufacturing " &
+            Exception_Message(An_Exception) &
+            ".");
+         DrawGame(Craft_View);
+         return Craft_View;
+      when Trade_No_Free_Cargo =>
+         ShowDialog("You don't have that much free space in your ship cargo.");
+         DrawGame(Craft_View);
+         return Craft_View;
+   end ShowRecipeForm;
 
    function CraftKeys(Key: Key_Code) return GameStates is
-      Result: Driver_Result;
+      Result: Menus.Driver_Result;
    begin
       case Key is
          when 27 => -- Back to sky map
@@ -480,7 +596,8 @@ package body Crafts.UI is
             DrawGame(Sky_Map_View);
             return Sky_Map_View;
          when 10 => -- Set selected manufacturing order
-            return ShowRecipeMenu;
+            Workshop := 0;
+            return ShowRecipeForm;
          when 56 | KEY_UP => -- Select previous recipe
             Result := Driver(RecipesMenu, M_Up_Item);
             if Result = Request_Denied then
@@ -510,18 +627,129 @@ package body Crafts.UI is
       return Craft_View;
    end CraftKeys;
 
-   function RecipeSettingKeys(Key: Key_Code) return GameStates is
-      Result: Driver_Result;
+   function RecipeFormKeys(Key: Key_Code) return GameStates is
+      Result: Forms.Driver_Result;
+      FieldIndex: Positive := Get_Index(Current(RecipeForm));
+      Visibility: Cursor_Visibility := Invisible;
+      RecipeName: Unbounded_String;
+   begin
+      case Key is
+         when KEY_UP => -- Select previous field
+            Result := Driver(RecipeForm, F_Previous_Field);
+            FieldIndex := Get_Index(Current(RecipeForm));
+            if FieldIndex = 2 then
+               Result := Driver(RecipeForm, F_End_Line);
+            end if;
+         when KEY_DOWN => -- Select next field
+            Result := Driver(RecipeForm, F_Next_Field);
+            FieldIndex := Get_Index(Current(RecipeForm));
+            if FieldIndex = 2 then
+               Result := Driver(RecipeForm, F_End_Line);
+            end if;
+         when 10 => -- set/cancel setting recipe or start setting workshop
+            if FieldIndex = 5 then
+               DrawGame(Craft_View);
+               return Craft_View;
+            elsif FieldIndex = 4 then
+               ShowWorkshopsMenu;
+               return Workshops_Menu;
+            elsif FieldIndex = 6 then
+               if Workshop = 0 then
+                  ShowDialog("You must set workshop for this recipe.");
+                  DrawGame(Craft_View);
+                  return Craft_View;
+               end if;
+               PlayerShip.Modules(Workshop).Current_Value := RecipeIndex;
+               if RecipeIndex > 0 then
+                  PlayerShip.Modules(Workshop).Max_Value :=
+                    Recipes_List(RecipeIndex).Time;
+                  RecipeName :=
+                    Items_List(Recipes_List(RecipeIndex).ResultIndex).Name;
+               else
+                  RecipeIndex := abs (RecipeIndex);
+                  for ProtoRecipe of Recipes_List loop
+                     if ProtoRecipe.ResultIndex = RecipeIndex then
+                        PlayerShip.Modules(Workshop).Max_Value :=
+                          ProtoRecipe.Difficulty * 15;
+                        exit;
+                     end if;
+                  end loop;
+                  RecipeName :=
+                    To_Unbounded_String("Deconstructing ") &
+                    Items_List(RecipeIndex).Name;
+               end if;
+               AddMessage
+                 (To_String(RecipeName) &
+                  " was set as manufacturing order in " &
+                  To_String(PlayerShip.Modules(Workshop).Name) &
+                  ".",
+                  CraftMessage);
+               UpdateOrders;
+               DrawGame(Craft_View);
+               return Craft_View;
+            end if;
+         when Key_Backspace => -- delete last character
+            if FieldIndex = 2 then
+               Result := Driver(RecipeForm, F_Delete_Previous);
+               if Result = Form_Ok then
+                  FieldIndex := Get_Index(Current(RecipeForm));
+                  if FieldIndex /= 2 then
+                     Set_Current(RecipeForm, Fields(RecipeForm, 2));
+                  end if;
+               end if;
+            end if;
+         when KEY_DC => -- delete character at cursor
+            if FieldIndex = 2 then
+               Result := Driver(RecipeForm, F_Delete_Char);
+            end if;
+         when KEY_RIGHT => -- Move cursor right
+            if FieldIndex = 2 then
+               Result := Driver(RecipeForm, F_Right_Char);
+            end if;
+         when KEY_LEFT => -- Move cursor left
+            if FieldIndex = 2 then
+               Result := Driver(RecipeForm, F_Left_Char);
+            end if;
+         when 27 => -- Escape select cancel button, second time closes form
+            if FieldIndex /= 5 then
+               FieldIndex := 5;
+               Set_Current(RecipeForm, Fields(RecipeForm, 5));
+               Result := Form_Ok;
+            else
+               DrawGame(Craft_View);
+               return Craft_View;
+            end if;
+         when others =>
+            Result := Driver(RecipeForm, Key);
+      end case;
+      if Result = Form_Ok then
+         for I in 2 .. 6 loop
+            Set_Foreground(Fields(RecipeForm, I));
+            Set_Background(Fields(RecipeForm, I));
+         end loop;
+         Set_Foreground(Current(RecipeForm), BoldCharacters, 11);
+         Set_Background(Current(RecipeForm), BoldCharacters, 11);
+         if FieldIndex = 2 then
+            Visibility := Normal;
+         end if;
+         Set_Cursor_Visibility(Visibility);
+         Refresh(FormWindow);
+      end if;
+      return Recipe_Setting;
+   end RecipeFormKeys;
+
+   function WorkshopsMenuKeys(Key: Key_Code) return GameStates is
+      Result: Menus.Driver_Result;
       ModuleIndex: constant Natural :=
         Natural'Value(Description(Current(ModulesMenu)));
    begin
       case Key is
          when 10 => -- Set selected manufacturing order
             if ModuleIndex > 0 then
-               SetRecipe(RecipeIndex, ModuleIndex);
+               Workshop := ModuleIndex;
             end if;
             DrawGame(Craft_View);
-            return Craft_View;
+            return ShowRecipeForm;
          when 56 | KEY_UP => -- Select previous recipe
             Result := Driver(ModulesMenu, M_Up_Item);
             if Result = Request_Denied then
@@ -549,26 +777,7 @@ package body Crafts.UI is
       if Result = Menu_Ok then
          Refresh(MenuWindow2);
       end if;
-      return Recipe_Setting;
-   exception
-      when An_Exception : Crafting_No_Materials =>
-         ShowDialog
-           ("You don't have enough materials to start manufacturing " &
-            Exception_Message(An_Exception) &
-            ".");
-         DrawGame(Craft_View);
-         return Craft_View;
-      when An_Exception : Crafting_No_Tools =>
-         ShowDialog
-           ("You don't have proper tool to start manufacturing " &
-            Exception_Message(An_Exception) &
-            ".");
-         DrawGame(Craft_View);
-         return Craft_View;
-      when Trade_No_Free_Cargo =>
-         ShowDialog("You don't have that much free space in your ship cargo.");
-         DrawGame(Craft_View);
-         return Craft_View;
-   end RecipeSettingKeys;
+      return Workshops_Menu;
+   end WorkshopsMenuKeys;
 
 end Crafts.UI;
