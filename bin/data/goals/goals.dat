@@ -210,4 +210,8 @@ Target = Pirates
 Type = Reputation
 Amount = 5
 Target = Pirates
+[66]
+Type = Visit
+Amount = 50
+Target = Poleis
 []
