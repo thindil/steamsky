@@ -46,8 +46,14 @@ package body Ships.UI.Ship is
             WindowHeight := WindowHeight + 1;
          when CABIN =>
             WindowHeight := WindowHeight + 3;
-         when ENGINE | GUN | ALCHEMY_LAB .. GREENHOUSE =>
+         when ENGINE | GUN =>
             WindowHeight := WindowHeight + 2;
+         when ALCHEMY_LAB .. GREENHOUSE =>
+            if Module.Current_Value = 0 then
+               WindowHeight := WindowHeight + 2;
+            else
+               WindowHeight := WindowHeight + 3;
+            end if;
          when ARMOR =>
             WindowHeight := WindowHeight - 1;
          when others =>
@@ -381,7 +387,7 @@ package body Ships.UI.Ship is
             else
                Add(Win => InfoWindow, Str => "Worker: none");
             end if;
-            Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             if Module.Current_Value /= 0 then
                if Module.Current_Value > 0 then
                   Add
@@ -406,14 +412,17 @@ package body Ships.UI.Ship is
                if EndColumn > WindowWidth then
                   WindowWidth := EndColumn;
                end if;
-               Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
+               CurrentLine := CurrentLine + 1;
+               Move_Cursor
+                 (Win => InfoWindow,
+                  Line => CurrentLine,
+                  Column => 0);
                Add
                  (Win => InfoWindow,
                   Str =>
                     "Time to complete:" &
                     Positive'Image(Module.Max_Value) &
                     " minutes");
-               CurrentLine := CurrentLine + 2;
             else
                Add(Win => InfoWindow, Str => "Manufacturing: nothing");
             end if;
