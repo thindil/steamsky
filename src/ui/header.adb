@@ -83,8 +83,7 @@ package body Header is
          when Craft_View =>
             Add(Str => "Manufacturing");
          when Cargo_Info =>
-            Add(Str => "Ship Cargo [Quit]");
-            Change_Attributes(Line => 0, Column => 12, Count => 1, Color => 1);
+            Add(Str => "Ship Cargo");
          when Help_Topic =>
             Add(Str => "Help [Menu] [Escape closes]");
             Change_Attributes

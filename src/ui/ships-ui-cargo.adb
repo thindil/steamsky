@@ -133,7 +133,17 @@ package body Ships.UI.Cargo is
         (Line => CurrentLine,
          Column => (Columns / 2) + 6,
          Count => 5,
-         Color => 1);
+         Color => 1,
+         Attr => BoldCharacters);
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      Add(Str => "Press Escape to back to sky map");
+      Change_Attributes
+        (Line => CurrentLine,
+         Column => (Columns / 2) + 6,
+         Count => 6,
+         Color => 1,
+         Attr => BoldCharacters);
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
       FreeSpace := FreeCargo(0);
@@ -222,8 +232,7 @@ package body Ships.UI.Cargo is
           (Items_List(PlayerShip.Cargo(CurrentMenuIndex).ProtoIndex).Name);
    begin
       case Key is
-         when Character'Pos('q') |
-           Character'Pos('Q') => -- Back sky map or combat screen
+         when 27 => -- Back sky map or combat screen
             CurrentMenuIndex := 1;
             DrawGame(OldState);
             return OldState;
