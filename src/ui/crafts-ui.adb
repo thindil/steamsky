@@ -37,6 +37,7 @@ package body Crafts.UI is
    RecipeIndex: Integer := 1;
    RecipeForm: Form;
    Workshop: Natural;
+   MaxAmount: Positive;
 
    procedure ShowRecipeInfo is
       InfoWindow, ClearWindow, BoxWindow: Window;
@@ -469,20 +470,20 @@ package body Crafts.UI is
          Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
       Post(ModulesMenu);
       Refresh_Without_Update;
-      Refresh_Without_Update(FormWindow);
+      if RecipeIndex > 0 then
+         Refresh_Without_Update(FormWindow);
+      end if;
       Refresh_Without_Update(MenuWindow2);
       Update_Screen;
    end ShowWorkshopsMenu;
 
-   function ShowRecipeForm return GameStates is
+   procedure ShowRecipeForm is
       Recipe_Fields: constant Field_Array_Access := new Field_Array(1 .. 7);
       FieldOptions: Field_Option_Set;
       FormHeight: Line_Position;
       FormLength: Column_Position;
       Visibility: Cursor_Visibility := Normal;
-      MaxAmount: Positive;
    begin
-      MaxAmount := CheckRecipe(RecipeIndex);
       Set_Cursor_Visibility(Visibility);
       Recipe_Fields.all(1) := New_Field(1, 20, 0, 0, 0, 0);
       FieldOptions := Get_Options(Recipe_Fields.all(1));
@@ -547,34 +548,36 @@ package body Crafts.UI is
       Refresh_Without_Update;
       Refresh_Without_Update(FormWindow);
       Update_Screen;
-      return Recipe_Setting;
-   exception
-      when An_Exception : Crafting_No_Materials =>
-         ShowDialog
-           ("You don't have enough materials to start manufacturing " &
-            Exception_Message(An_Exception) &
-            ".");
-         DrawGame(Craft_View);
-         return Craft_View;
-      when An_Exception : Crafting_No_Tools =>
-         ShowDialog
-           ("You don't have proper tool to start manufacturing " &
-            Exception_Message(An_Exception) &
-            ".");
-         DrawGame(Craft_View);
-         return Craft_View;
-      when Trade_No_Free_Cargo =>
-         ShowDialog("You don't have that much free space in your ship cargo.");
-         DrawGame(Craft_View);
-         return Craft_View;
-      when An_Exception : Crafting_No_Workshop =>
-         ShowDialog
-           ("You don't have proper workplace to start manufacturing " &
-            Exception_Message(An_Exception) &
-            ".");
-         DrawGame(Craft_View);
-         return Craft_View;
    end ShowRecipeForm;
+
+   procedure SetRecipe is
+      RecipeName: Unbounded_String;
+   begin
+      PlayerShip.Modules(Workshop).Current_Value := RecipeIndex;
+      if RecipeIndex > 0 then
+         PlayerShip.Modules(Workshop).Max_Value :=
+           Recipes_List(RecipeIndex).Time;
+         RecipeName := Items_List(Recipes_List(RecipeIndex).ResultIndex).Name;
+      else
+         for ProtoRecipe of Recipes_List loop
+            if ProtoRecipe.ResultIndex = abs (RecipeIndex) then
+               PlayerShip.Modules(Workshop).Max_Value :=
+                 ProtoRecipe.Difficulty * 15;
+               exit;
+            end if;
+         end loop;
+         RecipeName :=
+           To_Unbounded_String("Deconstructing ") &
+           Items_List(abs (RecipeIndex)).Name;
+      end if;
+      AddMessage
+        (To_String(RecipeName) &
+         " was set as manufacturing order in " &
+         To_String(PlayerShip.Modules(Workshop).Name) &
+         ".",
+         CraftMessage);
+      UpdateOrders;
+   end SetRecipe;
 
    function CraftKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
@@ -586,7 +589,14 @@ package body Crafts.UI is
             return Sky_Map_View;
          when 10 => -- Set selected manufacturing order
             Workshop := 0;
-            return ShowRecipeForm;
+            MaxAmount := CheckRecipe(RecipeIndex);
+            if RecipeIndex > 0 then
+               ShowRecipeForm;
+               return Recipe_Setting;
+            else
+               ShowWorkshopsMenu;
+               return Workshops_Menu;
+            end if;
          when 56 | KEY_UP => -- Select previous recipe
             Result := Driver(RecipesMenu, M_Up_Item);
             if Result = Request_Denied then
@@ -614,13 +624,38 @@ package body Crafts.UI is
          ShowRecipeInfo;
       end if;
       return Craft_View;
+   exception
+      when An_Exception : Crafting_No_Materials =>
+         ShowDialog
+           ("You don't have enough materials to start manufacturing " &
+            Exception_Message(An_Exception) &
+            ".");
+         DrawGame(Craft_View);
+         return Craft_View;
+      when An_Exception : Crafting_No_Tools =>
+         ShowDialog
+           ("You don't have proper tool to start manufacturing " &
+            Exception_Message(An_Exception) &
+            ".");
+         DrawGame(Craft_View);
+         return Craft_View;
+      when Trade_No_Free_Cargo =>
+         ShowDialog("You don't have that much free space in your ship cargo.");
+         DrawGame(Craft_View);
+         return Craft_View;
+      when An_Exception : Crafting_No_Workshop =>
+         ShowDialog
+           ("You don't have proper workplace to start manufacturing " &
+            Exception_Message(An_Exception) &
+            ".");
+         DrawGame(Craft_View);
+         return Craft_View;
    end CraftKeys;
 
    function RecipeFormKeys(Key: Key_Code) return GameStates is
       Result: Forms.Driver_Result;
       FieldIndex: Positive := Get_Index(Current(RecipeForm));
       Visibility: Cursor_Visibility := Invisible;
-      RecipeName: Unbounded_String;
    begin
       case Key is
          when KEY_UP => -- Select previous field
@@ -648,32 +683,7 @@ package body Crafts.UI is
                   DrawGame(Craft_View);
                   return Craft_View;
                end if;
-               PlayerShip.Modules(Workshop).Current_Value := RecipeIndex;
-               if RecipeIndex > 0 then
-                  PlayerShip.Modules(Workshop).Max_Value :=
-                    Recipes_List(RecipeIndex).Time;
-                  RecipeName :=
-                    Items_List(Recipes_List(RecipeIndex).ResultIndex).Name;
-               else
-                  RecipeIndex := abs (RecipeIndex);
-                  for ProtoRecipe of Recipes_List loop
-                     if ProtoRecipe.ResultIndex = RecipeIndex then
-                        PlayerShip.Modules(Workshop).Max_Value :=
-                          ProtoRecipe.Difficulty * 15;
-                        exit;
-                     end if;
-                  end loop;
-                  RecipeName :=
-                    To_Unbounded_String("Deconstructing ") &
-                    Items_List(RecipeIndex).Name;
-               end if;
-               AddMessage
-                 (To_String(RecipeName) &
-                  " was set as manufacturing order in " &
-                  To_String(PlayerShip.Modules(Workshop).Name) &
-                  ".",
-                  CraftMessage);
-               UpdateOrders;
+               SetRecipe;
                DrawGame(Craft_View);
                return Craft_View;
             end if;
@@ -736,9 +746,16 @@ package body Crafts.UI is
          when 10 => -- Set selected manufacturing order
             if ModuleIndex > 0 then
                Workshop := ModuleIndex;
+               if RecipeIndex < 0 then
+                  SetRecipe;
+               end if;
             end if;
             DrawGame(Craft_View);
-            return ShowRecipeForm;
+            if RecipeIndex > 0 then
+               ShowRecipeForm;
+               return Recipe_Setting;
+            end if;
+            return Craft_View;
          when 56 | KEY_UP => -- Select previous recipe
             Result := Driver(ModulesMenu, M_Up_Item);
             if Result = Request_Denied then
@@ -752,6 +769,10 @@ package body Crafts.UI is
          when 27 => -- Esc select close option, used second time, close menu
             if Name(Current(ModulesMenu)) = "Close" then
                DrawGame(Craft_View);
+               if RecipeIndex > 0 then
+                  ShowRecipeForm;
+                  return Recipe_Setting;
+               end if;
                return Craft_View;
             else
                Result := Driver(ModulesMenu, M_Last_Item);
