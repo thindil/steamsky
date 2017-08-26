@@ -588,4 +588,33 @@ package body Crafts is
       return 0;
    end FindRecipe;
 
+   procedure SetRecipe(Workshop: Positive; RecipeIndex: Integer) is
+      RecipeName: Unbounded_String;
+   begin
+      PlayerShip.Modules(Workshop).Current_Value := RecipeIndex;
+      if RecipeIndex > 0 then
+         PlayerShip.Modules(Workshop).Max_Value :=
+           Recipes_List(RecipeIndex).Time;
+         RecipeName := Items_List(Recipes_List(RecipeIndex).ResultIndex).Name;
+      else
+         for ProtoRecipe of Recipes_List loop
+            if ProtoRecipe.ResultIndex = abs (RecipeIndex) then
+               PlayerShip.Modules(Workshop).Max_Value :=
+                 ProtoRecipe.Difficulty * 15;
+               exit;
+            end if;
+         end loop;
+         RecipeName :=
+           To_Unbounded_String("Deconstructing ") &
+           Items_List(abs (RecipeIndex)).Name;
+      end if;
+      AddMessage
+        (To_String(RecipeName) &
+         " was set as manufacturing order in " &
+         To_String(PlayerShip.Modules(Workshop).Name) &
+         ".",
+         CraftMessage);
+      UpdateOrders;
+   end SetRecipe;
+
 end Crafts;
