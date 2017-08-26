@@ -214,4 +214,8 @@ Target = Pirates
 Type = Visit
 Amount = 50
 Target = Poleis
+[67]
+Type = Visit
+Amount = 75
+Target = Poleis
 []
