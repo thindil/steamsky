@@ -300,18 +300,18 @@ package body Crafts is
       for Module of PlayerShip.Modules loop
          if Module.Owner > 0 and
            (Modules_List(Module.ProtoIndex).MType in Workplaces) and
-           Module.Current_Value /= 0 then
+           Module.Data(1) /= 0 then
             CrafterIndex := Module.Owner;
             if PlayerShip.Crew(CrafterIndex).Order = Craft then
                CurrentMinutes := Minutes;
-               RecipeTime := Module.Max_Value;
-               if Module.Current_Value > 0 then
-                  Recipe := Recipes_List(Module.Current_Value);
+               RecipeTime := Module.Data(2);
+               if Module.Data(1) > 0 then
+                  Recipe := Recipes_List(Module.Data(1));
                   RecipeName :=
                     To_Unbounded_String("manufacturing ") &
                     Items_List(Recipe.ResultIndex).Name;
                else
-                  Recipe.ResultIndex := abs (Module.Current_Value);
+                  Recipe.ResultIndex := abs (Module.Data(1));
                   Recipe.MaterialTypes.Append
                   (New_Item => Items_List(Recipe.ResultIndex).IType);
                   Recipe.MaterialAmounts.Append(New_Item => 1);
@@ -341,8 +341,7 @@ package body Crafts is
                      ".",
                      CraftMessage,
                      3);
-                  Module.Current_Value := 0;
-                  Module.Max_Value := 0;
+                  Module.Data := (0, 0, 0);
                   GiveOrders(CrafterIndex, Rest);
                   CurrentMinutes := 0;
                end if;
@@ -355,7 +354,7 @@ package body Crafts is
                      WorkTime := WorkTime - RecipeTime;
                      RecipeTime := Recipe.Time;
                      MaterialIndexes.Clear;
-                     if Module.Current_Value > 0 then
+                     if Module.Data(1) > 0 then
                         for K in Recipe.MaterialTypes.Iterate loop
                            for J in Items_List.Iterate loop
                               if Items_List(J).IType =
@@ -385,8 +384,7 @@ package body Crafts is
                               ".",
                               CraftMessage,
                               3);
-                           Module.Current_Value := 0;
-                           Module.Max_Value := 0;
+                           Module.Data := (0, 0, 0);
                            GiveOrders(CrafterIndex, Rest);
                            exit Craft_Loop;
                         end if;
@@ -404,8 +402,7 @@ package body Crafts is
                            ".",
                            CraftMessage,
                            3);
-                        Module.Current_Value := 0;
-                        Module.Max_Value := 0;
+                        Module.Data := (0, 0, 0);
                         GiveOrders(CrafterIndex, Rest);
                         exit Craft_Loop;
                      end if;
@@ -456,12 +453,12 @@ package body Crafts is
                            ".",
                            CraftMessage,
                            3);
-                        Module.Current_Value := 0;
-                        Module.Max_Value := 0;
+                        Module.Data := (0, 0, 0);
                         GiveOrders(CrafterIndex, Rest);
                         exit Craft_Loop;
                      end if;
                      CraftedAmount := CraftedAmount + ResultAmount;
+                     Module.Data(3) := Module.Data(3) - 1;
                      for J in MaterialIndexes.Iterate loop
                         CargoIndex := 1;
                         while CargoIndex <= PlayerShip.Cargo.Last_Index loop
@@ -494,7 +491,7 @@ package body Crafts is
                      if ToolIndex > 0 then
                         DamageCargo(ToolIndex, CrafterIndex, Recipe.Skill);
                      end if;
-                     if Module.Current_Value > 0 then
+                     if Module.Data(1) > 0 then
                         Amount :=
                           Amount -
                           (Items_List(Recipe.ResultIndex).Weight *
@@ -506,15 +503,13 @@ package body Crafts is
                               ".",
                               CraftMessage,
                               3);
-                           Module.Current_Value := 0;
-                           Module.Max_Value := 0;
+                           Module.Data := (0, 0, 0);
                            GiveOrders(CrafterIndex, Rest);
                            exit Craft_Loop;
                         end if;
                         UpdateCargo
                           (PlayerShip,
-                           Recipes_List.Element(Module.Current_Value)
-                             .ResultIndex,
+                           Recipes_List.Element(Module.Data(1)).ResultIndex,
                            ResultAmount);
                         UpdateCraftingOrders(Recipe.Index);
                      else
@@ -528,13 +523,14 @@ package body Crafts is
                         end loop;
                         exit Craft_Loop;
                      end if;
+                     exit Craft_Loop when Module.Data(3) = 0;
                   else
                      RecipeTime := RecipeTime - CurrentMinutes;
                      WorkTime := WorkTime - CurrentMinutes;
                      CurrentMinutes := 0;
                   end if;
                end loop Craft_Loop;
-               Module.Max_Value := RecipeTime;
+               Module.Data(2) := RecipeTime;
                if CraftedAmount > 0 then
                   if Recipe.ResultAmount > 0 then
                      AddMessage
@@ -567,9 +563,8 @@ package body Crafts is
                      GainExp(GainedExp, Recipe.Skill, CrafterIndex);
                   end if;
                   PlayerShip.Crew(CrafterIndex).OrderTime := WorkTime;
-                  if Module.Current_Value < 0 and CraftedAmount > 0 then
-                     Module.Current_Value := 0;
-                     Module.Max_Value := 0;
+                  if Module.Data(3) = 0 then
+                     Module.Data := (0, 0, 0);
                      GiveOrders(CrafterIndex, Rest);
                   end if;
                end if;
@@ -588,18 +583,19 @@ package body Crafts is
       return 0;
    end FindRecipe;
 
-   procedure SetRecipe(Workshop: Positive; RecipeIndex: Integer) is
+   procedure SetRecipe(Workshop, Amount: Positive; RecipeIndex: Integer) is
       RecipeName: Unbounded_String;
    begin
-      PlayerShip.Modules(Workshop).Current_Value := RecipeIndex;
+      PlayerShip.Modules(Workshop).Data(1) := RecipeIndex;
+      PlayerShip.Modules(Workshop).Data(3) := Amount;
       if RecipeIndex > 0 then
-         PlayerShip.Modules(Workshop).Max_Value :=
+         PlayerShip.Modules(Workshop).Data(2) :=
            Recipes_List(RecipeIndex).Time;
          RecipeName := Items_List(Recipes_List(RecipeIndex).ResultIndex).Name;
       else
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.ResultIndex = abs (RecipeIndex) then
-               PlayerShip.Modules(Workshop).Max_Value :=
+               PlayerShip.Modules(Workshop).Data(2) :=
                  ProtoRecipe.Difficulty * 15;
                exit;
             end if;

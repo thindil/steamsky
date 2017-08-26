@@ -490,7 +490,7 @@ package body Crafts.UI is
       Set_Buffer
         (Recipe_Fields.all(1),
          0,
-         "Amount (max" & Positive'Image(MaxAmount) & "):");
+         "Times (max" & Positive'Image(MaxAmount) & "):");
       Recipe_Fields.all(2) := New_Field(1, 10, 0, 20, 0, 0);
       FieldOptions := Get_Options(Recipe_Fields.all(2));
       FieldOptions.Auto_Skip := False;
@@ -652,7 +652,10 @@ package body Crafts.UI is
                   DrawGame(Craft_View);
                   return Craft_View;
                end if;
-               SetRecipe(Workshop, RecipeIndex);
+               SetRecipe
+                 (Workshop,
+                  Positive'Value(Get_Buffer(Fields(RecipeForm, 2))),
+                  RecipeIndex);
                DrawGame(Craft_View);
                return Craft_View;
             end if;
@@ -716,7 +719,7 @@ package body Crafts.UI is
             if ModuleIndex > 0 then
                Workshop := ModuleIndex;
                if RecipeIndex < 0 then
-                  SetRecipe(Workshop, RecipeIndex);
+                  SetRecipe(Workshop, 1, RecipeIndex);
                end if;
             end if;
             DrawGame(Craft_View);
