@@ -32,8 +32,7 @@ package body Ships.UI.Ship.Keys is
       Result: Menus.Driver_Result;
    begin
       case Key is
-         when Character'Pos('q') |
-           Character'Pos('Q') => -- Back to sky map or combat screen
+         when 27 => -- Back to sky map or combat screen
             CurrentMenuIndex := 1;
             DrawGame(OldState);
             return OldState;
@@ -135,6 +134,13 @@ package body Ships.UI.Ship.Keys is
                DrawGame(Ship_Info);
                return Ship_Info;
             end if;
+         when 27 => -- Esc select close option, used second time, close menu
+            if OptionIndex = 6 then
+               DrawGame(Ship_Info);
+               return Ship_Info;
+            else
+               Result := Driver(OptionsMenu, M_Last_Item);
+            end if;
          when others =>
             Result := Driver(OptionsMenu, Key);
             if Result /= Menu_Ok then
@@ -210,6 +216,13 @@ package body Ships.UI.Ship.Keys is
             end if;
             DrawGame(Ship_Info);
             return Ship_Info;
+         when 27 => -- Esc select close option, used second time, close menu
+            if OptionIndex = 0 then
+               DrawGame(Ship_Info);
+               return Ship_Info;
+            else
+               Result := Driver(OptionsMenu, M_Last_Item);
+            end if;
          when others =>
             Result := Driver(OptionsMenu, Key);
             if Result /= Menu_Ok then
@@ -263,6 +276,13 @@ package body Ships.UI.Ship.Keys is
             end if;
             DrawGame(Ship_Info);
             return Ship_Info;
+         when 27 => -- Esc select close option, used second time, close menu
+            if OptionIndex = 0 then
+               DrawGame(Ship_Info);
+               return Ship_Info;
+            else
+               Result := Driver(OptionsMenu, M_Last_Item);
+            end if;
          when others =>
             Result := Driver(OptionsMenu, Key);
             if Result /= Menu_Ok then

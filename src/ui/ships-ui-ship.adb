@@ -516,16 +516,43 @@ package body Ships.UI.Ship is
          CurrentLine := CurrentLine + 1;
       end if;
       ActionsWindow :=
-        Create(2, (Columns / 2), WindowHeight + 3, (Columns / 2));
+        Create(6, (Columns / 2), WindowHeight + 3, (Columns / 2));
       Add
         (Win => ActionsWindow,
          Str => "Press Enter to see selected module options");
+      Get_Cursor_Position
+        (Win => ActionsWindow,
+         Line => CurrentLine,
+         Column => EndColumn);
       Change_Attributes
         (Win => ActionsWindow,
          Line => 0,
          Column => 6,
          Count => 5,
-         Color => 1);
+         Color => 1,
+         Attr => BoldCharacters);
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
+      Add(Win => ActionsWindow, Str => "Press F1 for help");
+      Change_Attributes
+        (Win => ActionsWindow,
+         Line => CurrentLine,
+         Column => 6,
+         Count => 2,
+         Color => 1,
+         Attr => BoldCharacters);
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
+      Add
+        (Win => ActionsWindow,
+         Str => "Press Escape to close ship informations");
+      Change_Attributes
+        (Win => ActionsWindow,
+         Line => CurrentLine,
+         Column => 6,
+         Count => 6,
+         Color => 1,
+         Attr => BoldCharacters);
       WindowWidth := WindowWidth + 4;
       if WindowWidth > (Columns / 2) then
          WindowWidth := (Columns / 2);
@@ -822,7 +849,7 @@ package body Ships.UI.Ship is
       end if;
       Options_Items.all(MenuIndex) := New_Item("Rename", "5");
       MenuIndex := MenuIndex + 1;
-      Options_Items.all(MenuIndex) := New_Item("Quit", "6");
+      Options_Items.all(MenuIndex) := New_Item("Close", "6");
       MenuIndex := MenuIndex + 1;
       for I in MenuIndex .. Options_Items'Last loop
          Options_Items.all(I) := Null_Item;
@@ -877,7 +904,7 @@ package body Ships.UI.Ship is
             end case;
          end if;
       end loop;
-      Assign_Items.all(MenuIndex) := New_Item("Quit", "0");
+      Assign_Items.all(MenuIndex) := New_Item("Close", "0");
       MenuIndex := MenuIndex + 1;
       for I in MenuIndex .. Assign_Items'Last loop
          Assign_Items.all(I) := Null_Item;
@@ -928,7 +955,7 @@ package body Ships.UI.Ship is
          DrawGame(Ship_Info);
          return Ship_Info;
       end if;
-      Assign_Items.all(MenuIndex) := New_Item("Quit", "0");
+      Assign_Items.all(MenuIndex) := New_Item("Close", "0");
       MenuIndex := MenuIndex + 1;
       for I in MenuIndex .. Assign_Items'Last loop
          Assign_Items.all(I) := Null_Item;
