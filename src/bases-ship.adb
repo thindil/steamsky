@@ -166,7 +166,11 @@ package body Bases.Ship is
                 MaxDurability => Modules_List(ModuleIndex).Durability,
                 Owner => 0,
                 UpgradeProgress => 0,
-                UpgradeAction => NONE));
+                UpgradeAction => NONE,
+                Data =>
+                  (Modules_List(ModuleIndex).Value,
+                   Modules_List(ModuleIndex).MaxValue,
+                   0)));
          else
             PlayerShip.Modules.Insert
             (Before =>
@@ -180,7 +184,11 @@ package body Bases.Ship is
                 MaxDurability => Modules_List(ModuleIndex).Durability,
                 Owner => 0,
                 UpgradeProgress => 0,
-                UpgradeAction => NONE));
+                UpgradeAction => NONE,
+                Data =>
+                  (Modules_List(ModuleIndex).Value,
+                   Modules_List(ModuleIndex).MaxValue,
+                   0)));
          end if;
          case Modules_List(ModuleIndex).MType is
             when GUN =>

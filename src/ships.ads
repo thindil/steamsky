@@ -27,6 +27,7 @@ package Ships is
      (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED, FULL_SPEED);
    type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER);
    type ShipUpgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
+   type Data_Array is array(1 .. 3) of Integer;
    type ModuleData is -- Data structure for ship modules
    record
       Name: Unbounded_String; -- Name of module
@@ -39,6 +40,7 @@ package Ships is
       Owner: Natural; -- Crew member owner of module (mostly for cabins)
       UpgradeProgress: Integer; -- Progress of module upgrade
       UpgradeAction: ShipUpgrade; -- Type of module upgrade
+      Data: Data_Array; -- Various data for module (depends on module)
    end record;
    package Modules_Container is new Vectors(Positive, ModuleData);
    type CargoData is -- Data structure for ship cargo

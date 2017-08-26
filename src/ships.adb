@@ -137,7 +137,8 @@ package body Ships is
              MaxDurability => TempModule.Durability,
              Owner => 0,
              UpgradeProgress => 0,
-             UpgradeAction => NONE));
+             UpgradeAction => NONE,
+             Data => (TempModule.Value, TempModule.MaxValue, 0)));
       end loop;
       if Name = Null_Unbounded_String then
          NewName := ProtoShip.Name;
