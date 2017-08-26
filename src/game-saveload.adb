@@ -32,7 +32,7 @@ with Goals; use Goals;
 
 package body Game.SaveLoad is
 
-   SaveVersion: constant String := "1.5";
+   SaveVersion: constant String := "1.6";
 
    procedure SaveGame is
       SaveGame: File_Type;
@@ -299,6 +299,10 @@ package body Game.SaveLoad is
            To_Unbounded_String
              (Integer'Image(ShipUpgrade'Pos(Module.UpgradeAction)));
          Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         for I in Module.Data'Range loop
+            RawValue := To_Unbounded_String(Integer'Image(Module.Data(I)));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         end loop;
       end loop;
       RawValue := To_Unbounded_String(PlayerShip.Cargo.Length'Img);
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -661,7 +665,14 @@ package body Game.SaveLoad is
              Owner => Integer'Value(To_String(ReadData)),
              UpgradeProgress => Integer'Value(To_String(ReadData)),
              UpgradeAction =>
-               ShipUpgrade'Val(Integer'Value(To_String(ReadData)))));
+               ShipUpgrade'Val(Integer'Value(To_String(ReadData))),
+             Data => (0, 0, 0)));
+         for J in
+           ShipModules(Modules_Container.Last_Index(ShipModules)).Data'
+             Range loop
+            ShipModules(Modules_Container.Last_Index(ShipModules)).Data(J) :=
+              Integer'Value(To_String(ReadData));
+         end loop;
       end loop;
       PlayerShip.Modules := ShipModules;
       VectorLength := Positive'Value(To_String(ReadData));
