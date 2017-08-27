@@ -257,7 +257,7 @@ package body Header is
             when GUN =>
                GunnersCheck := GunnersCheck + 1;
             when ALCHEMY_LAB .. GREENHOUSE =>
-               if Module.Current_Value /= 0 then
+               if Module.Data(1) /= 0 then
                   if Module.Owner > 0 and CraftersCheck < 2 then
                      CraftersCheck := 1;
                   else
