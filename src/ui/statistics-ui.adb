@@ -26,6 +26,7 @@ with Missions; use Missions;
 with Crafts; use Crafts;
 with Items; use Items;
 with Header; use Header;
+with Utils.UI; use Utils.UI;
 
 package body Statistics.UI is
 
@@ -167,7 +168,12 @@ package body Statistics.UI is
          Move_Cursor(Line => 6, Column => 2);
          Add
            (Str => "Crafting orders finished:" & Natural'Image(TotalFinished));
-         Change_Attributes(Line => 6, Column => 3, Count => 1, Color => 1);
+         Change_Attributes
+           (Line => 6,
+            Column => 3,
+            Count => 1,
+            Color => 1,
+            Attr => BoldCharacters);
          TotalFinished := 0;
          for FinishedMission of GameStats.FinishedMissions loop
             TotalFinished := TotalFinished + FinishedMission.Amount;
@@ -189,10 +195,20 @@ package body Statistics.UI is
                    (To_Unbounded_String(Natural'Image(MissionsPercent)),
                     Ada.Strings.Left)) &
               "%)");
-         Change_Attributes(Line => 7, Column => 2, Count => 1, Color => 1);
+         Change_Attributes
+           (Line => 7,
+            Column => 2,
+            Count => 1,
+            Color => 1,
+            Attr => BoldCharacters);
          Move_Cursor(Line => 8, Column => 2);
          Add(Str => "Current goal: " & GoalText(0));
-         Change_Attributes(Line => 8, Column => 2, Count => 1, Color => 1);
+         Change_Attributes
+           (Line => 8,
+            Column => 2,
+            Count => 1,
+            Color => 1,
+            Attr => BoldCharacters);
          Move_Cursor(Line => 9, Column => 2);
          Add(Str => "Points:" & Natural'Image(GameStats.Points));
          TotalFinished := 0;
@@ -353,9 +369,7 @@ package body Statistics.UI is
          end if;
          BoxWindow :=
            Create(WindowHeight, (Columns / 2), (Lines / 4), (Columns / 4));
-         Box(BoxWindow);
-         Move_Cursor(Win => BoxWindow, Line => 0, Column => 2);
-         Add(Win => BoxWindow, Str => "[Finished " & StatsType & "]");
+         WindowFrame(BoxWindow, 2, "Finished " & StatsType);
          Refresh_Without_Update;
          Refresh_Without_Update(BoxWindow);
          Delete(BoxWindow);
@@ -374,7 +388,7 @@ package body Statistics.UI is
    function ShowGameStatsKeys(Key: Key_Code) return GameStates is
    begin
       case Key is
-         when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+         when 27 => -- Back to sky map
             if PlayerShip.Crew(1).Health = 0 then -- Player is dead
                EndGame(False);
                Erase;

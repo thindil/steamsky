@@ -108,9 +108,19 @@ package body Header is
          when Events_View =>
             Add(Str => "List of know events");
          when GameStats_View =>
-            Add(Str => "Game statistics [Quit] [F1 Help]");
-            Change_Attributes(Line => 0, Column => 17, Count => 1, Color => 1);
-            Change_Attributes(Line => 0, Column => 24, Count => 2, Color => 1);
+            Add(Str => "Game statistics [Escape closes] [F1 Help]");
+            Change_Attributes
+              (Line => 0,
+               Column => 17,
+               Count => 6,
+               Color => 1,
+               Attr => BoldCharacters);
+            Change_Attributes
+              (Line => 0,
+               Column => 33,
+               Count => 2,
+               Color => 1,
+               Attr => BoldCharacters);
             return;
          when TradeRecipes_View =>
             Add(Str => "Buy crafting recipes");
