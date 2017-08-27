@@ -49,7 +49,7 @@ package body Ships.UI.Ship is
          when ENGINE | GUN =>
             WindowHeight := WindowHeight + 2;
          when ALCHEMY_LAB .. GREENHOUSE =>
-            if Module.Current_Value = 0 then
+            if Module.Data(1) = 0 then
                WindowHeight := WindowHeight + 2;
             else
                WindowHeight := WindowHeight + 3;
@@ -388,22 +388,23 @@ package body Ships.UI.Ship is
                Add(Win => InfoWindow, Str => "Worker: none");
             end if;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
-            if Module.Current_Value /= 0 then
-               if Module.Current_Value > 0 then
+            if Module.Data(1) /= 0 then
+               if Module.Data(1) > 0 then
                   Add
                     (Win => InfoWindow,
                      Str =>
-                       "Manufacturing: " &
+                       "Manufacturing:" &
+                       Positive'Image(Module.Data(3)) &
+                       "x " &
                        To_String
-                         (Items_List
-                            (Recipes_List(Module.Current_Value).ResultIndex)
+                         (Items_List(Recipes_List(Module.Data(1)).ResultIndex)
                             .Name));
                else
                   Add
                     (Win => InfoWindow,
                      Str =>
                        "Deconstructing " &
-                       To_String(Items_List(abs (Module.Current_Value)).Name));
+                       To_String(Items_List(abs (Module.Data(1))).Name));
                end if;
                Get_Cursor_Position
                  (Win => InfoWindow,
@@ -420,9 +421,9 @@ package body Ships.UI.Ship is
                Add
                  (Win => InfoWindow,
                   Str =>
-                    "Time to complete:" &
-                    Positive'Image(Module.Max_Value) &
-                    " minutes");
+                    "Time to complete current:" &
+                    Positive'Image(Module.Data(2)) &
+                    " mins");
             else
                Add(Win => InfoWindow, Str => "Manufacturing: nothing");
             end if;
@@ -813,7 +814,7 @@ package body Ships.UI.Ship is
                MenuIndex := MenuIndex + 1;
             end if;
          when ALCHEMY_LAB .. GREENHOUSE =>
-            if PlayerShip.Modules(ModuleIndex).Current_Value > 0 then
+            if PlayerShip.Modules(ModuleIndex).Data(1) > 0 then
                Options_Items.all(MenuIndex) := New_Item("Assign worker", "7");
                MenuIndex := MenuIndex + 1;
             end if;

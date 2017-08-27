@@ -448,7 +448,7 @@ package body Crew.UI is
                      end if;
                   when ALCHEMY_LAB .. GREENHOUSE =>
                      if Module.Owner /= MemberIndex and
-                       Module.Current_Value /= 0 then
+                       Module.Data(1) /= 0 then
                         OrdersAmount := OrdersAmount + 1;
                      end if;
                   when MEDICAL_ROOM =>
@@ -517,7 +517,7 @@ package body Crew.UI is
                      end if;
                   when ALCHEMY_LAB .. GREENHOUSE =>
                      if PlayerShip.Modules(I).Owner /= MemberIndex and
-                       PlayerShip.Modules(I).Current_Value /= 0 then
+                       PlayerShip.Modules(I).Data(1) /= 0 then
                         Orders_Items.all(MenuIndex) :=
                           New_Item
                             ("Work in " &

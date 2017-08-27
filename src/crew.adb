@@ -730,7 +730,7 @@ package body Crew is
                      if Order = Craft and
                        PlayerShip.Modules(I).Owner = 0 and
                        PlayerShip.Modules(I).Durability > 0 and
-                       PlayerShip.Modules(I).Current_Value /= 0 then
+                       PlayerShip.Modules(I).Data(1) /= 0 then
                         ModuleIndex := Modules_Container.To_Index(I);
                         exit;
                      end if;
@@ -805,7 +805,7 @@ package body Crew is
                   NeedGunners := True;
                end if;
             when ALCHEMY_LAB .. GREENHOUSE =>
-               if Module.Current_Value /= 0 and
+               if Module.Data(1) /= 0 and
                  Module.Owner = 0 and
                  Module.Durability > 0 and
                  not NeedCrafters then
