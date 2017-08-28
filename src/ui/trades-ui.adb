@@ -246,12 +246,14 @@ package body Trades.UI is
            (Line => CurrentLine,
             Column => (Columns / 2) + 6,
             Count => 5,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          Change_Attributes
            (Line => CurrentLine,
             Column => (Columns / 2) + 20,
             Count => 5,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          CurrentLine := CurrentLine + 1;
       elsif
         ((BaseIndex > 0 and Buyable) or
@@ -262,7 +264,8 @@ package body Trades.UI is
            (Line => CurrentLine,
             Column => (Columns / 2) + 6,
             Count => 5,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          CurrentLine := CurrentLine + 1;
       elsif
         ((BaseIndex > 0 and not Buyable) or
@@ -273,9 +276,28 @@ package body Trades.UI is
            (Line => CurrentLine,
             Column => (Columns / 2) + 6,
             Count => 5,
-            Color => 1);
+            Color => 1,
+            Attr => BoldCharacters);
          CurrentLine := CurrentLine + 1;
       end if;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      Add(Str => "Press ESCAPE to back to sky map");
+      Change_Attributes
+        (Line => CurrentLine,
+         Column => (Columns / 2) + 6,
+         Count => 6,
+         Color => 1,
+         Attr => BoldCharacters);
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      Add(Str => "Press F1 for help");
+      Change_Attributes
+        (Line => CurrentLine,
+         Column => (Columns / 2) + 6,
+         Count => 2,
+         Color => 1,
+         Attr => BoldCharacters);
+      CurrentLine := CurrentLine + 1;
       MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
       if MoneyIndex2 > 0 then
@@ -555,13 +577,8 @@ package body Trades.UI is
          FieldOptions := Get_Options(Trade_Fields.all(2));
          FieldOptions.Auto_Skip := False;
          Set_Options(Trade_Fields.all(2), FieldOptions);
-         Set_Foreground
-           (Trade_Fields.all(2),
-            (Bold_Character => True, others => False),
-            1);
-         Set_Background
-           (Trade_Fields.all(2),
-            (Under_Line => True, others => False));
+         Set_Foreground(Trade_Fields.all(2), BoldCharacters, 11);
+         Set_Background(Trade_Fields.all(2), BoldCharacters, 11);
          Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type
            (Trade_Fields.all(2),
             (0, 0, MaxAmount));
@@ -589,7 +606,7 @@ package body Trades.UI is
             Trade_Fields.all(5) :=
               New_Field
                 (1,
-                 11,
+                 10,
                  2,
                  (Column_Position(Length(FieldText)) / 2) + 16,
                  0,
@@ -799,7 +816,7 @@ package body Trades.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
    begin
       case Key is
-         when Character'Pos('q') | Character'Pos('Q') => -- Back to sky map
+         when 27 => -- Back to sky map
             if BaseIndex = 0 and EventIndex > 0 then
                DeleteEvent(EventIndex);
             end if;
@@ -902,10 +919,14 @@ package body Trades.UI is
             if FieldIndex = 2 then
                Result := Driver(TradeForm, F_Left_Char);
             end if;
-         when 27 => -- Escape select cancel button
-            FieldIndex := 3;
-            Set_Current(TradeForm, Fields(TradeForm, 3));
-            Result := Form_Ok;
+         when 27 => -- Escape select cancel button, second time closes form
+            if FieldIndex /= 3 then
+               FieldIndex := 3;
+               Set_Current(TradeForm, Fields(TradeForm, 3));
+               Result := Form_Ok;
+            else
+               return TradeResult;
+            end if;
          when others =>
             Result := Driver(TradeForm, Key);
       end case;
@@ -915,26 +936,15 @@ package body Trades.UI is
          else
             MaxIndex := 5;
          end if;
+         for I in 2 .. MaxIndex loop
+            Set_Foreground(Fields(TradeForm, I));
+            Set_Background(Fields(TradeForm, I));
+         end loop;
+         Set_Foreground(Current(TradeForm), BoldCharacters, 11);
+         Set_Background(Current(TradeForm), BoldCharacters, 11);
          if FieldIndex = 2 then
-            Set_Background
-              (Current(TradeForm),
-               (Under_Line => True, others => False));
             Visibility := Normal;
-            for I in 3 .. MaxIndex loop
-               Set_Foreground(Fields(TradeForm, I));
-            end loop;
-         else
-            Set_Background(Fields(TradeForm, 2));
-            for I in 2 .. MaxIndex loop
-               if I /= FieldIndex then
-                  Set_Foreground(Fields(TradeForm, I));
-               end if;
-            end loop;
          end if;
-         Set_Foreground
-           (Current(TradeForm),
-            (Bold_Character => True, others => False),
-            1);
          Set_Cursor_Visibility(Visibility);
          Refresh(FormWindow);
       end if;
