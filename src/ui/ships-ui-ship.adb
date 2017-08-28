@@ -731,7 +731,7 @@ package body Ships.UI.Ship is
                MenuIndex := MenuIndex + 1;
             end if;
          when ALCHEMY_LAB .. GREENHOUSE =>
-            if PlayerShip.Modules.Element(ModuleIndex).Current_Value > 0 then
+            if PlayerShip.Modules.Element(ModuleIndex).Current_Value /= 0 then
                Options_Items.all(MenuIndex) := New_Item("Assign worker", "7");
                MenuIndex := MenuIndex + 1;
             end if;
