@@ -222,4 +222,8 @@ Target = Poleis
 Type = Visit
 Amount = 100
 Target = Poleis
+[69]
+Type = Visit
+Amount = 125
+Target = Poleis
 []
