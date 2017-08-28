@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
   small independent patrol ship, poleis patrol ship, independent patrol ship,
   armored poleis patrol ship, armored independent patrol ship and advanced
   poleis patrol ship
+- Ability to set how many times craft selected item
 
 ### Changed
 - Updated interface
