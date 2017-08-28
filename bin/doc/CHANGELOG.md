@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Info about time for new recruits/missions in bases list
 - Adding player ship to list of friendly ships
 - Crash on showing info about workshop with crafting order
+- Ability to set worker in ship screen for deconstructing orders
 
 ## [1.5] - 2017-08-20
 
