@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New goals: gain max reputation in 10 independent bases, gain max reputation
   in 1 pirates base, gain max reputation in 3 pirates bases, gain max
-  reputation in 5 pirates bases, visit 50 poleis bases, visit 75 poleis bases
-  and visit 100 poleis bases
+  reputation in 5 pirates bases, visit 50 poleis bases, visit 75 poleis bases,
+  visit 100 poleis bases and visit 125 poleis bases
 - New friendly ships: tiny independent patrol ship, small poleis patrol ship,
   small independent patrol ship, poleis patrol ship, independent patrol ship,
   armored poleis patrol ship and armored independent patrol ship
