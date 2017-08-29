@@ -46,7 +46,12 @@ package body Header is
       case CurrentState is
          when Sky_Map_View | Control_Speed | Wait_Order =>
             Add(Str => "[Menu]");
-            Change_Attributes(Line => 0, Column => 2, Count => 1, Color => 1);
+            Change_Attributes
+              (Line => 0,
+               Column => 2,
+               Count => 1,
+               Color => 1,
+               Attr => BoldCharacters);
          when Ship_Info =>
             Add(Str => "Ship Informations");
          when Crew_Info | Giving_Orders | Dismiss_Confirm =>
