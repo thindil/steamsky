@@ -36,6 +36,7 @@ with Utils; use Utils;
 with Items; use Items;
 with Config; use Config;
 with Trades; use Trades;
+with Utils.UI; use Utils.UI;
 
 package body UserInterface.Keys is
 
@@ -168,16 +169,10 @@ package body UserInterface.Keys is
             if Result = Request_Denied then
                Result := Driver(OrdersMenu, M_Last_Item);
             end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow);
-            end if;
          when KEY_DOWN => -- Select next order
             Result := Driver(OrdersMenu, M_Down_Item);
             if Result = Request_Denied then
                Result := Driver(OrdersMenu, M_First_Item);
-            end if;
-            if Result = Menu_Ok then
-               Refresh(MenuWindow);
             end if;
          when 10 => -- Select current order
             Post(OrdersMenu, False);
@@ -328,18 +323,23 @@ package body UserInterface.Keys is
             end if;
             DrawGame(Sky_Map_View);
             return OldState;
+         when 27 => -- Select close option, second time close menu
+            if Order /= "Close" then
+               Result := Driver(OrdersMenu, M_Last_Item);
+            else
+               DrawGame(Sky_Map_View);
+               return OldState;
+            end if;
          when others =>
             Result := Driver(OrdersMenu, Key);
-            if Result = Menu_Ok then
-               Refresh(MenuWindow);
-            else
+            if Result /= Menu_Ok then
                Result := Driver(OrdersMenu, M_Clear_Pattern);
                Result := Driver(OrdersMenu, Key);
-               if Result = Menu_Ok then
-                  Refresh(MenuWindow);
-               end if;
             end if;
       end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow);
+      end if;
       return Control_Speed;
    exception
       when An_Exception : Trade_No_Money_In_Base =>
@@ -449,7 +449,7 @@ package body UserInterface.Keys is
             end if;
             return Wait_Order;
          when 10 => -- Select option from menu
-            if Order = "Quit" then
+            if Order = "Close" then
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             elsif Order = "Wait 1 minute" then
@@ -493,6 +493,15 @@ package body UserInterface.Keys is
                else
                   return Wait_Order;
                end if;
+            end if;
+         when 27 => -- Select close option, second time close menu
+            if Order /= "Close" then
+               Result := Driver(OrdersMenu, M_Last_Item);
+               Refresh(MenuWindow);
+               return Wait_Order;
+            else
+               DrawGame(Sky_Map_View);
+               return OldState;
             end if;
          when others =>
             Result := Driver(OrdersMenu, Key);
@@ -572,29 +581,29 @@ package body UserInterface.Keys is
             if FieldIndex = 2 then
                Result := Driver(WaitForm, F_Left_Char);
             end if;
-         when 27 => -- Escape select cancel button
-            FieldIndex := 3;
-            Set_Current(WaitForm, Fields(WaitForm, 3));
-            Result := Form_Ok;
+         when 27 => -- Escape select cancel button, second time closes form
+            if FieldIndex /= 3 then
+               FieldIndex := 3;
+               Set_Current(WaitForm, Fields(WaitForm, 3));
+               Result := Form_Ok;
+            else
+               Set_Cursor_Visibility(Visibility);
+               Post(WaitForm, False);
+               Delete(WaitForm);
+               DrawGame(Sky_Map_View);
+               return Sky_Map_View;
+            end if;
          when others =>
             Result := Driver(WaitForm, Key);
       end case;
       if Result = Form_Ok then
-         Set_Cursor_Visibility(Visibility);
          for I in 2 .. 4 loop
             Set_Foreground(Fields(WaitForm, I));
+            Set_Background(Fields(WaitForm, I));
          end loop;
-         Set_Foreground
-           (Fields(WaitForm, FieldIndex),
-            (Bold_Character => True, others => False),
-            1);
-         if FieldIndex = 2 then
-            Set_Background
-              (Fields(WaitForm, 2),
-               (Under_Line => True, others => False));
-         else
-            Set_Background(Fields(WaitForm, 2));
-         end if;
+         Set_Foreground(Fields(WaitForm, FieldIndex), BoldCharacters, 11);
+         Set_Background(Fields(WaitForm, FieldIndex), BoldCharacters, 11);
+         Set_Cursor_Visibility(Visibility);
          Refresh(MenuWindow);
       end if;
       return WaitX_Order;

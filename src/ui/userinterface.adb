@@ -446,7 +446,7 @@ package body UserInterface is
          Orders_Items.all(MenuIndex) := New_Item("Full speed");
          MenuIndex := MenuIndex + 1;
       end if;
-      Orders_Items.all(MenuIndex) := New_Item("Quit");
+      Orders_Items.all(MenuIndex) := New_Item("Close");
       MenuIndex := MenuIndex + 1;
       Orders_Items.all(MenuIndex) := Null_Item;
       OrdersMenu := New_Menu(Orders_Items);
@@ -619,7 +619,7 @@ package body UserInterface is
              (Positive'Image(MenuIndex)(2) & ") Wait until crew is healed");
          MenuIndex := MenuIndex + 1;
       end if;
-      Wait_Items.all(MenuIndex) := New_Item("Q) Quit");
+      Wait_Items.all(MenuIndex) := New_Item("C) Close");
       MenuIndex := MenuIndex + 1;
       Wait_Items.all(MenuIndex) := Null_Item;
       OrdersMenu := New_Menu(Wait_Items);
@@ -823,13 +823,8 @@ package body UserInterface is
       FieldOptions.Auto_Skip := False;
       FieldOptions.Null_Ok := False;
       Set_Options(Wait_Fields.all(2), FieldOptions);
-      Set_Foreground
-        (Wait_Fields.all(2),
-         (Bold_Character => True, others => False),
-         1);
-      Set_Background
-        (Wait_Fields.all(2),
-         (Under_Line => True, others => False));
+      Set_Foreground(Wait_Fields.all(2), BoldCharacters, 11);
+      Set_Background(Wait_Fields.all(2), BoldCharacters, 11);
       Set_Field_Type(Wait_Fields.all(2), (0, 1, 1024));
       Wait_Fields.all(3) := New_Field(1, 8, 2, 1, 0, 0);
       Set_Buffer(Wait_Fields.all(3), 0, "[Cancel]");
