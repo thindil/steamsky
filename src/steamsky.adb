@@ -201,50 +201,68 @@ begin
       Key := Get_Keystroke;
       while Key = Terminal_Interface.Curses.Key_Resize loop
          Erase;
-         case GameState is
-            when Main_Menu =>
-               ShowMainMenu;
-            when New_Game |
-              License_Info |
-              License_Full |
-              News_View |
-              Hall_Of_Fame =>
-               RedrawMainMenu(GameState);
-            when Trade_Form =>
-               Set_Cursor_Visibility(Visibility);
-               GameState := Trade_View;
-               DrawGame(Trade_View);               
-            when BasesList_Types | BasesList_Statuses | BasesList_Owners =>
-               GameState := Bases_List;
-               DrawGame(Bases_List);
-            when ShipyardTypesMenu =>
-               GameState := Shipyard_View;
-               DrawGame(Shipyard_View);
-            when Combat_Orders | Enemy_Info =>
-               GameState := Combat_State;
-               DrawGame(Combat_State);
-            when Recipe_Setting =>
-               GameState := Craft_View;
-               DrawGame(Craft_View);
-            when Drop_Cargo =>
-               GameState := Cargo_Info;
-               DrawGame(Cargo_Info);
-            when Rename_Module | Assign_Ammo | Module_Options | Assign_Owner =>
-               GameState := Ship_Info;
-               DrawGame(Ship_Info);
-            when GoalsList_View | GoalsTypes_View =>
+         if Columns < 60 or Lines < 24 then
+            Move_Cursor(Line => (Lines / 2), Column => 2);
+            Add
+              (Str =>
+                 "Your terminal size is too small for game. Minimal size is 60x24. Please resize it again.");
+            Refresh;
+            if GameState /= Small_Terminal then
+               OldState := GameState;
+               GameState := Small_Terminal;
+            end if;
+         else
+            if GameState = Small_Terminal then
                GameState := OldState;
-               if GameState = GameStats_View then
-                  DrawGame(GameState);
-               else
+            end if;
+            case GameState is
+               when Main_Menu =>
+                  ShowMainMenu;
+               when New_Game |
+                 License_Info |
+                 License_Full |
+                 News_View |
+                 Hall_Of_Fame =>
                   RedrawMainMenu(GameState);
-               end if;
-            when Giving_Orders | Orders_For_All | Orders_Priorities =>
-               GameState := Crew_Info;
-               DrawGame(Crew_Info);
-            when others =>
-               DrawGame(GameState);
-         end case;
+               when Trade_Form =>
+                  Set_Cursor_Visibility(Visibility);
+                  GameState := Trade_View;
+                  DrawGame(Trade_View);
+               when BasesList_Types | BasesList_Statuses | BasesList_Owners =>
+                  GameState := Bases_List;
+                  DrawGame(Bases_List);
+               when ShipyardTypesMenu =>
+                  GameState := Shipyard_View;
+                  DrawGame(Shipyard_View);
+               when Combat_Orders | Enemy_Info =>
+                  GameState := Combat_State;
+                  DrawGame(Combat_State);
+               when Recipe_Setting =>
+                  GameState := Craft_View;
+                  DrawGame(Craft_View);
+               when Drop_Cargo =>
+                  GameState := Cargo_Info;
+                  DrawGame(Cargo_Info);
+               when Rename_Module |
+                 Assign_Ammo |
+                 Module_Options |
+                 Assign_Owner =>
+                  GameState := Ship_Info;
+                  DrawGame(Ship_Info);
+               when GoalsList_View | GoalsTypes_View =>
+                  GameState := OldState;
+                  if GameState = GameStats_View then
+                     DrawGame(GameState);
+                  else
+                     RedrawMainMenu(GameState);
+                  end if;
+               when Giving_Orders | Orders_For_All | Orders_Priorities =>
+                  GameState := Crew_Info;
+                  DrawGame(Crew_Info);
+               when others =>
+                  DrawGame(GameState);
+            end case;
+         end if;
          Key := Get_Keystroke;
       end loop;
       if GameState /= Main_Menu and
@@ -255,7 +273,8 @@ begin
         GameState /= GameStats_View and
         GameState /= GoalsList_View and
         GameState /= GoalsTypes_View and
-        GameState /= Hall_Of_Fame then
+        GameState /= Hall_Of_Fame and
+        GameState /= Small_Terminal then
          if PlayerShip.Crew.Element(1).Health = 0 then -- Player is dead
             GameState := Death_Confirm;
             DrawGame(Death_Confirm);
@@ -414,6 +433,13 @@ begin
             GameState := LootFormKeys(Key);
          when Recipe_Setting =>
             GameState := RecipeFormKeys(Key);
+         when Small_Terminal =>
+            Erase;
+            Move_Cursor(Line => (Lines / 2), Column => 2);
+            Add
+              (Str =>
+                 "Your terminal size is too small for game. Minimal size is 60x24. Please resize it again.");
+            Refresh;
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;
@@ -428,7 +454,8 @@ exception
         GameState /= License_Info and
         GameState /= License_Full and
         GameState /= News_View and
-        GameState /= Hall_Of_Fame then
+        GameState /= Hall_Of_Fame and
+        GameState /= Small_Terminal then
          SaveGame;
       end if;
       if Exists(To_String(SaveDirectory) & "error.log") then
