@@ -10,8 +10,8 @@ All notable changes to this project will be documented in this file.
   visit 100 poleis bases, visit 125 poleis bases and visit 150 poleis bases
 - New friendly ships: tiny independent patrol ship, small poleis patrol ship,
   small independent patrol ship, poleis patrol ship, independent patrol ship,
-  armored poleis patrol ship, armored independent patrol ship and advanced
-  poleis patrol ship
+  armored poleis patrol ship, armored independent patrol ship, advanced poleis
+  patrol ship and advanced independent patrol ship
 - Ability to set how many times craft selected item
 
 ### Changed
