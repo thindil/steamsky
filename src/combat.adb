@@ -626,6 +626,11 @@ package body Combat is
                            UpdateGoal
                              (DESTROY,
                               ProtoShips_List(EnemyShipIndex).Index);
+                           UpdateGoal
+                             (DESTROY,
+                              To_Unbounded_String
+                                (Bases_Owners'Image
+                                   (ProtoShips_List(EnemyShipIndex).Owner)));
                         else
                            return;
                         end if;

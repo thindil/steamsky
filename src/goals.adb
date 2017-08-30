@@ -103,6 +103,7 @@ package body Goals is
       ItemIndex: Positive;
       Goal: Goal_Data;
       InsertPosition: Positive;
+      Added: Boolean := False;
    begin
       if Index > 0 then
          Goal := Goals_List(Index);
@@ -158,9 +159,20 @@ package body Goals is
                for I in ProtoShips_List.Iterate loop
                   if ProtoShips_List(I).Index = Goal.TargetIndex then
                      Append(Text, ": " & To_String(ProtoShips_List(I).Name));
+                     Added := True;
                      exit;
                   end if;
                end loop;
+               if not Added then
+                  InsertPosition := Length(Text) - 3;
+                  if Goal.Amount > 1 then
+                     InsertPosition := InsertPosition - 1;
+                  end if;
+                  Insert
+                    (Text,
+                     InsertPosition,
+                     To_String(Goal.TargetIndex) & " ");
+               end if;
             when CRAFT =>
                ItemIndex :=
                  Recipes_List(FindRecipe(Goal.TargetIndex)).ResultIndex;
