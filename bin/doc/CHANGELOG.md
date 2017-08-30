@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
 - New friendly ships: tiny independent patrol ship, small poleis patrol ship,
   small independent patrol ship, poleis patrol ship, independent patrol ship,
   armored poleis patrol ship, armored independent patrol ship, advanced poleis
-  patrol ship and advanced independent patrol ship
+  patrol ship, advanced independent patrol ship and large poleis patrol ship
 - Ability to set how many times craft selected item, which made saves from
   previous version incompatible
 
