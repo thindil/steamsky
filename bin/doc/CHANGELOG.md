@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
   patrol ship, advanced independent patrol ship and large poleis patrol ship
 - Ability to set how many times craft selected item, which made saves from
   previous version incompatible
+- Check for minimal size of terminal during game
 
 ### Changed
 - Updated interface
