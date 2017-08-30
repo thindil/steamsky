@@ -312,7 +312,8 @@ single word.
 - Target: Optional parameter, ignored for Discover type, exact target for 
   goal, depends on type of goal. Possible values: for Reputation and Visit, 
   bases owners names: Poleis, Independent, Pirates, Undead, Drones, 
-  Inquisition. For Destroy, any enemy ship index (from *ships* directory). For
+  Inquisition. For Destroy, any enemy ship index (from *ships* directory) or
+  owners names: Poleis, Independent, Pirates, Undead, Drones, Inquisition. For
   Craft, recipe index (from *recipes* directory). For Mission, missions types:
   Deliver for deliver item to bases, Destroy for destroy enemy ship, Patrol
   for patrol missions, Explore for explore missions, Passenger for transport
