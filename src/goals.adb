@@ -174,9 +174,13 @@ package body Goals is
                      To_String(Goal.TargetIndex) & " ");
                end if;
             when CRAFT =>
-               ItemIndex :=
-                 Recipes_List(FindRecipe(Goal.TargetIndex)).ResultIndex;
-               Append(Text, ": " & To_String(Items_List(ItemIndex).Name));
+               if FindRecipe(Goal.TargetIndex) > 0 then
+                  ItemIndex :=
+                    Recipes_List(FindRecipe(Goal.TargetIndex)).ResultIndex;
+                  Append(Text, ": " & To_String(Items_List(ItemIndex).Name));
+               else
+                  Append(Text, ": " & To_String(Goal.TargetIndex));
+               end if;
             when MISSION =>
                case Missions_Types'Value(To_String(Goal.TargetIndex)) is
                   when Deliver =>
