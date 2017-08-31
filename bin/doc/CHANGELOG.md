@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Auto assign crew member to talk in bases order when meet friendly ship
 - Updated help
+- Updated MODDING.md
 
 ### Fixed
 - Info about time for new recruits/missions in bases list
