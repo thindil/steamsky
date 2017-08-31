@@ -543,6 +543,19 @@ package body Crafts is
                         CraftMessage,
                         2);
                      UpdateGoal(CRAFT, Recipe.Index, CraftedAmount);
+                     if CurrentGoal.TargetIndex /= Null_Unbounded_String then
+                        UpdateGoal
+                          (CRAFT,
+                           Items_List(Recipe.ResultIndex).IType,
+                           CraftedAmount);
+                        if Items_List(Recipe.ResultIndex).ShowType /=
+                          Null_Unbounded_String then
+                           UpdateGoal
+                             (CRAFT,
+                              Items_List(Recipe.ResultIndex).ShowType,
+                              CraftedAmount);
+                        end if;
+                     end if;
                   else
                      AddMessage
                        (To_String(PlayerShip.Crew(CrafterIndex).Name) &
