@@ -106,7 +106,7 @@ package body Combat.UI is
                null;
          end case;
       else
-         PlayerShip.Modules(ModuleIndex).Current_Value := abs (CrewIndex);
+         PlayerShip.Modules(ModuleIndex).Data(1) := abs (CrewIndex);
          AddMessage
            ("You assigned " &
             To_String
@@ -553,7 +553,7 @@ package body Combat.UI is
                     Items_Types
                       (Modules_List(PlayerShip.Modules(Gun(1)).ProtoIndex)
                          .Value) and
-                    I /= PlayerShip.Modules(Gun(1)).Current_Value then
+                    I /= PlayerShip.Modules(Gun(1)).Data(1) then
                      Orders_Items.all(MenuIndex) :=
                        New_Item
                          ("Use " &

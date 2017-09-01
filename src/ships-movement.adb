@@ -215,7 +215,7 @@ package body Ships.Movement is
             end if;
             for Module of PlayerShip.Modules loop
                if Modules_List(Module.ProtoIndex).MType = HULL then
-                  DockingCost := Module.Max_Value;
+                  DockingCost := Module.Data(2);
                   exit;
                end if;
             end loop;
@@ -301,7 +301,7 @@ package body Ships.Movement is
       end if;
       for Module of Ship.Modules loop
          if Modules_List(Module.ProtoIndex).MType = ENGINE then
-            BaseSpeed := Module.Max_Value * 10;
+            BaseSpeed := Module.Data(2) * 10;
             Damage :=
               1.0 -
               DamageFactor
@@ -350,11 +350,11 @@ package body Ships.Movement is
          if Modules_List(Module.ProtoIndex).MType = ENGINE then
             case PlayerShip.Speed is
                when QUARTER_SPEED =>
-                  FuelNeeded := FuelNeeded - (Module.Current_Value / 4);
+                  FuelNeeded := FuelNeeded - (Module.Data(1) / 4);
                when HALF_SPEED =>
-                  FuelNeeded := FuelNeeded - (Module.Current_Value / 2);
+                  FuelNeeded := FuelNeeded - (Module.Data(1) / 2);
                when FULL_SPEED =>
-                  FuelNeeded := FuelNeeded - Module.Current_Value;
+                  FuelNeeded := FuelNeeded - Module.Data(1);
                when others =>
                   null;
             end case;

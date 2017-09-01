@@ -277,25 +277,25 @@ package body Bases.UI.Shipyard is
                  (Win => InfoWindow,
                   Str =>
                     "Max power:" &
-                    Positive'Image(PlayerShip.Modules(ModuleIndex).Max_Value));
+                    Positive'Image(PlayerShip.Modules(ModuleIndex).Data(2)));
                CurrentLine := 4;
             when ShipModules.CARGO =>
                Add
                  (Win => InfoWindow,
                   Str =>
                     "Max cargo:" &
-                    Positive'Image(PlayerShip.Modules(ModuleIndex).Max_Value) &
+                    Positive'Image(PlayerShip.Modules(ModuleIndex).Data(2)) &
                     " kg");
                CurrentLine := 4;
             when CABIN =>
                Add(Win => InfoWindow, Str => "Quality: ");
-               if PlayerShip.Modules(ModuleIndex).Max_Value < 30 then
+               if PlayerShip.Modules(ModuleIndex).Data(2) < 30 then
                   Add(Win => InfoWindow, Str => "minimal");
-               elsif PlayerShip.Modules(ModuleIndex).Max_Value > 29 and
-                 PlayerShip.Modules(ModuleIndex).Max_Value < 60 then
+               elsif PlayerShip.Modules(ModuleIndex).Data(2) > 29 and
+                 PlayerShip.Modules(ModuleIndex).Data(2) < 60 then
                   Add(Win => InfoWindow, Str => "basic");
-               elsif PlayerShip.Modules(ModuleIndex).Max_Value > 59 and
-                 PlayerShip.Modules(ModuleIndex).Max_Value < 80 then
+               elsif PlayerShip.Modules(ModuleIndex).Data(2) > 59 and
+                 PlayerShip.Modules(ModuleIndex).Data(2) < 80 then
                   Add(Win => InfoWindow, Str => "extended");
                else
                   Add(Win => InfoWindow, Str => "luxury");
@@ -434,9 +434,9 @@ package body Bases.UI.Shipyard is
               (Win => ActionWindow,
                Str =>
                  "You have used" &
-                 Natural'Image(Module.Current_Value) &
+                 Natural'Image(Module.Data(1)) &
                  " modules space from max" &
-                 Natural'Image(Module.Max_Value) &
+                 Natural'Image(Module.Data(2)) &
                  " allowed.");
             exit;
          end if;
