@@ -130,7 +130,7 @@ package body Events.UI is
       WindowFrame(InfoWindow, 2, "Event info");
       ActionsWindow :=
         Create(4, (Columns / 2), WindowHeight + 4, (Columns / 2));
-      Add(Win => ActionsWindow, Str => "Press SPACE to show event on map");
+      Add(Win => ActionsWindow, Str => "Press Space to show event on map");
       Change_Attributes
         (Win => ActionsWindow,
          Line => 0,
@@ -141,7 +141,7 @@ package body Events.UI is
       Move_Cursor(Win => ActionsWindow, Line => 1, Column => 0);
       Add
         (Win => ActionsWindow,
-         Str => "Press ENTER to set event as a destination for ship");
+         Str => "Press Enter to set event as a destination for ship");
       Get_Cursor_Position
         (Win => ActionsWindow,
          Line => CurrentLine,
@@ -155,7 +155,7 @@ package body Events.UI is
          Attr => BoldCharacters);
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
-      Add(Win => ActionsWindow, Str => "Press ESCAPE to back to sky map");
+      Add(Win => ActionsWindow, Str => "Press Escape to back to sky map");
       Change_Attributes
         (Win => ActionsWindow,
          Line => CurrentLine,
