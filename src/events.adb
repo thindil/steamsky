@@ -50,7 +50,7 @@ package body Events is
                      PlayerValue :=
                        PlayerValue +
                        Module.MaxDurability +
-                       (Module.Max_Value * 10);
+                       (Module.Data(2) * 10);
                   when ARMOR =>
                      PlayerValue := PlayerValue + Module.MaxDurability;
                   when others =>

@@ -55,10 +55,10 @@ package body Ships.Cargo is
             Ship.Cargo.Delete(Index => ItemIndex, Count => 1);
             for Module of Ship.Modules loop
                if Modules_List(Module.ProtoIndex).MType = GUN then
-                  if Module.Current_Value > ItemIndex then
-                     Module.Current_Value := Module.Current_Value - 1;
-                  elsif Module.Current_Value = ItemIndex then
-                     Module.Current_Value := 0;
+                  if Module.Data(1) > ItemIndex then
+                     Module.Data(1) := Module.Data(1) - 1;
+                  elsif Module.Data(1) = ItemIndex then
+                     Module.Data(1) := 0;
                   end if;
                end if;
             end loop;
@@ -76,7 +76,7 @@ package body Ships.Cargo is
       for Module of Ship.Modules loop
          if Modules_List(Module.ProtoIndex).MType = ShipModules.CARGO and
            Module.Durability > 0 then
-            FreeCargo := FreeCargo + Module.Max_Value;
+            FreeCargo := FreeCargo + Module.Data(2);
          end if;
       end loop;
       for Item of Ship.Cargo loop

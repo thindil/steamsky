@@ -257,8 +257,8 @@ package body Game is
          GameDate.Day := GameDate.Day + 1;
          for Module of PlayerShip.Modules loop
             if Modules_List(Module.ProtoIndex).MType = CABIN and
-              Module.Current_Value > 0 then
-               Module.Current_Value := Module.Current_Value - 1;
+              Module.Data(1) > 0 then
+               Module.Data(1) := Module.Data(1) - 1;
                NeedCleaning := True;
             end if;
          end loop;

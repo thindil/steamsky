@@ -102,9 +102,9 @@ package body Bases.Ship is
          case Modules_List(PlayerShip.Modules(C).ProtoIndex).MType is
             when HULL =>
                HullIndex := Modules_Container.To_Index(C);
-               ModulesAmount := PlayerShip.Modules(C).Current_Value;
+               ModulesAmount := PlayerShip.Modules(C).Data(1);
             when TURRET =>
-               if PlayerShip.Modules(C).Current_Value = 0 then
+               if PlayerShip.Modules(C).Data(1) = 0 then
                   FreeTurretIndex := Modules_Container.To_Index(C);
                end if;
             when others =>
@@ -129,7 +129,7 @@ package body Bases.Ship is
          end loop;
          if Modules_List(ModuleIndex).MType /= HULL then
             ModulesAmount := ModulesAmount + Modules_List(ModuleIndex).Size;
-            if ModulesAmount > PlayerShip.Modules(HullIndex).Max_Value and
+            if ModulesAmount > PlayerShip.Modules(HullIndex).Data(2) and
               Modules_List(ModuleIndex).MType /= GUN then
                raise BasesShip_Installation_Error
                  with "You don't have free modules space for more modules.";
@@ -160,8 +160,6 @@ package body Bases.Ship is
                (Name => Modules_List(ModuleIndex).Name,
                 ProtoIndex => ModuleIndex,
                 Weight => Modules_List(ModuleIndex).Weight,
-                Current_Value => Modules_List(ModuleIndex).Value,
-                Max_Value => Modules_List(ModuleIndex).MaxValue,
                 Durability => Modules_List(ModuleIndex).Durability,
                 MaxDurability => Modules_List(ModuleIndex).Durability,
                 Owner => 0,
@@ -178,8 +176,6 @@ package body Bases.Ship is
                (Name => Modules_List(ModuleIndex).Name,
                 ProtoIndex => ModuleIndex,
                 Weight => Modules_List(ModuleIndex).Weight,
-                Current_Value => Modules_List(ModuleIndex).Value,
-                Max_Value => Modules_List(ModuleIndex).MaxValue,
                 Durability => Modules_List(ModuleIndex).Durability,
                 MaxDurability => Modules_List(ModuleIndex).Durability,
                 Owner => 0,
@@ -192,10 +188,10 @@ package body Bases.Ship is
          end if;
          case Modules_List(ModuleIndex).MType is
             when GUN =>
-               PlayerShip.Modules(FreeTurretIndex).Current_Value :=
+               PlayerShip.Modules(FreeTurretIndex).Data(1) :=
                  PlayerShip.Modules.Last_Index;
             when others =>
-               PlayerShip.Modules(HullIndex).Current_Value := ModulesAmount;
+               PlayerShip.Modules(HullIndex).Data(1) := ModulesAmount;
          end case;
          AddMessage
            ("You installed " &
@@ -228,20 +224,20 @@ package body Bases.Ship is
          end if;
          case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
             when TURRET =>
-               if PlayerShip.Modules(ModuleIndex).Current_Value > 0 then
+               if PlayerShip.Modules(ModuleIndex).Data(1) > 0 then
                   raise BasesShip_Removing_Error
                     with "You have installed gun in this turret, remove it before you remove this turret.";
                end if;
             when GUN =>
                for Module of PlayerShip.Modules loop
                   if Modules_List(Module.ProtoIndex).MType = TURRET and
-                    Module.Current_Value = ModuleIndex then
-                     Module.Current_Value := 0;
+                    Module.Data(1) = ModuleIndex then
+                     Module.Data(1) := 0;
                      exit;
                   end if;
                end loop;
             when ShipModules.CARGO =>
-               if FreeCargo((0 - PlayerShip.Modules(ModuleIndex).Max_Value)) <
+               if FreeCargo((0 - PlayerShip.Modules(ModuleIndex).Data(2))) <
                  0 then
                   raise BasesShip_Removing_Error
                     with "You can't sell this cargo bay, because you have items in it.";
@@ -252,7 +248,7 @@ package body Bases.Ship is
          ModulesAmount :=
            ModulesAmount -
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size;
-         PlayerShip.Modules(HullIndex).Current_Value := ModulesAmount;
+         PlayerShip.Modules(HullIndex).Data(1) := ModulesAmount;
          if PlayerShip.UpgradeModule = ModuleIndex then
             PlayerShip.UpgradeModule := 0;
             for C in PlayerShip.Crew.Iterate loop
@@ -300,8 +296,8 @@ package body Bases.Ship is
          end if;
          for Module of PlayerShip.Modules loop
             if Modules_List(Module.ProtoIndex).MType = TURRET then
-               if Module.Current_Value > ModuleIndex then
-                  Module.Current_Value := Module.Current_Value - 1;
+               if Module.Data(1) > ModuleIndex then
+                  Module.Data(1) := Module.Data(1) - 1;
                end if;
             end if;
          end loop;
@@ -328,7 +324,7 @@ package body Bases.Ship is
       end if;
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = HULL then
-            DockingCost := Module.Max_Value;
+            DockingCost := Module.Data(2);
             exit;
          end if;
       end loop;

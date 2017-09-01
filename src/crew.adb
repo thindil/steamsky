@@ -470,9 +470,9 @@ package body Crew is
                          (Float(PlayerShip.Modules(CabinIndex).Durability) /
                           Float(PlayerShip.Modules(CabinIndex).MaxDurability));
                      RestAmount :=
-                       PlayerShip.Modules(CabinIndex).Current_Value -
+                       PlayerShip.Modules(CabinIndex).Data(1) -
                        Natural
-                         (Float(PlayerShip.Modules(CabinIndex).Current_Value) *
+                         (Float(PlayerShip.Modules(CabinIndex).Data(1)) *
                           Float(Damage));
                      if RestAmount = 0 then
                         RestAmount := 1;
@@ -595,13 +595,11 @@ package body Crew is
                      if ToolIndex > 0 then
                         for Module of PlayerShip.Modules loop
                            if Modules_List(Module.ProtoIndex).MType = CABIN and
-                             Module.Current_Value < Module.Max_Value then
-                              if Module.Current_Value + Times >
-                                Module.Max_Value then
-                                 Module.Current_Value := Module.Max_Value;
+                             Module.Data(1) < Module.Data(2) then
+                              if Module.Data(1) + Times > Module.Data(2) then
+                                 Module.Data(1) := Module.Data(2);
                               else
-                                 Module.Current_Value :=
-                                   Module.Current_Value + Times;
+                                 Module.Data(1) := Module.Data(1) + Times;
                               end if;
                               DamageCargo(ToolIndex);
                               exit;
@@ -609,7 +607,7 @@ package body Crew is
                         end loop;
                         for Module of PlayerShip.Modules loop
                            if Modules_List(Module.ProtoIndex).MType = CABIN and
-                             Module.Current_Value < Module.Max_Value then
+                             Module.Data(1) < Module.Data(2) then
                               NeedCleaning := True;
                               exit;
                            end if;
@@ -812,7 +810,7 @@ package body Crew is
                   NeedCrafters := True;
                end if;
             when CABIN =>
-               if Module.Current_Value < Module.Max_Value and
+               if Module.Data(1) < Module.Data(2) and
                  Module.Durability > 0 then
                   NeedClean := True;
                end if;
@@ -981,9 +979,9 @@ package body Crew is
                    (Float(PlayerShip.Modules(CabinIndex).Durability) /
                     Float(PlayerShip.Modules(CabinIndex).MaxDurability));
                CabinBonus :=
-                 PlayerShip.Modules(CabinIndex).Current_Value -
+                 PlayerShip.Modules(CabinIndex).Data(1) -
                  Natural
-                   (Float(PlayerShip.Modules(CabinIndex).Current_Value) *
+                   (Float(PlayerShip.Modules(CabinIndex).Data(1)) *
                     Float(Damage));
                if CabinBonus = 0 then
                   CabinBonus := 1;
