@@ -180,7 +180,7 @@ package body Header is
             if Items_List(Item.ProtoIndex).IType = FuelType then
                ItemAmount := ItemAmount + Item.Amount;
             end if;
-            exit when ItemAmount > 99;
+            exit when ItemAmount > GameSettings.LowFuel;
          end loop;
          if ItemAmount < GameSettings.LowFuel then
             Move_Cursor(Line => 0, Column => CurrentColumn);
@@ -209,7 +209,7 @@ package body Header is
             if Items_List(Item.ProtoIndex).IType = DrinksType then
                ItemAmount := ItemAmount + Item.Amount;
             end if;
-            exit when ItemAmount > 49;
+            exit when ItemAmount > GameSettings.LowDrinks;
          end loop;
          if ItemAmount < GameSettings.LowDrinks then
             Move_Cursor(Line => 0, Column => CurrentColumn);
@@ -241,7 +241,7 @@ package body Header is
               Items_List(Item.ProtoIndex).IType = FoodTypes(2) then
                ItemAmount := ItemAmount + Item.Amount;
             end if;
-            exit when ItemAmount > 49;
+            exit when ItemAmount > GameSettings.LowFood;
          end loop;
          if ItemAmount < GameSettings.LowFood then
             Move_Cursor(Line => 0, Column => CurrentColumn);
