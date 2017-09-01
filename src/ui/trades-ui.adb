@@ -241,7 +241,7 @@ package body Trades.UI is
         ((BaseIndex > 0 and Buyable) or
          (BaseIndex = 0 and BaseItemIndex > 0)) and
         CargoIndex > 0 then
-         Add(Str => "Press ENTER to buy, SPACE for sell.");
+         Add(Str => "Press Enter to buy, Space for sell.");
          Change_Attributes
            (Line => CurrentLine,
             Column => (Columns / 2) + 6,
@@ -259,7 +259,7 @@ package body Trades.UI is
         ((BaseIndex > 0 and Buyable) or
          (BaseIndex = 0 and BaseItemIndex > 0)) and
         CargoIndex = 0 then
-         Add(Str => "Press ENTER to buy.");
+         Add(Str => "Press Enter to buy.");
          Change_Attributes
            (Line => CurrentLine,
             Column => (Columns / 2) + 6,
@@ -271,7 +271,7 @@ package body Trades.UI is
         ((BaseIndex > 0 and not Buyable) or
          (BaseIndex = 0 and BaseItemIndex = 0)) and
         CargoIndex > 0 then
-         Add(Str => "Press SPACE for sell.");
+         Add(Str => "Press Space for sell.");
          Change_Attributes
            (Line => CurrentLine,
             Column => (Columns / 2) + 6,
@@ -281,7 +281,7 @@ package body Trades.UI is
          CurrentLine := CurrentLine + 1;
       end if;
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
-      Add(Str => "Press ESCAPE to back to sky map");
+      Add(Str => "Press Escape to back to sky map");
       Change_Attributes
         (Line => CurrentLine,
          Column => (Columns / 2) + 6,

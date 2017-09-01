@@ -397,9 +397,9 @@ package body Bases.UI.Shipyard is
       ActionWindow :=
         Create(5, (Columns / 2), WindowHeight + 7, (Columns / 2));
       if InstallView then
-         Add(Win => ActionWindow, Str => "Press ENTER to install module.");
+         Add(Win => ActionWindow, Str => "Press Enter to install module.");
       else
-         Add(Win => ActionWindow, Str => "Press ENTER to remove module.");
+         Add(Win => ActionWindow, Str => "Press Enter to remove module.");
       end if;
       Change_Attributes
         (Win => ActionWindow,
@@ -447,7 +447,7 @@ package body Bases.UI.Shipyard is
          Column => StartColumn);
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => ActionWindow, Line => CurrentLine, Column => 0);
-      Add(Win => ActionWindow, Str => "Press ESCAPE to back to sky map.");
+      Add(Win => ActionWindow, Str => "Press Escape to back to sky map.");
       Change_Attributes
         (Win => ActionWindow,
          Line => CurrentLine,

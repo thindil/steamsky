@@ -226,7 +226,7 @@ package body Missions.UI is
          Add(Win => InfoWindow, Str => "Mission is ready to return.");
          Add
            (Win => ActionsWindow,
-            Str => "Press SPACE to show start base on map");
+            Str => "Press Space to show start base on map");
          Change_Attributes
            (Win => ActionsWindow,
             Line => 0,
@@ -237,7 +237,7 @@ package body Missions.UI is
          Move_Cursor(Win => ActionsWindow, Line => 1, Column => 0);
          Add
            (Win => ActionsWindow,
-            Str => "Press ENTER to set start base as a destination for ship");
+            Str => "Press Enter to set start base as a destination for ship");
          Get_Cursor_Position
            (Win => ActionsWindow,
             Line => CurrentLine,
@@ -252,7 +252,7 @@ package body Missions.UI is
       else
          Add
            (Win => ActionsWindow,
-            Str => "Press SPACE to show mission on map");
+            Str => "Press Space to show mission on map");
          Change_Attributes
            (Win => ActionsWindow,
             Line => 0,
@@ -263,7 +263,7 @@ package body Missions.UI is
          Move_Cursor(Win => ActionsWindow, Line => 1, Column => 0);
          Add
            (Win => ActionsWindow,
-            Str => "Press ENTER to set mission as a destination for ship");
+            Str => "Press Enter to set mission as a destination for ship");
          Get_Cursor_Position
            (Win => ActionsWindow,
             Line => CurrentLine,
@@ -278,7 +278,7 @@ package body Missions.UI is
       end if;
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
-      Add(Win => ActionsWindow, Str => "Press ESCAPE to back to sky map");
+      Add(Win => ActionsWindow, Str => "Press Escape to back to sky map");
       Change_Attributes
         (Win => ActionsWindow,
          Line => CurrentLine,

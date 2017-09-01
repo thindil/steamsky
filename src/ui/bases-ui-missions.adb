@@ -276,7 +276,7 @@ package body Bases.UI.Missions is
       Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
       Add
         (Win => ActionsWindow,
-         Str => "Press ENTER to accept selected mission.");
+         Str => "Press Enter to accept selected mission.");
       Change_Attributes
         (Win => ActionsWindow,
          Line => CurrentLine,
@@ -286,7 +286,7 @@ package body Bases.UI.Missions is
          Attr => BoldCharacters);
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
-      Add(Win => ActionsWindow, Str => "Press ESCAPE to back to sky map.");
+      Add(Win => ActionsWindow, Str => "Press Escape to back to sky map.");
       Change_Attributes
         (Win => ActionsWindow,
          Line => CurrentLine,
