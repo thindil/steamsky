@@ -314,10 +314,10 @@ single word.
   bases owners names: Poleis, Independent, Pirates, Undead, Drones, 
   Inquisition. For Destroy, any enemy ship index (from *ships* directory) or
   owners names: Poleis, Independent, Pirates, Undead, Drones, Inquisition. For
-  Craft, recipe index (from *recipes* directory). For Mission, missions types:
-  Deliver for deliver item to bases, Destroy for destroy enemy ship, Patrol
-  for patrol missions, Explore for explore missions, Passenger for transport
-  passengers missions.
+  Craft, recipe index (from *recipes* directory), Type or ShowType (from
+  *items* directory). For Mission, missions types: Deliver for deliver item to 
+  bases, Destroy for destroy enemy ship, Patrol for patrol missions, Explore 
+  for explore missions, Passenger for transport passengers missions.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
