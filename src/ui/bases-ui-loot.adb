@@ -148,7 +148,7 @@ package body Bases.UI.Loot is
       if CargoIndex > 0 then
          if BaseItemIndex > 0 then
             if SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount > 0 then
-               Add(Str => "Press ENTER to take, SPACE for drop.");
+               Add(Str => "Press Enter to take, Space for drop.");
                Change_Attributes
                  (Line => CurrentLine,
                   Column => (Columns / 2) + 6,
@@ -162,7 +162,7 @@ package body Bases.UI.Loot is
                   Color => 1,
                   Attr => BoldCharacters);
             else
-               Add(Str => "Press SPACE for drop.");
+               Add(Str => "Press Space for drop.");
                Change_Attributes
                  (Line => CurrentLine,
                   Column => (Columns / 2) + 6,
@@ -171,7 +171,7 @@ package body Bases.UI.Loot is
                   Attr => BoldCharacters);
             end if;
          else
-            Add(Str => "Press SPACE for drop.");
+            Add(Str => "Press Space for drop.");
             Change_Attributes
               (Line => CurrentLine,
                Column => (Columns / 2) + 6,
@@ -181,7 +181,7 @@ package body Bases.UI.Loot is
          end if;
       elsif BaseItemIndex > 0 then
          if SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount > 0 then
-            Add(Str => "Press ENTER to take.");
+            Add(Str => "Press Enter to take.");
             Change_Attributes
               (Line => CurrentLine,
                Column => (Columns / 2) + 6,
@@ -199,7 +199,7 @@ package body Bases.UI.Loot is
       Add(Str => "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
-      Add(Str => "Press ESCAPE to back to sky map");
+      Add(Str => "Press Escape to back to sky map");
       Change_Attributes
         (Line => CurrentLine,
          Column => (Columns / 2) + 6,

@@ -252,7 +252,7 @@ package body BasesList is
       Move_Cursor(Win => OptionsWindow, Line => 1, Column => 0);
       Add
         (Win => OptionsWindow,
-         Str => "Press ENTER to set base as a destination for ship");
+         Str => "Press Enter to set base as a destination for ship");
       Get_Cursor_Position
         (Win => OptionsWindow,
          Line => CurrentLine,
@@ -266,7 +266,7 @@ package body BasesList is
          Color => 1);
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => OptionsWindow, Line => CurrentLine, Column => 0);
-      Add(Win => OptionsWindow, Str => "Press ESCAPE to back to sky map");
+      Add(Win => OptionsWindow, Str => "Press Escape to back to sky map");
       Change_Attributes
         (Win => OptionsWindow,
          Line => CurrentLine,

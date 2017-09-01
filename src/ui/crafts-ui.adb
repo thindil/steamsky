@@ -329,7 +329,7 @@ package body Crafts.UI is
       WindowFrame(BoxWindow, 2, "Recipe info");
       Resize(InfoWindow, WindowHeight - 2, WindowWidth - 2);
       Move_Cursor(Line => (WindowHeight + 3), Column => (Columns / 2));
-      Add(Str => "Press ENTER for set manufacturing order");
+      Add(Str => "Press Enter for set manufacturing order");
       Change_Attributes
         (Line => (WindowHeight + 3),
          Column => (Columns / 2) + 6,
@@ -337,7 +337,7 @@ package body Crafts.UI is
          Color => 1,
          Attr => BoldCharacters);
       Move_Cursor(Line => (WindowHeight + 4), Column => (Columns / 2));
-      Add(Str => "Press ESCAPE to back to sky map");
+      Add(Str => "Press Escape to back to sky map");
       Change_Attributes
         (Line => (WindowHeight + 4),
          Column => (Columns / 2) + 6,
