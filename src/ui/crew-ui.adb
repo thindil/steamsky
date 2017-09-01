@@ -308,7 +308,7 @@ package body Crew.UI is
       for Module of PlayerShip.Modules loop
          if Module.Durability > 0 and
            Modules_List(Module.ProtoIndex).MType = CABIN and
-           Module.Current_Value < Module.Max_Value and
+           Module.Data(1) < Module.Data(2) and
            not NeedClean then
             NeedClean := True;
          end if;

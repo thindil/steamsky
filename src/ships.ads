@@ -33,8 +33,6 @@ package Ships is
       Name: Unbounded_String; -- Name of module
       ProtoIndex: Positive; -- Index of module prototype
       Weight: Natural; -- Weight of module
-      Current_Value: Integer; -- For engine, current power, depends on module
-      Max_Value: Integer; -- For engine, max power, depends on module
       Durability: Integer; -- 0 = destroyed
       MaxDurability: Integer; -- Base durability
       Owner: Natural; -- Crew member owner of module (mostly for cabins)

@@ -131,8 +131,6 @@ package body Ships is
             (Name => Modules_List(Module).Name,
              ProtoIndex => Module,
              Weight => TempModule.Weight,
-             Current_Value => TempModule.Value,
-             Max_Value => TempModule.MaxValue,
              Durability => TempModule.Durability,
              MaxDurability => TempModule.Durability,
              Owner => 0,
@@ -236,13 +234,13 @@ package body Ships is
                null;
          end case;
          if TurretIndex > 0 and GunIndex > 0 then
-            TmpShip.Modules(TurretIndex).Current_Value := GunIndex;
+            TmpShip.Modules(TurretIndex).Data(1) := GunIndex;
             TurretIndex := 0;
             GunIndex := 0;
          end if;
          Amount := Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
       end loop;
-      TmpShip.Modules(HullIndex).Current_Value := Amount;
+      TmpShip.Modules(HullIndex).Data(1) := Amount;
       if ProtoShip.Index = PlayerShipIndex then
          for Recipe of ProtoShip.KnownRecipes loop
             Known_Recipes.Append(New_Item => Recipe);

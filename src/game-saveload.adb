@@ -282,10 +282,6 @@ package body Game.SaveLoad is
          Put(SaveGame, To_String(Modules_List(Module.ProtoIndex).Index) & ";");
          RawValue := To_Unbounded_String(Integer'Image(Module.Weight));
          Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Module.Current_Value));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Module.Max_Value));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
          RawValue := To_Unbounded_String(Integer'Image(Module.Durability));
          Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
          RawValue := To_Unbounded_String(Integer'Image(Module.MaxDurability));
@@ -658,8 +654,6 @@ package body Game.SaveLoad is
             (Name => ReadData,
              ProtoIndex => FindProtoModule(ReadData),
              Weight => Natural'Value(To_String(ReadData)),
-             Current_Value => Integer'Value(To_String(ReadData)),
-             Max_Value => Integer'Value(To_String(ReadData)),
              Durability => Integer'Value(To_String(ReadData)),
              MaxDurability => Integer'Value(To_String(ReadData)),
              Owner => Integer'Value(To_String(ReadData)),

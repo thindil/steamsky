@@ -262,8 +262,7 @@ package body Ships.UI.Ship.Keys is
          when 10 => -- Select new ammo for gun
             Post(OptionsMenu, False);
             if OptionIndex /= 0 then
-               PlayerShip.Modules(CurrentMenuIndex).Current_Value :=
-                 OptionIndex;
+               PlayerShip.Modules(CurrentMenuIndex).Data(1) := OptionIndex;
                AddMessage
                  ("You assigned " &
                   To_String

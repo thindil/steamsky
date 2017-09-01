@@ -62,7 +62,7 @@ package body Ships.Upgrade is
             case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
               .MType is
                when ENGINE =>
-                  if PlayerShip.Modules(ModuleIndex).Max_Value = MaxValue then
+                  if PlayerShip.Modules(ModuleIndex).Data(2) = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't improve more power of " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) &
@@ -70,7 +70,7 @@ package body Ships.Upgrade is
                   end if;
                   UpgradeProgress := 10;
                when CABIN =>
-                  if PlayerShip.Modules(ModuleIndex).Max_Value = MaxValue then
+                  if PlayerShip.Modules(ModuleIndex).Data(2) = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't improve more quality of " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) &
@@ -78,7 +78,7 @@ package body Ships.Upgrade is
                   end if;
                   UpgradeProgress := 100;
                when GUN | BATTERING_RAM =>
-                  if PlayerShip.Modules(ModuleIndex).Max_Value = MaxValue then
+                  if PlayerShip.Modules(ModuleIndex).Data(2) = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't improve more damage of " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) &
@@ -86,7 +86,7 @@ package body Ships.Upgrade is
                   end if;
                   UpgradeProgress := 100;
                when HULL =>
-                  if PlayerShip.Modules(ModuleIndex).Max_Value = MaxValue then
+                  if PlayerShip.Modules(ModuleIndex).Data(2) = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't enlarge more " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) &
@@ -109,8 +109,7 @@ package body Ships.Upgrade is
             case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
               .MType is
                when ENGINE =>
-                  if PlayerShip.Modules(ModuleIndex).Current_Value =
-                    MaxValue then
+                  if PlayerShip.Modules(ModuleIndex).Data(1) = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't reduce more fuel usage of " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) &
@@ -356,8 +355,8 @@ package body Ships.Upgrade is
                        10;
                   end if;
                when MAX_VALUE =>
-                  PlayerShip.Modules(PlayerShip.UpgradeModule).Max_Value :=
-                    PlayerShip.Modules(PlayerShip.UpgradeModule).Max_Value + 1;
+                  PlayerShip.Modules(PlayerShip.UpgradeModule).Data(2) :=
+                    PlayerShip.Modules(PlayerShip.UpgradeModule).Data(2) + 1;
                   case Modules_List
                     (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
                     .MType is
@@ -387,7 +386,7 @@ package body Ships.Upgrade is
                                .ProtoIndex)
                             .MaxValue) *
                        1.5);
-                  if PlayerShip.Modules(PlayerShip.UpgradeModule).Max_Value =
+                  if PlayerShip.Modules(PlayerShip.UpgradeModule).Data(2) =
                     MaxValue then
                      MaxUpgradeReached("You reached maximum upgrade for ");
                      return;
@@ -413,10 +412,8 @@ package body Ships.Upgrade is
                      end case;
                   end if;
                when VALUE =>
-                  PlayerShip.Modules(PlayerShip.UpgradeModule).Current_Value :=
-                    PlayerShip.Modules(PlayerShip.UpgradeModule)
-                      .Current_Value -
-                    1;
+                  PlayerShip.Modules(PlayerShip.UpgradeModule).Data(1) :=
+                    PlayerShip.Modules(PlayerShip.UpgradeModule).Data(1) - 1;
                   case Modules_List
                     (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
                     .MType is
@@ -444,8 +441,7 @@ package body Ships.Upgrade is
                                .ProtoIndex)
                             .Value) /
                        2.0);
-                  if PlayerShip.Modules(PlayerShip.UpgradeModule)
-                      .Current_Value =
+                  if PlayerShip.Modules(PlayerShip.UpgradeModule).Data(1) =
                     MaxValue then
                      MaxUpgradeReached("You reached maximum upgrade for ");
                      return;

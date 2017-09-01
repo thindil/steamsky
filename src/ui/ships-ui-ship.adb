@@ -194,37 +194,37 @@ package body Ships.UI.Ship is
          when ENGINE =>
             Add
               (Win => InfoWindow,
-               Str => "Max power:" & Integer'Image(Module.Max_Value));
+               Str => "Max power:" & Integer'Image(Module.Data(2)));
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
-            if Module.Max_Value = MaxValue then
+            if Module.Data(2) = MaxValue then
                Add(Win => InfoWindow, Str => " (max upgrade)");
             end if;
             Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
             Add
               (Win => InfoWindow,
-               Str => "Fuel usage:" & Integer'Image(Module.Current_Value));
+               Str => "Fuel usage:" & Integer'Image(Module.Data(1)));
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).Value) / 2.0);
-            if Module.Current_Value = MaxValue then
+            if Module.Data(1) = MaxValue then
                Add(Win => InfoWindow, Str => " (max upgrade)");
             end if;
             CurrentLine := CurrentLine + 1;
          when ShipModules.CARGO =>
             Add
               (Win => InfoWindow,
-               Str => "Max cargo:" & Integer'Image(Module.Max_Value) & " kg");
+               Str => "Max cargo:" & Integer'Image(Module.Data(2)) & " kg");
          when HULL =>
             Add
               (Win => InfoWindow,
                Str =>
                  "Modules space:" &
-                 Integer'Image(Module.Current_Value) &
+                 Integer'Image(Module.Data(1)) &
                  " /" &
-                 Integer'Image(Module.Max_Value));
+                 Integer'Image(Module.Data(2)));
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
-            if Module.Max_Value = MaxValue then
+            if Module.Data(2) = MaxValue then
                Add(Win => InfoWindow, Str => " (max upgrade)");
             end if;
          when CABIN =>
@@ -238,25 +238,23 @@ package body Ships.UI.Ship is
             end if;
             Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
             Add(Win => InfoWindow, Str => "Quality: ");
-            if Module.Max_Value < 30 then
+            if Module.Data(2) < 30 then
                Add(Win => InfoWindow, Str => "minimal");
-            elsif Module.Max_Value > 29 and Module.Max_Value < 60 then
+            elsif Module.Data(2) > 29 and Module.Data(2) < 60 then
                Add(Win => InfoWindow, Str => "basic");
-            elsif Module.Max_Value > 59 and Module.Max_Value < 80 then
+            elsif Module.Data(2) > 59 and Module.Data(2) < 80 then
                Add(Win => InfoWindow, Str => "extended");
             else
                Add(Win => InfoWindow, Str => "luxury");
             end if;
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
-            if Module.Max_Value = MaxValue then
+            if Module.Data(2) = MaxValue then
                Add(Win => InfoWindow, Str => " (max upgrade)");
             end if;
             DamagePercent :=
               100 -
-              Natural
-                ((Float(Module.Current_Value) / Float(Module.Max_Value)) *
-                 100.0);
+              Natural((Float(Module.Data(1)) / Float(Module.Data(2))) * 100.0);
             Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
             Add(Win => InfoWindow, Str => "State: ");
             if DamagePercent = 0 then
@@ -275,9 +273,9 @@ package body Ships.UI.Ship is
             CurrentLine := CurrentLine + 2;
          when GUN =>
             Add(Win => InfoWindow, Str => "Ammunition: ");
-            if Module.Current_Value >= PlayerShip.Cargo.First_Index and
-              Module.Current_Value <= PlayerShip.Cargo.Last_Index then
-               if Items_List(PlayerShip.Cargo(Module.Current_Value).ProtoIndex)
+            if Module.Data(1) >= PlayerShip.Cargo.First_Index and
+              Module.Data(1) <= PlayerShip.Cargo.Last_Index then
+               if Items_List(PlayerShip.Cargo(Module.Data(1)).ProtoIndex)
                    .IType =
                  Items_Types(Modules_List(Module.ProtoIndex).Value) then
                   Add
@@ -285,7 +283,7 @@ package body Ships.UI.Ship is
                      Str =>
                        To_String
                          (Items_List
-                            (PlayerShip.Cargo(Module.Current_Value).ProtoIndex)
+                            (PlayerShip.Cargo(Module.Data(1)).ProtoIndex)
                             .Name) &
                        " (assigned)");
                   HaveAmmo := True;
@@ -368,12 +366,12 @@ package body Ships.UI.Ship is
             end if;
             CurrentLine := CurrentLine + 1;
          when TURRET =>
-            if Module.Current_Value > 0 then
+            if Module.Data(1) > 0 then
                Add
                  (Win => InfoWindow,
                   Str =>
                     "Weapon: " &
-                    To_String(PlayerShip.Modules(Module.Current_Value).Name));
+                    To_String(PlayerShip.Modules(Module.Data(1)).Name));
             else
                Add(Win => InfoWindow, Str => "Weapon: none");
             end if;
@@ -737,7 +735,7 @@ package body Ships.UI.Ship is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .MaxValue) *
                  1.5);
-            if PlayerShip.Modules(ModuleIndex).Max_Value < MaxValue then
+            if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
                Options_Items.all(MenuIndex) :=
                  New_Item("Upgrade engine power", "2");
                MenuIndex := MenuIndex + 1;
@@ -748,7 +746,7 @@ package body Ships.UI.Ship is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .Value) /
                  2.0);
-            if PlayerShip.Modules(ModuleIndex).Current_Value > MaxValue then
+            if PlayerShip.Modules(ModuleIndex).Data(1) > MaxValue then
                Options_Items.all(MenuIndex) :=
                  New_Item("Reduce fuel usage", "3");
                MenuIndex := MenuIndex + 1;
@@ -760,7 +758,7 @@ package body Ships.UI.Ship is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .MaxValue) *
                  1.5);
-            if PlayerShip.Modules(ModuleIndex).Max_Value < MaxValue then
+            if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
                Options_Items.all(MenuIndex) :=
                  New_Item("Upgrade quality", "2");
                MenuIndex := MenuIndex + 1;
@@ -783,7 +781,7 @@ package body Ships.UI.Ship is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .MaxValue) *
                  1.5);
-            if PlayerShip.Modules(ModuleIndex).Max_Value < MaxValue then
+            if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
                Options_Items.all(MenuIndex) := New_Item("Upgrade damage", "2");
                MenuIndex := MenuIndex + 1;
             end if;
@@ -798,7 +796,7 @@ package body Ships.UI.Ship is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .MaxValue) *
                  1.5);
-            if PlayerShip.Modules(ModuleIndex).Max_Value < MaxValue then
+            if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
                Options_Items.all(MenuIndex) := New_Item("Upgrade damage", "2");
                MenuIndex := MenuIndex + 1;
             end if;
@@ -809,7 +807,7 @@ package body Ships.UI.Ship is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .MaxValue) *
                  1.5);
-            if PlayerShip.Modules(ModuleIndex).Max_Value < MaxValue then
+            if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
                Options_Items.all(MenuIndex) := New_Item("Enlarge hull", "2");
                MenuIndex := MenuIndex + 1;
             end if;
@@ -943,7 +941,7 @@ package body Ships.UI.Ship is
            Items_Types
              (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                 .Value) and
-           I /= PlayerShip.Modules(ModuleIndex).Current_Value then
+           I /= PlayerShip.Modules(ModuleIndex).Data(1) then
             Assign_Items.all(MenuIndex) :=
               New_Item
                 (To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name),

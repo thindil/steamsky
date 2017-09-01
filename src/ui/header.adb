@@ -268,7 +268,7 @@ package body Header is
                   end if;
                end if;
             when CABIN =>
-               if Module.Current_Value < Module.Max_Value then
+               if Module.Data(1) < Module.Data(2) then
                   NeedClean := True;
                end if;
             when others =>

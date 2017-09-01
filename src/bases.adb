@@ -413,9 +413,7 @@ package body Bases is
             case Modules_List(Module.ProtoIndex).MType is
                when HULL | GUN | BATTERING_RAM =>
                   PlayerValue :=
-                    PlayerValue +
-                    Module.MaxDurability +
-                    (Module.Max_Value * 10);
+                    PlayerValue + Module.MaxDurability + (Module.Data(2) * 10);
                when ARMOR =>
                   PlayerValue := PlayerValue + Module.MaxDurability;
                when others =>
