@@ -36,7 +36,13 @@ package body Events is
    function CheckForEvent(OldState: GameStates) return GameStates is
       TimePassed: Integer;
       CrewIndex, PlayerValue: Natural := 0;
-      Roll, Roll2, ItemIndex, EnemyIndex, EngineIndex, Injuries: Positive;
+      Roll,
+      Roll2,
+      ItemIndex,
+      EnemyIndex,
+      EngineIndex,
+      Injuries,
+      LostCargo: Positive;
       Enemies, Engines: Positive_Container.Vector;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -320,13 +326,32 @@ package body Events is
                   AddMessage
                     (To_String(PlayerShip.Crew(Roll2).Name) &
                      " was injured in brawl in base.",
-                     OtherMessage);
+                     OtherMessage,
+                     3);
                   if PlayerShip.Crew(Roll2).Health = 0 then
                      Death
                        (Roll2,
                         To_Unbounded_String("injuries in brawl in base"),
                         PlayerShip);
                   end if;
+               elsif Roll > 4 and Roll < 10 then -- Lost cargo in base
+                  Roll2 := GetRandom(1, PlayerShip.Cargo.Last_Index);
+                  LostCargo := GetRandom(1, 10);
+                  if LostCargo > PlayerShip.Cargo(Roll2).Amount then
+                     LostCargo := PlayerShip.Cargo(Roll2).Amount;
+                  end if;
+                  AddMessage
+                    ("During checking ship cargo, you noticed that you lost" &
+                     Positive'Image(LostCargo) &
+                     " " &
+                     GetCargoName(Roll2) &
+                     ".",
+                     OtherMessage,
+                     3);
+                  UpdateCargo
+                    (Ship => PlayerShip,
+                     Amount => (0 - LostCargo),
+                     CargoIndex => Roll2);
                end if;
             end if;
          end if;
