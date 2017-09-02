@@ -39,13 +39,20 @@ package body Header is
       HaveCleaner,
       NeedClean: Boolean :=
         False;
-      GunnersCheck, CraftersCheck, ItemIndex, ItemAmount: Natural := 0;
-      CurrentColumn: Column_Position;
+      GunnersCheck,
+      CraftersCheck,
+      ItemIndex,
+      FuelAmount,
+      FoodAmount,
+      DrinksAmount: Natural :=
+        0;
+      CurrentColumn, EndColumn, StartColumn: Column_Position;
       CurrentLine: Line_Position;
    begin
       case CurrentState is
          when Sky_Map_View | Control_Speed | Wait_Order =>
             Add(Str => "[Menu]");
+            Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
             Change_Attributes
               (Line => 0,
                Column => 2,
@@ -58,6 +65,7 @@ package body Header is
             Add(Str => "Crew Informations");
          when Messages_View =>
             Add(Str => "Last Messages [Escape closes]");
+            Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
             Change_Attributes
               (Line => 0,
                Column => 15,
@@ -149,6 +157,12 @@ package body Header is
          when others =>
             null;
       end case;
+      if CurrentState /= Sky_Map_View and
+        CurrentState /= Control_Speed and
+        CurrentState /= Wait_Order and
+        CurrentState /= Messages_View then
+         Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
+      end if;
       case PlayerShip.Speed is
          when DOCKED =>
             Speed := To_Unbounded_String("Docked");
@@ -161,12 +175,67 @@ package body Header is
          when FULL_SPEED =>
             Speed := To_Unbounded_String("Full Speed");
       end case;
-      Move_Cursor(Line => 0, Column => (Columns / 3));
+      EndColumn :=
+        (Columns / 3) +
+        Column_Position(FormatedTime'Length + 9 + Length(Speed));
+      ItemIndex := FindCargo(ItemType => FuelType);
+      if ItemIndex > 0 then
+         for Item of PlayerShip.Cargo loop
+            if Items_List(Item.ProtoIndex).IType = FuelType then
+               FuelAmount := FuelAmount + Item.Amount;
+            end if;
+            exit when FuelAmount > GameSettings.LowFuel;
+         end loop;
+         if FuelAmount < GameSettings.LowFuel then
+            EndColumn := EndColumn + 10;
+         end if;
+      else
+         EndColumn := EndColumn + 9;
+      end if;
+      ItemIndex := FindCargo(ItemType => DrinksType);
+      if ItemIndex = 0 then
+         EndColumn := EndColumn + 11;
+      else
+         for Item of PlayerShip.Cargo loop
+            if Items_List(Item.ProtoIndex).IType = DrinksType then
+               DrinksAmount := DrinksAmount + Item.Amount;
+            end if;
+            exit when DrinksAmount > GameSettings.LowDrinks;
+         end loop;
+         if DrinksAmount < GameSettings.LowDrinks then
+            EndColumn := EndColumn + 12;
+         end if;
+      end if;
+      ItemIndex := FindCargo(ItemType => FoodTypes(1));
+      if ItemIndex = 0 then
+         ItemIndex := FindCargo(ItemType => FoodTypes(2));
+      end if;
+      if ItemIndex = 0 then
+         EndColumn := EndColumn + 9;
+      else
+         for Item of PlayerShip.Cargo loop
+            if Items_List(Item.ProtoIndex).IType = FoodTypes(1) or
+              Items_List(Item.ProtoIndex).IType = FoodTypes(2) then
+               FoodAmount := FoodAmount + Item.Amount;
+            end if;
+            exit when FoodAmount > GameSettings.LowFood;
+         end loop;
+         if FoodAmount < GameSettings.LowFood then
+            EndColumn := EndColumn + 10;
+         end if;
+      end if;
+      StartColumn := (Columns / 3);
+      if EndColumn > (Columns - 25) then
+         StartColumn := StartColumn - (EndColumn - (Columns - 25));
+      end if;
+      if StartColumn < CurrentColumn + 1 then
+         StartColumn := CurrentColumn + 1;
+      end if;
+      Move_Cursor(Line => 0, Column => StartColumn);
       Add(Str => FormatedTime & " Speed: " & To_String(Speed));
       Get_Cursor_Position(Line => CurrentLine, Column => CurrentColumn);
       CurrentColumn := CurrentColumn + 1;
-      ItemIndex := FindCargo(ItemType => FuelType);
-      if ItemIndex = 0 then
+      if FuelAmount = 0 then
          Move_Cursor(Line => 0, Column => CurrentColumn);
          Add(Str => "[No Fuel]");
          Change_Attributes
@@ -175,26 +244,17 @@ package body Header is
             Count => 10,
             Color => 3);
          CurrentColumn := CurrentColumn + 9;
-      else
-         for Item of PlayerShip.Cargo loop
-            if Items_List(Item.ProtoIndex).IType = FuelType then
-               ItemAmount := ItemAmount + Item.Amount;
-            end if;
-            exit when ItemAmount > GameSettings.LowFuel;
-         end loop;
-         if ItemAmount < GameSettings.LowFuel then
-            Move_Cursor(Line => 0, Column => CurrentColumn);
-            Add(Str => "[Low Fuel]");
-            Change_Attributes
-              (Line => 0,
-               Column => CurrentColumn,
-               Count => 11,
-               Color => 1);
-            CurrentColumn := CurrentColumn + 10;
-         end if;
+      elsif FuelAmount < GameSettings.LowFuel then
+         Move_Cursor(Line => 0, Column => CurrentColumn);
+         Add(Str => "[Low Fuel]");
+         Change_Attributes
+           (Line => 0,
+            Column => CurrentColumn,
+            Count => 11,
+            Color => 1);
+         CurrentColumn := CurrentColumn + 10;
       end if;
-      ItemIndex := FindCargo(ItemType => DrinksType);
-      if ItemIndex = 0 then
+      if DrinksAmount = 0 then
          Move_Cursor(Line => 0, Column => CurrentColumn);
          Add(Str => "[No Drinks]");
          Change_Attributes
@@ -203,47 +263,26 @@ package body Header is
             Count => 11,
             Color => 3);
          CurrentColumn := CurrentColumn + 11;
-      else
-         ItemAmount := 0;
-         for Item of PlayerShip.Cargo loop
-            if Items_List(Item.ProtoIndex).IType = DrinksType then
-               ItemAmount := ItemAmount + Item.Amount;
-            end if;
-            exit when ItemAmount > GameSettings.LowDrinks;
-         end loop;
-         if ItemAmount < GameSettings.LowDrinks then
-            Move_Cursor(Line => 0, Column => CurrentColumn);
-            Add(Str => "[Low Drinks]");
-            Change_Attributes
-              (Line => 0,
-               Column => CurrentColumn,
-               Count => 12,
-               Color => 1);
-            CurrentColumn := CurrentColumn + 12;
-         end if;
-      end if;
-      ItemIndex := FindCargo(ItemType => FoodTypes(1));
-      if ItemIndex = 0 then
-         ItemIndex := FindCargo(ItemType => FoodTypes(2));
-      end if;
-      if ItemIndex = 0 then
+      elsif DrinksAmount < GameSettings.LowDrinks then
          Move_Cursor(Line => 0, Column => CurrentColumn);
-         Add(Str => "[No Food]");
+         Add(Str => "[Low Drinks]");
          Change_Attributes
            (Line => 0,
             Column => CurrentColumn,
-            Count => 10,
-            Color => 3);
-      else
-         ItemAmount := 0;
-         for Item of PlayerShip.Cargo loop
-            if Items_List(Item.ProtoIndex).IType = FoodTypes(1) or
-              Items_List(Item.ProtoIndex).IType = FoodTypes(2) then
-               ItemAmount := ItemAmount + Item.Amount;
-            end if;
-            exit when ItemAmount > GameSettings.LowFood;
-         end loop;
-         if ItemAmount < GameSettings.LowFood then
+            Count => 12,
+            Color => 1);
+         CurrentColumn := CurrentColumn + 12;
+      end if;
+      if CurrentColumn < (Columns - 26) then
+         if FoodAmount = 0 then
+            Move_Cursor(Line => 0, Column => CurrentColumn);
+            Add(Str => "[No Food]");
+            Change_Attributes
+              (Line => 0,
+               Column => CurrentColumn,
+               Count => 10,
+               Color => 3);
+         elsif FoodAmount < GameSettings.LowFood then
             Move_Cursor(Line => 0, Column => CurrentColumn);
             Add(Str => "[Low Food]");
             Change_Attributes
