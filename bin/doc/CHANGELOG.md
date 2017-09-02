@@ -14,7 +14,8 @@ All notable changes to this project will be documented in this file.
   small independent patrol ship, poleis patrol ship, independent patrol ship,
   armored poleis patrol ship, armored independent patrol ship, advanced poleis
   patrol ship, advanced independent patrol ship, large poleis patrol ship,
-  large independent patrol ship and huge poleis patrol ship
+  large independent patrol ship, huge poleis patrol ship and huge independent
+  patrol ship
 - Ability to set how many times craft selected item, which made saves from
   previous version incompatible
 - Check for minimal size of terminal during game
