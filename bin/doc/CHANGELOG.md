@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Check for minimal size of terminal during game
 - Option to set owners of ships for destroy ships goals targets
 - Option to set types of items for crafting goals targets
+- New random event: stealing ship cargo in base
 
 ### Changed
 - Updated interface
