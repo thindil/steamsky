@@ -65,6 +65,7 @@ package Ships is
       RepairModule: Natural; -- Number of module to repair as first
       Missions: Mission_Container.Vector; -- List of accepted missions
       Description: Unbounded_String; -- Description of ship
+      HomeBase: Natural; -- Index of home base of ship
    end record;
    type ProtoCrewData is -- Data structure for crew prototypes
    record

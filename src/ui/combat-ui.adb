@@ -28,6 +28,7 @@ with Ships.Crew; use Ships.Crew;
 with Messages.UI; use Messages.UI;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
+with Bases; use Bases;
 
 package body Combat.UI is
 
@@ -305,13 +306,17 @@ package body Combat.UI is
             end if;
          end loop;
       end if;
-      EnemyInfo := Create(7, (Columns / 2), 1, (Columns / 2));
+      EnemyInfo := Create(8, (Columns / 2), 1, (Columns / 2));
       WindowFrame(EnemyInfo, 1, "Enemy status");
       Move_Cursor(Win => EnemyInfo, Line => 1, Column => 2);
       Add(Win => EnemyInfo, Str => "Name: " & To_String(EnemyName));
       Move_Cursor(Win => EnemyInfo, Line => 2, Column => 2);
       Add(Win => EnemyInfo, Str => "Type: " & To_String(Enemy.Ship.Name));
       Move_Cursor(Win => EnemyInfo, Line => 3, Column => 2);
+      Add
+        (Win => EnemyInfo,
+         Str => "Home: " & To_String(SkyBases(Enemy.Ship.HomeBase).Name));
+      Move_Cursor(Win => EnemyInfo, Line => 4, Column => 2);
       Add(Win => EnemyInfo, Str => "Distance: ");
       if Enemy.Distance >= 15000 then
          Add(Win => EnemyInfo, Str => "Escaped");
@@ -324,7 +329,7 @@ package body Combat.UI is
       else
          Add(Win => EnemyInfo, Str => "Close");
       end if;
-      Move_Cursor(Win => EnemyInfo, Line => 4, Column => 2);
+      Move_Cursor(Win => EnemyInfo, Line => 5, Column => 2);
       Add(Win => EnemyInfo, Str => "Status: ");
       if Enemy.Distance < 15000 then
          if Enemy.Ship.Modules(1).Durability = 0 then
@@ -356,7 +361,7 @@ package body Combat.UI is
       else
          Add(Win => EnemyInfo, Str => "Unknown");
       end if;
-      Move_Cursor(Win => EnemyInfo, Line => 5, Column => 2);
+      Move_Cursor(Win => EnemyInfo, Line => 6, Column => 2);
       Add(Win => EnemyInfo, Str => "Speed: ");
       if Enemy.Distance < 15000 then
          case Enemy.Ship.Speed is
@@ -375,24 +380,16 @@ package body Combat.UI is
          Add(Win => EnemyInfo, Str => "Unknown");
       end if;
       if not EndCombat then
-         Move_Cursor(Line => 8, Column => (Columns / 2));
+         Move_Cursor(Line => 9, Column => (Columns / 2));
          Add(Str => "Detailed enemy info");
          Change_Attributes
-           (Line => 8,
+           (Line => 9,
             Column => (Columns / 2),
             Count => 1,
             Color => 1,
             Attr => BoldCharacters);
-         Move_Cursor(Line => 9, Column => (Columns / 2));
-         Add(Str => "ENTER to give orders");
-         Change_Attributes
-           (Line => 9,
-            Column => (Columns / 2),
-            Count => 5,
-            Color => 1,
-            Attr => BoldCharacters);
          Move_Cursor(Line => 10, Column => (Columns / 2));
-         Add(Str => "SPACE for next turn");
+         Add(Str => "ENTER to give orders");
          Change_Attributes
            (Line => 10,
             Column => (Columns / 2),
@@ -400,18 +397,26 @@ package body Combat.UI is
             Color => 1,
             Attr => BoldCharacters);
          Move_Cursor(Line => 11, Column => (Columns / 2));
-         Add(Str => "F1 for help");
+         Add(Str => "SPACE for next turn");
          Change_Attributes
            (Line => 11,
+            Column => (Columns / 2),
+            Count => 5,
+            Color => 1,
+            Attr => BoldCharacters);
+         Move_Cursor(Line => 12, Column => (Columns / 2));
+         Add(Str => "F1 for help");
+         Change_Attributes
+           (Line => 12,
             Column => (Columns / 2),
             Count => 2,
             Color => 1,
             Attr => BoldCharacters);
       else
-         Move_Cursor(Line => 10, Column => (Columns / 3));
+         Move_Cursor(Line => 11, Column => (Columns / 3));
          Add(Str => "Press any key for back to sky map");
          Change_Attributes
-           (Line => 10,
+           (Line => 11,
             Column => (Columns / 3) + 6,
             Count => 3,
             Color => 1,

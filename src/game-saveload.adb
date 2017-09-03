@@ -374,6 +374,8 @@ package body Game.SaveLoad is
             end if;
          end loop;
       end if;
+      RawValue := To_Unbounded_String(Integer'Image(PlayerShip.HomeBase));
+      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       -- Save known recipes
       RawValue := To_Unbounded_String(Known_Recipes.Length'Img);
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -744,6 +746,7 @@ package body Game.SaveLoad is
          end loop;
          PlayerShip.Missions := BaseMissions;
       end if;
+      PlayerShip.HomeBase := Integer'Value(To_String(ReadData));
       -- Load known recipes
       VectorLength := Positive'Value(To_String(ReadData));
       for I in 1 .. VectorLength loop
