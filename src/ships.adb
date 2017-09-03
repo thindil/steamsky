@@ -27,6 +27,7 @@ with Ships.Crew; use Ships.Crew;
 with Log; use Log;
 with Crafts; use Crafts;
 with Events; use Events;
+with Maps; use Maps;
 
 package body Ships is
 
@@ -55,6 +56,7 @@ package body Ships is
       ShipCargo: Cargo_Container.Vector;
       TempModule: BaseModule_Data;
       MaxValue, Roll: Positive;
+      StartX, StartY, EndX, EndY: Integer;
    begin
       if RandomUpgrades then
          UpgradesAmount := GetRandom(0, Positive(ProtoShip.Modules.Length));
@@ -220,7 +222,8 @@ package body Ships is
          DestinationY => 0,
          RepairModule => 0,
          Missions => ShipMissions,
-         Description => ProtoShip.Description);
+         Description => ProtoShip.Description,
+         HomeBase => 0);
       Amount := 0;
       for I in TmpShip.Modules.Iterate loop
          case Modules_List(TmpShip.Modules(I).ProtoIndex).MType is
@@ -245,6 +248,47 @@ package body Ships is
          for Recipe of ProtoShip.KnownRecipes loop
             Known_Recipes.Append(New_Item => Recipe);
          end loop;
+      end if;
+      -- Set home base for ship
+      if SkyMap(X, Y).BaseIndex > 0 then
+         TmpShip.HomeBase := SkyMap(X, Y).BaseIndex;
+      else
+         StartX := X - 100;
+         if StartX < 1 then
+            StartX := 1;
+         end if;
+         StartY := Y - 100;
+         if StartY < 1 then
+            StartY := 1;
+         end if;
+         EndX := X + 100;
+         if EndX > 1024 then
+            EndX := 1024;
+         end if;
+         EndY := Y + 100;
+         if EndY > 1024 then
+            EndY := 1024;
+         end if;
+         Bases_Loop:
+         for SkyX in StartX .. EndX loop
+            for SkyY in StartY .. EndY loop
+               if SkyMap(SkyX, SkyY).BaseIndex > 0 then
+                  if SkyBases(SkyMap(SkyX, SkyY).BaseIndex).Owner =
+                    ProtoShip.Owner then
+                     TmpShip.HomeBase := SkyMap(SkyX, SkyY).BaseIndex;
+                     exit Bases_Loop;
+                  end if;
+               end if;
+            end loop;
+         end loop Bases_Loop;
+         if TmpShip.HomeBase = 0 then
+            for I in SkyBases'Range loop
+               if SkyBases(I).Owner = ProtoShip.Owner then
+                  TmpShip.HomeBase := I;
+                  exit;
+               end if;
+            end loop;
+         end if;
       end if;
       return TmpShip;
    end CreateShip;
