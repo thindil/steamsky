@@ -246,4 +246,8 @@ Target = Poleis
 Type = Visit
 Amount = 10
 Target = Independent
+[75]
+Type = Visit
+Amount = 15
+Target = Independent
 []
