@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.0.7] - 2017-09-03
 
 ### Fixed
 - Damaging tools during cleaning ship
