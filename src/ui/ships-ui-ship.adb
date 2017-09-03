@@ -581,12 +581,19 @@ package body Ships.UI.Ship is
       Weight := CountShipWeight(PlayerShip);
       Move_Cursor(Line => 3, Column => 2);
       Add(Str => "Name: " & To_String(PlayerShip.Name));
-      Change_Attributes(Line => 3, Column => 2, Count => 1, Color => 1);
+      Change_Attributes
+        (Line => 3,
+         Column => 2,
+         Count => 1,
+         Color => 1,
+         Attr => BoldCharacters);
       Move_Cursor(Line => 4, Column => 2);
+      Add(Str => "Home: " & To_String(SkyBases(PlayerShip.HomeBase).Name));
+      Move_Cursor(Line => 5, Column => 2);
       Add(Str => "Upgrading: ");
       if PlayerShip.UpgradeModule = 0 then
          Add(Str => "Nothing");
-         CurrentLine := 5;
+         CurrentLine := 6;
       else
          Add
            (Str =>
@@ -628,7 +635,7 @@ package body Ships.UI.Ship is
             when others =>
                null;
          end case;
-         Move_Cursor(Line => 5, Column => 2);
+         Move_Cursor(Line => 6, Column => 2);
          Add(Str => "Upgrade progress: ");
          UpgradePercent :=
            100 -
@@ -649,7 +656,7 @@ package body Ships.UI.Ship is
          else
             Add(Str => "final upgrades");
          end if;
-         CurrentLine := 6;
+         CurrentLine := 7;
       end if;
       Move_Cursor(Line => CurrentLine, Column => 2);
       Add(Str => "Repair first: ");
