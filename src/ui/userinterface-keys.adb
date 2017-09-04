@@ -320,6 +320,9 @@ package body UserInterface.Keys is
             elsif Order = "Loot" then
                DrawGame(Loot_View);
                return Loot_View;
+            elsif Order = "Set as home" then
+               DrawGame(ChangeHome_Confirm);
+               return ChangeHome_Confirm;
             end if;
             DrawGame(Sky_Map_View);
             return OldState;
@@ -360,6 +363,9 @@ package body UserInterface.Keys is
    function ConfirmKeys
      (OldState: GameStates;
       Key: Key_Code) return GameStates is
+      MoneyIndex2: constant Natural := FindCargo(FindProtoItem(MoneyIndex));
+      TraderIndex: constant Natural := FindMember(Talk);
+      Price: Positive := 1000;
    begin
       case Key is
          when Character'Pos('n') | Character'Pos('N') => -- Back to old screen
@@ -372,7 +378,8 @@ package body UserInterface.Keys is
             elsif OldState = Quit_Confirm or
               OldState = PilotRest_Confirm or
               OldState = EngineerRest_Confirm or
-              OldState = Resign_Confirm then
+              OldState = Resign_Confirm or
+              OldState = ChangeHome_Confirm then
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             elsif OldState = Death_Confirm then
@@ -411,6 +418,38 @@ package body UserInterface.Keys is
                Death(1, To_Unbounded_String("resignation"), PlayerShip);
                DrawGame(Death_Confirm);
                return Death_Confirm;
+            elsif OldState = ChangeHome_Confirm then
+               if MoneyIndex2 = 0 then
+                  ShowDialog
+                    ("You don't have any " &
+                     To_String(MoneyName) &
+                     " for change ship home base.");
+                  DrawGame(Sky_Map_View);
+                  return Sky_Map_View;
+               end if;
+               CountPrice(Price, TraderIndex);
+               if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
+                  ShowDialog
+                    ("You don't have enough " &
+                     To_String(MoneyName) &
+                     " for change ship home base.");
+                  DrawGame(Sky_Map_View);
+                  return Sky_Map_View;
+               end if;
+               PlayerShip.HomeBase :=
+                 SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+               UpdateCargo
+                 (Ship => PlayerShip,
+                  CargoIndex => MoneyIndex2,
+                  Amount => (0 - Price));
+               AddMessage
+                 ("You changed your ship home base to: " &
+                  To_String(SkyBases(PlayerShip.HomeBase).Name),
+                  OtherMessage);
+               GainExp(1, 4, TraderIndex);
+               UpdateGame(10);
+               DrawGame(Sky_Map_View);
+               return Sky_Map_View;
             else
                return OldState;
             end if;
