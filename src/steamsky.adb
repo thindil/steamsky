@@ -346,7 +346,8 @@ begin
            Death_Confirm |
            PilotRest_Confirm |
            EngineerRest_Confirm |
-           Resign_Confirm =>
+           Resign_Confirm |
+           ChangeHome_Confirm =>
             GameState := ConfirmKeys(GameState, Key);
          when New_Game =>
             OldState := GameState;
