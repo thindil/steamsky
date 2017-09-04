@@ -142,6 +142,9 @@ package body UserInterface is
               MissionsLimit > 0 then
                OrdersAmount := OrdersAmount + 1;
             end if;
+            if PlayerShip.HomeBase /= BaseIndex then
+               OrdersAmount := OrdersAmount + 1;
+            end if;
          end if;
          Orders_Items := new Item_Array(1 .. OrdersAmount);
          Orders_Items.all(1) := New_Item("Undock");
@@ -236,6 +239,10 @@ package body UserInterface is
             if Integer(SkyBases(BaseIndex).Missions.Length) > 0 and
               MissionsLimit > 0 then
                Orders_Items.all(MenuIndex) := New_Item("Missions");
+               MenuIndex := MenuIndex + 1;
+            end if;
+            if PlayerShip.HomeBase /= BaseIndex then
+               Orders_Items.all(MenuIndex) := New_Item("Set as home");
                MenuIndex := MenuIndex + 1;
             end if;
          end if;
@@ -791,6 +798,21 @@ package body UserInterface is
             ShowConfirm("Are you sure want to resign from game?");
          when Loot_View =>
             ShowLoot;
+         when ChangeHome_Confirm =>
+            ShowSkyMap;
+            Refresh_Without_Update;
+            declare
+               TraderIndex: constant Natural := FindMember(Talk);
+               Price: Positive := 1000;
+            begin
+               CountPrice(Price, TraderIndex);
+               ShowConfirm
+                 ("Are you sure want to change your home base (it cost" &
+                  Positive'Image(Price) &
+                  " " &
+                  To_String(MoneyName) &
+                  ")?");
+            end;
          when others =>
             null;
       end case;
