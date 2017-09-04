@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Option to set owners of ships for destroy ships goals targets
 - Option to set types of items for crafting goals targets
 - New random event: stealing ship cargo in base
+- Assigned all ships (player's ship too) to sky bases
 
 ### Changed
 - Updated interface
