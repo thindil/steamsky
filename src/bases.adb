@@ -36,6 +36,9 @@ package body Bases is
          return;
       end if;
       NewPoints := SkyBases(BaseIndex).Reputation(2) + Points;
+      if BaseIndex = PlayerShip.HomeBase then
+         NewPoints := NewPoints + Points;
+      end if;
       while NewPoints < 0 loop
          SkyBases(BaseIndex).Reputation(1) :=
            SkyBases(BaseIndex).Reputation(1) - 1;
