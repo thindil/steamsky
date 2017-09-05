@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash in help on resizing window
+
 ## [1.0.7] - 2017-09-03
 
 ### Fixed
