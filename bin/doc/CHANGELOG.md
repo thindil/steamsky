@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Crash on showing info about workshop with crafting order
 - Ability to set worker in ship screen for deconstructing orders
 - Showing info about low level of food/drinks/fuel
+- Crash in help on resizing window
 
 ## [1.5] - 2017-08-20
 
