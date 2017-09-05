@@ -67,6 +67,7 @@ package body Help.UI is
       end if;
       if OldState /= Help_Topic then
          PreviousState := OldState;
+         StartIndex := 0;
          LinesAmount :=
            Line_Position
              (Ada.Strings.Unbounded.Count
