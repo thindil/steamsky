@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - New random event: stealing ship cargo in base
 - Assigned all ships (player's ship too) to sky bases
 - Chance to reduce player reputation in sky base after destroying ship
+- Faster gaining/losing reputation in player home sky base
 
 ### Changed
 - Updated interface
