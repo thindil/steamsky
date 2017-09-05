@@ -254,4 +254,8 @@ Target = Independent
 Type = Visit
 Amount = 20
 Target = Independent
+[77]
+Type = Visit
+Amount = 25
+Target = Independent
 []
