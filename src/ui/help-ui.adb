@@ -79,6 +79,7 @@ package body Help.UI is
       if OldState /= Help_Topic then
          PreviousState := OldState;
          NewText := Help_List(TopicIndex).Text;
+         StartIndex := 0;
          for I in 1 .. 37 loop
             loop
                VariableIndex :=
