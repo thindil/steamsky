@@ -619,7 +619,7 @@ package body Combat is
                               end if;
                            end if;
                            if GetRandom(1, 100) < 10 then
-                              GainRep(EnemyShip.HomeBase, -5);
+                              GainRep(EnemyShip.HomeBase, -100);
                            end if;
                            UpdateDestroyedShips(EnemyShip.Name);
                            UpdateGoal
