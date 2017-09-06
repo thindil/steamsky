@@ -220,7 +220,7 @@ package body Game is
       SkyBases(Integer(RandomBase)).Visited := GameDate;
       SkyBases(Integer(RandomBase)).Known := True;
       SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
-      GenerateRecruits(Integer(RandomBase));
+      GenerateRecruits;
       GenerateMissions(Integer(RandomBase));
       GenerateCargo;
       -- Set player goal if not set yet
@@ -304,11 +304,11 @@ package body Game is
                ".",
                OtherMessage);
          end if;
-         UpdatePopulation(BaseIndex);
-         GenerateRecruits(BaseIndex);
+         UpdatePopulation;
+         GenerateRecruits;
          GenerateMissions(BaseIndex);
          GenerateCargo;
-         UpdatePrices(BaseIndex);
+         UpdatePrices;
          UpdateOrders;
       end if;
       -- Update map cell
