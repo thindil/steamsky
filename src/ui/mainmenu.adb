@@ -295,7 +295,7 @@ package body MainMenu is
          Columns);
    end ShowFullLicense;
 
-   procedure ShowNews is
+   procedure ShowNews(NewestOnly: Boolean := True) is
       ChangesFile: File_Type;
       LinesAmount, TmpLinesAmount: Line_Position;
       NewsText: Unbounded_String := Null_Unbounded_String;
@@ -317,7 +317,7 @@ package body MainMenu is
             Set_Line(ChangesFile, 6);
             while not End_Of_File(ChangesFile) loop
                FileText := To_Unbounded_String(Get_Line(ChangesFile));
-               if Length(FileText) > 1 then
+               if Length(FileText) > 1 and NewestOnly then
                   exit when Slice(FileText, 1, 3) = "## ";
                end if;
                Append(NewsText, FileText);
@@ -430,7 +430,7 @@ package body MainMenu is
             Delete(NewsPad);
             Add
               (Str =>
-                 "Up/down arrows to scroll one line, PgUp/PgDown to scroll one screen, Home/End to go begining or end, any other key - back to main menu.");
+                 "Up/down arrows to scroll one line, PgUp/PgDown to scroll one screen, Home/End to go begining or end, F to show all changes (not only since last version), any other key - back to main menu.");
             Refresh_Without_Update;
             ShowNews;
             Update_Screen;
@@ -575,7 +575,7 @@ package body MainMenu is
                Erase;
                Add
                  (Str =>
-                    "Up/down arrows to scroll one line, PgUp/PgDown to scroll one screen, Home/End to go begining or end, any other key - back to main menu.");
+                    "Up/down arrows to scroll one line, PgUp/PgDown to scroll one screen, Home/End to go begining or end, F to show all changes (not only since last version), any other key - back to main menu.");
                Refresh_Without_Update;
                ShowNews;
                Update_Screen;
@@ -858,6 +858,11 @@ package body MainMenu is
             StartIndex := 0;
          when 49 | Key_End => -- Scroll news to end
             StartIndex := EndIndex;
+         when Character'Pos('f') | Character'Pos('F') => -- Show full changelog
+            StartIndex := 0;
+            Delete(NewsPad);
+            ShowNews(False);
+            return News_View;
          when others => -- Back to main menu
             StartIndex := 0;
             Delete(NewsPad);
