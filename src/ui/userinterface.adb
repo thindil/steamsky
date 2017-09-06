@@ -288,7 +288,7 @@ package body UserInterface is
             end if;
          elsif Event = Trader then
             if HaveTrader then
-               OrdersAmount := OrdersAmount + 3;
+               OrdersAmount := OrdersAmount + 4;
             end if;
          elsif Event = FriendlyShip then
             if HaveTrader then
@@ -300,9 +300,9 @@ package body UserInterface is
                       .Name,
                     To_String(TradersName)) >
                  0 then
-                  OrdersAmount := OrdersAmount + 3;
+                  OrdersAmount := OrdersAmount + 4;
                else
-                  OrdersAmount := OrdersAmount + 1;
+                  OrdersAmount := OrdersAmount + 2;
                end if;
             end if;
          else
@@ -424,6 +424,8 @@ package body UserInterface is
                   Orders_Items.all(MenuIndex) := New_Item("Ask for events");
                   MenuIndex := MenuIndex + 1;
                end if;
+               Orders_Items.all(MenuIndex) := New_Item("Attack");
+               MenuIndex := MenuIndex + 1;
             when FriendlyShip =>
                if HaveTrader then
                   if Index
@@ -443,6 +445,8 @@ package body UserInterface is
                   Orders_Items.all(MenuIndex) := New_Item("Ask for events");
                   MenuIndex := MenuIndex + 1;
                end if;
+               Orders_Items.all(MenuIndex) := New_Item("Attack");
+               MenuIndex := MenuIndex + 1;
          end case;
          Orders_Items.all(MenuIndex) := New_Item("All stop");
          MenuIndex := MenuIndex + 1;
