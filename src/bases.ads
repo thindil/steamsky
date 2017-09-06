@@ -85,12 +85,10 @@ package Bases is
         True); -- Count price for actions with bases (buying/selling/docking/ect)
    function GenerateBaseName
      return Unbounded_String; -- Generate random name for base
-   procedure GenerateRecruits
-     (BaseIndex: Positive); -- Generate if needed new recruits in base
+   procedure GenerateRecruits; -- Generate if needed new recruits in base
    procedure AskForBases; -- Ask in base for direction for other bases
    procedure AskForEvents; -- Ask in base for direction for random events
-   procedure UpdatePopulation
-     (BaseIndex: Positive); -- Update base population if needed
+   procedure UpdatePopulation; -- Update base population if needed
    procedure GenerateCargo; -- Generate base cargo
    procedure UpdateBaseCargo
      (ProtoIndex: Natural := 0;
@@ -102,7 +100,6 @@ package Bases is
       Durability: Natural :=
         101)
      return Natural; -- Find index of item in base cargo, return 0 if no item found
-   procedure UpdatePrices
-     (BaseIndex: Positive); -- Random changes of items prices in base
+   procedure UpdatePrices; -- Random changes of items prices in base
 
 end Bases;
