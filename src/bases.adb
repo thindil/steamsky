@@ -136,7 +136,9 @@ package body Bases is
       return NewName;
    end GenerateBaseName;
 
-   procedure GenerateRecruits(BaseIndex: Positive) is
+   procedure GenerateRecruits is
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MaxRecruits,
       RecruitsAmount,
       SkillsAmount,
@@ -546,7 +548,9 @@ package body Bases is
       UpdateGame(30);
    end AskForEvents;
 
-   procedure UpdatePopulation(BaseIndex: Positive) is
+   procedure UpdatePopulation is
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       PopulationDiff: Integer;
    begin
       if DaysDifference(SkyBases(BaseIndex).RecruitDate) < 30 then
@@ -707,7 +711,9 @@ package body Bases is
       return 0;
    end FindBaseCargo;
 
-   procedure UpdatePrices(BaseIndex: Positive) is
+   procedure UpdatePrices is
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Chance, Roll: Positive;
    begin
       if SkyBases(BaseIndex).Owner = Abandoned then
