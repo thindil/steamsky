@@ -195,7 +195,7 @@ package body Events is
                   AddMessage("You meet friendly trader.", OtherMessage);
                   GainPerception;
                   UpdateOrders;
-               when 24 .. 30 => -- Friendly trader
+               when 24 .. 30 => -- Friendly ship
                   Events_List.Append
                   (New_Item =>
                      (FriendlyShip,
