@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Assigned all ships (player's ship too) to sky bases
 - Chance to reduce player reputation in sky base after destroying ship
 - Faster gaining/losing reputation in player home sky base
+- Ability to attack friendly ships
 
 ### Changed
 - Updated interface
