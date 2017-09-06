@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Chance to reduce player reputation in sky base after destroying ship
 - Faster gaining/losing reputation in player home sky base
 - Ability to attack friendly ships
+- Ability to show whole Changelog.md in News
 
 ### Changed
 - Updated interface
