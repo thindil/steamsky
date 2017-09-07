@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file.
 - Check for minimal size of terminal during game
 - Option to set owners of ships for destroy ships goals targets
 - Option to set types of items for crafting goals targets
-- New random event: stealing ship cargo in base
+- New random events: stealing ship cargo in base and retake abandoned base
 - Assigned all ships (player's ship too) to sky bases
 - Chance to reduce player reputation in sky base after destroying ship
 - Faster gaining/losing reputation in player home sky base
