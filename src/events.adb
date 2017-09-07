@@ -227,6 +227,11 @@ package body Events is
             end case;
          else
             if SkyBases(BaseIndex).Owner = Abandoned then
+               if Roll < 6 and
+                 PlayerShip.Speed /=
+                   DOCKED then -- Change owner of abandoned base
+                  RecoverBase(BaseIndex);
+               end if;
                return OldState;
             end if;
             if PlayerShip.Speed /= DOCKED then
@@ -437,5 +442,69 @@ package body Events is
          TraderIndex := TraderIndex + 1;
       end loop;
    end GenerateTraders;
+
+   procedure RecoverBase(BaseIndex: Positive) is
+   begin
+      SkyBases(BaseIndex).Owner := Bases_Owners'Val(GetRandom(1, 7));
+      case GetRandom(1, 100) is
+         when 1 .. 94 =>
+            SkyBases(BaseIndex).Owner := Poleis;
+         when 95 =>
+            SkyBases(BaseIndex).Owner := Independent;
+         when 96 =>
+            SkyBases(BaseIndex).Owner := Abandoned;
+         when 97 =>
+            SkyBases(BaseIndex).Owner := Pirates;
+         when 98 =>
+            SkyBases(BaseIndex).Owner := Undead;
+         when 99 =>
+            SkyBases(BaseIndex).Owner := Drones;
+         when 100 =>
+            SkyBases(BaseIndex).Owner := Inquisition;
+         when others =>
+            null;
+      end case;
+      if SkyBases(BaseIndex).Owner /= Abandoned then
+         SkyBases(BaseIndex).Population := GetRandom(2, 50);
+         SkyBases(BaseIndex).Visited := (0, 0, 0, 0, 0);
+         SkyBases(BaseIndex).RecruitDate := (0, 0, 0, 0, 0);
+         SkyBases(BaseIndex).MissionsDate := (0, 0, 0, 0, 0);
+         case SkyBases(BaseIndex).Owner is
+            when Poleis =>
+               SkyBases(BaseIndex).Reputation(1) := 0;
+            when Independent =>
+               case GetRandom(1, 100) is
+                  when 1 .. 95 =>
+                     SkyBases(BaseIndex).Reputation(1) := 0;
+                  when 96 =>
+                     SkyBases(BaseIndex).Reputation(1) := -1;
+                  when 97 =>
+                     SkyBases(BaseIndex).Reputation(1) := -2;
+                  when 98 =>
+                     SkyBases(BaseIndex).Reputation(1) := -3;
+                  when 99 =>
+                     SkyBases(BaseIndex).Reputation(1) := 1;
+                  when 100 =>
+                     SkyBases(BaseIndex).Reputation(1) := 2;
+                  when others =>
+                     null;
+               end case;
+            when Pirates =>
+               SkyBases(BaseIndex).Reputation(1) := -10;
+            when Undead =>
+               SkyBases(BaseIndex).Reputation(1) := -100;
+            when Drones =>
+               SkyBases(BaseIndex).Reputation(1) := -100;
+            when Inquisition =>
+               SkyBases(BaseIndex).Reputation(1) := -50;
+            when others =>
+               null;
+         end case;
+         AddMessage
+           ("Base " & To_String(SkyBases(BaseIndex).Name) & " have new owner.",
+            OtherMessage,
+            5);
+      end if;
+   end RecoverBase;
 
 end Events;

@@ -449,7 +449,7 @@ package body Bases is
          end loop;
       end if;
       for I in 1 .. EventsAmount loop
-         Event := Events_Types'Val(GetRandom(1, 4));
+         Event := Events_Types'Val(GetRandom(1, 5));
          Attempts := 10;
          loop
             if Event = EnemyShip then
@@ -476,27 +476,29 @@ package body Bases is
                   end loop;
                   exit;
                end if;
-               if Event = AttackOnBase and
-                 (EventX /= PlayerShip.SkyX and
-                  EventY /= PlayerShip.SkyY and
-                  SkyMap(EventX, EventY).EventIndex = 0 and
-                  SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /=
-                    Abandoned and
-                  SkyBases(SkyMap(EventX, EventY).BaseIndex).Known) then
-                  exit;
-               end if;
-               if (Event = Disease or Event = DoublePrice) and
-                 (EventX /= PlayerShip.SkyX and
-                  EventY /= PlayerShip.SkyY and
-                  SkyMap(EventX, EventY).EventIndex = 0 and
-                  (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /=
-                   Abandoned or
-                   SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /=
-                     Drones or
-                   SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /=
-                     Undead) and
-                  SkyBases(SkyMap(EventX, EventY).BaseIndex).Known) then
-                  exit;
+               if EventX /= PlayerShip.SkyX and
+                 EventY /= PlayerShip.SkyY and
+                 SkyMap(EventX, EventY).EventIndex = 0 and
+                 SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
+                  if Event = AttackOnBase and
+                    SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /=
+                      Abandoned then
+                     exit;
+                  end if;
+                  if (Event = Disease or Event = DoublePrice) and
+                    (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /=
+                     Abandoned or
+                     SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /=
+                       Drones or
+                     SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /=
+                       Undead) then
+                     exit;
+                  end if;
+                  if Event = BaseRecovery and
+                    SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner =
+                      Abandoned then
+                     exit;
+                  end if;
                end if;
             end if;
          end loop;
@@ -539,10 +541,14 @@ package body Bases is
                    EventY,
                    GetRandom((EventTime * 3), (EventTime * 4)),
                    ItemIndex));
+            when BaseRecovery =>
+               RecoverBase(SkyMap(EventX, EventY).BaseIndex);
             when others =>
                null;
          end case;
-         SkyMap(EventX, EventY).EventIndex := Events_List.Last_Index;
+         if Event /= BaseRecovery then
+            SkyMap(EventX, EventY).EventIndex := Events_List.Last_Index;
+         end if;
       end loop;
       GainExp(1, 4, TraderIndex);
       UpdateGame(30);

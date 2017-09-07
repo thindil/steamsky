@@ -337,7 +337,7 @@ package body UserInterface is
                      MenuIndex := MenuIndex + 1;
                   end if;
                end if;
-            when None | DoublePrice =>
+            when None | DoublePrice | BaseRecovery =>
                if BaseIndex > 0 then
                   for Mission of PlayerShip.Missions loop
                      if HaveTrader then
