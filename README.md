@@ -17,17 +17,26 @@ At this moment are available 2 game versions:
   branch.
 
 ## Build game from sources
+
 To build it, you need:
 
 * compiler - GCC with enabled Ada support or GNAT from: 
+  
   http://libre.adacore.com/download/
+
+  At this moment tested compilers (all on Linux) are GCC 7.1 and GNAT GPL 2017.
+  Game not works with old compilers (like GCC 4.9) due to lack of full support
+  for Ada 2012.
 
 * ncurses Ada binding (should be available in most distributions or with ncurses 
   package or as standalone package). If not, you can download it from:
+  
   http://invisible-island.net/ncurses/ncurses-Ada95.html
 
 * optional, but highly recommended:  gprbuild program - should be available in most 
-  distributions, if not, download from: http://libre.adacore.com/download/
+  distributions, if not, download from: 
+  
+  http://libre.adacore.com/download/
 
 
 If you have all, in main source code directory (where this file is):
