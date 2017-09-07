@@ -332,7 +332,7 @@ package body Maps.UI is
                   Str =>
                     "Double price for " &
                     To_String(Items_List(Events_List(EventIndex).Data).Name));
-            when None =>
+            when None | BaseRecovery =>
                null;
          end case;
          CurrentLine := CurrentLine + 1;

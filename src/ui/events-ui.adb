@@ -111,7 +111,7 @@ package body Events.UI is
                    (Length(Items_List(Events_List(EventIndex).Data).Name)) +
                  10;
             end if;
-         when None =>
+         when None | BaseRecovery =>
             null;
       end case;
       Move_Cursor(Win => InfoWindow, Line => WindowHeight - 2, Column => 2);
@@ -197,7 +197,7 @@ package body Events.UI is
                Events_Items.all(I) := New_Item("Friendly trader spotted");
             when FriendlyShip =>
                Events_Items.all(I) := New_Item("Friendly ship spotted");
-            when None =>
+            when None | BaseRecovery =>
                null;
          end case;
       end loop;
