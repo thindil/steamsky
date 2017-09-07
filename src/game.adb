@@ -221,7 +221,7 @@ package body Game is
       SkyBases(Integer(RandomBase)).Known := True;
       SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
       GenerateRecruits;
-      GenerateMissions(Integer(RandomBase));
+      GenerateMissions;
       GenerateCargo;
       -- Set player goal if not set yet
       if CurrentGoal.GType = RANDOM then
@@ -306,7 +306,7 @@ package body Game is
          end if;
          UpdatePopulation;
          GenerateRecruits;
-         GenerateMissions(BaseIndex);
+         GenerateMissions;
          GenerateCargo;
          UpdatePrices;
          UpdateOrders;
