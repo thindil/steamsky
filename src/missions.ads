@@ -35,8 +35,7 @@ package Missions is
    Missions_Accepting_Error: exception; -- Raised when mission can't be accepted
    Missions_Finishing_Error: exception; -- Raised when mission can't be finished
 
-   procedure GenerateMissions
-     (BaseIndex: Positive); -- Generate if needed new missions in selected base
+   procedure GenerateMissions; -- Generate if needed new missions in base
    procedure AcceptMission
      (MissionIndex: Positive); -- Accept selected mission from base
    procedure UpdateMissions(Minutes: Positive); -- Update accepted missions
