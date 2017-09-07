@@ -37,7 +37,9 @@ with Goals; use Goals;
 
 package body Missions is
 
-   procedure GenerateMissions(BaseIndex: Positive) is
+   procedure GenerateMissions is
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MissionsAmount, MissionX, MissionY, TmpBaseIndex, DiffX, DiffY: Positive;
       Mission: Mission_Data;
       MissionsItems, BasesInRange, Cabins: Positive_Container.Vector;
