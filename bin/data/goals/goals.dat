@@ -262,4 +262,8 @@ Target = Independent
 Type = Visit
 Amount = 50
 Target = Independent
+[79]
+Type = Visit
+Amount = 1
+Target = Pirates
 []
