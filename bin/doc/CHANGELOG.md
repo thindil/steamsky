@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Faster gaining/losing reputation in player home sky base
 - Ability to attack friendly ships
 - Ability to show whole Changelog.md in News
+- Ability to set condition to stop ship auto movement
 
 ### Changed
 - Updated interface
