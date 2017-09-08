@@ -50,6 +50,7 @@ package body Game is
       BaseOwner: Bases_Owners;
       BasePopulation: Natural;
       TmpCargo: BaseCargo_Container.Vector;
+      TmpAttributes: Attributes_Container.Vector;
    begin
       -- Save new game configuration
       NewGameSettings :=
@@ -191,6 +192,9 @@ package body Game is
            False);
       -- Add player to ship
       TmpSkills.Append(New_Item => (4, 5, 0));
+      for I in Attributes_Names.Iterate loop
+         TmpAttributes.Append(New_Item => (3, 0));
+      end loop;
       PlayerShip.Crew.Prepend
       (New_Item =>
          (Name => CharName,
@@ -203,7 +207,8 @@ package body Game is
           Order => Talk,
           PreviousOrder => Rest,
           OrderTime => 15,
-          Orders => (0, 0, 0, 1, 1, 1, 2, 1, 1)));
+          Orders => (0, 0, 0, 1, 1, 1, 2, 1, 1),
+          Attributes => TmpAttributes));
       for Module of PlayerShip.Modules loop
          if Module.Owner > 0 then
             Module.Owner := Module.Owner + 1;
@@ -328,7 +333,7 @@ package body Game is
       DataFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex, StartIndex, EndIndex, Amount: Natural;
-      FieldsNames: constant array(1 .. 30) of Unbounded_String :=
+      FieldsNames: constant array(1 .. 31) of Unbounded_String :=
         (To_Unbounded_String("BasesSyllablesPre"),
          To_Unbounded_String("BasesSyllablesStart"),
          To_Unbounded_String("BasesSyllablesEnd"),
@@ -358,7 +363,8 @@ package body Game is
          To_Unbounded_String("FoodTypes"),
          To_Unbounded_String("FuelType"),
          To_Unbounded_String("MoneyIndex"),
-         To_Unbounded_String("TradersName"));
+         To_Unbounded_String("TradersName"),
+         To_Unbounded_String("AttributesNames"));
    begin
       if BaseSyllablesStart.Length > 0 then
          return True;
@@ -479,6 +485,10 @@ package body Game is
                         MoneyIndex := Value;
                      when 30 =>
                         TradersName := Value;
+                     when 31 =>
+                        Attributes_Names.Append
+                        (New_Item =>
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                   end case;
                   StartIndex := EndIndex + 2;
                end loop;
