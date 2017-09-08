@@ -28,3 +28,4 @@ FoodTypes = Food, RawFood
 FuelType = Fuel
 MoneyIndex = 1
 TradersName = trader
+AttributesNames = Strength, Dexterity, Intelligence, Condition
