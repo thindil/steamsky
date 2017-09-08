@@ -555,6 +555,35 @@ package body Maps.UI is
                   return 5;
                end if;
             end if;
+            if GameSettings.AutoMoveStop /= NEVER and
+              SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+               declare
+                  EventIndex: constant Positive :=
+                    SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+               begin
+                  case GameSettings.AutoMoveStop is
+                     when ANY =>
+                        if Events_List(EventIndex).EType = EnemyShip or
+                          Events_List(EventIndex).EType = Trader or
+                          Events_List(EventIndex).EType = FriendlyShip or
+                          Events_List(EventIndex).EType = EnemyPatrol then
+                           return 0;
+                        end if;
+                     when FRIENDLY =>
+                        if Events_List(EventIndex).EType = Trader or
+                          Events_List(EventIndex).EType = FriendlyShip then
+                           return 0;
+                        end if;
+                     when ENEMY =>
+                        if Events_List(EventIndex).EType = EnemyShip or
+                          Events_List(EventIndex).EType = EnemyPatrol then
+                           return 0;
+                        end if;
+                     when NEVER =>
+                        null;
+                  end case;
+               end;
+            end if;
             if PlayerShip.DestinationX = PlayerShip.SkyX and
               PlayerShip.DestinationY = PlayerShip.SkyY then
                AddMessage
