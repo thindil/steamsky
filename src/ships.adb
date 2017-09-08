@@ -57,6 +57,7 @@ package body Ships is
       TempModule: BaseModule_Data;
       MaxValue, Roll: Positive;
       StartX, StartY, EndX, EndY: Integer;
+      TmpAttributes: Attributes_Container.Vector;
    begin
       if RandomUpgrades then
          UpgradesAmount := GetRandom(0, Positive(ProtoShip.Modules.Length));
@@ -172,8 +173,10 @@ package body Ships is
              Order => Member.Order,
              PreviousOrder => Rest,
              OrderTime => 15,
-             Orders => Member.Orders));
+             Orders => Member.Orders,
+             Attributes => TmpAttributes));
          TmpSkills.Clear;
+         TmpAttributes.Clear;
          for Module of ShipModules loop
             if Modules_List(Module.ProtoIndex).MType = CABIN and
               Module.Owner = 0 then

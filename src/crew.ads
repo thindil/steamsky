@@ -34,6 +34,8 @@ package Crew is
       Clean,
       Rest);
    type Orders_Array is array(1 .. 9) of Natural;
+   type Attributes_Array is array(1 .. 2) of Natural;
+   package Attributes_Container is new Vectors(Positive, Attributes_Array);
    type Member_Data is -- Data structure for ship crew member
    record
       Name: Unbounded_String; -- Name of member
@@ -48,6 +50,8 @@ package Crew is
       PreviousOrder: Crew_Orders; -- Previous order for member
       OrderTime: Integer; -- Minutes to next check for order result
       Orders: Orders_Array; -- Priority of orders of member
+      Attributes: Attributes_Container
+        .Vector; -- Levels and experience in attributes of member
    end record;
    Crew_Order_Error: exception; -- Raised when new order can't be set for selected crew member
 

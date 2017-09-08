@@ -149,6 +149,7 @@ package body Bases is
       Gender: Character;
       Price: Natural;
       SkillIndex: Integer;
+      Attributes: Attributes_Container.Vector;
    begin
       if DaysDifference(SkyBases(BaseIndex).RecruitDate) < 30 or
         SkyBases(BaseIndex).Owner = Abandoned then
@@ -168,6 +169,7 @@ package body Bases is
       RecruitsAmount := GetRandom(1, MaxRecruits);
       for I in 1 .. RecruitsAmount loop
          Skills.Clear;
+         Attributes.Clear;
          Price := 0;
          if GetRandom(1, 2) = 1 then
             Gender := 'M';
@@ -179,7 +181,8 @@ package body Bases is
             (Name => GenerateMemberName(Gender),
              Gender => Gender,
              Price => 1,
-             Skills => Skills));
+             Skills => Skills,
+             Attributes => Attributes));
          SkillsAmount :=
            GetRandom(Skills_Names.First_Index, Skills_Names.Last_Index);
          for J in 1 .. SkillsAmount loop
@@ -204,11 +207,18 @@ package body Bases is
                (Index => SkillIndex, New_Item => (SkillNumber, SkillLevel, 0));
             end if;
          end loop;
-         for C in Skills.Iterate loop
-            Price := Price + Skills(C)(2);
+         for J in Attributes_Names.Iterate loop
+            Attributes.Append(New_Item => (GetRandom(3, 50), 0));
+         end loop;
+         for Skill of Skills loop
+            Price := Price + Skill(2);
+         end loop;
+         for Stat of Attributes loop
+            Price := Price + (Stat(2) * 5);
          end loop;
          Price := Price * 100;
          BaseRecruits(BaseRecruits.Last_Index).Skills := Skills;
+         BaseRecruits(BaseRecruits.Last_Index).Attributes := Attributes;
          BaseRecruits(BaseRecruits.Last_Index).Price := Price;
       end loop;
       SkyBases(BaseIndex).RecruitDate := GameDate;
