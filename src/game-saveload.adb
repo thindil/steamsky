@@ -151,6 +151,23 @@ package body Game.SaveLoad is
                        (SaveGame,
                         To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
                   end loop;
+                  RawValue :=
+                    To_Unbounded_String(Recruit.Attributes.Length'Img);
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  for Attribute of Recruit.Attributes loop
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Attribute(1)));
+                     Put
+                       (SaveGame,
+                        To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Attribute(2)));
+                     Put
+                       (SaveGame,
+                        To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  end loop;
                end loop;
             end if;
             if SkyBases(I).AskedForBases then
@@ -346,6 +363,14 @@ package body Game.SaveLoad is
             RawValue := To_Unbounded_String(Integer'Image(Member.Orders(J)));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
          end loop;
+         RawValue := To_Unbounded_String(Member.Attributes.Length'Img);
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         for Attribute of Member.Attributes loop
+            RawValue := To_Unbounded_String(Integer'Image(Attribute(1)));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(Attribute(2)));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         end loop;
       end loop;
       RawValue := To_Unbounded_String(PlayerShip.Missions.Length'Img);
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -484,6 +509,7 @@ package body Game.SaveLoad is
       BaseMissions: Mission_Container.Vector;
       TmpOrders: Orders_Array;
       BaseCargo: BaseCargo_Container.Vector;
+      Attributes: Attributes_Container.Vector;
       function ReadData return Unbounded_String is
          RawData: Unbounded_String := To_Unbounded_String("");
          Char: Character;
@@ -564,12 +590,14 @@ package body Game.SaveLoad is
             if VectorLength > 0 then
                for J in 1 .. VectorLength loop
                   Skills.Clear;
+                  Attributes.Clear;
                   BaseRecruits.Append
                   (New_Item =>
                      (Name => ReadData,
                       Gender => Element(ReadData, 1),
                       Price => Positive'Value(To_String(ReadData)),
-                      Skills => Skills));
+                      Skills => Skills,
+                      Attributes => Attributes));
                   SkillsLength := Positive'Value(To_String(ReadData));
                   for K in 1 .. SkillsLength loop
                      Skills.Append
@@ -579,6 +607,19 @@ package body Game.SaveLoad is
                          Natural'Value(To_String(ReadData))));
                   end loop;
                   BaseRecruits(BaseRecruits.Last_Index).Skills := Skills;
+                  SkillsLength := Positive'Value(To_String(ReadData));
+                  if SkillsLength /= Natural(Attributes_Names.Length) then
+                     raise SaveGame_Invalid_Data
+                       with "Different amount of character statistics.";
+                  end if;
+                  for K in 1 .. SkillsLength loop
+                     Attributes.Append
+                     (New_Item =>
+                        (Natural'Value(To_String(ReadData)),
+                         Natural'Value(To_String(ReadData))));
+                  end loop;
+                  BaseRecruits(BaseRecruits.Last_Index).Attributes :=
+                    Attributes;
                end loop;
                SkyBases(I).Recruits := BaseRecruits;
                BaseRecruits.Clear;
@@ -684,6 +725,7 @@ package body Game.SaveLoad is
       VectorLength := Positive'Value(To_String(ReadData));
       for I in 1 .. VectorLength loop
          Skills.Clear;
+         Attributes.Clear;
          ShipCrew.Append
          (New_Item =>
             (Name => ReadData,
@@ -697,7 +739,8 @@ package body Game.SaveLoad is
              PreviousOrder =>
                Crew_Orders'Val(Integer'Value(To_String(ReadData))),
              OrderTime => Integer'Value(To_String(ReadData)),
-             Orders => (others => 0)));
+             Orders => (others => 0),
+             Attributes => Attributes));
          SkillsLength := Positive'Value(To_String(ReadData));
          for J in 1 .. SkillsLength loop
             Skills.Append
@@ -709,7 +752,15 @@ package body Game.SaveLoad is
          for J in TmpOrders'Range loop
             TmpOrders(J) := Natural'Value(To_String(ReadData));
          end loop;
+         SkillsLength := Positive'Value(To_String(ReadData));
+         for J in 1 .. SkillsLength loop
+            Attributes.Append
+            (New_Item =>
+               (Natural'Value(To_String(ReadData)),
+                Natural'Value(To_String(ReadData))));
+         end loop;
          ShipCrew(ShipCrew.Last_Index).Skills := Skills;
+         ShipCrew(ShipCrew.Last_Index).Attributes := Attributes;
          ShipCrew(ShipCrew.Last_Index).Orders := TmpOrders;
       end loop;
       PlayerShip.Crew := ShipCrew;

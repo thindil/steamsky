@@ -31,6 +31,8 @@ package Bases is
       Skills: Skills_Container
         .Vector; -- Names indexes, levels and experience in skills of recruit
       Price: Positive; -- Cost of enlist of recruit
+      Attributes: Attributes_Container
+        .Vector; -- Names indexes, levels and experience in attributes of recruit
    end record;
    package Recruit_Container is new Vectors(Positive, Recruit_Data);
    type Reputation_Array is
