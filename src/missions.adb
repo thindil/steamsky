@@ -225,6 +225,7 @@ package body Missions is
       HaveCabin: Boolean := False;
       Gender: Character;
       Skills: Skills_Container.Vector;
+      Attributes: Attributes_Container.Vector;
    begin
       if SkyBases(BaseIndex).Reputation(1) < 0 then
          raise Missions_Accepting_Error
@@ -311,7 +312,8 @@ package body Missions is
                 Order => Rest,
                 PreviousOrder => Rest,
                 OrderTime => 15,
-                Orders => (others => 0)));
+                Orders => (others => 0),
+                Attributes => Attributes));
             for Module of PlayerShip.Modules loop
                if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
                   Module.Owner := PlayerShip.Crew.Last_Index;

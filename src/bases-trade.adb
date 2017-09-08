@@ -56,7 +56,8 @@ package body Bases.Trade is
           Order => Rest,
           PreviousOrder => Rest,
           OrderTime => 15,
-          Orders => (others => 0)));
+          Orders => (others => 0),
+          Attributes => Recruit.Attributes));
       UpdateCargo
         (Ship => PlayerShip,
          CargoIndex => MoneyIndex2,
