@@ -76,7 +76,8 @@ package body Config is
             108),
          LowFuel => 100,
          LowDrinks => 50,
-         LowFood => 25);
+         LowFood => 25,
+         AutoMoveStop => NEVER);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -137,6 +138,9 @@ package body Config is
                GameSettings.LowDrinks := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("LowFood") then
                GameSettings.LowFood := Positive'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("AutoMoveStop") then
+               GameSettings.AutoMoveStop :=
+                 AutoMoveBreak'Value(To_String(Value));
             end if;
          end if;
       end loop;
@@ -190,6 +194,9 @@ package body Config is
         (ConfigFile,
          "LowDrinks =" & Positive'Image(GameSettings.LowDrinks));
       Put_Line(ConfigFile, "LowFood =" & Positive'Image(GameSettings.LowFood));
+      Put_Line
+        (ConfigFile,
+         "AutoMoveStop = " & AutoMoveBreak'Image(GameSettings.AutoMoveStop));
       Close(ConfigFile);
    end SaveConfig;
 

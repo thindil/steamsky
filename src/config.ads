@@ -27,6 +27,11 @@ package Config is
       ShipName: Unbounded_String; -- Default ship name
    end record;
    type Keys_Array is array(1 .. 37) of Integer; -- Keys used in ship movement
+   type AutoMoveBreak is
+     (NEVER,
+      ANY,
+      FRIENDLY,
+      ENEMY); -- Options when stop auto move of player ship
    type GameSettingsRecord is -- Data for game settings
    record
       AutoRest: Boolean; -- If true, rest when pilot/engineer need rest
@@ -38,6 +43,7 @@ package Config is
       LowFuel: Positive; -- Amount of fuel below which warning about low level is show
       LowDrinks: Positive; -- Amount of drinkis below which warning about low level is show
       LowFood: Positive; -- Amount of food below which warning about low level is show
+      AutoMoveStop: AutoMoveBreak; -- When stop automoving of player ship
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
