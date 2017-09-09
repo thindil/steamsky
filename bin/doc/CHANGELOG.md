@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
   visit 175 poleis bases, visit 200 poleis bases, visit 250 poleis bases,
   visit 10 independent bases, visit 15 independent bases, visit 20 independent
   bases, visit 25 independent bases, visit 50 independent bases, visit 1
-  pirates base and visit 3 pirates bases
+  pirates base, visit 3 pirates bases and visit 5 pirates bases
 - New friendly ships: tiny independent patrol ship, small poleis patrol ship,
   small independent patrol ship, poleis patrol ship, independent patrol ship,
   armored poleis patrol ship, armored independent patrol ship, advanced poleis
