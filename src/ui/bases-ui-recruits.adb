@@ -44,9 +44,12 @@ package body Bases.UI.Recruits is
          Refresh_Without_Update(ClearWindow);
          Delete(ClearWindow);
       end if;
-      WindowHeight := 4 + Line_Position(Recruit.Skills.Length);
-      if WindowHeight > (Lines - 5) then
-         WindowHeight := Lines - 5;
+      WindowHeight :=
+        5 +
+        Line_Position(Recruit.Skills.Length) +
+        Line_Position(Recruit.Attributes.Length);
+      if WindowHeight > (Lines - 6) then
+         WindowHeight := Lines - 6;
       end if;
       InfoWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
       Move_Cursor(Win => InfoWindow, Line => 1, Column => 2);
@@ -55,6 +58,24 @@ package body Bases.UI.Recruits is
       else
          Add(Win => InfoWindow, Str => "Gender: Female");
       end if;
+      for I in Recruit.Attributes.Iterate loop
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
+         Add
+           (Win => InfoWindow,
+            Str =>
+              To_String(Attributes_Names(Attributes_Container.To_Index(I))) &
+              ": " &
+              GetAttributeLevelName(Recruit.Attributes(I)(1)));
+         Get_Cursor_Position
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => NewWindowWidth);
+         if InfoWindowWidth < (NewWindowWidth + 2) then
+            InfoWindowWidth := NewWindowWidth + 2;
+         end if;
+         CurrentLine := CurrentLine + 1;
+      end loop;
+      CurrentLine := CurrentLine + 1;
       for Skill of Recruit.Skills loop
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
          Add
@@ -72,6 +93,7 @@ package body Bases.UI.Recruits is
             InfoWindowWidth := NewWindowWidth;
          end if;
          CurrentLine := CurrentLine + 1;
+         exit when CurrentLine = WindowHeight;
       end loop;
       Resize(InfoWindow, WindowHeight, InfoWindowWidth);
       WindowFrame(InfoWindow, 2, "Recruit info");
