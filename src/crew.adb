@@ -1032,4 +1032,26 @@ package body Crew is
       end case;
    end GetSkillLevelName;
 
+   function GetAttributeLevelName(AttributeLevel: Positive) return String is
+   begin
+      case AttributeLevel is
+         when 1 .. 5 =>
+            return "Very low";
+         when 6 .. 10 =>
+            return "Low";
+         when 11 .. 15 =>
+            return "Below average";
+         when 16 .. 30 =>
+            return "Average";
+         when 31 .. 35 =>
+            return "Above average";
+         when 36 .. 40 =>
+            return "High";
+         when 41 .. 49 =>
+            return "Very high";
+         when others =>
+            return "Outstanding";
+      end case;
+   end GetAttributeLevelName;
+
 end Crew;

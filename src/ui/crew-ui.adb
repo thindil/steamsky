@@ -52,7 +52,7 @@ package body Crew.UI is
       SkillsLine, SkillsStartsLine: Line_Position := 0;
       WindowWidth: Column_Position := 18;
       CurrentColumn: Column_Position;
-      SkillsHeaderLine, OrderHeaderLine: Line_Position;
+      AttributesHeaderLine, SkillsHeaderLine, OrderHeaderLine: Line_Position;
       procedure SubHeader(Caption: String; HeaderLine: Line_Position) is
       begin
          Set_Color(InfoWindow, 2);
@@ -143,7 +143,10 @@ package body Crew.UI is
          WindowHeight := WindowHeight + 1;
       else
          WindowHeight :=
-           WindowHeight + Line_Position(Member.Skills.Length) + 3;
+           WindowHeight +
+           Line_Position(Member.Skills.Length) +
+           4 +
+           Line_Position(Member.Attributes.Length);
          if WindowHeight > (Lines - 5) then
             WindowHeight := Lines - 5;
          end if;
@@ -205,6 +208,26 @@ package body Crew.UI is
          CurrentLine := CurrentLine + 1;
       end if;
       if Member.Skills.Length > 0 then
+         AttributesHeaderLine := CurrentLine;
+         CurrentLine := CurrentLine + 1;
+         for I in Member.Attributes.Iterate loop
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
+            Add
+              (Win => InfoWindow,
+               Str =>
+                 To_String
+                   (Attributes_Names(Attributes_Container.To_Index(I))) &
+                 ": " &
+                 GetAttributeLevelName(Member.Attributes(I)(1)));
+            Get_Cursor_Position
+              (Win => InfoWindow,
+               Line => CurrentLine,
+               Column => CurrentColumn);
+            if WindowWidth < (CurrentColumn + 2) then
+               WindowWidth := CurrentColumn + 2;
+            end if;
+            CurrentLine := CurrentLine + 1;
+         end loop;
          SkillsHeaderLine := CurrentLine;
          CurrentLine := CurrentLine + 1;
          SkillsPad :=
@@ -275,6 +298,7 @@ package body Crew.UI is
       Resize(InfoWindow, WindowHeight, WindowWidth);
       WindowFrame(InfoWindow, 2, "Member info");
       if Member.Skills.Length > 0 then
+         SubHeader("Attributes", AttributesHeaderLine);
          SubHeader("Skills", SkillsHeaderLine);
          SubHeader("Order", OrderHeaderLine);
          Resize
