@@ -161,6 +161,14 @@ package body Ships is
                (New_Item => (Skill(1), GetRandom(Skill(2), Skill(3)), 0));
             end if;
          end loop;
+         for Attribute of Member.Attributes loop
+            if Attribute(2) = 0 then
+               TmpAttributes.Append(New_Item => Attribute);
+            else
+               TmpAttributes.Append
+               (New_Item => (GetRandom(Attribute(1), Attribute(2)), 0));
+            end if;
+         end loop;
          ShipCrew.Append
          (New_Item =>
             (Name => MemberName,
@@ -320,6 +328,7 @@ package body Ships is
       TempCargo: Skills_Container.Vector;
       TempCrew: ProtoCrew_Container.Vector;
       TempSkills: Skills_Container.Vector;
+      TempAttributes: Attributes_Container.Vector;
       TempOrder: Crew_Orders;
       SkillsAmount, PrioritiesAmount: Positive;
       Files: Search_Type;
@@ -540,7 +549,8 @@ package body Ships is
                      (New_Item =>
                         (Skills => TempSkills,
                          Order => Rest,
-                         Orders => (others => 0)));
+                         Orders => (others => 0),
+                         Attributes => TempAttributes));
                      TempSkills.Clear;
                      StartIndex := EndIndex + 2;
                   end loop;
@@ -629,6 +639,55 @@ package body Ships is
                           ".";
                      end if;
                      TempRecord.KnownRecipes.Append(New_Item => RecipeIndex);
+                     StartIndex := EndIndex + 2;
+                  end loop;
+               elsif FieldName = To_Unbounded_String("Attributes") then
+                  StartIndex := 1;
+                  Amount := Ada.Strings.Unbounded.Count(Value, "; ") + 1;
+                  for I in 1 .. Amount loop
+                     EndIndex := Index(Value, "; ", StartIndex);
+                     if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                     end if;
+                     SkillsValue :=
+                       To_Unbounded_String
+                         (Slice(Value, StartIndex, EndIndex - 1));
+                     StartIndex2 := 1;
+                     SkillsAmount :=
+                       Ada.Strings.Unbounded.Count(SkillsValue, ", ") + 1;
+                     for J in 1 .. SkillsAmount loop
+                        EndIndex2 := Index(SkillsValue, ", ", StartIndex2);
+                        if EndIndex2 = 0 then
+                           EndIndex2 := Length(SkillsValue) + 1;
+                        end if;
+                        DotIndex := Index(SkillsValue, "..", StartIndex2);
+                        if DotIndex = 0 or DotIndex > EndIndex2 then
+                           TempAttributes.Append
+                           (New_Item =>
+                              (Integer'Value
+                                 (Slice
+                                    (SkillsValue,
+                                     StartIndex2,
+                                     EndIndex2 - 1)),
+                               0));
+                        else
+                           TempAttributes.Append
+                           (New_Item =>
+                              (Integer'Value
+                                 (Slice
+                                    (SkillsValue,
+                                     StartIndex2,
+                                     DotIndex - 1)),
+                               Integer'Value
+                                 (Slice
+                                    (SkillsValue,
+                                     DotIndex + 2,
+                                     EndIndex2 - 1))));
+                        end if;
+                        StartIndex2 := EndIndex2 + 2;
+                     end loop;
+                     TempRecord.Crew(I).Attributes := TempAttributes;
+                     TempAttributes.Clear;
                      StartIndex := EndIndex + 2;
                   end loop;
                end if;
