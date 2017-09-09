@@ -87,10 +87,10 @@ package body ShipModules is
                elsif FieldName = To_Unbounded_String("Material") then
                   TempRecord.RepairMaterial := Value;
                elsif FieldName = To_Unbounded_String("Skill") then
-                  for I in Skills_Names.Iterate loop
-                     if Value = To_String(Skills_Names(I)) then
+                  for I in Skills_List.Iterate loop
+                     if Value = To_String(Skills_List(I).Name) then
                         TempRecord.RepairSkill :=
-                          UnboundedString_Container.To_Index(I);
+                          SkillsData_Container.To_Index(I);
                         exit;
                      end if;
                   end loop;

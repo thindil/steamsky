@@ -101,6 +101,12 @@ package Game is
      (Positive,
       Unbounded_String);
    package Positive_Container is new Vectors(Positive, Positive);
+   type Skill_Record is -- Data for skills
+   record
+      Name: Unbounded_String; -- Name of skill
+      Attribute: Positive; -- Attribute used with that skill
+   end record;
+   package SkillsData_Container is new Vectors(Positive, Skill_Record);
    BaseSyllablesPre: UnboundedString_Container.Vector;
    BaseSyllablesStart: UnboundedString_Container.Vector;
    BaseSyllablesEnd: UnboundedString_Container.Vector;
@@ -117,7 +123,7 @@ package Game is
    ShipSyllablesStart: UnboundedString_Container.Vector;
    ShipSyllablesMiddle: UnboundedString_Container.Vector;
    ShipSyllablesEnd: UnboundedString_Container.Vector;
-   Skills_Names: UnboundedString_Container.Vector;
+   Skills_List: SkillsData_Container.Vector; -- Contains data for all skills
    RepairTools: Unbounded_String;
    CleaningTools: Unbounded_String;
    HealingTools: Unbounded_String;

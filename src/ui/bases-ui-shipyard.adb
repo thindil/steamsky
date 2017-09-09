@@ -252,7 +252,8 @@ package body Bases.UI.Shipyard is
            (Win => InfoWindow,
             Str =>
               "Repair/Upgrade skill: " &
-              To_String(Skills_Names(Modules_List(ModuleIndex).RepairSkill)));
+              To_String
+                (Skills_List(Modules_List(ModuleIndex).RepairSkill).Name));
          if Modules_List(ModuleIndex).Description /= Null_Unbounded_String then
             CurrentLine := CurrentLine + 2;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);

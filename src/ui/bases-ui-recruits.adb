@@ -81,7 +81,7 @@ package body Bases.UI.Recruits is
          Add
            (Win => InfoWindow,
             Str =>
-              To_String(Skills_Names(Skill(1))) &
+              To_String(Skills_List(Skill(1)).Name) &
               ": " &
               GetSkillLevelName(Skill(2)));
          Get_Cursor_Position

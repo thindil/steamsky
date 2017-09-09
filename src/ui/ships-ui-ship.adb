@@ -180,7 +180,7 @@ package body Ships.UI.Ship is
          Str =>
            "Repair/Upgrade skill: " &
            To_String
-             (Skills_Names(Modules_List(Module.ProtoIndex).RepairSkill)));
+             (Skills_List(Modules_List(Module.ProtoIndex).RepairSkill).Name));
       Get_Cursor_Position
         (Win => InfoWindow,
          Line => CurrentLine,
