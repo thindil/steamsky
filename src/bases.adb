@@ -184,10 +184,10 @@ package body Bases is
              Skills => Skills,
              Attributes => Attributes));
          SkillsAmount :=
-           GetRandom(Skills_Names.First_Index, Skills_Names.Last_Index);
+           GetRandom(Skills_List.First_Index, Skills_List.Last_Index);
          for J in 1 .. SkillsAmount loop
             SkillNumber :=
-              GetRandom(Skills_Names.First_Index, Skills_Names.Last_Index);
+              GetRandom(Skills_List.First_Index, Skills_List.Last_Index);
             SkillLevel := GetRandom(1, 100);
             SkillIndex := 0;
             for C in Skills.Iterate loop

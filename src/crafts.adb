@@ -121,10 +121,9 @@ package body Crafts is
                elsif FieldName = To_Unbounded_String("Workplace") then
                   TempRecord.Workplace := ModuleType'Value(To_String(Value));
                elsif FieldName = To_Unbounded_String("Skill") then
-                  for I in Skills_Names.Iterate loop
-                     if Value = To_String(Skills_Names(I)) then
-                        TempRecord.Skill :=
-                          UnboundedString_Container.To_Index(I);
+                  for I in Skills_List.Iterate loop
+                     if Value = To_String(Skills_List(I).Name) then
+                        TempRecord.Skill := SkillsData_Container.To_Index(I);
                         exit;
                      end if;
                   end loop;

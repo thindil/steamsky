@@ -342,7 +342,7 @@ package body Game is
          To_Unbounded_String("MaleSyllablesMiddle"),
          To_Unbounded_String("MaleSyllablesEnd"),
          To_Unbounded_String("FemaleSyllablesEnd"),
-         To_Unbounded_String("SkillsNames"),
+         To_Unbounded_String("Skills"),
          To_Unbounded_String("ItemsTypes"),
          To_Unbounded_String("MaleVocals"),
          To_Unbounded_String("MaleConsonants"),
@@ -421,9 +421,32 @@ package body Game is
                         (New_Item =>
                            Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 9 =>
-                        Skills_Names.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
+                        declare
+                           ColonIndex, AttributeIndex: Positive;
+                           AttributeName: Unbounded_String;
+                        begin
+                           ColonIndex := Index(Value, ":", StartIndex);
+                           AttributeName :=
+                             Unbounded_Slice
+                               (Value,
+                                ColonIndex + 1,
+                                EndIndex - 1);
+                           for I in Attributes_Names.Iterate loop
+                              if Attributes_Names(I) = AttributeName then
+                                 AttributeIndex :=
+                                   UnboundedString_Container.To_Index(I);
+                                 exit;
+                              end if;
+                           end loop;
+                           Skills_List.Append
+                           (New_Item =>
+                              (Name =>
+                                 Unbounded_Slice
+                                   (Value,
+                                    StartIndex,
+                                    ColonIndex - 1),
+                               Attribute => AttributeIndex));
+                        end;
                      when 10 =>
                         Items_Types.Append
                         (New_Item =>
