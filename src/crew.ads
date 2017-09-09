@@ -74,5 +74,8 @@ package Crew is
    procedure WaitForRest; -- Wait until whole crew is rested
    function GetSkillLevelName
      (SkillLevel: Positive) return String; -- Get member skill level name
+   function GetAttributeLevelName
+     (AttributeLevel: Positive)
+     return String; -- Get member attribute level name
 
 end Crew;
