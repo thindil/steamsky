@@ -103,6 +103,14 @@ friendly trader random event), open file *game.dat* in *data* directory and
 edit like which starts with TradersName. Value after equal sign can be any
 single word.
 
+## Characters attributes
+To change/add/remove characters attributes, open file *game.dat* in *data* 
+directory and edit line which starts with AttributesNames. Each value for item
+type must be separated by comma and space: `, `. Whole AttributesNames entry 
+must be done in one line (if your text editor have automatic line wrap 
+enabled, don't forget to fix it). To add new attribute, just append it name 
+to AttributesNames entry.
+
 ## Items
 
 ### General informations
