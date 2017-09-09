@@ -253,7 +253,9 @@ to AttributesNames entry.
   separated by `..` (double dots).
 - Skills: List of crew members skills and its levels. Each crew member skills
   list is separated by `; ` (semicolon and space). Each crew member skill is
-  separated by `, ` (comma and space).
+  Skill Number`x`Level separated by `, ` (comma and space). Skill level can 
+  be constant value or range from minimum value to max value, separated by 
+  `..` (double dots).
 - Orders: Orders for each crew member. Must be in this same amount as skills of
   crew members. Possible values are: Pilot, Engineer, Gunner, Repair, Craft,
   Upgrading, Talk, Heal, Clean, Rest.
@@ -268,6 +270,10 @@ to AttributesNames entry.
   member).
 - Recipes: List of know recipes indexes (from *recipes* directory, player ship
   only), separated by `, ` (comma and space).
+- Attributes: List of crew members attributes and its levels. Each crew member
+  attributes list is separated by `; ` (semicolon and space). Each crew member 
+  attribute is separated by `, ` (comma and space). Can be constant value or
+  range from minimum value to max value, separated by `..` (double dots).
 
 ## Help
 
