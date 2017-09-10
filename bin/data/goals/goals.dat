@@ -274,4 +274,8 @@ Target = Pirates
 Type = Visit
 Amount = 5
 Target = Pirates
+[82]
+Type = Visit
+Amount = 10
+Target = Pirates
 []
