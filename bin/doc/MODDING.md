@@ -1,25 +1,6 @@
 Some general informations about adding/editing some game elements (skills,
 ships, ships modules, etc.)
 
-## Skills
-
-### General informations
-- Open file *game.dat* in *data* directory and edit line which starts with
-  SkillsNames.
-- Each value for skills must be separated by comma and space: `, `
-- Whole SkillsNames entry must be done in one line (if your text editor have
-  automatic line wrap enabled, don't forget to fix it).
-
-### Changing existing skills names
-- You can change name of any existing skill, just remember, that first skill is
-  always used by Pilot, second by Engineer, third by Gunner and forth by person
-  who talk/trade in bases.
-- After change skill name, you been need to made proper changes in other game
-  data files (recipes, items)
-
-### Adding new skills
-- To add new skill, just append it name to SkillsNames entry.
-
 ## Items types
 
 ### General informations
@@ -110,6 +91,31 @@ type must be separated by comma and space: `, `. Whole AttributesNames entry
 must be done in one line (if your text editor have automatic line wrap 
 enabled, don't forget to fix it). To add new attribute, just append it name 
 to AttributesNames entry.
+
+## Skills
+
+### General informations
+- Open file *game.dat* in *data* directory and edit line which starts with
+  Skills.
+- Each value for skills must be separated by comma and space: `, `
+- Each value have format Skill Name`:`Attribute Name. Attribute Name must be
+  name of existing attribute from AttributesNames list. Example: 
+  *Gunnery:Dexterity*
+- Whole Skills entry must be done in one line (if your text editor have
+  automatic line wrap enabled, don't forget to fix it).
+
+### Changing existing skills
+- You can change name of any existing skill, just remember, that first skill is
+  always used by Pilot, second by Engineer, third by Gunner and forth by person
+  who talk/trade in bases or with ships.
+- After change skill name, you been need to made proper changes in other game
+  data files (recipes, items)
+- To change which attribute is assigned to selected skill, just enter new name
+  of existing attribute from AttributesNames list.
+
+### Adding new skills
+- To add new skill, just append it name and assigned attribute name to Skills
+  entry.
 
 ## Items
 
