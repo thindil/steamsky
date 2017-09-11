@@ -278,4 +278,8 @@ Target = Pirates
 Type = Visit
 Amount = 10
 Target = Pirates
+[83]
+Type = Destroy
+Amount = 200
+Target = Pirates
 []
