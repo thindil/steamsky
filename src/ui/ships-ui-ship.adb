@@ -36,37 +36,11 @@ package body Ships.UI.Ship is
       HaveAmmo: Boolean := False;
       StartColumn, EndColumn, WindowWidth: Column_Position;
       Module: constant ModuleData := PlayerShip.Modules(ModuleIndex);
-      WindowHeight: Line_Position := 9;
+      WindowHeight: Line_Position := Lines - 4;
    begin
       ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
-      case Modules_List(Module.ProtoIndex).MType is
-         when ShipModules.CARGO | TURRET | MEDICAL_ROOM =>
-            WindowHeight := WindowHeight + 1;
-         when CABIN =>
-            WindowHeight := WindowHeight + 3;
-         when ENGINE | GUN =>
-            WindowHeight := WindowHeight + 2;
-         when ALCHEMY_LAB .. GREENHOUSE =>
-            if Module.Data(1) = 0 then
-               WindowHeight := WindowHeight + 2;
-            else
-               WindowHeight := WindowHeight + 3;
-            end if;
-         when ARMOR =>
-            WindowHeight := WindowHeight - 1;
-         when others =>
-            null;
-      end case;
-      if Module.UpgradeAction /= NONE then
-         WindowHeight := WindowHeight + 2;
-      end if;
-      WindowHeight :=
-        WindowHeight +
-        Line_Position
-          (Length(Modules_List(Module.ProtoIndex).Description) /
-           (Natural(Columns / 2) - 4));
       WindowWidth :=
         Column_Position(Length(Modules_List(Module.ProtoIndex).Description));
       BoxWindow := Create(WindowHeight, (Columns / 2), 3, (Columns / 2));
@@ -180,7 +154,12 @@ package body Ships.UI.Ship is
          Str =>
            "Repair/Upgrade skill: " &
            To_String
-             (Skills_List(Modules_List(Module.ProtoIndex).RepairSkill).Name));
+             (Skills_List(Modules_List(Module.ProtoIndex).RepairSkill).Name) &
+           "/" &
+           To_String
+             (Attributes_Names
+                (Skills_List(Modules_List(Module.ProtoIndex).RepairSkill)
+                   .Attribute)));
       Get_Cursor_Position
         (Win => InfoWindow,
          Line => CurrentLine,
@@ -188,8 +167,8 @@ package body Ships.UI.Ship is
       if EndColumn > WindowWidth then
          WindowWidth := EndColumn;
       end if;
-      CurrentLine := 5;
-      Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       case Modules_List(Module.ProtoIndex).MType is
          when ENGINE =>
             Add
@@ -200,7 +179,8 @@ package body Ships.UI.Ship is
             if Module.Data(2) = MaxValue then
                Add(Win => InfoWindow, Str => " (max upgrade)");
             end if;
-            Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+            CurrentLine := CurrentLine + 1;
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add
               (Win => InfoWindow,
                Str => "Fuel usage:" & Integer'Image(Module.Data(1)));
@@ -227,6 +207,7 @@ package body Ships.UI.Ship is
             if Module.Data(2) = MaxValue then
                Add(Win => InfoWindow, Str => " (max upgrade)");
             end if;
+            CurrentLine := CurrentLine + 1;
          when CABIN =>
             if Module.Owner > 0 then
                Add
@@ -236,7 +217,8 @@ package body Ships.UI.Ship is
             else
                Add(Win => InfoWindow, Str => "Owner: none");
             end if;
-            Move_Cursor(Win => InfoWindow, Line => 5, Column => 0);
+            CurrentLine := CurrentLine + 1;
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Quality: ");
             if Module.Data(2) < 30 then
                Add(Win => InfoWindow, Str => "minimal");
@@ -255,7 +237,8 @@ package body Ships.UI.Ship is
             DamagePercent :=
               100 -
               Natural((Float(Module.Data(1)) / Float(Module.Data(2))) * 100.0);
-            Move_Cursor(Win => InfoWindow, Line => 6, Column => 0);
+            CurrentLine := CurrentLine + 1;
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "State: ");
             if DamagePercent = 0 then
                Add(Win => InfoWindow, Str => "clean");
@@ -270,7 +253,7 @@ package body Ships.UI.Ship is
             else
                Add(Win => InfoWindow, Str => "ruined");
             end if;
-            CurrentLine := CurrentLine + 2;
+            CurrentLine := CurrentLine + 1;
          when GUN =>
             Add(Win => InfoWindow, Str => "Ammunition: ");
             if Module.Data(1) >= PlayerShip.Cargo.First_Index and
@@ -436,7 +419,7 @@ package body Ships.UI.Ship is
                Add(Win => InfoWindow, Str => "Medic: none");
             end if;
          when others =>
-            CurrentLine := CurrentLine - 1;
+            null;
       end case;
       if Modules_List(Module.ProtoIndex).Size > 0 then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
@@ -512,8 +495,11 @@ package body Ships.UI.Ship is
            (Win => InfoWindow,
             Line => CurrentLine,
             Column => EndColumn);
-         CurrentLine := CurrentLine + 1;
       end if;
+      if WindowHeight > CurrentLine + 3 then
+         WindowHeight := CurrentLine + 3;
+      end if;
+      Resize(InfoWindow, WindowHeight - 2, WindowWidth);
       ActionsWindow :=
         Create(6, (Columns / 2), WindowHeight + 3, (Columns / 2));
       Add
