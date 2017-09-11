@@ -319,7 +319,11 @@ package body Crafts.UI is
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       Add
         (Win => InfoWindow,
-         Str => "Skill: " & To_String(Skills_List(Recipe.Skill).Name));
+         Str =>
+           "Skill: " &
+           To_String(Skills_List(Recipe.Skill).Name) &
+           "/" &
+           To_String(Attributes_Names(Skills_List(Recipe.Skill).Attribute)));
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       Add

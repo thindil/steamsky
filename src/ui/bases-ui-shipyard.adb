@@ -253,7 +253,19 @@ package body Bases.UI.Shipyard is
             Str =>
               "Repair/Upgrade skill: " &
               To_String
-                (Skills_List(Modules_List(ModuleIndex).RepairSkill).Name));
+                (Skills_List(Modules_List(ModuleIndex).RepairSkill).Name) &
+              "/" &
+              To_String
+                (Attributes_Names
+                   (Skills_List(Modules_List(ModuleIndex).RepairSkill)
+                      .Attribute)));
+         Get_Cursor_Position
+           (Win => InfoWindow,
+            Line => CurrentLine,
+            Column => StartColumn);
+         if WindowWidth < StartColumn + 2 then
+            WindowWidth := StartColumn + 2;
+         end if;
          if Modules_List(ModuleIndex).Description /= Null_Unbounded_String then
             CurrentLine := CurrentLine + 2;
             Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
