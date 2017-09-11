@@ -6,7 +6,6 @@ Skills = 1x5, 5x5; 2x5; 3x5, 5x5
 Attributes = 3, 3, 3, 3; 3, 3, 3, 3; 3, 3, 3, 3
 Orders = Pilot, Engineer, Gunner
 Priorities = Piloting:Normal; Engineering:Normal; Operating guns:Normal
-Attributes = 2, 2, 2, 2; 2, 2, 2, 2
 Recipes = 1, 2, 4, 20
 [2]
 Name = Tiny pirates ship
