@@ -218,8 +218,30 @@ package body Crew is
    end GiveOrders;
 
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) is
-      SkillExp, SkillLevel, SkillIndex: Natural := 0;
+      SkillExp,
+      SkillLevel,
+      SkillIndex,
+      AttributeExp,
+      AttributeLevel: Natural :=
+        0;
+      AttributeIndex: constant Positive := Skills_List(SkillNumber).Attribute;
    begin
+      -- Gain experience in associated attribute
+      if PlayerShip.Crew(CrewIndex).Attributes(AttributeIndex)(1) < 50 then
+         AttributeExp :=
+           PlayerShip.Crew(CrewIndex).Attributes(AttributeIndex)(2) + Amount;
+         AttributeLevel :=
+           PlayerShip.Crew(CrewIndex).Attributes(AttributeIndex)(1);
+         if AttributeExp >= (AttributeLevel * 500) then
+            AttributeExp := AttributeExp - (AttributeLevel * 500);
+            AttributeLevel := AttributeLevel + 1;
+         end if;
+         PlayerShip.Crew(CrewIndex).Attributes(AttributeIndex)(1) :=
+           AttributeLevel;
+         PlayerShip.Crew(CrewIndex).Attributes(AttributeIndex)(2) :=
+           AttributeExp;
+      end if;
+      -- Gain experience in skill
       for I in
         PlayerShip.Crew(CrewIndex).Skills.First_Index ..
             PlayerShip.Crew(CrewIndex).Skills.Last_Index loop
