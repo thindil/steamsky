@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Ability to attack friendly ships
 - Ability to show whole Changelog.md in News
 - Ability to set condition to stop ship auto movement
+- Attributes to characters
 
 ### Changed
 - Updated interface
