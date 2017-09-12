@@ -53,6 +53,8 @@ package body Crew.UI is
       WindowWidth: Column_Position := 18;
       CurrentColumn: Column_Position;
       AttributesHeaderLine, SkillsHeaderLine, OrderHeaderLine: Line_Position;
+      TiredPoints: constant Integer :=
+        Member.Tired - Member.Attributes(ConditionIndex)(1);
       procedure SubHeader(Caption: String; HeaderLine: Line_Position) is
       begin
          Set_Color(InfoWindow, 2);
@@ -91,16 +93,16 @@ package body Crew.UI is
       if Health /= Null_Unbounded_String then
          WindowHeight := WindowHeight + 1;
       end if;
-      if Member.Tired > 20 and Member.Tired < 41 then
+      if TiredPoints > 20 and TiredPoints < 41 then
          Tired := To_Unbounded_String("Bit tired");
          TextColor(2) := 2;
-      elsif Member.Tired > 40 and Member.Tired < 81 then
+      elsif TiredPoints > 40 and TiredPoints < 81 then
          Tired := To_Unbounded_String("Tired");
          TextColor(2) := 1;
-      elsif Member.Tired > 80 and Member.Tired < 100 then
+      elsif TiredPoints > 80 and TiredPoints < 100 then
          Tired := To_Unbounded_String("Very tired");
          TextColor(2) := 3;
-      elsif Member.Tired = 100 then
+      elsif TiredPoints = 100 then
          Tired := To_Unbounded_String("Unconscious");
          TextColor(2) := 4;
       end if;
