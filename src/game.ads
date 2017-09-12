@@ -146,6 +146,7 @@ package Game is
    TradersName: Unbounded_String; -- Word used in ships names for traders ships (for events)
    Attributes_Names: UnboundedString_Container
      .Vector; -- Names of characters attributes
+   ConditionIndex: Positive; -- Index of attibute used as bonus to character condition
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
