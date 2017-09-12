@@ -225,22 +225,26 @@ package body Crew is
       AttributeLevel: Natural :=
         0;
       AttributeIndex: constant Positive := Skills_List(SkillNumber).Attribute;
-   begin
-      -- Gain experience in associated attribute
-      if PlayerShip.Crew(CrewIndex).Attributes(AttributeIndex)(1) < 50 then
+      procedure GainExpInAttribute(Attribute: Positive) is
+      begin
+         if PlayerShip.Crew(CrewIndex).Attributes(Attribute)(1) = 50 then
+            return;
+         end if;
          AttributeExp :=
-           PlayerShip.Crew(CrewIndex).Attributes(AttributeIndex)(2) + Amount;
-         AttributeLevel :=
-           PlayerShip.Crew(CrewIndex).Attributes(AttributeIndex)(1);
+           PlayerShip.Crew(CrewIndex).Attributes(Attribute)(2) + Amount;
+         AttributeLevel := PlayerShip.Crew(CrewIndex).Attributes(Attribute)(1);
          if AttributeExp >= (AttributeLevel * 500) then
             AttributeExp := AttributeExp - (AttributeLevel * 500);
             AttributeLevel := AttributeLevel + 1;
          end if;
-         PlayerShip.Crew(CrewIndex).Attributes(AttributeIndex)(1) :=
-           AttributeLevel;
-         PlayerShip.Crew(CrewIndex).Attributes(AttributeIndex)(2) :=
-           AttributeExp;
-      end if;
+         PlayerShip.Crew(CrewIndex).Attributes(Attribute)(1) := AttributeLevel;
+         PlayerShip.Crew(CrewIndex).Attributes(Attribute)(2) := AttributeExp;
+      end GainExpInAttribute;
+   begin
+      -- Gain experience in condition assigned attribute
+      GainExpInAttribute(ConditionIndex);
+      -- Gain experience in associated attribute
+      GainExpInAttribute(AttributeIndex);
       -- Gain experience in skill
       for I in
         PlayerShip.Crew(CrewIndex).Skills.First_Index ..
