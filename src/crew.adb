@@ -407,7 +407,8 @@ package body Crew is
             end if;
             Member.PreviousOrder := Rest;
          end if;
-         if TiredLevel > 80 and Member.Order /= Rest then
+         if TiredLevel > (80 + Member.Attributes(ConditionIndex)(1)) and
+           Member.Order /= Rest then
             Member.PreviousOrder := Member.Order;
             Member.Order := Rest;
             Member.OrderTime := 15;
@@ -514,8 +515,10 @@ package body Crew is
                if PlayerShip.Crew(I).Order /= Talk then
                   TiredLevel := TiredLevel + Times;
                end if;
-               if TiredLevel > 100 then
-                  TiredLevel := 100;
+               if TiredLevel >
+                 (100 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1)) then
+                  TiredLevel :=
+                    (100 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1));
                end if;
                case PlayerShip.Crew(I).Order is
                   when Pilot =>
