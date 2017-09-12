@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Ability to show whole Changelog.md in News
 - Ability to set condition to stop ship auto movement
 - Attributes to characters
+- Raise character endurance with Condition attribute
 
 ### Changed
 - Updated interface
