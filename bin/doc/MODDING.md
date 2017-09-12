@@ -81,7 +81,7 @@ must be existing item index from any items file from *data/items* directory.
 ## Traders ships name
 To change which word in ship names is used to determine trader ship (needed for
 friendly trader random event), open file *game.dat* in *data* directory and
-edit like which starts with TradersName. Value after equal sign can be any
+edit line which starts with TradersName. Value after equal sign can be any
 single word.
 
 ## Characters attributes
@@ -116,6 +116,11 @@ to AttributesNames entry.
 ### Adding new skills
 - To add new skill, just append it name and assigned attribute name to Skills
   entry.
+
+## Condition attribute name
+To change which attribute is used to raise character condition, open file 
+*game.dat* in *data* directory and edit line which starts with ConditionName.
+Value after equal sign must be existing attribute name.
 
 ## Items
 
