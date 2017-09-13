@@ -20,7 +20,6 @@ with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Messages; use Messages;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
-with Items; use Items;
 with UserInterface; use UserInterface;
 with Utils.UI; use Utils.UI;
 
@@ -173,7 +172,7 @@ package body Ships.UI is
               ("You dropped" &
                Positive'Image(DropAmount) &
                " " &
-               GetItemName(ItemIndex) &
+               GetItemName(PlayerShip.Cargo(ItemIndex)) &
                ".",
                OtherMessage);
             UpdateCargo

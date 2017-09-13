@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with Items; use Items;
 
 package Crew is
 
@@ -36,14 +37,6 @@ package Crew is
    type Orders_Array is array(1 .. 9) of Natural;
    type Attributes_Array is array(1 .. 2) of Natural;
    package Attributes_Container is new Vectors(Positive, Attributes_Array);
-   type InventoryData is -- Data structure for item in inventory
-   record
-      ProtoIndex: Positive; -- Index of prototype
-      Amount: Positive; -- Amount of item
-      Name: Unbounded_String; -- Name of item if different than default
-      Durability: Natural; -- Current durability of item
-   end record;
-   package Inventory_Container is new Vectors(Positive, InventoryData);
    type Member_Data is -- Data structure for ship crew member
    record
       Name: Unbounded_String; -- Name of member
