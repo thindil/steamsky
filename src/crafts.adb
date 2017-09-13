@@ -395,6 +395,25 @@ package body Crafts is
                             (Inventory =>
                                PlayerShip.Crew(CrafterIndex).Inventory,
                              ItemType => Recipe.Tool);
+                        if ToolIndex = 0 then
+                           ToolIndex :=
+                             FindItem
+                               (Inventory => PlayerShip.Cargo,
+                                ItemType => Recipe.Tool);
+                           if ToolIndex > 0 then
+                              UpdateInventory
+                                (CrafterIndex,
+                                 PlayerShip.Cargo.Element(ToolIndex)
+                                   .ProtoIndex,
+                                 1,
+                                 ToolIndex);
+                              ToolIndex :=
+                                FindItem
+                                  (Inventory =>
+                                     PlayerShip.Crew(CrafterIndex).Inventory,
+                                   ItemType => Recipe.Tool);
+                           end if;
+                        end if;
                      else
                         ToolIndex := 0;
                      end if;
