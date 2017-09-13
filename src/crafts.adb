@@ -222,7 +222,7 @@ package body Crafts is
                    Recipe.MaterialAmounts
                      (UnboundedString_Container.To_Index(J)) then
                   MaterialIndexes.Append
-                  (New_Item => Cargo_Container.To_Index(I));
+                  (New_Item => Inventory_Container.To_Index(I));
                   if MaxAmount >
                     PlayerShip.Cargo(I).Amount /
                       Recipe.MaterialAmounts
@@ -239,7 +239,8 @@ package body Crafts is
          for I in PlayerShip.Cargo.Iterate loop
             if Items_List(PlayerShip.Cargo(I).ProtoIndex).Name =
               Items_List(Recipe.ResultIndex).Name then
-               MaterialIndexes.Append(New_Item => Cargo_Container.To_Index(I));
+               MaterialIndexes.Append
+               (New_Item => Inventory_Container.To_Index(I));
                exit;
             end if;
          end loop;
@@ -488,7 +489,7 @@ package body Crafts is
                         end loop;
                      end loop;
                      if ToolIndex > 0 then
-                        DamageCargo(ToolIndex, CrafterIndex, Recipe.Skill);
+                        DamageItem(ToolIndex, CrafterIndex, Recipe.Skill);
                      end if;
                      if Module.Data(1) > 0 then
                         Amount :=

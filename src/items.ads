@@ -48,5 +48,15 @@ package Items is
       ItemType: Unbounded_String :=
         Null_Unbounded_String)
       return Natural; -- Return vector index of item or zero if item not found
+   function GetItemName
+     (ItemIndex: Positive;
+      MemberIndex: Natural :=
+        0)
+     return String; -- Get name of item in ship cargo or character inventory
+   procedure DamageItem
+     (CargoIndex: Positive;
+      CrewIndex,
+      SkillIndex: Natural :=
+        0); -- Check if item in ship cargo or character inventory was damaged
 
 end Items;

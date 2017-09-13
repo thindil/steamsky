@@ -51,6 +51,7 @@ package body Game is
       BasePopulation: Natural;
       TmpCargo: BaseCargo_Container.Vector;
       TmpAttributes: Attributes_Container.Vector;
+      TmpInventory: Inventory_Container.Vector;
    begin
       -- Save new game configuration
       NewGameSettings :=
@@ -208,7 +209,8 @@ package body Game is
           PreviousOrder => Rest,
           OrderTime => 15,
           Orders => (0, 0, 0, 1, 1, 1, 2, 1, 1),
-          Attributes => TmpAttributes));
+          Attributes => TmpAttributes,
+          Inventory => TmpInventory));
       for Module of PlayerShip.Modules loop
          if Module.Owner > 0 then
             Module.Owner := Module.Owner + 1;

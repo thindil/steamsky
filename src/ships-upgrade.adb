@@ -195,10 +195,10 @@ package body Ships.Upgrade is
               Modules_List
                 (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
                 .RepairMaterial then
-               UpgradeMaterial := Cargo_Container.To_Index(I);
+               UpgradeMaterial := Inventory_Container.To_Index(I);
             elsif Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
               RepairTools then
-               UpgradeTools := Cargo_Container.To_Index(I);
+               UpgradeTools := Inventory_Container.To_Index(I);
             end if;
             exit when UpgradeMaterial > 0 and UpgradeTools > 0;
          end loop;
@@ -293,7 +293,7 @@ package body Ships.Upgrade is
               (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
               .RepairSkill,
             WorkerIndex);
-         DamageCargo
+         DamageItem
            (UpgradeTools,
             WorkerIndex,
             Modules_List
