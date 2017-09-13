@@ -84,45 +84,4 @@ package body Ships.Cargo is
       return FreeCargo;
    end FreeCargo;
 
-   function FindCargo
-     (ProtoIndex: Natural := 0;
-      ItemType: Unbounded_String := Null_Unbounded_String;
-      Durability: Natural := 101;
-      Ship: ShipRecord := PlayerShip) return Natural is
-      CargoIndex: Natural := 0;
-   begin
-      if ProtoIndex > 0 then
-         for I in Ship.Cargo.Iterate loop
-            if Durability < 101 then
-               if Ship.Cargo(I).ProtoIndex = ProtoIndex and
-                 Ship.Cargo(I).Durability = Durability then
-                  CargoIndex := Inventory_Container.To_Index(I);
-                  exit;
-               end if;
-            else
-               if Ship.Cargo(I).ProtoIndex = ProtoIndex then
-                  CargoIndex := Inventory_Container.To_Index(I);
-                  exit;
-               end if;
-            end if;
-         end loop;
-      elsif ItemType /= Null_Unbounded_String then
-         for I in Ship.Cargo.Iterate loop
-            if Durability < 101 then
-               if Items_List(Ship.Cargo(I).ProtoIndex).IType = ItemType and
-                 Ship.Cargo(I).Durability = Durability then
-                  CargoIndex := Inventory_Container.To_Index(I);
-                  exit;
-               end if;
-            else
-               if Items_List(Ship.Cargo(I).ProtoIndex).IType = ItemType then
-                  CargoIndex := Inventory_Container.To_Index(I);
-                  exit;
-               end if;
-            end if;
-         end loop;
-      end if;
-      return CargoIndex;
-   end FindCargo;
-
 end Ships.Cargo;

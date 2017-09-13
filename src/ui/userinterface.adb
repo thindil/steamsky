@@ -23,7 +23,6 @@ use Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI; use Ships.UI;
 with Ships.UI.Cargo; use Ships.UI.Cargo;
@@ -281,7 +280,10 @@ package body UserInterface is
             end if;
          elsif Event = Disease then
             if HaveTrader then
-               ItemIndex := FindCargo(ItemType => HealingTools);
+               ItemIndex :=
+                 FindItem
+                   (Inventory => PlayerShip.Cargo,
+                    ItemType => HealingTools);
                if ItemIndex > 0 then
                   OrdersAmount := OrdersAmount + 2;
                end if;
@@ -327,7 +329,10 @@ package body UserInterface is
                MenuIndex := MenuIndex + 1;
             when Disease =>
                if HaveTrader then
-                  ItemIndex := FindCargo(ItemType => HealingTools);
+                  ItemIndex :=
+                    FindItem
+                      (Inventory => PlayerShip.Cargo,
+                       ItemType => HealingTools);
                   if ItemIndex > 0 then
                      Orders_Items.all(MenuIndex) :=
                        New_Item("Deliver medicines for free");

@@ -19,7 +19,6 @@ with Maps; use Maps;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
 with Bases.Ship; use Bases.Ship;
 with Utils.UI; use Utils.UI;
 with Trades; use Trades;
@@ -134,7 +133,7 @@ package body Bases.UI.Repair is
          CurrentMenuIndex := 1;
       end if;
       Set_Current(TradeMenu, Repair_Items.all(CurrentMenuIndex));
-      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       Move_Cursor(Line => 7, Column => (Columns / 2));
       if MoneyIndex2 > 0 then
          Add
