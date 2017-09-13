@@ -207,10 +207,35 @@ package body Crew is
          when Clean =>
             AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
       end case;
-      PlayerShip.Crew(MemberIndex).Order := GivenOrder;
+      if ToolsIndex > 0 then
+         UpdateInventory
+           (MemberIndex,
+            PlayerShip.Cargo.Element(ToolsIndex).ProtoIndex,
+            1,
+            ToolsIndex);
+      end if;
       if GivenOrder = Rest then
          PlayerShip.Crew(MemberIndex).PreviousOrder := Rest;
+         if PlayerShip.Crew(MemberIndex).Order = Repair or
+           PlayerShip.Crew(MemberIndex).Order = Clean or
+           PlayerShip.Crew(MemberIndex).Order = Upgrading then
+            if PlayerShip.Crew(MemberIndex).Order = Clean then
+               RequiredTool := CleaningTools;
+            else
+               RequiredTool := RepairTools;
+            end if;
+            ToolsIndex :=
+              FindItem
+                (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+                 ItemType => RequiredTool);
+            UpdateInventory
+              (MemberIndex,
+               PlayerShip.Crew(MemberIndex).Inventory.Element(ToolsIndex)
+                 .ProtoIndex,
+               -1);
+         end if;
       end if;
+      PlayerShip.Crew(MemberIndex).Order := GivenOrder;
       PlayerShip.Crew(MemberIndex).OrderTime := 15;
       if CheckPriorities then
          UpdateOrders;
