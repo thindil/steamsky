@@ -41,14 +41,6 @@ package Ships is
       Data: Data_Array; -- Various data for module (depends on module)
    end record;
    package Modules_Container is new Vectors(Positive, ModuleData);
-   type CargoData is -- Data structure for ship cargo
-   record
-      ProtoIndex: Positive; -- Index of prototype
-      Amount: Positive; -- Amount of cargo
-      Name: Unbounded_String; -- Name of item if different than default
-      Durability: Natural; -- Current durability of item
-   end record;
-   package Cargo_Container is new Vectors(Positive, CargoData);
    package Crew_Container is new Vectors(Positive, Member_Data);
    type ShipRecord is -- Data structure for ships
    record
@@ -57,7 +49,7 @@ package Ships is
       SkyY: Integer; -- Y coordinate on sky map
       Speed: ShipSpeed; -- Speed of ship
       Modules: Modules_Container.Vector; -- List of ship modules
-      Cargo: Cargo_Container.Vector; -- List of ship cargo
+      Cargo: Inventory_Container.Vector; -- List of ship cargo
       Crew: Crew_Container.Vector; -- List of ship crew
       UpgradeModule: Natural; -- Number of module to upgrade
       DestinationX: Integer; -- Destination X coordinate

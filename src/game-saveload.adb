@@ -371,6 +371,16 @@ package body Game.SaveLoad is
             RawValue := To_Unbounded_String(Integer'Image(Attribute(2)));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
          end loop;
+         RawValue := To_Unbounded_String(Member.Inventory.Length'Img);
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         for Item of Member.Inventory loop
+            Put(SaveGame, To_String(Items_List(Item.ProtoIndex).Index) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            Put(SaveGame, To_String(Item.Name) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(Item.Durability));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         end loop;
       end loop;
       RawValue := To_Unbounded_String(PlayerShip.Missions.Length'Img);
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
@@ -500,7 +510,7 @@ package body Game.SaveLoad is
       VectorLength, SkillsLength: Natural;
       Skills: Skills_Container.Vector;
       ShipModules: Modules_Container.Vector;
-      ShipCargo: Cargo_Container.Vector;
+      ShipCargo, Inventory: Inventory_Container.Vector;
       ShipCrew: Crew_Container.Vector;
       Message: Unbounded_String;
       MType: Message_Type;
@@ -726,6 +736,7 @@ package body Game.SaveLoad is
       for I in 1 .. VectorLength loop
          Skills.Clear;
          Attributes.Clear;
+         Inventory.Clear;
          ShipCrew.Append
          (New_Item =>
             (Name => ReadData,
@@ -740,7 +751,8 @@ package body Game.SaveLoad is
                Crew_Orders'Val(Integer'Value(To_String(ReadData))),
              OrderTime => Integer'Value(To_String(ReadData)),
              Orders => (others => 0),
-             Attributes => Attributes));
+             Attributes => Attributes,
+             Inventory => Inventory));
          SkillsLength := Positive'Value(To_String(ReadData));
          for J in 1 .. SkillsLength loop
             Skills.Append
@@ -759,9 +771,19 @@ package body Game.SaveLoad is
                (Natural'Value(To_String(ReadData)),
                 Natural'Value(To_String(ReadData))));
          end loop;
+         VectorLength := Positive'Value(To_String(ReadData));
+         for I in 1 .. VectorLength loop
+            Inventory.Append
+            (New_Item =>
+               (ProtoIndex => FindProtoItem(ReadData),
+                Amount => Positive'Value(To_String(ReadData)),
+                Name => ReadData,
+                Durability => Positive'Value(To_String(ReadData))));
+         end loop;
          ShipCrew(ShipCrew.Last_Index).Skills := Skills;
          ShipCrew(ShipCrew.Last_Index).Attributes := Attributes;
          ShipCrew(ShipCrew.Last_Index).Orders := TmpOrders;
+         ShipCrew(ShipCrew.Last_Index).Inventory := Inventory;
       end loop;
       PlayerShip.Crew := ShipCrew;
       VectorLength := Natural'Value(To_String(ReadData));

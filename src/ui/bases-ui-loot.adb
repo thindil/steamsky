@@ -235,7 +235,7 @@ package body Bases.UI.Loot is
          Loot_Items.all(MenuIndex) :=
            New_Item
              (To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name),
-              Positive'Image(Cargo_Container.To_Index(I)));
+              Positive'Image(Inventory_Container.To_Index(I)));
          MenuIndex := MenuIndex + 1;
       end loop;
       for I in SkyBases(BaseIndex).Cargo.Iterate loop

@@ -33,6 +33,7 @@ package body Bases.Trade is
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       TraderIndex: Positive;
+      Inventory: Inventory_Container.Vector;
    begin
       MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
       if MoneyIndex2 = 0 then
@@ -57,7 +58,8 @@ package body Bases.Trade is
           PreviousOrder => Rest,
           OrderTime => 15,
           Orders => (others => 0),
-          Attributes => Recruit.Attributes));
+          Attributes => Recruit.Attributes,
+          Inventory => Inventory));
       UpdateCargo
         (Ship => PlayerShip,
          CargoIndex => MoneyIndex2,

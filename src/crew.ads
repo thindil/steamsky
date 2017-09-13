@@ -36,6 +36,14 @@ package Crew is
    type Orders_Array is array(1 .. 9) of Natural;
    type Attributes_Array is array(1 .. 2) of Natural;
    package Attributes_Container is new Vectors(Positive, Attributes_Array);
+   type InventoryData is -- Data structure for item in inventory
+   record
+      ProtoIndex: Positive; -- Index of prototype
+      Amount: Positive; -- Amount of item
+      Name: Unbounded_String; -- Name of item if different than default
+      Durability: Natural; -- Current durability of item
+   end record;
+   package Inventory_Container is new Vectors(Positive, InventoryData);
    type Member_Data is -- Data structure for ship crew member
    record
       Name: Unbounded_String; -- Name of member
@@ -52,6 +60,7 @@ package Crew is
       Orders: Orders_Array; -- Priority of orders of member
       Attributes: Attributes_Container
         .Vector; -- Levels and experience in attributes of member
+      Inventory: Inventory_Container.Vector; -- Owned items by member
    end record;
    Crew_Order_Error: exception; -- Raised when new order can't be set for selected crew member
 
@@ -77,5 +86,13 @@ package Crew is
    function GetAttributeLevelName
      (AttributeLevel: Positive)
      return String; -- Get member attribute level name
+   procedure UpdateInventory
+     (MemberIndex, ProtoIndex: Positive;
+      Amount: Integer;
+      CargoIndex: Natural := 0); -- Update member inventory
+   function FindInventory
+     (MemberIndex,
+      ProtoIndex: Positive)
+     return Natural; -- Find item in member inventory, return item index or 0 if item not found.
 
 end Crew;

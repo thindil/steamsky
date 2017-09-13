@@ -274,7 +274,7 @@ package body Combat is
                            for J in Ship.Cargo.Iterate loop
                               if Ship.Cargo(J).ProtoIndex =
                                 Objects_Container.To_Index(I) then
-                                 AmmoIndex := Cargo_Container.To_Index(J);
+                                 AmmoIndex := Inventory_Container.To_Index(J);
                                  Ship.Modules(K).Data(1) := AmmoIndex;
                                  exit;
                               end if;
@@ -737,7 +737,8 @@ package body Combat is
                         for J in Enemy.Ship.Cargo.Iterate loop
                            if Enemy.Ship.Cargo(J).ProtoIndex =
                              Objects_Container.To_Index(K) then
-                              EnemyAmmoIndex := Cargo_Container.To_Index(J);
+                              EnemyAmmoIndex :=
+                                Inventory_Container.To_Index(J);
                               exit;
                            end if;
                         end loop;

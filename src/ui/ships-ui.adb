@@ -173,7 +173,7 @@ package body Ships.UI is
               ("You dropped" &
                Positive'Image(DropAmount) &
                " " &
-               GetCargoName(ItemIndex) &
+               GetItemName(ItemIndex) &
                ".",
                OtherMessage);
             UpdateCargo

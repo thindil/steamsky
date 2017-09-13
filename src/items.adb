@@ -19,6 +19,11 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Log; use Log;
+with Ships; use Ships;
+with Ships.Crew; use Ships.Crew;
+with Ships.Cargo; use Ships.Cargo;
+with Crew; use Crew;
+with Utils; use Utils;
 
 package body Items is
 
@@ -153,5 +158,139 @@ package body Items is
       end if;
       return 0;
    end FindProtoItem;
+
+   function GetItemName
+     (ItemIndex: Positive;
+      MemberIndex: Natural := 0) return String is
+   begin
+      if MemberIndex = 0 then
+         if PlayerShip.Cargo(ItemIndex).Name /= Null_Unbounded_String then
+            return To_String(PlayerShip.Cargo(ItemIndex).Name);
+         else
+            return To_String
+                (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Name);
+         end if;
+      else
+         if PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Name /=
+           Null_Unbounded_String then
+            return To_String
+                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Name);
+         else
+            return To_String
+                (Items_List
+                   (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
+                      .ProtoIndex)
+                   .Name);
+         end if;
+      end if;
+   end GetItemName;
+
+   procedure DamageItem
+     (CargoIndex: Positive;
+      CrewIndex, SkillIndex: Natural := 0) is
+      SelectedItem: InventoryData := PlayerShip.Cargo(CargoIndex);
+      DamageChance: Integer := Items_List(SelectedItem.ProtoIndex).Value;
+      I, LastIndex: Natural;
+   begin
+      if CrewIndex > 0 then
+         if SkillIndex > 0 then
+            DamageChance :=
+              DamageChance - (GetSkillLevel(CrewIndex, SkillIndex) / 5);
+            if DamageChance < 0 then
+               DamageChance := 0;
+            end if;
+         end if;
+         SelectedItem := PlayerShip.Crew(CrewIndex).Inventory(CargoIndex);
+         I := PlayerShip.Crew(CrewIndex).Inventory.First_Index;
+         LastIndex := PlayerShip.Crew(CrewIndex).Inventory.Last_Index;
+      else
+         I := PlayerShip.Cargo.First_Index;
+         LastIndex := PlayerShip.Cargo.Last_Index;
+      end if;
+      if GetRandom(1, 100) > DamageChance then -- Cargo not damaged
+         return;
+      end if;
+      if SelectedItem.Amount > 1 then
+         if CrewIndex = 0 then
+            PlayerShip.Cargo.Append
+            (New_Item =>
+               (ProtoIndex => SelectedItem.ProtoIndex,
+                Amount => (SelectedItem.Amount - 1),
+                Name => SelectedItem.Name,
+                Durability => SelectedItem.Durability));
+         else
+            PlayerShip.Crew(CrewIndex).Inventory.Append
+            (New_Item =>
+               (ProtoIndex => SelectedItem.ProtoIndex,
+                Amount => (SelectedItem.Amount - 1),
+                Name => SelectedItem.Name,
+                Durability => SelectedItem.Durability));
+         end if;
+         SelectedItem.Amount := 1;
+      end if;
+      SelectedItem.Durability := SelectedItem.Durability - 1;
+      if SelectedItem.Durability = 0 then -- Item destroyed
+         if CrewIndex = 0 then
+            UpdateCargo
+              (Ship => PlayerShip,
+               CargoIndex => CargoIndex,
+               Amount => -1);
+         else
+            UpdateInventory(CrewIndex, SelectedItem.ProtoIndex, -1);
+         end if;
+         return;
+      end if;
+      if CrewIndex = 0 then
+         PlayerShip.Cargo(CargoIndex) := SelectedItem;
+      else
+         PlayerShip.Crew(CrewIndex).Inventory(CargoIndex) := SelectedItem;
+      end if;
+      while I <= LastIndex loop
+         if CrewIndex = 0 then
+            for J in
+              PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
+               if PlayerShip.Cargo(I).ProtoIndex =
+                 PlayerShip.Cargo(J).ProtoIndex and
+                 PlayerShip.Cargo(I).Durability =
+                   PlayerShip.Cargo(J).Durability and
+                 I /= J then
+                  UpdateCargo
+                    (Ship => PlayerShip,
+                     CargoIndex => J,
+                     Amount => (0 - PlayerShip.Cargo.Element(J).Amount));
+                  UpdateCargo
+                    (Ship => PlayerShip,
+                     CargoIndex => I,
+                     Amount => PlayerShip.Cargo(J).Amount);
+                  I := I - 1;
+                  exit;
+               end if;
+            end loop;
+         else
+            for J in
+              PlayerShip.Crew(CrewIndex).Inventory.First_Index ..
+                  PlayerShip.Crew(CrewIndex).Inventory.Last_Index loop
+               if PlayerShip.Crew(CrewIndex).Inventory(I).ProtoIndex =
+                 PlayerShip.Crew(CrewIndex).Inventory(J).ProtoIndex and
+                 PlayerShip.Crew(CrewIndex).Inventory(I).Durability =
+                   PlayerShip.Crew(CrewIndex).Inventory(J).Durability and
+                 I /= J then
+                  UpdateInventory
+                    (CrewIndex,
+                     J,
+                     (0 -
+                      PlayerShip.Crew(CrewIndex).Inventory.Element(J).Amount));
+                  UpdateInventory
+                    (CrewIndex,
+                     I,
+                     PlayerShip.Crew(CrewIndex).Inventory(J).Amount);
+                  I := I - 1;
+                  exit;
+               end if;
+            end loop;
+         end if;
+         I := I + 1;
+      end loop;
+   end DamageItem;
 
 end Items;

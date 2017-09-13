@@ -31,6 +31,7 @@ with Events; use Events;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
 with Bases.UI; use Bases.UI;
+with Crew; use Crew;
 
 package body Trades.UI is
 
@@ -408,7 +409,7 @@ package body Trades.UI is
             Trade_Items.all(MenuIndex) :=
               New_Item
                 (To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name),
-                 Positive'Image(Cargo_Container.To_Index(I)));
+                 Positive'Image(Inventory_Container.To_Index(I)));
             MenuIndex := MenuIndex + 1;
          end if;
       end loop;

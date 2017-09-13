@@ -35,12 +35,5 @@ package Ships.Cargo is
       Durability: Natural := 101;
       Ship: ShipRecord := PlayerShip) return Natural; -- Return
    -- index of item, 0 if no item in ship cargo
-   function GetCargoName
-     (CargoIndex: Positive) return String; -- Get name of cargo
-   procedure DamageCargo
-     (CargoIndex: Positive;
-      CrewIndex,
-      SkillIndex: Natural :=
-        0); -- Check if item in ship cargo was damaged
 
 end Ships.Cargo;

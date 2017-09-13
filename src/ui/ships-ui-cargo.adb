@@ -167,7 +167,7 @@ package body Ships.UI.Cargo is
       MenuLength: Column_Position;
    begin
       for I in PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-         Cargo_Items.all(I) := New_Item(GetCargoName(I));
+         Cargo_Items.all(I) := New_Item(GetItemName(I));
       end loop;
       Cargo_Items.all(Cargo_Items'Last) := Null_Item;
       ShipsMenu := New_Menu(Cargo_Items);
