@@ -629,7 +629,9 @@ package body Crew is
                               else
                                  Module.Data(1) := Module.Data(1) + Times;
                               end if;
-                              DamageItem(ToolIndex);
+                              DamageItem
+                                (PlayerShip.Crew(I).Inventory,
+                                 ToolIndex);
                               exit;
                            end if;
                         end loop;

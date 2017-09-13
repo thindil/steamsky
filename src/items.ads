@@ -60,9 +60,9 @@ package Items is
      (Item: InventoryData)
      return String; -- Get name of item in ship cargo or character inventory
    procedure DamageItem
-     (CargoIndex: Positive;
-      CrewIndex,
-      SkillIndex: Natural :=
+     (Inventory: in out Inventory_Container.Vector;
+      ItemIndex: Positive;
+      SkillLevel: Natural :=
         0); -- Check if item in ship cargo or character inventory was damaged
 
 end Items;

@@ -870,10 +870,13 @@ package body Ships is
                      Crew_Container.To_Index(J));
                   CrewRepairPoints(PointsIndex) := RepairPoints;
                   DamageItem
-                    (ToolsIndex,
-                     Crew_Container.To_Index(J),
-                     Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                       .RepairSkill);
+                    (PlayerShip.Crew(J).Inventory,
+                     ToolsIndex,
+                     GetSkillLevel
+                       (Crew_Container.To_Index(J),
+                        Modules_List
+                          (PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                          .RepairSkill));
                   exit when not RepairNeeded;
                end if;
             end if;
