@@ -658,7 +658,7 @@ package body Combat is
          end case;
       end loop;
       EnemyPilotIndex := FindMember(Pilot, Enemy.Ship.Crew);
-      if FindCargo(ItemType => FuelType) > 0 then
+      if FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType) > 0 then
          HaveFuel := True;
       end if;
       if not HaveFuel then

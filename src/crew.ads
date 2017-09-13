@@ -83,9 +83,5 @@ package Crew is
      (MemberIndex, ProtoIndex: Positive;
       Amount: Integer;
       CargoIndex: Natural := 0); -- Update member inventory
-   function FindInventory
-     (MemberIndex,
-      ProtoIndex: Positive)
-     return Natural; -- Find item in member inventory, return item index or 0 if item not found.
 
 end Crew;

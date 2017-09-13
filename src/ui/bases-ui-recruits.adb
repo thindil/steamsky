@@ -19,7 +19,6 @@ with Ada.Exceptions; use Ada.Exceptions;
 with Maps; use Maps;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
 with Items; use Items;
 with Bases.Trade; use Bases.Trade;
 with Utils.UI; use Utils.UI;
@@ -99,7 +98,7 @@ package body Bases.UI.Recruits is
       WindowFrame(InfoWindow, 2, "Recruit info");
       OptionsWindow :=
         Create(4, (Columns / 2), WindowHeight + 3, (Columns / 2));
-      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if MoneyIndex2 > 0 then
          Add
            (Win => OptionsWindow,

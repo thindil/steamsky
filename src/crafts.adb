@@ -377,7 +377,7 @@ package body Crafts is
                         end loop;
                      end if;
                      for MaterialIndex of MaterialIndexes loop
-                        if FindCargo(MaterialIndex) = 0 then
+                        if FindItem(PlayerShip.Cargo, MaterialIndex) = 0 then
                            AddMessage
                              ("You don't have crafting materials for " &
                               To_String(RecipeName) &
@@ -390,7 +390,11 @@ package body Crafts is
                         end if;
                      end loop;
                      if Recipe.Tool /= To_Unbounded_String("None") then
-                        ToolIndex := FindCargo(ItemType => Recipe.Tool);
+                        ToolIndex :=
+                          FindItem
+                            (Inventory =>
+                               PlayerShip.Crew(CrafterIndex).Inventory,
+                             ItemType => Recipe.Tool);
                      else
                         ToolIndex := 0;
                      end if;

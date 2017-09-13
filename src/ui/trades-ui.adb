@@ -90,14 +90,16 @@ package body Trades.UI is
            Integer'Value(Description(Current(TradeMenu))) * (-1);
          if BaseIndex > 0 then
             CargoIndex :=
-              FindCargo
-                (ProtoIndex => ItemIndex,
+              FindItem
+                (Inventory => PlayerShip.Cargo,
+                 ProtoIndex => ItemIndex,
                  Durability =>
                    SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
          else
             CargoIndex :=
-              FindCargo
-                (ProtoIndex => ItemIndex,
+              FindItem
+                (Inventory => PlayerShip.Cargo,
+                 ProtoIndex => ItemIndex,
                  Durability => TraderCargo(BaseItemIndex).Durability);
          end if;
       end if;
@@ -298,7 +300,7 @@ package body Trades.UI is
          Color => 1,
          Attr => BoldCharacters);
       CurrentLine := CurrentLine + 1;
-      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
       if MoneyIndex2 > 0 then
          Add
@@ -390,13 +392,15 @@ package body Trades.UI is
       if BaseIndex > 0 then
          for I in Items_List.Iterate loop
             if Items_List(I).Buyable(BaseType) and
-              FindCargo(Objects_Container.To_Index(I)) = 0 then
+              FindItem(PlayerShip.Cargo, Objects_Container.To_Index(I)) =
+                0 then
                ItemsAmount := ItemsAmount + 1;
             end if;
          end loop;
       else
          for Item of TraderCargo loop
-            if FindCargo(Item.ProtoIndex) = 0 and Item.Price > 0 then
+            if FindItem(PlayerShip.Cargo, Item.ProtoIndex) = 0 and
+              Item.Price > 0 then
                ItemsAmount := ItemsAmount + 1;
             end if;
          end loop;
@@ -415,7 +419,8 @@ package body Trades.UI is
       if BaseIndex > 0 then
          for I in Items_List.Iterate loop
             if Items_List(I).Buyable(BaseType) and
-              FindCargo(Objects_Container.To_Index(I)) = 0 then
+              FindItem(PlayerShip.Cargo, Objects_Container.To_Index(I)) =
+                0 then
                BaseItemIndex := FindBaseCargo(Objects_Container.To_Index(I));
                Trade_Items.all(MenuIndex) :=
                  New_Item
@@ -426,7 +431,7 @@ package body Trades.UI is
          end loop;
       else
          for I in TraderCargo.Iterate loop
-            if FindCargo(TraderCargo(I).ProtoIndex) = 0 and
+            if FindItem(PlayerShip.Cargo, TraderCargo(I).ProtoIndex) = 0 and
               TraderCargo(I).Price > 0 then
                BaseItemIndex := BaseCargo_Container.To_Index(I);
                Trade_Items.all(MenuIndex) :=
@@ -470,7 +475,8 @@ package body Trades.UI is
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       CaptionText: Unbounded_String;
-      MoneyIndex2: constant Natural := FindCargo(FindProtoItem(MoneyIndex));
+      MoneyIndex2: constant Natural :=
+        FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       BaseItemIndex: Natural := 0;
       CargoIndex: Integer;
    begin
@@ -699,24 +705,29 @@ package body Trades.UI is
               Integer'Value(Description(Current(TradeMenu))) * (-1);
             if BaseIndex > 0 then
                CargoIndex :=
-                 FindCargo
-                   (ProtoIndex =>
+                 FindItem
+                   (Inventory => PlayerShip.Cargo,
+                    ProtoIndex =>
                       SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex,
                     Durability =>
                       SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
                if CargoIndex = 0 then
                   CargoIndex :=
-                    FindCargo
-                      (SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex);
+                    FindItem
+                      (PlayerShip.Cargo,
+                       SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex);
                end if;
             else
                CargoIndex :=
-                 FindCargo
-                   (ProtoIndex => TraderCargo(BaseItemIndex).ProtoIndex,
+                 FindItem
+                   (Inventory => PlayerShip.Cargo,
+                    ProtoIndex => TraderCargo(BaseItemIndex).ProtoIndex,
                     Durability => TraderCargo(BaseItemIndex).Durability);
                if CargoIndex = 0 then
                   CargoIndex :=
-                    FindCargo(TraderCargo(BaseItemIndex).ProtoIndex);
+                    FindItem
+                      (PlayerShip.Cargo,
+                       TraderCargo(BaseItemIndex).ProtoIndex);
                end if;
             end if;
          end if;

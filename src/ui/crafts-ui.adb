@@ -21,7 +21,6 @@ with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
 with Items; use Items;
 with Help.UI; use Help.UI;
 with Header; use Header;
@@ -88,7 +87,9 @@ package body Crafts.UI is
                  1 +
                  Length(Items_List(J).Name);
                CargoIndex :=
-                 FindCargo(ProtoIndex => Objects_Container.To_Index(J));
+                 FindItem
+                   (Inventory => PlayerShip.Cargo,
+                    ProtoIndex => Objects_Container.To_Index(J));
                if CargoIndex > 0 then
                   TextLength :=
                     TextLength +
@@ -175,7 +176,7 @@ package body Crafts.UI is
                   Line => CurrentLine,
                   Column => EndColumn);
                CargoIndex :=
-                 FindCargo(ProtoIndex => Objects_Container.To_Index(J));
+                 FindItem(PlayerShip.Cargo, Objects_Container.To_Index(J));
                if CargoIndex > 0 then
                   TextLength :=
                     Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)'Length;
@@ -246,7 +247,7 @@ package body Crafts.UI is
                  (Win => InfoWindow,
                   Line => CurrentLine,
                   Column => EndColumn);
-               if FindCargo(ProtoIndex => Objects_Container.To_Index(I)) =
+               if FindItem(PlayerShip.Cargo, Objects_Container.To_Index(I)) =
                  0 then
                   if StartLine = CurrentLine then
                      TextLength := Natural(EndColumn - StartColumn);

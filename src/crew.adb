@@ -59,7 +59,8 @@ package body Crew is
          else
             RequiredTool := RepairTools;
          end if;
-         ToolsIndex := FindCargo(ItemType => RequiredTool);
+         ToolsIndex :=
+           FindItem(Inventory => PlayerShip.Cargo, ItemType => RequiredTool);
          if ToolsIndex = 0 then
             case GivenOrder is
                when Repair =>
@@ -353,7 +354,8 @@ package body Crew is
       function Consume(ItemType: Unbounded_String) return Natural is
          ConsumeValue, ItemIndex: Natural;
       begin
-         ItemIndex := FindCargo(ItemType => ItemType);
+         ItemIndex :=
+           FindItem(Inventory => PlayerShip.Cargo, ItemType => ItemType);
          if ItemIndex > 0 then
             ConsumeValue :=
               Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value;
@@ -364,7 +366,10 @@ package body Crew is
             return ConsumeValue;
          end if;
          if ItemType = FoodTypes(1) then
-            ItemIndex := FindCargo(ItemType => FoodTypes(2));
+            ItemIndex :=
+              FindItem
+                (Inventory => PlayerShip.Cargo,
+                 ItemType => FoodTypes(2));
             if ItemIndex > 0 then
                ConsumeValue :=
                  Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value;
@@ -847,7 +852,10 @@ package body Crew is
             when MEDICAL_ROOM =>
                if NeedHealer and
                  Module.Durability > 0 and
-                 FindCargo(ItemType => HealingTools) > 0 then
+                 FindItem
+                     (Inventory => PlayerShip.Cargo,
+                      ItemType => HealingTools) >
+                   0 then
                   CanHeal := True;
                end if;
             when others =>
@@ -894,9 +902,11 @@ package body Crew is
       end if;
       if not HaveUpgrade and
         PlayerShip.UpgradeModule > 0 and
-        FindCargo(ItemType => RepairTools) > 0 then
-         if FindCargo
-             (ItemType =>
+        FindItem(Inventory => PlayerShip.Cargo, ItemType => RepairTools) >
+          0 then
+         if FindItem
+             (Inventory => PlayerShip.Cargo,
+              ItemType =>
                 Modules_List
                   (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
                   .RepairMaterial) >
@@ -911,7 +921,9 @@ package body Crew is
             UpdateOrders;
          end if;
       end if;
-      if NeedClean and FindCargo(ItemType => CleaningTools) > 0 then
+      if NeedClean and
+        FindItem(Inventory => PlayerShip.Cargo, ItemType => CleaningTools) >
+          0 then
          if UpdatePosition(Clean) then
             UpdateOrders;
          end if;
@@ -921,7 +933,9 @@ package body Crew is
             UpdateOrders;
          end if;
       end if;
-      if NeedRepairs and FindCargo(ItemType => RepairTools) > 0 then
+      if NeedRepairs and
+        FindItem(Inventory => PlayerShip.Cargo, ItemType => RepairTools) >
+          0 then
          if UpdatePosition(Repair) then
             UpdateOrders;
          end if;
@@ -948,9 +962,11 @@ package body Crew is
       end if;
       if not HaveUpgrade and
         PlayerShip.UpgradeModule > 0 and
-        FindCargo(ItemType => RepairTools) > 0 then
-         if FindCargo
-             (ItemType =>
+        FindItem(Inventory => PlayerShip.Cargo, ItemType => RepairTools) >
+          0 then
+         if FindItem
+             (Inventory => PlayerShip.Cargo,
+              ItemType =>
                 Modules_List
                   (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
                   .RepairMaterial) >
@@ -966,7 +982,9 @@ package body Crew is
             UpdateOrders;
          end if;
       end if;
-      if NeedClean and FindCargo(ItemType => CleaningTools) > 0 then
+      if NeedClean and
+        FindItem(Inventory => PlayerShip.Cargo, ItemType => CleaningTools) >
+          0 then
          if UpdatePosition(Clean, False) then
             UpdateOrders;
          end if;
@@ -976,7 +994,9 @@ package body Crew is
             UpdateOrders;
          end if;
       end if;
-      if NeedRepairs and FindCargo(ItemType => RepairTools) > 0 then
+      if NeedRepairs and
+        FindItem(Inventory => PlayerShip.Cargo, ItemType => RepairTools) >
+          0 then
          if UpdatePosition(Repair, False) then
             UpdateOrders;
          end if;
@@ -1115,8 +1135,9 @@ package body Crew is
          CargoIndex => CargoIndex,
          ProtoIndex => ProtoIndex);
       CargoItemIndex :=
-        FindCargo
-          (ProtoIndex => ProtoIndex,
+        FindItem
+          (Inventory => PlayerShip.Cargo,
+           ProtoIndex => ProtoIndex,
            Durability =>
              PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability);
       if CargoIndex = 0 then
@@ -1131,16 +1152,5 @@ package body Crew is
          (Index => ItemIndex, Count => 1);
       end if;
    end UpdateInventory;
-
-   function FindInventory(MemberIndex, ProtoIndex: Positive) return Natural is
-   begin
-      for I in PlayerShip.Crew(MemberIndex).Inventory.Iterate loop
-         if PlayerShip.Crew(MemberIndex).Inventory(I).ProtoIndex =
-           ProtoIndex then
-            return Inventory_Container.To_Index(I);
-         end if;
-      end loop;
-      return 0;
-   end FindInventory;
 
 end Crew;

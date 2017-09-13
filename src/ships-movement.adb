@@ -100,7 +100,8 @@ package body Ships.Movement is
          if Length(Message) > 0 then
             return 0;
          end if;
-         FuelIndex := FindCargo(ItemType => FuelType);
+         FuelIndex :=
+           FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
          if FuelIndex = 0 then
             Message := To_Unbounded_String("You don't have any fuel.");
             return 0;
@@ -155,7 +156,8 @@ package body Ships.Movement is
             end case;
             GameStats.DistanceTraveled := GameStats.DistanceTraveled + 1;
             UpdateGame(TimePassed);
-            FuelIndex := FindCargo(ItemType => FuelType);
+            FuelIndex :=
+              FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
             if FuelIndex = 0 then
                AddMessage
                  ("Ship fall from sky due to lack of fuel.",
@@ -184,10 +186,12 @@ package body Ships.Movement is
    function DockShip(Docking: Boolean) return String is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MoneyIndex2: constant Natural := FindCargo(FindProtoItem(MoneyIndex));
+      MoneyIndex2: constant Natural :=
+        FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       DockingCost: Positive;
       TraderIndex: Natural := 0;
-      FuelIndex: constant Natural := FindCargo(ItemType => FuelType);
+      FuelIndex: constant Natural :=
+        FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
       Message: Unbounded_String;
    begin
       if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then

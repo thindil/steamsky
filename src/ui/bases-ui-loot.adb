@@ -57,8 +57,9 @@ package body Bases.UI.Loot is
            Integer'Value(Description(Current(TradeMenu))) * (-1);
          ItemIndex := SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex;
          CargoIndex :=
-           FindCargo
-             (ProtoIndex => ItemIndex,
+           FindItem
+             (Inventory => PlayerShip.Cargo,
+              ProtoIndex => ItemIndex,
               Durability =>
                 SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
       end if;
@@ -226,7 +227,7 @@ package body Bases.UI.Loot is
    begin
       ItemsAmount := ItemsAmount + Positive(PlayerShip.Cargo.Length);
       for Item of SkyBases(BaseIndex).Cargo loop
-         if FindCargo(ProtoIndex => Item.ProtoIndex) = 0 then
+         if FindItem(PlayerShip.Cargo, Item.ProtoIndex) = 0 then
             ItemsAmount := ItemsAmount + 1;
          end if;
       end loop;
@@ -239,7 +240,9 @@ package body Bases.UI.Loot is
          MenuIndex := MenuIndex + 1;
       end loop;
       for I in SkyBases(BaseIndex).Cargo.Iterate loop
-         if FindCargo(ProtoIndex => SkyBases(BaseIndex).Cargo(I).ProtoIndex) =
+         if FindItem
+             (PlayerShip.Cargo,
+              SkyBases(BaseIndex).Cargo(I).ProtoIndex) =
            0 then
             Loot_Items.all(MenuIndex) :=
               New_Item
@@ -427,14 +430,16 @@ package body Bases.UI.Loot is
             BaseItemIndex :=
               Integer'Value(Description(Current(TradeMenu))) * (-1);
             CargoIndex :=
-              FindCargo
-                (ProtoIndex => ItemIndex,
+              FindItem
+                (Inventory => PlayerShip.Cargo,
+                 ProtoIndex => ItemIndex,
                  Durability =>
                    SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
             if CargoIndex = 0 then
                CargoIndex :=
-                 FindCargo
-                   (SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex);
+                 FindItem
+                   (PlayerShip.Cargo,
+                    SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex);
             end if;
          end if;
          if FieldIndex = 4 then

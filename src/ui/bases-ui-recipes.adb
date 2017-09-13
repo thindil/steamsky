@@ -20,7 +20,6 @@ with Maps; use Maps;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
 with Crafts; use Crafts;
 with Bases.Trade; use Bases.Trade;
 with Utils.UI; use Utils.UI;
@@ -123,7 +122,7 @@ package body Bases.UI.Recipes is
         (TradeMenu,
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
       Post(TradeMenu);
-      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       Move_Cursor(Line => 6, Column => (Columns / 2));
       if MoneyIndex2 > 0 then
          Add

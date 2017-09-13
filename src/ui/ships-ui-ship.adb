@@ -19,7 +19,6 @@ with ShipModules; use ShipModules;
 with UserInterface; use UserInterface;
 with Crafts; use Crafts;
 with Maps; use Maps;
-with Ships.Cargo; use Ships.Cargo;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Ship is
@@ -115,7 +114,10 @@ package body Ships.UI.Ship is
             if EndColumn > WindowWidth then
                WindowWidth := EndColumn;
             end if;
-            if FindCargo(ItemType => Item.IType) = 0 then
+            if FindItem
+                (Inventory => PlayerShip.Cargo,
+                 ItemType => Item.IType) =
+              0 then
                if StartLine = CurrentLine then
                   TextLength := Natural(EndColumn - StartColumn);
                   Change_Attributes
@@ -290,7 +292,10 @@ package body Ships.UI.Ship is
                        (Win => InfoWindow,
                         Line => CurrentLine,
                         Column => EndColumn);
-                     if FindCargo(Objects_Container.To_Index(I)) > 0 then
+                     if FindItem
+                         (PlayerShip.Cargo,
+                          Objects_Container.To_Index(I)) >
+                       0 then
                         HaveAmmo := True;
                      end if;
                      if not HaveAmmo then
@@ -811,7 +816,10 @@ package body Ships.UI.Ship is
          when MEDICAL_ROOM =>
             for Member of PlayerShip.Crew loop
                if Member.Health < 100 and
-                 FindCargo(ItemType => HealingTools) > 0 then
+                 FindItem
+                     (Inventory => PlayerShip.Cargo,
+                      ItemType => HealingTools) >
+                   0 then
                   Options_Items.all(MenuIndex) :=
                     New_Item("Assign medic", "7");
                   MenuIndex := MenuIndex + 1;

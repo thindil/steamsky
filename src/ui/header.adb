@@ -18,7 +18,6 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
 with Messages; use Messages;
 with Items; use Items;
 with Config; use Config;
@@ -178,7 +177,8 @@ package body Header is
       EndColumn :=
         (Columns / 3) +
         Column_Position(FormatedTime'Length + 9 + Length(Speed));
-      ItemIndex := FindCargo(ItemType => FuelType);
+      ItemIndex :=
+        FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
       if ItemIndex > 0 then
          for Item of PlayerShip.Cargo loop
             if Items_List(Item.ProtoIndex).IType = FuelType then
@@ -192,7 +192,8 @@ package body Header is
       else
          EndColumn := EndColumn + 9;
       end if;
-      ItemIndex := FindCargo(ItemType => DrinksType);
+      ItemIndex :=
+        FindItem(Inventory => PlayerShip.Cargo, ItemType => DrinksType);
       if ItemIndex = 0 then
          EndColumn := EndColumn + 11;
       else
@@ -206,9 +207,11 @@ package body Header is
             EndColumn := EndColumn + 12;
          end if;
       end if;
-      ItemIndex := FindCargo(ItemType => FoodTypes(1));
+      ItemIndex :=
+        FindItem(Inventory => PlayerShip.Cargo, ItemType => FoodTypes(1));
       if ItemIndex = 0 then
-         ItemIndex := FindCargo(ItemType => FoodTypes(2));
+         ItemIndex :=
+           FindItem(Inventory => PlayerShip.Cargo, ItemType => FoodTypes(2));
       end if;
       if ItemIndex = 0 then
          EndColumn := EndColumn + 9;

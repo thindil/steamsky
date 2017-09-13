@@ -35,7 +35,7 @@ package body Bases.Trade is
       TraderIndex: Positive;
       Inventory: Inventory_Container.Vector;
    begin
-      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if MoneyIndex2 = 0 then
          raise Trade_No_Money;
       end if;
@@ -109,7 +109,7 @@ package body Bases.Trade is
       end if;
       CountPrice(Cost, TraderIndex);
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
-      MoneyIndex2 := FindCargo(ProtoMoneyIndex);
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
       if MoneyIndex2 = 0 then
          raise Trade_No_Money with RecipeName;
       end if;
@@ -147,7 +147,7 @@ package body Bases.Trade is
          raise Trade_Cant_Heal;
       end if;
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
-      MoneyIndex2 := FindCargo(ProtoMoneyIndex);
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
       if MoneyIndex2 = 0 then
          raise Trade_No_Money;
       end if;
