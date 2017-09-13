@@ -210,9 +210,13 @@ package body Crew is
       if ToolsIndex > 0 then
          UpdateInventory
            (MemberIndex,
-            PlayerShip.Cargo.Element(ToolsIndex).ProtoIndex,
             1,
-            ToolsIndex);
+            PlayerShip.Cargo(ToolsIndex).ProtoIndex,
+            PlayerShip.Cargo(ToolsIndex).Durability);
+         UpdateCargo
+           (Ship => PlayerShip,
+            Amount => -1,
+            CargoIndex => ToolsIndex);
       end if;
       if GivenOrder = Rest then
          PlayerShip.Crew(MemberIndex).PreviousOrder := Rest;
@@ -228,11 +232,15 @@ package body Crew is
               FindItem
                 (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
                  ItemType => RequiredTool);
+            UpdateCargo
+              (PlayerShip,
+               PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex,
+               1,
+               PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex).Durability);
             UpdateInventory
-              (MemberIndex,
-               PlayerShip.Crew(MemberIndex).Inventory.Element(ToolsIndex)
-                 .ProtoIndex,
-               -1);
+              (MemberIndex => MemberIndex,
+               Amount => -1,
+               InventoryIndex => ToolsIndex);
          end if;
       end if;
       PlayerShip.Crew(MemberIndex).Order := GivenOrder;
@@ -1130,51 +1138,42 @@ package body Crew is
    end GetAttributeLevelName;
 
    procedure UpdateInventory
-     (MemberIndex, ProtoIndex: Positive;
+     (MemberIndex: Positive;
       Amount: Integer;
-      CargoIndex: Natural := 0) is
-      ItemIndex, CargoItemIndex: Natural := 0;
+      ProtoIndex, Durability, InventoryIndex: Natural := 0) is
+      ItemIndex: Natural := 0;
+      NewAmount: Natural;
    begin
-      for I in PlayerShip.Crew(MemberIndex).Inventory.Iterate loop
-         if PlayerShip.Crew(MemberIndex).Inventory(I).ProtoIndex =
-           ProtoIndex then
-            ItemIndex := Inventory_Container.To_Index(I);
-            exit;
-         end if;
-      end loop;
+      if InventoryIndex = 0 then
+         for I in PlayerShip.Crew(MemberIndex).Inventory.Iterate loop
+            if PlayerShip.Crew(MemberIndex).Inventory(I).ProtoIndex =
+              ProtoIndex and
+              PlayerShip.Crew(MemberIndex).Inventory(I).Durability =
+                Durability then
+               ItemIndex := Inventory_Container.To_Index(I);
+               exit;
+            end if;
+         end loop;
+      else
+         ItemIndex := InventoryIndex;
+      end if;
       if ItemIndex = 0 then
          PlayerShip.Crew(MemberIndex).Inventory.Append
          (New_Item =>
             (ProtoIndex => ProtoIndex,
              Amount => Amount,
-             Name => PlayerShip.Cargo(CargoIndex).Name,
-             Durability => PlayerShip.Cargo(CargoIndex).Durability));
+             Name => Items_List(ProtoIndex).Name,
+             Durability => Durability));
          ItemIndex := PlayerShip.Crew(MemberIndex).Inventory.Last_Index;
       else
-         PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount :=
+         NewAmount :=
            PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount + Amount;
       end if;
-      UpdateCargo
-        (Ship => PlayerShip,
-         Amount => (0 - Amount),
-         CargoIndex => CargoIndex,
-         ProtoIndex => ProtoIndex);
-      CargoItemIndex :=
-        FindItem
-          (Inventory => PlayerShip.Cargo,
-           ProtoIndex => ProtoIndex,
-           Durability =>
-             PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability);
-      if CargoIndex = 0 then
-         if PlayerShip.Cargo(CargoItemIndex).Name /=
-           PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Name then
-            PlayerShip.Cargo(CargoItemIndex).Name :=
-              PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Name;
-         end if;
-      end if;
-      if PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount = 0 then
+      if NewAmount = 0 then
          PlayerShip.Crew(MemberIndex).Inventory.Delete
          (Index => ItemIndex, Count => 1);
+      else
+         PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount := NewAmount;
       end if;
    end UpdateInventory;
 
