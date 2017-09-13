@@ -19,7 +19,6 @@ with Ada.Exceptions; use Ada.Exceptions;
 with Ships; use Ships;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
-with Items; use Items;
 with Game; use Game;
 with Utils; use Utils;
 with Ships.Cargo; use Ships.Cargo;

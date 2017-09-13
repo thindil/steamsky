@@ -21,6 +21,7 @@ with Crew; use Crew;
 with Game; use Game;
 with Missions; use Missions;
 with Bases; use Bases;
+with Items; use Items;
 
 package Ships is
    type ShipSpeed is

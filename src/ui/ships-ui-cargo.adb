@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships.Cargo; use Ships.Cargo;
 with Utils.UI; use Utils.UI;
@@ -167,7 +166,7 @@ package body Ships.UI.Cargo is
       MenuLength: Column_Position;
    begin
       for I in PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-         Cargo_Items.all(I) := New_Item(GetItemName(I));
+         Cargo_Items.all(I) := New_Item(GetItemName(PlayerShip.Cargo(I)));
       end loop;
       Cargo_Items.all(Cargo_Items'Last) := Null_Item;
       ShipsMenu := New_Menu(Cargo_Items);

@@ -38,6 +38,14 @@ package Items is
       Index: Unbounded_String; -- Index of item
    end record;
    package Objects_Container is new Vectors(Positive, Object_Data);
+   type InventoryData is -- Data structure for item in inventory
+   record
+      ProtoIndex: Positive; -- Index of prototype
+      Amount: Positive; -- Amount of item
+      Name: Unbounded_String; -- Name of item if different than default
+      Durability: Natural; -- Current durability of item
+   end record;
+   package Inventory_Container is new Vectors(Positive, InventoryData);
    Items_List: Objects_Container.Vector; -- List of item available in game
    Items_Directory_Not_Found: exception; -- Raised when no directory with items files
    Items_Files_Not_Found: exception; -- Raised when no files with items
@@ -49,9 +57,7 @@ package Items is
         Null_Unbounded_String)
       return Natural; -- Return vector index of item or zero if item not found
    function GetItemName
-     (ItemIndex: Positive;
-      MemberIndex: Natural :=
-        0)
+     (Item: InventoryData)
      return String; -- Get name of item in ship cargo or character inventory
    procedure DamageItem
      (CargoIndex: Positive;
