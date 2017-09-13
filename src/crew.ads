@@ -80,8 +80,11 @@ package Crew is
      (AttributeLevel: Positive)
      return String; -- Get member attribute level name
    procedure UpdateInventory
-     (MemberIndex, ProtoIndex: Positive;
+     (MemberIndex: Positive;
       Amount: Integer;
-      CargoIndex: Natural := 0); -- Update member inventory
+      ProtoIndex,
+      Durability,
+      InventoryIndex: Natural :=
+        0); -- Update member inventory
 
 end Crew;

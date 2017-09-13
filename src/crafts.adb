@@ -403,10 +403,13 @@ package body Crafts is
                            if ToolIndex > 0 then
                               UpdateInventory
                                 (CrafterIndex,
-                                 PlayerShip.Cargo.Element(ToolIndex)
-                                   .ProtoIndex,
                                  1,
-                                 ToolIndex);
+                                 PlayerShip.Cargo(ToolIndex).ProtoIndex,
+                                 PlayerShip.Cargo(ToolIndex).Durability);
+                              UpdateCargo
+                                (Ship => PlayerShip,
+                                 Amount => -1,
+                                 CargoIndex => ToolIndex);
                               ToolIndex :=
                                 FindItem
                                   (Inventory =>
@@ -477,6 +480,21 @@ package body Crafts is
                            CraftMessage,
                            3);
                         Module.Data := (0, 0, 0);
+                        if ToolIndex > 0 then
+                           UpdateCargo
+                             (PlayerShip,
+                              PlayerShip.Crew(CrafterIndex).Inventory
+                                (ToolIndex)
+                                .ProtoIndex,
+                              1,
+                              PlayerShip.Crew(CrafterIndex).Inventory
+                                (ToolIndex)
+                                .Durability);
+                           UpdateInventory
+                             (MemberIndex => CrafterIndex,
+                              Amount => -1,
+                              InventoryIndex => ToolIndex);
+                        end if;
                         GiveOrders(CrafterIndex, Rest);
                         exit Craft_Loop;
                      end if;
@@ -530,6 +548,21 @@ package body Crafts is
                               CraftMessage,
                               3);
                            Module.Data := (0, 0, 0);
+                           if ToolIndex > 0 then
+                              UpdateCargo
+                                (PlayerShip,
+                                 PlayerShip.Crew(CrafterIndex).Inventory
+                                   (ToolIndex)
+                                   .ProtoIndex,
+                                 1,
+                                 PlayerShip.Crew(CrafterIndex).Inventory
+                                   (ToolIndex)
+                                   .Durability);
+                              UpdateInventory
+                                (MemberIndex => CrafterIndex,
+                                 Amount => -1,
+                                 InventoryIndex => ToolIndex);
+                           end if;
                            GiveOrders(CrafterIndex, Rest);
                            exit Craft_Loop;
                         end if;
@@ -604,6 +637,19 @@ package body Crafts is
                   PlayerShip.Crew(CrafterIndex).OrderTime := WorkTime;
                   if Module.Data(3) = 0 then
                      Module.Data := (0, 0, 0);
+                     if ToolIndex > 0 then
+                        UpdateCargo
+                          (PlayerShip,
+                           PlayerShip.Crew(CrafterIndex).Inventory(ToolIndex)
+                             .ProtoIndex,
+                           1,
+                           PlayerShip.Crew(CrafterIndex).Inventory(ToolIndex)
+                             .Durability);
+                        UpdateInventory
+                          (MemberIndex => CrafterIndex,
+                           Amount => -1,
+                           InventoryIndex => ToolIndex);
+                     end if;
                      GiveOrders(CrafterIndex, Rest);
                   end if;
                end if;
