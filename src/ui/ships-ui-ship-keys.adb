@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions; use Ada.Exceptions;
-with Items; use Items;
 with ShipModules; use ShipModules;
 with UserInterface; use UserInterface;
 with Messages; use Messages;

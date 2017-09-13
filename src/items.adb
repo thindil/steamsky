@@ -159,30 +159,12 @@ package body Items is
       return 0;
    end FindProtoItem;
 
-   function GetItemName
-     (ItemIndex: Positive;
-      MemberIndex: Natural := 0) return String is
+   function GetItemName(Item: InventoryData) return String is
    begin
-      if MemberIndex = 0 then
-         if PlayerShip.Cargo(ItemIndex).Name /= Null_Unbounded_String then
-            return To_String(PlayerShip.Cargo(ItemIndex).Name);
-         else
-            return To_String
-                (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Name);
-         end if;
-      else
-         if PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Name /=
-           Null_Unbounded_String then
-            return To_String
-                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Name);
-         else
-            return To_String
-                (Items_List
-                   (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
-                      .ProtoIndex)
-                   .Name);
-         end if;
+      if Item.Name /= Null_Unbounded_String then
+         return To_String(Item.Name);
       end if;
+      return To_String(Items_List(Item.ProtoIndex).Name);
    end GetItemName;
 
    procedure DamageItem

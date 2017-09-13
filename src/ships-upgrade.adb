@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Messages; use Messages;
-with Items; use Items;
 with ShipModules; use ShipModules;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;

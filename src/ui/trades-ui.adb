@@ -31,7 +31,6 @@ with Events; use Events;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
 with Bases.UI; use Bases.UI;
-with Crew; use Crew;
 
 package body Trades.UI is
 

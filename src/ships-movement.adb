@@ -21,7 +21,6 @@ with Ships.Crew; use Ships.Crew;
 with Statistics; use Statistics;
 with Maps; use Maps;
 with Messages; use Messages;
-with Items; use Items;
 with Config; use Config;
 
 package body Ships.Movement is

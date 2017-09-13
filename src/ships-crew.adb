@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Messages; use Messages;
-with Items; use Items;
 with HallOfFame; use HallOfFame;
 
 package body Ships.Crew is

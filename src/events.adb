@@ -349,7 +349,7 @@ package body Events is
                     ("During checking ship cargo, you noticed that you lost" &
                      Positive'Image(LostCargo) &
                      " " &
-                     GetItemName(Roll2) &
+                     GetItemName(PlayerShip.Cargo(Roll2)) &
                      ".",
                      OtherMessage,
                      3);

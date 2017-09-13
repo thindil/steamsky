@@ -19,7 +19,6 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Messages; use Messages;
-with Items; use Items;
 with ShipModules; use ShipModules;
 with Utils; use Utils;
 with Ships.Cargo; use Ships.Cargo;
