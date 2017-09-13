@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
   visit 10 independent bases, visit 15 independent bases, visit 20 independent
   bases, visit 25 independent bases, visit 50 independent bases, visit 1
   pirates base, visit 3 pirates bases, visit 5 pirates bases, visit 10 pirates
-  bases, destroy 200 pirates ships and destroy 250 pirates ships
+  bases, destroy 200 pirates ships, destroy 250 pirates ships and destroy 500
+  pirates ships
 - New friendly ships: tiny independent patrol ship, small poleis patrol ship,
   small independent patrol ship, poleis patrol ship, independent patrol ship,
   armored poleis patrol ship, armored independent patrol ship, advanced poleis
