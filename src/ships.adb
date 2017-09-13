@@ -53,7 +53,7 @@ package body Ships is
       MemberName: Unbounded_String;
       TmpSkills: Skills_Container.Vector;
       ProtoShip: constant ProtoShipData := ProtoShips_List(ProtoIndex);
-      ShipCargo: Cargo_Container.Vector;
+      ShipCargo, TmpInventory: Inventory_Container.Vector;
       TempModule: BaseModule_Data;
       MaxValue, Roll: Positive;
       StartX, StartY, EndX, EndY: Integer;
@@ -182,7 +182,8 @@ package body Ships is
              PreviousOrder => Rest,
              OrderTime => 15,
              Orders => Member.Orders,
-             Attributes => TmpAttributes));
+             Attributes => TmpAttributes,
+             Inventory => TmpInventory));
          TmpSkills.Clear;
          TmpAttributes.Clear;
          for Module of ShipModules loop
@@ -796,14 +797,14 @@ package body Ships is
                      if Items_List(PlayerShip.Cargo(K).ProtoIndex).IType =
                        Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                          .RepairMaterial then
-                        RepairMaterial := Cargo_Container.To_Index(K);
+                        RepairMaterial := Inventory_Container.To_Index(K);
                   -- Limit repair point depends on amount of repair materials
                         if PlayerShip.Cargo(K).Amount < RepairPoints then
                            RepairPoints := PlayerShip.Cargo(K).Amount;
                         end if;
                      elsif Items_List(PlayerShip.Cargo(K).ProtoIndex).IType =
                        RepairTools then
-                        ToolsIndex := Cargo_Container.To_Index(K);
+                        ToolsIndex := Inventory_Container.To_Index(K);
                      end if;
                      exit when RepairMaterial > 0 and ToolsIndex > 0;
                   end loop;
@@ -869,7 +870,7 @@ package body Ships is
                        .RepairSkill,
                      Crew_Container.To_Index(J));
                   CrewRepairPoints(PointsIndex) := RepairPoints;
-                  DamageCargo
+                  DamageItem
                     (ToolsIndex,
                      Crew_Container.To_Index(J),
                      Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
