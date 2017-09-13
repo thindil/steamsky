@@ -489,7 +489,10 @@ package body Crafts is
                         end loop;
                      end loop;
                      if ToolIndex > 0 then
-                        DamageItem(ToolIndex, CrafterIndex, Recipe.Skill);
+                        DamageItem
+                          (PlayerShip.Crew(CrafterIndex).Inventory,
+                           ToolIndex,
+                           GetSkillLevel(CrafterIndex, Recipe.Skill));
                      end if;
                      if Module.Data(1) > 0 then
                         Amount :=

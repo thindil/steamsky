@@ -293,11 +293,13 @@ package body Ships.Upgrade is
               .RepairSkill,
             WorkerIndex);
          DamageItem
-           (UpgradeTools,
-            WorkerIndex,
-            Modules_List
-              (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
-              .RepairSkill);
+           (PlayerShip.Crew(WorkerIndex).Inventory,
+            UpgradeTools,
+            GetSkillLevel
+              (WorkerIndex,
+               Modules_List
+                 (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
+                 .RepairSkill));
          FindMatsAndTools;
          UpgradeProgress :=
            PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress -
