@@ -257,7 +257,10 @@ package body UserInterface.Keys is
                DrawGame(Wait_Order);
                return Wait_Order;
             elsif Order = "Deliver medicines for free" then
-               ItemIndex := FindCargo(ItemType => HealingTools);
+               ItemIndex :=
+                 FindItem
+                   (Inventory => PlayerShip.Cargo,
+                    ItemType => HealingTools);
                NewTime :=
                  Events_List(EventIndex).Time -
                  PlayerShip.Cargo(ItemIndex).Amount;
@@ -280,7 +283,10 @@ package body UserInterface.Keys is
                   PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
                   (0 - PlayerShip.Cargo.Element(ItemIndex).Amount));
             elsif Order = "Deliver medicines for price" then
-               ItemIndex := FindCargo(ItemType => HealingTools);
+               ItemIndex :=
+                 FindItem
+                   (Inventory => PlayerShip.Cargo,
+                    ItemType => HealingTools);
                NewTime :=
                  Events_List(EventIndex).Time -
                  PlayerShip.Cargo(ItemIndex).Amount;
@@ -363,7 +369,8 @@ package body UserInterface.Keys is
    function ConfirmKeys
      (OldState: GameStates;
       Key: Key_Code) return GameStates is
-      MoneyIndex2: constant Natural := FindCargo(FindProtoItem(MoneyIndex));
+      MoneyIndex2: constant Natural :=
+        FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       TraderIndex: constant Natural := FindMember(Talk);
       Price: Positive := 1000;
    begin

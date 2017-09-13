@@ -35,7 +35,7 @@ package body Bases.Ship is
          raise BasesShip_Nothing_To_Repair;
       end if;
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
-      MoneyIndex2 := FindCargo(ProtoMoneyIndex);
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
       if MoneyIndex2 = 0 then
          raise Trade_No_Money;
       end if;
@@ -87,7 +87,8 @@ package body Bases.Ship is
 
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Positive) is
       ProtoMoneyIndex: constant Positive := FindProtoItem(MoneyIndex);
-      MoneyIndex2: constant Natural := FindCargo(ProtoMoneyIndex);
+      MoneyIndex2: constant Natural :=
+        FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
       HullIndex, ModulesAmount, TraderIndex: Positive;
       FreeTurretIndex, Price: Natural := 0;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
@@ -308,7 +309,8 @@ package body Bases.Ship is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ProtoMoneyIndex: constant Positive := FindProtoItem(MoneyIndex);
-      MoneyIndex2: constant Natural := FindCargo(ProtoMoneyIndex);
+      MoneyIndex2: constant Natural :=
+        FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
       DockingCost: Positive;
       TraderIndex: constant Natural := FindMember(Talk);
    begin

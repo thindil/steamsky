@@ -21,7 +21,6 @@ with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Bases.Ship; use Bases.Ship;
-with Ships.Cargo; use Ships.Cargo;
 with ShipModules; use ShipModules;
 with Utils.UI; use Utils.UI;
 with Trades; use Trades;
@@ -421,7 +420,7 @@ package body Bases.UI.Shipyard is
          Count => 5,
          Color => 1,
          Attr => BoldCharacters);
-      MoneyIndex2 := FindCargo(FindProtoItem(MoneyIndex));
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       Move_Cursor(Win => ActionWindow, Line => 1, Column => 0);
       if MoneyIndex2 > 0 then
          Add

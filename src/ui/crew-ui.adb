@@ -19,7 +19,6 @@ with Ada.Exceptions; use Ada.Exceptions;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
 with Messages; use Messages;
 with Bases; use Bases;
 with Maps; use Maps;
@@ -339,8 +338,9 @@ package body Crew.UI is
             NeedClean := True;
          end if;
          if not NeedRepairs and Module.Durability < Module.MaxDurability then
-            if FindCargo
-                (ItemType => Modules_List(Module.ProtoIndex).RepairMaterial) >
+            if FindItem
+                (Inventory => PlayerShip.Cargo,
+                 ItemType => Modules_List(Module.ProtoIndex).RepairMaterial) >
               0 then
                NeedRepairs := True;
             end if;
@@ -479,7 +479,10 @@ package body Crew.UI is
                      end if;
                   when MEDICAL_ROOM =>
                      if NeedHealer then
-                        if FindCargo(ItemType => HealingTools) > 0 and
+                        if FindItem
+                            (Inventory => PlayerShip.Cargo,
+                             ItemType => HealingTools) >
+                          0 and
                           PlayerShip.Crew(MemberIndex).Order /= Heal and
                           PlayerShip.Crew(MemberIndex).Health = 100 then
                            HealOrder := True;

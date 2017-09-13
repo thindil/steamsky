@@ -216,4 +216,40 @@ package body Items is
       end loop;
    end DamageItem;
 
+   function FindItem
+     (Inventory: Inventory_Container.Vector;
+      ProtoIndex: Natural := 0;
+      ItemType: Unbounded_String := Null_Unbounded_String;
+      Durability: Natural := 101) return Natural is
+   begin
+      if ProtoIndex > 0 then
+         for I in Inventory.Iterate loop
+            if Durability < 101 then
+               if Inventory(I).ProtoIndex = ProtoIndex and
+                 Inventory(I).Durability = Durability then
+                  return Inventory_Container.To_Index(I);
+               end if;
+            else
+               if Inventory(I).ProtoIndex = ProtoIndex then
+                  return Inventory_Container.To_Index(I);
+               end if;
+            end if;
+         end loop;
+      elsif ItemType /= Null_Unbounded_String then
+         for I in Inventory.Iterate loop
+            if Durability < 101 then
+               if Items_List(Inventory(I).ProtoIndex).IType = ItemType and
+                 Inventory(I).Durability = Durability then
+                  return Inventory_Container.To_Index(I);
+               end if;
+            else
+               if Items_List(Inventory(I).ProtoIndex).IType = ItemType then
+                  return Inventory_Container.To_Index(I);
+               end if;
+            end if;
+         end loop;
+      end if;
+      return 0;
+   end FindItem;
+
 end Items;

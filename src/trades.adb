@@ -75,7 +75,7 @@ package body Trades is
       Cost := BuyAmount * Price;
       CountPrice(Cost, TraderIndex);
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
-      MoneyIndex2 := FindCargo(ProtoMoneyIndex);
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
       if FreeCargo(Cost - (Items_List(ItemIndex).Weight * BuyAmount)) < 0 then
          raise Trade_No_Free_Cargo;
       end if;
@@ -301,8 +301,7 @@ package body Trades is
          else
             ItemAmount := GetRandom(1, 1000);
          end if;
-         CargoItemIndex :=
-           FindCargo(ProtoIndex => ItemIndex, Ship => TraderShip);
+         CargoItemIndex := FindItem(TraderShip.Cargo, ItemIndex);
          if CargoItemIndex > 0 then
             TraderCargo(CargoItemIndex).Amount :=
               TraderCargo(CargoItemIndex).Amount + ItemAmount;

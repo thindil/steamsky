@@ -64,5 +64,12 @@ package Items is
       ItemIndex: Positive;
       SkillLevel: Natural :=
         0); -- Check if item in ship cargo or character inventory was damaged
+   function FindItem
+     (Inventory: Inventory_Container.Vector;
+      ProtoIndex: Natural := 0;
+      ItemType: Unbounded_String := Null_Unbounded_String;
+      Durability: Natural :=
+        101)
+     return Natural; -- Find item in ship cargo or character inventory, return item index or 0 if item not found
 
 end Items;
