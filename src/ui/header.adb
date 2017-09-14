@@ -151,6 +151,8 @@ package body Header is
             Add(Str => "Heal wounded crew members");
          when Loot_View =>
             Add(Str => "Loot base");
+         when Inventory_View =>
+            Add(Str => "Inventory");
          when Death_Confirm =>
             return;
          when others =>

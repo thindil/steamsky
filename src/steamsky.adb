@@ -441,6 +441,8 @@ begin
               (Str =>
                  "Your terminal size is too small for game. Minimal size is 60x24. Please resize it again.");
             Refresh;
+         when Inventory_View =>
+            GameState := InventoryKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;

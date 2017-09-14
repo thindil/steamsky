@@ -822,6 +822,8 @@ package body UserInterface is
                   To_String(MoneyName) &
                   ")?");
             end;
+         when Inventory_View =>
+            ShowInventory;
          when others =>
             null;
       end case;
