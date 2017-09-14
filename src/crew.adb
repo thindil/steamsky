@@ -589,18 +589,18 @@ package body Crew is
                      end if;
                      if HealAmount > 0 then
                         HealAmount := HealAmount * (-1);
-                        for I in
+                        for J in
                           PlayerShip.Cargo.First_Index ..
                               PlayerShip.Cargo.Last_Index loop
                            if Items_List
-                               (PlayerShip.Cargo.Element(I).ProtoIndex)
+                               (PlayerShip.Cargo.Element(J).ProtoIndex)
                                .IType =
                              HealingTools and
-                             PlayerShip.Cargo.Element(I).Amount >= Times then
+                             PlayerShip.Cargo.Element(J).Amount >= Times then
                               HealAmount := abs (HealAmount);
                               UpdateCargo
                                 (PlayerShip,
-                                 PlayerShip.Cargo.Element(I).ProtoIndex,
+                                 PlayerShip.Cargo.Element(J).ProtoIndex,
                                  (0 - Times));
                               exit;
                            end if;
