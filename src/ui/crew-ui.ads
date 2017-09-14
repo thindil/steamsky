@@ -23,6 +23,7 @@ package Crew.UI is
    procedure ShowCrewInfo; -- Show crew info
    procedure ShowOrdersMenu; -- Show menu with orders for crew
    procedure DismissMember; -- Dismiss selected crew member
+   procedure ShowInventory; -- Show inventory of selected crew member
    function CrewInfoKeys
      (Key: Key_Code;
       OldState: GameStates) return GameStates; -- Handle keys in crew info menu
@@ -34,5 +35,8 @@ package Crew.UI is
    function OrdersPrioritiesKeys
      (Key: Key_Code)
      return GameStates; -- Handle keys in crew orders priorities menu
+   function InventoryKeys
+     (Key: Key_Code)
+     return GameStates; -- Handle keys in crew member inventory view
 
 end Crew.UI;

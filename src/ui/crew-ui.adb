@@ -311,7 +311,8 @@ package body Crew.UI is
       if CurrentLine >= Lines - 4 then
          CurrentLine := Lines - 5;
       end if;
-      ActionsWindow := Create(5, (Columns / 2), CurrentLine, (Columns / 2));
+      ActionsWindow := Create(6, (Columns / 2), CurrentLine, (Columns / 2));
+      CurrentLine := -1;
       if Member.Tired < 100 and
         Member.Hunger < 100 and
         Member.Thirst < 100 then
@@ -330,6 +331,18 @@ package body Crew.UI is
             Color => 1,
             Attr => BoldCharacters);
       end if;
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
+      Add
+        (Win => ActionsWindow,
+         Str => "Press F2 to show crew member inventory");
+      Change_Attributes
+        (Win => ActionsWindow,
+         Line => CurrentLine,
+         Column => 6,
+         Count => 2,
+         Color => 1,
+         Attr => BoldCharacters);
       for Module of PlayerShip.Modules loop
          if Module.Durability > 0 and
            Modules_List(Module.ProtoIndex).MType = CABIN and
@@ -737,6 +750,226 @@ package body Crew.UI is
       Refresh(MenuWindow2);
    end ShowPrioritiesMenu;
 
+   procedure ShowItemInfo is
+      InfoWindow, ClearWindow, BoxWindow: Window;
+      ItemIndex: constant Positive := Get_Index(Current(CrewMenu));
+      ItemWeight: constant Positive :=
+        PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount *
+        Items_List
+          (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+          .Weight;
+      CurrentLine: Line_Position := 1;
+      WindowHeight: Line_Position := 8;
+      WindowWidth: Column_Position;
+   begin
+      ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
+      Refresh_Without_Update(ClearWindow);
+      Delete(ClearWindow);
+      if PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability <
+        100 then
+         WindowHeight := WindowHeight + 1;
+      end if;
+      WindowHeight :=
+        WindowHeight +
+        Line_Position
+          ((Length
+              (Items_List
+                 (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+                 .Description) /
+            (Natural(Columns / 2) - 4)));
+      WindowWidth :=
+        Column_Position
+          (Length
+             (Items_List
+                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+                .Description) +
+           5);
+      if WindowWidth <
+        Column_Position
+          (Positive'Image
+             (Items_List
+                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+                .Weight)'
+             Length +
+           5) then
+         WindowWidth :=
+           Column_Position
+             (Positive'Image
+                (Items_List
+                   (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
+                      .ProtoIndex)
+                   .Weight)'
+                Length +
+              5);
+      end if;
+      if WindowWidth > (Columns / 2) then
+         WindowWidth := Columns / 2;
+      end if;
+      BoxWindow := Create(WindowHeight, WindowWidth, 3, (Columns / 2));
+      WindowFrame(BoxWindow, 2, "Item info");
+      InfoWindow :=
+        Create(WindowHeight - 2, WindowWidth - 4, 4, (Columns / 2) + 2);
+      Add(Win => InfoWindow, Str => "Type: ");
+      if Items_List
+          (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+          .ShowType =
+        Null_Unbounded_String then
+         Add
+           (Win => InfoWindow,
+            Str =>
+              To_String
+                (Items_List
+                   (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
+                      .ProtoIndex)
+                   .IType));
+      else
+         Add
+           (Win => InfoWindow,
+            Str =>
+              To_String
+                (Items_List
+                   (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
+                      .ProtoIndex)
+                   .ShowType));
+      end if;
+      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+      Add
+        (Win => InfoWindow,
+         Str =>
+           "Amount:" &
+           Positive'Image
+             (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount));
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+      Add
+        (Win => InfoWindow,
+         Str =>
+           "Weight:" &
+           Positive'Image
+             (Items_List
+                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+                .Weight) &
+           " kg");
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+      Add
+        (Win => InfoWindow,
+         Str => "Total weight:" & Positive'Image(ItemWeight) & " kg");
+      CurrentLine := CurrentLine + 1;
+      if PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability <
+        100 then
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         Add(Win => InfoWindow, Str => "Status: ");
+         declare
+            DamagePercent: Natural;
+            TextLength: Positive;
+            TextColor: Color_Pair;
+         begin
+            DamagePercent :=
+              100 -
+              Natural
+                ((Float
+                    (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
+                       .Durability) /
+                  100.0) *
+                 100.0);
+            if DamagePercent > 0 and DamagePercent < 20 then
+               Add(Win => InfoWindow, Str => "Slightly used");
+               TextLength := 13;
+               TextColor := 2;
+            elsif DamagePercent > 19 and DamagePercent < 50 then
+               Add(Win => InfoWindow, Str => "Damaged");
+               TextLength := 7;
+               TextColor := 1;
+            elsif DamagePercent > 49 and DamagePercent < 80 then
+               Add(Win => InfoWindow, Str => "Heavily damaged");
+               TextLength := 15;
+               TextColor := 3;
+            elsif DamagePercent > 79 and DamagePercent < 100 then
+               Add(Win => InfoWindow, Str => "Almost destroyed");
+               TextLength := 16;
+               TextColor := 4;
+            end if;
+            Change_Attributes
+              (Win => InfoWindow,
+               Line => CurrentLine,
+               Column => 8,
+               Count => TextLength,
+               Color => TextColor);
+         end;
+         CurrentLine := CurrentLine + 1;
+      end if;
+      if Items_List
+          (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+          .Description /=
+        Null_Unbounded_String then
+         CurrentLine := CurrentLine + 1;
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         Add
+           (Win => InfoWindow,
+            Str =>
+              To_String
+                (Items_List
+                   (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
+                      .ProtoIndex)
+                   .Description));
+      end if;
+      CurrentLine := WindowHeight + 3;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      Add(Str => "Press Escape to back to crew informations");
+      Change_Attributes
+        (Line => CurrentLine,
+         Column => (Columns / 2) + 6,
+         Count => 6,
+         Color => 1,
+         Attr => BoldCharacters);
+      Refresh_Without_Update;
+      Refresh_Without_Update(BoxWindow);
+      Delete(BoxWindow);
+      Refresh_Without_Update(InfoWindow);
+      Delete(InfoWindow);
+      Refresh_Without_Update(MenuWindow);
+      Update_Screen;
+   end ShowItemInfo;
+
+   procedure ShowInventory is
+      Cargo_Items: constant Item_Array_Access :=
+        new Item_Array
+        (1 .. (PlayerShip.Crew(MemberIndex).Inventory.Last_Index + 1));
+      MenuHeight: Line_Position;
+      MenuLength: Column_Position;
+   begin
+      if PlayerShip.Crew(MemberIndex).Inventory.Length = 0 then
+         Move_Cursor(Line => (Lines / 3), Column => (Columns / 4));
+         Add(Str => "Empty, press Escape to back to crew list.");
+         Change_Attributes
+           (Line => (Lines / 3),
+            Column => (Columns / 4) + 13,
+            Count => 6,
+            Color => 1,
+            Attr => BoldCharacters);
+         Refresh;
+         return;
+      end if;
+      for I in
+        PlayerShip.Crew(MemberIndex).Inventory.First_Index ..
+            PlayerShip.Crew(MemberIndex).Inventory.Last_Index loop
+         Cargo_Items.all(I) :=
+           New_Item(GetItemName(PlayerShip.Crew(MemberIndex).Inventory(I)));
+      end loop;
+      Cargo_Items.all(Cargo_Items'Last) := Null_Item;
+      CrewMenu := New_Menu(Cargo_Items);
+      Set_Format(CrewMenu, Lines - 10, 1);
+      Scale(CrewMenu, MenuHeight, MenuLength);
+      MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
+      Set_Window(CrewMenu, MenuWindow);
+      Set_Sub_Window
+        (CrewMenu,
+         Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
+      Post(CrewMenu);
+      ShowItemInfo;
+   end ShowInventory;
+
    function CrewInfoKeys
      (Key: Key_Code;
       OldState: GameStates) return GameStates is
@@ -779,6 +1012,9 @@ package body Crew.UI is
             ShowGameHeader(Help_Topic);
             ShowHelp(Crew_Info, 7);
             return Help_Topic;
+         when Key_F2 => -- Show crew member inventory
+            DrawGame(Inventory_View);
+            return Inventory_View;
          when others =>
             Result := Driver(CrewMenu, Key);
             if Result /= Menu_Ok then
@@ -1018,5 +1254,42 @@ package body Crew.UI is
       end if;
       return Orders_Priorities;
    end OrdersPrioritiesKeys;
+
+   function InventoryKeys(Key: Key_Code) return GameStates is
+      Result: Driver_Result;
+   begin
+      if PlayerShip.Crew(MemberIndex).Inventory.Length = 0 then
+         if Key = 27 then -- back to crew info
+            DrawGame(Crew_Info);
+            return Crew_Info;
+         end if;
+         return Inventory_View;
+      end if;
+      case Key is
+         when 27 => -- back to crew info
+            DrawGame(Crew_Info);
+            return Crew_Info;
+         when 56 | KEY_UP => -- Select previous item in inventory
+            Result := Driver(CrewMenu, M_Up_Item);
+            if Result = Request_Denied then
+               Result := Driver(CrewMenu, M_Last_Item);
+            end if;
+         when 50 | KEY_DOWN => -- Select next item in inventory
+            Result := Driver(CrewMenu, M_Down_Item);
+            if Result = Request_Denied then
+               Result := Driver(CrewMenu, M_First_Item);
+            end if;
+         when others =>
+            Result := Driver(CrewMenu, Key);
+            if Result /= Menu_Ok then
+               Result := Driver(CrewMenu, M_Clear_Pattern);
+               Result := Driver(CrewMenu, Key);
+            end if;
+      end case;
+      if Result = Menu_Ok then
+         ShowItemInfo;
+      end if;
+      return Inventory_View;
+   end InventoryKeys;
 
 end Crew.UI;
