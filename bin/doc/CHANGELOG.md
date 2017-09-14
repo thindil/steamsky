@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
 - Ability to set condition to stop ship auto movement
 - Attributes to characters
 - Raise character endurance with Condition attribute
+- Crew members inventory
 
 ### Changed
 - Updated interface
