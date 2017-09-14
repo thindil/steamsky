@@ -86,7 +86,8 @@ package Game is
       Loot_Form,
       Workshops_Menu,
       Small_Terminal,
-      ChangeHome_Confirm); -- Game states
+      ChangeHome_Confirm,
+      Inventory_View); -- Game states
    type Date_Record is -- Data for game date/time
    record
       Year: Natural;
