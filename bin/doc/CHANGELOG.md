@@ -51,6 +51,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about low level of food/drinks/fuel
 - Crash in help on resizing window
 - Crafting skill for Wooden cooking set and Wooden bucket recipes
+- Healing crew members
 
 ## [1.5] - 2017-08-20
 
