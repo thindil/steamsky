@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Updated MODDING.md
 - Updated README.md
+- Amount of repair tools in starting cargo
 
 ### Fixed
 - Info about time for new recruits/missions in bases list
