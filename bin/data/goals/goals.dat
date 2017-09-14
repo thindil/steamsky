@@ -290,4 +290,8 @@ Target = Pirates
 Type = Destroy
 Amount = 500
 Target = Pirates
+[86]
+Type = Destroy
+Amount = 1000
+Target = Pirates
 []
