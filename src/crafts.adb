@@ -446,7 +446,9 @@ package body Crafts is
                          (Float'Floor
                             (Float(Recipe.ResultAmount) *
                              (Float
-                                (GetSkillLevel(CrafterIndex, Recipe.Skill)) /
+                                (GetSkillLevel
+                                   (PlayerShip.Crew(CrafterIndex),
+                                    Recipe.Skill)) /
                               100.0)));
                      Damage :=
                        1.0 -
@@ -533,7 +535,9 @@ package body Crafts is
                         DamageItem
                           (PlayerShip.Crew(CrafterIndex).Inventory,
                            ToolIndex,
-                           GetSkillLevel(CrafterIndex, Recipe.Skill));
+                           GetSkillLevel
+                             (PlayerShip.Crew(CrafterIndex),
+                              Recipe.Skill));
                      end if;
                      if Module.Data(1) > 0 then
                         Amount :=

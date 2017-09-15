@@ -46,16 +46,12 @@ package body Combat is
          for I in Spotter.Crew.Iterate loop
             case Spotter.Crew(I).Order is
                when Pilot =>
-                  Result :=
-                    Result +
-                    GetSkillLevel(Crew_Container.To_Index(I), 5, Spotter.Crew);
+                  Result := Result + GetSkillLevel(Spotter.Crew(I), 5);
                   if Spotter = PlayerShip then
                      GainExp(1, 5, Crew_Container.To_Index(I));
                   end if;
                when Gunner =>
-                  Result :=
-                    Result +
-                    GetSkillLevel(Crew_Container.To_Index(I), 5, Spotter.Crew);
+                  Result := Result + GetSkillLevel(Spotter.Crew(I), 5);
                   if Spotter = PlayerShip then
                      GainExp(1, 5, Crew_Container.To_Index(I));
                   end if;
@@ -314,7 +310,7 @@ package body Combat is
                   end if;
                   if GunnerIndex > 0 then
                      HitChance :=
-                       HitChance + GetSkillLevel(GunnerIndex, 3, Ship.Crew);
+                       HitChance + GetSkillLevel(Ship.Crew(GunnerIndex), 3);
                   end if;
                   if HitChance < -48 then
                      HitChance := -48;
@@ -685,14 +681,15 @@ package body Combat is
             when others =>
                null;
          end case;
-         EvadeBonus := EvadeBonus + GetSkillLevel(PilotIndex, 1);
+         EvadeBonus :=
+           EvadeBonus + GetSkillLevel(PlayerShip.Crew(PilotIndex), 1);
       else
          AccuracyBonus := 20;
          EvadeBonus := -10;
       end if;
       if EnemyPilotIndex > 0 then
          AccuracyBonus :=
-           AccuracyBonus - GetSkillLevel(EnemyPilotIndex, 1, Enemy.Ship.Crew);
+           AccuracyBonus - GetSkillLevel(Enemy.Ship.Crew(EnemyPilotIndex), 1);
       end if;
       if EngineerIndex > 0 and HaveFuel then
          Message :=

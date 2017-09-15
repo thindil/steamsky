@@ -132,7 +132,8 @@ package body Events is
                         when others =>
                            null;
                      end case;
-                     if Roll2 > GetSkillLevel(CrewIndex, 2) then
+                     if Roll2 >
+                       GetSkillLevel(PlayerShip.Crew(CrewIndex), 2) then
                         AddMessage
                           ("One of your engines is taking damage.",
                            OtherMessage,
@@ -170,7 +171,8 @@ package body Events is
                        ("Sudden bad weather makes your travel takes longer.",
                         OtherMessage,
                         3);
-                     TimePassed := 60 - GetSkillLevel(CrewIndex, 1);
+                     TimePassed :=
+                       60 - GetSkillLevel(PlayerShip.Crew(CrewIndex), 1);
                      if TimePassed < 1 then
                         TimePassed := 1;
                      end if;

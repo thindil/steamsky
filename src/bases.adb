@@ -73,7 +73,8 @@ package body Bases is
            Integer
              (Float'Floor
                 (Float(Price) *
-                 (Float(GetSkillLevel(TraderIndex, 4)) / 200.0)));
+                 (Float(GetSkillLevel(PlayerShip.Crew(TraderIndex), 4)) /
+                  200.0)));
       end if;
       if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
          case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
