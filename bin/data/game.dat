@@ -30,3 +30,4 @@ TradersName = trader
 AttributesNames = Strength, Dexterity, Intelligence, Condition
 Skills = Piloting:Dexterity, Engineering:Intelligence, Gunnery:Dexterity, Rhetoric:Intelligence, Perception:Intelligence, Alchemy:Intelligence, Cooking:Dexterity, Gunsmith:Dexterity, Metalsmith:Dexterity, Medicine:Intelligence, Farming:Strength, Woodcutting:Strength, Brewery:Intelligence, Blacksmith:Strength, Woodworking:Strength
 ConditionName = Condition
+StrengthName = Strength
