@@ -249,7 +249,7 @@ package body Ships.Upgrade is
       end if;
       UpgradePoints :=
         ((GetSkillLevel
-            (WorkerIndex,
+            (PlayerShip.Crew(WorkerIndex),
              Modules_List
                (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
                .RepairSkill) /
@@ -296,7 +296,7 @@ package body Ships.Upgrade is
            (PlayerShip.Crew(WorkerIndex).Inventory,
             UpgradeTools,
             GetSkillLevel
-              (WorkerIndex,
+              (PlayerShip.Crew(WorkerIndex),
                Modules_List
                  (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
                  .RepairSkill));

@@ -18,9 +18,8 @@
 package Ships.Crew is
 
    function GetSkillLevel
-     (MemberIndex, SkillIndex: Positive;
-      Crew: Crew_Container.Vector :=
-        PlayerShip.Crew)
+     (Member: Member_Data;
+      SkillIndex: Positive)
      return Natural; -- Get level of skill of selected crew member
    procedure Death
      (MemberIndex: Positive;
