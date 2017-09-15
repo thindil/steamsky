@@ -335,7 +335,7 @@ package body Game is
       DataFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex, StartIndex, EndIndex, Amount: Natural;
-      FieldsNames: constant array(1 .. 32) of Unbounded_String :=
+      FieldsNames: constant array(1 .. 33) of Unbounded_String :=
         (To_Unbounded_String("BasesSyllablesPre"),
          To_Unbounded_String("BasesSyllablesStart"),
          To_Unbounded_String("BasesSyllablesEnd"),
@@ -367,7 +367,8 @@ package body Game is
          To_Unbounded_String("MoneyIndex"),
          To_Unbounded_String("TradersName"),
          To_Unbounded_String("AttributesNames"),
-         To_Unbounded_String("ConditionName"));
+         To_Unbounded_String("ConditionName"),
+         To_Unbounded_String("StrengthName"));
    begin
       if BaseSyllablesStart.Length > 0 then
          return True;
@@ -517,6 +518,9 @@ package body Game is
                            Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 32 =>
                         ConditionIndex :=
+                          Attributes_Names.Find_Index(Item => Value);
+                     when 33 =>
+                        StrengthIndex :=
                           Attributes_Names.Find_Index(Item => Value);
                   end case;
                   StartIndex := EndIndex + 2;
