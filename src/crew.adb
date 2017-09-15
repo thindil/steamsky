@@ -62,6 +62,12 @@ package body Crew is
          ToolsIndex :=
            FindItem(Inventory => PlayerShip.Cargo, ItemType => RequiredTool);
          if ToolsIndex = 0 then
+            ToolsIndex :=
+              FindItem
+                (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+                 ItemType => RequiredTool);
+         end if;
+         if ToolsIndex = 0 then
             case GivenOrder is
                when Repair =>
                   raise Crew_Order_Error
