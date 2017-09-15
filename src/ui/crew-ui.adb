@@ -761,6 +761,7 @@ package body Crew.UI is
       CurrentLine: Line_Position := 1;
       WindowHeight: Line_Position := 8;
       WindowWidth: Column_Position;
+      FreeSpace: constant Integer := FreeInventory(MemberIndex, 0);
    begin
       ClearWindow := Create(Lines - 3, (Columns / 2), 3, (Columns / 2));
       Refresh_Without_Update(ClearWindow);
@@ -915,6 +916,9 @@ package body Crew.UI is
                    .Description));
       end if;
       CurrentLine := WindowHeight + 3;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      Add(Str => "Free inventory space:" & Integer'Image(FreeSpace) & " kg");
+      CurrentLine := CurrentLine + 1;
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
       Add(Str => "Press Escape to back to crew informations");
       Change_Attributes
@@ -1167,7 +1171,7 @@ package body Crew.UI is
       end if;
       return Orders_For_All;
    exception
-      when An_Exception : Crew_Order_Error =>
+      when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
          ShowDialog(Exception_Message(An_Exception));
          DrawGame(Crew_Info);
          return Crew_Info;

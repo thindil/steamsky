@@ -17,6 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with Ada.Exceptions; use Ada.Exceptions;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Messages; use Messages;
 with Ships; use Ships;
@@ -660,6 +661,10 @@ package body Crafts is
             end if;
          end if;
       end loop;
+   exception
+      when An_Exception : Crew_No_Space_Error =>
+         AddMessage(Exception_Message(An_Exception), OrderMessage, 3);
+         GiveOrders(CrafterIndex, Rest);
    end Manufacturing;
 
    function FindRecipe(Index: Unbounded_String) return Natural is
