@@ -56,6 +56,7 @@ package Crew is
       Inventory: Inventory_Container.Vector; -- Owned items by member
    end record;
    Crew_Order_Error: exception; -- Raised when new order can't be set for selected crew member
+   Crew_No_Space_Error: exception; -- Raised when no space for new item in crew member inventory
 
    procedure GiveOrders
      (MemberIndex: Positive;
@@ -86,5 +87,9 @@ package Crew is
       Durability,
       InventoryIndex: Natural :=
         0); -- Update member inventory
+   function FreeInventory
+     (MemberIndex: Positive;
+      Amount: Integer)
+     return Integer; -- Return available space in crew member inventory after adding/extracting Amount
 
 end Crew;

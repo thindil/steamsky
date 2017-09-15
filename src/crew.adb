@@ -847,7 +847,7 @@ package body Crew is
          GiveOrders(MemberIndex, Order, ModuleIndex);
          return True;
       exception
-         when An_Exception : Crew_Order_Error =>
+         when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
             AddMessage(Exception_Message(An_Exception), OrderMessage, 3);
             return False;
       end UpdatePosition;
@@ -1150,6 +1150,7 @@ package body Crew is
       ProtoIndex, Durability, InventoryIndex: Natural := 0) is
       ItemIndex: Natural := 0;
       NewAmount: Natural;
+      Weight: Integer;
    begin
       if InventoryIndex = 0 then
          for I in PlayerShip.Crew(MemberIndex).Inventory.Iterate loop
@@ -1163,6 +1164,24 @@ package body Crew is
          end loop;
       else
          ItemIndex := InventoryIndex;
+      end if;
+      if Amount > 0 then
+         if ItemIndex > 0 then
+            Weight :=
+              0 -
+              Items_List
+                  (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
+                     .ProtoIndex)
+                  .Weight *
+                Amount;
+         else
+            Weight := 0 - Items_List(ProtoIndex).Weight * Amount;
+         end if;
+         if FreeInventory(MemberIndex, Weight) < 0 then
+            raise Crew_No_Space_Error
+              with To_String(PlayerShip.Crew(MemberIndex).Name) &
+              " don't have free space in own inventory.";
+         end if;
       end if;
       if ItemIndex = 0 then
          PlayerShip.Crew(MemberIndex).Inventory.Append
@@ -1183,5 +1202,17 @@ package body Crew is
          PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount := NewAmount;
       end if;
    end UpdateInventory;
+
+   function FreeInventory
+     (MemberIndex: Positive;
+      Amount: Integer) return Integer is
+      FreeSpace: Integer := 20 + PlayerShip.Crew(MemberIndex).Attributes(1)(1);
+   begin
+      for Item of PlayerShip.Crew(MemberIndex).Inventory loop
+         FreeSpace :=
+           FreeSpace - (Items_List(Item.ProtoIndex).Weight * Item.Amount);
+      end loop;
+      return FreeSpace + Amount;
+   end FreeInventory;
 
 end Crew;
