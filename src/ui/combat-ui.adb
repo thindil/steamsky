@@ -496,19 +496,19 @@ package body Combat.UI is
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          case Order is
             when Pilot =>
-               if GetSkillLevel(I, 1) > SkillValue then
+               if GetSkillLevel(PlayerShip.Crew(I), 1) > SkillValue then
                   SkillIndex := I;
-                  SkillValue := GetSkillLevel(I, 1);
+                  SkillValue := GetSkillLevel(PlayerShip.Crew(I), 1);
                end if;
             when Engineer =>
-               if GetSkillLevel(I, 2) > SkillValue then
+               if GetSkillLevel(PlayerShip.Crew(I), 2) > SkillValue then
                   SkillIndex := I;
-                  SkillValue := GetSkillLevel(I, 2);
+                  SkillValue := GetSkillLevel(PlayerShip.Crew(I), 2);
                end if;
             when Gunner =>
-               if GetSkillLevel(I, 3) > SkillValue then
+               if GetSkillLevel(PlayerShip.Crew(I), 3) > SkillValue then
                   SkillIndex := I;
-                  SkillValue := GetSkillLevel(I, 3);
+                  SkillValue := GetSkillLevel(PlayerShip.Crew(I), 3);
                end if;
             when others =>
                null;
@@ -519,15 +519,15 @@ package body Combat.UI is
             SkillString := Null_Unbounded_String;
             case Order is
                when Pilot =>
-                  if GetSkillLevel(I, 1) > 0 then
+                  if GetSkillLevel(PlayerShip.Crew(I), 1) > 0 then
                      SkillString := To_Unbounded_String(" +");
                   end if;
                when Engineer =>
-                  if GetSkillLevel(I, 2) > 0 then
+                  if GetSkillLevel(PlayerShip.Crew(I), 2) > 0 then
                      SkillString := To_Unbounded_String(" +");
                   end if;
                when Gunner =>
-                  if GetSkillLevel(I, 3) > 0 then
+                  if GetSkillLevel(PlayerShip.Crew(I), 3) > 0 then
                      SkillString := To_Unbounded_String(" +");
                   end if;
                when others =>

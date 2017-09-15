@@ -21,33 +21,29 @@ with HallOfFame; use HallOfFame;
 package body Ships.Crew is
 
    function GetSkillLevel
-     (MemberIndex, SkillIndex: Positive;
-      Crew: Crew_Container.Vector := PlayerShip.Crew) return Natural is
+     (Member: Member_Data;
+      SkillIndex: Positive) return Natural is
       SkillLevel: Integer := 0;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       BaseSkillLevel: Natural;
    begin
-      for Skill of Crew(MemberIndex).Skills loop
+      for Skill of Member.Skills loop
          if Skill(1) = SkillIndex then
             BaseSkillLevel :=
-              Skill(2) +
-              Crew(MemberIndex).Attributes(Skills_List(Skill(1)).Attribute)(1);
-            Damage :=
-              1.0 - DamageFactor(Float(Crew(MemberIndex).Health) / 100.0);
+              Skill(2) + Member.Attributes(Skills_List(Skill(1)).Attribute)(1);
+            Damage := 1.0 - DamageFactor(Float(Member.Health) / 100.0);
             SkillLevel :=
               SkillLevel +
               (BaseSkillLevel -
                Integer(Float(BaseSkillLevel) * Float(Damage)));
-            if Crew(MemberIndex).Thirst > 40 then
-               Damage :=
-                 1.0 - DamageFactor(Float(Crew(MemberIndex).Thirst) / 100.0);
+            if Member.Thirst > 40 then
+               Damage := 1.0 - DamageFactor(Float(Member.Thirst) / 100.0);
                SkillLevel :=
                  SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
             end if;
-            if Crew(MemberIndex).Hunger > 80 then
-               Damage :=
-                 1.0 - DamageFactor(Float(Crew(MemberIndex).Hunger) / 100.0);
+            if Member.Hunger > 80 then
+               Damage := 1.0 - DamageFactor(Float(Member.Hunger) / 100.0);
                SkillLevel :=
                  SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
             end if;

@@ -567,7 +567,8 @@ package body Crew is
                   when Engineer =>
                      GainExp(Times, 2, I);
                   when Heal =>
-                     HealAmount := Times * (GetSkillLevel(I, 10) / 20);
+                     HealAmount :=
+                       Times * (GetSkillLevel(PlayerShip.Crew(I), 10) / 20);
                      if HealAmount < Times then
                         HealAmount := Times;
                      end if;
