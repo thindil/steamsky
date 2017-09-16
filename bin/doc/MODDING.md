@@ -122,6 +122,11 @@ To change which attribute is used to raise character condition, open file
 *game.dat* in *data* directory and edit line which starts with ConditionName.
 Value after equal sign must be existing attribute name.
 
+## Strength attribute name
+To change which attribute is used to count character maximum encumbrance, open
+file *game.dat* in *data* directory and edit line which starts with 
+StrenghtName. Value after equal sign must be existing attribute name.
+
 ## Items
 
 ### General informations
