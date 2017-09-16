@@ -187,20 +187,36 @@ package body Ships.Upgrade is
       OrderTime, CurrentMinutes: Integer;
       procedure FindMatsAndTools is
       begin
-         UpgradeMaterial := 0;
-         UpgradeTools := 0;
-         for I in PlayerShip.Cargo.Iterate loop
-            if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
-              Modules_List
-                (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
-                .RepairMaterial then
-               UpgradeMaterial := Inventory_Container.To_Index(I);
-            elsif Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
-              RepairTools then
-               UpgradeTools := Inventory_Container.To_Index(I);
+         UpgradeMaterial :=
+           FindItem
+             (Inventory => PlayerShip.Cargo,
+              ItemType =>
+                Modules_List
+                  (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
+                  .RepairMaterial);
+         UpgradeTools :=
+           FindItem
+             (Inventory => PlayerShip.Crew(WorkerIndex).Inventory,
+              ItemType => RepairTools);
+         if UpgradeTools = 0 then
+            UpgradeTools :=
+              FindItem(Inventory => PlayerShip.Cargo, ItemType => RepairTools);
+            if UpgradeTools > 0 then
+               UpdateInventory
+                 (WorkerIndex,
+                  1,
+                  PlayerShip.Cargo(UpgradeTools).ProtoIndex,
+                  PlayerShip.Cargo(UpgradeTools).Durability);
+               UpdateCargo
+                 (Ship => PlayerShip,
+                  Amount => -1,
+                  CargoIndex => UpgradeTools);
+               UpgradeTools :=
+                 FindItem
+                   (Inventory => PlayerShip.Crew(WorkerIndex).Inventory,
+                    ItemType => RepairTools);
             end if;
-            exit when UpgradeMaterial > 0 and UpgradeTools > 0;
-         end loop;
+         end if;
       end FindMatsAndTools;
       procedure MaxUpgradeReached(MessageText: String) is
       begin
