@@ -656,15 +656,11 @@ package body Crew is
                         GiveOrders(I, Rest);
                      end if;
                   when Clean =>
-                     ToolIndex := 0;
+                     ToolIndex :=
+                       FindItem
+                         (Inventory => PlayerShip.Crew(I).Inventory,
+                          ItemType => CleaningTools);
                      NeedCleaning := False;
-                     for J in PlayerShip.Cargo.Iterate loop
-                        if Items_List(PlayerShip.Cargo(J).ProtoIndex).IType =
-                          CleaningTools then
-                           ToolIndex := Inventory_Container.To_Index(J);
-                           exit;
-                        end if;
-                     end loop;
                      if ToolIndex > 0 then
                         for Module of PlayerShip.Modules loop
                            if Modules_List(Module.ProtoIndex).MType = CABIN and
