@@ -790,23 +790,45 @@ package body Ships is
                      10) *
                     CrewRepairPoints(PointsIndex);
                   RepairPoints := CrewRepairPoints(PointsIndex) + PointsBonus;
-                  RepairMaterial := 0;
-                  ToolsIndex := 0;
-                  for K in PlayerShip.Cargo.Iterate loop
-                     if Items_List(PlayerShip.Cargo(K).ProtoIndex).IType =
-                       Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                         .RepairMaterial then
-                        RepairMaterial := Inventory_Container.To_Index(K);
-                  -- Limit repair point depends on amount of repair materials
-                        if PlayerShip.Cargo(K).Amount < RepairPoints then
-                           RepairPoints := PlayerShip.Cargo(K).Amount;
-                        end if;
-                     elsif Items_List(PlayerShip.Cargo(K).ProtoIndex).IType =
-                       RepairTools then
-                        ToolsIndex := Inventory_Container.To_Index(K);
+                  RepairMaterial :=
+                    FindItem
+                      (Inventory => PlayerShip.Cargo,
+                       ItemType =>
+                         Modules_List
+                           (PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                           .RepairMaterial);
+                  if RepairMaterial > 0 then
+                     if PlayerShip.Cargo(RepairMaterial).Amount <
+                       RepairPoints then
+                        RepairPoints :=
+                          PlayerShip.Cargo(RepairMaterial).Amount;
                      end if;
-                     exit when RepairMaterial > 0 and ToolsIndex > 0;
-                  end loop;
+                  end if;
+                  ToolsIndex :=
+                    FindItem
+                      (Inventory => PlayerShip.Crew(J).Inventory,
+                       ItemType => RepairTools);
+                  if ToolsIndex = 0 then
+                     ToolsIndex :=
+                       FindItem
+                         (Inventory => PlayerShip.Cargo,
+                          ItemType => RepairTools);
+                     if ToolsIndex > 0 then
+                        UpdateInventory
+                          (Crew_Container.To_Index(J),
+                           1,
+                           PlayerShip.Cargo(ToolsIndex).ProtoIndex,
+                           PlayerShip.Cargo(ToolsIndex).Durability);
+                        UpdateCargo
+                          (Ship => PlayerShip,
+                           Amount => -1,
+                           CargoIndex => ToolsIndex);
+                        ToolsIndex :=
+                          FindItem
+                            (Inventory => PlayerShip.Crew(J).Inventory,
+                             ItemType => RepairTools);
+                     end if;
+                  end if;
                   if RepairMaterial = 0 then
                      AddMessage
                        ("You don't have repair materials to continue repairs of " &
