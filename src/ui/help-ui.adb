@@ -69,9 +69,12 @@ package body Help.UI is
       VariableIndex: Natural;
       VariablesNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("{MoneyName}"),
-         To_Unbounded_String("{FuelName}"));
+         To_Unbounded_String("{FuelName}"),
+         To_Unbounded_String("{StrengthName}"));
       VariablesValues: constant array(Positive range <>) of Unbounded_String :=
-        (MoneyName, Items_List(FindProtoItem(ItemType => FuelType)).Name);
+        (MoneyName,
+         Items_List(FindProtoItem(ItemType => FuelType)).Name,
+         Attributes_Names(StrengthIndex));
    begin
       if HelpIndex > 0 then
          TopicIndex := HelpIndex;
