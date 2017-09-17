@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Attributes to characters
 - Raise character endurance with Condition attribute
 - Crew members inventory
+- Showing current condition attribute name in help
 
 ### Changed
 - Updated interface
