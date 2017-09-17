@@ -238,15 +238,19 @@ package body Crew is
               FindItem
                 (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
                  ItemType => RequiredTool);
-            UpdateCargo
-              (PlayerShip,
-               PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex,
-               1,
-               PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex).Durability);
-            UpdateInventory
-              (MemberIndex => MemberIndex,
-               Amount => -1,
-               InventoryIndex => ToolsIndex);
+            if ToolsIndex > 0 then
+               UpdateCargo
+                 (PlayerShip,
+                  PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex)
+                    .ProtoIndex,
+                  1,
+                  PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex)
+                    .Durability);
+               UpdateInventory
+                 (MemberIndex => MemberIndex,
+                  Amount => -1,
+                  InventoryIndex => ToolsIndex);
+            end if;
          end if;
       end if;
       PlayerShip.Crew(MemberIndex).Order := GivenOrder;
