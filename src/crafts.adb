@@ -538,7 +538,8 @@ package body Crafts is
                            ToolIndex,
                            GetSkillLevel
                              (PlayerShip.Crew(CrafterIndex),
-                              Recipe.Skill));
+                              Recipe.Skill),
+                           CrafterIndex);
                      end if;
                      if Module.Data(1) > 0 then
                         Amount :=

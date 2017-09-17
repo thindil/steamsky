@@ -315,7 +315,8 @@ package body Ships.Upgrade is
               (PlayerShip.Crew(WorkerIndex),
                Modules_List
                  (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
-                 .RepairSkill));
+                 .RepairSkill),
+            WorkerIndex);
          FindMatsAndTools;
          UpgradeProgress :=
            PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress -

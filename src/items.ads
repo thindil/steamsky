@@ -62,7 +62,8 @@ package Items is
    procedure DamageItem
      (Inventory: in out Inventory_Container.Vector;
       ItemIndex: Positive;
-      SkillLevel: Natural :=
+      SkillLevel,
+      MemberIndex: Natural :=
         0); -- Check if item in ship cargo or character inventory was damaged
    function FindItem
      (Inventory: Inventory_Container.Vector;
