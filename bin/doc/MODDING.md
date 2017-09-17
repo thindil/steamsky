@@ -320,6 +320,9 @@ StrenghtName. Value after equal sign must be existing attribute name.
   be replaced with name of game money.
 - Inside help text you can use special variable `{FuelName}` which later will
   be replaced with name of fuel for ship.
+- Inside help text you can use special variable `{StrengthName}` which later
+  will be replaced with name of attribute used to count max character
+  encumbrance.
 
 ## Goals
 
