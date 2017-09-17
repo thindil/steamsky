@@ -98,8 +98,11 @@ Speed of rest of crew members depends on quality, damage level and cleanliness o
 You can hire new crew members in bases. First you must dock to base, then you choice Recruit option from orders menu. Amount of available recruits depends on size of base. They hire cost depends on amount of knowledge (skills and attributes and level of skills and attributes). Here no limit how much crew members you can have on ship, just remember, all of them needs food, drinks and place to rest. Hiring new crew members reduce population of base. New recruits are available every 30 days between visits of base. 
 If your ship is docked to base, you can dismiss crew members. Go to crew info screen and use Dismiss option from Orders menu on selected crew member. Dismissed crew members joins to base population.
 Hunger, thirst and wounds have impact on your crew members skills. Wounded or hungry crew members have penalties to their skills.
+When crew member start working on duty which needs any tool (like crafting, cleaning, upgrading or repairing ship) he/she takes needed tool to own inventory.
+Each crew member have maximum encumbrance for inventory which depends on his/her {StrengthName}.
 Crew members skills levels, starting from lowest: Beginner, Novice, Apprentice, Practitioner, Competent, Respected, Renowned, Master, Grand-Master, Legendary, Ultimate.
 Crew members attributes levels, starting from lowest: Very low, Low, Below average, Average, Above average, High, Very high, Outstanding.
+Each skill is associated with one attribute. It means that real skill level is sum of skill level and associated attribute level. Gaining experience in skill cause gaining experience in associated attribute too. Attributes levels grows much slower than skills levels.
 Each crew member can have set orders priorities. Highest priority means that this crew member will be stop current work and go on selected order if that position is needed and vacant. Normal priority means that this crew member will take selected position when he/she is on break if that position is needed and vacant. None means that this crew member will be ignore selected position if that position is needed and vacant. Each crew member starts with no orders priorities set.
 To set orders priorities, open Orders menu, select 'Set orders priorities' and use Left arrow key to reduce priority and Right arrow key to raise priority of selected order. When you finish setting, select option 'Quit' from menu.
 You may scroll list of crew members skills with PageUp and PageDown keys.
@@ -141,6 +144,4 @@ You can see more detailed informations about finished missions by pressing key '
 * If you deliver medicines for free to diseased base, you gain some reputation in that base. If you sell medicines to diseased base, you earn some money but lost reputation. Amount of gained or lost reputation depends on how much medicines you gave or sold.
 * You can check progress of your character goal in 'Game statistics' menu (key {GameKey 32}). There you can change it too, but if you do it, progress of old goal will be lost. If you finish your current goal, new random goal will be set.
 * Abandoned bases may be recovered by someone. In that situation, they gains small population and new owner.
-* Each skill is associated with one attribute. It means that real skill level is sum of skill level and associated attribute level. Gaining experience in skill cause gaining experience in associated attribute too. Attributes levels grows much slower than skills levels.
-* When crew member start working on duty which needs any tool (like crafting, cleaning, upgrading or repairing ship) he/she takes needed tool to own inventory.
 []
