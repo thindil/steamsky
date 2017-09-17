@@ -898,7 +898,8 @@ package body Ships is
                        (PlayerShip.Crew(J),
                         Modules_List
                           (PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                          .RepairSkill));
+                          .RepairSkill),
+                     Crew_Container.To_Index(J));
                   exit when not RepairNeeded;
                end if;
             end if;

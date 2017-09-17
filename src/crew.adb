@@ -675,8 +675,9 @@ package body Crew is
                                  Module.Data(1) := Module.Data(1) + Times;
                               end if;
                               DamageItem
-                                (PlayerShip.Crew(I).Inventory,
-                                 ToolIndex);
+                                (Inventory => PlayerShip.Crew(I).Inventory,
+                                 ItemIndex => ToolIndex,
+                                 MemberIndex => I);
                               exit;
                            end if;
                         end loop;

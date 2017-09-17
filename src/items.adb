@@ -22,6 +22,7 @@ with Log; use Log;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Utils; use Utils;
+with Crew; use Crew;
 
 package body Items is
 
@@ -168,7 +169,7 @@ package body Items is
    procedure DamageItem
      (Inventory: in out Inventory_Container.Vector;
       ItemIndex: Positive;
-      SkillLevel: Natural := 0) is
+      SkillLevel, MemberIndex: Natural := 0) is
       DamageChance: Integer :=
         Items_List(Inventory(ItemIndex).ProtoIndex).Value;
       I: Natural := Inventory.First_Index;
@@ -193,10 +194,17 @@ package body Items is
       end if;
       Inventory(ItemIndex).Durability := Inventory(ItemIndex).Durability - 1;
       if Inventory(ItemIndex).Durability = 0 then -- Item destroyed
-         UpdateCargo
-           (Ship => PlayerShip,
-            CargoIndex => ItemIndex,
-            Amount => -1);
+         if MemberIndex = 0 then
+            UpdateCargo
+              (Ship => PlayerShip,
+               CargoIndex => ItemIndex,
+               Amount => -1);
+         else
+            UpdateInventory
+              (MemberIndex => MemberIndex,
+               Amount => -1,
+               InventoryIndex => ItemIndex);
+         end if;
          return;
       end if;
       while I <= Inventory.Last_Index loop
@@ -204,10 +212,25 @@ package body Items is
             if Inventory(I).ProtoIndex = Inventory(J).ProtoIndex and
               Inventory(I).Durability = Inventory(J).Durability and
               I /= J then
-               UpdateCargo
-                 (Ship => PlayerShip,
-                  CargoIndex => J,
-                  Amount => (0 - Inventory.Element(J).Amount));
+               if MemberIndex = 0 then
+                  UpdateCargo
+                    (Ship => PlayerShip,
+                     CargoIndex => J,
+                     Amount => (0 - Inventory.Element(J).Amount));
+                  UpdateCargo
+                    (Ship => PlayerShip,
+                     CargoIndex => I,
+                     Amount => Inventory.Element(J).Amount);
+               else
+                  UpdateInventory
+                    (MemberIndex => MemberIndex,
+                     Amount => (0 - Inventory.Element(J).Amount),
+                     InventoryIndex => J);
+                  UpdateInventory
+                    (MemberIndex => MemberIndex,
+                     Amount => Inventory.Element(J).Amount,
+                     InventoryIndex => I);
+               end if;
                I := I - 1;
                exit;
             end if;
