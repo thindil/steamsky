@@ -20,8 +20,6 @@ with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 
 package Ships.UI is
 
-   ShipsMenu: Menu; -- Menu for ship modules/cargo
-
    procedure ShowShipForm
      (OptionText: String;
       MaxRange: Natural := 0); -- Show form to rename module/drop cargo
@@ -29,5 +27,8 @@ package Ships.UI is
      (Key: Key_Code;
       CurrentState: GameStates)
      return GameStates; -- Handle keys in rename/drop cargo form
+
+private
+   ShipsMenu: Menu; -- Menu for ship modules/cargo
 
 end Ships.UI;
