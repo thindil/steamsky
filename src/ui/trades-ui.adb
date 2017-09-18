@@ -25,12 +25,12 @@ with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
-with Ships.UI.Cargo; use Ships.UI.Cargo;
 with Help.UI; use Help.UI;
 with Events; use Events;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
 with Bases.UI; use Bases.UI;
+with Items.UI; use Items.UI;
 
 package body Trades.UI is
 
@@ -191,7 +191,7 @@ package body Trades.UI is
          if PlayerShip.Cargo(CargoIndex).Durability < 100 then
             Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
             Add(Win => InfoWindow, Str => "Status: ");
-            ShowCargoStatus(CargoIndex, InfoWindow, 4);
+            ShowItemStatus(PlayerShip.Cargo, CargoIndex, InfoWindow, 4);
             CurrentLine := 5;
          end if;
          CurrentLine := CurrentLine + 1;

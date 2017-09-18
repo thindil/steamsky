@@ -24,6 +24,7 @@ with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
 with Utils.UI; use Utils.UI;
 with Game; use Game;
+with Items.UI; use Items.UI;
 
 package body Crew.UI is
 
@@ -852,43 +853,11 @@ package body Crew.UI is
         100 then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
          Add(Win => InfoWindow, Str => "Status: ");
-         declare
-            DamagePercent: Natural;
-            TextLength: Positive;
-            TextColor: Color_Pair;
-         begin
-            DamagePercent :=
-              100 -
-              Natural
-                ((Float
-                    (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
-                       .Durability) /
-                  100.0) *
-                 100.0);
-            if DamagePercent > 0 and DamagePercent < 20 then
-               Add(Win => InfoWindow, Str => "Slightly used");
-               TextLength := 13;
-               TextColor := 2;
-            elsif DamagePercent > 19 and DamagePercent < 50 then
-               Add(Win => InfoWindow, Str => "Damaged");
-               TextLength := 7;
-               TextColor := 1;
-            elsif DamagePercent > 49 and DamagePercent < 80 then
-               Add(Win => InfoWindow, Str => "Heavily damaged");
-               TextLength := 15;
-               TextColor := 3;
-            elsif DamagePercent > 79 and DamagePercent < 100 then
-               Add(Win => InfoWindow, Str => "Almost destroyed");
-               TextLength := 16;
-               TextColor := 4;
-            end if;
-            Change_Attributes
-              (Win => InfoWindow,
-               Line => CurrentLine,
-               Column => 8,
-               Count => TextLength,
-               Color => TextColor);
-         end;
+         ShowItemStatus
+           (PlayerShip.Crew(MemberIndex).Inventory,
+            ItemIndex,
+            InfoWindow,
+            CurrentLine);
          CurrentLine := CurrentLine + 1;
       end if;
       if Items_List
