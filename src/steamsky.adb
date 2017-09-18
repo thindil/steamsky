@@ -36,7 +36,7 @@ with Game; use Game;
 with Game.SaveLoad; use Game.SaveLoad;
 with Messages.UI; use Messages.UI;
 with Crew; use Crew;
-with Crew.UI; use Crew.UI;
+with Crew.UI.Keys; use Crew.UI.Keys;
 with Ships; use Ships;
 with Ships.UI; use Ships.UI;
 with Ships.UI.Cargo; use Ships.UI.Cargo;
