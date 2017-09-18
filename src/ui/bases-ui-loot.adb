@@ -22,10 +22,10 @@ with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
-with Ships.UI.Cargo; use Ships.UI.Cargo;
 with Bases; use Bases;
 with Utils.UI; use Utils.UI;
 with Messages; use Messages;
+with Items.UI; use Items.UI;
 
 package body Bases.UI.Loot is
 
@@ -111,7 +111,7 @@ package body Bases.UI.Loot is
          if PlayerShip.Cargo(CargoIndex).Durability < 100 then
             Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
             Add(Win => InfoWindow, Str => "Status: ");
-            ShowCargoStatus(CargoIndex, InfoWindow, 3);
+            ShowItemStatus(PlayerShip.Cargo, CargoIndex, InfoWindow, 3);
             CurrentLine := 4;
          end if;
          CurrentLine := CurrentLine + 1;
