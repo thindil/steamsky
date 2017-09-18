@@ -16,7 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
-with Game; use Game;
+with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 
 package Crew.UI is
 
@@ -24,19 +24,17 @@ package Crew.UI is
    procedure ShowOrdersMenu; -- Show menu with orders for crew
    procedure DismissMember; -- Dismiss selected crew member
    procedure ShowInventory; -- Show inventory of selected crew member
-   function CrewInfoKeys
-     (Key: Key_Code;
-      OldState: GameStates) return GameStates; -- Handle keys in crew info menu
-   function CrewOrdersKeys
-     (Key: Key_Code) return GameStates; -- Handle keys in crew orders menu
-   function CrewOrdersAllKeys
-     (Key: Key_Code)
-     return GameStates; -- Handle keys in orders for all crew menu
-   function OrdersPrioritiesKeys
-     (Key: Key_Code)
-     return GameStates; -- Handle keys in crew orders priorities menu
-   function InventoryKeys
-     (Key: Key_Code)
-     return GameStates; -- Handle keys in crew member inventory view
+
+private
+   CrewMenu, OrdersMenu, PrioritiesMenu: Menu;
+   MenuWindow, MenuWindow2, SkillsPad: Window;
+   MemberIndex, PriorityIndex: Positive := 1;
+   NeedClean, NeedRepairs: Boolean := False;
+   StartIndex, EndIndex: Integer := 0;
+
+   procedure ShowMemberInfo; -- Show informations about selected crew member
+   procedure ShowOrdersForAll; -- Show menu with orders for whole crew
+   procedure ShowPrioritiesMenu; -- Show piorities settings for selected crew member
+   procedure ShowItemInfo; -- Show informations about selected item in crew member inventory
 
 end Crew.UI;
