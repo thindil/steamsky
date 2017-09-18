@@ -133,7 +133,7 @@ package Game is
    DrinksType: Unbounded_String;
    CorpseIndex: Unbounded_String;
    MissionItemsType: Unbounded_String;
-   FoodTypes: array(1 .. 2) of Unbounded_String;
+   FoodTypes: UnboundedString_Container.Vector; -- Contains food types names
    FuelType: Unbounded_String;
    MoneyIndex: Unbounded_String;
    MoneyName: Unbounded_String;

@@ -209,18 +209,18 @@ package body Header is
             EndColumn := EndColumn + 12;
          end if;
       end if;
-      ItemIndex :=
-        FindItem(Inventory => PlayerShip.Cargo, ItemType => FoodTypes(1));
-      if ItemIndex = 0 then
+      for FoodType of FoodTypes loop
          ItemIndex :=
-           FindItem(Inventory => PlayerShip.Cargo, ItemType => FoodTypes(2));
-      end if;
+           FindItem(Inventory => PlayerShip.Cargo, ItemType => FoodType);
+         exit when ItemIndex > 0;
+      end loop;
       if ItemIndex = 0 then
          EndColumn := EndColumn + 9;
       else
          for Item of PlayerShip.Cargo loop
-            if Items_List(Item.ProtoIndex).IType = FoodTypes(1) or
-              Items_List(Item.ProtoIndex).IType = FoodTypes(2) then
+            if FoodTypes.Find_Index
+              (Item => Items_List(Item.ProtoIndex).IType) /=
+              UnboundedString_Container.No_Index then
                FoodAmount := FoodAmount + Item.Amount;
             end if;
             exit when FoodAmount > GameSettings.LowFood;

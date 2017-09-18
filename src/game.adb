@@ -504,8 +504,9 @@ package body Game is
                      when 26 =>
                         MissionItemsType := Value;
                      when 27 =>
-                        FoodTypes(J) :=
-                          Unbounded_Slice(Value, StartIndex, EndIndex - 1);
+                        FoodTypes.Append
+                        (New_Item =>
+                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 28 =>
                         FuelType := Value;
                      when 29 =>

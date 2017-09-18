@@ -408,26 +408,11 @@ package body Crew is
                -1);
             return ConsumeValue;
          end if;
-         if ItemType = FoodTypes(1) then
-            ItemIndex :=
-              FindItem
-                (Inventory => PlayerShip.Cargo,
-                 ItemType => FoodTypes(2));
-            if ItemIndex > 0 then
-               ConsumeValue :=
-                 Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value;
-               UpdateCargo
-                 (PlayerShip,
-                  PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
-                  -1);
-               return ConsumeValue;
-            end if;
-         end if;
          return 0;
       end Consume;
       procedure UpdateMember(Member: in out Member_Data) is
          BackToWork: Boolean := True;
-         ConsumeResult: Natural;
+         ConsumeResult: Natural := 0;
       begin
          Member.Tired := TiredLevel;
          if TiredLevel = 0 and
@@ -469,7 +454,10 @@ package body Crew is
                1);
          end if;
          if HungerLevel > 80 then
-            ConsumeResult := Consume(FoodTypes(1));
+            for FoodType of FoodTypes loop
+               ConsumeResult := Consume(FoodType);
+               exit when ConsumeResult > 0;
+            end loop;
             HungerLevel := HungerLevel - ConsumeResult;
             if HungerLevel < 0 then
                HungerLevel := 0;
