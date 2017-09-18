@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New goal: destroy 200 drones ships
+- Option to set any amount of items types as food types
 
 ## [1.6] - 2017-09-17
 
