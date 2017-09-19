@@ -63,7 +63,7 @@ with Log; use Log;
 with GameOptions; use GameOptions;
 with Goals.UI; use Goals.UI;
 with HallOfFame; use HallOfFame;
-with Trades.UI; use Trades.UI;
+with Trades.UI.Keys; use Trades.UI.Keys;
 with Utils.UI; use Utils.UI;
 
 procedure SteamSky is

@@ -15,21 +15,11 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Terminal_Interface.Curses; use Terminal_Interface.Curses;
-with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
-with Game; use Game;
+package Trades.UI.Keys is
 
-package Trades.UI is
+   function TradeKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in bases trades
+   function TradeFormKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in trade form
 
-   procedure ShowTrade; -- Show trade window
-
-private
-   Buy: Boolean; -- If true, buy item, otherwise sell it
-   TradeForm: Form; -- Form for set item amount for trade
-   FormWindow: Window; -- Window for tradinf form
-
-   procedure ShowItemInfo; -- Show detailed informations about selected item
-   function ShowTradeForm
-     return GameStates; -- Show trade form for buy/sell item
-
-end Trades.UI;
+end Trades.UI.Keys;
