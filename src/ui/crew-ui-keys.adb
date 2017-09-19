@@ -193,7 +193,6 @@ package body Crew.UI.Keys is
             return Crew_Info;
          when 27 => -- Esc select close option, used second time, close menu
             if OrderName = "Close" then
-               Post(MoveForm, False);
                DrawGame(Crew_Info);
                return Crew_Info;
             else
