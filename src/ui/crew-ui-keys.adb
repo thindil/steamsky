@@ -19,12 +19,57 @@ with Ada.Exceptions; use Ada.Exceptions;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with ShipModules; use ShipModules;
 with Help.UI; use Help.UI;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
 
 package body Crew.UI.Keys is
+
+   function MoveItemResult return GameStates is
+      FieldIndex: constant Positive := Get_Index(Current(MoveForm));
+      ItemIndex: constant Positive := Get_Index(Current(CrewMenu));
+      Item: constant InventoryData :=
+        PlayerShip.Crew(MemberIndex).Inventory(ItemIndex);
+      Visibility: Cursor_Visibility := Invisible;
+   begin
+      if FieldIndex = 3 or
+        Get_Buffer(Fields(MoveForm, 2)) = "                    " then
+         Set_Cursor_Visibility(Visibility);
+         Post(MoveForm, False);
+         Delete(MoveForm);
+         DrawGame(Inventory_View);
+         return Inventory_View;
+      end if;
+      UpdateCargo
+        (PlayerShip,
+         Item.ProtoIndex,
+         Integer'Value(Get_Buffer(Fields(MoveForm, 2))),
+         Item.Durability);
+      UpdateInventory
+        (MemberIndex => MemberIndex,
+         Amount => (0 - Integer'Value(Get_Buffer(Fields(MoveForm, 2)))),
+         InventoryIndex => ItemIndex);
+      if
+        (PlayerShip.Crew(MemberIndex).Order = Clean and
+         FindItem
+             (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+              ItemType => CleaningTools) =
+           0) or
+        ((PlayerShip.Crew(MemberIndex).Order = Upgrading or
+          PlayerShip.Crew(MemberIndex).Order = Repair) and
+         FindItem
+             (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+              ItemType => RepairTools) =
+           0) then
+         GiveOrders(MemberIndex, Rest);
+      end if;
+      Post(MoveForm, False);
+      Delete(MoveForm);
+      DrawGame(Inventory_View);
+      return Inventory_View;
+   end MoveItemResult;
 
    function CrewInfoKeys
      (Key: Key_Code;
@@ -148,6 +193,7 @@ package body Crew.UI.Keys is
             return Crew_Info;
          when 27 => -- Esc select close option, used second time, close menu
             if OrderName = "Close" then
+               Post(MoveForm, False);
                DrawGame(Crew_Info);
                return Crew_Info;
             else
@@ -382,8 +428,7 @@ package body Crew.UI.Keys is
                   Set_Current(MoveForm, Fields(MoveForm, FieldIndex));
                end if;
             else
-               DrawGame(Inventory_View);
-               return Inventory_View;
+               return MoveItemResult;
             end if;
          when Key_Backspace => -- delete last character
             if FieldIndex = 2 then
@@ -414,6 +459,8 @@ package body Crew.UI.Keys is
                Set_Current(MoveForm, Fields(MoveForm, 3));
                Result := Form_Ok;
             else
+               Post(MoveForm, False);
+               Delete(MoveForm);
                DrawGame(Inventory_View);
                return Inventory_View;
             end if;
