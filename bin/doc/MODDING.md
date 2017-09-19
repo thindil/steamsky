@@ -63,10 +63,10 @@ after equal sign must be existing item type.
 
 ## Food items types
 To change which items types are used as food, open file *game.dat* in *data*
-directory and edit line which starts with FoodTypes. First type is main food
-type, second type is used by crew members when first type isn't found in ship
-cargo. Values after equal sign must be existing items types, separated by coma
-and space: `, `.
+directory and edit line which starts with FoodTypes. First type is always
+main type, other types used only when items of previous types are not found
+in ship cargo. Values after equal sign must be existing items types, 
+separated by coma and space: `, `.
 
 ## Fuel item type
 To change which item type is used as a fuel for ship, open file *game.dat* in 
