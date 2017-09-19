@@ -310,4 +310,8 @@ Target = Pirates
 Type = Destroy
 Amount = 200
 Target = Drones
+[91]
+Type = Destroy
+Amount = 250
+Target = Drones
 []
