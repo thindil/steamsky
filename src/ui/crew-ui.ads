@@ -17,6 +17,7 @@
 
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
+with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 
 package Crew.UI is
 
@@ -27,14 +28,16 @@ package Crew.UI is
 
 private
    CrewMenu, OrdersMenu, PrioritiesMenu: Menu;
-   MenuWindow, MenuWindow2, SkillsPad: Window;
+   MenuWindow, MenuWindow2, SkillsPad, FormWindow: Window;
    MemberIndex, PriorityIndex: Positive := 1;
    NeedClean, NeedRepairs: Boolean := False;
    StartIndex, EndIndex: Integer := 0;
+   MoveForm: Form;
 
    procedure ShowMemberInfo; -- Show informations about selected crew member
    procedure ShowOrdersForAll; -- Show menu with orders for whole crew
    procedure ShowPrioritiesMenu; -- Show piorities settings for selected crew member
    procedure ShowItemInfo; -- Show informations about selected item in crew member inventory
+   procedure ShowMoveForm; -- Show form for move item from crew member inventory to ship cargo
 
 end Crew.UI;
