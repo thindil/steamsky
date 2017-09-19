@@ -259,6 +259,10 @@ begin
                when Giving_Orders | Orders_For_All | Orders_Priorities =>
                   GameState := Crew_Info;
                   DrawGame(Crew_Info);
+               when MoveItem_Form =>
+                  Set_Cursor_Visibility(Visibility);
+                  GameState := Inventory_View;
+                  DrawGame(GameState);
                when others =>
                   DrawGame(GameState);
             end case;
@@ -443,6 +447,8 @@ begin
             Refresh;
          when Inventory_View =>
             GameState := InventoryKeys(Key);
+         when MoveItem_Form =>
+            GameState := MoveItemFormKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;

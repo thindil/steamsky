@@ -22,13 +22,14 @@ with Ships; use Ships;
 with ShipModules; use ShipModules;
 with Help.UI; use Help.UI;
 with Header; use Header;
+with Utils.UI; use Utils.UI;
 
 package body Crew.UI.Keys is
 
    function CrewInfoKeys
      (Key: Key_Code;
       OldState: GameStates) return GameStates is
-      Result: Driver_Result;
+      Result: Menus.Driver_Result;
       RefreshSkills: Boolean := False;
    begin
       case Key is
@@ -94,7 +95,7 @@ package body Crew.UI.Keys is
    end CrewInfoKeys;
 
    function CrewOrdersKeys(Key: Key_Code) return GameStates is
-      Result: Driver_Result;
+      Result: Menus.Driver_Result;
       ModuleIndex: constant Natural :=
         Natural'Value(Description(Current(OrdersMenu)));
       OrderName: constant String := Name(Current(OrdersMenu));
@@ -171,7 +172,7 @@ package body Crew.UI.Keys is
    end CrewOrdersKeys;
 
    function CrewOrdersAllKeys(Key: Key_Code) return GameStates is
-      Result: Driver_Result;
+      Result: Menus.Driver_Result;
       OrderName: constant String := Name(Current(OrdersMenu));
    begin
       case Key is
@@ -229,7 +230,7 @@ package body Crew.UI.Keys is
    end CrewOrdersAllKeys;
 
    function OrdersPrioritiesKeys(Key: Key_Code) return GameStates is
-      Result: Driver_Result;
+      Result: Menus.Driver_Result;
       OptionIndex: Positive := PriorityIndex;
       NewPriority: Integer := -1;
    begin
@@ -311,7 +312,7 @@ package body Crew.UI.Keys is
    end OrdersPrioritiesKeys;
 
    function InventoryKeys(Key: Key_Code) return GameStates is
-      Result: Driver_Result;
+      Result: Menus.Driver_Result;
    begin
       if PlayerShip.Crew(MemberIndex).Inventory.Length = 0 then
          if Key = 27 then -- back to crew info
@@ -334,6 +335,9 @@ package body Crew.UI.Keys is
             if Result = Request_Denied then
                Result := Driver(CrewMenu, M_First_Item);
             end if;
+         when 10 => -- Move item to ship cargo
+            ShowMoveForm;
+            return MoveItem_Form;
          when others =>
             Result := Driver(CrewMenu, Key);
             if Result /= Menu_Ok then
@@ -346,5 +350,90 @@ package body Crew.UI.Keys is
       end if;
       return Inventory_View;
    end InventoryKeys;
+
+   function MoveItemFormKeys(Key: Key_Code) return GameStates is
+      Result: Forms.Driver_Result;
+      FieldIndex: Positive := Get_Index(Current(MoveForm));
+      Visibility: Cursor_Visibility := Invisible;
+   begin
+      case Key is
+         when KEY_UP => -- Select previous field
+            Result := Driver(MoveForm, F_Previous_Field);
+            FieldIndex := Get_Index(Current(MoveForm));
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_End_Line);
+            end if;
+         when KEY_DOWN => -- Select next field
+            Result := Driver(MoveForm, F_Next_Field);
+            FieldIndex := Get_Index(Current(MoveForm));
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_End_Line);
+            end if;
+         when 10 => -- quit/move item
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_Next_Field);
+               if Result = Form_Ok then
+                  if Get_Buffer(Fields(MoveForm, 2)) =
+                    "                    " then
+                     FieldIndex := 3;
+                  else
+                     FieldIndex := 4;
+                  end if;
+                  Set_Current(MoveForm, Fields(MoveForm, FieldIndex));
+               end if;
+            else
+               DrawGame(Inventory_View);
+               return Inventory_View;
+            end if;
+         when Key_Backspace => -- delete last character
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_Delete_Previous);
+               if Result = Form_Ok then
+                  FieldIndex := Get_Index(Current(MoveForm));
+                  if FieldIndex /= 2 then
+                     FieldIndex := 2;
+                     Set_Current(MoveForm, Fields(MoveForm, 2));
+                  end if;
+               end if;
+            end if;
+         when KEY_DC => -- delete character at cursor
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_Delete_Char);
+            end if;
+         when KEY_RIGHT => -- Move cursor right
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_Right_Char);
+            end if;
+         when KEY_LEFT => -- Move cursor left
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_Left_Char);
+            end if;
+         when 27 => -- Escape select cancel button, second time closes form
+            if FieldIndex /= 3 then
+               FieldIndex := 3;
+               Set_Current(MoveForm, Fields(MoveForm, 3));
+               Result := Form_Ok;
+            else
+               DrawGame(Inventory_View);
+               return Inventory_View;
+            end if;
+         when others =>
+            Result := Driver(MoveForm, Key);
+      end case;
+      if Result = Form_Ok then
+         for I in 2 .. 4 loop
+            Set_Foreground(Fields(MoveForm, I));
+            Set_Background(Fields(MoveForm, I));
+         end loop;
+         Set_Foreground(Current(MoveForm), BoldCharacters, 11);
+         Set_Background(Current(MoveForm), BoldCharacters, 11);
+         if FieldIndex = 2 then
+            Visibility := Normal;
+         end if;
+         Set_Cursor_Visibility(Visibility);
+         Refresh(FormWindow);
+      end if;
+      return MoveItem_Form;
+   end MoveItemFormKeys;
 
 end Crew.UI.Keys;
