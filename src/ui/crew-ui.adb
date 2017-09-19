@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Messages; use Messages;
@@ -880,6 +881,15 @@ package body Crew.UI is
       Add(Str => "Free inventory space:" & Integer'Image(FreeSpace) & " kg");
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
+      Add(Str => "Press Enter to move item to ship cargo");
+      Change_Attributes
+        (Line => CurrentLine,
+         Column => (Columns / 2) + 6,
+         Count => 5,
+         Color => 1,
+         Attr => BoldCharacters);
+      CurrentLine := CurrentLine + 1;
+      Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
       Add(Str => "Press Escape to back to crew informations");
       Change_Attributes
         (Line => CurrentLine,
@@ -933,5 +943,74 @@ package body Crew.UI is
       Post(CrewMenu);
       ShowItemInfo;
    end ShowInventory;
+
+   procedure ShowMoveForm is
+      Move_Fields: constant Field_Array_Access := new Field_Array(1 .. 5);
+      FieldOptions: Field_Option_Set;
+      FormHeight: Line_Position;
+      FormLength: Column_Position;
+      Visibility: Cursor_Visibility := Normal;
+      ItemIndex: constant Positive := Get_Index(Current(CrewMenu));
+      MaxAmount: constant Positive := PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount;
+      FieldText: constant String := "Enter amount (max " & Positive'Image(MaxAmount) & "): ";
+      CaptionText: Unbounded_String;
+   begin
+      if MoveForm = Null_Form then
+         Set_Cursor_Visibility(Visibility);
+         Move_Fields.all(1) :=
+           New_Field(1, Column_Position(FieldText'Length), 0, 0, 0, 0);
+         FieldOptions := Get_Options(Move_Fields.all(1));
+         Set_Buffer(Move_Fields.all(1), 0, FieldText);
+         FieldOptions.Active := False;
+         Set_Options(Move_Fields.all(1), FieldOptions);
+         Move_Fields.all(2) :=
+           New_Field(1, 20, 0, Column_Position(FieldText'Length), 0, 0);
+         FieldOptions := Get_Options(Move_Fields.all(2));
+         FieldOptions.Auto_Skip := False;
+         Set_Options(Move_Fields.all(2), FieldOptions);
+         Set_Foreground(Move_Fields.all(2), BoldCharacters, 11);
+         Set_Background(Move_Fields.all(2), BoldCharacters, 11);
+         Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type
+           (Move_Fields.all(2),
+            (0, 0, MaxAmount));
+         Move_Fields.all(3) :=
+           New_Field(1, 8, 2, (Column_Position(FieldText'Length) / 2), 0, 0);
+         Set_Buffer(Move_Fields.all(3), 0, "[Cancel]");
+         FieldOptions := Get_Options(Move_Fields.all(3));
+         FieldOptions.Edit := False;
+         Set_Options(Move_Fields.all(3), FieldOptions);
+         Move_Fields.all(4) :=
+           New_Field
+             (1,
+              4,
+              2,
+              (Column_Position(FieldText'Length) / 2) + 10,
+              0,
+              0);
+         FieldOptions := Get_Options(Move_Fields.all(4));
+         FieldOptions.Edit := False;
+         Set_Options(Move_Fields.all(4), FieldOptions);
+         Set_Buffer(Move_Fields.all(4), 0, "[Ok]");
+         Move_Fields.all(5) := Null_Field;
+         MoveForm := New_Form(Move_Fields);
+         Scale(MoveForm, FormHeight, FormLength);
+         FormWindow :=
+           Create
+             (FormHeight + 2,
+              FormLength + 2,
+              ((Lines / 3) - (FormHeight / 2)),
+              ((Columns / 2) - (FormLength / 2)));
+         Box(FormWindow);
+         WindowFrame(FormWindow, 5, To_String(CaptionText));
+         Set_Window(MoveForm, FormWindow);
+         Set_Sub_Window
+           (MoveForm,
+            Derived_Window(FormWindow, FormHeight, FormLength, 1, 1));
+         Post(MoveForm);
+      end if;
+      Refresh_Without_Update;
+      Refresh_Without_Update(FormWindow);
+      Update_Screen;
+   end ShowMoveForm;
 
 end Crew.UI;
