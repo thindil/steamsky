@@ -451,6 +451,8 @@ begin
             GameState := MoveItemFormKeys(Key);
          when Cargo_Menu =>
             GameState := CargoMenuKeys(Key);
+         when CargoMove_Form =>
+            GameState := CargoMoveFormKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;
