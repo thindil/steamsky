@@ -314,4 +314,8 @@ Target = Drones
 Type = Destroy
 Amount = 250
 Target = Drones
+[92]
+Type = Destroy
+Amount = 500
+Target = Drones
 []
