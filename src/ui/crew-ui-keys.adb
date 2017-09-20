@@ -42,11 +42,11 @@ package body Crew.UI.Keys is
          DrawGame(Inventory_View);
       end RedrawScreen;
    begin
-      Amount := Positive'Value(Get_Buffer(Fields(MoveForm, 2)));
       if FieldIndex = 3 then
          RedrawScreen;
          return Inventory_View;
       end if;
+      Amount := Positive'Value(Get_Buffer(Fields(MoveForm, 2)));
       if FreeCargo(0 - Amount) < 0 then
          ShowDialog
            ("No free space in ship cargo for that amount of " &
