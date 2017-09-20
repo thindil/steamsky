@@ -22,8 +22,9 @@ with Items.UI; use Items.UI;
 
 package body Ships.UI.Cargo is
 
-   MenuWindow: Window;
+   MenuWindow, MenuWindow2: Window;
    CurrentMenuIndex: Positive := 1;
+   OptionsMenu: Menu;
 
    procedure ShowItemInfo is
       InfoWindow, ClearWindow, BoxWindow: Window;
@@ -128,7 +129,7 @@ package body Ships.UI.Cargo is
       end if;
       CurrentLine := WindowHeight + 3;
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
-      Add(Str => "Press Enter to drop cargo");
+      Add(Str => "Press Enter to see item options");
       Change_Attributes
         (Line => CurrentLine,
          Column => (Columns / 2) + 6,
@@ -186,13 +187,40 @@ package body Ships.UI.Cargo is
       ShowItemInfo;
    end ShowCargoInfo;
 
+   procedure ShowCargoMenu is
+      Options_Items: constant Item_Array_Access := new Item_Array(1 .. 4);
+      MenuHeight: Line_Position;
+      MenuLength: Column_Position;
+   begin
+      Options_Items.all :=
+        (New_Item("Drop item"),
+         New_Item("Give item to crew member"),
+         New_Item("Close"),
+         Null_Item);
+      OptionsMenu := New_Menu(Options_Items);
+      Set_Format(OptionsMenu, Lines - 10, 1);
+      Scale(OptionsMenu, MenuHeight, MenuLength);
+      MenuWindow2 :=
+        Create
+          (MenuHeight + 2,
+           MenuLength + 2,
+           ((Lines / 3) - (MenuHeight / 2)),
+           ((Columns / 2) - (MenuLength / 2)));
+      WindowFrame(MenuWindow2, 5, "Item options");
+      Set_Window(OptionsMenu, MenuWindow2);
+      Set_Sub_Window
+        (OptionsMenu,
+         Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
+      Post(OptionsMenu);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow2);
+      Update_Screen;
+   end ShowCargoMenu;
+
    function CargoInfoKeys
      (Key: Key_Code;
       OldState: GameStates) return GameStates is
       Result: Menus.Driver_Result;
-      ItemName: constant String :=
-        To_String
-          (Items_List(PlayerShip.Cargo(CurrentMenuIndex).ProtoIndex).Name);
    begin
       case Key is
          when 27 => -- Back sky map or combat screen
@@ -209,11 +237,9 @@ package body Ships.UI.Cargo is
             if Result = Request_Denied then
                Result := Driver(ShipsMenu, M_First_Item);
             end if;
-         when 10 => -- Drop selected cargo
-            ShowShipForm
-              ("Amount of " & ItemName & " to drop:",
-               PlayerShip.Cargo.Element(CurrentMenuIndex).Amount);
-            return Drop_Cargo;
+         when 10 => -- Show options for selected cargo
+            ShowCargoMenu;
+            return Cargo_Menu;
          when others =>
             Result := Driver(ShipsMenu, Key);
             if Result /= Menu_Ok then
@@ -227,5 +253,55 @@ package body Ships.UI.Cargo is
       CurrentMenuIndex := Get_Index(Current(ShipsMenu));
       return Cargo_Info;
    end CargoInfoKeys;
+
+   function CargoMenuKeys(Key: Key_Code) return GameStates is
+      Result: Menus.Driver_Result;
+      Option: constant String := Name(Current(OptionsMenu));
+      ItemName: constant String :=
+        To_String
+          (Items_List(PlayerShip.Cargo(CurrentMenuIndex).ProtoIndex).Name);
+   begin
+      case Key is
+         when 56 | KEY_UP => -- Select previous option
+            Result := Driver(OptionsMenu, M_Up_Item);
+            if Result = Request_Denied then
+               Result := Driver(OptionsMenu, M_Last_Item);
+            end if;
+         when 50 | KEY_DOWN => -- Select next option
+            Result := Driver(OptionsMenu, M_Down_Item);
+            if Result = Request_Denied then
+               Result := Driver(OptionsMenu, M_First_Item);
+            end if;
+         when 10 => -- Select option
+            Post(OptionsMenu, False);
+            Delete(OptionsMenu);
+            if Option = "Drop item" then
+               ShowShipForm
+                 ("Amount of " & ItemName & " to drop:",
+                  PlayerShip.Cargo.Element(CurrentMenuIndex).Amount);
+               return Drop_Cargo;
+            end if;
+            DrawGame(Cargo_Info);
+            return Cargo_Info;
+         when 27 => -- Esc select close option, used second time, close menu
+            if Option = "Close" then
+               Post(OptionsMenu, False);
+               Delete(OptionsMenu);
+               DrawGame(Cargo_Info);
+               return Cargo_Info;
+            end if;
+            Result := Driver(OptionsMenu, M_Last_Item);
+         when others =>
+            Result := Driver(OptionsMenu, Key);
+            if Result /= Menu_Ok then
+               Result := Driver(OptionsMenu, M_Clear_Pattern);
+               Result := Driver(OptionsMenu, Key);
+            end if;
+      end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow2);
+      end if;
+      return Cargo_Menu;
+   end CargoMenuKeys;
 
 end Ships.UI.Cargo;
