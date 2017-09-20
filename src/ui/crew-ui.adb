@@ -951,8 +951,10 @@ package body Crew.UI is
       FormLength: Column_Position;
       Visibility: Cursor_Visibility := Normal;
       ItemIndex: constant Positive := Get_Index(Current(CrewMenu));
-      MaxAmount: constant Positive := PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount;
-      FieldText: constant String := "Enter amount (max " & Positive'Image(MaxAmount) & "): ";
+      MaxAmount: constant Positive :=
+        PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount;
+      FieldText: constant String :=
+        "Enter amount (max " & Positive'Image(MaxAmount) & "): ";
       CaptionText: Unbounded_String;
    begin
       if MoveForm = Null_Form then
