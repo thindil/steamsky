@@ -240,7 +240,7 @@ begin
                when Recipe_Setting =>
                   GameState := Craft_View;
                   DrawGame(Craft_View);
-               when Drop_Cargo =>
+               when Drop_Cargo | Cargo_Menu =>
                   GameState := Cargo_Info;
                   DrawGame(Cargo_Info);
                when Rename_Module |
@@ -449,6 +449,8 @@ begin
             GameState := InventoryKeys(Key);
          when MoveItem_Form =>
             GameState := MoveItemFormKeys(Key);
+         when Cargo_Menu =>
+            GameState := CargoMenuKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;
