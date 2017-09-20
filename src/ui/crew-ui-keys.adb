@@ -47,7 +47,7 @@ package body Crew.UI.Keys is
          return Inventory_View;
       end if;
       Amount := Positive'Value(Get_Buffer(Fields(MoveForm, 2)));
-      if FreeCargo(0 - Amount) < 0 then
+      if FreeCargo(0 - (Items_List(Item.ProtoIndex).Weight * Amount)) < 0 then
          ShowDialog
            ("No free space in ship cargo for that amount of " &
             GetItemName(Item));
