@@ -89,7 +89,8 @@ package Game is
       ChangeHome_Confirm,
       Inventory_View,
       MoveItem_Form,
-      Cargo_Menu); -- Game states
+      Cargo_Menu,
+      CargoMove_Form); -- Game states
    type Date_Record is -- Data for game date/time
    record
       Year: Natural;

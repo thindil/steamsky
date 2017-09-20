@@ -15,6 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
+with Terminal_Interface.Curses.Forms.Field_Types.IntField;
+with Terminal_Interface.Curses.Forms.Field_Types.Enumeration;
+use Terminal_Interface.Curses.Forms.Field_Types.Enumeration;
 with UserInterface; use UserInterface;
 with Ships.Cargo; use Ships.Cargo;
 with Utils.UI; use Utils.UI;
@@ -25,6 +29,61 @@ package body Ships.UI.Cargo is
    MenuWindow, MenuWindow2: Window;
    CurrentMenuIndex: Positive := 1;
    OptionsMenu: Menu;
+   MoveForm: Form;
+
+   function MoveItemResult return GameStates is
+      FieldIndex: constant Positive := Get_Index(Current(MoveForm));
+      ItemIndex: constant Positive := Get_Index(Current(ShipsMenu));
+      Item: constant InventoryData := PlayerShip.Cargo(ItemIndex);
+      MemberName: Unbounded_String;
+      Amount, MemberIndex: Positive;
+      procedure RedrawScreen is
+         Visibility: Cursor_Visibility := Invisible;
+      begin
+         Set_Cursor_Visibility(Visibility);
+         Post(MoveForm, False);
+         Delete(MoveForm);
+         DrawGame(Cargo_Info);
+      end RedrawScreen;
+   begin
+      if FieldIndex = 3 then
+         RedrawScreen;
+         return Cargo_Info;
+      end if;
+      MemberName := To_Unbounded_String(Get_Buffer(Fields(MoveForm, 4)));
+      Trim(MemberName, Ada.Strings.Both);
+      for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Crew(I).Name = MemberName then
+            MemberIndex := Crew_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
+      Amount := Positive'Value(Get_Buffer(Fields(MoveForm, 2)));
+      if FreeInventory
+          (MemberIndex,
+           0 - (Items_List(Item.ProtoIndex).Weight * Amount)) <
+        0 then
+         ShowDialog
+           ("No free space in " &
+            To_String(MemberName) &
+            "'s inventory for that amount of " &
+            GetItemName(Item));
+         RedrawScreen;
+         return Cargo_Info;
+      end if;
+      UpdateInventory(MemberIndex, Amount, Item.ProtoIndex, Item.Durability);
+      UpdateCargo
+        (Ship => PlayerShip,
+         Amount => (0 - Amount),
+         CargoIndex => ItemIndex);
+      RedrawScreen;
+      return Cargo_Info;
+   exception
+      when Constraint_Error =>
+         ShowDialog("You entered wrong amount of item to move.");
+         RedrawScreen;
+         return Cargo_Info;
+   end MoveItemResult;
 
    procedure ShowItemInfo is
       InfoWindow, ClearWindow, BoxWindow: Window;
@@ -217,6 +276,92 @@ package body Ships.UI.Cargo is
       Update_Screen;
    end ShowCargoMenu;
 
+   procedure ShowCargoForm is
+      Move_Fields: constant Field_Array_Access := new Field_Array(1 .. 7);
+      FieldOptions: Field_Option_Set;
+      FormHeight: Line_Position;
+      FormLength: Column_Position;
+      Visibility: Cursor_Visibility := Normal;
+      ItemIndex: constant Positive := Menus.Get_Index(Current(ShipsMenu));
+      MaxAmount: constant Positive := PlayerShip.Cargo(ItemIndex).Amount;
+      FieldText: constant String :=
+        "Enter amount (max" & Positive'Image(MaxAmount) & "): ";
+      CaptionText: Unbounded_String;
+      MembersList: Enumeration_Info (Integer(PlayerShip.Crew.Length));
+   begin
+      if MoveForm = Null_Form then
+         Set_Cursor_Visibility(Visibility);
+         Move_Fields.all(1) :=
+           New_Field(1, Column_Position(FieldText'Length), 0, 0, 0, 0);
+         FieldOptions := Get_Options(Move_Fields.all(1));
+         Set_Buffer(Move_Fields.all(1), 0, FieldText);
+         FieldOptions.Active := False;
+         Set_Options(Move_Fields.all(1), FieldOptions);
+         Move_Fields.all(2) :=
+           New_Field(1, 20, 0, Column_Position(FieldText'Length), 0, 0);
+         FieldOptions := Get_Options(Move_Fields.all(2));
+         FieldOptions.Auto_Skip := False;
+         Set_Options(Move_Fields.all(2), FieldOptions);
+         Set_Foreground(Move_Fields.all(2), BoldCharacters, 11);
+         Set_Background(Move_Fields.all(2), BoldCharacters, 11);
+         Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type
+           (Move_Fields.all(2),
+            (0, 0, MaxAmount));
+         Move_Fields.all(3) := New_Field(1, 3, 1, 0, 0, 0);
+         FieldOptions := Get_Options(Move_Fields.all(3));
+         Set_Buffer(Move_Fields.all(3), 0, "To:");
+         FieldOptions.Active := False;
+         Set_Options(Move_Fields.all(3), FieldOptions);
+         for I in PlayerShip.Crew.Iterate loop
+            MembersList.Names(Crew_Container.To_Index(I)) :=
+              new String'(To_String(PlayerShip.Crew(I).Name));
+         end loop;
+         Move_Fields.all(4) := New_Field(1, 20, 1, 4, 0, 0);
+         Set_Field_Type(Move_Fields.all(4), Create(MembersList, True));
+         Set_Buffer(Move_Fields.all(4), 0, To_String(PlayerShip.Crew(1).Name));
+         FieldOptions := Get_Options(Move_Fields.all(4));
+         FieldOptions.Edit := False;
+         Set_Options(Move_Fields.all(4), FieldOptions);
+         Move_Fields.all(5) :=
+           New_Field(1, 8, 3, (Column_Position(FieldText'Length) / 2), 0, 0);
+         Set_Buffer(Move_Fields.all(5), 0, "[Cancel]");
+         FieldOptions := Get_Options(Move_Fields.all(5));
+         FieldOptions.Edit := False;
+         Set_Options(Move_Fields.all(5), FieldOptions);
+         Move_Fields.all(6) :=
+           New_Field
+             (1,
+              4,
+              3,
+              (Column_Position(FieldText'Length) / 2) + 10,
+              0,
+              0);
+         FieldOptions := Get_Options(Move_Fields.all(6));
+         FieldOptions.Edit := False;
+         Set_Options(Move_Fields.all(6), FieldOptions);
+         Set_Buffer(Move_Fields.all(6), 0, "[Ok]");
+         Move_Fields.all(7) := Null_Field;
+         MoveForm := New_Form(Move_Fields);
+         Scale(MoveForm, FormHeight, FormLength);
+         MenuWindow2 :=
+           Create
+             (FormHeight + 2,
+              FormLength + 2,
+              ((Lines / 3) - (FormHeight / 2)),
+              ((Columns / 2) - (FormLength / 2)));
+         Box(MenuWindow2);
+         WindowFrame(MenuWindow2, 5, To_String(CaptionText));
+         Set_Window(MoveForm, MenuWindow2);
+         Set_Sub_Window
+           (MoveForm,
+            Derived_Window(MenuWindow2, FormHeight, FormLength, 1, 1));
+         Post(MoveForm);
+      end if;
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow2);
+      Update_Screen;
+   end ShowCargoForm;
+
    function CargoInfoKeys
      (Key: Key_Code;
       OldState: GameStates) return GameStates is
@@ -280,6 +425,9 @@ package body Ships.UI.Cargo is
                  ("Amount of " & ItemName & " to drop:",
                   PlayerShip.Cargo.Element(CurrentMenuIndex).Amount);
                return Drop_Cargo;
+            elsif Option = "Give item to crew member" then
+               ShowCargoForm;
+               return CargoMove_Form;
             end if;
             DrawGame(Cargo_Info);
             return Cargo_Info;
@@ -303,5 +451,97 @@ package body Ships.UI.Cargo is
       end if;
       return Cargo_Menu;
    end CargoMenuKeys;
+
+   function CargoMoveFormKeys(Key: Key_Code) return GameStates is
+      Result: Forms.Driver_Result;
+      FieldIndex: Positive := Get_Index(Current(MoveForm));
+      Visibility: Cursor_Visibility := Invisible;
+   begin
+      case Key is
+         when KEY_UP => -- Select previous field
+            Result := Driver(MoveForm, F_Previous_Field);
+            FieldIndex := Get_Index(Current(MoveForm));
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_End_Line);
+            end if;
+         when KEY_DOWN => -- Select next field
+            Result := Driver(MoveForm, F_Next_Field);
+            FieldIndex := Get_Index(Current(MoveForm));
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_End_Line);
+            end if;
+         when 10 => -- quit/move item/change member
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_Next_Field);
+               if Result = Form_Ok then
+                  if Get_Buffer(Fields(MoveForm, 2)) =
+                    "                    " then
+                     FieldIndex := 5;
+                  else
+                     FieldIndex := 4;
+                  end if;
+                  Set_Current(MoveForm, Fields(MoveForm, FieldIndex));
+               end if;
+            elsif FieldIndex = 4 then
+               Result := Driver(MoveForm, F_Next_Choice);
+            else
+               return MoveItemResult;
+            end if;
+         when Key_Backspace => -- delete last character
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_Delete_Previous);
+               if Result = Form_Ok then
+                  FieldIndex := Get_Index(Current(MoveForm));
+                  if FieldIndex /= 2 then
+                     FieldIndex := 2;
+                     Set_Current(MoveForm, Fields(MoveForm, 2));
+                  end if;
+               end if;
+            end if;
+         when KEY_DC => -- delete character at cursor
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_Delete_Char);
+            end if;
+         when KEY_RIGHT => -- Move cursor right
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_Right_Char);
+            elsif FieldIndex = 4 then
+               Result := Driver(MoveForm, F_Next_Choice);
+            end if;
+         when KEY_LEFT => -- Move cursor left
+            if FieldIndex = 2 then
+               Result := Driver(MoveForm, F_Left_Char);
+            elsif FieldIndex = 4 then
+               Result := Driver(MoveForm, F_Previous_Choice);
+            end if;
+         when 27 => -- Escape select cancel button, second time closes form
+            if FieldIndex /= 5 then
+               FieldIndex := 5;
+               Set_Current(MoveForm, Fields(MoveForm, 5));
+               Result := Form_Ok;
+            else
+               Post(MoveForm, False);
+               Delete(MoveForm);
+               DrawGame(Cargo_Info);
+               return Cargo_Info;
+            end if;
+         when others =>
+            Result := Driver(MoveForm, Key);
+      end case;
+      if Result = Form_Ok then
+         for I in 2 .. 6 loop
+            Set_Foreground(Fields(MoveForm, I));
+            Set_Background(Fields(MoveForm, I));
+         end loop;
+         Set_Foreground(Current(MoveForm), BoldCharacters, 11);
+         Set_Background(Current(MoveForm), BoldCharacters, 11);
+         if FieldIndex = 2 then
+            Visibility := Normal;
+         end if;
+         Set_Cursor_Visibility(Visibility);
+         Refresh(MenuWindow2);
+      end if;
+      return CargoMove_Form;
+   end CargoMoveFormKeys;
 
 end Ships.UI.Cargo;
