@@ -32,24 +32,32 @@ package body Crew.UI.Keys is
       ItemIndex: constant Positive := Get_Index(Current(CrewMenu));
       Item: constant InventoryData :=
         PlayerShip.Crew(MemberIndex).Inventory(ItemIndex);
-      Visibility: Cursor_Visibility := Invisible;
-   begin
-      if FieldIndex = 3 or
-        Get_Buffer(Fields(MoveForm, 2)) = "                    " then
+      Amount: Positive;
+      procedure RedrawScreen is
+         Visibility: Cursor_Visibility := Invisible;
+      begin
          Set_Cursor_Visibility(Visibility);
          Post(MoveForm, False);
          Delete(MoveForm);
          DrawGame(Inventory_View);
+      end RedrawScreen;
+   begin
+      Amount := Positive'Value(Get_Buffer(Fields(MoveForm, 2)));
+      if FieldIndex = 3 then
+         RedrawScreen;
          return Inventory_View;
       end if;
-      UpdateCargo
-        (PlayerShip,
-         Item.ProtoIndex,
-         Integer'Value(Get_Buffer(Fields(MoveForm, 2))),
-         Item.Durability);
+      if FreeCargo(0 - Amount) < 0 then
+         ShowDialog
+           ("No free space in ship cargo for that amount of " &
+            GetItemName(Item));
+         RedrawScreen;
+         return Inventory_View;
+      end if;
+      UpdateCargo(PlayerShip, Item.ProtoIndex, Amount, Item.Durability);
       UpdateInventory
         (MemberIndex => MemberIndex,
-         Amount => (0 - Integer'Value(Get_Buffer(Fields(MoveForm, 2)))),
+         Amount => (0 - Amount),
          InventoryIndex => ItemIndex);
       if
         (PlayerShip.Crew(MemberIndex).Order = Clean and
@@ -65,10 +73,13 @@ package body Crew.UI.Keys is
            0) then
          GiveOrders(MemberIndex, Rest);
       end if;
-      Post(MoveForm, False);
-      Delete(MoveForm);
-      DrawGame(Inventory_View);
+      RedrawScreen;
       return Inventory_View;
+   exception
+      when Constraint_Error =>
+         ShowDialog("You entered wrong amount of item to move.");
+         RedrawScreen;
+         return Inventory_View;
    end MoveItemResult;
 
    function CrewInfoKeys
