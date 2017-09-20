@@ -954,7 +954,7 @@ package body Crew.UI is
       MaxAmount: constant Positive :=
         PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount;
       FieldText: constant String :=
-        "Enter amount (max " & Positive'Image(MaxAmount) & "): ";
+        "Enter amount (max" & Positive'Image(MaxAmount) & "): ";
       CaptionText: Unbounded_String;
    begin
       if MoveForm = Null_Form then
