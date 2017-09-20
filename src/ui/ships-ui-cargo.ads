@@ -24,5 +24,7 @@ package Ships.UI.Cargo is
      return GameStates; -- Handle keys in cargo info menu
    function CargoMenuKeys
      (Key: Key_Code) return GameStates; -- Handle keys in item options menu
+   function CargoMoveFormKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in item move form
 
 end Ships.UI.Cargo;
