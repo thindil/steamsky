@@ -88,7 +88,8 @@ package Game is
       Small_Terminal,
       ChangeHome_Confirm,
       Inventory_View,
-      MoveItem_Form); -- Game states
+      MoveItem_Form,
+      Cargo_Menu); -- Game states
    type Date_Record is -- Data for game date/time
    record
       Year: Natural;
