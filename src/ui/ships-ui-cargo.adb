@@ -226,6 +226,10 @@ package body Ships.UI.Cargo is
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
    begin
+      if MoveForm /= Null_Form then
+         Post(MoveForm, False);
+         Delete(MoveForm);
+      end if;
       for I in PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
          Cargo_Items.all(I) := New_Item(GetItemName(PlayerShip.Cargo(I)));
       end loop;
