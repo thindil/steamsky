@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated MODDING.md
 - Updated help
+- Updated recipe setting in crafting interface
 
 ## [1.6] - 2017-09-17
 
