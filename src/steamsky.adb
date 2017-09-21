@@ -246,7 +246,8 @@ begin
                when Rename_Module |
                  Assign_Ammo |
                  Module_Options |
-                 Assign_Owner =>
+                 Assign_Owner |
+                 Rename_Ship =>
                   GameState := Ship_Info;
                   DrawGame(Ship_Info);
                when GoalsList_View | GoalsTypes_View =>
@@ -262,6 +263,18 @@ begin
                when MoveItem_Form =>
                   Set_Cursor_Visibility(Visibility);
                   GameState := Inventory_View;
+                  DrawGame(GameState);
+               when CargoMove_Form =>
+                  Set_Cursor_Visibility(Visibility);
+                  GameState := Cargo_Info;
+                  DrawGame(GameState);
+               when Move_Map =>
+                  Set_Cursor_Visibility(Visibility);
+                  GameState := Sky_Map_View;
+                  DrawGame(GameState);
+               when Loot_Form =>
+                  Set_Cursor_Visibility(Visibility);
+                  GameState := Loot_View;
                   DrawGame(GameState);
                when others =>
                   DrawGame(GameState);
