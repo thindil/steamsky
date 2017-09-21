@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated MODDING.md
+- Updated help
 
 ## [1.6] - 2017-09-17
 
