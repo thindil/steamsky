@@ -84,7 +84,6 @@ package Game is
       Hall_Of_Fame,
       Loot_View,
       Loot_Form,
-      Workshops_Menu,
       Small_Terminal,
       ChangeHome_Confirm,
       Inventory_View,

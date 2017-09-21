@@ -19,6 +19,8 @@ with Ada.Exceptions; use Ada.Exceptions;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Terminal_Interface.Curses.Forms.Field_Types.IntField;
+with Terminal_Interface.Curses.Forms.Field_Types.Enumeration;
+use Terminal_Interface.Curses.Forms.Field_Types.Enumeration;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Items; use Items;
@@ -29,11 +31,10 @@ with Trades; use Trades;
 
 package body Crafts.UI is
 
-   RecipesMenu, ModulesMenu: Menu;
-   MenuWindow, MenuWindow2, FormWindow: Window;
+   RecipesMenu: Menu;
+   MenuWindow, FormWindow: Window;
    RecipeIndex: Integer := 1;
    RecipeForm: Form;
-   Workshop: Natural;
    MaxAmount: Positive;
 
    procedure ShowRecipeInfo is
@@ -427,67 +428,15 @@ package body Crafts.UI is
       ShowRecipeInfo;
    end ShowRecipes;
 
-   procedure ShowWorkshopsMenu is
-      Modules_Items: Item_Array_Access;
-      ModulesAmount: Positive := 2;
-      MenuIndex: Positive := 1;
-      MenuHeight: Line_Position;
-      MenuLength: Column_Position;
-      MType: ModuleType;
-   begin
-      if RecipeIndex > 0 then
-         MType := Recipes_List(RecipeIndex).Workplace;
-      else
-         MType := ALCHEMY_LAB;
-      end if;
-      for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = MType then
-            ModulesAmount := ModulesAmount + 1;
-         end if;
-      end loop;
-      Modules_Items := new Item_Array(1 .. ModulesAmount);
-      for I in PlayerShip.Modules.Iterate loop
-         if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType = MType then
-            Modules_Items.all(MenuIndex) :=
-              New_Item
-                (To_String(PlayerShip.Modules(I).Name),
-                 Positive'Image(Modules_Container.To_Index(I)));
-            MenuIndex := MenuIndex + 1;
-         end if;
-      end loop;
-      Modules_Items.all(Modules_Items'Last - 1) := New_Item("Close", "0");
-      Modules_Items.all(Modules_Items'Last) := Null_Item;
-      ModulesMenu := New_Menu(Modules_Items);
-      Set_Options(ModulesMenu, (Show_Descriptions => False, others => True));
-      Scale(ModulesMenu, MenuHeight, MenuLength);
-      MenuWindow2 :=
-        Create
-          (MenuHeight + 2,
-           MenuLength + 2,
-           ((Lines / 3) - (MenuHeight / 2)),
-           ((Columns / 2) - (MenuLength / 2)));
-      WindowFrame(MenuWindow2, 5, "Set workshop");
-      Set_Window(ModulesMenu, MenuWindow2);
-      Set_Sub_Window
-        (ModulesMenu,
-         Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
-      Post(ModulesMenu);
-      Refresh_Without_Update;
-      if RecipeIndex > 0 then
-         Refresh_Without_Update(FormWindow);
-      end if;
-      Refresh_Without_Update(MenuWindow2);
-      Update_Screen;
-   end ShowWorkshopsMenu;
-
    procedure ShowRecipeForm is
       Recipe_Fields: constant Field_Array_Access := new Field_Array(1 .. 7);
       FieldOptions: Field_Option_Set;
       FormHeight: Line_Position;
       FormLength: Column_Position;
       Visibility: Cursor_Visibility := Normal;
+      ModulesAmount: Positive := 1;
+      MType: ModuleType;
    begin
-      Set_Cursor_Visibility(Visibility);
       Recipe_Fields.all(1) := New_Field(1, 20, 0, 0, 0, 0);
       FieldOptions := Get_Options(Recipe_Fields.all(1));
       FieldOptions.Active := False;
@@ -498,11 +447,16 @@ package body Crafts.UI is
          "Times (max" & Positive'Image(MaxAmount) & "):");
       Recipe_Fields.all(2) := New_Field(1, 10, 0, 20, 0, 0);
       FieldOptions := Get_Options(Recipe_Fields.all(2));
-      FieldOptions.Auto_Skip := False;
+      if MaxAmount > 1 then
+         Set_Cursor_Visibility(Visibility);
+         FieldOptions.Auto_Skip := False;
+         Set_Foreground(Recipe_Fields.all(2), BoldCharacters, 11);
+         Set_Background(Recipe_Fields.all(2), BoldCharacters, 11);
+      else
+         FieldOptions.Active := False;
+      end if;
       Set_Options(Recipe_Fields.all(2), FieldOptions);
       Set_Buffer(Recipe_Fields.all(2), 0, Positive'Image(MaxAmount));
-      Set_Foreground(Recipe_Fields.all(2), BoldCharacters, 11);
-      Set_Background(Recipe_Fields.all(2), BoldCharacters, 11);
       Terminal_Interface.Curses.Forms.Field_Types.IntField.Set_Field_Type
         (Recipe_Fields.all(2),
          (0, 0, MaxAmount));
@@ -511,18 +465,40 @@ package body Crafts.UI is
       FieldOptions.Active := False;
       Set_Options(Recipe_Fields.all(3), FieldOptions);
       Set_Buffer(Recipe_Fields.all(3), 0, "Workshop:");
-      Recipe_Fields.all(4) := New_Field(1, 30, 1, 20, 0, 0);
-      FieldOptions := Get_Options(Recipe_Fields.all(4));
-      FieldOptions.Auto_Skip := False;
-      Set_Options(Recipe_Fields.all(4), FieldOptions);
-      if Workshop = 0 then
-         Set_Buffer(Recipe_Fields.all(4), 0, "Not set");
+      if RecipeIndex > 0 then
+         MType := Recipes_List(RecipeIndex).Workplace;
       else
-         Set_Buffer
-           (Recipe_Fields.all(4),
-            0,
-            To_String(PlayerShip.Modules(Workshop).Name));
+         MType := ALCHEMY_LAB;
       end if;
+      for Module of PlayerShip.Modules loop
+         if Modules_List(Module.ProtoIndex).MType = MType then
+            ModulesAmount := ModulesAmount + 1;
+         end if;
+      end loop;
+      declare
+         ModulesList: Enumeration_Info (ModulesAmount);
+         Iter: Positive := 2;
+      begin
+         ModulesList.Names(1) := new String'("Not set");
+         for I in PlayerShip.Modules.Iterate loop
+            if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType =
+              MType then
+               ModulesList.Names(Iter) :=
+                 new String'(To_String(PlayerShip.Modules(I).Name));
+               Iter := Iter + 1;
+            end if;
+         end loop;
+         Recipe_Fields.all(4) := New_Field(1, 30, 1, 20, 0, 0);
+         Set_Field_Type(Recipe_Fields.all(4), Create(ModulesList, True));
+         Set_Buffer(Recipe_Fields.all(4), 0, "Not set");
+         FieldOptions := Get_Options(Recipe_Fields.all(4));
+         FieldOptions.Edit := False;
+         Set_Options(Recipe_Fields.all(4), FieldOptions);
+         if MaxAmount = 1 then
+            Set_Foreground(Recipe_Fields.all(4), BoldCharacters, 11);
+            Set_Background(Recipe_Fields.all(4), BoldCharacters, 11);
+         end if;
+      end;
       Recipe_Fields.all(5) := New_Field(1, 8, 3, 10, 0, 0);
       Set_Buffer(Recipe_Fields.all(5), 0, "[Cancel]");
       FieldOptions := Get_Options(Recipe_Fields.all(5));
@@ -562,15 +538,9 @@ package body Crafts.UI is
             DrawGame(Sky_Map_View);
             return Sky_Map_View;
          when 10 => -- Set selected manufacturing order
-            Workshop := 0;
             MaxAmount := CheckRecipe(RecipeIndex);
-            if RecipeIndex > 0 then
-               ShowRecipeForm;
-               return Recipe_Setting;
-            else
-               ShowWorkshopsMenu;
-               return Workshops_Menu;
-            end if;
+            ShowRecipeForm;
+            return Recipe_Setting;
          when 56 | KEY_UP => -- Select previous recipe
             Result := Driver(RecipesMenu, M_Up_Item);
             if Result = Request_Denied then
@@ -630,6 +600,8 @@ package body Crafts.UI is
       Result: Forms.Driver_Result;
       FieldIndex: Positive := Get_Index(Current(RecipeForm));
       Visibility: Cursor_Visibility := Invisible;
+      WorkshopName: Unbounded_String :=
+        To_Unbounded_String(Get_Buffer(Fields(RecipeForm, 4)));
    begin
       case Key is
          when KEY_UP => -- Select previous field
@@ -648,21 +620,25 @@ package body Crafts.UI is
             if FieldIndex = 5 then
                DrawGame(Craft_View);
                return Craft_View;
-            elsif FieldIndex = 4 then
-               ShowWorkshopsMenu;
-               return Workshops_Menu;
             elsif FieldIndex = 6 then
-               if Workshop = 0 then
+               Trim(WorkshopName, Ada.Strings.Both);
+               if WorkshopName = "Not set" then
                   ShowDialog("You must set workshop for this recipe.");
                   DrawGame(Craft_View);
                   return Craft_View;
                end if;
-               SetRecipe
-                 (Workshop,
-                  Positive'Value(Get_Buffer(Fields(RecipeForm, 2))),
-                  RecipeIndex);
-               DrawGame(Craft_View);
-               return Craft_View;
+               for I in PlayerShip.Modules.Iterate loop
+                  if PlayerShip.Modules(I).Name = WorkshopName then
+                     SetRecipe
+                       (Modules_Container.To_Index(I),
+                        Positive'Value(Get_Buffer(Fields(RecipeForm, 2))),
+                        RecipeIndex);
+                     DrawGame(Craft_View);
+                     return Craft_View;
+                  end if;
+               end loop;
+            elsif FieldIndex = 4 then
+               Result := Driver(RecipeForm, F_Next_Choice);
             end if;
          when Key_Backspace => -- delete last character
             if FieldIndex = 2 then
@@ -681,10 +657,14 @@ package body Crafts.UI is
          when KEY_RIGHT => -- Move cursor right
             if FieldIndex = 2 then
                Result := Driver(RecipeForm, F_Right_Char);
+            elsif FieldIndex = 4 then
+               Result := Driver(RecipeForm, F_Next_Choice);
             end if;
          when KEY_LEFT => -- Move cursor left
             if FieldIndex = 2 then
                Result := Driver(RecipeForm, F_Left_Char);
+            elsif FieldIndex = 4 then
+               Result := Driver(RecipeForm, F_Previous_Choice);
             end if;
          when 27 => -- Escape select cancel button, second time closes form
             if FieldIndex /= 5 then
@@ -713,58 +693,5 @@ package body Crafts.UI is
       end if;
       return Recipe_Setting;
    end RecipeFormKeys;
-
-   function WorkshopsMenuKeys(Key: Key_Code) return GameStates is
-      Result: Menus.Driver_Result;
-      ModuleIndex: constant Natural :=
-        Natural'Value(Description(Current(ModulesMenu)));
-   begin
-      case Key is
-         when 10 => -- Set selected manufacturing order
-            if ModuleIndex > 0 then
-               Workshop := ModuleIndex;
-               if RecipeIndex < 0 then
-                  SetRecipe(Workshop, 1, RecipeIndex);
-               end if;
-            end if;
-            DrawGame(Craft_View);
-            if RecipeIndex > 0 then
-               ShowRecipeForm;
-               return Recipe_Setting;
-            end if;
-            return Craft_View;
-         when 56 | KEY_UP => -- Select previous recipe
-            Result := Driver(ModulesMenu, M_Up_Item);
-            if Result = Request_Denied then
-               Result := Driver(ModulesMenu, M_Last_Item);
-            end if;
-         when 50 | KEY_DOWN => -- Select next recipe
-            Result := Driver(ModulesMenu, M_Down_Item);
-            if Result = Request_Denied then
-               Result := Driver(ModulesMenu, M_First_Item);
-            end if;
-         when 27 => -- Esc select close option, used second time, close menu
-            if Name(Current(ModulesMenu)) = "Close" then
-               DrawGame(Craft_View);
-               if RecipeIndex > 0 then
-                  ShowRecipeForm;
-                  return Recipe_Setting;
-               end if;
-               return Craft_View;
-            else
-               Result := Driver(ModulesMenu, M_Last_Item);
-            end if;
-         when others =>
-            Result := Driver(ModulesMenu, Key);
-            if Result /= Menu_Ok then
-               Result := Driver(ModulesMenu, M_Clear_Pattern);
-               Result := Driver(ModulesMenu, Key);
-            end if;
-      end case;
-      if Result = Menu_Ok then
-         Refresh(MenuWindow2);
-      end if;
-      return Workshops_Menu;
-   end WorkshopsMenuKeys;
 
 end Crafts.UI;
