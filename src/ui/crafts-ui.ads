@@ -24,7 +24,5 @@ package Crafts.UI is
      (Key: Key_Code) return GameStates; -- Handle keys in craft screen
    function RecipeFormKeys
      (Key: Key_Code) return GameStates; -- Handle keys in recipe setting form
-   function WorkshopsMenuKeys
-     (Key: Key_Code) return GameStates; -- Handle keys in module select menu
 
 end Crafts.UI;

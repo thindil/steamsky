@@ -389,8 +389,6 @@ begin
             GameState := TradeFormKeys(Key);
          when Assign_Owner =>
             GameState := AssignOwnerKeys(Key);
-         when Workshops_Menu =>
-            GameState := WorkshopsMenuKeys(Key);
          when Move_Map =>
             GameState := MoveFormKeys(Key);
          when Bases_List =>
