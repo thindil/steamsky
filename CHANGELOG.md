@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash in help on resizing window
 - Crafting skill for Wooden cooking set and Wooden bucket recipes
+- Showing various forms after screen resize
 
 ## [1.0.7] - 2017-09-03
 
