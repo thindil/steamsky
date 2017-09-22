@@ -97,7 +97,7 @@ package body Crew is
                exit;
             end if;
          end loop;
-      elsif GivenOrder = Gunner or GivenOrder = Craft or GivenOrder = Heal then
+      elsif GivenOrder = Gunner or GivenOrder = Craft then
          if PlayerShip.Modules(ModuleIndex).Owner > 0 then
             GiveOrders(PlayerShip.Modules(ModuleIndex).Owner, Rest, 0, False);
          end if;
@@ -209,7 +209,6 @@ package body Crew is
             AddMessage
               (MemberName & " starts healing wounded crew members.",
                OrderMessage);
-            PlayerShip.Modules(ModuleIndex2).Owner := MemberIndex;
          when Clean =>
             AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
       end case;
@@ -580,11 +579,7 @@ package body Crew is
                         end if;
                      end loop;
                      if not HaveMedicalRoom then
-                        HealAmount := 0;
-                        AddMessage
-                          ("You don't have medical room to continue healing wounded crew members.",
-                           OrderMessage,
-                           3);
+                        HealAmount := HealAmount / 2;
                      end if;
                      if HealAmount > 0 then
                         HealAmount := HealAmount * (-1);
