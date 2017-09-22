@@ -215,6 +215,7 @@ begin
             if GameState = Small_Terminal then
                GameState := OldState;
             end if;
+            Visibility := Invisible;
             case GameState is
                when Main_Menu =>
                   ShowMainMenu;
@@ -248,6 +249,7 @@ begin
                  Module_Options |
                  Assign_Owner |
                  Rename_Ship =>
+                  Set_Cursor_Visibility(Visibility);
                   GameState := Ship_Info;
                   DrawGame(Ship_Info);
                when GoalsList_View | GoalsTypes_View =>
