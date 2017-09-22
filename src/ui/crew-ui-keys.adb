@@ -181,7 +181,7 @@ package body Crew.UI.Keys is
             elsif OrderName = "Talking in bases" then
                GiveOrders(MemberIndex, Talk);
             elsif OrderName = "Heal wounded crew members" then
-               GiveOrders(MemberIndex, Heal, ModuleIndex);
+               GiveOrders(MemberIndex, Heal);
             elsif OrderName = "Clean ship" then
                GiveOrders(MemberIndex, Clean);
             elsif OrderName = "Dismiss" then

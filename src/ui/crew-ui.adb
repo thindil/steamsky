@@ -441,7 +441,7 @@ package body Crew.UI is
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
       MenuIndex: Positive := 1;
-      NeedHealer, HealOrder: Boolean := False;
+      NeedHealer: Boolean := False;
    begin
       if
         (PlayerShip.Crew(MemberIndex).Tired = 100 or
@@ -464,13 +464,16 @@ package body Crew.UI is
             Orders_Items := new Item_Array(1 .. 2);
          end if;
       else
-         for I in PlayerShip.Crew.Iterate loop
-            if PlayerShip.Crew(I).Health < 100 and
-              Crew_Container.To_Index(I) /= MemberIndex then
-               NeedHealer := True;
-               exit;
-            end if;
-         end loop;
+         if PlayerShip.Crew(MemberIndex).Order /= Heal then
+            for I in PlayerShip.Crew.Iterate loop
+               if PlayerShip.Crew(I).Health < 100 and
+                 Crew_Container.To_Index(I) /= MemberIndex then
+                  OrdersAmount := OrdersAmount + 1;
+                  NeedHealer := True;
+                  exit;
+               end if;
+            end loop;
+         end if;
          for Module of PlayerShip.Modules loop
             if Module.Durability > 0 then
                case Modules_List(Module.ProtoIndex).MType is
@@ -482,18 +485,6 @@ package body Crew.UI is
                      if Module.Owner /= MemberIndex and
                        Module.Data(1) /= 0 then
                         OrdersAmount := OrdersAmount + 1;
-                     end if;
-                  when MEDICAL_ROOM =>
-                     if NeedHealer then
-                        if FindItem
-                            (Inventory => PlayerShip.Cargo,
-                             ItemType => HealingTools) >
-                          0 and
-                          PlayerShip.Crew(MemberIndex).Order /= Heal and
-                          PlayerShip.Crew(MemberIndex).Health = 100 then
-                           HealOrder := True;
-                           OrdersAmount := OrdersAmount + 1;
-                        end if;
                      end if;
                   when others =>
                      null;
@@ -560,15 +551,6 @@ package body Crew.UI is
                              Positive'Image(Modules_Container.To_Index(I)));
                         MenuIndex := MenuIndex + 1;
                      end if;
-                  when MEDICAL_ROOM =>
-                     if HealOrder then
-                        Orders_Items.all(MenuIndex) :=
-                          New_Item
-                            ("Heal wounded in " &
-                             To_String(PlayerShip.Modules(I).Name),
-                             Positive'Image(Modules_Container.To_Index(I)));
-                        MenuIndex := MenuIndex + 1;
-                     end if;
                   when CABIN =>
                      if NeedClean and
                        PlayerShip.Crew(MemberIndex).Order /= Clean then
@@ -582,6 +564,11 @@ package body Crew.UI is
                end case;
             end if;
          end loop;
+         if NeedHealer and PlayerShip.Crew(MemberIndex).Order /= Heal then
+            Orders_Items.all(MenuIndex) :=
+              New_Item("Heal wounded crew members", "0");
+            MenuIndex := MenuIndex + 1;
+         end if;
          if NeedRepairs and PlayerShip.Crew(MemberIndex).Order /= Repair then
             Orders_Items.all(MenuIndex) := New_Item("Repair ship", "0");
             MenuIndex := MenuIndex + 1;
