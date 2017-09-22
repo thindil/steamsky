@@ -15,6 +15,9 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Updated recipe setting in crafting interface
 
+### Fixed
+- Showing various forms after screen resize
+
 ## [1.6] - 2017-09-17
 
 ### Added
