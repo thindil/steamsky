@@ -925,6 +925,10 @@ package body Crew.UI is
          Refresh;
          return;
       end if;
+      if MoveForm /= Null_Form then
+         Post(MoveForm, False);
+         Delete(MoveForm);
+      end if;
       for I in
         PlayerShip.Crew(MemberIndex).Inventory.First_Index ..
             PlayerShip.Crew(MemberIndex).Inventory.Last_Index loop

@@ -371,6 +371,10 @@ package body Trades.UI is
       ItemsAmount: Positive := 1;
       BaseItemIndex: Positive;
    begin
+      if TradeForm /= Null_Form then
+         Post(TradeForm, False);
+         Delete(TradeForm);
+      end if;
       if BaseIndex > 0 then
          BaseType := Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       else

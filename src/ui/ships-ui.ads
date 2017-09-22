@@ -1,4 +1,4 @@
---    Copyright 2016 Bartek thindil Jasicki
+--    Copyright 2016-2017 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,6 +17,7 @@
 
 with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
+with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 
 package Ships.UI is
 
@@ -30,5 +31,6 @@ package Ships.UI is
 
 private
    ShipsMenu: Menu; -- Menu for ship modules/cargo
+   RenameForm: Form; -- Form used for rename ship/modules
 
 end Ships.UI;

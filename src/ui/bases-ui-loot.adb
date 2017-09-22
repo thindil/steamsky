@@ -225,6 +225,10 @@ package body Bases.UI.Loot is
       MenuIndex: Integer := 1;
       ItemsAmount: Positive := 1;
    begin
+      if LootForm /= Null_Form then
+         Post(LootForm, False);
+         Delete(LootForm);
+      end if;
       ItemsAmount := ItemsAmount + Positive(PlayerShip.Cargo.Length);
       for Item of SkyBases(BaseIndex).Cargo loop
          if FindItem(PlayerShip.Cargo, Item.ProtoIndex) = 0 then
