@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   drones ships, destroy 1000 drones ships and destroy 1500 drones ships
 - Option to set any amount of items types as food types
 - Moving items between ship cargo and crew members inventory
+- Medical supplies to starting cargo of player ship
 
 ### Changed
 - Updated MODDING.md
