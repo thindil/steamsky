@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Updated help
 - Updated recipe setting in crafting interface
+- Allow heal wounded crew members without medical room
 
 ### Fixed
 - Showing various forms after screen resize
