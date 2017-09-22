@@ -106,6 +106,7 @@ begin
       Key := Get_Keystroke;
       while Key = Terminal_Interface.Curses.Key_Resize loop
          Erase;
+         Visibility := Invisible;
          case GameState is
             when Main_Menu =>
                ShowMainMenu;
@@ -114,7 +115,7 @@ begin
             when Trade_Form =>
                Set_Cursor_Visibility(Visibility);
                GameState := Trade_View;
-               DrawGame(Trade_View);               
+               DrawGame(Trade_View);
             when BasesList_Types | BasesList_Statuses | BasesList_Owners =>
                GameState := Bases_List;
                DrawGame(Bases_List);
@@ -130,12 +131,21 @@ begin
             when Drop_Cargo =>
                GameState := Cargo_Info;
                DrawGame(Cargo_Info);
-            when Rename_Module | Assign_Ammo | Module_Options | Assign_Owner =>
+            when Rename_Module |
+              Assign_Ammo |
+              Module_Options |
+              Assign_Owner |
+              Rename_Ship =>
+               Set_Cursor_Visibility(Visibility);
                GameState := Ship_Info;
                DrawGame(Ship_Info);
             when Giving_Orders | Orders_For_All | Orders_Priorities =>
                GameState := Crew_Info;
                DrawGame(Crew_Info);
+            when Move_Map =>
+               Set_Cursor_Visibility(Visibility);
+               GameState := Sky_Map_View;
+               DrawGame(GameState);
             when others =>
                DrawGame(GameState);
          end case;

@@ -485,6 +485,10 @@ package body Ships.UI.Ship is
       MenuLength: Column_Position;
       UpgradePercent, MaxUpgrade: Natural;
    begin
+      if RenameForm /= Null_Form then
+         Post(RenameForm, False);
+         Delete(RenameForm);
+      end if;
       Weight := CountShipWeight(PlayerShip);
       Move_Cursor(Line => 2, Column => 2);
       Add(Str => "Name: " & To_String(PlayerShip.Name));

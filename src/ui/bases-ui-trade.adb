@@ -184,6 +184,10 @@ package body Bases.UI.Trade is
       ItemsAmount: Positive := 1;
       Added: Boolean;
    begin
+      if TradeForm /= Null_Form then
+         Post(TradeForm, False);
+         Delete(TradeForm);
+      end if;
       for Item of PlayerShip.Cargo loop
          if Items_List.Element(Item.ProtoIndex).Prices(BaseType) > 0 then
             ItemsAmount := ItemsAmount + 1;

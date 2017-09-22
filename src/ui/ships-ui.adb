@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Terminal_Interface.Curses.Forms; use Terminal_Interface.Curses.Forms;
 with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Messages; use Messages;
 with Ships; use Ships;
@@ -25,7 +24,6 @@ with UserInterface; use UserInterface;
 
 package body Ships.UI is
 
-   RenameForm: Form;
    FormWindow: Window;
 
    procedure ShowShipForm(OptionText: String; MaxRange: Natural := 0) is
