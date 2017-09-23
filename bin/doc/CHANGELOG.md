@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing various forms after screen resize
+- Healing wounded crew members
 
 ## [1.6] - 2017-09-17
 
