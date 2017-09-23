@@ -198,7 +198,7 @@ package body Combat is
             if EnemyShip = PlayerShip then
                for J in Guns.First_Index .. Guns.Last_Index loop
                   if Guns(J)(1) = ModuleIndex then
-                     Guns.Delete(Index => J, Count => 1);
+                     Guns.Delete(Index => J);
                      exit;
                   end if;
                end loop;
