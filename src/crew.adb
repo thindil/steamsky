@@ -627,13 +627,18 @@ package body Crew is
                            if Items_List.Element
                              (PlayerShip.Cargo.Element(J).ProtoIndex)
                                .IType =
-                             To_Unbounded_String("Medicines") and
-                             PlayerShip.Cargo.Element(J).Amount >= Times then
-                              HealAmount := abs (HealAmount);
+                             To_Unbounded_String("Medicines") then
+                              if PlayerShip.Cargo.Element(J).Amount >=
+                                abs (HealAmount) then
+                                 HealAmount := abs (HealAmount);
+                              else
+                                 HealAmount :=
+                                   PlayerShip.Cargo.Element(J).Amount;
+                              end if;
                               UpdateCargo
                                 (PlayerShip,
                                  PlayerShip.Cargo.Element(J).ProtoIndex,
-                                 (0 - Times));
+                                 (0 - HealAmount));
                               exit;
                            end if;
                         end loop;

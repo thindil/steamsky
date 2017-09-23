@@ -369,8 +369,7 @@ package body Crew.UI is
                      if HealOrder then
                         Orders_Items.all(MenuIndex) :=
                           New_Item
-                            ("Heal wounded in " &
-                             To_String(PlayerShip.Modules.Element(I).Name),
+                            ("Heal wounded in crew members",
                              Positive'Image(I));
                         MenuIndex := MenuIndex + 1;
                      end if;
