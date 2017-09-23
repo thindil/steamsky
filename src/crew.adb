@@ -565,7 +565,8 @@ package body Crew is
                      GainExp(Times, 2, I);
                   when Heal =>
                      HealAmount :=
-                       Times * (GetSkillLevel(PlayerShip.Crew(I), 10) / 20);
+                       Times *
+                       (GetSkillLevel(PlayerShip.Crew(I), HealingSkill) / 20);
                      if HealAmount < Times then
                         HealAmount := Times;
                      end if;
