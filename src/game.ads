@@ -151,6 +151,7 @@ package Game is
      .Vector; -- Names of characters attributes
    ConditionIndex: Positive; -- Index of attribute used as bonus to character condition
    StrengthIndex: Positive; -- Index of attribute used to count max character encumbrance
+   HealingSkill: Positive; -- Index of skill used to heal wounded crew members
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
