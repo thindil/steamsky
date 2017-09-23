@@ -589,13 +589,18 @@ package body Crew is
                            if Items_List
                                (PlayerShip.Cargo.Element(J).ProtoIndex)
                                .IType =
-                             HealingTools and
-                             PlayerShip.Cargo.Element(J).Amount >= Times then
-                              HealAmount := abs (HealAmount);
+                             HealingTools then
+                              if PlayerShip.Cargo.Element(J).Amount <
+                                abs (HealAmount) then
+                                 HealAmount :=
+                                   PlayerShip.Cargo.Element(J).Amount;
+                              else
+                                 HealAmount := abs (HealAmount);
+                              end if;
                               UpdateCargo
                                 (PlayerShip,
                                  PlayerShip.Cargo.Element(J).ProtoIndex,
-                                 (0 - Times));
+                                 (0 - HealAmount));
                               exit;
                            end if;
                         end loop;
@@ -635,7 +640,9 @@ package body Crew is
                         end if;
                      else
                         AddMessage
-                          ("You don't have any medical supplies to continue healing wounded crew members.",
+                          ("You don't have any " &
+                           To_String(HealingTools) &
+                           " to continue healing wounded crew members.",
                            OrderMessage,
                            3);
                      end if;
