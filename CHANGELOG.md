@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Crash in help on resizing window
 - Crafting skill for Wooden cooking set and Wooden bucket recipes
 - Showing various forms after screen resize
+- Healing wounded crew members
 
 ## [1.0.7] - 2017-09-03
 
