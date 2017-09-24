@@ -32,3 +32,4 @@ Skills = Piloting:Dexterity, Engineering:Intelligence, Gunnery:Dexterity, Rhetor
 ConditionName = Condition
 StrengthName = Strength
 HealingSkill = Medicine
+PilotingSkill = Piloting
