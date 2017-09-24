@@ -152,6 +152,7 @@ package Game is
    ConditionIndex: Positive; -- Index of attribute used as bonus to character condition
    StrengthIndex: Positive; -- Index of attribute used to count max character encumbrance
    HealingSkill: Positive; -- Index of skill used to heal wounded crew members
+   PilotingSkill: Positive; -- Index of skill used to piloting ship
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;

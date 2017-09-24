@@ -496,9 +496,11 @@ package body Combat.UI is
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          case Order is
             when Pilot =>
-               if GetSkillLevel(PlayerShip.Crew(I), 1) > SkillValue then
+               if GetSkillLevel(PlayerShip.Crew(I), PilotingSkill) >
+                 SkillValue then
                   SkillIndex := I;
-                  SkillValue := GetSkillLevel(PlayerShip.Crew(I), 1);
+                  SkillValue :=
+                    GetSkillLevel(PlayerShip.Crew(I), PilotingSkill);
                end if;
             when Engineer =>
                if GetSkillLevel(PlayerShip.Crew(I), 2) > SkillValue then
@@ -519,7 +521,7 @@ package body Combat.UI is
             SkillString := Null_Unbounded_String;
             case Order is
                when Pilot =>
-                  if GetSkillLevel(PlayerShip.Crew(I), 1) > 0 then
+                  if GetSkillLevel(PlayerShip.Crew(I), PilotingSkill) > 0 then
                      SkillString := To_Unbounded_String(" +");
                   end if;
                when Engineer =>

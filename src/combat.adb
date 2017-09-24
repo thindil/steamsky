@@ -682,7 +682,8 @@ package body Combat is
                null;
          end case;
          EvadeBonus :=
-           EvadeBonus + GetSkillLevel(PlayerShip.Crew(PilotIndex), 1);
+           EvadeBonus +
+           GetSkillLevel(PlayerShip.Crew(PilotIndex), PilotingSkill);
       else
          AccuracyBonus := 20;
          EvadeBonus := -10;
