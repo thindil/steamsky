@@ -335,7 +335,7 @@ package body Game is
       DataFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex, StartIndex, EndIndex, Amount: Natural;
-      FieldsNames: constant array(1 .. 34) of Unbounded_String :=
+      FieldsNames: constant array(1 .. 35) of Unbounded_String :=
         (To_Unbounded_String("BasesSyllablesPre"),
          To_Unbounded_String("BasesSyllablesStart"),
          To_Unbounded_String("BasesSyllablesEnd"),
@@ -369,7 +369,8 @@ package body Game is
          To_Unbounded_String("AttributesNames"),
          To_Unbounded_String("ConditionName"),
          To_Unbounded_String("StrengthName"),
-         To_Unbounded_String("HealingSkill"));
+         To_Unbounded_String("HealingSkill"),
+         To_Unbounded_String("PilotingSkill"));
       function FindSkillIndex(SkillName: Unbounded_String) return Positive is
       begin
          for I in Skills_List.Iterate loop
@@ -535,6 +536,8 @@ package body Game is
                           Attributes_Names.Find_Index(Item => Value);
                      when 34 =>
                         HealingSkill := FindSkillIndex(Value);
+                     when 35 =>
+                        PilotingSkill := FindSkillIndex(Value);
                   end case;
                   StartIndex := EndIndex + 2;
                end loop;
