@@ -172,7 +172,10 @@ package body Events is
                         OtherMessage,
                         3);
                      TimePassed :=
-                       60 - GetSkillLevel(PlayerShip.Crew(CrewIndex), 1);
+                       60 -
+                       GetSkillLevel
+                         (PlayerShip.Crew(CrewIndex),
+                          PilotingSkill);
                      if TimePassed < 1 then
                         TimePassed := 1;
                      end if;
