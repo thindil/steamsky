@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Option to set any amount of items types as food types
 - Moving items between ship cargo and crew members inventory
 - Medical supplies to starting cargo of player ship
+- Option to set which skill is used for healing wounded crew members
 
 ### Changed
 - Updated MODDING.md
