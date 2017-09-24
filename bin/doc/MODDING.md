@@ -127,6 +127,11 @@ To change which attribute is used to count character maximum encumbrance, open
 file *game.dat* in *data* directory and edit line which starts with 
 StrenghtName. Value after equal sign must be existing attribute name.
 
+## Healing skill name
+To change which skill is used for healing wounded crew members, open file 
+*game.dat* in *data* directory and edit line which starts with HealingSkill.
+Value after equal sign must be existing skill name.
+
 ## Items
 
 ### General informations
