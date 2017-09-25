@@ -702,7 +702,7 @@ package body Bases is
              .Buyable
              (BaseType) and
            ItemIndex > 1 then
-            SkyBases(BaseIndex).Cargo.Delete(Index => ItemIndex, Count => 1);
+            SkyBases(BaseIndex).Cargo.Delete(Index => ItemIndex);
          end if;
       end if;
    end UpdateBaseCargo;
