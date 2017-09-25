@@ -327,7 +327,7 @@ package body Ships.Movement is
               Speed +
               Natural
                 (Float(Speed) *
-                 (Float(GetSkillLevel(Ship.Crew(I), 2)) / 300.0));
+                 (Float(GetSkillLevel(Ship.Crew(I), EngineeringSkill)) / 300.0));
          end if;
       end loop;
       case Ship.Speed is

@@ -503,9 +503,9 @@ package body Combat.UI is
                     GetSkillLevel(PlayerShip.Crew(I), PilotingSkill);
                end if;
             when Engineer =>
-               if GetSkillLevel(PlayerShip.Crew(I), 2) > SkillValue then
+               if GetSkillLevel(PlayerShip.Crew(I), EngineeringSkill) > SkillValue then
                   SkillIndex := I;
-                  SkillValue := GetSkillLevel(PlayerShip.Crew(I), 2);
+                  SkillValue := GetSkillLevel(PlayerShip.Crew(I), EngineeringSkill);
                end if;
             when Gunner =>
                if GetSkillLevel(PlayerShip.Crew(I), 3) > SkillValue then
@@ -525,7 +525,7 @@ package body Combat.UI is
                      SkillString := To_Unbounded_String(" +");
                   end if;
                when Engineer =>
-                  if GetSkillLevel(PlayerShip.Crew(I), 2) > 0 then
+                  if GetSkillLevel(PlayerShip.Crew(I), EngineeringSkill) > 0 then
                      SkillString := To_Unbounded_String(" +");
                   end if;
                when Gunner =>
