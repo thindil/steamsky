@@ -33,3 +33,4 @@ ConditionName = Condition
 StrengthName = Strength
 HealingSkill = Medicine
 PilotingSkill = Piloting
+EngineeringSkill = Engineering
