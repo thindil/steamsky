@@ -105,9 +105,8 @@ to AttributesNames entry.
   automatic line wrap enabled, don't forget to fix it).
 
 ### Changing existing skills
-- You can change name of any existing skill, just remember, that second skill
-  is used by Engineer, third by Gunner and forth by person who talk/trade in 
-  bases or with ships.
+- You can change name of any existing skill, just remember, that third skill
+  is used by Gunner and forth by person who talk/trade in bases or with ships.
 - After change skill name, you been need to made proper changes in other game
   data files (recipes, items and this same file) if needed.
 - To change which attribute is assigned to selected skill, just enter new name
@@ -135,6 +134,12 @@ Value after equal sign must be existing skill name.
 ## Piloting skill name
 To change which skill is used for piloting ship, open file *game.dat* in 
 *data* directory and edit line which starts with PilotingSkill. Value after
+equal sign must be existing skill name.
+
+
+## Engineering skill name
+To change which skill is used for engineering duty, open file *game.dat* in 
+*data* directory and edit line which starts with EngineeringSkill. Value after
 equal sign must be existing skill name.
 
 ## Items
