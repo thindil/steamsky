@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Moving items between ship cargo and crew members inventory
 - Medical supplies to starting cargo of player ship
 - Option to set which skill is used for healing wounded crew members
+- Option to set which skill is used for piloting ship
 
 ### Changed
 - Updated MODDING.md
