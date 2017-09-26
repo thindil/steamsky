@@ -371,7 +371,8 @@ package body Game is
          To_Unbounded_String("StrengthName"),
          To_Unbounded_String("HealingSkill"),
          To_Unbounded_String("PilotingSkill"),
-         To_Unbounded_String("EngineeringSkill"));
+         To_Unbounded_String("EngineeringSkill"),
+         To_Unbounded_String("GunnerySkill"));
       function FindSkillIndex(SkillName: Unbounded_String) return Positive is
       begin
          for I in Skills_List.Iterate loop
@@ -541,6 +542,8 @@ package body Game is
                         PilotingSkill := FindSkillIndex(Value);
                      when 36 =>
                         EngineeringSkill := FindSkillIndex(Value);
+                     when 37 =>
+                        GunnerySkill := FindSkillIndex(Value);
                      when others =>
                         null;
                   end case;
