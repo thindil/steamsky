@@ -133,7 +133,9 @@ package body Events is
                            null;
                      end case;
                      if Roll2 >
-                       GetSkillLevel(PlayerShip.Crew(CrewIndex), EngineeringSkill) then
+                       GetSkillLevel
+                         (PlayerShip.Crew(CrewIndex),
+                          EngineeringSkill) then
                         AddMessage
                           ("One of your engines is taking damage.",
                            OtherMessage,
