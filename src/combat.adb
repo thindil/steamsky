@@ -310,7 +310,8 @@ package body Combat is
                   end if;
                   if GunnerIndex > 0 then
                      HitChance :=
-                       HitChance + GetSkillLevel(Ship.Crew(GunnerIndex), 3);
+                       HitChance +
+                       GetSkillLevel(Ship.Crew(GunnerIndex), GunnerySkill);
                   end if;
                   if HitChance < -48 then
                      HitChance := -48;
