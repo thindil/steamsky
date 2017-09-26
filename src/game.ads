@@ -154,6 +154,7 @@ package Game is
    HealingSkill: Positive; -- Index of skill used to heal wounded crew members
    PilotingSkill: Positive; -- Index of skill used to piloting ship
    EngineeringSkill: Positive; -- Index of skill used by engineer on ship
+   GunnerySkill: Positive; -- Index of skill used by gunners
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
