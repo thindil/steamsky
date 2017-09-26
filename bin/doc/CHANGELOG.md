@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Medical supplies to starting cargo of player ship
 - Option to set which skill is used for healing wounded crew members
 - Option to set which skill is used for piloting ship
+- Option to set which skill is used by ship engineer
 
 ### Changed
 - Updated MODDING.md
