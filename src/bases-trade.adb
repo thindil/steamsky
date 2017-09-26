@@ -75,7 +75,7 @@ package body Bases.Trade is
          To_String(MoneyName) &
          ".",
          TradeMessage);
-      SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex, Count => 1);
+      SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex);
       SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population - 1;
       UpdateGame(5);
    end HireRecruit;
