@@ -338,4 +338,8 @@ Target = Drones
 Type = Destroy
 Amount = 200
 Target = Undead
+[98]
+Type = Destroy
+Amount = 250
+Target = Undead
 []
