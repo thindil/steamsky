@@ -64,7 +64,7 @@ package body Bases.Trade is
         (Ship => PlayerShip,
          CargoIndex => MoneyIndex2,
          Amount => (0 - Price));
-      GainExp(1, 4, TraderIndex);
+      GainExp(1, TalkingSkill, TraderIndex);
       GainRep(BaseIndex, 1);
       AddMessage
         ("You hired " &
@@ -131,7 +131,7 @@ package body Bases.Trade is
          To_String(MoneyName) &
          ".",
          TradeMessage);
-      GainExp(1, 4, TraderIndex);
+      GainExp(1, TalkingSkill, TraderIndex);
       GainRep(BaseIndex, 1);
       UpdateGame(5);
    end BuyRecipe;
@@ -188,7 +188,7 @@ package body Bases.Trade is
          CargoIndex => MoneyIndex2,
          Amount => (0 - Cost));
       UpdateBaseCargo(ProtoMoneyIndex, Cost);
-      GainExp(1, 4, TraderIndex);
+      GainExp(1, TalkingSkill, TraderIndex);
       GainRep(BaseIndex, 1);
       UpdateGame(Time);
    end HealWounded;

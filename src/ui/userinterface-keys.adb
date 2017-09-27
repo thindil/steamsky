@@ -453,7 +453,7 @@ package body UserInterface.Keys is
                  ("You changed your ship home base to: " &
                   To_String(SkyBases(PlayerShip.HomeBase).Name),
                   OtherMessage);
-               GainExp(1, 4, TraderIndex);
+               GainExp(1, TalkingSkill, TraderIndex);
                UpdateGame(10);
                DrawGame(Sky_Map_View);
                return Sky_Map_View;

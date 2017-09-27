@@ -80,7 +80,7 @@ package body Bases.Ship is
          CargoIndex => MoneyIndex2,
          Amount => (0 - Cost));
       UpdateBaseCargo(ProtoMoneyIndex, Cost);
-      GainExp(1, 4, TraderIndex);
+      GainExp(1, TalkingSkill, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
       UpdateGame(Time);
    end RepairShip;
@@ -153,7 +153,7 @@ package body Bases.Ship is
             CargoIndex => MoneyIndex2,
             Amount => (0 - Price));
          UpdateBaseCargo(ProtoMoneyIndex, Price);
-         GainExp(1, 4, TraderIndex);
+         GainExp(1, TalkingSkill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          if Modules_List(ModuleIndex).MType /= HULL then
             PlayerShip.Modules.Append
@@ -275,7 +275,7 @@ package body Bases.Ship is
             CargoIndex => MoneyIndex2,
             Amount => Price);
          UpdateBaseCargo(ProtoMoneyIndex, Price);
-         GainExp(1, 4, TraderIndex);
+         GainExp(1, TalkingSkill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          AddMessage
            ("You removed " &
@@ -347,7 +347,7 @@ package body Bases.Ship is
          " docking fee.",
          OtherMessage);
       if TraderIndex > 0 then
-         GainExp(1, 4, TraderIndex);
+         GainExp(1, TalkingSkill, TraderIndex);
       end if;
    end PayForDock;
 

@@ -118,7 +118,7 @@ package body Trades is
             TraderCargo.Delete(Index => BaseItemIndex, Count => 1);
          end if;
       end if;
-      GainExp(1, 4, TraderIndex);
+      GainExp(1, TalkingSkill, TraderIndex);
       AddMessage
         ("You bought" &
          Positive'Image(BuyAmount) &
@@ -243,7 +243,7 @@ package body Trades is
       else
          TraderCargo(1).Amount := TraderCargo(1).Amount - Profit;
       end if;
-      GainExp(1, 4, TraderIndex);
+      GainExp(1, TalkingSkill, TraderIndex);
       AddMessage
         ("You sold" &
          Positive'Image(SellAmount) &
