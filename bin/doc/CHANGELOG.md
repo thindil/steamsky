@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Option to set which skill is used for healing wounded crew members
 - Option to set which skill is used for piloting ship
 - Option to set which skill is used by ship engineer
+- Option to set which skill is used by gunners
 
 ### Changed
 - Updated MODDING.md
