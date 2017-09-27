@@ -329,7 +329,7 @@ package body Missions is
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex :=
         PlayerShip.Missions.Last_Index;
       AddMessage(To_String(AcceptMessage), MissionMessage);
-      GainExp(1, 4, TraderIndex);
+      GainExp(1, TalkingSkill, TraderIndex);
       GameStats.AcceptedMissions := GameStats.AcceptedMissions + 1;
       UpdateGame(5);
    end AcceptMission;
