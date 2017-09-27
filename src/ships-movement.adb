@@ -243,7 +243,7 @@ package body Ships.Movement is
                ".",
                OrderMessage);
             if TraderIndex > 0 then
-               GainExp(1, 4, TraderIndex);
+               GainExp(1, TalkingSkill, TraderIndex);
             end if;
          else
             AddMessage

@@ -73,7 +73,10 @@ package body Bases is
            Integer
              (Float'Floor
                 (Float(Price) *
-                 (Float(GetSkillLevel(PlayerShip.Crew(TraderIndex), 4)) /
+                 (Float
+                    (GetSkillLevel
+                       (PlayerShip.Crew(TraderIndex),
+                        TalkingSkill)) /
                   200.0)));
       end if;
       if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
@@ -349,7 +352,7 @@ package body Bases is
             end loop;
          end if;
       end if;
-      GainExp(1, 4, TraderIndex);
+      GainExp(1, TalkingSkill, TraderIndex);
       UpdateGame(30);
    end AskForBases;
 
@@ -561,7 +564,7 @@ package body Bases is
             SkyMap(EventX, EventY).EventIndex := Events_List.Last_Index;
          end if;
       end loop;
-      GainExp(1, 4, TraderIndex);
+      GainExp(1, TalkingSkill, TraderIndex);
       UpdateGame(30);
    end AskForEvents;
 

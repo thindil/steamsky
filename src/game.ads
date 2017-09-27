@@ -155,6 +155,7 @@ package Game is
    PilotingSkill: Positive; -- Index of skill used to piloting ship
    EngineeringSkill: Positive; -- Index of skill used by engineer on ship
    GunnerySkill: Positive; -- Index of skill used by gunners
+   TalkingSkill: Positive; -- Index of skill used for talk in bases or with other ships
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
