@@ -146,6 +146,12 @@ To change which skill is used for operating guns on ship, open file *game.dat*
 in *data* directory and edit line which starts with GunnerySkill. Value after
 equal sign must be existing skill name.
 
+## Talking skill name
+To change which skill is used for talking in bases or with other ships (trades,
+repairs, recruit, etc), open file *game.dat* in *data* directory and edit line
+which starts with TalkingSkill. Value after equal sign must be existing skill
+name.
+
 ## Items
 
 ### General informations
