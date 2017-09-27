@@ -406,7 +406,7 @@ package body Events is
                Events_List(CurrentIndex).SkyY)
               .EventIndex :=
               0;
-            Events_List.Delete(Index => CurrentIndex, Count => 1);
+            Events_List.Delete(Index => CurrentIndex);
          else
             Events_List(CurrentIndex).Time := NewTime;
             CurrentIndex := CurrentIndex + 1;
@@ -424,7 +424,7 @@ package body Events is
       SkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY)
         .EventIndex :=
         0;
-      Events_List.Delete(Index => EventIndex, Count => 1);
+      Events_List.Delete(Index => EventIndex);
       for I in Events_List.First_Index .. Events_List.Last_Index loop
          SkyMap(Events_List(I).SkyX, Events_List(I).SkyY).EventIndex := I;
       end loop;
