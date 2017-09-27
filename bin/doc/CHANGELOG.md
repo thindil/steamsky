@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New goals: destroy 200 drones ships, destroy 250 drones ships, destroy 500
   drones ships, destroy 1000 drones ships, destroy 1500 drones ships, destroy
-  2000 drones ships, destroy 2500 drones ships, destroy 200 undead ships and
-  destroy 250 undead ships
+  2000 drones ships, destroy 2500 drones ships, destroy 200 undead ships,
+  destroy 250 undead ships and destroy 500 undead ships
 - Option to set any amount of items types as food types
 - Moving items between ship cargo and crew members inventory
 - Medical supplies to starting cargo of player ship
