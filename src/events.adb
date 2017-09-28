@@ -164,7 +164,7 @@ package body Events is
                            OtherMessage,
                            2);
                      end if;
-                     GainExp(1, 2, CrewIndex);
+                     GainExp(1, EngineeringSkill, CrewIndex);
                   end if;
                when 6 .. 20 => -- Bad weather
                   CrewIndex := FindMember(Pilot);
@@ -181,7 +181,7 @@ package body Events is
                      if TimePassed < 1 then
                         TimePassed := 1;
                      end if;
-                     GainExp(1, 1, CrewIndex);
+                     GainExp(1, PilotingSkill, CrewIndex);
                      UpdateCargo
                        (PlayerShip,
                         FindProtoItem(ItemType => FuelType),

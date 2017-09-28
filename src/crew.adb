@@ -560,9 +560,9 @@ package body Crew is
                end if;
                case PlayerShip.Crew(I).Order is
                   when Pilot =>
-                     GainExp(Times, 1, I);
+                     GainExp(Times, PilotingSkill, I);
                   when Engineer =>
-                     GainExp(Times, 2, I);
+                     GainExp(Times, EngineeringSkill, I);
                   when Heal =>
                      HealAmount :=
                        Times *
@@ -621,7 +621,7 @@ package body Crew is
                                  To_String(PlayerShip.Crew(J).Name) &
                                  " a bit.",
                                  OrderMessage);
-                              GainExp(Times, 10, I);
+                              GainExp(Times, HealingSkill, I);
                               exit;
                            end if;
                         end loop;
