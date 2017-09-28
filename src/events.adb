@@ -95,7 +95,7 @@ package body Events is
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Order = Pilot or
               PlayerShip.Crew(I).Order = Gunner then
-               GainExp(1, 5, Crew_Container.To_Index(I));
+               GainExp(1, PerceptionSkill, Crew_Container.To_Index(I));
             end if;
          end loop;
       end GainPerception;
