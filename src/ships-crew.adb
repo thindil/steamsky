@@ -95,7 +95,7 @@ package body Ships.Crew is
 
    procedure DeleteMember(MemberIndex: Positive; Ship: in out ShipRecord) is
    begin
-      Ship.Crew.Delete(Index => MemberIndex, Count => 1);
+      Ship.Crew.Delete(Index => MemberIndex);
       for Module of Ship.Modules loop
          if Module.Owner = MemberIndex then
             Module.Owner := 0;
