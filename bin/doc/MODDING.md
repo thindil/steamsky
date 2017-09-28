@@ -152,6 +152,11 @@ repairs, recruit, etc), open file *game.dat* in *data* directory and edit line
 which starts with TalkingSkill. Value after equal sign must be existing skill
 name.
 
+## Spotting skill name
+To change which skill is used for spotting things (other ships, etc), open 
+file *game.dat* in *data* directory and edit line which starts with 
+PerceptionSkill. Value after equal sign must be existing skill name.
+
 ## Items
 
 ### General informations
