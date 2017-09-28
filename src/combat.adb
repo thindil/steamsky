@@ -552,7 +552,7 @@ package body Combat is
                            Amount => -1);
                      end if;
                      if Ship = PlayerShip then
-                        GainExp(1, 3, GunnerIndex);
+                        GainExp(1, GunnerySkill, GunnerIndex);
                      end if;
                      if PlayerShip.Crew(1).Health = 0 then -- player is dead
                         EndCombat := True;
@@ -646,10 +646,10 @@ package body Combat is
          case PlayerShip.Crew(I).Order is
             when Pilot =>
                PilotIndex := Crew_Container.To_Index(I);
-               GainExp(1, 1, PilotIndex);
+               GainExp(1, PilotingSkill, PilotIndex);
             when Engineer =>
                EngineerIndex := Crew_Container.To_Index(I);
-               GainExp(1, 2, EngineerIndex);
+               GainExp(1, EngineeringSkill, EngineerIndex);
             when others =>
                null;
          end case;
