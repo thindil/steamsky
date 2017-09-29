@@ -353,6 +353,8 @@ PerceptionSkill. Value after equal sign must be existing skill name.
 - Inside help text you can use special variable `{StrengthName}` which later
   will be replaced with name of attribute used to count max character
   encumbrance.
+- Inside help text you can use special variable `{HealingTools}` which later
+  will be replaced with name of tool used for healing.
 
 ## Goals
 
