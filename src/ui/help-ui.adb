@@ -70,11 +70,13 @@ package body Help.UI is
       VariablesNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("{MoneyName}"),
          To_Unbounded_String("{FuelName}"),
-         To_Unbounded_String("{StrengthName}"));
+         To_Unbounded_String("{StrengthName}"),
+         To_Unbounded_String("{HealingTools}"));
       VariablesValues: constant array(Positive range <>) of Unbounded_String :=
         (MoneyName,
          Items_List(FindProtoItem(ItemType => FuelType)).Name,
-         Attributes_Names(StrengthIndex));
+         Attributes_Names(StrengthIndex),
+         HealingTools);
    begin
       if HelpIndex > 0 then
          TopicIndex := HelpIndex;
@@ -83,7 +85,7 @@ package body Help.UI is
          PreviousState := OldState;
          NewText := Help_List(TopicIndex).Text;
          StartIndex := 0;
-         for I in 1 .. 37 loop
+         for I in Keys_Array'Range loop
             loop
                VariableIndex :=
                  Index(NewText, "{GameKey" & Positive'Image(I) & "}");
