@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Option to set which skill is used to operate ships guns
 - Option to set which skill is used to talk in bases or with other ships
 - Option to set which skill is used to spotting things
+- Showing current medicines name in help
 
 ### Changed
 - Updated MODDING.md
