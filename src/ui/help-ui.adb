@@ -71,12 +71,14 @@ package body Help.UI is
         (To_Unbounded_String("{MoneyName}"),
          To_Unbounded_String("{FuelName}"),
          To_Unbounded_String("{StrengthName}"),
-         To_Unbounded_String("{HealingTools}"));
+         To_Unbounded_String("{HealingTools}"),
+         To_Unbounded_String("{HealingSkill}"));
       VariablesValues: constant array(Positive range <>) of Unbounded_String :=
         (MoneyName,
          Items_List(FindProtoItem(ItemType => FuelType)).Name,
          Attributes_Names(StrengthIndex),
-         HealingTools);
+         HealingTools,
+         Skills_List(HealingSkill).Name);
    begin
       if HelpIndex > 0 then
          TopicIndex := HelpIndex;
