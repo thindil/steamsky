@@ -350,4 +350,8 @@ Target = Undead
 Type = Destroy
 Amount = 1000
 Target = Undead
+[101]
+Type = Destroy
+Amount = 1500
+Target = Undead
 []
