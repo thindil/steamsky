@@ -344,17 +344,14 @@ PerceptionSkill. Value after equal sign must be existing skill name.
   accepted missions, wait orders, move map position, game statistics, help, 
   game options, quit from game, resign from game, close menu. (example: 
   `{GameKey 10}` will be translated to key used for auto move ship).
-- Inside help text you can use special variable `{MoneyName}` which later will
-  be replaced with name of game money.
-- Inside help text you can use special variable `{FuelName}` which later will
-  be replaced with name of fuel for ship.
-- Inside help text you can use special variable `{StrengthName}` which later
-  will be replaced with name of attribute used to count max character
-  encumbrance.
-- Inside help text you can use special variable `{HealingTools}` which later
-  will be replaced with name of tool used for healing.
-- Inside help text you can use special variable `{HealingSkill}` which later
-  will be replaced with name of skill used for healing.
+- Inside help text you can use special variables: `{MoneyName}` which later 
+  will be replaced with name of game money, `{FuelName}` which later will be
+  replaced with name of fuel for ship, `{StrengthName}` which later will be
+  replaced with name of attribute used to count max character encumbrance,
+  `{HealingTools}` which later will be replaced with name of tool used for 
+  healing, `{HealingSkill}` which later will be replaced with name of skill
+  used for healing, `{PilotingSkill}` which later will be replaced with name
+  of skill used for piloting ship.
 
 ## Goals
 
