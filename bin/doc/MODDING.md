@@ -105,8 +105,6 @@ to AttributesNames entry.
   automatic line wrap enabled, don't forget to fix it).
 
 ### Changing existing skills
-- You can change name of any existing skill, just remember, that forth skill
-  is used by person who talk/trade in bases or with ships.
 - After change skill name, you been need to made proper changes in other game
   data files (recipes, items and this same file) if needed.
 - To change which attribute is assigned to selected skill, just enter new name
@@ -355,6 +353,8 @@ PerceptionSkill. Value after equal sign must be existing skill name.
   encumbrance.
 - Inside help text you can use special variable `{HealingTools}` which later
   will be replaced with name of tool used for healing.
+- Inside help text you can use special variable `{HealingSkill}` which later
+  will be replaced with name of skill used for healing.
 
 ## Goals
 
