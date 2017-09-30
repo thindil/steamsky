@@ -54,7 +54,7 @@ package body Messages is
       Color: Natural := 0) is
    begin
       if Messages_List.Length = 500 then
-         Messages_List.Delete(Index => 1, Count => 1);
+         Messages_List.Delete(Index => 1);
       end if;
       LastIndex := LastIndex + 1;
       Messages_List.Append
