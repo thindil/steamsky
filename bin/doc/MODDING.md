@@ -351,7 +351,8 @@ PerceptionSkill. Value after equal sign must be existing skill name.
   `{HealingTools}` which later will be replaced with name of tool used for 
   healing, `{HealingSkill}` which later will be replaced with name of skill
   used for healing, `{PilotingSkill}` which later will be replaced with name
-  of skill used for piloting ship.
+  of skill used for piloting ship, `{EngineeringSkill}` which later will be
+  replaced with name of skill used by ship engineer.
 
 ## Goals
 
