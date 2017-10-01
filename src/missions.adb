@@ -324,7 +324,7 @@ package body Missions is
             end loop;
             Mission.Target := PlayerShip.Crew.Last_Index;
       end case;
-      SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex, Count => 1);
+      SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex);
       PlayerShip.Missions.Append(New_Item => Mission);
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex :=
         PlayerShip.Missions.Last_Index;
@@ -468,7 +468,7 @@ package body Missions is
          SkyBases(Mission.StartBase).SkyY)
         .MissionIndex :=
         0;
-      PlayerShip.Missions.Delete(Index => MissionIndex, Count => 1);
+      PlayerShip.Missions.Delete(Index => MissionIndex);
       if Mission.MType = Deliver then
          UpdateCargo(PlayerShip, Mission.Target, -1);
       elsif Mission.MType = Passenger then
