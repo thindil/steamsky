@@ -54,7 +54,7 @@ You (or enemy) starts hitting other parts of ship after destroying armor.
 Sign "plus" after crew member name in combat orders menu means that this member know something about selected role (have suitable skill).
 Double sign "plus" after crew name in combat orders menu means that this member have highest skill needed for selected role.
 Sign "minus" after crew member name in combat orders menu means that this member have assigned position (as a gunner, pilot, etc.).
-Gunnery skill affects chance to hit with gun in combat and Pilot skill affect chance to evade enemy attacks.
+{GunnerySkill} skill affects chance to hit with gun in combat and {PilotingSkill} skill affect chance to evade enemy attacks.
 Amount of loot from enemies depends on each enemy. Stronger enemies gives more amount of {MoneyName}.
 You can see detailed ship/crew/cargo/messages status during combat by pressing corresponding key ('c' for crew, 's' for ship, 'a' for cargo, 'm' for messages). There you can give normal orders to crew (even starts repairing during combat) or dropping cargo.
 Battering ram don't need operator to attack, it attack automatically when enemy is in close range and it always attack only one per combat round. You can't set hit location for battering ram too.
