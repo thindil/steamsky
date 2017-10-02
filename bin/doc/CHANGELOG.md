@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Showing current healing tool name in help
 - Showing current healing skill name in help
 - Showing current piloting skill name in help
+- Showing current engineering skill name in help
 
 ### Changed
 - Updated MODDING.md
