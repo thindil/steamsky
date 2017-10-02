@@ -8,8 +8,8 @@ All notable changes to this project will be documented in this file.
   drones ships, destroy 1000 drones ships, destroy 1500 drones ships, destroy
   2000 drones ships, destroy 2500 drones ships, destroy 200 undead ships,
   destroy 250 undead ships, destroy 500 undead ships, destroy 1000 undead
-  ships, destroy 1500 undead ships, destroy 2000 undead ships and destroy 2500
-  undead ships
+  ships, destroy 1500 undead ships, destroy 2000 undead ships, destroy 2500
+  undead ships and destroy 200 inquisition ships
 - Option to set any amount of items types as food types
 - Moving items between ship cargo and crew members inventory
 - Medical supplies to starting cargo of player ship
