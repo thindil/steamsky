@@ -115,7 +115,7 @@ package body Trades is
          TraderCargo(BaseItemIndex).Amount :=
            TraderCargo(BaseItemIndex).Amount - BuyAmount;
          if TraderCargo(BaseItemIndex).Amount = 0 then
-            TraderCargo.Delete(Index => BaseItemIndex, Count => 1);
+            TraderCargo.Delete(Index => BaseItemIndex);
          end if;
       end if;
       GainExp(1, TalkingSkill, TraderIndex);
