@@ -362,4 +362,8 @@ Target = Undead
 Type = Destroy
 Amount = 2500
 Target = Undead
+[104]
+Type = Destroy
+Amount = 200
+Target = Inquisition
 []
