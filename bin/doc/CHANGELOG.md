@@ -24,6 +24,8 @@ All notable changes to this project will be documented in this file.
 - Showing current piloting skill name in help
 - Showing current engineering skill name in help
 - Showing current gunnery skill name in help
+- Showing current name of skill used to talk in bases or with other ships in
+  help
 
 ### Changed
 - Updated MODDING.md
