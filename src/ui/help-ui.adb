@@ -76,7 +76,8 @@ package body Help.UI is
          To_Unbounded_String("{PilotingSkill}"),
          To_Unbounded_String("{EngineeringSkill}"),
          To_Unbounded_String("{GunnerySkill}"),
-         To_Unbounded_String("{TalkingSkill}"));
+         To_Unbounded_String("{TalkingSkill}"),
+         To_Unbounded_String("{PerceptionSkill}"));
       VariablesValues: constant array(Positive range <>) of Unbounded_String :=
         (MoneyName,
          Items_List(FindProtoItem(ItemType => FuelType)).Name,
@@ -86,7 +87,8 @@ package body Help.UI is
          Skills_List(PilotingSkill).Name,
          Skills_List(EngineeringSkill).Name,
          Skills_List(GunnerySkill).Name,
-         Skills_List(TalkingSkill).Name);
+         Skills_List(TalkingSkill).Name,
+         Skills_List(PerceptionSkill).Name);
    begin
       if HelpIndex > 0 then
          TopicIndex := HelpIndex;
