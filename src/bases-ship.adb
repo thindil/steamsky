@@ -145,7 +145,7 @@ package body Bases.Ship is
                raise BasesShip_Installation_Error
                  with "This hull is too small for your ship. Remove some modules first.";
             end if;
-            PlayerShip.Modules.Delete(HullIndex, 1);
+            PlayerShip.Modules.Delete(HullIndex);
          end if;
          UpdateGame(Modules_List(ModuleIndex).InstallTime);
          UpdateCargo
@@ -286,7 +286,7 @@ package body Bases.Ship is
             To_String(MoneyName) &
             ".",
             TradeMessage);
-         PlayerShip.Modules.Delete(ModuleIndex, 1);
+         PlayerShip.Modules.Delete(ModuleIndex);
          if PlayerShip.RepairModule > ModuleIndex then
             PlayerShip.RepairModule := PlayerShip.RepairModule - 1;
          elsif PlayerShip.RepairModule = ModuleIndex then
