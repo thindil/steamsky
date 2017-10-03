@@ -353,7 +353,9 @@ PerceptionSkill. Value after equal sign must be existing skill name.
   used for healing, `{PilotingSkill}` which later will be replaced with name
   of skill used for piloting ship, `{EngineeringSkill}` which later will be
   replaced with name of skill used by ship engineer, `{GunnerySkill}` which
-  later will be replaced with name of skill used to operate guns on ship.
+  later will be replaced with name of skill used to operate guns on ship,
+  `{TalkingSkill}` which later will be replaced with name of skill used to
+  talk in bases or with other ships.
 
 ## Goals
 
