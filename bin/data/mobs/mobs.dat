@@ -1,0 +1,7 @@
+[1]
+Skills = 4
+SkillsLevels = 5
+Attributes = 3, 3, 3, 3
+Order = Talk
+Priorities = Repair ship:Normal, Manufacturing:Normal, Upgrading ship:Normal, Talking in bases:High, Healing wounded:Normal, Cleaning ship:Normal
+[]
