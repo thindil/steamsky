@@ -39,6 +39,7 @@ with Goals; use Goals;
 with Goals.UI; use Goals.UI;
 with HallOfFame; use HallOfFame;
 with Utils.UI; use Utils.UI;
+with Mobs; use Mobs;
 
 package body MainMenu is
 
@@ -467,6 +468,7 @@ package body MainMenu is
          LoadItems;
          LoadShipModules;
          LoadRecipes;
+         LoadMobs;
          LoadShips;
          LoadGoals;
          if not NewGame then
@@ -509,7 +511,15 @@ package body MainMenu is
          when An_Exception : Recipes_Invalid_Data =>
             LogMessage(Exception_Message(An_Exception), Everything);
             ShowErrorInfo
-              ("Can't load recipess data. Invalid value in file. Run game in debug mode to get more info.");
+              ("Can't load recipes data. Invalid value in file. Run game in debug mode to get more info.");
+            return False;
+         when Mobs_Directory_Not_Found =>
+            ShowErrorInfo
+              ("Can't load mobs data. Directory with mobs data files not found.");
+            return False;
+         when Mobs_Files_Not_Found =>
+            ShowErrorInfo
+              ("Can't load mobs data. Files with mobs data not found.");
             return False;
          when Ships_Directory_Not_Found =>
             ShowErrorInfo
