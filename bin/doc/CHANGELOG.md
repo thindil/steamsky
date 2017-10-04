@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Showing current gunnery skill name in help
 - Showing current name of skill used to talk in bases or with other ships in
   help
+- Showing current perception skill name in help
 
 ### Changed
 - Updated MODDING.md
