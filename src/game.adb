@@ -34,6 +34,7 @@ with Missions; use Missions;
 with Utils; use Utils;
 with Goals; use Goals;
 with Game.SaveLoad; use Game.SaveLoad;
+with Mobs; use Mobs;
 
 package body Game is
 
@@ -43,14 +44,12 @@ package body Game is
       PosX, PosY, RandomBase, ShipIndex: Positive;
       ValidLocation: Boolean;
       TempX, TempY, BaseReputation: Integer;
-      TmpSkills: Skills_Container.Vector;
       TmpRecruits: Recruit_Container.Vector;
       TmpMissions: Mission_Container.Vector;
       CabinAssigned: Boolean := False;
       BaseOwner: Bases_Owners;
       BasePopulation: Natural;
       TmpCargo: BaseCargo_Container.Vector;
-      TmpAttributes: Attributes_Container.Vector;
       TmpInventory: Inventory_Container.Vector;
    begin
       -- Save new game configuration
@@ -192,24 +191,20 @@ package body Game is
            DOCKED,
            False);
       -- Add player to ship
-      TmpSkills.Append(New_Item => (4, 5, 0));
-      for I in Attributes_Names.Iterate loop
-         TmpAttributes.Append(New_Item => (3, 0));
-      end loop;
       PlayerShip.Crew.Prepend
       (New_Item =>
          (Name => CharName,
           Gender => Gender,
           Health => 100,
           Tired => 0,
-          Skills => TmpSkills,
+          Skills => ProtoMobs_List(1).Skills,
           Hunger => 0,
           Thirst => 0,
-          Order => Talk,
+          Order => ProtoMobs_List(1).Order,
           PreviousOrder => Rest,
           OrderTime => 15,
-          Orders => (0, 0, 0, 1, 1, 1, 2, 1, 1),
-          Attributes => TmpAttributes,
+          Orders => ProtoMobs_List(1).Priorities,
+          Attributes => ProtoMobs_List(1).Attributes,
           Inventory => TmpInventory));
       for Module of PlayerShip.Modules loop
          if Module.Owner > 0 then
