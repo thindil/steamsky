@@ -4,4 +4,102 @@ SkillsLevels = 5
 Attributes = 3, 3, 3, 3
 Order = Talk
 Priorities = Repair ship:Normal, Manufacturing:Normal, Upgrading ship:Normal, Talking in bases:High, Healing wounded:Normal, Cleaning ship:Normal
+[2]
+Skills = 1, 5
+SkillsLevels = 5, 5
+Attributes = 3, 3, 3, 3
+Order = Pilot
+Priorites = Piloting:Normal
+[3]
+Skills = 2
+SkillsLevels = 5
+Attributes = 3, 3, 3, 3
+Order = Engineer
+Priorites = Engineering:Normal
+[4]
+Skills = 3, 5
+SkillsLevels = 5, 5
+Attributes = 3, 3, 3, 3
+Order = Gunner
+Priorites = Operating guns:Normal
+[5]
+Skills = 1, 5
+SkillsLevels = 1, 1
+Attributes = 2, 2, 2, 2
+Order = Pilot
+[6]
+Skills = 3, 5
+SkillsLevels = 1, 1
+Attributes = 2, 2, 2, 2
+Order = Gunner
+[7]
+Skills = 1, 5
+SkillsLevels = 1, 1
+Attributes = 1, 1, 1, 1
+Order = Pilot
+[8]
+Skills = 1, 5
+SkillsLevels = 1, 2..4
+Attributes = 3, 3, 3, 3
+Order = Pilot
+[9]
+Skills = 3, 5
+SkillsLevels = 3, 2..4
+Attributes = 3, 3, 3, 3
+Order = Gunner
+[10]
+Skills = 2
+SkillsLevels = 3..6
+Attributes = 3, 3, 3, 3
+Order = Engineer
+[11]
+Skills = 1, 5
+SkillsLevels = 1, 1..4
+Attributes = 3, 3, 3, 3
+Order = Pilot
+[12]
+Skills = 1, 5
+SkillsLevels = 3..6, 3..6
+Attributes = 3..5, 3..5, 3..5, 3..5
+Order = Pilot
+[13]
+Skills = 3, 5
+SkillsLevels = 7..14, 3..6
+Attributes = 3..5, 3..5, 3..5, 3..5
+Order = Gunner
+[14]
+Skills = 2
+SkillsLevels = 7..12
+Attributes = 3..5, 3..5, 3..5, 3..5
+Order = Engineer
+[15]
+Skills = 4
+SkillsLevels = 1..5
+Attributes = 3..5, 3..5, 3..5, 3..5
+Order = Talk
+[16]
+Skills = 1, 5
+SkillsLevels = 6..12, 3..6
+Attributes = 5..10, 5..10, 5..10, 5..10
+Order = Pilot
+[17]
+Skills = 3, 5
+SkillsLevels = 7..14, 3..6
+Attributes = 5..10, 5..10, 5..10, 5..10
+Order = Gunner
+[18]
+Skills = 2
+SkillsLevels = 7..12
+Attributes = 5..10, 5..10, 5..10, 5..10
+Order = Engineer
+[19]
+Skills = 1, 5
+SkillsLevels = 1, 1..2
+Attributes = 3, 3, 3, 3
+Order = Pilot
+[20]
+Skills = 1, 5
+SkillsLevels = 3..7, 3..7
+Attributes = 3..5, 3..5, 3..5, 3..5
+Order = Pilot
 []
