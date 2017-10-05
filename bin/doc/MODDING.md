@@ -295,29 +295,13 @@ PerceptionSkill. Value after equal sign must be existing skill name.
   and space). Each item entry is Amount`x`Item index (from *items* directory).
   Amount can be constant value or range from minimum value to max value, 
   separated by `..` (double dots).
-- Skills: List of crew members skills and its levels. Each crew member skills
-  list is separated by `; ` (semicolon and space). Each crew member skill is
-  Skill Number`x`Level separated by `, ` (comma and space). Skill level can 
-  be constant value or range from minimum value to max value, separated by 
-  `..` (double dots).
-- Orders: Orders for each crew member. Must be in this same amount as skills of
-  crew members. Possible values are: Pilot, Engineer, Gunner, Repair, Craft,
-  Upgrading, Talk, Heal, Clean, Rest.
 - Description: Any length description of ship.
 - Owner: Which fraction own ship. Possible values are: Poleis, Independent,
   Pirates, Undead, Drones, Inquisition.
-- Priorities: Orders priorities for each crew member (player ship only). Must
-  be in this same amount as skills of crew members. Each priority entry is
-  Order`:`Priority where Order is: Piloting, Engineering, Operating guns, 
-  Repair ship, Manufacturing, Upgrading ship, Talking in bases, Healing 
-  wounded, Cleaning ship and Priority is: Normal or Highest (one per crew 
-  member).
 - Recipes: List of know recipes indexes (from *recipes* directory, player ship
   only), separated by `, ` (comma and space).
-- Attributes: List of crew members attributes and its levels. Each crew member
-  attributes list is separated by `; ` (semicolon and space). Each crew member 
-  attribute is separated by `, ` (comma and space). Can be constant value or
-  range from minimum value to max value, separated by `..` (double dots).
+- Crew: List of crew members indexes (from *mobs* directory), separated by 
+  `, ` (comma and space).
 
 ## Help
 
@@ -413,7 +397,7 @@ PerceptionSkill. Value after equal sign must be existing skill name.
   space). Each priority entry is Order`:`Priority where Order is: Piloting,
   Engineering, Operating guns, Repair ship, Manufacturing, Upgrading ship,
   Talking in bases, Healing wounded, Cleaning ship and Priority is: Normal,
-  High or Highest (one per crew member).
+  High or Highest.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
