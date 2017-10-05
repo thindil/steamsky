@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
 - Updated recipe setting in crafting interface
 - Allow heal wounded crew members without medical room
 - Moved starting player character data to separated text file
+- Moved informations about ships crews to separated text file
 
 ### Fixed
 - Showing various forms after screen resize
