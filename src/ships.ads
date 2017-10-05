@@ -60,14 +60,6 @@ package Ships is
       Description: Unbounded_String; -- Description of ship
       HomeBase: Natural; -- Index of home base of ship
    end record;
-   type ProtoCrewData is -- Data structure for crew prototypes
-   record
-      Skills: Skills_Container.Vector; -- Skills of crew member
-      Order: Crew_Orders; -- Order for crew member
-      Orders: Orders_Array; -- Priority of orders of member
-      Attributes: Attributes_Container.Vector; -- Attributes of crew member
-   end record;
-   package ProtoCrew_Container is new Vectors(Positive, ProtoCrewData);
    type ShipSkills_Array is array(1 .. 2) of Natural;
    type ProtoShipData is -- Data structure for ship prototypes
    record
@@ -80,7 +72,7 @@ package Ships is
       Perception: ShipSkills_Array; -- Bonus to spot player ship first
       Cargo: Skills_Container.Vector; -- List of ship cargo
       CombatValue: Positive; -- Combat value of ship (used to generate enemies)
-      Crew: ProtoCrew_Container.Vector; -- List of ship crew
+      Crew: Positive_Container.Vector; -- List of mobs indexes of ship crew
       Description: Unbounded_String; -- Description of ship
       Owner: Bases_Owners; -- Faction to which ship belong
       Index: Unbounded_String; -- Index of ship

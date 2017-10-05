@@ -195,4 +195,14 @@ package body Mobs is
       End_Search(Files);
    end LoadMobs;
 
+   function FindProtoMob(Index: Unbounded_String) return Natural is
+   begin
+      for I in ProtoMobs_List.Iterate loop
+         if ProtoMobs_List(I).Index = Index then
+            return ProtoMobs_Container.To_Index(I);
+         end if;
+      end loop;
+      return 0;
+   end FindProtoMob;
+
 end Mobs;
