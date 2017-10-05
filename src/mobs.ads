@@ -37,5 +37,8 @@ package Mobs is
    Mobs_Files_Not_Found: exception; -- Raised when no files with mobs
 
    procedure LoadMobs; -- Load mobs from files
+   function FindProtoMob
+     (Index: Unbounded_String)
+     return Natural; -- Return vector index of mobile or zero if mobile not found
 
 end Mobs;

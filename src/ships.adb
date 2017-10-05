@@ -27,6 +27,7 @@ with Log; use Log;
 with Crafts; use Crafts;
 with Events; use Events;
 with Maps; use Maps;
+with Mobs; use Mobs;
 
 package body Ships is
 
@@ -57,6 +58,7 @@ package body Ships is
       MaxValue, Roll: Positive;
       StartX, StartY, EndX, EndY: Integer;
       TmpAttributes: Attributes_Container.Vector;
+      Member: ProtoMobRecord;
    begin
       if RandomUpgrades then
          UpgradesAmount := GetRandom(0, Positive(ProtoShip.Modules.Length));
@@ -145,13 +147,14 @@ package body Ships is
       else
          NewName := Name;
       end if;
-      for Member of ProtoShip.Crew loop
+      for I in ProtoShip.Crew.First_Index .. ProtoShip.Crew.Last_Index loop
          if GetRandom(1, 100) < 50 then
             Gender := 'M';
          else
             Gender := 'F';
          end if;
          MemberName := GenerateMemberName(Gender);
+         Member := ProtoMobs_List.Element(ProtoShip.Crew.Element(I));
          for Skill of Member.Skills loop
             if Skill(3) = 0 then
                TmpSkills.Append(New_Item => Skill);
@@ -180,7 +183,7 @@ package body Ships is
              Order => Member.Order,
              PreviousOrder => Rest,
              OrderTime => 15,
-             Orders => Member.Orders,
+             Orders => Member.Priorities,
              Attributes => TmpAttributes,
              Inventory => TmpInventory));
          TmpSkills.Clear;
@@ -306,11 +309,7 @@ package body Ships is
 
    procedure LoadShips is
       ShipsFile: File_Type;
-      RawData,
-      FieldName,
-      Value,
-      SkillsValue,
-      PrioritiesValue: Unbounded_String;
+      RawData, FieldName, Value: Unbounded_String;
       EqualIndex,
       StartIndex,
       EndIndex,
@@ -318,32 +317,16 @@ package body Ships is
       XIndex,
       CombatValue,
       DotIndex,
-      EndIndex2,
-      StartIndex2,
       ModuleIndex,
       ItemIndex,
-      RecipeIndex: Natural;
+      RecipeIndex,
+      MobIndex: Natural;
       TempRecord: ProtoShipData;
       TempModules, TempRecipes: Positive_Container.Vector;
       TempCargo: Skills_Container.Vector;
-      TempCrew: ProtoCrew_Container.Vector;
-      TempSkills: Skills_Container.Vector;
-      TempAttributes: Attributes_Container.Vector;
-      TempOrder: Crew_Orders;
-      SkillsAmount, PrioritiesAmount: Positive;
+      TempCrew: Positive_Container.Vector;
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
-      TempPriorities: Orders_Array := (others => 0);
-      OrdersNames: constant array(Positive range <>) of Unbounded_String :=
-        (To_Unbounded_String("Piloting"),
-         To_Unbounded_String("Engineering"),
-         To_Unbounded_String("Operating guns"),
-         To_Unbounded_String("Repair ship"),
-         To_Unbounded_String("Manufacturing"),
-         To_Unbounded_String("Upgrading ship"),
-         To_Unbounded_String("Talking in bases"),
-         To_Unbounded_String("Healing wounded"),
-         To_Unbounded_String("Cleaning ship"));
    begin
       if ProtoShips_List.Length > 0 then
          return;
@@ -495,128 +478,10 @@ package body Ships is
                      end if;
                      StartIndex := EndIndex + 2;
                   end loop;
-               elsif FieldName = To_Unbounded_String("Skills") then
-                  StartIndex := 1;
-                  Amount := Ada.Strings.Unbounded.Count(Value, "; ") + 1;
-                  for I in 1 .. Amount loop
-                     EndIndex := Index(Value, "; ", StartIndex);
-                     if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                     end if;
-                     SkillsValue :=
-                       To_Unbounded_String
-                         (Slice(Value, StartIndex, EndIndex - 1));
-                     StartIndex2 := 1;
-                     SkillsAmount :=
-                       Ada.Strings.Unbounded.Count(SkillsValue, ", ") + 1;
-                     for J in 1 .. SkillsAmount loop
-                        EndIndex2 := Index(SkillsValue, ", ", StartIndex2);
-                        if EndIndex2 = 0 then
-                           EndIndex2 := Length(SkillsValue) + 1;
-                        end if;
-                        XIndex := Index(SkillsValue, "x", StartIndex2);
-                        DotIndex := Index(SkillsValue, "..", StartIndex2);
-                        if DotIndex = 0 or DotIndex > EndIndex2 then
-                           TempSkills.Append
-                           (New_Item =>
-                              (Integer'Value
-                                 (Slice(SkillsValue, StartIndex2, XIndex - 1)),
-                               Integer'Value
-                                 (Slice
-                                    (SkillsValue,
-                                     XIndex + 1,
-                                     EndIndex2 - 1)),
-                               0));
-                        else
-                           TempSkills.Append
-                           (New_Item =>
-                              (Integer'Value
-                                 (Slice(SkillsValue, StartIndex2, XIndex - 1)),
-                               Integer'Value
-                                 (Slice
-                                    (SkillsValue,
-                                     XIndex + 1,
-                                     DotIndex - 1)),
-                               Integer'Value
-                                 (Slice
-                                    (SkillsValue,
-                                     DotIndex + 2,
-                                     EndIndex2 - 1))));
-                        end if;
-                        StartIndex2 := EndIndex2 + 2;
-                     end loop;
-                     TempRecord.Crew.Append
-                     (New_Item =>
-                        (Skills => TempSkills,
-                         Order => Rest,
-                         Orders => (others => 0),
-                         Attributes => TempAttributes));
-                     TempSkills.Clear;
-                     StartIndex := EndIndex + 2;
-                  end loop;
-               elsif FieldName = To_Unbounded_String("Orders") then
-                  StartIndex := 1;
-                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                  for I in 1 .. Amount loop
-                     EndIndex := Index(Value, ", ", StartIndex);
-                     if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                     end if;
-                     TempOrder :=
-                       Crew_Orders'Value
-                         (Slice(Value, StartIndex, EndIndex - 1));
-                     TempRecord.Crew(I).Order := TempOrder;
-                     StartIndex := EndIndex + 2;
-                  end loop;
-                  TempOrder := Rest;
                elsif FieldName = To_Unbounded_String("Description") then
                   TempRecord.Description := Value;
                elsif FieldName = To_Unbounded_String("Owner") then
                   TempRecord.Owner := Bases_Owners'Value(To_String(Value));
-               elsif FieldName = To_Unbounded_String("Priorities") then
-                  StartIndex := 1;
-                  Amount := Ada.Strings.Unbounded.Count(Value, "; ") + 1;
-                  for I in 1 .. Amount loop
-                     EndIndex := Index(Value, "; ", StartIndex);
-                     if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                     end if;
-                     PrioritiesValue :=
-                       To_Unbounded_String
-                         (Slice(Value, StartIndex, EndIndex - 1));
-                     StartIndex2 := 1;
-                     PrioritiesAmount :=
-                       Ada.Strings.Unbounded.Count(PrioritiesValue, ", ") + 1;
-                     for J in 1 .. PrioritiesAmount loop
-                        EndIndex2 := Index(PrioritiesValue, ", ", StartIndex2);
-                        if EndIndex2 = 0 then
-                           EndIndex2 := Length(PrioritiesValue) + 1;
-                        end if;
-                        XIndex := Index(PrioritiesValue, ":", StartIndex2);
-                        for K in OrdersNames'Range loop
-                           if OrdersNames(K) =
-                             Unbounded_Slice
-                               (PrioritiesValue,
-                                StartIndex2,
-                                XIndex - 1) then
-                              if Slice
-                                  (PrioritiesValue,
-                                   XIndex + 1,
-                                   EndIndex2 - 1) =
-                                "Normal" then
-                                 TempPriorities(K) := 1;
-                              else
-                                 TempPriorities(K) := 2;
-                              end if;
-                              exit;
-                           end if;
-                        end loop;
-                        StartIndex2 := EndIndex2 + 2;
-                     end loop;
-                     TempRecord.Crew(I).Orders := TempPriorities;
-                     TempPriorities := (others => 0);
-                     StartIndex := EndIndex + 2;
-                  end loop;
                elsif FieldName = To_Unbounded_String("Recipes") then
                   StartIndex := 1;
                   Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
@@ -641,53 +506,28 @@ package body Ships is
                      TempRecord.KnownRecipes.Append(New_Item => RecipeIndex);
                      StartIndex := EndIndex + 2;
                   end loop;
-               elsif FieldName = To_Unbounded_String("Attributes") then
+               elsif FieldName = To_Unbounded_String("Crew") then
                   StartIndex := 1;
-                  Amount := Ada.Strings.Unbounded.Count(Value, "; ") + 1;
+                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
                   for I in 1 .. Amount loop
-                     EndIndex := Index(Value, "; ", StartIndex);
+                     EndIndex := Index(Value, ", ", StartIndex);
                      if EndIndex = 0 then
                         EndIndex := Length(Value) + 1;
                      end if;
-                     SkillsValue :=
-                       To_Unbounded_String
-                         (Slice(Value, StartIndex, EndIndex - 1));
-                     StartIndex2 := 1;
-                     SkillsAmount :=
-                       Ada.Strings.Unbounded.Count(SkillsValue, ", ") + 1;
-                     for J in 1 .. SkillsAmount loop
-                        EndIndex2 := Index(SkillsValue, ", ", StartIndex2);
-                        if EndIndex2 = 0 then
-                           EndIndex2 := Length(SkillsValue) + 1;
-                        end if;
-                        DotIndex := Index(SkillsValue, "..", StartIndex2);
-                        if DotIndex = 0 or DotIndex > EndIndex2 then
-                           TempAttributes.Append
-                           (New_Item =>
-                              (Integer'Value
-                                 (Slice
-                                    (SkillsValue,
-                                     StartIndex2,
-                                     EndIndex2 - 1)),
-                               0));
-                        else
-                           TempAttributes.Append
-                           (New_Item =>
-                              (Integer'Value
-                                 (Slice
-                                    (SkillsValue,
-                                     StartIndex2,
-                                     DotIndex - 1)),
-                               Integer'Value
-                                 (Slice
-                                    (SkillsValue,
-                                     DotIndex + 2,
-                                     EndIndex2 - 1))));
-                        end if;
-                        StartIndex2 := EndIndex2 + 2;
-                     end loop;
-                     TempRecord.Crew(I).Attributes := TempAttributes;
-                     TempAttributes.Clear;
+                     MobIndex :=
+                       FindProtoMob
+                         (Unbounded_Slice(Value, StartIndex, EndIndex - 1));
+                     if MobIndex = 0 then
+                        Close(ShipsFile);
+                        End_Search(Files);
+                        raise Ships_Invalid_Data
+                          with "Invalid mob index: |" &
+                          Slice(Value, StartIndex, EndIndex - 1) &
+                          "| in " &
+                          To_String(TempRecord.Name) &
+                          ".";
+                     end if;
+                     TempRecord.Crew.Append(New_Item => MobIndex);
                      StartIndex := EndIndex + 2;
                   end loop;
                end if;
