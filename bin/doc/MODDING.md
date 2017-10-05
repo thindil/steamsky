@@ -66,7 +66,7 @@ To change which items types are used as food, open file *game.dat* in *data*
 directory and edit line which starts with FoodTypes. First type is always
 main type, other types used only when items of previous types are not found
 in ship cargo. Values after equal sign must be existing items types, 
-separated by coma and space: `, `.
+separated by comma and space: `, `.
 
 ## Fuel item type
 To change which item type is used as a fuel for ship, open file *game.dat* in 
@@ -385,6 +385,35 @@ PerceptionSkill. Value after equal sign must be existing skill name.
   *items* directory). For Mission, missions types: Deliver for deliver item to 
   bases, Destroy for destroy enemy ship, Patrol for patrol missions, Explore 
   for explore missions, Passenger for transport passengers missions.
+
+## Mobiles
+
+### General informations
+- Open file *mobs.dat* in *data/mobs* directory or create new file with *dat*
+  extension in that directory (example: *mymobs.dat*).
+- Each value in goal data structure must be one line length.
+- File must end with `[]`.
+- First entry in file *mobs.dat* is player character.
+
+### Mob data structure
+- Each ship start from `[` symbol. Any value between `[` and `]` is a index 
+  (it can be number or text) and must be unique.
+- Skills: List of separated by `, ` (comma and space) numbers of skills which
+  selected mob known.
+- SkillsLevels: List of levels of skills which selected mob known, separated
+  by `, ` (comma and space). Skill level can be constant value or range from
+  minimum value to max value, separated by `..` (double dots). Must be that
+  same amount as for Skills entry.
+- Attributes: List of levels of mobile attributes, separated by `, ` (comma
+  and space). Can be constant value or range from minimum value to max value,
+  separated by `..` (double dots).
+- Order: Current ship order of selected mob. Possible values are: Pilot,
+  Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest.
+- Priorities: Orders priorities for selected mob, separated by `, ` (comma and
+  space). Each priority entry is Order`:`Priority where Order is: Piloting,
+  Engineering, Operating guns, Repair ship, Manufacturing, Upgrading ship,
+  Talking in bases, Healing wounded, Cleaning ship and Priority is: Normal,
+  High or Highest (one per crew member).
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
