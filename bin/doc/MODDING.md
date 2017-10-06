@@ -155,6 +155,12 @@ To change which skill is used for spotting things (other ships, etc), open
 file *game.dat* in *data* directory and edit line which starts with 
 PerceptionSkill. Value after equal sign must be existing skill name.
 
+## Player character index
+To change which mobile data is used for starting player character data 
+(attributes, skills, etc), open file *game.dat* in *data* directory and edit
+line which starts with PlayerIndex. Value after equal sign must be existing
+mobile index from any mobiles file from *data/mobs* directory.
+
 ## Items
 
 ### General informations
