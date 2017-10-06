@@ -1,274 +1,274 @@
 [1]
-Skills = 4
+Skills = Rhetoric
 SkillsLevels = 5
 Attributes = 3, 3, 3, 3
 Order = Talk
 Priorities = Repair ship:Normal, Manufacturing:Normal, Upgrading ship:Normal, Talking in bases:High, Healing wounded:Normal, Cleaning ship:Normal
 [2]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 5, 5
 Attributes = 3, 3, 3, 3
 Order = Pilot
 Priorites = Piloting:Normal
 [3]
-Skills = 2
+Skills = Engineering
 SkillsLevels = 5
 Attributes = 3, 3, 3, 3
 Order = Engineer
 Priorites = Engineering:Normal
 [4]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 5, 5
 Attributes = 3, 3, 3, 3
 Order = Gunner
 Priorites = Operating guns:Normal
 [5]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 1, 1
 Attributes = 2, 2, 2, 2
 Order = Pilot
 [6]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 1, 1
 Attributes = 2, 2, 2, 2
 Order = Gunner
 [7]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 1, 1
 Attributes = 1, 1, 1, 1
 Order = Pilot
 [8]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 1, 2..4
 Attributes = 3, 3, 3, 3
 Order = Pilot
 [9]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 3, 2..4
 Attributes = 3, 3, 3, 3
 Order = Gunner
 [10]
-Skills = 2
+Skills = Engineering
 SkillsLevels = 3..6
 Attributes = 3, 3, 3, 3
 Order = Engineer
 [11]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 1, 1..4
 Attributes = 3, 3, 3, 3
 Order = Pilot
 [12]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 3..6, 3..6
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Pilot
 [13]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 7..14, 3..6
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Gunner
 [14]
-Skills = 2
+Skills = Engineering
 SkillsLevels = 7..12
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Engineer
 [15]
-Skills = 4
+Skills = Rhetoric
 SkillsLevels = 1..5
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Talk
 [16]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 6..12, 3..6
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Pilot
 [17]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 7..14, 3..6
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Gunner
 [18]
-Skills = 2
+Skills = Engineering
 SkillsLevels = 7..12
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Engineer
 [19]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 1, 1..2
 Attributes = 3, 3, 3, 3
 Order = Pilot
 [20]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 3..7, 3..7
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Pilot
 [21]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 5..15, 3..7
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Pilot
 [22]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 5..15, 3..7
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Gunner
 [23]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 15..25, 3..6
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Pilot
 [24]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 15..25, 3..6
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Gunner
 [25]
-Skills = 2
+Skills = Engineering
 SkillsLevels = 15..25
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Engineer
 [26]
-Skills = 4
+Skills = Rhetoric
 SkillsLevels = 5..10
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Talk
 [27]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 3..6, 3..6
 Attributes = 2..4, 2..4, 2..4, 2..4
 Order = Pilot
 [28]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 7..20, 7..20
 Attributes = 5..15, 5..15, 5..15, 5..15
 Order = Pilot
 [29]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 15..25, 7..15
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Pilot
 [30]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 10..20, 3..8
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Gunner
 [31]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 10..20, 3..7
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Gunner
 [32]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 7..20, 4..12
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Pilot
 [33]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 7..20, 3..10
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Gunner
 [34]
-Skills = 2
+Skills = Engineering
 SkillsLevels = 7..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Engineer
 [35]
-Skills = 4
+Skills = Rhetoric
 SkillsLevels = 2..6
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Talk
 [36]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 5..15, 5..15
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Pilot
 [37]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 7..2, 5..15
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Pilot
 [38]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 10..20, 5..15
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Gunner
 [39]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 30..50, 4..12
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Pilot
 [40]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 30..50, 4..12
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Gunner
 [41]
-Skills = 2
+Skills = Engineering
 SkillsLevels = 30..50
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Engineer
 [42]
-Skills = 4
+Skills = Rhetoric
 SkillsLevels = 10..20
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Talk
 [43]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 40..60, 8..15
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Pilot
 [44]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 40..60, 8..15
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Gunner
 [45]
-Skills = 2
+Skills = Engineering
 SkillsLevels = 40..60
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Engineer
 [46]
-Skills = 4
+Skills = Rhetoric
 SkillsLevels = 20..40
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Talk
 [47]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 30..50, 30..50
 Attributes = 15..20, 15..20, 15..20, 15..20
 Order = Pilot
 [48]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 40..60, 40..60
 Attributes = 20..30, 20..30, 20..30, 20..30
 Order = Pilot
 [49]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 40..60, 5..15
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Pilot
 [50]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 30..50, 5..15
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Gunner
 [51]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 50..70, 8..20
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Pilot
 [52]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 40..60, 8..20
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Gunner
 [53]
-Skills = 1, 5
+Skills = Piloting, Perception
 SkillsLevels = 1, 1
 Attributes = 3, 3, 3, 3
 Order = Pilot
 [54]
-Skills = 3, 5
+Skills = Gunnery, Perception
 SkillsLevels = 1, 1
 Attributes = 3, 3, 3, 3
 Order = Gunner
