@@ -374,15 +374,6 @@ package body Game is
          To_Unbounded_String("TalkingSkill"),
          To_Unbounded_String("PerceptionSkill"),
          To_Unbounded_String("PlayerIndex"));
-      function FindSkillIndex(SkillName: Unbounded_String) return Positive is
-      begin
-         for I in Skills_List.Iterate loop
-            if Skills_List(I).Name = SkillName then
-               return SkillsData_Container.To_Index(I);
-            end if;
-         end loop;
-         return 1;
-      end FindSkillIndex;
    begin
       if BaseSyllablesStart.Length > 0 then
          return True;
@@ -587,5 +578,15 @@ package body Game is
       Known_Recipes.Clear;
       ClearCurrentGoal;
    end EndGame;
+
+   function FindSkillIndex(SkillName: Unbounded_String) return Positive is
+   begin
+      for I in Skills_List.Iterate loop
+         if Skills_List(I).Name = SkillName then
+            return SkillsData_Container.To_Index(I);
+         end if;
+      end loop;
+      return 1;
+   end FindSkillIndex;
 
 end Game;
