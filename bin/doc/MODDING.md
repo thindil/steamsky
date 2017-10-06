@@ -388,8 +388,8 @@ mobile index from any mobiles file from *data/mobs* directory.
 ### Mob data structure
 - Each ship start from `[` symbol. Any value between `[` and `]` is a index 
   (it can be number or text) and must be unique.
-- Skills: List of separated by `, ` (comma and space) numbers of skills which
-  selected mob known.
+- Skills: List of separated by `, ` (comma and space) names of skills (from
+  *game.dat* from *data* directory) which selected mob known.
 - SkillsLevels: List of levels of skills which selected mob known, separated
   by `, ` (comma and space). Skill level can be constant value or range from
   minimum value to max value, separated by `..` (double dots). Must be that
