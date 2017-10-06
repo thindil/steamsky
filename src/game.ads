@@ -170,5 +170,8 @@ package Game is
      return Natural; -- Return days difference between selected date and current game date
    procedure EndGame
      (Save: Boolean); -- Save (or not) game and clear all temporary data
+   function FindSkillIndex
+     (SkillName: Unbounded_String)
+     return Positive; -- Return vector index of selected skill
 
 end Game;

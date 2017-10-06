@@ -83,8 +83,8 @@ package body Mobs is
                      end if;
                      TempSkills.Append
                      (New_Item =>
-                        (Positive'Value
-                           (Slice(Value, StartIndex, EndIndex - 1)),
+                        (FindSkillIndex
+                           (Unbounded_Slice(Value, StartIndex, EndIndex - 1)),
                          0,
                          0));
                      StartIndex := EndIndex + 2;
