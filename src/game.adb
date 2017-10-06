@@ -38,6 +38,8 @@ with Mobs; use Mobs;
 
 package body Game is
 
+   PlayerIndex: Unbounded_String; -- Index of mob used for player starting data
+
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
       Gender: Character) is
@@ -51,6 +53,7 @@ package body Game is
       BasePopulation: Natural;
       TmpCargo: BaseCargo_Container.Vector;
       TmpInventory: Inventory_Container.Vector;
+      PlayerIndex2: constant Positive := FindProtoMob(PlayerIndex);
    begin
       -- Save new game configuration
       NewGameSettings :=
@@ -197,14 +200,14 @@ package body Game is
           Gender => Gender,
           Health => 100,
           Tired => 0,
-          Skills => ProtoMobs_List(1).Skills,
+          Skills => ProtoMobs_List(PlayerIndex2).Skills,
           Hunger => 0,
           Thirst => 0,
-          Order => ProtoMobs_List(1).Order,
+          Order => ProtoMobs_List(PlayerIndex2).Order,
           PreviousOrder => Rest,
           OrderTime => 15,
-          Orders => ProtoMobs_List(1).Priorities,
-          Attributes => ProtoMobs_List(1).Attributes,
+          Orders => ProtoMobs_List(PlayerIndex2).Priorities,
+          Attributes => ProtoMobs_List(PlayerIndex2).Attributes,
           Inventory => TmpInventory));
       for Module of PlayerShip.Modules loop
          if Module.Owner > 0 then
@@ -369,7 +372,8 @@ package body Game is
          To_Unbounded_String("EngineeringSkill"),
          To_Unbounded_String("GunnerySkill"),
          To_Unbounded_String("TalkingSkill"),
-         To_Unbounded_String("PerceptionSkill"));
+         To_Unbounded_String("PerceptionSkill"),
+         To_Unbounded_String("PlayerIndex"));
       function FindSkillIndex(SkillName: Unbounded_String) return Positive is
       begin
          for I in Skills_List.Iterate loop
@@ -545,6 +549,8 @@ package body Game is
                         TalkingSkill := FindSkillIndex(Value);
                      when 39 =>
                         PerceptionSkill := FindSkillIndex(Value);
+                     when 40 =>
+                        PlayerIndex := Value;
                      when others =>
                         null;
                   end case;
