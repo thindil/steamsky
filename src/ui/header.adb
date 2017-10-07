@@ -155,6 +155,8 @@ package body Header is
             Add(Str => "Inventory");
          when Death_Confirm =>
             return;
+         when School_View =>
+            Add(Str => "Train skills");
          when others =>
             null;
       end case;
