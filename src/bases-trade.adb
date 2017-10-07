@@ -26,6 +26,29 @@ with Trades; use Trades;
 
 package body Bases.Trade is
 
+   function CheckMoney
+     (Price: Positive;
+      Message: String := "") return Positive is
+      MoneyIndex2: constant Natural :=
+        FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+   begin
+      if MoneyIndex2 = 0 then
+         if Message /= "" then
+            raise Trade_No_Money with Message;
+         else
+            raise Trade_No_Money;
+         end if;
+      end if;
+      if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
+         if Message /= "" then
+            raise Trade_Not_Enough_Money with Message;
+         else
+            raise Trade_Not_Enough_Money;
+         end if;
+      end if;
+      return MoneyIndex2;
+   end CheckMoney;
+
    procedure HireRecruit(RecruitIndex: Positive) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -35,16 +58,10 @@ package body Bases.Trade is
       TraderIndex: Positive;
       Inventory: Inventory_Container.Vector;
    begin
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
-      if MoneyIndex2 = 0 then
-         raise Trade_No_Money;
-      end if;
       TraderIndex := FindMember(Talk);
       Price := Recruit.Price;
       CountPrice(Price, TraderIndex);
-      if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
-         raise Trade_Not_Enough_Money with To_String(Recruit.Name);
-      end if;
+      MoneyIndex2 := CheckMoney(Price, To_String(Recruit.Name));
       PlayerShip.Crew.Append
       (New_Item =>
          (Name => Recruit.Name,
@@ -109,13 +126,7 @@ package body Bases.Trade is
       end if;
       CountPrice(Cost, TraderIndex);
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
-      if MoneyIndex2 = 0 then
-         raise Trade_No_Money with RecipeName;
-      end if;
-      if Cost > PlayerShip.Cargo(MoneyIndex2).Amount then
-         raise Trade_Not_Enough_Money with RecipeName;
-      end if;
+      MoneyIndex2 := CheckMoney(Cost, RecipeName);
       UpdateCargo
         (Ship => PlayerShip,
          CargoIndex => MoneyIndex2,
@@ -147,15 +158,9 @@ package body Bases.Trade is
          raise Trade_Cant_Heal;
       end if;
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
-      if MoneyIndex2 = 0 then
-         raise Trade_No_Money;
-      end if;
       TraderIndex := FindMember(Talk);
       CountPrice(Cost, TraderIndex);
-      if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
-         raise Trade_Not_Enough_Money;
-      end if;
+      MoneyIndex2 := CheckMoney(Cost);
       if MemberIndex > 0 then
          PlayerShip.Crew(MemberIndex).Health := 100;
          AddMessage
