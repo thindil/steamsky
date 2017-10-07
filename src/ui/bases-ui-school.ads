@@ -18,7 +18,10 @@
 package Bases.UI.School is
 
    procedure ShowSchool; -- Show school window
+   procedure ShowSchoolSkillsMenu; -- Select skill to train
    function SchoolKeys
      (Key: Key_Code) return GameStates; -- Handle keys in base school
+   function SchoolSkillsMenuKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in selecting skill menu
 
 end Bases.UI.School;
