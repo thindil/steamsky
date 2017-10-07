@@ -205,10 +205,10 @@ package body Bases.UI.School is
                Result := Driver(TradeMenu, Key);
             end if;
       end case;
+      CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
       if Result = Menu_Ok then
          ShowSchoolInfo;
       end if;
-      CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
       return School_View;
    end SchoolKeys;
 
