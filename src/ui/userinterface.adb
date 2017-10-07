@@ -37,6 +37,7 @@ with Bases.UI.Recipes; use Bases.UI.Recipes;
 with Bases.UI.Missions; use Bases.UI.Missions;
 with Bases.UI.Heal; use Bases.UI.Heal;
 with Bases.UI.Loot; use Bases.UI.Loot;
+with Bases.UI.School; use Bases.UI.School;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
 with Combat; use Combat;
@@ -81,6 +82,7 @@ package body UserInterface is
          OrdersAmount := 4;
          MenuIndex := 2;
          if HaveTrader and SkyBases(BaseIndex).Owner /= Abandoned then
+            OrdersAmount := OrdersAmount + 1;
             case SkyBases(BaseIndex).Reputation(1) is
                when 0 .. 25 =>
                   MissionsLimit := 1;
@@ -194,6 +196,8 @@ package body UserInterface is
                end if;
             end loop;
             Orders_Items.all(MenuIndex) := New_Item("Trade");
+            MenuIndex := MenuIndex + 1;
+            Orders_Items.all(MenuIndex) := New_Item("School");
             MenuIndex := MenuIndex + 1;
             if SkyBases(BaseIndex).Recruits.Length > 0 then
                Orders_Items.all(MenuIndex) := New_Item("Recruit");
@@ -824,6 +828,8 @@ package body UserInterface is
             end;
          when Inventory_View =>
             ShowInventory;
+         when School_View =>
+            ShowSchool;
          when others =>
             null;
       end case;
