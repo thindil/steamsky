@@ -25,7 +25,14 @@ package Bases.Trade is
    procedure HealCost
      (Cost, Time: in out Natural;
       MemberIndex: Natural); -- Count cost of healing action
+   function TrainCost
+     (MemberIndex,
+      SkillIndex: Positive)
+     return Natural; -- Count cost of training action
+   procedure TrainSkill
+     (MemberIndex, SkillIndex: Positive); -- Train selected skill
    Trade_Already_Known: exception; -- Raised when player known selected recipe
    Trade_Cant_Heal: exception; -- Raised when no crew members are wounded
+   Trade_Cant_Train: exception; -- Raised when skill is maxed and can't be trained
 
 end Bases.Trade;

@@ -21,6 +21,7 @@ with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Utils.UI; use Utils.UI;
 with Trades; use Trades;
+with Bases.Trade; use Bases.Trade;
 
 package body Bases.UI.School is
 
@@ -30,7 +31,6 @@ package body Bases.UI.School is
    procedure ShowSchoolInfo is
       InfoWindow, ClearWindow: Window;
       WindowWidth: Column_Position := (Columns / 2);
-      MemberIndex: constant Positive := Get_Index(Current(TradeMenu));
       WindowHeight: constant Line_Position :=
         Line_Position(Skills_List.Length) + 1;
       Cost: Natural;
@@ -44,17 +44,7 @@ package body Bases.UI.School is
       InfoWindow := Create(WindowHeight, WindowWidth, 3, (Columns / 2));
       WindowWidth := 1;
       for I in Skills_List.Iterate loop
-         Cost := 100;
-         for Skill of PlayerShip.Crew(MemberIndex).Skills loop
-            if Skill(1) = SkillsData_Container.To_Index(I) then
-               if Skill(2) < 100 then
-                  Cost := (Skill(2) + 1) * 100;
-               else
-                  Cost := 0;
-               end if;
-               exit;
-            end if;
-         end loop;
+         Cost := TrainCost(CurrentMenuIndex, SkillsData_Container.To_Index(I));
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 1);
          if Cost > 0 then
             Add
@@ -247,7 +237,14 @@ package body Bases.UI.School is
             if Result = Request_Denied then
                Result := Driver(SkillsMenu, M_First_Item);
             end if;
-         when 10 => -- Start training skill
+         when 10 => -- Start training skill or close menu
+            if Name(Current(SkillsMenu)) /= "Close" then
+               TrainSkill(CurrentMenuIndex, Get_Index(Current(SkillsMenu)));
+            end if;
+            if SkillsMenu /= Null_Menu then
+               Post(SkillsMenu, False);
+               Delete(SkillsMenu);
+            end if;
             DrawGame(School_View);
             return School_View;
          when others =>
@@ -274,6 +271,10 @@ package body Bases.UI.School is
            ("You don't have enough " &
             To_String(MoneyName) &
             " to pay for learning this skill.");
+         DrawGame(School_View);
+         return School_View;
+      when Trade_Cant_Train =>
+         ShowDialog("You can't train this skill any more.");
          DrawGame(School_View);
          return School_View;
    end SchoolSkillsMenuKeys;

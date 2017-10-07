@@ -23,6 +23,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Crafts; use Crafts;
 with Trades; use Trades;
+with Utils; use Utils;
 
 package body Bases.Trade is
 
@@ -221,5 +222,65 @@ package body Bases.Trade is
          Time := 1;
       end if;
    end HealCost;
+
+   function TrainCost(MemberIndex, SkillIndex: Positive) return Natural is
+   begin
+      for Skill of PlayerShip.Crew(MemberIndex).Skills loop
+         if Skill(1) = SkillIndex then
+            if Skill(2) < 100 then
+               return (Skill(2) + 1) * 100;
+            else
+               return 0;
+            end if;
+         end if;
+      end loop;
+      return 100;
+   end TrainCost;
+
+   procedure TrainSkill(MemberIndex, SkillIndex: Positive) is
+      Cost: Natural := TrainCost(MemberIndex, SkillIndex);
+      MoneyIndex2: Natural;
+      TraderIndex, ProtoMoneyIndex: Positive;
+      GainedExp: Positive;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      if Cost = 0 then
+         raise Trade_Cant_Train;
+      end if;
+      TraderIndex := FindMember(Talk);
+      ProtoMoneyIndex := FindProtoItem(MoneyIndex);
+      CountPrice(Cost, TraderIndex);
+      MoneyIndex2 := CheckMoney(Cost);
+      AddMessage
+        ("You bought training session in " &
+         To_String(Skills_List(SkillIndex).Name) &
+         " for " &
+         To_String(PlayerShip.Crew(MemberIndex).Name) &
+         " for" &
+         Positive'Image(Cost) &
+         " " &
+         To_String(MoneyName) &
+         ".",
+         TradeMessage);
+      GiveOrders(MemberIndex, Rest, 0, False);
+      GainedExp :=
+        GetRandom(10, 60) +
+        PlayerShip.Crew(MemberIndex).Attributes
+          (Skills_List(SkillIndex).Attribute)
+          (1);
+      if GainedExp > 100 then
+         GainedExp := 100;
+      end if;
+      GainExp(GainedExp, SkillIndex, MemberIndex);
+      UpdateCargo
+        (Ship => PlayerShip,
+         CargoIndex => MoneyIndex2,
+         Amount => (0 - Cost));
+      UpdateBaseCargo(ProtoMoneyIndex, Cost);
+      GainExp(5, TalkingSkill, TraderIndex);
+      GainRep(BaseIndex, 5);
+      UpdateGame(60);
+   end TrainSkill;
 
 end Bases.Trade;
