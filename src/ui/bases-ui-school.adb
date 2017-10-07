@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
@@ -23,14 +24,16 @@ with Trades; use Trades;
 
 package body Bases.UI.School is
 
+   SkillsMenu: Menu;
+   MenuWindow2: Window;
+
    procedure ShowSchoolInfo is
       InfoWindow, ClearWindow: Window;
       WindowWidth: Column_Position := (Columns / 2);
-      MemberIndex: constant Natural :=
-        Natural'Value(Description(Current(TradeMenu)));
+      MemberIndex: constant Positive := Get_Index(Current(TradeMenu));
       WindowHeight: constant Line_Position :=
         Line_Position(Skills_List.Length) + 1;
-      Cost: Positive;
+      Cost: Natural;
       CurrentLine: Line_Position := 1;
       NewWindowWidth: Column_Position;
       MoneyIndex2: Natural := 0;
@@ -44,19 +47,29 @@ package body Bases.UI.School is
          Cost := 100;
          for Skill of PlayerShip.Crew(MemberIndex).Skills loop
             if Skill(1) = SkillsData_Container.To_Index(I) then
-               Cost := (Skill(2) + 1) * 100;
+               if Skill(2) < 100 then
+                  Cost := (Skill(2) + 1) * 100;
+               else
+                  Cost := 0;
+               end if;
                exit;
             end if;
          end loop;
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 1);
-         Add
-           (Win => InfoWindow,
-            Str =>
-              To_String(Skills_List(I).Name) &
-              ":" &
-              Positive'Image(Cost) &
-              " " &
-              To_String(MoneyName));
+         if Cost > 0 then
+            Add
+              (Win => InfoWindow,
+               Str =>
+                 To_String(Skills_List(I).Name) &
+                 ":" &
+                 Natural'Image(Cost) &
+                 " " &
+                 To_String(MoneyName));
+         else
+            Add
+              (Win => InfoWindow,
+               Str => To_String(Skills_List(I).Name) & ": can't train");
+         end if;
          Get_Cursor_Position
            (Win => InfoWindow,
             Line => CurrentLine,
@@ -117,18 +130,13 @@ package body Bases.UI.School is
         (PlayerShip.Crew.First_Index .. (PlayerShip.Crew.Last_Index + 1));
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
-      MenuIndex: Integer := 1;
    begin
       for I in PlayerShip.Crew.Iterate loop
-         School_Items.all(MenuIndex) :=
-           New_Item
-             (To_String(PlayerShip.Crew(I).Name),
-              Positive'Image(Crew_Container.To_Index(I)));
-         MenuIndex := MenuIndex + 1;
+         School_Items.all(Crew_Container.To_Index(I)) :=
+           New_Item(To_String(PlayerShip.Crew(I).Name));
       end loop;
-      School_Items.all(MenuIndex) := Null_Item;
+      School_Items.all(PlayerShip.Crew.Last_Index + 1) := Null_Item;
       TradeMenu := New_Menu(School_Items);
-      Set_Options(TradeMenu, (Show_Descriptions => False, others => True));
       Set_Format(TradeMenu, Lines - 10, 1);
       Scale(TradeMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
@@ -143,6 +151,37 @@ package body Bases.UI.School is
       Set_Current(TradeMenu, School_Items.all(CurrentMenuIndex));
       ShowSchoolInfo;
    end ShowSchool;
+
+   procedure ShowSchoolSkillsMenu is
+      Skills_Items: constant Item_Array_Access :=
+        new Item_Array
+        (Skills_List.First_Index .. (Skills_List.Last_Index + 2));
+      MenuHeight: Line_Position;
+      MenuLength: Column_Position;
+   begin
+      for I in Skills_List.Iterate loop
+         Skills_Items.all(SkillsData_Container.To_Index(I)) :=
+           New_Item(To_String(Skills_List(I).Name));
+      end loop;
+      Skills_Items.all(Skills_List.Last_Index + 1) := New_Item("Close");
+      Skills_Items.all(Skills_List.Last_Index + 2) := Null_Item;
+      SkillsMenu := New_Menu(Skills_Items);
+      Scale(SkillsMenu, MenuHeight, MenuLength);
+      MenuWindow2 :=
+        Create
+          (MenuHeight + 2,
+           MenuLength + 2,
+           ((Lines / 3) - (MenuHeight / 2)),
+           ((Columns / 2) - (MenuLength / 2)));
+      WindowFrame(MenuWindow2, 5, "Train");
+      Set_Window(SkillsMenu, MenuWindow2);
+      Set_Sub_Window
+        (SkillsMenu,
+         Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
+      Post(SkillsMenu);
+      Refresh(MenuWindow2);
+      Refresh;
+   end ShowSchoolSkillsMenu;
 
    function SchoolKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
@@ -167,8 +206,8 @@ package body Bases.UI.School is
                Result := Driver(TradeMenu, M_First_Item);
             end if;
          when 10 => -- Start setting what to learn
-            DrawGame(School_View);
-            return School_View;
+            ShowSchoolSkillsMenu;
+            return SchoolSkills_Menu;
          when others =>
             Result := Driver(TradeMenu, Key);
             if Result /= Menu_Ok then
@@ -181,6 +220,47 @@ package body Bases.UI.School is
       end if;
       CurrentMenuIndex := Menus.Get_Index(Current(TradeMenu));
       return School_View;
+   end SchoolKeys;
+
+   function SchoolSkillsMenuKeys(Key: Key_Code) return GameStates is
+      Result: Menus.Driver_Result;
+   begin
+      case Key is
+         when 27 => -- Esc select close option, used second time, close menu
+            if Name(Current(SkillsMenu)) = "Close" then
+               if SkillsMenu /= Null_Menu then
+                  Post(SkillsMenu, False);
+                  Delete(SkillsMenu);
+               end if;
+               DrawGame(School_View);
+               return School_View;
+            else
+               Result := Driver(SkillsMenu, M_Last_Item);
+            end if;
+         when 56 | KEY_UP => -- Select previous skill
+            Result := Driver(SkillsMenu, M_Up_Item);
+            if Result = Request_Denied then
+               Result := Driver(SkillsMenu, M_Last_Item);
+            end if;
+         when 50 | KEY_DOWN => -- Select next skill
+            Result := Driver(SkillsMenu, M_Down_Item);
+            if Result = Request_Denied then
+               Result := Driver(SkillsMenu, M_First_Item);
+            end if;
+         when 10 => -- Start training skill
+            DrawGame(School_View);
+            return School_View;
+         when others =>
+            Result := Driver(SkillsMenu, Key);
+            if Result /= Menu_Ok then
+               Result := Driver(SkillsMenu, M_Clear_Pattern);
+               Result := Driver(SkillsMenu, Key);
+            end if;
+      end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow2);
+      end if;
+      return SchoolSkills_Menu;
    exception
       when Trade_No_Money =>
          ShowDialog
@@ -196,6 +276,6 @@ package body Bases.UI.School is
             " to pay for learning this skill.");
          DrawGame(School_View);
          return School_View;
-   end SchoolKeys;
+   end SchoolSkillsMenuKeys;
 
 end Bases.UI.School;

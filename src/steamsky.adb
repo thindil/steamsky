@@ -279,6 +279,9 @@ begin
                   Set_Cursor_Visibility(Visibility);
                   GameState := Loot_View;
                   DrawGame(GameState);
+               when SchoolSkills_Menu =>
+                  GameState := School_View;
+                  DrawGame(GameState);
                when others =>
                   DrawGame(GameState);
             end case;
@@ -469,6 +472,8 @@ begin
             GameState := CargoMoveFormKeys(Key);
          when School_View =>
             GameState := SchoolKeys(Key);
+         when SchoolSkills_Menu =>
+            GameState := SchoolSkillsMenuKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;
