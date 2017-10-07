@@ -48,6 +48,7 @@ with Bases.UI.Recipes; use Bases.UI.Recipes;
 with Bases.UI.Missions; use Bases.UI.Missions;
 with Bases.UI.Heal; use Bases.UI.Heal;
 with Bases.UI.Loot; use Bases.UI.Loot;
+with Bases.UI.School; use Bases.UI.School;
 with Events; use Events;
 with Events.UI; use Events.UI;
 with Combat.UI; use Combat.UI;
@@ -466,6 +467,8 @@ begin
             GameState := CargoMenuKeys(Key);
          when CargoMove_Form =>
             GameState := CargoMoveFormKeys(Key);
+         when School_View =>
+            GameState := SchoolKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;

@@ -183,6 +183,9 @@ package body UserInterface.Keys is
                end if;
                DrawGame(Trade_View);
                return Trade_View;
+            elsif Order = "School" then
+               DrawGame(School_View);
+               return School_View;
             elsif Order = "Recruit" then
                DrawGame(Recruits_View);
                return Recruits_View;
