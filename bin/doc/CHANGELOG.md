@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Showing current name of skill used to talk in bases or with other ships in
   help
 - Showing current perception skill name in help
+- Ability to train skills in sky bases
 
 ### Changed
 - Updated MODDING.md
