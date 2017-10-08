@@ -148,14 +148,33 @@ package body Bases.UI.School is
         (Skills_List.First_Index .. (Skills_List.Last_Index + 2));
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
+      MenuIndex: Positive := 1;
+      function CanTrain(SkillIndex: Positive) return Boolean is
+      begin
+         for Skill of PlayerShip.Crew(CurrentMenuIndex).Skills loop
+            if Skill(1) = SkillIndex and Skill(2) = 100 then
+               return False;
+            end if;
+         end loop;
+         return True;
+      end CanTrain;
    begin
       for I in Skills_List.Iterate loop
-         Skills_Items.all(SkillsData_Container.To_Index(I)) :=
-           New_Item(To_String(Skills_List(I).Name));
+         if CanTrain(SkillsData_Container.To_Index(I)) then
+            Skills_Items.all(MenuIndex) :=
+              New_Item
+                (To_String(Skills_List(I).Name),
+                 Positive'Image(SkillsData_Container.To_Index(I)));
+            MenuIndex := MenuIndex + 1;
+         end if;
       end loop;
-      Skills_Items.all(Skills_List.Last_Index + 1) := New_Item("Close");
-      Skills_Items.all(Skills_List.Last_Index + 2) := Null_Item;
+      Skills_Items.all(MenuIndex) := New_Item("Close");
+      MenuIndex := MenuIndex + 1;
+      for I in MenuIndex .. Skills_Items'Last loop
+         Skills_Items.all(I) := Null_Item;
+      end loop;
       SkillsMenu := New_Menu(Skills_Items);
+      Set_Options(SkillsMenu, (Show_Descriptions => False, others => True));
       Scale(SkillsMenu, MenuHeight, MenuLength);
       MenuWindow2 :=
         Create
