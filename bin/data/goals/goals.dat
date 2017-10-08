@@ -386,4 +386,8 @@ Target = Inquisition
 Type = Destroy
 Amount = 2000
 Target = Inquisition
+[110]
+Type = Destroy
+Amount = 2500
+Target = Inquisition
 []
