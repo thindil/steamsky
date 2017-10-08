@@ -75,7 +75,7 @@ package body Bases.UI.School is
       Resize(InfoWindow, WindowHeight + 1, WindowWidth);
       WindowFrame(InfoWindow, 2, "Train cost");
       MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
-      Move_Cursor(Line => 7, Column => (Columns / 2));
+      Move_Cursor(Line => WindowHeight + 4, Column => (Columns / 2));
       if MoneyIndex2 > 0 then
          Add
            (Str =>
@@ -91,18 +91,18 @@ package body Bases.UI.School is
               To_String(MoneyName) &
               " to pay for learning.");
       end if;
-      Move_Cursor(Line => WindowHeight + 4, Column => (Columns / 2));
+      Move_Cursor(Line => WindowHeight + 5, Column => (Columns / 2));
       Add(Str => "Press Enter to select skill to train");
       Change_Attributes
-        (Line => WindowHeight + 4,
+        (Line => WindowHeight + 5,
          Column => (Columns / 2) + 6,
          Count => 5,
          Attr => BoldCharacters,
          Color => 1);
-      Move_Cursor(Line => WindowHeight + 5, Column => (Columns / 2));
+      Move_Cursor(Line => WindowHeight + 6, Column => (Columns / 2));
       Add(Str => "Press Escape to back to sky map");
       Change_Attributes
-        (Line => WindowHeight + 5,
+        (Line => WindowHeight + 6,
          Column => (Columns / 2) + 6,
          Count => 6,
          Attr => BoldCharacters,
