@@ -160,7 +160,6 @@ package body Bases.Trade is
       end if;
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
       TraderIndex := FindMember(Talk);
-      CountPrice(Cost, TraderIndex);
       MoneyIndex2 := CheckMoney(Cost);
       if MemberIndex > 0 then
          PlayerShip.Crew(MemberIndex).Health := 100;
@@ -218,6 +217,7 @@ package body Bases.Trade is
       Cost :=
         Time *
         Items_List(FindProtoItem(ItemType => HealingTools)).Prices(BaseType);
+      CountPrice(Cost, FindMember(Talk));
       if Time = 0 then
          Time := 1;
       end if;
