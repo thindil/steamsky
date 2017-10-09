@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Allow heal wounded crew members without medical room
 - Moved starting player character data to separated text file
 - Moved informations about ships crews to separated text file
+- Show real price of healing in bases
 
 ### Fixed
 - Showing various forms after screen resize
