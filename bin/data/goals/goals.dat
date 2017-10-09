@@ -390,4 +390,8 @@ Target = Inquisition
 Type = Destroy
 Amount = 2500
 Target = Inquisition
+[111]
+Type = Mission
+Amount = 200
+Target = Deliver
 []
