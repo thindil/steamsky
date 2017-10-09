@@ -346,7 +346,9 @@ mobile index from any mobiles file from *data/mobs* directory.
   later will be replaced with name of skill used to operate guns on ship,
   `{TalkingSkill}` which later will be replaced with name of skill used to
   talk in bases or with other ships, `{PerceptionSkill}` which later will be
-  replaced with name of skill used to notice other ships.
+  replaced with name of skill used to notice other ships, `{ConditionName}`
+  which later will be replaced with name of attribute used to raise crew
+  member condition.
 
 ## Goals
 
