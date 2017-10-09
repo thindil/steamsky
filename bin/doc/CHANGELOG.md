@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
   help
 - Showing current perception skill name in help
 - Ability to train skills in sky bases
+- Showing current condition attribute name in help
 
 ### Changed
 - Updated MODDING.md
@@ -81,7 +82,7 @@ All notable changes to this project will be documented in this file.
 - Attributes to characters
 - Raise character endurance with Condition attribute
 - Crew members inventory
-- Showing current condition attribute name in help
+- Showing current strength attribute name in help
 
 ### Changed
 - Updated interface
