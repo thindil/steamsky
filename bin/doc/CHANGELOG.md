@@ -11,8 +11,8 @@ All notable changes to this project will be documented in this file.
   ships, destroy 1500 undead ships, destroy 2000 undead ships, destroy 2500
   undead ships, destroy 200 inquisition ships, destroy 250 inquisition ships,
   destroy 500 inquisition ships, destroy 1000 inquisition ships, destroy 1500
-  inquisition ships, destroy 2000 inquisition ships and destroy 2500 
-  inquisition ships
+  inquisition ships, destroy 2000 inquisition ships, destroy 2500 inquisition
+  ships and finish 200 delivery missions
 - Option to set any amount of items types as food types
 - Moving items between ship cargo and crew members inventory
 - Medical supplies to starting cargo of player ship
