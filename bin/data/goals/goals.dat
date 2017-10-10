@@ -394,4 +394,8 @@ Target = Inquisition
 Type = Mission
 Amount = 200
 Target = Deliver
+[112]
+Type = Mission
+Amount = 250
+Target = Deliver
 []
