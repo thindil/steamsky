@@ -20,6 +20,7 @@ with Maps; use Maps;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
+with Ships.Crew; use Ships.Crew;
 with Crafts; use Crafts;
 with Bases.Trade; use Bases.Trade;
 with Utils.UI; use Utils.UI;
@@ -57,6 +58,7 @@ package body Bases.UI.Recipes is
       else
          Cost := Recipes_List(RecipeIndex).Difficulty * 100;
       end if;
+      CountPrice(Cost, FindMember(Talk));
       CostInfo :=
         To_Unbounded_String
           ("Base price:" & Positive'Image(Cost) & " " & To_String(MoneyName));
