@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 - Moved starting player character data to separated text file
 - Moved informations about ships crews to separated text file
 - Show real price of healing in bases
+- Show real price for buying or selling ship modules in bases
 
 ### Fixed
 - Showing various forms after screen resize
