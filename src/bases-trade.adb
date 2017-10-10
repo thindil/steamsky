@@ -224,33 +224,33 @@ package body Bases.Trade is
    end HealCost;
 
    function TrainCost(MemberIndex, SkillIndex: Positive) return Natural is
+      Cost: Positive := 100;
    begin
       for Skill of PlayerShip.Crew(MemberIndex).Skills loop
          if Skill(1) = SkillIndex then
             if Skill(2) < 100 then
-               return (Skill(2) + 1) * 100;
+               Cost := (Skill(2) + 1) * 100;
+               exit;
             else
                return 0;
             end if;
          end if;
       end loop;
-      return 100;
+      CountPrice(Cost, FindMember(Talk));
+      return Cost;
    end TrainCost;
 
    procedure TrainSkill(MemberIndex, SkillIndex: Positive) is
-      Cost: Natural := TrainCost(MemberIndex, SkillIndex);
+      Cost: constant Natural := TrainCost(MemberIndex, SkillIndex);
       MoneyIndex2: Natural;
-      TraderIndex, ProtoMoneyIndex: Positive;
-      GainedExp: Positive;
+      ProtoMoneyIndex, GainedExp: Positive;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       if Cost = 0 then
          raise Trade_Cant_Train;
       end if;
-      TraderIndex := FindMember(Talk);
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
-      CountPrice(Cost, TraderIndex);
       MoneyIndex2 := CheckMoney(Cost);
       AddMessage
         ("You bought training session in " &
@@ -278,7 +278,7 @@ package body Bases.Trade is
          CargoIndex => MoneyIndex2,
          Amount => (0 - Cost));
       UpdateBaseCargo(ProtoMoneyIndex, Cost);
-      GainExp(5, TalkingSkill, TraderIndex);
+      GainExp(5, TalkingSkill, FindMember(Talk));
       GainRep(BaseIndex, 5);
       UpdateGame(60);
    end TrainSkill;
