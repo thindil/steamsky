@@ -20,6 +20,7 @@ with Ada.Exceptions; use Ada.Exceptions;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
+with Ships.Crew; use Ships.Crew;
 with Bases.Ship; use Bases.Ship;
 with ShipModules; use ShipModules;
 with Utils.UI; use Utils.UI;
@@ -72,6 +73,7 @@ package body Bases.UI.Shipyard is
          TextCost := To_Unbounded_String("Install cost:");
          TextTime := To_Unbounded_String("Installation time:");
          Cost := Modules_List(ModuleIndex).Price;
+         CountPrice(Cost, FindMember(Talk));
          MTime := Modules_List(ModuleIndex).InstallTime;
          WindowHeight := 10;
       else
@@ -89,6 +91,7 @@ package body Bases.UI.Shipyard is
                 (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                    .Price) *
               Float(Damage));
+         CountPrice(Cost, FindMember(Talk), False);
          MTime :=
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
              .InstallTime;
