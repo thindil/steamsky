@@ -404,8 +404,8 @@ mobile index from any mobiles file from *data/mobs* directory.
 - Priorities: Orders priorities for selected mob, separated by `, ` (comma and
   space). Each priority entry is Order`:`Priority where Order is: Piloting,
   Engineering, Operating guns, Repair ship, Manufacturing, Upgrading ship,
-  Talking in bases, Healing wounded, Cleaning ship and Priority is: Normal,
-  High or Highest.
+  Talking in bases, Healing wounded, Cleaning ship and Priority is: Normal or
+  High.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
