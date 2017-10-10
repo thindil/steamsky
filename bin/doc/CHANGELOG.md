@@ -42,6 +42,7 @@ All notable changes to this project will be documented in this file.
 - Moved informations about ships crews to separated text file
 - Show real price of healing in bases
 - Show real price for buying or selling ship modules in bases
+- Show real price for buying recipes in bases
 
 ### Fixed
 - Showing various forms after screen resize
