@@ -50,6 +50,7 @@ All notable changes to this project will be documented in this file.
 - Showing various forms after screen resize
 - Healing wounded crew members
 - Recipe for fresh vegetables
+- Crash after buying all recipes in base
 
 ## [1.6] - 2017-09-17
 
