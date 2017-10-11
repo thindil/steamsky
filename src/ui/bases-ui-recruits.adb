@@ -19,6 +19,7 @@ with Ada.Exceptions; use Ada.Exceptions;
 with Maps; use Maps;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
+with Ships.Crew; use Ships.Crew;
 with Items; use Items;
 with Bases.Trade; use Bases.Trade;
 with Utils.UI; use Utils.UI;
@@ -37,6 +38,7 @@ package body Bases.UI.Recruits is
       WindowHeight: Line_Position;
       MoneyIndex2: Natural := 0;
       InfoWindowWidth, NewWindowWidth: Column_Position := 1;
+      Cost: Positive := Recruit.Price;
    begin
       if ClearInfo then
          ClearWindow := Create((Lines - 1), (Columns / 2), 3, (Columns / 2));
@@ -100,11 +102,12 @@ package body Bases.UI.Recruits is
         Create(4, (Columns / 2), WindowHeight + 3, (Columns / 2));
       MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if MoneyIndex2 > 0 then
+         CountPrice(Cost, FindMember(Talk));
          Add
            (Win => OptionsWindow,
             Str =>
               "Press Enter to hire for" &
-              Positive'Image(Recruit.Price) &
+              Positive'Image(Cost) &
               " " &
               To_String(MoneyName) &
               ".");
