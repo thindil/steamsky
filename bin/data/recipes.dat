@@ -177,7 +177,7 @@ Difficulty = 1
 BaseType = 2
 Tool = Sickle
 [19]
-Material = VegetableSeed
+Material = VegetableSeeds
 Amount = 1
 Result = 6
 Crafted = 2
