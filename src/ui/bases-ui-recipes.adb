@@ -192,6 +192,7 @@ package body Bases.UI.Recipes is
                end loop;
                BuyRecipe(RecipeIndex);
                DrawGame(TradeRecipes_View);
+               return TradeRecipes_View;
             when others =>
                Result := Driver(TradeMenu, Key);
                if Result /= Menu_Ok then
