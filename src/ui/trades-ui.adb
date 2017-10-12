@@ -547,6 +547,15 @@ package body Trades.UI is
             return Trade_View;
          end if;
          MaxAmount := PlayerShip.Cargo(MoneyIndex2).Amount / Price;
+         if BaseIndex > 0 then
+            if MaxAmount > SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount then
+               MaxAmount := SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount;
+            end if;
+         else
+            if MaxAmount > TraderCargo(BaseItemIndex).Amount then
+               MaxAmount := TraderCargo(BaseItemIndex).Amount;
+            end if;
+         end if;
          Append(FieldText, " to buy");
          CaptionText := To_Unbounded_String("Buying ");
          Append(CaptionText, Items_List(ItemIndex).Name);
@@ -561,6 +570,15 @@ package body Trades.UI is
             return Trade_View;
          end if;
          MaxAmount := PlayerShip.Cargo(CargoIndex).Amount;
+         if BaseIndex > 0 then
+            if MaxAmount > (SkyBases(BaseIndex).Cargo(1).Amount / Price) then
+               MaxAmount := SkyBases(BaseIndex).Cargo(1).Amount / Price;
+            end if;
+         else
+            if MaxAmount > (TraderCargo(1).Amount / Price) then
+               MaxAmount := TraderCargo(1).Amount / Price;
+            end if;
+         end if;
          Append(FieldText, " to sell");
          CaptionText := To_Unbounded_String("Selling ");
          Append(CaptionText, Items_List(ItemIndex).Name);
