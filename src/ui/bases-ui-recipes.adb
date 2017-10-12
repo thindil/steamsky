@@ -100,6 +100,14 @@ package body Bases.UI.Recipes is
          end if;
          Move_Cursor(Line => (Lines / 3), Column => (Columns / 3));
          Add(Str => "You bought all available crafting recipes in this base.");
+         Move_Cursor(Line => (Lines / 3) + 1, Column => (Columns / 3));
+         Add(Str => "Press Escape to back to sky map.");
+         Change_Attributes
+           (Line => (Lines / 3) + 1,
+            Column => (Columns / 3) + 6,
+            Count => 6,
+            Color => 1,
+            Attr => BoldCharacters);
          Refresh;
          return;
       end if;
