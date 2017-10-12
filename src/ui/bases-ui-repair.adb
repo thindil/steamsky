@@ -19,6 +19,7 @@ with Maps; use Maps;
 with Items; use Items;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
+with Ships.Crew; use Ships.Crew;
 with Bases.Ship; use Bases.Ship;
 with Utils.UI; use Utils.UI;
 with Trades; use Trades;
@@ -37,6 +38,7 @@ package body Bases.UI.Repair is
       Refresh_Without_Update(ClearWindow);
       Delete(ClearWindow);
       RepairCost(Cost, Time, ModuleIndex);
+      CountPrice(Cost, FindMember(Talk));
       CostInfo :=
         To_Unbounded_String
           ("Repair cost:" & Natural'Image(Cost) & " " & To_String(MoneyName));
