@@ -46,6 +46,7 @@ All notable changes to this project will be documented in this file.
 - Show real price for buying recipes in bases
 - Show real price for recruit new crew members
 - Show real price for repair ship in bases
+- Updated interface
 
 ### Fixed
 - Showing various forms after screen resize
