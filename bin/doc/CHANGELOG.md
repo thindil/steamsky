@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 - Show real price for recruit new crew members
 - Show real price for repair ship in bases
 - Updated interface
+- Better count max amount items to sell or buy
 
 ### Fixed
 - Showing various forms after screen resize
