@@ -1607,4 +1607,16 @@ Price = 40000
 InstallTime = 270
 Size = 4
 Description = Updated version of huge engine made of steel. Each ship needs at least one engine to fly.
+[127]
+Name = Bronze harpoon gun
+Type = Harpoon_Gun
+Weight = 30
+Value = 45
+MaxValue = 2
+Durability = 10
+Material = Bronze
+Skill = Gunsmith
+Price = 250
+InstallTime = 20
+Description = Weakest harpoon gun. As other guns, require empty turret to install.
 []
