@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Showing current perception skill name in help
 - Ability to train skills in sky bases
 - Showing current condition attribute name in help
+- New ship weapon type: harpoon gun
 
 ### Changed
 - Updated MODDING.md
