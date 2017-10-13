@@ -59,6 +59,11 @@ package body Events is
                        (Module.Data(2) * 10);
                   when ARMOR =>
                      PlayerValue := PlayerValue + Module.MaxDurability;
+                  when HARPOON_GUN =>
+                     PlayerValue :=
+                       PlayerValue +
+                       Module.MaxDurability +
+                       (Module.Data(2) * 5);
                   when others =>
                      null;
                end case;
@@ -69,6 +74,9 @@ package body Events is
                     "Ammo" then
                      PlayerValue :=
                        PlayerValue + (Items_List(Item.ProtoIndex).Value * 10);
+                  elsif Items_List(Item.ProtoIndex).IType = "Harpoon" then
+                     PlayerValue :=
+                       PlayerValue + (Items_List(Item.ProtoIndex).Value * 5);
                   end if;
                end if;
             end loop;

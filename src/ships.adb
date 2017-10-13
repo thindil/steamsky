@@ -545,6 +545,11 @@ package body Ships is
                            CombatValue :=
                              CombatValue +
                              Modules_List(ModuleIndex).Durability;
+                        when HARPOON_GUN =>
+                           CombatValue :=
+                             CombatValue +
+                             Modules_List(ModuleIndex).Durability +
+                             (Modules_List(ModuleIndex).MaxValue * 5);
                         when others =>
                            null;
                      end case;
@@ -554,6 +559,9 @@ package body Ships is
                         if Slice(Items_List(Item(1)).IType, 1, 4) = "Ammo" then
                            CombatValue :=
                              CombatValue + (Items_List(Item(1)).Value * 10);
+                        elsif Items_List(Item(1)).IType = "Harpoon" then
+                           CombatValue :=
+                             CombatValue + (Items_List(Item(1)).Value * 5);
                         end if;
                      end if;
                   end loop;

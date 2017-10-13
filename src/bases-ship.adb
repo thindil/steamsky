@@ -131,11 +131,14 @@ package body Bases.Ship is
          if Modules_List(ModuleIndex).MType /= HULL then
             ModulesAmount := ModulesAmount + Modules_List(ModuleIndex).Size;
             if ModulesAmount > PlayerShip.Modules(HullIndex).Data(2) and
-              Modules_List(ModuleIndex).MType /= GUN then
+              (Modules_List(ModuleIndex).MType /= GUN and
+               Modules_List(ModuleIndex).MType /= HARPOON_GUN) then
                raise BasesShip_Installation_Error
                  with "You don't have free modules space for more modules.";
             end if;
-            if Modules_List(ModuleIndex).MType = GUN and
+            if
+              (Modules_List(ModuleIndex).MType = GUN or
+               Modules_List(ModuleIndex).MType = HARPOON_GUN) and
               FreeTurretIndex = 0 then
                raise BasesShip_Installation_Error
                  with "You don't have free turret for next gun. Install new turret or remove old gun first.";
@@ -188,7 +191,7 @@ package body Bases.Ship is
                    0)));
          end if;
          case Modules_List(ModuleIndex).MType is
-            when GUN =>
+            when GUN | HARPOON_GUN =>
                PlayerShip.Modules(FreeTurretIndex).Data(1) :=
                  PlayerShip.Modules.Last_Index;
             when others =>
@@ -229,7 +232,7 @@ package body Bases.Ship is
                   raise BasesShip_Removing_Error
                     with "You have installed gun in this turret, remove it before you remove this turret.";
                end if;
-            when GUN =>
+            when GUN | HARPOON_GUN =>
                for Module of PlayerShip.Modules loop
                   if Modules_List(Module.ProtoIndex).MType = TURRET and
                     Module.Data(1) = ModuleIndex then
