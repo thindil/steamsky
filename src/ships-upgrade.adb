@@ -92,6 +92,14 @@ package body Ships.Upgrade is
                        ".";
                   end if;
                   UpgradeProgress := 500;
+               when HARPOON_GUN =>
+                  if PlayerShip.Modules(ModuleIndex).Data(2) = MaxValue then
+                     raise Ship_Upgrade_Error
+                       with "You can't improve more strength of " &
+                       To_String(PlayerShip.Modules(ModuleIndex).Name) &
+                       ".";
+                  end if;
+                  UpgradeProgress := 100;
                when others =>
                   raise Ship_Upgrade_Error
                     with To_String(PlayerShip.Modules(ModuleIndex).Name) &
@@ -417,7 +425,7 @@ package body Ships.Upgrade is
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
                              10;
-                        when CABIN | GUN | BATTERING_RAM =>
+                        when CABIN | GUN | BATTERING_RAM | HARPOON_GUN =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
                              100;

@@ -36,7 +36,8 @@ package ShipModules is
       WATER_COLLECTOR,
       WORKSHOP,
       GREENHOUSE,
-      MEDICAL_ROOM);
+      MEDICAL_ROOM,
+      HARPOON_GUN);
    type BaseModule_Data is -- Data structure for prototypes of ship modules
    record
       Name: Unbounded_String; -- Name of module

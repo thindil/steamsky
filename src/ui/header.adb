@@ -303,7 +303,7 @@ package body Header is
       Add(Str => "[P][E][G][R][M][U][T][C]");
       for Module of PlayerShip.Modules loop
          case Modules_List(Module.ProtoIndex).MType is
-            when GUN =>
+            when GUN | HARPOON_GUN =>
                GunnersCheck := GunnersCheck + 1;
             when ALCHEMY_LAB .. GREENHOUSE =>
                if Module.Data(1) /= 0 then

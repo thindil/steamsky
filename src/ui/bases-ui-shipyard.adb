@@ -48,7 +48,8 @@ package body Bases.UI.Shipyard is
       To_Unbounded_String("Water collectors"),
       To_Unbounded_String("Workshops"),
       To_Unbounded_String("Greenhouses"),
-      To_Unbounded_String("Medical rooms"));
+      To_Unbounded_String("Medical rooms"),
+      To_Unbounded_String("Harpoon guns"));
 
    procedure ShowModuleInfo(ClearInfo: Boolean := False) is
       ModuleIndex: constant Positive :=
@@ -165,7 +166,7 @@ package body Bases.UI.Shipyard is
                   Add(Win => InfoWindow, Str => "luxury");
                end if;
                CurrentLine := 4;
-            when GUN =>
+            when GUN | HARPOON_GUN =>
                AmmoText := To_Unbounded_String("Ammunition: ");
                MAmount := 0;
                for Item of Items_List loop
@@ -316,7 +317,7 @@ package body Bases.UI.Shipyard is
                   Add(Win => InfoWindow, Str => "luxury");
                end if;
                CurrentLine := 4;
-            when GUN =>
+            when GUN | HARPOON_GUN =>
                AmmoText := To_Unbounded_String("Ammunition: ");
                MAmount := 0;
                for I in Items_List.First_Index .. Items_List.Last_Index loop
