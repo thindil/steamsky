@@ -255,7 +255,7 @@ package body Ships.UI.Ship is
                Add(Win => InfoWindow, Str => "ruined");
             end if;
             CurrentLine := CurrentLine + 1;
-         when GUN =>
+         when GUN | HARPOON_GUN =>
             Add(Win => InfoWindow, Str => "Ammunition: ");
             if Module.Data(1) >= PlayerShip.Cargo.First_Index and
               Module.Data(1) <= PlayerShip.Cargo.Last_Index then
@@ -613,6 +613,9 @@ package body Ships.UI.Ship is
                   when HULL =>
                      Add(Str => "(enlarge)");
                      MaxUpgrade := 500;
+                  when HARPOON_GUN =>
+                     Add(Str => "(strength)");
+                     MaxUpgrade := 100;
                   when others =>
                      null;
                end case;
@@ -775,7 +778,7 @@ package body Ships.UI.Ship is
                Options_Items.all(MenuIndex) := New_Item("Assign owner", "7");
                MenuIndex := MenuIndex + 1;
             end if;
-         when GUN =>
+         when GUN | HARPOON_GUN =>
             MaxValue :=
               Natural
                 (Float
@@ -783,7 +786,15 @@ package body Ships.UI.Ship is
                       .MaxValue) *
                  1.5);
             if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
-               Options_Items.all(MenuIndex) := New_Item("Upgrade damage", "2");
+               if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                   .MType =
+                 GUN then
+                  Options_Items.all(MenuIndex) :=
+                    New_Item("Upgrade damage", "2");
+               else
+                  Options_Items.all(MenuIndex) :=
+                    New_Item("Upgrade strength", "2");
+               end if;
                MenuIndex := MenuIndex + 1;
             end if;
             Options_Items.all(MenuIndex) := New_Item("Assign gunner", "7");
