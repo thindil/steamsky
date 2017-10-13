@@ -13,7 +13,8 @@ All notable changes to this project will be documented in this file.
   destroy 500 inquisition ships, destroy 1000 inquisition ships, destroy 1500
   inquisition ships, destroy 2000 inquisition ships, destroy 2500 inquisition
   ships, finish 200 delivery missions, finish 250 delivery missions, finish
-  500 delivery missions and finish 1000 delivery missions
+  500 delivery missions, finish 1000 delivery missions and finish 1500
+  delivery missions
 - Option to set any amount of items types as food types
 - Moving items between ship cargo and crew members inventory
 - Medical supplies to starting cargo of player ship
@@ -37,7 +38,6 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated MODDING.md
 - Updated help
-- Updated recipe setting in crafting interface
 - Allow heal wounded crew members without medical room
 - Moved starting player character data to separated text file
 - Moved informations about ships crews to separated text file
