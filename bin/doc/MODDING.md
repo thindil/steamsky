@@ -241,17 +241,19 @@ mobile index from any mobiles file from *data/mobs* directory.
   shipyards.
 - Type: Type of module. Available options are: Engine, Cabin, Cockpit, Turret,
   Gun, Cargo, Hull, Armor, Battering\_ram, Alchemy\_Lab, Furnace,
-  Water\_Collector, Workshop, Greenhouse, Medical\_room
+  Water\_Collector, Workshop, Greenhouse, Medical\_room, Harpoon\_Gun
 - Weight: Weight of module in kilograms.
 - Value: Depends on type of module. For 'Engine' it is fuel usage for travel by
   one map field. For 'Cabin' it is value of reduced tiredness of owner who rest
-  there. For 'Gun' it is index of item type used as ammunition (item types are
-  in *game.dat* file). For any other type of modules should be 0 (zero).
+  there. For 'Gun' or 'Harpoon\_Gun' it is index of item type used as 
+  ammunition (item types are in *game.dat* file). For any other type of modules
+  should be 0 (zero).
 - MaxValue: Depends on type of module. For 'Hull' it is max free module space.
   For 'Engine' it is engine power. For 'Cabin' should be that same like Value
   value. For 'Cargo' it is maximum capacity in kilograms for cargo for that
-  module. For 'Gun' or 'Battering\_ram' it is amount of damage done by selected
-  weapon. For any other type of modules should be 0 (zero).
+  module. For 'Gun', 'Battering\_ram' it is amount of damage done by selected
+  weapon. For 'Harpoon\_Gun' it is amount of combat rounds by how long harpoon
+  is stuck in enemy ship. For any other type of modules should be 0 (zero).
 - Durability: Base durability of module. How many damage module can take before
   will be destroyed.
 - Material: Type of item which will be used to repair or upgrade module.
