@@ -56,6 +56,7 @@ All notable changes to this project will be documented in this file.
 - Healing wounded crew members
 - Recipe for fresh vegetables
 - Crash after buying all recipes in base
+- Counting attack range for enemy ships
 
 ## [1.6] - 2017-09-17
 
