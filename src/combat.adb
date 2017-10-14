@@ -164,7 +164,7 @@ package body Combat is
       ShootMessage: Unbounded_String;
       EnemyPilotOrder: Positive := 2;
       HaveFuel: Boolean := False;
-      DamageRange: Positive;
+      DamageRange: Positive := 10000;
       procedure Attack(Ship, EnemyShip: in out ShipRecord) is
          GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex: Natural;
          GunnerOrder: Positive;
@@ -681,7 +681,9 @@ package body Combat is
               BATTERING_RAM) then
             if Modules_List(Enemy.Ship.Modules.Element(I).ProtoIndex).MType =
               GUN then
-               DamageRange := 5000;
+               if DamageRange > 5000 then
+                  DamageRange := 5000;
+               end if;
                if Enemy.Ship.Modules.Element(I).Current_Value >=
                  Enemy.Ship.Cargo.First_Index and
                  Enemy.Ship.Modules.Element(I).Current_Value <=
@@ -722,7 +724,7 @@ package body Combat is
                   Enemy.CombatAI := COWARD;
                   exit;
                end if;
-            else
+            elsif DamageRange > 100 then
                DamageRange := 100;
             end if;
             EnemyWeaponIndex := I;
