@@ -18,6 +18,7 @@ ships, ships modules, etc.)
 ### Adding new items types
 - To add new item type, just append it name to ItemsTypes entry.
 - Each new ammunition type must starts with `Ammo` (example: *Ammo150*).
+- Ammunition for harpoon guns must be named `Harpoon`.
 
 ## Repair tools type
 To change which item type is used for repair/upgrading tools, open file 
@@ -188,7 +189,8 @@ mobile index from any mobiles file from *data/mobs* directory.
 - Value: optional parameter. For 'Food' or 'Raw Food' it is value of hunger 
   reduced by one portion. For 'Drink', value of thirst reduced by one portion.
   For ammunition it is damage done by that ammunition. For working tools it is
-  chance for item to be damaged during work.
+  chance for item to be damaged during work. For harpoon guns ammunition it is
+  how long (in combat turns) item will be stuck in enemy ship.
 - Description: Any length description of item.
 
 ## Recipes
