@@ -511,4 +511,13 @@ Buyable = Y, N, N, N
 Value = 2
 ShowType = Ammunition
 Description = Weakest type of harpoon with long rope. Used as ammunition for harpoon guns.
+[63]
+Name = Iron harpoon
+Weight = 12
+Type = Harpoon
+Prices = 7, 10, 10, 10
+Buyable = Y, N, N, N
+Value = 4
+ShowType = Ammunition
+Description = Harpoon made of iron with long rope. Used as ammunition for harpoon guns.
 []
