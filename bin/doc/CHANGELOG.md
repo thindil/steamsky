@@ -37,7 +37,7 @@ All notable changes to this project will be documented in this file.
 - New ship weapon type: harpoon gun
 - New ship modules: bronze harpoon gun and iron harpoon gun
 - New item type: harpoon
-- New item: bronze harpoon
+- New items: bronze harpoon and iron harpoon
 
 ### Changed
 - Updated MODDING.md
