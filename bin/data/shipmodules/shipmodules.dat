@@ -1619,4 +1619,16 @@ Skill = Gunsmith
 Price = 250
 InstallTime = 20
 Description = Weakest harpoon gun. As other guns, require empty turret to install.
+[128]
+Name = Iron harpoon gun
+Type = Harpoon_Gun
+Weight = 40
+Value = 45
+MaxValue = 4
+Durability = 20
+Material = Iron
+Skill = Gunsmith
+Price = 500
+InstallTime = 30
+Description = Harpoon gun made of iron. As other guns, require empty turret to install.
 []
