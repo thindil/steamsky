@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
   inquisition ships, destroy 2000 inquisition ships, destroy 2500 inquisition
   ships, finish 200 delivery missions, finish 250 delivery missions, finish
   500 delivery missions, finish 1000 delivery missions, finish 1500 delivery
-  missions and finish 2000 delivery missions
+  missions, finish 2000 delivery missions and finish 2500 delivery missions
 - Option to set any amount of items types as food types
 - Moving items between ship cargo and crew members inventory
 - Medical supplies to starting cargo of player ship
