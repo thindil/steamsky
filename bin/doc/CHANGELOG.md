@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.7] - 2017-10-15
 
 ### Added
 - New goals: destroy 200 drones ships, destroy 250 drones ships, destroy 500
