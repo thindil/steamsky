@@ -35,7 +35,7 @@ All notable changes to this project will be documented in this file.
 - Ability to train skills in sky bases
 - Showing current condition attribute name in help
 - New ship weapon type: harpoon gun
-- New ship module: bronze harpoon gun
+- New ship modules: bronze harpoon gun and iron harpoon gun
 - New item type: harpoon
 - New item: bronze harpoon
 
