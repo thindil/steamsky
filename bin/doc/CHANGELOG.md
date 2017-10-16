@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New goal: finish 200 destroy ship missions
+- New ship module: steel harpoon gun
 
 ## [1.7] - 2017-10-15
 
