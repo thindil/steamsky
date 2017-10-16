@@ -418,4 +418,8 @@ Target = Deliver
 Type = Mission
 Amount = 2500
 Target = Deliver
+[118]
+Type = Mission
+Amount = 200
+Target = Destroy
 []
