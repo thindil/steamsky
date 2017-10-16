@@ -1631,4 +1631,16 @@ Skill = Gunsmith
 Price = 500
 InstallTime = 30
 Description = Harpoon gun made of iron. As other guns, require empty turret to install.
+[129]
+Name = Steel harpoon gun
+Type = Harpoon_Gun
+Weight = 40
+Value = 45
+MaxValue = 8
+Durability = 30
+Material = Steel
+Skill = Gunsmith
+Price = 1000
+InstallTime = 30
+Description = Harpoon gun made of steel. As other guns, require empty turret to install.
 []
