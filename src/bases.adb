@@ -19,7 +19,6 @@ with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
 with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
-with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
@@ -428,31 +427,7 @@ package body Bases is
          MaxY := 1024;
       end if;
       if GetRandom(1, 100) < 99 then
-         for Module of PlayerShip.Modules loop
-            case Modules_List(Module.ProtoIndex).MType is
-               when HULL | GUN | BATTERING_RAM =>
-                  PlayerValue :=
-                    PlayerValue + Module.MaxDurability + (Module.Data(2) * 10);
-               when ARMOR =>
-                  PlayerValue := PlayerValue + Module.MaxDurability;
-               when HARPOON_GUN =>
-                  PlayerValue :=
-                    PlayerValue + Module.MaxDurability + (Module.Data(2) * 5);
-               when others =>
-                  null;
-            end case;
-         end loop;
-         for Item of PlayerShip.Cargo loop
-            if Length(Items_List(Item.ProtoIndex).IType) >= 4 then
-               if Slice(Items_List(Item.ProtoIndex).IType, 1, 4) = "Ammo" then
-                  PlayerValue :=
-                    PlayerValue + (Items_List(Item.ProtoIndex).Value * 10);
-               elsif Items_List(Item.ProtoIndex).IType = "Harpoon" then
-                  PlayerValue :=
-                    PlayerValue + (Items_List(Item.ProtoIndex).Value * 5);
-               end if;
-            end if;
-         end loop;
+         PlayerValue := CountCombatValue;
          for C in ProtoShips_List.Iterate loop
             if ProtoShips_List(C).CombatValue <= PlayerValue and
               (ProtoShips_List(C).Owner /= Poleis and
