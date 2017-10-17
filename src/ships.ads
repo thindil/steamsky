@@ -100,5 +100,7 @@ package Ships is
      (Owner: Bases_Owners :=
         Any)
      return Unbounded_String; -- Generate random name for ship
+   function CountCombatValue
+     return Natural; -- Count combat value of player ship
 
 end Ships;
