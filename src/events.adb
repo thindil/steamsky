@@ -50,36 +50,7 @@ package body Events is
       begin
          EnemyIndex := ProtoShips_List.First_Index;
          if GetRandom(1, 100) < 99 then
-            for Module of PlayerShip.Modules loop
-               case Modules_List(Module.ProtoIndex).MType is
-                  when HULL | GUN | BATTERING_RAM =>
-                     PlayerValue :=
-                       PlayerValue +
-                       Module.MaxDurability +
-                       (Module.Data(2) * 10);
-                  when ARMOR =>
-                     PlayerValue := PlayerValue + Module.MaxDurability;
-                  when HARPOON_GUN =>
-                     PlayerValue :=
-                       PlayerValue +
-                       Module.MaxDurability +
-                       (Module.Data(2) * 5);
-                  when others =>
-                     null;
-               end case;
-            end loop;
-            for Item of PlayerShip.Cargo loop
-               if Length(Items_List(Item.ProtoIndex).IType) >= 4 then
-                  if Slice(Items_List(Item.ProtoIndex).IType, 1, 4) =
-                    "Ammo" then
-                     PlayerValue :=
-                       PlayerValue + (Items_List(Item.ProtoIndex).Value * 10);
-                  elsif Items_List(Item.ProtoIndex).IType = "Harpoon" then
-                     PlayerValue :=
-                       PlayerValue + (Items_List(Item.ProtoIndex).Value * 5);
-                  end if;
-               end if;
-            end loop;
+            PlayerValue := CountCombatValue;
             for Ship of ProtoShips_List loop
                if Ship.CombatValue <= PlayerValue and
                  (Owner = Any or Ship.Owner = Owner) and

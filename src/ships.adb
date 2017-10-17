@@ -858,4 +858,35 @@ package body Ships is
       return NewName;
    end GenerateShipName;
 
+   function CountCombatValue return Natural is
+      CombatValue: Natural := 0;
+   begin
+      for Module of PlayerShip.Modules loop
+         case Modules_List(Module.ProtoIndex).MType is
+            when HULL | GUN | BATTERING_RAM =>
+               CombatValue :=
+                 CombatValue + Module.MaxDurability + (Module.Data(2) * 10);
+            when ARMOR =>
+               CombatValue := CombatValue + Module.MaxDurability;
+            when HARPOON_GUN =>
+               CombatValue :=
+                 CombatValue + Module.MaxDurability + (Module.Data(2) * 5);
+            when others =>
+               null;
+         end case;
+      end loop;
+      for Item of PlayerShip.Cargo loop
+         if Length(Items_List(Item.ProtoIndex).IType) >= 4 then
+            if Slice(Items_List(Item.ProtoIndex).IType, 1, 4) = "Ammo" then
+               CombatValue :=
+                 CombatValue + (Items_List(Item.ProtoIndex).Value * 10);
+            elsif Items_List(Item.ProtoIndex).IType = "Harpoon" then
+               CombatValue :=
+                 CombatValue + (Items_List(Item.ProtoIndex).Value * 5);
+            end if;
+         end if;
+      end loop;
+      return CombatValue;
+   end CountCombatValue;
+
 end Ships;
