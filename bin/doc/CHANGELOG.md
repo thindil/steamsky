@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file.
 - New item: steel harpoon
 - Harpoon guns to pirates ships
 
+### Fixed
+- Stopping player ship in combat after hit by enemy harpoon
+
 ## [1.7] - 2017-10-15
 
 ### Added
