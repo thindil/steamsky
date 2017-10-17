@@ -34,7 +34,7 @@ with Goals; use Goals;
 package body Combat is
 
    EnemyShipIndex: Positive;
-   HarpoonDuration: Natural;
+   HarpoonDuration, EnemyHarpoonDuration: Natural;
 
    function StartCombat
      (EnemyIndex: Positive;
@@ -73,6 +73,7 @@ package body Combat is
    begin
       EnemyShipIndex := EnemyIndex;
       HarpoonDuration := 0;
+      EnemyHarpoonDuration := 0;
       EnemyShip :=
         CreateShip
           (EnemyIndex,
@@ -506,7 +507,13 @@ package body Combat is
                                  exit;
                               end if;
                            end loop;
-                           HarpoonDuration := HarpoonDuration + WeaponDamage;
+                           if Ship = PlayerShip then
+                              HarpoonDuration :=
+                                HarpoonDuration + WeaponDamage;
+                           else
+                              EnemyHarpoonDuration :=
+                                EnemyHarpoonDuration + WeaponDamage;
+                           end if;
                            WeaponDamage := 1;
                         end if;
                         if WeaponDamage >
@@ -870,6 +877,10 @@ package body Combat is
       elsif Enemy.Ship.Speed = FULL_STOP then
          Enemy.Ship.Speed := QUARTER_SPEED;
       end if;
+      if EnemyHarpoonDuration > 0 then
+         PlayerShip.Speed := FULL_STOP;
+         AddMessage("You are stopped by enemy harpoon.", CombatMessage);
+      end if;
       case EnemyPilotOrder is
          when 1 =>
             AccuracyBonus := AccuracyBonus + 20;
@@ -948,6 +959,9 @@ package body Combat is
       end if;
       if HarpoonDuration > 0 then
          HarpoonDuration := HarpoonDuration - 1;
+      end if;
+      if EnemyHarpoonDuration > 0 then
+         EnemyHarpoonDuration := EnemyHarpoonDuration - 1;
       end if;
       if not EndCombat then
          UpdateGame(1);
