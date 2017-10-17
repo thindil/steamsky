@@ -327,6 +327,15 @@ package body Ships is
       TempCrew: Positive_Container.Vector;
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
+      procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
+      begin
+         for Item of TempRecord.Cargo loop
+            if Items_List(Item(1)).IType = Items_Types(ItemTypeIndex) then
+               CombatValue :=
+                 CombatValue + (Items_List(Item(1)).Value * Multiple);
+            end if;
+         end loop;
+      end CountAmmoValue;
    begin
       if ProtoShips_List.Length > 0 then
          return;
@@ -541,6 +550,11 @@ package body Ships is
                              CombatValue +
                              Modules_List(ModuleIndex).Durability +
                              (Modules_List(ModuleIndex).MaxValue * 10);
+                           if Modules_List(ModuleIndex).MType = GUN then
+                              CountAmmoValue
+                                (Modules_List(ModuleIndex).Value,
+                                 10);
+                           end if;
                         when ARMOR =>
                            CombatValue :=
                              CombatValue +
@@ -550,20 +564,10 @@ package body Ships is
                              CombatValue +
                              Modules_List(ModuleIndex).Durability +
                              (Modules_List(ModuleIndex).MaxValue * 5);
+                           CountAmmoValue(Modules_List(ModuleIndex).Value, 5);
                         when others =>
                            null;
                      end case;
-                  end loop;
-                  for Item of TempRecord.Cargo loop
-                     if Length(Items_List(Item(1)).IType) >= 4 then
-                        if Slice(Items_List(Item(1)).IType, 1, 4) = "Ammo" then
-                           CombatValue :=
-                             CombatValue + (Items_List(Item(1)).Value * 10);
-                        elsif Items_List(Item(1)).IType = "Harpoon" then
-                           CombatValue :=
-                             CombatValue + (Items_List(Item(1)).Value * 5);
-                        end if;
-                     end if;
                   end loop;
                   TempRecord.CombatValue := CombatValue;
                   ProtoShips_List.Append(New_Item => TempRecord);
@@ -860,31 +864,34 @@ package body Ships is
 
    function CountCombatValue return Natural is
       CombatValue: Natural := 0;
+      procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
+      begin
+         for Item of PlayerShip.Cargo loop
+            if Items_List(Item.ProtoIndex).IType =
+              Items_Types(ItemTypeIndex) then
+               CombatValue :=
+                 CombatValue + (Items_List(Item.ProtoIndex).Value * Multiple);
+            end if;
+         end loop;
+      end CountAmmoValue;
    begin
       for Module of PlayerShip.Modules loop
          case Modules_List(Module.ProtoIndex).MType is
             when HULL | GUN | BATTERING_RAM =>
                CombatValue :=
                  CombatValue + Module.MaxDurability + (Module.Data(2) * 10);
+               if Modules_List(Module.ProtoIndex).MType = GUN then
+                  CountAmmoValue(Modules_List(Module.ProtoIndex).Value, 10);
+               end if;
             when ARMOR =>
                CombatValue := CombatValue + Module.MaxDurability;
             when HARPOON_GUN =>
                CombatValue :=
                  CombatValue + Module.MaxDurability + (Module.Data(2) * 5);
+               CountAmmoValue(Modules_List(Module.ProtoIndex).Value, 5);
             when others =>
                null;
          end case;
-      end loop;
-      for Item of PlayerShip.Cargo loop
-         if Length(Items_List(Item.ProtoIndex).IType) >= 4 then
-            if Slice(Items_List(Item.ProtoIndex).IType, 1, 4) = "Ammo" then
-               CombatValue :=
-                 CombatValue + (Items_List(Item.ProtoIndex).Value * 10);
-            elsif Items_List(Item.ProtoIndex).IType = "Harpoon" then
-               CombatValue :=
-                 CombatValue + (Items_List(Item.ProtoIndex).Value * 5);
-            end if;
-         end if;
       end loop;
       return CombatValue;
    end CountCombatValue;
