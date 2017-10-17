@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   missions
 - New ship module: steel harpoon gun
 - New item: steel harpoon
+- Harpoon guns to pirates ships
 
 ## [1.7] - 2017-10-15
 
