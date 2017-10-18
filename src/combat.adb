@@ -271,7 +271,7 @@ package body Combat is
                                  exit;
                               end if;
                            end loop;
-                           exit;
+                           exit when AmmoIndex > 0;
                         end if;
                      end loop;
                   end if;
@@ -716,6 +716,7 @@ package body Combat is
                               exit;
                            end if;
                         end loop;
+                        exit when EnemyAmmoIndex > 0;
                      end if;
                   end loop;
                end if;
