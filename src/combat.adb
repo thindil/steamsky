@@ -729,7 +729,6 @@ package body Combat is
                DamageRange := 100;
             end if;
             EnemyWeaponIndex := I;
-            exit;
          end if;
       end loop;
       if EnemyWeaponIndex = 0 and
