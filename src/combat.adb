@@ -816,7 +816,6 @@ package body Combat is
                DamageRange := 100;
             end if;
             EnemyWeaponIndex := Modules_Container.To_Index(I);
-            exit;
          end if;
       end loop;
       if EnemyWeaponIndex = 0 and
