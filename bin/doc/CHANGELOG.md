@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Stopping player ship in combat after hit by enemy harpoon
 - Finding ammunition to guns during combat
+- Shooting with harpoon gun by enemies ships
 
 ## [1.7] - 2017-10-15
 
