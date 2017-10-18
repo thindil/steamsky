@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Recipe for fresh vegetables
 - Counting attack range for enemy ships
+- Finding ammunition to guns during combat
 
 ## [1.0.8] - 2017-10-01
 
