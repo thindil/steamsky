@@ -352,6 +352,8 @@ package body Combat.UI is
                         Add(Win => EnemyInfo, Str => " (gun)");
                      when BATTERING_RAM =>
                         Add(Win => EnemyInfo, Str => " (battering ram)");
+                     when HARPOON_GUN =>
+                        Add(Win => EnemyInfo, Str => " (harpoon gun)");
                      when others =>
                         null;
                   end case;
