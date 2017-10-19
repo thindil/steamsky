@@ -37,6 +37,7 @@ package Combat is
       Evasion: Natural; -- Bonus to evasion
       Loot: Natural; -- Amount of loot(money) looted from ship
       Perception: Natural; -- Bonus to perception
+      HarpoonDuration: Natural; -- How long (amount of rounds) ship will be stopped by player harpoon
    end record;
    Enemy: Enemy_Record; -- Enemy informations
    EndCombat: Boolean; -- True if combat ends
