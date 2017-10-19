@@ -22,6 +22,7 @@ with Bases.Ship; use Bases.Ship;
 with Maps; use Maps;
 with Ships; use Ships;
 with Ships.Upgrade; use Ships.Upgrade;
+with Ships.Repairs; use Ships.Repairs;
 with Crew; use Crew;
 with Messages; use Messages;
 with Crafts; use Crafts;
@@ -285,7 +286,7 @@ package body Game is
       -- Update crew
       UpdateCrew(Minutes, TiredPoints);
       -- Repair ship (if needed)
-      Ships.RepairShip(Minutes);
+      Ships.Repairs.RepairShip(Minutes);
       -- Craft items
       Manufacturing(Minutes);
       -- Upgrade ship module
