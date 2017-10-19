@@ -34,7 +34,7 @@ with Goals; use Goals;
 package body Combat is
 
    EnemyShipIndex: Positive;
-   HarpoonDuration, EnemyHarpoonDuration: Natural;
+   HarpoonDuration: Natural;
 
    function StartCombat
      (EnemyIndex: Positive;
@@ -73,7 +73,6 @@ package body Combat is
    begin
       EnemyShipIndex := EnemyIndex;
       HarpoonDuration := 0;
-      EnemyHarpoonDuration := 0;
       EnemyShip :=
         CreateShip
           (EnemyIndex,
@@ -88,7 +87,8 @@ package body Combat is
          CombatAI => ProtoShips_List(EnemyIndex).CombatAI,
          Evasion => 0,
          Loot => 0,
-         Perception => 0);
+         Perception => 0,
+         HarpoonDuration => 0);
       if ProtoShips_List(EnemyIndex).Accuracy(2) = 0 then
          Enemy.Accuracy := ProtoShips_List(EnemyIndex).Accuracy(1);
       else
@@ -508,11 +508,11 @@ package body Combat is
                               end if;
                            end loop;
                            if Ship = PlayerShip then
+                              Enemy.HarpoonDuration :=
+                                Enemy.HarpoonDuration + WeaponDamage;
+                           else
                               HarpoonDuration :=
                                 HarpoonDuration + WeaponDamage;
-                           else
-                              EnemyHarpoonDuration :=
-                                EnemyHarpoonDuration + WeaponDamage;
                            end if;
                            WeaponDamage := 1;
                         end if;
@@ -869,7 +869,7 @@ package body Combat is
          when others =>
             null;
       end case;
-      if HarpoonDuration > 0 then
+      if Enemy.HarpoonDuration > 0 then
          Enemy.Ship.Speed := FULL_STOP;
          AddMessage
            (To_String(EnemyName) & " is stopped by harpoon.",
@@ -877,7 +877,7 @@ package body Combat is
       elsif Enemy.Ship.Speed = FULL_STOP then
          Enemy.Ship.Speed := QUARTER_SPEED;
       end if;
-      if EnemyHarpoonDuration > 0 then
+      if HarpoonDuration > 0 then
          PlayerShip.Speed := FULL_STOP;
          AddMessage("You are stopped by enemy harpoon.", CombatMessage);
       end if;
@@ -957,11 +957,11 @@ package body Combat is
       if not EndCombat then
          Attack(Enemy.Ship, PlayerShip); -- Enemy attack
       end if;
+      if Enemy.HarpoonDuration > 0 then
+         Enemy.HarpoonDuration := Enemy.HarpoonDuration - 1;
+      end if;
       if HarpoonDuration > 0 then
          HarpoonDuration := HarpoonDuration - 1;
-      end if;
-      if EnemyHarpoonDuration > 0 then
-         EnemyHarpoonDuration := EnemyHarpoonDuration - 1;
       end if;
       if not EndCombat then
          UpdateGame(1);
