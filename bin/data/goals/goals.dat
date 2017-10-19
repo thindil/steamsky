@@ -430,4 +430,8 @@ Target = Destroy
 Type = Mission
 Amount = 500
 Target = Destroy
+[121]
+Type = Mission
+Amount = 1000
+Target = Destroy
 []
