@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
   missions, finish 500 destroy ship missions and finish 1000 destroy ship
   missions
 - New ship module: steel harpoon gun
-- New item: steel harpoon
+- New items: steel harpoon and leather sheet
 - Harpoon guns to pirates ships
 - New item type: leather
 
