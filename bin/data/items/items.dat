@@ -529,4 +529,11 @@ Buyable = Y, N, N, N
 Value = 8
 ShowType = Ammunition
 Description = Harpoon made of steel with long rope. Used as ammunition for harpoon guns.
+[65]
+Name = Leather sheet
+Weight = 5
+Type = Leather
+Prices = 3, 2, 3, 3
+Buyable = N, Y, N, N
+Description = Large leather sheet used in crafting.
 []
