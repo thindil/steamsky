@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 - New ship module: steel harpoon gun
 - New items: steel harpoon and leather sheet
 - Harpoon guns to pirates ships
-- New item type: leather
+- New item types: leather and meleeweapon
 
 ### Changed
 - Better counting ships combat value (for selection of enemies for player)
