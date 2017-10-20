@@ -445,4 +445,13 @@ Skill = Blacksmith
 Difficulty = 5
 BaseType = 1
 Tool = BlacksmithSet
+[45]
+Material = Bronze, Leather
+Amount = 1, 1
+Result = 62
+Crafted = 1
+Workplace = Workshop
+Skill = Blacksmith
+BaseType = 1
+Tool = BlacksmithSet
 []
