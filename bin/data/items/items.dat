@@ -536,4 +536,13 @@ Type = Leather
 Prices = 3, 2, 3, 3
 Buyable = N, Y, N, N
 Description = Large leather sheet used in crafting.
+[66]
+Name = Bronze sword
+Weight = 2
+Type = MeleeWeapon
+Prices = 10, 15, 15, 15
+Buyable = Y, N, N, N
+ShowType = Weapon
+Value = 20
+Description = Simple sword made of bronze, used in melee combat.
 []
