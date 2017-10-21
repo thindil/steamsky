@@ -454,4 +454,14 @@ Workplace = Workshop
 Skill = Blacksmith
 BaseType = 1
 Tool = BlacksmithSet
+[46]
+Material = Iron, Leather
+Amount = 1, 1
+Result = 63
+Crafted = 1
+Workplace = Workshop
+Skill = Blacksmith
+Difficulty = 5
+BaseType = 1
+Tool = BlacksmithSet
 []
