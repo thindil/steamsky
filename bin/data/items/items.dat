@@ -545,4 +545,12 @@ Buyable = Y, N, N, N
 ShowType = Weapon
 Value = 20
 Description = Simple sword made of bronze, used in melee combat.
+[67]
+Name = Leather jacket
+Type = ChestArmor
+Prices = 10, 15, 15, 15
+Buyable = Y, N, N, N
+ShowType = Armor
+Value = 5
+Description = Weakest type of armor, made of leather, weared on torso.
 []
