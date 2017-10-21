@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - New ship module: steel harpoon gun
 - New items: steel harpoon, leather sheet and bronze sword
 - Harpoon guns to pirates ships
-- New item types: leather and meleeweapon
+- New item types: leather, meleeweapon and chestarmor
 - New crafting recipes: bronze harpoon and iron harpoon
 
 ### Changed
