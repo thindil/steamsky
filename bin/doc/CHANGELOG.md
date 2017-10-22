@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
 - New items: steel harpoon, leather sheet, bronze sword and leather jacket
 - Harpoon guns to pirates ships
 - New item types: leather, meleeweapon and chestarmor
-- New crafting recipes: bronze harpoon and iron harpoon
+- New crafting recipes: bronze harpoon, iron harpoon and steel harpoon
 
 ### Changed
 - Better counting ships combat value (for selection of enemies for player)
