@@ -464,4 +464,14 @@ Skill = Blacksmith
 Difficulty = 5
 BaseType = 1
 Tool = BlacksmithSet
+[47]
+Material = Steel, Leather
+Amount = 1, 1
+Result = 64
+Crafted = 1
+Workplace = Workshop
+Skill = Blacksmith
+Difficulty = 10
+BaseType = 1
+Tool = BlacksmithSet
 []
