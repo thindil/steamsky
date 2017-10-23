@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
   missions, finish 2500 destroy ship missions and finish 200 patrol area
   missions
 - New ship module: steel harpoon gun
-- New items: steel harpoon, leather sheet, bronze sword and leather jacket
+- New items: steel harpoon, leather sheet, bronze sword, leather jacket and
+  leather helmet
 - Harpoon guns to pirates ships
 - New item types: leather, meleeweapon, chestarmor and headarmor
 - New crafting recipes: bronze harpoon, iron harpoon and steel harpoon
