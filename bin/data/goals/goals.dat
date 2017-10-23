@@ -446,4 +446,8 @@ Target = Destroy
 Type = Mission
 Amount = 2500
 Target = Destroy
+[125]
+Type = Mission
+Amount = 200
+Target = Patrol
 []
