@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - New goals: finish 200 destroy ship missions, finish 250 destroy ship
   missions, finish 500 destroy ship missions, finish 1000 destroy ship
   missions, finish 1500 destroy ship missions, finish 2000 destroy ship
-  missions and finish 2500 destroy ship missions
+  missions, finish 2500 destroy ship missions and finish 200 patrol area
+  missions
 - New ship module: steel harpoon gun
 - New items: steel harpoon, leather sheet, bronze sword and leather jacket
 - Harpoon guns to pirates ships
