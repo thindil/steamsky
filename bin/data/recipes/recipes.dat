@@ -474,4 +474,13 @@ Skill = Blacksmith
 Difficulty = 10
 BaseType = 1
 Tool = BlacksmithSet
+[48]
+Material = Bronze
+Amount = 1
+Result = 66
+Crafted = 1
+Workplace = Furnace
+Skill = Blacksmith
+BaseType = 1
+Tool = BlacksmithSet
 []
