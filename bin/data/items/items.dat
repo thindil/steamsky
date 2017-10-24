@@ -555,10 +555,18 @@ Value = 5
 Description = Weakest type of armor, made of leather, weared on torso.
 [68]
 Name = Leather helmet
-Type = ChestArmor
+Type = HeadArmor
 Prices = 7, 10, 10, 10
 Buyable = Y, N, N, N
 ShowType = Armor
 Value = 2
 Description = Weakest type of armor, made of leather, weared on head.
+[69]
+Name = Leather armsguard
+Type = ArmsArmor
+Prices = 8, 12, 12, 12
+Buyable = Y, N, N, N
+ShowType = Armor
+Value = 3
+Description = Weakest type of armor, made of leather, protects arms.
 []
