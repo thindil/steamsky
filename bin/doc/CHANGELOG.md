@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - New item types: leather, meleeweapon, chestarmor, headarmor and armsarmor
 - New crafting recipes: bronze harpoon, iron harpoon, steel harpoon and bronze
   sword
+- New skill: leatherworking
 
 ### Changed
 - Better counting ships combat value (for selection of enemies for player)
