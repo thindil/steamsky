@@ -483,4 +483,13 @@ Workplace = Furnace
 Skill = Blacksmith
 BaseType = 1
 Tool = BlacksmithSet
+[49]
+Material = Leather
+Amount = 2
+Result = 67
+Crafted = 1
+Workplace = Workshop
+Skill = Leatherworking
+BaseType = 1
+Tool = SewingKit
 []
