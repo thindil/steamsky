@@ -569,4 +569,13 @@ Buyable = Y, N, N, N
 ShowType = Armor
 Value = 3
 Description = Weakest type of armor, made of leather, protects arms.
+[70]
+Name = Bronze sewing kit
+Weight = 2
+Type = SewingKit
+Prices = 5, 7, 7, 7
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 15
+Description = Bronze set of tools needed to sew items.
 []
