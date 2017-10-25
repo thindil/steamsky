@@ -15,8 +15,8 @@ All notable changes to this project will be documented in this file.
 - Harpoon guns to pirates ships
 - New item types: leather, meleeweapon, chestarmor, headarmor, armsarmor,
   sewingkit and legsarmor
-- New crafting recipes: bronze harpoon, iron harpoon, steel harpoon and bronze
-  sword
+- New crafting recipes: bronze harpoon, iron harpoon, steel harpoon, bronze
+  sword and leather jacket
 - New skill: leatherworking
 
 ### Changed
