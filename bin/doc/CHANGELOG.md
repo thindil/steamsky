@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
   finish 250 patrol area missions and finish 500 patrol area missions
 - New ship module: steel harpoon gun
 - New items: steel harpoon, leather sheet, bronze sword, leather jacket,
-  leather helmet and leather armsguard
+  leather helmet, leather armsguard and bronze sewing kit
 - Harpoon guns to pirates ships
 - New item types: leather, meleeweapon, chestarmor, headarmor, armsarmor and
   sewingkit
