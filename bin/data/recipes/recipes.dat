@@ -492,4 +492,13 @@ Workplace = Workshop
 Skill = Leatherworking
 BaseType = 1
 Tool = SewingKit
+[50]
+Material = Leather
+Amount = 1
+Result = 68
+Crafted = 1
+Workplace = Workshop
+Skill = Leatherworking
+BaseType = 1
+Tool = SewingKit
 []
