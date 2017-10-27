@@ -586,4 +586,11 @@ Buyable = Y, N, N, N
 ShowType = Armor
 Value = 4
 Description = Weakest type of armor, made of leather, protects legs.
+[72]
+Name = Bronze shield
+Type = Shield
+Prices = 10, 15, 15, 15
+Buyable = Y, N, N, N
+Value = 4
+Description = Standard shield made of bronze, used in melee combat.
 []
