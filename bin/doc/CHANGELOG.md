@@ -18,7 +18,7 @@ All notable changes to this project will be documented in this file.
 - New item types: leather, meleeweapon, chestarmor, headarmor, armsarmor,
   sewingkit, legsarmor and shield
 - New crafting recipes: bronze harpoon, iron harpoon, steel harpoon, bronze
-  sword, leather jacket and leather helmet
+  sword, leather jacket, leather helmet and leather armsguard
 - New skill: leatherworking
 
 ### Changed
