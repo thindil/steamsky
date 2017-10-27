@@ -369,7 +369,7 @@ package body Trades.UI is
       MenuLength: Column_Position;
       MenuIndex: Integer := 1;
       ItemsAmount: Positive := 1;
-      BaseItemIndex: Positive;
+      BaseItemIndex: Natural;
    begin
       if TradeForm /= Null_Form then
          Post(TradeForm, False);
@@ -418,6 +418,12 @@ package body Trades.UI is
               FindItem(PlayerShip.Cargo, Objects_Container.To_Index(I)) =
                 0 then
                BaseItemIndex := FindBaseCargo(Objects_Container.To_Index(I));
+               if BaseItemIndex = 0 then
+                  SkyBases(BaseIndex).Cargo.Clear;
+                  GenerateCargo;
+                  ShowTrade;
+                  return;
+               end if;
                Trade_Items.all(MenuIndex) :=
                  New_Item
                    (To_String(Items_List(I).Name),
