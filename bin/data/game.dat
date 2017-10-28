@@ -38,3 +38,4 @@ GunnerySkill = Gunnery
 TalkingSkill = Rhetoric
 PerceptionSkill = Perception
 PlayerIndex = 1
+HeadArmor = HeadArmor
