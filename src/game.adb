@@ -374,7 +374,8 @@ package body Game is
          To_Unbounded_String("GunnerySkill"),
          To_Unbounded_String("TalkingSkill"),
          To_Unbounded_String("PerceptionSkill"),
-         To_Unbounded_String("PlayerIndex"));
+         To_Unbounded_String("PlayerIndex"),
+         To_Unbounded_String("HeadArmor"));
    begin
       if BaseSyllablesStart.Length > 0 then
          return True;
@@ -543,6 +544,8 @@ package body Game is
                         PerceptionSkill := FindSkillIndex(Value);
                      when 40 =>
                         PlayerIndex := Value;
+                     when 41 =>
+                        HeadArmor := Value;
                      when others =>
                         null;
                   end case;
