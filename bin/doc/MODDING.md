@@ -190,7 +190,9 @@ mobile index from any mobiles file from *data/mobs* directory.
   reduced by one portion. For 'Drink', value of thirst reduced by one portion.
   For ammunition it is damage done by that ammunition. For working tools it is
   chance for item to be damaged during work. For harpoon guns ammunition it is
-  how long (in combat turns) item will be stuck in enemy ship.
+  how long (in combat turns) item will be stuck in enemy ship. For melee
+  weapons it is damage done by that weapon. For armor pieces it is amount of
+  damage reduced by this armor.
 - Description: Any length description of item.
 
 ## Recipes
