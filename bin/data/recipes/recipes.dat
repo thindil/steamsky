@@ -510,4 +510,13 @@ Workplace = Workshop
 Skill = Leatherworking
 BaseType = 1
 Tool = SewingKit
+[52]
+Material = Bronze
+Amount = 1
+Result = 70
+Crafted = 2
+Workplace = Furnace
+Skill = Blacksmith
+BaseType = 1
+Tool = BlacksmithSet
 []
