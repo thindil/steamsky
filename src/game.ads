@@ -159,6 +159,7 @@ package Game is
    GunnerySkill: Positive; -- Index of skill used by gunners
    TalkingSkill: Positive; -- Index of skill used for talk in bases or with other ships
    PerceptionSkill: Positive; -- Index of skill used for spoting
+   HeadArmor: Unbounded_String; -- Name of item type used as characters head armor
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
