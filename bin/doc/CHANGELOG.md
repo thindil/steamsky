@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Better counting ships combat value (for selection of enemies for player)
 - Added info about harpoon gun to enemy info in combat screen
+- Updated MODDING.md
 
 ### Fixed
 - Stopping player ship in combat after hit by enemy harpoon
