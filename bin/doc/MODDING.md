@@ -162,6 +162,11 @@ To change which mobile data is used for starting player character data
 line which starts with PlayerIndex. Value after equal sign must be existing
 mobile index from any mobiles file from *data/mobs* directory.
 
+## Head armor type
+To change which item type is used as a head armor for charactes, open file 
+*game.dat* in *data* directory and edit line which starts with HeadArmor.
+Value after equal sign must be existing item type.
+
 ## Items
 
 ### General informations
