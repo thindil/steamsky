@@ -160,6 +160,7 @@ package Game is
    TalkingSkill: Positive; -- Index of skill used for talk in bases or with other ships
    PerceptionSkill: Positive; -- Index of skill used for spoting
    HeadArmor: Unbounded_String; -- Name of item type used as characters head armor
+   ChestArmor: Unbounded_String; -- Name of item type used as characters torso armor
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
