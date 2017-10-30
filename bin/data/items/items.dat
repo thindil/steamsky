@@ -547,6 +547,7 @@ Value = 20
 Description = Simple sword made of bronze, used in melee combat.
 [67]
 Name = Leather jacket
+Weight = 5
 Type = ChestArmor
 Prices = 10, 15, 15, 15
 Buyable = Y, N, N, N
@@ -580,6 +581,7 @@ Value = 15
 Description = Bronze set of tools needed to sew items.
 [71]
 Name = Leather legsguard
+Weight = 1
 Type = LegsArmor
 Prices = 9, 14, 14, 14
 Buyable = Y, N, N, N
@@ -588,6 +590,7 @@ Value = 4
 Description = Weakest type of armor, made of leather, protects legs.
 [72]
 Name = Bronze shield
+Weight = 4
 Type = Shield
 Prices = 10, 15, 15, 15
 Buyable = Y, N, N, N
