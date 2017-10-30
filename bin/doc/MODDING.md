@@ -167,6 +167,11 @@ To change which item type is used as a head armor for charactes, open file
 *game.dat* in *data* directory and edit line which starts with HeadArmor.
 Value after equal sign must be existing item type.
 
+## Torso armor type
+To change which item type is used as a torso armor for charactes, open file 
+*game.dat* in *data* directory and edit line which starts with ChestArmor.
+Value after equal sign must be existing item type.
+
 ## Items
 
 ### General informations
