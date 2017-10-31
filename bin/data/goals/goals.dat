@@ -478,4 +478,8 @@ Target = Patrol
 Type = Mission
 Amount = 200
 Target = Explore
+[137]
+Type = Mission
+Amount = 250
+Target = Explore
 []
