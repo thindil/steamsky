@@ -174,7 +174,12 @@ Value after equal sign must be existing item type.
 
 ## Arms armor type
 To change which item type is used as an arms armor for charactes, open file 
-*game.dat* in *data* directory and edit line which starts with ChestArmor.
+*game.dat* in *data* directory and edit line which starts with ArmsArmor.
+Value after equal sign must be existing item type.
+
+## Legs armor type
+To change which item type is used as a legs armor for charactes, open file 
+*game.dat* in *data* directory and edit line which starts with LegsArmor.
 Value after equal sign must be existing item type.
 
 ## Items
