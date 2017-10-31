@@ -377,7 +377,8 @@ package body Game is
          To_Unbounded_String("PlayerIndex"),
          To_Unbounded_String("HeadArmor"),
          To_Unbounded_String("ChestArmor"),
-         To_Unbounded_String("ArmsArmor"));
+         To_Unbounded_String("ArmsArmor"),
+         To_Unbounded_String("LegsArmor"));
    begin
       if BaseSyllablesStart.Length > 0 then
          return True;
@@ -552,6 +553,8 @@ package body Game is
                         ChestArmor := Value;
                      when 43 =>
                         ArmsArmor := Value;
+                     when 44 =>
+                        LegsArmor := Value;
                      when others =>
                         null;
                   end case;

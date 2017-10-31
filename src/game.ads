@@ -162,6 +162,7 @@ package Game is
    HeadArmor: Unbounded_String; -- Name of item type used as characters head armor
    ChestArmor: Unbounded_String; -- Name of item type used as characters torso armor
    ArmsArmor: Unbounded_String; -- Name of item type used as characters arms armor
+   LegsArmor: Unbounded_String; -- Name of item type used as characters legs armor
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
