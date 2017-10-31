@@ -161,6 +161,7 @@ package Game is
    PerceptionSkill: Positive; -- Index of skill used for spoting
    HeadArmor: Unbounded_String; -- Name of item type used as characters head armor
    ChestArmor: Unbounded_String; -- Name of item type used as characters torso armor
+   ArmsArmor: Unbounded_String; -- Name of item type used as characters arms armor
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
