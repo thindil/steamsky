@@ -182,6 +182,11 @@ To change which item type is used as a legs armor for charactes, open file
 *game.dat* in *data* directory and edit line which starts with LegsArmor.
 Value after equal sign must be existing item type.
 
+## Shield type
+To change which item type is used as a shield for charactes, open file 
+*game.dat* in *data* directory and edit line which starts with Shield. Value
+after equal sign must be existing item type.
+
 ## Items
 
 ### General informations
