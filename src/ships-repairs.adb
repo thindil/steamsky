@@ -25,7 +25,6 @@ package body Ships.Repairs is
    procedure RepairShip(Minutes: Positive) is
       OrderTime, CurrentMinutes, RepairPoints: Integer;
       RepairNeeded, RepairStopped: Boolean := False;
-      package Natural_Container is new Vectors(Positive, Natural);
       CrewRepairPoints: Natural_Container.Vector;
       procedure RepairModule(ModuleIndex: Positive) is
          PointsIndex, PointsBonus, RepairMaterial, ToolsIndex: Natural;
