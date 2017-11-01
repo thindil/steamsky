@@ -543,7 +543,7 @@ Type = MeleeWeapon
 Prices = 10, 15, 15, 15
 Buyable = Y, N, N, N
 ShowType = Weapon
-Value = 20
+Value = 15, 20
 Description = Simple sword made of bronze, used in melee combat.
 [67]
 Name = Leather jacket
@@ -552,7 +552,7 @@ Type = ChestArmor
 Prices = 10, 15, 15, 15
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 5
+Value = 20, 5
 Description = Weakest type of armor, made of leather, weared on torso.
 [68]
 Name = Leather helmet
@@ -560,7 +560,7 @@ Type = HeadArmor
 Prices = 7, 10, 10, 10
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 2
+Value = 20, 2
 Description = Weakest type of armor, made of leather, weared on head.
 [69]
 Name = Leather armsguard
@@ -568,7 +568,7 @@ Type = ArmsArmor
 Prices = 8, 12, 12, 12
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 3
+Value = 20, 3
 Description = Weakest type of armor, made of leather, protects arms.
 [70]
 Name = Bronze sewing kit
@@ -586,7 +586,7 @@ Type = LegsArmor
 Prices = 9, 14, 14, 14
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 4
+Value = 20, 4
 Description = Weakest type of armor, made of leather, protects legs.
 [72]
 Name = Bronze shield
@@ -594,6 +594,6 @@ Weight = 4
 Type = Shield
 Prices = 10, 15, 15, 15
 Buyable = Y, N, N, N
-Value = 4
+Value = 15, 4
 Description = Standard shield made of bronze, used in melee combat.
 []
