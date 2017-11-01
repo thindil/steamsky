@@ -329,7 +329,7 @@ package body Ships is
          for Item of TempRecord.Cargo loop
             if Items_List(Item(1)).IType = Items_Types(ItemTypeIndex) then
                CombatValue :=
-                 CombatValue + (Items_List(Item(1)).Value * Multiple);
+                 CombatValue + (Items_List(Item(1)).Value(1) * Multiple);
             end if;
          end loop;
       end CountAmmoValue;
@@ -678,7 +678,8 @@ package body Ships is
             if Items_List(Item.ProtoIndex).IType =
               Items_Types(ItemTypeIndex) then
                CombatValue :=
-                 CombatValue + (Items_List(Item.ProtoIndex).Value * Multiple);
+                 CombatValue +
+                 (Items_List(Item.ProtoIndex).Value(1) * Multiple);
             end if;
          end loop;
       end CountAmmoValue;

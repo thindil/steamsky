@@ -32,7 +32,8 @@ package Items is
       IType: Unbounded_String; -- Type of item
       Prices: Object_Prices; -- Prices of item in bases
       Buyable: Object_Buyable; -- Did item is buyable in selected bases
-      Value: Natural; -- Additional item data (damage for ammo, etc)
+      Value: Natural_Container
+        .Vector; -- Additional item data (damage for ammo, etc)
       ShowType: Unbounded_String; -- Displayed type of item (can be group of items, renamed type, etc)
       Description: Unbounded_String; -- Description of item
       Index: Unbounded_String; -- Index of item

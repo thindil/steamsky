@@ -129,7 +129,7 @@ package body Missions is
          if Length(Items_List(Item.ProtoIndex).IType) >= 4 then
             if Slice(Items_List(Item.ProtoIndex).IType, 1, 4) = "Ammo" then
                PlayerValue :=
-                 PlayerValue + (Items_List(Item.ProtoIndex).Value * 10);
+                 PlayerValue + (Items_List(Item.ProtoIndex).Value(1) * 10);
             end if;
          end if;
       end loop;

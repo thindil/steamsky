@@ -33,6 +33,8 @@ package body Items is
       TempRecord: Object_Data;
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
+      TempValue: Natural_Container.Vector;
+      Amount: Natural;
    begin
       if Items_List.Length > 0 then
          return;
@@ -55,7 +57,7 @@ package body Items is
             IType => Null_Unbounded_String,
             Prices => (0, 0, 0, 0),
             Buyable => (False, False, False, False),
-            Value => 0,
+            Value => TempValue,
             ShowType => Null_Unbounded_String,
             Description => Null_Unbounded_String,
             Index => Null_Unbounded_String);
@@ -102,7 +104,18 @@ package body Items is
                      StartIndex := EndIndex + 2;
                   end loop;
                elsif FieldName = To_Unbounded_String("Value") then
-                  TempRecord.Value := Integer'Value(To_String(Value));
+                  StartIndex := 1;
+                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                  for I in 1 .. Amount loop
+                     EndIndex := Index(Value, ", ", StartIndex);
+                     if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                     end if;
+                     TempRecord.Value.Append
+                     (New_Item =>
+                        Natural'Value(Slice(Value, StartIndex, EndIndex - 1)));
+                     StartIndex := EndIndex + 2;
+                  end loop;
                elsif FieldName = To_Unbounded_String("ShowType") then
                   TempRecord.ShowType := Value;
                elsif FieldName = To_Unbounded_String("Description") then
@@ -120,7 +133,7 @@ package body Items is
                      IType => Null_Unbounded_String,
                      Prices => (0, 0, 0, 0),
                      Buyable => (False, False, False, False),
-                     Value => 0,
+                     Value => TempValue,
                      ShowType => Null_Unbounded_String,
                      Description => Null_Unbounded_String,
                      Index => Null_Unbounded_String);
@@ -171,7 +184,7 @@ package body Items is
       ItemIndex: Positive;
       SkillLevel, MemberIndex: Natural := 0) is
       DamageChance: Integer :=
-        Items_List(Inventory(ItemIndex).ProtoIndex).Value;
+        Items_List(Inventory(ItemIndex).ProtoIndex).Value(1);
       I: Natural := Inventory.First_Index;
    begin
       if SkillLevel > 0 then

@@ -400,7 +400,7 @@ package body Crew is
            FindItem(Inventory => PlayerShip.Cargo, ItemType => ItemType);
          if ItemIndex > 0 then
             ConsumeValue :=
-              Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value;
+              Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value(1);
             UpdateCargo
               (PlayerShip,
                PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
