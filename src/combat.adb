@@ -491,8 +491,8 @@ package body Combat is
                         if AmmoIndex > 0 then
                            WeaponDamage :=
                              WeaponDamage +
-                             Items_List(Ship.Cargo(AmmoIndex).ProtoIndex)
-                               .Value;
+                             Items_List(Ship.Cargo(AmmoIndex).ProtoIndex).Value
+                               (1);
                         end if;
                         if Modules_List(Ship.Modules(K).ProtoIndex).MType =
                           HARPOON_GUN then
