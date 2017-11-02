@@ -54,7 +54,7 @@ package body Goals.UI is
       MenuOptions := Get_Options(GoalsMenu);
       MenuOptions.Show_Descriptions := False;
       Set_Options(GoalsMenu, MenuOptions);
-      Set_Format(GoalsMenu, Lines - 4, 1);
+      Set_Format(GoalsMenu, Lines - (Lines / 2), 1);
       Scale(GoalsMenu, MenuHeight, MenuLength);
       MenuWindow :=
         Create
