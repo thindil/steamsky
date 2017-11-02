@@ -868,7 +868,7 @@ package body Crew.UI is
       Add(Str => "Free inventory space:" & Integer'Image(FreeSpace) & " kg");
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
-      Add(Str => "Press Enter to move item to ship cargo");
+      Add(Str => "Press Enter to see item options");
       Change_Attributes
         (Line => CurrentLine,
          Column => (Columns / 2) + 6,
@@ -899,6 +899,7 @@ package body Crew.UI is
         (1 .. (PlayerShip.Crew(MemberIndex).Inventory.Last_Index + 1));
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
+      ItemName: Unbounded_String;
    begin
       if PlayerShip.Crew(MemberIndex).Inventory.Length = 0 then
          Move_Cursor(Line => (Lines / 3), Column => (Columns / 4));
@@ -916,11 +917,21 @@ package body Crew.UI is
          Post(MoveForm, False);
          Delete(MoveForm);
       end if;
+      if OrdersMenu /= Null_Menu then
+         Post(OrdersMenu, False);
+         Delete(OrdersMenu);
+      end if;
       for I in
         PlayerShip.Crew(MemberIndex).Inventory.First_Index ..
             PlayerShip.Crew(MemberIndex).Inventory.Last_Index loop
-         Cargo_Items.all(I) :=
-           New_Item(GetItemName(PlayerShip.Crew(MemberIndex).Inventory(I)));
+         ItemName := To_Unbounded_String(GetItemName(PlayerShip.Crew(MemberIndex).Inventory(I)));
+         for J in PlayerShip.Crew(MemberIndex).Equipment'Range loop
+            if PlayerShip.Crew(MemberIndex).Equipment(J) = I then
+               ItemName := ItemName & "(used)";
+               exit;
+            end if;
+         end loop;
+         Cargo_Items.all(I) := New_Item(To_String(ItemName));
       end loop;
       Cargo_Items.all(Cargo_Items'Last) := Null_Item;
       CrewMenu := New_Menu(Cargo_Items);
@@ -946,7 +957,6 @@ package body Crew.UI is
         PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount;
       FieldText: constant String :=
         "Enter amount (max" & Positive'Image(MaxAmount) & "): ";
-      CaptionText: Unbounded_String;
    begin
       if MoveForm = Null_Form then
          Set_Cursor_Visibility(Visibility);
@@ -994,7 +1004,7 @@ package body Crew.UI is
               ((Lines / 3) - (FormHeight / 2)),
               ((Columns / 2) - (FormLength / 2)));
          Box(FormWindow);
-         WindowFrame(FormWindow, 5, To_String(CaptionText));
+         WindowFrame(FormWindow, 5, "Move item to ship cargo");
          Set_Window(MoveForm, FormWindow);
          Set_Sub_Window
            (MoveForm,
@@ -1005,5 +1015,38 @@ package body Crew.UI is
       Refresh_Without_Update(FormWindow);
       Update_Screen;
    end ShowMoveForm;
+
+   procedure ShowInventoryMenu is
+      Options_Items: constant Item_Array_Access := new Item_Array(1 .. 4);
+      MenuHeight: Line_Position;
+      MenuLength: Column_Position;
+      ItemIndex: constant Positive := Get_Index(Current(CrewMenu));
+   begin
+      Options_Items.all := (New_Item("Equip item"), New_Item("Move item to ship cargo"), New_Item("Close"), Null_Item);
+      for I in PlayerShip.Crew(MemberIndex).Equipment'Range loop
+         if PlayerShip.Crew(MemberIndex).Equipment(I) = ItemIndex then
+            Options_Items.all(1) := New_Item("Take off item");
+            exit;
+         end if;
+      end loop;
+      OrdersMenu := New_Menu(Options_Items);
+      Set_Format(OrdersMenu, Lines - 10, 1);
+      Scale(OrdersMenu, MenuHeight, MenuLength);
+      MenuWindow2 :=
+        Create
+          (MenuHeight + 2,
+           MenuLength + 2,
+           ((Lines / 3) - (MenuHeight / 2)),
+           ((Columns / 2) - (MenuLength / 2)));
+      WindowFrame(MenuWindow2, 5, "Item options");
+      Set_Window(OrdersMenu, MenuWindow2);
+      Set_Sub_Window
+        (OrdersMenu,
+         Derived_Window(MenuWindow2, MenuHeight, MenuLength, 0, 0));
+      Post(OrdersMenu);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow2);
+      Update_Screen;
+   end ShowInventoryMenu;
 
 end Crew.UI;

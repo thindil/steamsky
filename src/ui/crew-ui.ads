@@ -39,5 +39,6 @@ private
    procedure ShowPrioritiesMenu; -- Show piorities settings for selected crew member
    procedure ShowItemInfo; -- Show informations about selected item in crew member inventory
    procedure ShowMoveForm; -- Show form for move item from crew member inventory to ship cargo
+   procedure ShowInventoryMenu; -- Show menu with options for selected item in crew member inventory
 
 end Crew.UI;
