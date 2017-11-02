@@ -182,7 +182,8 @@ package body Ships is
              OrderTime => 15,
              Orders => Member.Priorities,
              Attributes => TmpAttributes,
-             Inventory => TmpInventory));
+             Inventory => TmpInventory,
+             Equipment => (others => 0)));
          TmpSkills.Clear;
          TmpAttributes.Clear;
          for Module of ShipModules loop

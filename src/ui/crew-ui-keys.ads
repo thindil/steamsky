@@ -35,5 +35,7 @@ package Crew.UI.Keys is
      return GameStates; -- Handle keys in crew member inventory view
    function MoveItemFormKeys
      (Key: Key_Code) return GameStates; -- Handle keys in move item form
+   function InventoryMenuKeys
+     (Key: Key_Code) return GameStates; -- Handle keys in item options menu
 
 end Crew.UI.Keys;

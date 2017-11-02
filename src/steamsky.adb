@@ -282,6 +282,9 @@ begin
                when SchoolSkills_Menu =>
                   GameState := School_View;
                   DrawGame(GameState);
+               when Inventory_Menu =>
+                  GameState := Inventory_View;
+                  DrawGame(GameState);
                when others =>
                   DrawGame(GameState);
             end case;
@@ -474,6 +477,8 @@ begin
             GameState := SchoolKeys(Key);
          when SchoolSkills_Menu =>
             GameState := SchoolSkillsMenuKeys(Key);
+         when Inventory_Menu =>
+            GameState := InventoryMenuKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;
