@@ -165,7 +165,8 @@ package Game is
    ChestArmor: Unbounded_String; -- Name of item type used as characters torso armor
    ArmsArmor: Unbounded_String; -- Name of item type used as characters arms armor
    LegsArmor: Unbounded_String; -- Name of item type used as characters legs armor
-   ShieldType: Unbounded_String; -- Name of item type used as charactes shield
+   ShieldType: Unbounded_String; -- Name of item type used as characters shield
+   WeaponType: Unbounded_String; -- Name of item type used as characters weapon
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
