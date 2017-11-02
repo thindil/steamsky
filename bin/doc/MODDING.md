@@ -216,8 +216,10 @@ after equal sign must be existing item type.
   For ammunition it is damage done by that ammunition. For working tools it is
   chance for item to be damaged during work. For harpoon guns ammunition it is
   how long (in combat turns) item will be stuck in enemy ship. For melee
-  weapons it is damage done by that weapon. For armor pieces it is amount of
-  damage reduced by this armor.
+  weapons and armor pieces first value is change for item to be damaged during
+  combat, second value separated by `, ` (comma and space) for melee weapons
+  is damage done by weapon and for armor piece it is amount of damage reduced
+  by this armor.
 - Description: Any length description of item.
 
 ## Recipes
