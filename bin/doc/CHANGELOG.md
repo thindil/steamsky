@@ -11,8 +11,8 @@ All notable changes to this project will be documented in this file.
   finish 250 patrol area missions, finish 500 patrol area missions, finish 1000
   patrol area missions, finish 1500 patrol area missions, finish 2000 patrol
   area missions, finish 2500 patrol area missions, finish 200 explore area
-  missions, finish 250 explore area missions and finish 500 explore area 
-  missions
+  missions, finish 250 explore area missions, finish 500 explore area missions
+  and finish 1000 explore area missions
 - New ship module: steel harpoon gun
 - New items: steel harpoon, leather sheet, bronze sword, leather jacket,
   leather helmet, leather armsguard, bronze sewing kit, leather legsguard and
