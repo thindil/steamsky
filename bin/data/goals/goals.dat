@@ -486,4 +486,8 @@ Target = Explore
 Type = Mission
 Amount = 500
 Target = Explore
+[139]
+Type = Mission
+Amount = 1000
+Target = Explore
 []
