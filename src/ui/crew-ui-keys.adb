@@ -391,9 +391,11 @@ package body Crew.UI.Keys is
             if Result = Request_Denied then
                Result := Driver(CrewMenu, M_First_Item);
             end if;
-         when 10 => -- Move item to ship cargo
+         when 10 => -- Show item options
             ShowMoveForm;
             return MoveItem_Form;
+            --ShowInventoryMenu;
+            --return Inventory_Menu;
          when others =>
             Result := Driver(CrewMenu, Key);
             if Result /= Menu_Ok then
@@ -493,4 +495,10 @@ package body Crew.UI.Keys is
       return MoveItem_Form;
    end MoveItemFormKeys;
 
+   function InventoryMenuKeys(Key: Key_Code) return GameStates is
+      Result: Menus.Driver_Result;
+   begin
+      return Inventory_View;
+   end InventoryMenuKeys;
+   
 end Crew.UI.Keys;

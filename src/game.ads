@@ -91,7 +91,8 @@ package Game is
       Cargo_Menu,
       CargoMove_Form,
       School_View,
-      SchoolSkills_Menu); -- Game states
+      SchoolSkills_Menu,
+      Inventory_Menu); -- Game states
    type Date_Record is -- Data for game date/time
    record
       Year: Natural;

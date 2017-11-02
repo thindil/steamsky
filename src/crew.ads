@@ -36,6 +36,7 @@ package Crew is
       Rest);
    type Orders_Array is array(1 .. 9) of Natural;
    type Attributes_Array is array(1 .. 2) of Natural;
+   type Equipment_Array is array(1 .. 7) of Natural;
    package Attributes_Container is new Vectors(Positive, Attributes_Array);
    type Member_Data is -- Data structure for ship crew member
    record
@@ -54,6 +55,7 @@ package Crew is
       Attributes: Attributes_Container
         .Vector; -- Levels and experience in attributes of member
       Inventory: Inventory_Container.Vector; -- Owned items by member
+      Equipment: Equipment_Array; -- Items indexes from inventory used by character: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
    end record;
    Crew_Order_Error: exception; -- Raised when new order can't be set for selected crew member
    Crew_No_Space_Error: exception; -- Raised when no space for new item in crew member inventory

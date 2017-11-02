@@ -32,7 +32,7 @@ with Goals; use Goals;
 
 package body Game.SaveLoad is
 
-   SaveVersion: constant String := "1.6";
+   SaveVersion: constant String := "1.8";
 
    procedure SaveGame is
       SaveGame: File_Type;
@@ -379,6 +379,10 @@ package body Game.SaveLoad is
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
             Put(SaveGame, To_String(Item.Name) & ";");
             RawValue := To_Unbounded_String(Integer'Image(Item.Durability));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         end loop;
+         for I in Member.Equipment'Range loop
+            RawValue := To_Unbounded_String(Integer'Image(Member.Equipment(I)));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
          end loop;
       end loop;
@@ -752,7 +756,8 @@ package body Game.SaveLoad is
              OrderTime => Integer'Value(To_String(ReadData)),
              Orders => (others => 0),
              Attributes => Attributes,
-             Inventory => Inventory));
+             Inventory => Inventory,
+             Equipment => (others => 0)));
          SkillsLength := Positive'Value(To_String(ReadData));
          for J in 1 .. SkillsLength loop
             Skills.Append
@@ -784,6 +789,9 @@ package body Game.SaveLoad is
          ShipCrew(ShipCrew.Last_Index).Attributes := Attributes;
          ShipCrew(ShipCrew.Last_Index).Orders := TmpOrders;
          ShipCrew(ShipCrew.Last_Index).Inventory := Inventory;
+         for I in ShipCrew(ShipCrew.Last_Index).Equipment'Range loop
+            ShipCrew(ShipCrew.Last_Index).Equipment(I) := Natural'Value(To_String(ReadData));
+         end loop;
       end loop;
       PlayerShip.Crew := ShipCrew;
       VectorLength := Natural'Value(To_String(ReadData));
