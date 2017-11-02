@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Finding ammunition to guns during combat
 - Shooting with harpoon gun by enemies ships
 - Crash in trade screen after added new item to game
+- Crash on showing goals list
 
 ## [1.7] - 2017-10-15
 
