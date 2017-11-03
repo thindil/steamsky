@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Shooting with harpoon gun by enemies ships
 - Crash in trade screen after added new item to game
 - Crash on showing goals list
+- Don't check for amount when canceling giving items to crew member
 
 ## [1.7] - 2017-10-15
 
