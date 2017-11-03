@@ -392,10 +392,8 @@ package body Crew.UI.Keys is
                Result := Driver(CrewMenu, M_First_Item);
             end if;
          when 10 => -- Show item options
-            ShowMoveForm;
-            return MoveItem_Form;
-            --ShowInventoryMenu;
-            --return Inventory_Menu;
+            ShowInventoryMenu;
+            return Inventory_Menu;
          when others =>
             Result := Driver(CrewMenu, Key);
             if Result /= Menu_Ok then
@@ -497,8 +495,51 @@ package body Crew.UI.Keys is
 
    function InventoryMenuKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
+      Option: constant String := Name(Current(OrdersMenu));
+      procedure RedrawScreen is
+      begin
+         Post(OrdersMenu, False);
+         Delete(OrdersMenu);
+         DrawGame(Inventory_View);
+      end RedrawScreen;
    begin
-      return Inventory_View;
+      case Key is
+         when 56 | KEY_UP => -- Select previous option for item
+            Result := Driver(OrdersMenu, M_Up_Item);
+            if Result = Request_Denied then
+               Result := Driver(OrdersMenu, M_Last_Item);
+            end if;
+         when 50 | KEY_DOWN => -- Select next option for item
+            Result := Driver(OrdersMenu, M_Down_Item);
+            if Result = Request_Denied then
+               Result := Driver(OrdersMenu, M_First_Item);
+            end if;
+         when 27 => -- Escape select close option, second time closes menu
+            if Option = "Close" then
+               RedrawScreen;
+               return Inventory_View;
+            end if;
+            Result := Driver(OrdersMenu, M_Last_Item);
+         when 10 => -- Select option from menu
+            if Option = "Move item to ship cargo" then
+               RedrawScreen;
+               ShowMoveForm;
+               return MoveItem_Form;
+            elsif Option = "Close" then
+               RedrawScreen;
+               return Inventory_View;
+            end if;
+         when others =>
+            Result := Driver(OrdersMenu, Key);
+            if Result /= Menu_Ok then
+               Result := Driver(OrdersMenu, M_Clear_Pattern);
+               Result := Driver(OrdersMenu, Key);
+            end if;
+      end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow2);
+      end if;
+      return Inventory_Menu;
    end InventoryMenuKeys;
-   
+
 end Crew.UI.Keys;
