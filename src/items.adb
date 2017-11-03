@@ -23,6 +23,7 @@ with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Utils; use Utils;
 with Crew; use Crew;
+with Crafts; use Crafts;
 
 package body Items is
 
@@ -287,5 +288,22 @@ package body Items is
       end if;
       return 0;
    end FindItem;
+
+   procedure SetToolsList is
+   begin
+      if Tools_List.Length > 0 then
+         return;
+      end if;
+      Tools_List.Append(New_Item => RepairTools);
+      Tools_List.Append(New_Item => CleaningTools);
+      Tools_List.Append(New_Item => HealingTools);
+      Tools_List.Append(New_Item => AlchemyTools);
+      for Recipe of Recipes_List loop
+         if Tools_List.Find_Index(Item => Recipe.Tool) =
+           UnboundedString_Container.No_Index then
+            Tools_List.Append(New_Item => Recipe.Tool);
+         end if;
+      end loop;
+   end SetToolsList;
 
 end Items;

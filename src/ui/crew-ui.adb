@@ -924,7 +924,9 @@ package body Crew.UI is
       for I in
         PlayerShip.Crew(MemberIndex).Inventory.First_Index ..
             PlayerShip.Crew(MemberIndex).Inventory.Last_Index loop
-         ItemName := To_Unbounded_String(GetItemName(PlayerShip.Crew(MemberIndex).Inventory(I)));
+         ItemName :=
+           To_Unbounded_String
+             (GetItemName(PlayerShip.Crew(MemberIndex).Inventory(I)));
          for J in PlayerShip.Crew(MemberIndex).Equipment'Range loop
             if PlayerShip.Crew(MemberIndex).Equipment(J) = I then
                ItemName := ItemName & "(used)";
@@ -1017,18 +1019,54 @@ package body Crew.UI is
    end ShowMoveForm;
 
    procedure ShowInventoryMenu is
-      Options_Items: constant Item_Array_Access := new Item_Array(1 .. 4);
+      Options_Items: Item_Array_Access;
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
       ItemIndex: constant Positive := Get_Index(Current(CrewMenu));
+      ItemType: constant Unbounded_String :=
+        Items_List
+          (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+          .IType;
+      Worn: Boolean := False;
+      OptionText: Unbounded_String := Null_Unbounded_String;
    begin
-      Options_Items.all := (New_Item("Equip item"), New_Item("Move item to ship cargo"), New_Item("Close"), Null_Item);
       for I in PlayerShip.Crew(MemberIndex).Equipment'Range loop
          if PlayerShip.Crew(MemberIndex).Equipment(I) = ItemIndex then
-            Options_Items.all(1) := New_Item("Take off item");
+            OptionText := To_Unbounded_String("Take off item");
+            Worn := True;
             exit;
          end if;
       end loop;
+      if not Worn then
+         if ItemType = WeaponType then
+            OptionText := To_Unbounded_String("Use as weapon");
+         elsif ItemType = ShieldType then
+            OptionText := To_Unbounded_String("Use as shield");
+         elsif ItemType = HeadArmor then
+            OptionText := To_Unbounded_String("Use as helmet");
+         elsif ItemType = ChestArmor then
+            OptionText := To_Unbounded_String("Use as torso armor");
+         elsif ItemType = ArmsArmor then
+            OptionText := To_Unbounded_String("Use as arms armor");
+         elsif ItemType = LegsArmor then
+            OptionText := To_Unbounded_String("Use as legs armor");
+         elsif Tools_List.Find_Index(Item => ItemType) /=
+           UnboundedString_Container.No_Index then
+            OptionText := To_Unbounded_String("Use as tool");
+         end if;
+      end if;
+      if OptionText = Null_Unbounded_String then
+         Options_Items := new Item_Array(1 .. 3);
+         Options_Items.all :=
+           (New_Item("Move item to ship cargo"), New_Item("Close"), Null_Item);
+      else
+         Options_Items := new Item_Array(1 .. 4);
+         Options_Items.all :=
+           (New_Item(To_String(OptionText)),
+            New_Item("Move item to ship cargo"),
+            New_Item("Close"),
+            Null_Item);
+      end if;
       OrdersMenu := New_Menu(Options_Items);
       Set_Format(OrdersMenu, Lines - 10, 1);
       Scale(OrdersMenu, MenuHeight, MenuLength);
@@ -1042,7 +1080,7 @@ package body Crew.UI is
       Set_Window(OrdersMenu, MenuWindow2);
       Set_Sub_Window
         (OrdersMenu,
-         Derived_Window(MenuWindow2, MenuHeight, MenuLength, 0, 0));
+         Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
       Post(OrdersMenu);
       Refresh_Without_Update;
       Refresh_Without_Update(MenuWindow2);
