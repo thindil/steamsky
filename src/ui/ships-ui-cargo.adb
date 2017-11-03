@@ -46,7 +46,7 @@ package body Ships.UI.Cargo is
          DrawGame(Cargo_Info);
       end RedrawScreen;
    begin
-      if FieldIndex = 3 then
+      if FieldIndex = 5 then
          RedrawScreen;
          return Cargo_Info;
       end if;
@@ -290,7 +290,6 @@ package body Ships.UI.Cargo is
       MaxAmount: constant Positive := PlayerShip.Cargo(ItemIndex).Amount;
       FieldText: constant String :=
         "Enter amount (max" & Positive'Image(MaxAmount) & "): ";
-      CaptionText: Unbounded_String;
       MembersList: Enumeration_Info (Integer(PlayerShip.Crew.Length));
    begin
       if MoveForm = Null_Form then
@@ -354,7 +353,7 @@ package body Ships.UI.Cargo is
               ((Lines / 3) - (FormHeight / 2)),
               ((Columns / 2) - (FormLength / 2)));
          Box(MenuWindow2);
-         WindowFrame(MenuWindow2, 5, To_String(CaptionText));
+         WindowFrame(MenuWindow2, 5, "Give item to crew member");
          Set_Window(MoveForm, MenuWindow2);
          Set_Sub_Window
            (MoveForm,
