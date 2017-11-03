@@ -48,6 +48,8 @@ package Items is
    end record;
    package Inventory_Container is new Vectors(Positive, InventoryData);
    Items_List: Objects_Container.Vector; -- List of item available in game
+   Tools_List: UnboundedString_Container
+     .Vector; -- List of all tools types in game
    Items_Directory_Not_Found: exception; -- Raised when no directory with items files
    Items_Files_Not_Found: exception; -- Raised when no files with items
 
@@ -73,5 +75,6 @@ package Items is
       Durability: Natural :=
         101)
      return Natural; -- Find item in ship cargo or character inventory, return item index or 0 if item not found
+   procedure SetToolsList; -- Fill tools types list
 
 end Items;

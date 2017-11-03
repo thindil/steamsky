@@ -471,6 +471,7 @@ package body MainMenu is
          LoadMobs;
          LoadShips;
          LoadGoals;
+         SetToolsList;
          if not NewGame then
             LoadGame;
          end if;
