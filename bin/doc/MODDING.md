@@ -163,29 +163,34 @@ line which starts with PlayerIndex. Value after equal sign must be existing
 mobile index from any mobiles file from *data/mobs* directory.
 
 ## Head armor type
-To change which item type is used as a head armor for charactes, open file 
+To change which item type is used as a head armor for characters, open file 
 *game.dat* in *data* directory and edit line which starts with HeadArmor.
 Value after equal sign must be existing item type.
 
 ## Torso armor type
-To change which item type is used as a torso armor for charactes, open file 
+To change which item type is used as a torso armor for characters, open file 
 *game.dat* in *data* directory and edit line which starts with ChestArmor.
 Value after equal sign must be existing item type.
 
 ## Arms armor type
-To change which item type is used as an arms armor for charactes, open file 
+To change which item type is used as an arms armor for characters, open file 
 *game.dat* in *data* directory and edit line which starts with ArmsArmor.
 Value after equal sign must be existing item type.
 
 ## Legs armor type
-To change which item type is used as a legs armor for charactes, open file 
+To change which item type is used as a legs armor for characters, open file 
 *game.dat* in *data* directory and edit line which starts with LegsArmor.
 Value after equal sign must be existing item type.
 
 ## Shield type
-To change which item type is used as a shield for charactes, open file 
-*game.dat* in *data* directory and edit line which starts with Shield. Value
-after equal sign must be existing item type.
+To change which item type is used as a shield for characters, open file 
+*game.dat* in *data* directory and edit line which starts with ShieldType.
+Value after equal sign must be existing item type.
+
+## Weapon type
+To change which item type is used as a weapon by characters, open file 
+*game.dat* in *data* directory and edit line which starts with WeaponType.
+Value after equal sign must be existing item type.
 
 ## Items
 
