@@ -382,7 +382,8 @@ package body Game.SaveLoad is
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
          end loop;
          for I in Member.Equipment'Range loop
-            RawValue := To_Unbounded_String(Integer'Image(Member.Equipment(I)));
+            RawValue :=
+              To_Unbounded_String(Integer'Image(Member.Equipment(I)));
             Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
          end loop;
       end loop;
@@ -790,7 +791,8 @@ package body Game.SaveLoad is
          ShipCrew(ShipCrew.Last_Index).Orders := TmpOrders;
          ShipCrew(ShipCrew.Last_Index).Inventory := Inventory;
          for I in ShipCrew(ShipCrew.Last_Index).Equipment'Range loop
-            ShipCrew(ShipCrew.Last_Index).Equipment(I) := Natural'Value(To_String(ReadData));
+            ShipCrew(ShipCrew.Last_Index).Equipment(I) :=
+              Natural'Value(To_String(ReadData));
          end loop;
       end loop;
       PlayerShip.Crew := ShipCrew;
