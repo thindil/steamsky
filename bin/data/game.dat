@@ -43,3 +43,4 @@ ChestArmor = ChestArmor
 ArmsArmor = ArmsArmor
 LegsArmor = LegsArmor
 ShieldType = Shield
+WeaponType = MeleeWeapon
