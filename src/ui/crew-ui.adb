@@ -1027,16 +1027,9 @@ package body Crew.UI is
         Items_List
           (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
           .IType;
-      Worn: Boolean := False;
+      Worn: constant Boolean := ItemIsUsed(MemberIndex, ItemIndex);
       OptionText: Unbounded_String := Null_Unbounded_String;
    begin
-      for I in PlayerShip.Crew(MemberIndex).Equipment'Range loop
-         if PlayerShip.Crew(MemberIndex).Equipment(I) = ItemIndex then
-            OptionText := To_Unbounded_String("Take off item");
-            Worn := True;
-            exit;
-         end if;
-      end loop;
       if not Worn then
          if ItemType = WeaponType then
             OptionText := To_Unbounded_String("Use as weapon");
@@ -1054,6 +1047,8 @@ package body Crew.UI is
            UnboundedString_Container.No_Index then
             OptionText := To_Unbounded_String("Use as tool");
          end if;
+      else
+         OptionText := To_Unbounded_String("Take off item");
       end if;
       if OptionText = Null_Unbounded_String then
          Options_Items := new Item_Array(1 .. 3);
