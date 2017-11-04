@@ -496,6 +496,7 @@ package body Crew.UI.Keys is
    function InventoryMenuKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
       Option: constant String := Name(Current(OrdersMenu));
+      ItemIndex: constant Positive := Get_Index(Current(CrewMenu));
       procedure RedrawScreen is
       begin
          Post(OrdersMenu, False);
@@ -520,15 +521,28 @@ package body Crew.UI.Keys is
                return Inventory_View;
             end if;
             Result := Driver(OrdersMenu, M_Last_Item);
-         when 10 => -- Select option from menu
+         when 10 => -- Equip item/move it to ship cargo/close menu
             if Option = "Move item to ship cargo" then
                RedrawScreen;
                ShowMoveForm;
                return MoveItem_Form;
-            elsif Option = "Close" then
-               RedrawScreen;
-               return Inventory_View;
+            elsif Option = "Use as weapon" then
+               PlayerShip.Crew(MemberIndex).Equipment(1) := ItemIndex;
+            elsif Option = "Use as shield" then
+               PlayerShip.Crew(MemberIndex).Equipment(2) := ItemIndex;
+            elsif Option = "Use as helmet" then
+               PlayerShip.Crew(MemberIndex).Equipment(3) := ItemIndex;
+            elsif Option = "Use as torso armor" then
+               PlayerShip.Crew(MemberIndex).Equipment(4) := ItemIndex;
+            elsif Option = "Use as arms armor" then
+               PlayerShip.Crew(MemberIndex).Equipment(5) := ItemIndex;
+            elsif Option = "Use as legs armor" then
+               PlayerShip.Crew(MemberIndex).Equipment(6) := ItemIndex;
+            elsif Option = "Use as tool" then
+               PlayerShip.Crew(MemberIndex).Equipment(7) := ItemIndex;
             end if;
+            RedrawScreen;
+            return Inventory_View;
          when others =>
             Result := Driver(OrdersMenu, Key);
             if Result /= Menu_Ok then
