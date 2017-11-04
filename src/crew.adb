@@ -1208,4 +1208,14 @@ package body Crew is
       return FreeSpace + Amount;
    end FreeInventory;
 
+   procedure TakeOffItem(MemberIndex, ItemIndex: Positive) is
+   begin
+      for I in PlayerShip.Crew(MemberIndex).Equipment'Range loop
+         if PlayerShip.Crew(MemberIndex).Equipment(I) = ItemIndex then
+            PlayerShip.Crew(MemberIndex).Equipment(I) := 0;
+            exit;
+         end if;
+      end loop;
+   end TakeOffItem;
+
 end Crew;

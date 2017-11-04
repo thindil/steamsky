@@ -540,6 +540,8 @@ package body Crew.UI.Keys is
                PlayerShip.Crew(MemberIndex).Equipment(6) := ItemIndex;
             elsif Option = "Use as tool" then
                PlayerShip.Crew(MemberIndex).Equipment(7) := ItemIndex;
+            elsif Option = "Take off item" then
+               TakeOffItem(MemberIndex, ItemIndex);
             end if;
             RedrawScreen;
             return Inventory_View;
