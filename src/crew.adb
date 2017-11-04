@@ -1218,4 +1218,14 @@ package body Crew is
       end loop;
    end TakeOffItem;
 
+   function ItemIsUsed(MemberIndex, ItemIndex: Positive) return Boolean is
+   begin
+      for I in PlayerShip.Crew(MemberIndex).Equipment'Range loop
+         if PlayerShip.Crew(MemberIndex).Equipment(I) = ItemIndex then
+            return True;
+         end if;
+      end loop;
+      return False;
+   end ItemIsUsed;
+
 end Crew;
