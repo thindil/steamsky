@@ -392,46 +392,65 @@ package body Crafts is
                      end loop;
                      if Recipe.Tool /= To_Unbounded_String("None") then
                         ToolIndex :=
-                          FindItem
-                            (Inventory =>
-                               PlayerShip.Crew(CrafterIndex).Inventory,
-                             ItemType => Recipe.Tool);
+                          PlayerShip.Crew(CrafterIndex).Equipment(7);
+                        if ToolIndex > 0 then
+                           if Items_List
+                               (PlayerShip.Crew(CrafterIndex).Inventory
+                                  (ToolIndex)
+                                  .ProtoIndex)
+                               .IType /=
+                             Recipe.Tool then
+                              ToolIndex := 0;
+                           end if;
+                        end if;
                         if ToolIndex = 0 then
                            ToolIndex :=
                              FindItem
-                               (Inventory => PlayerShip.Cargo,
+                               (Inventory =>
+                                  PlayerShip.Crew(CrafterIndex).Inventory,
                                 ItemType => Recipe.Tool);
-                           if ToolIndex > 0 then
-                              UpdateInventory
-                                (CrafterIndex,
-                                 1,
-                                 PlayerShip.Cargo(ToolIndex).ProtoIndex,
-                                 PlayerShip.Cargo(ToolIndex).Durability);
-                              UpdateCargo
-                                (Ship => PlayerShip,
-                                 Amount => -1,
-                                 CargoIndex => ToolIndex);
+                           if ToolIndex = 0 then
                               ToolIndex :=
                                 FindItem
-                                  (Inventory =>
-                                     PlayerShip.Crew(CrafterIndex).Inventory,
+                                  (Inventory => PlayerShip.Cargo,
                                    ItemType => Recipe.Tool);
+                              if ToolIndex > 0 then
+                                 UpdateInventory
+                                   (CrafterIndex,
+                                    1,
+                                    PlayerShip.Cargo(ToolIndex).ProtoIndex,
+                                    PlayerShip.Cargo(ToolIndex).Durability);
+                                 UpdateCargo
+                                   (Ship => PlayerShip,
+                                    Amount => -1,
+                                    CargoIndex => ToolIndex);
+                                 ToolIndex :=
+                                   FindItem
+                                     (Inventory =>
+                                        PlayerShip.Crew(CrafterIndex)
+                                          .Inventory,
+                                      ItemType => Recipe.Tool);
+                                 PlayerShip.Crew(CrafterIndex).Equipment(7) :=
+                                   ToolIndex;
+                              end if;
+                           else
+                              PlayerShip.Crew(CrafterIndex).Equipment(7) :=
+                                ToolIndex;
                            end if;
+                        end if;
+                        if ToolIndex = 0 then
+                           AddMessage
+                             ("You don't have tool for " &
+                              To_String(RecipeName) &
+                              ".",
+                              CraftMessage,
+                              3);
+                           Module.Data := (0, 0, 0);
+                           GiveOrders(CrafterIndex, Rest);
+                           exit Craft_Loop;
                         end if;
                      else
                         ToolIndex := 0;
-                     end if;
-                     if ToolIndex = 0 and
-                       Recipe.Tool /= To_Unbounded_String("None") then
-                        AddMessage
-                          ("You don't have tool for " &
-                           To_String(RecipeName) &
-                           ".",
-                           CraftMessage,
-                           3);
-                        Module.Data := (0, 0, 0);
-                        GiveOrders(CrafterIndex, Rest);
-                        exit Craft_Loop;
                      end if;
                      Amount := 0;
                      for J in MaterialIndexes.Iterate loop
@@ -484,6 +503,7 @@ package body Crafts is
                            3);
                         Module.Data := (0, 0, 0);
                         if ToolIndex > 0 then
+                           TakeOffItem(CrafterIndex, ToolIndex);
                            UpdateCargo
                              (PlayerShip,
                               PlayerShip.Crew(CrafterIndex).Inventory
@@ -555,6 +575,7 @@ package body Crafts is
                               3);
                            Module.Data := (0, 0, 0);
                            if ToolIndex > 0 then
+                              TakeOffItem(CrafterIndex, ToolIndex);
                               UpdateCargo
                                 (PlayerShip,
                                  PlayerShip.Crew(CrafterIndex).Inventory
@@ -644,6 +665,7 @@ package body Crafts is
                   if Module.Data(3) = 0 then
                      Module.Data := (0, 0, 0);
                      if ToolIndex > 0 then
+                        TakeOffItem(CrafterIndex, ToolIndex);
                         UpdateCargo
                           (PlayerShip,
                            PlayerShip.Crew(CrafterIndex).Inventory(ToolIndex)

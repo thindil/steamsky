@@ -59,13 +59,31 @@ package body Crew is
          else
             RequiredTool := RepairTools;
          end if;
-         ToolsIndex :=
-           FindItem(Inventory => PlayerShip.Cargo, ItemType => RequiredTool);
+         ToolsIndex := PlayerShip.Crew(MemberIndex).Equipment(7);
+         if ToolsIndex > 0 then
+            if Items_List
+                (PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
+                .IType /=
+              RequiredTool then
+               ToolsIndex := 0;
+            end if;
+         end if;
          if ToolsIndex = 0 then
             ToolsIndex :=
               FindItem
-                (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+                (Inventory => PlayerShip.Cargo,
                  ItemType => RequiredTool);
+            if ToolsIndex = 0 then
+               ToolsIndex :=
+                 FindItem
+                   (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+                    ItemType => RequiredTool);
+               if ToolsIndex > 0 then
+                  PlayerShip.Crew(MemberIndex).Equipment(7) := 0;
+               end if;
+            else
+               PlayerShip.Crew(MemberIndex).Equipment(7) := ToolsIndex;
+            end if;
          end if;
          if ToolsIndex = 0 then
             case GivenOrder is
@@ -212,7 +230,8 @@ package body Crew is
          when Clean =>
             AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
       end case;
-      if ToolsIndex > 0 then
+      if ToolsIndex > 0 and
+        PlayerShip.Crew(MemberIndex).Equipment(7) /= ToolsIndex then
          UpdateInventory
            (MemberIndex,
             1,
@@ -222,22 +241,19 @@ package body Crew is
            (Ship => PlayerShip,
             Amount => -1,
             CargoIndex => ToolsIndex);
+         PlayerShip.Crew(MemberIndex).Equipment(7) :=
+           FindItem
+             (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+              ItemType => RequiredTool);
       end if;
       if GivenOrder = Rest then
          PlayerShip.Crew(MemberIndex).PreviousOrder := Rest;
          if PlayerShip.Crew(MemberIndex).Order = Repair or
            PlayerShip.Crew(MemberIndex).Order = Clean or
            PlayerShip.Crew(MemberIndex).Order = Upgrading then
-            if PlayerShip.Crew(MemberIndex).Order = Clean then
-               RequiredTool := CleaningTools;
-            else
-               RequiredTool := RepairTools;
-            end if;
-            ToolsIndex :=
-              FindItem
-                (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
-                 ItemType => RequiredTool);
+            ToolsIndex := PlayerShip.Crew(MemberIndex).Equipment(7);
             if ToolsIndex > 0 then
+               TakeOffItem(MemberIndex, ToolsIndex);
                UpdateCargo
                  (PlayerShip,
                   PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex)
@@ -651,10 +667,25 @@ package body Crew is
                         GiveOrders(I, Rest);
                      end if;
                   when Clean =>
-                     ToolIndex :=
-                       FindItem
-                         (Inventory => PlayerShip.Crew(I).Inventory,
-                          ItemType => CleaningTools);
+                     ToolIndex := PlayerShip.Crew(I).Equipment(7);
+                     if ToolIndex > 0 then
+                        if Items_List
+                            (PlayerShip.Crew(I).Inventory(ToolIndex)
+                               .ProtoIndex)
+                            .IType /=
+                          CleaningTools then
+                           ToolIndex := 0;
+                        end if;
+                     end if;
+                     if ToolIndex = 0 then
+                        ToolIndex :=
+                          FindItem
+                            (Inventory => PlayerShip.Crew(I).Inventory,
+                             ItemType => CleaningTools);
+                        if ToolIndex > 0 then
+                           PlayerShip.Crew(I).Equipment(7) := ToolIndex;
+                        end if;
+                     end if;
                      NeedCleaning := False;
                      if ToolIndex > 0 then
                         for Module of PlayerShip.Modules loop

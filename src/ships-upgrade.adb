@@ -23,8 +23,7 @@ with Ships.Crew; use Ships.Crew;
 package body Ships.Upgrade is
 
    procedure StartUpgrading(ModuleIndex, UpgradeType: Positive) is
-      MaxValue: Natural;
-      HaveMaterials, HaveTools: Boolean := False;
+      MaxValue, MaterialIndex: Natural;
       UpgradeProgress: Positive;
       UpgradeAction: ShipUpgrade;
    begin
@@ -139,33 +138,17 @@ package body Ships.Upgrade is
          when others =>
             return;
       end case;
-      for Item of PlayerShip.Cargo loop
-         if Items_List(Item.ProtoIndex).IType =
-           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-             .RepairMaterial then
-            HaveMaterials := True;
-         elsif Items_List(Item.ProtoIndex).IType = RepairTools then
-            HaveTools := True;
-         end if;
-         exit when HaveMaterials and HaveTools;
-      end loop;
-      if not HaveMaterials then
-         for Item of Items_List loop
-            if Item.IType =
-              Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                .RepairMaterial then
-               raise Ship_Upgrade_Error
-                 with "You don't have " &
-                 To_String(Item.Name) &
-                 " for upgrading " &
-                 To_String(PlayerShip.Modules(ModuleIndex).Name) &
-                 ".";
-            end if;
-         end loop;
-      end if;
-      if not HaveTools then
+      MaterialIndex :=
+        FindItem
+          (Inventory => PlayerShip.Cargo,
+           ItemType =>
+             Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+               .RepairMaterial);
+      if MaterialIndex = 0 then
          raise Ship_Upgrade_Error
-           with "You don't have repair tools for upgrading " &
+           with "You don't have " &
+           To_String(Items_List(MaterialIndex).Name) &
+           " for upgrading " &
            To_String(PlayerShip.Modules(ModuleIndex).Name) &
            ".";
       end if;
@@ -202,27 +185,44 @@ package body Ships.Upgrade is
                 Modules_List
                   (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
                   .RepairMaterial);
-         UpgradeTools :=
-           FindItem
-             (Inventory => PlayerShip.Crew(WorkerIndex).Inventory,
-              ItemType => RepairTools);
+         UpgradeTools := PlayerShip.Crew(WorkerIndex).Equipment(7);
+         if UpgradeTools > 0 then
+            if Items_List
+                (PlayerShip.Crew(WorkerIndex).Inventory(UpgradeTools)
+                   .ProtoIndex)
+                .IType /=
+              RepairTools then
+               UpgradeTools := 0;
+            end if;
+         end if;
          if UpgradeTools = 0 then
             UpgradeTools :=
-              FindItem(Inventory => PlayerShip.Cargo, ItemType => RepairTools);
-            if UpgradeTools > 0 then
-               UpdateInventory
-                 (WorkerIndex,
-                  1,
-                  PlayerShip.Cargo(UpgradeTools).ProtoIndex,
-                  PlayerShip.Cargo(UpgradeTools).Durability);
-               UpdateCargo
-                 (Ship => PlayerShip,
-                  Amount => -1,
-                  CargoIndex => UpgradeTools);
+              FindItem
+                (Inventory => PlayerShip.Crew(WorkerIndex).Inventory,
+                 ItemType => RepairTools);
+            if UpgradeTools = 0 then
                UpgradeTools :=
                  FindItem
-                   (Inventory => PlayerShip.Crew(WorkerIndex).Inventory,
+                   (Inventory => PlayerShip.Cargo,
                     ItemType => RepairTools);
+               if UpgradeTools > 0 then
+                  UpdateInventory
+                    (WorkerIndex,
+                     1,
+                     PlayerShip.Cargo(UpgradeTools).ProtoIndex,
+                     PlayerShip.Cargo(UpgradeTools).Durability);
+                  UpdateCargo
+                    (Ship => PlayerShip,
+                     Amount => -1,
+                     CargoIndex => UpgradeTools);
+                  UpgradeTools :=
+                    FindItem
+                      (Inventory => PlayerShip.Crew(WorkerIndex).Inventory,
+                       ItemType => RepairTools);
+                  PlayerShip.Crew(WorkerIndex).Equipment(7) := UpgradeTools;
+               end if;
+            else
+               PlayerShip.Crew(WorkerIndex).Equipment(7) := UpgradeTools;
             end if;
          end if;
       end FindMatsAndTools;
