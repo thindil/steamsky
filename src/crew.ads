@@ -96,5 +96,9 @@ package Crew is
    procedure TakeOffItem
      (MemberIndex,
       ItemIndex: Positive); -- Remove selected item from character equipment
+   function ItemIsUsed
+     (MemberIndex,
+      ItemIndex: Positive)
+     return Boolean; -- Check if selected crew member use this item
 
 end Crew;
