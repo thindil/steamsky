@@ -93,5 +93,8 @@ package Crew is
      (MemberIndex: Positive;
       Amount: Integer)
      return Integer; -- Return available space in crew member inventory after adding/extracting Amount
+   procedure TakeOffItem
+     (MemberIndex,
+      ItemIndex: Positive); -- Remove selected item from character equipment
 
 end Crew;
