@@ -79,10 +79,10 @@ package body Crew is
                    (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
                     ItemType => RequiredTool);
                if ToolsIndex > 0 then
-                  PlayerShip.Crew(MemberIndex).Equipment(7) := 0;
+                  PlayerShip.Crew(MemberIndex).Equipment(7) := ToolsIndex;
                end if;
             else
-               PlayerShip.Crew(MemberIndex).Equipment(7) := ToolsIndex;
+               PlayerShip.Crew(MemberIndex).Equipment(7) := 0;
             end if;
          end if;
          if ToolsIndex = 0 then
