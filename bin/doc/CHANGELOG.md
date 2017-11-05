@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file.
 - Crash in trade screen after added new item to game
 - Crash on showing goals list
 - Don't check for amount when canceling giving items to crew member
+- Search for cleaning tools in ship cargo too
 
 ## [1.7] - 2017-10-15
 
