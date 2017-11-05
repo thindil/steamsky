@@ -296,7 +296,6 @@ package body Items is
       end if;
       Tools_List.Append(New_Item => RepairTools);
       Tools_List.Append(New_Item => CleaningTools);
-      Tools_List.Append(New_Item => HealingTools);
       Tools_List.Append(New_Item => AlchemyTools);
       for Recipe of Recipes_List loop
          if Tools_List.Find_Index(Item => Recipe.Tool) =
