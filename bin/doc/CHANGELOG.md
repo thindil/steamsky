@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
   sword, leather jacket, leather helmet, leather armsguard, bronze sewing kit,
   leather legsguard and bronze shield
 - New skill: leatherworking
+- Character's equipment which made saves from previous version incompatible
 
 ### Changed
 - Better counting ships combat value (for selection of enemies for player)
