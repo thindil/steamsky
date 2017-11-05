@@ -684,6 +684,26 @@ package body Crew is
                              ItemType => CleaningTools);
                         if ToolIndex > 0 then
                            PlayerShip.Crew(I).Equipment(7) := ToolIndex;
+                        else
+                           ToolIndex :=
+                             FindItem
+                               (Inventory => PlayerShip.Cargo,
+                                ItemType => CleaningTools);
+                           if ToolIndex > 0 then
+                              UpdateInventory
+                                (I,
+                                 1,
+                                 PlayerShip.Cargo(ToolIndex).ProtoIndex,
+                                 PlayerShip.Cargo(ToolIndex).Durability);
+                              UpdateCargo
+                                (Ship => PlayerShip,
+                                 Amount => -1,
+                                 CargoIndex => ToolIndex);
+                              PlayerShip.Crew(I).Equipment(7) :=
+                                FindItem
+                                  (Inventory => PlayerShip.Crew(I).Inventory,
+                                   ItemType => CleaningTools);
+                           end if;
                         end if;
                      end if;
                      NeedCleaning := False;
