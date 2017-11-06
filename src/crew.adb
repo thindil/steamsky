@@ -600,27 +600,42 @@ package body Crew is
                      end if;
                      if HealAmount > 0 then
                         HealAmount := HealAmount * (-1);
-                        for J in
-                          PlayerShip.Cargo.First_Index ..
-                              PlayerShip.Cargo.Last_Index loop
-                           if Items_List
-                               (PlayerShip.Cargo.Element(J).ProtoIndex)
-                               .IType =
-                             HealingTools then
-                              if PlayerShip.Cargo.Element(J).Amount <
+                        ToolIndex :=
+                          FindItem
+                            (Inventory => PlayerShip.Cargo,
+                             ItemType => HealingTools);
+                        if ToolIndex > 0 then
+                           if PlayerShip.Cargo(ToolIndex).Amount <
+                             abs (HealAmount) then
+                              HealAmount := PlayerShip.Cargo(ToolIndex).Amount;
+                           else
+                              HealAmount := abs (HealAmount);
+                           end if;
+                           UpdateCargo
+                             (Ship => PlayerShip,
+                              Amount => (0 - HealAmount),
+                              CargoIndex => ToolIndex);
+                        else
+                           ToolIndex :=
+                             FindItem
+                               (Inventory => PlayerShip.Crew(I).Inventory,
+                                ItemType => HealingTools);
+                           if ToolIndex > 0 then
+                              if PlayerShip.Crew(I).Inventory(ToolIndex)
+                                  .Amount <
                                 abs (HealAmount) then
                                  HealAmount :=
-                                   PlayerShip.Cargo.Element(J).Amount;
+                                   PlayerShip.Crew(I).Inventory(ToolIndex)
+                                     .Amount;
                               else
                                  HealAmount := abs (HealAmount);
                               end if;
-                              UpdateCargo
-                                (PlayerShip,
-                                 PlayerShip.Cargo.Element(J).ProtoIndex,
-                                 (0 - HealAmount));
-                              exit;
+                              UpdateInventory
+                                (MemberIndex => I,
+                                 Amount => (0 - HealAmount),
+                                 InventoryIndex => ToolIndex);
                            end if;
-                        end loop;
+                        end if;
                      end if;
                      if HealAmount > 0 then
                         for J in PlayerShip.Crew.Iterate loop
