@@ -27,8 +27,11 @@ package body Ships.Repairs is
       RepairNeeded, RepairStopped: Boolean := False;
       CrewRepairPoints: Natural_Container.Vector;
       procedure RepairModule(ModuleIndex: Positive) is
-         PointsIndex, PointsBonus, RepairMaterial, ToolsIndex: Natural;
-         RepairValue: Positive;
+         PointsIndex,
+         PointsBonus,
+         RepairMaterial,
+         ToolsIndex,
+         RepairValue: Natural;
       begin
          PointsIndex := 0;
          RepairNeeded := True;
@@ -80,20 +83,31 @@ package body Ships.Repairs is
                             (Inventory => PlayerShip.Cargo,
                              ItemType => RepairTools);
                         if ToolsIndex > 0 then
-                           UpdateInventory
-                             (Crew_Container.To_Index(J),
-                              1,
-                              PlayerShip.Cargo(ToolsIndex).ProtoIndex,
-                              PlayerShip.Cargo(ToolsIndex).Durability);
-                           UpdateCargo
-                             (Ship => PlayerShip,
-                              Amount => -1,
-                              CargoIndex => ToolsIndex);
-                           ToolsIndex :=
-                             FindItem
-                               (Inventory => PlayerShip.Crew(J).Inventory,
-                                ItemType => RepairTools);
-                           PlayerShip.Crew(J).Equipment(7) := ToolsIndex;
+                           begin
+                              UpdateInventory
+                                (Crew_Container.To_Index(J),
+                                 1,
+                                 PlayerShip.Cargo(ToolsIndex).ProtoIndex,
+                                 PlayerShip.Cargo(ToolsIndex).Durability);
+                              UpdateCargo
+                                (Ship => PlayerShip,
+                                 Amount => -1,
+                                 CargoIndex => ToolsIndex);
+                              ToolsIndex :=
+                                FindItem
+                                  (Inventory => PlayerShip.Crew(J).Inventory,
+                                   ItemType => RepairTools);
+                              PlayerShip.Crew(J).Equipment(7) := ToolsIndex;
+                           exception
+                              when Crew_No_Space_Error =>
+                                 AddMessage
+                                   (To_String(PlayerShip.Crew(J).Name) &
+                                    " can't continue repairs because don't have space in inventory for repair tools.",
+                                    OrderMessage,
+                                    3);
+                                 RepairPoints := 0;
+                                 GiveOrders(Crew_Container.To_Index(J), Rest);
+                           end;
                         end if;
                      else
                         PlayerShip.Crew(J).Equipment(7) := ToolsIndex;
