@@ -42,6 +42,7 @@ All notable changes to this project will be documented in this file.
 - Crash on showing goals list
 - Don't check for amount when canceling giving items to crew member
 - Search for cleaning tools in ship cargo too
+- Search for healing tools in character inventory too
 
 ## [1.7] - 2017-10-15
 
