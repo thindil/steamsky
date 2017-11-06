@@ -44,6 +44,8 @@ All notable changes to this project will be documented in this file.
 - Search for cleaning tools in ship cargo too
 - Search for healing tools in character inventory too
 - Starting priorities for crew members
+- Crash when crew member have full inventory and starts repairing ship (issue
+  #4)
 
 ## [1.7] - 2017-10-15
 
