@@ -9,19 +9,19 @@ Skills = Piloting, Perception
 SkillsLevels = 5, 5
 Attributes = 3, 3, 3, 3
 Order = Pilot
-Priorites = Piloting:Normal
+Priorities = Piloting:Normal
 [3]
 Skills = Engineering
 SkillsLevels = 5
 Attributes = 3, 3, 3, 3
 Order = Engineer
-Priorites = Engineering:Normal
+Priorities = Engineering:Normal
 [4]
 Skills = Gunnery, Perception
 SkillsLevels = 5, 5
 Attributes = 3, 3, 3, 3
 Order = Gunner
-Priorites = Operating guns:Normal
+Priorities = Operating guns:Normal
 [5]
 Skills = Piloting, Perception
 SkillsLevels = 1, 1
