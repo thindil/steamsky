@@ -506,4 +506,8 @@ Target = Explore
 Type = Mission
 Amount = 200
 Target = Passenger
+[144]
+Type = Mission
+Amount = 250
+Target = Passenger
 []
