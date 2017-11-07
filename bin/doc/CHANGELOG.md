@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 - Starting priorities for crew members
 - Crash when crew member have full inventory and starts repairing ship (issue
   #4)
+- Moving items between crew members inventory and ship cargo
 
 ## [1.7] - 2017-10-15
 
