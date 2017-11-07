@@ -29,7 +29,7 @@ package Crew.UI is
 private
    CrewMenu, OrdersMenu, PrioritiesMenu: Menu;
    MenuWindow, MenuWindow2, SkillsPad, FormWindow: Window;
-   MemberIndex, PriorityIndex: Positive := 1;
+   MemberIndex, PriorityIndex, ItemIndex: Positive := 1;
    NeedClean, NeedRepairs: Boolean := False;
    StartIndex, EndIndex: Integer := 0;
    MoveForm: Form;

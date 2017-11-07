@@ -732,7 +732,6 @@ package body Crew.UI is
 
    procedure ShowItemInfo is
       InfoWindow, ClearWindow, BoxWindow: Window;
-      ItemIndex: constant Positive := Get_Index(Current(CrewMenu));
       ItemWeight: constant Positive :=
         PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount *
         Items_List
@@ -945,6 +944,10 @@ package body Crew.UI is
         (CrewMenu,
          Derived_Window(MenuWindow, MenuHeight, MenuLength, 0, 0));
       Post(CrewMenu);
+      if Cargo_Items.all(ItemIndex) = Null_Item then
+         ItemIndex := 1;
+      end if;
+      Set_Current(CrewMenu, Cargo_Items.all(ItemIndex));
       ShowItemInfo;
    end ShowInventory;
 
@@ -954,7 +957,6 @@ package body Crew.UI is
       FormHeight: Line_Position;
       FormLength: Column_Position;
       Visibility: Cursor_Visibility := Normal;
-      ItemIndex: constant Positive := Get_Index(Current(CrewMenu));
       MaxAmount: constant Positive :=
         PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount;
       FieldText: constant String :=
@@ -1022,7 +1024,6 @@ package body Crew.UI is
       Options_Items: Item_Array_Access;
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
-      ItemIndex: constant Positive := Get_Index(Current(CrewMenu));
       ItemType: constant Unbounded_String :=
         Items_List
           (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)

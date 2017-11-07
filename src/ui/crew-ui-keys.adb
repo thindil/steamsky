@@ -405,6 +405,7 @@ package body Crew.UI.Keys is
             end if;
       end case;
       if Result = Menu_Ok then
+         ItemIndex := Get_Index(Current(CrewMenu));
          ShowItemInfo;
       end if;
       return Inventory_View;
