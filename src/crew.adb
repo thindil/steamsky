@@ -196,40 +196,6 @@ package body Crew is
             exit;
          end if;
       end loop;
-      case GivenOrder is
-         when Pilot =>
-            AddMessage(MemberName & " starts piloting.", OrderMessage);
-            PlayerShip.Modules(ModuleIndex2).Owner := MemberIndex;
-         when Engineer =>
-            AddMessage(MemberName & " starts engineers duty.", OrderMessage);
-         when Gunner =>
-            AddMessage(MemberName & " starts operating gun.", OrderMessage);
-            PlayerShip.Modules(ModuleIndex2).Owner := MemberIndex;
-         when Rest =>
-            AddMessage(MemberName & " going on break.", OrderMessage);
-         when Repair =>
-            AddMessage(MemberName & " starts repair ship.", OrderMessage);
-         when Craft =>
-            AddMessage(MemberName & " starts manufacturing.", OrderMessage);
-            PlayerShip.Modules(ModuleIndex2).Owner := MemberIndex;
-         when Upgrading =>
-            AddMessage
-              (MemberName &
-               " starts upgrading " &
-               To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
-               ".",
-               OrderMessage);
-         when Talk =>
-            AddMessage
-              (MemberName & " was assigned to talking in bases.",
-               OrderMessage);
-         when Heal =>
-            AddMessage
-              (MemberName & " starts healing wounded crew members.",
-               OrderMessage);
-         when Clean =>
-            AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
-      end case;
       if ToolsIndex > 0 and
         PlayerShip.Crew(MemberIndex).Equipment(7) /= ToolsIndex then
          UpdateInventory
@@ -268,11 +234,48 @@ package body Crew is
             end if;
          end if;
       end if;
+      case GivenOrder is
+         when Pilot =>
+            AddMessage(MemberName & " starts piloting.", OrderMessage);
+            PlayerShip.Modules(ModuleIndex2).Owner := MemberIndex;
+         when Engineer =>
+            AddMessage(MemberName & " starts engineers duty.", OrderMessage);
+         when Gunner =>
+            AddMessage(MemberName & " starts operating gun.", OrderMessage);
+            PlayerShip.Modules(ModuleIndex2).Owner := MemberIndex;
+         when Rest =>
+            AddMessage(MemberName & " going on break.", OrderMessage);
+         when Repair =>
+            AddMessage(MemberName & " starts repair ship.", OrderMessage);
+         when Craft =>
+            AddMessage(MemberName & " starts manufacturing.", OrderMessage);
+            PlayerShip.Modules(ModuleIndex2).Owner := MemberIndex;
+         when Upgrading =>
+            AddMessage
+              (MemberName &
+               " starts upgrading " &
+               To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
+               ".",
+               OrderMessage);
+         when Talk =>
+            AddMessage
+              (MemberName & " was assigned to talking in bases.",
+               OrderMessage);
+         when Heal =>
+            AddMessage
+              (MemberName & " starts healing wounded crew members.",
+               OrderMessage);
+         when Clean =>
+            AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
+      end case;
       PlayerShip.Crew(MemberIndex).Order := GivenOrder;
       PlayerShip.Crew(MemberIndex).OrderTime := 15;
       if CheckPriorities then
          UpdateOrders;
       end if;
+   exception
+      when An_Exception : Crew_No_Space_Error =>
+         raise Crew_Order_Error with Exception_Message(An_Exception);
    end GiveOrders;
 
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) is
