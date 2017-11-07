@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Added info about harpoon gun to enemy info in combat screen
 - Updated MODDING.md
 - Value field for items from single value to list of values
+- Updated help
 
 ### Fixed
 - Stopping player ship in combat after hit by enemy harpoon
