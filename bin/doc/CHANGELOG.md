@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Value field for items from single value to list of values
 - Updated help
 - Better game crash reporting
+- Updated CONTRIBUTING.md
 
 ### Fixed
 - Stopping player ship in combat after hit by enemy harpoon
