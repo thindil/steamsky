@@ -510,4 +510,8 @@ Target = Passenger
 Type = Mission
 Amount = 250
 Target = Passenger
+[145]
+Type = Mission
+Amount = 500
+Target = Passenger
 []
