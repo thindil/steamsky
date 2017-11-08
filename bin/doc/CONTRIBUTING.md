@@ -17,7 +17,8 @@ you prefer, on mail <thindil@laeran.pl>
 - If game crashed, in most cases it should create file *error.log* in *data*
   directory. It will be a lot of help if you can attach that file to bug
   report. Each bug information in this file contains: date when crash happens,
-  version of game used and memory address of lines of code which caused crash.
+  version of game used, source code file and line in this file. If game can't
+  discover source code file, it write memory address instead.
   You can check this last information by using command `addr2line` in directory
   where *steamsky* executable file is. Example:
 
