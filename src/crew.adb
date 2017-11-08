@@ -1251,16 +1251,15 @@ package body Crew is
              Amount => Amount,
              Name => Items_List(ProtoIndex).Name,
              Durability => Durability));
-         ItemIndex := PlayerShip.Crew(MemberIndex).Inventory.Last_Index;
       else
          NewAmount :=
            PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount + Amount;
-      end if;
-      if NewAmount = 0 then
-         PlayerShip.Crew(MemberIndex).Inventory.Delete
-         (Index => ItemIndex, Count => 1);
-      else
-         PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount := NewAmount;
+         if NewAmount = 0 then
+            PlayerShip.Crew(MemberIndex).Inventory.Delete(Index => ItemIndex);
+         else
+            PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount :=
+              NewAmount;
+         end if;
       end if;
    end UpdateInventory;
 
