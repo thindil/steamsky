@@ -58,7 +58,8 @@ package body Goals is
            (Index => Null_Unbounded_String,
             GType => RANDOM,
             Amount => 0,
-            TargetIndex => Null_Unbounded_String);
+            TargetIndex => Null_Unbounded_String,
+            Multiplier => 1);
          LogMessage("Loading goals file: " & Full_Name(FoundFile), Everything);
          Open(GoalsFile, In_File, Full_Name(FoundFile));
          while not End_Of_File(GoalsFile) loop
@@ -74,6 +75,8 @@ package body Goals is
                elsif FieldName = To_Unbounded_String("Target") and
                  TempRecord.GType /= DISCOVER then
                   TempRecord.TargetIndex := Value;
+               elsif FieldName = To_Unbounded_String("Multiplier") then
+                  TempRecord.Multiplier := Positive'Value(To_String(Value));
                end if;
             else
                if TempRecord.GType /= RANDOM then
@@ -85,7 +88,8 @@ package body Goals is
                     (Index => Null_Unbounded_String,
                      GType => RANDOM,
                      Amount => 0,
-                     TargetIndex => Null_Unbounded_String);
+                     TargetIndex => Null_Unbounded_String,
+                     Multiplier => 1);
                end if;
                if Length(RawData) > 2 then
                   TempRecord.Index :=
@@ -207,7 +211,8 @@ package body Goals is
         (Index => Null_Unbounded_String,
          GType => RANDOM,
          Amount => 0,
-         TargetIndex => Null_Unbounded_String);
+         TargetIndex => Null_Unbounded_String,
+         Multiplier => 1);
    end ClearCurrentGoal;
 
    procedure UpdateGoal
