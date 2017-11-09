@@ -65,7 +65,7 @@ package body Bases is
      (Price: in out Positive;
       TraderIndex: Natural;
       Reduce: Boolean := True) is
-      Bonus: Natural := 0;
+      Bonus: Integer := 0;
    begin
       if TraderIndex > 0 then
          Bonus :=
@@ -93,6 +93,9 @@ package body Bases is
             when others =>
                null;
          end case;
+      end if;
+      if Bonus < 0 then
+         Bonus := 0;
       end if;
       if Reduce then
          if Bonus >= Price then
