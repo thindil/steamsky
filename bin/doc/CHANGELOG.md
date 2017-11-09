@@ -55,6 +55,7 @@ All notable changes to this project will be documented in this file.
 - Crash when giving order to clean ship for crew member with full inventory
 - Moving item from ship cargo to crew members inventory
 - Crash when starting upgrading ship without needed materials
+- Crash when repairing ships in bases (issue #6)
 
 ## [1.7] - 2017-10-15
 
