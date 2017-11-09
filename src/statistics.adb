@@ -63,7 +63,8 @@ package body Statistics is
    begin
       for Goal of Goals_List loop
          if Goal.Index = Index then
-            GameStats.Points := GameStats.Points + Goal.Amount;
+            GameStats.Points :=
+              GameStats.Points + (Goal.Amount * Goal.Multiplier);
             exit;
          end if;
       end loop;
