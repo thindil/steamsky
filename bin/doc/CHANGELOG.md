@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
   leather legsguard and bronze shield
 - New skill: leatherworking
 - Character's equipment which made saves from previous version incompatible
+- Option to set multipliers for points for selected goals
 
 ### Changed
 - Better counting ships combat value (for selection of enemies for player)
