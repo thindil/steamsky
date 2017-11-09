@@ -34,6 +34,7 @@ package Goals is
       GType: GoalTypes; -- Type of goal
       Amount: Natural; -- Amount of targets needed for finish goal
       TargetIndex: Unbounded_String; -- Index of target needed for finish goal. If empty, mean all targets selected type (bases, ships, etc)
+      Multiplier: Positive; -- Multiplier for points awarded for finish this goal.
    end record;
    package Goals_Container is new Vectors(Positive, Goal_Data);
    Goals_List: Goals_Container
