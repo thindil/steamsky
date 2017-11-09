@@ -145,12 +145,18 @@ package body Ships.Upgrade is
              Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                .RepairMaterial);
       if MaterialIndex = 0 then
-         raise Ship_Upgrade_Error
-           with "You don't have " &
-           To_String(Items_List(MaterialIndex).Name) &
-           " for upgrading " &
-           To_String(PlayerShip.Modules(ModuleIndex).Name) &
-           ".";
+         for Item of Items_List loop
+            if Item.IType =
+              Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                .RepairMaterial then
+               raise Ship_Upgrade_Error
+                 with "You don't have " &
+                 To_String(Item.Name) &
+                 " for upgrading " &
+                 To_String(PlayerShip.Modules(ModuleIndex).Name) &
+                 ".";
+            end if;
+         end loop;
       end if;
       PlayerShip.UpgradeModule := ModuleIndex;
       if PlayerShip.Modules(ModuleIndex).UpgradeAction /= UpgradeAction then
