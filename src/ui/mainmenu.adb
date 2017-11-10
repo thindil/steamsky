@@ -522,6 +522,11 @@ package body MainMenu is
             ShowErrorInfo
               ("Can't load mobs data. Files with mobs data not found.");
             return False;
+         when An_Exception : Mobs_Invalid_Data =>
+            LogMessage(Exception_Message(An_Exception), Everything);
+            ShowErrorInfo
+              ("Can't load mobs data. Invalid value in file. Run game in debug mode to get more info.");
+            return False;
          when Ships_Directory_Not_Found =>
             ShowErrorInfo
               ("Can't load ships data. Directory with ships data files not found.");
