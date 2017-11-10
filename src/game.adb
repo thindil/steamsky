@@ -44,7 +44,7 @@ package body Game is
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
       Gender: Character) is
-      PosX, PosY, RandomBase, ShipIndex: Positive;
+      PosX, PosY, RandomBase, ShipIndex, Amount: Positive;
       ValidLocation: Boolean;
       TempX, TempY, BaseReputation: Integer;
       TmpRecruits: Recruit_Container.Vector;
@@ -195,6 +195,19 @@ package body Game is
            DOCKED,
            False);
       -- Add player to ship
+      for Item of ProtoMobs_List(PlayerIndex2).Inventory loop
+         if Item(3) > 0 then
+            Amount := GetRandom(Item(2), Item(3));
+         else
+            Amount := Item(2);
+         end if;
+         TmpInventory.Append
+         (New_Item =>
+            (ProtoIndex => Item(1),
+             Amount => Amount,
+             Name => Null_Unbounded_String,
+             Durability => 100));
+      end loop;
       PlayerShip.Crew.Prepend
       (New_Item =>
          (Name => CharName,
