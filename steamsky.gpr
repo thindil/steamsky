@@ -43,7 +43,7 @@ project steamsky is
             when "debug" =>
               for Default_Switches ("ada") use ("-no-pie");
             when "release" =>
-                for Default_Switches ("ada") use ("-s", "-Wl,--gc-sections");
+                for Default_Switches ("ada") use ("-Wl,--gc-sections");
         end case;
     end Linker;
 
