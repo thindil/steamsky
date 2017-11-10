@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Better game crash reporting
 - Updated CONTRIBUTING.md
+- Raised max carry weight for characters
 
 ### Fixed
 - Stopping player ship in combat after hit by enemy harpoon
