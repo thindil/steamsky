@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - New skill: leatherworking
 - Character's equipment which made saves from previous version incompatible
 - Option to set multipliers for points for selected goals
+- Option to set starting inventory for mobs
 
 ### Changed
 - Better counting ships combat value (for selection of enemies for player)
