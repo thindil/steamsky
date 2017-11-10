@@ -415,6 +415,9 @@ Value after equal sign must be existing item type.
   *items* directory). For Mission, missions types: Deliver for deliver item to 
   bases, Destroy for destroy enemy ship, Patrol for patrol missions, Explore 
   for explore missions, Passenger for transport passengers missions.
+- Multiplier: Optional parameter, multiplier for amount of game points earned
+  by finishing this goal. Default value is 1, which mean goal give Amount of
+  points for finish it.
 
 ## Mobiles
 
