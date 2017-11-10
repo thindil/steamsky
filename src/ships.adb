@@ -168,6 +168,19 @@ package body Ships is
                (New_Item => (GetRandom(Attribute(1), Attribute(2)), 0));
             end if;
          end loop;
+         for Item of Member.Inventory loop
+            if Item(3) > 0 then
+               Amount := GetRandom(Item(2), Item(3));
+            else
+               Amount := Item(2);
+            end if;
+            TmpInventory.Append
+            (New_Item =>
+               (ProtoIndex => Item(1),
+                Amount => Amount,
+                Name => Null_Unbounded_String,
+                Durability => 100));
+         end loop;
          ShipCrew.Append
          (New_Item =>
             (Name => MemberName,
@@ -186,6 +199,7 @@ package body Ships is
              Equipment => (others => 0)));
          TmpSkills.Clear;
          TmpAttributes.Clear;
+         TmpInventory.Clear;
          for Module of ShipModules loop
             if Modules_List(Module.ProtoIndex).MType = CABIN and
               Module.Owner = 0 then

@@ -30,11 +30,13 @@ package Mobs is
         .Vector; -- Levels and experience in attributes of mob
       Order: Crew_Orders; -- Current order for mob
       Priorities: Orders_Array; -- Priority of orders of mob
+      Inventory: Skills_Container.Vector; -- List of mob inventory
    end record;
    package ProtoMobs_Container is new Vectors(Positive, ProtoMobRecord);
    ProtoMobs_List: ProtoMobs_Container.Vector;
    Mobs_Directory_Not_Found: exception; -- Raised when no directory with mobs files
    Mobs_Files_Not_Found: exception; -- Raised when no files with mobs
+   Mobs_Invalid_Data: exception; -- Raised when invalid data found in mobs file
 
    procedure LoadMobs; -- Load mobs from files
    function FindProtoMob
