@@ -535,6 +535,16 @@ Result = 72
 Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
+Difficulty = 5
 BaseType = 1
 Tool = BlacksmithSet
+[55]
+Material = Wood
+Amount = 1
+Result = 73
+Crafted = 1
+Workplace = Workshop
+Skill = Woodworking
+BaseType = 1
+Tool = WoodworkerSet
 []
