@@ -150,34 +150,42 @@ Target = Poleis
 Type = Reputation
 Amount = 3
 Target = Poleis
+Multiplier = 2
 [51]
 Type = Reputation
 Amount = 5
 Target = Poleis
+Multiplier = 2
 [52]
 Type = Reputation
 Amount = 7
 Target = Poleis
+Multiplier = 2
 [53]
 Type = Reputation
 Amount = 10
 Target = Poleis
+Multiplier = 2
 [54]
 Type = Reputation
 Amount = 15
 Target = Poleis
+Multiplier = 2
 [55]
 Type = Reputation
 Amount = 20
 Target = Poleis
+Multiplier = 2
 [56]
 Type = Reputation
 Amount = 25
 Target = Poleis
+Multiplier = 2
 [57]
 Type = Reputation
 Amount = 50
 Target = Poleis
+Multiplier = 2
 [58]
 Type = Reputation
 Amount = 1
@@ -186,294 +194,367 @@ Target = Independent
 Type = Reputation
 Amount = 3
 Target = Independent
+Multiplier = 3
 [60]
 Type = Reputation
 Amount = 5
 Target = Independent
+Multiplier = 3
 [61]
 Type = Reputation
 Amount = 7
 Target = Independent
+Multiplier = 3
 [62]
 Type = Reputation
 Amount = 10
 Target = Independent
+Multiplier = 3
 [63]
 Type = Reputation
 Amount = 1
 Target = Pirates
+Multiplier = 5
 [64]
 Type = Reputation
 Amount = 3
 Target = Pirates
+Multiplier = 5
 [65]
 Type = Reputation
 Amount = 5
 Target = Pirates
+Multiplier = 5
 [66]
 Type = Visit
 Amount = 50
 Target = Poleis
+Multiplier = 2
 [67]
 Type = Visit
 Amount = 75
 Target = Poleis
+Multiplier = 2
 [68]
 Type = Visit
 Amount = 100
 Target = Poleis
+Multiplier = 2
 [69]
 Type = Visit
 Amount = 125
 Target = Poleis
+Multiplier = 2
 [70]
 Type = Visit
 Amount = 150
 Target = Poleis
+Multiplier = 2
 [71]
 Type = Visit
 Amount = 175
 Target = Poleis
+Multiplier = 2
 [72]
 Type = Visit
 Amount = 200
 Target = Poleis
+Multiplier = 2
 [73]
 Type = Visit
 Amount = 250
 Target = Poleis
+Multiplier = 2
 [74]
 Type = Visit
 Amount = 10
 Target = Independent
+Multiplier = 3
 [75]
 Type = Visit
 Amount = 15
 Target = Independent
+Multiplier = 3
 [76]
 Type = Visit
 Amount = 20
 Target = Independent
+Multiplier = 3
 [77]
 Type = Visit
 Amount = 25
 Target = Independent
+Multiplier = 3
 [78]
 Type = Visit
 Amount = 50
 Target = Independent
+Multiplier = 3
 [79]
 Type = Visit
 Amount = 1
 Target = Pirates
+Multiplier = 4
 [80]
 Type = Visit
 Amount = 3
 Target = Pirates
+Multiplier = 4
 [81]
 Type = Visit
 Amount = 5
 Target = Pirates
+Multiplier = 4
 [82]
 Type = Visit
 Amount = 10
 Target = Pirates
+Multiplier = 4
 [83]
 Type = Destroy
 Amount = 200
 Target = Pirates
+Multiplier = 2
 [84]
 Type = Destroy
 Amount = 250
 Target = Pirates
+Multiplier = 2
 [85]
 Type = Destroy
 Amount = 500
 Target = Pirates
+Multiplier = 2
 [86]
 Type = Destroy
 Amount = 1000
 Target = Pirates
+Multiplier = 2
 [87]
 Type = Destroy
 Amount = 1500
 Target = Pirates
+Multiplier = 2
 [88]
 Type = Destroy
 Amount = 2000
 Target = Pirates
+Multiplier = 2
 [89]
 Type = Destroy
 Amount = 2500
 Target = Pirates
+Multiplier = 2
 [90]
 Type = Destroy
 Amount = 200
 Target = Drones
+Multiplier = 2
 [91]
 Type = Destroy
 Amount = 250
 Target = Drones
+Multiplier = 2
 [92]
 Type = Destroy
 Amount = 500
 Target = Drones
+Multiplier = 2
 [93]
 Type = Destroy
 Amount = 1000
 Target = Drones
+Multiplier = 2
 [94]
 Type = Destroy
 Amount = 1500
 Target = Drones
+Multiplier = 2
 [95]
 Type = Destroy
 Amount = 2000
 Target = Drones
+Multiplier = 2
 [96]
 Type = Destroy
 Amount = 2500
 Target = Drones
+Multiplier = 2
 [97]
 Type = Destroy
 Amount = 200
 Target = Undead
+Multiplier = 2
 [98]
 Type = Destroy
 Amount = 250
 Target = Undead
+Multiplier = 2
 [99]
 Type = Destroy
 Amount = 500
 Target = Undead
+Multiplier = 2
 [100]
 Type = Destroy
 Amount = 1000
 Target = Undead
+Multiplier = 2
 [101]
 Type = Destroy
 Amount = 1500
 Target = Undead
+Multiplier = 2
 [102]
 Type = Destroy
 Amount = 2000
 Target = Undead
+Multiplier = 2
 [103]
 Type = Destroy
 Amount = 2500
 Target = Undead
+Multiplier = 2
 [104]
 Type = Destroy
 Amount = 200
 Target = Inquisition
+Multiplier = 2
 [105]
 Type = Destroy
 Amount = 250
 Target = Inquisition
+Multiplier = 2
 [106]
 Type = Destroy
 Amount = 500
 Target = Inquisition
+Multiplier = 2
 [107]
 Type = Destroy
 Amount = 1000
 Target = Inquisition
+Multiplier = 2
 [108]
 Type = Destroy
 Amount = 1500
 Target = Inquisition
+Multiplier = 2
 [109]
 Type = Destroy
 Amount = 2000
 Target = Inquisition
+Multiplier = 2
 [110]
 Type = Destroy
 Amount = 2500
 Target = Inquisition
+Multiplier = 2
 [111]
 Type = Mission
 Amount = 200
 Target = Deliver
+Multiplier = 2
 [112]
 Type = Mission
 Amount = 250
 Target = Deliver
+Multiplier = 2
 [113]
 Type = Mission
 Amount = 500
 Target = Deliver
+Multiplier = 2
 [114]
 Type = Mission
 Amount = 1000
 Target = Deliver
+Multiplier = 2
 [115]
 Type = Mission
 Amount = 1500
 Target = Deliver
+Multiplier = 2
 [116]
 Type = Mission
 Amount = 2000
 Target = Deliver
+Multiplier = 2
 [117]
 Type = Mission
 Amount = 2500
 Target = Deliver
+Multiplier = 2
 [118]
 Type = Mission
 Amount = 200
 Target = Destroy
+Multiplier = 2
 [119]
 Type = Mission
 Amount = 250
 Target = Destroy
+Multiplier = 2
 [120]
 Type = Mission
 Amount = 500
 Target = Destroy
+Multiplier = 2
 [121]
 Type = Mission
 Amount = 1000
 Target = Destroy
+Multiplier = 2
 [122]
 Type = Mission
 Amount = 1500
 Target = Destroy
+Multiplier = 2
 [123]
 Type = Mission
 Amount = 2000
 Target = Destroy
+Multiplier = 2
 [124]
 Type = Mission
 Amount = 2500
 Target = Destroy
+Multiplier = 2
 [125]
 Type = Mission
 Amount = 200
 Target = Patrol
+Multiplier = 2
 [126]
 Type = Mission
 Amount = 250
 Target = Patrol
+Multiplier = 2
 [127]
 Type = Mission
 Amount = 500
 Target = Patrol
+Multiplier = 2
 [128]
 Type = Mission
 Amount = 1000
 Target = Patrol
+Multiplier = 2
 [129]
 Type = Mission
 Amount = 1500
 Target = Patrol
+Multiplier = 2
 [130]
 Type = Mission
 Amount = 2000
 Target = Patrol
+Multiplier = 2
 [135]
 Type = Mission
 Amount = 2500
 Target = Patrol
+Multiplier = 2
 [136]
 Type = Mission
 Amount = 200
@@ -506,24 +587,30 @@ Target = Explore
 Type = Mission
 Amount = 200
 Target = Passenger
+Multiplier = 5
 [144]
 Type = Mission
 Amount = 250
 Target = Passenger
+Multiplier = 5
 [145]
 Type = Mission
 Amount = 500
 Target = Passenger
+Multiplier = 5
 [146]
 Type = Mission
 Amount = 1000
 Target = Passenger
+Multiplier = 5
 [147]
 Type = Mission
 Amount = 1500
 Target = Passenger
+Multiplier = 5
 [148]
 Type = Mission
 Amount = 2000
 Target = Passenger
+Multiplier = 5
 []
