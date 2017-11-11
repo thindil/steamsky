@@ -596,4 +596,12 @@ Prices = 10, 15, 15, 15
 Buyable = Y, N, N, N
 Value = 15, 4
 Description = Standard shield made of bronze, used in melee combat.
+[73]
+Name = Wooden shield
+Weight = 3
+Type = Shield
+Prices = 7, 10, 10, 10
+Buyable = Y, N, N, N
+Value = 20, 2
+Description = Standard shield made of wood, used in melee combat.
 []
