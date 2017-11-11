@@ -447,6 +447,10 @@ Value after equal sign must be existing item type.
   Engineering, Operating guns, Repair ship, Manufacturing, Upgrading ship,
   Talking in bases, Healing wounded, Cleaning ship and Priority is: Normal or
   High.
+- Inventory: List of inventory of selected mob. Each item in inventory is 
+  separated by `, ` (comma and space). Each item entry is Amount`x`Item index
+  (from *items* directory). Amount can be constant value or range from minimum
+  value to max value, separated by `..` (double dots).
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
