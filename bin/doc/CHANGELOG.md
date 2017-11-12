@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
 - New ship module: steel harpoon gun
 - New items: steel harpoon, leather sheet, bronze sword, leather jacket,
   leather helmet, leather armsguard, bronze sewing kit, leather legsguard,
-  bronze shield and wooden shield
+  bronze shield, wooden shield and bronze short sword
 - Harpoon guns to pirates ships
 - New item types: leather, meleeweapon, chestarmor, headarmor, armsarmor,
   sewingkit, legsarmor and shield
