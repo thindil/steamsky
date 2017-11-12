@@ -547,4 +547,13 @@ Workplace = Workshop
 Skill = Woodworking
 BaseType = 1
 Tool = WoodworkerSet
+[56]
+Material = Bronze
+Amount = 1
+Result = 74
+Crafted = 2
+Workplace = Furnace
+Skill = Blacksmith
+BaseType = 1
+Tool = BlacksmithSet
 []
