@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.8] - 2017-11-12
 
 ### Added
 - New goals: finish 200 destroy ship missions, finish 250 destroy ship
