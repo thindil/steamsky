@@ -613,4 +613,9 @@ Type = Mission
 Amount = 2000
 Target = Passenger
 Multiplier = 5
+[149]
+Type = Mission
+Amount = 2500
+Target = Passenger
+Multiplier = 5
 []
