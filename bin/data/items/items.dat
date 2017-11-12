@@ -604,4 +604,13 @@ Prices = 7, 10, 10, 10
 Buyable = Y, N, N, N
 Value = 20, 2
 Description = Standard shield made of wood, used in melee combat.
+[74]
+Name = Bronze short sword
+Weight = 1
+Type = MeleeWeapon
+Prices = 7, 10, 10, 10
+Buyable = Y, N, N, N
+ShowType = Weapon
+Value = 15, 15
+Description = Simple short sword made of bronze, used in melee combat.
 []
