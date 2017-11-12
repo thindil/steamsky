@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file.
   sewingkit, legsarmor and shield
 - New crafting recipes: bronze harpoon, iron harpoon, steel harpoon, bronze
   sword, leather jacket, leather helmet, leather armsguard, bronze sewing kit,
-  leather legsguard, bronze shield and wooden shield
+  leather legsguard, bronze shield, wooden shield and bronze short sword
 - New skill: leatherworking
 - Character's equipment which made saves from previous version incompatible
 - Option to set multipliers for points for selected goals
