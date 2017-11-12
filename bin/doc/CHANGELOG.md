@@ -16,8 +16,8 @@ All notable changes to this project will be documented in this file.
   2000 explore area missions, finish 2500 explore area missions, finish 200
   transport passenger missions, finish 250 transport passenger missions, finish
   500 transport passenger missions, finish 1000 transport passenger missions,
-  finish 1500 transport passenger missions and finish 2000 transport passenger
-  missions
+  finish 1500 transport passenger missions, finish 2000 transport passenger
+  missions and finish 2500 transport passenger missions
 - New ship module: steel harpoon gun
 - New items: steel harpoon, leather sheet, bronze sword, leather jacket,
   leather helmet, leather armsguard, bronze sewing kit, leather legsguard,
