@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New item: iron mold
+- New crafting recipe: iron mold
 
 ## [1.8] - 2017-11-12
 
