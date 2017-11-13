@@ -24,6 +24,7 @@ with ShipModules; use ShipModules;
 with Help.UI; use Help.UI;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
+with Messages; use Messages;
 
 package body Crew.UI.Keys is
 
@@ -250,14 +251,30 @@ package body Crew.UI.Keys is
                for I in
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
                   if PlayerShip.Crew(I).Skills.Length > 0 then
-                     GiveOrders(I, Repair);
+                     begin
+                        GiveOrders(I, Repair);
+                     exception
+                        when An_Exception : Crew_Order_Error |
+                          Crew_No_Space_Error =>
+                           AddMessage
+                             (Exception_Message(An_Exception),
+                              OrderMessage);
+                     end;
                   end if;
                end loop;
             elsif OrderName = "Clean ship everyone" then
                for I in
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
                   if PlayerShip.Crew(I).Skills.Length > 0 then
-                     GiveOrders(I, Clean);
+                     begin
+                        GiveOrders(I, Clean);
+                     exception
+                        when An_Exception : Crew_Order_Error |
+                          Crew_No_Space_Error =>
+                           AddMessage
+                             (Exception_Message(An_Exception),
+                              OrderMessage);
+                     end;
                   end if;
                end loop;
             end if;
@@ -281,11 +298,6 @@ package body Crew.UI.Keys is
          Refresh(MenuWindow2);
       end if;
       return Orders_For_All;
-   exception
-      when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
-         ShowDialog(Exception_Message(An_Exception));
-         DrawGame(Crew_Info);
-         return Crew_Info;
    end CrewOrdersAllKeys;
 
    function OrdersPrioritiesKeys(Key: Key_Code) return GameStates is
