@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - New item: iron mold
 - New crafting recipe: iron mold
 
+### Fixed
+- Don't stop giving order to whole crew when one crew member can't do it
+
 ## [1.8] - 2017-11-12
 
 ### Added
