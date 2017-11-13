@@ -613,4 +613,13 @@ Buyable = Y, N, N, N
 ShowType = Weapon
 Value = 15, 15
 Description = Simple short sword made of bronze, used in melee combat.
+[75]
+Name = Iron mold
+Weight = 10
+Type = Mold
+Prices = 15, 17, 17, 17
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 10
+Description = Iron tool used in metalsmith recipes.
 []
