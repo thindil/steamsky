@@ -905,6 +905,9 @@ package body Crew is
                return False;
             end if;
          end if;
+         if PlayerShip.Crew(MemberIndex).Order /= Rest then
+            GiveOrders(MemberIndex, Rest, 0, False);
+         end if;
          GiveOrders(MemberIndex, Order, ModuleIndex);
          return True;
       exception
