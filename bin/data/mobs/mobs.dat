@@ -4,59 +4,70 @@ SkillsLevels = 5
 Attributes = 3, 3, 3, 3
 Order = Talk
 Priorities = Repair ship:Normal, Manufacturing:Normal, Upgrading ship:Normal, Talking in bases:High, Healing wounded:Normal, Cleaning ship:Normal
+Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
 [2]
 Skills = Piloting, Perception
 SkillsLevels = 5, 5
 Attributes = 3, 3, 3, 3
 Order = Pilot
 Priorities = Piloting:Normal
+Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 [3]
 Skills = Engineering
 SkillsLevels = 5
 Attributes = 3, 3, 3, 3
 Order = Engineer
 Priorities = Engineering:Normal
+Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 [4]
 Skills = Gunnery, Perception
 SkillsLevels = 5, 5
 Attributes = 3, 3, 3, 3
 Order = Gunner
 Priorities = Operating guns:Normal
+Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
 [5]
 Skills = Piloting, Perception
 SkillsLevels = 1, 1
 Attributes = 2, 2, 2, 2
 Order = Pilot
+Inventory = 1x74, 1x67, 1x68, 1x69, 1x71
 [6]
 Skills = Gunnery, Perception
 SkillsLevels = 1, 1
 Attributes = 2, 2, 2, 2
 Order = Gunner
+Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
 [7]
 Skills = Piloting, Perception
 SkillsLevels = 1, 1
 Attributes = 1, 1, 1, 1
 Order = Pilot
+Inventory = 1x67, 1x68, 1x69, 1x71
 [8]
 Skills = Piloting, Perception
 SkillsLevels = 1, 2..4
 Attributes = 3, 3, 3, 3
 Order = Pilot
+Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 [9]
 Skills = Gunnery, Perception
 SkillsLevels = 3, 2..4
 Attributes = 3, 3, 3, 3
 Order = Gunner
+Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
 [10]
 Skills = Engineering
 SkillsLevels = 3..6
 Attributes = 3, 3, 3, 3
 Order = Engineer
+Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 [11]
 Skills = Piloting, Perception
 SkillsLevels = 1, 1..4
 Attributes = 3, 3, 3, 3
 Order = Pilot
+Inventory = 1x67, 1x68, 1x69, 1x71
 [12]
 Skills = Piloting, Perception
 SkillsLevels = 3..6, 3..6
