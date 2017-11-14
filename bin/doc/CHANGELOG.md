@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: iron mold and iron sword
-- New crafting recipe: iron mold
+- New crafting recipes: iron mold and iron sword
 
 ### Fixed
 - Don't stop giving order to whole crew when one crew member can't do it
