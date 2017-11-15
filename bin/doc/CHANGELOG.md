@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Don't stop giving order to whole crew when one crew member can't do it
 - Auto changing crew members orders
+- Reset selected item in crew member inventory after close
 
 ## [1.8] - 2017-11-12
 
