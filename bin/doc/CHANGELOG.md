@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New items: iron mold and iron sword
+- New items: iron mold, iron sword and iron short sword
 - New crafting recipes: iron mold and iron sword
 
 ### Changed
