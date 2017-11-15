@@ -31,6 +31,7 @@ package Mobs is
       Order: Crew_Orders; -- Current order for mob
       Priorities: Orders_Array; -- Priority of orders of mob
       Inventory: Skills_Container.Vector; -- List of mob inventory
+      Equipment: Equipment_Array; -- Items indexes from inventory used by mob: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
    end record;
    package ProtoMobs_Container is new Vectors(Positive, ProtoMobRecord);
    ProtoMobs_List: ProtoMobs_Container.Vector;

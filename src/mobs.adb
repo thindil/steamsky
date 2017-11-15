@@ -26,7 +26,7 @@ package body Mobs is
 
    procedure LoadMobs is
       MobsFile: File_Type;
-      RawData, FieldName, Value: Unbounded_String;
+      RawData, FieldName, Value, EquipmentSlot: Unbounded_String;
       EqualIndex,
       StartIndex,
       EndIndex,
@@ -40,6 +40,7 @@ package body Mobs is
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
       TempPriorities: Orders_Array := (others => 0);
+      TempEquipment: Equipment_Array := (others => 0);
       OrdersNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("Piloting"),
          To_Unbounded_String("Engineering"),
@@ -72,7 +73,8 @@ package body Mobs is
             Attributes => TempAttributes,
             Order => Rest,
             Priorities => TempPriorities,
-            Inventory => TempInventory);
+            Inventory => TempInventory,
+            Equipment => TempEquipment);
          LogMessage("Loading mobs file: " & Full_Name(FoundFile), Everything);
          Open(MobsFile, In_File, Full_Name(FoundFile));
          while not End_Of_File(MobsFile) loop
@@ -219,6 +221,35 @@ package body Mobs is
                      end if;
                      StartIndex := EndIndex + 2;
                   end loop;
+               elsif FieldName = To_Unbounded_String("Equipment") then
+                  StartIndex := 1;
+                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+                  for J in 1 .. Amount loop
+                     EndIndex := Index(Value, ", ", StartIndex);
+                     if EndIndex = 0 then
+                        EndIndex := Length(Value) + 1;
+                     end if;
+                     XIndex := Index(Value, ":", StartIndex);
+                     EquipmentSlot := Unbounded_Slice(Value, StartIndex, XIndex - 1);
+                     if EquipmentSlot = "Weapon" then
+                        TempEquipment(1) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                     elsif EquipmentSlot = "Shield" then
+                        TempEquipment(2) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                     elsif EquipmentSlot = "Head" then
+                        TempEquipment(3) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                     elsif EquipmentSlot = "Torso" then
+                        TempEquipment(4) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                     elsif EquipmentSlot = "Arms" then
+                        TempEquipment(5) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                     elsif EquipmentSlot = "Legs" then
+                        TempEquipment(6) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                     elsif EquipmentSlot = "Tool" then
+                        TempEquipment(7) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                     end if;
+                     StartIndex := EndIndex + 2;
+                  end loop;
+                  TempRecord.Equipment := TempEquipment;
+                  TempEquipment := (others => 0);
                end if;
             else
                if TempRecord.Index /= Null_Unbounded_String then
@@ -232,7 +263,8 @@ package body Mobs is
                      Attributes => TempAttributes,
                      Order => Rest,
                      Priorities => TempPriorities,
-                     Inventory => TempInventory);
+                     Inventory => TempInventory,
+                     Equipment => TempEquipment);
                end if;
                if Length(RawData) > 2 then
                   TempRecord.Index :=
