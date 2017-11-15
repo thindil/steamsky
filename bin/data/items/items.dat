@@ -629,6 +629,15 @@ Type = MeleeWeapon
 Prices = 15, 17, 17, 17
 Buyable = Y, N, N, N
 ShowType = Weapon
-Value = 20, 25
+Value = 10, 25
 Description = Simple sword made of iron, used in melee combat.
+[77]
+Name = Iron short sword
+Weight = 1
+Type = MeleeWeapon
+Prices = 10, 12, 12, 12
+Buyable = Y, N, N, N
+ShowType = Weapon
+Value = 10, 20
+Description = Simple short sword made of bronze, used in melee combat.
 []
