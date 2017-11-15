@@ -387,6 +387,7 @@ package body Crew.UI.Keys is
    begin
       if PlayerShip.Crew(MemberIndex).Inventory.Length = 0 then
          if Key = 27 then -- back to crew info
+            ItemIndex := 1;
             DrawGame(Crew_Info);
             return Crew_Info;
          end if;
@@ -394,6 +395,7 @@ package body Crew.UI.Keys is
       end if;
       case Key is
          when 27 => -- back to crew info
+            ItemIndex := 1;
             DrawGame(Crew_Info);
             return Crew_Info;
          when 56 | KEY_UP => -- Select previous item in inventory
@@ -512,7 +514,6 @@ package body Crew.UI.Keys is
    function InventoryMenuKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
       Option: constant String := Name(Current(OrdersMenu));
-      ItemIndex: constant Positive := Get_Index(Current(CrewMenu));
       procedure RedrawScreen is
       begin
          Post(OrdersMenu, False);
