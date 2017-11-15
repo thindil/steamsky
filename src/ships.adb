@@ -196,7 +196,7 @@ package body Ships is
              Orders => Member.Priorities,
              Attributes => TmpAttributes,
              Inventory => TmpInventory,
-             Equipment => (others => 0)));
+             Equipment => Member.Equipment));
          TmpSkills.Clear;
          TmpAttributes.Clear;
          TmpInventory.Clear;
