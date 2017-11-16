@@ -451,6 +451,10 @@ Value after equal sign must be existing item type.
   separated by `, ` (comma and space). Each item entry is Amount`x`Item index
   (from *items* directory). Amount can be constant value or range from minimum
   value to max value, separated by `..` (double dots).
+- Equipment: List of items from inventory used by selected mob. Each item in
+  equipment is separated by `, ` (comma and space). Each item entry is Slot
+  name`:`Item index from inventory, where Slot name is: Weapon, Shield, Head,
+  Torso, Arms, Legs, Tools. Item index always starts from 1.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
