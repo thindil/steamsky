@@ -8,9 +8,10 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: iron mold, iron sword, iron short sword and bronze
   chestplate
 - Option to set starting equipment for mobs
+- Starting inventory to some mobs
 
 ### Changed
-- Added inventory to some mobs
+- Updated MODDING.md
 
 ### Fixed
 - Don't stop giving order to whole crew when one crew member can't do it
