@@ -5,6 +5,7 @@ Attributes = 3, 3, 3, 3
 Order = Talk
 Priorities = Repair ship:Normal, Manufacturing:Normal, Upgrading ship:Normal, Talking in bases:High, Healing wounded:Normal, Cleaning ship:Normal
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
+Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [2]
 Skills = Piloting, Perception
 SkillsLevels = 5, 5
@@ -12,6 +13,7 @@ Attributes = 3, 3, 3, 3
 Order = Pilot
 Priorities = Piloting:Normal
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
+Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [3]
 Skills = Engineering
 SkillsLevels = 5
@@ -19,6 +21,7 @@ Attributes = 3, 3, 3, 3
 Order = Engineer
 Priorities = Engineering:Normal
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
+Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [4]
 Skills = Gunnery, Perception
 SkillsLevels = 5, 5
@@ -26,48 +29,56 @@ Attributes = 3, 3, 3, 3
 Order = Gunner
 Priorities = Operating guns:Normal
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
+Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [5]
 Skills = Piloting, Perception
 SkillsLevels = 1, 1
 Attributes = 2, 2, 2, 2
 Order = Pilot
 Inventory = 1x74, 1x67, 1x68, 1x69, 1x71
+Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [6]
 Skills = Gunnery, Perception
 SkillsLevels = 1, 1
 Attributes = 2, 2, 2, 2
 Order = Gunner
 Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
+Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [7]
 Skills = Piloting, Perception
 SkillsLevels = 1, 1
 Attributes = 1, 1, 1, 1
 Order = Pilot
 Inventory = 1x67, 1x68, 1x69, 1x71
+Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [8]
 Skills = Piloting, Perception
 SkillsLevels = 1, 2..4
 Attributes = 3, 3, 3, 3
 Order = Pilot
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
+Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [9]
 Skills = Gunnery, Perception
 SkillsLevels = 3, 2..4
 Attributes = 3, 3, 3, 3
 Order = Gunner
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
+Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [10]
 Skills = Engineering
 SkillsLevels = 3..6
 Attributes = 3, 3, 3, 3
 Order = Engineer
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
+Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [11]
 Skills = Piloting, Perception
 SkillsLevels = 1, 1..4
 Attributes = 3, 3, 3, 3
 Order = Pilot
 Inventory = 1x67, 1x68, 1x69, 1x71
+Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [12]
 Skills = Piloting, Perception
 SkillsLevels = 3..6, 3..6
