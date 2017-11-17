@@ -543,7 +543,7 @@ Type = MeleeWeapon
 Prices = 10, 15, 15, 15
 Buyable = Y, N, N, N
 ShowType = Weapon
-Value = 15, 20
+Value = 15, 20, 17
 Description = Simple sword made of bronze, used in melee combat.
 [67]
 Name = Leather jacket
@@ -611,7 +611,7 @@ Type = MeleeWeapon
 Prices = 7, 10, 10, 10
 Buyable = Y, N, N, N
 ShowType = Weapon
-Value = 15, 15
+Value = 15, 15, 17
 Description = Simple short sword made of bronze, used in melee combat.
 [75]
 Name = Iron mold
@@ -629,7 +629,7 @@ Type = MeleeWeapon
 Prices = 15, 17, 17, 17
 Buyable = Y, N, N, N
 ShowType = Weapon
-Value = 10, 25
+Value = 10, 25, 17
 Description = Simple sword made of iron, used in melee combat.
 [77]
 Name = Iron short sword
@@ -638,7 +638,7 @@ Type = MeleeWeapon
 Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
 ShowType = Weapon
-Value = 10, 20
+Value = 10, 20, 17
 Description = Simple short sword made of bronze, used in melee combat.
 [78]
 Name = Bronze chestplate
