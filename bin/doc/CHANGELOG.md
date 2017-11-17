@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Option to set starting equipment for mobs
 - Inventory to some mobs
 - Equipment to some mobs
+- New skill: swords
 
 ### Changed
 - Updated MODDING.md
