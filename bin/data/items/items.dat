@@ -649,4 +649,12 @@ Buyable = Y, N, N, N
 ShowType = Armor
 Value = 15, 10
 Description = Standard type of armor, made of bronze, weared on torso.
+[79]
+Name = Bronze helmet
+Type = HeadArmor
+Prices = 10, 12, 12, 12
+Buyable = Y, N, N, N
+ShowType = Armor
+Value = 15, 5
+Description = Standard type of armor, made of bronze, weared on head.
 []
