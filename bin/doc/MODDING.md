@@ -224,7 +224,8 @@ Value after equal sign must be existing item type.
   weapons and armor pieces first value is change for item to be damaged during
   combat, second value separated by `, ` (comma and space) for melee weapons
   is damage done by weapon and for armor piece it is amount of damage reduced
-  by this armor.
+  by this armor. Third value for melee weapons is number of skill used by this
+  weapon (from *game.dat* file, entry *Skills*).
 - Description: Any length description of item.
 
 ## Recipes
