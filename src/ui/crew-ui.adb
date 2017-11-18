@@ -732,11 +732,11 @@ package body Crew.UI is
 
    procedure ShowItemInfo is
       InfoWindow, ClearWindow, BoxWindow: Window;
+      ProtoIndex: constant Positive :=
+        PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex;
       ItemWeight: constant Positive :=
         PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount *
-        Items_List
-          (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
-          .Weight;
+        Items_List(ProtoIndex).Weight;
       CurrentLine: Line_Position := 1;
       WindowHeight: Line_Position := 8;
       WindowWidth: Column_Position;
@@ -749,38 +749,22 @@ package body Crew.UI is
         100 then
          WindowHeight := WindowHeight + 1;
       end if;
+      if Items_List(ProtoIndex).IType = WeaponType then
+         WindowHeight := WindowHeight + 1;
+      end if;
       WindowHeight :=
         WindowHeight +
         Line_Position
-          ((Length
-              (Items_List
-                 (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
-                 .Description) /
+          ((Length(Items_List(ProtoIndex).Description) /
             (Natural(Columns / 2) - 4)));
       WindowWidth :=
-        Column_Position
-          (Length
-             (Items_List
-                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
-                .Description) +
-           5);
+        Column_Position(Length(Items_List(ProtoIndex).Description) + 5);
       if WindowWidth <
         Column_Position
-          (Positive'Image
-             (Items_List
-                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
-                .Weight)'
-             Length +
-           5) then
+          (Positive'Image(Items_List(ProtoIndex).Weight)'Length + 5) then
          WindowWidth :=
            Column_Position
-             (Positive'Image
-                (Items_List
-                   (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
-                      .ProtoIndex)
-                   .Weight)'
-                Length +
-              5);
+             (Positive'Image(Items_List(ProtoIndex).Weight)'Length + 5);
       end if;
       if WindowWidth > (Columns / 2) then
          WindowWidth := Columns / 2;
@@ -790,27 +774,14 @@ package body Crew.UI is
       InfoWindow :=
         Create(WindowHeight - 2, WindowWidth - 4, 4, (Columns / 2) + 2);
       Add(Win => InfoWindow, Str => "Type: ");
-      if Items_List
-          (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
-          .ShowType =
-        Null_Unbounded_String then
+      if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
          Add
            (Win => InfoWindow,
-            Str =>
-              To_String
-                (Items_List
-                   (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
-                      .ProtoIndex)
-                   .IType));
+            Str => To_String(Items_List(ProtoIndex).IType));
       else
          Add
            (Win => InfoWindow,
-            Str =>
-              To_String
-                (Items_List
-                   (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
-                      .ProtoIndex)
-                   .ShowType));
+            Str => To_String(Items_List(ProtoIndex).ShowType));
       end if;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       Add
@@ -824,18 +795,26 @@ package body Crew.UI is
       Add
         (Win => InfoWindow,
          Str =>
-           "Weight:" &
-           Positive'Image
-             (Items_List
-                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
-                .Weight) &
-           " kg");
+           "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) & " kg");
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
       Add
         (Win => InfoWindow,
          Str => "Total weight:" & Positive'Image(ItemWeight) & " kg");
       CurrentLine := CurrentLine + 1;
+      if Items_List(ProtoIndex).IType = WeaponType then
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
+         Add
+           (Win => InfoWindow,
+            Str =>
+              "Skill: " &
+              To_String(Skills_List(Items_List(ProtoIndex).Value(3)).Name) &
+              "/" &
+              To_String
+                (Attributes_Names
+                   (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)));
+         CurrentLine := CurrentLine + 1;
+      end if;
       if PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability <
         100 then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
