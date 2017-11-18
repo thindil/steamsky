@@ -52,6 +52,9 @@ package body Trades.UI is
       for I in Items_List.Iterate loop
          if To_String(Items_List(I).Name) = Name(Current(TradeMenu)) then
             ItemIndex := Objects_Container.To_Index(I);
+            if Items_List(I).IType = WeaponType then
+               WindowHeight := WindowHeight + 1;
+            end if;
             exit;
          end if;
       end loop;
@@ -174,17 +177,34 @@ package body Trades.UI is
         (Win => InfoWindow,
          Str =>
            "Weight:" & Integer'Image(Items_List(ItemIndex).Weight) & " kg");
+      if Items_List(ItemIndex).IType = WeaponType then
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
+         Add
+           (Win => InfoWindow,
+            Str =>
+              "Skill: " &
+              To_String(Skills_List(Items_List(ItemIndex).Value(3)).Name) &
+              "/" &
+              To_String
+                (Attributes_Names
+                   (Skills_List(Items_List(ItemIndex).Value(3)).Attribute)));
+         CurrentLine := 5;
+      end if;
       if CargoIndex > 0 then
-         Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
          Add
            (Win => InfoWindow,
             Str =>
               "Owned:" & Integer'Image(PlayerShip.Cargo(CargoIndex).Amount));
          if PlayerShip.Cargo(CargoIndex).Durability < 100 then
-            Move_Cursor(Win => InfoWindow, Line => 4, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Status: ");
-            ShowItemStatus(PlayerShip.Cargo, CargoIndex, InfoWindow, 4);
-            CurrentLine := 5;
+            ShowItemStatus
+              (PlayerShip.Cargo,
+               CargoIndex,
+               InfoWindow,
+               CurrentLine);
+            CurrentLine := CurrentLine + 1;
          end if;
          CurrentLine := CurrentLine + 1;
       end if;

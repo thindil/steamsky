@@ -74,6 +74,9 @@ package body Bases.UI.Loot is
             WindowHeight := WindowHeight + 1;
          end if;
       end if;
+      if Items_List(ItemIndex).IType = WeaponType then
+         WindowHeight := WindowHeight + 1;
+      end if;
       WindowHeight :=
         WindowHeight +
         Line_Position
@@ -102,17 +105,34 @@ package body Bases.UI.Loot is
         (Win => InfoWindow,
          Str =>
            "Weight:" & Integer'Image(Items_List(ItemIndex).Weight) & " kg");
+      if Items_List(ItemIndex).IType = WeaponType then
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
+         Add
+           (Win => InfoWindow,
+            Str =>
+              "Skill: " &
+              To_String(Skills_List(Items_List(ItemIndex).Value(3)).Name) &
+              "/" &
+              To_String
+                (Attributes_Names
+                   (Skills_List(Items_List(ItemIndex).Value(3)).Attribute)));
+         CurrentLine := 4;
+      end if;
       if CargoIndex > 0 then
-         Move_Cursor(Win => InfoWindow, Line => 2, Column => 0);
+         Move_Cursor(Win => InfoWindow, Line => CurrentLine - 1, Column => 0);
          Add
            (Win => InfoWindow,
             Str =>
               "Owned:" & Integer'Image(PlayerShip.Cargo(CargoIndex).Amount));
          if PlayerShip.Cargo(CargoIndex).Durability < 100 then
-            Move_Cursor(Win => InfoWindow, Line => 3, Column => 0);
+            Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
             Add(Win => InfoWindow, Str => "Status: ");
-            ShowItemStatus(PlayerShip.Cargo, CargoIndex, InfoWindow, 3);
-            CurrentLine := 4;
+            ShowItemStatus
+              (PlayerShip.Cargo,
+               CargoIndex,
+               InfoWindow,
+               CurrentLine);
+            CurrentLine := CurrentLine + 1;
          end if;
          CurrentLine := CurrentLine + 1;
       end if;
