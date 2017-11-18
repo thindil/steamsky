@@ -657,4 +657,12 @@ Buyable = Y, N, N, N
 ShowType = Armor
 Value = 15, 5
 Description = Standard type of armor, made of bronze, weared on head.
+[80]
+Name = Bronze armsguard
+Type = ArmsArmor
+Prices = 12, 14, 14, 14
+Buyable = Y, N, N, N
+ShowType = Armor
+Value = 15, 6
+Description = Standard type of armor, made of bronze, protects arms.
 []
