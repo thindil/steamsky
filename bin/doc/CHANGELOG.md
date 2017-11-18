@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New items: iron mold, iron sword, iron short sword, bronze chestplate and
-  bronze helmet
+- New items: iron mold, iron sword, iron short sword, bronze chestplate,
+  bronze helmet and bronze armsguard
 - New crafting recipes: iron mold, iron sword, iron short sword, bronze
   chestplate and bronze helmet
 - Option to set starting equipment for mobs
