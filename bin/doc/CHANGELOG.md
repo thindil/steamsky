@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated MODDING.md
 - Added used skill info to weapons
+- Updated interface
 
 ### Fixed
 - Don't stop giving order to whole crew when one crew member can't do it
