@@ -124,7 +124,7 @@ package body Bases.UI.Recipes is
       end loop;
       Trade_Items.all(Trade_Items'Last) := Null_Item;
       TradeMenu := New_Menu(Trade_Items);
-      Set_Format(TradeMenu, Lines - 10, 1);
+      Set_Format(TradeMenu, Lines - 3, 1);
       Scale(TradeMenu, MenuHeight, MenuLength);
       MenuWindow := Create(MenuHeight, MenuLength, 3, 2);
       Set_Window(TradeMenu, MenuWindow);
