@@ -642,7 +642,7 @@ Value = 10, 20, 17
 Description = Simple short sword made of bronze, used in melee combat.
 [78]
 Name = Bronze chestplate
-Weight = 5
+Weight = 10
 Type = ChestArmor
 Prices = 15, 17, 17, 17
 Buyable = Y, N, N, N
@@ -651,6 +651,7 @@ Value = 15, 10
 Description = Standard type of armor, made of bronze, weared on torso.
 [79]
 Name = Bronze helmet
+Weight = 2
 Type = HeadArmor
 Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
@@ -659,10 +660,20 @@ Value = 15, 5
 Description = Standard type of armor, made of bronze, weared on head.
 [80]
 Name = Bronze armsguard
+Weight = 2
 Type = ArmsArmor
 Prices = 12, 14, 14, 14
 Buyable = Y, N, N, N
 ShowType = Armor
 Value = 15, 6
 Description = Standard type of armor, made of bronze, protects arms.
+[81]
+Name = Bronze legsguard
+Weight = 2
+Type = LegsArmor
+Prices = 14, 16, 16, 16
+Buyable = Y, N, N, N
+ShowType = Armor
+Value = 15, 8
+Description = Standard type of armor, made of leather, protects legs.
 []
