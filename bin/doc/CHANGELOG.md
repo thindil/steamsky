@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Added used skill info to weapons
 - Updated interface
+- Issue #9 - changed default keys for close main menu and quit from game
 
 ### Fixed
 - Don't stop giving order to whole crew when one crew member can't do it
