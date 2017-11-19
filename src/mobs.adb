@@ -230,21 +230,36 @@ package body Mobs is
                         EndIndex := Length(Value) + 1;
                      end if;
                      XIndex := Index(Value, ":", StartIndex);
-                     EquipmentSlot := Unbounded_Slice(Value, StartIndex, XIndex - 1);
+                     EquipmentSlot :=
+                       Unbounded_Slice(Value, StartIndex, XIndex - 1);
                      if EquipmentSlot = "Weapon" then
-                        TempEquipment(1) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                        TempEquipment(1) :=
+                          Positive'Value
+                            (Slice(Value, XIndex + 1, EndIndex - 1));
                      elsif EquipmentSlot = "Shield" then
-                        TempEquipment(2) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                        TempEquipment(2) :=
+                          Positive'Value
+                            (Slice(Value, XIndex + 1, EndIndex - 1));
                      elsif EquipmentSlot = "Head" then
-                        TempEquipment(3) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                        TempEquipment(3) :=
+                          Positive'Value
+                            (Slice(Value, XIndex + 1, EndIndex - 1));
                      elsif EquipmentSlot = "Torso" then
-                        TempEquipment(4) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                        TempEquipment(4) :=
+                          Positive'Value
+                            (Slice(Value, XIndex + 1, EndIndex - 1));
                      elsif EquipmentSlot = "Arms" then
-                        TempEquipment(5) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                        TempEquipment(5) :=
+                          Positive'Value
+                            (Slice(Value, XIndex + 1, EndIndex - 1));
                      elsif EquipmentSlot = "Legs" then
-                        TempEquipment(6) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                        TempEquipment(6) :=
+                          Positive'Value
+                            (Slice(Value, XIndex + 1, EndIndex - 1));
                      elsif EquipmentSlot = "Tool" then
-                        TempEquipment(7) := Positive'Value(Slice(Value, XIndex + 1, EndIndex - 1));
+                        TempEquipment(7) :=
+                          Positive'Value
+                            (Slice(Value, XIndex + 1, EndIndex - 1));
                      end if;
                      StartIndex := EndIndex + 2;
                   end loop;
