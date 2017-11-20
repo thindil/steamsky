@@ -27,6 +27,7 @@ with Events; use Events;
 with Utils.UI; use Utils.UI;
 with Bases.UI; use Bases.UI;
 with Items.UI; use Items.UI;
+with Config; use Config;
 
 package body Trades.UI is
 
@@ -304,11 +305,15 @@ package body Trades.UI is
          Attr => BoldCharacters);
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Line => CurrentLine, Column => (Columns / 2));
-      Add(Str => "Press F1 for help");
+      Add
+        (Str =>
+           "Press " &
+           GetKeyName(Key_Code(GameSettings.Keys(33))) &
+           " for help");
       Change_Attributes
         (Line => CurrentLine,
          Column => (Columns / 2) + 6,
-         Count => 2,
+         Count => GetKeyName(Key_Code(GameSettings.Keys(33)))'Length,
          Color => 1,
          Attr => BoldCharacters);
       CurrentLine := CurrentLine + 1;

@@ -28,6 +28,7 @@ with Events; use Events;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
 with Bases.UI; use Bases.UI;
+with Config; use Config;
 
 package body Trades.UI.Keys is
 
@@ -212,6 +213,12 @@ package body Trades.UI.Keys is
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
    begin
+      if Key = Key_Code(GameSettings.Keys(33)) then -- Show help
+         Erase;
+         ShowGameHeader(Help_Topic);
+         ShowHelp(Trade_View, 3);
+         return Help_Topic;
+      end if;
       case Key is
          when 27 => -- Back to sky map
             if BaseIndex = 0 and EventIndex > 0 then
@@ -236,11 +243,6 @@ package body Trades.UI.Keys is
          when 10 => -- Buy item
             Buy := True;
             return ShowTradeForm;
-         when Key_F1 => -- Show help
-            Erase;
-            ShowGameHeader(Help_Topic);
-            ShowHelp(Trade_View, 3);
-            return Help_Topic;
          when others =>
             Result := Driver(TradeMenu, Key);
             if Result /= Menu_Ok then

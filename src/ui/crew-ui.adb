@@ -26,6 +26,7 @@ with Ships.Crew; use Ships.Crew;
 with Utils.UI; use Utils.UI;
 with Game; use Game;
 with Items.UI; use Items.UI;
+with Config; use Config;
 
 package body Crew.UI is
 
@@ -381,12 +382,17 @@ package body Crew.UI is
          Color => 1);
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
-      Add(Win => ActionsWindow, Str => "Press F1 for help");
+      Add
+        (Win => ActionsWindow,
+         Str =>
+           "Press " &
+           GetKeyName(Key_Code(GameSettings.Keys(33))) &
+           " for help");
       Change_Attributes
         (Win => ActionsWindow,
          Line => CurrentLine,
          Column => 6,
-         Count => 2,
+         Count => GetKeyName(Key_Code(GameSettings.Keys(33)))'Length,
          Attr => BoldCharacters,
          Color => 1);
       Refresh_Without_Update;

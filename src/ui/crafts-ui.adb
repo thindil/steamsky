@@ -28,6 +28,7 @@ with Help.UI; use Help.UI;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
 with Trades; use Trades;
+with Config; use Config;
 
 package body Crafts.UI is
 
@@ -351,11 +352,15 @@ package body Crafts.UI is
          Color => 1,
          Attr => BoldCharacters);
       Move_Cursor(Line => (WindowHeight + 5), Column => (Columns / 2));
-      Add(Str => "Press F1 for help");
+      Add
+        (Str =>
+           "Press " &
+           GetKeyName(Key_Code(GameSettings.Keys(33))) &
+           " for help");
       Change_Attributes
         (Line => (WindowHeight + 5),
          Column => (Columns / 2) + 6,
-         Count => 2,
+         Count => GetKeyName(Key_Code(GameSettings.Keys(33)))'Length,
          Color => 1,
          Attr => BoldCharacters);
       Refresh_Without_Update;
@@ -532,6 +537,12 @@ package body Crafts.UI is
    function CraftKeys(Key: Key_Code) return GameStates is
       Result: Menus.Driver_Result;
    begin
+      if Key = Key_Code(GameSettings.Keys(33)) then -- Show help
+         Erase;
+         ShowGameHeader(Help_Topic);
+         ShowHelp(Craft_View, 5);
+         return Help_Topic;
+      end if;
       case Key is
          when 27 => -- Back to sky map
             RecipeIndex := 1;
@@ -551,11 +562,6 @@ package body Crafts.UI is
             if Result = Request_Denied then
                Result := Driver(RecipesMenu, M_First_Item);
             end if;
-         when Key_F1 => -- Show help
-            Erase;
-            ShowGameHeader(Help_Topic);
-            ShowHelp(Craft_View, 5);
-            return Help_Topic;
          when others =>
             Result := Driver(RecipesMenu, Key);
             if Result /= Menu_Ok then

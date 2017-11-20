@@ -20,6 +20,7 @@ with UserInterface; use UserInterface;
 with Crafts; use Crafts;
 with Maps; use Maps;
 with Utils.UI; use Utils.UI;
+with Config; use Config;
 
 package body Ships.UI.Ship is
 
@@ -522,12 +523,17 @@ package body Ships.UI.Ship is
          Attr => BoldCharacters);
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => ActionsWindow, Line => CurrentLine, Column => 0);
-      Add(Win => ActionsWindow, Str => "Press F1 for help");
+      Add
+        (Win => ActionsWindow,
+         Str =>
+           "Press " &
+           GetKeyName(Key_Code(GameSettings.Keys(33))) &
+           " for help");
       Change_Attributes
         (Win => ActionsWindow,
          Line => CurrentLine,
          Column => 6,
-         Count => 2,
+         Count => GetKeyName(Key_Code(GameSettings.Keys(33)))'Length,
          Color => 1,
          Attr => BoldCharacters);
       CurrentLine := CurrentLine + 1;
