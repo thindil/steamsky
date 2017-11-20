@@ -84,56 +84,78 @@ Skills = Piloting, Perception
 SkillsLevels = 3..6, 3..6
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Pilot
+Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
+Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [13]
 Skills = Gunnery, Perception
 SkillsLevels = 7..14, 3..6
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Gunner
+Inventory = 1x77, 1x78, 1x79, 1x80, 1x81, 1x72
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [14]
 Skills = Engineering
 SkillsLevels = 7..12
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Engineer
+Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
+Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [15]
 Skills = Rhetoric
 SkillsLevels = 1..5
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Talk
+Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [16]
 Skills = Piloting, Perception
 SkillsLevels = 6..12, 3..6
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Pilot
+Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
+Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [17]
 Skills = Gunnery, Perception
 SkillsLevels = 7..14, 3..6
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Gunner
+Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [18]
 Skills = Engineering
 SkillsLevels = 7..12
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Engineer
+Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
+Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [19]
 Skills = Piloting, Perception
 SkillsLevels = 1, 1..2
 Attributes = 3, 3, 3, 3
 Order = Pilot
+Inventory = 1x74, 1x67, 1x68, 1x69, 1x71
+Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [20]
 Skills = Piloting, Perception
 SkillsLevels = 3..7, 3..7
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Pilot
+Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
+Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [21]
 Skills = Piloting, Perception
 SkillsLevels = 5..15, 3..7
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Pilot
+Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
+Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [22]
 Skills = Gunnery, Perception
 SkillsLevels = 5..15, 3..7
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Gunner
+Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [23]
 Skills = Piloting, Perception
 SkillsLevels = 15..25, 3..6
