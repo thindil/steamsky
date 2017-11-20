@@ -26,5 +26,7 @@ package Utils.UI is
      (Win: Window;
       Color: Color_Pair;
       Caption: String); -- draw frame around window with selected color and caption
+   function GetKeyName
+     (Key: Key_Code) return String; -- Return text representation of key
 
 end Utils.UI;
