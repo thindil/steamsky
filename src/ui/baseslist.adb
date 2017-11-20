@@ -276,12 +276,17 @@ package body BasesList is
          Color => 1);
       CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => OptionsWindow, Line => CurrentLine, Column => 0);
-      Add(Win => OptionsWindow, Str => "Press F1 for help");
+      Add
+        (Win => OptionsWindow,
+         Str =>
+           "Press " &
+           GetKeyName(Key_Code(GameSettings.Keys(33))) &
+           " for help");
       Change_Attributes
         (Win => OptionsWindow,
          Line => CurrentLine,
          Column => 6,
-         Count => 2,
+         Count => GetKeyName(Key_Code(GameSettings.Keys(33)))'Length,
          Attr => BoldCharacters,
          Color => 1);
       Refresh_Without_Update;
@@ -521,6 +526,12 @@ package body BasesList is
       Result: Driver_Result;
       BaseIndex: Positive;
    begin
+      if Key = Key_Code(GameSettings.Keys(33)) then -- Show help
+         Erase;
+         ShowGameHeader(Help_Topic);
+         ShowHelp(Bases_List, 8);
+         return Help_Topic;
+      end if;
       if BasesMenu /= Null_Menu then
          BaseIndex := Positive'Value(Description(Current(BasesMenu)));
          case Key is
@@ -586,11 +597,6 @@ package body BasesList is
             when Key_F4 => -- Show bases owners menu
                ShowBasesOptions(BasesList_Owners);
                return BasesList_Owners;
-            when Key_F1 => -- Show help
-               Erase;
-               ShowGameHeader(Help_Topic);
-               ShowHelp(Bases_List, 8);
-               return Help_Topic;
             when others =>
                Result := Driver(BasesMenu, Key);
          end case;
@@ -612,11 +618,6 @@ package body BasesList is
             when Key_F3 => -- Show bases statuses menu
                ShowBasesOptions(BasesList_Statuses);
                return BasesList_Statuses;
-            when Key_F1 => -- Show help
-               Erase;
-               ShowGameHeader(Help_Topic);
-               ShowHelp(Bases_List, 8);
-               return Help_Topic;
             when others =>
                null;
          end case;
