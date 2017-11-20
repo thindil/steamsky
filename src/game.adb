@@ -394,7 +394,8 @@ package body Game is
          To_Unbounded_String("ArmsArmor"),
          To_Unbounded_String("LegsArmor"),
          To_Unbounded_String("ShieldType"),
-         To_Unbounded_String("WeaponType"));
+         To_Unbounded_String("WeaponType"),
+         To_Unbounded_String("DodgeSkill"));
    begin
       if BaseSyllablesStart.Length > 0 then
          return True;
@@ -575,6 +576,8 @@ package body Game is
                         ShieldType := Value;
                      when 46 =>
                         WeaponType := Value;
+                     when 47 =>
+                        DodgeSkill := FindSkillIndex(Value);
                      when others =>
                         null;
                   end case;
