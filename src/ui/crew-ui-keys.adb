@@ -25,6 +25,7 @@ with Help.UI; use Help.UI;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
 with Messages; use Messages;
+with Config; use Config;
 
 package body Crew.UI.Keys is
 
@@ -92,6 +93,12 @@ package body Crew.UI.Keys is
       Result: Menus.Driver_Result;
       RefreshSkills: Boolean := False;
    begin
+      if Key = Key_Code(GameSettings.Keys(33)) then -- Show help
+         Erase;
+         ShowGameHeader(Help_Topic);
+         ShowHelp(Crew_Info, 7);
+         return Help_Topic;
+      end if;
       case Key is
          when 27 => -- Back to sky map or combat screen
             MemberIndex := 1;
@@ -123,11 +130,6 @@ package body Crew.UI.Keys is
                ShowOrdersForAll;
                return Orders_For_All;
             end if;
-         when Key_F1 => -- Show help
-            Erase;
-            ShowGameHeader(Help_Topic);
-            ShowHelp(Crew_Info, 7);
-            return Help_Topic;
          when Key_F2 => -- Show crew member inventory
             DrawGame(Inventory_View);
             return Inventory_View;

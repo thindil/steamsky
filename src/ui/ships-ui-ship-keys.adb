@@ -22,6 +22,7 @@ with Messages; use Messages;
 with Help.UI; use Help.UI;
 with Ships.Upgrade; use Ships.Upgrade;
 with Header; use Header;
+with Config; use Config;
 
 package body Ships.UI.Ship.Keys is
 
@@ -30,6 +31,12 @@ package body Ships.UI.Ship.Keys is
       OldState: GameStates) return GameStates is
       Result: Menus.Driver_Result;
    begin
+      if Key = Key_Code(GameSettings.Keys(33)) then -- Show help
+         Erase;
+         ShowGameHeader(Help_Topic);
+         ShowHelp(Ship_Info, 6);
+         return Help_Topic;
+      end if;
       case Key is
          when 27 => -- Back to sky map or combat screen
             CurrentMenuIndex := 1;
@@ -51,11 +58,6 @@ package body Ships.UI.Ship.Keys is
          when Character'Pos('n') | Character'Pos('N') => -- Rename ship
             ShowShipForm("New name for ship:");
             return Rename_Ship;
-         when Key_F1 => -- Show help
-            Erase;
-            ShowGameHeader(Help_Topic);
-            ShowHelp(Ship_Info, 6);
-            return Help_Topic;
          when others =>
             Result := Driver(ShipsMenu, Key);
             if Result /= Menu_Ok then
