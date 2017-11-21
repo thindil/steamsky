@@ -584,7 +584,7 @@ package body BasesList is
                end if;
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
-            when Key_Backspace => -- Delete last searching character
+            when Key_Backspace | 127 => -- Delete last searching character
                Result := Driver(BasesMenu, M_Back_Pattern);
             when KEY_DC => -- Clear whole searching string
                Result := Driver(BasesMenu, M_Clear_Pattern);

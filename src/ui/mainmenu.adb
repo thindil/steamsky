@@ -727,7 +727,7 @@ package body MainMenu is
             CenterMap;
             DrawGame(Sky_Map_View);
             return Sky_Map_View;
-         when Key_Backspace => -- delete last character
+         when Key_Backspace | 127 => -- delete last character
             if FieldIndex = 2 or FieldIndex = 6 then
                Result := Driver(NewGameForm, F_Delete_Previous);
             end if;

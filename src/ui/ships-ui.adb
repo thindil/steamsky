@@ -222,7 +222,7 @@ package body Ships.UI is
             else
                return RenameResult(CurrentState);
             end if;
-         when Key_Backspace => -- delete last character
+         when Key_Backspace | 127 => -- delete last character
             if FieldIndex = 2 then
                Result := Driver(RenameForm, F_Delete_Previous);
                if Result = Form_Ok then
