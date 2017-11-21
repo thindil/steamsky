@@ -102,6 +102,8 @@ package body Utils.UI is
             return "Shift + Delete";
          when Key_Backspace =>
             return "Backspace";
+         when 127 =>
+            return "Backspace2";
          when 9 =>
             return "Tab";
          when 353 =>

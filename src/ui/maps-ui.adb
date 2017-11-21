@@ -697,7 +697,7 @@ package body Maps.UI is
                CloseForm;
                return Sky_Map_View;
             end if;
-         when Key_Backspace => -- delete last character
+         when Key_Backspace | 127 => -- delete last character
             if FieldIndex = 2 or FieldIndex = 4 then
                Result := Driver(MoveForm, F_Delete_Previous);
             end if;
