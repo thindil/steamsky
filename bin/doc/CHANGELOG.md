@@ -1,4 +1,4 @@
-# Change Log
+issue #11 - use this same key for help everywhere, and ability to set help for key# Change Log
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
@@ -20,6 +20,8 @@ All notable changes to this project will be documented in this file.
 - Added used skill info to weapons
 - Updated interface
 - Issue #9 - changed default keys for close main menu and quit from game
+- Issue #11 - use this same key for help everywhere, and ability to set help
+  for key 
 
 ### Fixed
 - Don't stop giving order to whole crew when one crew member can't do it
