@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: iron mold, iron sword, iron short sword, bronze chestplate,
-  bronze helmet, bronze armsguard, bronze legsguard and iron shield
+  bronze helmet, bronze armsguard, bronze legsguard, iron shield and iron
+  chestplate
 - New crafting recipes: iron mold, iron sword, iron short sword, bronze
   chestplate, bronze helmet, bronze armsguard, bronze legsguard and iron
   shield
