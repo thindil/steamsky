@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Don't stop giving order to whole crew when one crew member can't do it
 - Auto changing crew members orders
 - Reset selected item in crew member inventory after close
+- Issue #8 - Cant delete backward with BACKSPACE in text fields
 
 ## [1.8] - 2017-11-12
 
