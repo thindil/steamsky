@@ -520,6 +520,8 @@ package body GameOptions is
             return Integer(KEY_SDC);
          elsif KeyName = "Backspace" then
             return Integer(Key_Backspace);
+         elsif KeyName = "Backspace2" then
+            return 127;
          elsif KeyName = "Tab" then
             return 9;
          elsif KeyName = "Shift + Tab" then
@@ -772,7 +774,7 @@ package body GameOptions is
             else
                SetNewKey;
             end if;
-         when Key_Backspace => -- delete last character
+         when Key_Backspace | 127 => -- delete last character
             if not KeySetting then
                if FieldIndex > 11 and FieldIndex < 17 then
                   Result := Driver(OptionsForm, F_Delete_Previous);

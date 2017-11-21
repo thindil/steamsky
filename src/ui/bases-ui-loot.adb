@@ -615,7 +615,7 @@ package body Bases.UI.Loot is
             else
                return LootResult;
             end if;
-         when Key_Backspace => -- delete last character
+         when Key_Backspace | 127 => -- delete last character
             if FieldIndex = 2 then
                Result := Driver(LootForm, F_Delete_Previous);
                if Result = Form_Ok then

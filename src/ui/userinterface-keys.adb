@@ -614,7 +614,7 @@ package body UserInterface.Keys is
                DrawGame(Sky_Map_View);
                return Sky_Map_View;
             end if;
-         when Key_Backspace => -- delete last character
+         when Key_Backspace | 127 => -- delete last character
             if FieldIndex = 2 then
                Result := Driver(WaitForm, F_Delete_Previous);
             end if;

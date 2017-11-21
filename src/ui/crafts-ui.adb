@@ -646,7 +646,7 @@ package body Crafts.UI is
             elsif FieldIndex = 4 then
                Result := Driver(RecipeForm, F_Next_Choice);
             end if;
-         when Key_Backspace => -- delete last character
+         when Key_Backspace | 127 => -- delete last character
             if FieldIndex = 2 then
                Result := Driver(RecipeForm, F_Delete_Previous);
                if Result = Form_Ok then
