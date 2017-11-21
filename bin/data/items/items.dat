@@ -684,4 +684,13 @@ Prices = 14, 16, 16, 16
 Buyable = Y, N, N, N
 Value = 15, 8
 Description = Standard shield made of iron, used in melee combat.
+[83]
+Name = Iron chestplate
+Weight = 10
+Type = ChestArmor
+Prices = 18, 20, 20, 20
+Buyable = Y, N, N, N
+ShowType = Armor
+Value = 10, 15
+Description = Standard type of armor, made of iron, weared on torso.
 []
