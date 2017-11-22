@@ -32,7 +32,7 @@ package body Config is
          ShipName => To_Unbounded_String("Anaria"));
       GameSettings :=
         (AutoRest => True,
-         UndockSpeed => QUARTER_SPEED,
+         UndockSpeed => FULL_SPEED,
          AutoCenter => True,
          AutoReturn => True,
          AutoFinish => True,
