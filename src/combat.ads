@@ -43,6 +43,7 @@ package Combat is
    EndCombat: Boolean; -- True if combat ends
    MessagesStarts: Natural; -- Start index for showing messages
    OldSpeed: ShipSpeed; -- Speed of player ship before combat
+   HarpoonDuration: Natural; -- How long (amount of rounds) player ship will be stopped by enemy harpoon
 
    function StartCombat
      (EnemyIndex: Positive;
