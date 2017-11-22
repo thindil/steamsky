@@ -192,6 +192,11 @@ To change which item type is used as a weapon by characters, open file
 *game.dat* in *data* directory and edit line which starts with WeaponType.
 Value after equal sign must be existing item type.
 
+## Dodging skill name
+To change which skill is used for dodges in character's combat, open 
+file *game.dat* in *data* directory and edit line which starts with 
+DodgeSkill. Value after equal sign must be existing skill name.
+
 ## Items
 
 ### General informations
