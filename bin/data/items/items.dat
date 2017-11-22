@@ -693,4 +693,13 @@ Buyable = Y, N, N, N
 ShowType = Armor
 Value = 10, 15
 Description = Standard type of armor, made of iron, weared on torso.
+[84]
+Name = Iron helmet
+Weight = 2
+Type = HeadArmor
+Prices = 12, 14, 14, 14
+Buyable = Y, N, N, N
+ShowType = Armor
+Value = 10, 7
+Description = Standard type of armor, made of iron, weared on head.
 []
