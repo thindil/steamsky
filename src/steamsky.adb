@@ -237,7 +237,7 @@ begin
                when ShipyardTypesMenu =>
                   GameState := Shipyard_View;
                   DrawGame(Shipyard_View);
-               when Combat_Orders | Enemy_Info =>
+               when Combat_Orders | Enemy_Info | Boarding_Menu =>
                   GameState := Combat_State;
                   DrawGame(Combat_State);
                when Recipe_Setting =>
@@ -480,6 +480,8 @@ begin
             GameState := SchoolSkillsMenuKeys(Key);
          when Inventory_Menu =>
             GameState := InventoryMenuKeys(Key);
+         when Boarding_Menu =>
+            GameState := BoardingMenuKeys(Key);
          when others =>
             GameState := GameMenuKeys(GameState, Key);
       end case;

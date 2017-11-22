@@ -34,7 +34,6 @@ with Goals; use Goals;
 package body Combat is
 
    EnemyShipIndex: Positive;
-   HarpoonDuration: Natural;
 
    function StartCombat
      (EnemyIndex: Positive;
