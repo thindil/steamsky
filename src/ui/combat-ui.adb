@@ -29,6 +29,7 @@ with Messages.UI; use Messages.UI;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
 with Bases; use Bases;
+with Config; use Config;
 
 package body Combat.UI is
 
@@ -407,13 +408,23 @@ package body Combat.UI is
             Color => 1,
             Attr => BoldCharacters);
          Move_Cursor(Line => 12, Column => (Columns / 2));
-         Add(Str => "F1 for help");
+         Add(Str => GetKeyName(Key_Code(GameSettings.Keys(33))) & " for help");
          Change_Attributes
            (Line => 12,
             Column => (Columns / 2),
-            Count => 2,
+            Count => GetKeyName(Key_Code(GameSettings.Keys(33)))'Length,
             Color => 1,
             Attr => BoldCharacters);
+         if HarpoonDuration > 0 or Enemy.HarpoonDuration > 0 then
+            Move_Cursor(Line => 13, Column => (Columns / 2));
+            Add(Str => "Board enemy ship");
+            Change_Attributes
+              (Line => 13,
+               Column => (Columns / 2),
+               Count => 1,
+               Color => 1,
+               Attr => BoldCharacters);
+         end if;
       else
          Move_Cursor(Line => 11, Column => (Columns / 3));
          Add(Str => "Press any key for back to sky map");
@@ -707,8 +718,49 @@ package body Combat.UI is
          Columns);
    end ShowEnemyInfo;
 
+   procedure ShowBoardingMenu is
+      Orders_Items: constant Item_Array_Access :=
+        new Item_Array
+        (PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index + 2);
+      MenuHeight: Line_Position;
+      MenuLength: Column_Position;
+   begin
+      for I in PlayerShip.Crew.Iterate loop
+         Orders_Items.all(Crew_Container.To_Index(I)) :=
+           New_Item(To_String(PlayerShip.Crew(I).Name));
+      end loop;
+      Orders_Items.all(Orders_Items'Last - 1) := New_Item("Close");
+      Orders_Items.all(Orders_Items'Last) := Null_Item;
+      OrdersMenu := New_Menu(Orders_Items);
+      Set_Options(OrdersMenu, (One_Valued => False, others => True));
+      Scale(OrdersMenu, MenuHeight, MenuLength);
+      MenuWindow2 :=
+        Create
+          (MenuHeight + 2,
+           MenuLength + 2,
+           ((Lines / 3) - (MenuHeight / 2)),
+           ((Columns / 2) - (MenuLength / 2)));
+      WindowFrame(MenuWindow2, 5, "Set boarding party");
+      Set_Window(OrdersMenu, MenuWindow2);
+      Set_Sub_Window
+        (OrdersMenu,
+         Derived_Window(MenuWindow2, MenuHeight, MenuLength, 1, 1));
+      Post(OrdersMenu);
+      Refresh_Without_Update;
+      Refresh_Without_Update(MenuWindow2);
+      Update_Screen;
+   end ShowBoardingMenu;
+
    function CombatKeys(Key: Key_Code) return GameStates is
       Result: Driver_Result;
+      procedure SearchMenu is
+      begin
+         Result := Driver(CrewMenu, Key);
+         if Result /= Menu_Ok then
+            Result := Driver(CrewMenu, M_Clear_Pattern);
+            Result := Driver(CrewMenu, Key);
+         end if;
+      end SearchMenu;
    begin
       if not EndCombat then
          case Key is
@@ -760,12 +812,17 @@ package body Combat.UI is
                ShowGameHeader(Help_Topic);
                ShowHelp(Combat_State, 4);
                return Help_Topic;
-            when others =>
-               Result := Driver(CrewMenu, Key);
-               if Result /= Menu_Ok then
-                  Result := Driver(CrewMenu, M_Clear_Pattern);
-                  Result := Driver(CrewMenu, Key);
+            when Character'Pos('b') |
+              Character'Pos
+                ('B') => -- Select boarding party and start boarding enemy ship
+               if HarpoonDuration > 0 or Enemy.HarpoonDuration > 0 then
+                  ShowBoardingMenu;
+                  return Boarding_Menu;
+               else
+                  SearchMenu;
                end if;
+            when others =>
+               SearchMenu;
          end case;
          if Result = Menu_Ok then
             Refresh(MenuWindow);
@@ -848,5 +905,14 @@ package body Combat.UI is
       ShowEnemyInfo;
       return Enemy_Info;
    end EnemyInfoKeys;
+
+   function BoardingMenuKeys(Key: Key_Code) return GameStates is
+   begin
+      case Key is
+         when others =>
+            DrawGame(Combat_State);
+            return Combat_State;
+      end case;
+   end BoardingMenuKeys;
 
 end Combat.UI;

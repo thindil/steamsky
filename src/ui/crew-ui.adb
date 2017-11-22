@@ -272,6 +272,10 @@ package body Crew.UI is
                OrderName := To_Unbounded_String("Healing wounded");
             when Clean =>
                OrderName := To_Unbounded_String("Cleans ship");
+            when Boarding =>
+               OrderName := To_Unbounded_String("Boarding");
+            when Defend =>
+               OrderName := To_Unbounded_String("Defends ship");
          end case;
          CurrentLine := WindowHeight - 3;
          OrderHeaderLine := CurrentLine;

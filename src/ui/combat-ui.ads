@@ -26,5 +26,8 @@ package Combat.UI is
      (Key: Key_Code) return GameStates; -- Handle keys in combat orders menu
    function EnemyInfoKeys
      (Key: Key_Code) return GameStates; -- Handle keys in detailed enemy info
+   function BoardingMenuKeys
+     (Key: Key_Code)
+     return GameStates; -- Handle keys in selecting boarding party
 
 end Combat.UI;

@@ -267,6 +267,12 @@ package body Crew is
                OrderMessage);
          when Clean =>
             AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
+         when Boarding =>
+            AddMessage
+              (MemberName & " starts boarding enemy ship.",
+               OrderMessage);
+         when Defend =>
+            AddMessage(MemberName & " starts defending ship.", OrderMessage);
       end case;
       PlayerShip.Crew(MemberIndex).Order := GivenOrder;
       PlayerShip.Crew(MemberIndex).OrderTime := 15;
