@@ -1,45 +1,45 @@
 [1]
-Skills = Rhetoric
-SkillsLevels = 5
+Skills = Rhetoric, Swords, Dodge
+SkillsLevels = 5, 5, 5
 Attributes = 3, 3, 3, 3
 Order = Talk
 Priorities = Repair ship:Normal, Manufacturing:Normal, Upgrading ship:Normal, Talking in bases:High, Healing wounded:Normal, Cleaning ship:Normal
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
 Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [2]
-Skills = Piloting, Perception
-SkillsLevels = 5, 5
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 5, 5, 5, 5
 Attributes = 3, 3, 3, 3
 Order = Pilot
 Priorities = Piloting:Normal
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [3]
-Skills = Engineering
-SkillsLevels = 5
+Skills = Engineering, Swords, Dodge
+SkillsLevels = 5, 5, 5
 Attributes = 3, 3, 3, 3
 Order = Engineer
 Priorities = Engineering:Normal
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [4]
-Skills = Gunnery, Perception
-SkillsLevels = 5, 5
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 5, 5, 5, 5
 Attributes = 3, 3, 3, 3
 Order = Gunner
 Priorities = Operating guns:Normal
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
 Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [5]
-Skills = Piloting, Perception
-SkillsLevels = 1, 1
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 1, 1, 1, 1
 Attributes = 2, 2, 2, 2
 Order = Pilot
 Inventory = 1x74, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [6]
-Skills = Gunnery, Perception
-SkillsLevels = 1, 1
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 1, 1, 1, 1
 Attributes = 2, 2, 2, 2
 Order = Gunner
 Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
@@ -52,106 +52,106 @@ Order = Pilot
 Inventory = 1x67, 1x68, 1x69, 1x71
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [8]
-Skills = Piloting, Perception
-SkillsLevels = 1, 2..4
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 1, 2..4, 2..4, 2..4
 Attributes = 3, 3, 3, 3
 Order = Pilot
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [9]
-Skills = Gunnery, Perception
-SkillsLevels = 3, 2..4
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 3, 2..4, 2..4, 2..4
 Attributes = 3, 3, 3, 3
 Order = Gunner
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
 Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [10]
-Skills = Engineering
-SkillsLevels = 3..6
+Skills = Engineering, Swords, Dodge
+SkillsLevels = 3..6, 3..6, 3..6
 Attributes = 3, 3, 3, 3
 Order = Engineer
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [11]
-Skills = Piloting, Perception
-SkillsLevels = 1, 1..4
+Skills = Piloting, Perception, Dodge
+SkillsLevels = 1, 1..4, 1..4
 Attributes = 3, 3, 3, 3
 Order = Pilot
 Inventory = 1x67, 1x68, 1x69, 1x71
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [12]
-Skills = Piloting, Perception
-SkillsLevels = 3..6, 3..6
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 3..6, 3..6, 3..6, 3..6
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Pilot
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [13]
-Skills = Gunnery, Perception
-SkillsLevels = 7..14, 3..6
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 7..14, 3..6, 3..6, 3..6
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Gunner
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [14]
-Skills = Engineering
-SkillsLevels = 7..12
+Skills = Engineering, Swords, Dodge
+SkillsLevels = 7..12, 7..12, 7..12
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Engineer
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [15]
-Skills = Rhetoric
-SkillsLevels = 1..5
+Skills = Rhetoric, Swords, Dodge
+SkillsLevels = 1..5, 1..5, 1..5
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Talk
 Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [16]
-Skills = Piloting, Perception
-SkillsLevels = 6..12, 3..6
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 6..12, 3..6, 6..12, 6..12
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Pilot
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [17]
-Skills = Gunnery, Perception
-SkillsLevels = 7..14, 3..6
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 7..14, 3..6, 7..14, 7..14
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Gunner
 Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [18]
-Skills = Engineering
-SkillsLevels = 7..12
+Skills = Engineering, Swords, Dodge
+SkillsLevels = 7..12, 7..12, 7..12
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Engineer
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [19]
-Skills = Piloting, Perception
-SkillsLevels = 1, 1..2
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 1, 1..2, 1..2, 1..2
 Attributes = 3, 3, 3, 3
 Order = Pilot
 Inventory = 1x74, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [20]
-Skills = Piloting, Perception
-SkillsLevels = 3..7, 3..7
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 3..7, 3..7, 3..7, 3..7
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Pilot
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [21]
-Skills = Piloting, Perception
-SkillsLevels = 5..15, 3..7
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 5..15, 3..7, 5..15, 5..15
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Pilot
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [22]
-Skills = Gunnery, Perception
-SkillsLevels = 5..15, 3..7
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 5..15, 3..7, 5..15, 5..15
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Gunner
 Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
