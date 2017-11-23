@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
   chestplate, iron helmet and iron armsguard
 - New crafting recipes: iron mold, iron sword, iron short sword, bronze
   chestplate, bronze helmet, bronze armsguard, bronze legsguard, iron shield,
-  iron chestplate and iron helmet
+  iron chestplate, iron helmet and iron armsguard
 - Option to set starting equipment for mobs
 - Inventory to some mobs
 - Equipment to some mobs
