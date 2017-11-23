@@ -744,7 +744,7 @@ package body Combat is
                  (To_String(EnemyName) & " increases speed.",
                   CombatMessage);
                EnemyPilotOrder := 1;
-            elsif Enemy.Distance <= 10 and Enemy.Ship.Speed /= HALF_SPEED then
+            elsif Enemy.Distance <= 10 and Enemy.Ship.Speed = FULL_SPEED then
                Enemy.Ship.Speed :=
                  ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) - 1);
                AddMessage
