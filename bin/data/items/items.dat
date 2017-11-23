@@ -702,4 +702,13 @@ Buyable = Y, N, N, N
 ShowType = Armor
 Value = 10, 7
 Description = Standard type of armor, made of iron, weared on head.
+[85]
+Name = Iron armsguard
+Weight = 2
+Type = ArmsArmor
+Prices = 15, 17, 17, 17
+Buyable = Y, N, N, N
+ShowType = Armor
+Value = 10, 9
+Description = Standard type of armor, made of iron, protects arms.
 []
