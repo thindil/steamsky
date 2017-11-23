@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Issue #11 - use this same key for help everywhere, and ability to set help
   for key 
 - Default ship speed after undocking as suggested in issue #14
+- Starting skills for mobs
 
 ### Fixed
 - Don't stop giving order to whole crew when one crew member can't do it
