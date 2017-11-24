@@ -157,85 +157,117 @@ Order = Gunner
 Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [23]
-Skills = Piloting, Perception
-SkillsLevels = 15..25, 3..6
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 15..25, 3..6, 15..25, 15..25
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Pilot
+Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [24]
-Skills = Gunnery, Perception
-SkillsLevels = 15..25, 3..6
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 15..25, 3..6, 15..25, 15..25
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Gunner
+Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [25]
-Skills = Engineering
-SkillsLevels = 15..25
+Skills = Engineering, Swords, Dodge
+SkillsLevels = 15..25, 15..25, 15..25
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Engineer
+Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [26]
-Skills = Rhetoric
-SkillsLevels = 5..10
+Skills = Rhetoric, Swords, Dodge
+SkillsLevels = 5..10, 15..25, 15..25
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Talk
+Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [27]
-Skills = Piloting, Perception
-SkillsLevels = 3..6, 3..6
+Skills = Piloting, Perception, Dodge
+SkillsLevels = 3..6, 3..6, 5..15
 Attributes = 2..4, 2..4, 2..4, 2..4
 Order = Pilot
+Inventory = 1x78, 1x79, 1x80, 1x81
+Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [28]
-Skills = Piloting, Perception
-SkillsLevels = 7..20, 7..20
+Skills = Piloting, Perception, Dodge
+SkillsLevels = 7..20, 7..20, 15..25
 Attributes = 5..15, 5..15, 5..15, 5..15
 Order = Pilot
+Inventory = 1x83, 1x84, 1x85, 1x86
+Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [29]
-Skills = Piloting, Perception
-SkillsLevels = 15..25, 7..15
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 15..25, 7..15, 15..25, 15..25
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Pilot
+Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [30]
-Skills = Gunnery, Perception
-SkillsLevels = 10..20, 3..8
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 10..20, 3..8, 15..25, 15..25
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Gunner
+Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [31]
-Skills = Gunnery, Perception
-SkillsLevels = 10..20, 3..7
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 10..20, 3..7, 15..25, 15..25
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Gunner
+Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [32]
-Skills = Piloting, Perception
-SkillsLevels = 7..20, 4..12
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 7..20, 4..12, 7..20, 7..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Pilot
+Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [33]
-Skills = Gunnery, Perception
-SkillsLevels = 7..20, 3..10
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 7..20, 3..10, 7..20, 7..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Gunner
+Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [34]
-Skills = Engineering
-SkillsLevels = 7..20
+Skills = Engineering, Swords, Dodge
+SkillsLevels = 7..20, 7..20, 7..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Engineer
+Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [35]
-Skills = Rhetoric
-SkillsLevels = 2..6
+Skills = Rhetoric, Swords, Dodge
+SkillsLevels = 2..6, 7..20, 7..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Talk
+Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [36]
-Skills = Piloting, Perception
-SkillsLevels = 5..15, 5..15
+Skills = Piloting, Perception, Dodge
+SkillsLevels = 5..15, 5..15, 5..15
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Pilot
+Inventory = 1x83, 1x84, 1x85, 1x86
+Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [37]
-Skills = Piloting, Perception
-SkillsLevels = 7..2, 5..15
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 7..2, 5..15, 10..20, 10..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Pilot
+Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [38]
-Skills = Gunnery, Perception
-SkillsLevels = 10..20, 5..15
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 10..20, 5..15, 5..15, 5..15
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Gunner
+Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [39]
 Skills = Piloting, Perception
 SkillsLevels = 30..50, 4..12
