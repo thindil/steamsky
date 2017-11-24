@@ -675,7 +675,7 @@ Prices = 14, 16, 16, 16
 Buyable = Y, N, N, N
 ShowType = Armor
 Value = 15, 8
-Description = Standard type of armor, made of leather, protects legs.
+Description = Standard type of armor, made of bronze, protects legs.
 [82]
 Name = Iron shield
 Weight = 6
@@ -711,4 +711,13 @@ Buyable = Y, N, N, N
 ShowType = Armor
 Value = 10, 9
 Description = Standard type of armor, made of iron, protects arms.
+[86]
+Name = Iron legsguard
+Weight = 2
+Type = LegsArmor
+Prices = 17, 19, 19, 19
+Buyable = Y, N, N, N
+ShowType = Armor
+Value = 10, 12
+Description = Standard type of armor, made of iron, protects legs.
 []
