@@ -734,6 +734,9 @@ package body Combat.UI is
       OrdersMenu := New_Menu(Orders_Items);
       Set_Options(OrdersMenu, (One_Valued => False, others => True));
       Scale(OrdersMenu, MenuHeight, MenuLength);
+      if MenuLength < 22 then
+         MenuLength := 22;
+      end if;
       MenuWindow2 :=
         Create
           (MenuHeight + 2,
