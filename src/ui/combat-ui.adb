@@ -733,6 +733,7 @@ package body Combat.UI is
       Orders_Items.all(Orders_Items'Last) := Null_Item;
       OrdersMenu := New_Menu(Orders_Items);
       Set_Options(OrdersMenu, (One_Valued => False, others => True));
+      Set_Mark(OrdersMenu, "+");
       Scale(OrdersMenu, MenuHeight, MenuLength);
       if MenuLength < 22 then
          MenuLength := 22;
@@ -910,12 +911,50 @@ package body Combat.UI is
    end EnemyInfoKeys;
 
    function BoardingMenuKeys(Key: Key_Code) return GameStates is
+      Result: Driver_Result;
    begin
       case Key is
+         when 56 | KEY_UP => -- Select previous crew member
+            Result := Driver(OrdersMenu, M_Up_Item);
+            if Result = Request_Denied then
+               Result := Driver(OrdersMenu, M_Last_Item);
+            end if;
+         when 50 | KEY_DOWN => -- Select next crew member
+            Result := Driver(OrdersMenu, M_Down_Item);
+            if Result = Request_Denied then
+               Result := Driver(OrdersMenu, M_First_Item);
+            end if;
+         when 10 => -- Set selected crew member as boarding party member
+            if Name(Current(OrdersMenu)) = "Close" then
+               for I in
+                 PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+                  if Value(Menus.Items(OrdersMenu, I)) then
+                     GiveOrders(I, Boarding);
+                  end if;
+               end loop;
+               DrawGame(Combat_State);
+               return Combat_State;
+            else
+               Result := Driver(OrdersMenu, M_Toggle_Item);
+            end if;
+         when 27 => -- Esc select close option, used second time, close menu
+            if Name(Current(OrdersMenu)) = "Close" then
+               DrawGame(Combat_State);
+               return Combat_State;
+            else
+               Result := Driver(OrdersMenu, M_Last_Item);
+            end if;
          when others =>
-            DrawGame(Combat_State);
-            return Combat_State;
+            Result := Driver(OrdersMenu, Key);
+            if Result /= Menu_Ok then
+               Result := Driver(OrdersMenu, M_Clear_Pattern);
+               Result := Driver(OrdersMenu, Key);
+            end if;
       end case;
+      if Result = Menu_Ok then
+         Refresh(MenuWindow2);
+      end if;
+      return Boarding_Menu;
    end BoardingMenuKeys;
 
 end Combat.UI;
