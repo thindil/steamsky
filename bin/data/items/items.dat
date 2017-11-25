@@ -552,7 +552,7 @@ Type = ChestArmor
 Prices = 10, 15, 15, 15
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 20, 5
+Value = 20, 5, 0
 Description = Weakest type of armor, made of leather, weared on torso.
 [68]
 Name = Leather helmet
@@ -560,7 +560,7 @@ Type = HeadArmor
 Prices = 7, 10, 10, 10
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 20, 2
+Value = 20, 2, 0
 Description = Weakest type of armor, made of leather, weared on head.
 [69]
 Name = Leather armsguard
@@ -568,7 +568,7 @@ Type = ArmsArmor
 Prices = 8, 12, 12, 12
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 20, 3
+Value = 20, 3, 0
 Description = Weakest type of armor, made of leather, protects arms.
 [70]
 Name = Bronze sewing kit
@@ -586,7 +586,7 @@ Type = LegsArmor
 Prices = 9, 12, 12, 12
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 20, 4
+Value = 20, 4, 0
 Description = Weakest type of armor, made of leather, protects legs.
 [72]
 Name = Bronze shield
@@ -647,7 +647,7 @@ Type = ChestArmor
 Prices = 15, 17, 17, 17
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 15, 10
+Value = 15, 10, 2
 Description = Standard type of armor, made of bronze, weared on torso.
 [79]
 Name = Bronze helmet
@@ -656,7 +656,7 @@ Type = HeadArmor
 Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 15, 5
+Value = 15, 5, 1
 Description = Standard type of armor, made of bronze, weared on head.
 [80]
 Name = Bronze armsguard
@@ -665,7 +665,7 @@ Type = ArmsArmor
 Prices = 12, 14, 14, 14
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 15, 6
+Value = 15, 6, 0
 Description = Standard type of armor, made of bronze, protects arms.
 [81]
 Name = Bronze legsguard
@@ -674,7 +674,7 @@ Type = LegsArmor
 Prices = 14, 16, 16, 16
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 15, 8
+Value = 15, 8, 2
 Description = Standard type of armor, made of bronze, protects legs.
 [82]
 Name = Iron shield
@@ -691,7 +691,7 @@ Type = ChestArmor
 Prices = 18, 20, 20, 20
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 10, 15
+Value = 10, 15, 3
 Description = Standard type of armor, made of iron, weared on torso.
 [84]
 Name = Iron helmet
@@ -700,7 +700,7 @@ Type = HeadArmor
 Prices = 12, 14, 14, 14
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 10, 7
+Value = 10, 7, 2
 Description = Standard type of armor, made of iron, weared on head.
 [85]
 Name = Iron armsguard
@@ -709,7 +709,7 @@ Type = ArmsArmor
 Prices = 15, 17, 17, 17
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 10, 9
+Value = 10, 9, 1
 Description = Standard type of armor, made of iron, protects arms.
 [86]
 Name = Iron legsguard
@@ -718,7 +718,7 @@ Type = LegsArmor
 Prices = 17, 19, 19, 19
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 10, 12
+Value = 10, 12, 1
 Description = Standard type of armor, made of iron, protects legs.
 [87]
 Name = Steel short sword
