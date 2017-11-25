@@ -146,6 +146,9 @@ begin
                Set_Cursor_Visibility(Visibility);
                GameState := Sky_Map_View;
                DrawGame(GameState);
+            when GameMenu | Control_Speed | Wait_Order =>
+               GameState := Sky_Map_View;
+               DrawGame(GameState);
             when others =>
                DrawGame(GameState);
          end case;
