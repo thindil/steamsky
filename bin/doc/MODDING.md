@@ -230,7 +230,8 @@ DodgeSkill. Value after equal sign must be existing skill name.
   combat, second value separated by `, ` (comma and space) for melee weapons
   is damage done by weapon and for armor piece it is amount of damage reduced
   by this armor. Third value for melee weapons is number of skill used by this
-  weapon (from *game.dat* file, entry *Skills*).
+  weapon (from *game.dat* file, entry *Skills*) and for armor is amount of
+  levels of dodge skill which this armor reduce when weared.
 - Description: Any length description of item.
 
 ## Recipes
