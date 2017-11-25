@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Reset selected item in crew member inventory after close
 - Issue #8 - Cant delete backward with BACKSPACE in text fields
 - Crash during combat when enemy ship change speed
+- Showing game menu after screen resize
 
 ## [1.8] - 2017-11-12
 
