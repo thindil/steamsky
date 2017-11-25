@@ -639,7 +639,7 @@ Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
 ShowType = Weapon
 Value = 10, 20, 17
-Description = Simple short sword made of bronze, used in melee combat.
+Description = Simple short sword made of iron, used in melee combat.
 [78]
 Name = Bronze chestplate
 Weight = 10
@@ -720,4 +720,13 @@ Buyable = Y, N, N, N
 ShowType = Armor
 Value = 10, 12
 Description = Standard type of armor, made of iron, protects legs.
+[87]
+Name = Steel short sword
+Weight = 1
+Type = MeleeWeapon
+Prices = 15, 17, 17, 17
+Buyable = Y, N, N, N
+ShowType = Weapon
+Value = 5, 25, 17
+Description = Simple short sword made of steel, used in melee combat.
 []
