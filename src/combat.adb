@@ -609,6 +609,11 @@ package body Combat is
                      end if;
                      if EndCombat then
                         if Ship = PlayerShip then
+                           for I in PlayerShip.Crew.Iterate loop
+                              if PlayerShip.Crew(I).Order = Boarding then
+                                 GiveOrders(Crew_Container.To_Index(I), Rest);
+                              end if;
+                           end loop;
                            EnemyShip.Modules(1).Durability := 0;
                            AddMessage
                              (To_String(EnemyName) & " is destroyed!",
