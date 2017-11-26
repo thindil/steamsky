@@ -33,8 +33,6 @@ with Goals; use Goals;
 
 package body Combat is
 
-   EnemyShipIndex: Positive;
-
    function StartCombat
      (EnemyIndex: Positive;
       NewCombat: Boolean := True) return GameStates is
