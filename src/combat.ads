@@ -44,6 +44,7 @@ package Combat is
    MessagesStarts: Natural; -- Start index for showing messages
    OldSpeed: ShipSpeed; -- Speed of player ship before combat
    HarpoonDuration: Natural; -- How long (amount of rounds) player ship will be stopped by enemy harpoon
+   EnemyShipIndex: Positive; -- Prototype index of enemy ship
 
    function StartCombat
      (EnemyIndex: Positive;
