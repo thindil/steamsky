@@ -415,7 +415,8 @@ package body Combat.UI is
             Count => GetKeyName(Key_Code(GameSettings.Keys(33)))'Length,
             Color => 1,
             Attr => BoldCharacters);
-         if HarpoonDuration > 0 or Enemy.HarpoonDuration > 0 then
+         if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
+           ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
             Move_Cursor(Line => 13, Column => (Columns / 2));
             Add(Str => "Board enemy ship");
             Change_Attributes
@@ -819,7 +820,8 @@ package body Combat.UI is
             when Character'Pos('b') |
               Character'Pos
                 ('B') => -- Select boarding party and start boarding enemy ship
-               if HarpoonDuration > 0 or Enemy.HarpoonDuration > 0 then
+               if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
+                 ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
                   ShowBoardingMenu;
                   return Boarding_Menu;
                else
