@@ -45,8 +45,8 @@ Order = Gunner
 Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
 Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [7]
-Skills = Piloting, Perception
-SkillsLevels = 1, 1
+Skills = Piloting, Perception, Brawling
+SkillsLevels = 1, 1, 1
 Attributes = 1, 1, 1, 1
 Order = Pilot
 Inventory = 1x67, 1x68, 1x69, 1x71
@@ -73,8 +73,8 @@ Order = Engineer
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [11]
-Skills = Piloting, Perception, Dodge
-SkillsLevels = 1, 1..4, 1..4
+Skills = Piloting, Perception, Brawling, Dodge
+SkillsLevels = 1, 1..4, 1..4, 1..4
 Attributes = 3, 3, 3, 3
 Order = Pilot
 Inventory = 1x67, 1x68, 1x69, 1x71
@@ -185,15 +185,15 @@ Order = Talk
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [27]
-Skills = Piloting, Perception, Dodge
-SkillsLevels = 3..6, 3..6, 5..15
+Skills = Piloting, Perception, Brawling, Dodge
+SkillsLevels = 3..6, 3..6, 5..15, 5..15
 Attributes = 2..4, 2..4, 2..4, 2..4
 Order = Pilot
 Inventory = 1x78, 1x79, 1x80, 1x81
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [28]
-Skills = Piloting, Perception, Dodge
-SkillsLevels = 7..20, 7..20, 15..25
+Skills = Piloting, Perception, Brawling, Dodge
+SkillsLevels = 7..20, 7..20, 15..25, 15..25
 Attributes = 5..15, 5..15, 5..15, 5..15
 Order = Pilot
 Inventory = 1x83, 1x84, 1x85, 1x86
@@ -248,8 +248,8 @@ Order = Talk
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [36]
-Skills = Piloting, Perception, Dodge
-SkillsLevels = 5..15, 5..15, 5..15
+Skills = Piloting, Perception, Brawling, Dodge
+SkillsLevels = 5..15, 5..15, 5..15, 5..15
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Pilot
 Inventory = 1x83, 1x84, 1x85, 1x86
