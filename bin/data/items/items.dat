@@ -738,4 +738,12 @@ Buyable = Y, N, N, N
 ShowType = Weapon
 Value = 5, 30, 17
 Description = Simple sword made of steel, used in melee combat.
+[89]
+Name = Steel shield
+Weight = 6
+Type = Shield
+Prices = 24, 26, 26, 26
+Buyable = Y, N, N, N
+Value = 15, 12
+Description = Standard shield made of steel, used in melee combat.
 []
