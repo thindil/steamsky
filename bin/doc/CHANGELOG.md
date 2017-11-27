@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 - Option to set starting equipment for mobs
 - Inventory to some mobs
 - Equipment to some mobs
-- New skills: swords and dodge
+- New skills: swords, dodge and brawling
 
 ### Changed
 - Updated MODDING.md
