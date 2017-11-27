@@ -177,17 +177,17 @@ package body Combat is
       EnemyAmmoIndex,
       EnemyPilotIndex: Natural :=
         0;
-      DistanceTraveled, SpeedBonus: Integer;
+      DistanceTraveled, SpeedBonus, LootAmount: Integer;
       ShootMessage: Unbounded_String;
       EnemyPilotOrder: Positive := 2;
       HaveFuel: Boolean := False;
       DamageRange: Positive := 10000;
       Message: Unbounded_String;
+      FreeSpace: Integer := 0;
       procedure Attack(Ship, EnemyShip: in out ShipRecord) is
          GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex: Natural;
          GunnerOrder: Positive;
-         HitChance, HitLocation, LootAmount, CurrentAccuracyBonus: Integer;
-         FreeSpace: Integer := 0;
+         HitChance, HitLocation, CurrentAccuracyBonus: Integer;
          type DamageFactor is digits 2 range 0.0 .. 1.0;
          Damage: DamageFactor := 0.0;
          WeaponDamage: Integer;
@@ -605,95 +605,26 @@ package body Combat is
                      if PlayerShip.Crew(1).Health = 0 then -- player is dead
                         EndCombat := True;
                      end if;
-                     if EndCombat then
-                        if Ship = PlayerShip then
-                           for I in PlayerShip.Crew.Iterate loop
-                              if PlayerShip.Crew(I).Order = Boarding then
-                                 GiveOrders(Crew_Container.To_Index(I), Rest);
-                              end if;
-                           end loop;
-                           EnemyShip.Modules(1).Durability := 0;
-                           AddMessage
-                             (To_String(EnemyName) & " is destroyed!",
-                              CombatMessage);
-                           LootAmount := Enemy.Loot;
-                           FreeSpace := FreeCargo((0 - LootAmount));
-                           if FreeSpace < 0 then
-                              LootAmount := LootAmount + FreeSpace;
-                           end if;
-                           if LootAmount > 0 then
-                              AddMessage
-                                ("You looted" &
-                                 Integer'Image(LootAmount) &
-                                 " " &
-                                 To_String(MoneyName) &
-                                 " from " &
-                                 To_String(EnemyName) &
-                                 ".",
-                                 CombatMessage);
-                              UpdateCargo
-                                (Ship,
-                                 FindProtoItem(MoneyIndex),
-                                 LootAmount);
-                           end if;
-                           EnemyShip.Speed := FULL_STOP;
-                           if SkyMap(Ship.SkyX, Ship.SkyY).EventIndex > 0 then
-                              if Events_List
-                                  (SkyMap(Ship.SkyX, Ship.SkyY).EventIndex)
-                                  .EType =
-                                AttackOnBase then
-                                 GainRep
-                                   (SkyMap(Ship.SkyX, Ship.SkyY).BaseIndex,
-                                    5);
-                              end if;
-                              DeleteEvent
-                                (SkyMap(Ship.SkyX, Ship.SkyY).EventIndex);
-                           end if;
-                           if SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex >
-                             0 then
-                              if Ship.Missions
-                                  (SkyMap(Ship.SkyX, Ship.SkyY).MissionIndex)
-                                  .MType =
-                                Destroy then
-                                 if ProtoShips_List
-                                     (Ship.Missions
-                                        (SkyMap(Ship.SkyX, Ship.SkyY)
-                                           .MissionIndex)
-                                        .Target)
-                                     .Name =
-                                   EnemyShip.Name then
-                                    UpdateMission
-                                      (SkyMap(Ship.SkyX, Ship.SkyY)
-                                         .MissionIndex);
-                                 end if;
-                              end if;
-                           end if;
-                           if GetRandom(1, 100) < 10 then
-                              GainRep(EnemyShip.HomeBase, -100);
-                           end if;
-                           UpdateDestroyedShips(EnemyShip.Name);
-                           UpdateGoal
-                             (DESTROY,
-                              ProtoShips_List(EnemyShipIndex).Index);
-                           if CurrentGoal.TargetIndex /=
-                             Null_Unbounded_String then
-                              UpdateGoal
-                                (DESTROY,
-                                 To_Unbounded_String
-                                   (Bases_Owners'Image
-                                      (ProtoShips_List(EnemyShipIndex)
-                                         .Owner)));
-                           end if;
-                        else
-                           return;
-                        end if;
-                        exit Attack_Loop;
-                     end if;
+                     exit Attack_Loop when EndCombat;
                   end loop;
                end if;
             end if;
          end loop Attack_Loop;
       end Attack;
+      function CharacterAttack
+        (AttackerIndex, DefenderIndex: Positive;
+         PlayerAttack: Boolean) return Boolean is
+         Attacker, Defender: Member_Data;
+      begin
+         if PlayerAttack then
+            Attacker := PlayerShip.Crew(AttackerIndex);
+            Defender := Enemy.Ship.Crew(DefenderIndex);
+         else
+            Attacker := Enemy.Ship.Crew(AttackerIndex);
+            Defender := PlayerShip.Crew(DefenderIndex);
+         end if;
+         return True;
+      end CharacterAttack;
    begin
       for I in PlayerShip.Crew.Iterate loop
          case PlayerShip.Crew(I).Order is
@@ -959,6 +890,43 @@ package body Combat is
       if not EndCombat then
          Attack(Enemy.Ship, PlayerShip); -- Enemy attack
       end if;
+      if not EndCombat and Enemy.Ship.Crew.Length > 0 then -- Characters combat
+         declare
+            AttackDone, Riposte: Boolean;
+            DefenderIndex: Positive;
+         begin
+            for Attacker in
+              PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+               if PlayerShip.Crew(Attacker).Order = Boarding then
+                  AttackDone := False;
+                  for Defender in
+                    Enemy.Ship.Crew.First_Index ..
+                        Enemy.Ship.Crew.Last_Index loop
+                     if Enemy.Ship.Crew(Defender).Order = Defend then
+                        Riposte := CharacterAttack(Attacker, Defender, True);
+                        if not EndCombat and Riposte then
+                           Riposte := CharacterAttack(Defender, Attacker, False);
+                        end if;
+                        AttackDone := True;
+                        exit;
+                     end if;
+                  end loop;
+                  if not AttackDone then
+                     DefenderIndex :=
+                       GetRandom
+                         (Enemy.Ship.Crew.First_Index,
+                          Enemy.Ship.Crew.Last_Index);
+                     Enemy.Ship.Crew(DefenderIndex).Order := Defend;
+                     Riposte := CharacterAttack(Attacker, DefenderIndex, True);
+                     if not EndCombat and Riposte then
+                        Riposte := CharacterAttack(DefenderIndex, Attacker, False);
+                     end if;
+                  end if;
+               end if;
+               exit when EndCombat;
+            end loop;
+         end;
+      end if;
       if Enemy.HarpoonDuration > 0 then
          Enemy.HarpoonDuration := Enemy.HarpoonDuration - 1;
       end if;
@@ -967,6 +935,67 @@ package body Combat is
       end if;
       if not EndCombat then
          UpdateGame(1);
+      elsif PlayerShip.Crew(1).Health > 0 then
+         for I in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(I).Order = Boarding then
+               GiveOrders(Crew_Container.To_Index(I), Rest);
+            end if;
+         end loop;
+         Enemy.Ship.Modules(1).Durability := 0;
+         AddMessage(To_String(EnemyName) & " is destroyed!", CombatMessage);
+         LootAmount := Enemy.Loot;
+         FreeSpace := FreeCargo((0 - LootAmount));
+         if FreeSpace < 0 then
+            LootAmount := LootAmount + FreeSpace;
+         end if;
+         if LootAmount > 0 then
+            AddMessage
+              ("You looted" &
+               Integer'Image(LootAmount) &
+               " " &
+               To_String(MoneyName) &
+               " from " &
+               To_String(EnemyName) &
+               ".",
+               CombatMessage);
+            UpdateCargo(PlayerShip, FindProtoItem(MoneyIndex), LootAmount);
+         end if;
+         Enemy.Ship.Speed := FULL_STOP;
+         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+            if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                .EType =
+              AttackOnBase then
+               GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 5);
+            end if;
+            DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
+         end if;
+         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
+            if PlayerShip.Missions
+                (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
+                .MType =
+              Destroy then
+               if ProtoShips_List
+                   (PlayerShip.Missions
+                      (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
+                      .Target)
+                   .Name =
+                 Enemy.Ship.Name then
+                  UpdateMission
+                    (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+               end if;
+            end if;
+         end if;
+         if GetRandom(1, 100) < 10 then
+            GainRep(Enemy.Ship.HomeBase, -100);
+         end if;
+         UpdateDestroyedShips(Enemy.Ship.Name);
+         UpdateGoal(DESTROY, ProtoShips_List(EnemyShipIndex).Index);
+         if CurrentGoal.TargetIndex /= Null_Unbounded_String then
+            UpdateGoal
+              (DESTROY,
+               To_Unbounded_String
+                 (Bases_Owners'Image(ProtoShips_List(EnemyShipIndex).Owner)));
+         end if;
       end if;
    end CombatTurn;
 
