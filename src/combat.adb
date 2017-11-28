@@ -615,6 +615,15 @@ package body Combat is
         (AttackerIndex, DefenderIndex: Positive;
          PlayerAttack: Boolean) return Boolean is
          Attacker, Defender: Member_Data;
+         HitChance, Damage: Integer;
+         HitLocation: constant Positive := GetRandom(3, 6);
+         AttackMessage: Unbounded_String;
+         LocationNames: constant array(3 .. 6) of Unbounded_String :=
+           (To_Unbounded_String("Head"),
+            To_Unbounded_String("Torso"),
+            To_Unbounded_String("Legs"),
+            To_Unbounded_String("Arms"));
+         MessageColor, AttackSkill: Natural;
       begin
          if PlayerAttack then
             Attacker := PlayerShip.Crew(AttackerIndex);
@@ -623,7 +632,114 @@ package body Combat is
             Attacker := Enemy.Ship.Crew(AttackerIndex);
             Defender := PlayerShip.Crew(DefenderIndex);
          end if;
-         return True;
+         AttackMessage :=
+           Attacker.Name & To_Unbounded_String(" attacks ") & Defender.Name;
+         if Attacker.Equipment(1) > 0 then
+            AttackSkill :=
+              GetSkillLevel
+                (Attacker,
+                 Items_List
+                   (Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
+                   .Value
+                   (3));
+            HitChance := AttackSkill + GetRandom(1, 50);
+            Damage :=
+              Items_List(Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
+                .Value
+                (2) +
+              Attacker.Attributes(StrengthIndex)(1);
+         else
+            HitChance :=
+              GetSkillLevel(Attacker, UnarmedSkill) + GetRandom(1, 50);
+            Damage := Attacker.Attributes(StrengthIndex)(1);
+         end if;
+         HitChance :=
+           HitChance -
+           (GetSkillLevel(Defender, DodgeSkill) + GetRandom(1, 50));
+         if Defender.Equipment(HitLocation) > 0 then
+            HitChance :=
+              HitChance +
+              Items_List
+                (Defender.Inventory(Defender.Equipment(HitLocation))
+                   .ProtoIndex)
+                .Value
+                (3);
+            Damage :=
+              Damage -
+              Items_List
+                (Defender.Inventory(Defender.Equipment(HitLocation))
+                   .ProtoIndex)
+                .Value
+                (2);
+            if Damage < 1 then
+               Damage := 1;
+            end if;
+         end if;
+         if HitChance < 1 then
+            AttackMessage := AttackMessage & To_Unbounded_String(" and miss.");
+            if PlayerAttack then
+               MessageColor := 4;
+            else
+               MessageColor := 5;
+            end if;
+            if not PlayerAttack then
+               GainExp(1, DodgeSkill, DefenderIndex);
+            end if;
+         else
+            AttackMessage :=
+              AttackMessage &
+              To_Unbounded_String(" and hit in ") &
+              LocationNames(HitLocation) &
+              To_Unbounded_String(".");
+            if PlayerAttack then
+               MessageColor := 2;
+            else
+               MessageColor := 1;
+            end if;
+            DamageItem
+              (Attacker.Inventory,
+               Attacker.Equipment(1),
+               AttackSkill,
+               AttackerIndex);
+            DamageItem
+              (Defender.Inventory,
+               Defender.Equipment(HitLocation),
+               0,
+               DefenderIndex);
+            if PlayerAttack then
+               GainExp
+                 (1,
+                  Items_List
+                    (Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
+                    .Value
+                    (3),
+                  AttackerIndex);
+            end if;
+            if Damage > Defender.Health then
+               Defender.Health := 0;
+            else
+               Defender.Health := Defender.Health - Damage;
+            end if;
+         end if;
+         AddMessage(To_String(AttackMessage), CombatMessage, MessageColor);
+         Attacker.Tired := Attacker.Tired + 1;
+         Defender.Tired := Defender.Tired + 1;
+         if Defender.Health = 0 then
+            if PlayerAttack then
+               Death(DefenderIndex, Attacker.Name, Enemy.Ship);
+               if Enemy.Ship.Crew.Length = 0 then
+                  EndCombat := True;
+               end if;
+            else
+               Death(DefenderIndex, Attacker.Name, PlayerShip);
+               if DefenderIndex = 1 then -- Player is dead
+                  EndCombat := True;
+               end if;
+            end if;
+            return False;
+         else
+            return True;
+         end if;
       end CharacterAttack;
    begin
       for I in PlayerShip.Crew.Iterate loop
@@ -905,7 +1021,8 @@ package body Combat is
                      if Enemy.Ship.Crew(Defender).Order = Defend then
                         Riposte := CharacterAttack(Attacker, Defender, True);
                         if not EndCombat and Riposte then
-                           Riposte := CharacterAttack(Defender, Attacker, False);
+                           Riposte :=
+                             CharacterAttack(Defender, Attacker, False);
                         end if;
                         AttackDone := True;
                         exit;
@@ -919,7 +1036,8 @@ package body Combat is
                      Enemy.Ship.Crew(DefenderIndex).Order := Defend;
                      Riposte := CharacterAttack(Attacker, DefenderIndex, True);
                      if not EndCombat and Riposte then
-                        Riposte := CharacterAttack(DefenderIndex, Attacker, False);
+                        Riposte :=
+                          CharacterAttack(DefenderIndex, Attacker, False);
                      end if;
                   end if;
                end if;
