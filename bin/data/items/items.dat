@@ -744,6 +744,15 @@ Weight = 6
 Type = Shield
 Prices = 24, 26, 26, 26
 Buyable = Y, N, N, N
-Value = 15, 12
+Value = 5, 12
 Description = Standard shield made of steel, used in melee combat.
+[90]
+Name = Steel chestplate
+Weight = 12
+Type = ChestArmor
+Prices = 28, 30, 30, 30
+Buyable = Y, N, N, N
+ShowType = Armor
+Value = 5, 20, 5
+Description = Standard type of armor, made of steel, weared on torso.
 []
