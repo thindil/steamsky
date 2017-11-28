@@ -59,7 +59,8 @@ package body Ships.Crew is
    procedure Death
      (MemberIndex: Positive;
       Reason: Unbounded_String;
-      Ship: in out ShipRecord) is
+      Ship: in out ShipRecord;
+      CreateBody: Boolean := True) is
    begin
       if MemberIndex > 1 then
          if Ship = PlayerShip then
@@ -83,13 +84,15 @@ package body Ships.Crew is
             return;
          end if;
       end if;
-      Ship.Cargo.Append
-      (New_Item =>
-         (ProtoIndex => FindProtoItem(CorpseIndex),
-          Amount => 1,
-          Name =>
-            Ship.Crew(MemberIndex).Name & To_Unbounded_String("'s corpse"),
-          Durability => 100));
+      if CreateBody then
+         Ship.Cargo.Append
+         (New_Item =>
+            (ProtoIndex => FindProtoItem(CorpseIndex),
+             Amount => 1,
+             Name =>
+               Ship.Crew(MemberIndex).Name & To_Unbounded_String("'s corpse"),
+             Durability => 100));
+      end if;
       DeleteMember(MemberIndex, Ship);
    end Death;
 

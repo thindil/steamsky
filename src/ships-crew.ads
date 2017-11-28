@@ -24,7 +24,8 @@ package Ships.Crew is
    procedure Death
      (MemberIndex: Positive;
       Reason: Unbounded_String;
-      Ship: in out ShipRecord); -- Handle crew member death
+      Ship: in out ShipRecord;
+      CreateBody: Boolean := True); -- Handle crew member death
    procedure DeleteMember
      (MemberIndex: Positive;
       Ship: in out ShipRecord); -- Delete selected member from crew list
