@@ -45,3 +45,4 @@ LegsArmor = LegsArmor
 ShieldType = Shield
 WeaponType = MeleeWeapon
 DodgeSkill = Dodge
+UnarmedSkill = Brawling
