@@ -163,6 +163,7 @@ package Game is
    TalkingSkill: Positive; -- Index of skill used for talk in bases or with other ships
    PerceptionSkill: Positive; -- Index of skill used for spoting
    DodgeSkill: Positive; -- Index of skill used for dodge in character's combat
+   UnarmedSkill: Positive; -- Index of skill used for unarmed attacks in character's combat
    HeadArmor: Unbounded_String; -- Name of item type used as characters head armor
    ChestArmor: Unbounded_String; -- Name of item type used as characters torso armor
    ArmsArmor: Unbounded_String; -- Name of item type used as characters arms armor
