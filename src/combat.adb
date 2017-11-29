@@ -656,14 +656,17 @@ package body Combat is
          HitChance :=
            HitChance -
            (GetSkillLevel(Defender, DodgeSkill) + GetRandom(1, 50));
+         for I in 3 .. 6 loop
+            if Defender.Equipment(I) > 0 then
+               HitChance :=
+                 HitChance +
+                 Items_List
+                   (Defender.Inventory(Defender.Equipment(I)).ProtoIndex)
+                   .Value
+                   (3);
+            end if;
+         end loop;
          if Defender.Equipment(HitLocation) > 0 then
-            HitChance :=
-              HitChance +
-              Items_List
-                (Defender.Inventory(Defender.Equipment(HitLocation))
-                   .ProtoIndex)
-                .Value
-                (3);
             Damage :=
               Damage -
               Items_List
