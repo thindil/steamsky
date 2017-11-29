@@ -619,10 +619,10 @@ package body Combat is
          HitLocation: constant Positive := GetRandom(3, 6);
          AttackMessage: Unbounded_String;
          LocationNames: constant array(3 .. 6) of Unbounded_String :=
-           (To_Unbounded_String("Head"),
-            To_Unbounded_String("Torso"),
-            To_Unbounded_String("Legs"),
-            To_Unbounded_String("Arms"));
+           (To_Unbounded_String("head"),
+            To_Unbounded_String("torso"),
+            To_Unbounded_String("leg"),
+            To_Unbounded_String("arm"));
          MessageColor, AttackSkill: Natural;
       begin
          if PlayerAttack then
@@ -696,16 +696,20 @@ package body Combat is
             else
                MessageColor := 1;
             end if;
-            DamageItem
-              (Attacker.Inventory,
-               Attacker.Equipment(1),
-               AttackSkill,
-               AttackerIndex);
-            DamageItem
-              (Defender.Inventory,
-               Defender.Equipment(HitLocation),
-               0,
-               DefenderIndex);
+            if Attacker.Equipment(1) > 0 then
+               DamageItem
+                 (Attacker.Inventory,
+                  Attacker.Equipment(1),
+                  AttackSkill,
+                  AttackerIndex);
+            end if;
+            if Defender.Equipment(HitLocation) > 0 then
+               DamageItem
+                 (Defender.Inventory,
+                  Defender.Equipment(HitLocation),
+                  0,
+                  DefenderIndex);
+            end if;
             if PlayerAttack then
                GainExp
                  (1,
@@ -724,6 +728,13 @@ package body Combat is
          AddMessage(To_String(AttackMessage), CombatMessage, MessageColor);
          Attacker.Tired := Attacker.Tired + 1;
          Defender.Tired := Defender.Tired + 1;
+         if PlayerAttack then
+            PlayerShip.Crew(AttackerIndex) := Attacker;
+            Enemy.Ship.Crew(DefenderIndex) := Defender;
+         else
+            PlayerShip.Crew(DefenderIndex) := Defender;
+            Enemy.Ship.Crew(AttackerIndex) := Attacker;
+         end if;
          if Defender.Health = 0 then
             if PlayerAttack then
                Death(DefenderIndex, Attacker.Name, Enemy.Ship);
