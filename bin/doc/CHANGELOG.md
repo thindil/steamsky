@@ -15,7 +15,8 @@ All notable changes to this project will be documented in this file.
 - Inventory to some mobs
 - Equipment to some mobs
 - New skills: swords, dodge and brawling
-- Added boarding enemy ships in combat
+- Boarding enemy ships in combat
+- Combat between characters
 
 ### Changed
 - Updated MODDING.md
