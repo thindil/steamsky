@@ -674,9 +674,16 @@ package body Combat is
                    .ProtoIndex)
                 .Value
                 (2);
-            if Damage < 1 then
-               Damage := 1;
-            end if;
+         end if;
+         if Defender.Equipment(2) > 0 then
+            Damage :=
+              Damage -
+              Items_List(Defender.Inventory(Defender.Equipment(2)).ProtoIndex)
+                .Value
+                (2);
+         end if;
+         if Damage < 1 then
+            Damage := 1;
          end if;
          if HitChance < 1 then
             AttackMessage := AttackMessage & To_Unbounded_String(" and miss.");
