@@ -49,7 +49,7 @@ package body Crew is
       end UpdateOrder;
    begin
       if GivenOrder = PlayerShip.Crew.Element(MemberIndex).Order then
-         if GivenOrder = Craft then
+         if GivenOrder = Craft or GivenOrder = Gunner then
             for I in
               PlayerShip.Modules.First_Index ..
                   PlayerShip.Modules.Last_Index loop
