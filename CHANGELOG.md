@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash during combat when enemy ship change speed
 - Showing game menu after screen resize
+- Assign gunner to other gun
 
 ## [1.0.9] - 2017-10-22
 
