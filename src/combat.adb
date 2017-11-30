@@ -1009,6 +1009,15 @@ package body Combat is
               (To_String(EnemyName) & " escaped from you.",
                CombatMessage);
          end if;
+         for I in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(I).Order = Boarding then
+               Death
+                 (Crew_Container.To_Index(I),
+                  To_Unbounded_String("enemy crew"),
+                  PlayerShip,
+                  False);
+            end if;
+         end loop;
          EndCombat := True;
          return;
       elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
