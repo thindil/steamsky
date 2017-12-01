@@ -14,8 +14,8 @@ All notable changes to this project will be documented in this file.
   sword, steel sword, steel shield, steel chestplate, steel helmet, steel
   armsguard and steel legsguard
 - Option to set starting equipment for mobs
-- Inventory to some mobs
-- Equipment to some mobs
+- Inventory to mobs
+- Equipment to mobs
 - New skills: swords, dodge and brawling
 - Boarding enemy ships in combat
 - Combat between characters
