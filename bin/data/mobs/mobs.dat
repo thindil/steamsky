@@ -269,83 +269,111 @@ Order = Gunner
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [39]
-Skills = Piloting, Perception
-SkillsLevels = 30..50, 4..12
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 30..50, 4..12, 30..50, 30..50
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Pilot
+Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [40]
-Skills = Gunnery, Perception
-SkillsLevels = 30..50, 4..12
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 30..50, 4..12, 30..50, 30..50
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Gunner
+Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [41]
-Skills = Engineering
-SkillsLevels = 30..50
+Skills = Engineering, Swords, Dodge
+SkillsLevels = 30..50, 30..50, 30..50
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Engineer
+Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [42]
-Skills = Rhetoric
-SkillsLevels = 10..20
+Skills = Rhetoric, Swords, Dodge
+SkillsLevels = 10..20, 30..50, 30..50
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Talk
+Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [43]
-Skills = Piloting, Perception
-SkillsLevels = 40..60, 8..15
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 40..60, 8..15, 40..60, 40..60
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Pilot
+Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [44]
-Skills = Gunnery, Perception
-SkillsLevels = 40..60, 8..15
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 40..60, 8..15, 40..60, 40..60
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Gunner
+Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [45]
-Skills = Engineering
-SkillsLevels = 40..60
+Skills = Engineering, Swords, Dodge
+SkillsLevels = 40..60, 40..60, 40..60
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Engineer
+Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [46]
-Skills = Rhetoric
-SkillsLevels = 20..40
+Skills = Rhetoric, Swords, Dodge
+SkillsLevels = 20..40, 40..60, 40..60
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Talk
+Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [47]
-Skills = Piloting, Perception
-SkillsLevels = 30..50, 30..50
+Skills = Piloting, Perception, Brawling, Dodge
+SkillsLevels = 30..50, 30..50, 30..50, 30..50
 Attributes = 15..20, 15..20, 15..20, 15..20
 Order = Pilot
+Inventory = 1x90, 1x91, 1x92, 1x93
+Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [48]
-Skills = Piloting, Perception
-SkillsLevels = 40..60, 40..60
+Skills = Piloting, Perception, Brawling, Dodge
+SkillsLevels = 40..60, 40..60, 40..60, 40..60
 Attributes = 20..30, 20..30, 20..30, 20..30
 Order = Pilot
+Inventory = 1x90, 1x91, 1x92, 1x93
+Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [49]
-Skills = Piloting, Perception
-SkillsLevels = 40..60, 5..15
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 40..60, 5..15, 40..60, 40..60
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Pilot
 [50]
-Skills = Gunnery, Perception
-SkillsLevels = 30..50, 5..15
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 30..50, 5..15, 40..60, 40..60
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Gunner
 [51]
-Skills = Piloting, Perception
-SkillsLevels = 50..70, 8..20
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 50..70, 8..20, 50..70, 50..70
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Pilot
+Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [52]
-Skills = Gunnery, Perception
-SkillsLevels = 40..60, 8..20
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 40..60, 8..20, 50..70, 50..70
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Gunner
+Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
+Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [53]
-Skills = Piloting, Perception
-SkillsLevels = 1, 1
+Skills = Piloting, Perception, Swords, Dodge
+SkillsLevels = 1, 1, 1, 1
 Attributes = 3, 3, 3, 3
 Order = Pilot
+Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
+Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [54]
-Skills = Gunnery, Perception
-SkillsLevels = 1, 1
+Skills = Gunnery, Perception, Swords, Dodge
+SkillsLevels = 1, 1, 1, 1
 Attributes = 3, 3, 3, 3
 Order = Gunner
+Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
+Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 []
