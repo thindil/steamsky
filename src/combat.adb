@@ -623,7 +623,9 @@ package body Combat is
             To_Unbounded_String("torso"),
             To_Unbounded_String("leg"),
             To_Unbounded_String("arm"));
-         MessageColor, AttackSkill: Natural;
+         MessageColor, AttackSkill, BaseDamage: Natural;
+         type DamageFactor is digits 2 range 0.0 .. 1.0;
+         Wounds: DamageFactor := 0.0;
       begin
          if PlayerAttack then
             Attacker := PlayerShip.Crew(AttackerIndex);
@@ -634,6 +636,20 @@ package body Combat is
          end if;
          AttackMessage :=
            Attacker.Name & To_Unbounded_String(" attacks ") & Defender.Name;
+         BaseDamage := Attacker.Attributes(StrengthIndex)(1);
+         if Attacker.Equipment(1) > 0 then
+            BaseDamage := BaseDamage + Items_List(Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex).Value(2);
+         end if;
+         Wounds := 1.0 - DamageFactor(Float(Attacker.Health) / 100.0);
+         Damage := (BaseDamage - Integer(Float(BaseDamage) * Float(Wounds)));
+         if Attacker.Thirst > 40 then
+            Wounds := 1.0 - DamageFactor(Float(Attacker.Thirst) / 100.0);
+            Damage := Damage - (Integer(Float(BaseDamage) * Float(Wounds)));
+         end if;
+         if Attacker.Hunger > 80 then
+            Wounds := 1.0 - DamageFactor(Float(Attacker.Hunger) / 100.0);
+            Damage := Damage - (Integer(Float(BaseDamage) * Float(Wounds)));
+         end if;
          if Attacker.Equipment(1) > 0 then
             AttackSkill :=
               GetSkillLevel
@@ -643,15 +659,9 @@ package body Combat is
                    .Value
                    (3));
             HitChance := AttackSkill + GetRandom(1, 50);
-            Damage :=
-              Items_List(Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
-                .Value
-                (2) +
-              Attacker.Attributes(StrengthIndex)(1);
          else
             HitChance :=
               GetSkillLevel(Attacker, UnarmedSkill) + GetRandom(1, 50);
-            Damage := Attacker.Attributes(StrengthIndex)(1);
          end if;
          HitChance :=
            HitChance -
