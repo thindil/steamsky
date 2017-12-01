@@ -718,7 +718,7 @@ Type = LegsArmor
 Prices = 17, 19, 19, 19
 Buyable = Y, N, N, N
 ShowType = Armor
-Value = 10, 12, 1
+Value = 10, 12, 2
 Description = Standard type of armor, made of iron, protects legs.
 [87]
 Name = Steel short sword
@@ -773,4 +773,13 @@ Buyable = Y, N, N, N
 ShowType = Armor
 Value = 5, 12, 2
 Description = Standard type of armor, made of steel, protects arms.
+[93]
+Name = Steel legsguard
+Weight = 3
+Type = LegsArmor
+Prices = 24, 26, 26, 26
+Buyable = Y, N, N, N
+ShowType = Armor
+Value = 5, 16, 3
+Description = Standard type of armor, made of steel, protects legs.
 []
