@@ -638,7 +638,11 @@ package body Combat is
            Attacker.Name & To_Unbounded_String(" attacks ") & Defender.Name;
          BaseDamage := Attacker.Attributes(StrengthIndex)(1);
          if Attacker.Equipment(1) > 0 then
-            BaseDamage := BaseDamage + Items_List(Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex).Value(2);
+            BaseDamage :=
+              BaseDamage +
+              Items_List(Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
+                .Value
+                (2);
          end if;
          Wounds := 1.0 - DamageFactor(Float(Attacker.Health) / 100.0);
          Damage := (BaseDamage - Integer(Float(BaseDamage) * Float(Wounds)));
