@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Crew; use Crew;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
@@ -630,12 +631,30 @@ package body Combat is
          if PlayerAttack then
             Attacker := PlayerShip.Crew(AttackerIndex);
             Defender := Enemy.Ship.Crew(DefenderIndex);
+            AttackMessage :=
+              Attacker.Name &
+              To_Unbounded_String(" attacks ") &
+              Defender.Name &
+              To_Unbounded_String(" (") &
+              To_Unbounded_String
+                (To_Lower
+                   (Bases_Owners'Image
+                      (ProtoShips_List(EnemyShipIndex).Owner))) &
+              To_Unbounded_String(")");
          else
             Attacker := Enemy.Ship.Crew(AttackerIndex);
             Defender := PlayerShip.Crew(DefenderIndex);
+            AttackMessage :=
+              Attacker.Name &
+              To_Unbounded_String(" (") &
+              To_Unbounded_String
+                (To_Lower
+                   (Bases_Owners'Image
+                      (ProtoShips_List(EnemyShipIndex).Owner))) &
+              To_Unbounded_String(")") &
+              To_Unbounded_String(" attacks ") &
+              Defender.Name;
          end if;
-         AttackMessage :=
-           Attacker.Name & To_Unbounded_String(" attacks ") & Defender.Name;
          BaseDamage := Attacker.Attributes(StrengthIndex)(1);
          if Attacker.Equipment(1) > 0 then
             BaseDamage :=
