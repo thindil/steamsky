@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
   chestplate, bronze helmet, bronze armsguard, bronze legsguard, iron shield,
   iron chestplate, iron helmet, iron armsguard, iron legsguard, steel short
   sword, steel sword, steel shield, steel chestplate, steel helmet, steel
-  armsguard and steel legsguard
+  armsguard, steel legsguard and steel mold
 - Option to set starting equipment for mobs
 - Inventory to mobs
 - Equipment to mobs
