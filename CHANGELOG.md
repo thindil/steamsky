@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.0.10] - 2017-12-03
 
 ### Fixed
 - Crash during combat when enemy ship change speed
