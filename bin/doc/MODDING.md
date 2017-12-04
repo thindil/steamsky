@@ -393,7 +393,8 @@ DodgeSkill. Value after equal sign must be existing skill name.
   talk in bases or with other ships, `{PerceptionSkill}` which later will be
   replaced with name of skill used to notice other ships, `{ConditionName}`
   which later will be replaced with name of attribute used to raise crew
-  member condition.
+  member condition, `{DodgeSkill}` which later will be replaced with name of
+  skill used to dodge enemy attacks in character's combat.
 
 ## Goals
 
