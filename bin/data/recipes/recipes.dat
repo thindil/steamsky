@@ -766,4 +766,14 @@ Skill = Blacksmith
 Difficulty = 10
 BaseType = 1
 Tool = BlacksmithSet
+[78]
+Material = Steel
+Amount = 2
+Result = 96
+Crafted = 1
+Workplace = Furnace
+Skill = Blacksmith
+Difficulty = 15
+BaseType = 1
+Tool = BlacksmithSet
 []
