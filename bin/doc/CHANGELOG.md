@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Boarding enemy ships in combat
 - Combat between characters
 - Showing current dodge skill name in help
+- Few new mobiles
 
 ### Changed
 - Updated MODDING.md
