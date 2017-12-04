@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - New skills: swords, dodge and brawling
 - Boarding enemy ships in combat
 - Combat between characters
+- Showing current dodge skill name in help
 
 ### Changed
 - Updated MODDING.md
