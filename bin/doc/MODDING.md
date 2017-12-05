@@ -449,7 +449,7 @@ DodgeSkill. Value after equal sign must be existing skill name.
   and space). Can be constant value or range from minimum value to max value,
   separated by `..` (double dots).
 - Order: Current ship order of selected mob. Possible values are: Pilot,
-  Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest.
+  Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest, Defend.
 - Priorities: Orders priorities for selected mob, separated by `, ` (comma and
   space). Each priority entry is Order`:`Priority where Order is: Piloting,
   Engineering, Operating guns, Repair ship, Manufacturing, Upgrading ship,
