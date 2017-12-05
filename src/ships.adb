@@ -333,6 +333,7 @@ package body Ships is
       ItemIndex,
       RecipeIndex,
       MobIndex: Natural;
+      Amount2: Positive;
       TempRecord: ProtoShipData;
       TempModules, TempRecipes: Positive_Container.Vector;
       TempCargo: Skills_Container.Vector;
@@ -535,9 +536,39 @@ package body Ships is
                      if EndIndex = 0 then
                         EndIndex := Length(Value) + 1;
                      end if;
-                     MobIndex :=
-                       FindProtoMob
-                         (Unbounded_Slice(Value, StartIndex, EndIndex - 1));
+                     XIndex := Index(Value, "x", StartIndex);
+                     DotIndex := Index(Value, "..", StartIndex);
+                     if XIndex = 0 or XIndex > EndIndex then
+                        MobIndex :=
+                          FindProtoMob
+                            (Unbounded_Slice(Value, StartIndex, EndIndex - 1));
+                        if MobIndex > 0 then
+                           TempRecord.Crew.Append(New_Item => MobIndex);
+                        end if;
+                     else
+                        if DotIndex = 0 or DotIndex > EndIndex then
+                           Amount2 :=
+                             Positive'Value
+                               (Slice(Value, StartIndex, XIndex - 1));
+                        else
+                           Amount2 :=
+                             GetRandom
+                               (Integer'Value
+                                  (Slice(Value, StartIndex, DotIndex - 1)),
+                                Integer'Value
+                                  (Slice(Value, DotIndex + 2, XIndex - 1)));
+                        end if;
+                        for J in 1 .. Amount2 loop
+                           MobIndex :=
+                             FindProtoMob
+                               (Unbounded_Slice
+                                  (Value,
+                                   XIndex + 1,
+                                   EndIndex - 1));
+                           exit when MobIndex = 0;
+                           TempRecord.Crew.Append(New_Item => MobIndex);
+                        end loop;
+                     end if;
                      if MobIndex = 0 then
                         Close(ShipsFile);
                         End_Search(Files);
@@ -548,7 +579,6 @@ package body Ships is
                           To_String(TempRecord.Name) &
                           ".";
                      end if;
-                     TempRecord.Crew.Append(New_Item => MobIndex);
                      StartIndex := EndIndex + 2;
                   end loop;
                end if;
