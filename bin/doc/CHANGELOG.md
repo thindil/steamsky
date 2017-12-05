@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Default ship speed after undocking as suggested in issue #14
 - Starting skills for mobs
 - Updated help
+- Increased crews in some ships
 
 ### Fixed
 - Don't stop giving order to whole crew when one crew member can't do it
