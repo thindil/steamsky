@@ -144,82 +144,89 @@ package body Ships is
       else
          NewName := Name;
       end if;
-      for I in ProtoShip.Crew.First_Index .. ProtoShip.Crew.Last_Index loop
-         if GetRandom(1, 100) < 50 then
-            Gender := 'M';
+      for ProtoMember of ProtoShip.Crew loop
+         if ProtoMember(3) = 0 then
+            Amount := ProtoMember(2);
          else
-            Gender := 'F';
+            Amount := GetRandom(ProtoMember(2), ProtoMember(3));
          end if;
-         MemberName := GenerateMemberName(Gender);
-         Member := ProtoMobs_List.Element(ProtoShip.Crew.Element(I));
-         for Skill of Member.Skills loop
-            if Skill(3) = 0 then
-               TmpSkills.Append(New_Item => Skill);
+         for I in 1 .. Amount loop
+            if GetRandom(1, 100) < 50 then
+               Gender := 'M';
             else
-               TmpSkills.Append
-               (New_Item => (Skill(1), GetRandom(Skill(2), Skill(3)), 0));
+               Gender := 'F';
             end if;
-         end loop;
-         for Attribute of Member.Attributes loop
-            if Attribute(2) = 0 then
-               TmpAttributes.Append(New_Item => Attribute);
-            else
-               TmpAttributes.Append
-               (New_Item => (GetRandom(Attribute(1), Attribute(2)), 0));
-            end if;
-         end loop;
-         for Item of Member.Inventory loop
-            if Item(3) > 0 then
-               Amount := GetRandom(Item(2), Item(3));
-            else
-               Amount := Item(2);
-            end if;
-            TmpInventory.Append
+            MemberName := GenerateMemberName(Gender);
+            Member := ProtoMobs_List.Element(ProtoMember(1));
+            for Skill of Member.Skills loop
+               if Skill(3) = 0 then
+                  TmpSkills.Append(New_Item => Skill);
+               else
+                  TmpSkills.Append
+                  (New_Item => (Skill(1), GetRandom(Skill(2), Skill(3)), 0));
+               end if;
+            end loop;
+            for Attribute of Member.Attributes loop
+               if Attribute(2) = 0 then
+                  TmpAttributes.Append(New_Item => Attribute);
+               else
+                  TmpAttributes.Append
+                  (New_Item => (GetRandom(Attribute(1), Attribute(2)), 0));
+               end if;
+            end loop;
+            for Item of Member.Inventory loop
+               if Item(3) > 0 then
+                  Amount := GetRandom(Item(2), Item(3));
+               else
+                  Amount := Item(2);
+               end if;
+               TmpInventory.Append
+               (New_Item =>
+                  (ProtoIndex => Item(1),
+                   Amount => Amount,
+                   Name => Null_Unbounded_String,
+                   Durability => 100));
+            end loop;
+            ShipCrew.Append
             (New_Item =>
-               (ProtoIndex => Item(1),
-                Amount => Amount,
-                Name => Null_Unbounded_String,
-                Durability => 100));
-         end loop;
-         ShipCrew.Append
-         (New_Item =>
-            (Name => MemberName,
-             Gender => Gender,
-             Health => 100,
-             Tired => 0,
-             Skills => TmpSkills,
-             Hunger => 0,
-             Thirst => 0,
-             Order => Member.Order,
-             PreviousOrder => Rest,
-             OrderTime => 15,
-             Orders => Member.Priorities,
-             Attributes => TmpAttributes,
-             Inventory => TmpInventory,
-             Equipment => Member.Equipment));
-         TmpSkills.Clear;
-         TmpAttributes.Clear;
-         TmpInventory.Clear;
-         for Module of ShipModules loop
-            if Modules_List(Module.ProtoIndex).MType = CABIN and
-              Module.Owner = 0 then
-               Module.Name := MemberName & To_Unbounded_String("'s Cabin");
-               Module.Owner := ShipCrew.Last_Index;
-               exit;
-            end if;
-         end loop;
-         for Module of ShipModules loop
-            if Module.Owner = 0 then
-               if Modules_List(Module.ProtoIndex).MType = GUN and
-                 Member.Order = Gunner then
+               (Name => MemberName,
+                Gender => Gender,
+                Health => 100,
+                Tired => 0,
+                Skills => TmpSkills,
+                Hunger => 0,
+                Thirst => 0,
+                Order => Member.Order,
+                PreviousOrder => Rest,
+                OrderTime => 15,
+                Orders => Member.Priorities,
+                Attributes => TmpAttributes,
+                Inventory => TmpInventory,
+                Equipment => Member.Equipment));
+            TmpSkills.Clear;
+            TmpAttributes.Clear;
+            TmpInventory.Clear;
+            for Module of ShipModules loop
+               if Modules_List(Module.ProtoIndex).MType = CABIN and
+                 Module.Owner = 0 then
+                  Module.Name := MemberName & To_Unbounded_String("'s Cabin");
                   Module.Owner := ShipCrew.Last_Index;
                   exit;
                end if;
-            elsif Modules_List(Module.ProtoIndex).MType = COCKPIT and
-              Member.Order = Pilot then
-               Module.Owner := ShipCrew.Last_Index;
-               exit;
-            end if;
+            end loop;
+            for Module of ShipModules loop
+               if Module.Owner = 0 then
+                  if Modules_List(Module.ProtoIndex).MType = GUN and
+                    Member.Order = Gunner then
+                     Module.Owner := ShipCrew.Last_Index;
+                     exit;
+                  end if;
+               elsif Modules_List(Module.ProtoIndex).MType = COCKPIT and
+                 Member.Order = Pilot then
+                  Module.Owner := ShipCrew.Last_Index;
+                  exit;
+               end if;
+            end loop;
          end loop;
       end loop;
       for Item of ProtoShip.Cargo loop
@@ -333,11 +340,9 @@ package body Ships is
       ItemIndex,
       RecipeIndex,
       MobIndex: Natural;
-      Amount2: Positive;
       TempRecord: ProtoShipData;
       TempModules, TempRecipes: Positive_Container.Vector;
-      TempCargo: Skills_Container.Vector;
-      TempCrew: Positive_Container.Vector;
+      TempCargo, TempCrew: Skills_Container.Vector;
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
       procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
@@ -543,31 +548,31 @@ package body Ships is
                           FindProtoMob
                             (Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                         if MobIndex > 0 then
-                           TempRecord.Crew.Append(New_Item => MobIndex);
+                           TempRecord.Crew.Append
+                           (New_Item => (MobIndex, 1, 0));
                         end if;
                      else
-                        if DotIndex = 0 or DotIndex > EndIndex then
-                           Amount2 :=
-                             Positive'Value
-                               (Slice(Value, StartIndex, XIndex - 1));
-                        else
-                           Amount2 :=
-                             GetRandom
-                               (Integer'Value
-                                  (Slice(Value, StartIndex, DotIndex - 1)),
-                                Integer'Value
-                                  (Slice(Value, DotIndex + 2, XIndex - 1)));
+                        MobIndex :=
+                          FindProtoMob
+                            (Unbounded_Slice(Value, XIndex + 1, EndIndex - 1));
+                        if MobIndex > 0 then
+                           if DotIndex = 0 or DotIndex > EndIndex then
+                              TempRecord.Crew.Append
+                              (New_Item =>
+                                 (MobIndex,
+                                  Positive'Value
+                                    (Slice(Value, StartIndex, XIndex - 1)),
+                                  0));
+                           else
+                              TempRecord.Crew.Append
+                              (New_Item =>
+                                 (MobIndex,
+                                  Positive'Value
+                                    (Slice(Value, StartIndex, DotIndex - 1)),
+                                  Integer'Value
+                                    (Slice(Value, DotIndex + 2, XIndex - 1))));
+                           end if;
                         end if;
-                        for J in 1 .. Amount2 loop
-                           MobIndex :=
-                             FindProtoMob
-                               (Unbounded_Slice
-                                  (Value,
-                                   XIndex + 1,
-                                   EndIndex - 1));
-                           exit when MobIndex = 0;
-                           TempRecord.Crew.Append(New_Item => MobIndex);
-                        end loop;
                      end if;
                      if MobIndex = 0 then
                         Close(ShipsFile);
