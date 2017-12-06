@@ -352,7 +352,8 @@ DodgeSkill. Value after equal sign must be existing skill name.
 - Recipes: List of know recipes indexes (from *recipes* directory, player ship
   only), separated by `, ` (comma and space).
 - Crew: List of crew members indexes (from *mobs* directory), separated by 
-  `, ` (comma and space).
+  `, ` (comma and space). Each crew entry can be only crew member index or
+  Amount`x`Member index.
 
 ## Help
 
