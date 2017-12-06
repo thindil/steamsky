@@ -72,7 +72,7 @@ package Ships is
       Perception: ShipSkills_Array; -- Bonus to spot player ship first
       Cargo: Skills_Container.Vector; -- List of ship cargo
       CombatValue: Positive; -- Combat value of ship (used to generate enemies)
-      Crew: Positive_Container.Vector; -- List of mobs indexes of ship crew
+      Crew: Skills_Container.Vector; -- List of mobs indexes of ship crew
       Description: Unbounded_String; -- Description of ship
       Owner: Bases_Owners; -- Faction to which ship belong
       Index: Unbounded_String; -- Index of ship
