@@ -1,12 +1,12 @@
 [1]
 Name = Player Ship
-Modules = 1, 2, 3, 4, 4, 4, 4, 5, 6, 7, 7, 8, 9
+Modules = 1, 2, 3, 4x4, 5, 6, 2x7, 8, 9
 Cargo = 2000x1, 100x2, 200x3, 500x4, 100x5, 20x13, 1x47, 1x49, 1x50, 4x61, 1x53, 10x22
 Recipes = 1, 2, 4, 20
 Crew = 2, 3, 4
 [2]
 Name = Tiny pirates ship
-Modules = 1, 3, 4, 4, 5, 7, 8, 11, 8, 127
+Modules = 1, 3, 2x4, 5, 7, 2x8, 11, 127
 CombatAI = Disarmer
 Loot = 10..100
 Cargo = 800..1000x1, 80..100x2, 150..200x3, 300..500x14, 50..75x62
@@ -35,7 +35,7 @@ Description = Smallest known clockwork drone. Dangerous at close range.
 Owner = Drones
 [5]
 Name = Small pirates ship
-Modules = 1, 3, 4, 4, 4, 5, 7, 7, 8, 9, 8, 127
+Modules = 1, 3, 3x4, 5, 2x7, 2x8, 9, 127
 CombatAI = Disarmer
 Loot = 20..200
 Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13, 50..75x63
@@ -44,7 +44,7 @@ Owner = Pirates
 Crew = 8, 2x9, 10
 [6]
 Name = Small undead ship
-Modules = 1, 2, 3, 5, 7, 7, 12
+Modules = 1, 2, 3, 5, 2x7, 12
 CombatAI = Berserker
 Loot = 20..200
 Cargo = 1500..2000x1, 80..100x5
@@ -64,7 +64,7 @@ Description = Small flying clockwork drone. Dangerous at close range.
 Owner = Drones
 [8]
 Name = Pirate ship
-Modules = 17, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 28, 27, 28, 128
+Modules = 17, 15, 8x4, 5, 4x7, 2x28, 27, 128
 CombatAI = Disarmer
 Loot = 100..200
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x5, 10..40x13, 75..100x63
@@ -73,7 +73,7 @@ Owner = Pirates
 Crew = 12, 2x13, 14, 3..5x57
 [9]
 Name = Armored pirate ship
-Modules = 17, 25, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 28, 27, 28, 128
+Modules = 17, 25, 15, 8x4, 5, 4x7, 2x28, 27, 128
 CombatAI = Disarmer
 Loot = 150..300
 Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x20, 100..200x5, 20..40x13, 100..150x63
@@ -93,7 +93,7 @@ Description = Small, more aggresive version of clockwork drone.
 Owner = Drones
 [11]
 Name = Attacking clockwork drone
-Modules = 17, 15, 7, 7, 12, 8, 9
+Modules = 17, 15, 2x7, 12, 8, 9
 Accuracy = 5..10
 CombatAI = Berserker
 Evasion = 5..10
@@ -104,7 +104,7 @@ Description = Standard, very aggresive version of clockwork drone.
 Owner = Drones
 [12]
 Name = Armored attacking drone
-Modules = 17, 2, 15, 7, 7, 12, 8, 9
+Modules = 17, 2, 15, 2x7, 12, 8, 9
 Accuracy = 5..12
 CombatAI = Berserker
 Evasion = 5..12
@@ -125,7 +125,7 @@ Owner = Inquisition
 Crew = 19
 [14]
 Name = Small inquisition ship
-Modules = 1, 3, 4, 4, 4, 4, 5, 7, 7, 12
+Modules = 1, 3, 4x4, 5, 2x7, 12
 CombatAI = Attacker
 Loot = 15..150
 Cargo = 1000..2000x1, 30..100x2, 150..200x3, 20..100x5
@@ -134,7 +134,7 @@ Owner = Inquisition
 Crew = 20, 3x59
 [15]
 Name = Inquisition ship
-Modules = 17, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 12, 8, 9
+Modules = 17, 15, 8x4, 5, 4x7, 12, 8, 9
 CombatAI = Attacker
 Loot = 100..200
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 300..500x4, 50..200x5, 5..40x13
@@ -143,7 +143,7 @@ Owner = Inquisition
 Crew = 21, 22, 4..8x60
 [16]
 Name = Armored inquisition ship
-Modules = 17, 2, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 12, 8, 9
+Modules = 17, 2, 15, 8x4, 5, 4x7, 12, 8, 9
 CombatAI = Attacker
 Loot = 120..240
 Cargo = 1800..2000x1, 100..200x2, 350..400x3, 250..500x4, 100..200x5, 10..40x13
@@ -152,7 +152,7 @@ Owner = Inquisition
 Crew = 21, 22, 2x60
 [17]
 Name = Large clockwork drone
-Modules = 23, 25, 19, 7, 7, 7, 7, 12, 28, 27, 28, 27
+Modules = 23, 25, 19, 4x7, 12, 2x28, 2x27
 Accuracy = 15..25
 CombatAI = Berserker
 Evasion = 15..25
@@ -163,7 +163,7 @@ Description = Large, good armored and aggresive clockwork drone.
 Owner = Drones
 [18]
 Name = Large pirate ship
-Modules = 23, 26, 19, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 28, 29, 28, 29, 28, 29, 28, 129
+Modules = 23, 26, 19, 10x4, 5, 6x7, 4x28, 3x29, 129
 CombatAI = Disarmer
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13, 100..150x64
@@ -172,7 +172,7 @@ Owner = Pirates
 Crew = 23, 4x24, 25, 3..5x61
 [19]
 Name = Undead ship
-Modules = 17, 25, 15, 5, 7, 7, 7, 7, 40
+Modules = 17, 25, 15, 5, 4x7, 40
 CombatAI = Berserker
 Loot = 100..300
 Cargo = 2000..2500x1, 150..300x5
@@ -181,7 +181,7 @@ Owner = Undead
 Crew = 27, 6..10x62
 [20]
 Name = Large undead ship
-Modules = 23, 26, 19, 5, 7, 7, 7, 7, 7, 7, 40
+Modules = 23, 26, 19, 5, 6x7, 40
 CombatAI = Berserker
 Loot = 200..400
 Cargo = 3000..4000x1, 300..400x5
@@ -190,16 +190,16 @@ Owner = Undead
 Crew = 28, 8..12x63
 [21]
 Name = Large inquisition ship
-Modules = 23, 26, 19, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 40, 28, 27, 28, 27
+Modules = 23, 26, 19, 10x4, 5, 6x7, 40, 2x28, 2x27
 CombatAI = Attacker
 Loot = 250..500
 Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x20, 200..400x5, 20..50x13
 Description = Large, good armored version of inquisition flying vessel.
 Owner = Inquisition
-Crew = 29, 30, 31, 5..9x64
+Crew = 29, 2x30, 31, 5..9x64
 [22]
 Name = Large attacking drone
-Modules = 23, 26, 19, 7, 7, 7, 7, 7, 7, 40, 28, 27, 28, 27
+Modules = 23, 26, 19, 6x7, 40, 2x28, 2x27
 Accuracy = 25..35
 CombatAI = Berserker
 Evasion = 25..35
@@ -210,7 +210,7 @@ Description = Large, good armored version of attacking clockwork drone.
 Owner = Drones
 [23]
 Name = Advanced attacking drone
-Modules = 22, 25, 18, 7, 7, 7, 7, 7, 40, 28, 27
+Modules = 22, 25, 18, 5x7, 40, 28, 27
 Accuracy = 15..25
 CombatAI = Berserker
 Evasion = 15..25
@@ -221,7 +221,7 @@ Description = Advanced version of standard attacking clockwork drone.
 Owner = Drones
 [24]
 Name = Advanced pirate ship
-Modules = 22, 25, 18, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 28, 27, 28, 128
+Modules = 22, 25, 18, 6x4, 5, 5x7, 2x28, 27, 128
 CombatAI = Disarmer
 Loot = 200..250
 Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x5, 20..40x13, 75..100x64
@@ -230,7 +230,7 @@ Owner = Pirates
 Crew = 32, 2x33, 34, 2x65
 [25]
 Name = Advanced undead ship
-Modules = 22, 25, 18, 5, 7, 7, 7, 7, 7, 40
+Modules = 22, 25, 18, 5, 5x7, 40
 CombatAI = Berserker
 Loot = 200..300
 Cargo = 2500..3000x1, 200..350x5
@@ -239,7 +239,7 @@ Owner = Undead
 Crew = 36, 6x66
 [26]
 Name = Advanced inquisition ship
-Modules = 22, 25, 18, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 40, 28, 29
+Modules = 22, 25, 18, 8x4, 5, 4x7, 40, 28, 29
 Accuracy = 15
 CombatAI = Attacker
 Evasion = 15
@@ -251,7 +251,7 @@ Owner = Inquisition
 Crew = 37, 38, 4..8x67
 [27]
 Name = Huge pirate ship
-Modules = 60, 26, 62, 62, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 33, 39, 33, 39, 33, 39, 33, 39, 129
+Modules = 60, 26, 2x62, 14x4, 5, 10x7, 5x39, 4x33, 129
 CombatAI = Disarmer
 Loot = 500..1000
 Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13, 100..200x64
@@ -260,7 +260,7 @@ Owner = Pirates
 Crew = 39, 5x40, 41, 5..9x68
 [28]
 Name = Advanced huge pirate ship
-Modules = 61, 26, 63, 63, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 34, 39, 34, 39, 34, 39, 34, 39, 129
+Modules = 61, 26, 2x63, 16x4, 5, 12x7, 5x39, 4x34, 129
 CombatAI = Disarmer
 Loot = 750..1200
 Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x5, 300..500x13, 150..300x64
@@ -269,7 +269,7 @@ Owner = Pirates
 Crew = 43, 5x44, 45, 7..11x69
 [29]
 Name = Huge undead ship
-Modules = 60, 26, 62, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40
+Modules = 60, 26, 62, 5, 10x7, 40
 CombatAI = Berserker
 Loot = 500..750
 Cargo = 5000..7000x1, 500..750x5
@@ -278,7 +278,7 @@ Owner = Undead
 Crew = 47, 10..14x70
 [30]
 Name = Huge attacking drone
-Modules = 60, 26, 62, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40, 39, 33, 39, 33, 39, 33
+Modules = 60, 26, 62, 10x7, 40, 3x39, 3x33
 Accuracy = 60..80
 CombatAI = Berserker
 Evasion = 60..80
@@ -289,7 +289,7 @@ Description = Huge, good armored version of attacking clockwork drone.
 Owner = Drones
 [31]
 Name = Advanced huge undead ship
-Modules = 61, 26, 63, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40
+Modules = 61, 26, 63, 5, 10x7, 40
 CombatAI = Berserker
 Loot = 600..900
 Cargo = 6000..8000x1, 600..800x5
@@ -298,7 +298,7 @@ Owner = Undead
 Crew = 48, 11..15x71
 [32]
 Name = Advanced huge attacking drone
-Modules = 61, 26, 63, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40, 39, 34, 39, 34, 39, 34
+Modules = 61, 26, 63, 12x7, 40, 3x39, 3x34
 Accuracy = 75..90
 CombatAI = Berserker
 Evasion = 75..90
@@ -309,7 +309,7 @@ Description = Advanced version of huge, good armored, attacking clockwork drone.
 Owner = Drones
 [33]
 Name = Huge inquisition ship
-Modules = 60, 26, 62, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40, 39, 33, 39, 33, 39, 33, 39, 33
+Modules = 60, 26, 62, 13x4, 5, 9x7, 40, 4x39, 4x33
 CombatAI = Attacker
 Loot = 750..1000
 Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x31, 400..600x5, 50..100x13
@@ -318,7 +318,7 @@ Owner = Inquisition
 Crew = 49, 4x50, 6..10x72
 [34]
 Name = Advanced huge inquisition ship
-Modules = 61, 26, 63, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 40, 39, 34, 39, 34, 39, 34, 39, 34
+Modules = 61, 26, 63, 15x4, 5, 11x7, 40, 4x39, 4x34
 CombatAI = Attacker
 Loot = 900..1200
 Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x33, 500..650x5, 75..120x13
@@ -327,7 +327,7 @@ Owner = Inquisition
 Crew = 51, 4x52, 8..12x73
 [35]
 Name = Tiny pirates ship mk II
-Modules = 64, 72, 80, 80, 41, 42, 84, 11, 84, 127
+Modules = 64, 72, 2x80, 41, 42, 2x84, 11, 127
 CombatAI = Disarmer
 Loot = 10..100
 Cargo = 800..1000x1, 80..100x2, 150..200x3, 300..500x14, 50..75x62
@@ -345,7 +345,7 @@ Owner = Undead
 Crew = 7, 2x55
 [37]
 Name = Small pirates ship mk II
-Modules = 64, 72, 80, 80, 80, 41, 42, 42, 84, 9, 84, 127
+Modules = 64, 72, 3x80, 41, 2x42, 2x84, 9, 127
 CombatAI = Disarmer
 Loot = 20..200
 Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x13, 50..75x63
@@ -354,7 +354,7 @@ Owner = Pirates
 Crew = 8, 2x9, 10
 [38]
 Name = Small undead ship mk II
-Modules = 64, 55, 72, 41, 42, 42, 87
+Modules = 64, 55, 72, 41, 2x42, 87
 CombatAI = Berserker
 Loot = 20..200
 Cargo = 1500..2000x1, 80..100x13
@@ -374,7 +374,7 @@ Description = Small flying clockwork drone (upgraded version). Dangerous at clos
 Owner = Drones
 [40]
 Name = Pirate ship mk II
-Modules = 66, 74, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 85, 27, 85, 128
+Modules = 66, 74, 8x80, 41, 4x42, 2x85, 27, 128
 CombatAI = Disarmer
 Loot = 100..200
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x13, 75..100x63
@@ -383,7 +383,7 @@ Owner = Pirates
 Crew = 12, 2x13, 14, 3..5x57
 [41]
 Name = Armored pirate ship mk II
-Modules = 66, 56, 74, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 85, 27, 85, 128
+Modules = 66, 56, 74, 8x80, 41, 4x42, 2x85, 27, 128
 CombatAI = Disarmer
 Loot = 150..300
 Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x20, 100..200x13, 100..150x63
@@ -403,7 +403,7 @@ Description = Small, more aggresive, upgraded version of clockwork drone.
 Owner = Drones
 [43]
 Name = Attacking clockwork drone mk II
-Modules = 66, 74, 42, 42, 87, 84, 9
+Modules = 66, 74, 2x42, 87, 84, 9
 Accuracy = 5..10
 CombatAI = Berserker
 Evasion = 5..10
@@ -414,7 +414,7 @@ Description = Standard, very aggresive, upgraded version of clockwork drone.
 Owner = Drones
 [44]
 Name = Armored attacking drone mk II
-Modules = 66, 55, 74, 42, 42, 87, 84, 9
+Modules = 66, 55, 74, 2x42, 87, 84, 9
 Accuracy = 5..12
 CombatAI = Berserker
 Evasion = 5..12
@@ -435,7 +435,7 @@ Owner = Inquisition
 Crew = 19
 [46]
 Name = Small inquisition ship mk II
-Modules = 64, 72, 80, 80, 80, 80, 41, 42, 42, 87
+Modules = 64, 72, 4x80, 41, 2x42, 87
 CombatAI = Attacker
 Loot = 15..150
 Cargo = 1000..2000x1, 30..100x2, 150..200x3, 20..100x13
@@ -444,7 +444,7 @@ Owner = Inquisition
 Crew = 20, 2..4x59
 [47]
 Name = Inquisition ship mk II
-Modules = 66, 74, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 87, 84, 9
+Modules = 66, 74, 8x80, 41, 4x42, 87, 84, 9
 CombatAI = Attacker
 Loot = 100..200
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 300..500x4, 5..40x13
@@ -453,7 +453,7 @@ Owner = Inquisition
 Crew = 21, 22, 4..8x60
 [48]
 Name = Armored inquisition ship mk II
-Modules = 66, 55, 74, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 87, 84, 9
+Modules = 66, 55, 74, 8x80, 41, 4x42, 87, 84, 9
 CombatAI = Attacker
 Loot = 120..240
 Cargo = 1800..2000x1, 100..200x2, 350..400x3, 250..500x4, 100..200x13
@@ -462,7 +462,7 @@ Owner = Inquisition
 Crew = 21, 22, 4..8x60
 [49]
 Name = Large clockwork drone mk II
-Modules = 68, 56, 76, 42, 42, 42, 42, 87, 85, 27, 85, 27
+Modules = 68, 56, 76, 4x42, 87, 2x85, 2x27
 Accuracy = 15..25
 CombatAI = Berserker
 Evasion = 15..25
@@ -473,7 +473,7 @@ Description = Large, good armored, upgraded and aggresive clockwork drone.
 Owner = Drones
 [50]
 Name = Large pirate ship mk II
-Modules = 68, 57, 76, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 42, 42, 85, 29, 85, 29, 85, 29, 85, 129
+Modules = 68, 57, 76, 10x80, 41, 6x42, 42, 4x85, 3x29, 129
 CombatAI = Disarmer
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x13, 100..150x64
@@ -482,7 +482,7 @@ Owner = Pirates
 Crew = 23, 4x24, 25, 3..5x61
 [51]
 Name = Undead ship mk II
-Modules = 66, 56, 74, 41, 42, 42, 42, 42, 89
+Modules = 66, 56, 74, 41, 4x42, 89
 CombatAI = Berserker
 Loot = 100..300
 Cargo = 2000..2500x1, 150..300x13
@@ -491,7 +491,7 @@ Owner = Undead
 Crew = 27, 6..10x62
 [52]
 Name = Large undead ship mk II
-Modules = 68, 57, 76, 41, 42, 42, 42, 42, 42, 42, 89
+Modules = 68, 57, 76, 41, 6x42, 89
 CombatAI = Berserker
 Loot = 200..400
 Cargo = 3000..4000x1, 300..400x13
@@ -500,7 +500,7 @@ Owner = Undead
 Crew = 28, 8..12x63
 [53]
 Name = Large inquisition ship mk II
-Modules = 68, 57, 76, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 42, 42, 42, 85, 27, 85, 27
+Modules = 68, 57, 76, 10x80, 41, 7x42, 2x85, 2x27
 CombatAI = Attacker
 Loot = 250..500
 Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x20, 200..400x13
@@ -509,7 +509,7 @@ Owner = Inquisition
 Crew = 29, 30, 31, 5..9x64
 [54]
 Name = Large attacking drone mk II
-Modules = 68, 57, 76, 42, 42, 42, 42, 42, 42, 89, 85, 27, 85, 27
+Modules = 68, 57, 76, 6x42, 89, 2x85, 2x27
 Accuracy = 25..35
 CombatAI = Berserker
 Evasion = 25..35
@@ -520,7 +520,7 @@ Description = Large, good armored, upgraded version of attacking clockwork drone
 Owner = Drones
 [55]
 Name = Advanced attacking drone mk II
-Modules = 67, 56, 75, 42, 42, 42, 42, 42, 89, 85, 27
+Modules = 67, 56, 75, 5x42, 89, 85, 27
 Accuracy = 15..25
 CombatAI = Berserker
 Evasion = 15..25
@@ -531,7 +531,7 @@ Description = Advanced and upgraded version of standard attacking clockwork dron
 Owner = Drones
 [56]
 Name = Advanced pirate ship mk II
-Modules = 67, 56, 75, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 42, 85, 27, 85, 128
+Modules = 67, 56, 75, 6x80, 41, 5x42, 85, 27, 85, 128
 CombatAI = Disarmer
 Loot = 200..250
 Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x13, 75..100x64
@@ -540,7 +540,7 @@ Owner = Pirates
 Crew = 32, 2x33, 34, 2x65
 [57]
 Name = Advanced undead ship mk II
-Modules = 67, 56, 75, 41, 42, 42, 42, 42, 42, 89
+Modules = 67, 56, 75, 41, 5x42, 89
 CombatAI = Berserker
 Loot = 200..300
 Cargo = 2500..3000x1, 200..350x13
@@ -549,7 +549,7 @@ Owner = Undead
 Crew = 36, 4..8x66
 [58]
 Name = Advanced inquisition ship mk II
-Modules = 67, 56, 75, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 89, 85, 27
+Modules = 67, 56, 75, 8x80, 41, 4x42, 89, 85, 27
 Accuracy = 15
 CombatAI = Attacker
 Evasion = 15
@@ -561,7 +561,7 @@ Owner = Inquisition
 Crew = 37, 38, 4..8x67
 [59]
 Name = Huge pirate ship mk II
-Modules = 70, 57, 78, 78, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 86, 33, 86, 33, 86, 33, 86, 33, 86, 129
+Modules = 70, 57, 2x78, 14x80, 41, 10x42, 86, 5x33, 4x86, 129
 CombatAI = Disarmer
 Loot = 500..1000
 Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x13, 150..200x64
@@ -570,7 +570,7 @@ Owner = Pirates
 Crew = 39, 5x40, 41, 5..9x68
 [60]
 Name = Advanced huge pirate ship mk II
-Modules = 71, 57, 79, 79, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 86, 34, 86, 34, 86, 34, 86, 34, 86, 129
+Modules = 71, 57, 2x79, 16x80, 41, 12x42, 5x86, 4x34, 129
 CombatAI = Disarmer
 Loot = 750..1200
 Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x13, 300..500x64
@@ -579,7 +579,7 @@ Owner = Pirates
 Crew = 43, 5x44, 45, 7..11x69
 [61]
 Name = Huge undead ship mk II
-Modules = 70, 57, 78, 41, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 89
+Modules = 70, 57, 78, 41, 10x42, 89
 CombatAI = Berserker
 Loot = 500..750
 Cargo = 5000..7000x1, 500..750x13
@@ -588,7 +588,7 @@ Owner = Undead
 Crew = 47, 10..14x70
 [62]
 Name = Huge attacking drone mk II
-Modules = 70, 57, 78, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 89, 86, 33, 86, 33, 86, 33
+Modules = 70, 57, 78, 10x42, 89, 3x86, 3x33
 Accuracy = 60..80
 CombatAI = Berserker
 Evasion = 60..80
@@ -599,7 +599,7 @@ Description = Huge, good armored and upgraded version of attacking clockwork dro
 Owner = Drones
 [63]
 Name = Advanced huge undead ship mk II
-Modules = 71, 57, 79, 41, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 89
+Modules = 71, 57, 79, 41, 10x42, 89
 CombatAI = Berserker
 Loot = 600..900
 Cargo = 6000..8000x1, 600..800x13
@@ -608,7 +608,7 @@ Owner = Undead
 Crew = 38, 11..15x71
 [64]
 Name = Advanced huge attacking drone mk II
-Modules = 71, 57, 79, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 89, 86, 34, 86, 34, 86, 34
+Modules = 71, 57, 79, 12x42, 89, 3x86, 3x34
 Accuracy = 75..90
 CombatAI = Berserker
 Evasion = 75..90
@@ -619,7 +619,7 @@ Description = Advanced and upgraded version of huge, good armored, attacking clo
 Owner = Drones
 [65]
 Name = Huge inquisition ship mk II
-Modules = 70, 57, 78, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 42, 42, 42, 42, 42, 89, 86, 33, 86, 33, 86, 33, 86, 33
+Modules = 70, 57, 78, 13x80, 41, 9x42, 89, 4x86, 4x33
 CombatAI = Attacker
 Loot = 750..1000
 Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x31, 400..600x13
@@ -628,7 +628,7 @@ Owner = Inquisition
 Crew = 49, 4x50, 6..10x72
 [66]
 Name = Advanced huge inquisition ship mk II
-Modules = 71, 57, 79, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 41, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 89, 86, 34, 86, 34, 86, 34, 86, 34
+Modules = 71, 57, 79, 15x80, 41, 11x42, 89, 4x86, 4x34
 CombatAI = Attacker
 Loot = 900..1200
 Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x33, 500..650x13
@@ -637,7 +637,7 @@ Owner = Inquisition
 Crew = 51, 4x52, 8..12x73
 [67]
 Name = Small pirates ship mk III
-Modules = 90, 92, 93, 93, 93, 94, 96, 96, 97, 49, 97, 127
+Modules = 90, 92, 3x93, 94, 2x96, 2x97, 49, 127
 CombatAI = Disarmer
 Loot = 20..200
 Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x23, 80..100x21, 50..75x63
@@ -646,7 +646,7 @@ Owner = Pirates
 Crew = 8, 2x9, 10
 [68]
 Name = Small undead ship mk III
-Modules = 90, 91, 92, 94, 96, 96, 98
+Modules = 90, 91, 92, 94, 2x96, 98
 CombatAI = Berserker
 Loot = 20..200
 Cargo = 1500..2000x1, 80..100x21
@@ -666,7 +666,7 @@ Description = Small flying clockwork drone (upgraded version). Dangerous at clos
 Owner = Drones
 [70]
 Name = Pirate ship mk III
-Modules = 103, 101, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 113, 50, 113, 128
+Modules = 103, 101, 7x93, 94, 4x96, 2x113, 50, 128
 CombatAI = Disarmer
 Loot = 100..200
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x25, 150..200x21, 75..100x63
@@ -675,7 +675,7 @@ Owner = Pirates
 Crew = 12, 2x13, 14, 3..5x57
 [71]
 Name = Armored pirate ship mk III
-Modules = 103, 111, 101, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 113, 50, 113, 128
+Modules = 103, 111, 101, 8x93, 94, 4x96, 2x113, 50, 128
 CombatAI = Disarmer
 Loot = 150..300
 Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x25, 100..200x21, 100..150x63
@@ -695,7 +695,7 @@ Description = Small, more aggresive, upgraded version of clockwork drone.
 Owner = Drones
 [73]
 Name = Attacking clockwork drone mk III
-Modules = 103, 101, 96, 96, 98, 97, 49
+Modules = 103, 101, 2x96, 98, 97, 49
 Accuracy = 5..10
 CombatAI = Berserker
 Evasion = 5..10
@@ -706,7 +706,7 @@ Description = Standard, very aggresive, upgraded version of clockwork drone.
 Owner = Drones
 [74]
 Name = Armored attacking drone mk III
-Modules = 103, 91, 101, 96, 96, 98, 97, 49
+Modules = 103, 91, 101, 2x96, 98, 97, 49
 Accuracy = 5..12
 CombatAI = Berserker
 Evasion = 5..12
@@ -717,7 +717,7 @@ Description = Armored, very aggresive, upgraded version of clockwork drone.
 Owner = Drones
 [75]
 Name = Small inquisition ship mk III
-Modules = 90, 92, 93, 93, 93, 93, 94, 96, 96, 98
+Modules = 90, 92, 4x93, 94, 2x96, 98
 CombatAI = Attacker
 Loot = 15..150
 Cargo = 1000..2000x1, 30..100x2, 150..200x3, 20..100x21
@@ -726,7 +726,7 @@ Owner = Inquisition
 Crew = 20, 2..4x59
 [76]
 Name = Inquisition ship mk III
-Modules = 103, 101, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 98, 97, 49
+Modules = 103, 101, 8x93, 94, 4x96, 98, 97, 49
 CombatAI = Attacker
 Loot = 100..200
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 300..500x23, 5..40x21
@@ -735,7 +735,7 @@ Owner = Inquisition
 Crew = 21, 22, 4..8x60
 [77]
 Name = Armored inquisition ship mk III
-Modules = 103, 91, 101, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 98, 97, 49
+Modules = 103, 91, 101, 8x93, 94, 4x96, 98, 97, 49
 CombatAI = Attacker
 Loot = 120..240
 Cargo = 1800..2000x1, 100..200x2, 350..400x3, 250..500x23, 100..200x21
@@ -744,7 +744,7 @@ Owner = Inquisition
 Crew = 21, 22, 4..8x60
 [78]
 Name = Large clockwork drone mk III
-Modules = 109, 111, 105, 96, 96, 96, 96, 98, 113, 50, 113, 50
+Modules = 109, 111, 105, 4x96, 98, 2x113, 50, 50
 Accuracy = 15..25
 CombatAI = Berserker
 Evasion = 15..25
@@ -755,7 +755,7 @@ Description = Large, good armored, upgraded and aggresive clockwork drone.
 Owner = Drones
 [79]
 Name = Large pirate ship mk III
-Modules = 109, 112, 105, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 96, 96, 113, 51, 113, 51, 113, 51, 113, 129
+Modules = 109, 112, 105, 9x93, 94, 6x96, 4x113, 3x51, 129
 CombatAI = Disarmer
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x27, 200..400x21, 100..150x64
@@ -764,7 +764,7 @@ Owner = Pirates
 Crew = 23, 4x24, 25, 3..5x61
 [80]
 Name = Undead ship mk III
-Modules = 103, 111, 101, 94, 96, 96, 96, 96, 121
+Modules = 103, 111, 101, 94, 4x96, 121
 CombatAI = Berserker
 Loot = 100..300
 Cargo = 2000..2500x1, 150..300x21
@@ -773,7 +773,7 @@ Owner = Undead
 Crew = 27, 6..10x62
 [81]
 Name = Large undead ship mk III
-Modules = 109, 112, 105, 94, 96, 96, 96, 96, 96, 96, 121
+Modules = 109, 112, 105, 94, 6x96, 121
 CombatAI = Berserker
 Loot = 200..400
 Cargo = 3000..4000x1, 300..400x21
@@ -782,7 +782,7 @@ Owner = Undead
 Crew = 28, 8..12x63
 [82]
 Name = Large inquisition ship mk III
-Modules = 109, 112, 105, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 96, 96, 96, 113, 50, 113, 50
+Modules = 109, 112, 105, 10x93, 94, 7x96, 2x113, 2x50
 CombatAI = Attacker
 Loot = 250..500
 Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x25, 200..400x21
@@ -791,7 +791,7 @@ Owner = Inquisition
 Crew = 29, 30, 31, 5..9x64
 [83]
 Name = Large attacking drone mk III
-Modules = 109, 112, 105, 96, 96, 96, 96, 96, 96, 121, 113, 50, 113, 50
+Modules = 109, 112, 105, 6x96, 121, 2x113, 2x50
 Accuracy = 25..35
 CombatAI = Berserker
 Evasion = 25..35
@@ -802,7 +802,7 @@ Description = Large, good armored, upgraded version of attacking clockwork drone
 Owner = Drones
 [84]
 Name = Advanced attacking drone mk III
-Modules = 108, 111, 104, 96, 96, 96, 96, 96, 121, 113, 50
+Modules = 108, 111, 104, 5x96, 121, 113, 50
 Accuracy = 15..25
 CombatAI = Berserker
 Evasion = 15..25
@@ -813,7 +813,7 @@ Description = Advanced and upgraded version of standard attacking clockwork dron
 Owner = Drones
 [85]
 Name = Advanced pirate ship mk III
-Modules = 108, 111, 104, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 96, 113, 50, 113, 128
+Modules = 108, 111, 104, 6x93, 94, 5x96, 2x113, 50, 128
 CombatAI = Disarmer
 Loot = 200..250
 Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x25, 100..200x21, 75..100x64
@@ -822,7 +822,7 @@ Owner = Pirates
 Crew = 32, 2x33, 34, 2x65
 [86]
 Name = Advanced undead ship mk III
-Modules = 108, 111, 104, 94, 96, 96, 96, 96, 96, 121
+Modules = 108, 111, 104, 94, 5x96, 121
 CombatAI = Berserker
 Loot = 200..300
 Cargo = 2500..3000x1, 200..350x21
@@ -831,7 +831,7 @@ Owner = Undead
 Crew = 36, 4..8x66
 [87]
 Name = Advanced inquisition ship mk III
-Modules = 108, 111, 104, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 121, 113, 50
+Modules = 108, 111, 104, 8x93, 94, 4x96, 121, 113, 50
 Accuracy = 15
 CombatAI = Attacker
 Evasion = 15
@@ -843,7 +843,7 @@ Owner = Inquisition
 Crew = 37, 38, 4..8x67
 [88]
 Name = Huge pirate ship mk III
-Modules = 123, 112, 125, 125, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 120, 52, 120, 52, 120, 52, 120, 52, 120, 129
+Modules = 123, 112, 2x125, 14x93, 94, 10x96, 5x120, 4x52, 129
 CombatAI = Disarmer
 Loot = 500..1000
 Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x32, 500..750x21, 100..200x64
@@ -852,7 +852,7 @@ Owner = Pirates
 Crew = 39, 5x40, 41, 5..9x68
 [89]
 Name = Advanced huge pirate ship mk III
-Modules = 124, 112, 126, 126, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 120, 53, 120, 53, 120, 53, 120, 53, 120, 129
+Modules = 124, 112, 2x126, 16x93, 94, 12x96, 5x120, 4x53, 129
 CombatAI = Disarmer
 Loot = 750..1200
 Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x34, 600..800x21, 150..300x64
@@ -861,7 +861,7 @@ Owner = Pirates
 Crew = 43, 5x44, 45, 7..11x69
 [90]
 Name = Huge undead ship mk III
-Modules = 123, 112, 125, 94, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 121
+Modules = 123, 112, 125, 94, 10x96, 121
 CombatAI = Berserker
 Loot = 500..750
 Cargo = 5000..7000x1, 500..750x21
@@ -870,7 +870,7 @@ Owner = Undead
 Crew = 47, 10..14x70
 [91]
 Name = Huge attacking drone mk III
-Modules = 123, 112, 125, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 121, 120, 52, 120, 52, 120, 52
+Modules = 123, 112, 125, 10x96, 121, 3x120, 3x52
 Accuracy = 60..80
 CombatAI = Berserker
 Evasion = 60..80
@@ -881,7 +881,7 @@ Description = Huge, good armored and upgraded version of attacking clockwork dro
 Owner = Drones
 [92]
 Name = Advanced huge undead ship mk III
-Modules = 124, 112, 126, 94, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 121
+Modules = 124, 112, 126, 94, 10x96, 121
 CombatAI = Berserker
 Loot = 600..900
 Cargo = 6000..8000x1, 600..800x21
@@ -890,7 +890,7 @@ Owner = Undead
 Crew = 48, 11..15x71
 [93]
 Name = Advanced huge attacking drone mk III
-Modules = 124, 112, 126, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 121, 120, 53, 120, 53, 120, 53
+Modules = 124, 112, 126, 12x96, 121, 3x120, 3x53
 Accuracy = 75..90
 CombatAI = Berserker
 Evasion = 75..90
@@ -901,7 +901,7 @@ Description = Advanced and upgraded version of huge, good armored, attacking clo
 Owner = Drones
 [94]
 Name = Huge inquisition ship mk III
-Modules = 123, 112, 125, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 96, 96, 96, 96, 96, 121, 120, 52, 120, 52, 120, 52, 120, 52
+Modules = 123, 112, 125, 13x93, 94, 9x96, 121, 4x120, 4x52
 CombatAI = Attacker
 Loot = 750..1000
 Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x32, 400..600x21
@@ -910,7 +910,7 @@ Owner = Inquisition
 Crew = 49, 4x50, 6..10x72
 [95]
 Name = Advanced huge inquisition ship mk III
-Modules = 124, 112, 126, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 93, 94, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 96, 121, 120, 53, 120, 53, 120, 53, 120, 53
+Modules = 124, 112, 126, 15x93, 94, 11x96, 121, 4x120, 4x53
 CombatAI = Attacker
 Loot = 900..1200
 Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x34, 500..650x21
@@ -919,7 +919,7 @@ Owner = Inquisition
 Crew = 51, 4x52, 8..12x73
 [96]
 Name = Tiny poleis trader
-Modules = 1, 3, 4, 4, 5, 7, 7, 8, 11
+Modules = 1, 3, 2x4, 5, 2x7, 8, 11
 CombatAI = Coward
 Loot = 10..100
 Cargo = 800..1000x1, 80..100x2, 150..200x3, 100..200x14
@@ -928,7 +928,7 @@ Owner = Poleis
 Crew = 5, 6
 [97]
 Name = Tiny independent trader
-Modules = 1, 3, 4, 4, 5, 7, 7, 8, 11
+Modules = 1, 3, 2x4, 5, 2x7, 8, 11
 CombatAI = Coward
 Loot = 10..100
 Cargo = 800..1000x1, 80..100x2, 150..200x3, 100..200x14
@@ -937,7 +937,7 @@ Owner = Independent
 Crew = 5, 6
 [98]
 Name = Small poleis trader
-Modules = 1, 3, 4, 4, 4, 5, 7, 7, 7, 7, 8, 9
+Modules = 1, 3, 3x4, 5, 4x7, 8, 9
 CombatAI = Coward
 Loot = 20..200
 Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13
@@ -946,7 +946,7 @@ Owner = Poleis
 Crew = 8, 9, 10
 [99]
 Name = Small independent trader
-Modules = 1, 3, 4, 4, 4, 5, 7, 7, 7, 7, 8, 9
+Modules = 1, 3, 3x4, 5, 4x7, 8, 9
 CombatAI = Coward
 Loot = 20..200
 Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13
@@ -955,7 +955,7 @@ Owner = Independent
 Crew = 8, 9, 10
 [100]
 Name = Poleis trader
-Modules = 17, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 28, 27
+Modules = 17, 15, 8x4, 5, 8x7, 28, 27
 CombatAI = Coward
 Loot = 100..200
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x5, 10..40x13
@@ -964,7 +964,7 @@ Owner = Poleis
 Crew = 12, 13, 14, 15, 2x57
 [101]
 Name = Independent trader
-Modules = 17, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 28, 27
+Modules = 17, 15, 8x4, 5, 8x7, 28, 27
 CombatAI = Coward
 Loot = 100..200
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x5, 10..40x13
@@ -973,7 +973,7 @@ Owner = Independent
 Crew = 12, 13, 14, 15, 2x57
 [102]
 Name = Advanced poleis trader
-Modules = 22, 25, 18, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 28, 27
+Modules = 22, 25, 18, 6x4, 5, 10x7, 28, 27
 CombatAI = Coward
 Loot = 200..250
 Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x5, 20..40x13
@@ -982,7 +982,7 @@ Owner = Poleis
 Crew = 32, 33, 34, 35, 2x65
 [103]
 Name = Advanced independent trader
-Modules = 22, 25, 18, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 28, 27
+Modules = 22, 25, 18, 6x4, 5, 10x7, 28, 27
 CombatAI = Coward
 Loot = 200..250
 Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x5, 20..40x13
@@ -991,7 +991,7 @@ Owner = Independent
 Crew = 32, 33, 34, 35, 2x65
 [104]
 Name = Large poleis trader
-Modules = 23, 26, 19, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 28, 29, 28, 29
+Modules = 23, 26, 19, 10x4, 5, 12x7, 2x28, 2x29
 CombatAI = Coward
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
@@ -1000,7 +1000,7 @@ Owner = Poleis
 Crew = 23, 2x24, 25, 26, 3x61
 [105]
 Name = Large independent trader
-Modules = 23, 26, 19, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 28, 29, 28, 29
+Modules = 23, 26, 19, 10x4, 5, 12x7, 2x28, 2x29
 CombatAI = Coward
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
@@ -1009,7 +1009,7 @@ Owner = Independent
 Crew = 23, 2x24, 25, 26, 3x61
 [106]
 Name = Huge poleis trader
-Modules = 60, 26, 62, 62, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 33, 39, 33, 39, 33
+Modules = 60, 26, 2x62, 14x4, 5, 16x7, 3x39, 3x33
 CombatAI = Coward
 Loot = 500..1000
 Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13
@@ -1018,7 +1018,7 @@ Owner = Poleis
 Crew = 39, 3x40, 41, 42, 3..5x68
 [107]
 Name = Huge independent trader
-Modules = 60, 26, 62, 62, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 33, 39, 33, 39, 33
+Modules = 60, 26, 2x62, 14x4, 5, 16x7, 3x39, 3x33
 CombatAI = Coward
 Loot = 500..1000
 Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13
@@ -1027,7 +1027,7 @@ Owner = Independent
 Crew = 39, 3x40, 41, 42, 3..5x68
 [108]
 Name = Advanced huge poleis trader
-Modules = 61, 26, 63, 63, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 34, 39, 34, 39, 34
+Modules = 61, 26, 2x63, 16x4, 5, 20x7, 3x39, 3x34
 CombatAI = Coward
 Loot = 750..1200
 Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x5, 300..500x13
@@ -1036,7 +1036,7 @@ Owner = Poleis
 Crew = 43, 3x44, 45, 46, 4..8x69
 [109]
 Name = Advanced huge independent trader
-Modules = 61, 26, 63, 63, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 34, 39, 34, 39, 34
+Modules = 61, 26, 2x63, 16x4, 5, 20x7, 3x39, 3x34
 CombatAI = Coward
 Loot = 750..1200
 Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x5, 300..500x13
@@ -1045,7 +1045,7 @@ Owner = Independent
 Crew = 43, 3x44, 45, 46, 4..8x69
 [110]
 Name = Tiny poleis patrol ship
-Modules = 1, 3, 4, 4, 5, 7, 8, 11
+Modules = 1, 3, 2x4, 5, 7, 8, 11
 CombatAI = Disarmer
 Loot = 10..100
 Cargo = 800..1000x1, 80..100x2, 150..200x3, 300..500x14
@@ -1054,7 +1054,7 @@ Owner = Poleis
 Crew = 5, 6
 [111]
 Name = Tiny independent patrol ship
-Modules = 1, 3, 4, 4, 5, 7, 8, 11
+Modules = 1, 3, 2x4, 5, 7, 8, 11
 CombatAI = Disarmer
 Loot = 10..100
 Cargo = 800..1000x1, 80..100x2, 150..200x3, 300..500x14
@@ -1063,7 +1063,7 @@ Owner = Independent
 Crew = 5, 6
 [112]
 Name = Small poleis patrol ship
-Modules = 1, 3, 4, 4, 4, 5, 7, 7, 8, 9
+Modules = 1, 3, 3x4, 5, 2x7, 8, 9
 CombatAI = Disarmer
 Loot = 20..200
 Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13
@@ -1072,7 +1072,7 @@ Owner = Poleis
 Crew = 8, 9, 10
 [113]
 Name = Small independent patrol ship
-Modules = 1, 3, 4, 4, 4, 5, 7, 7, 8, 9
+Modules = 1, 3, 3x4, 5, 2x7, 8, 9
 CombatAI = Disarmer
 Loot = 20..200
 Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13
@@ -1081,7 +1081,7 @@ Owner = Independent
 Crew = 8, 9, 10
 [114]
 Name = Poleis patrol ship
-Modules = 17, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 28, 27
+Modules = 17, 15, 8x4, 5, 4x7, 28, 27
 CombatAI = Disarmer
 Loot = 100..200
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x5, 10..40x13
@@ -1090,7 +1090,7 @@ Owner = Poleis
 Crew = 12, 13, 14, 5x57
 [115]
 Name = Independent patrol ship
-Modules = 17, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 28, 27
+Modules = 17, 15, 8x4, 5, 4x7, 28, 27
 CombatAI = Disarmer
 Loot = 100..200
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x5, 10..40x13
@@ -1099,7 +1099,7 @@ Owner = Independent
 Crew = 12, 13, 14, 3..7x57
 [116]
 Name = Armored poleis patrol ship
-Modules = 17, 25, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 28, 27
+Modules = 17, 25, 15, 8x4, 5, 4x7, 28, 27
 CombatAI = Disarmer
 Loot = 150..300
 Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x20, 100..200x5, 20..40x13
@@ -1108,7 +1108,7 @@ Owner = Poleis
 Crew = 16, 17, 18, 3..7x58
 [117]
 Name = Armored independent patrol ship
-Modules = 17, 25, 15, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 28, 27
+Modules = 17, 25, 15, 8x4, 5, 4x7, 28, 27
 CombatAI = Disarmer
 Loot = 150..300
 Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x20, 100..200x5, 20..40x13
@@ -1117,7 +1117,7 @@ Owner = Independent
 Crew = 16, 17, 18, 3..7x58
 [118]
 Name = Advanced poleis patrol ship
-Modules = 22, 25, 18, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 28, 27
+Modules = 22, 25, 18, 6x4, 5, 4x7, 28, 27
 CombatAI = Disarmer
 Loot = 200..250
 Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x5, 20..40x13
@@ -1126,7 +1126,7 @@ Owner = Poleis
 Crew = 32, 33, 34, 3x65
 [119]
 Name = Advanced independent patrol ship
-Modules = 22, 25, 18, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 28, 27
+Modules = 22, 25, 18, 6x4, 5, 4x7, 28, 27
 CombatAI = Disarmer
 Loot = 200..250
 Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x5, 20..40x13
@@ -1135,7 +1135,7 @@ Owner = Independent
 Crew = 32, 33, 34, 3x65
 [120]
 Name = Large poleis patrol ship
-Modules = 23, 26, 19, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 28, 29, 28, 29, 28, 29
+Modules = 23, 26, 19, 10x4, 5, 6x7, 3x28, 3x29
 CombatAI = Disarmer
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
@@ -1144,7 +1144,7 @@ Owner = Poleis
 Crew = 23, 3x24, 25, 3..7x65
 [121]
 Name = Large independent patrol ship
-Modules = 23, 26, 19, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 28, 29, 28, 29, 28, 29
+Modules = 23, 26, 19, 10x4, 5, 6x7, 3x28, 3x29
 CombatAI = Disarmer
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
@@ -1153,7 +1153,7 @@ Owner = Independent
 Crew = 23, 3x24, 25, 3..7x65
 [122]
 Name = Huge poleis patrol ship
-Modules = 60, 26, 62, 62, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 33, 39, 33, 39, 33, 39, 33
+Modules = 60, 26, 2x62, 14x4, 5, 10x7, 4x39, 4x33
 CombatAI = Disarmer
 Loot = 500..1000
 Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13
@@ -1162,7 +1162,7 @@ Owner = Poleis
 Crew = 39, 4x40, 41, 6..10x68
 [123]
 Name = Huge independent patrol ship
-Modules = 60, 26, 62, 62, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 33, 39, 33, 39, 33, 39, 33
+Modules = 60, 26, 2x62, 14x4, 5, 10x7, 4x39, 4x33
 CombatAI = Disarmer
 Loot = 500..1000
 Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13
@@ -1171,7 +1171,7 @@ Owner = Independent
 Crew = 39, 4x40, 41, 6..10x68
 [124]
 Name = Advanced huge poleis patrol ship
-Modules = 61, 26, 63, 63, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 34, 39, 34, 39, 34, 39, 34
+Modules = 61, 26, 2x63, 16x4, 5, 12x7, 4x39, 4x34
 CombatAI = Disarmer
 Loot = 750..1200
 Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x5, 300..500x13
@@ -1180,7 +1180,7 @@ Owner = Poleis
 Crew = 43, 4x44, 45, 8..12x69
 [125]
 Name = Advanced huge independent patrol ship
-Modules = 61, 26, 63, 63, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 39, 34, 39, 34, 39, 34, 39, 34
+Modules = 61, 26, 2x63, 16x4, 5, 12x7, 4x39, 4x34
 CombatAI = Disarmer
 Loot = 750..1200
 Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x5, 300..500x13
