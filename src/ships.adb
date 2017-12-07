@@ -340,6 +340,7 @@ package body Ships is
       ItemIndex,
       RecipeIndex,
       MobIndex: Natural;
+      Amount2: Positive;
       TempRecord: ProtoShipData;
       TempModules, TempRecipes: Positive_Container.Vector;
       TempCargo, TempCrew: Skills_Container.Vector;
@@ -403,9 +404,19 @@ package body Ships is
                      if EndIndex = 0 then
                         EndIndex := Length(Value) + 1;
                      end if;
-                     ModuleIndex :=
-                       FindProtoModule
-                         (Unbounded_Slice(Value, StartIndex, EndIndex - 1));
+                     XIndex := Index(Value, "x", StartIndex);
+                     if XIndex = 0 or XIndex > EndIndex then
+                        ModuleIndex :=
+                          FindProtoModule
+                            (Unbounded_Slice(Value, StartIndex, EndIndex - 1));
+                        Amount2 := 1;
+                     else
+                        ModuleIndex :=
+                          FindProtoModule
+                            (Unbounded_Slice(Value, XIndex + 1, EndIndex - 1));
+                        Amount2 :=
+                          Positive'Value(Slice(Value, StartIndex, XIndex - 1));
+                     end if;
                      if ModuleIndex = 0 then
                         Close(ShipsFile);
                         End_Search(Files);
@@ -416,7 +427,13 @@ package body Ships is
                           To_String(TempRecord.Name) &
                           ".";
                      end if;
-                     TempRecord.Modules.Append(New_Item => ModuleIndex);
+                     if Amount2 = 1 then
+                        TempRecord.Modules.Append(New_Item => ModuleIndex);
+                     else
+                        for J in 1 .. Amount2 loop
+                           TempRecord.Modules.Append(New_Item => ModuleIndex);
+                        end loop;
+                     end if;
                      StartIndex := EndIndex + 2;
                   end loop;
                elsif FieldName = To_Unbounded_String("Accuracy") then
