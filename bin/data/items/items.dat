@@ -827,4 +827,13 @@ Buyable = Y, N, N, N
 ShowType = Tool
 Value = 10
 Description = Set of tools made of iron, used to cook items.
+[99]
+Name = Steel cooking set
+Weight = 10
+Type = CookingSet
+Prices = 20, 22, 22, 22
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 5
+Description = Set of tools made of steel, used to cook items.
 []
