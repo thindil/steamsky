@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Combat between characters
 - Showing current dodge skill name in help
 - Few new mobiles
+- Option to set random amount of crew for ships
 
 ### Changed
 - Updated MODDING.md
