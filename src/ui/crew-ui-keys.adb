@@ -20,6 +20,7 @@ with Terminal_Interface.Curses.Menus; use Terminal_Interface.Curses.Menus;
 with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
+with Ships.Crew; use Ships.Crew;
 with ShipModules; use ShipModules;
 with Help.UI; use Help.UI;
 with Header; use Header;
@@ -76,7 +77,7 @@ package body Crew.UI.Keys is
              (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
               ItemType => RepairTools) =
            0) then
-         GiveOrders(MemberIndex, Rest);
+         GiveOrders(PlayerShip, MemberIndex, Rest);
       end if;
       RedrawScreen;
       return Inventory_View;
@@ -175,21 +176,21 @@ package body Crew.UI.Keys is
             end if;
          when 10 => -- Select order
             if OrderName = "Piloting" then
-               GiveOrders(MemberIndex, Pilot);
+               GiveOrders(PlayerShip, MemberIndex, Pilot);
             elsif OrderName = "Engineering" then
-               GiveOrders(MemberIndex, Engineer);
+               GiveOrders(PlayerShip, MemberIndex, Engineer);
             elsif OrderName = "Go on break" then
-               GiveOrders(MemberIndex, Rest);
+               GiveOrders(PlayerShip, MemberIndex, Rest);
             elsif OrderName = "Repair ship" then
-               GiveOrders(MemberIndex, Repair);
+               GiveOrders(PlayerShip, MemberIndex, Repair);
             elsif OrderName = "Upgrade module" then
-               GiveOrders(MemberIndex, Upgrading);
+               GiveOrders(PlayerShip, MemberIndex, Upgrading);
             elsif OrderName = "Talking in bases" then
-               GiveOrders(MemberIndex, Talk);
+               GiveOrders(PlayerShip, MemberIndex, Talk);
             elsif OrderName = "Heal wounded crew members" then
-               GiveOrders(MemberIndex, Heal);
+               GiveOrders(PlayerShip, MemberIndex, Heal);
             elsif OrderName = "Clean ship" then
-               GiveOrders(MemberIndex, Clean);
+               GiveOrders(PlayerShip, MemberIndex, Clean);
             elsif OrderName = "Dismiss" then
                DrawGame(Dismiss_Confirm);
                return Dismiss_Confirm;
@@ -201,9 +202,9 @@ package body Crew.UI.Keys is
                if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                    .MType =
                  GUN then
-                  GiveOrders(MemberIndex, Gunner, ModuleIndex);
+                  GiveOrders(PlayerShip, MemberIndex, Gunner, ModuleIndex);
                else
-                  GiveOrders(MemberIndex, Craft, ModuleIndex);
+                  GiveOrders(PlayerShip, MemberIndex, Craft, ModuleIndex);
                end if;
             end if;
             DrawGame(Crew_Info);
@@ -254,7 +255,7 @@ package body Crew.UI.Keys is
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
                   if PlayerShip.Crew(I).Skills.Length > 0 then
                      begin
-                        GiveOrders(I, Repair);
+                        GiveOrders(PlayerShip, I, Repair);
                      exception
                         when An_Exception : Crew_Order_Error |
                           Crew_No_Space_Error =>
@@ -269,7 +270,7 @@ package body Crew.UI.Keys is
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
                   if PlayerShip.Crew(I).Skills.Length > 0 then
                      begin
-                        GiveOrders(I, Clean);
+                        GiveOrders(PlayerShip, I, Clean);
                      exception
                         when An_Exception : Crew_Order_Error |
                           Crew_No_Space_Error =>

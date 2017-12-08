@@ -21,6 +21,7 @@ with UserInterface; use UserInterface;
 with Messages; use Messages;
 with Help.UI; use Help.UI;
 with Ships.Upgrade; use Ships.Upgrade;
+with Ships.Crew; use Ships.Crew;
 with Header; use Header;
 with Config; use Config;
 
@@ -112,7 +113,7 @@ package body Ships.UI.Ship.Keys is
                for I in
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
                   if PlayerShip.Crew(I).Order = Upgrading then
-                     GiveOrders(I, Rest);
+                     GiveOrders(PlayerShip, I, Rest);
                      exit;
                   end if;
                end loop;
@@ -203,11 +204,23 @@ package body Ships.UI.Ship.Keys is
                         ".",
                         OrderMessage);
                   when GUN =>
-                     GiveOrders(OptionIndex, Gunner, CurrentMenuIndex);
+                     GiveOrders
+                       (PlayerShip,
+                        OptionIndex,
+                        Gunner,
+                        CurrentMenuIndex);
                   when ALCHEMY_LAB .. GREENHOUSE =>
-                     GiveOrders(OptionIndex, Craft, CurrentMenuIndex);
+                     GiveOrders
+                       (PlayerShip,
+                        OptionIndex,
+                        Craft,
+                        CurrentMenuIndex);
                   when MEDICAL_ROOM =>
-                     GiveOrders(OptionIndex, Heal, CurrentMenuIndex);
+                     GiveOrders
+                       (PlayerShip,
+                        OptionIndex,
+                        Heal,
+                        CurrentMenuIndex);
                   when others =>
                      null;
                end case;

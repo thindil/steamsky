@@ -46,7 +46,7 @@ package body Bases.Ship is
       end if;
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Order = Repair then
-            GiveOrders(Crew_Container.To_Index(I), Rest);
+            GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
          end if;
       end loop;
       if ModuleIndex > 0 then
@@ -257,7 +257,7 @@ package body Bases.Ship is
             PlayerShip.UpgradeModule := 0;
             for C in PlayerShip.Crew.Iterate loop
                if PlayerShip.Crew(C).Order = Upgrading then
-                  GiveOrders(Crew_Container.To_Index(C), Rest);
+                  GiveOrders(PlayerShip, Crew_Container.To_Index(C), Rest);
                   exit;
                end if;
             end loop;
@@ -269,7 +269,8 @@ package body Bases.Ship is
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType /=
              CABIN then
             GiveOrders
-              (MemberIndex => PlayerShip.Modules(ModuleIndex).Owner,
+              (Ship => PlayerShip,
+               MemberIndex => PlayerShip.Modules(ModuleIndex).Owner,
                GivenOrder => Rest,
                CheckPriorities => False);
          end if;

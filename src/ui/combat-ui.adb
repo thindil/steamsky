@@ -73,7 +73,7 @@ package body Combat.UI is
          MemberIndex := PlayerShip.Modules(ModuleIndex).Owner;
       end if;
       if CrewIndex > 0 then
-         GiveOrders(CrewIndex, Order, ModuleIndex);
+         GiveOrders(PlayerShip, CrewIndex, Order, ModuleIndex);
       elsif CrewIndex = 0 then
          if Name(Current(OrdersMenu)) = "Close" then
             return;
@@ -931,7 +931,7 @@ package body Combat.UI is
                for I in
                  PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
                   if Value(Menus.Items(OrdersMenu, I)) then
-                     GiveOrders(I, Boarding);
+                     GiveOrders(PlayerShip, I, Boarding);
                   end if;
                end loop;
                DrawGame(Combat_State);

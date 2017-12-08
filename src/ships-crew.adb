@@ -15,8 +15,11 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Exceptions; use Ada.Exceptions;
 with Messages; use Messages;
 with HallOfFame; use HallOfFame;
+with ShipModules; use ShipModules;
+with Ships.Cargo; use Ships.Cargo;
 
 package body Ships.Crew is
 
@@ -131,5 +134,267 @@ package body Ships.Crew is
       end loop;
       return 0;
    end FindMember;
+
+   procedure GiveOrders
+     (Ship: in out ShipRecord;
+      MemberIndex: Positive;
+      GivenOrder: Crew_Orders;
+      ModuleIndex: Natural := 0;
+      CheckPriorities: Boolean := True) is
+      MemberName: constant String := To_String(Ship.Crew(MemberIndex).Name);
+      ModuleIndex2, ToolsIndex: Natural := 0;
+      MType: ModuleType := ENGINE;
+      RequiredTool: Unbounded_String;
+   begin
+      if GivenOrder = Ship.Crew(MemberIndex).Order then
+         if GivenOrder = Craft or GivenOrder = Gunner then
+            for I in Ship.Modules.Iterate loop
+               if Ship.Modules(I).Owner = MemberIndex and
+                 Modules_Container.To_Index(I) = ModuleIndex then
+                  return;
+               end if;
+            end loop;
+         else
+            return;
+         end if;
+      end if;
+      if GivenOrder = Upgrading or
+        GivenOrder = Repair or
+        GivenOrder = Clean then -- Check for tools
+         if GivenOrder = Clean then
+            RequiredTool := CleaningTools;
+         else
+            RequiredTool := RepairTools;
+         end if;
+         ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
+         if ToolsIndex > 0 then
+            if Items_List
+                (Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
+                .IType /=
+              RequiredTool then
+               ToolsIndex := 0;
+            end if;
+         end if;
+         if ToolsIndex = 0 then
+            ToolsIndex :=
+              FindItem(Inventory => Ship.Cargo, ItemType => RequiredTool);
+            if ToolsIndex = 0 then
+               ToolsIndex :=
+                 FindItem
+                   (Inventory => Ship.Crew(MemberIndex).Inventory,
+                    ItemType => RequiredTool);
+               if ToolsIndex > 0 then
+                  Ship.Crew(MemberIndex).Equipment(7) := ToolsIndex;
+               end if;
+            else
+               Ship.Crew(MemberIndex).Equipment(7) := 0;
+            end if;
+         end if;
+         if ToolsIndex = 0 then
+            case GivenOrder is
+               when Repair =>
+                  raise Crew_Order_Error
+                    with MemberName &
+                    " can't starts repairing ship because you don't have repair tools.";
+               when Clean =>
+                  raise Crew_Order_Error
+                    with MemberName &
+                    " can't starts cleaning ship because you don't have any cleaning tools.";
+               when Upgrading =>
+                  raise Crew_Order_Error
+                    with MemberName &
+                    " can't starts upgrading module because you don't have repair tools.";
+               when others =>
+                  return;
+            end case;
+         end if;
+      end if;
+      if GivenOrder = Pilot or
+        GivenOrder = Engineer or
+        GivenOrder = Upgrading or
+        GivenOrder = Talk then
+         for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
+            if Ship.Crew(I).Order = GivenOrder then
+               GiveOrders(PlayerShip, I, Rest, 0, False);
+               exit;
+            end if;
+         end loop;
+      elsif GivenOrder = Gunner or GivenOrder = Craft then
+         if Ship.Modules(ModuleIndex).Owner > 0 then
+            GiveOrders
+              (PlayerShip,
+               Ship.Modules(ModuleIndex).Owner,
+               Rest,
+               0,
+               False);
+         end if;
+      end if;
+      if ModuleIndex = 0 and
+        (GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Rest) then
+         case GivenOrder is
+            when Pilot =>
+               MType := COCKPIT;
+            when Engineer =>
+               MType := ENGINE;
+            when Rest =>
+               MType := CABIN;
+            when others =>
+               null;
+         end case;
+         for I in Ship.Modules.Iterate loop
+            if MType /= CABIN then
+               if Modules_List(Ship.Modules(I).ProtoIndex).MType = MType and
+                 Ship.Modules(I).Durability > 0 then
+                  if Ship.Modules(I).Owner /= 0 then
+                     GiveOrders
+                       (PlayerShip,
+                        Ship.Modules(I).Owner,
+                        Rest,
+                        0,
+                        False);
+                  end if;
+                  ModuleIndex2 := Modules_Container.To_Index(I);
+                  exit;
+               end if;
+            else
+               if Modules_List(Ship.Modules(I).ProtoIndex).MType = CABIN and
+                 Ship.Modules(I).Durability > 0 and
+                 Ship.Modules(I).Owner = MemberIndex then
+                  ModuleIndex2 := Modules_Container.To_Index(I);
+                  exit;
+               end if;
+            end if;
+         end loop;
+      else
+         ModuleIndex2 := ModuleIndex;
+      end if;
+      if ModuleIndex2 = 0 then
+         case GivenOrder is
+            when Pilot =>
+               raise Crew_Order_Error
+                 with MemberName &
+                 " can't starts piloting because cockpit is destroyed or you don't have cockpit.";
+            when Engineer =>
+               raise Crew_Order_Error
+                 with MemberName &
+                 " can't starts engineers duty because all engines are destroyed or you don't have engine.";
+            when Gunner =>
+               raise Crew_Order_Error
+                 with MemberName &
+                 " can't starts operating gun because all guns are destroyed or you don't have installed any.";
+            when Rest =>
+               for Module of Ship.Modules loop
+                  if Modules_List(Module.ProtoIndex).MType = CABIN and
+                    Module.Durability > 0 and
+                    Module.Owner = 0 then
+                     Module.Owner := MemberIndex;
+                     AddMessage
+                       (MemberName &
+                        " take " &
+                        To_String(Module.Name) &
+                        " as own cabin.",
+                        OtherMessage);
+                     exit;
+                  end if;
+               end loop;
+            when others =>
+               null;
+         end case;
+      end if;
+      for Module of Ship.Modules loop
+         if Modules_List(Module.ProtoIndex).MType /= CABIN and
+           Module.Owner = MemberIndex then
+            Module.Owner := 0;
+            exit;
+         end if;
+      end loop;
+      if ToolsIndex > 0 and
+        Ship.Crew(MemberIndex).Equipment(7) /= ToolsIndex then
+         UpdateInventory
+           (MemberIndex,
+            1,
+            Ship.Cargo(ToolsIndex).ProtoIndex,
+            Ship.Cargo(ToolsIndex).Durability);
+         UpdateCargo(Ship => Ship, Amount => -1, CargoIndex => ToolsIndex);
+         Ship.Crew(MemberIndex).Equipment(7) :=
+           FindItem
+             (Inventory => Ship.Crew(MemberIndex).Inventory,
+              ItemType => RequiredTool);
+      end if;
+      if GivenOrder = Rest then
+         Ship.Crew(MemberIndex).PreviousOrder := Rest;
+         if Ship.Crew(MemberIndex).Order = Repair or
+           Ship.Crew(MemberIndex).Order = Clean or
+           Ship.Crew(MemberIndex).Order = Upgrading then
+            ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
+            if ToolsIndex > 0 then
+               TakeOffItem(MemberIndex, ToolsIndex);
+               UpdateCargo
+                 (Ship,
+                  Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex,
+                  1,
+                  Ship.Crew(MemberIndex).Inventory(ToolsIndex).Durability);
+               UpdateInventory
+                 (MemberIndex => MemberIndex,
+                  Amount => -1,
+                  InventoryIndex => ToolsIndex);
+            end if;
+         end if;
+      end if;
+      if Ship = PlayerShip then
+         case GivenOrder is
+            when Pilot =>
+               AddMessage(MemberName & " starts piloting.", OrderMessage);
+               Ship.Modules(ModuleIndex2).Owner := MemberIndex;
+            when Engineer =>
+               AddMessage
+                 (MemberName & " starts engineers duty.",
+                  OrderMessage);
+            when Gunner =>
+               AddMessage(MemberName & " starts operating gun.", OrderMessage);
+               Ship.Modules(ModuleIndex2).Owner := MemberIndex;
+            when Rest =>
+               AddMessage(MemberName & " going on break.", OrderMessage);
+            when Repair =>
+               AddMessage(MemberName & " starts repair ship.", OrderMessage);
+            when Craft =>
+               AddMessage(MemberName & " starts manufacturing.", OrderMessage);
+               Ship.Modules(ModuleIndex2).Owner := MemberIndex;
+            when Upgrading =>
+               AddMessage
+                 (MemberName &
+                  " starts upgrading " &
+                  To_String(Ship.Modules(Ship.UpgradeModule).Name) &
+                  ".",
+                  OrderMessage);
+            when Talk =>
+               AddMessage
+                 (MemberName & " was assigned to talking in bases.",
+                  OrderMessage);
+            when Heal =>
+               AddMessage
+                 (MemberName & " starts healing wounded crew members.",
+                  OrderMessage);
+            when Clean =>
+               AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
+            when Boarding =>
+               AddMessage
+                 (MemberName & " starts boarding enemy ship.",
+                  OrderMessage);
+            when Defend =>
+               AddMessage
+                 (MemberName & " starts defending ship.",
+                  OrderMessage);
+         end case;
+      end if;
+      Ship.Crew(MemberIndex).Order := GivenOrder;
+      Ship.Crew(MemberIndex).OrderTime := 15;
+      if CheckPriorities then
+         UpdateOrders;
+      end if;
+   exception
+      when An_Exception : Crew_No_Space_Error =>
+         raise Crew_Order_Error with Exception_Message(An_Exception);
+   end GiveOrders;
 
 end Ships.Crew;

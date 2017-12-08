@@ -106,7 +106,10 @@ package body Ships.Repairs is
                                     OrderMessage,
                                     3);
                                  RepairPoints := 0;
-                                 GiveOrders(Crew_Container.To_Index(J), Rest);
+                                 GiveOrders
+                                   (PlayerShip,
+                                    Crew_Container.To_Index(J),
+                                    Rest);
                            end;
                         end if;
                      else
@@ -232,7 +235,7 @@ package body Ships.Repairs is
          end if;
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Order = Repair then
-               GiveOrders(Crew_Container.To_Index(I), Rest);
+               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
             end if;
          end loop;
       end if;
