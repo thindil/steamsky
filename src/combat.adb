@@ -193,6 +193,13 @@ package body Combat is
          Damage: DamageFactor := 0.0;
          WeaponDamage: Integer;
          DeathReason: Unbounded_String;
+         EnemyNameOwner: constant Unbounded_String :=
+           EnemyName &
+           To_Unbounded_String(" (") &
+           To_Unbounded_String
+             (To_Lower
+                (Bases_Owners'Image(ProtoShips_List(EnemyShipIndex).Owner))) &
+           To_Unbounded_String(")");
          procedure RemoveGun(ModuleIndex: Positive) is
          begin
             if EnemyShip.Modules(ModuleIndex).Owner > 0 then
@@ -365,18 +372,20 @@ package body Combat is
                            ShootMessage :=
                              Ship.Crew(GunnerIndex).Name &
                              To_Unbounded_String(" shoots to ") &
-                             EnemyName;
+                             EnemyNameOwner;
                         else
                            ShootMessage :=
-                             EnemyName & To_Unbounded_String(" attacks you");
+                             EnemyNameOwner &
+                             To_Unbounded_String(" attacks you");
                         end if;
                      else
                         if Ship = PlayerShip then
                            ShootMessage :=
-                             To_Unbounded_String("You ram ") & EnemyName;
+                             To_Unbounded_String("You ram ") & EnemyNameOwner;
                         else
                            ShootMessage :=
-                             EnemyName & To_Unbounded_String(" attacks you");
+                             EnemyNameOwner &
+                             To_Unbounded_String(" attacks you");
                         end if;
                      end if;
                      if HitChance + GetRandom(1, 50) >
@@ -1139,7 +1148,7 @@ package body Combat is
       elsif PlayerShip.Crew(1).Health > 0 then
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Order = Boarding then
-               GiveOrders(Crew_Container.To_Index(I), Rest);
+               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
             end if;
          end loop;
          Enemy.Ship.Modules(1).Durability := 0;
