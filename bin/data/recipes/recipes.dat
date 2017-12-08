@@ -806,4 +806,13 @@ Skill = Blacksmith
 Difficulty = 20
 BaseType = 1
 Tool = BlacksmithSet
+[82]
+Material = Iron
+Amount = 1
+Result = 100
+Crafted = 1
+Workplace = Furnace
+Skill = Blacksmith
+BaseType = 1
+Tool = BlacksmithSet
 []
