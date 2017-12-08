@@ -325,7 +325,8 @@ DodgeSkill. Value after equal sign must be existing skill name.
   which you set in *game.dat* as *TraderNames* in ship name. Example: if you
   use *trader* word, ship name can be *small poleis trader*.
 - Modules: List of modules indexes (from *shipmodules* directory), separated 
-  by `, ` (comma and space).
+  by `, ` (comma and space). Each module entry can be only module index or
+  Amount`x`Module index.
 - Accuracy: Bonus to accuracy for ship. Can be constant value (example: 1) or 
   range from minimum value to max value, separated by `..` (double dots)
   (example: 1..5).
