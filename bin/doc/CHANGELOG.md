@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
   iron chestplate, iron helmet, iron armsguard, iron legsguard, steel short
   sword, steel sword, steel shield, steel chestplate, steel helmet, steel
   armsguard, steel legsguard, steel mold, iron gunsmith set, steel gunsmith
-  set, bronze cooking set, iron cooking set and steel cooking set
+  set, bronze cooking set, iron cooking set, steel cooking set and iron sickle
 - Option to set starting equipment for mobs
 - Inventory to mobs
 - Equipment to mobs
