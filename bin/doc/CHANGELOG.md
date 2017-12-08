@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Showing current dodge skill name in help
 - Few new mobiles
 - Option to set random amount of crew for ships
+- Option to grouping ships modules in ship data
 
 ### Changed
 - Updated MODDING.md
