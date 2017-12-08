@@ -836,4 +836,13 @@ Buyable = Y, N, N, N
 ShowType = Tool
 Value = 5
 Description = Set of tools made of steel, used to cook items.
+[100]
+Name = Iron sickle
+Weight = 1
+Type = Sickle
+Prices = 10, 12, 12, 12
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 10
+Description = Iron tool used in cultivating plants.
 []
