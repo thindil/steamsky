@@ -173,12 +173,17 @@ package body Bases.Trade is
             To_String(MoneyName) &
             ".",
             TradeMessage);
-         GiveOrders(MemberIndex, Rest, 0, False);
+         GiveOrders(PlayerShip, MemberIndex, Rest, 0, False);
       else
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Health < 100 then
                PlayerShip.Crew(I).Health := 100;
-               GiveOrders(Crew_Container.To_Index(I), Rest, 0, False);
+               GiveOrders
+                 (PlayerShip,
+                  Crew_Container.To_Index(I),
+                  Rest,
+                  0,
+                  False);
             end if;
          end loop;
          AddMessage
@@ -264,7 +269,7 @@ package body Bases.Trade is
          To_String(MoneyName) &
          ".",
          TradeMessage);
-      GiveOrders(MemberIndex, Rest, 0, False);
+      GiveOrders(PlayerShip, MemberIndex, Rest, 0, False);
       GainedExp :=
         GetRandom(10, 60) +
         PlayerShip.Crew(MemberIndex).Attributes

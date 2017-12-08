@@ -34,5 +34,12 @@ package Ships.Crew is
       Crew: Crew_Container.Vector :=
         PlayerShip.Crew)
      return Natural; -- Find index of first crew member with selected order
+   procedure GiveOrders
+     (Ship: in out ShipRecord;
+      MemberIndex: Positive;
+      GivenOrder: Crew_Orders;
+      ModuleIndex: Natural := 0;
+      CheckPriorities: Boolean :=
+        True); -- Change order for selected crew member
 
 end Ships.Crew;

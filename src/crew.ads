@@ -62,12 +62,6 @@ package Crew is
    Crew_Order_Error: exception; -- Raised when new order can't be set for selected crew member
    Crew_No_Space_Error: exception; -- Raised when no space for new item in crew member inventory
 
-   procedure GiveOrders
-     (MemberIndex: Positive;
-      GivenOrder: Crew_Orders;
-      ModuleIndex: Natural := 0;
-      CheckPriorities: Boolean :=
-        True); -- Change order for selected crew member
    procedure GainExp
      (Amount: Natural;
       SkillNumber, CrewIndex: Positive); -- Gain experience in selected skill.

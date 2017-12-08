@@ -343,7 +343,7 @@ package body Crafts is
                      CraftMessage,
                      3);
                   Module.Data := (0, 0, 0);
-                  GiveOrders(CrafterIndex, Rest);
+                  GiveOrders(PlayerShip, CrafterIndex, Rest);
                   CurrentMinutes := 0;
                end if;
                WorkTime := PlayerShip.Crew(CrafterIndex).OrderTime;
@@ -386,7 +386,7 @@ package body Crafts is
                               CraftMessage,
                               3);
                            Module.Data := (0, 0, 0);
-                           GiveOrders(CrafterIndex, Rest);
+                           GiveOrders(PlayerShip, CrafterIndex, Rest);
                            exit Craft_Loop;
                         end if;
                      end loop;
@@ -446,7 +446,7 @@ package body Crafts is
                               CraftMessage,
                               3);
                            Module.Data := (0, 0, 0);
-                           GiveOrders(CrafterIndex, Rest);
+                           GiveOrders(PlayerShip, CrafterIndex, Rest);
                            exit Craft_Loop;
                         end if;
                      else
@@ -518,7 +518,7 @@ package body Crafts is
                               Amount => -1,
                               InventoryIndex => ToolIndex);
                         end if;
-                        GiveOrders(CrafterIndex, Rest);
+                        GiveOrders(PlayerShip, CrafterIndex, Rest);
                         exit Craft_Loop;
                      end if;
                      CraftedAmount := CraftedAmount + ResultAmount;
@@ -590,7 +590,7 @@ package body Crafts is
                                  Amount => -1,
                                  InventoryIndex => ToolIndex);
                            end if;
-                           GiveOrders(CrafterIndex, Rest);
+                           GiveOrders(PlayerShip, CrafterIndex, Rest);
                            exit Craft_Loop;
                         end if;
                         UpdateCargo
@@ -678,7 +678,7 @@ package body Crafts is
                            Amount => -1,
                            InventoryIndex => ToolIndex);
                      end if;
-                     GiveOrders(CrafterIndex, Rest);
+                     GiveOrders(PlayerShip, CrafterIndex, Rest);
                   end if;
                end if;
             end if;
@@ -687,7 +687,7 @@ package body Crafts is
    exception
       when An_Exception : Crew_No_Space_Error =>
          AddMessage(Exception_Message(An_Exception), OrderMessage, 3);
-         GiveOrders(CrafterIndex, Rest);
+         GiveOrders(PlayerShip, CrafterIndex, Rest);
    end Manufacturing;
 
    function FindRecipe(Index: Unbounded_String) return Natural is
