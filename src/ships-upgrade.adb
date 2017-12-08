@@ -243,7 +243,7 @@ package body Ships.Upgrade is
          PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress := 0;
          PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction := NONE;
          PlayerShip.UpgradeModule := 0;
-         GiveOrders(WorkerIndex, Rest);
+         GiveOrders(PlayerShip, WorkerIndex, Rest);
       end MaxUpgradeReached;
    begin
       WorkerIndex := FindMember(Upgrading);
@@ -260,7 +260,7 @@ package body Ships.Upgrade is
             " because it is destroyed.",
             OrderMessage,
             3);
-         GiveOrders(WorkerIndex, Rest);
+         GiveOrders(PlayerShip, WorkerIndex, Rest);
          return;
       end if;
       while CurrentMinutes > 0 loop
@@ -301,7 +301,7 @@ package body Ships.Upgrade is
                To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name),
                OrderMessage,
                3);
-            GiveOrders(WorkerIndex, Rest);
+            GiveOrders(PlayerShip, WorkerIndex, Rest);
             exit;
          end if;
          if UpgradeTools = 0 then
@@ -310,7 +310,7 @@ package body Ships.Upgrade is
                To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name),
                OrderMessage,
                3);
-            GiveOrders(WorkerIndex, Rest);
+            GiveOrders(PlayerShip, WorkerIndex, Rest);
             exit;
          end if;
          if ResultAmount > PlayerShip.Cargo(UpgradeMaterial).Amount then
