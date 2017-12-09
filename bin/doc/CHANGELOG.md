@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file.
   chestplate, iron helmet, iron armsguard, iron legsguard, steel short sword,
   steel sword, steel shield, steel chestplate, steel helmet, steel armsguard,
   steel legsguard, steel mold, iron gunsmith set, steel gunsmith set, bronze 
-  cooking set, iron cooking set, steel cooking set and iron sickle
+  cooking set, iron cooking set, steel cooking set, iron sickle and steel
+  sickle
 - New crafting recipes: iron mold, iron sword, iron short sword, bronze
   chestplate, bronze helmet, bronze armsguard, bronze legsguard, iron shield,
   iron chestplate, iron helmet, iron armsguard, iron legsguard, steel short
