@@ -352,7 +352,7 @@ package body Crew.UI.Keys is
          when 10 => -- Quit or show hint about setting
             if OptionIndex > Orders_Array'Last then
                PriorityIndex := 1;
-               UpdateOrders;
+               UpdateOrders(PlayerShip);
                DrawGame(Crew_Info);
                return Crew_Info;
             else

@@ -71,7 +71,6 @@ package Crew is
    procedure UpdateCrew
      (Minutes: Positive;
       TiredPoints: Natural); -- Update ship crew
-   procedure UpdateOrders; -- Update crew orders based on their orders priorities
    procedure WaitForRest; -- Wait until whole crew is rested
    function GetSkillLevelName
      (SkillLevel: Positive) return String; -- Get member skill level name
