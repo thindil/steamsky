@@ -23,6 +23,7 @@ with Maps; use Maps;
 with Ships; use Ships;
 with Ships.Upgrade; use Ships.Upgrade;
 with Ships.Repairs; use Ships.Repairs;
+with Ships.Crew; use Ships.Crew;
 with Crew; use Crew;
 with Messages; use Messages;
 with Crafts; use Crafts;
@@ -283,7 +284,7 @@ package body Game is
             end if;
          end loop;
          if NeedCleaning then
-            UpdateOrders;
+            UpdateOrders(PlayerShip);
          end if;
          if PlayerShip.Speed = DOCKED then
             PayForDock;
@@ -329,7 +330,7 @@ package body Game is
          GenerateMissions;
          GenerateCargo;
          UpdatePrices;
-         UpdateOrders;
+         UpdateOrders(PlayerShip);
       end if;
       -- Update map cell
       if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited = False then

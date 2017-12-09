@@ -279,7 +279,7 @@ package body Bases is
             "' for directions to other bases.",
             OrderMessage);
          DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
-         UpdateOrders;
+         UpdateOrders(PlayerShip);
       end if;
       Bases_Loop:
       for X in -Radius .. Radius loop
@@ -410,7 +410,7 @@ package body Bases is
             "' for events.",
             OrderMessage);
          DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
-         UpdateOrders;
+         UpdateOrders(PlayerShip);
       end if;
       EventsAmount := GetRandom(1, MaxEvents);
       MinX := PlayerShip.SkyX - 100;

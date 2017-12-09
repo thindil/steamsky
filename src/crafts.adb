@@ -727,7 +727,7 @@ package body Crafts is
          To_String(PlayerShip.Modules(Workshop).Name) &
          ".",
          CraftMessage);
-      UpdateOrders;
+      UpdateOrders(PlayerShip);
    end SetRecipe;
 
 end Crafts;
