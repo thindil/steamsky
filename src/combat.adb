@@ -1135,6 +1135,9 @@ package body Combat is
                   end loop;
                end if;
             end loop;
+            if FindMember(Boarding) = 0 then
+               UpdateOrders(Enemy.Ship);
+            end if;
          end;
       end if;
       if Enemy.HarpoonDuration > 0 then
