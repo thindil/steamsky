@@ -813,6 +813,17 @@ Result = 100
 Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
+Difficulty = 5
+BaseType = 1
+Tool = BlacksmithSet
+[83]
+Material = Steel
+Amount = 1
+Result = 101
+Crafted = 1
+Workplace = Furnace
+Skill = Blacksmith
+Difficulty = 10
 BaseType = 1
 Tool = BlacksmithSet
 []
