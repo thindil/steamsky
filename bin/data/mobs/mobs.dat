@@ -35,6 +35,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 1, 1, 1, 1
 Attributes = 2, 2, 2, 2
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x74, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [6]
@@ -42,6 +43,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 1, 1, 1, 1
 Attributes = 2, 2, 2, 2
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
 Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [7]
@@ -49,6 +51,7 @@ Skills = Piloting, Perception, Brawling, Dodge
 SkillsLevels = 1, 1, 1, 1
 Attributes = 1, 1, 1, 1
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x67, 1x68, 1x69, 1x71
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [8]
@@ -56,6 +59,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 1, 2..4, 2..4, 2..4
 Attributes = 3, 3, 3, 3
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [9]
@@ -63,6 +67,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 3, 2..4, 2..4, 2..4
 Attributes = 3, 3, 3, 3
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
 Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [10]
@@ -70,6 +75,7 @@ Skills = Engineering, Swords, Dodge
 SkillsLevels = 3..6, 3..6, 3..6
 Attributes = 3, 3, 3, 3
 Order = Engineer
+Priorities = Engineering:Normal
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [11]
@@ -77,6 +83,7 @@ Skills = Piloting, Perception, Brawling, Dodge
 SkillsLevels = 1, 1..4, 1..4, 1..4
 Attributes = 3, 3, 3, 3
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x67, 1x68, 1x69, 1x71
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [12]
@@ -84,6 +91,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 3..6, 3..6, 3..6, 3..6
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [13]
@@ -91,6 +99,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 7..14, 3..6, 3..6, 3..6
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [14]
@@ -98,6 +107,7 @@ Skills = Engineering, Swords, Dodge
 SkillsLevels = 7..12, 7..12, 7..12
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Engineer
+Priorities = Engineering:Normal
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [15]
@@ -105,6 +115,7 @@ Skills = Rhetoric, Swords, Dodge
 SkillsLevels = 1..5, 1..5, 1..5
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Talk
+Priorities = Talking in bases:Normal
 Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [16]
@@ -112,6 +123,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 6..12, 3..6, 6..12, 6..12
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [17]
@@ -119,6 +131,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 7..14, 3..6, 7..14, 7..14
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [18]
@@ -126,6 +139,7 @@ Skills = Engineering, Swords, Dodge
 SkillsLevels = 7..12, 7..12, 7..12
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Engineer
+Priorities = Engineering:Normal
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [19]
@@ -133,6 +147,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 1, 1..2, 1..2, 1..2
 Attributes = 3, 3, 3, 3
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x74, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [20]
@@ -147,6 +162,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 5..15, 3..7, 5..15, 5..15
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [22]
@@ -154,6 +170,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 5..15, 3..7, 5..15, 5..15
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [23]
@@ -161,6 +178,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 15..25, 3..6, 15..25, 15..25
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [24]
@@ -168,6 +186,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 15..25, 3..6, 15..25, 15..25
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [25]
@@ -175,6 +194,7 @@ Skills = Engineering, Swords, Dodge
 SkillsLevels = 15..25, 15..25, 15..25
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Engineer
+Priorities = Engineering:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [26]
@@ -182,6 +202,7 @@ Skills = Rhetoric, Swords, Dodge
 SkillsLevels = 5..10, 15..25, 15..25
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Talk
+Priorities = Talking in bases:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [27]
@@ -189,6 +210,7 @@ Skills = Piloting, Perception, Brawling, Dodge
 SkillsLevels = 3..6, 3..6, 5..15, 5..15
 Attributes = 2..4, 2..4, 2..4, 2..4
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x78, 1x79, 1x80, 1x81
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [28]
@@ -196,6 +218,7 @@ Skills = Piloting, Perception, Brawling, Dodge
 SkillsLevels = 7..20, 7..20, 15..25, 15..25
 Attributes = 5..15, 5..15, 5..15, 5..15
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x83, 1x84, 1x85, 1x86
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [29]
@@ -203,6 +226,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 15..25, 7..15, 15..25, 15..25
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [30]
@@ -210,6 +234,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 10..20, 3..8, 15..25, 15..25
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [31]
@@ -217,6 +242,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 10..20, 3..7, 15..25, 15..25
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [32]
@@ -224,6 +250,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 7..20, 4..12, 7..20, 7..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [33]
@@ -231,6 +258,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 7..20, 3..10, 7..20, 7..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [34]
@@ -238,6 +266,7 @@ Skills = Engineering, Swords, Dodge
 SkillsLevels = 7..20, 7..20, 7..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Engineer
+Priorities = Engineering:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [35]
@@ -245,6 +274,7 @@ Skills = Rhetoric, Swords, Dodge
 SkillsLevels = 2..6, 7..20, 7..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Talk
+Priorities = Talking in bases:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [36]
@@ -252,6 +282,7 @@ Skills = Piloting, Perception, Brawling, Dodge
 SkillsLevels = 5..15, 5..15, 5..15, 5..15
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x83, 1x84, 1x85, 1x86
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [37]
@@ -259,6 +290,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 7..2, 5..15, 10..20, 10..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [38]
@@ -266,6 +298,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 10..20, 5..15, 5..15, 5..15
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [39]
@@ -273,6 +306,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 30..50, 4..12, 30..50, 30..50
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [40]
@@ -280,6 +314,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 30..50, 4..12, 30..50, 30..50
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [41]
@@ -287,6 +322,7 @@ Skills = Engineering, Swords, Dodge
 SkillsLevels = 30..50, 30..50, 30..50
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Engineer
+Priorities = Engineering:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [42]
@@ -294,6 +330,7 @@ Skills = Rhetoric, Swords, Dodge
 SkillsLevels = 10..20, 30..50, 30..50
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Talk
+Priorities = Talking in bases:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [43]
@@ -301,6 +338,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 40..60, 8..15, 40..60, 40..60
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [44]
@@ -308,6 +346,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 40..60, 8..15, 40..60, 40..60
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [45]
@@ -315,6 +354,7 @@ Skills = Engineering, Swords, Dodge
 SkillsLevels = 40..60, 40..60, 40..60
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Engineer
+Priorities = Engineering:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [46]
@@ -322,6 +362,7 @@ Skills = Rhetoric, Swords, Dodge
 SkillsLevels = 20..40, 40..60, 40..60
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Talk
+Priorities = Talking in bases:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [47]
@@ -329,6 +370,7 @@ Skills = Piloting, Perception, Brawling, Dodge
 SkillsLevels = 30..50, 30..50, 30..50, 30..50
 Attributes = 15..20, 15..20, 15..20, 15..20
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x90, 1x91, 1x92, 1x93
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [48]
@@ -336,6 +378,7 @@ Skills = Piloting, Perception, Brawling, Dodge
 SkillsLevels = 40..60, 40..60, 40..60, 40..60
 Attributes = 20..30, 20..30, 20..30, 20..30
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x90, 1x91, 1x92, 1x93
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [49]
@@ -343,6 +386,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 40..60, 5..15, 40..60, 40..60
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [50]
@@ -350,6 +394,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 30..50, 5..15, 40..60, 40..60
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [51]
@@ -357,6 +402,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 50..70, 8..20, 50..70, 50..70
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [52]
@@ -364,6 +410,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 40..60, 8..20, 50..70, 50..70
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [53]
@@ -371,6 +418,7 @@ Skills = Piloting, Perception, Swords, Dodge
 SkillsLevels = 1, 1, 1, 1
 Attributes = 3, 3, 3, 3
 Order = Pilot
+Priorities = Piloting:Normal
 Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
 Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [54]
@@ -378,6 +426,7 @@ Skills = Gunnery, Perception, Swords, Dodge
 SkillsLevels = 1, 1, 1, 1
 Attributes = 3, 3, 3, 3
 Order = Gunner
+Priorities = Operating guns:Normal
 Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
 Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [55]
