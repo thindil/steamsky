@@ -178,12 +178,11 @@ package body Combat is
       EnemyAmmoIndex,
       EnemyPilotIndex: Natural :=
         0;
-      DistanceTraveled, SpeedBonus, LootAmount: Integer;
-      ShootMessage: Unbounded_String;
+      DistanceTraveled, SpeedBonus: Integer;
+      ShootMessage, Message: Unbounded_String;
       EnemyPilotOrder: Positive := 2;
       HaveFuel: Boolean := False;
       DamageRange: Positive := 10000;
-      Message: Unbounded_String;
       FreeSpace: Integer := 0;
       procedure Attack(Ship, EnemyShip: in out ShipRecord) is
          GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex: Natural;
@@ -1149,30 +1148,73 @@ package body Combat is
       if not EndCombat then
          UpdateGame(1);
       elsif PlayerShip.Crew(1).Health > 0 then
-         for I in PlayerShip.Crew.Iterate loop
-            if PlayerShip.Crew(I).Order = Boarding then
-               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
+         declare
+            WasBoarded: Boolean := False;
+            LootAmount: Integer;
+            MoneyIndex2: constant Positive := FindProtoItem(MoneyIndex);
+         begin
+            for I in PlayerShip.Crew.Iterate loop
+               if PlayerShip.Crew(I).Order = Boarding then
+                  GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
+                  WasBoarded := True;
+               end if;
+            end loop;
+            Enemy.Ship.Modules(1).Durability := 0;
+            AddMessage(To_String(EnemyName) & " is destroyed!", CombatMessage);
+            LootAmount := Enemy.Loot;
+            FreeSpace := FreeCargo((0 - LootAmount));
+            if FreeSpace < 0 then
+               LootAmount := LootAmount + FreeSpace;
             end if;
-         end loop;
-         Enemy.Ship.Modules(1).Durability := 0;
-         AddMessage(To_String(EnemyName) & " is destroyed!", CombatMessage);
-         LootAmount := Enemy.Loot;
-         FreeSpace := FreeCargo((0 - LootAmount));
-         if FreeSpace < 0 then
-            LootAmount := LootAmount + FreeSpace;
-         end if;
-         if LootAmount > 0 then
-            AddMessage
-              ("You looted" &
-               Integer'Image(LootAmount) &
-               " " &
-               To_String(MoneyName) &
-               " from " &
-               To_String(EnemyName) &
-               ".",
-               CombatMessage);
-            UpdateCargo(PlayerShip, FindProtoItem(MoneyIndex), LootAmount);
-         end if;
+            if LootAmount > 0 then
+               AddMessage
+                 ("You looted" &
+                  Integer'Image(LootAmount) &
+                  " " &
+                  To_String(MoneyName) &
+                  " from " &
+                  To_String(EnemyName) &
+                  ".",
+                  CombatMessage);
+               UpdateCargo(PlayerShip, MoneyIndex2, LootAmount);
+            end if;
+            FreeSpace := FreeCargo(0);
+            if WasBoarded and FreeSpace > 0 then
+               Message :=
+                 To_Unbounded_String
+                   ("Additionally, your boarding party takes from ") &
+                 EnemyName &
+                 To_Unbounded_String(":");
+               for Item of Enemy.Ship.Cargo loop
+                  LootAmount := Item.Amount / 5;
+                  FreeSpace := FreeCargo((0 - LootAmount));
+                  if FreeSpace < 0 then
+                     LootAmount := LootAmount + FreeSpace;
+                  end if;
+                  if Items_List(Item.ProtoIndex).Prices(1) = 0 and
+                    Item.ProtoIndex /= MoneyIndex2 then
+                     LootAmount := 0;
+                  end if;
+                  if LootAmount > 0 then
+                     if Item /= Enemy.Ship.Cargo.First_Element then
+                        Message := Message & To_Unbounded_String(",");
+                     end if;
+                     UpdateCargo(PlayerShip, Item.ProtoIndex, LootAmount);
+                     Message :=
+                       Message &
+                       Positive'Image(LootAmount) &
+                       To_Unbounded_String(" ") &
+                       Items_List(Item.ProtoIndex).Name;
+                     FreeSpace := FreeCargo(0);
+                     if Item = Enemy.Ship.Cargo.Last_Element or
+                       FreeSpace = 0 then
+                        exit;
+                     end if;
+                  end if;
+               end loop;
+               AddMessage(To_String(Message) & ".", CombatMessage);
+            end if;
+         end;
          Enemy.Ship.Speed := FULL_STOP;
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
