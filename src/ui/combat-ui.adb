@@ -839,7 +839,7 @@ package body Combat.UI is
          CurrentMenuIndex := 1;
          PlayerShip.Speed := OldSpeed;
          EnemyName := Null_Unbounded_String;
-         UpdateOrders;
+         UpdateOrders(PlayerShip);
          DrawGame(Sky_Map_View);
          return Sky_Map_View;
       end if;

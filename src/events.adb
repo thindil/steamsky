@@ -135,7 +135,7 @@ package body Events is
                                 Engines.Last_Index));
                         PlayerShip.Modules(EngineIndex).Durability :=
                           PlayerShip.Modules(EngineIndex).Durability - 1;
-                        UpdateOrders;
+                        UpdateOrders(PlayerShip);
                      else
                         AddMessage
                           (To_String(PlayerShip.Crew(CrewIndex).Name) &
@@ -180,7 +180,7 @@ package body Events is
                     Events_List.Last_Index;
                   AddMessage("You meet friendly trader.", OtherMessage);
                   GainPerception;
-                  UpdateOrders;
+                  UpdateOrders(PlayerShip);
                when 24 .. 30 => -- Friendly ship
                   Events_List.Append
                   (New_Item =>
@@ -196,7 +196,7 @@ package body Events is
                     Events_List.Last_Index;
                   AddMessage("You spotted friendly ship.", OtherMessage);
                   GainPerception;
-                  UpdateOrders;
+                  UpdateOrders(PlayerShip);
                when others => -- Combat
                   GenerateEnemies;
                   Events_List.Append
