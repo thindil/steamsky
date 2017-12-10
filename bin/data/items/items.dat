@@ -854,4 +854,13 @@ Buyable = Y, N, N, N
 ShowType = Tool
 Value = 5
 Description = Steel tool used in cultivating plants.
+[102]
+Name = Iron saw
+Weight = 1
+Type = Saw
+Prices = 10, 12, 12, 12
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 10
+Description = Iron tool used to cut wood.
 []
