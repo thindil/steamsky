@@ -1,6 +1,6 @@
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.9] - 2017-12-10
 
 ### Added
 - New items: iron mold, iron sword, iron short sword, bronze chestplate,
