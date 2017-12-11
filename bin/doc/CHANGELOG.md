@@ -1,5 +1,10 @@
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New item: steel saw
+
 ## [1.9] - 2017-12-10
 
 ### Added
