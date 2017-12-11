@@ -863,4 +863,13 @@ Buyable = Y, N, N, N
 ShowType = Tool
 Value = 10
 Description = Iron tool used to cut wood.
+[103]
+Name = Steel saw
+Weight = 1
+Type = Saw
+Prices = 15, 17, 17, 17
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 5
+Description = Steel tool used to cut wood.
 []
