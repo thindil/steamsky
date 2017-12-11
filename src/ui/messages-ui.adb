@@ -31,7 +31,7 @@ package body Messages.UI is
       LinesAmount: Line_Position := 0;
       Messages_Items: constant Item_Array_Access := new Item_Array(1 .. 8);
       MenuHeight, CurrentLine: Line_Position;
-      MenuLength: Column_Position;
+      MenuLength, CurrentColumn: Column_Position;
    begin
       if Messages_List.Length = 0 then
          Move_Cursor(Line => (Lines / 2), Column => (Columns / 2) - 8);
@@ -93,17 +93,12 @@ package body Messages.UI is
             CurrentLine := 0;
             for Message of reverse Messages_List loop
                if Message.MType = MessagesType or MessagesType = Default then
+                  Set_Color(MessagesPad, Color_Pair(Message.Color));
                   Add(Win => MessagesPad, Str => To_String(Message.Message));
-                  Change_Attributes
-                    (Win => MessagesPad,
-                     Line => CurrentLine,
-                     Column => 0,
-                     Count => Length(Message.Message),
-                     Color => Color_Pair(Message.Color));
-                  CurrentLine := CurrentLine + 1;
+                  Get_Cursor_Position(MessagesPad, CurrentLine, CurrentColumn);
                   Move_Cursor
                     (Win => MessagesPad,
-                     Line => CurrentLine,
+                     Line => CurrentLine + 1,
                      Column => 0);
                end if;
             end loop;
@@ -129,7 +124,8 @@ package body Messages.UI is
       LoopStart: Integer;
       CurrentLine, WindowHeight: Line_Position;
       Message: Message_Data;
-      MessagesWindow: Window;
+      MessagesWindow, MessagesPad2: Window;
+      CurrentColumn: Column_Position;
    begin
       LoopStart := 0 - MessagesAmount;
       CurrentLine := 1;
@@ -147,30 +143,28 @@ package body Messages.UI is
       MessagesWindow :=
         Create(WindowHeight, Columns, (Lines - WindowHeight), 0);
       WindowFrame(MessagesWindow, Color_Pair'First, "Last messages");
-      Move_Cursor(Win => MessagesWindow, Line => CurrentLine, Column => 2);
+      MessagesPad2 := New_Pad(40, Columns - 5);
       for I in reverse LoopStart .. -1 loop
          Message := GetMessage((I + 1));
-         if Message.MessageIndex < StartIndex then
-            exit;
-         end if;
+         exit when Message.MessageIndex < StartIndex;
          CurrentLine := CurrentLine + 1;
-         if Length(Message.Message) > Integer(Columns - 2) then
-            CurrentLine :=
-              CurrentLine +
-              (Line_Position(Length(Message.Message)) /
-               Line_Position(Columns - 4));
-         end if;
-         exit when CurrentLine >= WindowHeight;
-         Add(Win => MessagesWindow, Str => To_String(Message.Message));
-         Change_Attributes
-           (Win => MessagesWindow,
-            Line => CurrentLine - 1,
-            Column => 2,
-            Count => Length(Message.Message),
-            Color => Color_Pair(Message.Color));
-         Move_Cursor(Win => MessagesWindow, Line => CurrentLine, Column => 2);
+         Set_Color(MessagesPad2, Color_Pair(Message.Color));
+         Add(Win => MessagesPad2, Str => To_String(Message.Message));
+         Get_Cursor_Position(MessagesPad2, CurrentLine, CurrentColumn);
+         Move_Cursor
+           (Win => MessagesPad2,
+            Line => CurrentLine + 1,
+            Column => 0);
       end loop;
       Refresh(MessagesWindow);
+      Refresh
+        (MessagesPad2,
+         0,
+         0,
+         (Lines - WindowHeight) + 1,
+         2,
+         (Lines - 2),
+         (Columns - 4));
       Delete(MessagesWindow);
    end ShowLastMessages;
 
