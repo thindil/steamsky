@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New item: steel saw
+- New crafting recipe: steel saw
 
 ## [1.9] - 2017-12-10
 
