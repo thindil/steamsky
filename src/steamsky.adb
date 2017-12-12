@@ -289,6 +289,9 @@ begin
                when GameMenu | Control_Speed | Wait_Order =>
                   GameState := Sky_Map_View;
                   DrawGame(GameState);
+               when Messages_View =>
+                  DeleteMessagesPad;
+                  DrawGame(GameState);
                when others =>
                   DrawGame(GameState);
             end case;
