@@ -23,6 +23,7 @@ package Messages.UI is
    procedure ShowLastMessages
      (StartIndex: Natural :=
         0); -- Show last messages, with index higher than startindex
+   procedure DeleteMessagesPad; -- Delete messages window so it can be redrawed
    function MessagesKeys
      (Key: Key_Code;
       OldState: GameStates) return GameStates; -- Handle keys in messages list
