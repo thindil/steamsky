@@ -128,9 +128,6 @@ package Game is
    FemaleSyllablesMiddle: UnboundedString_Container.Vector;
    FemaleSyllablesEnd: UnboundedString_Container.Vector;
    FemaleVocals: UnboundedString_Container.Vector;
-   ShipSyllablesStart: UnboundedString_Container.Vector;
-   ShipSyllablesMiddle: UnboundedString_Container.Vector;
-   ShipSyllablesEnd: UnboundedString_Container.Vector;
    Skills_List: SkillsData_Container.Vector; -- Contains data for all skills
    RepairTools: Unbounded_String;
    CleaningTools: Unbounded_String;
