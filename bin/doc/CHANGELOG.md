@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing very long messages
+- Showing messages after screen resize
 
 ## [1.9] - 2017-12-10
 
