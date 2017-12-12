@@ -86,7 +86,7 @@ package body Messages.UI is
          if LinesAmount < 1 then
             LinesAmount := 1;
          end if;
-         MessagesPad := New_Pad(LinesAmount + 1, Columns - 2);
+         MessagesPad := New_Pad(LinesAmount + 1, Columns - 4);
          if MessagesAmount(MessagesType) = 0 then
             Add(Win => MessagesPad, Str => "There no messages of that type.");
          else
@@ -147,7 +147,6 @@ package body Messages.UI is
       for I in reverse LoopStart .. -1 loop
          Message := GetMessage((I + 1));
          exit when Message.MessageIndex < StartIndex;
-         CurrentLine := CurrentLine + 1;
          Set_Color(MessagesPad2, Color_Pair(Message.Color));
          Add(Win => MessagesPad2, Str => To_String(Message.Message));
          Get_Cursor_Position(MessagesPad2, CurrentLine, CurrentColumn);
@@ -168,15 +167,20 @@ package body Messages.UI is
       Delete(MessagesWindow);
    end ShowLastMessages;
 
+   procedure DeleteMessagesPad is
+   begin
+      if MessagesPad /= Null_Window then
+         Delete(MessagesPad);
+      end if;
+   end DeleteMessagesPad;
+
    function MessagesKeys
      (Key: Key_Code;
       OldState: GameStates) return GameStates is
       Result: Driver_Result;
       function SetMessagesType return GameStates is
       begin
-         if MessagesPad /= Null_Window then
-            Delete(MessagesPad);
-         end if;
+         DeleteMessagesPad;
          MessagesType :=
            Message_Type'Val(Get_Index(Current(MessagesMenu)) - 1);
          DrawGame(Messages_View);
@@ -187,9 +191,7 @@ package body Messages.UI is
          when 27 => -- Back to sky map
             StartIndex := 0;
             MessagesType := Default;
-            if MessagesPad /= Null_Window then
-               Delete(MessagesPad);
-            end if;
+            DeleteMessagesPad;
             DrawGame(OldState);
             return OldState;
          when Character'Pos('d') | Character'Pos('D') => -- Delete all messages
