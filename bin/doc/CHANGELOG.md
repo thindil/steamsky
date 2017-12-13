@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Showing very long messages
 - Showing messages after screen resize
+- Crash in orders menu when nobody is assigned to talk in bases
 
 ## [1.9] - 2017-12-10
 
