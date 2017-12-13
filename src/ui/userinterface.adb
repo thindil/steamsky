@@ -79,7 +79,11 @@ package body UserInterface is
          HaveTrader := True;
       end if;
       if PlayerShip.Speed = DOCKED then
-         OrdersAmount := 4;
+         if HaveTrader then
+            OrdersAmount := 4;
+         else
+            OrdersAmount := 3;
+         end if;
          MenuIndex := 2;
          if HaveTrader and SkyBases(BaseIndex).Owner /= Abandoned then
             OrdersAmount := OrdersAmount + 1;
