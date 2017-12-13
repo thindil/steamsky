@@ -76,6 +76,10 @@ package Bases is
       Cargo: BaseCargo_Container.Vector; -- List of all cargo in base
    end record;
    SkyBases: array(1 .. 1024) of BaseRecord; -- List of sky bases
+   BaseSyllablesPre: UnboundedString_Container.Vector;
+   BaseSyllablesStart: UnboundedString_Container.Vector;
+   BaseSyllablesEnd: UnboundedString_Container.Vector;
+   BaseSyllablesPost: UnboundedString_Container.Vector;
 
    procedure GainRep
      (BaseIndex: Positive;
