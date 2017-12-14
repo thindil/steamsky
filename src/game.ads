@@ -115,15 +115,6 @@ package Game is
       Attribute: Positive; -- Attribute used with that skill
    end record;
    package SkillsData_Container is new Vectors(Positive, Skill_Record);
-   MaleSyllablesStart: UnboundedString_Container.Vector;
-   MaleSyllablesMiddle: UnboundedString_Container.Vector;
-   MaleSyllablesEnd: UnboundedString_Container.Vector;
-   MaleVocals: UnboundedString_Container.Vector;
-   MaleConsonants: UnboundedString_Container.Vector;
-   FemaleSyllablesStart: UnboundedString_Container.Vector;
-   FemaleSyllablesMiddle: UnboundedString_Container.Vector;
-   FemaleSyllablesEnd: UnboundedString_Container.Vector;
-   FemaleVocals: UnboundedString_Container.Vector;
    Skills_List: SkillsData_Container.Vector; -- Contains data for all skills
    RepairTools: Unbounded_String;
    CleaningTools: Unbounded_String;

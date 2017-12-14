@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Items; use Items;
+with Game; use Game;
 
 package Crew is
 
@@ -59,6 +60,15 @@ package Crew is
       Inventory: Inventory_Container.Vector; -- Owned items by member
       Equipment: Equipment_Array; -- Items indexes from inventory used by character: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
    end record;
+   MaleSyllablesStart: UnboundedString_Container.Vector;
+   MaleSyllablesMiddle: UnboundedString_Container.Vector;
+   MaleSyllablesEnd: UnboundedString_Container.Vector;
+   MaleVocals: UnboundedString_Container.Vector;
+   MaleConsonants: UnboundedString_Container.Vector;
+   FemaleSyllablesStart: UnboundedString_Container.Vector;
+   FemaleSyllablesMiddle: UnboundedString_Container.Vector;
+   FemaleSyllablesEnd: UnboundedString_Container.Vector;
+   FemaleVocals: UnboundedString_Container.Vector;
    Crew_Order_Error: exception; -- Raised when new order can't be set for selected crew member
    Crew_No_Space_Error: exception; -- Raised when no space for new item in crew member inventory
 
