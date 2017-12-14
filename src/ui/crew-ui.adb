@@ -24,7 +24,6 @@ with Maps; use Maps;
 with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
 with Utils.UI; use Utils.UI;
-with Game; use Game;
 with Items.UI; use Items.UI;
 with Config; use Config;
 

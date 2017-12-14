@@ -18,7 +18,6 @@
 with Ships; use Ships;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
-with Game; use Game;
 with Utils; use Utils;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
