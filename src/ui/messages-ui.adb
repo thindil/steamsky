@@ -75,11 +75,11 @@ package body Messages.UI is
          for Message of reverse Messages_List loop
             if Message.MType = MessagesType or MessagesType = Default then
                LinesAmount := LinesAmount + 1;
-               if Length(Message.Message) > Positive(Columns - 2) then
+               if Length(Message.Message) > Positive(Columns - 4) then
                   LinesAmount :=
                     LinesAmount +
                     (Line_Position(Length(Message.Message)) /
-                     Line_Position(Columns - 2));
+                     Line_Position(Columns - 4));
                end if;
             end if;
          end loop;
@@ -172,6 +172,7 @@ package body Messages.UI is
       if MessagesPad /= Null_Window then
          Delete(MessagesPad);
       end if;
+      StartIndex := 0;
    end DeleteMessagesPad;
 
    function MessagesKeys
@@ -189,7 +190,6 @@ package body Messages.UI is
    begin
       case Key is
          when 27 => -- Back to sky map
-            StartIndex := 0;
             MessagesType := Default;
             DeleteMessagesPad;
             DrawGame(OldState);
