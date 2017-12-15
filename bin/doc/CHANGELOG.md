@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New items: steel saw, bronze bucket, iron bucket, steel bucket and iron 
   blacksmith set
-- New crafting recipes: steel saw, bronze bucket, iron bucket and steel bucket
+- New crafting recipes: steel saw, bronze bucket, iron bucket, steel bucket
+  and iron blacksmith set
 
 ### Fixed
 - Showing very long messages
