@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Showing very long messages
 - Showing messages after screen resize
 - Crash in orders menu when nobody is assigned to talk in bases
+- Crash in many forms when trying to left them with invalid value
 
 ## [1.9] - 2017-12-10
 
