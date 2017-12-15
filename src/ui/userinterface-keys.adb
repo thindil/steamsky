@@ -656,6 +656,9 @@ package body UserInterface.Keys is
          Refresh(MenuWindow);
       end if;
       return WaitX_Order;
+   exception
+      when Eti_Invalid_Field =>
+         return WaitX_Order;
    end WaitFormKeys;
 
 end UserInterface.Keys;

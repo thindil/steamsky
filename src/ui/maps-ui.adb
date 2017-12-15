@@ -739,6 +739,9 @@ package body Maps.UI is
          Refresh(FormWindow);
       end if;
       return Move_Map;
+   exception
+      when Eti_Invalid_Field =>
+         return Move_Map;
    end MoveFormKeys;
 
 end Maps.UI;
