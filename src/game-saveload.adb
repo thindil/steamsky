@@ -326,11 +326,9 @@ package body Game.SaveLoad is
       ShipCrew: Crew_Container.Vector;
       Message: Unbounded_String;
       MType: Message_Type;
-      BaseRecruits: Recruit_Container.Vector;
       VisitedFields: Positive;
       BaseMissions: Mission_Container.Vector;
       TmpOrders: Orders_Array;
-      BaseCargo: BaseCargo_Container.Vector;
       Attributes: Attributes_Container.Vector;
       function ReadData return Unbounded_String is
          RawData: Unbounded_String := To_Unbounded_String("");
@@ -373,136 +371,7 @@ package body Game.SaveLoad is
            True;
       end loop;
       -- Load sky bases
-      for I in SkyBases'Range loop
-         SkyBases(I) :=
-           (Name => ReadData,
-            Visited => (0, 0, 0, 0, 0),
-            SkyX => 0,
-            SkyY => 0,
-            BaseType => Industrial,
-            Population => 0,
-            RecruitDate => (0, 0, 0, 0, 0),
-            Recruits => BaseRecruits,
-            Known => False,
-            AskedForBases => False,
-            AskedForEvents => (0, 0, 0, 0, 0),
-            Reputation => (0, 0),
-            MissionsDate => (0, 0, 0, 0, 0),
-            Missions => BaseMissions,
-            Owner => Poleis,
-            Cargo => BaseCargo);
-         SkyBases(I).Visited.Year := Natural'Value(To_String(ReadData));
-         if SkyBases(I).Visited.Year > 0 then
-            SkyBases(I).Visited.Month := Natural'Value(To_String(ReadData));
-            SkyBases(I).Visited.Day := Natural'Value(To_String(ReadData));
-            SkyBases(I).Visited.Hour := Natural'Value(To_String(ReadData));
-            SkyBases(I).Visited.Minutes := Natural'Value(To_String(ReadData));
-         end if;
-         SkyBases(I).SkyX := Integer'Value(To_String(ReadData));
-         SkyBases(I).SkyY := Integer'Value(To_String(ReadData));
-         SkyBases(I).BaseType :=
-           Bases_Types'Val(Integer'Value(To_String(ReadData)));
-         SkyBases(I).Population := Natural'Value(To_String(ReadData));
-         if SkyBases(I).Visited.Year > 0 then
-            SkyBases(I).RecruitDate.Year := Natural'Value(To_String(ReadData));
-            SkyBases(I).RecruitDate.Month :=
-              Natural'Value(To_String(ReadData));
-            SkyBases(I).RecruitDate.Day := Natural'Value(To_String(ReadData));
-            VectorLength := Natural'Value(To_String(ReadData));
-            if VectorLength > 0 then
-               for J in 1 .. VectorLength loop
-                  Skills.Clear;
-                  Attributes.Clear;
-                  BaseRecruits.Append
-                  (New_Item =>
-                     (Name => ReadData,
-                      Gender => Element(ReadData, 1),
-                      Price => Positive'Value(To_String(ReadData)),
-                      Skills => Skills,
-                      Attributes => Attributes));
-                  SkillsLength := Positive'Value(To_String(ReadData));
-                  for K in 1 .. SkillsLength loop
-                     Skills.Append
-                     (New_Item =>
-                        (Natural'Value(To_String(ReadData)),
-                         Natural'Value(To_String(ReadData)),
-                         Natural'Value(To_String(ReadData))));
-                  end loop;
-                  BaseRecruits(BaseRecruits.Last_Index).Skills := Skills;
-                  SkillsLength := Positive'Value(To_String(ReadData));
-                  if SkillsLength /= Natural(Attributes_Names.Length) then
-                     raise SaveGame_Invalid_Data
-                       with "Different amount of character statistics.";
-                  end if;
-                  for K in 1 .. SkillsLength loop
-                     Attributes.Append
-                     (New_Item =>
-                        (Natural'Value(To_String(ReadData)),
-                         Natural'Value(To_String(ReadData))));
-                  end loop;
-                  BaseRecruits(BaseRecruits.Last_Index).Attributes :=
-                    Attributes;
-               end loop;
-               SkyBases(I).Recruits := BaseRecruits;
-               BaseRecruits.Clear;
-            end if;
-            if ReadData = To_Unbounded_String("Y") then
-               SkyBases(I).AskedForBases := True;
-            end if;
-            SkyBases(I).AskedForEvents.Year :=
-              Natural'Value(To_String(ReadData));
-            SkyBases(I).AskedForEvents.Month :=
-              Natural'Value(To_String(ReadData));
-            SkyBases(I).AskedForEvents.Day :=
-              Natural'Value(To_String(ReadData));
-         end if;
-         SkyBases(I).Reputation(1) := Integer'Value(To_String(ReadData));
-         SkyBases(I).Reputation(2) := Integer'Value(To_String(ReadData));
-         if SkyBases(I).Visited.Year > 0 then
-            SkyBases(I).MissionsDate.Year :=
-              Natural'Value(To_String(ReadData));
-            SkyBases(I).MissionsDate.Month :=
-              Natural'Value(To_String(ReadData));
-            SkyBases(I).MissionsDate.Day := Natural'Value(To_String(ReadData));
-            VectorLength := Natural'Value(To_String(ReadData));
-            if VectorLength > 0 then
-               for J in 1 .. VectorLength loop
-                  BaseMissions.Append
-                  (New_Item =>
-                     (MType =>
-                        Missions_Types'Val(Integer'Value(To_String(ReadData))),
-                      Target => Natural'Value(To_String(ReadData)),
-                      Time => Integer'Value(To_String(ReadData)),
-                      TargetX => Integer'Value(To_String(ReadData)),
-                      TargetY => Integer'Value(To_String(ReadData)),
-                      Reward => Integer'Value(To_String(ReadData)),
-                      StartBase => I,
-                      Finished => False));
-               end loop;
-               SkyBases(I).Missions := BaseMissions;
-               BaseMissions.Clear;
-            end if;
-            VectorLength := Natural'Value(To_String(ReadData));
-            if VectorLength > 0 then
-               for J in 1 .. VectorLength loop
-                  BaseCargo.Append
-                  (New_Item =>
-                     (ProtoIndex => FindProtoItem(ReadData),
-                      Amount => Natural'Value(To_String(ReadData)),
-                      Durability => Positive'Value(To_String(ReadData)),
-                      Price => Positive'Value(To_String(ReadData))));
-               end loop;
-               SkyBases(I).Cargo := BaseCargo;
-               BaseCargo.Clear;
-            end if;
-         end if;
-         if ReadData = To_Unbounded_String("Y") then
-            SkyBases(I).Known := True;
-         end if;
-         SkyBases(I).Owner :=
-           Bases_Owners'Val(Integer'Value(To_String(ReadData)));
-         SkyMap(SkyBases(I).SkyX, SkyBases(I).SkyY).BaseIndex := I;
-      end loop;
+      LoadBases(SaveGame);
       -- Load player ship
       PlayerShip.Name := ReadData;
       PlayerShip.SkyX := Integer'Value(To_String(ReadData));
