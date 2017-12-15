@@ -512,6 +512,9 @@ package body Crew.UI.Keys is
          Refresh(FormWindow);
       end if;
       return MoveItem_Form;
+   exception
+      when Eti_Invalid_Field =>
+         return MoveItem_Form;
    end MoveItemFormKeys;
 
    function InventoryMenuKeys(Key: Key_Code) return GameStates is
