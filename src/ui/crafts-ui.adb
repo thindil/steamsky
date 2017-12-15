@@ -698,6 +698,9 @@ package body Crafts.UI is
          Refresh(FormWindow);
       end if;
       return Recipe_Setting;
+   exception
+      when Eti_Invalid_Field =>
+         return Recipe_Setting;
    end RecipeFormKeys;
 
 end Crafts.UI;

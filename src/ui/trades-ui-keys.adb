@@ -348,6 +348,9 @@ package body Trades.UI.Keys is
          Refresh(FormWindow);
       end if;
       return Trade_Form;
+   exception
+      when Eti_Invalid_Field =>
+         return Trade_Form;
    end TradeFormKeys;
 
 end Trades.UI.Keys;

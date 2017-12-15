@@ -273,6 +273,9 @@ package body Ships.UI is
          Refresh(FormWindow);
       end if;
       return CurrentState;
+   exception
+      when Eti_Invalid_Field =>
+         return CurrentState;
    end ShipFormKeys;
 
 end Ships.UI;

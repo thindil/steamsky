@@ -538,6 +538,9 @@ package body Ships.UI.Cargo is
          Refresh(MenuWindow2);
       end if;
       return CargoMove_Form;
+   exception
+      when Eti_Invalid_Field =>
+         return CargoMove_Form;
    end CargoMoveFormKeys;
 
 end Ships.UI.Cargo;

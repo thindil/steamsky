@@ -664,6 +664,9 @@ package body Bases.UI.Loot is
          Refresh(FormWindow);
       end if;
       return Loot_Form;
+   exception
+      when Eti_Invalid_Field =>
+         return Loot_Form;
    end LootFormKeys;
 
 end Bases.UI.Loot;
