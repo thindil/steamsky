@@ -846,7 +846,7 @@ Skill = Blacksmith
 Difficulty = 15
 BaseType = 1
 Tool = BlacksmithSet
-[43]
+[86]
 Material = Bronze
 Amount = 1
 Result = 104
@@ -856,7 +856,7 @@ Skill = Blacksmith
 Difficulty = 10
 BaseType = 1
 Tool = BlacksmithSet
-[44]
+[87]
 Material = Iron
 Amount = 1
 Result = 105
@@ -866,7 +866,7 @@ Skill = Blacksmith
 Difficulty = 15
 BaseType = 1
 Tool = BlacksmithSet
-[45]
+[88]
 Material = Steel
 Amount = 1
 Result = 106
@@ -874,6 +874,16 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 20
+BaseType = 1
+Tool = BlacksmithSet
+[89]
+Material = Iron
+Amount = 10
+Result = 107
+Crafted = 1
+Workplace = Furnace
+Skill = Blacksmith
+Difficulty = 15
 BaseType = 1
 Tool = BlacksmithSet
 []
