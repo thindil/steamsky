@@ -30,7 +30,7 @@ with Items.UI; use Items.UI;
 package body Bases.UI.Loot is
 
    Take: Boolean;
-   LootForm: Form;
+   LootForm: Forms.Form;
    FormWindow: Window;
 
    procedure ShowItemInfo is
