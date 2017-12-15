@@ -745,4 +745,203 @@ package body Bases is
       end loop;
    end UpdatePrices;
 
+   procedure SaveBases(SaveGame: in out File_Type) is
+      RawValue: Unbounded_String;
+   begin
+      for I in SkyBases'Range loop
+         Put(SaveGame, To_String(SkyBases(I).Name) & ";");
+         RawValue :=
+           To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Year));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         if SkyBases(I).Visited.Year > 0 then
+            RawValue :=
+              To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Month));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue :=
+              To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Day));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue :=
+              To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Hour));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue :=
+              To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Minutes));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         end if;
+         RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).SkyX));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).SkyY));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         RawValue :=
+           To_Unbounded_String
+             (Integer'Image(Bases_Types'Pos(SkyBases(I).BaseType)));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         RawValue :=
+           To_Unbounded_String(Integer'Image(SkyBases(I).Population));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         if SkyBases(I).Visited.Year > 0 then
+            RawValue :=
+              To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Year));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue :=
+              To_Unbounded_String
+                (Integer'Image(SkyBases(I).RecruitDate.Month));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue :=
+              To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Day));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(SkyBases(I).Recruits.Length'Img);
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            if SkyBases(I).Recruits.Length > 0 then
+               for Recruit of SkyBases(I).Recruits loop
+                  Put(SaveGame, To_String(Recruit.Name) & ";");
+                  Put(SaveGame, Recruit.Gender & ";");
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Recruit.Price));
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  RawValue := To_Unbounded_String(Recruit.Skills.Length'Img);
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  for Skill of Recruit.Skills loop
+                     RawValue := To_Unbounded_String(Integer'Image(Skill(1)));
+                     Put
+                       (SaveGame,
+                        To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                     RawValue := To_Unbounded_String(Integer'Image(Skill(2)));
+                     Put
+                       (SaveGame,
+                        To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                     RawValue := To_Unbounded_String(Integer'Image(Skill(3)));
+                     Put
+                       (SaveGame,
+                        To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  end loop;
+                  RawValue :=
+                    To_Unbounded_String(Recruit.Attributes.Length'Img);
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  for Attribute of Recruit.Attributes loop
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Attribute(1)));
+                     Put
+                       (SaveGame,
+                        To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Attribute(2)));
+                     Put
+                       (SaveGame,
+                        To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  end loop;
+               end loop;
+            end if;
+            if SkyBases(I).AskedForBases then
+               Put(SaveGame, "Y;");
+            else
+               Put(SaveGame, "N;");
+            end if;
+            RawValue :=
+              To_Unbounded_String
+                (Integer'Image(SkyBases(I).AskedForEvents.Year));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue :=
+              To_Unbounded_String
+                (Integer'Image(SkyBases(I).AskedForEvents.Month));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue :=
+              To_Unbounded_String
+                (Integer'Image(SkyBases(I).AskedForEvents.Day));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         end if;
+         RawValue :=
+           To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(1)));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         RawValue :=
+           To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(2)));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         if SkyBases(I).Visited.Year > 0 then
+            RawValue :=
+              To_Unbounded_String
+                (Integer'Image(SkyBases(I).MissionsDate.Year));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue :=
+              To_Unbounded_String
+                (Integer'Image(SkyBases(I).MissionsDate.Month));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue :=
+              To_Unbounded_String(Integer'Image(SkyBases(I).MissionsDate.Day));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            RawValue := To_Unbounded_String(SkyBases(I).Missions.Length'Img);
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            if SkyBases(I).Missions.Length > 0 then
+               for Mission of SkyBases(I).Missions loop
+                  RawValue :=
+                    To_Unbounded_String
+                      (Integer'Image(Missions_Types'Pos(Mission.MType)));
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Mission.Target));
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  RawValue := To_Unbounded_String(Integer'Image(Mission.Time));
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Mission.TargetX));
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Mission.TargetY));
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Mission.Reward));
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+               end loop;
+            end if;
+            RawValue := To_Unbounded_String(SkyBases(I).Cargo.Length'Img);
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            if SkyBases(I).Cargo.Length > 0 then
+               for Item of SkyBases(I).Cargo loop
+                  Put
+                    (SaveGame,
+                     To_String(Items_List(Item.ProtoIndex).Index) & ";");
+                  RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Item.Durability));
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                  RawValue := To_Unbounded_String(Integer'Image(Item.Price));
+                  Put
+                    (SaveGame,
+                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+               end loop;
+            end if;
+         end if;
+         if SkyBases(I).Known then
+            Put(SaveGame, "Y;");
+         else
+            Put(SaveGame, "N;");
+         end if;
+         RawValue :=
+           To_Unbounded_String
+             (Integer'Image(Bases_Owners'Pos(SkyBases(I).Owner)));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      end loop;
+   end SaveBases;
+
 end Bases;

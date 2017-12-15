@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Text_IO; use Ada.Text_IO;
 with Game; use Game;
 with Crew; use Crew;
 with Missions; use Missions;
@@ -107,5 +108,7 @@ package Bases is
         101)
      return Natural; -- Find index of item in base cargo, return 0 if no item found
    procedure UpdatePrices; -- Random changes of items prices in base
+   procedure SaveBases
+     (SaveGame: in out File_Type); -- Save bases from current game in file
 
 end Bases;
