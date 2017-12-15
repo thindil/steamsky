@@ -110,5 +110,6 @@ package Bases is
    procedure UpdatePrices; -- Random changes of items prices in base
    procedure SaveBases
      (SaveGame: in out File_Type); -- Save bases from current game in file
+   procedure LoadBases(SaveGame: File_Type); -- Load bases from file
 
 end Bases;
