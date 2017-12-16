@@ -31,6 +31,6 @@ package Ships.UI is
 
 private
    ShipsMenu: Menu; -- Menu for ship modules/cargo
-   RenameForm: Form; -- Form used for rename ship/modules
+   RenameForm: Forms.Form; -- Form used for rename ship/modules
 
 end Ships.UI;

@@ -17,6 +17,7 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO; use Ada.Text_IO;
 with Crew; use Crew;
 with Game; use Game;
 with Missions; use Missions;
@@ -104,5 +105,7 @@ package Ships is
      return Unbounded_String; -- Generate random name for ship
    function CountCombatValue
      return Natural; -- Count combat value of player ship
+   procedure SavePlayerShip
+     (SaveGame: in out File_Type); -- Save player ship to file
 
 end Ships;
