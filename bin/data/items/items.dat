@@ -903,9 +903,18 @@ Description = Simple bucket made of steel.
 Name = Iron blacksmith set
 Weight = 100
 Type = BlacksmithSet
-Prices = 60, 62, 62, 62
+Prices = 65, 67, 67, 67
 Buyable = Y, N, N, N
 ShowType = Tool
 Value = 10
 Description = Iron set of tools used in blacksmith recipes.
+[108]
+Name = Steel blacksmith set
+Weight = 100
+Type = BlacksmithSet
+Prices = 95, 97, 97, 97
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 5
+Description = Steel set of tools used in blacksmith recipes.
 []
