@@ -29,7 +29,7 @@ package body Ships.UI.Cargo is
    MenuWindow, MenuWindow2: Window;
    CurrentMenuIndex: Positive := 1;
    OptionsMenu: Menu;
-   MoveForm: Form;
+   MoveForm: Forms.Form;
 
    function MoveItemResult return GameStates is
       FieldIndex: constant Positive := Get_Index(Current(MoveForm));
