@@ -107,5 +107,7 @@ package Ships is
      return Natural; -- Count combat value of player ship
    procedure SavePlayerShip
      (SaveGame: in out File_Type); -- Save player ship to file
+   procedure LoadPlayerShip
+     (SaveGame: File_Type); -- Load saved player ship from file
 
 end Ships;
