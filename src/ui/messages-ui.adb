@@ -96,6 +96,10 @@ package body Messages.UI is
                   Set_Color(MessagesPad, Color_Pair(Message.Color));
                   Add(Win => MessagesPad, Str => To_String(Message.Message));
                   Get_Cursor_Position(MessagesPad, CurrentLine, CurrentColumn);
+                  if CurrentLine >= LinesAmount then
+                     LinesAmount := CurrentLine + 1;
+                     Resize(MessagesPad, LinesAmount + 1, Columns - 4);
+                  end if;
                   Move_Cursor
                     (Win => MessagesPad,
                      Line => CurrentLine + 1,
