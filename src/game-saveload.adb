@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Exceptions; use Ada.Exceptions;
 with Bases; use Bases;
 with Maps; use Maps;
@@ -180,30 +179,19 @@ package body Game.SaveLoad is
       Message: Unbounded_String;
       MType: Message_Type;
       VisitedFields: Positive;
-      function ReadData return Unbounded_String is
-         RawData: Unbounded_String := To_Unbounded_String("");
-         Char: Character;
-      begin
-         Get(SaveGame, Char);
-         while Char not in ';' loop
-            Append(RawData, Char);
-            Get(SaveGame, Char);
-         end loop;
-         return RawData;
-      end ReadData;
    begin
       Open(SaveGame, In_File, To_String(SaveDirectory) & "savegame.dat");
       -- Check save version
-      if ReadData /= SaveVersion then
+      if ReadData(SaveGame) /= SaveVersion then
          Close(SaveGame);
          raise SaveGame_Invalid_Version;
       end if;
       -- Load game date
-      GameDate.Year := Natural'Value(To_String(ReadData));
-      GameDate.Month := Natural'Value(To_String(ReadData));
-      GameDate.Day := Natural'Value(To_String(ReadData));
-      GameDate.Hour := Natural'Value(To_String(ReadData));
-      GameDate.Minutes := Natural'Value(To_String(ReadData));
+      GameDate.Year := Natural'Value(To_String(ReadData(SaveGame)));
+      GameDate.Month := Natural'Value(To_String(ReadData(SaveGame)));
+      GameDate.Day := Natural'Value(To_String(ReadData(SaveGame)));
+      GameDate.Hour := Natural'Value(To_String(ReadData(SaveGame)));
+      GameDate.Minutes := Natural'Value(To_String(ReadData(SaveGame)));
       -- Load sky map
       SkyMap :=
         (others =>
@@ -212,11 +200,11 @@ package body Game.SaveLoad is
                Visited => False,
                EventIndex => 0,
                MissionIndex => 0)));
-      VisitedFields := Positive'Value(To_String(ReadData));
+      VisitedFields := Positive'Value(To_String(ReadData(SaveGame)));
       for I in 1 .. VisitedFields loop
          SkyMap
-           (Positive'Value(To_String(ReadData)),
-            Positive'Value(To_String(ReadData)))
+           (Positive'Value(To_String(ReadData(SaveGame))),
+            Positive'Value(To_String(ReadData(SaveGame))))
            .Visited :=
            True;
       end loop;
@@ -225,73 +213,93 @@ package body Game.SaveLoad is
       -- Load player ship
       LoadPlayerShip(SaveGame);
       -- Load known recipes
-      VectorLength := Positive'Value(To_String(ReadData));
+      VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
       for I in 1 .. VectorLength loop
-         Known_Recipes.Append(New_Item => FindRecipe(ReadData));
+         Known_Recipes.Append(New_Item => FindRecipe(ReadData(SaveGame)));
       end loop;
       -- Load messages
-      VectorLength := Integer'Value(To_String(ReadData));
+      VectorLength := Integer'Value(To_String(ReadData(SaveGame)));
       for I in 1 .. VectorLength loop
-         Message := ReadData;
-         MType := Message_Type'Val(Integer'Value(To_String(ReadData)));
-         RestoreMessage(Message, MType, Natural'Value(To_String(ReadData)));
+         Message := ReadData(SaveGame);
+         MType :=
+           Message_Type'Val(Integer'Value(To_String(ReadData(SaveGame))));
+         RestoreMessage
+           (Message,
+            MType,
+            Natural'Value(To_String(ReadData(SaveGame))));
       end loop;
       -- Load events
-      VectorLength := Positive'Value(To_String(ReadData));
+      VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
       for I in 1 .. VectorLength loop
          Events_List.Append
          (New_Item =>
-            (EType => Events_Types'Val(Integer'Value(To_String(ReadData))),
-             SkyX => Integer'Value(To_String(ReadData)),
-             SkyY => Integer'Value(To_String(ReadData)),
-             Time => Integer'Value(To_String(ReadData)),
-             Data => Integer'Value(To_String(ReadData))));
+            (EType =>
+               Events_Types'Val(Integer'Value(To_String(ReadData(SaveGame)))),
+             SkyX => Integer'Value(To_String(ReadData(SaveGame))),
+             SkyY => Integer'Value(To_String(ReadData(SaveGame))),
+             Time => Integer'Value(To_String(ReadData(SaveGame))),
+             Data => Integer'Value(To_String(ReadData(SaveGame)))));
          SkyMap(Events_List(I).SkyX, Events_List(I).SkyY).EventIndex := I;
       end loop;
       -- Load game statistics
-      VectorLength := Positive'Value(To_String(ReadData));
+      VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
       for I in 1 .. VectorLength loop
          GameStats.DestroyedShips.Append
          (New_Item =>
-            (Index => ReadData,
-             Amount => Positive'Value(To_String(ReadData))));
+            (Index => ReadData(SaveGame),
+             Amount => Positive'Value(To_String(ReadData(SaveGame)))));
       end loop;
-      GameStats.BasesVisited := Positive'Value(To_String(ReadData));
-      GameStats.MapVisited := Positive'Value(To_String(ReadData));
-      GameStats.DistanceTraveled := Positive'Value(To_String(ReadData));
-      VectorLength := Positive'Value(To_String(ReadData));
+      GameStats.BasesVisited := Positive'Value(To_String(ReadData(SaveGame)));
+      GameStats.MapVisited := Positive'Value(To_String(ReadData(SaveGame)));
+      GameStats.DistanceTraveled :=
+        Positive'Value(To_String(ReadData(SaveGame)));
+      VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
       for I in 1 .. VectorLength loop
          GameStats.CraftingOrders.Append
          (New_Item =>
-            (Index => ReadData,
-             Amount => Positive'Value(To_String(ReadData))));
+            (Index => ReadData(SaveGame),
+             Amount => Positive'Value(To_String(ReadData(SaveGame)))));
       end loop;
-      GameStats.AcceptedMissions := Positive'Value(To_String(ReadData));
-      VectorLength := Positive'Value(To_String(ReadData));
+      GameStats.AcceptedMissions :=
+        Positive'Value(To_String(ReadData(SaveGame)));
+      VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
       for I in 1 .. VectorLength loop
          GameStats.FinishedMissions.Append
          (New_Item =>
-            (Index => ReadData,
-             Amount => Positive'Value(To_String(ReadData))));
+            (Index => ReadData(SaveGame),
+             Amount => Positive'Value(To_String(ReadData(SaveGame)))));
       end loop;
-      VectorLength := Positive'Value(To_String(ReadData));
+      VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
       for I in 1 .. VectorLength loop
          GameStats.FinishedGoals.Append
          (New_Item =>
-            (Index => ReadData,
-             Amount => Positive'Value(To_String(ReadData))));
+            (Index => ReadData(SaveGame),
+             Amount => Positive'Value(To_String(ReadData(SaveGame)))));
       end loop;
-      GameStats.Points := Natural'Value(To_String(ReadData));
+      GameStats.Points := Natural'Value(To_String(ReadData(SaveGame)));
       -- Load current goal
-      CurrentGoal.Index := ReadData;
-      CurrentGoal.GType := GoalTypes'Val(Integer'Value(To_String(ReadData)));
-      CurrentGoal.Amount := Natural'Value(To_String(ReadData));
-      CurrentGoal.TargetIndex := ReadData;
+      CurrentGoal.Index := ReadData(SaveGame);
+      CurrentGoal.GType :=
+        GoalTypes'Val(Integer'Value(To_String(ReadData(SaveGame))));
+      CurrentGoal.Amount := Natural'Value(To_String(ReadData(SaveGame)));
+      CurrentGoal.TargetIndex := ReadData(SaveGame);
       Close(SaveGame);
    exception
       when An_Exception : Constraint_Error | End_Error =>
          Close(SaveGame);
          raise SaveGame_Invalid_Data with Exception_Message(An_Exception);
    end LoadGame;
+
+   function ReadData(SaveGame: File_Type) return Unbounded_String is
+      RawData: Unbounded_String := To_Unbounded_String("");
+      Char: Character;
+   begin
+      Get(SaveGame, Char);
+      while Char not in ';' loop
+         Append(RawData, Char);
+         Get(SaveGame, Char);
+      end loop;
+      return RawData;
+   end ReadData;
 
 end Game.SaveLoad;
