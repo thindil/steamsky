@@ -15,6 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Text_IO; use Ada.Text_IO;
+
 package Game.SaveLoad is
 
    SaveGame_Invalid_Version: exception; -- Raised when trying to load unsuported version of savegame
@@ -22,5 +24,8 @@ package Game.SaveLoad is
 
    procedure SaveGame; -- Save game to file
    procedure LoadGame; -- Load game from file
+   function ReadData
+     (SaveGame: File_Type)
+     return Unbounded_String; -- Read saved data from file
 
 end Game.SaveLoad;

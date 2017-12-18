@@ -24,6 +24,7 @@ with Crafts; use Crafts;
 with Events; use Events;
 with Maps; use Maps;
 with Mobs; use Mobs;
+with Game.SaveLoad; use Game.SaveLoad;
 
 package body Ships is
 
@@ -925,106 +926,97 @@ package body Ships is
       BaseMissions: Mission_Container.Vector;
       TmpOrders: Orders_Array;
       Attributes: Attributes_Container.Vector;
-      function ReadData return Unbounded_String is
-         RawData: Unbounded_String := To_Unbounded_String("");
-         Char: Character;
-      begin
-         Get(SaveGame, Char);
-         while Char not in ';' loop
-            Append(RawData, Char);
-            Get(SaveGame, Char);
-         end loop;
-         return RawData;
-      end ReadData;
    begin
-      PlayerShip.Name := ReadData;
-      PlayerShip.SkyX := Integer'Value(To_String(ReadData));
-      PlayerShip.SkyY := Integer'Value(To_String(ReadData));
-      PlayerShip.Speed := ShipSpeed'Val(Integer'Value(To_String(ReadData)));
-      PlayerShip.UpgradeModule := Integer'Value(To_String(ReadData));
-      PlayerShip.DestinationX := Integer'Value(To_String(ReadData));
-      PlayerShip.DestinationY := Integer'Value(To_String(ReadData));
-      PlayerShip.RepairModule := Integer'Value(To_String(ReadData));
-      VectorLength := Positive'Value(To_String(ReadData));
+      PlayerShip.Name := ReadData(SaveGame);
+      PlayerShip.SkyX := Integer'Value(To_String(ReadData(SaveGame)));
+      PlayerShip.SkyY := Integer'Value(To_String(ReadData(SaveGame)));
+      PlayerShip.Speed :=
+        ShipSpeed'Val(Integer'Value(To_String(ReadData(SaveGame))));
+      PlayerShip.UpgradeModule := Integer'Value(To_String(ReadData(SaveGame)));
+      PlayerShip.DestinationX := Integer'Value(To_String(ReadData(SaveGame)));
+      PlayerShip.DestinationY := Integer'Value(To_String(ReadData(SaveGame)));
+      PlayerShip.RepairModule := Integer'Value(To_String(ReadData(SaveGame)));
+      VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
       for I in 1 .. VectorLength loop
          ShipModules.Append
          (New_Item =>
-            (Name => ReadData,
-             ProtoIndex => FindProtoModule(ReadData),
-             Weight => Natural'Value(To_String(ReadData)),
-             Durability => Integer'Value(To_String(ReadData)),
-             MaxDurability => Integer'Value(To_String(ReadData)),
-             Owner => Integer'Value(To_String(ReadData)),
-             UpgradeProgress => Integer'Value(To_String(ReadData)),
+            (Name => ReadData(SaveGame),
+             ProtoIndex => FindProtoModule(ReadData(SaveGame)),
+             Weight => Natural'Value(To_String(ReadData(SaveGame))),
+             Durability => Integer'Value(To_String(ReadData(SaveGame))),
+             MaxDurability => Integer'Value(To_String(ReadData(SaveGame))),
+             Owner => Integer'Value(To_String(ReadData(SaveGame))),
+             UpgradeProgress => Integer'Value(To_String(ReadData(SaveGame))),
              UpgradeAction =>
-               ShipUpgrade'Val(Integer'Value(To_String(ReadData))),
+               ShipUpgrade'Val(Integer'Value(To_String(ReadData(SaveGame)))),
              Data => (0, 0, 0)));
          for J in
            ShipModules(Modules_Container.Last_Index(ShipModules)).Data'
              Range loop
             ShipModules(Modules_Container.Last_Index(ShipModules)).Data(J) :=
-              Integer'Value(To_String(ReadData));
+              Integer'Value(To_String(ReadData(SaveGame)));
          end loop;
       end loop;
       PlayerShip.Modules := ShipModules;
-      VectorLength := Positive'Value(To_String(ReadData));
+      VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
       for I in 1 .. VectorLength loop
          ShipCargo.Append
          (New_Item =>
-            (ProtoIndex => FindProtoItem(ReadData),
-             Amount => Positive'Value(To_String(ReadData)),
-             Name => ReadData,
-             Durability => Positive'Value(To_String(ReadData))));
+            (ProtoIndex => FindProtoItem(ReadData(SaveGame)),
+             Amount => Positive'Value(To_String(ReadData(SaveGame))),
+             Name => ReadData(SaveGame),
+             Durability => Positive'Value(To_String(ReadData(SaveGame)))));
       end loop;
       PlayerShip.Cargo := ShipCargo;
-      VectorLength := Positive'Value(To_String(ReadData));
+      VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
       for I in 1 .. VectorLength loop
          Skills.Clear;
          Attributes.Clear;
          Inventory.Clear;
          ShipCrew.Append
          (New_Item =>
-            (Name => ReadData,
-             Gender => Element(ReadData, 1),
-             Health => Natural'Value(To_String(ReadData)),
-             Tired => Natural'Value(To_String(ReadData)),
+            (Name => ReadData(SaveGame),
+             Gender => Element(ReadData(SaveGame), 1),
+             Health => Natural'Value(To_String(ReadData(SaveGame))),
+             Tired => Natural'Value(To_String(ReadData(SaveGame))),
              Skills => Skills,
-             Hunger => Natural'Value(To_String(ReadData)),
-             Thirst => Natural'Value(To_String(ReadData)),
-             Order => Crew_Orders'Val(Integer'Value(To_String(ReadData))),
+             Hunger => Natural'Value(To_String(ReadData(SaveGame))),
+             Thirst => Natural'Value(To_String(ReadData(SaveGame))),
+             Order =>
+               Crew_Orders'Val(Integer'Value(To_String(ReadData(SaveGame)))),
              PreviousOrder =>
-               Crew_Orders'Val(Integer'Value(To_String(ReadData))),
-             OrderTime => Integer'Value(To_String(ReadData)),
+               Crew_Orders'Val(Integer'Value(To_String(ReadData(SaveGame)))),
+             OrderTime => Integer'Value(To_String(ReadData(SaveGame))),
              Orders => (others => 0),
              Attributes => Attributes,
              Inventory => Inventory,
              Equipment => (others => 0)));
-         SkillsLength := Positive'Value(To_String(ReadData));
+         SkillsLength := Positive'Value(To_String(ReadData(SaveGame)));
          for J in 1 .. SkillsLength loop
             Skills.Append
             (New_Item =>
-               (Natural'Value(To_String(ReadData)),
-                Natural'Value(To_String(ReadData)),
-                Natural'Value(To_String(ReadData))));
+               (Natural'Value(To_String(ReadData(SaveGame))),
+                Natural'Value(To_String(ReadData(SaveGame))),
+                Natural'Value(To_String(ReadData(SaveGame)))));
          end loop;
          for J in TmpOrders'Range loop
-            TmpOrders(J) := Natural'Value(To_String(ReadData));
+            TmpOrders(J) := Natural'Value(To_String(ReadData(SaveGame)));
          end loop;
-         SkillsLength := Positive'Value(To_String(ReadData));
+         SkillsLength := Positive'Value(To_String(ReadData(SaveGame)));
          for J in 1 .. SkillsLength loop
             Attributes.Append
             (New_Item =>
-               (Natural'Value(To_String(ReadData)),
-                Natural'Value(To_String(ReadData))));
+               (Natural'Value(To_String(ReadData(SaveGame))),
+                Natural'Value(To_String(ReadData(SaveGame)))));
          end loop;
-         VectorLength := Positive'Value(To_String(ReadData));
+         VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
          for I in 1 .. VectorLength loop
             Inventory.Append
             (New_Item =>
-               (ProtoIndex => FindProtoItem(ReadData),
-                Amount => Positive'Value(To_String(ReadData)),
-                Name => ReadData,
-                Durability => Positive'Value(To_String(ReadData))));
+               (ProtoIndex => FindProtoItem(ReadData(SaveGame)),
+                Amount => Positive'Value(To_String(ReadData(SaveGame))),
+                Name => ReadData(SaveGame),
+                Durability => Positive'Value(To_String(ReadData(SaveGame)))));
          end loop;
          ShipCrew(ShipCrew.Last_Index).Skills := Skills;
          ShipCrew(ShipCrew.Last_Index).Attributes := Attributes;
@@ -1032,25 +1024,26 @@ package body Ships is
          ShipCrew(ShipCrew.Last_Index).Inventory := Inventory;
          for I in ShipCrew(ShipCrew.Last_Index).Equipment'Range loop
             ShipCrew(ShipCrew.Last_Index).Equipment(I) :=
-              Natural'Value(To_String(ReadData));
+              Natural'Value(To_String(ReadData(SaveGame)));
          end loop;
       end loop;
       PlayerShip.Crew := ShipCrew;
-      VectorLength := Natural'Value(To_String(ReadData));
+      VectorLength := Natural'Value(To_String(ReadData(SaveGame)));
       if VectorLength > 0 then
          for I in 1 .. VectorLength loop
             BaseMissions.Append
             (New_Item =>
                (MType =>
-                  Missions_Types'Val(Integer'Value(To_String(ReadData))),
-                Target => Natural'Value(To_String(ReadData)),
-                Time => Integer'Value(To_String(ReadData)),
-                TargetX => Integer'Value(To_String(ReadData)),
-                TargetY => Integer'Value(To_String(ReadData)),
-                Reward => Integer'Value(To_String(ReadData)),
-                StartBase => Integer'Value(To_String(ReadData)),
+                  Missions_Types'Val
+                    (Integer'Value(To_String(ReadData(SaveGame)))),
+                Target => Natural'Value(To_String(ReadData(SaveGame))),
+                Time => Integer'Value(To_String(ReadData(SaveGame))),
+                TargetX => Integer'Value(To_String(ReadData(SaveGame))),
+                TargetY => Integer'Value(To_String(ReadData(SaveGame))),
+                Reward => Integer'Value(To_String(ReadData(SaveGame))),
+                StartBase => Integer'Value(To_String(ReadData(SaveGame))),
                 Finished => False));
-            if To_String(ReadData) = "Y" then
+            if To_String(ReadData(SaveGame)) = "Y" then
                BaseMissions(BaseMissions.Last_Index).Finished := True;
             else
                BaseMissions(BaseMissions.Last_Index).Finished := False;
@@ -1069,7 +1062,7 @@ package body Ships is
          end loop;
          PlayerShip.Missions := BaseMissions;
       end if;
-      PlayerShip.HomeBase := Integer'Value(To_String(ReadData));
+      PlayerShip.HomeBase := Integer'Value(To_String(ReadData(SaveGame)));
    end LoadPlayerShip;
 
 end Ships;
