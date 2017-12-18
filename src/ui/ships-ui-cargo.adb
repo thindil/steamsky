@@ -152,8 +152,8 @@ package body Ships.UI.Cargo is
       Add
         (Win => InfoWindow,
          Str => "Total weight:" & Positive'Image(ItemWeight) & " kg");
+      CurrentLine := CurrentLine + 1;
       if Items_List(ProtoIndex).IType = WeaponType then
-         CurrentLine := CurrentLine + 1;
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
          Add
            (Win => InfoWindow,
@@ -164,6 +164,7 @@ package body Ships.UI.Cargo is
               To_String
                 (Attributes_Names
                    (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)));
+         CurrentLine := CurrentLine + 1;
       end if;
       if PlayerShip.Cargo(ItemIndex).Durability < 100 then
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
@@ -171,7 +172,6 @@ package body Ships.UI.Cargo is
          ShowItemStatus(PlayerShip.Cargo, ItemIndex, InfoWindow, CurrentLine);
          CurrentLine := CurrentLine + 1;
       end if;
-      CurrentLine := CurrentLine + 1;
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          CurrentLine := CurrentLine + 1;
          Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 0);
