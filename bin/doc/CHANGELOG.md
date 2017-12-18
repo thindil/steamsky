@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
   blacksmith set, steel blackmith set, iron woodworker set and steel woodworker
   set
 - New crafting recipes: steel saw, bronze bucket, iron bucket, steel bucket,
-  iron blacksmith set, steel blacksmith set and iron woodworker set
+  iron blacksmith set, steel blacksmith set, iron woodworker set and steel
+  woodworker set
 
 ### Fixed
 - Showing very long messages
