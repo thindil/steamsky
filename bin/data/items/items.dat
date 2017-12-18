@@ -926,4 +926,13 @@ Buyable = Y, N, N, N
 ShowType = Tool
 Value = 10
 Description = Iron set of tools used in woodworker recipes.
+[110]
+Name = Steel woodworker set
+Weight = 5
+Type = WoodworkerSet
+Prices = 15, 17, 17, 17
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 5
+Description = Steel set of tools used in woodworker recipes.
 []
