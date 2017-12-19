@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Crash in orders menu when nobody is assigned to talk in bases
 - Crash in many forms when trying to left them with invalid value
 - Showing full weight of items in ship cargo
+- Buying items when you have that same item but damaged
 
 ## [1.9] - 2017-12-10
 
