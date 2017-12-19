@@ -105,5 +105,10 @@ package Crew is
      (MemberIndex,
       ItemIndex: Positive)
      return Boolean; -- Check if selected crew member use this item
+   function FindTools
+     (MemberIndex: Positive;
+      ItemType: Unbounded_String;
+      Order: Crew_Orders)
+     return Natural; -- Search for specified tools in character and ship cargo, return 0 if tools not found otherwise index of tool in character inventory
 
 end Crew;
