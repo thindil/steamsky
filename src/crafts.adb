@@ -392,52 +392,7 @@ package body Crafts is
                      end loop;
                      if Recipe.Tool /= To_Unbounded_String("None") then
                         ToolIndex :=
-                          PlayerShip.Crew(CrafterIndex).Equipment(7);
-                        if ToolIndex > 0 then
-                           if Items_List
-                               (PlayerShip.Crew(CrafterIndex).Inventory
-                                  (ToolIndex)
-                                  .ProtoIndex)
-                               .IType /=
-                             Recipe.Tool then
-                              ToolIndex := 0;
-                           end if;
-                        end if;
-                        if ToolIndex = 0 then
-                           ToolIndex :=
-                             FindItem
-                               (Inventory =>
-                                  PlayerShip.Crew(CrafterIndex).Inventory,
-                                ItemType => Recipe.Tool);
-                           if ToolIndex = 0 then
-                              ToolIndex :=
-                                FindItem
-                                  (Inventory => PlayerShip.Cargo,
-                                   ItemType => Recipe.Tool);
-                              if ToolIndex > 0 then
-                                 UpdateInventory
-                                   (CrafterIndex,
-                                    1,
-                                    PlayerShip.Cargo(ToolIndex).ProtoIndex,
-                                    PlayerShip.Cargo(ToolIndex).Durability);
-                                 UpdateCargo
-                                   (Ship => PlayerShip,
-                                    Amount => -1,
-                                    CargoIndex => ToolIndex);
-                                 ToolIndex :=
-                                   FindItem
-                                     (Inventory =>
-                                        PlayerShip.Crew(CrafterIndex)
-                                          .Inventory,
-                                      ItemType => Recipe.Tool);
-                                 PlayerShip.Crew(CrafterIndex).Equipment(7) :=
-                                   ToolIndex;
-                              end if;
-                           else
-                              PlayerShip.Crew(CrafterIndex).Equipment(7) :=
-                                ToolIndex;
-                           end if;
-                        end if;
+                          FindTools(CrafterIndex, Recipe.Tool, Craft);
                         if ToolIndex = 0 then
                            AddMessage
                              ("You don't have tool for " &

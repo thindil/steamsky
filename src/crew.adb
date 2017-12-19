@@ -432,45 +432,7 @@ package body Crew is
                         GiveOrders(PlayerShip, I, Rest);
                      end if;
                   when Clean =>
-                     ToolIndex := PlayerShip.Crew(I).Equipment(7);
-                     if ToolIndex > 0 then
-                        if Items_List
-                            (PlayerShip.Crew(I).Inventory(ToolIndex)
-                               .ProtoIndex)
-                            .IType /=
-                          CleaningTools then
-                           ToolIndex := 0;
-                        end if;
-                     end if;
-                     if ToolIndex = 0 then
-                        ToolIndex :=
-                          FindItem
-                            (Inventory => PlayerShip.Crew(I).Inventory,
-                             ItemType => CleaningTools);
-                        if ToolIndex > 0 then
-                           PlayerShip.Crew(I).Equipment(7) := ToolIndex;
-                        else
-                           ToolIndex :=
-                             FindItem
-                               (Inventory => PlayerShip.Cargo,
-                                ItemType => CleaningTools);
-                           if ToolIndex > 0 then
-                              UpdateInventory
-                                (I,
-                                 1,
-                                 PlayerShip.Cargo(ToolIndex).ProtoIndex,
-                                 PlayerShip.Cargo(ToolIndex).Durability);
-                              UpdateCargo
-                                (Ship => PlayerShip,
-                                 Amount => -1,
-                                 CargoIndex => ToolIndex);
-                              PlayerShip.Crew(I).Equipment(7) :=
-                                FindItem
-                                  (Inventory => PlayerShip.Crew(I).Inventory,
-                                   ItemType => CleaningTools);
-                           end if;
-                        end if;
-                     end if;
+                     ToolIndex := FindTools(I, CleaningTools, Clean);
                      NeedCleaning := False;
                      if ToolIndex > 0 then
                         for Module of PlayerShip.Modules loop
@@ -749,5 +711,83 @@ package body Crew is
       end loop;
       return False;
    end ItemIsUsed;
+
+   function FindTools
+     (MemberIndex: Positive;
+      ItemType: Unbounded_String;
+      Order: Crew_Orders) return Natural is
+      ToolsIndex: Natural;
+   begin
+      ToolsIndex := PlayerShip.Crew(MemberIndex).Equipment(7);
+      if ToolsIndex > 0 then
+         if Items_List
+             (PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
+             .IType /=
+           ItemType then
+            return 0;
+         end if;
+      end if;
+      ToolsIndex :=
+        FindItem
+          (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+           ItemType => ItemType);
+      if ToolsIndex = 0 then
+         ToolsIndex :=
+           FindItem(Inventory => PlayerShip.Cargo, ItemType => ItemType);
+         if ToolsIndex > 0 then
+            begin
+               UpdateInventory
+                 (MemberIndex,
+                  1,
+                  PlayerShip.Cargo(ToolsIndex).ProtoIndex,
+                  PlayerShip.Cargo(ToolsIndex).Durability);
+               UpdateCargo
+                 (Ship => PlayerShip,
+                  Amount => -1,
+                  CargoIndex => ToolsIndex);
+               ToolsIndex :=
+                 FindItem
+                   (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+                    ItemType => ItemType);
+               PlayerShip.Crew(MemberIndex).Equipment(7) := ToolsIndex;
+            exception
+               when Crew_No_Space_Error =>
+                  case Order is
+                     when Repair =>
+                        AddMessage
+                          (To_String(PlayerShip.Crew(MemberIndex).Name) &
+                           " can't continue repairs because don't have space in inventory for repair tools.",
+                           OrderMessage,
+                           3);
+                     when Upgrading =>
+                        AddMessage
+                          (To_String(PlayerShip.Crew(MemberIndex).Name) &
+                           " can't continue upgrading module because don't have space in inventory for repair tools.",
+                           OrderMessage,
+                           3);
+                     when Clean =>
+                        AddMessage
+                          (To_String(PlayerShip.Crew(MemberIndex).Name) &
+                           " can't continue cleaning ship because don't have space in inventory for cleaning tools.",
+                           OrderMessage,
+                           3);
+                     when Craft =>
+                        AddMessage
+                          (To_String(PlayerShip.Crew(MemberIndex).Name) &
+                           " can't continue manufacturing because don't have space in inventory for proper tools.",
+                           OrderMessage,
+                           3);
+                     when others =>
+                        null;
+                  end case;
+                  GiveOrders(PlayerShip, MemberIndex, Rest);
+                  return 0;
+            end;
+         end if;
+      else
+         PlayerShip.Crew(MemberIndex).Equipment(7) := ToolsIndex;
+      end if;
+      return ToolsIndex;
+   end FindTools;
 
 end Crew;
