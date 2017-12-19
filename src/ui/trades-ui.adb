@@ -413,14 +413,21 @@ package body Trades.UI is
       if BaseIndex > 0 then
          for I in Items_List.Iterate loop
             if Items_List(I).Buyable(BaseType) and
-              FindItem(PlayerShip.Cargo, Objects_Container.To_Index(I)) =
+              FindItem
+                  (Inventory => PlayerShip.Cargo,
+                   ProtoIndex => Objects_Container.To_Index(I),
+                   Durability => 100) =
                 0 then
                ItemsAmount := ItemsAmount + 1;
             end if;
          end loop;
       else
          for Item of TraderCargo loop
-            if FindItem(PlayerShip.Cargo, Item.ProtoIndex) = 0 and
+            if FindItem
+                (Inventory => PlayerShip.Cargo,
+                 ProtoIndex => Item.ProtoIndex,
+                 Durability => 100) =
+              0 and
               Item.Price > 0 then
                ItemsAmount := ItemsAmount + 1;
             end if;
@@ -440,7 +447,10 @@ package body Trades.UI is
       if BaseIndex > 0 then
          for I in Items_List.Iterate loop
             if Items_List(I).Buyable(BaseType) and
-              FindItem(PlayerShip.Cargo, Objects_Container.To_Index(I)) =
+              FindItem
+                  (Inventory => PlayerShip.Cargo,
+                   ProtoIndex => Objects_Container.To_Index(I),
+                   Durability => 100) =
                 0 then
                BaseItemIndex := FindBaseCargo(Objects_Container.To_Index(I));
                if BaseItemIndex = 0 then
@@ -458,7 +468,11 @@ package body Trades.UI is
          end loop;
       else
          for I in TraderCargo.Iterate loop
-            if FindItem(PlayerShip.Cargo, TraderCargo(I).ProtoIndex) = 0 and
+            if FindItem
+                (Inventory => PlayerShip.Cargo,
+                 ProtoIndex => TraderCargo(I).ProtoIndex,
+                 Durability => 100) =
+              0 and
               TraderCargo(I).Price > 0 then
                BaseItemIndex := BaseCargo_Container.To_Index(I);
                Trade_Items.all(MenuIndex) :=
