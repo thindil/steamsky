@@ -191,46 +191,7 @@ package body Ships.Upgrade is
                 Modules_List
                   (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
                   .RepairMaterial);
-         UpgradeTools := PlayerShip.Crew(WorkerIndex).Equipment(7);
-         if UpgradeTools > 0 then
-            if Items_List
-                (PlayerShip.Crew(WorkerIndex).Inventory(UpgradeTools)
-                   .ProtoIndex)
-                .IType /=
-              RepairTools then
-               UpgradeTools := 0;
-            end if;
-         end if;
-         if UpgradeTools = 0 then
-            UpgradeTools :=
-              FindItem
-                (Inventory => PlayerShip.Crew(WorkerIndex).Inventory,
-                 ItemType => RepairTools);
-            if UpgradeTools = 0 then
-               UpgradeTools :=
-                 FindItem
-                   (Inventory => PlayerShip.Cargo,
-                    ItemType => RepairTools);
-               if UpgradeTools > 0 then
-                  UpdateInventory
-                    (WorkerIndex,
-                     1,
-                     PlayerShip.Cargo(UpgradeTools).ProtoIndex,
-                     PlayerShip.Cargo(UpgradeTools).Durability);
-                  UpdateCargo
-                    (Ship => PlayerShip,
-                     Amount => -1,
-                     CargoIndex => UpgradeTools);
-                  UpgradeTools :=
-                    FindItem
-                      (Inventory => PlayerShip.Crew(WorkerIndex).Inventory,
-                       ItemType => RepairTools);
-                  PlayerShip.Crew(WorkerIndex).Equipment(7) := UpgradeTools;
-               end if;
-            else
-               PlayerShip.Crew(WorkerIndex).Equipment(7) := UpgradeTools;
-            end if;
-         end if;
+         UpgradeTools := FindTools(WorkerIndex, RepairTools, Upgrading);
       end FindMatsAndTools;
       procedure MaxUpgradeReached(MessageText: String) is
       begin
