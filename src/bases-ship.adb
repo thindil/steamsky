@@ -23,6 +23,7 @@ with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Trades; use Trades;
+with Bases.Cargo; use Bases.Cargo;
 
 package body Bases.Ship is
 
