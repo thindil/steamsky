@@ -27,6 +27,7 @@ with Events; use Events;
 with Crew; use Crew;
 with Game; use Game;
 with Utils; use Utils;
+with Bases.Cargo; use Bases.Cargo;
 
 package body Trades is
 

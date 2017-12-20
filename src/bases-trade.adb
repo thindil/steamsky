@@ -24,6 +24,7 @@ with Ships.Crew; use Ships.Crew;
 with Crafts; use Crafts;
 with Trades; use Trades;
 with Utils; use Utils;
+with Bases.Cargo; use Bases.Cargo;
 
 package body Bases.Trade is
 
