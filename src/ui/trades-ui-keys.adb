@@ -28,6 +28,7 @@ with Events; use Events;
 with Header; use Header;
 with Utils.UI; use Utils.UI;
 with Bases.UI; use Bases.UI;
+with Bases.Cargo; use Bases.Cargo;
 with Config; use Config;
 
 package body Trades.UI.Keys is

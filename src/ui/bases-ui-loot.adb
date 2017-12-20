@@ -23,6 +23,7 @@ with UserInterface; use UserInterface;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Bases; use Bases;
+with Bases.Cargo; use Bases.Cargo;
 with Utils.UI; use Utils.UI;
 with Messages; use Messages;
 with Items.UI; use Items.UI;

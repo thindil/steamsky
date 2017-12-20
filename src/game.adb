@@ -19,6 +19,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Bases; use Bases;
 with Bases.Ship; use Bases.Ship;
+with Bases.Cargo; use Bases.Cargo;
 with Maps; use Maps;
 with Ships; use Ships;
 with Ships.Upgrade; use Ships.Upgrade;

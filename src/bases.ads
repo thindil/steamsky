@@ -96,17 +96,6 @@ package Bases is
    procedure AskForBases; -- Ask in base for direction for other bases
    procedure AskForEvents; -- Ask in base for direction for random events
    procedure UpdatePopulation; -- Update base population if needed
-   procedure GenerateCargo; -- Generate base cargo
-   procedure UpdateBaseCargo
-     (ProtoIndex: Natural := 0;
-      Amount: Integer;
-      Durability: Natural := 100;
-      CargoIndex: Natural := 0); -- Update cargo in base
-   function FindBaseCargo
-     (ProtoIndex: Positive;
-      Durability: Natural :=
-        101)
-     return Natural; -- Find index of item in base cargo, return 0 if no item found
    procedure UpdatePrices; -- Random changes of items prices in base
    procedure SaveBases
      (SaveGame: in out File_Type); -- Save bases from current game in file

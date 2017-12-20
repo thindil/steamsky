@@ -26,6 +26,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Events; use Events;
 with Utils.UI; use Utils.UI;
 with Bases.UI; use Bases.UI;
+with Bases.Cargo; use Bases.Cargo;
 with Items.UI; use Items.UI;
 with Config; use Config;
 
