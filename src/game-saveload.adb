@@ -17,6 +17,7 @@
 
 with Ada.Exceptions; use Ada.Exceptions;
 with Bases; use Bases;
+with Bases.SaveLoad; use Bases.SaveLoad;
 with Maps; use Maps;
 with Ships; use Ships;
 with Messages; use Messages;

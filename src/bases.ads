@@ -17,7 +17,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
-with Ada.Text_IO; use Ada.Text_IO;
 with Game; use Game;
 with Crew; use Crew;
 with Missions; use Missions;
@@ -97,8 +96,5 @@ package Bases is
    procedure AskForEvents; -- Ask in base for direction for random events
    procedure UpdatePopulation; -- Update base population if needed
    procedure UpdatePrices; -- Random changes of items prices in base
-   procedure SaveBases
-     (SaveGame: in out File_Type); -- Save bases from current game in file
-   procedure LoadBases(SaveGame: File_Type); -- Load bases from file
 
 end Bases;
