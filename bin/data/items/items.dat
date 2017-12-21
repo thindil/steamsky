@@ -953,4 +953,13 @@ Buyable = Y, N, N, N
 ShowType = Tool
 Value = 5
 Description = Steel set of tools needed to repair or upgrade ship modules.
+[113]
+Name = Iron sewing kit
+Weight = 2
+Type = SewingKit
+Prices = 10, 12, 12, 12
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 10
+Description = Iron set of tools needed to sew items.
 []
