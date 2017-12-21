@@ -217,6 +217,33 @@ package body Crew is
               (To_String(Member.Name) & " is too tired to work, going rest.",
                OrderMessage,
                1);
+            declare
+               HaveCabin: Boolean := False;
+            begin
+               for Module of PlayerShip.Modules loop
+                  if Module.Owner = I and
+                    Modules_List(Module.ProtoIndex).MType = CABIN then
+                     HaveCabin := True;
+                     exit;
+                  end if;
+               end loop;
+               if not HaveCabin then
+                  for Module of PlayerShip.Modules loop
+                     if Modules_List(Module.ProtoIndex).MType = CABIN and
+                       Module.Durability > 0 and
+                       Module.Owner = 0 then
+                        Module.Owner := I;
+                        AddMessage
+                          (To_String(Member.Name) &
+                           " take " &
+                           To_String(Module.Name) &
+                           " as own cabin.",
+                           OtherMessage);
+                        exit;
+                     end if;
+                  end loop;
+               end if;
+            end;
          end if;
          if HungerLevel > 80 then
             for FoodType of FoodTypes loop
