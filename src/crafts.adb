@@ -24,6 +24,7 @@ with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Crew; use Crew;
+with Crew.Inventory; use Crew.Inventory;
 with Items; use Items;
 with Statistics; use Statistics;
 with Log; use Log;
