@@ -26,6 +26,7 @@ with Ships.Crew; use Ships.Crew;
 with Utils.UI; use Utils.UI;
 with Items.UI; use Items.UI;
 with Config; use Config;
+with Crew.Inventory; use Crew.Inventory;
 
 package body Crew.UI is
 

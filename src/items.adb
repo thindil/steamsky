@@ -23,6 +23,7 @@ with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Utils; use Utils;
 with Crew; use Crew;
+with Crew.Inventory; use Crew.Inventory;
 with Crafts; use Crafts;
 
 package body Items is

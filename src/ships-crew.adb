@@ -22,6 +22,7 @@ with ShipModules; use ShipModules;
 with Ships.Cargo; use Ships.Cargo;
 with Maps; use Maps;
 with Events; use Events;
+with Crew.Inventory; use Crew.Inventory;
 
 package body Ships.Crew is
 
