@@ -23,6 +23,7 @@ with UserInterface; use UserInterface;
 with Ships.Cargo; use Ships.Cargo;
 with Utils.UI; use Utils.UI;
 with Items.UI; use Items.UI;
+with Crew.Inventory; use Crew.Inventory;
 
 package body Ships.UI.Cargo is
 

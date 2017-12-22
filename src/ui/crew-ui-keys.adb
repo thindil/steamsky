@@ -27,6 +27,7 @@ with Header; use Header;
 with Utils.UI; use Utils.UI;
 with Messages; use Messages;
 with Config; use Config;
+with Crew.Inventory; use Crew.Inventory;
 
 package body Crew.UI.Keys is
 
