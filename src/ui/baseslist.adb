@@ -554,9 +554,9 @@ package body BasesList is
                   Result := Driver(BasesMenu, M_First_Item);
                end if;
             when KEY_NPAGE => -- Scroll list one screen down
-               Result := Driver(BasesMenu, M_ScrollUp_Page);
-            when KEY_PPAGE => -- Scroll list one screen up
                Result := Driver(BasesMenu, M_ScrollDown_Page);
+            when KEY_PPAGE => -- Scroll list one screen up
+               Result := Driver(BasesMenu, M_ScrollUp_Page);
             when Key_Home => -- Scroll list to start
                Result := Driver(BasesMenu, M_First_Item);
             when Key_End => -- Scroll list to end
