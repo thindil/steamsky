@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New items: steel saw, bronze bucket, iron bucket, steel bucket, iron
   blacksmith set, steel blackmith set, iron woodworker set, steel woodworker
-  set, iron repair tools, steel repair tools, iron sewing kit and steel sewing
-  kit
+  set, iron repair tools, steel repair tools, iron sewing kit, steel sewing kit
+  and titanium ore
 - New crafting recipes: steel saw, bronze bucket, iron bucket, steel bucket,
   iron blacksmith set, steel blacksmith set, iron woodworker set, steel
   woodworker set, iron repair tools, steel repair tools, iron sewing kit and
