@@ -20,6 +20,7 @@ with Bases; use Bases;
 with Bases.SaveLoad; use Bases.SaveLoad;
 with Maps; use Maps;
 with Ships; use Ships;
+with Ships.SaveLoad; use Ships.SaveLoad;
 with Messages; use Messages;
 with Crafts; use Crafts;
 with Events; use Events;
