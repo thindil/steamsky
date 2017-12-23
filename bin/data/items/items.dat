@@ -971,4 +971,12 @@ Buyable = Y, N, N, N
 ShowType = Tool
 Value = 5
 Description = Steel set of tools needed to sew items.
+[115]
+Name = Titianium ore
+Weight = 15
+Type = TitaniumOre
+Prices = 10, 10, 8, 10
+Buyable = N, N, Y, N
+ShowType = Ore
+Description = Unrefined titanium ore.
 []
