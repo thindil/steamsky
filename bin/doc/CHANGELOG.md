@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
   iron blacksmith set, steel blacksmith set, iron woodworker set, steel
   woodworker set, iron repair tools, steel repair tools, iron sewing kit and
   steel sewing kit
-- New item type: titaniumore
+- New item types: titaniumore, titanium
 
 ### Fixed
 - Showing very long messages
