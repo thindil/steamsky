@@ -116,18 +116,18 @@ package Game is
    end record;
    package SkillsData_Container is new Vectors(Positive, Skill_Record);
    Skills_List: SkillsData_Container.Vector; -- Contains data for all skills
-   RepairTools: Unbounded_String;
-   CleaningTools: Unbounded_String;
-   HealingTools: Unbounded_String;
-   PlayerShipIndex: Unbounded_String;
-   AlchemyTools: Unbounded_String;
-   DrinksType: Unbounded_String;
-   CorpseIndex: Unbounded_String;
-   MissionItemsType: Unbounded_String;
+   RepairTools: Unbounded_String; -- Name of item type used as tool in repairing/upgrading ship
+   CleaningTools: Unbounded_String; -- Name of item type used as tool in cleaning ship
+   HealingTools: Unbounded_String; -- Name of item type used as tool in healing crew members
+   PlayerShipIndex: Unbounded_String; -- Index of ship prototype used as player ship
+   AlchemyTools: Unbounded_String; -- Name of item type used as alchemy tools (mainly in deconstructing orders)
+   DrinksType: Unbounded_String; -- Name of item type used as drinks
+   CorpseIndex: Unbounded_String; -- Index of item used to create mobs corpses
+   MissionItemsType: Unbounded_String; -- Name of item type used for delivery missions
    FoodTypes: UnboundedString_Container.Vector; -- Contains food types names
-   FuelType: Unbounded_String;
-   MoneyIndex: Unbounded_String;
-   MoneyName: Unbounded_String;
+   FuelType: Unbounded_String; -- Name of item type used as fuel for ships
+   MoneyIndex: Unbounded_String; -- Index of item used as money
+   MoneyName: Unbounded_String; -- Name of money (taken from MoneyIndex)
    SaveDirectory: Unbounded_String :=
      To_Unbounded_String
        ("data" &
