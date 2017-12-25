@@ -411,7 +411,7 @@ package body Missions is
       FreeSpace, RewardAmount: Integer;
       Reputation: Natural;
    begin
-      Reputation := Mission.Reward / 100;
+      Reputation := Mission.Reward / 50;
       if Reputation < 2 then
          Reputation := 2;
       end if;
