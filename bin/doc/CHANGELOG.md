@@ -13,6 +13,9 @@ All notable changes to this project will be documented in this file.
   sewing kit and titanium plates
 - New item types: titaniumore, titanium
 
+### Changed
+- Raised gained or lost reputation for missions
+
 ### Fixed
 - Showing very long messages
 - Showing messages after screen resize
