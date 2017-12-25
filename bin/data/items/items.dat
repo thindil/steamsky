@@ -979,4 +979,12 @@ Prices = 10, 10, 8, 10
 Buyable = N, N, Y, N
 ShowType = Ore
 Description = Unrefined titanium ore.
+[116]
+Name = Titanium plates
+Weight = 10
+Type = Titanium
+Prices = 14, 16, 16, 16
+Buyable = Y, N, N, N
+ShowType = Repair material
+Description = Heavy, large, titanium plates used to repair or upgrade ship modules.
 []
