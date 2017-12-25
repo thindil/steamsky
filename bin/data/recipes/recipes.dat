@@ -956,4 +956,15 @@ Skill = Blacksmith
 Difficulty = 15
 BaseType = 1
 Tool = BlacksmithSet
+[97]
+Material = TitaniumOre, Fuel
+Amount = 1, 2
+Result = 115
+Crafted = 1
+Workplace = Furnace
+Skill = Metalsmith
+Time = 60
+Difficulty = 15
+BaseType = 1
+Tool = Mold
 []
