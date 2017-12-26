@@ -1643,4 +1643,18 @@ Skill = Gunsmith
 Price = 1000
 InstallTime = 30
 Description = Harpoon gun made of steel. As other guns, require empty turret to install.
+[130]
+Name = Titanium cockpit
+Type = Cockpit
+Weight = 600
+Value = 0
+MaxValue = 0
+Durability = 800
+Material = Titanium
+Skill = Engineering
+Price = 6000
+InstallTime = 90
+Unique = Yes
+Size = 1
+Description = Each ship require one cockpit to fly. This is titanium version of standard cockpit.
 []
