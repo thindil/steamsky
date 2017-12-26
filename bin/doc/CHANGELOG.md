@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
   woodworker set, iron repair tools, steel repair tools, iron sewing kit, steel
   sewing kit and titanium plates
 - New item types: titaniumore, titanium
+- New ship module: titanium cockpit
 
 ### Changed
 - Raised gained or lost reputation for missions
