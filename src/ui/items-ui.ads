@@ -20,9 +20,13 @@ with Terminal_Interface.Curses; use Terminal_Interface.Curses;
 package Items.UI is
 
    procedure ShowItemStatus
-     (Inventory: Inventory_Container.Vector; 
+     (Inventory: Inventory_Container.Vector;
       ItemIndex: Positive;
       InfoWindow: Window;
       Line: Line_Position); -- show damage level of item in character inventory or ship cargo
+   function ShowItemInfo
+     (Inventory: Inventory_Container.Vector;
+      ItemIndex: Positive)
+     return Line_Position; --Show informations about selected item
 
 end Items.UI;
