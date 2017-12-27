@@ -1657,4 +1657,17 @@ InstallTime = 90
 Unique = Yes
 Size = 1
 Description = Each ship require one cockpit to fly. This is titanium version of standard cockpit.
+[131]
+Name = Small titanium alchemy lab
+Type = Alchemy_lab
+Weight = 900
+Value = 0
+MaxValue = 0
+Durability = 400
+Material = Titanium
+Skill = Engineering
+Price = 6000
+InstallTime = 90
+Size = 1
+Description = Allow research new crafting recipes and craft some items. More durable version made of titanium.
 []
