@@ -206,6 +206,9 @@ package body Trades.UI is
                CargoIndex,
                InfoWindow,
                CurrentLine);
+            if WindowWidth < GetStatusLength(PlayerShip.Cargo, CargoIndex) then
+               WindowWidth := GetStatusLength(PlayerShip.Cargo, CargoIndex);
+            end if;
             CurrentLine := CurrentLine + 1;
          end if;
          CurrentLine := CurrentLine + 1;
