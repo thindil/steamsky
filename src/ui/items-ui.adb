@@ -27,26 +27,27 @@ package body Items.UI is
       DamagePercent: constant Natural :=
         100 -
         Natural((Float(Inventory(ItemIndex).Durability) / 100.0) * 100.0);
-      TextLength: Positive;
+      TextLength: Integer;
       TextColor: Color_Pair;
    begin
-      if DamagePercent > 0 and DamagePercent < 20 then
-         Add(Win => InfoWindow, Str => "Slightly used");
-         TextLength := 13;
-         TextColor := 2;
-      elsif DamagePercent > 19 and DamagePercent < 50 then
-         Add(Win => InfoWindow, Str => "Damaged");
-         TextLength := 7;
-         TextColor := 1;
-      elsif DamagePercent > 49 and DamagePercent < 80 then
-         Add(Win => InfoWindow, Str => "Heavily damaged");
-         TextLength := 15;
-         TextColor := 3;
-      elsif DamagePercent > 79 and DamagePercent < 100 then
-         Add(Win => InfoWindow, Str => "Almost destroyed");
-         TextLength := 16;
-         TextColor := 4;
+      TextLength := Integer(GetStatusLength(Inventory, ItemIndex)) - 12;
+      if TextLength < 1 then
+         return;
       end if;
+      case DamagePercent is
+         when 1 .. 19 =>
+            Add(Win => InfoWindow, Str => "Slightly used");
+            TextColor := 2;
+         when 20 .. 49 =>
+            Add(Win => InfoWindow, Str => "Damaged");
+            TextColor := 1;
+         when 50 .. 79 =>
+            Add(Win => InfoWindow, Str => "Heavily damaged");
+            TextColor := 3;
+         when others =>
+            Add(Win => InfoWindow, Str => "Almost destroyed");
+            TextColor := 4;
+      end case;
       Change_Attributes
         (Win => InfoWindow,
          Line => Line,
@@ -85,6 +86,9 @@ package body Items.UI is
          WindowWidth :=
            Column_Position
              (Positive'Image(Items_List(ProtoIndex).Weight)'Length + 5);
+      end if;
+      if WindowWidth < GetStatusLength(Inventory, ItemIndex) then
+         WindowWidth := GetStatusLength(Inventory, ItemIndex);
       end if;
       if WindowWidth > (Columns / 2) then
          WindowWidth := Columns / 2;
@@ -152,5 +156,26 @@ package body Items.UI is
       Delete(InfoWindow);
       return WindowHeight + 3;
    end ShowItemInfo;
+
+   function GetStatusLength
+     (Inventory: Inventory_Container.Vector;
+      ItemIndex: Positive) return Column_Position is
+      DamagePercent: constant Natural :=
+        100 -
+        Natural((Float(Inventory(ItemIndex).Durability) / 100.0) * 100.0);
+   begin
+      case DamagePercent is
+         when 0 =>
+            return 0;
+         when 1 .. 19 =>
+            return 25;
+         when 20 .. 49 =>
+            return 19;
+         when 50 .. 79 =>
+            return 27;
+         when others =>
+            return 28;
+      end case;
+   end GetStatusLength;
 
 end Items.UI;

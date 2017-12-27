@@ -28,5 +28,9 @@ package Items.UI is
      (Inventory: Inventory_Container.Vector;
       ItemIndex: Positive)
      return Line_Position; --Show informations about selected item
+   function GetStatusLength
+     (Inventory: Inventory_Container.Vector;
+      ItemIndex: Positive)
+     return Column_Position; -- Return minimal length of window needed for show item status
 
 end Items.UI;
