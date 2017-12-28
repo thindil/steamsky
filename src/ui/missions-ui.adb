@@ -40,7 +40,7 @@ package body Missions.UI is
       MinutesDiff, Distance: Natural;
       MissionTime: Date_Record :=
         (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
-      WindowHeight: Line_Position := 6;
+      WindowHeight: Line_Position := 7;
       WindowWidth, TextLength: Column_Position := 31;
    begin
       ClearWindow := Create(15, (Columns / 2), 3, (Columns / 2));
@@ -92,7 +92,6 @@ package body Missions.UI is
               (Win => InfoWindow,
                Line => CurrentLine,
                Column => TextLength);
-            CurrentLine := CurrentLine + 1;
             if TextLength + 4 > WindowWidth then
                WindowWidth := TextLength + 4;
             end if;
@@ -132,7 +131,6 @@ package body Missions.UI is
               (Win => InfoWindow,
                Line => CurrentLine,
                Column => TextLength);
-            CurrentLine := CurrentLine + 1;
             if TextLength + 2 > WindowWidth then
                WindowWidth := TextLength + 2;
             end if;
@@ -145,6 +143,7 @@ package body Missions.UI is
              (SkyBases(Mission.StartBase).SkyX,
               SkyBases(Mission.StartBase).SkyY);
       end if;
+      CurrentLine := CurrentLine + 1;
       Move_Cursor(Win => InfoWindow, Line => CurrentLine, Column => 2);
       Add(Win => InfoWindow, Str => "Distance:" & Integer'Image(Distance));
       Get_Cursor_Position
