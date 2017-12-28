@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Finding empty cabin when crew member without it going on break
 - Scrolling bases list by pages
 - Showing item status
+- Showing info about accepted missions
 
 ## [1.9] - 2017-12-10
 
