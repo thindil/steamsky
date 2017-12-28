@@ -1670,4 +1670,17 @@ Price = 6000
 InstallTime = 90
 Size = 1
 Description = Allow research new crafting recipes and craft some items. More durable version made of titanium.
+[132]
+Name = Small titanium cargo bay
+Type = Cargo
+Weight = 300
+Value = 0
+MaxValue = 5000
+Durability = 150
+Material = Titanium
+Skill = Engineering
+Price = 2400
+InstallTime = 90
+Size = 1
+Description = Space for hold ship cargo, made of titanium.
 []
