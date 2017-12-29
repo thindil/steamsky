@@ -1683,4 +1683,18 @@ Price = 2400
 InstallTime = 90
 Size = 1
 Description = Space for hold ship cargo, made of titanium.
+[133]
+Name = Titanium battering ram
+Type = Battering_ram
+Weight = 1400
+Value = 0
+MaxValue = 16
+Durability = 200
+Material = Titanium
+Skill = Engineering
+Price = 900
+InstallTime = 120
+Unique = Yes
+Size = 1
+Description = Standard battering ram, made of titanium. Attack enemies automatically when in close range.
 []
