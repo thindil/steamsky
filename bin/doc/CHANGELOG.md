@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Scrolling bases list by pages
 - Showing item status
 - Showing info about accepted missions
+- Crash when training trader in base
 
 ## [1.9] - 2017-12-10
 
