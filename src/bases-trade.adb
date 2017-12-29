@@ -249,7 +249,7 @@ package body Bases.Trade is
 
    procedure TrainSkill(MemberIndex, SkillIndex: Positive) is
       Cost: constant Natural := TrainCost(MemberIndex, SkillIndex);
-      MoneyIndex2: Natural;
+      MoneyIndex2, TraderIndex: Natural;
       ProtoMoneyIndex, GainedExp: Positive;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -285,7 +285,10 @@ package body Bases.Trade is
          CargoIndex => MoneyIndex2,
          Amount => (0 - Cost));
       UpdateBaseCargo(ProtoMoneyIndex, Cost);
-      GainExp(5, TalkingSkill, FindMember(Talk));
+      TraderIndex := FindMember(Talk);
+      if TraderIndex > 0 then
+         GainExp(5, TalkingSkill, TraderIndex);
+      end if;
       GainRep(BaseIndex, 5);
       UpdateGame(60);
    end TrainSkill;
