@@ -959,7 +959,7 @@ Tool = BlacksmithSet
 [97]
 Material = TitaniumOre, Fuel
 Amount = 1, 2
-Result = 115
+Result = 116
 Crafted = 1
 Workplace = Furnace
 Skill = Metalsmith
