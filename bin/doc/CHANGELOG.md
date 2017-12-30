@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
   sewing kit and titanium plates
 - New item types: titaniumore, titanium
 - New ship modules: titanium cockpit, small titanium alchemy lab, small
-  titanium cargo bay and titanium battering ram
+  titanium cargo bay, titanium battering ram and medium titanium engine
 
 ### Changed
 - Raised gained or lost reputation for missions
