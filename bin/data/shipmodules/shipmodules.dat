@@ -1697,4 +1697,17 @@ InstallTime = 120
 Unique = Yes
 Size = 1
 Description = Standard battering ram, made of titanium. Attack enemies automatically when in close range.
+[134]
+Name = Medium titanium engine
+Type = Engine
+Weight = 3400
+Value = 6
+MaxValue = 10000
+Durability = 300
+Material = Titanium
+Skill = Engineering
+Price = 14000
+InstallTime = 180
+Size = 2
+Description = Standard available engine made of titanium. Each ship needs at least one engine to fly.
 []
