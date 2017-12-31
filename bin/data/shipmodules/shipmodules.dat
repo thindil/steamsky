@@ -1710,4 +1710,16 @@ Price = 14000
 InstallTime = 180
 Size = 2
 Description = Standard available engine made of titanium. Each ship needs at least one engine to fly.
+[135]
+Name = Medium titanium hull
+Type = Hull
+Weight = 12000
+Value = 0
+MaxValue = 26
+Durability = 300
+Material = Titanium
+Skill = Engineering
+Price = 15000 
+InstallTime = 250
+Description = Base module of each ship made of titanium. Whole ship is destroyed if hull is destroyed.
 []
