@@ -1722,4 +1722,17 @@ Skill = Engineering
 Price = 15000 
 InstallTime = 250
 Description = Base module of each ship made of titanium. Whole ship is destroyed if hull is destroyed.
+[136]
+Name = Medium advanced titanium engine
+Type = Engine
+Weight = 3700
+Value = 7
+MaxValue = 13500
+Durability = 300
+Material = Titanium
+Skill = Engineering
+Price = 20000
+InstallTime = 210
+Size = 2
+Description = Updated version of standard available engine made of titanium. Each ship needs at least one engine to fly.
 []
