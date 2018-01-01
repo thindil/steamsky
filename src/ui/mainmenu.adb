@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -108,7 +108,7 @@ package body MainMenu is
       Post(GameMenu);
       -- Copyright
       Move_Cursor(Line => Lines - 1, Column => (Columns / 2) - 18);
-      Add(Str => "(c) 2016-2017 Bartek thindil Jasicki");
+      Add(Str => "(c) 2016-2018 Bartek thindil Jasicki");
       Refresh;
       Refresh(MenuWindow);
    end ShowMainMenu;
