@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Showing item status
 - Showing info about accepted missions
 - Crash when training trader in base
+- Description for small package, package, large package and huge package
 
 ## [1.9] - 2017-12-10
 
