@@ -319,7 +319,7 @@ Type = MissionItem
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
 ShowType = Special
-Description = Item needed for one of your missions. Deliver it to proper sky base fro reward. Droping it from cargo automatically fail proper mission.
+Description = Item needed for one of your missions. Deliver it to proper sky base for reward. Removing it from cargo automatically fail proper mission.
 [40]
 Name = Corpse
 Weight = 70
@@ -334,7 +334,7 @@ Type = MissionItem
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
 ShowType = Special
-Description = Item needed for one of your missions. Deliver it to proper sky base fro reward. Droping it from cargo automatically fail proper mission.
+Description = Item needed for one of your missions. Deliver it to proper sky base for reward. Removing it from cargo automatically fail proper mission.
 [42]
 Name = Large package
 Weight = 50
@@ -342,7 +342,7 @@ Type = MissionItem
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
 ShowType = Special
-Description = Item needed for one of your missions. Deliver it to proper sky base fro reward. Droping it from cargo automatically fail proper mission.
+Description = Item needed for one of your missions. Deliver it to proper sky base for reward. Removing it from cargo automatically fail proper mission.
 [43]
 Name = Huge package
 Weight = 200
@@ -350,7 +350,7 @@ Type = MissionItem
 Prices = 0, 0, 0, 0
 Buyable = N, N, N, N
 ShowType = Special
-Description = Item needed for one of your missions. Deliver it to proper sky base fro reward. Droping it from cargo automatically fail proper mission.
+Description = Item needed for one of your missions. Deliver it to proper sky base for reward. Removing it from cargo automatically fail proper mission.
 [44]
 Name = Beer
 Weight = 1
