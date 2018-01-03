@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about accepted missions
 - Crash when training trader in base
 - Description for small package, package, large package and huge package
+- Don't allow gave mission items from ship cargo to crew members
 
 ## [1.9] - 2017-12-10
 
