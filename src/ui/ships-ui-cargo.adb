@@ -158,15 +158,25 @@ package body Ships.UI.Cargo is
       Options_Items: constant Item_Array_Access := new Item_Array(1 .. 4);
       MenuHeight: Line_Position;
       MenuLength: Column_Position;
+      ItemIndex: constant Positive := Get_Index(Current(ShipsMenu));
    begin
-      Options_Items.all :=
-        (New_Item("Drop item"),
-         New_Item("Give item to crew member"),
-         New_Item("Close"),
-         Null_Item);
+      if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType /=
+        MissionItemsType then
+         Options_Items.all :=
+           (New_Item("Drop item"),
+            New_Item("Give item to crew member"),
+            New_Item("Close"),
+            Null_Item);
+      else
+         Options_Items.all :=
+           (New_Item("Drop item"), New_Item("Close"), Null_Item, Null_Item);
+      end if;
       OptionsMenu := New_Menu(Options_Items);
       Set_Format(OptionsMenu, Lines - 10, 1);
       Scale(OptionsMenu, MenuHeight, MenuLength);
+      if MenuLength < 16 then
+         MenuLength := 16;
+      end if;
       MenuWindow2 :=
         Create
           (MenuHeight + 2,
