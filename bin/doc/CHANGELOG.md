@@ -14,7 +14,8 @@ All notable changes to this project will be documented in this file.
 - New item types: titaniumore, titanium
 - New ship modules: titanium cockpit, small titanium alchemy lab, small
   titanium cargo bay, titanium battering ram, medium titanium engine, medium
-  titanium hull, medium advanced titanium engine and large titanium engine
+  titanium hull, medium advanced titanium engine, large titanium engine and
+  large advanced titanium engine
 
 ### Changed
 - Raised gained or lost reputation for missions
