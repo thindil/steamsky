@@ -1748,4 +1748,17 @@ Price = 27000
 InstallTime = 230
 Size = 3
 Description = Large engine made of titanium. Each ship needs at least one engine to fly.
+[138]
+Name = Large advanced titanium engine
+Type = Engine
+Weight = 5000
+Value = 9
+MaxValue = 28000
+Durability = 350
+Material = Titanium
+Skill = Engineering
+Price = 36000
+InstallTime = 250
+Size = 3
+Description = Updated version of large engine made of titanium. Each ship needs at least one engine to fly.
 []
