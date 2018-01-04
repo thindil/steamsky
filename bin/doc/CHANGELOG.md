@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Raised gained or lost reputation for missions
+- Updated help
 
 ### Fixed
 - Showing very long messages
