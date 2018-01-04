@@ -149,5 +149,5 @@ You can see more detailed informations about finished missions by pressing key '
 * If you deliver {HealingTools} for free to diseased base, you gain some reputation in that base. If you sell {HealingTools} to diseased base, you earn some money but lost reputation. Amount of gained or lost reputation depends on how much {HealingTools} you gave or sold.
 * You can check progress of your character goal in 'Game statistics' menu (key {GameKey 32}). There you can change it too, but if you do it, progress of old goal will be lost. If you finish your current goal, new random goal will be set.
 * Abandoned bases may be recovered by someone. In that situation, they gains small population and new owner.
-* You may move items between ship cargo and crew members inventory in cargo screen and from inventory to ship in selected crew member inventory screen.
+* You may move most items (with exception of items needed for missions) between ship cargo and crew members inventory in cargo screen and from inventory to ship in selected crew member inventory screen.
 []
