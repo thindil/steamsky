@@ -1761,4 +1761,17 @@ Price = 36000
 InstallTime = 250
 Size = 3
 Description = Updated version of large engine made of titanium. Each ship needs at least one engine to fly.
+[139]
+Name = Small titanium furnace
+Type = Furnace
+Weight = 1800
+Value = 0
+MaxValue = 0
+Durability = 400
+Material = Titanium
+Skill = Metalsmith
+Price = 6000
+InstallTime = 90
+Size = 1
+Description = Allow smelt ores into metals. Made of titanium.
 []
