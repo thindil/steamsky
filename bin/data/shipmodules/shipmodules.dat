@@ -1774,4 +1774,16 @@ Price = 6000
 InstallTime = 90
 Size = 1
 Description = Allow smelt ores into metals. Made of titanium.
+[140]
+Name = Advanced medium titanium hull
+Type = Hull
+Weight = 14000
+Value = 0
+MaxValue = 31
+Durability = 350
+Material = Titanium
+Skill = Engineering
+Price = 18000 
+InstallTime = 270
+Description = Base module of each ship, made of titanium. Whole ship is destroyed if hull is destroyed.
 []
