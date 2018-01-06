@@ -102,6 +102,13 @@ package body Missions.UI is
               (Win => InfoWindow,
                Str =>
                  "Target: " & To_String(ProtoShips_List(Mission.Target).Name));
+            Get_Cursor_Position
+              (Win => InfoWindow,
+               Line => CurrentLine,
+               Column => TextLength);
+            if TextLength + 4 > WindowWidth then
+               WindowWidth := TextLength + 4;
+            end if;
          when Explore =>
             Add(Win => InfoWindow, Str => "Explore selected area");
          when Passenger =>
