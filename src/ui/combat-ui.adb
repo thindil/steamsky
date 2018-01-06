@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -172,14 +172,19 @@ package body Combat.UI is
       Crew_Items.all(2) := New_Item(To_String(EngineerName), "0");
       for I in Guns.First_Index .. Guns.Last_Index loop
          GunnerName := PlayerShip.Modules(Guns(I)(1)).Name & ": ";
-         if PlayerShip.Modules(Guns(I)(1)).Owner = 0 then
-            GunnerName := GunnerName & To_Unbounded_String("Vacant");
+         if PlayerShip.Modules(Guns(I)(1)).Owner /= 0 then
+            if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner).Order =
+              Gunner then
+               GunnerName :=
+                 GunnerName &
+                 PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner).Name &
+                 " -> " &
+                 GunnerOrders(Guns(I)(2));
+            else
+               GunnerName := GunnerName & To_Unbounded_String("Vacant");
+            end if;
          else
-            GunnerName :=
-              GunnerName &
-              PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner).Name &
-              " -> " &
-              GunnerOrders(Guns(I)(2));
+            GunnerName := GunnerName & To_Unbounded_String("Vacant");
          end if;
          Crew_Items.all(I + 2) :=
            New_Item(To_String(GunnerName), Positive'Image(I));
@@ -466,6 +471,11 @@ package body Combat.UI is
            PlayerShip.Modules
              (Guns(Positive'Value(Description(Current(CrewMenu))))(1))
              .Owner;
+         if MemberIndex > 0 then
+            if PlayerShip.Crew(MemberIndex).Order /= Gunner then
+               MemberIndex := 0;
+            end if;
+         end if;
       end if;
       if MemberIndex > 0 then
          case Order is
