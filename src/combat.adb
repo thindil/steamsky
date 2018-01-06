@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -247,6 +247,9 @@ package body Combat is
                               exit;
                            end if;
                         end loop;
+                        if Ship.Crew(GunnerIndex).Order /= Gunner then
+                           GunnerOrder := 1;
+                        end if;
                         case GunnerOrder is
                            when 2 =>
                               CurrentAccuracyBonus := AccuracyBonus + 20;
