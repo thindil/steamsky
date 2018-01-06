@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Crash when training trader in base
 - Description for small package, package, large package and huge package
 - Don't allow gave mission items from ship cargo to crew members
+- Giving orders for gunners during combat when they are on break
 
 ## [1.9] - 2017-12-10
 
