@@ -15,8 +15,8 @@ All notable changes to this project will be documented in this file.
 - New ship modules: titanium cockpit, small titanium alchemy lab, small
   titanium cargo bay, titanium battering ram, medium titanium engine, medium
   titanium hull, medium advanced titanium engine, large titanium engine, large
-  advanced titanium engine, small titanium furnace and advanced medium titanium
-  hull
+  advanced titanium engine, small titanium furnace, advanced medium titanium
+  hull and large titanium hull
 
 ### Changed
 - Raised gained or lost reputation for missions
