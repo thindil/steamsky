@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - Description for small package, package, large package and huge package
 - Don't allow gave mission items from ship cargo to crew members
 - Giving orders for gunners during combat when they are on break
+- Crash in crafting when there is more than one needed material type in ship
 
 ## [1.9] - 2017-12-10
 
