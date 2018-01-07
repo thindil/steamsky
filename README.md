@@ -9,9 +9,9 @@ generally is playable. Now game is available (and tested) only on Linux
 
 ## Game versions
 At this moment are available 2 game versions:
-- 1.0.x: "stable" version of game. This version receive only fixes of bug but
-  no new features. Source code for this version is in *1.0* branch.
-- 1.x: "development" version of game, future version 2.0. This is main place
+- 2.0.x: "stable" version of game. This version receive only fixes of bug but
+  no new features. Source code for this version is in *2.0* branch.
+- 2.x: "development" version of game, future version 3.0. This is main place
   where game development happen. It often break save compatibilities between
   releases so use at your own risk. Source code for this version is in *master*
   branch.
