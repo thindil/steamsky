@@ -1798,4 +1798,16 @@ Skill = Engineering
 Price = 22000 
 InstallTime = 290
 Description = Base module of each ship, made of titanium. Whole ship is destroyed if hull is destroyed.
+[142]
+Name = Advanced large titanium hull
+Type = Hull
+Weight = 19000
+Value = 0
+MaxValue = 41
+Durability = 400
+Material = Titanium
+Skill = Engineering
+Price = 25000 
+InstallTime = 310
+Description = Base module of each ship, made of titanium. Whole ship is destroyed if hull is destroyed.
 []
