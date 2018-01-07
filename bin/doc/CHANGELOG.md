@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
   titanium cargo bay, titanium battering ram, medium titanium engine, medium
   titanium hull, medium advanced titanium engine, large titanium engine, large
   advanced titanium engine, small titanium furnace, advanced medium titanium
-  hull and large titanium hull
+  hull, large titanium hull and advanced large titanium hull
 
 ### Changed
 - Raised gained or lost reputation for missions
