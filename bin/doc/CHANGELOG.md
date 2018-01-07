@@ -1,6 +1,6 @@
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.0] - 2018-01-07
 
 ### Added
 - New items: steel saw, bronze bucket, iron bucket, steel bucket, iron
