@@ -216,8 +216,8 @@ package body Crafts is
       end if;
       -- Check for materials
       if RecipeIndex > 0 then
-         for I in PlayerShip.Cargo.Iterate loop
-            for J in Recipe.MaterialTypes.Iterate loop
+         for J in Recipe.MaterialTypes.Iterate loop
+            for I in PlayerShip.Cargo.Iterate loop
                if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
                  Recipe.MaterialTypes(J) and
                  PlayerShip.Cargo(I).Amount >=
@@ -234,6 +234,7 @@ package body Crafts is
                        Recipe.MaterialAmounts
                          (UnboundedString_Container.To_Index(J));
                   end if;
+                  exit;
                end if;
             end loop;
          end loop;
