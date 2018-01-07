@@ -379,19 +379,32 @@ package body Crafts is
                            end if;
                         end loop;
                      end if;
-                     for MaterialIndex of MaterialIndexes loop
-                        if FindItem(PlayerShip.Cargo, MaterialIndex) = 0 then
-                           AddMessage
-                             ("You don't have crafting materials for " &
-                              To_String(RecipeName) &
-                              ".",
-                              CraftMessage,
-                              3);
-                           Module.Data := (0, 0, 0);
-                           GiveOrders(PlayerShip, CrafterIndex, Rest);
-                           exit Craft_Loop;
-                        end if;
-                     end loop;
+                     declare
+                        CraftingMaterial: Natural := 0;
+                     begin
+                        for MaterialIndex of MaterialIndexes loop
+                           CraftingMaterial :=
+                             FindItem
+                               (PlayerShip.Cargo,
+                                ItemType => Items_List(MaterialIndex).IType);
+                           if CraftingMaterial = 0 then
+                              AddMessage
+                                ("You don't have crafting materials for " &
+                                 To_String(RecipeName) &
+                                 ".",
+                                 CraftMessage,
+                                 3);
+                              Module.Data := (0, 0, 0);
+                              GiveOrders(PlayerShip, CrafterIndex, Rest);
+                              exit Craft_Loop;
+                           elsif PlayerShip.Cargo(CraftingMaterial)
+                               .ProtoIndex /=
+                             MaterialIndex then
+                              MaterialIndex :=
+                                PlayerShip.Cargo(CraftingMaterial).ProtoIndex;
+                           end if;
+                        end loop;
+                     end;
                      if Recipe.Tool /= To_Unbounded_String("None") then
                         ToolIndex :=
                           FindTools(CrafterIndex, Recipe.Tool, Craft);
