@@ -1,4 +1,4 @@
-with "adacurses";
+with "/usr/share/gpr/gtkada";
 
 project steamsky is
     
