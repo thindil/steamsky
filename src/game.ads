@@ -154,6 +154,9 @@ package Game is
    LegsArmor: Unbounded_String; -- Name of item type used as characters legs armor
    ShieldType: Unbounded_String; -- Name of item type used as characters shield
    WeaponType: Unbounded_String; -- Name of item type used as characters weapon
+   DocDirectory: Unbounded_String :=
+     To_Unbounded_String
+       ("doc" & Dir_Separator); -- Path to directory where documentation is
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
