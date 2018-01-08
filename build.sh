@@ -18,8 +18,8 @@ then
    # if compiler can't find adacurses project file
    if [ "${error#*"steamsky.gpr:1:06:"}" != "$error" ]
    then
-      # replace name of project file
-      sed -i '1s/adacurses/ncursesada/' steamsky.gpr
+      # replace name of gtk project file
+      sed -i '1s/\/usr\/share\/gpr\///' steamsky.gpr
       # if we are in git repository
       if [ -d ".git" ]
       then
