@@ -1810,4 +1810,17 @@ Skill = Engineering
 Price = 25000 
 InstallTime = 310
 Description = Base module of each ship, made of titanium. Whole ship is destroyed if hull is destroyed.
+[143]
+Name = Titanium armor
+Type = Armor
+Weight = 10000
+Value = 5
+MaxValue = 10
+Durability = 750
+Material = Titanium 
+Skill = Engineering
+Price = 17000
+InstallTime = 250
+Unique = Yes
+Description = Standard type of titanium armor. Protect whole ship.
 []
