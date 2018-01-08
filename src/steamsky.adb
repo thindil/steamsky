@@ -25,6 +25,7 @@ with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
+with Gtk.Main; use Gtk.Main;
 with Game; use Game;
 with Config; use Config;
 with Log; use Log;
@@ -110,6 +111,9 @@ begin
 
    LoadConfig;
    LoadHallOfFame;
+
+   --  Initializes GtkAda
+   Init;
 
    EndLogging;
 exception
