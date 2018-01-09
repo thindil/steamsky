@@ -1823,4 +1823,17 @@ Price = 17000
 InstallTime = 250
 Unique = Yes
 Description = Standard type of titanium armor. Protect whole ship.
+[144]
+Name = Heavy titanium armor
+Type = Armor
+Weight = 12000
+Value = 5
+MaxValue = 10
+Durability = 950
+Material = Titanium
+Skill = Engineering
+Price = 20000
+InstallTime = 270
+Unique = Yes
+Description = Heaviest type of titanium armor. Protect whole ship.
 []
