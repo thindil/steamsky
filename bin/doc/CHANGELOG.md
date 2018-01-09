@@ -5,3 +5,6 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New ship modules: titanium armor and heavy titanium armor
+
+### Changed
+- Updated README.md
