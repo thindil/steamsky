@@ -30,6 +30,7 @@ with Game; use Game;
 with Config; use Config;
 with Log; use Log;
 with HallOfFame; use HallOfFame;
+with MainMenu; use MainMenu;
 
 procedure SteamSky is
 begin
@@ -114,12 +115,15 @@ begin
 
    --  Initializes GtkAda
    Init;
+   CreateMainMenu;
+   Main;
 
    EndLogging;
 exception
    when An_Exception : others =>
       declare
          ErrorFile: File_Type;
+         ErrorText: Unbounded_String;
       begin
          if Exists(To_String(SaveDirectory) & "error.log") then
             Open(ErrorFile, Append_File, To_String(SaveDirectory) & "error.log");
@@ -129,14 +133,22 @@ exception
                Append_File,
                To_String(SaveDirectory) & "error.log");
          end if;
-         Put_Line(ErrorFile, Ada.Calendar.Formatting.Image(Clock));
-         Put_Line(ErrorFile, GameVersion);
-         Put_Line(ErrorFile, "Exception: " & Exception_Name(An_Exception));
-         Put_Line(ErrorFile, "Message: " & Exception_Message(An_Exception));
-         Put_Line(ErrorFile, "-------------------------------------------------");
-         Put_Line(ErrorFile, Symbolic_Traceback(An_Exception));
-         Put_Line(ErrorFile, "-------------------------------------------------");
+         Append(ErrorText, Ada.Calendar.Formatting.Image(Clock));
+         Append(ErrorText, ASCII.LF);
+         Append(ErrorText, GameVersion);
+         Append(ErrorText, ASCII.LF);
+         Append(ErrorText, "Exception: " & Exception_Name(An_Exception));
+         Append(ErrorText, ASCII.LF);
+         Append(ErrorText, "Message: " & Exception_Message(An_Exception));
+         Append(ErrorText, ASCII.LF);
+         Append(ErrorText, "-------------------------------------------------");
+         Append(ErrorText, ASCII.LF);
+         Append(ErrorText, Symbolic_Traceback(An_Exception));
+         Append(ErrorText, ASCII.LF);
+         Append(ErrorText, "-------------------------------------------------");
+         Put_Line(ErrorFile, To_String(ErrorText));
          Close(ErrorFile);
+         ShowErrorInfo(ErrorText);
       end;
       EndLogging;
 end SteamSky;
