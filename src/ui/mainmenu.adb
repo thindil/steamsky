@@ -15,18 +15,36 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Directories; use Ada.Directories;
 with Gtk.Builder; use Gtk.Builder;
 with Gtk.Widget; use Gtk.Widget;
+with Gtk.Label; use Gtk.Label;
+with Glib; use Glib;
+with Glib.Error; use Glib.Error;
 with Game; use Game;
+with HallOfFame; use HallOfFame;
 
 package body MainMenu is
 
    Builder: Gtk_Builder;
    
    procedure CreateMainMenu is
+      Error: aliased GError;
    begin
-      Initialize_From_File(Builder, To_String(DataDirectory) & "ui/mainmenu.glade");
+      Gtk_New(Builder);
+      if Add_From_File(Builder, To_String(DataDirectory) & "ui/mainmenu.glade", Error'Access) = Guint(0) then
+         Put_Line ("Error : " & Get_Message (Error));
+         return;
+      end if;
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
+      Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
+      if not Exists(To_String(SaveDirectory) & "savegame.dat") then
+         Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+      end if;
+      if HallOfFame_Array(1).Name = Null_Unbounded_String then
+         Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
+      end if;
    end CreateMainMenu;
 
    procedure ShowErrorInfo(Message: Unbounded_String) is
