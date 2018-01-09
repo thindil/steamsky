@@ -24,14 +24,14 @@ To build it, you need:
   
   http://libre.adacore.com/download/
 
-  At this moment tested compilers (all on Linux) are GCC 7.1 and GNAT GPL 2017.
+  At this moment tested compilers (all on Linux) are GCC 7.2 and GNAT GPL 2017.
   Game not works with old compilers (like GCC 4.9) due to lack of full support
   for Ada 2012.
 
-* ncurses Ada binding (should be available in most distributions or with ncurses 
-  package or as standalone package). If not, you can download it from:
-  
-  http://invisible-island.net/ncurses/ncurses-Ada95.html
+* GtkAda library which should be available in most Linux distributions. If not,
+  you can download source code from:
+
+  https://www.adacore.com/download/more
 
 * optional, but highly recommended:  gprbuild program - should be available in most 
   distributions, if not, download from: 
@@ -42,8 +42,7 @@ To build it, you need:
 If you have all, in main source code directory (where this file is):
 
 * Best option, is to use build.sh script. It can detect did you have gprbuild
-  installed and use it or gnatmake automatically. Additionally, if you use
-  Debian or Debian based distribution (like Ubuntu, etc.) it can fix
+  installed and use it or gnatmake automatically. Additionally, it can fix
   *steamsky.gpr* file automatically. This is recommended option for first time
   build. Type `./build.sh` for debug build or `./build.sh release` for release
   version.
