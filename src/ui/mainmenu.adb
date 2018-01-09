@@ -28,13 +28,17 @@ with HallOfFame; use HallOfFame;
 package body MainMenu is
 
    Builder: Gtk_Builder;
-   
+
    procedure CreateMainMenu is
       Error: aliased GError;
    begin
       Gtk_New(Builder);
-      if Add_From_File(Builder, To_String(DataDirectory) & "ui/mainmenu.glade", Error'Access) = Guint(0) then
-         Put_Line ("Error : " & Get_Message (Error));
+      if Add_From_File
+          (Builder,
+           To_String(DataDirectory) & "ui/mainmenu.glade",
+           Error'Access) =
+        Guint(0) then
+         Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));

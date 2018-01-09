@@ -126,10 +126,13 @@ exception
          ErrorText: Unbounded_String;
       begin
          if Exists(To_String(SaveDirectory) & "error.log") then
-            Open(ErrorFile, Append_File, To_String(SaveDirectory) & "error.log");
+            Open
+              (ErrorFile,
+               Append_File,
+               To_String(SaveDirectory) & "error.log");
          else
             Create
-               (ErrorFile,
+              (ErrorFile,
                Append_File,
                To_String(SaveDirectory) & "error.log");
          end if;
@@ -141,11 +144,15 @@ exception
          Append(ErrorText, ASCII.LF);
          Append(ErrorText, "Message: " & Exception_Message(An_Exception));
          Append(ErrorText, ASCII.LF);
-         Append(ErrorText, "-------------------------------------------------");
+         Append
+           (ErrorText,
+            "-------------------------------------------------");
          Append(ErrorText, ASCII.LF);
          Append(ErrorText, Symbolic_Traceback(An_Exception));
          Append(ErrorText, ASCII.LF);
-         Append(ErrorText, "-------------------------------------------------");
+         Append
+           (ErrorText,
+            "-------------------------------------------------");
          Put_Line(ErrorFile, To_String(ErrorText));
          Close(ErrorFile);
          ShowErrorInfo(ErrorText);
