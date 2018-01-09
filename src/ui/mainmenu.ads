@@ -20,6 +20,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package MainMenu is
 
    procedure CreateMainMenu; -- Create main menu and show it
-   procedure ShowErrorInfo(Message: Unbounded_String); -- Show informations about error
+   procedure ShowErrorInfo
+     (Message: Unbounded_String); -- Show informations about error
 
 end MainMenu;
