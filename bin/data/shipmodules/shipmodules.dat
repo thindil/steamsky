@@ -1836,4 +1836,17 @@ Price = 20000
 InstallTime = 270
 Unique = Yes
 Description = Heaviest type of titanium armor. Protect whole ship.
+[145]
+Name = Titanium turret
+Type = Turret
+Weight = 200
+Value = 0
+MaxValue = 0
+Durability = 400
+Material = Titanium
+Skill = Engineering
+Price = 1200
+InstallTime = 120
+Size = 1
+Description = Standard titanium turret. If turret is destroyed, gun is destroyed too and gunner killed.
 []
