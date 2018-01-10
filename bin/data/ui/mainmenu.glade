@@ -95,6 +95,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="Main_Quit" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -115,7 +116,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="lblerror">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Oops, something bad happens and game crashed. Game should save your progress, but better check it. Also, please, remember what you done before crash and report this problem at https://github.com/thindil/steamsky/issues (or if you prefer, on mail thindil@laeran.pl) and attach (if possible) file 'error.log'</property>
@@ -175,6 +176,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="default_width">440</property>
+    <signal name="destroy" handler="Main_Quit" swapped="no"/>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -282,6 +284,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="Main_Quit" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -296,22 +299,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="position">2</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">(c) 2016-2018 Bartek thindil Jasicki</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
       </object>
     </child>
-    <child type="titlebar">
+    <child>
       <placeholder/>
     </child>
   </object>
@@ -384,7 +374,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
-    <child type="titlebar">
+    <child>
       <placeholder/>
     </child>
   </object>
