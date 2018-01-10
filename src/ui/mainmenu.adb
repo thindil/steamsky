@@ -30,6 +30,7 @@ with HallOfFame; use HallOfFame;
 package body MainMenu is
 
    Builder: Gtkada_Builder;
+   AllNews: Boolean := False;
 
    procedure Quit(Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -48,8 +49,56 @@ package body MainMenu is
       return Hide_On_Delete(Gtk_Widget(Get_Object(Object, "aboutdialog")));
    end HideAbout;
 
+   procedure ShowNews(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Show_All(Gtk_Widget(Get_Object(Object, "newswindow")));
+   end ShowNews;
+
+   function HideNews
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   begin
+      return Hide_On_Delete(Gtk_Widget(Get_Object(Object, "newswindow")));
+   end HideNews;
+
+   procedure ShowAllNews(Object: access Gtkada_Builder_Record'Class) is
+      pragma Unreferenced(Object);
+      ChangesFile: File_Type;
+      NewsText: Unbounded_String := Null_Unbounded_String;
+      FileText: Unbounded_String;
+   begin
+      if AllNews then
+         return;
+      end if;
+      if not Exists(To_String(DocDirectory) & "CHANGELOG.md") then
+         NewsText :=
+            To_Unbounded_String
+               ("Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
+               To_String(DocDirectory) &
+               "' directory?");
+      else
+         Open
+            (ChangesFile,
+            In_File,
+            To_String(DocDirectory) & "CHANGELOG.md");
+         Set_Line(ChangesFile, 6);
+         while not End_Of_File(ChangesFile) loop
+            FileText := To_Unbounded_String(Get_Line(ChangesFile));
+            Append(NewsText, FileText);
+            Append(NewsText, ASCII.LF);
+         end loop;
+         Close(ChangesFile);
+         Set_Text
+            (Gtk_Text_Buffer(Get_Object(Builder, "newsbuffer")),
+            To_String(NewsText));
+      end if;
+      AllNews := True;
+   end ShowAllNews;
+
    procedure CreateMainMenu is
       Error: aliased GError;
+      ChangesFile: File_Type;
+      NewsText: Unbounded_String := Null_Unbounded_String;
+      FileText: Unbounded_String;
    begin
       Gtk_New(Builder);
       if Add_From_File
@@ -63,6 +112,9 @@ package body MainMenu is
       Register_Handler(Builder, "Main_Quit", Quit'Access);
       Register_Handler(Builder, "Show_About", ShowAbout'Access);
       Register_Handler(Builder, "Hide_About", HideAbout'Access);
+      Register_Handler(Builder, "Show_News", ShowNews'Access);
+      Register_Handler(Builder, "Hide_News", HideNews'Access);
+      Register_Handler(Builder, "Show_All_News", ShowAllNews'Access);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if not Exists(To_String(SaveDirectory) & "savegame.dat") then
@@ -70,6 +122,31 @@ package body MainMenu is
       end if;
       if HallOfFame_Array(1).Name = Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
+      end if;
+      if not Exists(To_String(DocDirectory) & "CHANGELOG.md") then
+         NewsText :=
+            To_Unbounded_String
+               ("Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
+               To_String(DocDirectory) &
+               "' directory?");
+      else
+         Open
+            (ChangesFile,
+            In_File,
+            To_String(DocDirectory) & "CHANGELOG.md");
+         Set_Line(ChangesFile, 6);
+         while not End_Of_File(ChangesFile) loop
+            FileText := To_Unbounded_String(Get_Line(ChangesFile));
+            if Length(FileText) > 1 then
+               exit when Slice(FileText, 1, 3) = "## ";
+            end if;
+            Append(NewsText, FileText);
+            Append(NewsText, ASCII.LF);
+         end loop;
+         Close(ChangesFile);
+         Set_Text
+            (Gtk_Text_Buffer(Get_Object(Builder, "newsbuffer")),
+            To_String(NewsText));
       end if;
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
    end CreateMainMenu;
