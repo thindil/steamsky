@@ -21,6 +21,7 @@ with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Main; use Gtk.Main;
+with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
@@ -33,6 +34,7 @@ package body MainMenu is
    procedure Quit(Object: access Gtkada.Builder.Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
    begin
+      Unref(Builder);
       Gtk.Main.Main_Quit;
    end Quit;
 
@@ -50,7 +52,6 @@ package body MainMenu is
       end if;
       Register_Handler(Builder, "Main_Quit", Quit'Access);
       Do_Connect(Builder);
-      Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if not Exists(To_String(SaveDirectory) & "savegame.dat") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
@@ -58,11 +59,15 @@ package body MainMenu is
       if HallOfFame_Array(1).Name = Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
       end if;
+      Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
    end CreateMainMenu;
 
    procedure ShowErrorInfo(Message: Unbounded_String) is
+      Label: constant Gtk_Label := Gtk_Label(Get_Object(Builder, "lblerror"));
    begin
-      null;
+      Set_Label(Label, Get_Label(Label) & " from '" & To_String(DataDirectory) & "' directory.");
+      Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "errorbuffer")), To_String(Message));
+      Show_All(Gtk_Widget(Get_Object(Builder, "errordialog")));
    end ShowErrorInfo;
 
 end MainMenu;
