@@ -31,12 +31,22 @@ package body MainMenu is
 
    Builder: Gtkada_Builder;
 
-   procedure Quit(Object: access Gtkada.Builder.Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
+   procedure Quit(Object: access Gtkada_Builder_Record'Class) is
    begin
-      Unref(Builder);
+      Unref(Object);
       Gtk.Main.Main_Quit;
    end Quit;
+
+   procedure ShowAbout(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Show_All(Gtk_Widget(Get_Object(Object, "aboutdialog")));
+   end ShowAbout;
+
+   function HideAbout
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   begin
+      return Hide_On_Delete(Gtk_Widget(Get_Object(Object, "aboutdialog")));
+   end HideAbout;
 
    procedure CreateMainMenu is
       Error: aliased GError;
@@ -51,6 +61,8 @@ package body MainMenu is
          return;
       end if;
       Register_Handler(Builder, "Main_Quit", Quit'Access);
+      Register_Handler(Builder, "Show_About", ShowAbout'Access);
+      Register_Handler(Builder, "Hide_About", HideAbout'Access);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if not Exists(To_String(SaveDirectory) & "savegame.dat") then
@@ -65,8 +77,15 @@ package body MainMenu is
    procedure ShowErrorInfo(Message: Unbounded_String) is
       Label: constant Gtk_Label := Gtk_Label(Get_Object(Builder, "lblerror"));
    begin
-      Set_Label(Label, Get_Label(Label) & " from '" & To_String(DataDirectory) & "' directory.");
-      Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "errorbuffer")), To_String(Message));
+      Set_Label
+        (Label,
+         Get_Label(Label) &
+         " from '" &
+         To_String(DataDirectory) &
+         "' directory.");
+      Set_Text
+        (Gtk_Text_Buffer(Get_Object(Builder, "errorbuffer")),
+         To_String(Message));
       Show_All(Gtk_Widget(Get_Object(Builder, "errordialog")));
    end ShowErrorInfo;
 
