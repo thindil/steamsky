@@ -22,6 +22,7 @@ with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Main; use Gtk.Main;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
+with Gtk.Button; use Gtk.Button;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
@@ -61,37 +62,38 @@ package body MainMenu is
    end HideNews;
 
    procedure ShowAllNews(Object: access Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
       ChangesFile: File_Type;
       NewsText: Unbounded_String := Null_Unbounded_String;
       FileText: Unbounded_String;
    begin
-      if AllNews then
-         return;
-      end if;
+      AllNews := not AllNews;
       if not Exists(To_String(DocDirectory) & "CHANGELOG.md") then
          NewsText :=
-            To_Unbounded_String
-               ("Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
-               To_String(DocDirectory) &
-               "' directory?");
+           To_Unbounded_String
+             ("Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
+              To_String(DocDirectory) &
+              "' directory?");
       else
-         Open
-            (ChangesFile,
-            In_File,
-            To_String(DocDirectory) & "CHANGELOG.md");
+         Open(ChangesFile, In_File, To_String(DocDirectory) & "CHANGELOG.md");
          Set_Line(ChangesFile, 6);
          while not End_Of_File(ChangesFile) loop
             FileText := To_Unbounded_String(Get_Line(ChangesFile));
+            if Length(FileText) > 1 and not AllNews then
+               exit when Slice(FileText, 1, 3) = "## ";
+            end if;
             Append(NewsText, FileText);
             Append(NewsText, ASCII.LF);
          end loop;
          Close(ChangesFile);
-         Set_Text
-            (Gtk_Text_Buffer(Get_Object(Builder, "newsbuffer")),
-            To_String(NewsText));
       end if;
-      AllNews := True;
+      Set_Text
+        (Gtk_Text_Buffer(Get_Object(Object, "newsbuffer")),
+         To_String(NewsText));
+      if AllNews then
+         Set_Label(Gtk_Button(Get_Object(Object, "btnfull")), "Show only newest changes");
+      else
+         Set_Label(Gtk_Button(Get_Object(Object, "btnfull")), "Show all changes");
+      end if;
    end ShowAllNews;
 
    procedure CreateMainMenu is
@@ -125,15 +127,12 @@ package body MainMenu is
       end if;
       if not Exists(To_String(DocDirectory) & "CHANGELOG.md") then
          NewsText :=
-            To_Unbounded_String
-               ("Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
-               To_String(DocDirectory) &
-               "' directory?");
+           To_Unbounded_String
+             ("Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
+              To_String(DocDirectory) &
+              "' directory?");
       else
-         Open
-            (ChangesFile,
-            In_File,
-            To_String(DocDirectory) & "CHANGELOG.md");
+         Open(ChangesFile, In_File, To_String(DocDirectory) & "CHANGELOG.md");
          Set_Line(ChangesFile, 6);
          while not End_Of_File(ChangesFile) loop
             FileText := To_Unbounded_String(Get_Line(ChangesFile));
@@ -144,10 +143,10 @@ package body MainMenu is
             Append(NewsText, ASCII.LF);
          end loop;
          Close(ChangesFile);
-         Set_Text
-            (Gtk_Text_Buffer(Get_Object(Builder, "newsbuffer")),
-            To_String(NewsText));
       end if;
+      Set_Text
+        (Gtk_Text_Buffer(Get_Object(Builder, "newsbuffer")),
+         To_String(NewsText));
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
    end CreateMainMenu;
 
