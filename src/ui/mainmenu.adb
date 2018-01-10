@@ -17,9 +17,10 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
-with Gtk.Builder; use Gtk.Builder;
+with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
+with Gtk.Main; use Gtk.Main;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
@@ -27,7 +28,13 @@ with HallOfFame; use HallOfFame;
 
 package body MainMenu is
 
-   Builder: Gtk_Builder;
+   Builder: Gtkada_Builder;
+
+   procedure Quit(Object: access Gtkada.Builder.Gtkada_Builder_Record'Class) is
+      pragma Unreferenced(Object);
+   begin
+      Gtk.Main.Main_Quit;
+   end Quit;
 
    procedure CreateMainMenu is
       Error: aliased GError;
@@ -41,6 +48,8 @@ package body MainMenu is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
+      Register_Handler(Builder, "Main_Quit", Quit'Access);
+      Do_Connect(Builder);
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if not Exists(To_String(SaveDirectory) & "savegame.dat") then
