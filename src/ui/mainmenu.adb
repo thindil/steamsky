@@ -23,6 +23,7 @@ with Gtk.Label; use Gtk.Label;
 with Gtk.Main; use Gtk.Main;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Button; use Gtk.Button;
+with Gtk.About_Dialog; use Gtk.About_Dialog;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
@@ -90,9 +91,13 @@ package body MainMenu is
         (Gtk_Text_Buffer(Get_Object(Object, "newsbuffer")),
          To_String(NewsText));
       if AllNews then
-         Set_Label(Gtk_Button(Get_Object(Object, "btnfull")), "Show only newest changes");
+         Set_Label
+           (Gtk_Button(Get_Object(Object, "btnfull")),
+            "Show only newest changes");
       else
-         Set_Label(Gtk_Button(Get_Object(Object, "btnfull")), "Show all changes");
+         Set_Label
+           (Gtk_Button(Get_Object(Object, "btnfull")),
+            "Show all changes");
       end if;
    end ShowAllNews;
 
@@ -147,6 +152,9 @@ package body MainMenu is
       Set_Text
         (Gtk_Text_Buffer(Get_Object(Builder, "newsbuffer")),
          To_String(NewsText));
+      Set_Version
+        (Gtk_About_Dialog(Get_Object(Builder, "aboutdialog")),
+         GameVersion);
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
    end CreateMainMenu;
 
