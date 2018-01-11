@@ -113,7 +113,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="Show_News" swapped="no"/>
+                <signal name="clicked" handler="Show_Window" object="newswindow" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -127,7 +127,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="Show_About" swapped="no"/>
+                <signal name="clicked" handler="Show_Window" object="aboutdialog" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
