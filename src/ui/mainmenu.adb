@@ -26,6 +26,7 @@ with Gtk.Button; use Gtk.Button;
 with Gtk.About_Dialog; use Gtk.About_Dialog;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
+with Glib.Object; use Glib.Object;
 with Game; use Game;
 with HallOfFame; use HallOfFame;
 
@@ -45,22 +46,16 @@ package body MainMenu is
       Show_All(Gtk_Widget(Get_Object(Object, "aboutdialog")));
    end ShowAbout;
 
-   function HideAbout
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      return Hide_On_Delete(Gtk_Widget(Get_Object(Object, "aboutdialog")));
-   end HideAbout;
-
    procedure ShowNews(Object: access Gtkada_Builder_Record'Class) is
    begin
       Show_All(Gtk_Widget(Get_Object(Object, "newswindow")));
    end ShowNews;
 
-   function HideNews
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   function HideWindow
+     (User_Data: access GObject_Record'Class) return Boolean is
    begin
-      return Hide_On_Delete(Gtk_Widget(Get_Object(Object, "newswindow")));
-   end HideNews;
+      return Hide_On_Delete(Gtk_Widget(User_Data));
+   end HideWindow;
 
    procedure ShowAllNews(Object: access Gtkada_Builder_Record'Class) is
       ChangesFile: File_Type;
@@ -118,10 +113,9 @@ package body MainMenu is
       end if;
       Register_Handler(Builder, "Main_Quit", Quit'Access);
       Register_Handler(Builder, "Show_About", ShowAbout'Access);
-      Register_Handler(Builder, "Hide_About", HideAbout'Access);
       Register_Handler(Builder, "Show_News", ShowNews'Access);
-      Register_Handler(Builder, "Hide_News", HideNews'Access);
       Register_Handler(Builder, "Show_All_News", ShowAllNews'Access);
+      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if not Exists(To_String(SaveDirectory) & "savegame.dat") then
