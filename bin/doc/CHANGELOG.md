@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Typos in changelog files
+
 ## [2.0] - 2018-01-07
 
 ### Added
