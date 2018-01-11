@@ -41,21 +41,16 @@ package body MainMenu is
       Gtk.Main.Main_Quit;
    end Quit;
 
-   procedure ShowAbout(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Show_All(Gtk_Widget(Get_Object(Object, "aboutdialog")));
-   end ShowAbout;
-
-   procedure ShowNews(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Show_All(Gtk_Widget(Get_Object(Object, "newswindow")));
-   end ShowNews;
-
    function HideWindow
      (User_Data: access GObject_Record'Class) return Boolean is
    begin
       return Hide_On_Delete(Gtk_Widget(User_Data));
    end HideWindow;
+
+   procedure ShowWindow(User_Data: access GObject_Record'Class) is
+   begin
+      Show_All(Gtk_Widget(User_Data));
+   end ShowWindow;
 
    procedure ShowAllNews(Object: access Gtkada_Builder_Record'Class) is
       ChangesFile: File_Type;
@@ -112,10 +107,9 @@ package body MainMenu is
          return;
       end if;
       Register_Handler(Builder, "Main_Quit", Quit'Access);
-      Register_Handler(Builder, "Show_About", ShowAbout'Access);
-      Register_Handler(Builder, "Show_News", ShowNews'Access);
       Register_Handler(Builder, "Show_All_News", ShowAllNews'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
+      Register_Handler(Builder, "Show_Window", ShowWindow'Access);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if not Exists(To_String(SaveDirectory) & "savegame.dat") then
