@@ -22,7 +22,7 @@ To build it, you need:
 
 * compiler - GCC with enabled Ada support or GNAT from: 
   
-  http://libre.adacore.com/download/
+  https://www.adacore.com/download/
 
   At this moment tested compilers (all on Linux) are GCC 7.2 and GNAT GPL 2017.
   Game not works with old compilers (like GCC 4.9) due to lack of full support
@@ -33,10 +33,13 @@ To build it, you need:
 
   https://www.adacore.com/download/more
 
-* optional, but highly recommended:  gprbuild program - should be available in most 
-  distributions, if not, download from: 
+  At this moment tested version of GtkAda is 2017 and game require GTK library
+  in version 3.20 or above.
+
+* optional, but highly recommended:  gprbuild program - should be available in 
+  most distributions, if not, download source code from: 
   
-  http://libre.adacore.com/download/
+  https://www.adacore.com/download/more
 
 
 If you have all, in main source code directory (where this file is):
@@ -55,11 +58,9 @@ If you have all, in main source code directory (where this file is):
 
 
 ## Running game
-If you build game from sources you need only ncurses library to run game. Enter
-*bin* directory and type `./steamsky`.
-If you use released binaries, you don't need any additional libraries, just in
-main game directory (where this file is) type `./steamsky`.
-Game works only in terminal.
+You need GtkAda library to run game, which should be available in most Linux
+distributions. Type in terminal where game is `./steamsky` or run it from 
+file manager.
 
 ### Starting parameters
 You can set game directories by starting parameters. Possible options are:
