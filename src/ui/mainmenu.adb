@@ -24,6 +24,8 @@ with Gtk.Main; use Gtk.Main;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Button; use Gtk.Button;
 with Gtk.About_Dialog; use Gtk.About_Dialog;
+with Gtk.List_Store; use Gtk.List_Store;
+with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -96,6 +98,22 @@ package body MainMenu is
       end if;
    end ShowAllNews;
 
+   procedure ShowHallOfFame(Object: access Gtkada_Builder_Record'Class) is
+      HofList: constant Gtk_List_Store := Gtk_List_Store(Get_Object(Object, "hoflist"));
+      Iter: Gtk_Tree_Iter;
+   begin
+      Clear(HofList);
+      for I in HallOfFame_Array'Range loop
+         exit when HallOfFame_Array(I).Name = Null_Unbounded_String;
+         Append(HofList, Iter);
+         Set(HofList, Iter, 0, Gint(I));
+         Set(HofList, Iter, 1, To_String(HallOfFame_Array(I).Name));
+         Set(HofList, Iter, 2, Gint(HallOfFame_Array(I).Points));
+         Set(HofList, Iter, 3, To_String(HallOfFame_Array(I).DeathReason));
+      end loop;
+      Show_All(Gtk_Widget(Get_Object(Object, "hofwindow")));
+   end ShowHallOfFame;
+
    procedure CreateMainMenu is
       Error: aliased GError;
    begin
@@ -112,6 +130,7 @@ package body MainMenu is
       Register_Handler(Builder, "Show_All_News", ShowAllNews'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Show_Window", ShowWindow'Access);
+      Register_Handler(Builder, "Show_Hall_Of_Fame", ShowHallOfFame'Access);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if not Exists(To_String(SaveDirectory) & "savegame.dat") then
