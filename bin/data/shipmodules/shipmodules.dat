@@ -1862,4 +1862,17 @@ Price = 6000
 InstallTime = 90
 Size = 1
 Description = Allow cultivate plants. Made of titanium.
+[147]
+Name = Small titanium water collector
+Type = Water_collector
+Weight = 1800
+Value = 0
+MaxValue = 0
+Durability = 400
+Material = Titanium
+Skill = Engineering
+Price = 6000
+InstallTime = 90
+Size = 1
+Description = Allow collect water from air. Made of titanium.
 []
