@@ -52,12 +52,11 @@ package body MainMenu is
       Show_All(Gtk_Widget(User_Data));
    end ShowWindow;
 
-   procedure ShowAllNews(Object: access Gtkada_Builder_Record'Class) is
+   procedure UpdateNews is
       ChangesFile: File_Type;
       NewsText: Unbounded_String := Null_Unbounded_String;
       FileText: Unbounded_String;
    begin
-      AllNews := not AllNews;
       if not Exists(To_String(DocDirectory) & "CHANGELOG.md") then
          NewsText :=
            To_Unbounded_String
@@ -78,8 +77,14 @@ package body MainMenu is
          Close(ChangesFile);
       end if;
       Set_Text
-        (Gtk_Text_Buffer(Get_Object(Object, "newsbuffer")),
+        (Gtk_Text_Buffer(Get_Object(Builder, "newsbuffer")),
          To_String(NewsText));
+   end UpdateNews;
+
+   procedure ShowAllNews(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      AllNews := not AllNews;
+      UpdateNews;
       if AllNews then
          Set_Label
            (Gtk_Button(Get_Object(Object, "btnfull")),
@@ -93,9 +98,6 @@ package body MainMenu is
 
    procedure CreateMainMenu is
       Error: aliased GError;
-      ChangesFile: File_Type;
-      NewsText: Unbounded_String := Null_Unbounded_String;
-      FileText: Unbounded_String;
    begin
       Gtk_New(Builder);
       if Add_From_File
@@ -118,28 +120,7 @@ package body MainMenu is
       if HallOfFame_Array(1).Name = Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
       end if;
-      if not Exists(To_String(DocDirectory) & "CHANGELOG.md") then
-         NewsText :=
-           To_Unbounded_String
-             ("Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
-              To_String(DocDirectory) &
-              "' directory?");
-      else
-         Open(ChangesFile, In_File, To_String(DocDirectory) & "CHANGELOG.md");
-         Set_Line(ChangesFile, 6);
-         while not End_Of_File(ChangesFile) loop
-            FileText := To_Unbounded_String(Get_Line(ChangesFile));
-            if Length(FileText) > 1 then
-               exit when Slice(FileText, 1, 3) = "## ";
-            end if;
-            Append(NewsText, FileText);
-            Append(NewsText, ASCII.LF);
-         end loop;
-         Close(ChangesFile);
-      end if;
-      Set_Text
-        (Gtk_Text_Buffer(Get_Object(Builder, "newsbuffer")),
-         To_String(NewsText));
+      UpdateNews;
       Set_Version
         (Gtk_About_Dialog(Get_Object(Builder, "aboutdialog")),
          GameVersion);
