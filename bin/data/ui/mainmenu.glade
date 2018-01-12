@@ -348,24 +348,48 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkTreeViewColumn">
             <property name="resizable">True</property>
             <property name="title" translatable="yes">Position</property>
+            <child>
+              <object class="GtkCellRendererText"/>
+              <attributes>
+                <attribute name="text">0</attribute>
+              </attributes>
+            </child>
           </object>
         </child>
         <child>
           <object class="GtkTreeViewColumn">
             <property name="resizable">True</property>
             <property name="title" translatable="yes">Name</property>
+            <child>
+              <object class="GtkCellRendererText"/>
+              <attributes>
+                <attribute name="text">1</attribute>
+              </attributes>
+            </child>
           </object>
         </child>
         <child>
           <object class="GtkTreeViewColumn">
             <property name="resizable">True</property>
             <property name="title" translatable="yes">Points</property>
+            <child>
+              <object class="GtkCellRendererText"/>
+              <attributes>
+                <attribute name="text">2</attribute>
+              </attributes>
+            </child>
           </object>
         </child>
         <child>
           <object class="GtkTreeViewColumn">
             <property name="resizable">True</property>
             <property name="title" translatable="yes">Died by</property>
+            <child>
+              <object class="GtkCellRendererText"/>
+              <attributes>
+                <attribute name="text">3</attribute>
+              </attributes>
+            </child>
           </object>
         </child>
       </object>
