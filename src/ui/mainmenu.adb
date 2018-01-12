@@ -99,7 +99,8 @@ package body MainMenu is
    end ShowAllNews;
 
    procedure ShowHallOfFame(Object: access Gtkada_Builder_Record'Class) is
-      HofList: constant Gtk_List_Store := Gtk_List_Store(Get_Object(Object, "hoflist"));
+      HofList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Object, "hoflist"));
       Iter: Gtk_Tree_Iter;
    begin
       Clear(HofList);
