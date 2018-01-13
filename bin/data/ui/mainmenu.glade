@@ -471,6 +471,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Enter character name or press Enter key for random name.</property>
+                <signal name="activate" handler="Random_Name" object="entrycharactername" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -482,6 +483,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Enter ship name or press Enter for random ship name.</property>
+                <signal name="activate" handler="Random_Name" object="entryshipname" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">1</property>
