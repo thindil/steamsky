@@ -1875,4 +1875,18 @@ Price = 6000
 InstallTime = 90
 Size = 1
 Description = Allow collect water from air. Made of titanium.
+[148]
+Name = Small titanium medical room
+Type = Medical_room
+Weight = 1000
+Value = 0
+MaxValue = 0
+Durability = 400
+Material = Titanium
+Skill = Engineering
+Price = 6000
+InstallTime = 90
+Size = 1
+Unique = Yes
+Description = Allow treat wounded crew members. Made of titanium.
 []
