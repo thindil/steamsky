@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Text_IO; use Ada.Text_IO;
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Glib; use Glib;
@@ -40,7 +41,7 @@ package body Goals.UI is
    begin
       if Add_From_File
           (Builder,
-           To_String(DataDirectory) & "ui/goals.glade",
+           To_String(DataDirectory) & "ui" & Dir_Separator & "goals.glade",
            Error'Access) =
         Guint(0) then
          Put_Line("Error : " & Get_Message(Error));
