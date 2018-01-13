@@ -18,23 +18,30 @@
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkTreeView">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="model">goalslist</property>
-            <property name="headers_visible">False</property>
-            <property name="headers_clickable">False</property>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection"/>
-            </child>
+            <property name="shadow_type">in</property>
             <child>
-              <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">column</property>
+              <object class="GtkTreeView">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="model">goalslist</property>
+                <property name="headers_visible">False</property>
+                <property name="headers_clickable">False</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
                 <child>
-                  <object class="GtkCellRendererText"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
+                  <object class="GtkTreeViewColumn">
+                    <property name="title" translatable="yes">column</property>
+                    <child>
+                       <object class="GtkCellRendererText"/>
+                       <attributes>
+                          <attribute name="text">0</attribute>
+                       </attributes>
+                    </child>
+                  </object>
                 </child>
               </object>
             </child>
@@ -46,8 +53,8 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="btnselect">
-            <property name="label" translatable="yes">Select goal</property>
+          <object class="GtkButton">
+            <property name="label" translatable="yes">button</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
