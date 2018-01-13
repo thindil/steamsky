@@ -17,6 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
@@ -155,7 +156,7 @@ package body MainMenu is
       Gtk_New(Builder);
       if Add_From_File
           (Builder,
-           To_String(DataDirectory) & "ui/mainmenu.glade",
+           To_String(DataDirectory) & "ui" & Dir_Separator & "mainmenu.glade",
            Error'Access) =
         Guint(0) then
          Put_Line("Error : " & Get_Message(Error));
