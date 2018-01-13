@@ -36,10 +36,10 @@
                   <object class="GtkTreeViewColumn">
                     <property name="title" translatable="yes">column</property>
                     <child>
-                       <object class="GtkCellRendererText"/>
-                       <attributes>
-                          <attribute name="text">0</attribute>
-                       </attributes>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
                     </child>
                   </object>
                 </child>
@@ -54,7 +54,7 @@
         </child>
         <child>
           <object class="GtkButton">
-            <property name="label" translatable="yes">button</property>
+            <property name="label" translatable="yes">Select goal</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

@@ -36,6 +36,7 @@ with HallOfFame; use HallOfFame;
 with Ships; use Ships;
 with Crew; use Crew;
 with Config; use Config;
+with Goals.UI; use Goals.UI;
 
 package body MainMenu is
 
@@ -166,6 +167,7 @@ package body MainMenu is
       Register_Handler(Builder, "Show_Window", ShowWindow'Access);
       Register_Handler(Builder, "Show_Hall_Of_Fame", ShowHallOfFame'Access);
       Register_Handler(Builder, "Random_Name", RandomName'Access);
+      CreateGoalsMenu(Builder);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if not Exists(To_String(SaveDirectory) & "savegame.dat") then
