@@ -26,11 +26,16 @@ with Gtk.Button; use Gtk.Button;
 with Gtk.About_Dialog; use Gtk.About_Dialog;
 with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
+with Gtk.GEntry; use Gtk.GEntry;
+with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
 with HallOfFame; use HallOfFame;
+with Ships; use Ships;
+with Crew; use Crew;
+with Config; use Config;
 
 package body MainMenu is
 
@@ -51,6 +56,20 @@ package body MainMenu is
 
    procedure ShowWindow(User_Data: access GObject_Record'Class) is
    begin
+      if User_Data = Get_Object(Builder, "newgamewindow") then
+         if Get_Text(Gtk_GEntry(Get_Object(Builder, "entrycharactername"))) =
+           "" then
+            Set_Text
+              (Gtk_Entry(Get_Object(Builder, "entrycharactername")),
+               To_String(NewGameSettings.PlayerName));
+         end if;
+         if Get_Text(Gtk_GEntry(Get_Object(Builder, "entryshipname"))) =
+           "" then
+            Set_Text
+              (Gtk_Entry(Get_Object(Builder, "entryshipname")),
+               To_String(NewGameSettings.ShipName));
+         end if;
+      end if;
       Show_All(Gtk_Widget(User_Data));
    end ShowWindow;
 
@@ -115,6 +134,20 @@ package body MainMenu is
       Show_All(Gtk_Widget(Get_Object(Object, "hofwindow")));
    end ShowHallOfFame;
 
+   procedure RandomName(User_Data: access GObject_Record'Class) is
+   begin
+      if User_Data = Get_Object(Builder, "entryshipname") then
+         Set_Text(Gtk_Entry(User_Data), To_String(GenerateShipName));
+      else
+         if Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender"))) =
+           0 then
+            Set_Text(Gtk_Entry(User_Data), To_String(GenerateMemberName('M')));
+         else
+            Set_Text(Gtk_Entry(User_Data), To_String(GenerateMemberName('F')));
+         end if;
+      end if;
+   end RandomName;
+
    procedure CreateMainMenu is
       Error: aliased GError;
    begin
@@ -132,6 +165,7 @@ package body MainMenu is
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Show_Window", ShowWindow'Access);
       Register_Handler(Builder, "Show_Hall_Of_Fame", ShowHallOfFame'Access);
+      Register_Handler(Builder, "Random_Name", RandomName'Access);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if not Exists(To_String(SaveDirectory) & "savegame.dat") then
@@ -144,6 +178,12 @@ package body MainMenu is
       Set_Version
         (Gtk_About_Dialog(Get_Object(Builder, "aboutdialog")),
          GameVersion);
+      Set_Text
+        (Gtk_Entry(Get_Object(Builder, "entrycharactername")),
+         To_String(NewGameSettings.PlayerName));
+      Set_Text
+        (Gtk_Entry(Get_Object(Builder, "entryshipname")),
+         To_String(NewGameSettings.ShipName));
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
    end CreateMainMenu;
 
