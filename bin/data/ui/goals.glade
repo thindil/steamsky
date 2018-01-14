@@ -6,6 +6,8 @@
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
+      <!-- column-name index -->
+      <column type="guint"/>
     </columns>
   </object>
   <object class="GtkWindow" id="goalswindow">
@@ -27,12 +29,13 @@
             <property name="hscrollbar_policy">never</property>
             <property name="shadow_type">in</property>
             <child>
-              <object class="GtkTreeView">
+              <object class="GtkTreeView" id="treegoals">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="model">goalslist</property>
                 <property name="headers_visible">False</property>
                 <property name="headers_clickable">False</property>
+                <signal name="cursor-changed" handler="Goal_Selected" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
                 </child>
@@ -57,11 +60,12 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton">
+          <object class="GtkButton" id="btnselectgoal">
             <property name="label" translatable="yes">Select goal</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <signal name="clicked" handler="Select_Goal" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>

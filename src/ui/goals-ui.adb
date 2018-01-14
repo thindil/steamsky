@@ -20,6 +20,9 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Store; use Gtk.Tree_Store;
+with Gtk.Tree_View; use Gtk.Tree_View;
+with Gtk.Tree_Selection; use Gtk.Tree_Selection;
+with Gtk.Button; use Gtk.Button;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -39,6 +42,38 @@ package body Goals.UI is
       Show_All(Gtk_Widget(Get_Object(Object, "goalswindow")));
    end ShowGoalsMenu;
 
+   procedure GoalSelected(Object: access Gtkada_Builder_Record'Class) is
+      Iter: Gtk_Tree_Iter;
+      GoalsView: constant Gtk_Tree_View :=
+        Gtk_Tree_View(Get_Object(Object, "treegoals"));
+      GoalsModel: Gtk_Tree_Model;
+   begin
+      Get_Selected(Get_Selection(GoalsView), GoalsModel, Iter);
+      if Get_String(GoalsModel, Iter, 0) /= "Random" and
+        Get_Int(GoalsModel, Iter, 1) = 0 then
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnselectgoal")), False);
+      else
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnselectgoal")), True);
+      end if;
+   end GoalSelected;
+
+   procedure SelectGoal(Object: access Gtkada_Builder_Record'Class) is
+      Iter: Gtk_Tree_Iter;
+      GoalsView: constant Gtk_Tree_View :=
+        Gtk_Tree_View(Get_Object(Object, "treegoals"));
+      GoalsModel: Gtk_Tree_Model;
+   begin
+      Get_Selected(Get_Selection(GoalsView), GoalsModel, Iter);
+      if Get_String(GoalsModel, Iter, 0) = "Random" then
+         ClearCurrentGoal;
+         Set_Label(Gtk_Button(Get_Object(Object, "btngoal")), "Random");
+      else
+         CurrentGoal := Goals_List(Positive(Get_Int(GoalsModel, Iter, 1)));
+         Set_Label(Gtk_Button(Get_Object(Object, "btngoal")), GoalText(0));
+      end if;
+      Hide(Gtk_Widget(Get_Object(Object, "goalswindow")));
+   end SelectGoal;
+
    procedure CreateGoalsMenu(Builder: Gtkada_Builder) is
       Error: aliased GError;
       GoalsList: Gtk_Tree_Store;
@@ -48,6 +83,7 @@ package body Goals.UI is
       begin
          Append(GoalsList, CategoryIter, Null_Iter);
          Set(GoalsList, CategoryIter, 0, CategoryName);
+         Set(GoalsList, CategoryIter, 1, 0);
          for I in Goals_List.Iterate loop
             if Goals_List(I).GType = GType then
                Append(GoalsList, GoalsIter, CategoryIter);
@@ -56,6 +92,7 @@ package body Goals.UI is
                   GoalsIter,
                   0,
                   GoalText(Goals_Container.To_Index(I)));
+               Set(GoalsList, GoalsIter, 1, Gint(Goals_Container.To_Index(I)));
             end if;
          end loop;
       end AddGoals;
@@ -70,10 +107,13 @@ package body Goals.UI is
       end if;
       Register_Handler(Builder, "Show_Goals", ShowGoalsMenu'Access);
       Register_Handler(Builder, "Hide_Goals", HideGoals'Access);
+      Register_Handler(Builder, "Goal_Selected", GoalSelected'Access);
+      Register_Handler(Builder, "Select_Goal", SelectGoal'Access);
       LoadGoals;
       GoalsList := Gtk_Tree_Store(Get_Object(Builder, "goalslist"));
       Append(GoalsList, CategoryIter, Null_Iter);
       Set(GoalsList, CategoryIter, 0, "Random");
+      Set(GoalsList, CategoryIter, 1, 0);
       AddGoals("Gain max reputation in bases", REPUTATION);
       AddGoals("Destroy enemy ships", DESTROY);
       AddGoals("Discover map", DISCOVER);
