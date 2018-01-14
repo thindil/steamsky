@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -40,8 +40,8 @@ package Goals is
    Goals_List: Goals_Container
      .Vector; -- List of player goals available in game
    CurrentGoal: Goal_Data; -- Player current goal
-   Goals_Directory_Not_Found: exception; -- Raised when no directory with modules files
-   Goals_Files_Not_Found: exception; -- Raised when no files with modules
+   Goals_Directory_Not_Found: exception; -- Raised when no directory with goals files
+   Goals_Files_Not_Found: exception; -- Raised when no files with goals
 
    procedure LoadGoals; -- Load player goals from files
    function GoalText
