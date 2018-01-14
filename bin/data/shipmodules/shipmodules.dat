@@ -1889,4 +1889,17 @@ InstallTime = 90
 Size = 1
 Unique = Yes
 Description = Allow treat wounded crew members. Made of titanium.
+[149]
+Name = Advanced titanium cabin
+Type = Cabin
+Weight = 1000
+Value = 40
+MaxValue = 40
+Durability = 200
+Material = Titanium
+Skill = Engineering
+Price = 2500
+InstallTime = 120
+Size = 1
+Description = Small, decorated cabin made of titanium.
 []
