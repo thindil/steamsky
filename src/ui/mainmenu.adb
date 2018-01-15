@@ -278,6 +278,27 @@ package body MainMenu is
       end if;
    end LoadGame;
 
+   procedure NewGame(Object: access Gtkada_Builder_Record'Class) is
+      CharacterName: constant String := Get_Text(Gtk_Entry(Get_Object(Object, "entrycharactername")));
+      ShipName: constant String := Get_Text(Gtk_Entry(Get_Object(Object, "entryshipname")));
+      Gender: Character;
+   begin
+      Hide(Gtk_Widget(Get_Object(Object, "newgamewindow")));
+      if LoadGameData then
+         if Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender"))) = 0 then
+            Gender := 'M';
+         else
+            Gender := 'F';
+         end if;
+         NewGame(To_Unbounded_String(CharacterName), To_Unbounded_String(ShipName), Gender);
+         Hide(Gtk_Widget(Get_Object(Object, "mainmenuwindow")));
+         CreateSkyMap;
+      else
+         Hide(Gtk_Widget(Get_Object(Object, "btnloadgame")));
+         Hide(Gtk_Widget(Get_Object(Object, "btnnewgame")));
+      end if;
+   end NewGame;
+
    procedure CreateMainMenu is
       Error: aliased GError;
    begin
@@ -298,6 +319,7 @@ package body MainMenu is
       Register_Handler(Builder, "Random_Name", RandomName'Access);
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
       Register_Handler(Builder, "Load_Game", LoadGame'Access);
+      Register_Handler(Builder, "New_Game", NewGame'Access);
       Do_Connect(Builder);
       CreateGoalsMenu;
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
