@@ -1902,4 +1902,17 @@ Price = 2500
 InstallTime = 120
 Size = 1
 Description = Small, decorated cabin made of titanium.
+[150]
+Name = Extended titanium cabin
+Type = Cabin
+Weight = 1600
+Value = 60
+MaxValue = 60
+Durability = 200
+Material = Titanium
+Skill = Engineering
+Price = 4000
+InstallTime = 150
+Size = 1
+Description = Small, decorated cabin made of titanium with few better quality furnitures.
 []
