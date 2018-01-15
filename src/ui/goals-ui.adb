@@ -23,11 +23,13 @@ with Gtk.Tree_Store; use Gtk.Tree_Store;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
 with Goals; use Goals;
+with Utils.UI; use Utils.UI;
 
 package body Goals.UI is
 
@@ -120,6 +122,19 @@ package body Goals.UI is
       AddGoals("Visit bases", VISIT);
       AddGoals("Craft items", CRAFT);
       AddGoals("Finish missions", MISSION);
+   exception
+      when Goals_Directory_Not_Found =>
+         ShowDialog
+           ("Can't find directory with goals data files.",
+            Gtk_Window(Get_Object(Builder, "mainmenuwindow")));
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnnewgame")), False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnloadgame")), False);
+      when Goals_Files_Not_Found =>
+         ShowDialog
+           ("Can't find files with goals data in goals directory.",
+            Gtk_Window(Get_Object(Builder, "mainmenuwindow")));
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnnewgame")), False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnloadgame")), False);
    end CreateGoalsMenu;
 
 end Goals.UI;
