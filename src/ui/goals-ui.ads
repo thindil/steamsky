@@ -15,10 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 package Goals.UI is
 
-   procedure CreateGoalsMenu(Builder: Gtkada_Builder); -- Create goals menu
+   procedure CreateGoalsMenu; -- Create goals menu
+   procedure ShowGoalsMenu
+     (InMainMenu: Boolean := True); -- Show goals selection menu to player
 
 end Goals.UI;

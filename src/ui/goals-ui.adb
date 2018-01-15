@@ -17,12 +17,12 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Store; use Gtk.Tree_Store;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
-with Gtk.Button; use Gtk.Button;
 with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
@@ -30,8 +30,12 @@ with Glib.Object; use Glib.Object;
 with Game; use Game;
 with Goals; use Goals;
 with Utils.UI; use Utils.UI;
+with MainMenu; use MainMenu;
 
 package body Goals.UI is
+
+   Builder: Gtkada_Builder;
+   FromMainMenu: Boolean := True;
 
    function HideGoals
      (User_Data: access Gtkada_Builder_Record'Class) return Boolean is
@@ -39,9 +43,10 @@ package body Goals.UI is
       return Hide_On_Delete(Gtk_Widget(Get_Object(User_Data, "goalswindow")));
    end HideGoals;
 
-   procedure ShowGoalsMenu(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowGoalsMenu(InMainMenu: Boolean := True) is
    begin
-      Show_All(Gtk_Widget(Get_Object(Object, "goalswindow")));
+      FromMainMenu := InMainMenu;
+      Show_All(Gtk_Widget(Get_Object(Builder, "goalswindow")));
    end ShowGoalsMenu;
 
    procedure GoalSelected(Object: access Gtkada_Builder_Record'Class) is
@@ -68,15 +73,19 @@ package body Goals.UI is
       Get_Selected(Get_Selection(GoalsView), GoalsModel, Iter);
       if Get_String(GoalsModel, Iter, 0) = "Random" then
          ClearCurrentGoal;
-         Set_Label(Gtk_Button(Get_Object(Object, "btngoal")), "Random");
+         if FromMainMenu then
+            UpdateGoalButton("Random");
+         end if;
       else
          CurrentGoal := Goals_List(Positive(Get_Int(GoalsModel, Iter, 1)));
-         Set_Label(Gtk_Button(Get_Object(Object, "btngoal")), GoalText(0));
+         if FromMainMenu then
+            UpdateGoalButton(GoalText(0));
+         end if;
       end if;
       Hide(Gtk_Widget(Get_Object(Object, "goalswindow")));
    end SelectGoal;
 
-   procedure CreateGoalsMenu(Builder: Gtkada_Builder) is
+   procedure CreateGoalsMenu is
       Error: aliased GError;
       GoalsList: Gtk_Tree_Store;
       CategoryIter: Gtk_Tree_Iter;
@@ -99,6 +108,7 @@ package body Goals.UI is
          end loop;
       end AddGoals;
    begin
+      Gtk_New(Builder);
       if Add_From_File
           (Builder,
            To_String(DataDirectory) & "ui" & Dir_Separator & "goals.glade",
@@ -107,10 +117,10 @@ package body Goals.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Register_Handler(Builder, "Show_Goals", ShowGoalsMenu'Access);
       Register_Handler(Builder, "Hide_Goals", HideGoals'Access);
       Register_Handler(Builder, "Goal_Selected", GoalSelected'Access);
       Register_Handler(Builder, "Select_Goal", SelectGoal'Access);
+      Do_Connect(Builder);
       LoadGoals;
       GoalsList := Gtk_Tree_Store(Get_Object(Builder, "goalslist"));
       Append(GoalsList, CategoryIter, Null_Iter);
