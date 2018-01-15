@@ -150,6 +150,12 @@ package body MainMenu is
       end if;
    end RandomName;
 
+   procedure ShowGoals(Object: access Gtkada_Builder_Record'Class) is
+      pragma Unreferenced(Object);
+   begin
+      ShowGoalsMenu;
+   end ShowGoals;
+
    procedure CreateMainMenu is
       Error: aliased GError;
    begin
@@ -168,8 +174,9 @@ package body MainMenu is
       Register_Handler(Builder, "Show_Window", ShowWindow'Access);
       Register_Handler(Builder, "Show_Hall_Of_Fame", ShowHallOfFame'Access);
       Register_Handler(Builder, "Random_Name", RandomName'Access);
-      CreateGoalsMenu(Builder);
+      Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
       Do_Connect(Builder);
+      CreateGoalsMenu;
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if not Exists(To_String(SaveDirectory) & "savegame.dat") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
@@ -204,5 +211,10 @@ package body MainMenu is
          To_String(Message));
       Show_All(Gtk_Widget(Get_Object(Builder, "errordialog")));
    end ShowErrorInfo;
+
+   procedure UpdateGoalButton(Message: String) is
+   begin
+      Set_Label(Gtk_Button(Get_Object(Builder, "btngoal")), Message);
+   end UpdateGoalButton;
 
 end MainMenu;

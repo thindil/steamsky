@@ -22,5 +22,7 @@ package MainMenu is
    procedure CreateMainMenu; -- Create main menu and show it
    procedure ShowErrorInfo
      (Message: Unbounded_String); -- Show informations about error
+   procedure UpdateGoalButton
+     (Message: String); -- Update label on character goal button
 
 end MainMenu;
