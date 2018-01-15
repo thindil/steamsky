@@ -17,6 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with Ada.Exceptions; use Ada.Exceptions;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
@@ -29,6 +30,7 @@ with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
+with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -38,6 +40,16 @@ with Ships; use Ships;
 with Crew; use Crew;
 with Config; use Config;
 with Goals.UI; use Goals.UI;
+with Maps.UI; use Maps.UI;
+with Help; use Help;
+with Items; use Items;
+with ShipModules; use ShipModules;
+with Crafts; use Crafts;
+with Mobs; use Mobs;
+with Goals; use Goals;
+with Game.SaveLoad; use Game.SaveLoad;
+with Utils.UI; use Utils.UI;
+with Log; use Log;
 
 package body MainMenu is
 
@@ -156,6 +168,116 @@ package body MainMenu is
       ShowGoalsMenu;
    end ShowGoals;
 
+   function LoadGameData(NewGame: Boolean := True) return Boolean is
+      Parent: constant Gtk_Window := Gtk_Window(Get_Object(Builder, "mainmenuwindow"));
+   begin
+      LoadHelp;
+      LoadItems;
+      LoadShipModules;
+      LoadRecipes;
+      LoadMobs;
+      LoadShips;
+      LoadGoals;
+      SetToolsList;
+      if not NewGame then
+         LoadGame;
+      end if;
+      return True;
+   exception
+      when Help_Directory_Not_Found =>
+         ShowDialog
+            ("Can't load help data. Directory with help files not found.", Parent);
+         return False;
+      when Help_Files_Not_Found =>
+         ShowDialog
+            ("Can't load help data. Files with help data not found.", Parent);
+         return False;
+      when Items_Directory_Not_Found =>
+         ShowDialog
+            ("Can't load items data. Directory with items data files not found.", Parent);
+         return False;
+      when Items_Files_Not_Found =>
+         ShowDialog
+            ("Can't load items data. Files with items data not found.", Parent);
+         return False;
+      when Modules_Directory_Not_Found =>
+         ShowDialog
+            ("Can't load ship modules data. Directory with modules data files not found.", Parent);
+         return False;
+      when Modules_Files_Not_Found =>
+         ShowDialog
+            ("Can't load ship modules data. Files with modules data not found.", Parent);
+         return False;
+      when Recipes_Directory_Not_Found =>
+         ShowDialog
+            ("Can't load recipes data. Directory with recipes data files not found.", Parent);
+         return False;
+      when Recipes_Files_Not_Found =>
+         ShowDialog
+            ("Can't load recipes data. Files with recipes data not found.", Parent);
+         return False;
+      when An_Exception : Recipes_Invalid_Data =>
+         LogMessage(Exception_Message(An_Exception), Everything);
+         ShowDialog
+            ("Can't load recipes data. Invalid value in file. Run game in debug mode to get more info.", Parent);
+         return False;
+      when Mobs_Directory_Not_Found =>
+         ShowDialog
+            ("Can't load mobs data. Directory with mobs data files not found.", Parent);
+         return False;
+      when Mobs_Files_Not_Found =>
+         ShowDialog
+            ("Can't load mobs data. Files with mobs data not found.", Parent);
+         return False;
+      when An_Exception : Mobs_Invalid_Data =>
+         LogMessage(Exception_Message(An_Exception), Everything);
+         ShowDialog
+            ("Can't load mobs data. Invalid value in file. Run game in debug mode to get more info.", Parent);
+         return False;
+      when Ships_Directory_Not_Found =>
+         ShowDialog
+            ("Can't load ships data. Directory with ships data files not found.", Parent);
+         return False;
+      when Ships_Files_Not_Found =>
+         ShowDialog
+            ("Can't load ships data. Files with ships data not found.", Parent);
+         return False;
+      when An_Exception : Ships_Invalid_Data =>
+         LogMessage(Exception_Message(An_Exception), Everything);
+         ShowDialog
+            ("Can't load ships data. Invalid value in file. Run game in debug mode to get more info.", Parent);
+         return False;
+      when SaveGame_Invalid_Version =>
+         ShowDialog
+            ("This saved game is incompatible with this version of game and can't be loaded.", Parent);
+         return False;
+      when An_Exception : SaveGame_Invalid_Data =>
+         LogMessage
+            ("Invalid data in savegame: " & Exception_Message(An_Exception),
+         Everything);
+         ShowDialog
+            ("Can't load savegame file. Invalid data. Run game in debug mode to get more info.", Parent);
+         return False;
+      when Goals_Directory_Not_Found =>
+         ShowDialog
+            ("Can't load goals data. Directory with goals files not found.", Parent);
+         return False;
+      when Goals_Files_Not_Found =>
+         ShowDialog
+            ("Can't load goals data. Files with goals data not found.", Parent);
+         return False;
+   end LoadGameData;   
+
+   procedure LoadGame(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      if LoadGameData(False) then
+         Hide(Gtk_Widget(Get_Object(Object, "mainmenuwindow")));
+         CreateSkyMap;
+      else
+         Hide(Gtk_Widget(Get_Object(Object, "btnloadgame")));
+      end if;
+   end LoadGame;
+
    procedure CreateMainMenu is
       Error: aliased GError;
    begin
@@ -175,6 +297,7 @@ package body MainMenu is
       Register_Handler(Builder, "Show_Hall_Of_Fame", ShowHallOfFame'Access);
       Register_Handler(Builder, "Random_Name", RandomName'Access);
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
+      Register_Handler(Builder, "Load_Game", LoadGame'Access);
       Do_Connect(Builder);
       CreateGoalsMenu;
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);

@@ -115,6 +115,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="label" translatable="yes">Load Game</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="Load_Game" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
