@@ -106,6 +106,9 @@ package body Goals.UI is
          end loop;
       end AddGoals;
    begin
+      if Builder /= null then
+         return;
+      end if;
       Gtk_New(Builder);
       if Add_From_File
           (Builder,
