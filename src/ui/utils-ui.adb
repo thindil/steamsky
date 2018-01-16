@@ -17,6 +17,7 @@
 
 with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Dialog; use Gtk.Dialog;
+with Gtk.Widget; use Gtk.Widget;
 
 package body Utils.UI is
 
@@ -33,5 +34,11 @@ package body Utils.UI is
          Destroy(MessageDialog);
       end if;
    end ShowDialog;
+
+   function HideWindow
+     (User_Data: access GObject_Record'Class) return Boolean is
+   begin
+      return Hide_On_Delete(Gtk_Widget(User_Data));
+   end HideWindow;
 
 end Utils.UI;
