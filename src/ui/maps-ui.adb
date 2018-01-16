@@ -31,6 +31,10 @@ package body Maps.UI is
    procedure CreateSkyMap is
       Error: aliased GError;
    begin
+      if Builder /= null then
+         Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
+         return;
+      end if;
       Gtk_New(Builder);
       if Add_From_File
           (Builder,
