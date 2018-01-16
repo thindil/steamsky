@@ -62,12 +62,6 @@ package body MainMenu is
       Gtk.Main.Main_Quit;
    end Quit;
 
-   function HideWindow
-     (User_Data: access GObject_Record'Class) return Boolean is
-   begin
-      return Hide_On_Delete(Gtk_Widget(User_Data));
-   end HideWindow;
-
    function LoadGameData(NewGame: Boolean := True) return Boolean is
       Parent: constant Gtk_Window :=
         Gtk_Window(Get_Object(Builder, "mainmenuwindow"));
