@@ -68,20 +68,147 @@ package body MainMenu is
       return Hide_On_Delete(Gtk_Widget(User_Data));
    end HideWindow;
 
+   function LoadGameData(NewGame: Boolean := True) return Boolean is
+      Parent: constant Gtk_Window :=
+        Gtk_Window(Get_Object(Builder, "mainmenuwindow"));
+   begin
+      LoadHelp;
+      LoadItems;
+      LoadShipModules;
+      LoadRecipes;
+      LoadMobs;
+      LoadShips;
+      LoadGoals;
+      SetToolsList;
+      if not NewGame then
+         LoadGame;
+      end if;
+      return True;
+   exception
+      when Help_Directory_Not_Found =>
+         ShowDialog
+           ("Can't load help data. Directory with help files not found.",
+            Parent);
+         return False;
+      when Help_Files_Not_Found =>
+         ShowDialog
+           ("Can't load help data. Files with help data not found.",
+            Parent);
+         return False;
+      when Items_Directory_Not_Found =>
+         ShowDialog
+           ("Can't load items data. Directory with items data files not found.",
+            Parent);
+         return False;
+      when Items_Files_Not_Found =>
+         ShowDialog
+           ("Can't load items data. Files with items data not found.",
+            Parent);
+         return False;
+      when Modules_Directory_Not_Found =>
+         ShowDialog
+           ("Can't load ship modules data. Directory with modules data files not found.",
+            Parent);
+         return False;
+      when Modules_Files_Not_Found =>
+         ShowDialog
+           ("Can't load ship modules data. Files with modules data not found.",
+            Parent);
+         return False;
+      when Recipes_Directory_Not_Found =>
+         ShowDialog
+           ("Can't load recipes data. Directory with recipes data files not found.",
+            Parent);
+         return False;
+      when Recipes_Files_Not_Found =>
+         ShowDialog
+           ("Can't load recipes data. Files with recipes data not found.",
+            Parent);
+         return False;
+      when An_Exception : Recipes_Invalid_Data =>
+         LogMessage(Exception_Message(An_Exception), Everything);
+         ShowDialog
+           ("Can't load recipes data. Invalid value in file. Run game in debug mode to get more info.",
+            Parent);
+         return False;
+      when Mobs_Directory_Not_Found =>
+         ShowDialog
+           ("Can't load mobs data. Directory with mobs data files not found.",
+            Parent);
+         return False;
+      when Mobs_Files_Not_Found =>
+         ShowDialog
+           ("Can't load mobs data. Files with mobs data not found.",
+            Parent);
+         return False;
+      when An_Exception : Mobs_Invalid_Data =>
+         LogMessage(Exception_Message(An_Exception), Everything);
+         ShowDialog
+           ("Can't load mobs data. Invalid value in file. Run game in debug mode to get more info.",
+            Parent);
+         return False;
+      when Ships_Directory_Not_Found =>
+         ShowDialog
+           ("Can't load ships data. Directory with ships data files not found.",
+            Parent);
+         return False;
+      when Ships_Files_Not_Found =>
+         ShowDialog
+           ("Can't load ships data. Files with ships data not found.",
+            Parent);
+         return False;
+      when An_Exception : Ships_Invalid_Data =>
+         LogMessage(Exception_Message(An_Exception), Everything);
+         ShowDialog
+           ("Can't load ships data. Invalid value in file. Run game in debug mode to get more info.",
+            Parent);
+         return False;
+      when SaveGame_Invalid_Version =>
+         ShowDialog
+           ("This saved game is incompatible with this version of game and can't be loaded.",
+            Parent);
+         return False;
+      when An_Exception : SaveGame_Invalid_Data =>
+         LogMessage
+           ("Invalid data in savegame: " & Exception_Message(An_Exception),
+            Everything);
+         ShowDialog
+           ("Can't load savegame file. Invalid data. Run game in debug mode to get more info.",
+            Parent);
+         return False;
+      when Goals_Directory_Not_Found =>
+         ShowDialog
+           ("Can't load goals data. Directory with goals files not found.",
+            Parent);
+         return False;
+      when Goals_Files_Not_Found =>
+         ShowDialog
+           ("Can't load goals data. Files with goals data not found.",
+            Parent);
+         return False;
+   end LoadGameData;
+
    procedure ShowWindow(User_Data: access GObject_Record'Class) is
    begin
       if User_Data = Get_Object(Builder, "newgamewindow") then
-         if Get_Text(Gtk_GEntry(Get_Object(Builder, "entrycharactername"))) =
-           "" then
-            Set_Text
-              (Gtk_Entry(Get_Object(Builder, "entrycharactername")),
-               To_String(NewGameSettings.PlayerName));
-         end if;
-         if Get_Text(Gtk_GEntry(Get_Object(Builder, "entryshipname"))) =
-           "" then
-            Set_Text
-              (Gtk_Entry(Get_Object(Builder, "entryshipname")),
-               To_String(NewGameSettings.ShipName));
+         if LoadGameData then
+            if Get_Text
+                (Gtk_GEntry(Get_Object(Builder, "entrycharactername"))) =
+              "" then
+               Set_Text
+                 (Gtk_Entry(Get_Object(Builder, "entrycharactername")),
+                  To_String(NewGameSettings.PlayerName));
+            end if;
+            if Get_Text(Gtk_GEntry(Get_Object(Builder, "entryshipname"))) =
+              "" then
+               Set_Text
+                 (Gtk_Entry(Get_Object(Builder, "entryshipname")),
+                  To_String(NewGameSettings.ShipName));
+            end if;
+            CreateGoalsMenu;
+         else
+            Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+            Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
          end if;
       end if;
       Show_All(Gtk_Widget(User_Data));
@@ -168,106 +295,6 @@ package body MainMenu is
       ShowGoalsMenu;
    end ShowGoals;
 
-   function LoadGameData(NewGame: Boolean := True) return Boolean is
-      Parent: constant Gtk_Window := Gtk_Window(Get_Object(Builder, "mainmenuwindow"));
-   begin
-      LoadHelp;
-      LoadItems;
-      LoadShipModules;
-      LoadRecipes;
-      LoadMobs;
-      LoadShips;
-      LoadGoals;
-      SetToolsList;
-      if not NewGame then
-         LoadGame;
-      end if;
-      return True;
-   exception
-      when Help_Directory_Not_Found =>
-         ShowDialog
-            ("Can't load help data. Directory with help files not found.", Parent);
-         return False;
-      when Help_Files_Not_Found =>
-         ShowDialog
-            ("Can't load help data. Files with help data not found.", Parent);
-         return False;
-      when Items_Directory_Not_Found =>
-         ShowDialog
-            ("Can't load items data. Directory with items data files not found.", Parent);
-         return False;
-      when Items_Files_Not_Found =>
-         ShowDialog
-            ("Can't load items data. Files with items data not found.", Parent);
-         return False;
-      when Modules_Directory_Not_Found =>
-         ShowDialog
-            ("Can't load ship modules data. Directory with modules data files not found.", Parent);
-         return False;
-      when Modules_Files_Not_Found =>
-         ShowDialog
-            ("Can't load ship modules data. Files with modules data not found.", Parent);
-         return False;
-      when Recipes_Directory_Not_Found =>
-         ShowDialog
-            ("Can't load recipes data. Directory with recipes data files not found.", Parent);
-         return False;
-      when Recipes_Files_Not_Found =>
-         ShowDialog
-            ("Can't load recipes data. Files with recipes data not found.", Parent);
-         return False;
-      when An_Exception : Recipes_Invalid_Data =>
-         LogMessage(Exception_Message(An_Exception), Everything);
-         ShowDialog
-            ("Can't load recipes data. Invalid value in file. Run game in debug mode to get more info.", Parent);
-         return False;
-      when Mobs_Directory_Not_Found =>
-         ShowDialog
-            ("Can't load mobs data. Directory with mobs data files not found.", Parent);
-         return False;
-      when Mobs_Files_Not_Found =>
-         ShowDialog
-            ("Can't load mobs data. Files with mobs data not found.", Parent);
-         return False;
-      when An_Exception : Mobs_Invalid_Data =>
-         LogMessage(Exception_Message(An_Exception), Everything);
-         ShowDialog
-            ("Can't load mobs data. Invalid value in file. Run game in debug mode to get more info.", Parent);
-         return False;
-      when Ships_Directory_Not_Found =>
-         ShowDialog
-            ("Can't load ships data. Directory with ships data files not found.", Parent);
-         return False;
-      when Ships_Files_Not_Found =>
-         ShowDialog
-            ("Can't load ships data. Files with ships data not found.", Parent);
-         return False;
-      when An_Exception : Ships_Invalid_Data =>
-         LogMessage(Exception_Message(An_Exception), Everything);
-         ShowDialog
-            ("Can't load ships data. Invalid value in file. Run game in debug mode to get more info.", Parent);
-         return False;
-      when SaveGame_Invalid_Version =>
-         ShowDialog
-            ("This saved game is incompatible with this version of game and can't be loaded.", Parent);
-         return False;
-      when An_Exception : SaveGame_Invalid_Data =>
-         LogMessage
-            ("Invalid data in savegame: " & Exception_Message(An_Exception),
-         Everything);
-         ShowDialog
-            ("Can't load savegame file. Invalid data. Run game in debug mode to get more info.", Parent);
-         return False;
-      when Goals_Directory_Not_Found =>
-         ShowDialog
-            ("Can't load goals data. Directory with goals files not found.", Parent);
-         return False;
-      when Goals_Files_Not_Found =>
-         ShowDialog
-            ("Can't load goals data. Files with goals data not found.", Parent);
-         return False;
-   end LoadGameData;   
-
    procedure LoadGame(Object: access Gtkada_Builder_Record'Class) is
    begin
       if LoadGameData(False) then
@@ -279,24 +306,24 @@ package body MainMenu is
    end LoadGame;
 
    procedure NewGame(Object: access Gtkada_Builder_Record'Class) is
-      CharacterName: constant String := Get_Text(Gtk_Entry(Get_Object(Object, "entrycharactername")));
-      ShipName: constant String := Get_Text(Gtk_Entry(Get_Object(Object, "entryshipname")));
+      CharacterName: constant String :=
+        Get_Text(Gtk_Entry(Get_Object(Object, "entrycharactername")));
+      ShipName: constant String :=
+        Get_Text(Gtk_Entry(Get_Object(Object, "entryshipname")));
       Gender: Character;
    begin
       Hide(Gtk_Widget(Get_Object(Object, "newgamewindow")));
-      if LoadGameData then
-         if Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender"))) = 0 then
-            Gender := 'M';
-         else
-            Gender := 'F';
-         end if;
-         NewGame(To_Unbounded_String(CharacterName), To_Unbounded_String(ShipName), Gender);
-         Hide(Gtk_Widget(Get_Object(Object, "mainmenuwindow")));
-         CreateSkyMap;
+      if Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender"))) = 0 then
+         Gender := 'M';
       else
-         Hide(Gtk_Widget(Get_Object(Object, "btnloadgame")));
-         Hide(Gtk_Widget(Get_Object(Object, "btnnewgame")));
+         Gender := 'F';
       end if;
+      NewGame
+        (To_Unbounded_String(CharacterName),
+         To_Unbounded_String(ShipName),
+         Gender);
+      Hide(Gtk_Widget(Get_Object(Object, "mainmenuwindow")));
+      CreateSkyMap;
    end NewGame;
 
    procedure CreateMainMenu is
@@ -321,7 +348,6 @@ package body MainMenu is
       Register_Handler(Builder, "Load_Game", LoadGame'Access);
       Register_Handler(Builder, "New_Game", NewGame'Access);
       Do_Connect(Builder);
-      CreateGoalsMenu;
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if not Exists(To_String(SaveDirectory) & "savegame.dat") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
