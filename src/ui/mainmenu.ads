@@ -24,5 +24,6 @@ package MainMenu is
      (Message: Unbounded_String); -- Show informations about error
    procedure UpdateGoalButton
      (Message: String); -- Update label on character goal button
+   procedure ShowMainMenu; -- Show main menu window
 
 end MainMenu;

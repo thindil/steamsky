@@ -123,6 +123,7 @@
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Quit from game</property>
         <property name="use_underline">True</property>
+        <signal name="activate" handler="Quit_Game_Menu" swapped="no"/>
       </object>
     </child>
     <child>
@@ -159,7 +160,7 @@
     <property name="window_position">center</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
-    <signal name="delete-event" handler="Show_Main_Menu" swapped="no"/>
+    <signal name="delete-event" handler="Quit_Game" swapped="no"/>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
