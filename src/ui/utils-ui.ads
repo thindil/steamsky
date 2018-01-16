@@ -24,6 +24,7 @@ package Utils.UI is
      (Message: String;
       Parent: Gtk_Window); -- Show dialog with info
    function HideWindow
-     (User_Data: access GObject_Record'Class) return Boolean; -- Hide window instead of destroying it
+     (User_Data: access GObject_Record'Class)
+     return Boolean; -- Hide window instead of destroying it
 
 end Utils.UI;

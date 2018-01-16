@@ -359,7 +359,7 @@ package body MainMenu is
       Set_Text
         (Gtk_Entry(Get_Object(Builder, "entryshipname")),
          To_String(NewGameSettings.ShipName));
-      Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
+      ShowMainMenu;
    end CreateMainMenu;
 
    procedure ShowErrorInfo(Message: Unbounded_String) is
@@ -381,5 +381,10 @@ package body MainMenu is
    begin
       Set_Label(Gtk_Button(Get_Object(Builder, "btngoal")), Message);
    end UpdateGoalButton;
+
+   procedure ShowMainMenu is
+   begin
+      Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
+   end ShowMainMenu;
 
 end MainMenu;
