@@ -73,6 +73,8 @@ package body Maps.UI is
          ShowDialog
            ("Can't hide last message.",
             Gtk_Window(Get_Object(Object, "skymapwindow")));
+      else
+         LastMessage := Null_Unbounded_String;
       end if;
    end HideLastMessage;
 
