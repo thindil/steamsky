@@ -238,6 +238,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </row>
     </data>
   </object>
+  <object class="GtkTextBuffer" id="txtmessages"/>
   <object class="GtkWindow" id="skymapwindow">
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
@@ -423,6 +424,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkTextView" id="messagesview">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="buffer">txtmessages</property>
                   </object>
                 </child>
               </object>
