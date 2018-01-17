@@ -218,6 +218,41 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <object class="GtkTextBuffer" id="txtmap">
     <property name="tag_table">maptags</property>
   </object>
+  <object class="GtkTextTagTable" id="messagestags">
+    <child type="tag">
+      <object class="GtkTextTag" id="blue1">
+        <property name="foreground">blue</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="yellow1">
+        <property name="foreground">yellow</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="red1">
+        <property name="foreground">red</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="green1">
+        <property name="foreground">green</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="cyan1">
+        <property name="foreground">cyan</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTextBuffer" id="txtmessages">
+    <property name="tag_table">messagestags</property>
+  </object>
   <object class="GtkListStore" id="speedlist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -238,7 +273,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </row>
     </data>
   </object>
-  <object class="GtkTextBuffer" id="txtmessages"/>
   <object class="GtkWindow" id="skymapwindow">
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
@@ -424,6 +458,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkTextView" id="messagesview">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="editable">False</property>
+                    <property name="cursor_visible">False</property>
                     <property name="buffer">txtmessages</property>
                   </object>
                 </child>
