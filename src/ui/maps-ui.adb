@@ -31,6 +31,9 @@ with MainMenu; use MainMenu;
 with Utils.UI; use Utils.UI;
 with Ships; use Ships;
 with Messages; use Messages;
+with Crew; use Crew;
+with ShipModules; use ShipModules;
+with Events; use Events;
 
 package body Maps.UI is
 
@@ -78,6 +81,232 @@ package body Maps.UI is
       end if;
    end HideLastMessage;
 
+   procedure UpdateHeader is
+      HaveWorker, HaveGunner: Boolean := True;
+      NeedCleaning,
+      NeedRepairs,
+      NeedWorker,
+      HavePilot,
+      HaveEngineer,
+      HaveTrader,
+      HaveUpgrader,
+      HaveCleaner,
+      HaveRepairman: Boolean :=
+        False;
+   begin
+      Set_Text(Gtk_Label(Get_Object(Builder, "lbltime")), FormatedTime);
+      for Module of PlayerShip.Modules loop
+         case Modules_List(Module.ProtoIndex).MType is
+            when GUN | HARPOON_GUN =>
+               if Module.Owner = 0 then
+                  HaveGunner := False;
+               elsif PlayerShip.Crew(Module.Owner).Order /= Gunner then
+                  HaveGunner := False;
+               end if;
+            when ALCHEMY_LAB .. GREENHOUSE =>
+               if Module.Data(1) > 0 then
+                  NeedWorker := True;
+                  if Module.Owner = 0 then
+                     HaveWorker := False;
+                  elsif PlayerShip.Crew(Module.Owner).Order /= Craft then
+                     HaveWorker := False;
+                  end if;
+               end if;
+            when CABIN =>
+               if Module.Data(1) /= Module.Data(2) then
+                  NeedCleaning := True;
+               end if;
+            when others =>
+               null;
+         end case;
+         if Module.Durability /= Module.MaxDurability then
+            NeedRepairs := True;
+         end if;
+      end loop;
+      for Member of PlayerShip.Crew loop
+         case Member.Order is
+            when Pilot =>
+               HavePilot := True;
+            when Engineer =>
+               HaveEngineer := True;
+            when Talk =>
+               HaveTrader := True;
+            when Upgrading =>
+               HaveUpgrader := True;
+            when Clean =>
+               HaveCleaner := True;
+            when Repair =>
+               HaveRepairman := True;
+            when others =>
+               null;
+         end case;
+      end loop;
+      if HavePilot then
+         Set_Markup
+           (Gtk_Label(Get_Object(Builder, "lblpilot")),
+            "[<span foreground=""green"">P</span>]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblpilot")),
+            "Pilot is on position.");
+      else
+         Set_Markup
+           (Gtk_Label(Get_Object(Builder, "lblpilot")),
+            "[<span foreground=""red"">P</span>]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblpilot")),
+            "No pilot assigned. Ship can't move.");
+      end if;
+      if HaveEngineer then
+         Set_Markup
+           (Gtk_Label(Get_Object(Builder, "lblengineer")),
+            "[<span foreground=""green"">E</span>]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblengineer")),
+            "Engineer is on position.");
+      else
+         Set_Markup
+           (Gtk_Label(Get_Object(Builder, "lblengineer")),
+            "[<span foreground=""red"">E</span>]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblengineer")),
+            "No engineer assigned. Ship can't move.");
+      end if;
+      if HaveGunner then
+         Set_Markup
+           (Gtk_Label(Get_Object(Builder, "lblgunners")),
+            "[<span foreground=""green"">G</span>]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblgunners")),
+            "All guns are manned.");
+      else
+         Set_Markup
+           (Gtk_Label(Get_Object(Builder, "lblgunners")),
+            "[<span foreground=""red"">G</span>]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblgunners")),
+            "One or more guns don't have gunner.");
+      end if;
+      if NeedRepairs then
+         if HaveRepairman then
+            Set_Markup
+              (Gtk_Label(Get_Object(Builder, "lblrepairs")),
+               "[<span foreground=""green"">R</span>]");
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, "lblrepairs")),
+               "Ship is being repaired.");
+         else
+            Set_Markup
+              (Gtk_Label(Get_Object(Builder, "lblrepairs")),
+               "[<span foreground=""red"">R</span>]");
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, "lblrepairs")),
+               "Ship needs repairs but no one is working on it.");
+         end if;
+      else
+         Set_Text(Gtk_Label(Get_Object(Builder, "lblrepairs")), "[R]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblrepairs")),
+            "Ship no need repairs.");
+      end if;
+      if NeedWorker then
+         if HaveWorker then
+            Set_Markup
+              (Gtk_Label(Get_Object(Builder, "lblcrafting")),
+               "[<span foreground=""green"">M</span>]");
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, "lblcrafting")),
+               "All crafting orders are executed.");
+         else
+            Set_Markup
+              (Gtk_Label(Get_Object(Builder, "lblcrafting")),
+               "[<span foreground=""red"">M</span>]");
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, "lblcrafting")),
+               "You need to assing some crew members to manufacturing.");
+         end if;
+      else
+         Set_Text(Gtk_Label(Get_Object(Builder, "lblcrafting")), "[M]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblcrafting")),
+            "No crafting orders were set.");
+      end if;
+      if PlayerShip.UpgradeModule > 0 then
+         if HaveUpgrader then
+            Set_Markup
+              (Gtk_Label(Get_Object(Builder, "lblupgrade")),
+               "[<span foreground=""green"">U</span>]");
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, "lblupgrade")),
+               "Ship module upgrade in progress.");
+         else
+            Set_Markup
+              (Gtk_Label(Get_Object(Builder, "lblupgrade")),
+               "[<span foreground=""red"">U</span>]");
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, "lblupgrade")),
+               "Ship module upgrade in progress but no one is working on it.");
+         end if;
+      else
+         Set_Text(Gtk_Label(Get_Object(Builder, "lblupgrade")), "[U]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblupgrade")),
+            "No ship module upgrade was set.");
+      end if;
+      if HaveTrader then
+         Set_Markup
+           (Gtk_Label(Get_Object(Builder, "lbltalk")),
+            "[<span foreground=""green"">T</span>]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lbltalk")),
+            "Trader is on position.");
+      elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+         Set_Markup
+           (Gtk_Label(Get_Object(Builder, "lbltalk")),
+            "[<span foreground=""red"">T</span>]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lbltalk")),
+            "No trader assigned. You need one for talk/trade.");
+      elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+         if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+             .EType =
+           FriendlyShip then
+            Set_Markup
+              (Gtk_Label(Get_Object(Builder, "lbltalk")),
+               "[<span foreground=""red"">T</span>]");
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, "lbltalk")),
+               "No trader assigned. You need one for talk/trade.");
+         end if;
+      else
+         Set_Text(Gtk_Label(Get_Object(Builder, "lbltalk")), "[T]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lbltalk")),
+            "No trader needed.");
+      end if;
+      if NeedCleaning then
+         if HaveCleaner then
+            Set_Markup
+              (Gtk_Label(Get_Object(Builder, "lblclean")),
+               "[<span foreground=""green"">C</span>]");
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, "lblclean")),
+               "Ship is cleaned.");
+         else
+            Set_Markup
+              (Gtk_Label(Get_Object(Builder, "lblclean")),
+               "[<span foreground=""red"">C</span>]");
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, "lblclean")),
+               "Ship is dirty but no one is cleaning it.");
+         end if;
+      else
+         Set_Text(Gtk_Label(Get_Object(Builder, "lblclean")), "[C]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblclean")),
+            "Ship no need cleaning.");
+      end if;
+   end UpdateHeader;
+
    procedure CreateSkyMap is
       Error: aliased GError;
    begin
@@ -99,7 +328,7 @@ package body Maps.UI is
             HideLastMessage'Access);
          Do_Connect(Builder);
       end if;
-      Set_Text(Gtk_Label(Get_Object(Builder, "lbltime")), FormatedTime);
+      UpdateHeader;
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       Hide(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
       Hide(Gtk_Widget(Get_Object(Builder, "lblnofood")));
