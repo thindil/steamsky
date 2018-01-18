@@ -24,6 +24,7 @@ with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Label; use Gtk.Label;
+with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
@@ -392,6 +393,47 @@ package body Maps.UI is
       end if;
    end UpdateHeader;
 
+   procedure UpdateMoveButtons is
+   begin
+      if PlayerShip.Speed = DOCKED then
+         Hide(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
+         Set_Text(Gtk_Label(Get_Object(Builder, "btnmove")), "Wait");
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupleft")), False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnup")), False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupright")), False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnleft")), False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnright")), False);
+         Set_Sensitive
+           (Gtk_Widget(Get_Object(Builder, "btnbottomleft")),
+            False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnbottom")), False);
+         Set_Sensitive
+           (Gtk_Widget(Get_Object(Builder, "btnbottomright")),
+            False);
+      else
+         Set_Active
+           (Gtk_Combo_Box(Get_Object(Builder, "cmdspeed")),
+            Gint(ShipSpeed'Pos(PlayerShip.Speed)));
+         Show_All(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
+         if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
+            Show_All(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
+            Set_Text(Gtk_Label(Get_Object(Builder, "btnmove")), "Move");
+         else
+            Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
+            Set_Text(Gtk_Label(Get_Object(Builder, "btnmove")), "Wait");
+         end if;
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupleft")));
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnup")));
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupright")));
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnleft")));
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnright")));
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnbottomleft")));
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnbottom")));
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnbottomright")));
+      end if;
+   end UpdateMoveButtons;
+
    procedure CreateSkyMap is
       Error: aliased GError;
    begin
@@ -425,22 +467,7 @@ package body Maps.UI is
            (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
             To_String(LastMessage));
       end if;
-      if PlayerShip.Speed = DOCKED then
-         Hide(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
-         Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupleft")), False);
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnup")), False);
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupright")), False);
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnleft")), False);
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnright")), False);
-         Set_Sensitive
-           (Gtk_Widget(Get_Object(Builder, "btnbottomleft")),
-            False);
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnbottom")), False);
-         Set_Sensitive
-           (Gtk_Widget(Get_Object(Builder, "btnbottomright")),
-            False);
-      end if;
+      UpdateMoveButtons;
    end CreateSkyMap;
 
 end Maps.UI;
