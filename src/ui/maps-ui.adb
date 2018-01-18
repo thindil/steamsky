@@ -99,6 +99,15 @@ package body Maps.UI is
       ItemIndex, ItemAmount: Natural := 0;
    begin
       Set_Text(Gtk_Label(Get_Object(Builder, "lbltime")), FormatedTime);
+      if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnofuel"))) then
+         Hide(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
+      end if;
+      if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnodrinks"))) then
+         Hide(Gtk_Widget(Get_Object(Builder, "lblnodrinks")));
+      end if;
+      if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnofood"))) then
+         Hide(Gtk_Widget(Get_Object(Builder, "lblnofood")));
+      end if;
       ItemIndex :=
         FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
       if ItemIndex > 0 then
@@ -115,6 +124,7 @@ package body Maps.UI is
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblnofuel")),
                "Low level of fuel on ship.");
+            Show_All(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
          end if;
       else
          Set_Markup
@@ -123,6 +133,7 @@ package body Maps.UI is
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblnofuel")),
             "You can't travel anymore.");
+         Show_All(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
       end if;
       ItemIndex :=
         FindItem(Inventory => PlayerShip.Cargo, ItemType => DrinksType);
@@ -133,6 +144,7 @@ package body Maps.UI is
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblnodrink")),
             "You don't have any drinks in ship.");
+         Show_All(Gtk_Widget(Get_Object(Builder, "lblnodrink")));
       else
          ItemAmount := 0;
          for Item of PlayerShip.Cargo loop
@@ -148,6 +160,7 @@ package body Maps.UI is
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblnodrink")),
                "Low level of drinks on ship.");
+            Show_All(Gtk_Widget(Get_Object(Builder, "lblnodrink")));
          end if;
       end if;
       for FoodType of FoodTypes loop
@@ -162,6 +175,7 @@ package body Maps.UI is
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblnofood")),
             "You don't have any food in ship.");
+         Show_All(Gtk_Widget(Get_Object(Builder, "lblnofood")));
       else
          ItemAmount := 0;
          for Item of PlayerShip.Cargo loop
@@ -179,6 +193,7 @@ package body Maps.UI is
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblnofood")),
                "Low level of food on ship.");
+            Show_All(Gtk_Widget(Get_Object(Builder, "lblnofood")));
          end if;
       end if;
       for Module of PlayerShip.Modules loop
