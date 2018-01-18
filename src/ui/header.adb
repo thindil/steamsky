@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -25,6 +25,7 @@ with ShipModules; use ShipModules;
 with Crew; use Crew;
 with Maps; use Maps;
 with Utils.UI; use Utils.UI;
+with Events; use Events;
 
 package body Header is
 
@@ -430,13 +431,24 @@ package body Header is
             Count => 1,
             Color => 3);
       end if;
-      if not HaveTrader and
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
-         Change_Attributes
-           (Line => 0,
-            Column => (Columns - 6),
-            Count => 1,
-            Color => 3);
+      if not HaveTrader then
+         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+            Change_Attributes
+               (Line => 0,
+               Column => (Columns - 6),
+               Count => 1,
+               Color => 3);
+         elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+            if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                .EType =
+              FriendlyShip then
+               Change_Attributes
+                 (Line => 0,
+                  Column => (Columns - 6),
+                  Count => 1,
+                  Color => 3);
+            end if;
+         end if;
       end if;
       if not HaveCleaner and NeedClean then
          Change_Attributes
