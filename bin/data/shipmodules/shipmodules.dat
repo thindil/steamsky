@@ -1941,4 +1941,18 @@ Price = 2000
 InstallTime = 150
 Size = 1
 Description = Heaviest titanium turret. If turret is destroyed, gun is destroyed too and gunner killed.
+[153]
+Name = Heavy titanium battering ram
+Type = Battering_ram
+Weight = 1500
+Value = 0
+MaxValue = 26
+Durability = 250
+Material = Titanium
+Skill = Engineering
+Price = 2000
+InstallTime = 180
+Unique = Yes
+Size = 1
+Description = Heavy battering ram, made of titanium. Attack enemies automatically when in close range.
 []
