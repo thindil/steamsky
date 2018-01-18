@@ -30,6 +30,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Ship informations</property>
         <property name="use_underline">True</property>
@@ -38,6 +39,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Ship cargo</property>
         <property name="use_underline">True</property>
@@ -46,6 +48,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Crew informations</property>
         <property name="use_underline">True</property>
@@ -54,6 +57,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Ship orders</property>
         <property name="use_underline">True</property>
@@ -62,6 +66,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Crafting</property>
         <property name="use_underline">True</property>
@@ -70,6 +75,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Last messages</property>
         <property name="use_underline">True</property>
@@ -78,6 +84,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">List of known bases</property>
         <property name="use_underline">True</property>
@@ -86,6 +93,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">List of known events</property>
         <property name="use_underline">True</property>
@@ -94,6 +102,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Accepted missions</property>
         <property name="use_underline">True</property>
@@ -102,6 +111,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Wait orders</property>
         <property name="use_underline">True</property>
@@ -110,6 +120,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Move map position</property>
         <property name="use_underline">True</property>
@@ -118,6 +129,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Game statistics</property>
         <property name="use_underline">True</property>
@@ -126,6 +138,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Help</property>
         <property name="use_underline">True</property>
@@ -134,6 +147,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Game options</property>
         <property name="use_underline">True</property>
@@ -151,6 +165,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
+        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Resign from game</property>
         <property name="use_underline">True</property>
