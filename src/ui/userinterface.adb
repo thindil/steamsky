@@ -83,6 +83,9 @@ package body UserInterface is
             OrdersAmount := 4;
          else
             OrdersAmount := 3;
+            if SkyBases(BaseIndex).Owner = Abandoned then
+               OrdersAmount := 4;
+            end if;
          end if;
          MenuIndex := 2;
          if HaveTrader and SkyBases(BaseIndex).Owner /= Abandoned then
