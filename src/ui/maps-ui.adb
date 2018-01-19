@@ -30,8 +30,10 @@ with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Text_Tag; use Gtk.Text_Tag;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Enums; use Gtk.Enums;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
+with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with MainMenu; use MainMenu;
 with Utils.UI; use Utils.UI;
@@ -42,6 +44,7 @@ with ShipModules; use ShipModules;
 with Events; use Events;
 with Items; use Items;
 with Config; use Config;
+with Bases; use Bases;
 
 package body Maps.UI is
 
@@ -499,6 +502,13 @@ package body Maps.UI is
 
    procedure CreateSkyMap is
       Error: aliased GError;
+      MapBuffer: Gtk_Text_Buffer;
+      Iter: Gtk_Text_Iter;
+      Map: Unbounded_String := Null_Unbounded_String;
+      MapTagTable: Gtk_Text_Tag_Table;
+      BgColor: Gdk_RGBA;
+      ColorSuccess: Boolean;
+      MapTag: Gtk_Text_Tag;
    begin
       if Builder = null then
          Gtk_New(Builder);
@@ -520,6 +530,34 @@ package body Maps.UI is
       end if;
       UpdateHeader;
       UpdateMessages;
+      Parse(BgColor, "gray", ColorSuccess);
+      Override_Background_Color(Gtk_Widget(Get_Object(Builder, "mapview")), 0, BgColor);
+      MapBuffer := Gtk_Text_Buffer(Get_Object(Builder, "txtmap"));
+      for Y in SkyMap'Range loop
+         for X in SkyMap'First..SkyMap'Last loop
+            Append(Map, " ");
+         end loop;
+         if Y < SkyMap'Last then
+            Append(Map, ASCII.LF);
+         end if;
+      end loop;
+      Set_Text(MapBuffer, To_String(Map));
+      MapTagTable := Get_Tag_Table(MapBuffer);
+      for X in SkyMap'Range loop
+         for Y in SkyMap'First..SkyMap'Last loop
+            if not SkyMap(X, Y).Visited then
+               MapTag := Lookup(MapTagTable, "gray");
+            else
+               MapTag := Lookup(MapTagTable, "white");
+            end if;
+            if SkyMap(X, Y).BaseIndex > 0 then
+               if SkyBases(SkyMap(X, Y).BaseIndex).Known then
+                  Get_Iter_At_Line_Offset(MapBuffer, Iter, Gint(X - 1), Gint(Y - 1));
+                  Insert_With_Tags(MapBuffer, Iter, "o", MapTag);
+               end if;
+            end if;
+         end loop;
+      end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       if LastMessage = Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
