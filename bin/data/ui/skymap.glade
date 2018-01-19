@@ -225,7 +225,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <object class="GtkTextTag" id="gray">
         <property name="name">gray</property>
         <property name="background">gray</property>
-        <property name="foreground">gray</property>
+        <property name="foreground">white</property>
         <property name="font">Normal</property>
       </object>
     </child>
