@@ -25,6 +25,11 @@ with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
+with Gtk.Text_Buffer; use Gtk.Text_Buffer;
+with Gtk.Text_Iter; use Gtk.Text_Iter;
+with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
+with Gtk.Text_Tag; use Gtk.Text_Tag;
+with Gtk.Button; use Gtk.Button;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
@@ -102,8 +107,8 @@ package body Maps.UI is
       if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnofuel"))) then
          Hide(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
       end if;
-      if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnodrinks"))) then
-         Hide(Gtk_Widget(Get_Object(Builder, "lblnodrinks")));
+      if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnodrink"))) then
+         Hide(Gtk_Widget(Get_Object(Builder, "lblnodrink")));
       end if;
       if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnofood"))) then
          Hide(Gtk_Widget(Get_Object(Builder, "lblnofood")));
@@ -413,7 +418,7 @@ package body Maps.UI is
       if PlayerShip.Speed = DOCKED then
          Hide(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
-         Set_Text(Gtk_Label(Get_Object(Builder, "btnmove")), "Wait");
+         Set_Label(Gtk_Button(Get_Object(Builder, "btnmove")), "Wait");
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupleft")), False);
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnup")), False);
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupright")), False);
@@ -433,7 +438,7 @@ package body Maps.UI is
          Show_All(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
          if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
             Show_All(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
-            Set_Text(Gtk_Label(Get_Object(Builder, "btnmove")), "Move");
+            Set_Label(Gtk_Button(Get_Object(Builder, "btnmove")), "Move");
          else
             Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
             Set_Text(Gtk_Label(Get_Object(Builder, "btnmove")), "Wait");
@@ -448,6 +453,49 @@ package body Maps.UI is
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnbottomright")));
       end if;
    end UpdateMoveButtons;
+
+   procedure UpdateMessages is
+      MessagesBuffer: constant Gtk_Text_Buffer :=
+        Gtk_Text_Buffer(Get_Object(Builder, "txtmessages"));
+      LoopStart: Integer := 0 - MessagesAmount;
+      Message: Message_Data;
+      Iter: Gtk_Text_Iter;
+      TagNames: constant array(1 .. 5) of Unbounded_String :=
+        (To_Unbounded_String("yellow"),
+         To_Unbounded_String("green"),
+         To_Unbounded_String("red"),
+         To_Unbounded_String("blue"),
+         To_Unbounded_String("cyan"));
+   begin
+      Set_Text(MessagesBuffer, "");
+      Get_Start_Iter(MessagesBuffer, Iter);
+      if LoopStart = 0 then
+         return;
+      end if;
+      if LoopStart < -10 then
+         LoopStart := -10;
+      end if;
+      for I in LoopStart .. -1 loop
+         Message := GetMessage(I + 1);
+         if Message.Color = 0 then
+            Insert
+              (MessagesBuffer,
+               Iter,
+               To_String(Message.Message));
+         else
+            Insert_With_Tags
+              (MessagesBuffer,
+               Iter,
+               To_String(Message.Message),
+               Lookup
+                 (Get_Tag_Table(MessagesBuffer),
+                  To_String(TagNames(Message.Color))));
+         end if;
+         if I < -1 then
+            Insert(MessagesBuffer, Iter, "" & ASCII.LF);
+         end if;
+      end loop;
+   end UpdateMessages;
 
    procedure CreateSkyMap is
       Error: aliased GError;
@@ -471,10 +519,8 @@ package body Maps.UI is
          Do_Connect(Builder);
       end if;
       UpdateHeader;
+      UpdateMessages;
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
-      Hide(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
-      Hide(Gtk_Widget(Get_Object(Builder, "lblnofood")));
-      Hide(Gtk_Widget(Get_Object(Builder, "lblnodrink")));
       if LastMessage = Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
       else
