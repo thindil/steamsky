@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - New ship modules: titanium armor, heavy titanium armor, titanium turret,
   small titanium greenhouse, small titanium water collector, small titanium
   medical room, advanced titanium cabin, extended titanium cabin, luxury
-  titanium cabin, heavy titanium turret and heavy titanium battering ram
+  titanium cabin, heavy titanium turret, heavy titanium battering ram and
+  small titanium workshop
 
 ### Changed
 - Updated README.md
