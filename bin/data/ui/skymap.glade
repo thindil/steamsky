@@ -174,16 +174,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   </object>
   <object class="GtkTextTagTable" id="maptags">
     <child type="tag">
-      <object class="GtkTextTag" id="gray">
+      <object class="GtkTextTag" id="white">
         <property name="background">black</property>
-        <property name="foreground">gray</property>
-        <property name="font">Normal</property>
-      </object>
-    </child>
-    <child type="tag">
-      <object class="GtkTextTag" id="blue">
-        <property name="background">black</property>
-        <property name="foreground">blue</property>
+        <property name="foreground">white</property>
         <property name="font">Normal</property>
       </object>
     </child>
@@ -195,9 +188,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </object>
     </child>
     <child type="tag">
-      <object class="GtkTextTag" id="black">
+      <object class="GtkTextTag" id="green">
         <property name="background">black</property>
-        <property name="foreground">black</property>
+        <property name="foreground">green</property>
         <property name="font">Normal</property>
       </object>
     </child>
@@ -209,16 +202,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </object>
     </child>
     <child type="tag">
-      <object class="GtkTextTag" id="green">
+      <object class="GtkTextTag" id="blue">
         <property name="background">black</property>
-        <property name="foreground">green</property>
-        <property name="font">Normal</property>
-      </object>
-    </child>
-    <child type="tag">
-      <object class="GtkTextTag" id="white">
-        <property name="background">black</property>
-        <property name="foreground">white</property>
+        <property name="foreground">blue</property>
         <property name="font">Normal</property>
       </object>
     </child>
@@ -229,37 +215,49 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="font">Normal</property>
       </object>
     </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="gray">
+        <property name="background">gray</property>
+        <property name="foreground">gray</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
   </object>
   <object class="GtkTextBuffer" id="txtmap">
     <property name="tag_table">maptags</property>
   </object>
   <object class="GtkTextTagTable" id="messagestags">
     <child type="tag">
-      <object class="GtkTextTag" id="blue1">
-        <property name="foreground">blue</property>
-        <property name="font">Normal</property>
-      </object>
-    </child>
-    <child type="tag">
       <object class="GtkTextTag" id="yellow1">
+        <property name="name">yellow</property>
         <property name="foreground">yellow</property>
         <property name="font">Normal</property>
       </object>
     </child>
     <child type="tag">
-      <object class="GtkTextTag" id="red1">
-        <property name="foreground">red</property>
-        <property name="font">Normal</property>
-      </object>
-    </child>
-    <child type="tag">
       <object class="GtkTextTag" id="green1">
+        <property name="name">green</property>
         <property name="foreground">green</property>
         <property name="font">Normal</property>
       </object>
     </child>
     <child type="tag">
+      <object class="GtkTextTag" id="red1">
+        <property name="name">red</property>
+        <property name="foreground">red</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="blue1">
+        <property name="name">blue</property>
+        <property name="foreground">blue</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
       <object class="GtkTextTag" id="cyan1">
+        <property name="name">cyan</property>
         <property name="foreground">cyan</property>
         <property name="font">Normal</property>
       </object>
