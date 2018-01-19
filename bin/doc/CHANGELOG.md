@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated README.md
+- Renamed all cabins to small cabins
 
 ### Fixed
 - Typos in old changelog files
