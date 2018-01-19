@@ -37,7 +37,7 @@ InstallTime = 120
 Size = 1
 Description = Smallest available engine. Each ship needs at least one engine to fly.
 [4]
-Name = Basic bronze cabin
+Name = Small basic bronze cabin
 Type = Cabin
 Weight = 200
 Value = 20
@@ -439,7 +439,7 @@ Price = 16000
 InstallTime = 150
 Description = Standard 120mm ship gun. Require empty turret.
 [36]
-Name = Advanced bronze cabin
+Name = Small advanced bronze cabin
 Type = Cabin
 Weight = 400
 Value = 40
@@ -452,7 +452,7 @@ InstallTime = 90
 Size = 1
 Description = Small, decorated cabin made of bronze.
 [37]
-Name = Extended bronze cabin
+Name = Small extended bronze cabin
 Type = Cabin
 Weight = 700
 Value = 60
@@ -465,7 +465,7 @@ InstallTime = 120
 Size = 1
 Description = Small, decorated cabin made of bronze with few better quality furnitures.
 [38]
-Name = Luxury bronze cabin
+Name = Small luxury bronze cabin
 Type = Cabin
 Weight = 1000
 Value = 80
@@ -997,7 +997,7 @@ InstallTime = 270
 Size = 4
 Description = Updated version of huge engine made of iron. Each ship needs at least one engine to fly.
 [80]
-Name = Basic iron cabin
+Name = Small basic iron cabin
 Type = Cabin
 Weight = 250
 Value = 20
@@ -1010,7 +1010,7 @@ InstallTime = 60
 Size = 1
 Description = Small cabin made of iron with just few furnitures.
 [81]
-Name = Advanced iron cabin
+Name = Small advanced iron cabin
 Type = Cabin
 Weight = 450
 Value = 40
@@ -1023,7 +1023,7 @@ InstallTime = 90
 Size = 1
 Description = Small, decorated cabin made of iron.
 [82]
-Name = Extended iron cabin
+Name = Small extended iron cabin
 Type = Cabin
 Weight = 750
 Value = 60
@@ -1036,7 +1036,7 @@ InstallTime = 120
 Size = 1
 Description = Small, decorated cabin made of iron with few better quality furnitures.
 [83]
-Name = Luxury iron cabin
+Name = Small luxury iron cabin
 Type = Cabin
 Weight = 1100
 Value = 80
@@ -1168,7 +1168,7 @@ InstallTime = 120
 Size = 1
 Description = Smallest available engine, made of steel. Each ship needs at least one engine to fly.
 [93]
-Name = Basic steel cabin
+Name = Small basic steel cabin
 Type = Cabin
 Weight = 300
 Value = 20
@@ -1479,7 +1479,7 @@ Size = 1
 Unique = Yes
 Description = Allow treat wounded crew members. Made of steel.
 [117]
-Name = Advanced steel cabin
+Name = Small advanced steel cabin
 Type = Cabin
 Weight = 500
 Value = 40
@@ -1492,7 +1492,7 @@ InstallTime = 90
 Size = 1
 Description = Small, decorated cabin made of steel.
 [118]
-Name = Extended steel cabin
+Name = Small extended steel cabin
 Type = Cabin
 Weight = 800
 Value = 60
@@ -1505,7 +1505,7 @@ InstallTime = 120
 Size = 1
 Description = Small, decorated cabin made of steel with few better quality furnitures.
 [119]
-Name = Luxury steel cabin
+Name = Small luxury steel cabin
 Type = Cabin
 Weight = 1200
 Value = 80
@@ -1890,7 +1890,7 @@ Size = 1
 Unique = Yes
 Description = Allow treat wounded crew members. Made of titanium.
 [149]
-Name = Advanced titanium cabin
+Name = Small advanced titanium cabin
 Type = Cabin
 Weight = 1000
 Value = 40
@@ -1903,7 +1903,7 @@ InstallTime = 120
 Size = 1
 Description = Small, decorated cabin made of titanium.
 [150]
-Name = Extended titanium cabin
+Name = Small extended titanium cabin
 Type = Cabin
 Weight = 1600
 Value = 60
@@ -1916,7 +1916,7 @@ InstallTime = 150
 Size = 1
 Description = Small, decorated cabin made of titanium with few better quality furnitures.
 [151]
-Name = Luxury titanium cabin
+Name = Small luxury titanium cabin
 Type = Cabin
 Weight = 2400
 Value = 80
