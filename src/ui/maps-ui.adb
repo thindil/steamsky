@@ -30,6 +30,7 @@ with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Text_Tag; use Gtk.Text_Tag;
 with Gtk.Text_View; use Gtk.Text_View;
+with Gtk.Text_Mark; use Gtk.Text_Mark;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Enums; use Gtk.Enums;
 with Glib; use Glib;
@@ -45,7 +46,7 @@ with ShipModules; use ShipModules;
 with Events; use Events;
 with Items; use Items;
 with Config; use Config;
-with Gtk.Text_Mark; use Gtk.Text_Mark;
+with Bases; use Bases;
 
 package body Maps.UI is
 
@@ -507,6 +508,17 @@ package body Maps.UI is
       MapBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Object, "txtmap"));
       PlayerMark: constant Gtk_Text_Mark := Get_Mark(MapBuffer, "Player");
+      StartY, EndY, StartX, EndX: Positive;
+      Tags: constant Gtk_Text_Tag_Table := Get_Tag_Table(MapBuffer);
+      WhiteColor: constant Gtk_Text_Tag := Lookup(Tags, "white");
+      GrayColor: constant Gtk_Text_Tag := Lookup(Tags, "gray");
+      RedColor: constant Gtk_Text_Tag := Lookup(Tags, "red");
+      GreenColor: constant Gtk_Text_Tag := Lookup(Tags, "green");
+      BlueColor: constant Gtk_Text_Tag := Lookup(Tags, "blue");
+      CyanColor: constant Gtk_Text_Tag := Lookup(Tags, "cyan");
+      MapChar: Character;
+      MapColor: Gtk_Text_Tag;
+      Result: Boolean;
    begin
       if IsNewGame then
          IsNewGame := False;
@@ -520,8 +532,49 @@ package body Maps.UI is
          EndIter,
          VisibleArea.X + VisibleArea.Width,
          VisibleArea.Y + VisibleArea.Height);
-      --Delete(MapBuffer, Iter, EndIter);
-      -- Add new text
+      StartY := Natural(Get_Line(Iter)) + 1;
+      EndY := Natural(Get_Line(EndIter)) + 1;
+      StartX := Natural(Get_Line_Offset(Iter)) + 1;
+      EndX := Natural(Get_Line_Offset(EndIter)) + 1;
+      Delete(MapBuffer, Iter, EndIter);
+      for Y in StartY .. EndY loop
+         for X in StartX .. EndX loop
+            if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
+               MapChar := '+';
+               MapColor := WhiteColor;
+            else
+               MapChar := ' ';
+               if SkyMap(X, Y).Visited then
+                  MapColor := WhiteColor;
+               else
+                  MapColor := GrayColor;
+               end if;
+               if SkyMap(X, Y).MissionIndex > 0 then
+                  MapChar := '!';
+               elsif SkyMap(X, Y).EventIndex > 0 then
+                  MapChar := '?';
+               elsif SkyMap(X, Y).BaseIndex > 0 then
+                  if SkyBases(SkyMap(X, Y).BaseIndex).Known then
+                     MapChar := 'o';
+                     case SkyBases(SkyMap(X, Y).BaseIndex).BaseType is
+                        when Industrial =>
+                           MapColor := RedColor;
+                        when Agricultural =>
+                           MapColor := GreenColor;
+                        when Refinery =>
+                           MapColor := BlueColor;
+                        when Shipyard =>
+                           MapColor := CyanColor;
+                        when others =>
+                           null;
+                     end case;
+                  end if;
+               end if;
+            end if;
+            Insert_With_Tags(MapBuffer, Iter, "" & MapChar, MapColor);
+         end loop;
+         Forward_Visible_Line(Iter, Result);
+      end loop;
    end DrawMap;
 
    procedure CreateSkyMap is
