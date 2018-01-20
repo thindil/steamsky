@@ -1,4 +1,4 @@
-with "/usr/share/gpr/gtkada";
+with "gtkada";
 
 project steamsky is
     
