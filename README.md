@@ -34,7 +34,7 @@ To build it, you need:
   https://www.adacore.com/download/more
 
   At this moment tested version of GtkAda is 2017 and game require GTK library
-  in version 3.20 or above.
+  in version 3.14 or above.
 
 * optional, but highly recommended:  gprbuild program - should be available in 
   most distributions, if not, download source code from: 
@@ -58,9 +58,9 @@ If you have all, in main source code directory (where this file is):
 
 
 ## Running game
-You need GtkAda library to run game, which should be available in most Linux
-distributions. Type in terminal where game is `./steamsky` or run it from 
-file manager.
+If you use downloaded binaries, you need only Gtk library to run game, which 
+should be available in all Linux distributions. Type in terminal where game 
+is `./steamsky` or run it from file manager.
 
 ### Starting parameters
 You can set game directories by starting parameters. Possible options are:
