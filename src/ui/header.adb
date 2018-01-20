@@ -26,6 +26,7 @@ with Crew; use Crew;
 with Maps; use Maps;
 with Utils.UI; use Utils.UI;
 with Events; use Events;
+with Bases; use Bases;
 
 package body Header is
 
@@ -433,11 +434,15 @@ package body Header is
       end if;
       if not HaveTrader then
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
-            Change_Attributes
-               (Line => 0,
-               Column => (Columns - 6),
-               Count => 1,
-               Color => 3);
+            if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+                .Owner /=
+              Abandoned then
+               Change_Attributes
+                 (Line => 0,
+                  Column => (Columns - 6),
+                  Count => 1,
+                  Color => 3);
+            end if;
          elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
                 .EType =
