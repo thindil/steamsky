@@ -20,7 +20,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.14"/>
   <!-- interface-license-type gplv3 -->
   <!-- interface-name Steam Sky -->
   <!-- interface-copyright 2018 Bartek thindil Jasicki -->
@@ -310,7 +310,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="wrap_mode">word</property>
                     <property name="cursor_visible">False</property>
                     <property name="buffer">errorbuffer</property>
-                    <property name="monospace">True</property>
                   </object>
                 </child>
                 <child type="label">
