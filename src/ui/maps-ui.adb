@@ -480,7 +480,7 @@ package body Maps.UI is
       if LoopStart < -10 then
          LoopStart := -10;
       end if;
-      for I in LoopStart .. -1 loop
+      for I in reverse LoopStart .. -1 loop
          Message := GetMessage(I + 1);
          if Message.Color = 0 then
             Insert(MessagesBuffer, Iter, To_String(Message.Message));
@@ -493,7 +493,7 @@ package body Maps.UI is
                  (Get_Tag_Table(MessagesBuffer),
                   To_String(TagNames(Message.Color))));
          end if;
-         if I < -1 then
+         if I > LoopStart then
             Insert(MessagesBuffer, Iter, "" & ASCII.LF);
          end if;
       end loop;
@@ -504,7 +504,8 @@ package body Maps.UI is
       MapView: constant Gtk_Text_View :=
         Gtk_Text_View(Get_Object(Object, "mapview"));
       Iter, EndIter: Gtk_Text_Iter;
-      MapBuffer: constant Gtk_Text_Buffer := Gtk_Text_Buffer(Get_Object(Object, "txtmap"));
+      MapBuffer: constant Gtk_Text_Buffer :=
+        Gtk_Text_Buffer(Get_Object(Object, "txtmap"));
       PlayerMark: constant Gtk_Text_Mark := Get_Mark(MapBuffer, "Player");
    begin
       if IsNewGame then
