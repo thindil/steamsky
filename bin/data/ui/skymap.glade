@@ -20,7 +20,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.14"/>
   <!-- interface-license-type gplv3 -->
   <!-- interface-name Steam Sky -->
   <!-- interface-copyright 2018 Bartek thindil Jasicki -->
@@ -172,6 +172,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </object>
     </child>
   </object>
+  <object class="GtkAdjustment" id="maphorizontaladj">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <signal name="value-changed" handler="Scroll_Map" swapped="no"/>
+  </object>
   <object class="GtkTextTagTable" id="maptags">
     <child type="tag">
       <object class="GtkTextTag" id="white">
@@ -232,6 +238,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   </object>
   <object class="GtkTextBuffer" id="txtmap">
     <property name="tag_table">maptags</property>
+  </object>
+  <object class="GtkAdjustment" id="mapverticaladj">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <signal name="value-changed" handler="Scroll_Map" swapped="no"/>
   </object>
   <object class="GtkTextTagTable" id="messagestags">
     <child type="tag">
@@ -544,6 +556,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="hadjustment">maphorizontaladj</property>
+            <property name="vadjustment">mapverticaladj</property>
             <property name="shadow_type">in</property>
             <child>
               <object class="GtkTextView" id="mapview">
@@ -552,7 +566,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="editable">False</property>
                 <property name="cursor_visible">False</property>
                 <property name="buffer">txtmap</property>
-                <property name="monospace">True</property>
               </object>
             </child>
           </object>
