@@ -30,7 +30,6 @@ with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Text_Tag; use Gtk.Text_Tag;
 with Gtk.Text_View; use Gtk.Text_View;
-with Gtk.Text_Mark; use Gtk.Text_Mark;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Enums; use Gtk.Enums;
 with Glib; use Glib;
@@ -51,7 +50,6 @@ with Bases; use Bases;
 package body Maps.UI is
 
    Builder: Gtkada_Builder;
-   IsNewGame: Boolean;
 
    function QuitGame
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
@@ -500,14 +498,13 @@ package body Maps.UI is
       end loop;
    end UpdateMessages;
 
-   procedure DrawMap(Object: access Gtkada_Builder_Record'Class) is
+   procedure DrawMap is
       VisibleArea: Gdk_Rectangle;
       MapView: constant Gtk_Text_View :=
-        Gtk_Text_View(Get_Object(Object, "mapview"));
-      Iter, EndIter: Gtk_Text_Iter;
+        Gtk_Text_View(Get_Object(Builder, "mapview"));
+      Iter : Gtk_Text_Iter;
       MapBuffer: constant Gtk_Text_Buffer :=
-        Gtk_Text_Buffer(Get_Object(Object, "txtmap"));
-      PlayerMark: constant Gtk_Text_Mark := Get_Mark(MapBuffer, "Player");
+        Gtk_Text_Buffer(Get_Object(Builder, "txtmap"));
       StartY, EndY, StartX, EndX: Positive;
       Tags: constant Gtk_Text_Tag_Table := Get_Tag_Table(MapBuffer);
       WhiteColor: constant Gtk_Text_Tag := Lookup(Tags, "white");
@@ -518,25 +515,13 @@ package body Maps.UI is
       CyanColor: constant Gtk_Text_Tag := Lookup(Tags, "cyan");
       MapChar: Character;
       MapColor: Gtk_Text_Tag;
-      Result: Boolean;
    begin
-      if IsNewGame then
-         IsNewGame := False;
-         Scroll_To_Mark(MapView, PlayerMark, 0.0, True, 0.5, 0.5);
-         return;
-      end if;
       Get_Visible_Rect(MapView, VisibleArea);
-      Get_Iter_At_Location(MapView, Iter, VisibleArea.X, VisibleArea.Y);
-      Get_Iter_At_Location
-        (MapView,
-         EndIter,
-         VisibleArea.X + VisibleArea.Width,
-         VisibleArea.Y + VisibleArea.Height);
-      StartY := Natural(Get_Line(Iter)) + 1;
-      EndY := Natural(Get_Line(EndIter)) + 1;
-      StartX := Natural(Get_Line_Offset(Iter)) + 1;
-      EndX := Natural(Get_Line_Offset(EndIter)) + 1;
-      Delete(MapBuffer, Iter, EndIter);
+      StartY := 1;
+      StartX := 1;
+      EndY := 10;
+      EndX := 10;
+      Get_Start_Iter(MapBuffer, Iter);
       for Y in StartY .. EndY loop
          for X in StartX .. EndX loop
             if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
@@ -573,16 +558,12 @@ package body Maps.UI is
             end if;
             Insert_With_Tags(MapBuffer, Iter, "" & MapChar, MapColor);
          end loop;
-         Forward_Visible_Line(Iter, Result);
+         Insert(MapBuffer, Iter, "" & ASCII.LF);
       end loop;
    end DrawMap;
 
    procedure CreateSkyMap is
       Error: aliased GError;
-      Iter: Gtk_Text_Iter;
-      Map: Unbounded_String := Null_Unbounded_String;
-      Result: Boolean;
-      PlayerMark: Gtk_Text_Mark;
    begin
       if Builder = null then
          Gtk_New(Builder);
@@ -596,38 +577,14 @@ package body Maps.UI is
          end if;
          Register_Handler(Builder, "Quit_Game", QuitGame'Access);
          Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
-         Register_Handler(Builder, "Scroll_Map", DrawMap'Access);
          Register_Handler
            (Builder,
             "Hide_Last_Message",
             HideLastMessage'Access);
          Do_Connect(Builder);
       end if;
-      IsNewGame := True;
       UpdateMessages;
-      for Y in SkyMap'Range loop
-         for X in SkyMap'First .. SkyMap'Last loop
-            if PlayerShip.SkyX = X and PlayerShip.SkyY = Y then
-               Append(Map, "+");
-            else
-               Append(Map, " ");
-            end if;
-         end loop;
-         if Y < SkyMap'Last then
-            Append(Map, ASCII.LF);
-         end if;
-      end loop;
-      Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), To_String(Map));
-      Get_Start_Iter(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), Iter);
-      Gtk_New(PlayerMark, "Player", False);
-      loop
-         exit when Get_Char(Iter) = '+';
-         Forward_Char(Iter, Result);
-      end loop;
-      Add_Mark
-        (Gtk_Text_Buffer(Get_Object(Builder, "txtmap")),
-         PlayerMark,
-         Iter);
+      Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "");
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       UpdateHeader;
       if LastMessage = Null_Unbounded_String then
@@ -638,6 +595,7 @@ package body Maps.UI is
             To_String(LastMessage));
       end if;
       UpdateMoveButtons;
+      DrawMap;
    end CreateSkyMap;
 
 end Maps.UI;
