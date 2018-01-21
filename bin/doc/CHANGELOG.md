@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Typos in changelog files
 - Info about needed trader when encountered friendly ship or in abandoned base
 - Crash when no trader set in abandoned bases
+- Generating cargo in abandoned bases
 
 ## [2.0] - 2018-01-07
 
