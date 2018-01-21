@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -28,7 +28,11 @@ package body Bases.Cargo is
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       Chance, Roll: Positive;
+      Population: Natural := SkyBases(BaseIndex).Population;
    begin
+      if Population = 0 then
+         Population := 1;
+      end if;
       if SkyBases(BaseIndex).Population < 150 then
          Chance := 5;
       elsif SkyBases(BaseIndex).Population > 149 and
@@ -48,7 +52,7 @@ package body Bases.Cargo is
          SkyBases(BaseIndex).Cargo.Append
          (New_Item =>
             (ProtoIndex => FindProtoItem(MoneyIndex),
-             Amount => (GetRandom(50, 200) * SkyBases(BaseIndex).Population),
+             Amount => (GetRandom(50, 200) * Population),
              Durability => 100,
              Price => 0));
          for I in Items_List.Iterate loop
@@ -56,8 +60,7 @@ package body Bases.Cargo is
                SkyBases(BaseIndex).Cargo.Append
                (New_Item =>
                   (ProtoIndex => Objects_Container.To_Index(I),
-                   Amount =>
-                     (GetRandom(0, 100) * SkyBases(BaseIndex).Population),
+                   Amount => (GetRandom(0, 100) * Population),
                    Durability => 100,
                    Price => Items_List(I).Prices(BaseType)));
             end if;
@@ -69,8 +72,7 @@ package body Bases.Cargo is
                Item.Amount := Item.Amount - (GetRandom(1, (Item.Amount / 2)));
             elsif Roll < 60 and SkyBases(BaseIndex).Owner /= Abandoned then
                if Item.Amount = 0 then
-                  Item.Amount :=
-                    GetRandom(1, 10) * SkyBases(BaseIndex).Population;
+                  Item.Amount := GetRandom(1, 10) * Population;
                else
                   Item.Amount :=
                     Item.Amount + (GetRandom(1, (Item.Amount / 2)));
