@@ -594,8 +594,10 @@ package body Maps.UI is
       Forward_Line(Iter, Result);
       Forward_Char(Iter, Result);
       Get_Iter_Location(MapView, Iter, Location);
-      MapWidth := Positive(Get_Allocated_Width(Gtk_Widget(MapView)) / Location.X) - 1;
-      MapHeight := Positive(Get_Allocated_Height(Gtk_Widget(MapView)) / Location.Y) - 1;
+      MapWidth :=
+        Positive(Get_Allocated_Width(Gtk_Widget(MapView)) / Location.X) - 1;
+      MapHeight :=
+        Positive(Get_Allocated_Height(Gtk_Widget(MapView)) / Location.Y) - 1;
       Set_Text(MapBuffer, "");
       CenterX := PlayerShip.SkyX;
       CenterY := PlayerShip.SkyY;
@@ -631,7 +633,9 @@ package body Maps.UI is
             FontDescription);
       end if;
       UpdateMessages;
-      Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "X" & ASCII.LF & "X");
+      Set_Text
+        (Gtk_Text_Buffer(Get_Object(Builder, "txtmap")),
+         "X" & ASCII.LF & "X");
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       UpdateHeader;
       if LastMessage = Null_Unbounded_String then
