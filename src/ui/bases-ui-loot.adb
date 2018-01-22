@@ -336,7 +336,7 @@ package body Bases.UI.Loot is
          CaptionText := To_Unbounded_String("Taking ");
          Append(CaptionText, Items_List(ItemIndex).Name);
       else
-         if Description(Current(TradeMenu)) = "0" then
+         if Integer'Value(Description(Current(TradeMenu))) < 0 then
             ShowDialog
               ("You don't have any " &
                To_String(Items_List(ItemIndex).Name) &
