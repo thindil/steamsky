@@ -34,6 +34,7 @@ with Gtk.Button; use Gtk.Button;
 with Gtk.Enums; use Gtk.Enums;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
+with Pango.Font; use Pango.Font;
 with Gdk.Rectangle; use Gdk.Rectangle;
 with Game; use Game;
 with MainMenu; use MainMenu;
@@ -50,6 +51,7 @@ with Bases; use Bases;
 package body Maps.UI is
 
    Builder: Gtkada_Builder;
+   MapWidth, MapHeight, CenterX, CenterY: Positive;
 
    function QuitGame
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
@@ -499,13 +501,10 @@ package body Maps.UI is
    end UpdateMessages;
 
    procedure DrawMap is
-      VisibleArea: Gdk_Rectangle;
-      MapView: constant Gtk_Text_View :=
-        Gtk_Text_View(Get_Object(Builder, "mapview"));
-      Iter : Gtk_Text_Iter;
+      Iter: Gtk_Text_Iter;
       MapBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Builder, "txtmap"));
-      StartY, EndY, StartX, EndX: Positive;
+      StartY, EndY, StartX, EndX: Integer;
       Tags: constant Gtk_Text_Tag_Table := Get_Tag_Table(MapBuffer);
       WhiteColor: constant Gtk_Text_Tag := Lookup(Tags, "white");
       GrayColor: constant Gtk_Text_Tag := Lookup(Tags, "gray");
@@ -516,11 +515,26 @@ package body Maps.UI is
       MapChar: Character;
       MapColor: Gtk_Text_Tag;
    begin
-      Get_Visible_Rect(MapView, VisibleArea);
-      StartY := 1;
-      StartX := 1;
-      EndY := 10;
-      EndX := 10;
+      StartY := CenterY - (MapHeight / 2);
+      StartX := CenterX - (MapWidth / 2);
+      EndY := CenterY + (MapHeight / 2);
+      EndX := CenterX + (MapWidth / 2);
+      if StartY < 1 then
+         StartY := 1;
+         EndY := MapHeight;
+      end if;
+      if StartX < 1 then
+         StartX := 1;
+         EndX := MapWidth;
+      end if;
+      if EndY > 1024 then
+         EndY := 1024;
+         StartY := 1024 - MapHeight;
+      end if;
+      if EndX > 1024 then
+         EndX := 1024;
+         StartX := 1024 - MapWidth;
+      end if;
       Get_Start_Iter(MapBuffer, Iter);
       for Y in StartY .. EndY loop
          for X in StartX .. EndX loop
@@ -534,7 +548,10 @@ package body Maps.UI is
                else
                   MapColor := GrayColor;
                end if;
-               if SkyMap(X, Y).MissionIndex > 0 then
+               if X = PlayerShip.DestinationX and
+                 Y = PlayerShip.DestinationY then
+                  MapChar := 'X';
+               elsif SkyMap(X, Y).MissionIndex > 0 then
                   MapChar := '!';
                elsif SkyMap(X, Y).EventIndex > 0 then
                   MapChar := '?';
@@ -558,12 +575,37 @@ package body Maps.UI is
             end if;
             Insert_With_Tags(MapBuffer, Iter, "" & MapChar, MapColor);
          end loop;
-         Insert(MapBuffer, Iter, "" & ASCII.LF);
+         if Y < EndY then
+            Insert(MapBuffer, Iter, "" & ASCII.LF);
+         end if;
       end loop;
    end DrawMap;
 
+   procedure GetMapSize is
+      MapBuffer: constant Gtk_Text_Buffer :=
+        Gtk_Text_Buffer(Get_Object(Builder, "txtmap"));
+      MapView: constant Gtk_Text_View :=
+        Gtk_Text_View(Get_Object(Builder, "mapview"));
+      Iter: Gtk_Text_Iter;
+      Location: Gdk_Rectangle;
+   begin
+      Set_Text(MapBuffer, "X" & ASCII.LF & "X");
+      Get_End_Iter(MapBuffer, Iter);
+      Get_Iter_Location(MapView, Iter, Location);
+      MapWidth :=
+        Positive(Get_Allocated_Width(Gtk_Widget(MapView)) / Location.X);
+      MapHeight :=
+        Positive(Get_Allocated_Height(Gtk_Widget(MapView)) / (Location.Y / 2));
+      Set_Text(MapBuffer, "");
+      CenterX := PlayerShip.SkyX;
+      CenterY := PlayerShip.SkyY;
+      DrawMap;
+   end GetMapSize;
+
    procedure CreateSkyMap is
       Error: aliased GError;
+      FontDescription: constant Pango_Font_Description :=
+        Pango_Font_Description_New;
    begin
       if Builder = null then
          Gtk_New(Builder);
@@ -582,6 +624,10 @@ package body Maps.UI is
             "Hide_Last_Message",
             HideLastMessage'Access);
          Do_Connect(Builder);
+         Set_Family(FontDescription, "monospace");
+         Override_Font
+           (Gtk_Widget(Get_Object(Builder, "mapview")),
+            FontDescription);
       end if;
       UpdateMessages;
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "");
@@ -595,7 +641,7 @@ package body Maps.UI is
             To_String(LastMessage));
       end if;
       UpdateMoveButtons;
-      DrawMap;
+      GetMapSize;
    end CreateSkyMap;
 
 end Maps.UI;
