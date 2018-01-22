@@ -52,7 +52,6 @@ package body Maps.UI is
 
    Builder: Gtkada_Builder;
    MapWidth, MapHeight, CenterX, CenterY: Positive;
-   WindowWidth, WindowHeight, MapViewWidth, MapViewHeight: Gint;
 
    function QuitGame
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
@@ -587,32 +586,16 @@ package body Maps.UI is
         Gtk_Text_Buffer(Get_Object(Object, "txtmap"));
       MapView: constant Gtk_Text_View :=
         Gtk_Text_View(Get_Object(Object, "mapview"));
-      MapWindow: constant Gtk_Widget := Gtk_Widget(Get_Object(Object, "skymapwindow"));
       Iter: Gtk_Text_Iter;
       Location: Gdk_Rectangle;
-      NewWidth: constant Gint := Get_Allocated_Width(MapWindow);
-      NewHeight: constant Gint := Get_Allocated_Height(MapWindow);
-      DiffWidth, DiffHeight: Gint;
+      Result: Boolean;
    begin
-      if WindowWidth = NewWidth and WindowHeight = NewHeight then
-         return;
-      end if;
-      if WindowWidth = 1 and WindowHeight = 1 then
-         MapViewWidth := Get_Allocated_Width(Gtk_Widget(MapView));
-         MapViewHeight := Get_Allocated_Height(Gtk_Widget(MapView));
-      end if;
-      WindowWidth := NewWidth;
-      WindowHeight := NewHeight;
-      Put_Line("MapWidth:" & Gint'Image(MapViewWidth) & " MapHeight:" & Gint'Image(MapViewHeight));
-      DiffWidth := WindowWidth - NewWidth;
-      DiffHeight := WindowHeight - NewHeight;
-      Put_Line("DiffWidth:" & Gint'Image(DiffWidth) & " DiffHeight:" & Gint'Image(DiffHeight));
-      Set_Text(MapBuffer, "X" & ASCII.LF & "X");
-      Get_End_Iter(MapBuffer, Iter);
+      Get_Start_Iter(MapBuffer, Iter);
+      Forward_Line(Iter, Result);
+      Forward_Char(Iter, Result);
       Get_Iter_Location(MapView, Iter, Location);
-      MapWidth := Positive((MapViewWidth - DiffWidth) / Location.X);
-      MapHeight := Positive((MapViewHeight - DiffHeight) / (Location.Y / 2));
-      Put_Line("Width:" & Positive'Image(MapWidth) & " Height:" & Positive'Image(MapHeight));
+      MapWidth := Positive(Get_Allocated_Width(Gtk_Widget(MapView)) / Location.X) - 1;
+      MapHeight := Positive(Get_Allocated_Height(Gtk_Widget(MapView)) / Location.Y) - 1;
       Set_Text(MapBuffer, "");
       CenterX := PlayerShip.SkyX;
       CenterY := PlayerShip.SkyY;
@@ -624,8 +607,6 @@ package body Maps.UI is
       FontDescription: constant Pango_Font_Description :=
         Pango_Font_Description_New;
    begin
-      WindowWidth := 1;
-      WindowHeight := 1;
       if Builder = null then
          Gtk_New(Builder);
          if Add_From_File
@@ -650,7 +631,7 @@ package body Maps.UI is
             FontDescription);
       end if;
       UpdateMessages;
-      Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "");
+      Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "X" & ASCII.LF & "X");
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       UpdateHeader;
       if LastMessage = Null_Unbounded_String then
