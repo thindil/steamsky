@@ -491,12 +491,20 @@ package body Bases.UI.Loot is
                DrawGame(Loot_View);
                return Loot_View;
             end if;
-            UpdateCargo
-              (Ship => PlayerShip,
-               CargoIndex => CargoIndex,
-               Amount => Amount,
-               Durability =>
-                 SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
+            if CargoIndex > 0 then
+               UpdateCargo
+                 (Ship => PlayerShip,
+                  CargoIndex => CargoIndex,
+                  Amount => Amount,
+                  Durability =>
+                    SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
+            else
+               UpdateCargo
+                 (PlayerShip,
+                  ItemIndex,
+                  Amount,
+                  SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
+            end if;
             UpdateBaseCargo
               (CargoIndex => BaseItemIndex,
                Amount => (0 - Amount),
