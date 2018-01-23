@@ -54,6 +54,7 @@ with Events; use Events;
 with Items; use Items;
 with Config; use Config;
 with Bases; use Bases;
+with Missions; use Missions;
 
 package body Maps.UI is
 
@@ -714,7 +715,9 @@ package body Maps.UI is
          declare
             EventIndex: constant Positive := SkyMap(MapX, MapY).EventIndex;
          begin
-            Append(MapInfoText, ASCII.LF & ASCII.LF);
+            if Events_List(EventIndex).EType /= BaseRecovery then
+               Append(MapInfoText, ASCII.LF & ASCII.LF);
+            end if;
             case Events_List(EventIndex).EType is
                when EnemyShip | Trader | FriendlyShip =>
                   Append
@@ -738,18 +741,54 @@ package body Maps.UI is
             end case;
          end;
       end if;
-      Set_Label
-        (Gtk_Label(Get_Object(Object, "lblmapinfo")),
-         To_String(MapInfoText));
-      if MapX /= PlayerShip.SkyX and MapY /= PlayerShip.SkyY then
+      if SkyMap(MapX, MapY).MissionIndex > 0 then
+         declare
+            MissionIndex: constant Positive := SkyMap(MapX, MapY).MissionIndex;
+         begin
+            Append(MapInfoText, ASCII.LF & ASCII.LF);
+            case PlayerShip.Missions(MissionIndex).MType is
+               when Deliver =>
+                  Append
+                    (MapInfoText,
+                     "Deliver " &
+                     To_String
+                       (Items_List(PlayerShip.Missions(MissionIndex).Target)
+                          .Name));
+               when Destroy =>
+                  Append
+                    (MapInfoText,
+                     "Destroy " &
+                     To_String
+                       (ProtoShips_List
+                          (PlayerShip.Missions(MissionIndex).Target)
+                          .Name));
+               when Patrol =>
+                  Append(MapInfoText, "Patrol area");
+               when Explore =>
+                  Append(MapInfoText, "Explore area");
+               when Passenger =>
+                  Append(MapInfoText, "Transport passenger");
+            end case;
+         end;
+      end if;
+      if MapX /= PlayerShip.SkyX or MapY /= PlayerShip.SkyY then
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "btndestination")));
+         if Length(MapInfoText) > 0 then
+            Append(MapInfoText, ASCII.LF);
+         end if;
+         Append
+           (MapInfoText,
+            "Distance:" & Positive'Image(CountDistance(MapX, MapY)));
       else
          Set_Sensitive
            (Gtk_Widget(Get_Object(Object, "btndestination")),
             False);
       end if;
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblmapinfo")),
+         To_String(MapInfoText));
       Show_All(Gtk_Widget(Get_Object(Builder, "mapinfowindow")));
-      return False;
+      return True;
    end ShowMapCellInfo;
 
    procedure HideMapInfoWindow(User_Data: access GObject_Record'Class) is
