@@ -64,7 +64,7 @@ package body Maps.UI is
    CenterX,
    CenterY,
    MapCellWidth,
-   MapCellHeight: Positive;
+   MapCellHeight, MapX, MapY: Positive;
    StartX, StartY: Integer;
 
    function QuitGame
@@ -569,7 +569,8 @@ package body Maps.UI is
       DrawMap;
    end GetMapSize;
 
-   procedure GetMapLocation(MapX, MapY: out Positive) is
+   function ShowMapCellInfo
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
       MouseX, MouseY: Gint;
       DeviceManager: constant Gdk_Device_Manager :=
         Get_Device_Manager
@@ -577,6 +578,7 @@ package body Maps.UI is
       Mouse: constant Gdk_Device := Get_Client_Pointer(DeviceManager);
       Mask: Gdk_Modifier_Type;
       Window: Gdk_Window;
+      MapInfoText: Unbounded_String;
    begin
       Get_Device_Position
         (Get_Window(Gtk_Widget(Get_Object(Builder, "mapview"))),
@@ -587,14 +589,6 @@ package body Maps.UI is
          Window);
       MapX := (Positive(MouseX) / MapCellWidth) + StartX;
       MapY := (Positive(MouseY) / MapCellHeight) + StartY;
-   end GetMapLocation;
-
-   function ShowMapCellInfo
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-      MapX, MapY: Positive;
-      MapInfoText: Unbounded_String;
-   begin
-      GetMapLocation(MapX, MapY);
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblmapx")),
          "X:" & Positive'Image(MapX));
@@ -800,12 +794,14 @@ package body Maps.UI is
            (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
             To_String(LastMessage));
          Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
+         GetMapSize(Builder);
       end if;
    end UpdateMessages;
 
    procedure SetDestination(Object: access Gtkada_Builder_Record'Class) is
    begin
-      GetMapLocation(PlayerShip.DestinationX, PlayerShip.DestinationY);
+      PlayerShip.DestinationX := MapX;
+      PlayerShip.DestinationY := MapY;
       AddMessage("You set travel destination for your ship.", OrderMessage);
       Hide(Gtk_Window(Get_Object(Object, "mapinfowindow")));
       UpdateMessages;
@@ -820,6 +816,7 @@ package body Maps.UI is
       else
          LastMessage := Null_Unbounded_String;
       end if;
+      GetMapSize(Object);
    end HideLastMessage;
 
    procedure CreateSkyMap is
