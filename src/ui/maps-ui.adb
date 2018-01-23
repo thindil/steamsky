@@ -98,17 +98,6 @@ package body Maps.UI is
       end if;
    end QuitGameMenu;
 
-   procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      if not HideWindow(Get_Object(Object, "infolastmessage")) then
-         ShowDialog
-           ("Can't hide last message.",
-            Gtk_Window(Get_Object(Object, "skymapwindow")));
-      else
-         LastMessage := Null_Unbounded_String;
-      end if;
-   end HideLastMessage;
-
    procedure UpdateHeader is
       HaveWorker, HaveGunner: Boolean := True;
       NeedCleaning,
@@ -474,46 +463,6 @@ package body Maps.UI is
       end if;
    end UpdateMoveButtons;
 
-   procedure UpdateMessages is
-      MessagesBuffer: constant Gtk_Text_Buffer :=
-        Gtk_Text_Buffer(Get_Object(Builder, "txtmessages"));
-      LoopStart: Integer := 0 - MessagesAmount;
-      Message: Message_Data;
-      Iter: Gtk_Text_Iter;
-      TagNames: constant array(1 .. 5) of Unbounded_String :=
-        (To_Unbounded_String("yellow"),
-         To_Unbounded_String("green"),
-         To_Unbounded_String("red"),
-         To_Unbounded_String("blue"),
-         To_Unbounded_String("cyan"));
-   begin
-      Set_Text(MessagesBuffer, "");
-      Get_Start_Iter(MessagesBuffer, Iter);
-      if LoopStart = 0 then
-         return;
-      end if;
-      if LoopStart < -10 then
-         LoopStart := -10;
-      end if;
-      for I in reverse LoopStart .. -1 loop
-         Message := GetMessage(I + 1);
-         if Message.Color = 0 then
-            Insert(MessagesBuffer, Iter, To_String(Message.Message));
-         else
-            Insert_With_Tags
-              (MessagesBuffer,
-               Iter,
-               To_String(Message.Message),
-               Lookup
-                 (Get_Tag_Table(MessagesBuffer),
-                  To_String(TagNames(Message.Color))));
-         end if;
-         if I > LoopStart then
-            Insert(MessagesBuffer, Iter, "" & ASCII.LF);
-         end if;
-      end loop;
-   end UpdateMessages;
-
    procedure DrawMap is
       Iter: Gtk_Text_Iter;
       MapBuffer: constant Gtk_Text_Buffer :=
@@ -620,20 +569,17 @@ package body Maps.UI is
       DrawMap;
    end GetMapSize;
 
-   function ShowMapCellInfo
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   procedure GetMapLocation(MapX, MapY: out Positive) is
       MouseX, MouseY: Gint;
       DeviceManager: constant Gdk_Device_Manager :=
         Get_Device_Manager
-          (Get_Display(Gtk_Widget(Get_Object(Object, "mapview"))));
+          (Get_Display(Gtk_Widget(Get_Object(Builder, "mapview"))));
       Mouse: constant Gdk_Device := Get_Client_Pointer(DeviceManager);
       Mask: Gdk_Modifier_Type;
       Window: Gdk_Window;
-      MapX, MapY: Positive;
-      MapInfoText: Unbounded_String;
    begin
       Get_Device_Position
-        (Get_Window(Gtk_Widget(Get_Object(Object, "mapview"))),
+        (Get_Window(Gtk_Widget(Get_Object(Builder, "mapview"))),
          Mouse,
          MouseX,
          MouseY,
@@ -641,6 +587,14 @@ package body Maps.UI is
          Window);
       MapX := (Positive(MouseX) / MapCellWidth) + StartX;
       MapY := (Positive(MouseY) / MapCellHeight) + StartY;
+   end GetMapLocation;
+
+   function ShowMapCellInfo
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+      MapX, MapY: Positive;
+      MapInfoText: Unbounded_String;
+   begin
+      GetMapLocation(MapX, MapY);
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblmapx")),
          "X:" & Positive'Image(MapX));
@@ -796,6 +750,78 @@ package body Maps.UI is
       Hide(Gtk_Window(User_Data));
    end HideMapInfoWindow;
 
+   procedure ShowWindow(User_Data: access GObject_Record'Class) is
+   begin
+      Show_All(Gtk_Widget(User_Data));
+   end ShowWindow;
+
+   procedure UpdateMessages is
+      MessagesBuffer: constant Gtk_Text_Buffer :=
+        Gtk_Text_Buffer(Get_Object(Builder, "txtmessages"));
+      LoopStart: Integer := 0 - MessagesAmount;
+      Message: Message_Data;
+      Iter: Gtk_Text_Iter;
+      TagNames: constant array(1 .. 5) of Unbounded_String :=
+        (To_Unbounded_String("yellow"),
+         To_Unbounded_String("green"),
+         To_Unbounded_String("red"),
+         To_Unbounded_String("blue"),
+         To_Unbounded_String("cyan"));
+   begin
+      Set_Text(MessagesBuffer, "");
+      Get_Start_Iter(MessagesBuffer, Iter);
+      if LoopStart = 0 then
+         return;
+      end if;
+      if LoopStart < -10 then
+         LoopStart := -10;
+      end if;
+      for I in reverse LoopStart .. -1 loop
+         Message := GetMessage(I + 1);
+         if Message.Color = 0 then
+            Insert(MessagesBuffer, Iter, To_String(Message.Message));
+         else
+            Insert_With_Tags
+              (MessagesBuffer,
+               Iter,
+               To_String(Message.Message),
+               Lookup
+                 (Get_Tag_Table(MessagesBuffer),
+                  To_String(TagNames(Message.Color))));
+         end if;
+         if I > LoopStart then
+            Insert(MessagesBuffer, Iter, "" & ASCII.LF);
+         end if;
+      end loop;
+      if LastMessage = Null_Unbounded_String then
+         Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
+      else
+         Set_Text
+           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
+            To_String(LastMessage));
+         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
+      end if;
+   end UpdateMessages;
+
+   procedure SetDestination(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      GetMapLocation(PlayerShip.DestinationX, PlayerShip.DestinationY);
+      AddMessage("You set travel destination for your ship.", OrderMessage);
+      Hide(Gtk_Window(Get_Object(Object, "mapinfowindow")));
+      UpdateMessages;
+   end SetDestination;
+
+   procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      if not HideWindow(Get_Object(Object, "infolastmessage")) then
+         ShowDialog
+           ("Can't hide last message.",
+            Gtk_Window(Get_Object(Object, "skymapwindow")));
+      else
+         LastMessage := Null_Unbounded_String;
+      end if;
+   end HideLastMessage;
+
    procedure CreateSkyMap is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
@@ -820,6 +846,8 @@ package body Maps.UI is
          Register_Handler(Builder, "Get_New_Size", GetMapSize'Access);
          Register_Handler(Builder, "Show_Map_Info", ShowMapCellInfo'Access);
          Register_Handler(Builder, "Hide_Window", HideMapInfoWindow'Access);
+         Register_Handler(Builder, "Show_Window", ShowWindow'Access);
+         Register_Handler(Builder, "Set_Destination", SetDestination'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
@@ -832,14 +860,8 @@ package body Maps.UI is
          "X" & ASCII.LF & "X");
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       UpdateHeader;
-      if LastMessage = Null_Unbounded_String then
-         Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
-      else
-         Set_Text
-           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
-            To_String(LastMessage));
-      end if;
       UpdateMoveButtons;
+      Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
    end CreateSkyMap;
 
 end Maps.UI;
