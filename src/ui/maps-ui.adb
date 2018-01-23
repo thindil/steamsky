@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
@@ -34,8 +35,14 @@ with Gtk.Button; use Gtk.Button;
 with Gtk.Enums; use Gtk.Enums;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
+with Glib.Object; use Glib.Object;
 with Pango.Font; use Pango.Font;
 with Gdk.Rectangle; use Gdk.Rectangle;
+with Gdk.Device_Manager; use Gdk.Device_Manager;
+with Gdk.Device; use Gdk.Device;
+with Gdk.Window; use Gdk.Window;
+with Gdk.Types; use Gdk.Types;
+with Gdk; use Gdk;
 with Game; use Game;
 with MainMenu; use MainMenu;
 with Utils.UI; use Utils.UI;
@@ -51,7 +58,13 @@ with Bases; use Bases;
 package body Maps.UI is
 
    Builder: Gtkada_Builder;
-   MapWidth, MapHeight, CenterX, CenterY: Positive;
+   MapWidth,
+   MapHeight,
+   CenterX,
+   CenterY,
+   MapCellWidth,
+   MapCellHeight: Positive;
+   StartX, StartY: Integer;
 
    function QuitGame
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
@@ -504,7 +517,7 @@ package body Maps.UI is
       Iter: Gtk_Text_Iter;
       MapBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Builder, "txtmap"));
-      StartY, EndY, StartX, EndX: Integer;
+      EndY, EndX: Integer;
       Tags: constant Gtk_Text_Tag_Table := Get_Tag_Table(MapBuffer);
       WhiteColor: constant Gtk_Text_Tag := Lookup(Tags, "white");
       GrayColor: constant Gtk_Text_Tag := Lookup(Tags, "gray");
@@ -598,11 +611,151 @@ package body Maps.UI is
         Positive(Get_Allocated_Width(Gtk_Widget(MapView)) / Location.X) - 1;
       MapHeight :=
         Positive(Get_Allocated_Height(Gtk_Widget(MapView)) / Location.Y) - 1;
+      MapCellWidth := Positive(Location.X);
+      MapCellHeight := Positive(Location.Y);
       Set_Text(MapBuffer, "");
       CenterX := PlayerShip.SkyX;
       CenterY := PlayerShip.SkyY;
       DrawMap;
    end GetMapSize;
+
+   function ShowMapCellInfo
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+      MouseX, MouseY: Gint;
+      DeviceManager: constant Gdk_Device_Manager :=
+        Get_Device_Manager
+          (Get_Display(Gtk_Widget(Get_Object(Object, "mapview"))));
+      Mouse: constant Gdk_Device := Get_Client_Pointer(DeviceManager);
+      Mask: Gdk_Modifier_Type;
+      Window: Gdk_Window;
+      MapX, MapY: Positive;
+      MapInfoText: Unbounded_String;
+   begin
+      Get_Device_Position
+        (Get_Window(Gtk_Widget(Get_Object(Object, "mapview"))),
+         Mouse,
+         MouseX,
+         MouseY,
+         Mask,
+         Window);
+      MapX := (Positive(MouseX) / MapCellWidth) + StartX;
+      MapY := (Positive(MouseY) / MapCellHeight) + StartY;
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblmapx")),
+         "X:" & Positive'Image(MapX));
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblmapy")),
+         "Y:" & Positive'Image(MapY));
+      if SkyMap(MapX, MapY).BaseIndex > 0 then
+         declare
+            BaseIndex: constant Positive := SkyMap(MapX, MapY).BaseIndex;
+         begin
+            Append(MapInfoText, "Base info");
+            Append(MapInfoText, ASCII.LF);
+            Append
+              (MapInfoText,
+               To_Unbounded_String("Name: ") & SkyBases(BaseIndex).Name);
+            if SkyBases(SkyMap(MapX, MapY).BaseIndex).Visited.Year > 0 then
+               Append(MapInfoText, ASCII.LF);
+               Append
+                 (MapInfoText,
+                  "Type: " &
+                  To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
+               Append(MapInfoText, ASCII.LF);
+               if SkyBases(BaseIndex).Population > 0 and
+                 SkyBases(BaseIndex).Population < 150 then
+                  Append(MapInfoText, "Population: small");
+               elsif SkyBases(BaseIndex).Population > 149 and
+                 SkyBases(BaseIndex).Population < 300 then
+                  Append(MapInfoText, "Population: medium");
+               elsif SkyBases(BaseIndex).Population > 299 then
+                  Append(MapInfoText, "Population: large");
+               end if;
+               if SkyBases(BaseIndex).Population > 0 then
+                  Append(MapInfoText, ASCII.LF);
+               end if;
+               if SkyBases(BaseIndex).Owner = Abandoned then
+                  Append(MapInfoText, "Base is abandoned");
+               else
+                  Append
+                    (MapInfoText,
+                     "Owner: " &
+                     To_Lower(Bases_Owners'Image(SkyBases(BaseIndex).Owner)));
+               end if;
+               if SkyBases(BaseIndex).Population > 0 then
+                  Append(MapInfoText, ASCII.LF);
+                  case SkyBases(BaseIndex).Reputation(1) is
+                     when -100 .. -75 =>
+                        Append(MapInfoText, "You are hated here");
+                     when -74 .. -50 =>
+                        Append(MapInfoText, "You are outlaw here");
+                     when -49 .. -25 =>
+                        Append(MapInfoText, "You are hostile here");
+                     when -24 .. -1 =>
+                        Append(MapInfoText, "They are unfriendly to you");
+                     when 0 =>
+                        Append(MapInfoText, "You are unknown here");
+                     when 1 .. 25 =>
+                        Append(MapInfoText, "You are know here as visitor");
+                     when 26 .. 50 =>
+                        Append(MapInfoText, "You are know here as trader");
+                     when 51 .. 75 =>
+                        Append(MapInfoText, "You are know here as friend");
+                     when 76 .. 100 =>
+                        Append(MapInfoText, "You are well know here");
+                     when others =>
+                        null;
+                  end case;
+               end if;
+            end if;
+         end;
+      end if;
+      if SkyMap(MapX, MapY).EventIndex > 0 then
+         declare
+            EventIndex: constant Positive := SkyMap(MapX, MapY).EventIndex;
+         begin
+            Append(MapInfoText, ASCII.LF & ASCII.LF);
+            case Events_List(EventIndex).EType is
+               when EnemyShip | Trader | FriendlyShip =>
+                  Append
+                    (MapInfoText,
+                     ProtoShips_List(Events_List(EventIndex).Data).Name);
+               when FullDocks =>
+                  Append(MapInfoText, "Full docks in base");
+               when AttackOnBase =>
+                  Append(MapInfoText, "Base is under attack");
+               when Disease =>
+                  Append(MapInfoText, "Disease in base");
+               when EnemyPatrol =>
+                  Append(MapInfoText, "Enemy patrol");
+               when DoublePrice =>
+                  Append
+                    (MapInfoText,
+                     "Double price for " &
+                     To_String(Items_List(Events_List(EventIndex).Data).Name));
+               when None | BaseRecovery =>
+                  null;
+            end case;
+         end;
+      end if;
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblmapinfo")),
+         To_String(MapInfoText));
+      if MapX /= PlayerShip.SkyX and MapY /= PlayerShip.SkyY then
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btndestination")));
+      else
+         Set_Sensitive
+           (Gtk_Widget(Get_Object(Object, "btndestination")),
+            False);
+      end if;
+      Show_All(Gtk_Widget(Get_Object(Builder, "mapinfowindow")));
+      return False;
+   end ShowMapCellInfo;
+
+   procedure HideMapInfoWindow(User_Data: access GObject_Record'Class) is
+   begin
+      Hide(Gtk_Window(User_Data));
+   end HideMapInfoWindow;
 
    procedure CreateSkyMap is
       Error: aliased GError;
@@ -626,6 +779,8 @@ package body Maps.UI is
             "Hide_Last_Message",
             HideLastMessage'Access);
          Register_Handler(Builder, "Get_New_Size", GetMapSize'Access);
+         Register_Handler(Builder, "Show_Map_Info", ShowMapCellInfo'Access);
+         Register_Handler(Builder, "Hide_Window", HideMapInfoWindow'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
