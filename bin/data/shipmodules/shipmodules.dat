@@ -2018,4 +2018,16 @@ Price = 55000
 InstallTime = 300
 Size = 4
 Description = Updated version of huge engine made of titanium. Each ship needs at least one engine to fly.
+[159]
+Name = Titanium harpoon gun
+Type = Harpoon_Gun
+Weight = 60
+Value = 45
+MaxValue = 12
+Durability = 40
+Material = Titanium
+Skill = Gunsmith
+Price = 2000
+InstallTime = 50
+Description = Harpoon gun made of titanium. As other guns, require empty turret to install.
 []
