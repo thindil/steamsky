@@ -523,18 +523,20 @@ package body Maps.UI is
                elsif SkyMap(X, Y).BaseIndex > 0 then
                   if SkyBases(SkyMap(X, Y).BaseIndex).Known then
                      MapChar := 'o';
-                     case SkyBases(SkyMap(X, Y).BaseIndex).BaseType is
-                        when Industrial =>
-                           MapColor := RedColor;
-                        when Agricultural =>
-                           MapColor := GreenColor;
-                        when Refinery =>
-                           MapColor := BlueColor;
-                        when Shipyard =>
-                           MapColor := CyanColor;
-                        when others =>
-                           null;
-                     end case;
+                     if SkyBases(SkyMap(X, Y).BaseIndex).Visited.Year > 0 then
+                        case SkyBases(SkyMap(X, Y).BaseIndex).BaseType is
+                           when Industrial =>
+                              MapColor := RedColor;
+                           when Agricultural =>
+                              MapColor := GreenColor;
+                           when Refinery =>
+                              MapColor := BlueColor;
+                           when Shipyard =>
+                              MapColor := CyanColor;
+                           when others =>
+                              null;
+                        end case;
+                     end if;
                   end if;
                end if;
             end if;
