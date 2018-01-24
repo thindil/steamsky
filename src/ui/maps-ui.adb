@@ -33,6 +33,8 @@ with Gtk.Text_Tag; use Gtk.Text_Tag;
 with Gtk.Text_View; use Gtk.Text_View;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Enums; use Gtk.Enums;
+with Gtk.Container; use Gtk.Container;
+with Gtk.Adjustment; use Gtk.Adjustment;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -564,8 +566,6 @@ package body Maps.UI is
       MapCellWidth := Positive(Location.X);
       MapCellHeight := Positive(Location.Y);
       Set_Text(MapBuffer, "");
-      CenterX := PlayerShip.SkyX;
-      CenterY := PlayerShip.SkyY;
       DrawMap;
    end GetMapSize;
 
@@ -794,7 +794,7 @@ package body Maps.UI is
            (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
             To_String(LastMessage));
          Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
-         GetMapSize(Builder);
+         Check_Resize(Gtk_Container(Get_Object(Builder, "skymapwindow")));
       end if;
    end UpdateMessages;
 
@@ -816,14 +816,30 @@ package body Maps.UI is
       else
          LastMessage := Null_Unbounded_String;
       end if;
-      GetMapSize(Object);
+      Check_Resize(Gtk_Container(Get_Object(Object, "skymapwindow")));
    end HideLastMessage;
+
+   procedure MoveMap(User_Data: access GObject_Record'Class) is
+   begin
+      if User_Data = Get_Object(Builder, "btncenter") then
+         CenterX := PlayerShip.SkyX;
+         CenterY := PlayerShip.SkyY;
+      else
+         CenterX := Positive(Get_Value(Gtk_Adjustment(Get_Object(Builder, "mapxadj"))));
+         CenterY := Positive(Get_Value(Gtk_Adjustment(Get_Object(Builder, "mapyadj"))));
+      end if;
+      Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "");
+      DrawMap;
+      Hide(Gtk_Widget(Get_Object(Builder, "movemapwindow")));
+   end MoveMap;
 
    procedure CreateSkyMap is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
         Pango_Font_Description_New;
    begin
+      CenterX := PlayerShip.SkyX;
+      CenterY := PlayerShip.SkyY;
       if Builder = null then
          Gtk_New(Builder);
          if Add_From_File
@@ -842,9 +858,11 @@ package body Maps.UI is
             HideLastMessage'Access);
          Register_Handler(Builder, "Get_New_Size", GetMapSize'Access);
          Register_Handler(Builder, "Show_Map_Info", ShowMapCellInfo'Access);
-         Register_Handler(Builder, "Hide_Window", HideMapInfoWindow'Access);
+         Register_Handler(Builder, "Hide_Map_Info", HideMapInfoWindow'Access);
          Register_Handler(Builder, "Show_Window", ShowWindow'Access);
          Register_Handler(Builder, "Set_Destination", SetDestination'Access);
+         Register_Handler(Builder, "Hide_Window", HideWindow'Access);
+         Register_Handler(Builder, "Move_Map", MoveMap'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
