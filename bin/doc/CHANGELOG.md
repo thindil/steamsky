@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Generating cargo in abandoned bases
 - Crash on dropping items in abandoned bases
 - Taking items from abandoned bases
+- Droping items to abandoned bases
 
 ## [2.0] - 2018-01-07
 
