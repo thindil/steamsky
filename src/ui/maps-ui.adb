@@ -828,11 +828,35 @@ package body Maps.UI is
       if User_Data = Get_Object(Builder, "btncenter") then
          CenterX := PlayerShip.SkyX;
          CenterY := PlayerShip.SkyY;
-      else
+      elsif User_Data = Get_Object(Builder, "btnmovemapok") then
          CenterX :=
            Positive(Get_Value(Gtk_Adjustment(Get_Object(Builder, "mapxadj"))));
          CenterY :=
            Positive(Get_Value(Gtk_Adjustment(Get_Object(Builder, "mapyadj"))));
+      elsif User_Data = Get_Object(Builder, "btnmapup") then
+         if CenterY - (MapHeight / 3) < 1 then
+            CenterY := 1;
+         else
+            CenterY := CenterY - (MapHeight / 3);
+         end if;
+      elsif User_Data = Get_Object(Builder, "btnmapdown") then
+         if CenterY + (MapHeight / 3) > 1024 then
+            CenterY := 1024;
+         else
+            CenterY := CenterY + (MapHeight / 3);
+         end if;
+      elsif User_Data = Get_Object(Builder, "btnmapleft") then
+         if CenterX - (MapWidth / 3) < 1 then
+            CenterX := 1;
+         else
+            CenterX := CenterX - (MapWidth / 3);
+         end if;
+      elsif User_Data = Get_Object(Builder, "btnmapright") then
+         if CenterX + (MapWidth / 3) > 1024 then
+            CenterX := 1024;
+         else
+            CenterX := CenterX + (MapWidth / 3);
+         end if;
       end if;
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "");
       DrawMap;
