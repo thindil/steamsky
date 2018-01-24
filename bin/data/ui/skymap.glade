@@ -367,6 +367,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="homogeneous">True</property>
             <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
@@ -409,6 +410,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="homogeneous">True</property>
             <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
@@ -448,7 +450,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="layout_style">center</property>
             <child>
               <object class="GtkButton" id="btnmovemapok">
-                <property name="label" translatable="yes">Move Map</property>
+                <property name="label" translatable="yes">Move map to selected position</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -462,7 +464,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
             <child>
               <object class="GtkButton" id="btncenter">
-                <property name="label" translatable="yes">Center map</property>
+                <property name="label" translatable="yes">Center map on ship</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
