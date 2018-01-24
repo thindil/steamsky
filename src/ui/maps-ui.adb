@@ -66,7 +66,9 @@ package body Maps.UI is
    CenterX,
    CenterY,
    MapCellWidth,
-   MapCellHeight, MapX, MapY: Positive;
+   MapCellHeight,
+   MapX,
+   MapY: Positive;
    StartX, StartY: Integer;
 
    function QuitGame
@@ -827,8 +829,10 @@ package body Maps.UI is
          CenterX := PlayerShip.SkyX;
          CenterY := PlayerShip.SkyY;
       else
-         CenterX := Positive(Get_Value(Gtk_Adjustment(Get_Object(Builder, "mapxadj"))));
-         CenterY := Positive(Get_Value(Gtk_Adjustment(Get_Object(Builder, "mapyadj"))));
+         CenterX :=
+           Positive(Get_Value(Gtk_Adjustment(Get_Object(Builder, "mapxadj"))));
+         CenterY :=
+           Positive(Get_Value(Gtk_Adjustment(Get_Object(Builder, "mapyadj"))));
       end if;
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "");
       DrawMap;
