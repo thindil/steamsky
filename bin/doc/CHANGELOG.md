@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
   medical room, advanced titanium cabin, extended titanium cabin, luxury
   titanium cabin, heavy titanium turret, heavy titanium battering ram, small
   titanium workshop, huge titanium hull, advanced huge titanium hull, huge
-  titanium engine and advanced huge titanium engine
+  titanium engine, advanced huge titanium engine and titanium harpoon gun
 
 ### Changed
 - Updated README.md
