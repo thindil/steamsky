@@ -518,13 +518,21 @@ package body Bases.UI.Loot is
                ".",
                OrderMessage);
          else
-            UpdateBaseCargo
-              (CargoIndex => BaseItemIndex,
-               Amount => Amount,
-               Durability => PlayerShip.Cargo.Element(CargoIndex).Durability);
+            if BaseItemIndex > 0 then
+               UpdateBaseCargo
+                 (CargoIndex => BaseItemIndex,
+                  Amount => Amount,
+                  Durability =>
+                    PlayerShip.Cargo.Element(CargoIndex).Durability);
+            else
+               UpdateBaseCargo
+                 (ItemIndex,
+                  Amount,
+                  PlayerShip.Cargo.Element(CargoIndex).Durability);
+            end if;
             UpdateCargo
               (Ship => PlayerShip,
-               CargoIndex => ItemIndex,
+               CargoIndex => CargoIndex,
                Amount => (0 - Amount),
                Durability => PlayerShip.Cargo.Element(CargoIndex).Durability);
             AddMessage
