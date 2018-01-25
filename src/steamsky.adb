@@ -15,17 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Ada.Command_Line; use Ada.Command_Line;
-with Ada.Calendar; use Ada.Calendar;
-with Ada.Calendar.Formatting;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
 with Gtk.Main; use Gtk.Main;
+with Gtkada.Bindings; use Gtkada.Bindings;
 with Game; use Game;
 with Config; use Config;
 with Log; use Log;
@@ -115,47 +112,12 @@ begin
 
    --  Initializes GtkAda
    Init;
+   Set_On_Exception(On_Exception'Access);
    CreateMainMenu;
    Main;
 
    EndLogging;
 exception
    when An_Exception : others =>
-      declare
-         ErrorFile: File_Type;
-         ErrorText: Unbounded_String;
-      begin
-         if Exists(To_String(SaveDirectory) & "error.log") then
-            Open
-              (ErrorFile,
-               Append_File,
-               To_String(SaveDirectory) & "error.log");
-         else
-            Create
-              (ErrorFile,
-               Append_File,
-               To_String(SaveDirectory) & "error.log");
-         end if;
-         Append(ErrorText, Ada.Calendar.Formatting.Image(Clock));
-         Append(ErrorText, ASCII.LF);
-         Append(ErrorText, GameVersion);
-         Append(ErrorText, ASCII.LF);
-         Append(ErrorText, "Exception: " & Exception_Name(An_Exception));
-         Append(ErrorText, ASCII.LF);
-         Append(ErrorText, "Message: " & Exception_Message(An_Exception));
-         Append(ErrorText, ASCII.LF);
-         Append
-           (ErrorText,
-            "-------------------------------------------------");
-         Append(ErrorText, ASCII.LF);
-         Append(ErrorText, Symbolic_Traceback(An_Exception));
-         Append(ErrorText, ASCII.LF);
-         Append
-           (ErrorText,
-            "-------------------------------------------------");
-         Put_Line(ErrorFile, To_String(ErrorText));
-         Close(ErrorFile);
-         ShowErrorInfo(ErrorText);
-      end;
-      EndLogging;
+      On_Exception(An_Exception);
 end SteamSky;
