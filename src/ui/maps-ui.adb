@@ -49,6 +49,7 @@ with Game; use Game;
 with MainMenu; use MainMenu;
 with Utils.UI; use Utils.UI;
 with Ships; use Ships;
+with Ships.Movement; use Ships.Movement;
 with Messages; use Messages;
 with Crew; use Crew;
 with ShipModules; use ShipModules;
@@ -431,7 +432,8 @@ package body Maps.UI is
       if PlayerShip.Speed = DOCKED then
          Hide(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
-         Set_Label(Gtk_Button(Get_Object(Builder, "btnmove")), "Wait");
+         Set_Label(Gtk_Button(Get_Object(Builder, "btnmovewait")), "Wait");
+         Set_Label(Gtk_Button(Get_Object(Builder, "btndock")), "Undock");
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupleft")), False);
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnup")), False);
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupright")), False);
@@ -446,15 +448,21 @@ package body Maps.UI is
             False);
       else
          Set_Active
-           (Gtk_Combo_Box(Get_Object(Builder, "cmdspeed")),
-            Gint(ShipSpeed'Pos(PlayerShip.Speed)));
+           (Gtk_Combo_Box(Get_Object(Builder, "cmbspeed")),
+            Gint(ShipSpeed'Pos(PlayerShip.Speed) - 1));
          Show_All(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
          if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
             Show_All(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
-            Set_Label(Gtk_Button(Get_Object(Builder, "btnmove")), "Move");
+            Set_Label(Gtk_Button(Get_Object(Builder, "btnmovewait")), "Move");
          else
             Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
-            Set_Text(Gtk_Label(Get_Object(Builder, "btnmove")), "Wait");
+            Set_Label(Gtk_Button(Get_Object(Builder, "btnmovewait")), "Wait");
+         end if;
+         Set_Label(Gtk_Button(Get_Object(Builder, "btndock")), "Dock");
+         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
+            Show_All(Gtk_Widget(Get_Object(Builder, "btndock")));
+         else
+            Hide(Gtk_Widget(Get_Object(Builder, "btndock")));
          end if;
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupleft")));
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnup")));
@@ -863,6 +871,31 @@ package body Maps.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "movemapwindow")));
    end MoveMap;
 
+   procedure BtnDockClicked(Object: access Gtkada_Builder_Record'Class) is
+      Message: Unbounded_String := Null_Unbounded_String;
+   begin
+      if PlayerShip.Speed = DOCKED then
+         Message := To_Unbounded_String(DockShip(False));
+         if Length(Message) > 0 then
+            ShowDialog
+              (To_String(Message),
+               Gtk_Window(Get_Object(Object, "skymapwindow")));
+            return;
+         end if;
+      else
+         Message := To_Unbounded_String(DockShip(True));
+         if Length(Message) > 0 then
+            ShowDialog
+              (To_String(Message),
+               Gtk_Window(Get_Object(Object, "skymapwindow")));
+            return;
+         end if;
+      end if;
+      UpdateHeader;
+      UpdateMessages;
+      UpdateMoveButtons;
+   end BtnDockClicked;
+
    procedure CreateSkyMap is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
@@ -893,6 +926,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Set_Destination", SetDestination'Access);
          Register_Handler(Builder, "Hide_Window", HideWindow'Access);
          Register_Handler(Builder, "Move_Map", MoveMap'Access);
+         Register_Handler(Builder, "Dock_Ship", BtnDockClicked'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
