@@ -2030,4 +2030,16 @@ Skill = Gunsmith
 Price = 2000
 InstallTime = 50
 Description = Harpoon gun made of titanium. As other guns, require empty turret to install.
+[160]
+Name = Titanium 40mm gun
+Type = Gun
+Weight = 100
+Value = 16
+MaxValue = 40
+Durability = 100
+Material = Titanium
+Skill = Gunsmith
+Price = 4000
+InstallTime = 75
+Description = Upgraded 40mm ship gun, made of titanium. Require empty turret.
 []
