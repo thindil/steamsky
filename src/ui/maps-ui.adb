@@ -44,6 +44,7 @@ with Gdk.Device_Manager; use Gdk.Device_Manager;
 with Gdk.Device; use Gdk.Device;
 with Gdk.Window; use Gdk.Window;
 with Gdk.Types; use Gdk.Types;
+with Gdk.Cursor; use Gdk.Cursor;
 with Gdk; use Gdk;
 with Game; use Game;
 with MainMenu; use MainMenu;
@@ -489,6 +490,10 @@ package body Maps.UI is
       CyanColor: constant Gtk_Text_Tag := Lookup(Tags, "cyan");
       MapChar: Character;
       MapColor: Gtk_Text_Tag;
+      TextWindow: constant Gdk_Window :=
+        Get_Window
+          (Gtk_Text_View(Get_Object(Builder, "mapview")),
+           Text_Window_Text);
    begin
       StartY := CenterY - (MapHeight / 2);
       StartX := CenterX - (MapWidth / 2);
@@ -556,6 +561,9 @@ package body Maps.UI is
             Insert(MapBuffer, Iter, "" & ASCII.LF);
          end if;
       end loop;
+      if TextWindow /= null then
+         Set_Cursor(TextWindow, Gdk_Cursor_New(Cross));
+      end if;
    end DrawMap;
 
    procedure GetMapSize(Object: access Gtkada_Builder_Record'Class) is
