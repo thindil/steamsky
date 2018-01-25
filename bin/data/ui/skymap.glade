@@ -536,7 +536,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">All stop</col>
+        <col id="0" translatable="yes">Full stop</col>
       </row>
       <row>
         <col id="0" translatable="yes">Quarter speed</col>
@@ -924,6 +924,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="active">3</property>
                         <property name="button_sensitivity">on</property>
                         <property name="id_column">0</property>
+                        <signal name="changed" handler="Change_Speed" swapped="no"/>
                         <child>
                           <object class="GtkCellRendererText"/>
                           <attributes>

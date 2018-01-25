@@ -896,6 +896,13 @@ package body Maps.UI is
       UpdateMoveButtons;
    end BtnDockClicked;
 
+   procedure ChangeSpeed(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      PlayerShip.Speed :=
+        ShipSpeed'Val
+          (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbspeed"))) + 1);
+   end ChangeSpeed;
+
    procedure CreateSkyMap is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
@@ -927,6 +934,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Hide_Window", HideWindow'Access);
          Register_Handler(Builder, "Move_Map", MoveMap'Access);
          Register_Handler(Builder, "Dock_Ship", BtnDockClicked'Access);
+         Register_Handler(Builder, "Change_Speed", ChangeSpeed'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
