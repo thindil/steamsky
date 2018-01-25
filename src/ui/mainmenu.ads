@@ -16,14 +16,15 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Exceptions; use Ada.Exceptions;
 
 package MainMenu is
 
    procedure CreateMainMenu; -- Create main menu and show it
-   procedure ShowErrorInfo
-     (Message: Unbounded_String); -- Show informations about error
    procedure UpdateGoalButton
      (Message: String); -- Update label on character goal button
    procedure ShowMainMenu; -- Show main menu window
+   procedure On_Exception
+     (An_Exception: Exception_Occurrence); -- Handle all exceptions
 
 end MainMenu;
