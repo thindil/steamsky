@@ -17,8 +17,10 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
-with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Calendar; use Ada.Calendar;
+with Ada.Calendar.Formatting;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
@@ -386,5 +388,36 @@ package body MainMenu is
    begin
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
    end ShowMainMenu;
+
+   procedure On_Exception(An_Exception: Exception_Occurrence) is
+      ErrorFile: File_Type;
+      ErrorText: Unbounded_String;
+   begin
+      if Exists(To_String(SaveDirectory) & "error.log") then
+         Open(ErrorFile, Append_File, To_String(SaveDirectory) & "error.log");
+      else
+         Create
+           (ErrorFile,
+            Append_File,
+            To_String(SaveDirectory) & "error.log");
+      end if;
+      Append(ErrorText, Ada.Calendar.Formatting.Image(Clock));
+      Append(ErrorText, ASCII.LF);
+      Append(ErrorText, GameVersion);
+      Append(ErrorText, ASCII.LF);
+      Append(ErrorText, "Exception: " & Exception_Name(An_Exception));
+      Append(ErrorText, ASCII.LF);
+      Append(ErrorText, "Message: " & Exception_Message(An_Exception));
+      Append(ErrorText, ASCII.LF);
+      Append(ErrorText, "-------------------------------------------------");
+      Append(ErrorText, ASCII.LF);
+      Append(ErrorText, Symbolic_Traceback(An_Exception));
+      Append(ErrorText, ASCII.LF);
+      Append(ErrorText, "-------------------------------------------------");
+      Put_Line(ErrorFile, To_String(ErrorText));
+      Close(ErrorFile);
+      ShowErrorInfo(ErrorText);
+      EndLogging;
+   end On_Exception;
 
 end MainMenu;
