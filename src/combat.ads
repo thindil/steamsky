@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,7 +18,6 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ships; use Ships;
-with Game; use Game;
 
 package Combat is
 
@@ -50,7 +49,7 @@ package Combat is
      (EnemyIndex: Positive;
       NewCombat: Boolean :=
         True)
-     return GameStates; -- Generate enemy and start battle
+     return Boolean; -- Generate enemy and start battle, return True if combat starts
    procedure CombatTurn; -- Count damage/ships actions, etc
 
 end Combat;
