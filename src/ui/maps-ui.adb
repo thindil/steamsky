@@ -815,6 +815,7 @@ package body Maps.UI is
             To_String(LastMessage));
          Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
          Check_Resize(Gtk_Container(Get_Object(Builder, "skymapwindow")));
+         LastMessage := Null_Unbounded_String;
       end if;
    end UpdateMessages;
 
