@@ -911,6 +911,42 @@ package body Maps.UI is
           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbspeed"))) + 1);
    end ChangeSpeed;
 
+   procedure MoveShip(User_Data: access GObject_Record'Class) is
+      Message: Unbounded_String;
+      Result: Natural;
+   begin
+      if User_Data = Get_Object(Builder, "btnup") then -- Move up
+         Result := MoveShip(0, 0, -1, Message);
+      elsif User_Data = Get_Object(Builder, "btnbottom") then -- Move down
+         Result := MoveShip(0, 0, 1, Message);
+      elsif User_Data = Get_Object(Builder, "btnright") then -- Move right
+         Result := MoveShip(0, 1, 0, Message);
+      elsif User_Data = Get_Object(Builder, "btnleft") then -- Move left
+         Result := MoveShip(0, -1, 0, Message);
+      elsif User_Data =
+        Get_Object(Builder, "btnbottomleft") then -- Move down/left
+         Result := MoveShip(0, -1, 1, Message);
+      elsif User_Data =
+        Get_Object(Builder, "btnbottomright") then -- Move down/right
+         Result := MoveShip(0, 1, 1, Message);
+      elsif User_Data = Get_Object(Builder, "btnupleft") then -- Move up/left
+         Result := MoveShip(0, -1, -1, Message);
+      elsif User_Data = Get_Object(Builder, "btnupright") then -- Move up/right
+         Result := MoveShip(0, 1, -1, Message);
+      end if;
+      if Message /= Null_Unbounded_String then
+         ShowDialog
+           (To_String(Message),
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+      end if;
+      if Result > 0 then
+         UpdateHeader;
+         UpdateMessages;
+         UpdateMoveButtons;
+         DrawMap;
+      end if;
+   end MoveShip;
+
    procedure CreateSkyMap is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
@@ -943,6 +979,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Move_Map", MoveMap'Access);
          Register_Handler(Builder, "Dock_Ship", BtnDockClicked'Access);
          Register_Handler(Builder, "Change_Speed", ChangeSpeed'Access);
+         Register_Handler(Builder, "Move_Ship", MoveShip'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
