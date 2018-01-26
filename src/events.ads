@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors; use Ada.Containers;
-with Game; use Game;
 
 package Events is
 
@@ -43,7 +42,7 @@ package Events is
    Events_List: Events_Container.Vector;
 
    function CheckForEvent
-     (OldState: GameStates) return GameStates; -- Check if event happen
+     return Boolean; -- Check if event happen, returns True, if combat starts
    procedure UpdateEvents(Minutes: Positive); -- Update all events timers
    procedure DeleteEvent(EventIndex: Positive); -- Delete selected event
    procedure GenerateTraders; -- Create list of traders needed for trader event

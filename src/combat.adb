@@ -31,12 +31,13 @@ with Ships.Movement; use Ships.Movement;
 with Utils; use Utils;
 with Log; use Log;
 with Goals; use Goals;
+with Game; use Game;
 
 package body Combat is
 
    function StartCombat
      (EnemyIndex: Positive;
-      NewCombat: Boolean := True) return GameStates is
+      NewCombat: Boolean := True) return Boolean is
       EnemyShip: ShipRecord;
       PlayerPerception, EnemyPerception: Natural := 0;
       function CountPerception(Spotter, Spotted: ShipRecord) return Natural is
@@ -156,18 +157,18 @@ package body Combat is
                LogMessage
                  ("You was attacked by " & To_String(Enemy.Ship.Name),
                   Log.Combat);
-               return Combat_State;
+               return True;
             end if;
             AddMessage
               ("You spotted " & To_String(Enemy.Ship.Name) & ".",
                OtherMessage);
          end if;
-         return Sky_Map_View;
+         return False;
       end if;
       LogMessage
         ("Started combat with " & To_String(Enemy.Ship.Name),
          Log.Combat);
-      return Combat_State;
+      return True;
    end StartCombat;
 
    procedure CombatTurn is
