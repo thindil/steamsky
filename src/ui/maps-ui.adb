@@ -39,13 +39,14 @@ with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Pango.Font; use Pango.Font;
+with Gdk; use Gdk;
 with Gdk.Rectangle; use Gdk.Rectangle;
 with Gdk.Device_Manager; use Gdk.Device_Manager;
 with Gdk.Device; use Gdk.Device;
 with Gdk.Window; use Gdk.Window;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Cursor; use Gdk.Cursor;
-with Gdk; use Gdk;
+with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with MainMenu; use MainMenu;
 with Utils.UI; use Utils.UI;
@@ -986,6 +987,14 @@ package body Maps.UI is
          Override_Font
            (Gtk_Widget(Get_Object(Builder, "mapview")),
             FontDescription);
+         Override_Background_Color
+           (Gtk_Widget(Get_Object(Builder, "messagesview")),
+            0,
+            Black_RGBA);
+         Override_Color
+           (Gtk_Widget(Get_Object(Builder, "messagesview")),
+            0,
+            White_RGBA);
       end if;
       UpdateMessages;
       Set_Text
