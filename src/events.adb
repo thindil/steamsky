@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -28,12 +28,13 @@ with Bases; use Bases;
 with ShipModules; use ShipModules;
 with Items; use Items;
 with Utils; use Utils;
+with Game; use Game;
 
 package body Events is
 
    Traders, FriendlyShips: Positive_Container.Vector;
 
-   function CheckForEvent(OldState: GameStates) return GameStates is
+   function CheckForEvent return Boolean is
       TimePassed: Integer;
       CrewIndex, PlayerValue: Natural := 0;
       Roll,
@@ -88,7 +89,7 @@ package body Events is
                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
                       .Data);
             when others =>
-               return OldState;
+               return False;
          end case;
       end if;
       if GetRandom(1, 100) < 7 then -- Event happen
@@ -218,7 +219,7 @@ package body Events is
                    DOCKED then -- Change owner of abandoned base
                   RecoverBase(BaseIndex);
                end if;
-               return OldState;
+               return False;
             end if;
             if PlayerShip.Speed /= DOCKED then
                if Roll in 21 .. 30 and
@@ -347,7 +348,7 @@ package body Events is
             end if;
          end if;
       end if;
-      return OldState;
+      return False;
    end CheckForEvent;
 
    procedure UpdateEvents(Minutes: Positive) is
