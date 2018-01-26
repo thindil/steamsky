@@ -74,25 +74,31 @@ package body Maps.UI is
    MapY: Positive;
    StartX, StartY: Integer;
 
-   function QuitGame
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-      SkyMapWindow: constant Gtk_Window :=
-        Gtk_Window(Get_Object(Object, "skymapwindow"));
+   function ShowConfirmDialog(Message: String) return Boolean is
       MessageDialog: constant Gtk_Message_Dialog :=
         Gtk_Message_Dialog_New
-          (SkyMapWindow,
+          (Gtk_Window(Get_Object(Builder, "skymapwindow")),
            Modal,
            Message_Question,
            Buttons_Yes_No,
-           "Are you sure want to quit game?");
+           Message);
    begin
       if Run(MessageDialog) = Gtk_Response_Yes then
-         EndGame(True);
          Destroy(MessageDialog);
-         ShowMainMenu;
-         return Hide_On_Delete(Gtk_Widget(SkyMapWindow));
+         return True;
       end if;
       Destroy(MessageDialog);
+      return False;
+   end ShowConfirmDialog;
+
+   function QuitGame
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   begin
+      if ShowConfirmDialog("Are you sure want to quit game?") then
+         EndGame(True);
+         ShowMainMenu;
+         return Hide_On_Delete(Gtk_Widget(Get_Object(Object, "skymapwindow")));
+      end if;
       return True;
    end QuitGame;
 
