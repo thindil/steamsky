@@ -1114,6 +1114,11 @@ package body Maps.UI is
       end if;
    end MoveShip;
 
+   procedure ShowOrders(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Show_All(Gtk_Widget(Get_Object(Object, "orderswindow")));
+   end ShowOrders;
+
    procedure CreateSkyMap is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
@@ -1147,6 +1152,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Dock_Ship", BtnDockClicked'Access);
          Register_Handler(Builder, "Change_Speed", ChangeSpeed'Access);
          Register_Handler(Builder, "Move_Ship", MoveShip'Access);
+         Register_Handler(Builder, "Show_Orders", ShowOrders'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
