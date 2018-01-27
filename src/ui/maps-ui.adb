@@ -923,6 +923,7 @@ package body Maps.UI is
       Message: Unbounded_String;
       Result: Natural;
       StartsCombat: Boolean;
+      NewX, NewY: Integer;
    begin
       if User_Data = Get_Object(Builder, "btnup") then -- Move up
          Result := MoveShip(0, 0, -1, Message);
@@ -942,6 +943,40 @@ package body Maps.UI is
          Result := MoveShip(0, -1, -1, Message);
       elsif User_Data = Get_Object(Builder, "btnupright") then -- Move up/right
          Result := MoveShip(0, 1, -1, Message);
+      elsif User_Data =
+        Get_Object
+          (Builder,
+           "btnmovewait") then -- Move to destination or wait 1 game minute
+         if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
+            Result := 1;
+            UpdateGame(1);
+         else
+            if PlayerShip.DestinationX > PlayerShip.SkyX then
+               NewX := 1;
+            elsif PlayerShip.DestinationX < PlayerShip.SkyX then
+               NewX := -1;
+            end if;
+            if PlayerShip.DestinationY > PlayerShip.SkyY then
+               NewY := 1;
+            elsif PlayerShip.DestinationY < PlayerShip.SkyY then
+               NewY := -1;
+            end if;
+            Result := MoveShip(0, NewX, NewY, Message);
+            if PlayerShip.DestinationX = PlayerShip.SkyX and
+              PlayerShip.DestinationY = PlayerShip.SkyY then
+               AddMessage
+                 ("You reached your travel destination.",
+                  OrderMessage);
+               PlayerShip.DestinationX := 0;
+               PlayerShip.DestinationY := 0;
+               if GameSettings.AutoFinish then
+                  Message := To_Unbounded_String(AutoFinishMissions);
+               end if;
+            end if;
+         end if;
+      elsif User_Data =
+        Get_Object(Builder, "btnmoveto") then -- Move to destination
+         Result := 0;
       end if;
       case Result is
          when 1 => -- Ship moved, check for events

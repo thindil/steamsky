@@ -715,6 +715,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="label" translatable="yes">Move to</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="Move_Ship" object="btnmoveto" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -851,6 +852,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="Move_Ship" object="btnmovewait" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
