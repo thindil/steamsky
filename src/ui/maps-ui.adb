@@ -690,7 +690,8 @@ package body Maps.UI is
          declare
             EventIndex: constant Positive := SkyMap(MapX, MapY).EventIndex;
          begin
-            if Events_List(EventIndex).EType /= BaseRecovery then
+            if Events_List(EventIndex).EType /= BaseRecovery and
+              SkyMap(MapX, MapY).BaseIndex > 0 then
                Append(MapInfoText, ASCII.LF & ASCII.LF);
             end if;
             case Events_List(EventIndex).EType is
@@ -720,7 +721,10 @@ package body Maps.UI is
          declare
             MissionIndex: constant Positive := SkyMap(MapX, MapY).MissionIndex;
          begin
-            Append(MapInfoText, ASCII.LF & ASCII.LF);
+            if SkyMap(MapX, MapY).BaseIndex > 0 or
+              SkyMap(MapX, MapY).EventIndex > 0 then
+               Append(MapInfoText, ASCII.LF & ASCII.LF);
+            end if;
             case PlayerShip.Missions(MissionIndex).MType is
                when Deliver =>
                   Append
