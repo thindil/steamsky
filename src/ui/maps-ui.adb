@@ -922,6 +922,7 @@ package body Maps.UI is
    procedure MoveShip(User_Data: access GObject_Record'Class) is
       Message: Unbounded_String;
       Result: Natural;
+      StartsCombat: Boolean;
    begin
       if User_Data = Get_Object(Builder, "btnup") then -- Move up
          Result := MoveShip(0, 0, -1, Message);
@@ -942,10 +943,53 @@ package body Maps.UI is
       elsif User_Data = Get_Object(Builder, "btnupright") then -- Move up/right
          Result := MoveShip(0, 1, -1, Message);
       end if;
+      case Result is
+         when 1 => -- Ship moved, check for events
+            StartsCombat := CheckForEvent;
+            if not StartsCombat and GameSettings.AutoFinish then
+               Message := To_Unbounded_String(AutoFinishMissions);
+            end if;
+         when 6 => -- Ship moved, but pilot needs rest, confirm
+            if ShowConfirmDialog
+                ("You don't have pilot on duty. Did you want to wait until your pilot rest?") then
+               WaitForRest;
+               StartsCombat := CheckForEvent;
+               if not StartsCombat and GameSettings.AutoFinish then
+                  Message := To_Unbounded_String(AutoFinishMissions);
+               end if;
+            end if;
+         when 7 => -- Ship moved, but engineer needs rest, confirm
+            if ShowConfirmDialog
+                ("You don't have engineer on duty. Did you want to wait until your engineer rest?") then
+               WaitForRest;
+               StartsCombat := CheckForEvent;
+               if not StartsCombat and GameSettings.AutoFinish then
+                  Message := To_Unbounded_String(AutoFinishMissions);
+               end if;
+            end if;
+         when 8 => -- Ship moved, but crew needs rest, autorest
+            StartsCombat := CheckForEvent;
+            if not StartsCombat then
+               WaitForRest;
+               StartsCombat := CheckForEvent;
+            end if;
+            if not StartsCombat and GameSettings.AutoFinish then
+               Message := To_Unbounded_String(AutoFinishMissions);
+            end if;
+         when others =>
+            null;
+      end case;
       if Message /= Null_Unbounded_String then
          ShowDialog
            (To_String(Message),
             Gtk_Window(Get_Object(Builder, "skymapwindow")));
+      end if;
+      if Result > 0 then
+         CenterX := PlayerShip.SkyX;
+         CenterY := PlayerShip.SkyY;
+      end if;
+      if StartsCombat then
+         Put_Line("Combat here");
       end if;
       if Result > 0 then
          UpdateHeader;
