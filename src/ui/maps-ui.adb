@@ -977,7 +977,82 @@ package body Maps.UI is
          end if;
       elsif User_Data =
         Get_Object(Builder, "btnmoveto") then -- Move to destination
-         Result := 0;
+         loop
+            NewX := 0;
+            NewY := 0;
+            if PlayerShip.DestinationX > PlayerShip.SkyX then
+               NewX := 1;
+            elsif PlayerShip.DestinationX < PlayerShip.SkyX then
+               NewX := -1;
+            end if;
+            if PlayerShip.DestinationY > PlayerShip.SkyY then
+               NewY := 1;
+            elsif PlayerShip.DestinationY < PlayerShip.SkyY then
+               NewY := -1;
+            end if;
+            Result := MoveShip(0, NewX, NewY, Message);
+            exit when Result = 0;
+            StartsCombat := CheckForEvent;
+            if StartsCombat then
+               Result := 4;
+               exit;
+            end if;
+            if Result = 8 then
+               WaitForRest;
+               Result := 1;
+               StartsCombat := CheckForEvent;
+               if StartsCombat then
+                  Result := 4;
+                  exit;
+               end if;
+            end if;
+            if GameSettings.AutoMoveStop /= NEVER and
+              SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+               declare
+                  EventIndex: constant Positive :=
+                    SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+               begin
+                  case GameSettings.AutoMoveStop is
+                     when ANY =>
+                        if Events_List(EventIndex).EType = EnemyShip or
+                          Events_List(EventIndex).EType = Trader or
+                          Events_List(EventIndex).EType = FriendlyShip or
+                          Events_List(EventIndex).EType = EnemyPatrol then
+                           Result := 0;
+                           exit;
+                        end if;
+                     when FRIENDLY =>
+                        if Events_List(EventIndex).EType = Trader or
+                          Events_List(EventIndex).EType = FriendlyShip then
+                           Result := 0;
+                           exit;
+                        end if;
+                     when ENEMY =>
+                        if Events_List(EventIndex).EType = EnemyShip or
+                          Events_List(EventIndex).EType = EnemyPatrol then
+                           Result := 0;
+                           exit;
+                        end if;
+                     when NEVER =>
+                        null;
+                  end case;
+               end;
+            end if;
+            if PlayerShip.DestinationX = PlayerShip.SkyX and
+              PlayerShip.DestinationY = PlayerShip.SkyY then
+               AddMessage
+                 ("You reached your travel destination.",
+                  OrderMessage);
+               PlayerShip.DestinationX := 0;
+               PlayerShip.DestinationY := 0;
+               if GameSettings.AutoFinish then
+                  Message := To_Unbounded_String(AutoFinishMissions);
+               end if;
+               Result := 4;
+               exit;
+            end if;
+            exit when Result = 6 or Result = 7;
+         end loop;
       end if;
       case Result is
          when 1 => -- Ship moved, check for events
