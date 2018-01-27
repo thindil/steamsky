@@ -972,6 +972,7 @@ package body Maps.UI is
                if GameSettings.AutoFinish then
                   Message := To_Unbounded_String(AutoFinishMissions);
                end if;
+               Result := 4;
             end if;
          end if;
       elsif User_Data =
