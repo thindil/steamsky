@@ -76,6 +76,7 @@ package body Maps.UI is
    MapX,
    MapY: Positive;
    StartX, StartY: Integer;
+   ButtonsVisible: Boolean := False;
 
    function ShowConfirmDialog(Message: String) return Boolean is
       MessageDialog: constant Gtk_Message_Dialog :=
@@ -1123,11 +1124,20 @@ package body Maps.UI is
       Hide(Widget);
    end HideButtons;
 
+   procedure CheckButtons(Widget: not null access Gtk_Widget_Record'Class) is
+   begin
+      if not Get_No_Show_All(Widget) and not ButtonsVisible then
+         ButtonsVisible := True;
+      end if;
+   end CheckButtons;
+
    procedure ShowOrders(Object: access Gtkada_Builder_Record'Class) is
       HaveTrader: Boolean := False;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MissionsLimit: Integer;
+      Event: Events_Types := None;
+      ItemIndex: Natural;
    begin
       Foreach
         (Gtk_Container(Get_Object(Object, "btnboxorders")),
@@ -1205,6 +1215,44 @@ package body Maps.UI is
                   if (Mission.Finished and Mission.StartBase = BaseIndex) or
                     (Mission.TargetX = PlayerShip.SkyX and
                      Mission.TargetY = PlayerShip.SkyY) then
+                     case Mission.MType is
+                        when Deliver =>
+                           Set_Label
+                             (Gtk_Button
+                                (Get_Object(Object, "btnfinishmission")),
+                              "Complete delivery of " &
+                              To_String(Items_List(Mission.Target).Name));
+                        when Destroy =>
+                           if Mission.Finished then
+                              Set_Label
+                                (Gtk_Button
+                                   (Get_Object(Object, "btnfinishmission")),
+                                 "Complete destroy " &
+                                 To_String
+                                   (ProtoShips_List(Mission.Target).Name));
+                           end if;
+                        when Patrol =>
+                           if Mission.Finished then
+                              Set_Label
+                                (Gtk_Button
+                                   (Get_Object(Object, "btnfinishmission")),
+                                 "Complete Patrol area mission");
+                           end if;
+                        when Explore =>
+                           if Mission.Finished then
+                              Set_Label
+                                (Gtk_Button
+                                   (Get_Object(Object, "btnfinishmission")),
+                                 "Complete Explore area mission");
+                           end if;
+                        when Passenger =>
+                           if Mission.Finished then
+                              Set_Label
+                                (Gtk_Button
+                                   (Get_Object(Object, "btnfinishmission")),
+                                 "Complete Transport passenger mission");
+                           end if;
+                     end case;
                      Set_No_Show_All
                        (Gtk_Widget(Get_Object(Object, "btnfinishmission")),
                         False);
@@ -1225,8 +1273,179 @@ package body Maps.UI is
                   False);
             end if;
          end if;
+         if SkyBases(BaseIndex).Owner = Abandoned then
+            Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btnloot")), False);
+         end if;
+      else
+         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+            Event :=
+              Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                .EType;
+         end if;
+         case Event is
+            when EnemyShip | EnemyPatrol =>
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btnattack")),
+                  False);
+            when FullDocks =>
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btnattack")),
+                  False);
+               Set_Label(Gtk_Button(Get_Object(Object, "btnattack")), "Wait");
+            when AttackOnBase =>
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btnattack")),
+                  False);
+               Set_Label
+                 (Gtk_Button(Get_Object(Object, "btnattack")),
+                  "Defend");
+            when Disease =>
+               if HaveTrader then
+                  ItemIndex :=
+                    FindItem
+                      (Inventory => PlayerShip.Cargo,
+                       ItemType => HealingTools);
+                  if ItemIndex > 0 then
+                     Set_No_Show_All
+                       (Gtk_Widget(Get_Object(Object, "btnfreemedicines")),
+                        False);
+                     Set_No_Show_All
+                       (Gtk_Widget(Get_Object(Object, "btnpricedmedicines")),
+                        False);
+                  end if;
+               end if;
+            when None | DoublePrice | BaseRecovery =>
+               if BaseIndex > 0 then
+                  for Mission of PlayerShip.Missions loop
+                     if HaveTrader then
+                        case Mission.MType is
+                           when Deliver =>
+                              Set_Label
+                                (Gtk_Button
+                                   (Get_Object(Object, "btnfinishmission")),
+                                 "Complete delivery of " &
+                                 To_String(Items_List(Mission.Target).Name));
+                           when Destroy =>
+                              if Mission.Finished then
+                                 Set_Label
+                                   (Gtk_Button
+                                      (Get_Object(Object, "btnfinishmission")),
+                                    "Complete destroy " &
+                                    To_String
+                                      (ProtoShips_List(Mission.Target).Name));
+                              end if;
+                           when Patrol =>
+                              if Mission.Finished then
+                                 Set_Label
+                                   (Gtk_Button
+                                      (Get_Object(Object, "btnfinishmission")),
+                                    "Complete Patrol area mission");
+                              end if;
+                           when Explore =>
+                              if Mission.Finished then
+                                 Set_Label
+                                   (Gtk_Button
+                                      (Get_Object(Object, "btnfinishmission")),
+                                    "Complete Explore area mission");
+                              end if;
+                           when Passenger =>
+                              if Mission.Finished then
+                                 Set_Label
+                                   (Gtk_Button
+                                      (Get_Object(Object, "btnfinishmission")),
+                                    "Complete Transport passenger mission");
+                              end if;
+                        end case;
+                        Set_No_Show_All
+                          (Gtk_Widget(Get_Object(Object, "btnfinishmission")),
+                           False);
+                     end if;
+                  end loop;
+               else
+                  for Mission of PlayerShip.Missions loop
+                     if Mission.TargetX = PlayerShip.SkyX and
+                       Mission.TargetY = PlayerShip.SkyY and
+                       not Mission.Finished then
+                        case Mission.MType is
+                           when Deliver | Passenger =>
+                              null;
+                           when Destroy =>
+                              Set_Label
+                                (Gtk_Button
+                                   (Get_Object(Object, "btncurrentmission")),
+                                 "Search for " &
+                                 To_String
+                                   (ProtoShips_List(Mission.Target).Name));
+                           when Patrol =>
+                              Set_Label
+                                (Gtk_Button
+                                   (Get_Object(Object, "btncurrentmission")),
+                                 "Patrol area");
+                           when Explore =>
+                              Set_Label
+                                (Gtk_Button
+                                   (Get_Object(Object, "btncurrentmission")),
+                                 "Explore area");
+                        end case;
+                        Set_No_Show_All
+                          (Gtk_Widget(Get_Object(Object, "btncurrentmission")),
+                           False);
+                     end if;
+                  end loop;
+               end if;
+            when Trader =>
+               if HaveTrader then
+                  Set_No_Show_All
+                    (Gtk_Widget(Get_Object(Object, "btntrade")),
+                     False);
+                  Set_No_Show_All
+                    (Gtk_Widget(Get_Object(Object, "btnaskevents")),
+                     False);
+                  Set_No_Show_All
+                    (Gtk_Widget(Get_Object(Object, "btnaskbases")),
+                     False);
+               end if;
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btnattack")),
+                  False);
+            when FriendlyShip =>
+               if HaveTrader then
+                  if Index
+                      (ProtoShips_List
+                         (Events_List
+                            (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                               .EventIndex)
+                            .Data)
+                         .Name,
+                       To_String(TradersName)) >
+                    0 then
+                     Set_No_Show_All
+                       (Gtk_Widget(Get_Object(Object, "btntrade")),
+                        False);
+                     Set_No_Show_All
+                       (Gtk_Widget(Get_Object(Object, "btnaskbases")),
+                        False);
+                  end if;
+                  Set_No_Show_All
+                    (Gtk_Widget(Get_Object(Object, "btnaskevents")),
+                     False);
+               end if;
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btnattack")),
+                  False);
+         end case;
       end if;
-      Show_All(Gtk_Widget(Get_Object(Object, "orderswindow")));
+      ButtonsVisible := False;
+      Foreach
+        (Gtk_Container(Get_Object(Object, "btnboxorders")),
+         CheckButtons'Access);
+      if ButtonsVisible then
+         Show_All(Gtk_Widget(Get_Object(Object, "orderswindow")));
+      else
+         ShowDialog
+           ("Here are no available ship orders at this moment.",
+            Gtk_Window(Get_Object(Object, "skymapwindow")));
+      end if;
    end ShowOrders;
 
    procedure CreateSkyMap is
