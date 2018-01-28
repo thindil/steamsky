@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Containers; use Ada.Containers;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
@@ -52,6 +53,7 @@ with MainMenu; use MainMenu;
 with Utils.UI; use Utils.UI;
 with Ships; use Ships;
 with Ships.Movement; use Ships.Movement;
+with Ships.Crew; use Ships.Crew;
 with Messages; use Messages;
 with Crew; use Crew;
 with ShipModules; use ShipModules;
@@ -60,6 +62,7 @@ with Items; use Items;
 with Config; use Config;
 with Bases; use Bases;
 with Missions; use Missions;
+with Crafts; use Crafts;
 
 package body Maps.UI is
 
@@ -1114,8 +1117,115 @@ package body Maps.UI is
       end if;
    end MoveShip;
 
-   procedure ShowOrders(Object: access Gtkada_Builder_Record'Class) is
+   procedure HideButtons(Widget: not null access Gtk_Widget_Record'Class) is
    begin
+      Set_No_Show_All(Widget, True);
+      Hide(Widget);
+   end HideButtons;
+
+   procedure ShowOrders(Object: access Gtkada_Builder_Record'Class) is
+      HaveTrader: Boolean := False;
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      MissionsLimit: Integer;
+   begin
+      Foreach
+        (Gtk_Container(Get_Object(Object, "btnboxorders")),
+         HideButtons'Access);
+      if FindMember(Talk) > 0 then
+         HaveTrader := True;
+      end if;
+      if PlayerShip.Speed = DOCKED then
+         if HaveTrader and SkyBases(BaseIndex).Owner /= Abandoned then
+            Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btntrade")), False);
+            Set_No_Show_All
+              (Gtk_Widget(Get_Object(Object, "btnschool")),
+               False);
+            if SkyBases(BaseIndex).Recruits.Length > 0 then
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btnrecruit")),
+                  False);
+            end if;
+            if DaysDifference(SkyBases(BaseIndex).AskedForEvents) > 6 then
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btnaskevents")),
+                  False);
+            end if;
+            if not SkyBases(BaseIndex).AskedForBases then
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btnaskbases")),
+                  False);
+            end if;
+            for Member of PlayerShip.Crew loop
+               if Member.Health < 100 then
+                  Set_No_Show_All
+                    (Gtk_Widget(Get_Object(Object, "btnheal")),
+                     False);
+                  exit;
+               end if;
+            end loop;
+            for Module of PlayerShip.Modules loop
+               if Module.Durability < Module.MaxDurability then
+                  Set_No_Show_All
+                    (Gtk_Widget(Get_Object(Object, "btnrepair")),
+                     False);
+                  exit;
+               end if;
+            end loop;
+            if SkyBases(BaseIndex).BaseType = Shipyard then
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btnshipyard")),
+                  False);
+            end if;
+            for I in Recipes_List.First_Index .. Recipes_List.Last_Index loop
+               if Known_Recipes.Find_Index(Item => I) =
+                 Positive_Container.No_Index and
+                 Recipes_List(I).BaseType =
+                   Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1 then
+                  Set_No_Show_All
+                    (Gtk_Widget(Get_Object(Object, "btnrecipes")),
+                     False);
+                  exit;
+               end if;
+            end loop;
+            if SkyBases(BaseIndex).Missions.Length > 0 then
+               case SkyBases(BaseIndex).Reputation(1) is
+                  when 0 .. 25 =>
+                     MissionsLimit := 1;
+                  when 26 .. 50 =>
+                     MissionsLimit := 3;
+                  when 51 .. 75 =>
+                     MissionsLimit := 5;
+                  when 76 .. 100 =>
+                     MissionsLimit := 10;
+                  when others =>
+                     MissionsLimit := 0;
+               end case;
+               for Mission of PlayerShip.Missions loop
+                  if (Mission.Finished and Mission.StartBase = BaseIndex) or
+                    (Mission.TargetX = PlayerShip.SkyX and
+                     Mission.TargetY = PlayerShip.SkyY) then
+                     Set_No_Show_All
+                       (Gtk_Widget(Get_Object(Object, "btnfinishmission")),
+                        False);
+                  end if;
+                  if Mission.StartBase = BaseIndex then
+                     MissionsLimit := MissionsLimit - 1;
+                  end if;
+               end loop;
+               if MissionsLimit > 0 then
+                  Set_No_Show_All
+                    (Gtk_Widget(Get_Object(Object, "btnmissions")),
+                     False);
+               end if;
+            end if;
+            if PlayerShip.HomeBase /= BaseIndex then
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btnsethome")),
+                  False);
+            end if;
+         end if;
+      end if;
       Show_All(Gtk_Widget(Get_Object(Object, "orderswindow")));
    end ShowOrders;
 
