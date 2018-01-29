@@ -487,6 +487,32 @@ package body Maps.UI is
       end if;
    end UpdateMoveButtons;
 
+   procedure UpdateMenu is
+      NeedHealing, NeedRest: Boolean := False;
+   begin
+      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+         if PlayerShip.Crew(I).Tired > 0 and
+           PlayerShip.Crew(I).Order = Rest then
+            NeedRest := True;
+         end if;
+         if PlayerShip.Crew(I).Health < 100 and
+           PlayerShip.Crew(I).Health > 0 and
+           PlayerShip.Crew(I).Order = Rest then
+            for Module of PlayerShip.Modules loop
+               if Modules_List(Module.ProtoIndex).MType = CABIN and
+                 Module.Owner = I then
+                  NeedHealing := True;
+                  exit;
+               end if;
+            end loop;
+         end if;
+      end loop;
+      Set_Visible
+        (Gtk_Widget(Get_Object(Builder, "itemwaitheal")),
+         NeedHealing);
+      Set_Visible(Gtk_Widget(Get_Object(Builder, "itemwaitrest")), NeedRest);
+   end UpdateMenu;
+
    procedure DrawMap is
       Iter: Gtk_Text_Iter;
       MapBuffer: constant Gtk_Text_Buffer :=
@@ -918,6 +944,7 @@ package body Maps.UI is
       UpdateHeader;
       UpdateMessages;
       UpdateMoveButtons;
+      UpdateMenu;
    end BtnDockClicked;
 
    procedure ChangeSpeed(Object: access Gtkada_Builder_Record'Class) is
@@ -1114,6 +1141,7 @@ package body Maps.UI is
          UpdateHeader;
          UpdateMessages;
          UpdateMoveButtons;
+         UpdateMenu;
          DrawMap;
       end if;
    end MoveShip;
@@ -1448,6 +1476,55 @@ package body Maps.UI is
       end if;
    end ShowOrders;
 
+   procedure WaitOrder(User_Data: access GObject_Record'Class) is
+      TimeNeeded: Natural := 0;
+   begin
+      if User_Data = Get_Object(Builder, "item1min") then
+         UpdateGame(1);
+      elsif User_Data = Get_Object(Builder, "item5min") then
+         UpdateGame(5);
+      elsif User_Data = Get_Object(Builder, "item10min") then
+         UpdateGame(10);
+      elsif User_Data = Get_Object(Builder, "item15min") then
+         UpdateGame(15);
+      elsif User_Data = Get_Object(Builder, "item30min") then
+         UpdateGame(30);
+      elsif User_Data = Get_Object(Builder, "item1hour") then
+         UpdateGame(60);
+      elsif User_Data = Get_Object(Builder, "itemxmin") then
+         return;
+      elsif User_Data = Get_Object(Builder, "itemwaitrest") then
+         WaitForRest;
+      elsif User_Data = Get_Object(Builder, "itemwaitheal") then
+         for I in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(I).Health < 100 and
+              PlayerShip.Crew(I).Health > 0 and
+              PlayerShip.Crew(I).Order = Rest then
+               for Module of PlayerShip.Modules loop
+                  if Modules_List(Module.ProtoIndex).MType = CABIN and
+                    Module.Owner = Crew_Container.To_Index(I) then
+                     if TimeNeeded <
+                       (100 - PlayerShip.Crew(I).Health) * 15 then
+                        TimeNeeded := (100 - PlayerShip.Crew(I).Health) * 15;
+                     end if;
+                     exit;
+                  end if;
+               end loop;
+            end if;
+         end loop;
+         if TimeNeeded > 0 then
+            UpdateGame(TimeNeeded);
+         else
+            return;
+         end if;
+      end if;
+      UpdateHeader;
+      UpdateMessages;
+      UpdateMoveButtons;
+      UpdateMenu;
+      DrawMap;
+   end WaitOrder;
+
    procedure CreateSkyMap is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
@@ -1482,6 +1559,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Change_Speed", ChangeSpeed'Access);
          Register_Handler(Builder, "Move_Ship", MoveShip'Access);
          Register_Handler(Builder, "Show_Orders", ShowOrders'Access);
+         Register_Handler(Builder, "Wait_Order", WaitOrder'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
@@ -1503,6 +1581,7 @@ package body Maps.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       UpdateHeader;
       UpdateMoveButtons;
+      UpdateMenu;
       Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
    end CreateSkyMap;
 
