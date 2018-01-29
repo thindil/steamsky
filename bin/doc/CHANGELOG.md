@@ -10,8 +10,8 @@ All notable changes to this project will be documented in this file.
   titanium cabin, heavy titanium turret, heavy titanium battering ram, small
   titanium workshop, huge titanium hull, advanced huge titanium hull, huge
   titanium engine, advanced huge titanium engine, titanium harpoon gun,
-  titanium 40mm gun, titanium 60mm gun, titanium 80mm gun and titanium 100mm
-  gun
+  titanium 40mm gun, titanium 60mm gun, titanium 80mm gun, titanium 100mm gun
+  and titanium 120mm gun
 
 ### Changed
 - Updated README.md
