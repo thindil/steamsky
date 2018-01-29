@@ -111,10 +111,94 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
-        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Wait orders</property>
         <property name="use_underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkMenuItem" id="item1min">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Wait 1 minute</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="Wait_Order" object="item1min" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="item5min">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Wait 5 minutes</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="Wait_Order" object="item5min" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="item10min">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Wait 10 minutes</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="Wait_Order" object="item10min" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="item15min">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Wait 15 minutes</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="Wait_Order" object="item15min" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="item30min">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Wait 30 minutes</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="Wait_Order" object="item30min" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="item1hour">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Wait 1 hour</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="Wait_Order" object="item1hour" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="itemxmin">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Wait X minutes</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="Wait_Order" object="itemxmin" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="itemwaitrest">
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Wait until crew is rested</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="Wait_Order" object="itemwaitrest" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="itemwaitheal">
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Wait until crew is healed</property>
+                <property name="use_underline">True</property>
+                <signal name="activate" handler="Wait_Order" object="itemwaitheal" swapped="no"/>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
     <child>
