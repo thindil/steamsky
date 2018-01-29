@@ -52,6 +52,7 @@ with Goals; use Goals;
 with Game.SaveLoad; use Game.SaveLoad;
 with Utils.UI; use Utils.UI;
 with Log; use Log;
+with Combat.UI; use Combat.UI;
 
 package body MainMenu is
 
@@ -296,6 +297,7 @@ package body MainMenu is
       if LoadGameData(False) then
          Hide(Gtk_Widget(Get_Object(Object, "mainmenuwindow")));
          CreateSkyMap;
+         CreateCombatUI;
       else
          Hide(Gtk_Widget(Get_Object(Object, "btnloadgame")));
       end if;
@@ -320,6 +322,7 @@ package body MainMenu is
          Gender);
       Hide(Gtk_Widget(Get_Object(Object, "mainmenuwindow")));
       CreateSkyMap;
+      CreateCombatUI;
    end NewGame;
 
    procedure CreateMainMenu is

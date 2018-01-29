@@ -1250,6 +1250,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <signal name="clicked" handler="Attack_Order" swapped="no"/>
           </object>
           <packing>
             <property name="expand">True</property>
