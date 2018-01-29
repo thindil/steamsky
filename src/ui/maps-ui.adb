@@ -63,6 +63,7 @@ with Config; use Config;
 with Bases; use Bases;
 with Missions; use Missions;
 with Crafts; use Crafts;
+with Combat.UI; use Combat.UI;
 
 package body Maps.UI is
 
@@ -1135,7 +1136,8 @@ package body Maps.UI is
          CenterY := PlayerShip.SkyY;
       end if;
       if StartsCombat then
-         Put_Line("Combat here");
+         Hide(Gtk_Window(Get_Object(Builder, "skymapwindow")));
+         ShowCombatUI;
       end if;
       if Result > 0 then
          UpdateHeader;
@@ -1526,6 +1528,20 @@ package body Maps.UI is
       DrawMap;
    end WaitOrder;
 
+   procedure AttackOrder(Object: access Gtkada_Builder_Record'Class) is
+      BtnAttack: constant Gtk_Button :=
+        Gtk_Button(Get_Object(Object, "btnattack"));
+      Label: constant String := Get_Label(BtnAttack);
+   begin
+      Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+      if Label = "Wait" then
+         Show_All(Gtk_Widget(Get_Object(Builder, "waitxwindow")));
+      else
+         Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
+         ShowCombatUI;
+      end if;
+   end AttackOrder;
+
    procedure CreateSkyMap is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
@@ -1561,6 +1577,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Move_Ship", MoveShip'Access);
          Register_Handler(Builder, "Show_Orders", ShowOrders'Access);
          Register_Handler(Builder, "Wait_Order", WaitOrder'Access);
+         Register_Handler(Builder, "Attack_Order", AttackOrder'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
