@@ -2078,4 +2078,16 @@ Skill = Gunsmith
 Price = 32000
 InstallTime = 150
 Description = Upgraded 100mm ship gun, made of titanium. Require empty turret.
+[164]
+Name = Titanium 120mm gun
+Type = Gun
+Weight = 1600
+Value = 25
+MaxValue = 520
+Durability = 400
+Material = Titanium
+Skill = Gunsmith
+Price = 64000
+InstallTime = 180
+Description = Upgraded 120mm ship gun, made of titanium. Require empty turret.
 []
