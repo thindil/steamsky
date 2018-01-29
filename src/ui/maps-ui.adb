@@ -1491,8 +1491,6 @@ package body Maps.UI is
          UpdateGame(30);
       elsif User_Data = Get_Object(Builder, "item1hour") then
          UpdateGame(60);
-      elsif User_Data = Get_Object(Builder, "itemxmin") then
-         return;
       elsif User_Data = Get_Object(Builder, "itemwaitrest") then
          WaitForRest;
       elsif User_Data = Get_Object(Builder, "itemwaitheal") then
@@ -1517,6 +1515,9 @@ package body Maps.UI is
          else
             return;
          end if;
+      elsif User_Data = Get_Object(Builder, "waitxadj") then
+         Hide(Gtk_Widget(Get_Object(Builder, "waitxwindow")));
+         UpdateGame(Positive(Get_Value(Gtk_Adjustment(User_Data))));
       end if;
       UpdateHeader;
       UpdateMessages;
