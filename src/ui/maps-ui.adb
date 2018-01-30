@@ -1317,6 +1317,9 @@ package body Maps.UI is
                Set_No_Show_All
                  (Gtk_Widget(Get_Object(Object, "btnattack")),
                   False);
+               Set_Label
+                 (Gtk_Button(Get_Object(Object, "btnattack")),
+                  "Attack");
             when FullDocks =>
                Set_No_Show_All
                  (Gtk_Widget(Get_Object(Object, "btnattack")),
@@ -1438,6 +1441,9 @@ package body Maps.UI is
                Set_No_Show_All
                  (Gtk_Widget(Get_Object(Object, "btnattack")),
                   False);
+               Set_Label
+                 (Gtk_Button(Get_Object(Object, "btnattack")),
+                  "Attack");
             when FriendlyShip =>
                if HaveTrader then
                   if Index
@@ -1463,6 +1469,9 @@ package body Maps.UI is
                Set_No_Show_All
                  (Gtk_Widget(Get_Object(Object, "btnattack")),
                   False);
+               Set_Label
+                 (Gtk_Button(Get_Object(Object, "btnattack")),
+                  "Attack");
          end case;
       end if;
       ButtonsVisible := False;
