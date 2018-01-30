@@ -26,5 +26,14 @@ package Utils.UI is
    function HideWindow
      (User_Data: access GObject_Record'Class)
      return Boolean; -- Hide window instead of destroying it
+   procedure ShowWindow
+     (User_Data: access GObject_Record'Class); -- Show selected window
+   function ShowConfirmDialog
+     (Message: String;
+      Parent: Gtk_Window)
+     return Boolean; -- Show confirmation dialog to player, return True, if player choice 'Yes' option
+   function QuitGame
+     (User_Data: access GObject_Record'Class)
+     return Boolean; -- Save and quit from game
 
 end Utils.UI;
