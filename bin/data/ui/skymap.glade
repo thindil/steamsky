@@ -397,7 +397,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="default_width">800</property>
     <property name="default_height">600</property>
     <signal name="check-resize" handler="Get_New_Size" swapped="no"/>
-    <signal name="delete-event" handler="Quit_Game" swapped="no"/>
+    <signal name="delete-event" handler="Quit_Game" object="skymapwindow" swapped="no"/>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
