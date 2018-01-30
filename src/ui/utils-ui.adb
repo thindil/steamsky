@@ -18,6 +18,8 @@
 with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Widget; use Gtk.Widget;
+with MainMenu; use MainMenu;
+with Game; use Game;
 
 package body Utils.UI is
 
@@ -40,5 +42,41 @@ package body Utils.UI is
    begin
       return Hide_On_Delete(Gtk_Widget(User_Data));
    end HideWindow;
+
+   procedure ShowWindow(User_Data: access GObject_Record'Class) is
+   begin
+      Show_All(Gtk_Widget(User_Data));
+   end ShowWindow;
+
+   function ShowConfirmDialog
+     (Message: String;
+      Parent: Gtk_Window) return Boolean is
+      MessageDialog: constant Gtk_Message_Dialog :=
+        Gtk_Message_Dialog_New
+          (Parent,
+           Modal,
+           Message_Question,
+           Buttons_Yes_No,
+           Message);
+   begin
+      if Run(MessageDialog) = Gtk_Response_Yes then
+         Destroy(MessageDialog);
+         return True;
+      end if;
+      Destroy(MessageDialog);
+      return False;
+   end ShowConfirmDialog;
+
+   function QuitGame(User_Data: access GObject_Record'Class) return Boolean is
+   begin
+      if ShowConfirmDialog
+          ("Are you sure want to quit game?",
+           Gtk_Window(User_Data)) then
+         EndGame(True);
+         ShowMainMenu;
+         return Hide_On_Delete(Gtk_Widget(User_Data));
+      end if;
+      return True;
+   end QuitGame;
 
 end Utils.UI;

@@ -22,8 +22,6 @@ with Ada.Containers; use Ada.Containers;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
-with Gtk.Message_Dialog; use Gtk.Message_Dialog;
-with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
@@ -49,7 +47,6 @@ with Gdk.Types; use Gdk.Types;
 with Gdk.Cursor; use Gdk.Cursor;
 with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
-with MainMenu; use MainMenu;
 with Utils.UI; use Utils.UI;
 with Ships; use Ships;
 with Ships.Movement; use Ships.Movement;
@@ -79,37 +76,9 @@ package body Maps.UI is
    StartX, StartY: Integer;
    ButtonsVisible: Boolean := False;
 
-   function ShowConfirmDialog(Message: String) return Boolean is
-      MessageDialog: constant Gtk_Message_Dialog :=
-        Gtk_Message_Dialog_New
-          (Gtk_Window(Get_Object(Builder, "skymapwindow")),
-           Modal,
-           Message_Question,
-           Buttons_Yes_No,
-           Message);
-   begin
-      if Run(MessageDialog) = Gtk_Response_Yes then
-         Destroy(MessageDialog);
-         return True;
-      end if;
-      Destroy(MessageDialog);
-      return False;
-   end ShowConfirmDialog;
-
-   function QuitGame
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      if ShowConfirmDialog("Are you sure want to quit game?") then
-         EndGame(True);
-         ShowMainMenu;
-         return Hide_On_Delete(Gtk_Widget(Get_Object(Object, "skymapwindow")));
-      end if;
-      return True;
-   end QuitGame;
-
    procedure QuitGameMenu(Object: access Gtkada_Builder_Record'Class) is
    begin
-      if not QuitGame(Object) then
+      if not QuitGame(Gtk_Window(Get_Object(Object, "skymapwindow"))) then
          ShowDialog
            ("Can't quit game.",
             Gtk_Window(Get_Object(Object, "skymapwindow")));
@@ -806,11 +775,6 @@ package body Maps.UI is
       Hide(Gtk_Window(User_Data));
    end HideMapInfoWindow;
 
-   procedure ShowWindow(User_Data: access GObject_Record'Class) is
-   begin
-      Show_All(Gtk_Widget(User_Data));
-   end ShowWindow;
-
    procedure UpdateMessages is
       MessagesBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Builder, "txtmessages"));
@@ -1098,7 +1062,8 @@ package body Maps.UI is
             end if;
          when 6 => -- Ship moved, but pilot needs rest, confirm
             if ShowConfirmDialog
-                ("You don't have pilot on duty. Did you want to wait until your pilot rest?") then
+                ("You don't have pilot on duty. Did you want to wait until your pilot rest?",
+                 Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
                WaitForRest;
                StartsCombat := CheckForEvent;
                if not StartsCombat and GameSettings.AutoFinish then
@@ -1107,7 +1072,8 @@ package body Maps.UI is
             end if;
          when 7 => -- Ship moved, but engineer needs rest, confirm
             if ShowConfirmDialog
-                ("You don't have engineer on duty. Did you want to wait until your engineer rest?") then
+                ("You don't have engineer on duty. Did you want to wait until your engineer rest?",
+                 Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
                WaitForRest;
                StartsCombat := CheckForEvent;
                if not StartsCombat and GameSettings.AutoFinish then
