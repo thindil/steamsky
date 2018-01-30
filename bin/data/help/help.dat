@@ -63,12 +63,7 @@ When enemy ship (or your) is stopped by harpoon, you can set boarding party to a
 When you destroy enemy ship with using of boarding party, you will get better loot from that ship.
 Damage from weapon depends on level of damage itself and used ammo damage. If weapon is more damaged, it do less damage. It works for player ship and enemy ship weapons.
 You can assign (during combat or outside combat) which ammunition to use with selected gun in ship info screen. If you don't assign ammo to gun, gunner will be using first available ammo from cargo which works with selected gun.
-On combat screen you can see only damaged modules. Colors on your ship modules list show how much damaged module is:
-- White : module slightly damaged
-- Green: module is damaged
-- Yellow : module is heavily damaged
-- Red : module is almost destroyed
-- Blue : module is destroyed
+On combat screen you can see only damaged modules. Progess bar show how much damaged is selected module (more damage = bigger progress).
 Amount of informations about enemy ship depends on distance to it. In close range, you can see detailed informations about enemy ship modules. In any bigger range, only very general informations.
 After destroying enemy ship, you have small chance to lose some reputation with home sky base of enemy ship.
 [Crafting]
