@@ -67,31 +67,35 @@ package body Combat.UI is
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "btnboard")));
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmessages")), "");
+      List := Gtk_List_Store(Get_Object(Builder, "crewnames"));
+      Clear(List);
+      Append(List, Iter);
+      Set(List, Iter, 0, "Empty");
+      for Member of PlayerShip.Crew loop
+         Append(List, Iter);
+         Set(List, Iter, 0, To_String(Member.Name));
+      end loop;
       List := Gtk_List_Store(Get_Object(Builder, "crewlist"));
       Clear(List);
       Append(List, Iter);
       MemberIndex := FindMember(Pilot);
       if MemberIndex = 0 then
          Set(List, Iter, 0, "Pilot:");
-         Set(List, Iter, 1, 0);
-         Set(List, Iter, 2, "vacant");
+         Set(List, Iter, 2, "Empty");
       else
          Set(List, Iter, 0, "Pilot:");
-         Set(List, Iter, 1, Gint(MemberIndex));
+         Set(List, Iter, 1, To_String(PilotOrders(PilotOrder)));
          Set(List, Iter, 2, To_String(PlayerShip.Crew(MemberIndex).Name));
-         Set(List, Iter, 3, To_String(PilotOrders(PilotOrder)));
       end if;
       Append(List, Iter);
       MemberIndex := FindMember(Engineer);
       if MemberIndex = 0 then
          Set(List, Iter, 0, "Engineer:");
-         Set(List, Iter, 1, 0);
-         Set(List, Iter, 2, "vacant");
+         Set(List, Iter, 2, "Empty");
       else
          Set(List, Iter, 0, "Engineer:");
-         Set(List, Iter, 1, Gint(MemberIndex));
+         Set(List, Iter, 1, To_String(EngineerOrders(EngineerOrder)));
          Set(List, Iter, 2, To_String(PlayerShip.Crew(MemberIndex).Name));
-         Set(List, Iter, 3, To_String(EngineerOrders(EngineerOrder)));
       end if;
       for I in Guns.First_Index .. Guns.Last_Index loop
          Append(List, Iter);
@@ -103,21 +107,14 @@ package body Combat.UI is
          if PlayerShip.Modules(Guns(I)(1)).Owner /= 0 then
             if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner).Order =
               Gunner then
-               Set
-                 (List,
-                  Iter,
-                  2,
-                  To_String
-                    (PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner)
-                       .Name));
-               Set(List, Iter, 3, To_String(GunnerOrders(Guns(I)(2))));
+               Set(List, Iter, 1, To_String(GunnerOrders(Guns(I)(2))));
+               Set(List, Iter, 2, To_String(PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner).Name));
             else
-               Set(List, Iter, 2, "Vacant");
+               Set(List, Iter, 2, "Empty");
             end if;
          else
-            Set(List, Iter, 2, "Vacant");
+            Set(List, Iter, 2, "Empty");
          end if;
-         Set(List, Iter, 1, Gint(I));
       end loop;
       List := Gtk_List_Store(Get_Object(Builder, "damagelist"));
       Clear(List);
