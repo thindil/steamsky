@@ -967,4 +967,14 @@ Time = 60
 Difficulty = 15
 BaseType = 1
 Tool = Mold
+[98]
+Material = Titanium, Gunpowder
+Amount = 1, 1
+Result = 117
+Crafted = 2
+Workplace = Alchemy_Lab
+Skill = Gunsmith
+Difficulty = 15
+BaseType = 1
+Tool = GunsmithSet
 []
