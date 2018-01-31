@@ -28,11 +28,15 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
-      <!-- column-name index -->
-      <column type="guint"/>
       <!-- column-name gchararray2 -->
       <column type="gchararray"/>
       <!-- column-name gchararray3 -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="crewnames">
+    <columns>
+      <!-- column-name gchararray1 -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -43,6 +47,52 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <!-- column-name guint1 -->
       <column type="guint"/>
     </columns>
+  </object>
+  <object class="GtkListStore" id="engineerorders">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">All stop</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Quarter speed</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Half speed</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Full speed</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="gunnerorders">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Don't shoot</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Precise fire</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Fire at will</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Aim for engine</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Aim in weapon</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Aim in hull</col>
+      </row>
+    </data>
   </object>
   <object class="GtkTextTagTable" id="messagestags">
     <child type="tag">
@@ -83,10 +133,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   </object>
   <object class="GtkTextBuffer" id="txtmessages">
     <property name="tag_table">messagestags</property>
-  </object>
-  <object class="GtkMenu" id="ordersmenu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
   </object>
   <object class="GtkWindow" id="combatwindow">
     <property name="can_focus">False</property>
@@ -134,7 +180,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkTreeViewColumn">
                         <property name="title" translatable="yes">Name</property>
                         <child>
-                          <object class="GtkCellRendererText"/>
+                          <object class="GtkCellRendererCombo">
+                            <property name="editable">True</property>
+                            <property name="has_entry">False</property>
+                            <property name="model">crewnames</property>
+                            <property name="text_column">0</property>
+                          </object>
                           <attributes>
                             <attribute name="text">2</attribute>
                           </attributes>
@@ -145,9 +196,13 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkTreeViewColumn">
                         <property name="title" translatable="yes">Order</property>
                         <child>
-                          <object class="GtkCellRendererText"/>
+                          <object class="GtkCellRendererCombo">
+                            <property name="editable">True</property>
+                            <property name="has_entry">False</property>
+                            <property name="text_column">0</property>
+                          </object>
                           <attributes>
-                            <attribute name="text">3</attribute>
+                            <attribute name="text">1</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -290,26 +345,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkMenuButton" id="btnorders">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="popup">ordersmenu</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Give orders to selected position</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkButton" id="btnnextturn">
                     <property name="label" translatable="yes">Next turn</property>
                     <property name="visible">True</property>
@@ -401,5 +436,29 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child type="titlebar">
       <placeholder/>
     </child>
+  </object>
+  <object class="GtkMenu" id="ordersmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+  </object>
+  <object class="GtkListStore" id="pilotorders">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Go closer</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Keep distance</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Evade</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Escape</col>
+      </row>
+    </data>
   </object>
 </interface>
