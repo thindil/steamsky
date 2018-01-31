@@ -240,6 +240,11 @@ package body Combat.UI is
       RefreshCombatUI;
    end ShowCombatUI;
 
+   procedure SetOrdersList(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Put_Line("here");
+   end SetOrdersList;
+
    procedure CreateCombatUI is
       Error: aliased GError;
       Iter: Gtk_Tree_Iter;
@@ -282,6 +287,7 @@ package body Combat.UI is
       end loop;
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Quit_Game", QuitGame'Access);
+      Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);
       Do_Connect(Builder);
    end CreateCombatUI;
 

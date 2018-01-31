@@ -128,6 +128,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="model">crewlist</property>
                     <property name="headers_clickable">False</property>
                     <property name="enable_search">False</property>
+                    <signal name="cursor-changed" handler="Set_Orders_List" swapped="no"/>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection"/>
                     </child>
@@ -162,7 +163,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkTreeViewColumn">
                         <property name="title" translatable="yes">Order</property>
                         <child>
-                          <object class="GtkCellRendererCombo">
+                          <object class="GtkCellRendererCombo" id="renderorders">
                             <property name="editable">True</property>
                             <property name="has_entry">False</property>
                             <property name="text_column">0</property>
