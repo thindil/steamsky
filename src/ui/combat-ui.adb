@@ -108,7 +108,13 @@ package body Combat.UI is
             if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner).Order =
               Gunner then
                Set(List, Iter, 1, To_String(GunnerOrders(Guns(I)(2))));
-               Set(List, Iter, 2, To_String(PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner).Name));
+               Set
+                 (List,
+                  Iter,
+                  2,
+                  To_String
+                    (PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner)
+                       .Name));
             else
                Set(List, Iter, 2, "Empty");
             end if;
@@ -238,6 +244,8 @@ package body Combat.UI is
 
    procedure CreateCombatUI is
       Error: aliased GError;
+      Iter: Gtk_Tree_Iter;
+      List: Gtk_List_Store;
    begin
       if Builder /= null then
          return;
@@ -259,6 +267,21 @@ package body Combat.UI is
         (Gtk_Widget(Get_Object(Builder, "messagesview")),
          0,
          White_RGBA);
+      List := Gtk_List_Store(Get_Object(Builder, "pilotorders"));
+      for Order of PilotOrders loop
+         Append(List, Iter);
+         Set(List, Iter, 0, To_String(Order));
+      end loop;
+      List := Gtk_List_Store(Get_Object(Builder, "engineerorders"));
+      for Order of EngineerOrders loop
+         Append(List, Iter);
+         Set(List, Iter, 0, To_String(Order));
+      end loop;
+      List := Gtk_List_Store(Get_Object(Builder, "gunnerorders"));
+      for Order of GunnerOrders loop
+         Append(List, Iter);
+         Set(List, Iter, 0, To_String(Order));
+      end loop;
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Quit_Game", QuitGame'Access);
       Do_Connect(Builder);
