@@ -53,46 +53,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">All stop</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Quarter speed</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Half speed</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Full speed</col>
-      </row>
-    </data>
   </object>
   <object class="GtkListStore" id="gunnerorders">
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Don't shoot</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Precise fire</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Fire at will</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Aim for engine</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Aim in weapon</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Aim in hull</col>
-      </row>
-    </data>
   </object>
   <object class="GtkTextTagTable" id="messagestags">
     <child type="tag">
@@ -446,19 +412,5 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Go closer</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Keep distance</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Evade</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Escape</col>
-      </row>
-    </data>
   </object>
 </interface>
