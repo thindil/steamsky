@@ -69,8 +69,6 @@ package body Combat.UI is
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmessages")), "");
       List := Gtk_List_Store(Get_Object(Builder, "crewnames"));
       Clear(List);
-      Append(List, Iter);
-      Set(List, Iter, 0, "Empty");
       for Member of PlayerShip.Crew loop
          Append(List, Iter);
          Set(List, Iter, 0, To_String(Member.Name));
@@ -81,7 +79,7 @@ package body Combat.UI is
       MemberIndex := FindMember(Pilot);
       if MemberIndex = 0 then
          Set(List, Iter, 0, "Pilot:");
-         Set(List, Iter, 2, "Empty");
+         Set(List, Iter, 2, "Nobody");
       else
          Set(List, Iter, 0, "Pilot:");
          Set(List, Iter, 1, To_String(PilotOrders(PilotOrder)));
@@ -91,7 +89,7 @@ package body Combat.UI is
       MemberIndex := FindMember(Engineer);
       if MemberIndex = 0 then
          Set(List, Iter, 0, "Engineer:");
-         Set(List, Iter, 2, "Empty");
+         Set(List, Iter, 2, "Nobody");
       else
          Set(List, Iter, 0, "Engineer:");
          Set(List, Iter, 1, To_String(EngineerOrders(EngineerOrder)));
@@ -116,10 +114,10 @@ package body Combat.UI is
                     (PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner)
                        .Name));
             else
-               Set(List, Iter, 2, "Empty");
+               Set(List, Iter, 2, "Nobody");
             end if;
          else
-            Set(List, Iter, 2, "Empty");
+            Set(List, Iter, 2, "Nobody");
          end if;
       end loop;
       List := Gtk_List_Store(Get_Object(Builder, "damagelist"));
