@@ -26,6 +26,8 @@ with Gtk.Label; use Gtk.Label;
 with Gtk.Cell_Renderer_Combo; use Gtk.Cell_Renderer_Combo;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
+with Gtk.Text_Iter; use Gtk.Text_Iter;
+with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -70,9 +72,45 @@ package body Combat.UI is
       IsDamaged: Boolean := False;
       EnemyInfo: Unbounded_String;
       MemberIndex: Natural;
+      MessagesBuffer: constant Gtk_Text_Buffer :=
+        Gtk_Text_Buffer(Get_Object(Builder, "txtmessages"));
+      LoopStart: Integer := 0 - MessagesAmount;
+      Message: Message_Data;
+      MessagesIter: Gtk_Text_Iter;
+      TagNames: constant array(1 .. 5) of Unbounded_String :=
+        (To_Unbounded_String("yellow"),
+         To_Unbounded_String("green"),
+         To_Unbounded_String("red"),
+         To_Unbounded_String("blue"),
+         To_Unbounded_String("cyan"));
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "btnboard")));
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmessages")), "");
+      Get_Start_Iter(MessagesBuffer, MessagesIter);
+      if LoopStart = 0 then
+         return;
+      end if;
+      if LoopStart < -10 then
+         LoopStart := -10;
+      end if;
+      for I in reverse LoopStart .. -1 loop
+         Message := GetMessage(I + 1);
+         exit when Message.MessageIndex < MessagesStarts;
+         if Message.Color = 0 then
+            Insert(MessagesBuffer, MessagesIter, To_String(Message.Message));
+         else
+            Insert_With_Tags
+              (MessagesBuffer,
+               MessagesIter,
+               To_String(Message.Message),
+               Lookup
+                 (Get_Tag_Table(MessagesBuffer),
+                  To_String(TagNames(Message.Color))));
+         end if;
+         if I > LoopStart then
+            Insert(MessagesBuffer, MessagesIter, "" & ASCII.LF);
+         end if;
+      end loop;
       List := Gtk_List_Store(Get_Object(Builder, "crewlist"));
       Clear(List);
       Append(List, Iter);
