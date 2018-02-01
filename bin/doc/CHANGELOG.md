@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
   titanium engine, advanced huge titanium engine, titanium harpoon gun,
   titanium 40mm gun, titanium 60mm gun, titanium 80mm gun, titanium 100mm gun
   and titanium 120mm gun
-- New item: titanium 40mm ammo
+- New items: titanium 40mm ammo and titanium 60mm ammo
 - New crafting recipe: titanium 40mm ammo
 
 ### Changed
