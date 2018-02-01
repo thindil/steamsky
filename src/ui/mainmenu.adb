@@ -292,12 +292,17 @@ package body MainMenu is
       ShowGoalsMenu;
    end ShowGoals;
 
+   procedure StartGame is
+   begin
+      Hide(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
+      CreateCombatUI;
+      CreateSkyMap;
+   end StartGame;
+
    procedure LoadGame(Object: access Gtkada_Builder_Record'Class) is
    begin
       if LoadGameData(False) then
-         Hide(Gtk_Widget(Get_Object(Object, "mainmenuwindow")));
-         CreateSkyMap;
-         CreateCombatUI;
+         StartGame;
       else
          Hide(Gtk_Widget(Get_Object(Object, "btnloadgame")));
       end if;
@@ -320,9 +325,7 @@ package body MainMenu is
         (To_Unbounded_String(CharacterName),
          To_Unbounded_String(ShipName),
          Gender);
-      Hide(Gtk_Widget(Get_Object(Object, "mainmenuwindow")));
-      CreateSkyMap;
-      CreateCombatUI;
+      StartGame;
    end NewGame;
 
    procedure CreateMainMenu is
