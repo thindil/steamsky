@@ -23,9 +23,14 @@ with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Label; use Gtk.Label;
+with Gtk.Cell_Renderer_Combo; use Gtk.Cell_Renderer_Combo;
+with Gtk.Tree_Selection; use Gtk.Tree_Selection;
+with Gtk.Tree_View; use Gtk.Tree_View;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
+with Glib.Properties; use Glib.Properties;
+with Glib.Types; use Glib.Types;
 with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with Utils.UI; use Utils.UI;
@@ -35,6 +40,7 @@ with Events; use Events;
 with Maps; use Maps;
 with Crew; use Crew;
 with Ships.Crew; use Ships.Crew;
+with Messages; use Messages;
 
 package body Combat.UI is
 
@@ -67,12 +73,6 @@ package body Combat.UI is
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "btnboard")));
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmessages")), "");
-      List := Gtk_List_Store(Get_Object(Builder, "crewnames"));
-      Clear(List);
-      for Member of PlayerShip.Crew loop
-         Append(List, Iter);
-         Set(List, Iter, 0, To_String(Member.Name));
-      end loop;
       List := Gtk_List_Store(Get_Object(Builder, "crewlist"));
       Clear(List);
       Append(List, Iter);
@@ -241,14 +241,193 @@ package body Combat.UI is
    end ShowCombatUI;
 
    procedure SetOrdersList(Object: access Gtkada_Builder_Record'Class) is
+      OrdersModel: Glib.Types.GType_Interface;
+      OrdersList, CrewList: Gtk_List_Store;
+      OrdersIter, CrewIter, NamesIter: Gtk_Tree_Iter;
+      CrewModel: Gtk_Tree_Model;
+      Position: Natural;
+      AssignedName, AssignedOrder: Unbounded_String;
+      SkillIndex, SkillValue: Natural := 0;
+      SkillString: Unbounded_String;
    begin
-      Put_Line("here");
+      Get_Selected
+        (Gtk.Tree_View.Get_Selection
+           (Gtk_Tree_View(Get_Object(Object, "treecrew"))),
+         CrewModel,
+         CrewIter);
+      if CrewIter = Null_Iter then
+         return;
+      end if;
+      Position := Natural'Value(To_String(Get_Path(CrewModel, CrewIter)));
+      CrewList := Gtk_List_Store(Get_Object(Builder, "crewnames"));
+      Clear(CrewList);
+      AssignedName := To_Unbounded_String(Get_String(CrewModel, CrewIter, 2));
+      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+         case Position is
+            when 0 =>
+               if GetSkillLevel(PlayerShip.Crew(I), PilotingSkill) >
+                 SkillValue then
+                  SkillIndex := I;
+                  SkillValue :=
+                    GetSkillLevel(PlayerShip.Crew(I), PilotingSkill);
+               end if;
+            when 1 =>
+               if GetSkillLevel(PlayerShip.Crew(I), EngineeringSkill) >
+                 SkillValue then
+                  SkillIndex := I;
+                  SkillValue :=
+                    GetSkillLevel(PlayerShip.Crew(I), EngineeringSkill);
+               end if;
+            when others =>
+               if GetSkillLevel(PlayerShip.Crew(I), GunnerySkill) >
+                 SkillValue then
+                  SkillIndex := I;
+                  SkillValue :=
+                    GetSkillLevel(PlayerShip.Crew(I), GunnerySkill);
+               end if;
+         end case;
+      end loop;
+      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+         if PlayerShip.Crew(I).Name /= AssignedName and
+           PlayerShip.Crew(I).Skills.Length > 0 then
+            SkillString := Null_Unbounded_String;
+            case Position is
+               when 0 =>
+                  if GetSkillLevel(PlayerShip.Crew(I), PilotingSkill) > 0 then
+                     SkillString := To_Unbounded_String(" +");
+                  end if;
+               when 1 =>
+                  if GetSkillLevel(PlayerShip.Crew(I), EngineeringSkill) >
+                    0 then
+                     SkillString := To_Unbounded_String(" +");
+                  end if;
+               when others =>
+                  if GetSkillLevel(PlayerShip.Crew(I), GunnerySkill) > 0 then
+                     SkillString := To_Unbounded_String(" +");
+                  end if;
+            end case;
+            if I = SkillIndex then
+               SkillString := SkillString & To_Unbounded_String("+");
+            end if;
+            if PlayerShip.Crew(I).Order /= Rest then
+               SkillString := SkillString & To_Unbounded_String(" -");
+            end if;
+            Append(CrewList, NamesIter);
+            Set
+              (CrewList,
+               NamesIter,
+               0,
+               To_String(PlayerShip.Crew(I).Name & SkillString));
+            Set(CrewList, NamesIter, 1, Gint(I));
+         end if;
+      end loop;
+      OrdersModel :=
+        Get_Property
+          (Get_Object(Object, "renderorders"),
+           Gtk.Cell_Renderer_Combo.Model_Property);
+      OrdersList := -(Gtk_Tree_Model(OrdersModel));
+      OrdersList.Clear;
+      if AssignedName = To_Unbounded_String("Nobody") then
+         return;
+      end if;
+      AssignedOrder := To_Unbounded_String(Get_String(CrewModel, CrewIter, 1));
+      if Position = 0 then
+         for I in PilotOrders'Range loop
+            if AssignedOrder /= PilotOrders(I) then
+               Append(OrdersList, OrdersIter);
+               Set(OrdersList, OrdersIter, 0, To_String(PilotOrders(I)));
+               Set(OrdersList, OrdersIter, 1, Gint(I));
+            end if;
+         end loop;
+      elsif Position = 1 then
+         for I in EngineerOrders'Range loop
+            if AssignedOrder /= EngineerOrders(I) then
+               Append(OrdersList, OrdersIter);
+               Set(OrdersList, OrdersIter, 0, To_String(EngineerOrders(I)));
+               Set(OrdersList, OrdersIter, 1, Gint(I));
+            end if;
+         end loop;
+      else
+         for I in GunnerOrders'Range loop
+            if AssignedOrder /= GunnerOrders(I) then
+               Append(OrdersList, OrdersIter);
+               Set(OrdersList, OrdersIter, 0, To_String(GunnerOrders(I)));
+               Set(OrdersList, OrdersIter, 1, Gint(I));
+            end if;
+         end loop;
+      end if;
    end SetOrdersList;
+
+   procedure GiveCombatOrders
+     (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
+      Path_String: UTF8_String;
+      New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
+      Model: Glib.Types.GType_Interface;
+      List: Gtk_List_Store;
+      ModuleIndex: Natural := 0;
+   begin
+      Model := Get_Property(Self, Gtk.Cell_Renderer_Combo.Model_Property);
+      List := -(Gtk_Tree_Model(Model));
+      if Self = Gtk_Cell_Renderer_Combo(Get_Object(Builder, "rendercrew")) then
+         if Path_String = "0" then
+            GiveOrders
+              (PlayerShip,
+               Positive(Get_Int(List, New_Iter, 1)),
+               Pilot,
+               ModuleIndex);
+         elsif Path_String = "1" then
+            GiveOrders
+              (PlayerShip,
+               Positive(Get_Int(List, New_Iter, 1)),
+               Engineer,
+               ModuleIndex);
+         else
+            ModuleIndex := Guns(Positive'Value(Path_String) - 1)(1);
+            GiveOrders
+              (PlayerShip,
+               Positive(Get_Int(List, New_Iter, 1)),
+               Gunner,
+               ModuleIndex);
+         end if;
+      else
+         if Path_String = "0" then
+            PilotOrder := Positive(Get_Int(List, New_Iter, 1));
+            AddMessage
+              ("Order for " &
+               To_String(PlayerShip.Crew(FindMember(Pilot)).Name) &
+               " was set on: " &
+               To_String(PilotOrders(PilotOrder)),
+               CombatMessage);
+         elsif Path_String = "1" then
+            EngineerOrder := Positive(Get_Int(List, New_Iter, 1));
+            AddMessage
+              ("Order for " &
+               To_String(PlayerShip.Crew(FindMember(Engineer)).Name) &
+               " was set on: " &
+               To_String(EngineerOrders(EngineerOrder)),
+               CombatMessage);
+         else
+            Guns(Positive'Value(Path_String) - 1)(2) :=
+              Positive(Get_Int(List, New_Iter, 1));
+            AddMessage
+              ("Order for " &
+               To_String
+                 (PlayerShip.Crew
+                    (PlayerShip.Modules
+                       (Guns(Positive'Value(Path_String) - 1)(1))
+                       .Owner)
+                    .Name) &
+               " was set on: " &
+               To_String
+                 (GunnerOrders(Guns(Positive'Value(Path_String) - 1)(2))),
+               CombatMessage);
+         end if;
+      end if;
+      RefreshCombatUI;
+   end GiveCombatOrders;
 
    procedure CreateCombatUI is
       Error: aliased GError;
-      Iter: Gtk_Tree_Iter;
-      List: Gtk_List_Store;
    begin
       if Builder /= null then
          return;
@@ -270,25 +449,16 @@ package body Combat.UI is
         (Gtk_Widget(Get_Object(Builder, "messagesview")),
          0,
          White_RGBA);
-      List := Gtk_List_Store(Get_Object(Builder, "pilotorders"));
-      for Order of PilotOrders loop
-         Append(List, Iter);
-         Set(List, Iter, 0, To_String(Order));
-      end loop;
-      List := Gtk_List_Store(Get_Object(Builder, "engineerorders"));
-      for Order of EngineerOrders loop
-         Append(List, Iter);
-         Set(List, Iter, 0, To_String(Order));
-      end loop;
-      List := Gtk_List_Store(Get_Object(Builder, "gunnerorders"));
-      for Order of GunnerOrders loop
-         Append(List, Iter);
-         Set(List, Iter, 0, To_String(Order));
-      end loop;
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Quit_Game", QuitGame'Access);
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);
       Do_Connect(Builder);
+      On_Changed
+        (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders")),
+         GiveCombatOrders'Access);
+      On_Changed
+        (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "rendercrew")),
+         GiveCombatOrders'Access);
    end CreateCombatUI;
 
 end Combat.UI;
