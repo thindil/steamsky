@@ -40,6 +40,7 @@ with Bases; use Bases;
 with ShipModules; use ShipModules;
 with Events; use Events;
 with Maps; use Maps;
+with Maps.UI; use Maps.UI;
 with Crew; use Crew;
 with Ships.Crew; use Ships.Crew;
 with Messages; use Messages;
@@ -464,6 +465,29 @@ package body Combat.UI is
       RefreshCombatUI;
    end GiveCombatOrders;
 
+   procedure NextTurn(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      CombatTurn;
+      RefreshCombatUI;
+      if EndCombat then
+         Hide(Gtk_Widget(Get_Object(Object, "btnboxinfo")));
+         Hide(Gtk_Widget(Get_Object(Object, "btnboxactions")));
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew")), False);
+      end if;
+   end NextTurn;
+
+   function CloseWindow
+     (User_Data: access GObject_Record'Class) return Boolean is
+   begin
+      if not EndCombat then
+         return QuitGame(User_Data);
+      end if;
+      Set_Sensitive(Gtk_Widget(Get_Object(Builder, "treecrew")), True);
+      Hide(Gtk_Widget(Get_Object(Builder, "combatwindow")));
+      CreateSkyMap;
+      return True;
+   end CloseWindow;
+
    procedure CreateCombatUI is
       Error: aliased GError;
    begin
@@ -488,8 +512,9 @@ package body Combat.UI is
          0,
          White_RGBA);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
-      Register_Handler(Builder, "Quit_Game", QuitGame'Access);
+      Register_Handler(Builder, "Close_Window", CloseWindow'Access);
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);
+      Register_Handler(Builder, "Next_Turn", NextTurn'Access);
       Do_Connect(Builder);
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders")),
