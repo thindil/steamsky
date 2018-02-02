@@ -31,6 +31,8 @@ with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Container; use Gtk.Container;
 with Gtk.Check_Button; use Gtk.Check_Button;
+with Gtk.Toggle_Button; use Gtk.Toggle_Button;
+with Gtk.Button; use Gtk.Button;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -88,8 +90,8 @@ package body Combat.UI is
          To_Unbounded_String("blue"),
          To_Unbounded_String("cyan"));
    begin
-      if (HarpoonDuration = 0 or Enemy.HarpoonDuration = 0) and -- test code, replace later '=' with '>'
-         ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
+      if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
+        ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
          Show_All(Gtk_Widget(Get_Object(Builder, "btnboard")));
       else
          Hide(Gtk_Widget(Get_Object(Builder, "btnboard")));
@@ -541,18 +543,38 @@ package body Combat.UI is
       Show_All(Gtk_Widget(Get_Object(Object, "enemyinfowindow")));
    end ShowEnemyInfo;
 
-   procedure ShowBoardOrder(Object: access Gtkada_Builder_Record'Class) is
-      ButtonBox: constant Gtk_Container := Gtk_Container(Get_Object(Object, "btnboxboard"));
+   procedure RemoveButton(Widget: not null access Gtk_Widget_Record'Class) is
    begin
+      Destroy(Widget);
+   end RemoveButton;
+
+   procedure ShowBoardOrder(Object: access Gtkada_Builder_Record'Class) is
+      ButtonBox: constant Gtk_Container :=
+        Gtk_Container(Get_Object(Object, "btnboxboard"));
+   begin
+      Foreach
+        (Gtk_Container(Get_Object(Object, "btnboxboard")),
+         RemoveButton'Access);
       for Member of PlayerShip.Crew loop
-         Add(ButtonBox, Gtk_Check_Button_New_With_Label(To_String(Member.Name)));
+         Add
+           (ButtonBox,
+            Gtk_Check_Button_New_With_Label(To_String(Member.Name)));
       end loop;
       Show_All(Gtk_Widget(Get_Object(Object, "boardwindow")));
    end ShowBoardOrder;
 
    procedure SetBoarding(Widget: not null access Gtk_Widget_Record'Class) is
+      MemberName: Unbounded_String;
    begin
-      null;
+      if Get_Active(Gtk_Toggle_Button(Widget)) then
+         MemberName := To_Unbounded_String(Get_Label(Gtk_Button(Widget)));
+         for I in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(I).Name = MemberName then
+               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Boarding, 0);
+               exit;
+            end if;
+         end loop;
+      end if;
    end SetBoarding;
 
    procedure SetBoardingParty(Object: access Gtkada_Builder_Record'Class) is
@@ -561,6 +583,7 @@ package body Combat.UI is
         (Gtk_Container(Get_Object(Object, "btnboxboard")),
          SetBoarding'Access);
       Hide(Gtk_Widget(Get_Object(Object, "boardwindow")));
+      RefreshCombatUI;
    end SetBoardingParty;
 
    procedure CreateCombatUI is
