@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
@@ -277,6 +278,9 @@ package body Combat.UI is
             return;
          end if;
       end if;
+      Set_Text
+        (Gtk_Label(Get_Object(Builder, "lbldescription")),
+         To_String(Enemy.Ship.Description));
       Show_All(Gtk_Widget(Get_Object(Builder, "combatwindow")));
       RefreshCombatUI;
    end ShowCombatUI;
@@ -490,6 +494,46 @@ package body Combat.UI is
       return True;
    end CloseWindow;
 
+   procedure ShowEnemyInfo(Object: access Gtkada_Builder_Record'Class) is
+      EnemyList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "enemyinfolist"));
+      DamagePercent, SpaceIndex: Natural;
+      ModuleName: Unbounded_String;
+      EnemyIter: Gtk_Tree_Iter;
+   begin
+      Clear(EnemyList);
+      for I in Enemy.Ship.Modules.Iterate loop
+         Append(EnemyList, EnemyIter);
+         if Enemy.Distance > 1000 then
+            ModuleName :=
+              To_Unbounded_String
+                (ModuleType'Image
+                   (Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType));
+            Replace_Slice
+              (ModuleName,
+               2,
+               Length(ModuleName),
+               To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
+            SpaceIndex := Index(ModuleName, "_");
+            while SpaceIndex > 0 loop
+               Replace_Element(ModuleName, SpaceIndex, ' ');
+               SpaceIndex := Index(ModuleName, "_");
+            end loop;
+         else
+            ModuleName := Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name;
+         end if;
+         Set(EnemyList, EnemyIter, 0, To_String(ModuleName));
+         DamagePercent :=
+           100 -
+           Natural
+             ((Float(Enemy.Ship.Modules(I).Durability) /
+               Float(Enemy.Ship.Modules(I).MaxDurability)) *
+              100.0);
+         Set(EnemyList, EnemyIter, 1, Gint(DamagePercent));
+      end loop;
+      Show_All(Gtk_Widget(Get_Object(Object, "enemyinfowindow")));
+   end ShowEnemyInfo;
+
    procedure CreateCombatUI is
       Error: aliased GError;
    begin
@@ -517,6 +561,7 @@ package body Combat.UI is
       Register_Handler(Builder, "Close_Window", CloseWindow'Access);
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);
       Register_Handler(Builder, "Next_Turn", NextTurn'Access);
+      Register_Handler(Builder, "Show_Enemy_Info", ShowEnemyInfo'Access);
       Do_Connect(Builder);
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders")),
