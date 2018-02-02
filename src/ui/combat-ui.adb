@@ -29,6 +29,8 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
+with Gtk.Container; use Gtk.Container;
+with Gtk.Check_Button; use Gtk.Check_Button;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -86,7 +88,12 @@ package body Combat.UI is
          To_Unbounded_String("blue"),
          To_Unbounded_String("cyan"));
    begin
-      Hide(Gtk_Widget(Get_Object(Builder, "btnboard")));
+      if (HarpoonDuration = 0 or Enemy.HarpoonDuration = 0) and -- test code, replace later '=' with '>'
+         ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
+         Show_All(Gtk_Widget(Get_Object(Builder, "btnboard")));
+      else
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboard")));
+      end if;
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmessages")), "");
       Get_Start_Iter(MessagesBuffer, MessagesIter);
       if LoopStart = 0 then
@@ -534,6 +541,28 @@ package body Combat.UI is
       Show_All(Gtk_Widget(Get_Object(Object, "enemyinfowindow")));
    end ShowEnemyInfo;
 
+   procedure ShowBoardOrder(Object: access Gtkada_Builder_Record'Class) is
+      ButtonBox: constant Gtk_Container := Gtk_Container(Get_Object(Object, "btnboxboard"));
+   begin
+      for Member of PlayerShip.Crew loop
+         Add(ButtonBox, Gtk_Check_Button_New_With_Label(To_String(Member.Name)));
+      end loop;
+      Show_All(Gtk_Widget(Get_Object(Object, "boardwindow")));
+   end ShowBoardOrder;
+
+   procedure SetBoarding(Widget: not null access Gtk_Widget_Record'Class) is
+   begin
+      null;
+   end SetBoarding;
+
+   procedure SetBoardingParty(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Foreach
+        (Gtk_Container(Get_Object(Object, "btnboxboard")),
+         SetBoarding'Access);
+      Hide(Gtk_Widget(Get_Object(Object, "boardwindow")));
+   end SetBoardingParty;
+
    procedure CreateCombatUI is
       Error: aliased GError;
    begin
@@ -562,6 +591,8 @@ package body Combat.UI is
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);
       Register_Handler(Builder, "Next_Turn", NextTurn'Access);
       Register_Handler(Builder, "Show_Enemy_Info", ShowEnemyInfo'Access);
+      Register_Handler(Builder, "Show_Board_Order", ShowBoardOrder'Access);
+      Register_Handler(Builder, "Set_Boarding_Party", SetBoardingParty'Access);
       Do_Connect(Builder);
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders")),
