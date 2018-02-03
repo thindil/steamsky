@@ -61,6 +61,7 @@ with Bases; use Bases;
 with Missions; use Missions;
 with Crafts; use Crafts;
 with Combat.UI; use Combat.UI;
+with Help.UI; use Help.UI;
 
 package body Maps.UI is
 
@@ -1517,6 +1518,12 @@ package body Maps.UI is
       end if;
    end AttackOrder;
 
+   procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
+      pragma Unreferenced(Object);
+   begin
+      ShowHelpUI(1);
+   end ShowHelp;
+
    procedure CreateSkyMap is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
@@ -1553,6 +1560,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Show_Orders", ShowOrders'Access);
          Register_Handler(Builder, "Wait_Order", WaitOrder'Access);
          Register_Handler(Builder, "Attack_Order", AttackOrder'Access);
+         Register_Handler(Builder, "Show_Help", ShowHelp'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font

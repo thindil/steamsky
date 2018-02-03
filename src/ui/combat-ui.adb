@@ -49,6 +49,7 @@ with Maps.UI; use Maps.UI;
 with Crew; use Crew;
 with Ships.Crew; use Ships.Crew;
 with Messages; use Messages;
+with Help.UI; use Help.UI;
 
 package body Combat.UI is
 
@@ -586,6 +587,12 @@ package body Combat.UI is
       RefreshCombatUI;
    end SetBoardingParty;
 
+   procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
+      pragma Unreferenced(Object);
+   begin
+      ShowHelpUI(4);
+   end ShowHelp;
+
    procedure CreateCombatUI is
       Error: aliased GError;
    begin
@@ -616,6 +623,7 @@ package body Combat.UI is
       Register_Handler(Builder, "Show_Enemy_Info", ShowEnemyInfo'Access);
       Register_Handler(Builder, "Show_Board_Order", ShowBoardOrder'Access);
       Register_Handler(Builder, "Set_Boarding_Party", SetBoardingParty'Access);
+      Register_Handler(Builder, "Show_Help", ShowHelp'Access);
       Do_Connect(Builder);
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders")),
