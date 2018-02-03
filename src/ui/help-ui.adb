@@ -27,6 +27,8 @@ with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
 with Utils.UI; use Utils.UI;
+with Items; use Items;
+with Config; use Config;
 
 package body Help.UI is
 
@@ -73,13 +75,65 @@ package body Help.UI is
    end CreateHelpUI;
 
    procedure ShowHelpUI(Topic: Positive) is
+      NewText: Unbounded_String;
+      VariableIndex: Natural;
+      VariablesNames: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("{MoneyName}"),
+         To_Unbounded_String("{FuelName}"),
+         To_Unbounded_String("{StrengthName}"),
+         To_Unbounded_String("{HealingTools}"),
+         To_Unbounded_String("{HealingSkill}"),
+         To_Unbounded_String("{PilotingSkill}"),
+         To_Unbounded_String("{EngineeringSkill}"),
+         To_Unbounded_String("{GunnerySkill}"),
+         To_Unbounded_String("{TalkingSkill}"),
+         To_Unbounded_String("{PerceptionSkill}"),
+         To_Unbounded_String("{ConditionName}"),
+         To_Unbounded_String("{DodgeSkill}"));
+      VariablesValues: constant array(Positive range <>) of Unbounded_String :=
+        (MoneyName,
+         Items_List(FindProtoItem(ItemType => FuelType)).Name,
+         Attributes_Names(StrengthIndex),
+         HealingTools,
+         Skills_List(HealingSkill).Name,
+         Skills_List(PilotingSkill).Name,
+         Skills_List(EngineeringSkill).Name,
+         Skills_List(GunnerySkill).Name,
+         Skills_List(TalkingSkill).Name,
+         Skills_List(PerceptionSkill).Name,
+         Attributes_Names(ConditionIndex),
+         Skills_List(DodgeSkill).Name);
    begin
+      NewText := Help_List(Topic).Text;
+      for I in Keys_Array'Range loop
+         loop
+            VariableIndex :=
+              Index(NewText, "{GameKey" & Positive'Image(I) & "}");
+            exit when VariableIndex = 0;
+            Replace_Slice
+              (NewText,
+               VariableIndex,
+               (VariableIndex + 8 + Positive'Image(I)'Length),
+               "'" & Character'Val(GameSettings.Keys(I)) & "'");
+         end loop;
+      end loop;
+      for I in VariablesNames'Range loop
+         loop
+            VariableIndex := Index(NewText, To_String(VariablesNames(I)));
+            exit when VariableIndex = 0;
+            Replace_Slice
+              (NewText,
+               VariableIndex,
+               VariableIndex + (Length(VariablesNames(I)) - 1),
+               To_String(VariablesValues(I)));
+         end loop;
+      end loop;
       Set_Text
         (Gtk_Label(Get_Object(Builder, "lblhelptopic")),
          To_String(Help_List(Topic).Title));
       Set_Text
         (Gtk_Text_Buffer(Get_Object(Builder, "helpbuffer")),
-         To_String(Help_List(Topic).Text));
+         To_String(NewText));
       Show_All(Gtk_Widget(Get_Object(Builder, "helpwindow")));
    end ShowHelpUI;
 
