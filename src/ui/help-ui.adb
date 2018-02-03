@@ -21,6 +21,8 @@ with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Widget; use Gtk.Widget;
+with Gtk.Menu_Item; use Gtk.Menu_Item;
+with Gtk.Menu_Shell; use Gtk.Menu_Shell;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
@@ -30,8 +32,22 @@ package body Help.UI is
 
    Builder: Gtkada_Builder;
 
+   procedure SelectTopic(Self: access Gtk_Menu_Item_Record'Class) is
+      TopicName: constant Unbounded_String :=
+        To_Unbounded_String(Get_Label(Self));
+   begin
+      for I in Help_List.Iterate loop
+         if TopicName = Help_List(I).Title then
+            ShowHelpUI(Help_Container.To_Index(I));
+            exit;
+         end if;
+      end loop;
+   end SelectTopic;
+
    procedure CreateHelpUI is
       Error: aliased GError;
+      MenuTopic: Gtk_Menu_Item;
+      TopicList: Gtk_Menu_Shell;
    begin
       if Builder /= null then
          return;
@@ -45,6 +61,13 @@ package body Help.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
+      TopicList := Gtk_Menu_Shell(Get_Object(Builder, "helpmenu"));
+      for Help of Help_List loop
+         Gtk_New_With_Label(MenuTopic, To_String(Help.Title));
+         Append(TopicList, MenuTopic);
+         Show(MenuTopic);
+         On_Activate(MenuTopic, SelectTopic'Access);
+      end loop;
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Do_Connect(Builder);
    end CreateHelpUI;
