@@ -1005,4 +1005,13 @@ Buyable = Y, N, N, N
 Value = 32
 ShowType = Ammunition
 Description = Upgraded 60mm gun ammunition, made of titanium.
+[119]
+Name = Titanium 80mm ammo
+Weight = 16
+Type = Ammo80
+Prices = 24, 26, 26, 26
+Buyable = Y, N, N, N
+Value = 64
+ShowType = Ammunition
+Description = Upgraded 80mm gun ammunition, made of titanium.
 []
