@@ -87,7 +87,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>
