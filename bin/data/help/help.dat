@@ -1,17 +1,14 @@
 [General Informations]
-SteamSky is roguelike game where you command flying ship with crew. You must take care about ship and crew. You can trade items between sky bases, fight with enemies or manufacturing items. Game ends when your character die.
-Whole game interface is keyboard based. Most options/menus are accessible by keyboard shortcuts. When you need arrow keys, you can use normal arrows and keypad arrows (after enabling Num Lock at your keyboard).
+Steam Sky is roguelike game where you command flying ship with crew. You must take care about ship and crew. You can trade items between sky bases, fight with enemies or manufacturing items. Game ends when your character die.
 You can use shortcuts on most in-game menus too (not only navigate by arrows keys).
-Most texts in game, can be scrolled with arrow keys by one line, by one screen with PageUp/PageDown keys or to beginning by Home key and end to End key.
-Forms (for example, renaming modules) can be navigated by arrow keys too. To quit from form without changes, just jump with arrows keys to Cancel button and hit Enter. To accept changes, navigate with arrows to Ok button and then hit Enter. If you left empty field in form and press Enter, it will be count as quit without changes. 
 On most screens you can see in top right corner informations about needed crew positions in ship. P means pilot, E - engineer, G - gunner, R - repairs, M - manufacturing, U - upgrading ship module, T - talking in bases, C - clean ship. 
 For pilot and engineer if letter is green, position is taken by crew member, red means you don't have anyone assigned to this position.
 For gunners and manufacturing - green letter mean all positions are taken (all guns, all crafting modules), red letter mean you have free positions (not all guns/crafting modules are taken), white letter mean, you don't have or no need anyone assigned to this positions.
 For repairs, upgrading ship modules, talking in bases and cleaning ship, green you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white letter means you don't have anyone assigned to this position and you don't need anyone.
-To move map without moving ship (with default keys settings), hold SHIFT and use keypad keys this same which are used for moving ship. Press {GameKey 19} to center map on ship. In that way, you can see informations about selected map cell (for example, bases info). Window in right up corner of screen always show info about your current map cell.
-At this moment, help is under development (as whole game).
+Press {GameKey 19} to center map on ship. By left clicking on map, you can get informations about selected map field (like bases, other ships, etc).
+At this moment, help is under development (as whole game). To see other help topics, click on topic title (for example "General Informations" for this screen) above help text.
 [Ship movement]
-Your ship starts docked to base. To move it, you must first give order "Undock" from base. Press {GameKey 24} key (or first 'e' key for see game menu) for open orders menu.
+Your ship starts docked to base. To move it, you must first give order "Undock" from base, by clicking on "Undock" button. To see other orders available for ship, press {GameKey 24} key (or first 'e' key for see game menu) for open orders menu.
 Each docking operation cost some money, depending on your ship size (bigger ships have bigger docking cost) and your reputation in that base. Same is with staying longer in base - for each day you pay this same price as for docking. Undocking from bases is free.
 Each unvisited field on map is grey. Once you fly on this field, it color change to black.
 At game start, you know only one base. You can discover others by flying on it or by asking for other bases in current base. To ask, press {GameKey 24} key and then select option 'Ask for bases'. You can ask for other bases only once in each base. Each ask take 30 minutes of game time. Amount of discovered bases depends on current base size (in larger bases they know more other bases). From time to time you can meet friendly trader ship, which you can ask for bases too.
@@ -26,7 +23,7 @@ During travel you may encounter various events. Some events may bring new option
 Ship speed depends on engine power, engine damage, ship weight (with cargo) and bit on Engineer and Pilot experience.
 With higher set ship speed, there is bigger chance that one of engines will be damaged. More experienced Engineer have better chances to prevent engine damage during fly.
 As you fly near bases (you are in this same cell where base is), you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are in default text color. All bases marked on map as 'o'.
-You can set your destination travel point on map by selecting map cell (by default SHIFT + arrow keys) and then press {GameKey 20}.
+You can set your destination travel point on map by selecting map cell (by left click on it) and select proper option from menu which appear after click.
 If you have set travel destination, press key {GameKey 9} to auto travel by one map field. If you want move further, you can press {GameKey 10} key - then you been move until you reach destination, combat happen or you can't move anymore (no pilot/engineer, too damaged engines, no fuel, etc.).
 If destination is not set, pressing key {GameKey 9} allow you to wait 1 game minute without moving.
 [Trading]
@@ -63,7 +60,7 @@ When enemy ship (or your) is stopped by harpoon, you can set boarding party to a
 When you destroy enemy ship with using of boarding party, you will get better loot from that ship.
 Damage from weapon depends on level of damage itself and used ammo damage. If weapon is more damaged, it do less damage. It works for player ship and enemy ship weapons.
 You can assign (during combat or outside combat) which ammunition to use with selected gun in ship info screen. If you don't assign ammo to gun, gunner will be using first available ammo from cargo which works with selected gun.
-On combat screen you can see only damaged modules. Progess bar show how much damaged is selected module (more damage = bigger progress).
+On combat screen you can see only damaged modules. Progress bar show how much damaged is selected module (more damage = bigger progress).
 Amount of informations about enemy ship depends on distance to it. In close range, you can see detailed informations about enemy ship modules. In any bigger range, only very general informations.
 After destroying enemy ship, you have small chance to lose some reputation with home sky base of enemy ship.
 [Crafting]
