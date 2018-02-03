@@ -53,6 +53,7 @@ with Game.SaveLoad; use Game.SaveLoad;
 with Utils.UI; use Utils.UI;
 with Log; use Log;
 with Combat.UI; use Combat.UI;
+with Help.UI; use Help.UI;
 
 package body MainMenu is
 
@@ -296,6 +297,7 @@ package body MainMenu is
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       CreateCombatUI;
+      CreateHelpUI;
       CreateSkyMap;
    end StartGame;
 
