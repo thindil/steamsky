@@ -54,6 +54,7 @@ with Utils.UI; use Utils.UI;
 with Log; use Log;
 with Combat.UI; use Combat.UI;
 with Help.UI; use Help.UI;
+with Messages.UI; use Messages.UI;
 
 package body MainMenu is
 
@@ -298,6 +299,7 @@ package body MainMenu is
       Hide(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       CreateCombatUI;
       CreateHelpUI;
+      CreateMessagesUI;
       CreateSkyMap;
    end StartGame;
 
