@@ -52,6 +52,7 @@ with Ships; use Ships;
 with Ships.Movement; use Ships.Movement;
 with Ships.Crew; use Ships.Crew;
 with Messages; use Messages;
+with Messages.UI; use Messages.UI;
 with Crew; use Crew;
 with ShipModules; use ShipModules;
 with Events; use Events;
@@ -1524,6 +1525,12 @@ package body Maps.UI is
       ShowHelpUI(1);
    end ShowHelp;
 
+   procedure ShowMessages(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Hide(Gtk_Widget(Get_Object(Object, "skymapwindow")));
+      ShowMessagesUI(SkyMap_View);
+   end ShowMessages;
+
    procedure CreateSkyMap is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
@@ -1561,6 +1568,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Wait_Order", WaitOrder'Access);
          Register_Handler(Builder, "Attack_Order", AttackOrder'Access);
          Register_Handler(Builder, "Show_Help", ShowHelp'Access);
+         Register_Handler(Builder, "Show_Messages", ShowMessages'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
