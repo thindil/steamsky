@@ -20,6 +20,8 @@ with Glib.Object; use Glib.Object;
 
 package Utils.UI is
 
+   type GameStates is (SkyMap_View, Combat_View); -- Game states
+
    procedure ShowDialog
      (Message: String;
       Parent: Gtk_Window); -- Show dialog with info
