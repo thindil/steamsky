@@ -40,6 +40,7 @@ with Game; use Game;
 with HallOfFame; use HallOfFame;
 with Ships; use Ships;
 with Crew; use Crew;
+with Crew.UI; use Crew.UI;
 with Config; use Config;
 with Goals.UI; use Goals.UI;
 with Maps.UI; use Maps.UI;
@@ -300,6 +301,7 @@ package body MainMenu is
       CreateCombatUI;
       CreateHelpUI;
       CreateMessagesUI;
+      CreateCrewUI;
       CreateSkyMap;
    end StartGame;
 
