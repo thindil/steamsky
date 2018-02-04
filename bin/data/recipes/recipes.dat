@@ -987,4 +987,15 @@ Skill = Gunsmith
 Difficulty = 20
 BaseType = 1
 Tool = GunsmithSet
+[100]
+Material = Titanium, Gunpowder
+Amount = 2, 1
+Result = 119
+Crafted = 1
+Workplace = Alchemy_Lab
+Skill = Gunsmith
+Time = 45
+Difficulty = 25
+BaseType = 1
+Tool = GunsmithSet
 []
