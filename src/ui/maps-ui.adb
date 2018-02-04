@@ -54,6 +54,7 @@ with Ships.Crew; use Ships.Crew;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
 with Crew; use Crew;
+with Crew.UI; use Crew.UI;
 with ShipModules; use ShipModules;
 with Events; use Events;
 with Items; use Items;
@@ -1525,11 +1526,15 @@ package body Maps.UI is
       ShowHelpUI(1);
    end ShowHelp;
 
-   procedure ShowMessages(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowInfo(User_Data: access GObject_Record'Class) is
    begin
-      Hide(Gtk_Widget(Get_Object(Object, "skymapwindow")));
-      ShowMessagesUI(SkyMap_View);
-   end ShowMessages;
+      Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
+      if User_Data = Get_Object(Builder, "menumessages") then
+         ShowMessagesUI(SkyMap_View);
+      else
+         ShowCrewUI(SkyMap_View);
+      end if;
+   end ShowInfo;
 
    procedure CreateSkyMap is
       Error: aliased GError;
@@ -1568,7 +1573,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Wait_Order", WaitOrder'Access);
          Register_Handler(Builder, "Attack_Order", AttackOrder'Access);
          Register_Handler(Builder, "Show_Help", ShowHelp'Access);
-         Register_Handler(Builder, "Show_Messages", ShowMessages'Access);
+         Register_Handler(Builder, "Show_Info", ShowInfo'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font

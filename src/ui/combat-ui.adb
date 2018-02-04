@@ -47,6 +47,7 @@ with Events; use Events;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Crew; use Crew;
+with Crew.UI; use Crew.UI;
 with Ships.Crew; use Ships.Crew;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
@@ -594,11 +595,15 @@ package body Combat.UI is
       ShowHelpUI(4);
    end ShowHelp;
 
-   procedure ShowMessages(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowInfo(User_Data: access GObject_Record'Class) is
    begin
-      Hide(Gtk_Widget(Get_Object(Object, "combatwindow")));
-      ShowMessagesUI(Combat_View);
-   end ShowMessages;
+      Hide(Gtk_Widget(Get_Object(Builder, "combatwindow")));
+      if User_Data = Get_Object(Builder, "btnmessages") then
+         ShowMessagesUI(Combat_View);
+      else
+         ShowCrewUI(Combat_View);
+      end if;
+   end ShowInfo;
 
    procedure CreateCombatUI is
       Error: aliased GError;
@@ -631,7 +636,7 @@ package body Combat.UI is
       Register_Handler(Builder, "Show_Board_Order", ShowBoardOrder'Access);
       Register_Handler(Builder, "Set_Boarding_Party", SetBoardingParty'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
-      Register_Handler(Builder, "Show_Messages", ShowMessages'Access);
+      Register_Handler(Builder, "Show_Info", ShowInfo'Access);
       Do_Connect(Builder);
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders")),
