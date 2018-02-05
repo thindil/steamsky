@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Exceptions; use Ada.Exceptions;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
@@ -26,13 +27,16 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Label; use Gtk.Label;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
+with Glib.Object; use Glib.Object;
 with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Combat.UI; use Combat.UI;
 with Ships; use Ships;
+with Ships.Crew; use Ships.Crew;
 with ShipModules; use ShipModules;
 with Help.UI; use Help.UI;
+with Messages; use Messages;
 
 package body Crew.UI is
 
@@ -235,6 +239,54 @@ package body Crew.UI is
       ShowHelpUI(7);
    end ShowHelp;
 
+   procedure ShowOrdersForAll(Object: access Gtkada_Builder_Record'Class) is
+      NeedCleaning, NeedRepair: Boolean := False;
+   begin
+      Show_All(Gtk_Widget(Get_Object(Object, "ordersallwindow")));
+      for Module of PlayerShip.Modules loop
+         if Module.Durability < Module.MaxDurability then
+            NeedRepair := True;
+         end if;
+         if Module.Durability > 0 and
+           Modules_List(Module.ProtoIndex).MType = CABIN and
+           Module.Data(1) < Module.Data(2) then
+            NeedCleaning := True;
+         end if;
+         exit when NeedCleaning and NeedRepair;
+      end loop;
+      if NeedRepair then
+         Show_All(Gtk_Widget(Get_Object(Object, "btnrepairall")));
+      else
+         Hide(Gtk_Widget(Get_Object(Object, "btnrepairall")));
+      end if;
+      if NeedCleaning then
+         Show_All(Gtk_Widget(Get_Object(Object, "btnclearall")));
+      else
+         Hide(Gtk_Widget(Get_Object(Object, "btnclearall")));
+      end if;
+   end ShowOrdersForAll;
+
+   procedure GiveOrdersAll(User_Data: access GObject_Record'Class) is
+      Order: Crew_Orders;
+   begin
+      if User_Data = Get_Object(Builder, "btnrepairall") then
+         Order := Repair;
+      else
+         Order := Clean;
+      end if;
+      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+         if PlayerShip.Crew(I).Skills.Length > 0 then
+            begin
+               GiveOrders(PlayerShip, I, Order);
+            exception
+               when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
+                  AddMessage(Exception_Message(An_Exception), OrderMessage);
+            end;
+         end if;
+      end loop;
+      Hide(Gtk_Widget(Get_Object(Builder, "ordersallwindow")));
+   end GiveOrdersAll;
+
    procedure CreateCrewUI is
       Error: aliased GError;
    begin
@@ -261,6 +313,12 @@ package body Crew.UI is
       Register_Handler(Builder, "Hide_Crew_Info", HideCrewInfo'Access);
       Register_Handler(Builder, "Show_Member_Info", ShowMemberInfo'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
+      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
+      Register_Handler
+        (Builder,
+         "Show_Orders_For_All",
+         ShowOrdersForAll'Access);
+      Register_Handler(Builder, "Give_Orders_All", GiveOrdersAll'Access);
       Do_Connect(Builder);
    end CreateCrewUI;
 
