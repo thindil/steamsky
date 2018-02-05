@@ -25,6 +25,7 @@ with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Label; use Gtk.Label;
+with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -285,7 +286,20 @@ package body Crew.UI is
          end if;
       end loop;
       Hide(Gtk_Widget(Get_Object(Builder, "ordersallwindow")));
+      if LastMessage /= Null_Unbounded_String then
+         Set_Text
+           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
+            To_String(LastMessage));
+         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
+         LastMessage := Null_Unbounded_String;
+      end if;
    end GiveOrdersAll;
+
+   procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Hide(Gtk_Widget(Get_Object(Object, "infolastmessage")));
+      LastMessage := Null_Unbounded_String;
+   end HideLastMessage;
 
    procedure CreateCrewUI is
       Error: aliased GError;
@@ -319,6 +333,7 @@ package body Crew.UI is
          "Show_Orders_For_All",
          ShowOrdersForAll'Access);
       Register_Handler(Builder, "Give_Orders_All", GiveOrdersAll'Access);
+      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Do_Connect(Builder);
    end CreateCrewUI;
 
@@ -334,6 +349,20 @@ package body Crew.UI is
       end loop;
       GameState := OldState;
       Show_All(Gtk_Widget(Get_Object(Builder, "crewwindow")));
+      if LastMessage = Null_Unbounded_String then
+         HideLastMessage(Builder);
+      else
+         Set_Text
+           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
+            To_String(LastMessage));
+         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
+         LastMessage := Null_Unbounded_String;
+      end if;
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treecrew")),
+         Gtk_Tree_Path_New_From_String("0"),
+         Gtk_Tree_View_Column(Get_Object(Builder, "columncrew")),
+         False);
    end ShowCrewUI;
 
 end Crew.UI;
