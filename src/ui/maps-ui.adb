@@ -839,13 +839,8 @@ package body Maps.UI is
 
    procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
    begin
-      if not HideWindow(Get_Object(Object, "infolastmessage")) then
-         ShowDialog
-           ("Can't hide last message.",
-            Gtk_Window(Get_Object(Object, "skymapwindow")));
-      else
-         LastMessage := Null_Unbounded_String;
-      end if;
+      Hide(Gtk_Widget(Get_Object(Object, "infolastmessage")));
+      LastMessage := Null_Unbounded_String;
       Check_Resize(Gtk_Container(Get_Object(Object, "skymapwindow")));
    end HideLastMessage;
 
