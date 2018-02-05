@@ -30,6 +30,22 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkListStore" id="skillslist">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+      <!-- column-name guint1 -->
+      <column type="guint"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="statslist">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+      <!-- column-name guint1 -->
+      <column type="guint"/>
+    </columns>
+  </object>
   <object class="GtkWindow" id="crewwindow">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Steam Sky - Crew Info</property>
@@ -49,12 +65,13 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="hscrollbar_policy">never</property>
             <property name="shadow_type">in</property>
             <child>
-              <object class="GtkTreeView">
+              <object class="GtkTreeView" id="treecrew">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="model">crewlist</property>
                 <property name="headers_visible">False</property>
                 <property name="headers_clickable">False</property>
+                <signal name="cursor-changed" handler="Show_Member_Info" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
                 </child>
@@ -87,11 +104,90 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkLabel" id="lblinfo">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="use_markup">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkTreeView" id="treestats">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="model">statslist</property>
+                <property name="headers_visible">False</property>
+                <property name="headers_clickable">False</property>
+                <property name="search_column">0</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="title" translatable="yes">column</property>
+                    <child>
+                      <object class="GtkCellRendererProgress"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                        <attribute name="value">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="scrollskills">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="model">skillslist</property>
+                    <property name="headers_visible">False</property>
+                    <property name="headers_clickable">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn">
+                        <property name="title" translatable="yes">column</property>
+                        <child>
+                          <object class="GtkCellRendererProgress"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                            <attribute name="value">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lblorder">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -114,7 +210,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="bntinventory">
+                  <object class="GtkButton" id="btninventory">
                     <property name="label" translatable="yes">Inventory</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -145,6 +241,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="Show_Help" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -154,9 +251,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>
