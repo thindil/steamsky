@@ -25,3 +25,4 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Typos in old changelog files
 - Generating cargo in abandoned bases
+- Crew member equipment after moving item to cargo
