@@ -26,6 +26,7 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
+with Gtk.Button; use Gtk.Button;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -38,11 +39,15 @@ with Ships.Crew; use Ships.Crew;
 with ShipModules; use ShipModules;
 with Help.UI; use Help.UI;
 with Messages; use Messages;
+with Crew.Inventory; use Crew.Inventory;
 
 package body Crew.UI is
 
    Builder: Gtkada_Builder;
    GameState: GameStates;
+   CrewIter: Gtk_Tree_Iter;
+   CrewModel: Gtk_Tree_Model;
+   MemberIndex: Positive;
 
    function HideCrewInfo
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
@@ -58,9 +63,6 @@ package body Crew.UI is
    end HideCrewInfo;
 
    procedure ShowMemberInfo(Object: access Gtkada_Builder_Record'Class) is
-      CrewIter: Gtk_Tree_Iter;
-      CrewModel: Gtk_Tree_Model;
-      MemberIndex: Positive;
       Member: Member_Data;
       MemberInfo: Unbounded_String;
       TiredPoints: Integer;
@@ -301,6 +303,167 @@ package body Crew.UI is
       LastMessage := Null_Unbounded_String;
    end HideLastMessage;
 
+   procedure ShowInventory(Object: access Gtkada_Builder_Record'Class) is
+      InventoryIter: Gtk_Tree_Iter;
+      InventoryList: Gtk_List_Store;
+      ItemName: Unbounded_String;
+   begin
+      InventoryList := Gtk_List_Store(Get_Object(Builder, "inventorylist"));
+      Clear(InventoryList);
+      for I in
+        PlayerShip.Crew(MemberIndex).Inventory.First_Index ..
+            PlayerShip.Crew(MemberIndex).Inventory.Last_Index loop
+         ItemName :=
+           To_Unbounded_String
+             (GetItemName(PlayerShip.Crew(MemberIndex).Inventory(I)));
+         if ItemIsUsed(MemberIndex, I) then
+            ItemName := ItemName & "(used)";
+         end if;
+         Append(InventoryList, InventoryIter);
+         Set(InventoryList, InventoryIter, 0, To_String(ItemName));
+      end loop;
+      Show_All(Gtk_Widget(Get_Object(Object, "inventorywindow")));
+      if PlayerShip.Crew(MemberIndex).Inventory.Length > 0 then
+         Set_Cursor
+           (Gtk_Tree_View(Get_Object(Builder, "treeinventory")),
+            Gtk_Tree_Path_New_From_String("0"),
+            Gtk_Tree_View_Column(Get_Object(Builder, "columninventory")),
+            False);
+      end if;
+   end ShowInventory;
+
+   procedure ShowItemInfo(Object: access Gtkada_Builder_Record'Class) is
+      InventoryIter: Gtk_Tree_Iter;
+      InventoryModel: Gtk_Tree_Model;
+      ItemInfo: Unbounded_String;
+      ItemIndex, ProtoIndex, ItemWeight: Positive;
+      DamagePercent: Natural;
+      ItemType: Unbounded_String;
+   begin
+      Get_Selected
+        (Gtk.Tree_View.Get_Selection
+           (Gtk_Tree_View(Get_Object(Object, "treeinventory"))),
+         InventoryModel,
+         InventoryIter);
+      if InventoryIter = Null_Iter then
+         return;
+      end if;
+      ItemIndex :=
+        Natural'Value(To_String(Get_Path(InventoryModel, InventoryIter))) + 1;
+      ProtoIndex :=
+        PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex;
+      ItemWeight :=
+        PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount *
+        Items_List(ProtoIndex).Weight;
+      ItemInfo := To_Unbounded_String("Type: ");
+      if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+         Append(ItemInfo, Items_List(ProtoIndex).IType);
+      else
+         Append(ItemInfo, Items_List(ProtoIndex).ShowType);
+      end if;
+      Append
+        (ItemInfo,
+         ASCII.LF &
+         "Amount:" &
+         Positive'Image
+           (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount));
+      Append
+        (ItemInfo,
+         ASCII.LF &
+         "Weight:" &
+         Positive'Image(Items_List(ProtoIndex).Weight) &
+         " kg");
+      Append
+        (ItemInfo,
+         ASCII.LF & "Total weight:" & Positive'Image(ItemWeight) & " kg");
+      if Items_List(ProtoIndex).IType = WeaponType then
+         Append
+           (ItemInfo,
+            ASCII.LF &
+            "Skill: " &
+            Skills_List(Items_List(ProtoIndex).Value(3)).Name &
+            "/" &
+            Attributes_Names
+              (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute));
+      end if;
+      if PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability <
+        100 then
+         DamagePercent :=
+           100 -
+           Natural
+             ((Float
+                 (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
+                    .Durability) /
+               100.0) *
+              100.0);
+         Append(ItemInfo, ASCII.LF & "Status: ");
+         case DamagePercent is
+            when 1 .. 19 =>
+               Append
+                 (ItemInfo,
+                  "<span foreground=""green"">Slightly used</span>");
+            when 20 .. 49 =>
+               Append(ItemInfo, "<span foreground=""yellow"">Damaged</span>");
+            when 50 .. 79 =>
+               Append
+                 (ItemInfo,
+                  "<span foreground=""red"">Heavily damaged</span>");
+            when others =>
+               Append
+                 (ItemInfo,
+                  "<span foreground=""blue"">Almost destroyed</span>");
+         end case;
+      end if;
+      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
+         Append
+           (ItemInfo,
+            ASCII.LF & ASCII.LF & Items_List(ProtoIndex).Description);
+      end if;
+      Set_Markup
+        (Gtk_Label(Get_Object(Object, "lbliteminfo")),
+         To_String(ItemInfo));
+      if ItemIsUsed(MemberIndex, ItemIndex) then
+         Set_Label
+           (Gtk_Button(Get_Object(Object, "btnequip")),
+            "Take off item");
+      else
+         ItemType :=
+           Items_List
+             (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+             .IType;
+         if ItemType = WeaponType then
+            Set_Label
+              (Gtk_Button(Get_Object(Object, "btnequip")),
+               "Use as weapon");
+         elsif ItemType = ShieldType then
+            Set_Label
+              (Gtk_Button(Get_Object(Object, "btnequip")),
+               "Use as shield");
+         elsif ItemType = HeadArmor then
+            Set_Label
+              (Gtk_Button(Get_Object(Object, "btnequip")),
+               "Use as helmet");
+         elsif ItemType = ChestArmor then
+            Set_Label
+              (Gtk_Button(Get_Object(Object, "btnequip")),
+               "Use as torso armor");
+         elsif ItemType = ArmsArmor then
+            Set_Label
+              (Gtk_Button(Get_Object(Object, "btnequip")),
+               "Use as arms armor");
+         elsif ItemType = LegsArmor then
+            Set_Label
+              (Gtk_Button(Get_Object(Object, "btnequip")),
+               "Use as legs armor");
+         elsif Tools_List.Find_Index(Item => ItemType) /=
+           UnboundedString_Container.No_Index then
+            Set_Label
+              (Gtk_Button(Get_Object(Object, "btnequip")),
+               "Use as tool");
+         end if;
+      end if;
+   end ShowItemInfo;
+
    procedure CreateCrewUI is
       Error: aliased GError;
    begin
@@ -324,6 +487,14 @@ package body Crew.UI is
         (Gtk_Widget(Get_Object(Builder, "lblinfo")),
          0,
          White_RGBA);
+      Override_Background_Color
+        (Gtk_Widget(Get_Object(Builder, "lbliteminfo")),
+         0,
+         Black_RGBA);
+      Override_Color
+        (Gtk_Widget(Get_Object(Builder, "lbliteminfo")),
+         0,
+         White_RGBA);
       Register_Handler(Builder, "Hide_Crew_Info", HideCrewInfo'Access);
       Register_Handler(Builder, "Show_Member_Info", ShowMemberInfo'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
@@ -334,6 +505,8 @@ package body Crew.UI is
          ShowOrdersForAll'Access);
       Register_Handler(Builder, "Give_Orders_All", GiveOrdersAll'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
+      Register_Handler(Builder, "Show_Inventory", ShowInventory'Access);
+      Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
       Do_Connect(Builder);
    end CreateCrewUI;
 
