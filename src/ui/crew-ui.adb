@@ -27,6 +27,8 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -36,6 +38,7 @@ with Maps.UI; use Maps.UI;
 with Combat.UI; use Combat.UI;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
+with Ships.Cargo; use Ships.Cargo;
 with ShipModules; use ShipModules;
 with Help.UI; use Help.UI;
 with Messages; use Messages;
@@ -505,6 +508,58 @@ package body Crew.UI is
       SetActiveItem;
    end UseItem;
 
+   procedure ShowMoveItem(Object: access Gtkada_Builder_Record'Class) is
+      AmountAdj: constant Gtk_Adjustment :=
+        Gtk_Adjustment(Get_Object(Object, "amountadj"));
+   begin
+      Set_Upper
+        (AmountAdj,
+         Gdouble(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount));
+      Set_Value(AmountAdj, 1.0);
+      Show_All(Gtk_Widget(Get_Object(Builder, "moveitemwindow")));
+   end ShowMoveItem;
+
+   procedure MoveItem(Object: access Gtkada_Builder_Record'Class) is
+      Amount: Positive;
+      Item: constant InventoryData :=
+        PlayerShip.Crew(MemberIndex).Inventory(ItemIndex);
+   begin
+      Amount :=
+        Positive(Get_Value(Gtk_Adjustment(Get_Object(Object, "amountadj"))));
+      if FreeCargo(0 - (Items_List(Item.ProtoIndex).Weight * Amount)) < 0 then
+         ShowDialog
+           ("No free space in ship cargo for that amount of " &
+            GetItemName(Item),
+            Gtk_Window(Get_Object(Object, "moveitemwindow")));
+         return;
+      end if;
+      if ItemIsUsed(MemberIndex, ItemIndex) then
+         TakeOffItem(MemberIndex, ItemIndex);
+      end if;
+      UpdateCargo(PlayerShip, Item.ProtoIndex, Amount, Item.Durability);
+      UpdateInventory
+        (MemberIndex => MemberIndex,
+         Amount => (0 - Amount),
+         InventoryIndex => ItemIndex);
+      if
+        (PlayerShip.Crew(MemberIndex).Order = Clean and
+         FindItem
+             (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+              ItemType => CleaningTools) =
+           0) or
+        ((PlayerShip.Crew(MemberIndex).Order = Upgrading or
+          PlayerShip.Crew(MemberIndex).Order = Repair) and
+         FindItem
+             (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+              ItemType => RepairTools) =
+           0) then
+         GiveOrders(PlayerShip, MemberIndex, Rest);
+      end if;
+      Hide(Gtk_Widget(Get_Object(Builder, "moveitemwindow")));
+      RefreshInventory;
+      SetActiveItem;
+   end MoveItem;
+
    procedure CreateCrewUI is
       Error: aliased GError;
    begin
@@ -549,6 +604,8 @@ package body Crew.UI is
       Register_Handler(Builder, "Show_Inventory", ShowInventory'Access);
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
       Register_Handler(Builder, "Use_Item", UseItem'Access);
+      Register_Handler(Builder, "Show_Move_Item", ShowMoveItem'Access);
+      Register_Handler(Builder, "Move_Item", MoveItem'Access);
       Do_Connect(Builder);
    end CreateCrewUI;
 
