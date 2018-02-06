@@ -14,8 +14,8 @@ All notable changes to this project will be documented in this file.
   and titanium 120mm gun
 - New items: titanium 40mm ammo, titanium 60mm ammo, titanium 80mm ammo and
   titanium 100mm ammo
-- New crafting recipes: titanium 40mm ammo, titanium 60mm ammo and titanium
-  80mm ammo
+- New crafting recipes: titanium 40mm ammo, titanium 60mm ammo, titanium 80mm
+  ammo and titanium 100mm ammo
 
 ### Changed
 - Updated README.md
