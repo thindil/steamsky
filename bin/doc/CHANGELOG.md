@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crew member equipment after moving item to cargo
+
 ## [2.0.1] - 2018-01-28
 
 ### Fixed
