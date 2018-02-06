@@ -533,9 +533,6 @@ package body Crew.UI is
             Gtk_Window(Get_Object(Object, "moveitemwindow")));
          return;
       end if;
-      if ItemIsUsed(MemberIndex, ItemIndex) then
-         TakeOffItem(MemberIndex, ItemIndex);
-      end if;
       UpdateCargo(PlayerShip, Item.ProtoIndex, Amount, Item.Durability);
       UpdateInventory
         (MemberIndex => MemberIndex,
