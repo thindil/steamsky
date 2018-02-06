@@ -73,6 +73,11 @@ package body Crew.Inventory is
            PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount + Amount;
          if NewAmount = 0 then
             PlayerShip.Crew(MemberIndex).Inventory.Delete(Index => ItemIndex);
+            for Item of PlayerShip.Crew(MemberIndex).Equipment loop
+               if Item > ItemIndex then
+                  Item := Item - 1;
+               end if;
+            end loop;
          else
             PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount :=
               NewAmount;
