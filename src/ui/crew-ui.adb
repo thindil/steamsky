@@ -45,9 +45,7 @@ package body Crew.UI is
 
    Builder: Gtkada_Builder;
    GameState: GameStates;
-   CrewIter: Gtk_Tree_Iter;
-   CrewModel: Gtk_Tree_Model;
-   MemberIndex: Positive;
+   MemberIndex, ItemIndex: Positive;
 
    function HideCrewInfo
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
@@ -63,6 +61,8 @@ package body Crew.UI is
    end HideCrewInfo;
 
    procedure ShowMemberInfo(Object: access Gtkada_Builder_Record'Class) is
+      CrewIter: Gtk_Tree_Iter;
+      CrewModel: Gtk_Tree_Model;
       Member: Member_Data;
       MemberInfo: Unbounded_String;
       TiredPoints: Integer;
@@ -303,7 +303,7 @@ package body Crew.UI is
       LastMessage := Null_Unbounded_String;
    end HideLastMessage;
 
-   procedure ShowInventory(Object: access Gtkada_Builder_Record'Class) is
+   procedure RefreshInventory is
       InventoryIter: Gtk_Tree_Iter;
       InventoryList: Gtk_List_Store;
       ItemName: Unbounded_String;
@@ -322,7 +322,10 @@ package body Crew.UI is
          Append(InventoryList, InventoryIter);
          Set(InventoryList, InventoryIter, 0, To_String(ItemName));
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Object, "inventorywindow")));
+   end RefreshInventory;
+
+   procedure SetActiveItem is
+   begin
       if PlayerShip.Crew(MemberIndex).Inventory.Length > 0 then
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treeinventory")),
@@ -330,13 +333,20 @@ package body Crew.UI is
             Gtk_Tree_View_Column(Get_Object(Builder, "columninventory")),
             False);
       end if;
+   end SetActiveItem;
+
+   procedure ShowInventory(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      RefreshInventory;
+      Show_All(Gtk_Widget(Get_Object(Object, "inventorywindow")));
+      SetActiveItem;
    end ShowInventory;
 
    procedure ShowItemInfo(Object: access Gtkada_Builder_Record'Class) is
       InventoryIter: Gtk_Tree_Iter;
       InventoryModel: Gtk_Tree_Model;
       ItemInfo: Unbounded_String;
-      ItemIndex, ProtoIndex, ItemWeight: Positive;
+      ProtoIndex, ItemWeight: Positive;
       DamagePercent: Natural;
       ItemType: Unbounded_String;
    begin
@@ -464,6 +474,37 @@ package body Crew.UI is
       end if;
    end ShowItemInfo;
 
+   procedure UseItem(Object: access Gtkada_Builder_Record'Class) is
+      pragma Unreferenced(Object);
+      ItemType: constant Unbounded_String :=
+        Items_List
+          (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+          .IType;
+   begin
+      if ItemIsUsed(MemberIndex, ItemIndex) then
+         TakeOffItem(MemberIndex, ItemIndex);
+      else
+         if ItemType = WeaponType then
+            PlayerShip.Crew(MemberIndex).Equipment(1) := ItemIndex;
+         elsif ItemType = ShieldType then
+            PlayerShip.Crew(MemberIndex).Equipment(2) := ItemIndex;
+         elsif ItemType = HeadArmor then
+            PlayerShip.Crew(MemberIndex).Equipment(3) := ItemIndex;
+         elsif ItemType = ChestArmor then
+            PlayerShip.Crew(MemberIndex).Equipment(4) := ItemIndex;
+         elsif ItemType = ArmsArmor then
+            PlayerShip.Crew(MemberIndex).Equipment(5) := ItemIndex;
+         elsif ItemType = LegsArmor then
+            PlayerShip.Crew(MemberIndex).Equipment(6) := ItemIndex;
+         elsif Tools_List.Find_Index(Item => ItemType) /=
+           UnboundedString_Container.No_Index then
+            PlayerShip.Crew(MemberIndex).Equipment(7) := ItemIndex;
+         end if;
+      end if;
+      RefreshInventory;
+      SetActiveItem;
+   end UseItem;
+
    procedure CreateCrewUI is
       Error: aliased GError;
    begin
@@ -507,6 +548,7 @@ package body Crew.UI is
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Inventory", ShowInventory'Access);
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
+      Register_Handler(Builder, "Use_Item", UseItem'Access);
       Do_Connect(Builder);
    end CreateCrewUI;
 
