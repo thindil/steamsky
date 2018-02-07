@@ -45,6 +45,23 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkListStore" id="levelslist">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">None</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Normal</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Highest</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkListStore" id="orders">
     <columns>
       <!-- column-name gchararray1 -->
@@ -54,6 +71,52 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <!-- column-name guint2 -->
       <column type="guint"/>
     </columns>
+  </object>
+  <object class="GtkListStore" id="prioritieslist">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+      <!-- column-name gchararray2 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Piloting</col>
+        <col id="1" translatable="yes">None</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Engineering</col>
+        <col id="1" translatable="yes">None</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Operating guns</col>
+        <col id="1" translatable="yes">None</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Repair ship</col>
+        <col id="1" translatable="yes">None</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Manufacturing</col>
+        <col id="1" translatable="yes">None</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Upgrading ship</col>
+        <col id="1" translatable="yes">None</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Talking in bases</col>
+        <col id="1" translatable="yes">None</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Healing wounded</col>
+        <col id="1" translatable="yes">None</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Cleaning ship</col>
+        <col id="1" translatable="yes">None</col>
+      </row>
+    </data>
   </object>
   <object class="GtkListStore" id="skillslist">
     <columns>
@@ -305,6 +368,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="Show_Priorities" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -572,6 +636,83 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </object>
     </child>
     <child type="titlebar">
+      <placeholder/>
+    </child>
+  </object>
+  <object class="GtkWindow" id="prioritieswindow">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Steam Sky - Orders Priorities</property>
+    <property name="modal">True</property>
+    <property name="window_position">center</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
+    <property name="transient_for">crewwindow</property>
+    <signal name="delete-event" handler="Hide_Window" object="prioritieswindow" swapped="no"/>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkTreeView">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="model">prioritieslist</property>
+            <property name="headers_clickable">False</property>
+            <property name="search_column">0</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection"/>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Piority</property>
+                <child>
+                  <object class="GtkCellRendererText"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Level</property>
+                <child>
+                  <object class="GtkCellRendererCombo" id="renderpriorities">
+                    <property name="editable">True</property>
+                    <property name="has_entry">False</property>
+                    <property name="model">levelslist</property>
+                    <property name="text_column">0</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnaccept">
+            <property name="label" translatable="yes">Accept changes</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child>
       <placeholder/>
     </child>
   </object>
