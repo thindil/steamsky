@@ -29,9 +29,12 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Cell_Renderer_Combo; use Gtk.Cell_Renderer_Combo;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
+with Glib.Types; use Glib.Types;
+with Glib.Properties; use Glib.Properties;
 with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
@@ -63,6 +66,98 @@ package body Crew.UI is
       return True;
    end HideCrewInfo;
 
+   procedure SetOrdersList is
+      OrdersModel: Glib.Types.GType_Interface;
+      OrdersList: Gtk_List_Store;
+      OrdersIter: Gtk_Tree_Iter;
+      NeedClean, NeedRepair: Boolean := True;
+      procedure AddOrder
+        (OrderText: String;
+         OrderIndex, ModuleIndex: Natural) is
+      begin
+         Append(OrdersList, OrdersIter);
+         Set(OrdersList, OrdersIter, 0, OrderText);
+         Set(OrdersList, OrdersIter, 1, Gint(OrderIndex));
+         Set(OrdersList, OrdersIter, 2, Gint(ModuleIndex));
+      end AddOrder;
+   begin
+      OrdersModel :=
+        Get_Property
+          (Get_Object(Builder, "renderorders"),
+           Gtk.Cell_Renderer_Combo.Model_Property);
+      OrdersList := -(Gtk_Tree_Model(OrdersModel));
+      OrdersList.Clear;
+      if
+        (PlayerShip.Crew(MemberIndex).Tired = 100 or
+         PlayerShip.Crew(MemberIndex).Hunger = 100 or
+         PlayerShip.Crew(MemberIndex).Thirst = 100) and
+        PlayerShip.Crew(MemberIndex).Order /= Rest then
+         AddOrder("Go on break", 9, 0);
+      else
+         if PlayerShip.Crew(MemberIndex).Order /= Pilot then
+            AddOrder("Piloting", 0, 0);
+         end if;
+         if PlayerShip.Crew(MemberIndex).Order /= Engineer then
+            AddOrder("Engineering", 1, 0);
+         end if;
+         for I in PlayerShip.Modules.Iterate loop
+            if PlayerShip.Modules(I).Durability > 0 then
+               case Modules_List(PlayerShip.Modules(I).ProtoIndex).MType is
+                  when GUN =>
+                     if PlayerShip.Modules(I).Owner /= MemberIndex then
+                        AddOrder
+                          ("Operate " & To_String(PlayerShip.Modules(I).Name),
+                           2,
+                           Modules_Container.To_Index(I));
+                     end if;
+                  when ALCHEMY_LAB .. GREENHOUSE =>
+                     if PlayerShip.Modules(I).Owner /= MemberIndex and
+                       PlayerShip.Modules(I).Data(1) /= 0 then
+                        AddOrder
+                          ("Work in " & To_String(PlayerShip.Modules(I).Name),
+                           4,
+                           Modules_Container.To_Index(I));
+                     end if;
+                  when CABIN =>
+                     if PlayerShip.Modules(I).Data(1) <
+                       PlayerShip.Modules(I).Data(2) and
+                       PlayerShip.Crew(MemberIndex).Order /= Clean and
+                       NeedClean then
+                        AddOrder("Clean ship", 8, 0);
+                        NeedClean := False;
+                     end if;
+                  when others =>
+                     null;
+               end case;
+               if PlayerShip.Modules(I).Durability <
+                 PlayerShip.Modules(I).MaxDurability and
+                 NeedRepair then
+                  AddOrder("Repair ship", 3, 0);
+                  NeedRepair := False;
+               end if;
+            end if;
+         end loop;
+         for I in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(I).Health < 100 and
+              Crew_Container.To_Index(I) /= MemberIndex and
+              PlayerShip.Crew(MemberIndex).Order /= Heal then
+               AddOrder("Heal wounded crew members", 7, 0);
+               exit;
+            end if;
+         end loop;
+         if PlayerShip.UpgradeModule > 0 and
+           PlayerShip.Crew(MemberIndex).Order /= Upgrading then
+            AddOrder("Upgrade module", 5, 0);
+         end if;
+         if PlayerShip.Crew(MemberIndex).Order /= Talk then
+            AddOrder("Talking in bases", 6, 0);
+         end if;
+         if PlayerShip.Crew(MemberIndex).Order /= Rest then
+            AddOrder("Go on break", 9, 0);
+         end if;
+      end if;
+   end SetOrdersList;
+
    procedure ShowMemberInfo(Object: access Gtkada_Builder_Record'Class) is
       CrewIter: Gtk_Tree_Iter;
       CrewModel: Gtk_Tree_Model;
@@ -92,15 +187,13 @@ package body Crew.UI is
       if Member.Skills.Length = 0 then
          Hide(Gtk_Widget(Get_Object(Object, "treestats")));
          Hide(Gtk_Widget(Get_Object(Object, "scrollskills")));
-         Hide(Gtk_Widget(Get_Object(Object, "lblorder")));
-         Hide(Gtk_Widget(Get_Object(Object, "btnorders")));
+         Hide(Gtk_Widget(Get_Object(Object, "btnpriorities")));
          Hide(Gtk_Widget(Get_Object(Object, "btninventory")));
          Append(MemberInfo, ASCII.LF & "Passenger");
       else
          Show_All(Gtk_Widget(Get_Object(Object, "treestats")));
          Show_All(Gtk_Widget(Get_Object(Object, "scrollskills")));
-         Show_All(Gtk_Widget(Get_Object(Object, "lblorder")));
-         Show_All(Gtk_Widget(Get_Object(Object, "btnorders")));
+         Show_All(Gtk_Widget(Get_Object(Object, "btnpriorities")));
          Show_All(Gtk_Widget(Get_Object(Object, "btninventory")));
       end if;
       for Module of PlayerShip.Modules loop
@@ -207,36 +300,8 @@ package body Crew.UI is
             Set(List, Iter, 0, To_String(Skills_List(Skill(1)).Name));
             Set(List, Iter, 1, Gint(Skill(2)));
          end loop;
-         case Member.Order is
-            when Pilot =>
-               MemberInfo := To_Unbounded_String("Piloting");
-            when Engineer =>
-               MemberInfo := To_Unbounded_String("Engineering");
-            when Gunner =>
-               MemberInfo := To_Unbounded_String("Gunner");
-            when Rest =>
-               MemberInfo := To_Unbounded_String("On break");
-            when Repair =>
-               MemberInfo := To_Unbounded_String("Repair ship");
-            when Craft =>
-               MemberInfo := To_Unbounded_String("Manufacturing");
-            when Upgrading =>
-               MemberInfo := To_Unbounded_String("Upgrading module");
-            when Talk =>
-               MemberInfo := To_Unbounded_String("Talking in bases");
-            when Heal =>
-               MemberInfo := To_Unbounded_String("Healing wounded");
-            when Clean =>
-               MemberInfo := To_Unbounded_String("Cleans ship");
-            when Boarding =>
-               MemberInfo := To_Unbounded_String("Boarding");
-            when Defend =>
-               MemberInfo := To_Unbounded_String("Defends ship");
-         end case;
-         Set_Text
-           (Gtk_Label(Get_Object(Object, "lblorder")),
-            "Order: " & To_String(MemberInfo));
       end if;
+      SetOrdersList;
    end ShowMemberInfo;
 
    procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
@@ -557,6 +622,76 @@ package body Crew.UI is
       SetActiveItem;
    end MoveItem;
 
+   procedure RefreshCrewInfo is
+      CrewIter: Gtk_Tree_Iter;
+      CrewList: Gtk_List_Store;
+      OrdersNames: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("Piloting"),
+         To_Unbounded_String("Engineering"),
+         To_Unbounded_String("Gunner"),
+         To_Unbounded_String("Repair ship"),
+         To_Unbounded_String("Manufacturing"),
+         To_Unbounded_String("Upgrading module"),
+         To_Unbounded_String("Talking in bases"),
+         To_Unbounded_String("Healing wounded"),
+         To_Unbounded_String("Cleans ship"),
+         To_Unbounded_String("On break"),
+         To_Unbounded_String("Boarding"),
+         To_Unbounded_String("Defends ship"));
+   begin
+      CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist"));
+      Clear(CrewList);
+      for Member of PlayerShip.Crew loop
+         Append(CrewList, CrewIter);
+         Set(CrewList, CrewIter, 0, To_String(Member.Name));
+         Set
+           (CrewList,
+            CrewIter,
+            1,
+            To_String(OrdersNames(Crew_Orders'Pos(Member.Order) + 1)));
+      end loop;
+   end RefreshCrewInfo;
+
+   procedure ShowLastMessage is
+   begin
+      if LastMessage = Null_Unbounded_String then
+         HideLastMessage(Builder);
+      else
+         Set_Text
+           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
+            To_String(LastMessage));
+         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
+         LastMessage := Null_Unbounded_String;
+      end if;
+   end ShowLastMessage;
+
+   procedure SetActiveMember is
+   begin
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treecrew")),
+         Gtk_Tree_Path_New_From_String("0"),
+         Gtk_Tree_View_Column(Get_Object(Builder, "columncrew")),
+         False);
+   end SetActiveMember;
+
+   procedure GiveCrewOrders
+     (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
+      Path_String: UTF8_String;
+      New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
+      Model: Glib.Types.GType_Interface;
+      List: Gtk_List_Store;
+   begin
+      Model := Get_Property(Self, Gtk.Cell_Renderer_Combo.Model_Property);
+      List := -(Gtk_Tree_Model(Model));
+      GiveOrders
+        (PlayerShip,
+         (Natural'Value(Path_String) + 1),
+         Crew_Orders'Val(Get_Int(List, New_Iter, 1)),
+         Natural(Get_Int(List, New_Iter, 2)));
+      RefreshCrewInfo;
+      ShowLastMessage;
+   end GiveCrewOrders;
+
    procedure CreateCrewUI is
       Error: aliased GError;
    begin
@@ -604,34 +739,18 @@ package body Crew.UI is
       Register_Handler(Builder, "Show_Move_Item", ShowMoveItem'Access);
       Register_Handler(Builder, "Move_Item", MoveItem'Access);
       Do_Connect(Builder);
+      On_Changed
+        (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders")),
+         GiveCrewOrders'Access);
    end CreateCrewUI;
 
    procedure ShowCrewUI(OldState: GameStates) is
-      CrewIter: Gtk_Tree_Iter;
-      CrewList: Gtk_List_Store;
    begin
-      CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist"));
-      Clear(CrewList);
-      for Member of PlayerShip.Crew loop
-         Append(CrewList, CrewIter);
-         Set(CrewList, CrewIter, 0, To_String(Member.Name));
-      end loop;
+      RefreshCrewInfo;
       GameState := OldState;
       Show_All(Gtk_Widget(Get_Object(Builder, "crewwindow")));
-      if LastMessage = Null_Unbounded_String then
-         HideLastMessage(Builder);
-      else
-         Set_Text
-           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
-            To_String(LastMessage));
-         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
-         LastMessage := Null_Unbounded_String;
-      end if;
-      Set_Cursor
-        (Gtk_Tree_View(Get_Object(Builder, "treecrew")),
-         Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columncrew")),
-         False);
+      ShowLastMessage;
+      SetActiveMember;
    end ShowCrewUI;
 
 end Crew.UI;
