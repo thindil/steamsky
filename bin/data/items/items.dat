@@ -1023,4 +1023,13 @@ Buyable = Y, N, N, N
 Value = 128
 ShowType = Ammunition
 Description = Upgraded 100mm gun ammunition, made of titanium.
+[121]
+Name = Titanium 120mm ammo
+Weight = 60
+Type = Ammo120
+Prices = 70, 72, 72, 72
+Buyable = Y, N, N, N
+Value = 256
+ShowType = Ammunition
+Description = Upgraded 120mm gun ammunition, made of titanium.
 []
