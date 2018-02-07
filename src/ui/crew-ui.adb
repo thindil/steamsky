@@ -735,6 +735,40 @@ package body Crew.UI is
          To_String(NewValue));
    end SetPriority;
 
+   function SetEachPriority
+     (Model: Gtk_Tree_Model;
+      Path: Gtk_Tree_Path;
+      Iter: Gtk_Tree_Iter) return Boolean is
+      PriorityLevel: constant String := Get_String(Model, Iter, 1);
+   begin
+      if PriorityLevel = "Highest" then
+         PlayerShip.Crew(MemberIndex).Orders
+           (Positive'Value(To_String(Path)) + 1) :=
+           2;
+      elsif PriorityLevel = "Normal" then
+         PlayerShip.Crew(MemberIndex).Orders
+           (Positive'Value(To_String(Path)) + 1) :=
+           1;
+      else
+         PlayerShip.Crew(MemberIndex).Orders
+           (Positive'Value(To_String(Path)) + 1) :=
+           0;
+      end if;
+      return False;
+   end SetEachPriority;
+
+   procedure SetPriorities(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Foreach
+        (Gtk_List_Store(Get_Object(Object, "prioritieslist")),
+         SetEachPriority'Access);
+      UpdateOrders(PlayerShip);
+      Hide(Gtk_Widget(Get_Object(Builder, "prioritieswindow")));
+      RefreshCrewInfo;
+      ShowLastMessage;
+      ShowOrdersForAll;
+   end SetPriorities;
+
    procedure CreateCrewUI is
       Error: aliased GError;
    begin
@@ -778,6 +812,7 @@ package body Crew.UI is
       Register_Handler(Builder, "Show_Move_Item", ShowMoveItem'Access);
       Register_Handler(Builder, "Move_Item", MoveItem'Access);
       Register_Handler(Builder, "Show_Priorities", ShowPriorities'Access);
+      Register_Handler(Builder, "Set_Priorities", SetPriorities'Access);
       Do_Connect(Builder);
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders")),
