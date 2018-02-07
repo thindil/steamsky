@@ -166,7 +166,6 @@ package body Crew.UI is
       TiredPoints: Integer;
       Iter: Gtk_Tree_Iter;
       List: Gtk_List_Store;
-      OrdersForAll: Boolean := False;
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -195,23 +194,6 @@ package body Crew.UI is
          Show_All(Gtk_Widget(Get_Object(Object, "scrollskills")));
          Show_All(Gtk_Widget(Get_Object(Object, "btnpriorities")));
          Show_All(Gtk_Widget(Get_Object(Object, "btninventory")));
-      end if;
-      for Module of PlayerShip.Modules loop
-         if Module.Durability < Module.MaxDurability then
-            OrdersForAll := True;
-            exit;
-         end if;
-         if Module.Durability > 0 and
-           Modules_List(Module.ProtoIndex).MType = CABIN and
-           Module.Data(1) < Module.Data(2) then
-            OrdersForAll := True;
-            exit;
-         end if;
-      end loop;
-      if not OrdersForAll then
-         Hide(Gtk_Widget(Get_Object(Object, "btnordersall")));
-      else
-         Show_All(Gtk_Widget(Get_Object(Object, "btnordersall")));
       end if;
       if Member.Health < 100 and Member.Health > 80 then
          Append
@@ -310,10 +292,9 @@ package body Crew.UI is
       ShowHelpUI(7);
    end ShowHelp;
 
-   procedure ShowOrdersForAll(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowOrdersForAll is
       NeedCleaning, NeedRepair: Boolean := False;
    begin
-      Show_All(Gtk_Widget(Get_Object(Object, "ordersallwindow")));
       for Module of PlayerShip.Modules loop
          if Module.Durability < Module.MaxDurability then
             NeedRepair := True;
@@ -326,14 +307,14 @@ package body Crew.UI is
          exit when NeedCleaning and NeedRepair;
       end loop;
       if NeedRepair then
-         Show_All(Gtk_Widget(Get_Object(Object, "btnrepairall")));
+         Show_All(Gtk_Widget(Get_Object(Builder, "btnrepairall")));
       else
-         Hide(Gtk_Widget(Get_Object(Object, "btnrepairall")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnrepairall")));
       end if;
       if NeedCleaning then
-         Show_All(Gtk_Widget(Get_Object(Object, "btnclearall")));
+         Show_All(Gtk_Widget(Get_Object(Builder, "btnclearall")));
       else
-         Hide(Gtk_Widget(Get_Object(Object, "btnclearall")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnclearall")));
       end if;
    end ShowOrdersForAll;
 
@@ -355,7 +336,6 @@ package body Crew.UI is
             end;
          end if;
       end loop;
-      Hide(Gtk_Widget(Get_Object(Builder, "ordersallwindow")));
       if LastMessage /= Null_Unbounded_String then
          Set_Text
            (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
@@ -690,6 +670,7 @@ package body Crew.UI is
          Natural(Get_Int(List, New_Iter, 2)));
       RefreshCrewInfo;
       ShowLastMessage;
+      ShowOrdersForAll;
    end GiveCrewOrders;
 
    procedure CreateCrewUI is
@@ -727,10 +708,6 @@ package body Crew.UI is
       Register_Handler(Builder, "Show_Member_Info", ShowMemberInfo'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
-      Register_Handler
-        (Builder,
-         "Show_Orders_For_All",
-         ShowOrdersForAll'Access);
       Register_Handler(Builder, "Give_Orders_All", GiveOrdersAll'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Inventory", ShowInventory'Access);
@@ -751,6 +728,7 @@ package body Crew.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "crewwindow")));
       ShowLastMessage;
       SetActiveMember;
+      ShowOrdersForAll;
    end ShowCrewUI;
 
 end Crew.UI;
