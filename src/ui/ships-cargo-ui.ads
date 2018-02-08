@@ -17,10 +17,10 @@
 
 with Utils.UI; use Utils.UI;
 
-package Crew.UI is
+package Ships.Cargo.UI is
 
-   procedure CreateCrewUI; -- Create infterace for show player ship crew info
-   procedure ShowCrewUI
-     (OldState: GameStates); -- Show interface for show player ship crew info
+   procedure CreateCargoUI; -- Create infterace for show player ship cargo
+   procedure ShowCargoUI
+     (OldState: GameStates); -- Show interface for show player ship cargo
 
-end Crew.UI;
+end Ships.Cargo.UI;
