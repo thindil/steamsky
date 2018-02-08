@@ -37,6 +37,7 @@ with Glib.Types; use Glib.Types;
 with Glib.Properties; use Glib.Properties;
 with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
+with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Combat.UI; use Combat.UI;
 with Ships; use Ships;
@@ -46,6 +47,7 @@ with ShipModules; use ShipModules;
 with Help.UI; use Help.UI;
 with Messages; use Messages;
 with Crew.Inventory; use Crew.Inventory;
+with Bases; use Bases;
 
 package body Crew.UI is
 
@@ -194,6 +196,11 @@ package body Crew.UI is
          Show_All(Gtk_Widget(Get_Object(Object, "scrollskills")));
          Show_All(Gtk_Widget(Get_Object(Object, "btnpriorities")));
          Show_All(Gtk_Widget(Get_Object(Object, "btninventory")));
+      end if;
+      if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
+         Show_All(Gtk_Widget(Get_Object(Object, "btndismiss")));
+      else
+         Hide(Gtk_Widget(Get_Object(Object, "btndismiss")));
       end if;
       if Member.Health < 100 and Member.Health > 80 then
          Append
@@ -774,6 +781,27 @@ package body Crew.UI is
       ShowOrdersForAll;
    end SetPriorities;
 
+   procedure DismissMember(Object: access Gtkada_Builder_Record'Class) is
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      if ShowConfirmDialog
+          ("Are you sure want to dismiss this crew member?",
+           Gtk_Window(Get_Object(Object, "crewwindow"))) then
+         AddMessage
+           ("You dismissed " &
+            To_String(PlayerShip.Crew(MemberIndex).Name) &
+            ".",
+            OrderMessage);
+         DeleteMember(MemberIndex, PlayerShip);
+         SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
+         RefreshCrewInfo;
+         ShowLastMessage;
+         ShowOrdersForAll;
+         SetActiveMember;
+      end if;
+   end DismissMember;
+
    procedure CreateCrewUI is
       Error: aliased GError;
    begin
@@ -818,6 +846,7 @@ package body Crew.UI is
       Register_Handler(Builder, "Move_Item", MoveItem'Access);
       Register_Handler(Builder, "Show_Priorities", ShowPriorities'Access);
       Register_Handler(Builder, "Set_Priorities", SetPriorities'Access);
+      Register_Handler(Builder, "Dismiss_Member", DismissMember'Access);
       Do_Connect(Builder);
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders")),
