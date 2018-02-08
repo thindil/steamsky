@@ -370,6 +370,11 @@ package body Crew.UI is
          Append(InventoryList, InventoryIter);
          Set(InventoryList, InventoryIter, 0, To_String(ItemName));
       end loop;
+      Set_Label
+        (Gtk_Label(Get_Object(Builder, "lblfreespace")),
+         "Free inventory space:" &
+         Integer'Image(FreeInventory(MemberIndex, 0)) &
+         " kg");
    end RefreshInventory;
 
    procedure SetActiveItem is
