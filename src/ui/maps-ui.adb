@@ -51,6 +51,7 @@ with Utils.UI; use Utils.UI;
 with Ships; use Ships;
 with Ships.Movement; use Ships.Movement;
 with Ships.Crew; use Ships.Crew;
+with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
 with Crew; use Crew;
@@ -1526,6 +1527,8 @@ package body Maps.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       if User_Data = Get_Object(Builder, "menumessages") then
          ShowMessagesUI(SkyMap_View);
+      elsif User_Data = Get_Object(Builder, "menucargo") then
+         ShowCargoUI(SkyMap_View);
       else
          ShowCrewUI(SkyMap_View);
       end if;

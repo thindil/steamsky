@@ -49,6 +49,7 @@ with Maps.UI; use Maps.UI;
 with Crew; use Crew;
 with Crew.UI; use Crew.UI;
 with Ships.Crew; use Ships.Crew;
+with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
 with Help.UI; use Help.UI;
@@ -600,6 +601,8 @@ package body Combat.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "combatwindow")));
       if User_Data = Get_Object(Builder, "btnmessages") then
          ShowMessagesUI(Combat_View);
+      elsif User_Data = Get_Object(Builder, "btncargoinfo") then
+         ShowCargoUI(Combat_View);
       else
          ShowCrewUI(Combat_View);
       end if;
