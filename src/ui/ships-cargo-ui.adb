@@ -25,6 +25,7 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
+with Gtk.Adjustment; use Gtk.Adjustment;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Gdk.RGBA; use Gdk.RGBA;
@@ -113,11 +114,9 @@ package body Ships.Cargo.UI is
       end if;
       ItemIndex :=
         Natural'Value(To_String(Get_Path(CargoModel, CargoIter))) + 1;
-      ProtoIndex :=
-        PlayerShip.Cargo(ItemIndex).ProtoIndex;
+      ProtoIndex := PlayerShip.Cargo(ItemIndex).ProtoIndex;
       ItemWeight :=
-        PlayerShip.Cargo(ItemIndex).Amount *
-        Items_List(ProtoIndex).Weight;
+        PlayerShip.Cargo(ItemIndex).Amount * Items_List(ProtoIndex).Weight;
       ItemInfo := To_Unbounded_String("Type: ");
       if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
          Append(ItemInfo, Items_List(ProtoIndex).IType);
@@ -128,8 +127,7 @@ package body Ships.Cargo.UI is
         (ItemInfo,
          ASCII.LF &
          "Amount:" &
-         Positive'Image
-           (PlayerShip.Cargo(ItemIndex).Amount));
+         Positive'Image(PlayerShip.Cargo(ItemIndex).Amount));
       Append
         (ItemInfo,
          ASCII.LF &
@@ -149,16 +147,11 @@ package body Ships.Cargo.UI is
             Attributes_Names
               (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute));
       end if;
-      if PlayerShip.Cargo(ItemIndex).Durability <
-        100 then
+      if PlayerShip.Cargo(ItemIndex).Durability < 100 then
          DamagePercent :=
            100 -
            Natural
-             ((Float
-                 (PlayerShip.Cargo(ItemIndex)
-                    .Durability) /
-               100.0) *
-              100.0);
+             ((Float(PlayerShip.Cargo(ItemIndex).Durability) / 100.0) * 100.0);
          Append(ItemInfo, ASCII.LF & "Status: ");
          case DamagePercent is
             when 1 .. 19 =>
@@ -186,6 +179,56 @@ package body Ships.Cargo.UI is
         (Gtk_Label(Get_Object(Object, "lblinfo")),
          To_String(ItemInfo));
    end ShowItemInfo;
+
+   procedure ShowDropItem(Object: access Gtkada_Builder_Record'Class) is
+      AmountAdj: constant Gtk_Adjustment :=
+        Gtk_Adjustment(Get_Object(Object, "amountadj"));
+   begin
+      Set_Upper(AmountAdj, Gdouble(PlayerShip.Cargo(ItemIndex).Amount));
+      Set_Value(AmountAdj, 1.0);
+      Show_All(Gtk_Widget(Get_Object(Builder, "dropitemwindow")));
+   end ShowDropItem;
+
+   procedure DropItem(Object: access Gtkada_Builder_Record'Class) is
+      DropAmount: Natural :=
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "amountadj"))));
+      DropAmount2: constant Natural := DropAmount;
+   begin
+      if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
+        MissionItemsType then
+         for J in 1 .. DropAmount2 loop
+            for I in
+              PlayerShip.Missions.First_Index ..
+                  PlayerShip.Missions.Last_Index loop
+               if PlayerShip.Missions(I).MType = Deliver and
+                 PlayerShip.Missions(I).Target =
+                   PlayerShip.Cargo(ItemIndex).ProtoIndex then
+                  DeleteMission(I);
+                  DropAmount := DropAmount - 1;
+                  exit;
+               end if;
+            end loop;
+         end loop;
+      end if;
+      if DropAmount > 0 then
+         AddMessage
+           ("You dropped" &
+            Positive'Image(DropAmount) &
+            " " &
+            GetItemName(PlayerShip.Cargo(ItemIndex)) &
+            ".",
+            OtherMessage);
+         UpdateCargo
+           (PlayerShip,
+            PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+            (0 - DropAmount),
+            PlayerShip.Cargo.Element(ItemIndex).Durability);
+      end if;
+      Hide(Gtk_Widget(Get_Object(Object, "dropitemwindow")));
+      RefreshCargoInfo;
+      ShowLastMessage;
+      SetActiveItem;
+   end DropItem;
 
    procedure CreateCargoUI is
       Error: aliased GError;
@@ -216,6 +259,9 @@ package body Ships.Cargo.UI is
       Register_Handler(Builder, "Hide_Cargo_Info", HideCargoInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
+      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
+      Register_Handler(Builder, "Show_Drop_Item", ShowDropItem'Access);
+      Register_Handler(Builder, "Drop_Item", DropItem'Access);
       Do_Connect(Builder);
    end CreateCargoUI;
 
