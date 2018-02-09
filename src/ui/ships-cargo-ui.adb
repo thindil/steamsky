@@ -26,12 +26,15 @@ with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Combo_Box; use Gtk.Combo_Box;
+with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Gdk.RGBA; use Gdk.RGBA;
 with Maps.UI; use Maps.UI;
 with Combat.UI; use Combat.UI;
 with Messages; use Messages;
+with Crew.Inventory; use Crew.Inventory;
 
 package body Ships.Cargo.UI is
 
@@ -230,6 +233,55 @@ package body Ships.Cargo.UI is
       SetActiveItem;
    end DropItem;
 
+   procedure ShowGiveItem(Object: access Gtkada_Builder_Record'Class) is
+      CrewIter: Gtk_Tree_Iter;
+      CrewList: Gtk_List_Store;
+      AmountAdj: constant Gtk_Adjustment :=
+        Gtk_Adjustment(Get_Object(Object, "amountadj"));
+   begin
+      Set_Upper(AmountAdj, Gdouble(PlayerShip.Cargo(ItemIndex).Amount));
+      Set_Value(AmountAdj, 1.0);
+      CrewList := Gtk_List_Store(Get_Object(Object, "crewlist"));
+      Clear(CrewList);
+      for Member of PlayerShip.Crew loop
+         Append(CrewList, CrewIter);
+         Set(CrewList, CrewIter, 0, To_String(Member.Name));
+      end loop;
+      Show_All(Gtk_Widget(Get_Object(Object, "giveitemwindow")));
+      Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmember")), 0);
+   end ShowGiveItem;
+
+   procedure GiveItem(Object: access Gtkada_Builder_Record'Class) is
+      MemberIndex: constant Positive :=
+        Positive
+          (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmember"))) + 1);
+      Amount: constant Positive :=
+        Positive(Get_Value(Gtk_Adjustment(Get_Object(Object, "amountadj"))));
+      Item: constant InventoryData := PlayerShip.Cargo(ItemIndex);
+   begin
+      if FreeInventory
+          (MemberIndex,
+           0 - (Items_List(Item.ProtoIndex).Weight * Amount)) <
+        0 then
+         ShowDialog
+           ("No free space in " &
+            To_String(PlayerShip.Crew(MemberIndex).Name) &
+            "'s inventory for that amount of " &
+            GetItemName(Item),
+            Gtk_Window(Get_Object(Object, "giveitemwindow")));
+         return;
+      end if;
+      UpdateInventory(MemberIndex, Amount, Item.ProtoIndex, Item.Durability);
+      UpdateCargo
+        (Ship => PlayerShip,
+         Amount => (0 - Amount),
+         CargoIndex => ItemIndex);
+      Hide(Gtk_Widget(Get_Object(Object, "giveitemwindow")));
+      RefreshCargoInfo;
+      ShowLastMessage;
+      SetActiveItem;
+   end GiveItem;
+
    procedure CreateCargoUI is
       Error: aliased GError;
    begin
@@ -262,6 +314,8 @@ package body Ships.Cargo.UI is
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Show_Drop_Item", ShowDropItem'Access);
       Register_Handler(Builder, "Drop_Item", DropItem'Access);
+      Register_Handler(Builder, "Show_Give_Item", ShowGiveItem'Access);
+      Register_Handler(Builder, "Give_Item", GiveItem'Access);
       Do_Connect(Builder);
    end CreateCargoUI;
 
