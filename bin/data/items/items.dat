@@ -1032,4 +1032,13 @@ Buyable = Y, N, N, N
 Value = 256
 ShowType = Ammunition
 Description = Upgraded 120mm gun ammunition, made of titanium.
+[122]
+Name = Titanium harpoon
+Weight = 20
+Type = Harpoon
+Prices = 15, 17, 17, 17
+Buyable = Y, N, N, N
+Value = 12
+ShowType = Ammunition
+Description = Harpoon made of titanium with long rope. Used as ammunition for harpoon guns.
 []
