@@ -49,6 +49,7 @@ with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with Utils.UI; use Utils.UI;
 with Ships; use Ships;
+with Ships.UI; use Ships.UI;
 with Ships.Movement; use Ships.Movement;
 with Ships.Crew; use Ships.Crew;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
@@ -1529,6 +1530,8 @@ package body Maps.UI is
          ShowMessagesUI(SkyMap_View);
       elsif User_Data = Get_Object(Builder, "menucargo") then
          ShowCargoUI(SkyMap_View);
+      elsif User_Data = Get_Object(Builder, "menuship") then
+         ShowShipUI(SkyMap_View);
       else
          ShowCrewUI(SkyMap_View);
       end if;
