@@ -49,6 +49,7 @@ with Maps.UI; use Maps.UI;
 with Crew; use Crew;
 with Crew.UI; use Crew.UI;
 with Ships.Crew; use Ships.Crew;
+with Ships.UI; use Ships.UI;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
@@ -603,6 +604,8 @@ package body Combat.UI is
          ShowMessagesUI(Combat_View);
       elsif User_Data = Get_Object(Builder, "btncargoinfo") then
          ShowCargoUI(Combat_View);
+      elsif User_Data = Get_Object(Builder, "btnshipinfo") then
+         ShowShipUI(Combat_View);
       else
          ShowCrewUI(Combat_View);
       end if;

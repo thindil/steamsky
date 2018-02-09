@@ -28,12 +28,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem">
+      <object class="GtkMenuItem" id="menuship">
         <property name="visible">True</property>
-        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Ship informations</property>
         <property name="use_underline">True</property>
+        <signal name="activate" handler="Show_Info" object="menuship" swapped="no"/>
       </object>
     </child>
     <child>
