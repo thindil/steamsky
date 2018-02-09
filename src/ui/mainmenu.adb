@@ -39,6 +39,7 @@ with Glib.Object; use Glib.Object;
 with Game; use Game;
 with HallOfFame; use HallOfFame;
 with Ships; use Ships;
+with Ships.UI; use Ships.UI;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Crew; use Crew;
 with Crew.UI; use Crew.UI;
@@ -304,6 +305,7 @@ package body MainMenu is
       CreateMessagesUI;
       CreateCrewUI;
       CreateCargoUI;
+      CreateShipUI;
       CreateSkyMap;
    end StartGame;
 
