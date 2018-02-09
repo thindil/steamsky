@@ -181,6 +181,12 @@ package body Ships.Cargo.UI is
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lblinfo")),
          To_String(ItemInfo));
+      if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
+        MissionItemsType then
+         Hide(Gtk_Widget(Get_Object(Builder, "btngiveto")));
+      else
+         Show_All(Gtk_Widget(Get_Object(Builder, "btngiveto")));
+      end if;
    end ShowItemInfo;
 
    procedure ShowDropItem(Object: access Gtkada_Builder_Record'Class) is
