@@ -25,8 +25,11 @@ with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
+with Gtk.GEntry; use Gtk.GEntry;
+with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
+with Glib.Object; use Glib.Object;
 with Gdk.RGBA; use Gdk.RGBA;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -530,6 +533,42 @@ package body Ships.UI is
       ShowHelpUI(6);
    end ShowHelp;
 
+   procedure ShowChangeName(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Set_Text
+        (Gtk_Entry(Get_Object(Object, "edtnewname")),
+         To_String(PlayerShip.Name));
+      Show_All(Gtk_Widget(Get_Object(Object, "changenamewindow")));
+   end ShowChangeName;
+
+   procedure ChangeName(User_Data: access GObject_Record'Class) is
+      NewName: Unbounded_String :=
+        To_Unbounded_String
+          (Get_Text(Gtk_Entry(Get_Object(Builder, "edtnewname"))));
+      SemicolonIndex: Natural;
+   begin
+      if Length(NewName) = 0 then
+         if User_Data = Get_Object(Builder, "btnchangename") then
+            ShowDialog
+              ("You must enter new ship name",
+               Gtk_Window(Get_Object(Builder, "changenamewindow")));
+            return;
+         end if;
+      end if;
+      SemicolonIndex := Index(NewName, ";");
+      while SemicolonIndex > 0 loop
+         Delete(NewName, SemicolonIndex, SemicolonIndex);
+         SemicolonIndex := Index(NewName, ";");
+      end loop;
+      if User_Data = Get_Object(Builder, "btnchangename") then
+         PlayerShip.Name := NewName;
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblshipname")),
+            To_String(PlayerShip.Name));
+         Hide(Gtk_Widget(Get_Object(Builder, "changenamewindow")));
+      end if;
+   end ChangeName;
+
    procedure CreateShipUI is
       Error: aliased GError;
    begin
@@ -557,6 +596,9 @@ package body Ships.UI is
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Module_Info", ShowModuleInfo'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
+      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
+      Register_Handler(Builder, "Show_Change_Name", ShowChangeName'Access);
+      Register_Handler(Builder, "Change_Name", ChangeName'Access);
       Do_Connect(Builder);
    end CreateShipUI;
 
