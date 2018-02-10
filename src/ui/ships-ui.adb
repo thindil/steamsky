@@ -34,6 +34,7 @@ with Combat.UI; use Combat.UI;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Crafts; use Crafts;
+with Help.UI; use Help.UI;
 
 package body Ships.UI is
 
@@ -523,6 +524,12 @@ package body Ships.UI is
          To_String(ShipInfo));
    end ShowShipInfo;
 
+   procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
+      pragma Unreferenced(Object);
+   begin
+      ShowHelpUI(6);
+   end ShowHelp;
+
    procedure CreateShipUI is
       Error: aliased GError;
    begin
@@ -549,6 +556,7 @@ package body Ships.UI is
       Register_Handler(Builder, "Hide_Ship_Info", HideShipInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Module_Info", ShowModuleInfo'Access);
+      Register_Handler(Builder, "Show_Help", ShowHelp'Access);
       Do_Connect(Builder);
    end CreateShipUI;
 
