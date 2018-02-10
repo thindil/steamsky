@@ -1020,4 +1020,14 @@ Time = 75
 Difficulty = 35
 BaseType = 1
 Tool = GunsmithSet
+[103]
+Material = Titanium, Leather
+Amount = 1, 1
+Result = 122
+Crafted = 1
+Workplace = Workshop
+Skill = Blacksmith
+Difficulty = 15
+BaseType = 1
+Tool = BlacksmithSet
 []
