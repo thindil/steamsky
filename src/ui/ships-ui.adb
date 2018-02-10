@@ -541,33 +541,29 @@ package body Ships.UI is
       Show_All(Gtk_Widget(Get_Object(Object, "changenamewindow")));
    end ShowChangeName;
 
-   procedure ChangeName(User_Data: access GObject_Record'Class) is
+   procedure ChangeShipName(Object: access Gtkada_Builder_Record'Class) is
       NewName: Unbounded_String :=
         To_Unbounded_String
-          (Get_Text(Gtk_Entry(Get_Object(Builder, "edtnewname"))));
+          (Get_Text(Gtk_Entry(Get_Object(Object, "edtnewname"))));
       SemicolonIndex: Natural;
    begin
       if Length(NewName) = 0 then
-         if User_Data = Get_Object(Builder, "btnchangename") then
-            ShowDialog
-              ("You must enter new ship name",
-               Gtk_Window(Get_Object(Builder, "changenamewindow")));
-            return;
-         end if;
+         ShowDialog
+           ("You must enter new ship name",
+            Gtk_Window(Get_Object(Builder, "changenamewindow")));
+         return;
       end if;
       SemicolonIndex := Index(NewName, ";");
       while SemicolonIndex > 0 loop
          Delete(NewName, SemicolonIndex, SemicolonIndex);
          SemicolonIndex := Index(NewName, ";");
       end loop;
-      if User_Data = Get_Object(Builder, "btnchangename") then
-         PlayerShip.Name := NewName;
-         Set_Label
-           (Gtk_Label(Get_Object(Builder, "lblshipname")),
-            To_String(PlayerShip.Name));
-         Hide(Gtk_Widget(Get_Object(Builder, "changenamewindow")));
-      end if;
-   end ChangeName;
+      PlayerShip.Name := NewName;
+      Set_Label
+        (Gtk_Label(Get_Object(Builder, "lblshipname")),
+         To_String(PlayerShip.Name));
+      Hide(Gtk_Widget(Get_Object(Builder, "changenamewindow")));
+   end ChangeShipName;
 
    procedure CreateShipUI is
       Error: aliased GError;
@@ -598,7 +594,7 @@ package body Ships.UI is
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Show_Change_Name", ShowChangeName'Access);
-      Register_Handler(Builder, "Change_Name", ChangeName'Access);
+      Register_Handler(Builder, "Change_Ship_Name", ChangeShipName'Access);
       Do_Connect(Builder);
    end CreateShipUI;
 

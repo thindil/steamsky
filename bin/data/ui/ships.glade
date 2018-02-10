@@ -332,7 +332,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <signal name="clicked" handler="Change_Name" object="btnchangename" swapped="no"/>
+            <signal name="clicked" handler="Change_Ship_Name" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
