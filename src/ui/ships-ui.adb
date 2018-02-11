@@ -814,7 +814,21 @@ package body Ships.UI is
 
    procedure SetRepair(User_Data: access GObject_Record'Class) is
    begin
-      null;
+      if User_Data = Get_Object(Builder, "btnrepairfirst") then
+         PlayerShip.RepairModule := ModuleIndex;
+         AddMessage
+           ("You assigned " &
+            To_String(PlayerShip.Modules(ModuleIndex).Name) &
+            " as repair priority.",
+            OrderMessage);
+      else
+         PlayerShip.RepairModule := 0;
+         AddMessage("You removed repair priority.", OrderMessage);
+      end if;
+      Hide(Gtk_Widget(Get_Object(Builder, "optionswindow")));
+      ShowLastMessage;
+      ShowShipInfo;
+      ShowModuleInfo(Builder);
    end SetRepair;
 
    procedure CreateShipUI is
