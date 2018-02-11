@@ -28,6 +28,7 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
+with Gtk.Button; use Gtk.Button;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -39,6 +40,8 @@ with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Crafts; use Crafts;
 with Help.UI; use Help.UI;
+with Ships.Upgrade; use Ships.Upgrade;
+with Ships.Crew; use Ships.Crew;
 
 package body Ships.UI is
 
@@ -595,6 +598,225 @@ package body Ships.UI is
          To_String(NewName));
    end ChangeModuleName;
 
+   procedure ShowModuleOptions(Object: access Gtkada_Builder_Record'Class) is
+      MaxValue: Positive;
+      IsPassenger: Boolean := False;
+   begin
+      Show_All(Gtk_Widget(Get_Object(Object, "optionswindow")));
+      Hide(Gtk_Widget(Get_Object(Object, "btnupgrade2")));
+      Hide(Gtk_Widget(Get_Object(Object, "btnassigncrew")));
+      Hide(Gtk_Widget(Get_Object(Object, "btnassignammo")));
+      MaxValue :=
+        Natural
+          (Float
+             (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                .Durability) *
+           1.5);
+      if PlayerShip.Modules(ModuleIndex).MaxDurability >= MaxValue then
+         Hide(Gtk_Widget(Get_Object(Object, "btnupgradedur")));
+      end if;
+      case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
+         when ENGINE =>
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .MaxValue) *
+                 1.5);
+            if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
+               Set_Label
+                 (Gtk_Button(Get_Object(Object, "btnupgrade1")),
+                  "Upgrade engine power");
+            else
+               Hide(Gtk_Widget(Get_Object(Object, "btnupgrade1")));
+            end if;
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .Value) /
+                 2.0);
+            if PlayerShip.Modules(ModuleIndex).Data(1) > MaxValue then
+               Set_Label
+                 (Gtk_Button(Get_Object(Object, "btnupgrade2")),
+                  "Reduce fuel usage");
+            else
+               Hide(Gtk_Widget(Get_Object(Object, "btnupgrade2")));
+            end if;
+         when CABIN =>
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .MaxValue) *
+                 1.5);
+            if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
+               Set_Label
+                 (Gtk_Button(Get_Object(Object, "btnupgrade1")),
+                  "Upgrade quality");
+            else
+               Hide(Gtk_Widget(Get_Object(Object, "btnupgrade1")));
+            end if;
+            for Mission of PlayerShip.Missions loop
+               if Mission.MType = Passenger and
+                 Mission.Target = PlayerShip.Modules(ModuleIndex).Owner then
+                  IsPassenger := True;
+                  exit;
+               end if;
+            end loop;
+            if not IsPassenger then
+               Set_Label
+                 (Gtk_Button(Get_Object(Object, "btnassigncrew")),
+                  "Assign owner");
+               Show_All(Gtk_Widget(Get_Object(Object, "btnassigncrew")));
+            else
+               Hide(Gtk_Widget(Get_Object(Object, "btnassigncrew")));
+            end if;
+         when GUN | HARPOON_GUN =>
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .MaxValue) *
+                 1.5);
+            if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
+               if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                   .MType =
+                 GUN then
+                  Set_Label
+                    (Gtk_Button(Get_Object(Object, "btnupgrade1")),
+                     "Upgrade damage");
+               else
+                  Set_Label
+                    (Gtk_Button(Get_Object(Object, "btnupgrade1")),
+                     "Upgrade strength");
+               end if;
+            else
+               Hide(Gtk_Widget(Get_Object(Object, "btnupgrade1")));
+            end if;
+            Set_Label
+              (Gtk_Button(Get_Object(Object, "btnassigncrew")),
+               "Assign gunner");
+            Show_All(Gtk_Widget(Get_Object(Object, "btnassigncrew")));
+            Show_All(Gtk_Widget(Get_Object(Object, "btnassignammo")));
+         when BATTERING_RAM =>
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .MaxValue) *
+                 1.5);
+            if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
+               Set_Label
+                 (Gtk_Button(Get_Object(Object, "btnupgrade1")),
+                  "Upgrade damage");
+            else
+               Hide(Gtk_Widget(Get_Object(Object, "btnupgrade1")));
+            end if;
+         when HULL =>
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .MaxValue) *
+                 1.5);
+            if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
+               Set_Label
+                 (Gtk_Button(Get_Object(Object, "btnupgrade1")),
+                  "Enlarge hull");
+            else
+               Hide(Gtk_Widget(Get_Object(Object, "btnupgrade1")));
+            end if;
+         when ALCHEMY_LAB .. GREENHOUSE =>
+            if PlayerShip.Modules(ModuleIndex).Data(1) /= 0 then
+               Set_Label
+                 (Gtk_Button(Get_Object(Object, "btnassigncrew")),
+                  "Assign worker");
+               Show_All(Gtk_Widget(Get_Object(Object, "btnassigncrew")));
+            end if;
+         when MEDICAL_ROOM =>
+            for Member of PlayerShip.Crew loop
+               if Member.Health < 100 and
+                 FindItem
+                     (Inventory => PlayerShip.Cargo,
+                      ItemType => HealingTools) >
+                   0 then
+                  Set_Label
+                    (Gtk_Button(Get_Object(Object, "btnassigncrew")),
+                     "Assign medic");
+                  Show_All(Gtk_Widget(Get_Object(Object, "btnassigncrew")));
+                  exit;
+               end if;
+            end loop;
+         when others =>
+            null;
+      end case;
+      if PlayerShip.Modules(ModuleIndex).UpgradeAction = NONE or
+        PlayerShip.UpgradeModule = ModuleIndex then
+         Hide(Gtk_Widget(Get_Object(Object, "btncontinue")));
+      end if;
+      if PlayerShip.UpgradeModule = 0 then
+         Hide(Gtk_Widget(Get_Object(Object, "btnstop")));
+      end if;
+      if PlayerShip.RepairModule = ModuleIndex then
+         Hide(Gtk_Widget(Get_Object(Object, "btnrepairfirst")));
+      end if;
+      if PlayerShip.RepairModule = 0 then
+         Hide(Gtk_Widget(Get_Object(Object, "btnremovepriority")));
+      end if;
+   end ShowModuleOptions;
+
+   procedure SetUpgrade(User_Data: access GObject_Record'Class) is
+      UpgradeType: Positive;
+   begin
+      if User_Data = Get_Object(Builder, "btnupgradedur") then
+         UpgradeType := 1;
+      elsif User_Data = Get_Object(Builder, "btnupgrade1") then
+         UpgradeType := 2;
+      elsif User_Data = Get_Object(Builder, "btnupgrade2") then
+         UpgradeType := 3;
+      else
+         UpgradeType := 4;
+      end if;
+      StartUpgrading(ModuleIndex, UpgradeType);
+      UpdateOrders(PlayerShip);
+      Hide(Gtk_Widget(Get_Object(Builder, "optionswindow")));
+      ShowLastMessage;
+      ShowShipInfo;
+      ShowModuleInfo(Builder);
+   end SetUpgrade;
+
+   procedure ShowAssignMember(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      null;
+   end ShowAssignMember;
+
+   procedure ShowAssignAmmo(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      null;
+   end ShowAssignAmmo;
+
+   procedure StopUpgrading(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      PlayerShip.UpgradeModule := 0;
+      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+         if PlayerShip.Crew(I).Order = Upgrading then
+            GiveOrders(PlayerShip, I, Rest);
+            exit;
+         end if;
+      end loop;
+      Hide(Gtk_Widget(Get_Object(Object, "optionswindow")));
+      AddMessage("You stopped current upgrade.", OrderMessage);
+      ShowLastMessage;
+      ShowShipInfo;
+      ShowModuleInfo(Object);
+   end StopUpgrading;
+
+   procedure SetRepair(User_Data: access GObject_Record'Class) is
+   begin
+      null;
+   end SetRepair;
+
    procedure CreateShipUI is
       Error: aliased GError;
    begin
@@ -625,6 +847,15 @@ package body Ships.UI is
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Show_Change_Name", ShowChangeName'Access);
       Register_Handler(Builder, "Change_Ship_Name", ChangeShipName'Access);
+      Register_Handler
+        (Builder,
+         "Show_Module_Options",
+         ShowModuleOptions'Access);
+      Register_Handler(Builder, "Set_Upgrade", SetUpgrade'Access);
+      Register_Handler(Builder, "Show_Assign_Member", ShowAssignMember'Access);
+      Register_Handler(Builder, "Show_Assign_Ammo", ShowAssignAmmo'Access);
+      Register_Handler(Builder, "Stop_Upgrading", StopUpgrading'Access);
+      Register_Handler(Builder, "Set_Repair", SetRepair'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "rendername")),
