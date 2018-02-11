@@ -27,6 +27,7 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -565,6 +566,35 @@ package body Ships.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "changenamewindow")));
    end ChangeShipName;
 
+   procedure ChangeModuleName
+     (Self: access Gtk_Cell_Renderer_Text_Record'Class;
+      Path: UTF8_String;
+      New_Text: UTF8_String) is
+      pragma Unreferenced(Self);
+      ModulesList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "moduleslist"));
+      NewName: Unbounded_String := To_Unbounded_String(New_Text);
+      SemicolonIndex: Natural;
+   begin
+      if Length(NewName) = 0 then
+         ShowDialog
+           ("You must enter new module name",
+            Gtk_Window(Get_Object(Builder, "shipwindow")));
+         return;
+      end if;
+      SemicolonIndex := Index(NewName, ";");
+      while SemicolonIndex > 0 loop
+         Delete(NewName, SemicolonIndex, SemicolonIndex);
+         SemicolonIndex := Index(NewName, ";");
+      end loop;
+      PlayerShip.Modules(ModuleIndex).Name := NewName;
+      Set
+        (ModulesList,
+         Get_Iter_From_String(ModulesList, Path),
+         0,
+         To_String(NewName));
+   end ChangeModuleName;
+
    procedure CreateShipUI is
       Error: aliased GError;
    begin
@@ -596,6 +626,9 @@ package body Ships.UI is
       Register_Handler(Builder, "Show_Change_Name", ShowChangeName'Access);
       Register_Handler(Builder, "Change_Ship_Name", ChangeShipName'Access);
       Do_Connect(Builder);
+      On_Edited
+        (Gtk_Cell_Renderer_Text(Get_Object(Builder, "rendername")),
+         ChangeModuleName'Access);
    end CreateShipUI;
 
    procedure ShowShipUI(OldState: GameStates) is
