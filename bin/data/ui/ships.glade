@@ -176,7 +176,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkTreeViewColumn" id="columnmodule">
                             <property name="title" translatable="yes">Position</property>
                             <child>
-                              <object class="GtkCellRendererText"/>
+                              <object class="GtkCellRendererText" id="rendername">
+                                <property name="editable">True</property>
+                              </object>
                               <attributes>
                                 <attribute name="text">0</attribute>
                               </attributes>
