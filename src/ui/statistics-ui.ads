@@ -15,9 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Utils.UI; use Utils.UI;
+
 package Statistics.UI is
 
    procedure CreateStatsUI; -- Create infterace for show game statistics
-   procedure ShowStatsUI; -- Show interface for show game statistics
+   procedure ShowStatsUI
+     (OldState: GameStates); -- Show interface for show game statistics
 
 end Statistics.UI;

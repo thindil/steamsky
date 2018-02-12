@@ -31,11 +31,14 @@ with Goals; use Goals;
 package body Statistics.UI is
 
    Builder: Gtkada_Builder;
+   GameState: GameStates;
 
    function HideStatistics
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
    begin
-      CreateSkyMap;
+      if GameState = SkyMap_View then
+         CreateSkyMap;
+      end if;
       return Hide_On_Delete
           (Gtk_Widget(Get_Object(Object, "statisticswindow")));
    end HideStatistics;
@@ -62,7 +65,7 @@ package body Statistics.UI is
       Do_Connect(Builder);
    end CreateStatsUI;
 
-   procedure ShowStatsUI is
+   procedure ShowStatsUI(OldState: GameStates) is
       MinutesDiff: Natural;
       TimePassed: Date_Record :=
         (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
@@ -72,6 +75,7 @@ package body Statistics.UI is
       MissionsPercent, TotalFinished: Natural := 0;
       StatsText: Unbounded_String;
    begin
+      GameState := OldState;
       MinutesDiff :=
         (GameDate.Minutes +
          (GameDate.Hour * 60) +
