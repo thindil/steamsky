@@ -211,12 +211,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem">
+      <object class="GtkMenuItem" id="menustats">
         <property name="visible">True</property>
-        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Game statistics</property>
         <property name="use_underline">True</property>
+        <signal name="activate" handler="Show_Info" object="menustats" swapped="no"/>
       </object>
     </child>
     <child>
