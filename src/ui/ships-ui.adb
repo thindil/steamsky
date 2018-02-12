@@ -29,6 +29,7 @@ with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -48,6 +49,7 @@ package body Ships.UI is
    Builder: Gtkada_Builder;
    GameState: GameStates;
    ModuleIndex: Positive;
+   AssignAmmo: Boolean;
 
    function HideShipInfo
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
@@ -787,13 +789,73 @@ package body Ships.UI is
    end SetUpgrade;
 
    procedure ShowAssignMember(Object: access Gtkada_Builder_Record'Class) is
+      AssignIter: Gtk_Tree_Iter;
+      AssignList: Gtk_List_Store;
    begin
-      null;
+      AssignAmmo := False;
+      AssignList := Gtk_List_Store(Get_Object(Builder, "assignlist"));
+      Clear(AssignList);
+      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+         if PlayerShip.Modules(ModuleIndex).Owner /= I and
+           PlayerShip.Crew(I).Skills.Length > 0 then
+            case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+              .MType is
+               when MEDICAL_ROOM =>
+                  if PlayerShip.Crew(I).Health = 100 then
+                     Append(AssignList, AssignIter);
+                     Set
+                       (AssignList,
+                        AssignIter,
+                        0,
+                        To_String(PlayerShip.Crew(I).Name));
+                     Set(AssignList, AssignIter, 1, Gint(I));
+                  end if;
+               when others =>
+                  Append(AssignList, AssignIter);
+                  Set
+                    (AssignList,
+                     AssignIter,
+                     0,
+                     To_String(PlayerShip.Crew(I).Name));
+                  Set(AssignList, AssignIter, 1, Gint(I));
+            end case;
+         end if;
+      end loop;
+      Show_All(Gtk_Widget(Get_Object(Object, "assignwindow")));
+      Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbassign")), 0);
    end ShowAssignMember;
 
    procedure ShowAssignAmmo(Object: access Gtkada_Builder_Record'Class) is
+      AssignIter: Gtk_Tree_Iter;
+      AssignList: Gtk_List_Store;
+      HaveAmmo: Boolean := False;
    begin
-      null;
+      AssignAmmo := True;
+      AssignList := Gtk_List_Store(Get_Object(Builder, "assignlist"));
+      Clear(AssignList);
+      for I in PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
+         if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
+           Items_Types
+             (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                .Value) and
+           I /= PlayerShip.Modules(ModuleIndex).Data(1) then
+            Set
+              (AssignList,
+               AssignIter,
+               0,
+               To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name));
+            Set(AssignList, AssignIter, 1, Gint(I));
+            HaveAmmo := True;
+         end if;
+      end loop;
+      if not HaveAmmo then
+         ShowDialog
+           ("You don't have any ammo to this gun.",
+            Gtk_Window(Get_Object(Object, "optionswindow")));
+         return;
+      end if;
+      Show_All(Gtk_Widget(Get_Object(Object, "assignwindow")));
+      Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbassign")), 0);
    end ShowAssignAmmo;
 
    procedure StopUpgrading(Object: access Gtkada_Builder_Record'Class) is
@@ -830,6 +892,63 @@ package body Ships.UI is
       ShowShipInfo;
       ShowModuleInfo(Builder);
    end SetRepair;
+
+   procedure Assign(Object: access Gtkada_Builder_Record'Class) is
+      ActiveIndex: constant Natural :=
+        Natural(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbassign"))));
+      AssignList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Object, "assignlist"));
+      AssignIndex: constant Positive :=
+        Positive
+          (Get_Int
+             (AssignList,
+              Get_Iter_From_String(AssignList, Natural'Image(ActiveIndex)),
+              1));
+   begin
+      if not AssignAmmo then
+         case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
+            when CABIN =>
+               for I in PlayerShip.Modules.Iterate loop
+                  if PlayerShip.Modules(I).Owner = AssignIndex and
+                    Modules_List(PlayerShip.Modules(I).ProtoIndex).MType =
+                      CABIN then
+                     PlayerShip.Modules(I).Owner := 0;
+                  end if;
+               end loop;
+               PlayerShip.Modules(ModuleIndex).Owner := AssignIndex;
+               AddMessage
+                 ("You assigned " &
+                  To_String(PlayerShip.Modules(ModuleIndex).Name) &
+                  " to " &
+                  To_String(PlayerShip.Crew(AssignIndex).Name) &
+                  ".",
+                  OrderMessage);
+            when GUN =>
+               GiveOrders(PlayerShip, AssignIndex, Gunner, ModuleIndex);
+            when ALCHEMY_LAB .. GREENHOUSE =>
+               GiveOrders(PlayerShip, AssignIndex, Craft, ModuleIndex);
+            when MEDICAL_ROOM =>
+               GiveOrders(PlayerShip, AssignIndex, Heal, ModuleIndex);
+            when others =>
+               null;
+         end case;
+      else
+         PlayerShip.Modules(ModuleIndex).Data(1) := AssignIndex;
+         AddMessage
+           ("You assigned " &
+            To_String
+              (Items_List(PlayerShip.Cargo(AssignIndex).ProtoIndex).Name) &
+            " to " &
+            To_String(PlayerShip.Modules(ModuleIndex).Name) &
+            ".",
+            OrderMessage);
+      end if;
+      Hide(Gtk_Widget(Get_Object(Object, "assignwindow")));
+      Hide(Gtk_Widget(Get_Object(Object, "optionswindow")));
+      ShowLastMessage;
+      ShowShipInfo;
+      ShowModuleInfo(Object);
+   end Assign;
 
    procedure CreateShipUI is
       Error: aliased GError;
@@ -870,6 +989,7 @@ package body Ships.UI is
       Register_Handler(Builder, "Show_Assign_Ammo", ShowAssignAmmo'Access);
       Register_Handler(Builder, "Stop_Upgrading", StopUpgrading'Access);
       Register_Handler(Builder, "Set_Repair", SetRepair'Access);
+      Register_Handler(Builder, "Assign", Assign'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "rendername")),
