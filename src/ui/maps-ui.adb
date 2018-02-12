@@ -1536,7 +1536,7 @@ package body Maps.UI is
       elsif User_Data = Get_Object(Builder, "menucrew") then
          ShowCrewUI(SkyMap_View);
       elsif User_Data = Get_Object(Builder, "menustats") then
-         ShowStatsUI;
+         ShowStatsUI(SkyMap_View);
       end if;
    end ShowInfo;
 
