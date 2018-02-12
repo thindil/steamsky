@@ -66,6 +66,7 @@ with Missions; use Missions;
 with Crafts; use Crafts;
 with Combat.UI; use Combat.UI;
 with Help.UI; use Help.UI;
+with Statistics.UI; use Statistics.UI;
 
 package body Maps.UI is
 
@@ -1532,8 +1533,10 @@ package body Maps.UI is
          ShowCargoUI(SkyMap_View);
       elsif User_Data = Get_Object(Builder, "menuship") then
          ShowShipUI(SkyMap_View);
-      else
+      elsif User_Data = Get_Object(Builder, "menucrew") then
          ShowCrewUI(SkyMap_View);
+      elsif User_Data = Get_Object(Builder, "menustats") then
+         ShowStatsUI;
       end if;
    end ShowInfo;
 
