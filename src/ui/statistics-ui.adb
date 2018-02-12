@@ -22,11 +22,14 @@ with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Tree_Model; use Gtk.Tree_Model;
+with Gtk.List_Store; use Gtk.List_Store;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Goals; use Goals;
+with Ships; use Ships;
 
 package body Statistics.UI is
 
@@ -72,8 +75,11 @@ package body Statistics.UI is
       type VisitedFactor is digits 4 range 0.0 .. 100.0;
       VisitedPercent: VisitedFactor;
       VisitedString: String(1 .. 5);
-      MissionsPercent, TotalFinished: Natural := 0;
+      MissionsPercent, TotalFinished, TotalDestroyed: Natural := 0;
       StatsText: Unbounded_String;
+      Iter: Gtk_Tree_Iter;
+      List: Gtk_List_Store;
+      ProtoIndex: Positive;
    begin
       GameState := OldState;
       MinutesDiff :=
@@ -182,6 +188,57 @@ package body Statistics.UI is
         (Gtk_Label(Get_Object(Builder, "lblpoints")),
          "Points:" & Natural'Image(GameStats.Points));
       Show_All(Gtk_Widget(Get_Object(Builder, "statisticswindow")));
+      if GameStats.DestroyedShips.Length > 0 then
+         List := Gtk_List_Store(Get_Object(Builder, "destroyedlist"));
+         Clear(List);
+         for I in GameStats.DestroyedShips.Iterate loop
+            Append(List, Iter);
+            for ProtoShip of ProtoShips_List loop
+               if ProtoShip.Index = GameStats.DestroyedShips(I).Index then
+                  Set(List, Iter, 0, To_String(ProtoShip.Name));
+                  Set(List, Iter, 1, Gint(GameStats.DestroyedShips(I).Amount));
+                  exit;
+               end if;
+            end loop;
+            TotalDestroyed :=
+              TotalDestroyed + GameStats.DestroyedShips(I).Amount;
+         end loop;
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lbldestroyed")),
+            "Destroyed ships (Total:" & Natural'Image(TotalDestroyed) & ")");
+         Show_All(Gtk_Widget(Get_Object(Builder, "scrolldestroyed")));
+      else
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lbldestroyed")),
+            "Destroyed ships: none");
+         Hide(Gtk_Widget(Get_Object(Builder, "scrolldestroyed")));
+      end if;
+      TotalFinished := 0;
+      if GameStats.FinishedGoals.Length > 0 then
+         List := Gtk_List_Store(Get_Object(Builder, "goalslist"));
+         Clear(List);
+         for I in GameStats.FinishedGoals.Iterate loop
+            Append(List, Iter);
+            for J in Goals_List.Iterate loop
+               if GameStats.FinishedGoals(I).Index = Goals_List(J).Index then
+                  ProtoIndex := Goals_Container.To_Index(J);
+                  exit;
+               end if;
+            end loop;
+            Set(List, Iter, 0, GoalText(ProtoIndex));
+            Set(List, Iter, 1, Gint(GameStats.FinishedGoals(I).Amount));
+            TotalFinished := TotalFinished + GameStats.FinishedGoals(I).Amount;
+         end loop;
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblfinishedgoals")),
+            "Finished goals (Total:" & Natural'Image(TotalFinished) & ")");
+         Show_All(Gtk_Widget(Get_Object(Builder, "scrollgoals")));
+      else
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblfinishedgoals")),
+            "Finished goals: none");
+         Hide(Gtk_Widget(Get_Object(Builder, "scrollgoals")));
+      end if;
    end ShowStatsUI;
 
 end Statistics.UI;
