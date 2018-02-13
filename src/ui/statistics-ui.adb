@@ -26,10 +26,14 @@ with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
+with Glib.Object; use Glib.Object;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Goals; use Goals;
 with Ships; use Ships;
+with Missions; use Missions;
+with Crafts; use Crafts;
+with Items; use Items;
 
 package body Statistics.UI is
 
@@ -45,6 +49,59 @@ package body Statistics.UI is
       return Hide_On_Delete
           (Gtk_Widget(Get_Object(Object, "statisticswindow")));
    end HideStatistics;
+
+   procedure ShowMore(User_Data: access GObject_Record'Class) is
+      InfoIter: Gtk_Tree_Iter;
+      InfoList: Gtk_List_Store;
+      ItemIndex: Positive;
+   begin
+      InfoList := Gtk_List_Store(Get_Object(Builder, "infolist"));
+      Clear(InfoList);
+      if User_Data = Get_Object(Builder, "btnmissions") then
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblinfo")),
+            "Finished missions:");
+         for I in GameStats.FinishedMissions.Iterate loop
+            Append(InfoList, InfoIter);
+            case Missions_Types'Val
+              (Integer'Value
+                 (To_String(GameStats.FinishedMissions(I).Index))) is
+               when Deliver =>
+                  Set(InfoList, InfoIter, 0, "Delivered items");
+               when Patrol =>
+                  Set(InfoList, InfoIter, 0, "Patroled areas");
+               when Destroy =>
+                  Set(InfoList, InfoIter, 0, "Destroyed ships");
+               when Explore =>
+                  Set(InfoList, InfoIter, 0, "Explored areas");
+               when Passenger =>
+                  Set(InfoList, InfoIter, 0, "Passengers transported");
+            end case;
+            Set
+              (InfoList,
+               InfoIter,
+               1,
+               Gint(GameStats.FinishedMissions(I).Amount));
+         end loop;
+      else
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblinfo")),
+            "Finished crafting orders:");
+         for I in GameStats.CraftingOrders.Iterate loop
+            Append(InfoList, InfoIter);
+            ItemIndex :=
+              Recipes_List(FindRecipe(GameStats.CraftingOrders(I).Index))
+                .ResultIndex;
+            Set(InfoList, InfoIter, 0, To_String(Items_List(ItemIndex).Name));
+            Set
+              (InfoList,
+               InfoIter,
+               1,
+               Gint(GameStats.CraftingOrders(I).Amount));
+         end loop;
+      end if;
+      Show_All(Gtk_Widget(Get_Object(Builder, "showmorewindow")));
+   end ShowMore;
 
    procedure CreateStatsUI is
       Error: aliased GError;
@@ -64,7 +121,9 @@ package body Statistics.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
+      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Hide_Statistics", HideStatistics'Access);
+      Register_Handler(Builder, "Show_More", ShowMore'Access);
       Do_Connect(Builder);
    end CreateStatsUI;
 
@@ -238,6 +297,16 @@ package body Statistics.UI is
            (Gtk_Label(Get_Object(Builder, "lblfinishedgoals")),
             "Finished goals: none");
          Hide(Gtk_Widget(Get_Object(Builder, "scrollgoals")));
+      end if;
+      if GameStats.FinishedMissions.Length > 0 then
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btncrafts")), True);
+      else
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btncrafts")), False);
+      end if;
+      if GameStats.CraftingOrders.Length > 0 then
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnmissions")), True);
+      else
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnmissions")), False);
       end if;
    end ShowStatsUI;
 
