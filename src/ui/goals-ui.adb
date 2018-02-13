@@ -29,6 +29,8 @@ with Glib.Object; use Glib.Object;
 with Game; use Game;
 with Goals; use Goals;
 with MainMenu; use MainMenu;
+with Statistics.UI; use Statistics.UI;
+with Utils; use Utils;
 
 package body Goals.UI is
 
@@ -73,11 +75,18 @@ package body Goals.UI is
          ClearCurrentGoal;
          if FromMainMenu then
             UpdateGoalButton("Random");
+         else
+            CurrentGoal :=
+              Goals_List
+                (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
+            UpdateGoalsButton(GoalText(0));
          end if;
       else
          CurrentGoal := Goals_List(Positive(Get_Int(GoalsModel, Iter, 1)));
          if FromMainMenu then
             UpdateGoalButton(GoalText(0));
+         else
+            UpdateGoalsButton(GoalText(0));
          end if;
       end if;
       Hide(Gtk_Widget(Get_Object(Object, "goalswindow")));
