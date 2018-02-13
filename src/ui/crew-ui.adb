@@ -64,6 +64,8 @@ package body Crew.UI is
             CreateSkyMap;
          when Combat_View =>
             ShowCombatUI;
+         when others =>
+            null;
       end case;
       return True;
    end HideCrewInfo;

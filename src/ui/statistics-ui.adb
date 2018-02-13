@@ -35,6 +35,7 @@ with Ships; use Ships;
 with Missions; use Missions;
 with Crafts; use Crafts;
 with Items; use Items;
+with MainMenu; use MainMenu;
 
 package body Statistics.UI is
 
@@ -46,6 +47,8 @@ package body Statistics.UI is
    begin
       if GameState = SkyMap_View then
          CreateSkyMap;
+      else
+         ShowMainMenu;
       end if;
       return Hide_On_Delete
           (Gtk_Widget(Get_Object(Object, "statisticswindow")));

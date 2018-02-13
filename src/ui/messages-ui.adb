@@ -45,6 +45,8 @@ package body Messages.UI is
             CreateSkyMap;
          when Combat_View =>
             ShowCombatUI;
+         when others =>
+            null;
       end case;
       return True;
    end HideMessages;

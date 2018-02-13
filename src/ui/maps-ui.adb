@@ -67,6 +67,7 @@ with Crafts; use Crafts;
 with Combat.UI; use Combat.UI;
 with Help.UI; use Help.UI;
 with Statistics.UI; use Statistics.UI;
+with MainMenu; use MainMenu;
 
 package body Maps.UI is
 
@@ -105,6 +106,17 @@ package body Maps.UI is
         False;
       ItemIndex, ItemAmount: Natural := 0;
    begin
+      if PlayerShip.Crew(1).Health = 0 then
+         Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
+         if ShowConfirmDialog
+             ("You are dead. Did you want to see your game statistics?",
+              Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
+            ShowStatsUI(Main_Menu);
+            return;
+         end if;
+         ShowMainMenu;
+         EndGame(False);
+      end if;
       Set_Text(Gtk_Label(Get_Object(Builder, "lbltime")), FormatedTime);
       if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnofuel"))) then
          Hide(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
@@ -592,6 +604,9 @@ package body Maps.UI is
       Forward_Line(Iter, Result);
       Forward_Char(Iter, Result);
       Get_Iter_Location(MapView, Iter, Location);
+      if (Get_Allocated_Height(Gtk_Widget(MapView)) / Location.Y) - 1 < 1 then
+         return;
+      end if;
       MapWidth :=
         Positive(Get_Allocated_Width(Gtk_Widget(MapView)) / Location.X) - 1;
       MapHeight :=
