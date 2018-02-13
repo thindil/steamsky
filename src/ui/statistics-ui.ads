@@ -22,5 +22,7 @@ package Statistics.UI is
    procedure CreateStatsUI; -- Create infterace for show game statistics
    procedure ShowStatsUI
      (OldState: GameStates); -- Show interface for show game statistics
+   procedure UpdateGoalsButton
+     (Message: String); -- Update label on character goal button
 
 end Statistics.UI;

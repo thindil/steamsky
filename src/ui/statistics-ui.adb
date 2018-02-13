@@ -30,6 +30,7 @@ with Glib.Object; use Glib.Object;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Goals; use Goals;
+with Goals.UI; use Goals.UI;
 with Ships; use Ships;
 with Missions; use Missions;
 with Crafts; use Crafts;
@@ -103,6 +104,17 @@ package body Statistics.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "showmorewindow")));
    end ShowMore;
 
+   procedure ShowGoals(Object: access Gtkada_Builder_Record'Class) is
+      pragma Unreferenced(Object);
+   begin
+      ShowGoalsMenu(False);
+   end ShowGoals;
+
+   procedure UpdateGoalsButton(Message: String) is
+   begin
+      Set_Label(Gtk_Button(Get_Object(Builder, "btngoals")), Message);
+   end UpdateGoalsButton;
+
    procedure CreateStatsUI is
       Error: aliased GError;
    begin
@@ -124,6 +136,7 @@ package body Statistics.UI is
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Hide_Statistics", HideStatistics'Access);
       Register_Handler(Builder, "Show_More", ShowMore'Access);
+      Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
       Do_Connect(Builder);
    end CreateStatsUI;
 
