@@ -308,6 +308,7 @@ package body MainMenu is
       CreateCargoUI;
       CreateShipUI;
       CreateStatsUI;
+      CreateGoalsMenu;
       CreateSkyMap;
    end StartGame;
 
