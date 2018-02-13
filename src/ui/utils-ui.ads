@@ -20,7 +20,7 @@ with Glib.Object; use Glib.Object;
 
 package Utils.UI is
 
-   type GameStates is (SkyMap_View, Combat_View); -- Game states
+   type GameStates is (SkyMap_View, Combat_View, Main_Menu); -- Game states
 
    procedure ShowDialog
      (Message: String;
