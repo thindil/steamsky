@@ -324,6 +324,11 @@ package body Statistics.UI is
       else
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnmissions")), False);
       end if;
+      if PlayerShip.Crew(1).Health = 0 then
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btngoals")), False);
+      else
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btngoals")), True);
+      end if;
    end ShowStatsUI;
 
 end Statistics.UI;
