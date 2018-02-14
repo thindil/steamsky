@@ -63,6 +63,7 @@ with Items; use Items;
 with Config; use Config;
 with Bases; use Bases;
 with Missions; use Missions;
+with Missions.UI; use Missions.UI;
 with Crafts; use Crafts;
 with Combat.UI; use Combat.UI;
 with Help.UI; use Help.UI;
@@ -1570,6 +1571,13 @@ package body Maps.UI is
       end if;
    end ResignFromGame;
 
+   procedure ShowMissions(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Hide(Gtk_Widget(Get_Object(Object, "orderswindow")));
+      Hide(Gtk_Widget(Get_Object(Object, "skymapwindow")));
+      ShowMissionsUI;
+   end ShowMissions;
+
    procedure CreateSkyMap is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
@@ -1609,6 +1617,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Show_Help", ShowHelp'Access);
          Register_Handler(Builder, "Show_Info", ShowInfo'Access);
          Register_Handler(Builder, "Resign_From_Game", ResignFromGame'Access);
+         Register_Handler(Builder, "Show_Missions", ShowMissions'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
