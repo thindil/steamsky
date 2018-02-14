@@ -108,14 +108,14 @@ package body Maps.UI is
    begin
       if PlayerShip.Crew(1).Health = 0 then
          Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
+         EndGame(False);
          if ShowConfirmDialog
              ("You are dead. Did you want to see your game statistics?",
               Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
             ShowStatsUI(Main_Menu);
-            return;
+         else
+            ShowMainMenu;
          end if;
-         ShowMainMenu;
-         EndGame(False);
       end if;
       Set_Text(Gtk_Label(Get_Object(Builder, "lbltime")), FormatedTime);
       if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnofuel"))) then
