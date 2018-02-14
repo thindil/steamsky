@@ -92,6 +92,19 @@ package body Maps.UI is
       end if;
    end QuitGameMenu;
 
+   procedure DeathConfirm is
+   begin
+      Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
+      if ShowConfirmDialog
+          ("You are dead. Did you want to see your game statistics?",
+           Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
+         ShowStatsUI(Main_Menu);
+      else
+         EndGame(False);
+         ShowMainMenu;
+      end if;
+   end DeathConfirm;
+
    procedure UpdateHeader is
       HaveWorker, HaveGunner: Boolean := True;
       NeedCleaning,
@@ -107,15 +120,7 @@ package body Maps.UI is
       ItemIndex, ItemAmount: Natural := 0;
    begin
       if PlayerShip.Crew(1).Health = 0 then
-         Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
-         if ShowConfirmDialog
-             ("You are dead. Did you want to see your game statistics?",
-              Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
-            ShowStatsUI(Main_Menu);
-         else
-            EndGame(False);
-            ShowMainMenu;
-         end if;
+         DeathConfirm;
       end if;
       Set_Text(Gtk_Label(Get_Object(Builder, "lbltime")), FormatedTime);
       if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnofuel"))) then
@@ -1555,6 +1560,16 @@ package body Maps.UI is
       end if;
    end ShowInfo;
 
+   procedure ResignFromGame(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      if ShowConfirmDialog
+          ("Are you sure want to resign from game?",
+           Gtk_Window(Get_Object(Object, "skymapwindow"))) then
+         Death(1, To_Unbounded_String("resignation"), PlayerShip);
+         DeathConfirm;
+      end if;
+   end ResignFromGame;
+
    procedure CreateSkyMap is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
@@ -1593,6 +1608,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Attack_Order", AttackOrder'Access);
          Register_Handler(Builder, "Show_Help", ShowHelp'Access);
          Register_Handler(Builder, "Show_Info", ShowInfo'Access);
+         Register_Handler(Builder, "Resign_From_Game", ResignFromGame'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font

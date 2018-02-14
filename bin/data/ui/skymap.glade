@@ -249,10 +249,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child>
       <object class="GtkMenuItem">
         <property name="visible">True</property>
-        <property name="sensitive">False</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Resign from game</property>
         <property name="use_underline">True</property>
+        <signal name="activate" handler="Resign_From_Game" swapped="no"/>
       </object>
     </child>
   </object>
