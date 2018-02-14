@@ -139,7 +139,7 @@ package body Maps.UI is
          if ItemAmount < GameSettings.LowFuel then
             Set_Markup
               (Gtk_Label(Get_Object(Builder, "lblnofuel")),
-               "[<span foreground=""yellow"">[Low Fuel]</span>]");
+               "[<span foreground=""yellow"">Low Fuel</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblnofuel")),
                "Low level of fuel on ship.");
@@ -148,7 +148,7 @@ package body Maps.UI is
       else
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblnofuel")),
-            "[<span foreground=""red"">[No Fuel]</span>]");
+            "[<span foreground=""red"">No Fuel</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblnofuel")),
             "You can't travel anymore.");
@@ -159,7 +159,7 @@ package body Maps.UI is
       if ItemIndex = 0 then
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblnodrink")),
-            "[<span foreground=""red"">[No Drinks]</span>]");
+            "[<span foreground=""red"">No Drinks</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblnodrink")),
             "You don't have any drinks in ship.");
@@ -175,7 +175,7 @@ package body Maps.UI is
          if ItemAmount < GameSettings.LowDrinks then
             Set_Markup
               (Gtk_Label(Get_Object(Builder, "lblnodrink")),
-               "[<span foreground=""yellow"">[Low Drinks]</span>]");
+               "[<span foreground=""yellow"">Low Drinks</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblnodrink")),
                "Low level of drinks on ship.");
@@ -190,7 +190,7 @@ package body Maps.UI is
       if ItemIndex = 0 then
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblnofood")),
-            "[<span foreground=""red"">[No Food]</span>]");
+            "[<span foreground=""red"">No Food</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblnofood")),
             "You don't have any food in ship.");
@@ -208,7 +208,7 @@ package body Maps.UI is
          if ItemAmount < GameSettings.LowFood then
             Set_Markup
               (Gtk_Label(Get_Object(Builder, "lblnofood")),
-               "[<span foreground=""yellow"">[Low Food]</span>]");
+               "[<span foreground=""yellow"">Low Food</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblnofood")),
                "Low level of food on ship.");
