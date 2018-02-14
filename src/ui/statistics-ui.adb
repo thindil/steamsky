@@ -48,6 +48,7 @@ package body Statistics.UI is
       if GameState = SkyMap_View then
          CreateSkyMap;
       else
+         EndGame(False);
          ShowMainMenu;
       end if;
       return Hide_On_Delete
