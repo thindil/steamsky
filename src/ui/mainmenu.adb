@@ -59,6 +59,7 @@ with Combat.UI; use Combat.UI;
 with Help.UI; use Help.UI;
 with Messages.UI; use Messages.UI;
 with Statistics.UI; use Statistics.UI;
+with Missions.UI; use Missions.UI;
 
 package body MainMenu is
 
@@ -309,6 +310,7 @@ package body MainMenu is
       CreateShipUI;
       CreateStatsUI;
       CreateGoalsMenu;
+      CreateMissionsUI;
       CreateSkyMap;
    end StartGame;
 
