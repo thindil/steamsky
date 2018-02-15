@@ -30,13 +30,132 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkWindow" id="missionsinfowindow">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Steam Sky - Accepted Missions</property>
+    <property name="window_position">center</property>
+    <property name="default_width">800</property>
+    <property name="default_height">600</property>
+    <signal name="delete-event" handler="Hide_Missions" object="missionsinfowindow" swapped="no"/>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="homogeneous">True</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="hscrollbar_policy">never</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTreeView" id="treemissions1">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="model">missionslist</property>
+                <property name="headers_visible">False</property>
+                <property name="headers_clickable">False</property>
+                <property name="search_column">0</property>
+                <signal name="cursor-changed" handler="Show_Mission_Info" object="treemissions1" swapped="no"/>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="columnmission1">
+                    <child>
+                      <object class="GtkCellRendererText">
+                        <property name="editable">True</property>
+                      </object>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkLabel" id="lblmissioninfo">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lblfinished">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btncenter">
+                <property name="label" translatable="yes">Show mission on map</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="Button_Mission" object="btncenter" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btndestination">
+                <property name="label" translatable="yes">Set mission as destination for ship</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="Button_Mission" object="btndestination" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+  </object>
   <object class="GtkWindow" id="missionswindow">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Steam Sky - Available Missions</property>
     <property name="window_position">center</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
-    <signal name="delete-event" handler="Hide_Missions" swapped="no"/>
+    <signal name="delete-event" handler="Hide_Missions" object="missionswindow" swapped="no"/>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -115,7 +234,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="headers_visible">False</property>
                     <property name="headers_clickable">False</property>
                     <property name="search_column">0</property>
-                    <signal name="cursor-changed" handler="Show_Mission_Info" swapped="no"/>
+                    <signal name="cursor-changed" handler="Show_Mission_Info" object="treemissions" swapped="no"/>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection"/>
                     </child>
