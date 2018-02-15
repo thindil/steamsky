@@ -278,18 +278,21 @@ package body Combat.UI is
    procedure ShowCombatUI is
       CombatStarted: Boolean;
    begin
-      if EnemyName /=
-        ProtoShips_List
-          (Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-             .Data)
-          .Name then
-         CombatStarted :=
-           StartCombat
+      if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+         if EnemyName /=
+           ProtoShips_List
              (Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                .Data,
-              False);
-         if not CombatStarted then
-            return;
+                .Data)
+             .Name then
+            CombatStarted :=
+              StartCombat
+                (Events_List
+                   (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                   .Data,
+                 False);
+            if not CombatStarted then
+               return;
+            end if;
          end if;
       end if;
       Set_Text
