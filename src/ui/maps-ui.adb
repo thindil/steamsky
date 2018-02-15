@@ -47,6 +47,7 @@ with Gdk.Types; use Gdk.Types;
 with Gdk.Cursor; use Gdk.Cursor;
 with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
+with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 with Ships.UI; use Ships.UI;
 with Ships.Movement; use Ships.Movement;
@@ -64,6 +65,7 @@ with Bases; use Bases;
 with Missions; use Missions;
 with Missions.UI; use Missions.UI;
 with Crafts; use Crafts;
+with Combat; use Combat;
 with Combat.UI; use Combat.UI;
 with Help.UI; use Help.UI;
 with Statistics.UI; use Statistics.UI;
@@ -1048,7 +1050,7 @@ package body Maps.UI is
                            Result := 0;
                            exit;
                         end if;
-                     when ENEMY =>
+                     when Config.ENEMY =>
                         if Events_List(EventIndex).EType = EnemyShip or
                           Events_List(EventIndex).EType = EnemyPatrol then
                            Result := 0;
@@ -1585,6 +1587,53 @@ package body Maps.UI is
       ShowMissionsUI;
    end ShowMissions;
 
+   procedure StartMission(Object: access Gtkada_Builder_Record'Class) is
+      StartsCombat: Boolean := False;
+   begin
+      Hide(Gtk_Widget(Get_Object(Object, "orderswindow")));
+      for Mission of PlayerShip.Missions loop
+         if Mission.TargetX = PlayerShip.SkyX and
+           Mission.TargetY = PlayerShip.SkyY and
+           not Mission.Finished then
+            case Mission.MType is
+               when Deliver | Passenger =>
+                  null;
+               when Destroy =>
+                  UpdateGame(GetRandom(15, 45));
+                  StartsCombat := CheckForEvent;
+                  if not StartsCombat then
+                     StartsCombat :=
+                       StartCombat
+                         (PlayerShip.Missions
+                            (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                               .MissionIndex)
+                            .Target,
+                          False);
+                  end if;
+               when Patrol =>
+                  UpdateGame(GetRandom(45, 75));
+                  StartsCombat := CheckForEvent;
+                  if not StartsCombat then
+                     UpdateMission
+                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+                  end if;
+               when Explore =>
+                  UpdateGame(GetRandom(30, 60));
+                  StartsCombat := CheckForEvent;
+                  if not StartsCombat then
+                     UpdateMission
+                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+                  end if;
+            end case;
+            exit;
+         end if;
+      end loop;
+      if StartsCombat then
+         Hide(Gtk_Window(Get_Object(Builder, "skymapwindow")));
+         ShowCombatUI;
+      end if;
+   end StartMission;
+
    procedure CreateSkyMap
      (X: Integer := PlayerShip.SkyX;
       Y: Integer := PlayerShip.SkyY) is
@@ -1627,6 +1676,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Show_Info", ShowInfo'Access);
          Register_Handler(Builder, "Resign_From_Game", ResignFromGame'Access);
          Register_Handler(Builder, "Show_Missions", ShowMissions'Access);
+         Register_Handler(Builder, "Start_Mission", StartMission'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
