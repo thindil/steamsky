@@ -15,8 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ships; use Ships;
+
 package Maps.UI is
 
-   procedure CreateSkyMap; -- Create and show sky map
+   procedure CreateSkyMap
+     (X: Integer := PlayerShip.SkyX;
+      Y: Integer := PlayerShip.SkyY); -- Create and show sky map
 
 end Maps.UI;
