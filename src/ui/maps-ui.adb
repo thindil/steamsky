@@ -1634,6 +1634,17 @@ package body Maps.UI is
       end if;
    end StartMission;
 
+   procedure CompleteMission(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Hide(Gtk_Widget(Get_Object(Object, "orderswindow")));
+      FinishMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+      UpdateHeader;
+      UpdateMessages;
+      UpdateMoveButtons;
+      UpdateMenu;
+      DrawMap;
+   end CompleteMission;
+
    procedure CreateSkyMap
      (X: Integer := PlayerShip.SkyX;
       Y: Integer := PlayerShip.SkyY) is
@@ -1677,6 +1688,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Resign_From_Game", ResignFromGame'Access);
          Register_Handler(Builder, "Show_Missions", ShowMissions'Access);
          Register_Handler(Builder, "Start_Mission", StartMission'Access);
+         Register_Handler(Builder, "Complete_Mission", CompleteMission'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
