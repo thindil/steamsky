@@ -1059,4 +1059,12 @@ Buyable = Y, N, N, N
 ShowType = Weapon
 Value = 3, 35, 17
 Description = Simple sword made of titanium, used in melee combat.
+[125]
+Name = Titanium shield
+Weight = 9
+Type = Shield
+Prices = 30, 32, 32, 32
+Buyable = Y, N, N, N
+Value = 3, 16
+Description = Standard shield made of titanium, used in melee combat.
 []
