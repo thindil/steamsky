@@ -28,8 +28,10 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Button; use Gtk.Button;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
+with Glib.Object; use Glib.Object;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Game; use Game;
@@ -46,10 +48,10 @@ package body Missions.UI is
    MissionIndex: Positive;
 
    function HideMissions
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+     (User_Data: access GObject_Record'Class) return Boolean is
    begin
       CreateSkyMap;
-      return Hide_On_Delete(Gtk_Widget(Get_Object(Object, "missionswindow")));
+      return Hide_On_Delete(Gtk_Widget(User_Data));
    end HideMissions;
 
    procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
@@ -71,7 +73,7 @@ package body Missions.UI is
       end if;
    end ShowLastMessage;
 
-   procedure ShowMissionInfo(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowMissionInfo(User_Data: access GObject_Record'Class) is
       MissionsIter: Gtk_Tree_Iter;
       MissionsModel: Gtk_Tree_Model;
       MissionInfo: Unbounded_String;
@@ -84,8 +86,7 @@ package body Missions.UI is
       MissionsLimit: Natural;
    begin
       Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treemissions"))),
+        (Gtk.Tree_View.Get_Selection(Gtk_Tree_View(User_Data)),
          MissionsModel,
          MissionsIter);
       if MissionsIter = Null_Iter then
@@ -93,9 +94,14 @@ package body Missions.UI is
       end if;
       MissionIndex :=
         Natural'Value(To_String(Get_Path(MissionsModel, MissionsIter))) + 1;
-      Mission :=
-        SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Missions
-          (MissionIndex);
+      if User_Data = Get_Object(Builder, "treemissions") then
+         Mission :=
+           SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+             .Missions
+             (MissionIndex);
+      else
+         Mission := PlayerShip.Missions(MissionIndex);
+      end if;
       case Mission.MType is
          when Deliver =>
             MissionInfo :=
@@ -134,6 +140,9 @@ package body Missions.UI is
                   end if;
                end if;
             end loop;
+            if User_Data = Get_Object(Builder, "treemissions1") then
+               HaveCabin := True;
+            end if;
             MissionInfo := To_Unbounded_String("Needed cabin: ");
             if HaveCabin then
                Append(MissionInfo, Modules_List(Mission.Target).Name);
@@ -205,45 +214,64 @@ package body Missions.UI is
          Positive'Image(Mission.Reward) &
          " " &
          To_String(MoneyName));
-      Set_Markup
-        (Gtk_Label(Get_Object(Object, "lblinfo")),
-         To_String(MissionInfo));
-      case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-        .Reputation
-        (1) is
-         when 0 .. 25 =>
-            MissionsLimit := 1;
-         when 26 .. 50 =>
-            MissionsLimit := 3;
-         when 51 .. 75 =>
-            MissionsLimit := 5;
-         when 76 .. 100 =>
-            MissionsLimit := 10;
-         when others =>
-            MissionsLimit := 0;
-      end case;
-      for Mission of PlayerShip.Missions loop
-         if Mission.StartBase =
-           SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex then
-            MissionsLimit := MissionsLimit - 1;
+      if User_Data = Get_Object(Builder, "treemissions") then
+         Set_Markup
+           (Gtk_Label(Get_Object(Builder, "lblinfo")),
+            To_String(MissionInfo));
+         case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+           .Reputation
+           (1) is
+            when 0 .. 25 =>
+               MissionsLimit := 1;
+            when 26 .. 50 =>
+               MissionsLimit := 3;
+            when 51 .. 75 =>
+               MissionsLimit := 5;
+            when 76 .. 100 =>
+               MissionsLimit := 10;
+            when others =>
+               MissionsLimit := 0;
+         end case;
+         for Mission of PlayerShip.Missions loop
+            if Mission.StartBase =
+              SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex then
+               MissionsLimit := MissionsLimit - 1;
+            end if;
+         end loop;
+         if MissionsLimit > 0 then
+            Set_Label
+              (Gtk_Label(Get_Object(Builder, "lblavailable")),
+               "You can take" &
+               Natural'Image(MissionsLimit) &
+               " more missions in this base.");
+         else
+            Set_Label
+              (Gtk_Label(Get_Object(Builder, "lblavailable")),
+               "You can't take any more missions in this base.");
+            CanAccept := False;
          end if;
-      end loop;
-      if MissionsLimit > 0 then
-         Set_Label
-           (Gtk_Label(Get_Object(Object, "lblavailable")),
-            "You can take" &
-            Natural'Image(MissionsLimit) &
-            " more missions in this base.");
+         if not CanAccept then
+            Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnaccept")), False);
+         else
+            Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnaccept")), True);
+         end if;
       else
-         Set_Label
-           (Gtk_Label(Get_Object(Object, "lblavailable")),
-            "You can't take any more missions in this base.");
-         CanAccept := False;
-      end if;
-      if not CanAccept then
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnaccept")), False);
-      else
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnaccept")), True);
+         Set_Markup
+           (Gtk_Label(Get_Object(Builder, "lblmissioninfo")),
+            To_String(MissionInfo));
+         if Mission.Finished then
+            Set_Label
+              (Gtk_Label(Get_Object(Builder, "lblfinished")),
+               "Mission is ready to return.");
+            Set_Label
+              (Gtk_Button(Get_Object(Builder, "btndestination")),
+               "Set starting base as destination for ship");
+         else
+            Set_Label(Gtk_Label(Get_Object(Builder, "lblfinished")), "");
+            Set_Label
+              (Gtk_Button(Get_Object(Builder, "btndestination")),
+               "Set mission as destination for ship");
+         end if;
       end if;
    end ShowMissionInfo;
 
@@ -275,6 +303,35 @@ package body Missions.UI is
             Gtk_Window(Get_Object(Object, "missionswindow")));
    end AcceptSelectedMission;
 
+   procedure ButtonMission(User_Data: access GObject_Record'Class) is
+      X, Y: Integer;
+   begin
+      if User_Data = Get_Object(Builder, "btncenter") then
+         CreateSkyMap
+           (PlayerShip.Missions(MissionIndex).TargetX,
+            PlayerShip.Missions(MissionIndex).TargetY);
+      else
+         if not PlayerShip.Missions(MissionIndex).Finished then
+            X := PlayerShip.Missions(MissionIndex).TargetX;
+            Y := PlayerShip.Missions(MissionIndex).TargetY;
+         else
+            X := SkyBases(PlayerShip.Missions(MissionIndex).StartBase).SkyX;
+            Y := SkyBases(PlayerShip.Missions(MissionIndex).StartBase).SkyY;
+         end if;
+         if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
+            ShowDialog
+              ("You are at this target now.",
+               Gtk_Window(Get_Object(Builder, "missionsinfowindow")));
+            return;
+         end if;
+         PlayerShip.DestinationX := X;
+         PlayerShip.DestinationY := Y;
+         AddMessage("You set travel destination for your ship.", OrderMessage);
+         CreateSkyMap;
+      end if;
+      Hide(Gtk_Widget(Get_Object(Builder, "missionsinfowindow")));
+   end ButtonMission;
+
    procedure CreateMissionsUI is
       Error: aliased GError;
    begin
@@ -293,6 +350,7 @@ package body Missions.UI is
       Register_Handler(Builder, "Hide_Missions", HideMissions'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Mission_Info", ShowMissionInfo'Access);
+      Register_Handler(Builder, "Button_Mission", ButtonMission'Access);
       Register_Handler
         (Builder,
          "Accept_Mission",
@@ -335,5 +393,38 @@ package body Missions.UI is
          False);
       ShowLastMessage;
    end ShowMissionsUI;
+
+   procedure ShowAcceptedMissions is
+      MissionsIter: Gtk_Tree_Iter;
+      MissionsList: Gtk_List_Store;
+   begin
+      MissionsList := Gtk_List_Store(Get_Object(Builder, "missionslist"));
+      Clear(MissionsList);
+      for Mission of PlayerShip.Missions loop
+         Append(MissionsList, MissionsIter);
+         case Mission.MType is
+            when Deliver =>
+               Set(MissionsList, MissionsIter, 0, "Deliver item to base");
+            when Patrol =>
+               Set(MissionsList, MissionsIter, 0, "Patrol area");
+            when Destroy =>
+               Set(MissionsList, MissionsIter, 0, "Destroy ship");
+            when Explore =>
+               Set(MissionsList, MissionsIter, 0, "Explore area");
+            when Passenger =>
+               Set
+                 (MissionsList,
+                  MissionsIter,
+                  0,
+                  "Transport passenger to base");
+         end case;
+      end loop;
+      Show_All(Gtk_Widget(Get_Object(Builder, "missionsinfowindow")));
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treemissions1")),
+         Gtk_Tree_Path_New_From_String("0"),
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnmission1")),
+         False);
+   end ShowAcceptedMissions;
 
 end Missions.UI;

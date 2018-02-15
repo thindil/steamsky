@@ -48,7 +48,6 @@ with Gdk.Cursor; use Gdk.Cursor;
 with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with Utils.UI; use Utils.UI;
-with Ships; use Ships;
 with Ships.UI; use Ships.UI;
 with Ships.Movement; use Ships.Movement;
 with Ships.Crew; use Ships.Crew;
@@ -1547,7 +1546,6 @@ package body Maps.UI is
 
    procedure ShowInfo(User_Data: access GObject_Record'Class) is
    begin
-      Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       if User_Data = Get_Object(Builder, "menumessages") then
          ShowMessagesUI(SkyMap_View);
       elsif User_Data = Get_Object(Builder, "menucargo") then
@@ -1558,7 +1556,16 @@ package body Maps.UI is
          ShowCrewUI(SkyMap_View);
       elsif User_Data = Get_Object(Builder, "menustats") then
          ShowStatsUI(SkyMap_View);
+      elsif User_Data = Get_Object(Builder, "menumissions") then
+         if PlayerShip.Missions.Length = 0 then
+            ShowDialog
+              ("You didn't accepted any mission yet.",
+               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            return;
+         end if;
+         ShowAcceptedMissions;
       end if;
+      Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
    end ShowInfo;
 
    procedure ResignFromGame(Object: access Gtkada_Builder_Record'Class) is
@@ -1578,13 +1585,15 @@ package body Maps.UI is
       ShowMissionsUI;
    end ShowMissions;
 
-   procedure CreateSkyMap is
+   procedure CreateSkyMap
+     (X: Integer := PlayerShip.SkyX;
+      Y: Integer := PlayerShip.SkyY) is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
         Pango_Font_Description_New;
    begin
-      CenterX := PlayerShip.SkyX;
-      CenterY := PlayerShip.SkyY;
+      CenterX := X;
+      CenterY := Y;
       if Builder = null then
          Gtk_New(Builder);
          if Add_From_File

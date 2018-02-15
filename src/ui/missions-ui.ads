@@ -19,5 +19,6 @@ package Missions.UI is
 
    procedure CreateMissionsUI; -- Create infterace for show available missions
    procedure ShowMissionsUI; -- Show interface for show available missions
+   procedure ShowAcceptedMissions; -- Show interface for show accepted missions
 
 end Missions.UI;
