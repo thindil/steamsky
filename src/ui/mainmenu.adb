@@ -60,6 +60,7 @@ with Help.UI; use Help.UI;
 with Messages.UI; use Messages.UI;
 with Statistics.UI; use Statistics.UI;
 with Missions.UI; use Missions.UI;
+with Trades.UI; use Trades.UI;
 
 package body MainMenu is
 
@@ -311,6 +312,7 @@ package body MainMenu is
       CreateStatsUI;
       CreateGoalsMenu;
       CreateMissionsUI;
+      CreateTradeUI;
       CreateSkyMap;
    end StartGame;
 
