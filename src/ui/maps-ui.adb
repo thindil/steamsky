@@ -52,6 +52,7 @@ with Utils.UI; use Utils.UI;
 with Ships.UI; use Ships.UI;
 with Ships.Movement; use Ships.Movement;
 with Ships.Crew; use Ships.Crew;
+with Ships.Cargo; use Ships.Cargo;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
@@ -1645,20 +1646,63 @@ package body Maps.UI is
       DrawMap;
    end CompleteMission;
 
-   procedure AskFor(User_Data: access GObject_Record'Class) is
+   procedure ExecuteOrder(User_Data: access GObject_Record'Class) is
+      TraderIndex: constant Natural := FindMember(Talk);
+      Price: Positive := 1000;
+      MoneyIndex2: constant Natural :=
+        FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
       if User_Data = Get_Object(Builder, "btnaskevents") then
          AskForEvents;
-      else
+      elsif User_Data = Get_Object(Builder, "btnaskbases") then
          AskForBases;
+      else
+         CountPrice(Price, TraderIndex);
+         if ShowConfirmDialog
+             ("Are you sure want to change your home base (it cost" &
+              Positive'Image(Price) &
+              " " &
+              To_String(MoneyName) &
+              ")?",
+              Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
+            if MoneyIndex2 = 0 then
+               ShowDialog
+                 ("You don't have any " &
+                  To_String(MoneyName) &
+                  " for change ship home base.",
+                  Gtk_Window(Get_Object(Builder, "skymapwindow")));
+               return;
+            end if;
+            CountPrice(Price, TraderIndex);
+            if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
+               ShowDialog
+                 ("You don't have enough " &
+                  To_String(MoneyName) &
+                  " for change ship home base.",
+                  Gtk_Window(Get_Object(Builder, "skymapwindow")));
+               return;
+            end if;
+            PlayerShip.HomeBase :=
+              SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+            UpdateCargo
+              (Ship => PlayerShip,
+               CargoIndex => MoneyIndex2,
+               Amount => (0 - Price));
+            AddMessage
+              ("You changed your ship home base to: " &
+               To_String(SkyBases(PlayerShip.HomeBase).Name),
+               OtherMessage);
+            GainExp(1, TalkingSkill, TraderIndex);
+            UpdateGame(10);
+         end if;
       end if;
       UpdateHeader;
       UpdateMessages;
       UpdateMoveButtons;
       UpdateMenu;
       DrawMap;
-   end AskFor;
+   end ExecuteOrder;
 
    procedure CreateSkyMap
      (X: Integer := PlayerShip.SkyX;
@@ -1704,7 +1748,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Show_Missions", ShowMissions'Access);
          Register_Handler(Builder, "Start_Mission", StartMission'Access);
          Register_Handler(Builder, "Complete_Mission", CompleteMission'Access);
-         Register_Handler(Builder, "Ask_For", AskFor'Access);
+         Register_Handler(Builder, "Execute_Order", ExecuteOrder'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
