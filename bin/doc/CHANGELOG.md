@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
   sword, titanium sword and titanium shield
 - New crafting recipes: titanium 40mm ammo, titanium 60mm ammo, titanium 80mm
   ammo, titanium 100mm ammo, titanium 120mm ammo, titanium harpoon, titanium
-  short sword and titanium sword
+  short sword, titanium sword and titanium shield
 
 ### Changed
 - Updated README.md
