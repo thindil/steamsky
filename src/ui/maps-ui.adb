@@ -71,6 +71,7 @@ with Combat.UI; use Combat.UI;
 with Help.UI; use Help.UI;
 with Statistics.UI; use Statistics.UI;
 with MainMenu; use MainMenu;
+with Trades; use Trades;
 
 package body Maps.UI is
 
@@ -1704,6 +1705,44 @@ package body Maps.UI is
       DrawMap;
    end ExecuteOrder;
 
+   procedure DeliverMedicines(User_Data: access GObject_Record'Class) is
+      EventIndex, ItemIndex: Natural := 0;
+      NewTime: Integer;
+   begin
+      EventIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+      ItemIndex :=
+        FindItem(Inventory => PlayerShip.Cargo, ItemType => HealingTools);
+      NewTime :=
+        Events_List(EventIndex).Time - PlayerShip.Cargo(ItemIndex).Amount;
+      if NewTime < 1 then
+         DeleteEvent(EventIndex);
+      else
+         Events_List(EventIndex).Time := NewTime;
+      end if;
+      if User_Data = Get_Object(Builder, "btnfreemedicines") then
+         GainRep
+           (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
+            (PlayerShip.Cargo(ItemIndex).Amount / 10));
+         UpdateCargo
+           (PlayerShip,
+            PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+            (0 - PlayerShip.Cargo.Element(ItemIndex).Amount));
+         AddMessage
+           ("You gave " &
+            To_String
+              (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Name) &
+            " for free to base.",
+            TradeMessage);
+      else
+         SellItems
+           (ItemIndex,
+            Integer'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
+         GainRep
+           (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
+            ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
+      end if;
+   end DeliverMedicines;
+
    procedure CreateSkyMap
      (X: Integer := PlayerShip.SkyX;
       Y: Integer := PlayerShip.SkyY) is
@@ -1749,6 +1788,10 @@ package body Maps.UI is
          Register_Handler(Builder, "Start_Mission", StartMission'Access);
          Register_Handler(Builder, "Complete_Mission", CompleteMission'Access);
          Register_Handler(Builder, "Execute_Order", ExecuteOrder'Access);
+         Register_Handler
+           (Builder,
+            "Deliver_Medicines",
+            DeliverMedicines'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
