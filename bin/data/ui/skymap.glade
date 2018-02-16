@@ -1334,7 +1334,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <signal name="clicked" handler="Ask_For" object="btnaskevents" swapped="no"/>
+            <signal name="clicked" handler="Execute_Order" object="btnaskevents" swapped="no"/>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -1348,7 +1348,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <signal name="clicked" handler="Ask_For" object="btnaskbases" swapped="no"/>
+            <signal name="clicked" handler="Execute_Order" object="btnaskbases" swapped="no"/>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -1455,6 +1455,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <signal name="clicked" handler="Execute_Order" object="btnsethome" swapped="no"/>
           </object>
           <packing>
             <property name="expand">True</property>
