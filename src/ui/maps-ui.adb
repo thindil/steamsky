@@ -1650,6 +1650,8 @@ package body Maps.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
       if User_Data = Get_Object(Builder, "btnaskevents") then
          AskForEvents;
+      else
+         AskForBases;
       end if;
       UpdateHeader;
       UpdateMessages;
