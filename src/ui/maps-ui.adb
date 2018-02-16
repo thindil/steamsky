@@ -1645,6 +1645,19 @@ package body Maps.UI is
       DrawMap;
    end CompleteMission;
 
+   procedure AskFor(User_Data: access GObject_Record'Class) is
+   begin
+      Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+      if User_Data = Get_Object(Builder, "btnaskevents") then
+         AskForEvents;
+      end if;
+      UpdateHeader;
+      UpdateMessages;
+      UpdateMoveButtons;
+      UpdateMenu;
+      DrawMap;
+   end AskFor;
+
    procedure CreateSkyMap
      (X: Integer := PlayerShip.SkyX;
       Y: Integer := PlayerShip.SkyY) is
@@ -1689,6 +1702,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Show_Missions", ShowMissions'Access);
          Register_Handler(Builder, "Start_Mission", StartMission'Access);
          Register_Handler(Builder, "Complete_Mission", CompleteMission'Access);
+         Register_Handler(Builder, "Ask_For", AskFor'Access);
          Do_Connect(Builder);
          Set_Family(FontDescription, "monospace");
          Override_Font
