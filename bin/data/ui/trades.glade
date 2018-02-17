@@ -112,22 +112,21 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="hscrollbar_policy">never</property>
                 <property name="shadow_type">in</property>
                 <child>
-                  <object class="GtkTreeView">
+                  <object class="GtkTreeView" id="treeitems">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="model">itemslist</property>
                     <property name="headers_visible">False</property>
                     <property name="headers_clickable">False</property>
+                    <signal name="cursor-changed" handler="Show_Item_Info" swapped="no"/>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection"/>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn">
+                      <object class="GtkTreeViewColumn" id="columnname">
                         <property name="title" translatable="yes">column</property>
                         <child>
-                          <object class="GtkCellRendererText">
-                            <property name="editable">True</property>
-                          </object>
+                          <object class="GtkCellRendererText"/>
                           <attributes>
                             <attribute name="text">0</attribute>
                           </attributes>
@@ -153,6 +152,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_markup">True</property>
+                    <property name="wrap">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -248,7 +248,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>
