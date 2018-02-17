@@ -17,6 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Exceptions; use Ada.Exceptions;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
@@ -26,8 +27,11 @@ with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
+with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
+with Glib.Object; use Glib.Object;
 with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with Maps; use Maps;
@@ -39,6 +43,7 @@ with Messages; use Messages;
 with Items; use Items;
 with Bases.Cargo; use Bases.Cargo;
 with Help.UI; use Help.UI;
+with Utils.UI; use Utils.UI;
 
 package body Trades.UI is
 
@@ -230,12 +235,12 @@ package body Trades.UI is
       else
          Set_Visible(Gtk_Widget(Get_Object(Object, "btnsell")), True);
       end if;
-      if BaseCargoIndex = 0 then
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      if BaseCargoIndex = 0 or MoneyIndex2 = 0 then
          Set_Visible(Gtk_Widget(Get_Object(Object, "btnbuy")), False);
       else
          Set_Visible(Gtk_Widget(Get_Object(Object, "btnbuy")), True);
       end if;
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if MoneyIndex2 > 0 then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblshipmoney")),
@@ -299,6 +304,181 @@ package body Trades.UI is
       ShowHelpUI(3);
    end ShowHelp;
 
+   procedure ShowTradeItem(User_Data: access GObject_Record'Class) is
+      ItemsIter: Gtk_Tree_Iter;
+      ItemsModel: Gtk_Tree_Model;
+      MaxAmount, MoneyIndex2: Natural;
+      CargoIndex, BaseCargoIndex: Natural := 0;
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      Price, BaseType, ProtoIndex: Positive;
+      EventIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+      AmountAdj: constant Gtk_Adjustment :=
+        Gtk_Adjustment(Get_Object(Builder, "amountadj"));
+   begin
+      Get_Selected
+        (Gtk.Tree_View.Get_Selection
+           (Gtk_Tree_View(Get_Object(Builder, "treeitems"))),
+         ItemsModel,
+         ItemsIter);
+      if ItemsIter = Null_Iter then
+         return;
+      end if;
+      CargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 1));
+      BaseCargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 2));
+      if CargoIndex > 0 then
+         ProtoIndex := PlayerShip.Cargo(CargoIndex).ProtoIndex;
+      else
+         if BaseIndex = 0 then
+            ProtoIndex := TraderCargo(BaseCargoIndex).ProtoIndex;
+         else
+            ProtoIndex := SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
+         end if;
+      end if;
+      if BaseIndex > 0 then
+         BaseType := Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+      else
+         BaseType := 1;
+      end if;
+      if BaseCargoIndex = 0 then
+         Price := Items_List(ProtoIndex).Prices(BaseType);
+      else
+         if BaseIndex > 0 then
+            Price := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Price;
+         else
+            Price := TraderCargo(BaseCargoIndex).Price;
+         end if;
+      end if;
+      if EventIndex > 0 then
+         if Events_List(EventIndex).EType = DoublePrice and
+           Events_List(EventIndex).Data = ProtoIndex then
+            Price := Price * 2;
+         end if;
+      end if;
+      Set_Value(AmountAdj, 1.0);
+      if User_Data = Get_Object(Builder, "btnbuy") then
+         MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+         MaxAmount := PlayerShip.Cargo(MoneyIndex2).Amount / Price;
+         if BaseIndex > 0 then
+            if MaxAmount >
+              SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount then
+               MaxAmount := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
+            end if;
+         else
+            if MaxAmount > TraderCargo(BaseCargoIndex).Amount then
+               MaxAmount := TraderCargo(BaseCargoIndex).Amount;
+            end if;
+         end if;
+         Set_Upper(AmountAdj, Gdouble(MaxAmount));
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblbuyamount")),
+            "Amount to buy (max" & Natural'Image(MaxAmount) & "):");
+         Show_All(Gtk_Widget(Get_Object(Builder, "buywindow")));
+      end if;
+   end ShowTradeItem;
+
+   procedure TradeItem(User_Data: access GObject_Record'Class) is
+      ItemsIter: Gtk_Tree_Iter;
+      ItemsModel: Gtk_Tree_Model;
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      BaseCargoIndex: Natural := 0;
+      Trader: String(1 .. 4);
+      Amount: constant Natural :=
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "amountadj"))));
+      ParentWindow: Gtk_Window;
+   begin
+      Get_Selected
+        (Gtk.Tree_View.Get_Selection
+           (Gtk_Tree_View(Get_Object(Builder, "treeitems"))),
+         ItemsModel,
+         ItemsIter);
+      if ItemsIter = Null_Iter then
+         return;
+      end if;
+      BaseCargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 2));
+      if BaseIndex > 0 then
+         Trader := "base";
+      else
+         Trader := "ship";
+      end if;
+      if User_Data = Get_Object(Builder, "btnbuyitem") then
+         ParentWindow := Gtk_Window(Get_Object(Builder, "buywindow"));
+         BuyItems(BaseCargoIndex, Natural'Image(Amount));
+      end if;
+      Hide(Gtk_Widget(ParentWindow));
+      ShowTradeUI;
+   exception
+      when An_Exception : Trade_Cant_Buy =>
+         ShowDialog
+           ("You can't buy " &
+            Exception_Message(An_Exception) &
+            " in this " &
+            Trader &
+            ".",
+            ParentWindow);
+      when An_Exception : Trade_Not_For_Sale_Now =>
+         ShowDialog
+           ("You can't buy " &
+            Exception_Message(An_Exception) &
+            " in this base at this moment.",
+            ParentWindow);
+      when An_Exception : Trade_Buying_Too_Much =>
+         ShowDialog
+           (Trader &
+            " don't have that much " &
+            Exception_Message(An_Exception) &
+            " for sale.",
+            ParentWindow);
+      when Trade_No_Free_Cargo =>
+         ShowDialog
+           ("You don't have that much free space in your ship cargo.",
+            ParentWindow);
+      when An_Exception : Trade_No_Money =>
+         ShowDialog
+           ("You don't have any " &
+            To_String(MoneyName) &
+            " to buy " &
+            Exception_Message(An_Exception) &
+            ".",
+            ParentWindow);
+      when An_Exception : Trade_Not_Enough_Money =>
+         ShowDialog
+           ("You don't have enough " &
+            To_String(MoneyName) &
+            " to buy so much " &
+            Exception_Message(An_Exception) &
+            ".",
+            ParentWindow);
+      when Trade_Invalid_Amount =>
+         if User_Data = Get_Object(Builder, "btnbuyitem") then
+            ShowDialog("You entered invalid amount to buy.", ParentWindow);
+         else
+            ShowDialog("You entered invalid amount to sell.", ParentWindow);
+         end if;
+      when An_Exception : Trade_Too_Much_For_Sale =>
+         ShowDialog
+           ("You dont have that much " &
+            Exception_Message(An_Exception) &
+            " in ship cargo.",
+            ParentWindow);
+      when An_Exception : Trade_No_Money_In_Base =>
+         ShowDialog
+           ("You can't sell so much " &
+            Exception_Message(An_Exception) &
+            " because " &
+            Trader &
+            " don't have that much " &
+            To_String(MoneyName) &
+            " to buy it.",
+            ParentWindow);
+      when Trade_No_Trader =>
+         ShowDialog
+           ("You don't have assigned anyone in crew to talk in bases duty.",
+            ParentWindow);
+   end TradeItem;
+
    procedure CreateTradeUI is
       Error: aliased GError;
    begin
@@ -326,6 +506,9 @@ package body Trades.UI is
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
+      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
+      Register_Handler(Builder, "Show_Trade_Item", ShowTradeItem'Access);
+      Register_Handler(Builder, "Trade_Item", TradeItem'Access);
       Do_Connect(Builder);
    end CreateTradeUI;
 
