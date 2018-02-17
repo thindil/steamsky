@@ -33,6 +33,7 @@ with Game; use Game;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with Events; use Events;
 with Messages; use Messages;
 with Items; use Items;
@@ -88,7 +89,8 @@ package body Trades.UI is
       BaseType: Positive;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      DamagePercent: Natural;
+      DamagePercent, MoneyIndex2: Natural;
+      FreeSpace: Integer;
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -232,6 +234,62 @@ package body Trades.UI is
          Set_Visible(Gtk_Widget(Get_Object(Object, "btnbuy")), False);
       else
          Set_Visible(Gtk_Widget(Get_Object(Object, "btnbuy")), True);
+      end if;
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      if MoneyIndex2 > 0 then
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lblshipmoney")),
+            "You have" &
+            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
+            " " &
+            To_String(MoneyName) &
+            ".");
+      else
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lblshipmoney")),
+            "You don't have any " &
+            To_String(MoneyName) &
+            " to buy anything.");
+      end if;
+      FreeSpace := FreeCargo(0);
+      if FreeSpace < 0 then
+         FreeSpace := 0;
+      end if;
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblshipspace")),
+         "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
+      if BaseIndex > 0 then
+         if SkyBases(BaseIndex).Cargo(1).Amount = 0 then
+            Set_Label
+              (Gtk_Label(Get_Object(Object, "lblbasemoney")),
+               "Base don't have any " &
+               To_String(MoneyName) &
+               "to buy anything.");
+         else
+            Set_Label
+              (Gtk_Label(Get_Object(Object, "lblbasemoney")),
+               "Base have" &
+               Positive'Image(SkyBases(BaseIndex).Cargo(1).Amount) &
+               " " &
+               To_String(MoneyName) &
+               ".");
+         end if;
+      else
+         if TraderCargo(1).Amount = 0 then
+            Set_Label
+              (Gtk_Label(Get_Object(Object, "lblbasemoney")),
+               "Ship don't have any " &
+               To_String(MoneyName) &
+               "to buy anything.");
+         else
+            Set_Label
+              (Gtk_Label(Get_Object(Object, "lblbasemoney")),
+               "Ship have" &
+               Positive'Image(TraderCargo(1).Amount) &
+               " " &
+               To_String(MoneyName) &
+               ".");
+         end if;
       end if;
    end ShowItemInfo;
 
