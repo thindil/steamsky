@@ -1067,4 +1067,13 @@ Prices = 30, 32, 32, 32
 Buyable = Y, N, N, N
 Value = 3, 16
 Description = Standard shield made of titanium, used in melee combat.
+[126]
+Name = Titanium chestplate
+Weight = 18
+Type = ChestArmor
+Prices = 35, 37, 37, 37
+Buyable = Y, N, N, N
+ShowType = Armor
+Value = 3, 25, 7
+Description = Standard type of armor, made of steel, weared on torso.
 []
