@@ -1571,6 +1571,11 @@ package body Maps.UI is
          ShowAcceptedMissions;
       elsif User_Data = Get_Object(Builder, "btntrade") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
+            GenerateTraderCargo
+              (Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                 .Data);
+         end if;
          ShowTradeUI;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
