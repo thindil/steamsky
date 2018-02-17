@@ -19,6 +19,7 @@ with Maps; use Maps;
 with Items; use Items;
 with Ships; use Ships;
 with Utils; use Utils;
+with Trades; use Trades;
 
 package body Bases.Cargo is
 
@@ -126,21 +127,36 @@ package body Bases.Cargo is
    function FindBaseCargo
      (ProtoIndex: Positive;
       Durability: Natural := 101) return Natural is
-      BaseIndex: constant Positive :=
+      BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
-      for I in SkyBases(BaseIndex).Cargo.Iterate loop
-         if Durability < 101 then
-            if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex and
-              SkyBases(BaseIndex).Cargo(I).Durability = Durability then
-               return BaseCargo_Container.To_Index(I);
+      if BaseIndex > 0 then
+         for I in SkyBases(BaseIndex).Cargo.Iterate loop
+            if Durability < 101 then
+               if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex and
+                 SkyBases(BaseIndex).Cargo(I).Durability = Durability then
+                  return BaseCargo_Container.To_Index(I);
+               end if;
+            else
+               if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex then
+                  return BaseCargo_Container.To_Index(I);
+               end if;
             end if;
-         else
-            if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex then
-               return BaseCargo_Container.To_Index(I);
+         end loop;
+      else
+         for I in TraderCargo.Iterate loop
+            if Durability < 101 then
+               if TraderCargo(I).ProtoIndex = ProtoIndex and
+                 TraderCargo(I).Durability = Durability then
+                  return BaseCargo_Container.To_Index(I);
+               end if;
+            else
+               if TraderCargo(I).ProtoIndex = ProtoIndex then
+                  return BaseCargo_Container.To_Index(I);
+               end if;
             end if;
-         end if;
-      end loop;
+         end loop;
+      end if;
       return 0;
    end FindBaseCargo;
 
