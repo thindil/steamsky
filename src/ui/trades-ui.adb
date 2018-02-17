@@ -37,6 +37,7 @@ with Events; use Events;
 with Messages; use Messages;
 with Items; use Items;
 with Bases.Cargo; use Bases.Cargo;
+with Help.UI; use Help.UI;
 
 package body Trades.UI is
 
@@ -234,6 +235,12 @@ package body Trades.UI is
       end if;
    end ShowItemInfo;
 
+   procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
+      pragma Unreferenced(Object);
+   begin
+      ShowHelpUI(3);
+   end ShowHelp;
+
    procedure CreateTradeUI is
       Error: aliased GError;
    begin
@@ -260,6 +267,7 @@ package body Trades.UI is
       Register_Handler(Builder, "Hide_Trade", HideTrade'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
+      Register_Handler(Builder, "Show_Help", ShowHelp'Access);
       Do_Connect(Builder);
    end CreateTradeUI;
 
