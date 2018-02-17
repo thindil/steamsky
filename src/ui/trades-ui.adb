@@ -217,9 +217,21 @@ package body Trades.UI is
          Append(ItemInfo, Positive'Image(Amount));
       end if;
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
-         Append(ItemInfo, ASCII.LF & ASCII.LF & Items_List(ProtoIndex).Description);
+         Append
+           (ItemInfo,
+            ASCII.LF & ASCII.LF & Items_List(ProtoIndex).Description);
       end if;
       Set_Label(Gtk_Label(Get_Object(Object, "lblinfo")), To_String(ItemInfo));
+      if CargoIndex = 0 then
+         Set_Visible(Gtk_Widget(Get_Object(Object, "btnsell")), False);
+      else
+         Set_Visible(Gtk_Widget(Get_Object(Object, "btnsell")), True);
+      end if;
+      if BaseCargoIndex = 0 then
+         Set_Visible(Gtk_Widget(Get_Object(Object, "btnbuy")), False);
+      else
+         Set_Visible(Gtk_Widget(Get_Object(Object, "btnbuy")), True);
+      end if;
    end ShowItemInfo;
 
    procedure CreateTradeUI is
