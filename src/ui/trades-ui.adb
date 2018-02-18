@@ -111,7 +111,15 @@ package body Trades.UI is
          BaseType := 1;
       end if;
       CargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 1));
+      if CargoIndex > Natural(PlayerShip.Cargo.Length) then
+         return;
+      end if;
       BaseCargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 2));
+      if BaseIndex = 0 and BaseCargoIndex > Natural(TraderCargo.Length) then
+         return;
+      elsif BaseCargoIndex > Natural(SkyBases(BaseIndex).Cargo.Length) then
+         return;
+      end if;
       if CargoIndex > 0 then
          ProtoIndex := PlayerShip.Cargo(CargoIndex).ProtoIndex;
          if BaseCargoIndex = 0 then
@@ -375,6 +383,22 @@ package body Trades.UI is
            (Gtk_Label(Get_Object(Builder, "lblbuyamount")),
             "Amount to buy (max" & Natural'Image(MaxAmount) & "):");
          Show_All(Gtk_Widget(Get_Object(Builder, "buywindow")));
+      else
+         MaxAmount := PlayerShip.Cargo(CargoIndex).Amount;
+         if BaseIndex > 0 then
+            if MaxAmount > (SkyBases(BaseIndex).Cargo(1).Amount / Price) then
+               MaxAmount := SkyBases(BaseIndex).Cargo(1).Amount / Price;
+            end if;
+         else
+            if MaxAmount > (TraderCargo(1).Amount / Price) then
+               MaxAmount := TraderCargo(1).Amount / Price;
+            end if;
+         end if;
+         Set_Upper(AmountAdj, Gdouble(MaxAmount));
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblsellamount")),
+            "Amount to sell (max" & Natural'Image(MaxAmount) & "):");
+         Show_All(Gtk_Widget(Get_Object(Builder, "sellwindow")));
       end if;
    end ShowTradeItem;
 
@@ -383,7 +407,7 @@ package body Trades.UI is
       ItemsModel: Gtk_Tree_Model;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseCargoIndex: Natural := 0;
+      BaseCargoIndex, CargoIndex: Natural := 0;
       Trader: String(1 .. 4);
       Amount: constant Natural :=
         Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "amountadj"))));
@@ -397,6 +421,7 @@ package body Trades.UI is
       if ItemsIter = Null_Iter then
          return;
       end if;
+      CargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 1));
       BaseCargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 2));
       if BaseIndex > 0 then
          Trader := "base";
@@ -406,6 +431,15 @@ package body Trades.UI is
       if User_Data = Get_Object(Builder, "btnbuyitem") then
          ParentWindow := Gtk_Window(Get_Object(Builder, "buywindow"));
          BuyItems(BaseCargoIndex, Natural'Image(Amount));
+      else
+         ParentWindow := Gtk_Window(Get_Object(Builder, "sellwindow"));
+         if User_Data = Get_Object(Builder, "btnsellitem") then
+            SellItems(CargoIndex, Natural'Image(Amount));
+         else
+            SellItems
+              (CargoIndex,
+               Positive'Image(PlayerShip.Cargo.Element(CargoIndex).Amount));
+         end if;
       end if;
       Hide(Gtk_Widget(ParentWindow));
       ShowTradeUI;
