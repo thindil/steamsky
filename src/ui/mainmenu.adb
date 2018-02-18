@@ -416,6 +416,9 @@ package body MainMenu is
       ErrorFile: File_Type;
       ErrorText: Unbounded_String;
    begin
+      if Natural(PlayerShip.Crew.Length) > 0 then
+         SaveGame;
+      end if;
       if Exists(To_String(SaveDirectory) & "error.log") then
          Open(ErrorFile, Append_File, To_String(SaveDirectory) & "error.log");
       else
