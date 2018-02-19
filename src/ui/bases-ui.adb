@@ -19,8 +19,153 @@ with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
+with Gtk.Label; use Gtk.Label;
+with Gtk.Tree_Model; use Gtk.Tree_Model;
+with Gtk.List_Store; use Gtk.List_Store;
+with Gtk.Tree_View; use Gtk.Tree_View;
+with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
+with Gtk.Tree_Selection; use Gtk.Tree_Selection;
+with Gtk.Button; use Gtk.Button;
+with Glib; use Glib;
+with Glib.Error; use Glib.Error;
+with Glib.Object; use Glib.Object;
+with Maps; use Maps;
+with Maps.UI; use Maps.UI;
+with Messages; use Messages;
+with Ships; use Ships;
+with Ships.Crew; use Ships.Crew;
+with Items; use Items;
+with Bases.Trade; use Bases.Trade;
 
 package body Bases.UI is
+
+   Builder: Gtkada_Builder;
+
+   function HideBaseWindow
+     (User_Data: access GObject_Record'Class) return Boolean is
+   begin
+      Hide(Gtk_Widget(User_Data));
+      CreateSkyMap;
+      return True;
+   end HideBaseWindow;
+
+   procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Hide(Gtk_Widget(Get_Object(Object, "infolastmessage")));
+      LastMessage := Null_Unbounded_String;
+   end HideLastMessage;
+
+   procedure ShowLastMessage is
+   begin
+      if LastMessage = Null_Unbounded_String then
+         HideLastMessage(Builder);
+      else
+         Set_Text
+           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
+            To_String(LastMessage));
+         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
+         LastMessage := Null_Unbounded_String;
+      end if;
+   end ShowLastMessage;
+
+   procedure ShowRecruitInfo(Object: access Gtkada_Builder_Record'Class) is
+      RecruitIter, Iter: Gtk_Tree_Iter;
+      RecruitModel: Gtk_Tree_Model;
+      RecruitInfo: Unbounded_String;
+      Recruit: Recruit_Data;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      List: Gtk_List_Store;
+      MoneyIndex2: Natural;
+      Cost, RecruitIndex: Positive;
+   begin
+      Get_Selected
+        (Gtk.Tree_View.Get_Selection
+           (Gtk_Tree_View(Get_Object(Object, "treerecruits"))),
+         RecruitModel,
+         RecruitIter);
+      if RecruitIter = Null_Iter then
+         return;
+      end if;
+      RecruitIndex :=
+        Natural'Value(To_String(Get_Path(RecruitModel, RecruitIter))) + 1;
+      Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
+      if Recruit.Gender = 'M' then
+         RecruitInfo := To_Unbounded_String("Gender: Male");
+      else
+         RecruitInfo := To_Unbounded_String("Gender: Female");
+      end if;
+      Set_Markup
+        (Gtk_Label(Get_Object(Object, "lblrecruitinfo")),
+         To_String(RecruitInfo));
+      List := Gtk_List_Store(Get_Object(Object, "statslist"));
+      Clear(List);
+      for I in Recruit.Attributes.Iterate loop
+         Append(List, Iter);
+         Set
+           (List,
+            Iter,
+            0,
+            To_String(Attributes_Names(Attributes_Container.To_Index(I))));
+         Set(List, Iter, 1, Gint(Recruit.Attributes(I)(1) * 2));
+      end loop;
+      List := Gtk_List_Store(Get_Object(Object, "skillslist"));
+      Clear(List);
+      for Skill of Recruit.Skills loop
+         Append(List, Iter);
+         Set(List, Iter, 0, To_String(Skills_List(Skill(1)).Name));
+         Set(List, Iter, 1, Gint(Skill(2)));
+      end loop;
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      if MoneyIndex2 > 0 then
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lblrecruitmoney")),
+            "You have" &
+            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
+            " " &
+            To_String(MoneyName) &
+            ".");
+         Cost := Recruit.Price;
+         CountPrice(Cost, FindMember(Talk));
+         Set_Label
+           (Gtk_Button(Get_Object(Object, "btnrecruit")),
+            "Hire for" & Positive'Image(Cost) & " " & To_String(MoneyName));
+         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+            Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnrecruit")), False);
+         else
+            Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnrecruit")), True);
+         end if;
+      else
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnrecruit")), False);
+      end if;
+   end ShowRecruitInfo;
+
+   procedure SetActiveRow is
+   begin
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treerecruits")),
+         Gtk_Tree_Path_New_From_String("0"),
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnname")),
+         False);
+   end SetActiveRow;
+
+   procedure Hire(Object: access Gtkada_Builder_Record'Class) is
+      RecruitIter: Gtk_Tree_Iter;
+      RecruitModel: Gtk_Tree_Model;
+      RecruitIndex: Positive;
+   begin
+      Get_Selected
+        (Gtk.Tree_View.Get_Selection
+           (Gtk_Tree_View(Get_Object(Object, "treerecruits"))),
+         RecruitModel,
+         RecruitIter);
+      RecruitIndex :=
+        Natural'Value(To_String(Get_Path(RecruitModel, RecruitIter))) + 1;
+      HireRecruit(RecruitIndex);
+      Remove(-(RecruitModel), RecruitIter);
+      SetActiveRow;
+      ShowLastMessage;
+   end Hire;
 
    procedure CreateBasesUI is
       Error: aliased GError;
@@ -37,12 +182,28 @@ package body Bases.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
+      Register_Handler(Builder, "Hide_Base_Window", HideBaseWindow'Access);
+      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
+      Register_Handler(Builder, "Show_Recruit_Info", ShowRecruitInfo'Access);
+      Register_Handler(Builder, "Hire_Recruit", Hire'Access);
       Do_Connect(Builder);
    end CreateBasesUI;
 
    procedure ShowRecruitUI is
+      RecruitIter: Gtk_Tree_Iter;
+      RecruitList: Gtk_List_Store;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
+      RecruitList := Gtk_List_Store(Get_Object(Builder, "itemslist"));
+      Clear(RecruitList);
+      for Recruit of SkyBases(BaseIndex).Recruits loop
+         Append(RecruitList, RecruitIter);
+         Set(RecruitList, RecruitIter, 0, To_String(Recruit.Name));
+      end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "recruitwindow")));
+      SetActiveRow;
+      ShowLastMessage;
    end ShowRecruitUI;
 
 end Bases.UI;
