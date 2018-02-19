@@ -63,6 +63,7 @@ with Events; use Events;
 with Items; use Items;
 with Config; use Config;
 with Bases; use Bases;
+with Bases.UI; use Bases.UI;
 with Missions; use Missions;
 with Missions.UI; use Missions.UI;
 with Crafts; use Crafts;
@@ -1577,6 +1578,9 @@ package body Maps.UI is
                  .Data);
          end if;
          ShowTradeUI;
+      elsif User_Data = Get_Object(Builder, "btnrecruit") then
+         Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+         ShowRecruitUI;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
    end ShowInfo;
