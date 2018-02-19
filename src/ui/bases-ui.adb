@@ -176,12 +176,13 @@ package body Bases.UI is
    procedure ObjectSelected(Object: access Gtkada_Builder_Record'Class) is
       Iter: Gtk_Tree_Iter;
       Model: Gtk_Tree_Model;
-      ObjectIndex, Cost: Positive;
+      Cost: Positive;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       MoneyIndex2: Natural;
+      ObjectIndex: Integer;
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -191,15 +192,9 @@ package body Bases.UI is
       if Iter = Null_Iter then
          return;
       end if;
+      ObjectIndex := Integer(Get_Int(Model, Iter, 1));
       case CurrentState is
          when RECIPES =>
-            for I in Recipes_List.Iterate loop
-               if To_String(Items_List(Recipes_List(I).ResultIndex).Name) =
-                 Get_String(Model, Iter, 0) then
-                  ObjectIndex := Recipes_Container.To_Index(I);
-                  exit;
-               end if;
-            end loop;
             if Items_List(Recipes_List(ObjectIndex).ResultIndex).Prices
                 (BaseType) >
               0 then
@@ -255,13 +250,7 @@ package body Bases.UI is
       end if;
       case CurrentState is
          when RECIPES =>
-            for I in Recipes_List.Iterate loop
-               if To_String(Items_List(Recipes_List(I).ResultIndex).Name) =
-                 Get_String(Model, Iter, 0) then
-                  BuyRecipe(Recipes_Container.To_Index(I));
-                  exit;
-               end if;
-            end loop;
+            BuyRecipe(Positive(Get_Int(Model, Iter, 1)));
       end case;
       Remove(-(Model), Iter);
       SetActiveRow("treebases", "columnbases");
@@ -298,7 +287,7 @@ package body Bases.UI is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
-      RecruitList := Gtk_List_Store(Get_Object(Builder, "itemslist"));
+      RecruitList := Gtk_List_Store(Get_Object(Builder, "recruitlist"));
       Clear(RecruitList);
       for Recruit of SkyBases(BaseIndex).Recruits loop
          Append(RecruitList, RecruitIter);
@@ -329,6 +318,11 @@ package body Bases.UI is
                RecipesIter,
                0,
                To_String(Items_List(Recipes_List(I).ResultIndex).Name));
+            Set
+              (RecipesList,
+               RecipesIter,
+               1,
+               Gint(Recipes_Container.To_Index(I)));
          end if;
       end loop;
       Set_Label(Gtk_Button(Get_Object(Builder, "btnaccept")), "Buy recipe");
