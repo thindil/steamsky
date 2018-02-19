@@ -28,6 +28,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
+      <!-- column-name gint1 -->
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkWindow" id="basewindow">
@@ -195,9 +197,15 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
+  </object>
+  <object class="GtkListStore" id="recruitlist">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
   </object>
   <object class="GtkListStore" id="skillslist">
     <columns>
@@ -296,7 +304,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkTreeView" id="treerecruits">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="model">itemslist</property>
+                    <property name="model">recruitlist</property>
                     <property name="headers_visible">False</property>
                     <property name="headers_clickable">False</property>
                     <property name="search_column">0</property>
