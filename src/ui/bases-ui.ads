@@ -21,5 +21,6 @@ package Bases.UI is
    procedure ShowRecruitUI; -- Show interface for recruit new crew members
    procedure ShowBuyRecipesUI; -- Show interface for buying crafting recipes
    procedure ShowRepairUI; -- Show interface for buying ship repairs in bases
+   procedure ShowHealUI; -- Show interface for buying crew members healing in bases
 
 end Bases.UI;

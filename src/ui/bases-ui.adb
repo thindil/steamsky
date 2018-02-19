@@ -42,7 +42,7 @@ with Crafts; use Crafts;
 package body Bases.UI is
 
    Builder: Gtkada_Builder;
-   type States is (RECIPES, REPAIRS, CLEARING);
+   type States is (RECIPES, REPAIRS, HEAL, CLEARING);
    CurrentState: States;
 
    function HideBaseWindow
@@ -209,6 +209,12 @@ package body Bases.UI is
                CreateSkyMap;
                return;
             end if;
+         when HEAL =>
+            if N_Children(Model, Null_Iter) = 1 then
+               Hide(Gtk_Widget(Get_Object(Object, "basewindow")));
+               CreateSkyMap;
+               return;
+            end if;
          when CLEARING =>
             null;
       end case;
@@ -244,6 +250,18 @@ package body Bases.UI is
                To_String(MoneyName) &
                ASCII.LF &
                "Repair time:" &
+               Natural'Image(Time) &
+               " minutes");
+         when HEAL =>
+            HealCost(Cost, Time, ObjectIndex);
+            Set_Label
+              (Gtk_Label(Get_Object(Object, "lblinfo")),
+               "Heal cost:" &
+               Natural'Image(Cost) &
+               " " &
+               To_String(MoneyName) &
+               ASCII.LF &
+               "Heal time:" &
                Natural'Image(Time) &
                " minutes");
          when CLEARING =>
@@ -287,7 +305,9 @@ package body Bases.UI is
          when RECIPES =>
             BuyRecipe(Positive(Get_Int(Model, Iter, 1)));
          when REPAIRS =>
-            Bases.Ship.RepairShip(Integer((Get_Int(Model, Iter, 1))));
+            Bases.Ship.RepairShip(Integer(Get_Int(Model, Iter, 1)));
+         when HEAL =>
+            HealWounded(Natural(Get_Int(Model, Iter, 1)));
          when CLEARING =>
             null;
       end case;
@@ -411,10 +431,34 @@ package body Bases.UI is
          Set(RepairsList, RepairsIter, 0, "Fast repair whole ship");
          Set(RepairsList, RepairsIter, 1, -2);
       end if;
-      Set_Label(Gtk_Button(Get_Object(Builder, "btnaccept")), "Repair");
+      Set_Label(Gtk_Button(Get_Object(Builder, "btnaccept")), "Buy repairs");
       Show_All(Gtk_Widget(Get_Object(Builder, "basewindow")));
       SetActiveRow("treebases", "columnbases");
       ShowLastMessage("lbllastmessage1", "infolastmessage1");
    end ShowRepairUI;
+
+   procedure ShowHealUI is
+      HealsIter: Gtk_Tree_Iter;
+      HealsList: Gtk_List_Store;
+   begin
+      CurrentState := CLEARING;
+      HealsList := Gtk_List_Store(Get_Object(Builder, "itemslist"));
+      Clear(HealsList);
+      CurrentState := HEAL;
+      for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Crew(I).Health < 100 then
+            Append(HealsList, HealsIter);
+            Set(HealsList, HealsIter, 0, To_String(PlayerShip.Crew(I).Name));
+            Set(HealsList, HealsIter, 1, Gint(Crew_Container.To_Index(I)));
+         end if;
+      end loop;
+      Append(HealsList, HealsIter);
+      Set(HealsList, HealsIter, 0, "Heal all wounded crew members");
+      Set(HealsList, HealsIter, 1, 0);
+      Set_Label(Gtk_Button(Get_Object(Builder, "btnaccept")), "Buy healing");
+      Show_All(Gtk_Widget(Get_Object(Builder, "basewindow")));
+      SetActiveRow("treebases", "columnbases");
+      ShowLastMessage("lbllastmessage1", "infolastmessage1");
+   end ShowHealUI;
 
 end Bases.UI;
