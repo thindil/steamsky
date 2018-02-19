@@ -1075,5 +1075,14 @@ Prices = 35, 37, 37, 37
 Buyable = Y, N, N, N
 ShowType = Armor
 Value = 3, 25, 7
-Description = Standard type of armor, made of steel, weared on torso.
+Description = Standard type of armor, made of titanium, weared on torso.
+[127]
+Name = Titanium helmet
+Weight = 5
+Type = HeadArmor
+Prices = 24, 26, 26, 26
+Buyable = Y, N, N, N
+ShowType = Armor
+Value = 3, 13, 3
+Description = Standard type of armor, made of titanium, weared on head.
 []
