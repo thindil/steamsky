@@ -19,5 +19,6 @@ package Bases.UI is
 
    procedure CreateBasesUI; -- Create infterace for various bases options
    procedure ShowRecruitUI; -- Show interface for recruit new crew members
+   procedure ShowBuyRecipesUI; -- Show interface for buying crafting recipes
 
 end Bases.UI;
