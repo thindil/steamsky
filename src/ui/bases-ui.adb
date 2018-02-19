@@ -35,13 +35,14 @@ with Messages; use Messages;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
 with Items; use Items;
+with Bases.Ship; use Bases.Ship;
 with Bases.Trade; use Bases.Trade;
 with Crafts; use Crafts;
 
 package body Bases.UI is
 
    Builder: Gtkada_Builder;
-   type States is (RECIPES);
+   type States is (RECIPES, REPAIRS, CLEARING);
    CurrentState: States;
 
    function HideBaseWindow
@@ -176,7 +177,7 @@ package body Bases.UI is
    procedure ObjectSelected(Object: access Gtkada_Builder_Record'Class) is
       Iter: Gtk_Tree_Iter;
       Model: Gtk_Tree_Model;
-      Cost: Positive;
+      Cost, Time: Natural := 0;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
@@ -184,6 +185,9 @@ package body Bases.UI is
       MoneyIndex2: Natural;
       ObjectIndex: Integer;
    begin
+      if CurrentState = CLEARING then
+         return;
+      end if;
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treebases"))),
@@ -192,6 +196,22 @@ package body Bases.UI is
       if Iter = Null_Iter then
          return;
       end if;
+      case CurrentState is
+         when RECIPES =>
+            if N_Children(Model, Null_Iter) = 0 then
+               Hide(Gtk_Widget(Get_Object(Object, "basewindow")));
+               CreateSkyMap;
+               return;
+            end if;
+         when REPAIRS =>
+            if N_Children(Model, Null_Iter) = 3 then
+               Hide(Gtk_Widget(Get_Object(Object, "basewindow")));
+               CreateSkyMap;
+               return;
+            end if;
+         when CLEARING =>
+            null;
+      end case;
       ObjectIndex := Integer(Get_Int(Model, Iter, 1));
       case CurrentState is
          when RECIPES =>
@@ -213,6 +233,21 @@ package body Bases.UI is
                Positive'Image(Cost) &
                " " &
                To_String(MoneyName));
+         when REPAIRS =>
+            RepairCost(Cost, Time, ObjectIndex);
+            CountPrice(Cost, FindMember(Talk));
+            Set_Label
+              (Gtk_Label(Get_Object(Object, "lblinfo")),
+               "Repair cost:" &
+               Natural'Image(Cost) &
+               " " &
+               To_String(MoneyName) &
+               ASCII.LF &
+               "Repair time:" &
+               Natural'Image(Time) &
+               " minutes");
+         when CLEARING =>
+            null;
       end case;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if MoneyIndex2 > 0 then
@@ -251,6 +286,10 @@ package body Bases.UI is
       case CurrentState is
          when RECIPES =>
             BuyRecipe(Positive(Get_Int(Model, Iter, 1)));
+         when REPAIRS =>
+            Bases.Ship.RepairShip(Integer((Get_Int(Model, Iter, 1))));
+         when CLEARING =>
+            null;
       end case;
       Remove(-(Model), Iter);
       SetActiveRow("treebases", "columnbases");
@@ -306,8 +345,10 @@ package body Bases.UI is
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
    begin
+      CurrentState := CLEARING;
       RecipesList := Gtk_List_Store(Get_Object(Builder, "itemslist"));
       Clear(RecipesList);
+      CurrentState := RECIPES;
       for I in Recipes_List.Iterate loop
          if Recipes_List(I).BaseType = BaseType and
            Known_Recipes.Find_Index(Item => Recipes_Container.To_Index(I)) =
@@ -329,7 +370,51 @@ package body Bases.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "basewindow")));
       SetActiveRow("treebases", "columnbases");
       ShowLastMessage("lbllastmessage1", "infolastmessage1");
-      CurrentState := RECIPES;
    end ShowBuyRecipesUI;
+
+   procedure ShowRepairUI is
+      RepairsIter: Gtk_Tree_Iter;
+      RepairsList: Gtk_List_Store;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      CurrentState := CLEARING;
+      RepairsList := Gtk_List_Store(Get_Object(Builder, "itemslist"));
+      Clear(RepairsList);
+      CurrentState := REPAIRS;
+      for I in PlayerShip.Modules.Iterate loop
+         if PlayerShip.Modules(I).Durability <
+           PlayerShip.Modules(I).MaxDurability then
+            Append(RepairsList, RepairsIter);
+            Set
+              (RepairsList,
+               RepairsIter,
+               0,
+               To_String(PlayerShip.Modules(I).Name));
+            Set
+              (RepairsList,
+               RepairsIter,
+               1,
+               Gint(Modules_Container.To_Index(I)));
+         end if;
+      end loop;
+      Append(RepairsList, RepairsIter);
+      Set(RepairsList, RepairsIter, 0, "Slowly repair whole ship");
+      Set(RepairsList, RepairsIter, 1, 0);
+      if SkyBases(BaseIndex).Population > 149 then
+         Append(RepairsList, RepairsIter);
+         Set(RepairsList, RepairsIter, 0, "Repair whole ship");
+         Set(RepairsList, RepairsIter, 1, -1);
+      end if;
+      if SkyBases(BaseIndex).Population > 299 then
+         Append(RepairsList, RepairsIter);
+         Set(RepairsList, RepairsIter, 0, "Fast repair whole ship");
+         Set(RepairsList, RepairsIter, 1, -2);
+      end if;
+      Set_Label(Gtk_Button(Get_Object(Builder, "btnaccept")), "Repair");
+      Show_All(Gtk_Widget(Get_Object(Builder, "basewindow")));
+      SetActiveRow("treebases", "columnbases");
+      ShowLastMessage("lbllastmessage1", "infolastmessage1");
+   end ShowRepairUI;
 
 end Bases.UI;

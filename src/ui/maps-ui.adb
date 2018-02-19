@@ -1584,6 +1584,9 @@ package body Maps.UI is
       elsif User_Data = Get_Object(Builder, "btnrecipes") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowBuyRecipesUI;
+      elsif User_Data = Get_Object(Builder, "btnrepair") then
+         Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+         ShowRepairUI;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
    end ShowInfo;
