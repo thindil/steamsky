@@ -18,7 +18,8 @@ All notable changes to this project will be documented in this file.
   helmet
 - New crafting recipes: titanium 40mm ammo, titanium 60mm ammo, titanium 80mm
   ammo, titanium 100mm ammo, titanium 120mm ammo, titanium harpoon, titanium
-  short sword, titanium sword, titanium shield and titanium chestplate
+  short sword, titanium sword, titanium shield, titanium chestplate and
+  titanium helmet
 
 ### Changed
 - Updated README.md
