@@ -64,6 +64,7 @@ with Items; use Items;
 with Config; use Config;
 with Bases; use Bases;
 with Bases.UI; use Bases.UI;
+with Bases.SchoolUI; use Bases.SchoolUI;
 with Missions; use Missions;
 with Missions.UI; use Missions.UI;
 with Crafts; use Crafts;
@@ -1590,6 +1591,9 @@ package body Maps.UI is
       elsif User_Data = Get_Object(Builder, "btnheal") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowHealUI;
+      elsif User_Data = Get_Object(Builder, "btnschool") then
+         Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+         ShowSchoolUI;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
    end ShowInfo;
