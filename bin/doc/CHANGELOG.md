@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash in bases schools in small console
+
 ## [2.0.2] - 2018-02-18
 
 ### Fixed
