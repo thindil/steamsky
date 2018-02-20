@@ -28,6 +28,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
+      <!-- column-name guint1 -->
+      <column type="guint"/>
     </columns>
   </object>
   <object class="GtkListStore" id="removemodulelist">
@@ -41,6 +43,59 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
     </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Any</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Engines</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Cabins</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Cockpits</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Turrets</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Guns</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Cargo bays</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Hulls</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Armors</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Battering rams</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Alchemy labs</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Furnaces</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Water collectors</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Workshops</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Greenhouses</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Medical rooms</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Harpoon guns</col>
+      </row>
+    </data>
   </object>
   <object class="GtkWindow" id="shipyardwindow">
     <property name="can_focus">False</property>
@@ -125,17 +180,45 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkBox" id="scrollinstall">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkComboBox" id="cmbtypes">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="model">typeslist</property>
                     <child>
-                      <object class="GtkCellRendererText"/>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Show modules:</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="cmbtypes">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="model">typeslist</property>
+                        <property name="active">0</property>
+                        <signal name="changed" handler="Change_Type" swapped="no"/>
+                        <child>
+                          <object class="GtkCellRendererText"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -163,6 +246,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="headers_visible">False</property>
                             <property name="headers_clickable">False</property>
                             <property name="search_column">0</property>
+                            <signal name="cursor-changed" handler="Show_Install_Info" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection"/>
                             </child>
@@ -195,6 +279,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkLabel" id="lblinstallinfo">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="wrap">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -206,6 +291,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkLabel" id="lblmoneyinstall">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="wrap">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -219,6 +305,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <signal name="clicked" handler="Manipulate_Module" object="btninstall" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -351,7 +438,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>
