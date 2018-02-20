@@ -297,20 +297,203 @@ package body Bases.ShipyardUI is
       end if;
    end ShowInstallInfo;
 
+   procedure ShowRemoveInfo(Object: access Gtkada_Builder_Record'Class) is
+      ModulesIter: Gtk_Tree_Iter;
+      ModulesModel: Gtk_Tree_Model;
+      ModuleInfo, RemoveInfo: Unbounded_String;
+      Cost: Positive;
+      MAmount, MoneyIndex2, UsedSpace, AllSpace: Natural;
+      type DamageFactor is digits 2 range 0.0 .. 1.0;
+      Damage: DamageFactor := 0.0;
+   begin
+      Get_Selected
+        (Gtk.Tree_View.Get_Selection
+           (Gtk_Tree_View(Get_Object(Object, "treeremove"))),
+         ModulesModel,
+         ModulesIter);
+      if ModulesIter = Null_Iter then
+         return;
+      end if;
+      ModuleIndex := Positive(Get_Int(ModulesModel, ModulesIter, 1));
+      if ModuleIndex > Positive(PlayerShip.Modules.Length) then
+         return;
+      end if;
+      Damage :=
+        1.0 -
+        DamageFactor
+          (Float(PlayerShip.Modules(ModuleIndex).Durability) /
+           Float(PlayerShip.Modules(ModuleIndex).MaxDurability));
+      Cost :=
+        Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Price -
+        Integer
+          (Float
+             (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Price) *
+           Float(Damage));
+      CountPrice(Cost, FindMember(Talk), False);
+      ModuleInfo := To_Unbounded_String("Remove gain:" & Positive'Image(Cost));
+      Append
+        (ModuleInfo,
+         ASCII.LF &
+         "Removing time:" &
+         Positive'Image
+           (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+              .InstallTime) &
+         " minutes");
+      case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
+         when ENGINE =>
+            Append
+              (ModuleInfo,
+               ASCII.LF &
+               "Max power:" &
+               Positive'Image(PlayerShip.Modules(ModuleIndex).Data(2)));
+         when ShipModules.CARGO =>
+            Append
+              (ModuleInfo,
+               ASCII.LF &
+               "Max cargo:" &
+               Positive'Image(PlayerShip.Modules(ModuleIndex).Data(2)) &
+               " kg");
+         when CABIN =>
+            Append(ModuleInfo, ASCII.LF & "Quality: ");
+            if PlayerShip.Modules(ModuleIndex).Data(2) < 30 then
+               Append(ModuleInfo, "minimal");
+            elsif PlayerShip.Modules(ModuleIndex).Data(2) > 29 and
+              PlayerShip.Modules(ModuleIndex).Data(2) < 60 then
+               Append(ModuleInfo, "basic");
+            elsif PlayerShip.Modules(ModuleIndex).Data(2) > 59 and
+              PlayerShip.Modules(ModuleIndex).Data(2) < 80 then
+               Append(ModuleInfo, "extended");
+            else
+               Append(ModuleInfo, "luxury");
+            end if;
+         when GUN | HARPOON_GUN =>
+            Append(ModuleInfo, ASCII.LF & "Ammunition: ");
+            MAmount := 0;
+            for I in Items_List.First_Index .. Items_List.Last_Index loop
+               if Items_List(I).IType =
+                 Items_Types
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .Value) then
+                  if MAmount > 0 then
+                     Append(ModuleInfo, " or ");
+                  end if;
+                  Append(ModuleInfo, Items_List(I).Name);
+                  MAmount := MAmount + 1;
+               end if;
+            end loop;
+         when others =>
+            null;
+      end case;
+      if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size > 0 then
+         Append
+           (ModuleInfo,
+            ASCII.LF &
+            "Size:" &
+            Natural'Image
+              (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size));
+      end if;
+      if PlayerShip.Modules(ModuleIndex).Weight > 0 then
+         Append
+           (ModuleInfo,
+            ASCII.LF &
+            "Weight:" &
+            Natural'Image(PlayerShip.Modules(ModuleIndex).Weight) &
+            " kg");
+      end if;
+      if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+          .Description /=
+        Null_Unbounded_String then
+         Append
+           (ModuleInfo,
+            ASCII.LF &
+            ASCII.LF &
+            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+              .Description);
+      end if;
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblremoveinfo")),
+         To_String(ModuleInfo));
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      if MoneyIndex2 > 0 then
+         RemoveInfo :=
+           To_Unbounded_String
+             (ASCII.LF &
+              "You have" &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
+              " " &
+              To_String(MoneyName) &
+              ".");
+      else
+         RemoveInfo :=
+           To_Unbounded_String
+             (ASCII.LF &
+              "You don't have any " &
+              To_String(MoneyName) &
+              " to install anything.");
+      end if;
+      for Module of PlayerShip.Modules loop
+         if Modules_List(Module.ProtoIndex).MType = HULL then
+            UsedSpace := Module.Data(1);
+            AllSpace := Module.Data(2);
+            Append
+              (RemoveInfo,
+               ASCII.LF &
+               "You have used" &
+               Natural'Image(UsedSpace) &
+               " modules space from max" &
+               Natural'Image(AllSpace) &
+               " allowed.");
+            exit;
+         end if;
+      end loop;
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblmoneyremove")),
+         To_String(RemoveInfo));
+   end ShowRemoveInfo;
+
+   procedure SetRemoveModulesList is
+      ModulesList: Gtk_List_Store;
+      ModulesIter: Gtk_Tree_Iter;
+   begin
+      ModulesList := Gtk_List_Store(Get_Object(Builder, "removemodulelist"));
+      Clear(ModulesList);
+      for I in PlayerShip.Modules.Iterate loop
+         if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType /= HULL then
+            Append(ModulesList, ModulesIter);
+            Set
+              (ModulesList,
+               ModulesIter,
+               0,
+               To_String(PlayerShip.Modules(I).Name));
+            Set
+              (ModulesList,
+               ModulesIter,
+               1,
+               Gint(Modules_Container.To_Index(I)));
+         end if;
+      end loop;
+   end SetRemoveModulesList;
+
    procedure ManipulateModule(User_Data: access GObject_Record'Class) is
       Install: Boolean;
       ParentWindow: constant Gtk_Window :=
         Gtk_Window(Get_Object(Builder, "shipyardwindow"));
+      ModulesIter: Gtk_Tree_Iter;
+      ModulesModel: Gtk_Tree_Model;
    begin
       if User_Data = Get_Object(Builder, "btninstall") then
          Install := True;
       else
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Builder, "treeremove"))),
+            ModulesModel,
+            ModulesIter);
          Install := False;
       end if;
       Bases.Ship.UpgradeShip(Install, ModuleIndex);
-      if Install then
-         ShowInstallInfo(Builder);
-      end if;
+      SetRemoveModulesList;
+      ShowInstallInfo(Builder);
       ShowLastMessage;
    exception
       when Trade_No_Money =>
@@ -371,11 +554,13 @@ package body Bases.ShipyardUI is
       Register_Handler(Builder, "Change_Type", ChangeType'Access);
       Register_Handler(Builder, "Show_Install_Info", ShowInstallInfo'Access);
       Register_Handler(Builder, "Manipulate_Module", ManipulateModule'Access);
+      Register_Handler(Builder, "Show_Remove_Info", ShowRemoveInfo'Access);
       Do_Connect(Builder);
    end CreateBasesShipyardUI;
 
    procedure ShowShipyardUI is
    begin
+      SetRemoveModulesList;
       SetInstallModulesList(ANY);
       Show_All(Gtk_Widget(Get_Object(Builder, "shipyardwindow")));
       ShowLastMessage;

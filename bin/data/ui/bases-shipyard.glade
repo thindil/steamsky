@@ -36,6 +36,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
+      <!-- column-name guint1 -->
+      <column type="guint"/>
     </columns>
   </object>
   <object class="GtkListStore" id="typeslist">
@@ -352,6 +354,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="headers_visible">False</property>
                         <property name="headers_clickable">False</property>
                         <property name="search_column">0</property>
+                        <signal name="cursor-changed" handler="Show_Remove_Info" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -384,6 +387,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkLabel" id="lblremoveinfo">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="wrap">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -395,6 +399,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkLabel" id="lblmoneyremove">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="wrap">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -408,6 +413,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="Manipulate_Module" object="btnremove" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
