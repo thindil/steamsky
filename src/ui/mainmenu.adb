@@ -63,6 +63,7 @@ with Missions.UI; use Missions.UI;
 with Trades.UI; use Trades.UI;
 with Bases.UI; use Bases.UI;
 with Bases.SchoolUI; use Bases.SchoolUI;
+with Bases.ShipyardUI; use Bases.ShipyardUI;
 
 package body MainMenu is
 
@@ -317,6 +318,7 @@ package body MainMenu is
       CreateTradeUI;
       CreateBasesUI;
       CreateBasesSchoolUI;
+      CreateBasesShipyardUI;
       CreateSkyMap;
    end StartGame;
 
