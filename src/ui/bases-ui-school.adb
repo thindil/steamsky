@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -31,8 +31,7 @@ package body Bases.UI.School is
    procedure ShowSchoolInfo is
       InfoWindow, ClearWindow: Window;
       WindowWidth: Column_Position := (Columns / 2);
-      WindowHeight: constant Line_Position :=
-        Line_Position(Skills_List.Length) + 1;
+      WindowHeight: Line_Position := Line_Position(Skills_List.Length) + 1;
       Cost: Natural;
       CurrentLine: Line_Position := 1;
       NewWindowWidth: Column_Position;
@@ -71,6 +70,9 @@ package body Bases.UI.School is
       end loop;
       if WindowWidth > Columns / 2 then
          WindowWidth := Columns / 2;
+      end if;
+      if (WindowHeight + 6) > (Lines - 1) then
+         WindowHeight := Lines - 7;
       end if;
       Resize(InfoWindow, WindowHeight + 1, WindowWidth);
       WindowFrame(InfoWindow, 2, "Train cost");
