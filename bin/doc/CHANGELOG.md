@@ -14,8 +14,8 @@ All notable changes to this project will be documented in this file.
   and titanium 120mm gun
 - New items: titanium 40mm ammo, titanium 60mm ammo, titanium 80mm ammo,
   titanium 100mm ammo, titanium 120mm ammo, titanium harpoon, titanium short
-  sword, titanium sword, titanium shield, titanium chestplate and titanium
-  helmet
+  sword, titanium sword, titanium shield, titanium chestplate, titanium helmet
+  and titanium armsguard
 - New crafting recipes: titanium 40mm ammo, titanium 60mm ammo, titanium 80mm
   ammo, titanium 100mm ammo, titanium 120mm ammo, titanium harpoon, titanium
   short sword, titanium sword, titanium shield, titanium chestplate and
