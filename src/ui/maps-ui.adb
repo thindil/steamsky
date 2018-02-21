@@ -66,6 +66,7 @@ with Bases; use Bases;
 with Bases.UI; use Bases.UI;
 with Bases.SchoolUI; use Bases.SchoolUI;
 with Bases.ShipyardUI; use Bases.ShipyardUI;
+with Bases.LootUI; use Bases.LootUI;
 with Missions; use Missions;
 with Missions.UI; use Missions.UI;
 with Crafts; use Crafts;
@@ -1598,6 +1599,9 @@ package body Maps.UI is
       elsif User_Data = Get_Object(Builder, "btnshipyard") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowShipyardUI;
+      elsif User_Data = Get_Object(Builder, "btnloot") then
+         Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+         ShowLootUI;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
    end ShowInfo;
