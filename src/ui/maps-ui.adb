@@ -77,6 +77,7 @@ with Statistics.UI; use Statistics.UI;
 with MainMenu; use MainMenu;
 with Trades; use Trades;
 with Trades.UI; use Trades.UI;
+with Crafts.UI; use Crafts.UI;
 
 package body Maps.UI is
 
@@ -1602,6 +1603,8 @@ package body Maps.UI is
       elsif User_Data = Get_Object(Builder, "btnloot") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowLootUI;
+      elsif User_Data = Get_Object(Builder, "menucrafting") then
+         ShowCraftsUI;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
    end ShowInfo;
