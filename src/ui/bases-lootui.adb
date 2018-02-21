@@ -27,6 +27,7 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -76,7 +77,7 @@ package body Bases.LootUI is
       ItemsIter: Gtk_Tree_Iter;
       ItemsModel: Gtk_Tree_Model;
       ItemInfo: Unbounded_String;
-      Amount, ProtoIndex: Positive;
+      Amount, ProtoIndex: Natural;
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -164,7 +165,9 @@ package body Bases.LootUI is
          end if;
       end if;
       if BaseCargoIndex > 0 then
-         Append(ItemInfo, ASCII.LF & "In base:" & Positive'Image(Amount));
+         if SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
+            Append(ItemInfo, ASCII.LF & "In base:" & Positive'Image(Amount));
+         end if;
       end if;
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Append
@@ -179,7 +182,7 @@ package body Bases.LootUI is
       end if;
       if BaseCargoIndex = 0 then
          Set_Visible(Gtk_Widget(Get_Object(Object, "btntake")), False);
-      else
+      elsif SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
          Set_Visible(Gtk_Widget(Get_Object(Object, "btntake")), True);
       end if;
       FreeSpace := FreeCargo(0);
@@ -236,6 +239,104 @@ package body Bases.LootUI is
       Show_All(Gtk_Widget(Get_Object(Builder, "lootitemwindow")));
    end ShowLootItem;
 
+   procedure LootItem(User_Data: access GObject_Record'Class) is
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      Amount, ProtoIndex: Positive;
+      CargoIndex, BaseCargoIndex: Natural := 0;
+      ItemsIter: Gtk_Tree_Iter;
+      ItemsModel: Gtk_Tree_Model;
+   begin
+      Get_Selected
+        (Gtk.Tree_View.Get_Selection
+           (Gtk_Tree_View(Get_Object(Builder, "treeitems"))),
+         ItemsModel,
+         ItemsIter);
+      if ItemsIter = Null_Iter then
+         return;
+      end if;
+      CargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 1));
+      BaseCargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 2));
+      if CargoIndex > 0 then
+         ProtoIndex := PlayerShip.Cargo(CargoIndex).ProtoIndex;
+      else
+         ProtoIndex := SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
+      end if;
+      if Get_Label(Gtk_Button(User_Data)) = "Take all" then
+         Amount := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
+      elsif Get_Label(Gtk_Button(User_Data)) = "Drop all" then
+         Amount := PlayerShip.Cargo(CargoIndex).Amount;
+      else
+         Amount :=
+           Positive
+             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "amountadj"))));
+      end if;
+      if Get_Label(Gtk_Button(User_Data)) = "Drop all" or
+        Get_Label(Gtk_Button(User_Data)) = "Drop item" then
+         if BaseCargoIndex > 0 then
+            UpdateBaseCargo
+              (CargoIndex => BaseCargoIndex,
+               Amount => Amount,
+               Durability => PlayerShip.Cargo.Element(CargoIndex).Durability);
+         else
+            UpdateBaseCargo
+              (ProtoIndex,
+               Amount,
+               PlayerShip.Cargo.Element(CargoIndex).Durability);
+         end if;
+         UpdateCargo
+           (Ship => PlayerShip,
+            CargoIndex => CargoIndex,
+            Amount => (0 - Amount),
+            Durability => PlayerShip.Cargo.Element(CargoIndex).Durability);
+         AddMessage
+           ("You drop" &
+            Positive'Image(Amount) &
+            " " &
+            To_String(Items_List(ProtoIndex).Name) &
+            ".",
+            OrderMessage);
+      else
+         if FreeCargo(0 - (Amount * Items_List(ProtoIndex).Weight)) < 0 then
+            ShowDialog
+              ("You can't take that much " &
+               To_String(Items_List(ProtoIndex).Name) &
+               ".",
+               Gtk_Window(Get_Object(Builder, "lootitemwindow")));
+            return;
+         end if;
+         if CargoIndex > 0 then
+            UpdateCargo
+              (Ship => PlayerShip,
+               CargoIndex => CargoIndex,
+               Amount => Amount,
+               Durability =>
+                 SkyBases(BaseIndex).Cargo(BaseCargoIndex).Durability);
+         else
+            UpdateCargo
+              (PlayerShip,
+               ProtoIndex,
+               Amount,
+               SkyBases(BaseIndex).Cargo(BaseCargoIndex).Durability);
+         end if;
+         UpdateBaseCargo
+           (CargoIndex => BaseCargoIndex,
+            Amount => (0 - Amount),
+            Durability =>
+              SkyBases(BaseIndex).Cargo.Element(BaseCargoIndex).Durability);
+         AddMessage
+           ("You took" &
+            Positive'Image(Amount) &
+            " " &
+            To_String(Items_List(ProtoIndex).Name) &
+            ".",
+            OrderMessage);
+      end if;
+      UpdateGame(10);
+      Hide(Gtk_Widget(Get_Object(Builder, "lootitemwindow")));
+      ShowLootUI;
+   end LootItem;
+
    procedure CreateBasesLootUI is
       Error: aliased GError;
    begin
@@ -267,6 +368,7 @@ package body Bases.LootUI is
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
       Register_Handler(Builder, "Show_Loot_Item", ShowLootItem'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
+      Register_Handler(Builder, "Loot_Item", LootItem'Access);
       Do_Connect(Builder);
    end CreateBasesLootUI;
 
@@ -309,9 +411,7 @@ package body Bases.LootUI is
       for I in
         SkyBases(BaseIndex).Cargo.First_Index ..
             SkyBases(BaseIndex).Cargo.Last_Index loop
-         if IndexesList.Find_Index(Item => I) = 0 and
-           Items_List(SkyBases(BaseIndex).Cargo(I).ProtoIndex).Buyable
-             (BaseType) then
+         if IndexesList.Find_Index(Item => I) = 0 then
             Append(ItemsList, ItemsIter);
             Set
               (ItemsList,
