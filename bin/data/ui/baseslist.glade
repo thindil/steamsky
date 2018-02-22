@@ -244,6 +244,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="Show_Base" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -257,24 +258,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="Set_Destination" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="btnhelp">
-                    <property name="label" translatable="yes">Help</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
                   </packing>
                 </child>
               </object>
