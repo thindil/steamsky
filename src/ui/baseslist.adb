@@ -28,17 +28,21 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Label; use Gtk.Label;
+with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
 with Bases; use Bases;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
+with Ships; use Ships;
+with Utils.UI; use Utils.UI;
 
 package body BasesList is
 
    Builder: Gtkada_Builder;
    SettingTime: Boolean;
+   BaseIndex: Positive;
 
    function HideBasesList
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
@@ -130,7 +134,6 @@ package body BasesList is
       BasesIter: Gtk_Tree_Iter;
       BasesModel: Gtk_Tree_Model;
       BaseInfo: Unbounded_String;
-      BaseIndex: Positive;
       TimeDiff: Integer;
    begin
       Get_Selected
@@ -256,6 +259,32 @@ package body BasesList is
       Set_Label(Gtk_Label(Get_Object(Object, "lblinfo")), To_String(BaseInfo));
    end ShowBaseInfo;
 
+   procedure SetDestination(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      if SkyBases(BaseIndex).SkyX = PlayerShip.SkyX and
+        SkyBases(BaseIndex).SkyY = PlayerShip.SkyY then
+         ShowDialog
+           ("You are at this base now.",
+            Gtk_Window(Get_Object(Object, "baseslistwindow")));
+         return;
+      end if;
+      PlayerShip.DestinationX := SkyBases(BaseIndex).SkyX;
+      PlayerShip.DestinationY := SkyBases(BaseIndex).SkyY;
+      AddMessage
+        ("You set base " &
+         To_String(SkyBases(BaseIndex).Name) &
+         " as a destination for your ship.",
+         OrderMessage);
+      Hide(Gtk_Widget(Get_Object(Object, "baseslistwindow")));
+      CreateSkyMap;
+   end SetDestination;
+
+   procedure ShowBase(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Hide(Gtk_Widget(Get_Object(Object, "baseslistwindow")));
+      CreateSkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
+   end ShowBase;
+
    procedure CreateBasesListUI is
       Error: aliased GError;
       Iter: Gtk_Tree_Iter;
@@ -276,6 +305,8 @@ package body BasesList is
       Register_Handler(Builder, "Hide_Bases_List", HideBasesList'Access);
       Register_Handler(Builder, "Refresh_Bases_List", RefreshBasesList'Access);
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
+      Register_Handler(Builder, "Set_Destination", SetDestination'Access);
+      Register_Handler(Builder, "Show_Base", ShowBase'Access);
       Do_Connect(Builder);
       List := Gtk_List_Store(Get_Object(Builder, "typeslist"));
       for I in Bases_Types loop
