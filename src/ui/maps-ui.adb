@@ -78,6 +78,7 @@ with MainMenu; use MainMenu;
 with Trades; use Trades;
 with Trades.UI; use Trades.UI;
 with Crafts.UI; use Crafts.UI;
+with BasesList; use BasesList;
 
 package body Maps.UI is
 
@@ -1605,6 +1606,8 @@ package body Maps.UI is
          ShowLootUI;
       elsif User_Data = Get_Object(Builder, "menucrafting") then
          ShowCraftsUI;
+      elsif User_Data = Get_Object(Builder, "menubaseslist") then
+         ShowBasesListUI;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
    end ShowInfo;
