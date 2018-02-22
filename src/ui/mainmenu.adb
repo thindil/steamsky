@@ -67,6 +67,7 @@ with Bases.ShipyardUI; use Bases.ShipyardUI;
 with Bases.LootUI; use Bases.LootUI;
 with Crafts.UI; use Crafts.UI;
 with BasesList; use BasesList;
+with Events.UI; use Events.UI;
 
 package body MainMenu is
 
@@ -325,6 +326,7 @@ package body MainMenu is
       CreateBasesLootUI;
       CreateCraftsUI;
       CreateBasesListUI;
+      CreateEventsUI;
       CreateSkyMap;
    end StartGame;
 
