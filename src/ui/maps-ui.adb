@@ -60,6 +60,7 @@ with Crew; use Crew;
 with Crew.UI; use Crew.UI;
 with ShipModules; use ShipModules;
 with Events; use Events;
+with Events.UI; use Events.UI;
 with Items; use Items;
 with Config; use Config;
 with Bases; use Bases;
@@ -1608,6 +1609,8 @@ package body Maps.UI is
          ShowCraftsUI;
       elsif User_Data = Get_Object(Builder, "menubaseslist") then
          ShowBasesListUI;
+      elsif User_Data = Get_Object(Builder, "menuevents") then
+         ShowEventsUI;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
    end ShowInfo;
