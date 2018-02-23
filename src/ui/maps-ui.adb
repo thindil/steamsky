@@ -80,6 +80,7 @@ with Trades; use Trades;
 with Trades.UI; use Trades.UI;
 with Crafts.UI; use Crafts.UI;
 with BasesList; use BasesList;
+with GameOptions; use GameOptions;
 
 package body Maps.UI is
 
@@ -1611,6 +1612,8 @@ package body Maps.UI is
          ShowBasesListUI;
       elsif User_Data = Get_Object(Builder, "menuevents") then
          ShowEventsUI;
+      elsif User_Data = Get_Object(Builder, "menuoptions") then
+         ShowGameOptions;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
    end ShowInfo;
