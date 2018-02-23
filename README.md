@@ -20,64 +20,59 @@ At this moment are available 2 game versions:
 
 To build it, you need:
 
-* compiler - GCC with enabled Ada support or GNAT from: 
+* compiler - GCC with enabled Ada support or (best option) GNAT from: 
   
   https://www.adacore.com/download/
 
-  At this moment tested compilers (all on Linux) are GCC 7.2 and GNAT GPL 2017.
+  At this moment tested compiler (on Linux) is GNAT GPL 2017.
   Game not works with old compilers (like GCC 4.9) due to lack of full support
   for Ada 2012.
 
-* GtkAda library which should be available in most Linux distributions. If not,
-  you can download source code from:
-
+* GtkAda library which should be available in most Linux distributions. Best
+  option is to use (with GNAT GPL) AdaCore version of GtkAda from:
+  
   https://www.adacore.com/download/more
 
   At this moment tested version of GtkAda is 2017 and game require GTK library
   in version 3.14 or above.
 
-* optional, but highly recommended:  gprbuild program - should be available in 
-  most distributions, if not, download source code from: 
-  
-  https://www.adacore.com/download/more
-
-
 If you have all, in main source code directory (where this file is):
 
-* Best option, is to use build.sh script. It can detect did you have gprbuild
-  installed and use it or gnatmake automatically. Additionally, it can fix
-  *steamsky.gpr* file automatically. This is recommended option for first time
-  build. Type `./build.sh` for debug build or `./build.sh release` for release
-  version.
+* Easiest way to compile game is use Gnat Programming Studio included in GNAT. 
+  Just run GPS, select *steamsky.gpr* as a project file and select option `Build
+  All`.
 
-* if you don't have gprbuild: type `gnatmake -P steamsky.gpr` for debug build 
-  or for release version: `gnatmake -P steamsky.gpr -XMode=release`
+* If you prefer console, best option, is to use build.sh script. It can detect 
+  did you have gprbuild installed and use it or gnatmake automatically. 
+  Additionally, it can fix *steamsky.gpr* file automatically. This is recommended 
+  option for first time build. Type `./build.sh` for debug build or `./build.sh 
+  release` for release version.
 
 * if you have gprbuild: type `gprbuild` for debug mode build or for release 
   mode: `gprbuild -XMode=release`
 
 
 ## Running game
-If you use downloaded binaries, you need only Gtk library to run game, which 
-should be available in all Linux distributions. Type in terminal where game 
-is `./steamsky` or run it from file manager.
+If you use downloaded binaries, you don't need any additional libraries. Just
+in terminal, run `steamsky.sh` script to start game. This script should works
+too if you use binaries compiled by self.
 
 ### Starting parameters
 You can set game directories by starting parameters. Possible options are:
 
 * --datadir=[directory] set directory where all game data files (and
-  directories like ships, items, etc.) are. Example: `./steamsky
+  directories like ships, items, etc.) are. Example: `./steamsky.sh
   --datadir=/home/user/game/tmp`. Default value is *data/*
 
 * --savedir=[directory] set directory where game (or logs) will be saved. Game
-  must have write permission to this directory. Example: `./steamsky
+  must have write permission to this directory. Example: `./steamsky.sh
   --savedir=/home/user/.saves`. Default value is *data/*
 
 * --docdir=[directory] set directory where game documentation is (at this
-  moment important only for license and changelog files). Example `./steamsky
+  moment important only for license and changelog files). Example `./steamsky.sh
   --docdir=/usr/share/steamsky/doc`. Default value is *doc/*.
 
-Of course, you can set all parameters together: `./steamsky --datadir=somedir/
+Of course, you can set all parameters together: `./steamsky.sh --datadir=somedir/
 --savedir=otherdir/ --docdir=anotherdir/`
 
 Paths to directories can be absolute or relative where file `steamsky` is. 
