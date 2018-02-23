@@ -42,14 +42,8 @@ If you have all, in main source code directory (where this file is):
   Just run GPS, select *steamsky.gpr* as a project file and select option `Build
   All`.
 
-* If you prefer console, best option, is to use build.sh script. It can detect 
-  did you have gprbuild installed and use it or gnatmake automatically. 
-  Additionally, it can fix *steamsky.gpr* file automatically. This is recommended 
-  option for first time build. Type `./build.sh` for debug build or `./build.sh 
-  release` for release version.
-
-* if you have gprbuild: type `gprbuild` for debug mode build or for release 
-  mode: `gprbuild -XMode=release`
+* If you prefer using console: in main source code directory type `gprbuild` 
+  for debug mode build or for release mode: `gprbuild -XMode=release`
 
 
 ## Running game
