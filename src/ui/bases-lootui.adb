@@ -54,12 +54,6 @@ package body Bases.LootUI is
       return True;
    end HideLoot;
 
-   procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "infolastmessage")));
-      LastMessage := Null_Unbounded_String;
-   end HideLastMessage;
-
    procedure ShowLastMessage is
    begin
       if LastMessage = Null_Unbounded_String then

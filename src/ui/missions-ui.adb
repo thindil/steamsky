@@ -54,12 +54,6 @@ package body Missions.UI is
       return Hide_On_Delete(Gtk_Widget(User_Data));
    end HideMissions;
 
-   procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "infolastmessage")));
-      LastMessage := Null_Unbounded_String;
-   end HideLastMessage;
-
    procedure ShowLastMessage is
    begin
       if LastMessage = Null_Unbounded_String then

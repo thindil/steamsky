@@ -873,13 +873,6 @@ package body Maps.UI is
       UpdateMessages;
    end SetDestination;
 
-   procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "infolastmessage")));
-      LastMessage := Null_Unbounded_String;
-      Check_Resize(Gtk_Container(Get_Object(Object, "skymapwindow")));
-   end HideLastMessage;
-
    procedure MoveMap(User_Data: access GObject_Record'Class) is
    begin
       if User_Data = Get_Object(Builder, "btncenter") then
