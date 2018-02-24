@@ -33,6 +33,7 @@ with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
 with Bases; use Bases;
+with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Ships; use Ships;
@@ -256,6 +257,15 @@ package body BasesList is
       else
          BaseInfo := To_Unbounded_String("Not visited yet.");
       end if;
+      Append
+        (BaseInfo,
+         ASCII.LF &
+         "Distance:" &
+         Integer'Image
+           (Integer
+              (CountDistance
+                 (SkyBases(BaseIndex).SkyX,
+                  SkyBases(BaseIndex).SkyY))));
       Set_Label(Gtk_Label(Get_Object(Object, "lblinfo")), To_String(BaseInfo));
    end ShowBaseInfo;
 
