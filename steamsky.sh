@@ -5,7 +5,7 @@ prefix=`dirname $0`
 # like 5.10 do have it). So we also try the shell's built-in
 prefix=`cd $prefix; /bin/pwd -P 2>/dev/null || pwd -P`
 
-if [ -d "$DIRECTORY" ]; then
+if [ -d lib ]; then
    env="PATH=\"$prefix/bin:\$PATH\";
    LD_LIBRARY_PATH=\"$prefix/lib:\$LD_LIBRARY_PATH\";
    PKG_CONFIG_PATH=\"$prefix/lib/pkgconfig:/usr/lib64/pkgconfig\";
