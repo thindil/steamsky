@@ -15,11 +15,13 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Widget; use Gtk.Widget;
 with MainMenu; use MainMenu;
 with Game; use Game;
+with Messages; use Messages;
 
 package body Utils.UI is
 
@@ -78,5 +80,11 @@ package body Utils.UI is
       end if;
       return True;
    end QuitGame;
+
+   procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Hide(Gtk_Widget(Get_Object(Object, "infolastmessage")));
+      LastMessage := Null_Unbounded_String;
+   end HideLastMessage;
 
 end Utils.UI;

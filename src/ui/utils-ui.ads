@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Window; use Gtk.Window;
 with Glib.Object; use Glib.Object;
 
@@ -37,5 +38,7 @@ package Utils.UI is
    function QuitGame
      (User_Data: access GObject_Record'Class)
      return Boolean; -- Save and quit from game
+   procedure HideLastMessage
+     (Object: access Gtkada_Builder_Record'Class); -- Hide last message window
 
 end Utils.UI;
