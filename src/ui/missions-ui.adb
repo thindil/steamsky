@@ -54,19 +54,6 @@ package body Missions.UI is
       return Hide_On_Delete(Gtk_Widget(User_Data));
    end HideMissions;
 
-   procedure ShowLastMessage is
-   begin
-      if LastMessage = Null_Unbounded_String then
-         HideLastMessage(Builder);
-      else
-         Set_Text
-           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
-            To_String(LastMessage));
-         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
-         LastMessage := Null_Unbounded_String;
-      end if;
-   end ShowLastMessage;
-
    procedure ShowMissionInfo(User_Data: access GObject_Record'Class) is
       MissionsIter: Gtk_Tree_Iter;
       MissionsModel: Gtk_Tree_Model;
@@ -289,7 +276,7 @@ package body Missions.UI is
          Gtk_Tree_Path_New_From_String("0"),
          Gtk_Tree_View_Column(Get_Object(Builder, "columnmission")),
          False);
-      ShowLastMessage;
+      ShowLastMessage(Object);
    exception
       when An_Exception : Missions_Accepting_Error =>
          ShowDialog
@@ -385,7 +372,7 @@ package body Missions.UI is
          Gtk_Tree_Path_New_From_String("0"),
          Gtk_Tree_View_Column(Get_Object(Builder, "columnmission")),
          False);
-      ShowLastMessage;
+      ShowLastMessage(Builder);
    end ShowMissionsUI;
 
    procedure ShowAcceptedMissions is

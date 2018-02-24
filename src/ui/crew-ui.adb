@@ -640,19 +640,6 @@ package body Crew.UI is
       end loop;
    end RefreshCrewInfo;
 
-   procedure ShowLastMessage is
-   begin
-      if LastMessage = Null_Unbounded_String then
-         HideLastMessage(Builder);
-      else
-         Set_Text
-           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
-            To_String(LastMessage));
-         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
-         LastMessage := Null_Unbounded_String;
-      end if;
-   end ShowLastMessage;
-
    procedure SetActiveMember is
    begin
       Set_Cursor
@@ -677,7 +664,7 @@ package body Crew.UI is
          Crew_Orders'Val(Get_Int(List, New_Iter, 1)),
          Natural(Get_Int(List, New_Iter, 2)));
       RefreshCrewInfo;
-      ShowLastMessage;
+      ShowLastMessage(Builder);
       ShowOrdersForAll;
    end GiveCrewOrders;
 
@@ -773,7 +760,7 @@ package body Crew.UI is
       UpdateOrders(PlayerShip);
       Hide(Gtk_Widget(Get_Object(Builder, "prioritieswindow")));
       RefreshCrewInfo;
-      ShowLastMessage;
+      ShowLastMessage(Object);
       ShowOrdersForAll;
    end SetPriorities;
 
@@ -792,7 +779,7 @@ package body Crew.UI is
          DeleteMember(MemberIndex, PlayerShip);
          SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
          RefreshCrewInfo;
-         ShowLastMessage;
+         ShowLastMessage(Object);
          ShowOrdersForAll;
          SetActiveMember;
       end if;
@@ -857,7 +844,7 @@ package body Crew.UI is
       RefreshCrewInfo;
       GameState := OldState;
       Show_All(Gtk_Widget(Get_Object(Builder, "crewwindow")));
-      ShowLastMessage;
+      ShowLastMessage(Builder);
       SetActiveMember;
       ShowOrdersForAll;
    end ShowCrewUI;
