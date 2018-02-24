@@ -54,19 +54,6 @@ package body Bases.LootUI is
       return True;
    end HideLoot;
 
-   procedure ShowLastMessage is
-   begin
-      if LastMessage = Null_Unbounded_String then
-         HideLastMessage(Builder);
-      else
-         Set_Text
-           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
-            To_String(LastMessage));
-         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
-         LastMessage := Null_Unbounded_String;
-      end if;
-   end ShowLastMessage;
-
    procedure ShowItemInfo(Object: access Gtkada_Builder_Record'Class) is
       ItemsIter: Gtk_Tree_Iter;
       ItemsModel: Gtk_Tree_Model;
@@ -423,7 +410,7 @@ package body Bases.LootUI is
          Gtk_Tree_Path_New_From_String("0"),
          Gtk_Tree_View_Column(Get_Object(Builder, "columnname")),
          False);
-      ShowLastMessage;
+      ShowLastMessage(Builder);
    end ShowLootUI;
 
 end Bases.LootUI;

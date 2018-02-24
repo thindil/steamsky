@@ -39,7 +39,6 @@ with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Events; use Events;
-with Messages; use Messages;
 with Items; use Items;
 with Bases.Cargo; use Bases.Cargo;
 with Help.UI; use Help.UI;
@@ -63,19 +62,6 @@ package body Trades.UI is
       CreateSkyMap;
       return True;
    end HideTrade;
-
-   procedure ShowLastMessage is
-   begin
-      if LastMessage = Null_Unbounded_String then
-         HideLastMessage(Builder);
-      else
-         Set_Text
-           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
-            To_String(LastMessage));
-         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
-         LastMessage := Null_Unbounded_String;
-      end if;
-   end ShowLastMessage;
 
    procedure ShowItemInfo(Object: access Gtkada_Builder_Record'Class) is
       ItemsIter: Gtk_Tree_Iter;
@@ -602,7 +588,7 @@ package body Trades.UI is
          Gtk_Tree_Path_New_From_String("0"),
          Gtk_Tree_View_Column(Get_Object(Builder, "columnname")),
          False);
-      ShowLastMessage;
+      ShowLastMessage(Builder);
    end ShowTradeUI;
 
 end Trades.UI;
