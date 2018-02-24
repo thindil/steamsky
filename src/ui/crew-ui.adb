@@ -354,12 +354,6 @@ package body Crew.UI is
       end if;
    end GiveOrdersAll;
 
-   procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "infolastmessage")));
-      LastMessage := Null_Unbounded_String;
-   end HideLastMessage;
-
    procedure RefreshInventory is
       InventoryIter: Gtk_Tree_Iter;
       InventoryList: Gtk_List_Store;
