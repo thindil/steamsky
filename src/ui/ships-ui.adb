@@ -66,19 +66,6 @@ package body Ships.UI is
       return True;
    end HideShipInfo;
 
-   procedure ShowLastMessage is
-   begin
-      if LastMessage = Null_Unbounded_String then
-         HideLastMessage(Builder);
-      else
-         Set_Text
-           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
-            To_String(LastMessage));
-         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
-         LastMessage := Null_Unbounded_String;
-      end if;
-   end ShowLastMessage;
-
    procedure ShowModuleInfo(Object: access Gtkada_Builder_Record'Class) is
       ModulesIter: Gtk_Tree_Iter;
       ModulesModel: Gtk_Tree_Model;
@@ -779,7 +766,7 @@ package body Ships.UI is
       StartUpgrading(ModuleIndex, UpgradeType);
       UpdateOrders(PlayerShip);
       Hide(Gtk_Widget(Get_Object(Builder, "optionswindow")));
-      ShowLastMessage;
+      ShowLastMessage(Builder);
       ShowShipInfo;
       ShowModuleInfo(Builder);
    end SetUpgrade;
@@ -865,7 +852,7 @@ package body Ships.UI is
       end loop;
       Hide(Gtk_Widget(Get_Object(Object, "optionswindow")));
       AddMessage("You stopped current upgrade.", OrderMessage);
-      ShowLastMessage;
+      ShowLastMessage(Object);
       ShowShipInfo;
       ShowModuleInfo(Object);
    end StopUpgrading;
@@ -884,7 +871,7 @@ package body Ships.UI is
          AddMessage("You removed repair priority.", OrderMessage);
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "optionswindow")));
-      ShowLastMessage;
+      ShowLastMessage(Builder);
       ShowShipInfo;
       ShowModuleInfo(Builder);
    end SetRepair;
@@ -941,7 +928,7 @@ package body Ships.UI is
       end if;
       Hide(Gtk_Widget(Get_Object(Object, "assignwindow")));
       Hide(Gtk_Widget(Get_Object(Object, "optionswindow")));
-      ShowLastMessage;
+      ShowLastMessage(Object);
       ShowShipInfo;
       ShowModuleInfo(Object);
    end Assign;
@@ -1009,7 +996,7 @@ package body Ships.UI is
          Gtk_Tree_Path_New_From_String("0"),
          Gtk_Tree_View_Column(Get_Object(Builder, "columnmodule")),
          False);
-      ShowLastMessage;
+      ShowLastMessage(Builder);
       ShowShipInfo;
    end ShowShipUI;
 

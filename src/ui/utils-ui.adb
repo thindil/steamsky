@@ -19,6 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Widget; use Gtk.Widget;
+with Gtk.Label; use Gtk.Label;
 with MainMenu; use MainMenu;
 with Game; use Game;
 with Messages; use Messages;
@@ -86,5 +87,18 @@ package body Utils.UI is
       Hide(Gtk_Widget(Get_Object(Object, "infolastmessage")));
       LastMessage := Null_Unbounded_String;
    end HideLastMessage;
+
+   procedure ShowLastMessage(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      if LastMessage = Null_Unbounded_String then
+         HideLastMessage(Object);
+      else
+         Set_Text
+           (Gtk_Label(Get_Object(Object, "lbllastmessage")),
+            To_String(LastMessage));
+         Show_All(Gtk_Widget(Get_Object(Object, "infolastmessage")));
+         LastMessage := Null_Unbounded_String;
+      end if;
+   end ShowLastMessage;
 
 end Utils.UI;

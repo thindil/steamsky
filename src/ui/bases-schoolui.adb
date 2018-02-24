@@ -19,7 +19,6 @@ with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
-with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_View; use Gtk.Tree_View;
@@ -29,7 +28,6 @@ with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Maps.UI; use Maps.UI;
-with Messages; use Messages;
 with Ships; use Ships;
 with Bases.Trade; use Bases.Trade;
 with Utils.UI; use Utils.UI;
@@ -47,19 +45,6 @@ package body Bases.SchoolUI is
       CreateSkyMap;
       return True;
    end HideSchool;
-
-   procedure ShowLastMessage is
-   begin
-      if LastMessage = Null_Unbounded_String then
-         HideLastMessage(Builder);
-      else
-         Set_Text
-           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
-            To_String(LastMessage));
-         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
-         LastMessage := Null_Unbounded_String;
-      end if;
-   end ShowLastMessage;
 
    procedure ShowTrainInfo(Object: access Gtkada_Builder_Record'Class) is
       CrewIter, SkillsIter: Gtk_Tree_Iter;
@@ -119,7 +104,7 @@ package body Bases.SchoolUI is
         Gtk_Window(Get_Object(Object, "schoolwindow"));
    begin
       TrainSkill(CrewIndex, SkillIndex);
-      ShowLastMessage;
+      ShowLastMessage(Object);
       ShowTrainInfo(Object);
       SetTrainButton(Object);
    exception
@@ -179,7 +164,7 @@ package body Bases.SchoolUI is
          Set(CrewList, CrewIter, 0, To_String(Member.Name));
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "schoolwindow")));
-      ShowLastMessage;
+      ShowLastMessage(Builder);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treecrew")),
          Gtk_Tree_Path_New_From_String("0"),

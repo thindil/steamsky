@@ -38,6 +38,7 @@ with Items; use Items;
 with Bases.Ship; use Bases.Ship;
 with Bases.Trade; use Bases.Trade;
 with Crafts; use Crafts;
+with Utils.UI; use Utils.UI;
 
 package body Bases.UI is
 
@@ -53,24 +54,24 @@ package body Bases.UI is
       return True;
    end HideBaseWindow;
 
-   procedure HideLastMessage(User_Data: access GObject_Record'Class) is
+   procedure HideLastMessage2(User_Data: access GObject_Record'Class) is
    begin
       Hide(Gtk_Widget(User_Data));
       LastMessage := Null_Unbounded_String;
-   end HideLastMessage;
+   end HideLastMessage2;
 
-   procedure ShowLastMessage(LabelName, WidgetName: String) is
+   procedure ShowLastMessage2 is
    begin
       if LastMessage = Null_Unbounded_String then
-         HideLastMessage(Get_Object(Builder, WidgetName));
+         HideLastMessage2(Get_Object(Builder, "infolastmessage1"));
       else
          Set_Text
-           (Gtk_Label(Get_Object(Builder, LabelName)),
+           (Gtk_Label(Get_Object(Builder, "lbllastmessage1")),
             To_String(LastMessage));
-         Show_All(Gtk_Widget(Get_Object(Builder, WidgetName)));
+         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage1")));
          LastMessage := Null_Unbounded_String;
       end if;
-   end ShowLastMessage;
+   end ShowLastMessage2;
 
    procedure ShowRecruitInfo(Object: access Gtkada_Builder_Record'Class) is
       RecruitIter, Iter: Gtk_Tree_Iter;
@@ -171,7 +172,7 @@ package body Bases.UI is
       HireRecruit(RecruitIndex);
       Remove(-(RecruitModel), RecruitIter);
       SetActiveRow("treerecruits", "columnname");
-      ShowLastMessage("lbllastmessage", "infolastmessage");
+      ShowLastMessage(Object);
    end Hire;
 
    procedure ObjectSelected(Object: access Gtkada_Builder_Record'Class) is
@@ -313,7 +314,7 @@ package body Bases.UI is
       end case;
       Remove(-(Model), Iter);
       SetActiveRow("treebases", "columnbases");
-      ShowLastMessage("lbllastmessage1", "infolastmessage1");
+      ShowLastMessage2;
    end AcceptAction;
 
    procedure CreateBasesUI is
@@ -332,7 +333,7 @@ package body Bases.UI is
          return;
       end if;
       Register_Handler(Builder, "Hide_Base_Window", HideBaseWindow'Access);
-      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
+      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage2'Access);
       Register_Handler(Builder, "Show_Recruit_Info", ShowRecruitInfo'Access);
       Register_Handler(Builder, "Hire_Recruit", Hire'Access);
       Register_Handler(Builder, "Object_Selected", ObjectSelected'Access);
@@ -354,7 +355,7 @@ package body Bases.UI is
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "recruitwindow")));
       SetActiveRow("treerecruits", "columnname");
-      ShowLastMessage("lbllastmessage", "infolastmessage");
+      ShowLastMessage(Builder);
    end ShowRecruitUI;
 
    procedure ShowBuyRecipesUI is
@@ -389,7 +390,7 @@ package body Bases.UI is
       Set_Label(Gtk_Button(Get_Object(Builder, "btnaccept")), "Buy recipe");
       Show_All(Gtk_Widget(Get_Object(Builder, "basewindow")));
       SetActiveRow("treebases", "columnbases");
-      ShowLastMessage("lbllastmessage1", "infolastmessage1");
+      ShowLastMessage2;
    end ShowBuyRecipesUI;
 
    procedure ShowRepairUI is
@@ -434,7 +435,7 @@ package body Bases.UI is
       Set_Label(Gtk_Button(Get_Object(Builder, "btnaccept")), "Buy repairs");
       Show_All(Gtk_Widget(Get_Object(Builder, "basewindow")));
       SetActiveRow("treebases", "columnbases");
-      ShowLastMessage("lbllastmessage1", "infolastmessage1");
+      ShowLastMessage2;
    end ShowRepairUI;
 
    procedure ShowHealUI is
@@ -458,7 +459,7 @@ package body Bases.UI is
       Set_Label(Gtk_Button(Get_Object(Builder, "btnaccept")), "Buy healing");
       Show_All(Gtk_Widget(Get_Object(Builder, "basewindow")));
       SetActiveRow("treebases", "columnbases");
-      ShowLastMessage("lbllastmessage1", "infolastmessage1");
+      ShowLastMessage2;
    end ShowHealUI;
 
 end Bases.UI;

@@ -33,7 +33,6 @@ with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
-with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
@@ -54,19 +53,6 @@ package body Bases.ShipyardUI is
       CreateSkyMap;
       return True;
    end HideShipyard;
-
-   procedure ShowLastMessage is
-   begin
-      if LastMessage = Null_Unbounded_String then
-         HideLastMessage(Builder);
-      else
-         Set_Text
-           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
-            To_String(LastMessage));
-         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
-         LastMessage := Null_Unbounded_String;
-      end if;
-   end ShowLastMessage;
 
    procedure SetInstallModulesList(ShowType: ModuleType) is
       ModulesList: Gtk_List_Store;
@@ -488,7 +474,7 @@ package body Bases.ShipyardUI is
       Bases.Ship.UpgradeShip(Install, ModuleIndex);
       SetRemoveModulesList;
       ShowInstallInfo(Builder);
-      ShowLastMessage;
+      ShowLastMessage(Builder);
    exception
       when Trade_No_Money =>
          ShowDialog
@@ -557,7 +543,7 @@ package body Bases.ShipyardUI is
       SetRemoveModulesList;
       SetInstallModulesList(ANY);
       Show_All(Gtk_Widget(Get_Object(Builder, "shipyardwindow")));
-      ShowLastMessage;
+      ShowLastMessage(Builder);
       SetActiveModule("treeinstall", "columnname");
       SetActiveModule("treeremove", "columnname1");
    end ShowShipyardUI;

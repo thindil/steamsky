@@ -40,5 +40,7 @@ package Utils.UI is
      return Boolean; -- Save and quit from game
    procedure HideLastMessage
      (Object: access Gtkada_Builder_Record'Class); -- Hide last message window
+   procedure ShowLastMessage
+     (Object: access Gtkada_Builder_Record'Class); -- Show last message window
 
 end Utils.UI;
