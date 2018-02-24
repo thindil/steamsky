@@ -426,6 +426,9 @@ package body MainMenu is
       if not Exists(To_String(SaveDirectory) & "savegame.dat") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
       end if;
+      if not Exists(To_String(DataDirectory) & "halloffame.dat") then
+         Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
+      end if;
    end ShowMainMenu;
 
    procedure On_Exception(An_Exception: Exception_Occurrence) is
