@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Renamed all cabins to small cabins
 - Updated help
+- User Interface from console to graphical
 
 ### Fixed
 - Typos in old changelog files
