@@ -202,27 +202,17 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="model">damagelist</property>
                     <property name="headers_visible">False</property>
                     <child internal-child="selection">
-                      <object class="GtkTreeSelection"/>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn">
-                        <property name="title" translatable="yes">column</property>
-                        <child>
-                          <object class="GtkCellRendererText"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
+                      <object class="GtkTreeSelection">
+                        <property name="mode">none</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn">
                         <property name="title" translatable="yes">column</property>
                         <child>
-                          <object class="GtkCellRendererProgress">
-                            <property name="text"> </property>
-                          </object>
+                          <object class="GtkCellRendererProgress"/>
                           <attributes>
+                            <attribute name="text">0</attribute>
                             <attribute name="value">1</attribute>
                           </attributes>
                         </child>
@@ -504,7 +494,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="headers_visible">False</property>
                 <property name="headers_clickable">False</property>
                 <child internal-child="selection">
-                  <object class="GtkTreeSelection"/>
+                  <object class="GtkTreeSelection">
+                    <property name="mode">none</property>
+                  </object>
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn">
