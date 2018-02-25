@@ -38,8 +38,6 @@ with Glib.Properties; use Glib.Properties;
 with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with Maps; use Maps;
-with Maps.UI; use Maps.UI;
-with Combat.UI; use Combat.UI;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
 with Ships.Cargo; use Ships.Cargo;
@@ -52,23 +50,7 @@ with Bases; use Bases;
 package body Crew.UI is
 
    Builder: Gtkada_Builder;
-   GameState: GameStates;
    MemberIndex, ItemIndex: Positive;
-
-   function HideCrewInfo
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "crewwindow")));
-      case GameState is
-         when SkyMap_View =>
-            CreateSkyMap;
-         when Combat_View =>
-            ShowCombatUI;
-         when others =>
-            null;
-      end case;
-      return True;
-   end HideCrewInfo;
 
    procedure SetOrdersList is
       OrdersModel: Glib.Types.GType_Interface;
@@ -816,7 +798,7 @@ package body Crew.UI is
         (Gtk_Widget(Get_Object(Builder, "lbliteminfo")),
          0,
          White_RGBA);
-      Register_Handler(Builder, "Hide_Crew_Info", HideCrewInfo'Access);
+      Register_Handler(Builder, "Hide_Ship_Info", HideShipInfo'Access);
       Register_Handler(Builder, "Show_Member_Info", ShowMemberInfo'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
@@ -842,7 +824,7 @@ package body Crew.UI is
    procedure ShowCrewUI(OldState: GameStates) is
    begin
       RefreshCrewInfo;
-      GameState := OldState;
+      PreviousGameState := OldState;
       Show_All(Gtk_Widget(Get_Object(Builder, "crewwindow")));
       ShowLastMessage(Builder);
       SetActiveMember;

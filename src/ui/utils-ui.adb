@@ -23,6 +23,8 @@ with Gtk.Label; use Gtk.Label;
 with MainMenu; use MainMenu;
 with Game; use Game;
 with Messages; use Messages;
+with Maps.UI; use Maps.UI;
+with Combat.UI; use Combat.UI;
 
 package body Utils.UI is
 
@@ -100,5 +102,20 @@ package body Utils.UI is
          LastMessage := Null_Unbounded_String;
       end if;
    end ShowLastMessage;
+
+   function HideShipInfo
+     (User_Data: access GObject_Record'Class) return Boolean is
+   begin
+      Hide(Gtk_Widget(User_Data));
+      case PreviousGameState is
+         when SkyMap_View =>
+            CreateSkyMap;
+         when Combat_View =>
+            ShowCombatUI;
+         when others =>
+            null;
+      end case;
+      return True;
+   end HideShipInfo;
 
 end Utils.UI;

@@ -31,31 +31,13 @@ with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Gdk.RGBA; use Gdk.RGBA;
-with Maps.UI; use Maps.UI;
-with Combat.UI; use Combat.UI;
 with Messages; use Messages;
 with Crew.Inventory; use Crew.Inventory;
 
 package body Ships.Cargo.UI is
 
    Builder: Gtkada_Builder;
-   GameState: GameStates;
    ItemIndex: Positive;
-
-   function HideCargoInfo
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "cargowindow")));
-      case GameState is
-         when SkyMap_View =>
-            CreateSkyMap;
-         when Combat_View =>
-            ShowCombatUI;
-         when others =>
-            null;
-      end case;
-      return True;
-   end HideCargoInfo;
 
    procedure RefreshCargoInfo is
       CargoIter: Gtk_Tree_Iter;
@@ -297,7 +279,7 @@ package body Ships.Cargo.UI is
         (Gtk_Widget(Get_Object(Builder, "lblinfo")),
          0,
          White_RGBA);
-      Register_Handler(Builder, "Hide_Cargo_Info", HideCargoInfo'Access);
+      Register_Handler(Builder, "Hide_Ship_Info", HideShipInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
@@ -311,7 +293,7 @@ package body Ships.Cargo.UI is
    procedure ShowCargoUI(OldState: GameStates) is
    begin
       RefreshCargoInfo;
-      GameState := OldState;
+      PreviousGameState := OldState;
       Show_All(Gtk_Widget(Get_Object(Builder, "cargowindow")));
       ShowLastMessage(Builder);
       SetActiveItem;
