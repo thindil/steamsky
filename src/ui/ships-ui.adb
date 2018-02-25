@@ -35,8 +35,6 @@ with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Gdk.RGBA; use Gdk.RGBA;
 with Maps; use Maps;
-with Maps.UI; use Maps.UI;
-with Combat.UI; use Combat.UI;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Crafts; use Crafts;
@@ -47,24 +45,8 @@ with Ships.Crew; use Ships.Crew;
 package body Ships.UI is
 
    Builder: Gtkada_Builder;
-   GameState: GameStates;
    ModuleIndex: Positive;
    AssignAmmo: Boolean;
-
-   function HideShipInfo
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "shipwindow")));
-      case GameState is
-         when SkyMap_View =>
-            CreateSkyMap;
-         when Combat_View =>
-            ShowCombatUI;
-         when others =>
-            null;
-      end case;
-      return True;
-   end HideShipInfo;
 
    procedure ShowModuleInfo(Object: access Gtkada_Builder_Record'Class) is
       ModulesIter: Gtk_Tree_Iter;
@@ -983,7 +965,7 @@ package body Ships.UI is
       ModulesIter: Gtk_Tree_Iter;
       ModulesList: Gtk_List_Store;
    begin
-      GameState := OldState;
+      PreviousGameState := OldState;
       ModulesList := Gtk_List_Store(Get_Object(Builder, "moduleslist"));
       Clear(ModulesList);
       for Module of PlayerShip.Modules loop

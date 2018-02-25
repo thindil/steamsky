@@ -28,28 +28,10 @@ with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
-with Maps.UI; use Maps.UI;
-with Combat.UI; use Combat.UI;
 
 package body Messages.UI is
 
    Builder: Gtkada_Builder;
-   GameState: GameStates;
-
-   function HideMessages
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "messageswindow")));
-      case GameState is
-         when SkyMap_View =>
-            CreateSkyMap;
-         when Combat_View =>
-            ShowCombatUI;
-         when others =>
-            null;
-      end case;
-      return True;
-   end HideMessages;
 
    procedure ShowMessages(MessagesType: Message_Type) is
       MessagesBuffer: constant Gtk_Text_Buffer :=
@@ -130,7 +112,7 @@ package body Messages.UI is
         (Gtk_Widget(Get_Object(Builder, "messagesview")),
          0,
          White_RGBA);
-      Register_Handler(Builder, "Hide_Window", HideMessages'Access);
+      Register_Handler(Builder, "Hide_Ship_Info", HideShipInfo'Access);
       Register_Handler(Builder, "Select_Messages", SelectMessages'Access);
       Register_Handler(Builder, "Delete_Messages", DeleteMessages'Access);
       Do_Connect(Builder);
@@ -138,7 +120,7 @@ package body Messages.UI is
 
    procedure ShowMessagesUI(OldState: GameStates) is
    begin
-      GameState := OldState;
+      PreviousGameState := OldState;
       ShowMessages(Default);
       Show_All(Gtk_Widget(Get_Object(Builder, "messageswindow")));
    end ShowMessagesUI;

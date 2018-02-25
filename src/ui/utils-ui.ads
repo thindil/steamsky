@@ -22,6 +22,7 @@ with Glib.Object; use Glib.Object;
 package Utils.UI is
 
    type GameStates is (SkyMap_View, Combat_View, Main_Menu); -- Game states
+   PreviousGameState: GameStates; -- Current game state, needed for hide some windows
 
    procedure ShowDialog
      (Message: String;
@@ -42,5 +43,8 @@ package Utils.UI is
      (Object: access Gtkada_Builder_Record'Class); -- Hide last message window
    procedure ShowLastMessage
      (Object: access Gtkada_Builder_Record'Class); -- Show last message window
+   function HideShipInfo
+     (User_Data: access GObject_Record'Class)
+     return Boolean; -- Hide info window and back to sky map/combat
 
 end Utils.UI;
