@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.1] - 2018-02-25
 
 ### Added
 - New ship modules: titanium armor, heavy titanium armor, titanium turret,
