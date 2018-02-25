@@ -25,6 +25,7 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Label; use Gtk.Label;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Maps.UI; use Maps.UI;
@@ -32,6 +33,7 @@ with Ships; use Ships;
 with Bases.Trade; use Bases.Trade;
 with Utils.UI; use Utils.UI;
 with Trades; use Trades;
+with Items; use Items;
 
 package body Bases.SchoolUI is
 
@@ -50,6 +52,7 @@ package body Bases.SchoolUI is
       CrewIter, SkillsIter: Gtk_Tree_Iter;
       CrewModel: Gtk_Tree_Model;
       SkillsList: Gtk_List_Store;
+      MoneyIndex2: Natural;
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -71,6 +74,22 @@ package body Bases.SchoolUI is
             1,
             Gint(TrainCost(CrewIndex, SkillsData_Container.To_Index(I))));
       end loop;
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      if MoneyIndex2 > 0 then
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lblmoney")),
+            "You have" &
+            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
+            " " &
+            To_String(MoneyName) &
+            ".");
+      else
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lblmoney")),
+            "You don't have any " &
+            To_String(MoneyName) &
+            " to pay for learning.");
+      end if;
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treeskills")),
          Gtk_Tree_Path_New_From_String("0"),
