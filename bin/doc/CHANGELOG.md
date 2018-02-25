@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
   ammo, titanium 100mm ammo, titanium 120mm ammo, titanium harpoon, titanium
   short sword, titanium sword, titanium shield, titanium chestplate, titanium
   helmet, titanium armsguard and titanium legsguard
+- New enemy ship: pirate ship mk IV
 
 ### Changed
 - Updated README.md
