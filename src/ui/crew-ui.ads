@@ -16,11 +16,24 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Utils.UI; use Utils.UI;
+with Gtkada.Builder; use Gtkada.Builder;
 
 package Crew.UI is
 
    procedure CreateCrewUI; -- Create infterace for show player ship crew info
    procedure ShowCrewUI
      (OldState: GameStates); -- Show interface for show player ship crew info
+
+private
+
+   Builder: Gtkada_Builder; -- Gtk builder for user interface
+   MemberIndex,
+   ItemIndex: Positive; -- Crew member and item from inventory indexes
+   procedure SetOrdersList; -- Set orders for selected crew member
+   procedure ShowOrdersForAll; -- Show list of orders for all crew members
+   procedure RefreshInventory; -- Refresh informations about selected crew member inventory
+   procedure SetActiveItem; -- Set active item in inventory list
+   procedure RefreshCrewInfo; -- Refresh crew list
+   procedure SetActiveMember; -- Set active crew member in crew list
 
 end Crew.UI;
