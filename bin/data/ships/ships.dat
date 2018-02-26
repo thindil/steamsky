@@ -1196,4 +1196,13 @@ Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x117, 150..200x116, 75..1
 Description = Standard pirate vessel (upgraded version). As many pirates they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 12, 2x13, 14, 3..5x57
+[127]
+Name = Armored pirate ship mk IV
+Modules = 135, 143, 134, 8x149, 130, 4x132, 2x145, 160, 129
+CombatAI = Disarmer
+Loot = 150..300
+Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x117, 100..200x116, 100..150x64
+Description = Armored version of pirate ship (upgraded version). As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
+Crew = 16, 2x17, 18, 3..5x58
 []
