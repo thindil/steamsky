@@ -46,5 +46,6 @@ package Utils.UI is
    function HideShipInfo
      (User_Data: access GObject_Record'Class)
      return Boolean; -- Hide info window and back to sky map/combat
+   function HideInfo(User_Data: access GObject_Record'Class) return Boolean; -- Hide info window and back to sky map
 
 end Utils.UI;

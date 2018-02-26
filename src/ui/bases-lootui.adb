@@ -34,7 +34,6 @@ with Glib.Object; use Glib.Object;
 with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with Maps; use Maps;
-with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
@@ -45,14 +44,6 @@ with Utils.UI; use Utils.UI;
 package body Bases.LootUI is
 
    Builder: Gtkada_Builder;
-
-   function HideLoot
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "lootwindow")));
-      CreateSkyMap;
-      return True;
-   end HideLoot;
 
    procedure ShowItemInfo(Object: access Gtkada_Builder_Record'Class) is
       ItemsIter: Gtk_Tree_Iter;
@@ -344,7 +335,7 @@ package body Bases.LootUI is
         (Gtk_Widget(Get_Object(Builder, "lblinfo")),
          0,
          White_RGBA);
-      Register_Handler(Builder, "Hide_Loot", HideLoot'Access);
+      Register_Handler(Builder, "Hide_Loot", HideInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
       Register_Handler(Builder, "Show_Loot_Item", ShowLootItem'Access);

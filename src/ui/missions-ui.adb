@@ -47,13 +47,6 @@ package body Missions.UI is
    Builder: Gtkada_Builder;
    MissionIndex: Positive;
 
-   function HideMissions
-     (User_Data: access GObject_Record'Class) return Boolean is
-   begin
-      CreateSkyMap;
-      return Hide_On_Delete(Gtk_Widget(User_Data));
-   end HideMissions;
-
    procedure ShowMissionInfo(User_Data: access GObject_Record'Class) is
       MissionsIter: Gtk_Tree_Iter;
       MissionsModel: Gtk_Tree_Model;
@@ -328,7 +321,7 @@ package body Missions.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Register_Handler(Builder, "Hide_Missions", HideMissions'Access);
+      Register_Handler(Builder, "Hide_Missions", HideInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Mission_Info", ShowMissionInfo'Access);
       Register_Handler(Builder, "Button_Mission", ButtonMission'Access);
