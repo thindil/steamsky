@@ -43,14 +43,6 @@ package body Events.UI is
    Builder: Gtkada_Builder;
    EventIndex: Positive;
 
-   function HideEvents
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "eventswindow")));
-      CreateSkyMap;
-      return True;
-   end HideEvents;
-
    procedure ShowEventInfo(Object: access Gtkada_Builder_Record'Class) is
       EventsIter: Gtk_Tree_Iter;
       EventsModel: Gtk_Tree_Model;
@@ -149,7 +141,7 @@ package body Events.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Register_Handler(Builder, "Hide_Events", HideEvents'Access);
+      Register_Handler(Builder, "Hide_Events", HideInfo'Access);
       Register_Handler(Builder, "Show_Event_Info", ShowEventInfo'Access);
       Register_Handler(Builder, "Set_Destination", SetDestination'Access);
       Register_Handler(Builder, "Show_Event", ShowEvent'Access);

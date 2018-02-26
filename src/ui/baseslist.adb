@@ -45,14 +45,6 @@ package body BasesList is
    SettingTime: Boolean;
    BaseIndex: Positive;
 
-   function HideBasesList
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "baseslistwindow")));
-      CreateSkyMap;
-      return True;
-   end HideBasesList;
-
    procedure RefreshBasesList(Object: access Gtkada_Builder_Record'Class) is
       BaseIter: Gtk_Tree_Iter;
       BaseList: Gtk_List_Store;
@@ -312,7 +304,7 @@ package body BasesList is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Register_Handler(Builder, "Hide_Bases_List", HideBasesList'Access);
+      Register_Handler(Builder, "Hide_Bases_List", HideInfo'Access);
       Register_Handler(Builder, "Refresh_Bases_List", RefreshBasesList'Access);
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
       Register_Handler(Builder, "Set_Destination", SetDestination'Access);
