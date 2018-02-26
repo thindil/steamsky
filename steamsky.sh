@@ -5,9 +5,8 @@ prefix=`dirname $0`
 # like 5.10 do have it). So we also try the shell's built-in
 prefix=`cd $prefix; /bin/pwd -P 2>/dev/null || pwd -P`
 
-if [ -d lib ]; then
-   env="PATH=\"$prefix/bin:\$PATH\";
-   LD_LIBRARY_PATH=\"$prefix/lib:\$LD_LIBRARY_PATH\";
+if [ -d "$prefix/lib" ]; then
+   env="LD_LIBRARY_PATH=\"$prefix/lib:\$LD_LIBRARY_PATH\";
    PKG_CONFIG_PATH=\"$prefix/lib/pkgconfig:/usr/lib64/pkgconfig\";
    PKG_CONFIG_PATH=\"\$PKG_CONFIG_PATH:/usr/lib/pkgconfig:/usr/share/pkgconfig\";
    GDK_PIXBUF_MODULE_FILE=\"$prefix/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache\";
@@ -17,7 +16,7 @@ if [ -d lib ]; then
    XDG_CONFIG_DIRS=\"$prefix/etc\";
    GSETTINGS_BACKEND=memory;
    GLADE_BASE_DIR=\"$prefix\";
-   export PATH LD_LIBRARY_PATH PKG_CONFIG_PATH GDK_PIXBUF_MODULEDIR;
+   export LD_LIBRARY_PATH PKG_CONFIG_PATH GDK_PIXBUF_MODULEDIR;
    export GDK_PIXBUF_MODULE_FILE FONTCONFIG_FILE XDG_DATA_DIRS;
    export GLADE_BASE_DIR GSETTINGS_BACKEND"
 else
@@ -25,4 +24,4 @@ else
 fi
 
 eval "$env"
-exec bin/steamsky "$@"
+exec "$prefix/bin/steamsky" "$@"
