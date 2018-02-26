@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New enemy ship: armored pirate ship mk IV
+
 ## [2.1] - 2018-02-25
 
 ### Added
