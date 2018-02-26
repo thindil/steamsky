@@ -33,7 +33,6 @@ with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
-with Maps.UI; use Maps.UI;
 with Help.UI; use Help.UI;
 with Ships; use Ships;
 with Items; use Items;
@@ -44,14 +43,6 @@ package body Crafts.UI is
 
    Builder: Gtkada_Builder;
    RecipeIndex: Integer;
-
-   function HideCrafts
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "craftswindow")));
-      CreateSkyMap;
-      return True;
-   end HideCrafts;
 
    procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
@@ -314,7 +305,7 @@ package body Crafts.UI is
         (Gtk_Widget(Get_Object(Builder, "lblinfo")),
          0,
          White_RGBA);
-      Register_Handler(Builder, "Hide_Crafts", HideCrafts'Access);
+      Register_Handler(Builder, "Hide_Crafts", HideInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
       Register_Handler(Builder, "Show_Recipe_Info", ShowRecipeInfo'Access);

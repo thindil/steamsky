@@ -46,14 +46,6 @@ package body Bases.UI is
    type States is (RECIPES, REPAIRS, HEAL, CLEARING);
    CurrentState: States;
 
-   function HideBaseWindow
-     (User_Data: access GObject_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(User_Data));
-      CreateSkyMap;
-      return True;
-   end HideBaseWindow;
-
    procedure HideLastMessage2(User_Data: access GObject_Record'Class) is
    begin
       Hide(Gtk_Widget(User_Data));
@@ -332,7 +324,7 @@ package body Bases.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Register_Handler(Builder, "Hide_Base_Window", HideBaseWindow'Access);
+      Register_Handler(Builder, "Hide_Base_Window", HideInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage2'Access);
       Register_Handler(Builder, "Show_Recruit_Info", ShowRecruitInfo'Access);
       Register_Handler(Builder, "Hire_Recruit", Hire'Access);

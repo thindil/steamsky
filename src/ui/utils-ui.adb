@@ -118,4 +118,11 @@ package body Utils.UI is
       return True;
    end HideShipInfo;
 
+   function HideInfo(User_Data: access GObject_Record'Class) return Boolean is
+   begin
+      Hide(Gtk_Widget(User_Data));
+      CreateSkyMap;
+      return True;
+   end HideInfo;
+
 end Utils.UI;

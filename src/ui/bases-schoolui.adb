@@ -28,7 +28,6 @@ with Gtk.Window; use Gtk.Window;
 with Gtk.Label; use Gtk.Label;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
-with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Bases.Trade; use Bases.Trade;
 with Utils.UI; use Utils.UI;
@@ -39,14 +38,6 @@ package body Bases.SchoolUI is
 
    Builder: Gtkada_Builder;
    CrewIndex, SkillIndex: Positive;
-
-   function HideSchool
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "schoolwindow")));
-      CreateSkyMap;
-      return True;
-   end HideSchool;
 
    procedure ShowTrainInfo(Object: access Gtkada_Builder_Record'Class) is
       CrewIter, SkillsIter: Gtk_Tree_Iter;
@@ -161,7 +152,7 @@ package body Bases.SchoolUI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Register_Handler(Builder, "Hide_School", HideSchool'Access);
+      Register_Handler(Builder, "Hide_School", HideInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Train_Info", ShowTrainInfo'Access);
       Register_Handler(Builder, "Set_Train_Button", SetTrainButton'Access);

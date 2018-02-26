@@ -32,7 +32,6 @@ with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
-with Maps.UI; use Maps.UI;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
@@ -45,14 +44,6 @@ package body Bases.ShipyardUI is
 
    Builder: Gtkada_Builder;
    ModuleIndex: Positive;
-
-   function HideShipyard
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "shipyardwindow")));
-      CreateSkyMap;
-      return True;
-   end HideShipyard;
 
    procedure SetInstallModulesList(ShowType: ModuleType) is
       ModulesList: Gtk_List_Store;
@@ -529,7 +520,7 @@ package body Bases.ShipyardUI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Register_Handler(Builder, "Hide_Shipyard", HideShipyard'Access);
+      Register_Handler(Builder, "Hide_Shipyard", HideInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Change_Type", ChangeType'Access);
       Register_Handler(Builder, "Show_Install_Info", ShowInstallInfo'Access);
