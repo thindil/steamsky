@@ -15,6 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Gtkada.Builder; use Gtkada.Builder;
+with Gtk.Widget; use Gtk.Widget;
 with Ships; use Ships;
 
 package Maps.UI is
@@ -23,4 +25,29 @@ package Maps.UI is
      (X: Integer := PlayerShip.SkyX;
       Y: Integer := PlayerShip.SkyY); -- Create and show sky map
 
+private
+
+   Builder: Gtkada_Builder; -- Gtk builder for user interface
+   MapWidth,
+   MapHeight,
+   CenterX,
+   CenterY,
+   MapCellWidth,
+   MapCellHeight,
+   MapX,
+   MapY: Positive;
+   StartX, StartY: Integer;
+   ButtonsVisible: Boolean := False;
+
+   procedure DeathConfirm; -- Show confirmation to show game stats when player died
+   procedure UpdateHeader; -- Update game header informations
+   procedure UpdateMoveButtons; -- Update move buttons
+   procedure UpdateMenu; -- Update wait menu
+   procedure DrawMap; -- Draw sky map
+   procedure UpdateMessages; -- Update game messages and last message
+   procedure HideButtons
+     (Widget: not null access Gtk_Widget_Record'Class); -- Hide selected button
+   procedure CheckButtons
+     (Widget: not null access Gtk_Widget_Record'
+        Class); -- Check selected button
 end Maps.UI;
