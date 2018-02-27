@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New enemy ships: armored pirate ship mk IV and attacking clockwork drone mk
   IV
+- Keyboard shortcuts for ship movement
 
 ### Fixed
 - Movement buttons after set destination for ship
