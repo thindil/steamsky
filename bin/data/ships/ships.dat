@@ -1205,4 +1205,15 @@ Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x117, 100..200x116, 100..
 Description = Armored version of pirate ship (upgraded version). As many pirates they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 16, 2x17, 18, 3..5x58
+[128]
+Name = Attacking clockwork drone mk IV
+Modules = 135, 134, 2x132, 133, 97, 49
+Accuracy = 5..10
+CombatAI = Berserker
+Evasion = 5..10
+Loot = 10..100
+Perception = 10..20
+Cargo = 800..1000x1, 100..500x23
+Description = Standard, very aggresive, upgraded version of clockwork drone.
+Owner = Drones
 []
