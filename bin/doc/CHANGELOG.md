@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - New enemy ships: armored pirate ship mk IV and attacking clockwork drone mk
   IV
 
+### Fixed
+- Movement buttons after set destination for ship
+
 ## [2.1] - 2018-02-25
 
 ### Added
