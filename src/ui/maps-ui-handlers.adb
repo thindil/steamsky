@@ -373,8 +373,8 @@ package body Maps.UI.Handlers is
    procedure MoveShip(User_Data: access GObject_Record'Class) is
       Message: Unbounded_String;
       Result: Natural;
-      StartsCombat: Boolean;
-      NewX, NewY: Integer;
+      StartsCombat: Boolean := False;
+      NewX, NewY: Integer := 0;
    begin
       if User_Data = Get_Object(Builder, "btnup") then -- Move up
          Result := MoveShip(0, 0, -1, Message);
