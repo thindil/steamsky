@@ -371,6 +371,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <object class="GtkTextBuffer" id="txtmessages">
     <property name="tag_table">messagestags</property>
   </object>
+  <object class="GtkAccelGroup" id="movementaccels"/>
   <object class="GtkListStore" id="speedlist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -396,6 +397,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="window_position">center</property>
     <property name="default_width">800</property>
     <property name="default_height">600</property>
+    <accel-groups>
+      <group name="movementaccels"/>
+    </accel-groups>
     <signal name="check-resize" handler="Get_New_Size" swapped="no"/>
     <signal name="delete-event" handler="Quit_Game" object="skymapwindow" swapped="no"/>
     <child>
@@ -737,12 +741,14 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">never</property>
                 <property name="shadow_type">in</property>
                 <child>
                   <object class="GtkTextView" id="messagesview">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="editable">False</property>
+                    <property name="wrap_mode">word</property>
                     <property name="cursor_visible">False</property>
                     <property name="buffer">txtmessages</property>
                   </object>
@@ -800,10 +806,18 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnmoveto">
-                        <property name="label" translatable="yes">Move to</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="Move_Ship" object="btnmoveto" swapped="no"/>
+                        <child>
+                          <object class="GtkAccelLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Move to</property>
+                            <property name="width_chars">10</property>
+                            <property name="accel_widget">btnmoveto</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -822,14 +836,23 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkGrid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="row_homogeneous">True</property>
+                    <property name="column_homogeneous">True</property>
                     <child>
                       <object class="GtkButton" id="btnupleft">
-                        <property name="label" translatable="yes">Up/Left</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="Move_Ship" object="btnupleft" swapped="no"/>
+                        <child>
+                          <object class="GtkAccelLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label">↖</property>
+                            <property name="accel_widget">btnupleft</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -838,12 +861,19 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnup">
-                        <property name="label" translatable="yes">Up</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="Move_Ship" object="btnup" swapped="no"/>
+                        <child>
+                          <object class="GtkAccelLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label">⬆</property>
+                            <property name="accel_widget">btnup</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -852,12 +882,19 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnupright">
-                        <property name="label" translatable="yes">Up/Right</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="Move_Ship" object="btnupright" swapped="no"/>
+                        <child>
+                          <object class="GtkAccelLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label">↗</property>
+                            <property name="accel_widget">btnupright</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -866,12 +903,19 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnleft">
-                        <property name="label" translatable="yes">Left</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="Move_Ship" object="btnleft" swapped="no"/>
+                        <child>
+                          <object class="GtkAccelLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label">⬅</property>
+                            <property name="accel_widget">btnleft</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -880,12 +924,19 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnright">
-                        <property name="label" translatable="yes">Right</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="Move_Ship" object="btnright" swapped="no"/>
+                        <child>
+                          <object class="GtkAccelLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label">➡</property>
+                            <property name="accel_widget">btnright</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -894,12 +945,19 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnbottomleft">
-                        <property name="label" translatable="yes">Down/Left</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="Move_Ship" object="btnbottomleft" swapped="no"/>
+                        <child>
+                          <object class="GtkAccelLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label">↙</property>
+                            <property name="accel_widget">btnbottomleft</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -908,12 +966,19 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnbottom">
-                        <property name="label" translatable="yes">Down</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="Move_Ship" object="btnbottom" swapped="no"/>
+                        <child>
+                          <object class="GtkAccelLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label">⬇</property>
+                            <property name="accel_widget">btnbottom</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -922,12 +987,19 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnbottomright">
-                        <property name="label" translatable="yes">Down/Right</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="Move_Ship" object="btnbottomright" swapped="no"/>
+                        <child>
+                          <object class="GtkAccelLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label">↘</property>
+                            <property name="accel_widget">btnbottomright</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -936,11 +1008,18 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnmovewait">
-                        <property name="label" translatable="yes">Wait</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="Move_Ship" object="btnmovewait" swapped="no"/>
+                        <child>
+                          <object class="GtkAccelLabel" id="lblmovewait">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Wait</property>
+                            <property name="accel_widget">btnmovewait</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -949,7 +1028,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
