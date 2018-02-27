@@ -702,17 +702,48 @@ package body Maps.UI is
          else
             Load(To_String(SaveDirectory) & "keys.cfg");
          end if;
-         Accelerators := Gtk_Accel_Group(Get_Object(Builder, "movementaccels"));
-         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnupleft")), "<skymapwindow>/btnupleft", Accelerators);
-         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnup")), "<skymapwindow>/btnup", Accelerators);
-         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnupright")), "<skymapwindow>/btnupright", Accelerators);
-         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnleft")), "<skymapwindow>/btnleft", Accelerators);
-         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnmovewait")), "<skymapwindow>/btnmovewait", Accelerators);
-         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnright")), "<skymapwindow>/btnright", Accelerators);
-         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnbottomleft")), "<skymapwindow>/btnbottomleft", Accelerators);
-         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnbottom")), "<skymapwindow>/btnbottom", Accelerators);
-         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnbottomright")), "<skymapwindow>/btnbottomleft", Accelerators);
-         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnmoveto")), "<skymapwindow>/btnmoveto", Accelerators);
+         Accelerators :=
+           Gtk_Accel_Group(Get_Object(Builder, "movementaccels"));
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "btnupleft")),
+            "<skymapwindow>/btnupleft",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "btnup")),
+            "<skymapwindow>/btnup",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "btnupright")),
+            "<skymapwindow>/btnupright",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "btnleft")),
+            "<skymapwindow>/btnleft",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "btnmovewait")),
+            "<skymapwindow>/btnmovewait",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "btnright")),
+            "<skymapwindow>/btnright",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "btnbottomleft")),
+            "<skymapwindow>/btnbottomleft",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "btnbottom")),
+            "<skymapwindow>/btnbottom",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "btnbottomright")),
+            "<skymapwindow>/btnbottomleft",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "btnmoveto")),
+            "<skymapwindow>/btnmoveto",
+            Accelerators);
       end if;
       UpdateMessages;
       Set_Text
