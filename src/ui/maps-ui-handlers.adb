@@ -294,6 +294,7 @@ package body Maps.UI.Handlers is
       AddMessage("You set travel destination for your ship.", OrderMessage);
       Hide(Gtk_Window(Get_Object(Object, "mapinfowindow")));
       UpdateMessages;
+      UpdateMoveButtons;
    end SetDestination;
 
    procedure MoveMap(User_Data: access GObject_Record'Class) is
