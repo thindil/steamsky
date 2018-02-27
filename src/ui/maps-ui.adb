@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Directories; use Ada.Directories;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Label; use Gtk.Label;
@@ -29,6 +30,8 @@ with Gtk.Text_View; use Gtk.Text_View;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Enums; use Gtk.Enums;
 with Gtk.Container; use Gtk.Container;
+with Gtk.Accel_Map; use Gtk.Accel_Map;
+with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -38,6 +41,7 @@ with Gdk.Device; use Gdk.Device;
 with Gdk.Window; use Gdk.Window;
 with Gdk.Cursor; use Gdk.Cursor;
 with Gdk.RGBA; use Gdk.RGBA;
+with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Game; use Game;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
@@ -399,7 +403,7 @@ package body Maps.UI is
       if PlayerShip.Speed = DOCKED then
          Hide(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
-         Set_Label(Gtk_Button(Get_Object(Builder, "btnmovewait")), "Wait");
+         Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Wait");
          Set_Label(Gtk_Button(Get_Object(Builder, "btndock")), "Undock");
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupleft")), False);
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnup")), False);
@@ -420,10 +424,10 @@ package body Maps.UI is
          Show_All(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
          if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
             Show_All(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
-            Set_Label(Gtk_Button(Get_Object(Builder, "btnmovewait")), "Move");
+            Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Move");
          else
             Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
-            Set_Label(Gtk_Button(Get_Object(Builder, "btnmovewait")), "Wait");
+            Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Wait");
          end if;
          Set_Label(Gtk_Button(Get_Object(Builder, "btndock")), "Dock");
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
@@ -627,6 +631,7 @@ package body Maps.UI is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
         Pango_Font_Description_New;
+      Accelerators: Gtk_Accel_Group;
    begin
       CenterX := X;
       CenterY := Y;
@@ -683,6 +688,31 @@ package body Maps.UI is
            (Gtk_Widget(Get_Object(Builder, "messagesview")),
             0,
             White_RGBA);
+         if not Exists(To_String(SaveDirectory) & "keys.cfg") then
+            Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
+            Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
+            Add_Entry("<skymapwindow>/btnupright", GDK_KP_9, 0);
+            Add_Entry("<skymapwindow>/btnleft", GDK_KP_4, 0);
+            Add_Entry("<skymapwindow>/btnmovewait", GDK_KP_5, 0);
+            Add_Entry("<skymapwindow>/btnright", GDK_KP_6, 0);
+            Add_Entry("<skymapwindow>/btnbottomleft", GDK_KP_1, 0);
+            Add_Entry("<skymapwindow>/btnbottom", GDK_KP_2, 0);
+            Add_Entry("<skymapwindow>/btnbottomright", GDK_KP_3, 0);
+            Add_Entry("<skymapwindow>/btnmoveto", GDK_KP_Divide, 0);
+         else
+            Load(To_String(SaveDirectory) & "keys.cfg");
+         end if;
+         Accelerators := Gtk_Accel_Group(Get_Object(Builder, "movementaccels"));
+         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnupleft")), "<skymapwindow>/btnupleft", Accelerators);
+         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnup")), "<skymapwindow>/btnup", Accelerators);
+         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnupright")), "<skymapwindow>/btnupright", Accelerators);
+         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnleft")), "<skymapwindow>/btnleft", Accelerators);
+         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnmovewait")), "<skymapwindow>/btnmovewait", Accelerators);
+         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnright")), "<skymapwindow>/btnright", Accelerators);
+         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnbottomleft")), "<skymapwindow>/btnbottomleft", Accelerators);
+         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnbottom")), "<skymapwindow>/btnbottom", Accelerators);
+         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnbottomright")), "<skymapwindow>/btnbottomleft", Accelerators);
+         Set_Accel_Path(Gtk_Widget(Get_Object(Builder, "btnmoveto")), "<skymapwindow>/btnmoveto", Accelerators);
       end if;
       UpdateMessages;
       Set_Text
