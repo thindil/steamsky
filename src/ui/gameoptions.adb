@@ -23,9 +23,14 @@ with Gtk.Widget; use Gtk.Widget;
 with Gtk.Switch; use Gtk.Switch;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.GEntry; use Gtk.GEntry;
+with Gtk.Accel_Map; use Gtk.Accel_Map;
+with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
+with Gdk.Event; use Gdk.Event;
+with Gdk.Types; use Gdk.Types;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Config; use Config;
@@ -59,10 +64,89 @@ package body GameOptions is
         AutoMoveBreak'Val
           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbautomovestop"))));
       SaveConfig;
+      Save(To_String(SaveDirectory) & "keys.cfg");
       Hide(Gtk_Widget(Get_Object(Object, "optionswindow")));
       CreateSkyMap;
       return True;
    end HideOptions;
+
+   function SetAccelerator
+     (Self: access Gtk_Widget_Record'Class;
+      Event: Gdk.Event.Gdk_Event_Key) return Boolean is
+      KeyMods: constant Gdk_Modifier_Type :=
+        Event.State and Get_Default_Mod_Mask;
+      Changed: Boolean;
+   begin
+      if Self = Gtk_Widget(Get_Object(Builder, "edtupleft")) then
+         Changed :=
+           Change_Entry
+             ("<skymapwindow>/btnupleft",
+              Event.Keyval,
+              KeyMods,
+              True);
+      elsif Self = Gtk_Widget(Get_Object(Builder, "edtup")) then
+         Changed :=
+           Change_Entry("<skymapwindow>/btnup", Event.Keyval, KeyMods, True);
+      elsif Self = Gtk_Widget(Get_Object(Builder, "edtupright")) then
+         Changed :=
+           Change_Entry
+             ("<skymapwindow>/btnupright",
+              Event.Keyval,
+              KeyMods,
+              True);
+      elsif Self = Gtk_Widget(Get_Object(Builder, "edtleft")) then
+         Changed :=
+           Change_Entry("<skymapwindow>/btnleft", Event.Keyval, KeyMods, True);
+      elsif Self = Gtk_Widget(Get_Object(Builder, "edtmovewait")) then
+         Changed :=
+           Change_Entry
+             ("<skymapwindow>/btnmovewait",
+              Event.Keyval,
+              KeyMods,
+              True);
+      elsif Self = Gtk_Widget(Get_Object(Builder, "edtright")) then
+         Changed :=
+           Change_Entry
+             ("<skymapwindow>/btnright",
+              Event.Keyval,
+              KeyMods,
+              True);
+      elsif Self = Gtk_Widget(Get_Object(Builder, "edtdownleft")) then
+         Changed :=
+           Change_Entry
+             ("<skymapwindow>/btnbottomleft",
+              Event.Keyval,
+              KeyMods,
+              True);
+      elsif Self = Gtk_Widget(Get_Object(Builder, "edtdown")) then
+         Changed :=
+           Change_Entry
+             ("<skymapwindow>/btnbottom",
+              Event.Keyval,
+              KeyMods,
+              True);
+      elsif Self = Gtk_Widget(Get_Object(Builder, "edtdownright")) then
+         Changed :=
+           Change_Entry
+             ("<skymapwindow>/btnbottomright",
+              Event.Keyval,
+              KeyMods,
+              True);
+      elsif Self = Gtk_Widget(Get_Object(Builder, "edtmoveto")) then
+         Changed :=
+           Change_Entry
+             ("<skymapwindow>/btnmoveto",
+              Event.Keyval,
+              KeyMods,
+              True);
+      end if;
+      if Changed then
+         Set_Text
+           (Gtk_Entry(Self),
+            Accelerator_Get_Label(Event.Keyval, KeyMods));
+      end if;
+      return False;
+   end SetAccelerator;
 
    procedure CreateGameOptions is
       Error: aliased GError;
@@ -84,9 +168,41 @@ package body GameOptions is
       end if;
       Register_Handler(Builder, "Hide_Options", HideOptions'Access);
       Do_Connect(Builder);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "edtupleft")),
+         SetAccelerator'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "edtup")),
+         SetAccelerator'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "edtupright")),
+         SetAccelerator'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "edtleft")),
+         SetAccelerator'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "edtmovewait")),
+         SetAccelerator'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "edtright")),
+         SetAccelerator'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "edtdownleft")),
+         SetAccelerator'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "edtdown")),
+         SetAccelerator'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "edtdownright")),
+         SetAccelerator'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "edtmoveto")),
+         SetAccelerator'Access);
    end CreateGameOptions;
 
    procedure ShowGameOptions is
+      Key: Gtk_Accel_Key;
+      Found: Boolean;
    begin
       Set_State
         (Gtk_Switch(Get_Object(Builder, "switchautorest")),
@@ -115,6 +231,46 @@ package body GameOptions is
       Set_Active
         (Gtk_Combo_Box(Get_Object(Builder, "cmbautomovestop")),
          (AutoMoveBreak'Pos(GameSettings.AutoMoveStop)));
+      Lookup_Entry("<skymapwindow>/btnupleft", Key, Found);
+      Set_Text
+        (Gtk_Entry(Get_Object(Builder, "edtupleft")),
+         Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods));
+      Lookup_Entry("<skymapwindow>/btnup", Key, Found);
+      Set_Text
+        (Gtk_Entry(Get_Object(Builder, "edtup")),
+         Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods));
+      Lookup_Entry("<skymapwindow>/btnupright", Key, Found);
+      Set_Text
+        (Gtk_Entry(Get_Object(Builder, "edtupright")),
+         Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods));
+      Lookup_Entry("<skymapwindow>/btnleft", Key, Found);
+      Set_Text
+        (Gtk_Entry(Get_Object(Builder, "edtleft")),
+         Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods));
+      Lookup_Entry("<skymapwindow>/btnmovewait", Key, Found);
+      Set_Text
+        (Gtk_Entry(Get_Object(Builder, "edtmovewait")),
+         Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods));
+      Lookup_Entry("<skymapwindow>/btnright", Key, Found);
+      Set_Text
+        (Gtk_Entry(Get_Object(Builder, "edtright")),
+         Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods));
+      Lookup_Entry("<skymapwindow>/btnbottomleft", Key, Found);
+      Set_Text
+        (Gtk_Entry(Get_Object(Builder, "edtdownleft")),
+         Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods));
+      Lookup_Entry("<skymapwindow>/btnbottom", Key, Found);
+      Set_Text
+        (Gtk_Entry(Get_Object(Builder, "edtdown")),
+         Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods));
+      Lookup_Entry("<skymapwindow>/btnbottomright", Key, Found);
+      Set_Text
+        (Gtk_Entry(Get_Object(Builder, "edtdownright")),
+         Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods));
+      Lookup_Entry("<skymapwindow>/btnmoveto", Key, Found);
+      Set_Text
+        (Gtk_Entry(Get_Object(Builder, "edtmoveto")),
+         Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods));
       Show_All(Gtk_Widget(Get_Object(Builder, "optionswindow")));
    end ShowGameOptions;
 
