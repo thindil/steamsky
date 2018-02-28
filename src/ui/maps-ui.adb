@@ -688,18 +688,17 @@ package body Maps.UI is
            (Gtk_Widget(Get_Object(Builder, "messagesview")),
             0,
             White_RGBA);
-         if not Exists(To_String(SaveDirectory) & "keys.cfg") then
-            Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
-            Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
-            Add_Entry("<skymapwindow>/btnupright", GDK_KP_9, 0);
-            Add_Entry("<skymapwindow>/btnleft", GDK_KP_4, 0);
-            Add_Entry("<skymapwindow>/btnmovewait", GDK_KP_5, 0);
-            Add_Entry("<skymapwindow>/btnright", GDK_KP_6, 0);
-            Add_Entry("<skymapwindow>/btnbottomleft", GDK_KP_1, 0);
-            Add_Entry("<skymapwindow>/btnbottom", GDK_KP_2, 0);
-            Add_Entry("<skymapwindow>/btnbottomright", GDK_KP_3, 0);
-            Add_Entry("<skymapwindow>/btnmoveto", GDK_KP_Divide, 0);
-         else
+         Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
+         Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
+         Add_Entry("<skymapwindow>/btnupright", GDK_KP_9, 0);
+         Add_Entry("<skymapwindow>/btnleft", GDK_KP_4, 0);
+         Add_Entry("<skymapwindow>/btnmovewait", GDK_KP_5, 0);
+         Add_Entry("<skymapwindow>/btnright", GDK_KP_6, 0);
+         Add_Entry("<skymapwindow>/btnbottomleft", GDK_KP_1, 0);
+         Add_Entry("<skymapwindow>/btnbottom", GDK_KP_2, 0);
+         Add_Entry("<skymapwindow>/btnbottomright", GDK_KP_3, 0);
+         Add_Entry("<skymapwindow>/btnmoveto", GDK_KP_Divide, 0);
+         if Exists(To_String(SaveDirectory) & "keys.cfg") then
             Load(To_String(SaveDirectory) & "keys.cfg");
          end if;
          Accelerators :=
