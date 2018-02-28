@@ -814,7 +814,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Move to</property>
-                            <property name="width_chars">10</property>
                             <property name="accel_widget">btnmoveto</property>
                           </object>
                         </child>
@@ -1035,7 +1034,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
