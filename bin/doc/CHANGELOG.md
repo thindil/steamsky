@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New enemy ships: armored pirate ship mk IV and attacking clockwork drone mk
-  IV
+- New enemy ships: armored pirate ship mk IV, attacking clockwork drone mk IV
+  and armored attacking drone mk IV
 - Keyboard shortcuts for ship movement
 
 ### Fixed
