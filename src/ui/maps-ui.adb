@@ -698,6 +698,22 @@ package body Maps.UI is
          Add_Entry("<skymapwindow>/btnbottom", GDK_KP_2, 0);
          Add_Entry("<skymapwindow>/btnbottomright", GDK_KP_3, 0);
          Add_Entry("<skymapwindow>/btnmoveto", GDK_KP_Divide, 0);
+         Add_Entry("<skymapwindow>/Menu/ShipInfo", GDK_S, 0);
+         Add_Entry("<skymapwindow>/Menu/ShipCargoInfo", GDK_A, 0);
+         Add_Entry("<skymapwindow>/Menu/CrewInfo", GDK_C, 0);
+         Add_Entry("<skymapwindow>/Menu/ShipOrders", GDK_O, 0);
+         Add_Entry("<skymapwindow>/Menu/CraftInfo", GDK_R, 0);
+         Add_Entry("<skymapwindow>/Menu/MessagesInfo", GDK_M, 0);
+         Add_Entry("<skymapwindow>/Menu/BasesInfo", GDK_B, 0);
+         Add_Entry("<skymapwindow>/Menu/EventsInfo", GDK_N, 0);
+         Add_Entry("<skymapwindow>/Menu/MissionsInfo", GDK_I, 0);
+         Add_Entry("<skymapwindow>/Menu/MoveMap", GDK_V, 0);
+         Add_Entry("<skymapwindow>/Menu/GameStats", GDK_G, 0);
+         Add_Entry("<skymapwindow>/Menu/Help", GDK_F1, 0);
+         Add_Entry("<skymapwindow>/Menu/GameOptions", GDK_P, 0);
+         Add_Entry("<skymapwindow>/Menu/QuitGame", GDK_Q, 0);
+         Add_Entry("<skymapwindow>/Menu/ResignFromGame", GDK_X, 0);
+         Add_Entry("<skymapwindow>/Menu", GDK_E, 0);
          if Exists(To_String(SaveDirectory) & "keys.cfg") then
             Load(To_String(SaveDirectory) & "keys.cfg");
          end if;
@@ -742,6 +758,70 @@ package body Maps.UI is
          Set_Accel_Path
            (Gtk_Widget(Get_Object(Builder, "btnmoveto")),
             "<skymapwindow>/btnmoveto",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "btnmenu")),
+            "<skymapwindow>/Menu",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menuship")),
+            "<skymapwindow>/Menu/ShipInfo",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menucargo")),
+            "<skymapwindow>/Menu/ShipCargoInfo",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menucrew")),
+            "<skymapwindow>/Menu/CrewInfo",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menuorders")),
+            "<skymapwindow>/Menu/ShipOrders",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menucrafting")),
+            "<skymapwindow>/Menu/CraftInfo",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menumessages")),
+            "<skymapwindow>/Menu/MessagesInfo",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menubaseslist")),
+            "<skymapwindow>/Menu/BasesInfo",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menuevents")),
+            "<skymapwindow>/Menu/EventsInfo",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menumissions")),
+            "<skymapwindow>/Menu/MissionsInfo",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menumovemap")),
+            "<skymapwindow>/Menu/MoveMap",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menustats")),
+            "<skymapwindow>/Menu/GameStats",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menuhelp")),
+            "<skymapwindow>/Menu/Help",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menuoptions")),
+            "<skymapwindow>/Menu/GameOptions",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menuquit")),
+            "<skymapwindow>/Menu/QuitGame",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menuresign")),
+            "<skymapwindow>/Menu/ResignFromGame",
             Accelerators);
       end if;
       UpdateMessages;
