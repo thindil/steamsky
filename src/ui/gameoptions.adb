@@ -51,7 +51,23 @@ package body GameOptions is
       To_Unbounded_String("<skymapwindow>/btnbottomleft"),
       To_Unbounded_String("<skymapwindow>/btnbottom"),
       To_Unbounded_String("<skymapwindow>/btnbottomright"),
-      To_Unbounded_String("<skymapwindow>/btnmoveto"));
+      To_Unbounded_String("<skymapwindow>/btnmoveto"),
+      To_Unbounded_String("<skymapwindow>/Menu/ShipInfo"),
+      To_Unbounded_String("<skymapwindow>/Menu/ShipCargoInfo"),
+      To_Unbounded_String("<skymapwindow>/Menu/CrewInfo"),
+      To_Unbounded_String("<skymapwindow>/Menu/ShipOrders"),
+      To_Unbounded_String("<skymapwindow>/Menu/CraftInfo"),
+      To_Unbounded_String("<skymapwindow>/Menu/MessagesInfo"),
+      To_Unbounded_String("<skymapwindow>/Menu/BasesInfo"),
+      To_Unbounded_String("<skymapwindow>/Menu/EventsInfo"),
+      To_Unbounded_String("<skymapwindow>/Menu/MissionsInfo"),
+      To_Unbounded_String("<skymapwindow>/Menu/MoveMap"),
+      To_Unbounded_String("<skymapwindow>/Menu/GameStats"),
+      To_Unbounded_String("<skymapwindow>/Menu/Help"),
+      To_Unbounded_String("<skymapwindow>/Menu/GameOptions"),
+      To_Unbounded_String("<skymapwindow>/Menu/QuitGame"),
+      To_Unbounded_String("<skymapwindow>/Menu/ResignFromGame"),
+      To_Unbounded_String("<skymapwindow>/Menu"));
    EditNames: constant array(Positive range <>) of Unbounded_String :=
      (To_Unbounded_String("edtupleft"),
       To_Unbounded_String("edtup"),
@@ -62,7 +78,23 @@ package body GameOptions is
       To_Unbounded_String("edtdownleft"),
       To_Unbounded_String("edtdown"),
       To_Unbounded_String("edtdownright"),
-      To_Unbounded_String("edtmoveto"));
+      To_Unbounded_String("edtmoveto"),
+      To_Unbounded_String("edtshipinfo"),
+      To_Unbounded_String("edtcargo"),
+      To_Unbounded_String("edtcrew"),
+      To_Unbounded_String("edtorders"),
+      To_Unbounded_String("edtcrafts"),
+      To_Unbounded_String("edtmessages"),
+      To_Unbounded_String("edtbases"),
+      To_Unbounded_String("edtevents"),
+      To_Unbounded_String("edtmissions"),
+      To_Unbounded_String("edtmap"),
+      To_Unbounded_String("edtgamestats"),
+      To_Unbounded_String("edthelp"),
+      To_Unbounded_String("edtgameoptions"),
+      To_Unbounded_String("edtquit"),
+      To_Unbounded_String("edtresign"),
+      To_Unbounded_String("edtmenu"));
 
    function HideOptions
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
