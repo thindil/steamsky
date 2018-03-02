@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Movement buttons after set destination for ship
 - Moving ship to destination point
+- Refreshing move buttons after finish mission
 
 ## [2.1] - 2018-02-25
 
