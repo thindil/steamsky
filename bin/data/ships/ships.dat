@@ -1236,4 +1236,13 @@ Cargo = 1500..2000x1, 100..200x2, 300..400x3, 300..500x23, 5..30x21, 2..10x116
 Description = Standard ship of inquisition (upgraded version).
 Owner = Inquisition
 Crew = 21, 22, 4..8x60
+[131]
+Name = Armored inquisition ship mk III
+Modules = 135, 91, 134, 8x93, 130, 4x132, 133, 97, 49
+CombatAI = Attacker
+Loot = 120..240
+Cargo = 1800..2000x1, 100..200x2, 350..400x3, 250..500x23, 80..160x21, 20..40x116
+Description = Armored and upgraded version of standard flying vessel of inquisition.
+Owner = Inquisition
+Crew = 21, 22, 4..8x60
 []
