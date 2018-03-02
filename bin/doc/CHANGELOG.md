@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file.
 - Keyboard shortcuts for ship movement and menu
 - Option to set keyboard shortcuts for ship movement and menu
 
+### Changed
+- Updated MODDING.md
+
 ### Fixed
 - Movement buttons after set destination for ship
 - Moving ship to destination point
