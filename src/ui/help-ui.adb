@@ -23,12 +23,13 @@ with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Menu_Item; use Gtk.Menu_Item;
 with Gtk.Menu_Shell; use Gtk.Menu_Shell;
+with Gtk.Accel_Map; use Gtk.Accel_Map;
+with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
 with Utils.UI; use Utils.UI;
 with Items; use Items;
-with Config; use Config;
 
 package body Help.UI is
 
@@ -77,6 +78,8 @@ package body Help.UI is
    procedure ShowHelpUI(Topic: Positive) is
       NewText: Unbounded_String;
       VariableIndex: Natural;
+      Key: Gtk_Accel_Key;
+      Found: Boolean;
       VariablesNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("{MoneyName}"),
          To_Unbounded_String("{FuelName}"),
@@ -103,18 +106,48 @@ package body Help.UI is
          Skills_List(PerceptionSkill).Name,
          Attributes_Names(ConditionIndex),
          Skills_List(DodgeSkill).Name);
+      AccelNames: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("<skymapwindow>/btnupleft"),
+         To_Unbounded_String("<skymapwindow>/btnup"),
+         To_Unbounded_String("<skymapwindow>/btnupright"),
+         To_Unbounded_String("<skymapwindow>/btnleft"),
+         To_Unbounded_String("<skymapwindow>/btnmovewait"),
+         To_Unbounded_String("<skymapwindow>/btnright"),
+         To_Unbounded_String("<skymapwindow>/btnbottomleft"),
+         To_Unbounded_String("<skymapwindow>/btnbottom"),
+         To_Unbounded_String("<skymapwindow>/btnbottomright"),
+         To_Unbounded_String("<skymapwindow>/btnmoveto"),
+         To_Unbounded_String("<skymapwindow>/Menu/ShipInfo"),
+         To_Unbounded_String("<skymapwindow>/Menu/ShipCargoInfo"),
+         To_Unbounded_String("<skymapwindow>/Menu/CrewInfo"),
+         To_Unbounded_String("<skymapwindow>/Menu/ShipOrders"),
+         To_Unbounded_String("<skymapwindow>/Menu/CraftInfo"),
+         To_Unbounded_String("<skymapwindow>/Menu/MessagesInfo"),
+         To_Unbounded_String("<skymapwindow>/Menu/BasesInfo"),
+         To_Unbounded_String("<skymapwindow>/Menu/EventsInfo"),
+         To_Unbounded_String("<skymapwindow>/Menu/MissionsInfo"),
+         To_Unbounded_String("<skymapwindow>/Menu/MoveMap"),
+         To_Unbounded_String("<skymapwindow>/Menu/GameStats"),
+         To_Unbounded_String("<skymapwindow>/Menu/Help"),
+         To_Unbounded_String("<skymapwindow>/Menu/GameOptions"),
+         To_Unbounded_String("<skymapwindow>/Menu/QuitGame"),
+         To_Unbounded_String("<skymapwindow>/Menu/ResignFromGame"),
+         To_Unbounded_String("<skymapwindow>/Menu"));
    begin
       NewText := Help_List(Topic).Text;
-      for I in Keys_Array'Range loop
+      for I in AccelNames'Range loop
          loop
             VariableIndex :=
               Index(NewText, "{GameKey" & Positive'Image(I) & "}");
             exit when VariableIndex = 0;
+            Lookup_Entry(To_String(AccelNames(I)), Key, Found);
             Replace_Slice
               (NewText,
                VariableIndex,
                (VariableIndex + 8 + Positive'Image(I)'Length),
-               "'" & Character'Val(GameSettings.Keys(I)) & "'");
+               "'" &
+               Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
+               "'");
          end loop;
       end loop;
       for I in VariablesNames'Range loop
