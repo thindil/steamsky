@@ -1083,7 +1083,13 @@ package body Maps.UI.Handlers is
       if StartsCombat then
          Hide(Gtk_Window(Get_Object(Builder, "skymapwindow")));
          ShowCombatUI;
+         return;
       end if;
+      UpdateHeader;
+      UpdateMessages;
+      UpdateMoveButtons;
+      UpdateMenu;
+      DrawMap;
    end StartMission;
 
    procedure CompleteMission(Object: access Gtkada_Builder_Record'Class) is
