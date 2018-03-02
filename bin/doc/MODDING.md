@@ -371,17 +371,15 @@ DodgeSkill. Value after equal sign must be existing skill name.
   text visible when player select this option from help menu.
 - Inside help text you can use special variables which later will be replaced
   by proper keys names. All  that variables have name `{GameKey [number]}`
-  where `[number]` is between 1 and 37 (example: `{GameKey 9}`). Proper game 
-  keys in   order: move ship up, move ship down, move ship right, move ship 
-  left, move ship down/left, move ship down/right, move ship up/left, move 
-  ship up/right, wait 1 min or move ship 1 field, auto move ship, move map up,
-  move map down, move map right, move map left, move map up/left, move map 
-  up/right, move map down/left, move map down/right, center map on ship, set 
-  destination for ship, ship informations, ship cargo, crew informations, ship 
-  orders, crafting, last messages, list of known bases, list of known event, 
-  accepted missions, wait orders, move map position, game statistics, help, 
-  game options, quit from game, resign from game, close menu. (example: 
-  `{GameKey 10}` will be translated to key used for auto move ship).
+  where `[number]` is between 1 and 26 (example: `{GameKey 9}`). Proper game 
+  keys in order: move ship up/left, move ship up, move ship up/right, move
+  ship left, move ship one field or wait 1 minute, move ship right, move ship
+  down/left, move ship down, move ship down/right, move ship to destination, 
+  show ship info, show cargo info, show crew info, show ship orders, show 
+  crafting menu, show last messages, show know bases, show known events, show 
+  accepted missions, move map position, show game statistics, show help, show 
+  game options, quit from game, resign from game. (example: `{GameKey 10}` 
+  will be translated to key used for auto move ship).
 - Inside help text you can use special variables: `{MoneyName}` which later 
   will be replaced with name of game money, `{FuelName}` which later will be
   replaced with name of fuel for ship, `{StrengthName}` which later will be
