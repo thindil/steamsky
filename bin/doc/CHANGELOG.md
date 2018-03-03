@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated MODDING.md
+- Updated help
 
 ### Fixed
 - Movement buttons after set destination for ship
