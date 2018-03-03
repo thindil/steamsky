@@ -1237,7 +1237,7 @@ Description = Standard ship of inquisition (upgraded version).
 Owner = Inquisition
 Crew = 21, 22, 4..8x60
 [131]
-Name = Armored inquisition ship mk III
+Name = Armored inquisition ship mk IV
 Modules = 135, 91, 134, 8x93, 130, 4x132, 133, 97, 49
 CombatAI = Attacker
 Loot = 120..240
@@ -1245,4 +1245,15 @@ Cargo = 1800..2000x1, 100..200x2, 350..400x3, 250..500x23, 80..160x21, 20..40x11
 Description = Armored and upgraded version of standard flying vessel of inquisition.
 Owner = Inquisition
 Crew = 21, 22, 4..8x60
+[132]
+Name = Large clockwork drone mk IV
+Modules = 141, 143, 137, 4x132, 133, 2x145, 2x160
+Accuracy = 15..25
+CombatAI = Berserker
+Evasion = 15..25
+Loot = 200..400
+Perception = 25..35
+Cargo = 1800..2000x1, 450..500x117, 120..250x116
+Description = Large, good armored, upgraded and aggresive clockwork drone.
+Owner = Drones
 []
