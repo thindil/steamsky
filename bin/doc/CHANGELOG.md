@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Movement buttons after set destination for ship
 - Moving ship to destination point
 - Refreshing move buttons after finish mission
+- Crash on showing available missions
 
 ## [2.1] - 2018-02-25
 
