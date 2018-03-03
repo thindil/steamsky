@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -24,7 +24,7 @@ package body Config is
    procedure LoadConfig is
       ConfigFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
-      EqualIndex, StartIndex, EndIndex, KeysAmount: Natural;
+      EqualIndex: Natural;
    begin
       NewGameSettings :=
         (PlayerName => To_Unbounded_String("Laeran"),
@@ -36,44 +36,6 @@ package body Config is
          AutoCenter => True,
          AutoReturn => True,
          AutoFinish => True,
-         Keys =>
-           (56,
-            50,
-            54,
-            52,
-            49,
-            51,
-            55,
-            57,
-            53,
-            37,
-            337,
-            336,
-            402,
-            393,
-            391,
-            398,
-            386,
-            396,
-            32,
-            10,
-            115,
-            97,
-            99,
-            111,
-            114,
-            109,
-            98,
-            110,
-            105,
-            119,
-            118,
-            103,
-            265,
-            112,
-            81,
-            120,
-            27),
          LowFuel => 100,
          LowDrinks => 50,
          LowFood => 25,
@@ -120,18 +82,6 @@ package body Config is
                else
                   GameSettings.AutoFinish := False;
                end if;
-            elsif FieldName = To_Unbounded_String("Keys") then
-               StartIndex := 1;
-               KeysAmount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-               for I in 1 .. KeysAmount loop
-                  EndIndex := Index(Value, ", ", StartIndex);
-                  if EndIndex = 0 then
-                     EndIndex := Length(Value) + 1;
-                  end if;
-                  GameSettings.Keys(I) :=
-                    Integer'Value(Slice(Value, StartIndex, EndIndex - 1));
-                  StartIndex := EndIndex + 2;
-               end loop;
             elsif FieldName = To_Unbounded_String("LowFuel") then
                GameSettings.LowFuel := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("LowDrinks") then
@@ -181,14 +131,6 @@ package body Config is
       else
          Put_Line(ConfigFile, "AutoFinish = No");
       end if;
-      Put(ConfigFile, "Keys = ");
-      for I in GameSettings.Keys'Range loop
-         if I < GameSettings.Keys'Last then
-            Put(ConfigFile, Integer'Image(GameSettings.Keys(I)) & ", ");
-         else
-            Put_Line(ConfigFile, Integer'Image(GameSettings.Keys(I)));
-         end if;
-      end loop;
       Put_Line(ConfigFile, "LowFuel =" & Positive'Image(GameSettings.LowFuel));
       Put_Line
         (ConfigFile,
