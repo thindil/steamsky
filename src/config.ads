@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -26,7 +26,6 @@ package Config is
       PlayerGender: Character; -- Default player gender
       ShipName: Unbounded_String; -- Default ship name
    end record;
-   type Keys_Array is array(1 .. 37) of Integer; -- Keys used in ship movement
    type AutoMoveBreak is
      (NEVER,
       ANY,
@@ -39,7 +38,6 @@ package Config is
       AutoCenter: Boolean; -- If true, back to ship after sets destination for it
       AutoReturn: Boolean; -- If true, set base as destination for ship after finished mission
       AutoFinish: Boolean; -- If true, complete mission if ship is near corresponding base
-      Keys: Keys_Array; -- Settings for ship movement keys
       LowFuel: Positive; -- Amount of fuel below which warning about low level is show
       LowDrinks: Positive; -- Amount of drinkis below which warning about low level is show
       LowFood: Positive; -- Amount of food below which warning about low level is show
