@@ -46,6 +46,7 @@ package body Missions.UI is
 
    Builder: Gtkada_Builder;
    MissionIndex: Positive;
+   Cleaning: Boolean;
 
    procedure ShowMissionInfo(User_Data: access GObject_Record'Class) is
       MissionsIter: Gtk_Tree_Iter;
@@ -59,6 +60,9 @@ package body Missions.UI is
       CanAccept: Boolean := True;
       MissionsLimit: Natural;
    begin
+      if Cleaning then
+         return;
+      end if;
       Get_Selected
         (Gtk.Tree_View.Get_Selection(Gtk_Tree_View(User_Data)),
          MissionsModel,
@@ -339,7 +343,9 @@ package body Missions.UI is
       MissionsList: Gtk_List_Store;
    begin
       MissionsList := Gtk_List_Store(Get_Object(Builder, "missionslist"));
+      Cleaning := True;
       Clear(MissionsList);
+      Cleaning := False;
       for Mission of SkyBases(BaseIndex).Missions loop
          Append(MissionsList, MissionsIter);
          case Mission.MType is
@@ -373,7 +379,9 @@ package body Missions.UI is
       MissionsList: Gtk_List_Store;
    begin
       MissionsList := Gtk_List_Store(Get_Object(Builder, "missionslist"));
+      Cleaning := True;
       Clear(MissionsList);
+      Cleaning := False;
       for Mission of PlayerShip.Missions loop
          Append(MissionsList, MissionsIter);
          case Mission.MType is
