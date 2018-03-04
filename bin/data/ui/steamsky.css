@@ -1,0 +1,58 @@
+* {
+   background:rgb(35,41,51);
+   color:rgb(219,219,219);
+   border-style:none;
+   box-shadow:none;
+   text-shadow:none;
+}
+
+*:hover, 
+   GtkButton:hover *, 
+   GtkMenuItem:hover * {
+  background:rgb(64,69,82);
+}
+
+GtkButton:focus,
+   GtkButton:active,
+   GtkButton:focus *, 
+   GtkButton:active *, 
+   GtkMenuItem:focus *, 
+   GtkMenuItem:active *,
+   GtkTreeView:selected, 
+   GtkTreeView:selected:focus {
+  background:rgb(204,87,93);
+}
+
+.scrollbar.slider {
+   border-style:dotted;
+   border-width:1px;
+   border-color:rgb(64,69,82);
+}
+
+.scrollbar.slider:prelight:active, 
+   .scrollbar.slider:active {
+  background:rgb(204,87,93);
+  border-style:none;
+}
+
+.scrollbar.slider:hover {
+  background:rgb(64,69,82);
+  border-style:none;
+}
+
+GtkButton {
+   border-radius:30px;
+}
+
+GtkButton:insensitive * {
+   color:black;
+}
+
+GtkButton * {
+   font-weight:bold;
+}
+
+.progressbar {
+   background: linear-gradient(to right, green, blue);
+}
+

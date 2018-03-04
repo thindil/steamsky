@@ -33,9 +33,13 @@ with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Css_Provider; use Gtk.Css_Provider;
+with Gtk.Style_Context; use Gtk.Style_Context;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
+with Gdk.Screen; use Gdk.Screen;
+with Gdk.Display; use Gdk.Display;
 with Game; use Game;
 with HallOfFame; use HallOfFame;
 with Ships; use Ships;
@@ -363,7 +367,20 @@ package body MainMenu is
 
    procedure CreateMainMenu is
       Error: aliased GError;
+      CssProvider: Gtk_Css_Provider;
    begin
+      Gtk_New(CssProvider);
+      if not Load_From_Path
+          (CssProvider,
+           To_String(DataDirectory) & "ui" & Dir_Separator & "steamsky.css",
+           Error'Access) then
+         Put_Line("Error : " & Get_Message(Error));
+         return;
+      end if;
+      Add_Provider_For_Screen
+        (Get_Default_Screen(Get_Default),
+         +(CssProvider),
+         Guint'Last);
       Gtk_New(Builder);
       if Add_From_File
           (Builder,
