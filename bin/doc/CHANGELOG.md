@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Moving ship to destination point
 - Refreshing move buttons after finish mission
 - Crash on showing available missions
+- Crash when generate bases cargo
 
 ## [2.1] - 2018-02-25
 
