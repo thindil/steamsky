@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash in bases schools in small console
+- Crash when generate bases cargo
 
 ## [2.0.2] - 2018-02-18
 
