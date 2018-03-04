@@ -1256,4 +1256,13 @@ Perception = 25..35
 Cargo = 1800..2000x1, 450..500x117, 120..250x116
 Description = Large, good armored, upgraded and aggresive clockwork drone.
 Owner = Drones
+[133]
+Name = Large pirate ship mk IV
+Modules = 141, 144, 137, 9x93, 130, 6x132, 4x145, 3x161, 159
+CombatAI = Disarmer
+Loot = 300..500
+Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x118, 200..400x116, 100..150x122
+Description = Large, good armored, upgraded version of pirate ship. As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
+Crew = 23, 4x24, 25, 3..5x61
 []
