@@ -29,6 +29,7 @@ package body Bases.Cargo is
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       Chance, Roll: Positive;
       Population: Natural := SkyBases(BaseIndex).Population;
+      MaxAmount: Natural;
    begin
       if Population = 0 then
          Population := 1;
@@ -69,13 +70,20 @@ package body Bases.Cargo is
          for Item of SkyBases(BaseIndex).Cargo loop
             Roll := GetRandom(1, 100);
             if Roll < 30 and Item.Amount > 0 then
-               Item.Amount := Item.Amount - (GetRandom(1, (Item.Amount / 2)));
+               MaxAmount := Item.Amount / 2;
+               if MaxAmount < 1 then
+                  MaxAmount := 1;
+               end if;
+               Item.Amount := Item.Amount - GetRandom(1, MaxAmount);
             elsif Roll < 60 and SkyBases(BaseIndex).Owner /= Abandoned then
                if Item.Amount = 0 then
                   Item.Amount := GetRandom(1, 10) * Population;
                else
-                  Item.Amount :=
-                    Item.Amount + (GetRandom(1, (Item.Amount / 2)));
+                  MaxAmount := Item.Amount / 2;
+                  if MaxAmount < 1 then
+                     MaxAmount := 1;
+                  end if;
+                  Item.Amount := Item.Amount + GetRandom(1, MaxAmount);
                end if;
             end if;
          end loop;
