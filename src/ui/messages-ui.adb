@@ -26,7 +26,6 @@ with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
-with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 
 package body Messages.UI is
@@ -104,14 +103,6 @@ package body Messages.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Override_Background_Color
-        (Gtk_Widget(Get_Object(Builder, "messagesview")),
-         0,
-         Black_RGBA);
-      Override_Color
-        (Gtk_Widget(Get_Object(Builder, "messagesview")),
-         0,
-         White_RGBA);
       Register_Handler(Builder, "Hide_Ship_Info", HideShipInfo'Access);
       Register_Handler(Builder, "Select_Messages", SelectMessages'Access);
       Register_Handler(Builder, "Delete_Messages", DeleteMessages'Access);

@@ -32,7 +32,6 @@ with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
-with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -508,14 +507,6 @@ package body Trades.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Override_Background_Color
-        (Gtk_Widget(Get_Object(Builder, "lblinfo")),
-         0,
-         Black_RGBA);
-      Override_Color
-        (Gtk_Widget(Get_Object(Builder, "lblinfo")),
-         0,
-         White_RGBA);
       Register_Handler(Builder, "Hide_Trade", HideTrade'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);

@@ -40,7 +40,6 @@ with Gdk; use Gdk;
 with Gdk.Device; use Gdk.Device;
 with Gdk.Window; use Gdk.Window;
 with Gdk.Cursor; use Gdk.Cursor;
-with Gdk.RGBA; use Gdk.RGBA;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Game; use Game;
 with Utils; use Utils;
@@ -680,14 +679,6 @@ package body Maps.UI is
          Override_Font
            (Gtk_Widget(Get_Object(Builder, "mapview")),
             FontDescription);
-         Override_Background_Color
-           (Gtk_Widget(Get_Object(Builder, "messagesview")),
-            0,
-            Black_RGBA);
-         Override_Color
-           (Gtk_Widget(Get_Object(Builder, "messagesview")),
-            0,
-            White_RGBA);
          Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
          Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
          Add_Entry("<skymapwindow>/btnupright", GDK_KP_9, 0);

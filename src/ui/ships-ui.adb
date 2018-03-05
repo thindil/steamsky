@@ -33,7 +33,6 @@ with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
-with Gdk.RGBA; use Gdk.RGBA;
 with Maps; use Maps;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
@@ -930,14 +929,6 @@ package body Ships.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Override_Background_Color
-        (Gtk_Widget(Get_Object(Builder, "lblmoduleinfo")),
-         0,
-         Black_RGBA);
-      Override_Color
-        (Gtk_Widget(Get_Object(Builder, "lblmoduleinfo")),
-         0,
-         White_RGBA);
       Register_Handler(Builder, "Hide_Ship_Info", HideShipInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Module_Info", ShowModuleInfo'Access);
