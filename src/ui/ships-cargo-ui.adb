@@ -30,7 +30,6 @@ with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
-with Gdk.RGBA; use Gdk.RGBA;
 with Messages; use Messages;
 with Crew.Inventory; use Crew.Inventory;
 
@@ -271,14 +270,6 @@ package body Ships.Cargo.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Override_Background_Color
-        (Gtk_Widget(Get_Object(Builder, "lblinfo")),
-         0,
-         Black_RGBA);
-      Override_Color
-        (Gtk_Widget(Get_Object(Builder, "lblinfo")),
-         0,
-         White_RGBA);
       Register_Handler(Builder, "Hide_Ship_Info", HideShipInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);

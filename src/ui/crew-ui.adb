@@ -29,7 +29,6 @@ with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Glib.Types; use Glib.Types;
 with Glib.Properties; use Glib.Properties;
-with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with Ships; use Ships;
 with ShipModules; use ShipModules;
@@ -247,22 +246,6 @@ package body Crew.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Override_Background_Color
-        (Gtk_Widget(Get_Object(Builder, "lblinfo")),
-         0,
-         Black_RGBA);
-      Override_Color
-        (Gtk_Widget(Get_Object(Builder, "lblinfo")),
-         0,
-         White_RGBA);
-      Override_Background_Color
-        (Gtk_Widget(Get_Object(Builder, "lbliteminfo")),
-         0,
-         Black_RGBA);
-      Override_Color
-        (Gtk_Widget(Get_Object(Builder, "lbliteminfo")),
-         0,
-         White_RGBA);
       Register_Handler(Builder, "Hide_Ship_Info", HideShipInfo'Access);
       Register_Handler(Builder, "Show_Member_Info", ShowMemberInfo'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);

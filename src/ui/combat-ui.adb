@@ -38,7 +38,6 @@ with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Glib.Properties; use Glib.Properties;
 with Glib.Types; use Glib.Types;
-with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with Utils.UI; use Utils.UI;
 with Bases; use Bases;
@@ -629,14 +628,6 @@ package body Combat.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Override_Background_Color
-        (Gtk_Widget(Get_Object(Builder, "messagesview")),
-         0,
-         Black_RGBA);
-      Override_Color
-        (Gtk_Widget(Get_Object(Builder, "messagesview")),
-         0,
-         White_RGBA);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Close_Window", CloseWindow'Access);
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);

@@ -31,7 +31,6 @@ with Gtk.Window; use Gtk.Window;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
-with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with Help.UI; use Help.UI;
 with Ships; use Ships;
@@ -297,14 +296,6 @@ package body Crafts.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Override_Background_Color
-        (Gtk_Widget(Get_Object(Builder, "lblinfo")),
-         0,
-         Black_RGBA);
-      Override_Color
-        (Gtk_Widget(Get_Object(Builder, "lblinfo")),
-         0,
-         White_RGBA);
       Register_Handler(Builder, "Hide_Crafts", HideInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
