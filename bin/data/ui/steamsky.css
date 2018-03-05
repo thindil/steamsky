@@ -40,10 +40,6 @@ GtkButton:focus,
   border-style:none;
 }
 
-GtkButton {
-   border-radius:30px;
-}
-
 GtkButton:insensitive * {
    color:black;
 }
