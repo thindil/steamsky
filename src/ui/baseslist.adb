@@ -103,6 +103,7 @@ package body BasesList is
                Append(BaseList, BaseIter);
                Set(BaseList, BaseIter, 0, To_String(SkyBases(I).Name));
                Set(BaseList, BaseIter, 1, Gint(I));
+               Set(BaseList, BaseIter, 2, Gint(CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)));
                AddBase := False;
             end if;
          end if;
@@ -226,38 +227,29 @@ package body BasesList is
          Append(BaseInfo, ASCII.LF & "Reputation: ");
          case SkyBases(BaseIndex).Reputation(1) is
             when -100 .. -75 =>
-               Append(BaseInfo, ASCII.LF & "Hated");
+               Append(BaseInfo, "Hated");
             when -74 .. -50 =>
-               Append(BaseInfo, ASCII.LF & "Outlaw");
+               Append(BaseInfo, "Outlaw");
             when -49 .. -25 =>
-               Append(BaseInfo, ASCII.LF & "Hostile");
+               Append(BaseInfo, "Hostile");
             when -24 .. -1 =>
-               Append(BaseInfo, ASCII.LF & "Unfriendly");
+               Append(BaseInfo, "Unfriendly");
             when 0 =>
-               Append(BaseInfo, ASCII.LF & "Unknown");
+               Append(BaseInfo, "Unknown");
             when 1 .. 25 =>
-               Append(BaseInfo, ASCII.LF & "Visitor");
+               Append(BaseInfo, "Visitor");
             when 26 .. 50 =>
-               Append(BaseInfo, ASCII.LF & "Trader");
+               Append(BaseInfo, "Trader");
             when 51 .. 75 =>
-               Append(BaseInfo, ASCII.LF & "Friend");
+               Append(BaseInfo, "Friend");
             when 76 .. 100 =>
-               Append(BaseInfo, ASCII.LF & "Well known");
+               Append(BaseInfo, "Well known");
             when others =>
                null;
          end case;
       else
          BaseInfo := To_Unbounded_String("Not visited yet.");
       end if;
-      Append
-        (BaseInfo,
-         ASCII.LF &
-         "Distance:" &
-         Integer'Image
-           (Integer
-              (CountDistance
-                 (SkyBases(BaseIndex).SkyX,
-                  SkyBases(BaseIndex).SkyY))));
       Set_Label(Gtk_Label(Get_Object(Object, "lblinfo")), To_String(BaseInfo));
    end ShowBaseInfo;
 
