@@ -1265,4 +1265,13 @@ Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x118, 200..400x116, 100..
 Description = Large, good armored, upgraded version of pirate ship. As many pirates they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 23, 4x24, 25, 3..5x61
+[134]
+Name = Undead ship mk IV
+Modules = 135, 143, 134, 130, 4x132, 153
+CombatAI = Berserker
+Loot = 100..300
+Cargo = 2000..2500x1, 150..300x116
+Description = Upgraded version of undead flying vessel. Dangerous at close range.
+Owner = Undead
+Crew = 27, 6..10x62
 []
