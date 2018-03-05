@@ -9,7 +9,7 @@ generally is playable. Now game is available (and tested) only on Linux
 
 ## Game versions
 At this moment are available 2 game versions:
-- 2.0.x: "stable" version of game. This version receive only fixes of bug but
+- 2.0.x: "stable" version of game. This version receive only fixes of bugs but
   no new features. Source code for this version is in *2.0* branch.
 - 2.x: "development" version of game, future version 3.0. This is main place
   where game development happen. It often break save compatibilities between
@@ -18,7 +18,7 @@ At this moment are available 2 game versions:
 
 ## Build game from sources
 
-To build it, you need:
+To build it (works on Linux and Windows too), you need:
 
 * compiler - GCC with enabled Ada support or (best option) GNAT from: 
   
@@ -47,9 +47,15 @@ If you have all, in main source code directory (where this file is):
 
 
 ## Running game
+
+### Linux
 If you use downloaded binaries, you don't need any additional libraries. Just
 in terminal, run `steamsky.sh` script to start game. This script should works
 too if you use binaries compiled by self.
+
+### Windows
+If you compiled game by self, just clicking on `steamsky.exe` should be enough 
+to run game.
 
 ### Starting parameters
 You can set game directories by starting parameters. Possible options are:
@@ -69,7 +75,8 @@ You can set game directories by starting parameters. Possible options are:
 Of course, you can set all parameters together: `./steamsky.sh --datadir=somedir/
 --savedir=otherdir/ --docdir=anotherdir/`
 
-Paths to directories can be absolute or relative where file `steamsky` is. 
+Paths to directories can be absolute or relative where file `steamsky` is. For
+Windows, use `steamsky.exe` instead `./steamsky.sh`.
 
 ## Modify game
 For detailed informations about modifying various game elements or debugging
@@ -79,6 +86,8 @@ game, see [MODDING.md](bin/doc/MODDING.md)
 For detailed informations about contributing to project (bugs reporting, ideas
 propositions, code conduct, etc), see [CONTRIBUTING.md](bin/doc/CONTRIBUTING.md)
 
+## License
+Game is available under [GPLv3](bin/doc/COPYING) license.
 
 More documentation about game (changelog, license) you can find in
 [doc](bin/doc) directory.
