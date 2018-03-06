@@ -73,6 +73,9 @@ package body Help.UI is
       end loop;
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Do_Connect(Builder);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "helpwindow")),
+         CloseWindow'Access);
    end CreateHelpUI;
 
    procedure ShowHelpUI(Topic: Positive) is

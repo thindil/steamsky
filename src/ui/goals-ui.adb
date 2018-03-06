@@ -31,6 +31,7 @@ with Goals; use Goals;
 with MainMenu; use MainMenu;
 with Statistics.UI; use Statistics.UI;
 with Utils; use Utils;
+with Utils.UI; use Utils.UI;
 
 package body Goals.UI is
 
@@ -141,6 +142,9 @@ package body Goals.UI is
       AddGoals("Visit bases", VISIT);
       AddGoals("Craft items", CRAFT);
       AddGoals("Finish missions", MISSION);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "goalswindow")),
+         CloseWindow'Access);
    end CreateGoalsMenu;
 
 end Goals.UI;

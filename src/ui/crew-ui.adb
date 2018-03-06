@@ -267,6 +267,18 @@ package body Crew.UI is
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderpriorities")),
          SetPriority'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "crewwindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "inventorywindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "moveitemwindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "prioritieswindow")),
+         CloseWindow'Access);
    end CreateCrewUI;
 
    procedure ShowCrewUI(OldState: GameStates) is

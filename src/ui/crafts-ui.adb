@@ -304,6 +304,12 @@ package body Crafts.UI is
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Set_Crafting", SetCrafting'Access);
       Do_Connect(Builder);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "craftswindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "recipewindow")),
+         CloseWindow'Access);
    end CreateCraftsUI;
 
    procedure ShowCraftsUI is

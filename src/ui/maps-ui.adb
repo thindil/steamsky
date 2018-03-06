@@ -815,6 +815,18 @@ package body Maps.UI is
             "<skymapwindow>/Menu/ResignFromGame",
             Accelerators);
       end if;
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "mapinfowindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "movemapwindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "orderswindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "waitxwindow")),
+         CloseWindow'Access);
       UpdateMessages;
       Set_Text
         (Gtk_Text_Buffer(Get_Object(Builder, "txtmap")),

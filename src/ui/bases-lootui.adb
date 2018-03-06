@@ -333,6 +333,12 @@ package body Bases.LootUI is
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Loot_Item", LootItem'Access);
       Do_Connect(Builder);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "lootwindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "lootitemwindow")),
+         CloseWindow'Access);
    end CreateBasesLootUI;
 
    procedure ShowLootUI is

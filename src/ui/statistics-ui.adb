@@ -142,6 +142,12 @@ package body Statistics.UI is
       Register_Handler(Builder, "Show_More", ShowMore'Access);
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
       Do_Connect(Builder);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "statisticswindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "showmorewindow")),
+         CloseWindow'Access);
    end CreateStatsUI;
 
    procedure ShowStatsUI(OldState: GameStates) is

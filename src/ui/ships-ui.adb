@@ -950,6 +950,18 @@ package body Ships.UI is
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "rendername")),
          ChangeModuleName'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "shipwindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "assignwindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "changenamewindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "optionswindow")),
+         CloseWindow'Access);
    end CreateShipUI;
 
    procedure ShowShipUI(OldState: GameStates) is

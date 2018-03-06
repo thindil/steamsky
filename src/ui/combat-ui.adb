@@ -644,6 +644,12 @@ package body Combat.UI is
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "rendercrew")),
          GiveCombatOrders'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "boardwindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "enemyinfowindow")),
+         CloseWindow'Access);
    end CreateCombatUI;
 
 end Combat.UI;

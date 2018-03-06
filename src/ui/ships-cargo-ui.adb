@@ -279,6 +279,15 @@ package body Ships.Cargo.UI is
       Register_Handler(Builder, "Show_Give_Item", ShowGiveItem'Access);
       Register_Handler(Builder, "Give_Item", GiveItem'Access);
       Do_Connect(Builder);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "cargowindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "dropitemwindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "giveitemwindow")),
+         CloseWindow'Access);
    end CreateCargoUI;
 
    procedure ShowCargoUI(OldState: GameStates) is

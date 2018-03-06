@@ -103,7 +103,11 @@ package body BasesList is
                Append(BaseList, BaseIter);
                Set(BaseList, BaseIter, 0, To_String(SkyBases(I).Name));
                Set(BaseList, BaseIter, 1, Gint(I));
-               Set(BaseList, BaseIter, 2, Gint(CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)));
+               Set
+                 (BaseList,
+                  BaseIter,
+                  2,
+                  Gint(CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)));
                AddBase := False;
             end if;
          end if;
@@ -322,6 +326,9 @@ package body BasesList is
             Bases_Owners'Image(I)(1) &
             To_Lower(Bases_Owners'Image(I)(2 .. Bases_Owners'Image(I)'Last)));
       end loop;
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "baseslistwindow")),
+         CloseWindow'Access);
    end CreateBasesListUI;
 
    procedure ShowBasesListUI is
