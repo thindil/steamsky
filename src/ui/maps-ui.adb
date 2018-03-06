@@ -465,10 +465,8 @@ package body Maps.UI is
             end loop;
          end if;
       end loop;
-      Set_Visible
-        (Gtk_Widget(Get_Object(Builder, "itemwaitheal")),
-         NeedHealing);
-      Set_Visible(Gtk_Widget(Get_Object(Builder, "itemwaitrest")), NeedRest);
+      Set_Visible(Gtk_Widget(Get_Object(Builder, "btnwaitheal")), NeedHealing);
+      Set_Visible(Gtk_Widget(Get_Object(Builder, "btnwaitrest")), NeedRest);
    end UpdateMenu;
 
    procedure DrawMap is
@@ -826,6 +824,9 @@ package body Maps.UI is
          CloseWindow'Access);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "waitxwindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "waitwindow")),
          CloseWindow'Access);
       UpdateMessages;
       Set_Text
