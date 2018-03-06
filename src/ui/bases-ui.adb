@@ -331,6 +331,12 @@ package body Bases.UI is
       Register_Handler(Builder, "Object_Selected", ObjectSelected'Access);
       Register_Handler(Builder, "Accept_Action", AcceptAction'Access);
       Do_Connect(Builder);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "basewindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "recruitwindow")),
+         CloseWindow'Access);
    end CreateBasesUI;
 
    procedure ShowRecruitUI is

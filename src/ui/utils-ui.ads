@@ -17,7 +17,9 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Widget; use Gtk.Widget;
 with Glib.Object; use Glib.Object;
+with Gdk.Event; use Gdk.Event;
 
 package Utils.UI is
 
@@ -49,5 +51,8 @@ package Utils.UI is
    function HideInfo
      (User_Data: access GObject_Record'Class)
      return Boolean; -- Hide info window and back to sky map
+   function CloseWindow
+     (Self: access Gtk_Widget_Record'Class;
+      Event: Gdk_Event_Key) return Boolean; -- Close window on press Escape key
 
 end Utils.UI;

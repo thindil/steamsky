@@ -146,6 +146,9 @@ package body Events.UI is
       Register_Handler(Builder, "Set_Destination", SetDestination'Access);
       Register_Handler(Builder, "Show_Event", ShowEvent'Access);
       Do_Connect(Builder);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "eventswindow")),
+         CloseWindow'Access);
    end CreateEventsUI;
 
    procedure ShowEventsUI is

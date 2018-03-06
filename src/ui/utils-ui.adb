@@ -18,8 +18,10 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Dialog; use Gtk.Dialog;
-with Gtk.Widget; use Gtk.Widget;
+with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Label; use Gtk.Label;
+with Gdk.Types; use Gdk.Types;
+with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with MainMenu; use MainMenu;
 with Game; use Game;
 with Messages; use Messages;
@@ -124,5 +126,18 @@ package body Utils.UI is
       CreateSkyMap;
       return True;
    end HideInfo;
+
+   function CloseWindow
+     (Self: access Gtk_Widget_Record'Class;
+      Event: Gdk_Event_Key) return Boolean is
+      KeyMods: constant Gdk_Modifier_Type :=
+        Event.State and Get_Default_Mod_Mask;
+   begin
+      if KeyMods = 0 and Event.Keyval = GDK_Escape then
+         Close(Gtk_Window(Self));
+         return False;
+      end if;
+      return True;
+   end CloseWindow;
 
 end Utils.UI;

@@ -188,6 +188,9 @@ package body GameOptions is
            (Gtk_Widget(Get_Object(Builder, To_String(EditNames(I)))),
             SetAccelerator'Access);
       end loop;
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "optionswindow")),
+         CloseWindow'Access);
    end CreateGameOptions;
 
    procedure ShowGameOptions is
