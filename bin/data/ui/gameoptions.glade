@@ -731,7 +731,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">9</property>
+                    <property name="top_attach">10</property>
                   </packing>
                 </child>
                 <child>
@@ -742,7 +742,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">10</property>
+                    <property name="top_attach">11</property>
                   </packing>
                 </child>
                 <child>
@@ -753,7 +753,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">11</property>
+                    <property name="top_attach">12</property>
                   </packing>
                 </child>
                 <child>
@@ -764,7 +764,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">12</property>
+                    <property name="top_attach">13</property>
                   </packing>
                 </child>
                 <child>
@@ -775,7 +775,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">13</property>
+                    <property name="top_attach">14</property>
                   </packing>
                 </child>
                 <child>
@@ -786,7 +786,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">14</property>
+                    <property name="top_attach">15</property>
                   </packing>
                 </child>
                 <child>
@@ -797,7 +797,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">15</property>
+                    <property name="top_attach">16</property>
                   </packing>
                 </child>
                 <child>
@@ -874,7 +874,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">9</property>
+                    <property name="top_attach">10</property>
                   </packing>
                 </child>
                 <child>
@@ -885,7 +885,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">10</property>
+                    <property name="top_attach">11</property>
                   </packing>
                 </child>
                 <child>
@@ -896,7 +896,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">11</property>
+                    <property name="top_attach">12</property>
                   </packing>
                 </child>
                 <child>
@@ -907,7 +907,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">12</property>
+                    <property name="top_attach">13</property>
                   </packing>
                 </child>
                 <child>
@@ -918,7 +918,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">13</property>
+                    <property name="top_attach">14</property>
                   </packing>
                 </child>
                 <child>
@@ -929,7 +929,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">14</property>
+                    <property name="top_attach">15</property>
                   </packing>
                 </child>
                 <child>
@@ -940,7 +940,29 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">15</property>
+                    <property name="top_attach">16</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Wait orders:</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">9</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="edtwaitorders">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="editable">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">9</property>
                   </packing>
                 </child>
               </object>
