@@ -703,6 +703,7 @@ package body Maps.UI is
          Add_Entry("<skymapwindow>/Menu/QuitGame", GDK_Q, 0);
          Add_Entry("<skymapwindow>/Menu/ResignFromGame", GDK_X, 0);
          Add_Entry("<skymapwindow>/Menu", GDK_E, 0);
+         Add_Entry("<skymapwindow>/Menu/WaitOrders", GDK_W, 0);
          if Exists(To_String(SaveDirectory) & "keys.cfg") then
             Load(To_String(SaveDirectory) & "keys.cfg");
          end if;
@@ -811,6 +812,10 @@ package body Maps.UI is
          Set_Accel_Path
            (Gtk_Widget(Get_Object(Builder, "menuresign")),
             "<skymapwindow>/Menu/ResignFromGame",
+            Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "menuwait")),
+            "<skymapwindow>/Menu/WaitOrders",
             Accelerators);
       end if;
       On_Key_Release_Event
