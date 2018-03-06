@@ -334,6 +334,12 @@ package body Missions.UI is
          "Accept_Mission",
          AcceptSelectedMission'Access);
       Do_Connect(Builder);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "missionswindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "missionsinfowindow")),
+         CloseWindow'Access);
    end CreateMissionsUI;
 
    procedure ShowMissionsUI is

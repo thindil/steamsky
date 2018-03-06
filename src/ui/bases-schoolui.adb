@@ -161,6 +161,9 @@ package body Bases.SchoolUI is
          "Train_Selected_Skill",
          TrainSelectedSkill'Access);
       Do_Connect(Builder);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "schoolwindow")),
+         CloseWindow'Access);
    end CreateBasesSchoolUI;
 
    procedure ShowSchoolUI is

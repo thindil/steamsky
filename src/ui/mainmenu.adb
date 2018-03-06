@@ -414,6 +414,18 @@ package body MainMenu is
       Set_Text
         (Gtk_Entry(Get_Object(Builder, "entryshipname")),
          To_String(NewGameSettings.ShipName));
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "aboutdialog")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "hofwindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "newgamewindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "newswindow")),
+         CloseWindow'Access);
       ShowMainMenu;
    end CreateMainMenu;
 

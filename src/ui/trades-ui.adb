@@ -515,6 +515,15 @@ package body Trades.UI is
       Register_Handler(Builder, "Show_Trade_Item", ShowTradeItem'Access);
       Register_Handler(Builder, "Trade_Item", TradeItem'Access);
       Do_Connect(Builder);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "tradewindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "buywindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "sellwindow")),
+         CloseWindow'Access);
    end CreateTradeUI;
 
    procedure ShowTradeUI is

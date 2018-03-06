@@ -527,6 +527,9 @@ package body Bases.ShipyardUI is
       Register_Handler(Builder, "Manipulate_Module", ManipulateModule'Access);
       Register_Handler(Builder, "Show_Remove_Info", ShowRemoveInfo'Access);
       Do_Connect(Builder);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "shipyardwindow")),
+         CloseWindow'Access);
    end CreateBasesShipyardUI;
 
    procedure ShowShipyardUI is

@@ -107,6 +107,9 @@ package body Messages.UI is
       Register_Handler(Builder, "Select_Messages", SelectMessages'Access);
       Register_Handler(Builder, "Delete_Messages", DeleteMessages'Access);
       Do_Connect(Builder);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "messageswindow")),
+         CloseWindow'Access);
    end CreateMessagesUI;
 
    procedure ShowMessagesUI(OldState: GameStates) is
