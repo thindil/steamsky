@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New enemy ships: armored pirate ship mk IV, attacking clockwork drone mk IV,
   armored attacking drone mk IV, inquisition ship mk IV, armored inquisition
-  ship mk IV, large clockwork drone mk IV, large pirate ship mk IV and undead
-  ship mk IV
+  ship mk IV, large clockwork drone mk IV, large pirate ship mk IV, undead ship
+  mk IV and large undead ship mk IV
 - Keyboard shortcuts for ship movement and menu
 - Option to set keyboard shortcuts for ship movement and menu
 
