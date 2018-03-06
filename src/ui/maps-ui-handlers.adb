@@ -894,21 +894,22 @@ package body Maps.UI.Handlers is
    procedure WaitOrder(User_Data: access GObject_Record'Class) is
       TimeNeeded: Natural := 0;
    begin
-      if User_Data = Get_Object(Builder, "item1min") then
+      Hide(Gtk_Widget(Get_Object(Builder, "waitwindow")));
+      if User_Data = Get_Object(Builder, "btn1min") then
          UpdateGame(1);
-      elsif User_Data = Get_Object(Builder, "item5min") then
+      elsif User_Data = Get_Object(Builder, "btnwait5min") then
          UpdateGame(5);
-      elsif User_Data = Get_Object(Builder, "item10min") then
+      elsif User_Data = Get_Object(Builder, "btnwait10min") then
          UpdateGame(10);
-      elsif User_Data = Get_Object(Builder, "item15min") then
+      elsif User_Data = Get_Object(Builder, "btnwait15min") then
          UpdateGame(15);
-      elsif User_Data = Get_Object(Builder, "item30min") then
+      elsif User_Data = Get_Object(Builder, "btnwait30min") then
          UpdateGame(30);
-      elsif User_Data = Get_Object(Builder, "item1hour") then
+      elsif User_Data = Get_Object(Builder, "btnwait1hour") then
          UpdateGame(60);
-      elsif User_Data = Get_Object(Builder, "itemwaitrest") then
+      elsif User_Data = Get_Object(Builder, "btnwaitrest") then
          WaitForRest;
-      elsif User_Data = Get_Object(Builder, "itemwaitheal") then
+      elsif User_Data = Get_Object(Builder, "btnwaitheal") then
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Health < 100 and
               PlayerShip.Crew(I).Health > 0 and
