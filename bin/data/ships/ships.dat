@@ -1274,4 +1274,13 @@ Cargo = 2000..2500x1, 150..300x116
 Description = Upgraded version of undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 27, 6..10x62
+[135]
+Name = Large undead ship mk IV
+Modules = 141, 144, 137, 130, 6x132, 153
+CombatAI = Berserker
+Loot = 200..400
+Cargo = 3000..4000x1, 300..400x116
+Description = Large, good armored, upgraded version of undead flying vessel. Dangerous at close range.
+Owner = Undead
+Crew = 28, 8..12x63
 []
