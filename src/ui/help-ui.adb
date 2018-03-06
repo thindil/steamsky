@@ -135,7 +135,8 @@ package body Help.UI is
          To_Unbounded_String("<skymapwindow>/Menu/GameOptions"),
          To_Unbounded_String("<skymapwindow>/Menu/QuitGame"),
          To_Unbounded_String("<skymapwindow>/Menu/ResignFromGame"),
-         To_Unbounded_String("<skymapwindow>/Menu"));
+         To_Unbounded_String("<skymapwindow>/Menu"),
+         To_Unbounded_String("<skymapwindow>/Menu/WaitOrders"));
    begin
       NewText := Help_List(Topic).Text;
       for I in AccelNames'Range loop
