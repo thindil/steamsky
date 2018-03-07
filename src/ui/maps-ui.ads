@@ -42,7 +42,6 @@ private
    procedure DeathConfirm; -- Show confirmation to show game stats when player died
    procedure UpdateHeader; -- Update game header informations
    procedure UpdateMoveButtons; -- Update move buttons
-   procedure UpdateMenu; -- Update wait menu
    procedure DrawMap; -- Draw sky map
    procedure UpdateMessages; -- Update game messages and last message
    procedure HideButtons

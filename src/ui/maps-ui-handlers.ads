@@ -70,5 +70,8 @@ package Maps.UI.Handlers is
         Class); -- Set home base/ask for bases/ask for events
    procedure DeliverMedicines
      (User_Data: access GObject_Record'Class); -- Deliver medicines to base
+   procedure ShowWaitOrders
+     (Object: access Gtkada_Builder_Record'
+        Class); -- Show available wait orders
 
 end Maps.UI.Handlers;

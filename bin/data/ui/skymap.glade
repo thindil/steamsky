@@ -114,7 +114,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Wait orders</property>
         <property name="use_underline">True</property>
-        <signal name="activate" handler="Show_Window" object="waitwindow" swapped="no"/>
+        <signal name="activate" handler="Show_Wait_Orders" swapped="no"/>
       </object>
     </child>
     <child>
@@ -1510,6 +1510,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <property name="transient_for">skymapwindow</property>
+    <signal name="delete-event" handler="Hide_Window" object="waitwindow" swapped="no"/>
     <child>
       <object class="GtkButtonBox">
         <property name="visible">True</property>
@@ -1620,6 +1621,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="no_show_all">True</property>
             <signal name="clicked" handler="Wait_Order" object="btnwaitrest" swapped="no"/>
           </object>
           <packing>
@@ -1634,6 +1636,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="no_show_all">True</property>
             <signal name="clicked" handler="Wait_Order" object="btnwaitheal" swapped="no"/>
           </object>
           <packing>
@@ -1644,7 +1647,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>

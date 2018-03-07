@@ -445,30 +445,6 @@ package body Maps.UI is
       end if;
    end UpdateMoveButtons;
 
-   procedure UpdateMenu is
-      NeedHealing, NeedRest: Boolean := False;
-   begin
-      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-         if PlayerShip.Crew(I).Tired > 0 and
-           PlayerShip.Crew(I).Order = Rest then
-            NeedRest := True;
-         end if;
-         if PlayerShip.Crew(I).Health < 100 and
-           PlayerShip.Crew(I).Health > 0 and
-           PlayerShip.Crew(I).Order = Rest then
-            for Module of PlayerShip.Modules loop
-               if Modules_List(Module.ProtoIndex).MType = CABIN and
-                 Module.Owner = I then
-                  NeedHealing := True;
-                  exit;
-               end if;
-            end loop;
-         end if;
-      end loop;
-      Set_Visible(Gtk_Widget(Get_Object(Builder, "btnwaitheal")), NeedHealing);
-      Set_Visible(Gtk_Widget(Get_Object(Builder, "btnwaitrest")), NeedRest);
-   end UpdateMenu;
-
    procedure DrawMap is
       Iter: Gtk_Text_Iter;
       MapBuffer: constant Gtk_Text_Buffer :=
@@ -668,6 +644,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Start_Mission", StartMission'Access);
          Register_Handler(Builder, "Complete_Mission", CompleteMission'Access);
          Register_Handler(Builder, "Execute_Order", ExecuteOrder'Access);
+         Register_Handler(Builder, "Show_Wait_Orders", ShowWaitOrders'Access);
          Register_Handler
            (Builder,
             "Deliver_Medicines",
@@ -840,7 +817,6 @@ package body Maps.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       UpdateHeader;
       UpdateMoveButtons;
-      UpdateMenu;
       Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
    end CreateSkyMap;
 

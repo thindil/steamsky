@@ -360,7 +360,6 @@ package body Maps.UI.Handlers is
       UpdateHeader;
       UpdateMessages;
       UpdateMoveButtons;
-      UpdateMenu;
    end BtnDockClicked;
 
    procedure ChangeSpeed(Object: access Gtkada_Builder_Record'Class) is
@@ -560,7 +559,6 @@ package body Maps.UI.Handlers is
          UpdateHeader;
          UpdateMessages;
          UpdateMoveButtons;
-         UpdateMenu;
          DrawMap;
       end if;
    end MoveShip;
@@ -938,7 +936,6 @@ package body Maps.UI.Handlers is
       UpdateHeader;
       UpdateMessages;
       UpdateMoveButtons;
-      UpdateMenu;
       DrawMap;
    end WaitOrder;
 
@@ -1089,7 +1086,6 @@ package body Maps.UI.Handlers is
       UpdateHeader;
       UpdateMessages;
       UpdateMoveButtons;
-      UpdateMenu;
       DrawMap;
    end StartMission;
 
@@ -1100,7 +1096,6 @@ package body Maps.UI.Handlers is
       UpdateHeader;
       UpdateMessages;
       UpdateMoveButtons;
-      UpdateMenu;
       DrawMap;
    end CompleteMission;
 
@@ -1158,7 +1153,6 @@ package body Maps.UI.Handlers is
       UpdateHeader;
       UpdateMessages;
       UpdateMoveButtons;
-      UpdateMenu;
       DrawMap;
    end ExecuteOrder;
 
@@ -1199,5 +1193,30 @@ package body Maps.UI.Handlers is
             ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
       end if;
    end DeliverMedicines;
+
+   procedure ShowWaitOrders(Object: access Gtkada_Builder_Record'Class) is
+      NeedHealing, NeedRest: Boolean := False;
+   begin
+      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+         if PlayerShip.Crew(I).Tired > 0 and
+           PlayerShip.Crew(I).Order = Rest then
+            NeedRest := True;
+         end if;
+         if PlayerShip.Crew(I).Health < 100 and
+           PlayerShip.Crew(I).Health > 0 and
+           PlayerShip.Crew(I).Order = Rest then
+            for Module of PlayerShip.Modules loop
+               if Modules_List(Module.ProtoIndex).MType = CABIN and
+                 Module.Owner = I then
+                  NeedHealing := True;
+                  exit;
+               end if;
+            end loop;
+         end if;
+      end loop;
+      Set_Visible(Gtk_Widget(Get_Object(Object, "btnwaitheal")), NeedHealing);
+      Set_Visible(Gtk_Widget(Get_Object(Object, "btnwaitrest")), NeedRest);
+      Show_All(Gtk_Widget(Get_Object(Object, "waitwindow")));
+   end ShowWaitOrders;
 
 end Maps.UI.Handlers;
