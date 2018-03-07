@@ -234,7 +234,7 @@ package body Maps.UI is
       if HavePilot then
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblpilot")),
-            "[<span foreground=""green"">P</span>]");
+            "[<span foreground=""#4E9A06"">P</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblpilot")),
             "Pilot is on position.");
@@ -249,7 +249,7 @@ package body Maps.UI is
       if HaveEngineer then
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblengineer")),
-            "[<span foreground=""green"">E</span>]");
+            "[<span foreground=""#4E9A06"">E</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblengineer")),
             "Engineer is on position.");
@@ -264,7 +264,7 @@ package body Maps.UI is
       if HaveGunner then
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblgunners")),
-            "[<span foreground=""green"">G</span>]");
+            "[<span foreground=""#4E9A06"">G</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblgunners")),
             "All guns are manned.");
@@ -280,7 +280,7 @@ package body Maps.UI is
          if HaveRepairman then
             Set_Markup
               (Gtk_Label(Get_Object(Builder, "lblrepairs")),
-               "[<span foreground=""green"">R</span>]");
+               "[<span foreground=""#4E9A06"">R</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblrepairs")),
                "Ship is being repaired.");
@@ -302,7 +302,7 @@ package body Maps.UI is
          if HaveWorker then
             Set_Markup
               (Gtk_Label(Get_Object(Builder, "lblcrafting")),
-               "[<span foreground=""green"">M</span>]");
+               "[<span foreground=""#4E9A06"">M</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblcrafting")),
                "All crafting orders are executed.");
@@ -324,7 +324,7 @@ package body Maps.UI is
          if HaveUpgrader then
             Set_Markup
               (Gtk_Label(Get_Object(Builder, "lblupgrade")),
-               "[<span foreground=""green"">U</span>]");
+               "[<span foreground=""#4E9A06"">U</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblupgrade")),
                "Ship module upgrade in progress.");
@@ -345,7 +345,7 @@ package body Maps.UI is
       if HaveTrader then
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lbltalk")),
-            "[<span foreground=""green"">T</span>]");
+            "[<span foreground=""#4E9A06"">T</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lbltalk")),
             "Trader is on position.");
@@ -377,7 +377,7 @@ package body Maps.UI is
          if HaveCleaner then
             Set_Markup
               (Gtk_Label(Get_Object(Builder, "lblclean")),
-               "[<span foreground=""green"">C</span>]");
+               "[<span foreground=""#4E9A06"">C</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblclean")),
                "Ship is cleaned.");
@@ -455,7 +455,7 @@ package body Maps.UI is
       GrayColor: constant Gtk_Text_Tag := Lookup(Tags, "gray");
       RedColor: constant Gtk_Text_Tag := Lookup(Tags, "red");
       GreenColor: constant Gtk_Text_Tag := Lookup(Tags, "green");
-      BlueColor: constant Gtk_Text_Tag := Lookup(Tags, "blue");
+      YellowColor: constant Gtk_Text_Tag := Lookup(Tags, "yellow");
       CyanColor: constant Gtk_Text_Tag := Lookup(Tags, "cyan");
       MapChar: Character;
       MapColor: Gtk_Text_Tag;
@@ -514,7 +514,7 @@ package body Maps.UI is
                            when Agricultural =>
                               MapColor := GreenColor;
                            when Refinery =>
-                              MapColor := BlueColor;
+                              MapColor := YellowColor;
                            when Shipyard =>
                               MapColor := CyanColor;
                            when others =>
