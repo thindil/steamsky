@@ -1283,4 +1283,13 @@ Cargo = 3000..4000x1, 300..400x116
 Description = Large, good armored, upgraded version of undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 28, 8..12x63
+[136]
+Name = Large inquisition ship mk IV
+Modules = 141, 144, 137, 10x93, 130, 7x132, 2x145, 2x160
+CombatAI = Attacker
+Loot = 250..500
+Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x117, 200..400x116
+Description = Large, good armored, upgraded version of inquisition flying vessel.
+Owner = Inquisition
+Crew = 29, 30, 31, 5..9x64
 []
