@@ -156,11 +156,38 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel" id="lblinfo">
+                  <object class="GtkFrame">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_markup">True</property>
-                    <property name="wrap">True</property>
+                    <property name="margin_left">5</property>
+                    <property name="margin_right">5</property>
+                    <property name="margin_top">5</property>
+                    <property name="margin_bottom">5</property>
+                    <property name="label_xalign">0.10000000149011612</property>
+                    <property name="shadow_type">out</property>
+                    <child>
+                      <object class="GtkAlignment">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="left_padding">12</property>
+                        <child>
+                          <object class="GtkLabel" id="lblinfo">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="use_markup">True</property>
+                            <property name="wrap">True</property>
+                            <property name="xalign">0</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Item info:</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -169,12 +196,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="btntake">
-                    <property name="label" translatable="yes">Take item</property>
+                  <object class="GtkLabel" id="lblshipspace">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <signal name="clicked" handler="Show_Loot_Item" object="btntake" swapped="no"/>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0.05000000074505806</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -183,12 +208,13 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="btndrop">
-                    <property name="label" translatable="yes">Drop item</property>
+                  <object class="GtkButton" id="btntake">
+                    <property name="label" translatable="yes">Take item</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="Show_Loot_Item" object="btndrop" swapped="no"/>
+                    <property name="halign">center</property>
+                    <signal name="clicked" handler="Show_Loot_Item" object="btntake" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -197,9 +223,13 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="lblshipspace">
+                  <object class="GtkButton" id="btndrop">
+                    <property name="label" translatable="yes">Drop item</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">center</property>
+                    <signal name="clicked" handler="Show_Loot_Item" object="btndrop" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
