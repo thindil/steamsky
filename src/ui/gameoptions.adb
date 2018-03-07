@@ -135,10 +135,16 @@ package body GameOptions is
         Event.State and Get_Default_Mod_Mask;
       Changed, Found: Boolean := False;
       Key: Gtk_Accel_Key;
+      KeyPressed: Gdk_Key_Type;
    begin
+      if Integer(Event.Keyval) <= Character'Pos(Character'Last) then
+         KeyPressed := Event.Keyval - 32;
+      else
+         KeyPressed := Event.Keyval;
+      end if;
       for I in AccelNames'Range loop
          Lookup_Entry(To_String(AccelNames(I)), Key, Found);
-         if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
+         if Key.Accel_Key = KeyPressed and Key.Accel_Mods = KeyMods then
             ShowDialog
               ("You can't set this key because it is set for other action. Please choice another key.",
                Gtk_Window(Get_Object(Builder, "optionswindow")));
@@ -151,7 +157,7 @@ package body GameOptions is
             Changed :=
               Change_Entry
                 (To_String(AccelNames(I)),
-                 Event.Keyval,
+                 KeyPressed,
                  KeyMods,
                  True);
             exit;
