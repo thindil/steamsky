@@ -91,6 +91,7 @@ package body Bases.SchoolUI is
    procedure SetTrainButton(Object: access Gtkada_Builder_Record'Class) is
       SkillsIter: Gtk_Tree_Iter;
       SkillsModel: Gtk_Tree_Model;
+      SkillName: Unbounded_String;
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -100,8 +101,13 @@ package body Bases.SchoolUI is
       if SkillsIter = Null_Iter then
          return;
       end if;
-      SkillIndex :=
-        Natural'Value(To_String(Get_Path(SkillsModel, SkillsIter))) + 1;
+      SkillName := To_Unbounded_String(Get_String(SkillsModel, SkillsIter, 0));
+      for I in Skills_List.Iterate loop
+         if Skills_List(I).Name = SkillName then
+            SkillIndex := SkillsData_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
       if Get_Int(SkillsModel, SkillsIter, 1) = 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "btntrain")), False);
       else
