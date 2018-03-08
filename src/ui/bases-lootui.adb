@@ -26,7 +26,6 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
-with Gtk.Button; use Gtk.Button;
 with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
@@ -147,14 +146,16 @@ package body Bases.LootUI is
       end if;
       Set_Label(Gtk_Label(Get_Object(Object, "lblinfo")), To_String(ItemInfo));
       if CargoIndex = 0 then
-         Set_Visible(Gtk_Widget(Get_Object(Object, "btndrop")), False);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "dropexpand")), False);
       else
-         Set_Visible(Gtk_Widget(Get_Object(Object, "btndrop")), True);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "dropexpand")), True);
+         Set_Upper(Gtk_Adjustment(Get_Object(Object, "amountadj")), Gdouble(PlayerShip.Cargo(CargoIndex).Amount));
       end if;
       if BaseCargoIndex = 0 then
-         Set_Visible(Gtk_Widget(Get_Object(Object, "btntake")), False);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "takeexpand")), False);
       elsif SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
-         Set_Visible(Gtk_Widget(Get_Object(Object, "btntake")), True);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "takeexpand")), True);
+         Set_Upper(Gtk_Adjustment(Get_Object(Object, "amountadj1")), Gdouble(SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount));
       end if;
       FreeSpace := FreeCargo(0);
       if FreeSpace < 0 then
@@ -164,51 +165,6 @@ package body Bases.LootUI is
         (Gtk_Label(Get_Object(Object, "lblshipspace")),
          "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
    end ShowItemInfo;
-
-   procedure ShowLootItem(User_Data: access GObject_Record'Class) is
-      ItemsIter: Gtk_Tree_Iter;
-      ItemsModel: Gtk_Tree_Model;
-      MaxAmount: Natural;
-      CargoIndex, BaseCargoIndex: Natural := 0;
-      BaseIndex: constant Natural :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      AmountAdj: constant Gtk_Adjustment :=
-        Gtk_Adjustment(Get_Object(Builder, "amountadj"));
-   begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Builder, "treeitems"))),
-         ItemsModel,
-         ItemsIter);
-      if ItemsIter = Null_Iter then
-         return;
-      end if;
-      CargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 1));
-      BaseCargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 2));
-      Set_Value(AmountAdj, 1.0);
-      if User_Data = Get_Object(Builder, "btntake") then
-         MaxAmount := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
-         Set_Upper(AmountAdj, Gdouble(MaxAmount));
-         Set_Label
-           (Gtk_Label(Get_Object(Builder, "lblamount")),
-            "Amount to take (max" & Natural'Image(MaxAmount) & "):");
-         Set_Label
-           (Gtk_Button(Get_Object(Builder, "btnlootitem")),
-            "Take item");
-         Set_Label(Gtk_Button(Get_Object(Builder, "btnlootall")), "Take all");
-      else
-         MaxAmount := PlayerShip.Cargo(CargoIndex).Amount;
-         Set_Upper(AmountAdj, Gdouble(MaxAmount));
-         Set_Label
-           (Gtk_Label(Get_Object(Builder, "lblamount")),
-            "Amount to drop (max" & Natural'Image(MaxAmount) & "):");
-         Set_Label
-           (Gtk_Button(Get_Object(Builder, "btnlootitem")),
-            "Drop item");
-         Set_Label(Gtk_Button(Get_Object(Builder, "btnlootall")), "Drop all");
-      end if;
-      Show_All(Gtk_Widget(Get_Object(Builder, "lootitemwindow")));
-   end ShowLootItem;
 
    procedure LootItem(User_Data: access GObject_Record'Class) is
       BaseIndex: constant Natural :=
@@ -233,17 +189,20 @@ package body Bases.LootUI is
       else
          ProtoIndex := SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
       end if;
-      if Get_Label(Gtk_Button(User_Data)) = "Take all" then
+      if User_Data = Get_Object(Builder, "btntakeall") then
          Amount := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
-      elsif Get_Label(Gtk_Button(User_Data)) = "Drop all" then
+      elsif User_Data = Get_Object(Builder, "btndropall") then
          Amount := PlayerShip.Cargo(CargoIndex).Amount;
+      elsif User_Data = Get_Object(Builder, "btndrop") then
+         Amount :=
+           Positive
+             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "amountadj1"))));
       else
          Amount :=
            Positive
              (Get_Value(Gtk_Adjustment(Get_Object(Builder, "amountadj"))));
       end if;
-      if Get_Label(Gtk_Button(User_Data)) = "Drop all" or
-        Get_Label(Gtk_Button(User_Data)) = "Drop item" then
+      if User_Data = Get_Object(Builder, "btndropall") or User_Data = Get_Object(Builder, "btndrop") then
          if BaseCargoIndex > 0 then
             UpdateBaseCargo
               (CargoIndex => BaseCargoIndex,
@@ -304,7 +263,6 @@ package body Bases.LootUI is
             OrderMessage);
       end if;
       UpdateGame(10);
-      Hide(Gtk_Widget(Get_Object(Builder, "lootitemwindow")));
       ShowLootUI;
    end LootItem;
 
@@ -329,15 +287,11 @@ package body Bases.LootUI is
       Register_Handler(Builder, "Hide_Loot", HideInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
-      Register_Handler(Builder, "Show_Loot_Item", ShowLootItem'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Loot_Item", LootItem'Access);
       Do_Connect(Builder);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "lootwindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "lootitemwindow")),
          CloseWindow'Access);
    end CreateBasesLootUI;
 
@@ -393,6 +347,8 @@ package body Bases.LootUI is
          end if;
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "lootwindow")));
+      Hide(Gtk_Widget(Get_Object(Builder, "dropexpand")));
+      Hide(Gtk_Widget(Get_Object(Builder, "takeexpand")));
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treeitems")),
          Gtk_Tree_Path_New_From_String("0"),
