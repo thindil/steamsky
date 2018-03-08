@@ -50,6 +50,7 @@ GtkButton * {
 
 .progressbar {
    background: linear-gradient(to right, green, blue);
+   border-radius:5px;
 }
 
 GtkFrame {
