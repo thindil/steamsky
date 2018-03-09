@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 
+<!-- Generated with glade 3.20.3 
 
 Copyright (C) 2018 Bartek thindil Jasicki
 
@@ -245,8 +245,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="model">installmoduleslist</property>
-                            <property name="headers_visible">False</property>
-                            <property name="headers_clickable">False</property>
                             <property name="search_column">0</property>
                             <signal name="cursor-changed" handler="Show_Install_Info" swapped="no"/>
                             <child internal-child="selection">
@@ -254,7 +252,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                             <child>
                               <object class="GtkTreeViewColumn" id="columnnames">
-                                <property name="title" translatable="yes">column</property>
+                                <property name="title" translatable="yes">Name</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">0</property>
                                 <child>
                                   <object class="GtkCellRendererText"/>
                                   <attributes>
@@ -351,8 +351,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="model">removemodulelist</property>
-                        <property name="headers_visible">False</property>
-                        <property name="headers_clickable">False</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Remove_Info" swapped="no"/>
                         <child internal-child="selection">
@@ -360,7 +358,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="columnnames1">
-                            <property name="title" translatable="yes">column</property>
+                            <property name="title" translatable="yes">Name</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">0</property>
                             <child>
                               <object class="GtkCellRendererText"/>
                               <attributes>
