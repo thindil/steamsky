@@ -164,7 +164,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">True</property>
                         <property name="model">skillslist</property>
                         <property name="search_column">0</property>
-                        <signal name="cursor-changed" handler="Set_Train_Button" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -246,7 +245,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>
