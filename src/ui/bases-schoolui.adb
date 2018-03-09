@@ -37,13 +37,14 @@ with Items; use Items;
 package body Bases.SchoolUI is
 
    Builder: Gtkada_Builder;
-   CrewIndex, SkillIndex: Positive;
+   CrewIndex: Positive;
 
    procedure ShowTrainInfo(Object: access Gtkada_Builder_Record'Class) is
       CrewIter, SkillsIter: Gtk_Tree_Iter;
       CrewModel: Gtk_Tree_Model;
       SkillsList: Gtk_List_Store;
       MoneyIndex2: Natural;
+      Cost: Gint;
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -57,13 +58,12 @@ package body Bases.SchoolUI is
       SkillsList := Gtk_List_Store(Get_Object(Builder, "skillslist"));
       Clear(SkillsList);
       for I in Skills_List.Iterate loop
-         Append(SkillsList, SkillsIter);
-         Set(SkillsList, SkillsIter, 0, To_String(Skills_List(I).Name));
-         Set
-           (SkillsList,
-            SkillsIter,
-            1,
-            Gint(TrainCost(CrewIndex, SkillsData_Container.To_Index(I))));
+         Cost := Gint(TrainCost(CrewIndex, SkillsData_Container.To_Index(I)));
+         if Cost > 0 then
+            Append(SkillsList, SkillsIter);
+            Set(SkillsList, SkillsIter, 0, To_String(Skills_List(I).Name));
+            Set(SkillsList, SkillsIter, 1, Cost);
+         end if;
       end loop;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if MoneyIndex2 > 0 then
@@ -81,17 +81,25 @@ package body Bases.SchoolUI is
             To_String(MoneyName) &
             " to pay for learning.");
       end if;
-      Set_Cursor
-        (Gtk_Tree_View(Get_Object(Builder, "treeskills")),
-         Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnskill")),
-         False);
+      if N_Children(SkillsList, Null_Iter) > 0 then
+         Set_Cursor
+           (Gtk_Tree_View(Get_Object(Builder, "treeskills")),
+            Gtk_Tree_Path_New_From_String("0"),
+            Gtk_Tree_View_Column(Get_Object(Builder, "columnskill")),
+            False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btntrain")), True);
+      else
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btntrain")), False);
+      end if;
    end ShowTrainInfo;
 
-   procedure SetTrainButton(Object: access Gtkada_Builder_Record'Class) is
+   procedure TrainSelectedSkill(Object: access Gtkada_Builder_Record'Class) is
+      ParentWindow: constant Gtk_Window :=
+        Gtk_Window(Get_Object(Object, "schoolwindow"));
       SkillsIter: Gtk_Tree_Iter;
       SkillsModel: Gtk_Tree_Model;
       SkillName: Unbounded_String;
+      SkillIndex: Positive;
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -108,21 +116,9 @@ package body Bases.SchoolUI is
             exit;
          end if;
       end loop;
-      if Get_Int(SkillsModel, SkillsIter, 1) = 0 then
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btntrain")), False);
-      else
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btntrain")), True);
-      end if;
-   end SetTrainButton;
-
-   procedure TrainSelectedSkill(Object: access Gtkada_Builder_Record'Class) is
-      ParentWindow: constant Gtk_Window :=
-        Gtk_Window(Get_Object(Object, "schoolwindow"));
-   begin
       TrainSkill(CrewIndex, SkillIndex);
       ShowLastMessage(Object);
       ShowTrainInfo(Object);
-      SetTrainButton(Object);
    exception
       when Trade_No_Money =>
          ShowDialog
@@ -161,7 +157,6 @@ package body Bases.SchoolUI is
       Register_Handler(Builder, "Hide_School", HideInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Train_Info", ShowTrainInfo'Access);
-      Register_Handler(Builder, "Set_Train_Button", SetTrainButton'Access);
       Register_Handler
         (Builder,
          "Train_Selected_Skill",
