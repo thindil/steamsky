@@ -536,6 +536,7 @@ package body Bases.ShipyardUI is
    begin
       SetRemoveModulesList;
       SetInstallModulesList(ANY);
+      Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbtypes")), 0);
       Show_All(Gtk_Widget(Get_Object(Builder, "shipyardwindow")));
       ShowLastMessage(Builder);
       SetActiveModule("treeinstall", "columnname");
