@@ -28,6 +28,7 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -274,8 +275,8 @@ package body Bases.ShipyardUI is
       ModuleInfo, RemoveInfo: Unbounded_String;
       Cost: Positive;
       MAmount, MoneyIndex2, UsedSpace, AllSpace: Natural;
-      type DamageFactor is digits 2 range 0.0 .. 1.0;
-      Damage: DamageFactor := 0.0;
+      Damage: Gdouble;
+      DamageBar: constant GObject := Get_Object(Object, "damagebar");
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -291,9 +292,9 @@ package body Bases.ShipyardUI is
       end if;
       Damage :=
         1.0 -
-        DamageFactor
-          (Float(PlayerShip.Modules(ModuleIndex).Durability) /
-           Float(PlayerShip.Modules(ModuleIndex).MaxDurability));
+        Gdouble
+          (Gdouble(PlayerShip.Modules(ModuleIndex).Durability) /
+           Gdouble(PlayerShip.Modules(ModuleIndex).MaxDurability));
       Cost :=
         Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Price -
         Integer
@@ -371,19 +372,36 @@ package body Bases.ShipyardUI is
             Natural'Image(PlayerShip.Modules(ModuleIndex).Weight) &
             " kg");
       end if;
-      if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-          .Description /=
-        Null_Unbounded_String then
-         Append
-           (ModuleInfo,
-            ASCII.LF &
-            ASCII.LF &
-            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-              .Description);
-      end if;
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblremoveinfo")),
          To_String(ModuleInfo));
+      if Damage = 0.0 then
+         Hide(Gtk_Widget(DamageBar));
+      else
+         Show_All(Gtk_Widget(DamageBar));
+         Set_Fraction(Gtk_Progress_Bar(DamageBar), Damage);
+         if Damage < 0.2 then
+            Set_Text(Gtk_Progress_Bar(DamageBar), "Slightly damaged");
+         elsif Damage < 0.5 then
+            Set_Text(Gtk_Progress_Bar(DamageBar), "Damaged");
+         elsif Damage < 0.8 then
+            Set_Text(Gtk_Progress_Bar(DamageBar), "Heavily damaged");
+         elsif Damage < 1.0 then
+            Set_Text(Gtk_Progress_Bar(DamageBar), "Almost destroyed");
+         else
+            Set_Text(Gtk_Progress_Bar(DamageBar), "Destroyed");
+         end if;
+      end if;
+      if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+          .Description /=
+        Null_Unbounded_String then
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lbldescription")),
+            ASCII.LF &
+            To_String
+              (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                 .Description));
+      end if;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if MoneyIndex2 > 0 then
          RemoveInfo :=
