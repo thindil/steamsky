@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Refreshing move buttons after finish mission
 - Crash on showing available missions
 - Crash when generate bases cargo
+- Showing repair ship option in small and medium bases
 
 ## [2.1] - 2018-02-25
 
