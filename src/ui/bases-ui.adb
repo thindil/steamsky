@@ -84,8 +84,7 @@ package body Bases.UI is
       if RecruitIter = Null_Iter then
          return;
       end if;
-      RecruitIndex :=
-        Natural'Value(To_String(Get_Path(RecruitModel, RecruitIter))) + 1;
+      RecruitIndex := Positive(Get_Int(RecruitModel, RecruitIter, 1));
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
       if Recruit.Gender = 'M' then
          RecruitInfo := To_Unbounded_String("Gender: Male");
@@ -356,9 +355,14 @@ package body Bases.UI is
    begin
       RecruitList := Gtk_List_Store(Get_Object(Builder, "recruitlist"));
       Clear(RecruitList);
-      for Recruit of SkyBases(BaseIndex).Recruits loop
+      for I in SkyBases(BaseIndex).Recruits.Iterate loop
          Append(RecruitList, RecruitIter);
-         Set(RecruitList, RecruitIter, 0, To_String(Recruit.Name));
+         Set
+           (RecruitList,
+            RecruitIter,
+            0,
+            To_String(SkyBases(BaseIndex).Recruits(I).Name));
+         Set(RecruitList, RecruitIter, 1, Gint(Recruit_Container.To_Index(I)));
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "recruitwindow")));
       SetActiveRow("treerecruits", "columnname");
