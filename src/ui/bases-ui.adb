@@ -177,6 +177,7 @@ package body Bases.UI is
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       MoneyIndex2: Natural;
       ObjectIndex: Integer;
+      MinChildren: Gint;
    begin
       if CurrentState = CLEARING then
          return;
@@ -197,7 +198,15 @@ package body Bases.UI is
                return;
             end if;
          when REPAIRS =>
-            if N_Children(Model, Null_Iter) = 3 then
+            if SkyBases(BaseIndex).Population < 150 then
+               MinChildren := 1;
+            elsif SkyBases(BaseIndex).Population > 149 and
+              SkyBases(BaseIndex).Population < 300 then
+               MinChildren := 2;
+            else
+               MinChildren := 3;
+            end if;
+            if N_Children(Model, Null_Iter) = MinChildren then
                Hide(Gtk_Widget(Get_Object(Object, "basewindow")));
                CreateSkyMap;
                return;
