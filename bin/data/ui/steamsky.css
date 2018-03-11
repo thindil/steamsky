@@ -49,8 +49,13 @@ GtkButton * {
 }
 
 .progressbar {
-   background: linear-gradient(to right, green, blue);
-   border-radius:5px;
+   background:linear-gradient(to bottom, blue, black);
+   border-radius:10px;
+}
+
+GtkProgressBar.trough, GtkTreeView.view.trough {
+  border-radius: 10px;
+  background:linear-gradient(to bottom, rgb(64,69,82), rgb(35,41,51)); 
 }
 
 GtkFrame {
