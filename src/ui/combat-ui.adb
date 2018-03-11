@@ -492,7 +492,6 @@ package body Combat.UI is
       CombatTurn;
       RefreshCombatUI;
       if EndCombat then
-         Hide(Gtk_Widget(Get_Object(Object, "btnboxinfo")));
          Hide(Gtk_Widget(Get_Object(Object, "btnboxactions")));
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew")), False);
       end if;
