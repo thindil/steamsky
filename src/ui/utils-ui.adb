@@ -113,7 +113,7 @@ package body Utils.UI is
          when SkyMap_View =>
             CreateSkyMap;
          when Combat_View =>
-            ShowCombatUI;
+            ShowCombatUI(False);
          when others =>
             null;
       end case;
