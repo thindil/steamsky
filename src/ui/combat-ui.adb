@@ -274,31 +274,39 @@ package body Combat.UI is
          To_String(EnemyInfo));
    end RefreshCombatUI;
 
-   procedure ShowCombatUI is
+   procedure ShowCombatUI(NewCombat: Boolean := True) is
       CombatStarted: Boolean;
    begin
-      if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
-         if EnemyName /=
-           ProtoShips_List
-             (Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                .Data)
-             .Name then
-            CombatStarted :=
-              StartCombat
-                (Events_List
-                   (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                   .Data,
-                 False);
-            if not CombatStarted then
-               return;
+      if NewCombat then
+         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+            if EnemyName /=
+               ProtoShips_List
+                  (Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                  .Data)
+                  .Name then
+                  CombatStarted :=
+                     StartCombat
+                        (Events_List
+                           (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                           .Data,
+                           False);
+                     if not CombatStarted then
+                        return;
+                     end if;
             end if;
          end if;
-      end if;
-      Set_Text
-        (Gtk_Label(Get_Object(Builder, "lbldescription")),
+         Set_Text
+            (Gtk_Label(Get_Object(Builder, "lbldescription")),
          To_String(Enemy.Ship.Description));
+      end if;
       Show_All(Gtk_Widget(Get_Object(Builder, "combatwindow")));
-      RefreshCombatUI;
+      if (HarpoonDuration = 0 and Enemy.HarpoonDuration = 0) or
+        ProtoShips_List(EnemyShipIndex).Crew.Length = 0 then
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboard")));
+      end if;
+      if NewCombat then
+         RefreshCombatUI;
+      end if;
    end ShowCombatUI;
 
    procedure SetOrdersList(Object: access Gtkada_Builder_Record'Class) is

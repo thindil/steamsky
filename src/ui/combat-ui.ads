@@ -18,6 +18,6 @@
 package Combat.UI is
 
    procedure CreateCombatUI; -- Create combat user interface
-   procedure ShowCombatUI; -- Show combat interface
+   procedure ShowCombatUI(NewCombat: Boolean := True); -- Show combat interface
 
 end Combat.UI;
