@@ -80,8 +80,8 @@ package body Combat.UI is
       List: Gtk_List_Store;
       DamagePercent: Gint;
       IsDamaged: Boolean := False;
-      EnemyInfo: Unbounded_String;
-      MemberIndex: Natural;
+      EnemyInfo, ModuleName: Unbounded_String;
+      MemberIndex, SpaceIndex: Natural;
       MessagesBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Builder, "txtmessages"));
       LoopStart: Integer := 0 - MessagesAmount;
@@ -272,32 +272,95 @@ package body Combat.UI is
       Set_Text
         (Gtk_Label(Get_Object(Builder, "lblenemyinfo")),
          To_String(EnemyInfo));
+      List := Gtk_List_Store(Get_Object(Builder, "enemyinfolist"));
+      Iter := Get_Iter_First(List);
+      for I in Enemy.Ship.Modules.Iterate loop
+         if Enemy.Distance > 1000 then
+            ModuleName :=
+              To_Unbounded_String
+                (ModuleType'Image
+                   (Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType));
+            Replace_Slice
+              (ModuleName,
+               2,
+               Length(ModuleName),
+               To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
+            SpaceIndex := Index(ModuleName, "_");
+            while SpaceIndex > 0 loop
+               Replace_Element(ModuleName, SpaceIndex, ' ');
+               SpaceIndex := Index(ModuleName, "_");
+            end loop;
+         else
+            ModuleName := Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name;
+         end if;
+         Set(List, Iter, 0, To_String(ModuleName));
+         DamagePercent :=
+           100 -
+           Gint
+             ((Float(Enemy.Ship.Modules(I).Durability) /
+               Float(Enemy.Ship.Modules(I).MaxDurability)) *
+              100.0);
+         Set(List, Iter, 1, DamagePercent);
+         Next(List, Iter);
+      end loop;
    end RefreshCombatUI;
 
    procedure ShowCombatUI(NewCombat: Boolean := True) is
       CombatStarted: Boolean;
+      EnemyList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "enemyinfolist"));
+      DamagePercent, SpaceIndex: Natural;
+      ModuleName: Unbounded_String;
+      EnemyIter: Gtk_Tree_Iter;
    begin
       if NewCombat then
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             if EnemyName /=
-               ProtoShips_List
-                  (Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                  .Data)
-                  .Name then
-                  CombatStarted :=
-                     StartCombat
-                        (Events_List
-                           (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                           .Data,
-                           False);
-                     if not CombatStarted then
-                        return;
-                     end if;
+              ProtoShips_List
+                (Events_List
+                   (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                   .Data)
+                .Name then
+               CombatStarted :=
+                 StartCombat
+                   (Events_List
+                      (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                      .Data,
+                    False);
+               if not CombatStarted then
+                  return;
+               end if;
             end if;
          end if;
          Set_Text
-            (Gtk_Label(Get_Object(Builder, "lbldescription")),
-         To_String(Enemy.Ship.Description));
+           (Gtk_Label(Get_Object(Builder, "lbldescription")),
+            To_String(Enemy.Ship.Description));
+         Clear(EnemyList);
+         for I in Enemy.Ship.Modules.Iterate loop
+            Append(EnemyList, EnemyIter);
+            ModuleName :=
+              To_Unbounded_String
+                (ModuleType'Image
+                   (Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType));
+            Replace_Slice
+              (ModuleName,
+               2,
+               Length(ModuleName),
+               To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
+            SpaceIndex := Index(ModuleName, "_");
+            while SpaceIndex > 0 loop
+               Replace_Element(ModuleName, SpaceIndex, ' ');
+               SpaceIndex := Index(ModuleName, "_");
+            end loop;
+            Set(EnemyList, EnemyIter, 0, To_String(ModuleName));
+            DamagePercent :=
+              100 -
+              Natural
+                ((Float(Enemy.Ship.Modules(I).Durability) /
+                  Float(Enemy.Ship.Modules(I).MaxDurability)) *
+                 100.0);
+            Set(EnemyList, EnemyIter, 1, Gint(DamagePercent));
+         end loop;
       end if;
       Show_All(Gtk_Widget(Get_Object(Builder, "combatwindow")));
       if (HarpoonDuration = 0 and Enemy.HarpoonDuration = 0) or
@@ -517,46 +580,6 @@ package body Combat.UI is
       return True;
    end CloseWindow;
 
-   procedure ShowEnemyInfo(Object: access Gtkada_Builder_Record'Class) is
-      EnemyList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "enemyinfolist"));
-      DamagePercent, SpaceIndex: Natural;
-      ModuleName: Unbounded_String;
-      EnemyIter: Gtk_Tree_Iter;
-   begin
-      Clear(EnemyList);
-      for I in Enemy.Ship.Modules.Iterate loop
-         Append(EnemyList, EnemyIter);
-         if Enemy.Distance > 1000 then
-            ModuleName :=
-              To_Unbounded_String
-                (ModuleType'Image
-                   (Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType));
-            Replace_Slice
-              (ModuleName,
-               2,
-               Length(ModuleName),
-               To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
-            SpaceIndex := Index(ModuleName, "_");
-            while SpaceIndex > 0 loop
-               Replace_Element(ModuleName, SpaceIndex, ' ');
-               SpaceIndex := Index(ModuleName, "_");
-            end loop;
-         else
-            ModuleName := Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name;
-         end if;
-         Set(EnemyList, EnemyIter, 0, To_String(ModuleName));
-         DamagePercent :=
-           100 -
-           Natural
-             ((Float(Enemy.Ship.Modules(I).Durability) /
-               Float(Enemy.Ship.Modules(I).MaxDurability)) *
-              100.0);
-         Set(EnemyList, EnemyIter, 1, Gint(DamagePercent));
-      end loop;
-      Show_All(Gtk_Widget(Get_Object(Object, "enemyinfowindow")));
-   end ShowEnemyInfo;
-
    procedure RemoveButton(Widget: not null access Gtk_Widget_Record'Class) is
    begin
       Destroy(Widget);
@@ -639,7 +662,6 @@ package body Combat.UI is
       Register_Handler(Builder, "Close_Window", CloseWindow'Access);
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);
       Register_Handler(Builder, "Next_Turn", NextTurn'Access);
-      Register_Handler(Builder, "Show_Enemy_Info", ShowEnemyInfo'Access);
       Register_Handler(Builder, "Show_Board_Order", ShowBoardOrder'Access);
       Register_Handler(Builder, "Set_Boarding_Party", SetBoardingParty'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
@@ -653,9 +675,6 @@ package body Combat.UI is
          GiveCombatOrders'Access);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "boardwindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "enemyinfowindow")),
          CloseWindow'Access);
    end CreateCombatUI;
 
