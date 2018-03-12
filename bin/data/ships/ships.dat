@@ -1332,4 +1332,16 @@ Cargo = 2500..3000x1, 200..350x116
 Description = Advanced and upgraded version of standard undead ship. Dangerous at close range.
 Owner = Undead
 Crew = 36, 4..8x66
+[141]
+Name = Advanced inquisition ship mk IV
+Modules = 140, 143, 136, 8x93, 130, 4x132, 153, 145, 160
+Accuracy = 15
+CombatAI = Attacker
+Evasion = 15
+Loot = 120..240
+Perception = 15
+Cargo = 2000..2200x1, 150..220x2, 400..500x3, 400..600x117, 150..250x116
+Description = Advanced and upgraded version of standard flying vessel of inquisition.
+Owner = Inquisition
+Crew = 37, 38, 4..8x67
 []
