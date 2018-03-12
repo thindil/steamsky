@@ -75,6 +75,46 @@ package body Combat.UI is
       To_Unbounded_String("Aim in weapon"),
       To_Unbounded_String("Aim in hull"));
 
+   procedure RefreshCombatUI;
+
+   procedure RemoveButton(Widget: not null access Gtk_Widget_Record'Class) is
+   begin
+      Destroy(Widget);
+   end RemoveButton;
+
+   procedure SetBoardingOrder(Self: access Gtk_Toggle_Button_Record'Class) is
+      MemberName: Unbounded_String;
+   begin
+      MemberName := To_Unbounded_String(Get_Label(Self));
+      for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Crew(I).Name = MemberName then
+            if Get_Active(Self) then
+               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Boarding, 0);
+            else
+               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
+            end if;
+            exit;
+         end if;
+      end loop;
+      RefreshCombatUI;
+   end SetBoardingOrder;
+
+   procedure SetBoardingParty
+     (Widget: not null access Gtk_Widget_Record'Class) is
+      MemberName: Unbounded_String;
+   begin
+      MemberName := To_Unbounded_String(Get_Label(Gtk_Button(Widget)));
+      for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Crew(I).Name = MemberName and
+           PlayerShip.Crew(I).Order = Boarding then
+            Set_Active(Gtk_Toggle_Button(Widget), True);
+            exit;
+         end if;
+      end loop;
+      On_Toggled(Gtk_Toggle_Button(Widget), SetBoardingOrder'Access);
+      Show_All(Widget);
+   end SetBoardingParty;
+
    procedure RefreshCombatUI is
       Iter: Gtk_Tree_Iter;
       List: Gtk_List_Store;
@@ -93,12 +133,14 @@ package body Combat.UI is
          To_Unbounded_String("red"),
          To_Unbounded_String("blue"),
          To_Unbounded_String("cyan"));
+      ButtonBox: constant Gtk_Container :=
+        Gtk_Container(Get_Object(Builder, "btnboxboard"));
    begin
       if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
         ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
-         Show_All(Gtk_Widget(Get_Object(Builder, "btnboard")));
+         Show_All(Gtk_Widget(Get_Object(Builder, "expboard")));
       else
-         Hide(Gtk_Widget(Get_Object(Builder, "btnboard")));
+         Hide(Gtk_Widget(Get_Object(Builder, "expboard")));
       end if;
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmessages")), "");
       Get_Start_Iter(MessagesBuffer, MessagesIter);
@@ -303,6 +345,19 @@ package body Combat.UI is
          Set(List, Iter, 1, DamagePercent);
          Next(List, Iter);
       end loop;
+      if Is_Visible(Gtk_Widget(Get_Object(Builder, "expboard"))) then
+         Foreach
+           (Gtk_Container(Get_Object(Builder, "btnboxboard")),
+            RemoveButton'Access);
+         for Member of PlayerShip.Crew loop
+            Add
+              (ButtonBox,
+               Gtk_Check_Button_New_With_Label(To_String(Member.Name)));
+         end loop;
+         Foreach
+           (Gtk_Container(Get_Object(Builder, "btnboxboard")),
+            SetBoardingParty'Access);
+      end if;
    end RefreshCombatUI;
 
    procedure ShowCombatUI(NewCombat: Boolean := True) is
@@ -365,7 +420,7 @@ package body Combat.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "combatwindow")));
       if (HarpoonDuration = 0 and Enemy.HarpoonDuration = 0) or
         ProtoShips_List(EnemyShipIndex).Crew.Length = 0 then
-         Hide(Gtk_Widget(Get_Object(Builder, "btnboard")));
+         Hide(Gtk_Widget(Get_Object(Builder, "expboard")));
       end if;
       if NewCombat then
          RefreshCombatUI;
@@ -580,49 +635,6 @@ package body Combat.UI is
       return True;
    end CloseWindow;
 
-   procedure RemoveButton(Widget: not null access Gtk_Widget_Record'Class) is
-   begin
-      Destroy(Widget);
-   end RemoveButton;
-
-   procedure ShowBoardOrder(Object: access Gtkada_Builder_Record'Class) is
-      ButtonBox: constant Gtk_Container :=
-        Gtk_Container(Get_Object(Object, "btnboxboard"));
-   begin
-      Foreach
-        (Gtk_Container(Get_Object(Object, "btnboxboard")),
-         RemoveButton'Access);
-      for Member of PlayerShip.Crew loop
-         Add
-           (ButtonBox,
-            Gtk_Check_Button_New_With_Label(To_String(Member.Name)));
-      end loop;
-      Show_All(Gtk_Widget(Get_Object(Object, "boardwindow")));
-   end ShowBoardOrder;
-
-   procedure SetBoarding(Widget: not null access Gtk_Widget_Record'Class) is
-      MemberName: Unbounded_String;
-   begin
-      if Get_Active(Gtk_Toggle_Button(Widget)) then
-         MemberName := To_Unbounded_String(Get_Label(Gtk_Button(Widget)));
-         for I in PlayerShip.Crew.Iterate loop
-            if PlayerShip.Crew(I).Name = MemberName then
-               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Boarding, 0);
-               exit;
-            end if;
-         end loop;
-      end if;
-   end SetBoarding;
-
-   procedure SetBoardingParty(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Foreach
-        (Gtk_Container(Get_Object(Object, "btnboxboard")),
-         SetBoarding'Access);
-      Hide(Gtk_Widget(Get_Object(Object, "boardwindow")));
-      RefreshCombatUI;
-   end SetBoardingParty;
-
    procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
    begin
@@ -662,8 +674,6 @@ package body Combat.UI is
       Register_Handler(Builder, "Close_Window", CloseWindow'Access);
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);
       Register_Handler(Builder, "Next_Turn", NextTurn'Access);
-      Register_Handler(Builder, "Show_Board_Order", ShowBoardOrder'Access);
-      Register_Handler(Builder, "Set_Boarding_Party", SetBoardingParty'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
       Register_Handler(Builder, "Show_Info", ShowInfo'Access);
       Do_Connect(Builder);
@@ -673,9 +683,6 @@ package body Combat.UI is
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "rendercrew")),
          GiveCombatOrders'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "boardwindow")),
-         CloseWindow'Access);
    end CreateCombatUI;
 
 end Combat.UI;
