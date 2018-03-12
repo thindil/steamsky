@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Crash on showing available missions
 - Crash when generate bases cargo
 - Showing repair ship option in small and medium bases
+- Showing combat after show info windows
 
 ## [2.1] - 2018-02-25
 
