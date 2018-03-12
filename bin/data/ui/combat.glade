@@ -262,11 +262,99 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="yalign">0</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkLabel" id="lblenemyinfo">
+                          <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkLabel" id="lblenemyinfo">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="yalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkExpander">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="orientation">vertical</property>
+                                    <child>
+                                      <object class="GtkLabel" id="lbldescription">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="wrap">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkScrolledWindow">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="shadow_type">in</property>
+                                        <child>
+                                          <object class="GtkTreeView" id="enemyinfotree">
+                                            <property name="visible">True</property>
+                                            <property name="sensitive">False</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="model">enemyinfolist</property>
+                                            <property name="headers_visible">False</property>
+                                            <property name="headers_clickable">False</property>
+                                            <child internal-child="selection">
+                                              <object class="GtkTreeSelection">
+                                                <property name="mode">none</property>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkTreeViewColumn">
+                                                <property name="title" translatable="yes">column</property>
+                                                <child>
+                                                  <object class="GtkCellRendererProgress"/>
+                                                  <attributes>
+                                                    <attribute name="text">0</attribute>
+                                                    <attribute name="value">1</attribute>
+                                                  </attributes>
+                                                </child>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">True</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child type="label">
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">More info</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -280,7 +368,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
@@ -292,20 +380,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="orientation">vertical</property>
                     <property name="layout_style">center</property>
                     <child>
-                      <object class="GtkButton" id="btndetails">
-                        <property name="label" translatable="yes">Detailed enemy info</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <signal name="clicked" handler="Show_Enemy_Info" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkButton" id="btncrewinfo">
                         <property name="label" translatable="yes">Crew info</property>
                         <property name="visible">True</property>
@@ -316,7 +390,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -330,7 +404,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -344,7 +418,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -358,7 +432,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -372,7 +446,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="position">5</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
@@ -385,7 +459,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="position">6</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
@@ -399,7 +473,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="position">7</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                   </object>
@@ -448,7 +522,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>
@@ -490,74 +564,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-  </object>
-  <object class="GtkWindow" id="enemyinfowindow">
-    <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Steam Sky - enemy info</property>
-    <property name="window_position">center</property>
-    <property name="type_hint">dialog</property>
-    <property name="transient_for">combatwindow</property>
-    <signal name="delete-event" handler="Hide_Window" object="enemyinfowindow" swapped="no"/>
-    <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="lbldescription">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="wrap">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="shadow_type">in</property>
-            <child>
-              <object class="GtkTreeView" id="enemyinfotree">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="model">enemyinfolist</property>
-                <property name="headers_visible">False</property>
-                <property name="headers_clickable">False</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection">
-                    <property name="mode">none</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="yes">column</property>
-                    <child>
-                      <object class="GtkCellRendererProgress"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                        <attribute name="value">1</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
