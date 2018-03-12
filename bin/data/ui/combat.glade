@@ -464,11 +464,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnnextturn">
-                        <property name="label" translatable="yes">Next turn</property>
+                        <property name="label" translatable="yes">Next turn [Space]</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <signal name="clicked" handler="Next_Turn" swapped="no"/>
+                        <accelerator key="space" signal="clicked"/>
                       </object>
                       <packing>
                         <property name="expand">True</property>
