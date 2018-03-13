@@ -52,11 +52,15 @@ package body Crafts.UI is
    procedure ShowRecipeInfo(Object: access Gtkada_Builder_Record'Class) is
       RecipesIter: Gtk_Tree_Iter;
       RecipesModel: Gtk_Tree_Model;
-      RecipeInfo: Unbounded_String := Null_Unbounded_String;
+      RecipeInfo, WorkplaceName: Unbounded_String := Null_Unbounded_String;
       Recipe: Craft_Data;
       MAmount, CargoIndex: Natural := 0;
-      HaveWorkplace, IsMaterial, IsTool: Boolean := False;
-      WorkplaceName: Unbounded_String := Null_Unbounded_String;
+      HaveWorkplace,
+      IsMaterial,
+      IsTool,
+      HaveMaterials,
+      HaveTool: Boolean :=
+        False;
       TextLength: Positive;
    begin
       Get_Selected
@@ -118,6 +122,8 @@ package body Crafts.UI is
                  FindItem(PlayerShip.Cargo, Objects_Container.To_Index(J));
                if CargoIndex = 0 then
                   Append(RecipeInfo, "<span foreground=""red"">");
+               else
+                  HaveMaterials := True;
                end if;
                Append
                  (RecipeInfo,
@@ -156,6 +162,8 @@ package body Crafts.UI is
                  FindItem(PlayerShip.Cargo, Objects_Container.To_Index(I));
                if CargoIndex = 0 then
                   Append(RecipeInfo, "<span foreground=""red"">");
+               else
+                  HaveTool := True;
                end if;
                Append(RecipeInfo, To_String(Items_List(I).Name));
                if CargoIndex = 0 then
@@ -164,6 +172,8 @@ package body Crafts.UI is
                MAmount := MAmount + 1;
             end if;
          end loop;
+      else
+         HaveTool := True;
       end if;
       Append(RecipeInfo, ASCII.LF & "Workplace: ");
       for Module of PlayerShip.Modules loop
@@ -203,6 +213,27 @@ package body Crafts.UI is
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lblinfo")),
          To_String(RecipeInfo));
+      if HaveMaterials and HaveTool and HaveWorkplace then
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btncraft")), True);
+         Set_Has_Tooltip(Gtk_Widget(Get_Object(Object, "btncraft")), False);
+      else
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btncraft")), False);
+         if not HaveMaterials then
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Object, "btncraft")),
+               "You can't craft this recipe because you don't have proper materials.");
+         end if;
+         if not HaveTool then
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Object, "btncraft")),
+               "You can't craft this recipe because you don't have proper tool.");
+         end if;
+         if not HaveWorkplace then
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Object, "btncraft")),
+               "You can't craft this recipe because you don't have proper workshop.");
+         end if;
+      end if;
    end ShowRecipeInfo;
 
    procedure ShowSetRecipe(Object: access Gtkada_Builder_Record'Class) is
