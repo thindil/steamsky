@@ -211,14 +211,16 @@ package body Crew.UI is
    begin
       CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist"));
       Clear(CrewList);
-      for Member of PlayerShip.Crew loop
+      for I in PlayerShip.Crew.Iterate loop
          Append(CrewList, CrewIter);
-         Set(CrewList, CrewIter, 0, To_String(Member.Name));
+         Set(CrewList, CrewIter, 0, To_String(PlayerShip.Crew(I).Name));
          Set
            (CrewList,
             CrewIter,
             1,
-            To_String(OrdersNames(Crew_Orders'Pos(Member.Order) + 1)));
+            To_String
+              (OrdersNames(Crew_Orders'Pos(PlayerShip.Crew(I).Order) + 1)));
+         Set(CrewList, CrewIter, 2, Gint(Crew_Container.To_Index(I)));
       end loop;
    end RefreshCrewInfo;
 

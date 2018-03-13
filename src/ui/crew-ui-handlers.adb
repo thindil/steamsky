@@ -57,8 +57,7 @@ package body Crew.UI.Handlers is
       if CrewIter = Null_Iter then
          return;
       end if;
-      MemberIndex :=
-        Natural'Value(To_String(Get_Path(CrewModel, CrewIter))) + 1;
+      MemberIndex := Positive(Get_Int(CrewModel, CrewIter, 2));
       Member := PlayerShip.Crew(MemberIndex);
       if Member.Gender = 'M' then
          MemberInfo := To_Unbounded_String("Gender: Male");
