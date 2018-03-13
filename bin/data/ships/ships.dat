@@ -1344,4 +1344,13 @@ Cargo = 2000..2200x1, 150..220x2, 400..500x3, 400..600x117, 150..250x116
 Description = Advanced and upgraded version of standard flying vessel of inquisition.
 Owner = Inquisition
 Crew = 37, 38, 4..8x67
+[142]
+Name = Huge pirate ship mk IV
+Modules = 155, 144, 2x157, 14x93, 130, 10x132, 5x152, 4x162, 159
+CombatAI = Disarmer
+Loot = 500..1000
+Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x119, 500..750x116, 100..200x122
+Description = Huge, well armored pirate ship (upgraded version). As many pirates they prefer to dismarm enemies first.
+Owner = Pirates
+Crew = 39, 5x40, 41, 5..9x68
 []
