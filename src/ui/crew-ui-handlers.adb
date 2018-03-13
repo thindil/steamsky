@@ -26,6 +26,7 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Glib.Types; use Glib.Types;
 with Glib.Properties; use Glib.Properties;
 with Game; use Game;
@@ -64,6 +65,9 @@ package body Crew.UI.Handlers is
       else
          MemberInfo := To_Unbounded_String("Gender: Female");
       end if;
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblinfo")),
+         To_String(MemberInfo));
       if Member.Skills.Length = 0 then
          Hide(Gtk_Widget(Get_Object(Object, "treestats")));
          Hide(Gtk_Widget(Get_Object(Object, "scrollskills")));
@@ -81,74 +85,95 @@ package body Crew.UI.Handlers is
       else
          Hide(Gtk_Widget(Get_Object(Object, "btndismiss")));
       end if;
+      Show_All(Gtk_Widget(Get_Object(Object, "progresshealth")));
+      Set_Fraction
+        (Gtk_Progress_Bar(Get_Object(Object, "progresshealth")),
+         Gdouble(Member.Health) / 100.0);
       if Member.Health < 100 and Member.Health > 80 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""green"">Slightly wounded</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progresshealth")),
+            "Slightly wounded");
       elsif Member.Health < 81 and Member.Health > 50 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""yellow"">Wounded</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progresshealth")),
+            "Wounded");
       elsif Member.Health < 51 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""red"">Heavily Wounded</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progresshealth")),
+            "Heavily wounded");
+      else
+         Hide(Gtk_Widget(Get_Object(Object, "progresshealth")));
       end if;
       TiredPoints := Member.Tired - Member.Attributes(ConditionIndex)(1);
+      Show_All(Gtk_Widget(Get_Object(Object, "progresstired")));
+      Set_Fraction
+        (Gtk_Progress_Bar(Get_Object(Object, "progresstired")),
+         Gdouble(TiredPoints) / 100.0);
       if TiredPoints > 20 and TiredPoints < 41 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""green"">Bit tired</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progresstired")),
+            "Bit tired");
       elsif TiredPoints > 40 and TiredPoints < 81 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""yellow"">Tired</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progresstired")),
+            "Tired");
       elsif TiredPoints > 80 and TiredPoints < 100 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""red"">Very tired</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progresstired")),
+            "Very tired");
       elsif TiredPoints = 100 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""blue"">Unconscious</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progresstired")),
+            "Unconscious");
+      else
+         Hide(Gtk_Widget(Get_Object(Object, "progresstired")));
       end if;
+      Show_All(Gtk_Widget(Get_Object(Object, "progressthirst")));
+      Set_Fraction
+        (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")),
+         Gdouble(Member.Thirst) / 100.0);
       if Member.Thirst > 20 and Member.Thirst < 41 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""green"">Bit thirsty</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")),
+            "Bit thirsty");
       elsif Member.Thirst > 40 and Member.Thirst < 81 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""yellow"">Thirsty</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")),
+            "Thirsty");
       elsif Member.Thirst > 80 and Member.Thirst < 100 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""red"">Very thirsty</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")),
+            "Very thirsty");
       elsif Member.Thirst = 100 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""blue"">Dehydrated</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")),
+            "Dehydrated");
+      else
+         Hide(Gtk_Widget(Get_Object(Object, "progressthirst")));
       end if;
+      Show_All(Gtk_Widget(Get_Object(Object, "progresshunger")));
+      Set_Fraction
+        (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")),
+         Gdouble(Member.Hunger) / 100.0);
       if Member.Hunger > 20 and Member.Hunger < 41 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""green"">Bit hungry</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")),
+            "Bit hungry");
       elsif Member.Hunger > 40 and Member.Hunger < 81 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""yellow"">Hungry</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")),
+            "Hungry");
       elsif Member.Hunger > 80 and Member.Hunger < 100 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""red"">Very hungry</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")),
+            "Very hungry");
       elsif Member.Hunger = 100 then
-         Append
-           (MemberInfo,
-            ASCII.LF & "<span foreground=""blue"">Starving</span>");
+         Set_Text
+           (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")),
+            "Starving");
+      else
+         Hide(Gtk_Widget(Get_Object(Object, "progresshunger")));
       end if;
-      Set_Markup
-        (Gtk_Label(Get_Object(Object, "lblinfo")),
-         To_String(MemberInfo));
       if Member.Skills.Length > 0 then
          List := Gtk_List_Store(Get_Object(Builder, "statslist"));
          Clear(List);
