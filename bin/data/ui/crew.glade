@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 
+<!-- Generated with glade 3.20.3 
 
 Copyright (C) 2018 Bartek thindil Jasicki
 
@@ -277,7 +277,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <child>
                   <object class="GtkTreeView" id="treestats">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can_focus">False</property>
                     <property name="model">statslist</property>
                     <property name="headers_visible">False</property>
                     <property name="headers_clickable">False</property>
@@ -313,7 +314,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <child>
                       <object class="GtkTreeView">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can_focus">False</property>
                         <property name="model">skillslist</property>
                         <property name="headers_visible">False</property>
                         <property name="headers_clickable">False</property>
