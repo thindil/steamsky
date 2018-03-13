@@ -37,6 +37,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
       <!-- column-name gchararray2 -->
       <column type="gchararray"/>
+      <!-- column-name guint1 -->
+      <column type="guint"/>
     </columns>
   </object>
   <object class="GtkListStore" id="inventorylist">
@@ -224,6 +226,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <child>
                       <object class="GtkTreeViewColumn" id="columncrew">
                         <property name="title" translatable="yes">Name</property>
+                        <property name="sort_indicator">True</property>
+                        <property name="sort_column_id">0</property>
                         <child>
                           <object class="GtkCellRendererText"/>
                           <attributes>
@@ -235,6 +239,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <child>
                       <object class="GtkTreeViewColumn">
                         <property name="title" translatable="yes">Order</property>
+                        <property name="sort_indicator">True</property>
+                        <property name="sort_column_id">1</property>
                         <child>
                           <object class="GtkCellRendererCombo" id="renderorders">
                             <property name="editable">True</property>
