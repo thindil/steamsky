@@ -41,6 +41,25 @@ with Bases; use Bases;
 
 package body Crew.UI.Handlers is
 
+   function UpdatePriorities
+     (Model: Gtk_Tree_Model;
+      Path: Gtk_Tree_Path;
+      Iter: Gtk_Tree_Iter) return Boolean is
+   begin
+      case PlayerShip.Crew(MemberIndex).Orders
+        (Positive'Value(To_String(Path)) + 1) is
+         when 0 =>
+            Set(-(Model), Iter, 1, "None");
+         when 1 =>
+            Set(-(Model), Iter, 1, "Normal");
+         when 2 =>
+            Set(-(Model), Iter, 1, "Highest");
+         when others =>
+            null;
+      end case;
+      return False;
+   end UpdatePriorities;
+
    procedure ShowMemberInfo(Object: access Gtkada_Builder_Record'Class) is
       CrewIter: Gtk_Tree_Iter;
       CrewModel: Gtk_Tree_Model;
@@ -68,17 +87,20 @@ package body Crew.UI.Handlers is
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblinfo")),
          To_String(MemberInfo));
+      Foreach
+        (Gtk_List_Store(Get_Object(Builder, "prioritieslist")),
+         UpdatePriorities'Access);
       if Member.Skills.Length = 0 then
          Hide(Gtk_Widget(Get_Object(Object, "treestats")));
          Hide(Gtk_Widget(Get_Object(Object, "scrollskills")));
-         Hide(Gtk_Widget(Get_Object(Object, "btnpriorities")));
          Hide(Gtk_Widget(Get_Object(Object, "btninventory")));
+         Hide(Gtk_Widget(Get_Object(Object, "exppriorities")));
          Append(MemberInfo, ASCII.LF & "Passenger");
       else
          Show_All(Gtk_Widget(Get_Object(Object, "treestats")));
          Show_All(Gtk_Widget(Get_Object(Object, "scrollskills")));
-         Show_All(Gtk_Widget(Get_Object(Object, "btnpriorities")));
          Show_All(Gtk_Widget(Get_Object(Object, "btninventory")));
+         Show_All(Gtk_Widget(Get_Object(Object, "exppriorities")));
       end if;
       if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
          Show_All(Gtk_Widget(Get_Object(Object, "btndismiss")));
@@ -468,42 +490,17 @@ package body Crew.UI.Handlers is
       ShowOrdersForAll;
    end GiveCrewOrders;
 
-   function UpdatePriorities
-     (Model: Gtk_Tree_Model;
-      Path: Gtk_Tree_Path;
-      Iter: Gtk_Tree_Iter) return Boolean is
-   begin
-      case PlayerShip.Crew(MemberIndex).Orders
-        (Positive'Value(To_String(Path)) + 1) is
-         when 0 =>
-            Set(-(Model), Iter, 1, "None");
-         when 1 =>
-            Set(-(Model), Iter, 1, "Normal");
-         when 2 =>
-            Set(-(Model), Iter, 1, "Highest");
-         when others =>
-            null;
-      end case;
-      return False;
-   end UpdatePriorities;
-
-   procedure ShowPriorities(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Foreach
-        (Gtk_List_Store(Get_Object(Object, "prioritieslist")),
-         UpdatePriorities'Access);
-      Show_All(Gtk_Widget(Get_Object(Builder, "prioritieswindow")));
-   end ShowPriorities;
-
    function ReducePriority
      (Model: Gtk_Tree_Model;
       Path: Gtk_Tree_Path;
       Iter: Gtk_Tree_Iter) return Boolean is
-      pragma Unreferenced(Path);
    begin
       if Get_String(Model, Iter, 1) = "Highest" then
          Set(-(Model), Iter, 1, "Normal");
-         return True;
+         PlayerShip.Crew(MemberIndex).Orders
+           (Positive'Value(To_String(Path)) + 1) :=
+           1;
+         return False;
       end if;
       return False;
    end ReducePriority;
@@ -513,56 +510,38 @@ package body Crew.UI.Handlers is
       Path_String: UTF8_String;
       New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
       Model: Glib.Types.GType_Interface;
-      NewValue: Unbounded_String;
+      PriorityLevel: Unbounded_String;
       PrioritiesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "prioritieslist"));
    begin
       Model := Get_Property(Self, Gtk.Cell_Renderer_Combo.Model_Property);
-      NewValue :=
+      PriorityLevel :=
         To_Unbounded_String(Get_String(Gtk_Tree_Model(Model), New_Iter, 0));
-      if NewValue = To_Unbounded_String("Highest") then
-         Foreach(PrioritiesList, ReducePriority'Access);
-      end if;
       Set
         (PrioritiesList,
          Get_Iter_From_String(PrioritiesList, Path_String),
          1,
-         To_String(NewValue));
-   end SetPriority;
-
-   function SetEachPriority
-     (Model: Gtk_Tree_Model;
-      Path: Gtk_Tree_Path;
-      Iter: Gtk_Tree_Iter) return Boolean is
-      PriorityLevel: constant String := Get_String(Model, Iter, 1);
-   begin
+         To_String(PriorityLevel));
       if PriorityLevel = "Highest" then
+         Foreach(PrioritiesList, ReducePriority'Access);
          PlayerShip.Crew(MemberIndex).Orders
-           (Positive'Value(To_String(Path)) + 1) :=
+           (Positive'Value(Path_String) + 1) :=
            2;
       elsif PriorityLevel = "Normal" then
          PlayerShip.Crew(MemberIndex).Orders
-           (Positive'Value(To_String(Path)) + 1) :=
+           (Positive'Value(Path_String) + 1) :=
            1;
       else
          PlayerShip.Crew(MemberIndex).Orders
-           (Positive'Value(To_String(Path)) + 1) :=
+           (Positive'Value(Path_String) + 1) :=
            0;
       end if;
-      return False;
-   end SetEachPriority;
-
-   procedure SetPriorities(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Foreach
-        (Gtk_List_Store(Get_Object(Object, "prioritieslist")),
-         SetEachPriority'Access);
       UpdateOrders(PlayerShip);
-      Hide(Gtk_Widget(Get_Object(Builder, "prioritieswindow")));
       RefreshCrewInfo;
-      ShowLastMessage(Object);
+      ShowLastMessage(Builder);
       ShowOrdersForAll;
-   end SetPriorities;
+      SetActiveMember;
+   end SetPriority;
 
    procedure DismissMember(Object: access Gtkada_Builder_Record'Class) is
       BaseIndex: constant Positive :=

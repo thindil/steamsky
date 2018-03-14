@@ -259,8 +259,6 @@ package body Crew.UI is
       Register_Handler(Builder, "Use_Item", UseItem'Access);
       Register_Handler(Builder, "Show_Move_Item", ShowMoveItem'Access);
       Register_Handler(Builder, "Move_Item", MoveItem'Access);
-      Register_Handler(Builder, "Show_Priorities", ShowPriorities'Access);
-      Register_Handler(Builder, "Set_Priorities", SetPriorities'Access);
       Register_Handler(Builder, "Dismiss_Member", DismissMember'Access);
       Do_Connect(Builder);
       On_Changed
@@ -277,9 +275,6 @@ package body Crew.UI is
          CloseWindow'Access);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "moveitemwindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "prioritieswindow")),
          CloseWindow'Access);
    end CreateCrewUI;
 
