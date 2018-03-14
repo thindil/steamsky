@@ -173,6 +173,7 @@ package body Crew.UI is
          end if;
          Append(InventoryList, InventoryIter);
          Set(InventoryList, InventoryIter, 0, To_String(ItemName));
+         Set(InventoryList, InventoryIter, 1, Gint(I));
       end loop;
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblfreespace")),

@@ -279,8 +279,7 @@ package body Crew.UI.Handlers is
       if InventoryIter = Null_Iter then
          return;
       end if;
-      ItemIndex :=
-        Natural'Value(To_String(Get_Path(InventoryModel, InventoryIter))) + 1;
+      ItemIndex := Positive(Get_Int(InventoryModel, InventoryIter, 1));
       ProtoIndex :=
         PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex;
       ItemWeight :=
