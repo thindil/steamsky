@@ -95,12 +95,16 @@ package body Crew.UI.Handlers is
          Hide(Gtk_Widget(Get_Object(Object, "scrollskills")));
          Hide(Gtk_Widget(Get_Object(Object, "btninventory")));
          Hide(Gtk_Widget(Get_Object(Object, "exppriorities")));
+         Hide(Gtk_Widget(Get_Object(Object, "lblstats")));
+         Hide(Gtk_Widget(Get_Object(Object, "lblskills")));
          Append(MemberInfo, ASCII.LF & "Passenger");
       else
          Show_All(Gtk_Widget(Get_Object(Object, "treestats")));
          Show_All(Gtk_Widget(Get_Object(Object, "scrollskills")));
          Show_All(Gtk_Widget(Get_Object(Object, "btninventory")));
          Show_All(Gtk_Widget(Get_Object(Object, "exppriorities")));
+         Show_All(Gtk_Widget(Get_Object(Object, "lblstats")));
+         Show_All(Gtk_Widget(Get_Object(Object, "lblskills")));
       end if;
       if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
          Show_All(Gtk_Widget(Get_Object(Object, "btndismiss")));
