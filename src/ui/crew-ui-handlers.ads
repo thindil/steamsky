@@ -49,17 +49,11 @@ package Crew.UI.Handlers is
       Path_String: UTF8_String;
       New_Iter: Gtk.Tree_Model
         .Gtk_Tree_Iter); -- Show give orders for all crew members
-   procedure ShowPriorities
-     (Object: access Gtkada_Builder_Record'
-        Class); -- Show order priorities for selected crew member
    procedure SetPriority
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String;
       New_Iter: Gtk.Tree_Model
-        .Gtk_Tree_Iter); -- Reduce orders priorities if current value was set to "Highest"
-   procedure SetPriorities
-     (Object: access Gtkada_Builder_Record'
-        Class); -- Set all order priorities for selected crew member
+        .Gtk_Tree_Iter); -- Set selected priority (and reduce others if needed)
    procedure DismissMember
      (Object: access Gtkada_Builder_Record'
         Class); -- Dismiss selected crew member
