@@ -730,6 +730,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkLabel" id="lblfreespace">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="xalign">0.05000000074505806</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -750,6 +751,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="halign">center</property>
                     <signal name="clicked" handler="Use_Item" swapped="no"/>
                   </object>
                   <packing>
@@ -764,6 +766,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="halign">center</property>
                     <signal name="clicked" handler="Show_Move_Item" swapped="no"/>
                   </object>
                   <packing>
@@ -781,7 +784,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
