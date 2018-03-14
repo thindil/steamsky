@@ -351,6 +351,18 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkLabel" id="lblstats">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Statistics:</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">5</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkTreeView" id="treestats">
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
@@ -378,7 +390,19 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">5</property>
+                                <property name="position">6</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="lblskills">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Skills:</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">7</property>
                               </packing>
                             </child>
                             <child>
@@ -417,7 +441,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <packing>
                                 <property name="expand">True</property>
                                 <property name="fill">True</property>
-                                <property name="position">6</property>
+                                <property name="position">8</property>
                               </packing>
                             </child>
                           </object>
@@ -580,7 +604,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
