@@ -654,6 +654,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="model">inventorylist</property>
+                <property name="search_column">0</property>
                 <signal name="cursor-changed" handler="Show_Item_Info" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
