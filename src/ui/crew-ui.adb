@@ -260,7 +260,6 @@ package body Crew.UI is
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Inventory", ShowInventory'Access);
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
-      Register_Handler(Builder, "Show_Move_Item", ShowMoveItem'Access);
       Register_Handler(Builder, "Move_Item", MoveItem'Access);
       Register_Handler(Builder, "Dismiss_Member", DismissMember'Access);
       Do_Connect(Builder);
@@ -275,9 +274,6 @@ package body Crew.UI is
          CloseWindow'Access);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "inventorywindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "moveitemwindow")),
          CloseWindow'Access);
       On_Toggled
         (Gtk_Cell_Renderer_Toggle(Get_Object(Builder, "renderused")),
