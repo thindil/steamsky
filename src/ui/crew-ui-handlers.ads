@@ -17,6 +17,7 @@
 
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Cell_Renderer_Combo; use Gtk.Cell_Renderer_Combo;
+with Gtk.Cell_Renderer_Toggle; use Gtk.Cell_Renderer_Toggle;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 
@@ -37,8 +38,8 @@ package Crew.UI.Handlers is
      (Object: access Gtkada_Builder_Record'
         Class); -- Show informations about selected item
    procedure UseItem
-     (Object: access Gtkada_Builder_Record'
-        Class); -- Set selected item as used by crew member
+     (Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
+      Path: UTF8_String); -- Set selected item as used by crew member or take it down
    procedure ShowMoveItem
      (Object: access Gtkada_Builder_Record'Class); -- Show move item form
    procedure MoveItem

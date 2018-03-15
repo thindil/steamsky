@@ -23,7 +23,6 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
-with Gtk.Button; use Gtk.Button;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
@@ -269,7 +268,6 @@ package body Crew.UI.Handlers is
       ItemInfo: Unbounded_String;
       ProtoIndex, ItemWeight: Positive;
       DamagePercent: Natural;
-      ItemType: Unbounded_String;
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -352,56 +350,18 @@ package body Crew.UI.Handlers is
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lbliteminfo")),
          To_String(ItemInfo));
-      if ItemIsUsed(MemberIndex, ItemIndex) then
-         Set_Label
-           (Gtk_Button(Get_Object(Object, "btnequip")),
-            "Take off item");
-      else
-         ItemType :=
-           Items_List
-             (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
-             .IType;
-         if ItemType = WeaponType then
-            Set_Label
-              (Gtk_Button(Get_Object(Object, "btnequip")),
-               "Use as weapon");
-         elsif ItemType = ShieldType then
-            Set_Label
-              (Gtk_Button(Get_Object(Object, "btnequip")),
-               "Use as shield");
-         elsif ItemType = HeadArmor then
-            Set_Label
-              (Gtk_Button(Get_Object(Object, "btnequip")),
-               "Use as helmet");
-         elsif ItemType = ChestArmor then
-            Set_Label
-              (Gtk_Button(Get_Object(Object, "btnequip")),
-               "Use as torso armor");
-         elsif ItemType = ArmsArmor then
-            Set_Label
-              (Gtk_Button(Get_Object(Object, "btnequip")),
-               "Use as arms armor");
-         elsif ItemType = LegsArmor then
-            Set_Label
-              (Gtk_Button(Get_Object(Object, "btnequip")),
-               "Use as legs armor");
-         elsif Tools_List.Find_Index(Item => ItemType) /=
-           UnboundedString_Container.No_Index then
-            Set_Label
-              (Gtk_Button(Get_Object(Object, "btnequip")),
-               "Use as tool");
-         end if;
-      end if;
    end ShowItemInfo;
 
-   procedure UseItem(Object: access Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
+   procedure UseItem
+     (Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
+      Path: UTF8_String) is
+      pragma Unreferenced(Path);
       ItemType: constant Unbounded_String :=
         Items_List
           (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
           .IType;
    begin
-      if ItemIsUsed(MemberIndex, ItemIndex) then
+      if Get_Active(Self) then
          TakeOffItem(MemberIndex, ItemIndex);
       else
          if ItemType = WeaponType then
