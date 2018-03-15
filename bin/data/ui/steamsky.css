@@ -63,3 +63,11 @@ GtkFrame {
    border-width:2px;
    border-color:green;
 }
+
+GtkFrame > GtkLabel {
+   border-radius:5px;
+   border-style:dashed;
+   border-color:green;
+   border-width:1px;
+   padding:4px;
+}
