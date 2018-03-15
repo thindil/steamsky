@@ -40,7 +40,7 @@ GtkButton:focus,
   border-style:none;
 }
 
-GtkButton:insensitive * {
+.button:insensitive, .button:insensitive * {
    color:black;
 }
 
