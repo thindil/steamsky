@@ -47,6 +47,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
       <!-- column-name guint1 -->
       <column type="guint"/>
+      <!-- column-name gboolean1 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkListStore" id="levelslist">
@@ -668,6 +670,17 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkCellRendererText"/>
                       <attributes>
                         <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="title" translatable="yes">Used</property>
+                    <child>
+                      <object class="GtkCellRendererToggle"/>
+                      <attributes>
+                        <attribute name="active">2</attribute>
                       </attributes>
                     </child>
                   </object>

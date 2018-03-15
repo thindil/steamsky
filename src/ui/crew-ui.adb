@@ -158,22 +158,24 @@ package body Crew.UI is
    procedure RefreshInventory is
       InventoryIter: Gtk_Tree_Iter;
       InventoryList: Gtk_List_Store;
-      ItemName: Unbounded_String;
    begin
       InventoryList := Gtk_List_Store(Get_Object(Builder, "inventorylist"));
       Clear(InventoryList);
       for I in
         PlayerShip.Crew(MemberIndex).Inventory.First_Index ..
             PlayerShip.Crew(MemberIndex).Inventory.Last_Index loop
-         ItemName :=
-           To_Unbounded_String
-             (GetItemName(PlayerShip.Crew(MemberIndex).Inventory(I)));
-         if ItemIsUsed(MemberIndex, I) then
-            ItemName := ItemName & "(used)";
-         end if;
          Append(InventoryList, InventoryIter);
-         Set(InventoryList, InventoryIter, 0, To_String(ItemName));
+         Set
+           (InventoryList,
+            InventoryIter,
+            0,
+            GetItemName(PlayerShip.Crew(MemberIndex).Inventory(I)));
          Set(InventoryList, InventoryIter, 1, Gint(I));
+         if ItemIsUsed(MemberIndex, I) then
+            Set(InventoryList, InventoryIter, 2, True);
+         else
+            Set(InventoryList, InventoryIter, 2, False);
+         end if;
       end loop;
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblfreespace")),
