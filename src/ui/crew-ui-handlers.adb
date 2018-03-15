@@ -268,6 +268,8 @@ package body Crew.UI.Handlers is
       ItemInfo: Unbounded_String;
       ProtoIndex, ItemWeight: Positive;
       DamagePercent: Natural;
+      AmountAdj: constant Gtk_Adjustment :=
+        Gtk_Adjustment(Get_Object(Object, "amountadj"));
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -278,6 +280,10 @@ package body Crew.UI.Handlers is
          return;
       end if;
       ItemIndex := Positive(Get_Int(InventoryModel, InventoryIter, 1));
+      if ItemIndex >
+        Positive(PlayerShip.Crew(MemberIndex).Inventory.Length) then
+         return;
+      end if;
       ProtoIndex :=
         PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex;
       ItemWeight :=
@@ -350,6 +356,10 @@ package body Crew.UI.Handlers is
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lbliteminfo")),
          To_String(ItemInfo));
+      Set_Upper
+        (AmountAdj,
+         Gdouble(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount));
+      Set_Value(AmountAdj, 1.0);
    end ShowItemInfo;
 
    procedure UseItem
@@ -385,17 +395,6 @@ package body Crew.UI.Handlers is
       SetActiveItem;
    end UseItem;
 
-   procedure ShowMoveItem(Object: access Gtkada_Builder_Record'Class) is
-      AmountAdj: constant Gtk_Adjustment :=
-        Gtk_Adjustment(Get_Object(Object, "amountadj"));
-   begin
-      Set_Upper
-        (AmountAdj,
-         Gdouble(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount));
-      Set_Value(AmountAdj, 1.0);
-      Show_All(Gtk_Widget(Get_Object(Builder, "moveitemwindow")));
-   end ShowMoveItem;
-
    procedure MoveItem(Object: access Gtkada_Builder_Record'Class) is
       Amount: Positive;
       Item: constant InventoryData :=
@@ -429,7 +428,6 @@ package body Crew.UI.Handlers is
            0) then
          GiveOrders(PlayerShip, MemberIndex, Rest);
       end if;
-      Hide(Gtk_Widget(Get_Object(Builder, "moveitemwindow")));
       RefreshInventory;
       SetActiveItem;
    end MoveItem;

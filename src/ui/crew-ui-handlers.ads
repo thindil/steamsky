@@ -40,8 +40,6 @@ package Crew.UI.Handlers is
    procedure UseItem
      (Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
       Path: UTF8_String); -- Set selected item as used by crew member or take it down
-   procedure ShowMoveItem
-     (Object: access Gtkada_Builder_Record'Class); -- Show move item form
    procedure MoveItem
      (Object: access Gtkada_Builder_Record'
         Class); -- Move item from inventory to ship cargo
