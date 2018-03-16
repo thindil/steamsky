@@ -49,6 +49,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="guint"/>
       <!-- column-name gboolean1 -->
       <column type="gboolean"/>
+      <!-- column-name gboolean2 -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkListStore" id="levelslist">
@@ -682,6 +684,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <child>
                       <object class="GtkCellRendererToggle" id="renderused"/>
                       <attributes>
+                        <attribute name="visible">3</attribute>
                         <attribute name="active">2</attribute>
                       </attributes>
                     </child>

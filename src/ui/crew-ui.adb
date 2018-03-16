@@ -159,6 +159,7 @@ package body Crew.UI is
    procedure RefreshInventory is
       InventoryIter: Gtk_Tree_Iter;
       InventoryList: Gtk_List_Store;
+      ItemType: Unbounded_String;
    begin
       InventoryList := Gtk_List_Store(Get_Object(Builder, "inventorylist"));
       Clear(InventoryList);
@@ -176,6 +177,21 @@ package body Crew.UI is
             Set(InventoryList, InventoryIter, 2, True);
          else
             Set(InventoryList, InventoryIter, 2, False);
+         end if;
+         ItemType :=
+           Items_List(PlayerShip.Crew(MemberIndex).Inventory(I).ProtoIndex)
+             .IType;
+         if ItemType = WeaponType or
+           ItemType = ShieldType or
+           ItemType = HeadArmor or
+           ItemType = ChestArmor or
+           ItemType = ArmsArmor or
+           ItemType = LegsArmor or
+           Tools_List.Find_Index(Item => ItemType) /=
+             UnboundedString_Container.No_Index then
+            Set(InventoryList, InventoryIter, 3, True);
+         else
+            Set(InventoryList, InventoryIter, 3, False);
          end if;
       end loop;
       Set_Label
