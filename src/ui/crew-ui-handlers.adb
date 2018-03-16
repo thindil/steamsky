@@ -267,9 +267,10 @@ package body Crew.UI.Handlers is
       InventoryModel: Gtk_Tree_Model;
       ItemInfo: Unbounded_String;
       ProtoIndex, ItemWeight: Positive;
-      DamagePercent: Natural;
+      DamagePercent: Gdouble;
       AmountAdj: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Object, "amountadj"));
+      DamageBar: constant GObject := Get_Object(Object, "damagebar");
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -323,39 +324,32 @@ package body Crew.UI.Handlers is
       if PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability <
         100 then
          DamagePercent :=
-           100 -
-           Natural
-             ((Float
-                 (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
-                    .Durability) /
-               100.0) *
-              100.0);
-         Append(ItemInfo, ASCII.LF & "Status: ");
-         case DamagePercent is
-            when 1 .. 19 =>
-               Append
-                 (ItemInfo,
-                  "<span foreground=""green"">Slightly used</span>");
-            when 20 .. 49 =>
-               Append(ItemInfo, "<span foreground=""yellow"">Damaged</span>");
-            when 50 .. 79 =>
-               Append
-                 (ItemInfo,
-                  "<span foreground=""red"">Heavily damaged</span>");
-            when others =>
-               Append
-                 (ItemInfo,
-                  "<span foreground=""blue"">Almost destroyed</span>");
-         end case;
-      end if;
-      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
-         Append
-           (ItemInfo,
-            ASCII.LF & ASCII.LF & Items_List(ProtoIndex).Description);
+           1.0 -
+           (Gdouble
+              (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability) /
+            100.0);
+         Set_Visible(Gtk_Widget(DamageBar), True);
+         Set_Fraction(Gtk_Progress_Bar(DamageBar), DamagePercent);
+         if DamagePercent < 0.2 then
+            Set_Text(Gtk_Progress_Bar(DamageBar), "Slightly used");
+         elsif DamagePercent < 0.5 then
+            Set_Text(Gtk_Progress_Bar(DamageBar), "Damaged");
+         elsif DamagePercent < 0.8 then
+            Set_Text(Gtk_Progress_Bar(DamageBar), "Heavily damaged");
+         else
+            Set_Text(Gtk_Progress_Bar(DamageBar), "Almost destroyed");
+         end if;
+      else
+         Set_Visible(Gtk_Widget(DamageBar), False);
       end if;
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lbliteminfo")),
          To_String(ItemInfo));
+      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lbldescription")),
+            ASCII.LF & To_String(Items_List(ProtoIndex).Description));
+      end if;
       Set_Upper
         (AmountAdj,
          Gdouble(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount));
