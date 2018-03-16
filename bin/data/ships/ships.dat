@@ -1371,4 +1371,15 @@ Cargo = 5000..7000x1, 500..750x116
 Description = Huge, good armored and upgraded version of undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 47, 10..14x70
+[145]
+Name = Huge attacking drone mk IV
+Modules = 155, 144, 157, 10x132, 153, 3x152, 3x162
+Accuracy = 60..80
+CombatAI = Berserker
+Evasion = 60..80
+Loot = 500..900
+Perception = 60..80
+Cargo = 2000..4000x1, 500..1000x119, 500..750x116
+Description = Huge, good armored and upgraded version of attacking clockwork drone.
+Owner = Drones
 []
