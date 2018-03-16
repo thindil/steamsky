@@ -57,8 +57,7 @@ package body Events.UI is
       if EventsIter = Null_Iter then
          return;
       end if;
-      EventIndex :=
-        Natural'Value(To_String(Get_Path(EventsModel, EventsIter))) + 1;
+      EventIndex := Positive(Get_Int(EventsModel, EventsIter, 1));
       BaseIndex :=
         SkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY)
           .BaseIndex;
@@ -91,14 +90,6 @@ package body Events.UI is
          when None | BaseRecovery =>
             null;
       end case;
-      Append
-        (EventInfo,
-         ASCII.LF &
-         "Distance:" &
-         Integer'Image
-           (CountDistance
-              (Events_List(EventIndex).SkyX,
-               Events_List(EventIndex).SkyY)));
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblinfo")),
          To_String(EventInfo));
@@ -179,6 +170,12 @@ package body Events.UI is
             when None | BaseRecovery =>
                null;
          end case;
+         Set(EventsList, EventsIter, 1, Gint(I));
+         Set
+           (EventsList,
+            EventsIter,
+            2,
+            Gint(CountDistance(Events_List(I).SkyX, Events_List(I).SkyY)));
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "eventswindow")));
       if N_Children(EventsList, Null_Iter) > 0 then
