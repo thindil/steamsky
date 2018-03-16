@@ -65,6 +65,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <child>
                   <object class="GtkTreeViewColumn" id="columnnames">
                     <property name="title" translatable="yes">Name</property>
+                    <property name="sort_indicator">True</property>
+                    <property name="sort_column_id">0</property>
                     <child>
                       <object class="GtkCellRendererText"/>
                       <attributes>
