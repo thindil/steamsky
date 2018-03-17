@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 
+<!-- Generated with glade 3.20.4 
 
 Copyright (C) 2018 Bartek thindil Jasicki
 
@@ -163,7 +163,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <child>
               <object class="GtkTextView" id="messagesview">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="sensitive">False</property>
+                <property name="can_focus">False</property>
                 <property name="editable">False</property>
                 <property name="wrap_mode">word</property>
                 <property name="cursor_visible">False</property>
