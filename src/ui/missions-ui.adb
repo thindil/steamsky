@@ -70,14 +70,22 @@ package body Missions.UI is
       if MissionsIter = Null_Iter then
          return;
       end if;
-      MissionIndex :=
-        Natural'Value(To_String(Get_Path(MissionsModel, MissionsIter))) + 1;
+      MissionIndex := Positive(Get_Int(MissionsModel, MissionsIter, 1));
       if User_Data = Get_Object(Builder, "treemissions") then
+         if MissionIndex >
+           Positive
+             (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+                .Missions.Length) then
+            return;
+         end if;
          Mission :=
            SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
              .Missions
              (MissionIndex);
       else
+         if MissionIndex > Positive(PlayerShip.Missions.Length) then
+            return;
+         end if;
          Mission := PlayerShip.Missions(MissionIndex);
       end if;
       case Mission.MType is
@@ -352,9 +360,9 @@ package body Missions.UI is
       Cleaning := True;
       Clear(MissionsList);
       Cleaning := False;
-      for Mission of SkyBases(BaseIndex).Missions loop
+      for I in SkyBases(BaseIndex).Missions.Iterate loop
          Append(MissionsList, MissionsIter);
-         case Mission.MType is
+         case SkyBases(BaseIndex).Missions(I).MType is
             when Deliver =>
                Set(MissionsList, MissionsIter, 0, "Deliver item to base");
             when Patrol =>
@@ -370,6 +378,11 @@ package body Missions.UI is
                   0,
                   "Transport passenger to base");
          end case;
+         Set
+           (MissionsList,
+            MissionsIter,
+            1,
+            Gint(Mission_Container.To_Index(I)));
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "missionswindow")));
       Set_Cursor
