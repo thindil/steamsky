@@ -805,9 +805,6 @@ package body Maps.UI is
         (Gtk_Widget(Get_Object(Builder, "orderswindow")),
          CloseWindow'Access);
       On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "waitxwindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "waitwindow")),
          CloseWindow'Access);
       UpdateMessages;

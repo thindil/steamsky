@@ -930,7 +930,6 @@ package body Maps.UI.Handlers is
             return;
          end if;
       elsif User_Data = Get_Object(Builder, "waitxadj") then
-         Hide(Gtk_Widget(Get_Object(Builder, "waitxwindow")));
          UpdateGame(Positive(Get_Value(Gtk_Adjustment(User_Data))));
       end if;
       UpdateHeader;
@@ -946,7 +945,7 @@ package body Maps.UI.Handlers is
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
       if Label = "Wait" then
-         Show_All(Gtk_Widget(Get_Object(Builder, "waitxwindow")));
+         Show_All(Gtk_Widget(Get_Object(Builder, "waitwindow")));
       else
          Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
          ShowCombatUI;
