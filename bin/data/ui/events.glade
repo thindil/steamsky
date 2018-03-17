@@ -147,6 +147,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="halign">center</property>
                 <signal name="clicked" handler="Show_Event" swapped="no"/>
               </object>
               <packing>
@@ -161,6 +162,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="halign">center</property>
                 <signal name="clicked" handler="Set_Destination" swapped="no"/>
               </object>
               <packing>
