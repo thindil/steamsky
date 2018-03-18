@@ -153,11 +153,13 @@ package body Missions.UI is
                  (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                     .Name));
       end case;
-      Append
-        (MissionInfo,
-         ASCII.LF &
-         "Distance:" &
-         Integer'Image(CountDistance(Mission.TargetX, Mission.TargetY)));
+      if User_Data = Get_Object(Builder, "treemissions1") then
+         Append
+           (MissionInfo,
+            ASCII.LF &
+            "Distance:" &
+            Integer'Image(CountDistance(Mission.TargetX, Mission.TargetY)));
+      end if;
       MinutesDiff := Mission.Time;
       while MinutesDiff > 0 loop
          if MinutesDiff >= 518400 then
@@ -383,6 +385,14 @@ package body Missions.UI is
             MissionsIter,
             1,
             Gint(Mission_Container.To_Index(I)));
+         Set
+           (MissionsList,
+            MissionsIter,
+            2,
+            Gint
+              (CountDistance
+                 (SkyBases(BaseIndex).Missions(I).TargetX,
+                  SkyBases(BaseIndex).Missions(I).TargetY)));
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "missionswindow")));
       Set_Cursor
