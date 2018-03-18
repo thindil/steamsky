@@ -360,7 +360,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="model">hoflist</property>
-        <property name="headers_clickable">False</property>
         <property name="enable_search">False</property>
         <property name="search_column">0</property>
         <property name="show_expanders">False</property>
@@ -373,6 +372,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkTreeViewColumn">
             <property name="resizable">True</property>
             <property name="title" translatable="yes">Position</property>
+            <property name="sort_indicator">True</property>
+            <property name="sort_column_id">0</property>
             <child>
               <object class="GtkCellRendererText"/>
               <attributes>
@@ -385,6 +386,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkTreeViewColumn">
             <property name="resizable">True</property>
             <property name="title" translatable="yes">Name</property>
+            <property name="sort_indicator">True</property>
+            <property name="sort_column_id">1</property>
             <child>
               <object class="GtkCellRendererText"/>
               <attributes>
@@ -397,6 +400,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkTreeViewColumn">
             <property name="resizable">True</property>
             <property name="title" translatable="yes">Points</property>
+            <property name="sort_indicator">True</property>
+            <property name="sort_column_id">2</property>
             <child>
               <object class="GtkCellRendererText"/>
               <attributes>
@@ -409,6 +414,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkTreeViewColumn">
             <property name="resizable">True</property>
             <property name="title" translatable="yes">Died by</property>
+            <property name="sort_indicator">True</property>
+            <property name="sort_column_id">3</property>
             <child>
               <object class="GtkCellRendererText"/>
               <attributes>
