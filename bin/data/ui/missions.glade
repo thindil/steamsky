@@ -57,8 +57,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="model">missionslist</property>
-                <property name="headers_visible">False</property>
-                <property name="headers_clickable">False</property>
                 <property name="search_column">0</property>
                 <signal name="cursor-changed" handler="Show_Mission_Info" object="treemissions1" swapped="no"/>
                 <child internal-child="selection">
@@ -66,6 +64,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="columnmission1">
+                    <property name="title" translatable="yes">Name</property>
+                    <property name="sort_indicator">True</property>
+                    <property name="sort_column_id">0</property>
                     <child>
                       <object class="GtkCellRendererText">
                         <property name="editable">True</property>
