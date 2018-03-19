@@ -77,6 +77,18 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="title" translatable="yes">Distance</property>
+                    <property name="clickable">True</property>
+                    <child>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

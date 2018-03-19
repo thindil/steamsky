@@ -153,13 +153,6 @@ package body Missions.UI is
                  (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                     .Name));
       end case;
-      if User_Data = Get_Object(Builder, "treemissions1") then
-         Append
-           (MissionInfo,
-            ASCII.LF &
-            "Distance:" &
-            Integer'Image(CountDistance(Mission.TargetX, Mission.TargetY)));
-      end if;
       MinutesDiff := Mission.Time;
       while MinutesDiff > 0 loop
          if MinutesDiff >= 518400 then
@@ -411,9 +404,9 @@ package body Missions.UI is
       Cleaning := True;
       Clear(MissionsList);
       Cleaning := False;
-      for Mission of PlayerShip.Missions loop
+      for I in PlayerShip.Missions.Iterate loop
          Append(MissionsList, MissionsIter);
-         case Mission.MType is
+         case PlayerShip.Missions(I).MType is
             when Deliver =>
                Set(MissionsList, MissionsIter, 0, "Deliver item to base");
             when Patrol =>
@@ -429,6 +422,19 @@ package body Missions.UI is
                   0,
                   "Transport passenger to base");
          end case;
+         Set
+           (MissionsList,
+            MissionsIter,
+            1,
+            Gint(Mission_Container.To_Index(I)));
+         Set
+           (MissionsList,
+            MissionsIter,
+            2,
+            Gint
+              (CountDistance
+                 (PlayerShip.Missions(I).TargetX,
+                  PlayerShip.Missions(I).TargetY)));
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "missionsinfowindow")));
       Set_Cursor
