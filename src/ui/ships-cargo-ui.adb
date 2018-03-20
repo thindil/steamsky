@@ -44,9 +44,10 @@ package body Ships.Cargo.UI is
    begin
       CargoList := Gtk_List_Store(Get_Object(Builder, "cargolist"));
       Clear(CargoList);
-      for Item of PlayerShip.Cargo loop
+      for I in PlayerShip.Cargo.Iterate loop
          Append(CargoList, CargoIter);
-         Set(CargoList, CargoIter, 0, GetItemName(Item));
+         Set(CargoList, CargoIter, 0, GetItemName(PlayerShip.Cargo(I)));
+         Set(CargoList, CargoIter, 1, Gint(Inventory_Container.To_Index(I)));
       end loop;
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblfreespace")),
@@ -79,8 +80,7 @@ package body Ships.Cargo.UI is
       if CargoIter = Null_Iter then
          return;
       end if;
-      ItemIndex :=
-        Natural'Value(To_String(Get_Path(CargoModel, CargoIter))) + 1;
+      ItemIndex := Positive(Get_Int(CargoModel, CargoIter, 1));
       ProtoIndex := PlayerShip.Cargo(ItemIndex).ProtoIndex;
       ItemWeight :=
         PlayerShip.Cargo(ItemIndex).Amount * Items_List(ProtoIndex).Weight;
