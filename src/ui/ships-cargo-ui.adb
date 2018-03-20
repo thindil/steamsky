@@ -76,6 +76,8 @@ package body Ships.Cargo.UI is
       DamageBar: constant GObject := Get_Object(Object, "damagebar");
       AmountAdj: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Object, "amountadj"));
+      AmountAdj2: constant Gtk_Adjustment :=
+        Gtk_Adjustment(Get_Object(Object, "amountadj1"));
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -149,12 +151,14 @@ package body Ships.Cargo.UI is
       end if;
       if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
         MissionItemsType then
-         Hide(Gtk_Widget(Get_Object(Builder, "btngiveto")));
+         Hide(Gtk_Widget(Get_Object(Builder, "expgive")));
       else
-         Show_All(Gtk_Widget(Get_Object(Builder, "btngiveto")));
+         Show_All(Gtk_Widget(Get_Object(Builder, "expgive")));
       end if;
       Set_Upper(AmountAdj, Gdouble(PlayerShip.Cargo(ItemIndex).Amount));
       Set_Value(AmountAdj, 1.0);
+      Set_Upper(AmountAdj2, Gdouble(PlayerShip.Cargo(ItemIndex).Amount));
+      Set_Value(AmountAdj2, 1.0);
    end ShowItemInfo;
 
    procedure DropItem(Object: access Gtkada_Builder_Record'Class) is
@@ -197,30 +201,12 @@ package body Ships.Cargo.UI is
       SetActiveItem;
    end DropItem;
 
-   procedure ShowGiveItem(Object: access Gtkada_Builder_Record'Class) is
-      CrewIter: Gtk_Tree_Iter;
-      CrewList: Gtk_List_Store;
-      AmountAdj: constant Gtk_Adjustment :=
-        Gtk_Adjustment(Get_Object(Object, "amountadj"));
-   begin
-      Set_Upper(AmountAdj, Gdouble(PlayerShip.Cargo(ItemIndex).Amount));
-      Set_Value(AmountAdj, 1.0);
-      CrewList := Gtk_List_Store(Get_Object(Object, "crewlist"));
-      Clear(CrewList);
-      for Member of PlayerShip.Crew loop
-         Append(CrewList, CrewIter);
-         Set(CrewList, CrewIter, 0, To_String(Member.Name));
-      end loop;
-      Show_All(Gtk_Widget(Get_Object(Object, "giveitemwindow")));
-      Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmember")), 0);
-   end ShowGiveItem;
-
    procedure GiveItem(Object: access Gtkada_Builder_Record'Class) is
       MemberIndex: constant Positive :=
         Positive
           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmember"))) + 1);
       Amount: constant Positive :=
-        Positive(Get_Value(Gtk_Adjustment(Get_Object(Object, "amountadj"))));
+        Positive(Get_Value(Gtk_Adjustment(Get_Object(Object, "amountadj1"))));
       Item: constant InventoryData := PlayerShip.Cargo(ItemIndex);
    begin
       if FreeInventory
@@ -240,7 +226,6 @@ package body Ships.Cargo.UI is
         (Ship => PlayerShip,
          Amount => (0 - Amount),
          CargoIndex => ItemIndex);
-      Hide(Gtk_Widget(Get_Object(Object, "giveitemwindow")));
       RefreshCargoInfo;
       ShowLastMessage(Object);
       SetActiveItem;
@@ -269,24 +254,29 @@ package body Ships.Cargo.UI is
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Drop_Item", DropItem'Access);
-      Register_Handler(Builder, "Show_Give_Item", ShowGiveItem'Access);
       Register_Handler(Builder, "Give_Item", GiveItem'Access);
       Do_Connect(Builder);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "cargowindow")),
          CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "giveitemwindow")),
-         CloseWindow'Access);
    end CreateCargoUI;
 
    procedure ShowCargoUI(OldState: GameStates) is
+      CrewIter: Gtk_Tree_Iter;
+      CrewList: Gtk_List_Store;
    begin
+      CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist"));
+      Clear(CrewList);
+      for Member of PlayerShip.Crew loop
+         Append(CrewList, CrewIter);
+         Set(CrewList, CrewIter, 0, To_String(Member.Name));
+      end loop;
       RefreshCargoInfo;
       PreviousGameState := OldState;
       Show_All(Gtk_Widget(Get_Object(Builder, "cargowindow")));
       ShowLastMessage(Builder);
       SetActiveItem;
+      Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbmember")), 0);
    end ShowCargoUI;
 
 end Ships.Cargo.UI;
