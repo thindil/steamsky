@@ -74,6 +74,8 @@ package body Ships.Cargo.UI is
       ProtoIndex, ItemWeight: Positive;
       DamagePercent: Gdouble;
       DamageBar: constant GObject := Get_Object(Object, "damagebar");
+      AmountAdj: constant Gtk_Adjustment :=
+        Gtk_Adjustment(Get_Object(Object, "amountadj"));
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -84,6 +86,9 @@ package body Ships.Cargo.UI is
          return;
       end if;
       ItemIndex := Positive(Get_Int(CargoModel, CargoIter, 1));
+      if ItemIndex > Positive(PlayerShip.Cargo.Length) then
+         return;
+      end if;
       ProtoIndex := PlayerShip.Cargo(ItemIndex).ProtoIndex;
       ItemWeight :=
         PlayerShip.Cargo(ItemIndex).Amount * Items_List(ProtoIndex).Weight;
@@ -148,16 +153,9 @@ package body Ships.Cargo.UI is
       else
          Show_All(Gtk_Widget(Get_Object(Builder, "btngiveto")));
       end if;
-   end ShowItemInfo;
-
-   procedure ShowDropItem(Object: access Gtkada_Builder_Record'Class) is
-      AmountAdj: constant Gtk_Adjustment :=
-        Gtk_Adjustment(Get_Object(Object, "amountadj"));
-   begin
       Set_Upper(AmountAdj, Gdouble(PlayerShip.Cargo(ItemIndex).Amount));
       Set_Value(AmountAdj, 1.0);
-      Show_All(Gtk_Widget(Get_Object(Builder, "dropitemwindow")));
-   end ShowDropItem;
+   end ShowItemInfo;
 
    procedure DropItem(Object: access Gtkada_Builder_Record'Class) is
       DropAmount: Natural :=
@@ -194,7 +192,6 @@ package body Ships.Cargo.UI is
             (0 - DropAmount),
             PlayerShip.Cargo.Element(ItemIndex).Durability);
       end if;
-      Hide(Gtk_Widget(Get_Object(Object, "dropitemwindow")));
       RefreshCargoInfo;
       ShowLastMessage(Object);
       SetActiveItem;
@@ -271,16 +268,12 @@ package body Ships.Cargo.UI is
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
-      Register_Handler(Builder, "Show_Drop_Item", ShowDropItem'Access);
       Register_Handler(Builder, "Drop_Item", DropItem'Access);
       Register_Handler(Builder, "Show_Give_Item", ShowGiveItem'Access);
       Register_Handler(Builder, "Give_Item", GiveItem'Access);
       Do_Connect(Builder);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "cargowindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "dropitemwindow")),
          CloseWindow'Access);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "giveitemwindow")),
