@@ -28,8 +28,10 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
+with Glib.Object; use Glib.Object;
 with Messages; use Messages;
 with Crew.Inventory; use Crew.Inventory;
 
@@ -70,7 +72,8 @@ package body Ships.Cargo.UI is
       CargoModel: Gtk_Tree_Model;
       ItemInfo: Unbounded_String;
       ProtoIndex, ItemWeight: Positive;
-      DamagePercent: Natural;
+      DamagePercent: Gdouble;
+      DamageBar: constant GObject := Get_Object(Object, "damagebar");
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -114,37 +117,31 @@ package body Ships.Cargo.UI is
             Attributes_Names
               (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute));
       end if;
-      if PlayerShip.Cargo(ItemIndex).Durability < 100 then
-         DamagePercent :=
-           100 -
-           Natural
-             ((Float(PlayerShip.Cargo(ItemIndex).Durability) / 100.0) * 100.0);
-         Append(ItemInfo, ASCII.LF & "Status: ");
-         case DamagePercent is
-            when 1 .. 19 =>
-               Append
-                 (ItemInfo,
-                  "<span foreground=""green"">Slightly used</span>");
-            when 20 .. 49 =>
-               Append(ItemInfo, "<span foreground=""yellow"">Damaged</span>");
-            when 50 .. 79 =>
-               Append
-                 (ItemInfo,
-                  "<span foreground=""red"">Heavily damaged</span>");
-            when others =>
-               Append
-                 (ItemInfo,
-                  "<span foreground=""blue"">Almost destroyed</span>");
-         end case;
-      end if;
-      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
-         Append
-           (ItemInfo,
-            ASCII.LF & ASCII.LF & Items_List(ProtoIndex).Description);
-      end if;
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lblinfo")),
          To_String(ItemInfo));
+      if PlayerShip.Cargo(ItemIndex).Durability < 100 then
+         Set_Visible(Gtk_Widget(DamageBar), True);
+         DamagePercent :=
+           1.0 - (Gdouble(PlayerShip.Cargo(ItemIndex).Durability) / 100.0);
+         Set_Fraction(Gtk_Progress_Bar(DamageBar), DamagePercent);
+         if DamagePercent < 0.2 then
+            Set_Text(Gtk_Progress_Bar(DamageBar), "Slightly used");
+         elsif DamagePercent < 0.5 then
+            Set_Text(Gtk_Progress_Bar(DamageBar), "Damaged");
+         elsif DamagePercent < 0.8 then
+            Set_Text(Gtk_Progress_Bar(DamageBar), "Heavily damaged");
+         else
+            Set_Text(Gtk_Progress_Bar(DamageBar), "Almost destroyed");
+         end if;
+      else
+         Set_Visible(Gtk_Widget(DamageBar), False);
+      end if;
+      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lbldescription")),
+            ASCII.LF & To_String(Items_List(ProtoIndex).Description));
+      end if;
       if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
         MissionItemsType then
          Hide(Gtk_Widget(Get_Object(Builder, "btngiveto")));
