@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
   advanced undead ship mk IV, advanced inquisition ship mk IV, huge pirate ship
   mk IV, advanced huge pirate ship mk IV, huge undead ship mk IV, huge
   attacking drone mk IV, advanced huge undead ship mk IV, advanced huge
-  attacking drone mk IV and huge inquisition ship mk IV
+  attacking drone mk IV, huge inquisition ship mk IV and advanced huge 
+  inquisition ship mk IV
 - Keyboard shortcuts for ship movement and menu
 - Option to set keyboard shortcuts for ship movement and menu
 
