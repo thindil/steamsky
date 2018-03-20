@@ -1411,4 +1411,13 @@ Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x119, 400..600x116
 Description = Huge, good armored and upgraded version of inquisition flying vessel.
 Owner = Inquisition
 Crew = 49, 4x50, 6..10x72
+[149]
+Name = Advanced huge inquisition ship mk IV
+Modules = 156, 144, 158, 15x93, 130, 11x132, 153, 4x152, 4x163
+CombatAI = Attacker
+Loot = 900..1200
+Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x120, 500..650x116
+Description = Advanced and upgraded version of huge, good armored, inquisition flying vessel.
+Owner = Inquisition
+Crew = 51, 4x52, 8..12x73
 []
