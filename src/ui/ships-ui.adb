@@ -381,8 +381,8 @@ package body Ships.UI is
       UpgradePercent: Natural;
       MaxUpgrade: Positive;
    begin
-      Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblshipname")),
+      Set_Text
+        (Gtk_Entry(Get_Object(Builder, "edtname")),
          To_String(PlayerShip.Name));
       ShipInfo :=
         To_Unbounded_String
@@ -503,24 +503,16 @@ package body Ships.UI is
       ShowHelpUI(6);
    end ShowHelp;
 
-   procedure ShowChangeName(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Set_Text
-        (Gtk_Entry(Get_Object(Object, "edtnewname")),
-         To_String(PlayerShip.Name));
-      Show_All(Gtk_Widget(Get_Object(Object, "changenamewindow")));
-   end ShowChangeName;
-
    procedure ChangeShipName(Object: access Gtkada_Builder_Record'Class) is
       NewName: Unbounded_String :=
         To_Unbounded_String
-          (Get_Text(Gtk_Entry(Get_Object(Object, "edtnewname"))));
+          (Get_Text(Gtk_Entry(Get_Object(Object, "edtname"))));
       SemicolonIndex: Natural;
    begin
       if Length(NewName) = 0 then
          ShowDialog
            ("You must enter new ship name",
-            Gtk_Window(Get_Object(Builder, "changenamewindow")));
+            Gtk_Window(Get_Object(Builder, "shipwindow")));
          return;
       end if;
       SemicolonIndex := Index(NewName, ";");
@@ -529,10 +521,6 @@ package body Ships.UI is
          SemicolonIndex := Index(NewName, ";");
       end loop;
       PlayerShip.Name := NewName;
-      Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblshipname")),
-         To_String(PlayerShip.Name));
-      Hide(Gtk_Widget(Get_Object(Builder, "changenamewindow")));
    end ChangeShipName;
 
    procedure ChangeModuleName
@@ -934,7 +922,6 @@ package body Ships.UI is
       Register_Handler(Builder, "Show_Module_Info", ShowModuleInfo'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
-      Register_Handler(Builder, "Show_Change_Name", ShowChangeName'Access);
       Register_Handler(Builder, "Change_Ship_Name", ChangeShipName'Access);
       Register_Handler
         (Builder,
@@ -955,9 +942,6 @@ package body Ships.UI is
          CloseWindow'Access);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "assignwindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "changenamewindow")),
          CloseWindow'Access);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "optionswindow")),
