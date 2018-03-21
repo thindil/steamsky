@@ -252,7 +252,6 @@ package body Ships.Cargo.UI is
       Register_Handler(Builder, "Hide_Ship_Info", HideShipInfo'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
-      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Drop_Item", DropItem'Access);
       Register_Handler(Builder, "Give_Item", GiveItem'Access);
       Do_Connect(Builder);
