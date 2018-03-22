@@ -63,6 +63,8 @@ package body Ships.UI is
            1.5);
       if PlayerShip.Modules(ModuleIndex).MaxDurability >= MaxValue then
          Hide(Gtk_Widget(Get_Object(Builder, "btnupgradedur")));
+      else
+         Show_All(Gtk_Widget(Get_Object(Builder, "btnupgradedur")));
       end if;
       case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
          when ENGINE =>
@@ -76,6 +78,7 @@ package body Ships.UI is
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
                   "Upgrade engine power");
+               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             end if;
@@ -89,6 +92,7 @@ package body Ships.UI is
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade2")),
                   "Reduce fuel usage");
+               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
             end if;
@@ -103,6 +107,7 @@ package body Ships.UI is
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
                   "Upgrade quality");
+               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             end if;
@@ -140,6 +145,7 @@ package body Ships.UI is
                     (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
                      "Upgrade strength");
                end if;
+               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             end if;
@@ -159,6 +165,7 @@ package body Ships.UI is
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
                   "Upgrade damage");
+               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             end if;
@@ -173,6 +180,7 @@ package body Ships.UI is
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
                   "Enlarge hull");
+               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             end if;
@@ -203,15 +211,23 @@ package body Ships.UI is
       if PlayerShip.Modules(ModuleIndex).UpgradeAction = NONE or
         PlayerShip.UpgradeModule = ModuleIndex then
          Hide(Gtk_Widget(Get_Object(Builder, "btncontinue")));
+      else
+         Show_All(Gtk_Widget(Get_Object(Builder, "btncontinue")));
       end if;
       if PlayerShip.UpgradeModule = 0 then
          Hide(Gtk_Widget(Get_Object(Builder, "btnstop")));
+      else
+         Show_All(Gtk_Widget(Get_Object(Builder, "btnstop")));
       end if;
       if PlayerShip.RepairModule = ModuleIndex then
          Hide(Gtk_Widget(Get_Object(Builder, "btnrepairfirst")));
+      else
+         Show_All(Gtk_Widget(Get_Object(Builder, "btnrepairfirst")));
       end if;
       if PlayerShip.RepairModule = 0 then
          Hide(Gtk_Widget(Get_Object(Builder, "btnremovepriority")));
+      else
+         Show_All(Gtk_Widget(Get_Object(Builder, "btnremovepriority")));
       end if;
    end ShowModuleOptions;
 
