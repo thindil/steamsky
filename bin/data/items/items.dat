@@ -1103,4 +1103,12 @@ Buyable = Y, N, N, N
 ShowType = Armor
 Value = 3, 20, 4
 Description = Standard type of armor, made of titanium, protects legs.
+[130]
+Name = Orichalcum ore
+Weight = 12
+Type = OrichalcumOre
+Prices = 15, 15, 12, 15
+Buyable = N, N, Y, N
+ShowType = Ore
+Description = Unrefined orichalcum ore.
 []
