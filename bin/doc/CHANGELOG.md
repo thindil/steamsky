@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Crash when generate bases cargo
 - Showing repair ship option in small and medium bases
 - Showing combat after show info windows
+- Crash on setting module upgrade when no upgrading materials are available
 
 ## [2.1] - 2018-02-25
 
