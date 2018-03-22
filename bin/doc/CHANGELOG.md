@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Keyboard shortcuts for ship movement and menu
 - Option to set keyboard shortcuts for ship movement and menu
 - New item type: orichalcumore
+- New item: orichalcum ore
 
 ### Changed
 - Updated MODDING.md
