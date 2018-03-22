@@ -31,6 +31,7 @@ with Gtk.Window; use Gtk.Window;
 with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
+with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -303,11 +304,14 @@ package body Ships.UI is
       ModulesIter: Gtk_Tree_Iter;
       ModulesModel: Gtk_Tree_Model;
       ModuleInfo: Unbounded_String;
-      DamagePercent, UpgradePercent: Natural;
+      UpgradePercent: Natural;
       Module: ModuleData;
       MaxValue, MaxUpgrade: Positive;
       HaveAmmo: Boolean;
       Mamount: Natural := 0;
+      DamagePercent: Gdouble;
+      DamageBar: constant Gtk_Progress_Bar :=
+        Gtk_Progress_Bar(Get_Object(Object, "damagebar"));
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -320,36 +324,34 @@ package body Ships.UI is
       ModuleIndex :=
         Natural'Value(To_String(Get_Path(ModulesModel, ModulesIter))) + 1;
       Module := PlayerShip.Modules(ModuleIndex);
-      ModuleInfo := To_Unbounded_String("Status: ");
-      DamagePercent :=
-        100 -
-        Natural
-          ((Float(Module.Durability) / Float(Module.MaxDurability)) * 100.0);
-      if DamagePercent = 0 then
-         Append(ModuleInfo, "Ok");
-      elsif DamagePercent > 0 and DamagePercent < 20 then
-         Append(ModuleInfo, "Slightly damaged");
-      elsif DamagePercent > 19 and DamagePercent < 50 then
-         Append(ModuleInfo, "<span foreground=""green"">Damaged</span>");
-      elsif DamagePercent > 49 and DamagePercent < 80 then
-         Append
-           (ModuleInfo,
-            "<span foreground=""yellow"">Heavily damaged</span>");
-      elsif DamagePercent > 79 and DamagePercent < 100 then
-         Append
-           (ModuleInfo,
-            "<span foreground=""red"">Almost destroyed</span>");
+      if Module.Durability < Module.MaxDurability then
+         DamagePercent :=
+           1.0 -
+           (Gdouble(Module.Durability) / Gdouble(Module.MaxDurability)) /
+             100.0;
+         if DamagePercent < 1.0 and DamagePercent > 0.79 then
+            Set_Text(DamageBar, "Slightly damaged");
+         elsif DamagePercent < 0.8 and DamagePercent > 0.49 then
+            Set_Text(DamageBar, "Damaged");
+         elsif DamagePercent < 0.5 and DamagePercent > 0.19 then
+            Set_Text(DamageBar, "Heavily damaged");
+         elsif DamagePercent < 0.2 and DamagePercent > 0.0 then
+            Set_Text(DamageBar, "Almost destroyed");
+         elsif DamagePercent = 0.0 then
+            Set_Text(DamageBar, "Destroyed");
+         end if;
       else
-         Append(ModuleInfo, "<span foreground=""blue"">Destroyed</span>");
+         Set_Text(DamageBar, "Not damaged");
+         DamagePercent := 1.0;
       end if;
+      Set_Fraction(DamageBar, DamagePercent);
       MaxValue :=
         Positive(Float(Modules_List(Module.ProtoIndex).Durability) * 1.5);
       if Module.MaxDurability = MaxValue then
-         Append(ModuleInfo, " (max upgrade)");
+         Set_Text(DamageBar, Get_Text(DamageBar) & " (max upgrade)");
       end if;
-      Append
-        (ModuleInfo,
-         ASCII.LF & "Weight:" & Integer'Image(Module.Weight) & " kg");
+      ModuleInfo :=
+        To_Unbounded_String("Weight:" & Integer'Image(Module.Weight) & " kg");
       Append(ModuleInfo, ASCII.LF & "Repair/Upgrade material: ");
       for Item of Items_List loop
          if Item.IType = Modules_List(Module.ProtoIndex).RepairMaterial then
@@ -439,18 +441,18 @@ package body Ships.UI is
                Append(ModuleInfo, " (max upgrade)");
             end if;
             DamagePercent :=
-              100 -
-              Natural((Float(Module.Data(1)) / Float(Module.Data(2))) * 100.0);
+              100.0 -
+              ((Gdouble(Module.Data(1)) / Gdouble(Module.Data(2))) * 100.0);
             Append(ModuleInfo, ASCII.LF & "State: ");
-            if DamagePercent = 0 then
+            if DamagePercent = 0.0 then
                Append(ModuleInfo, "clean");
-            elsif DamagePercent > 0 and DamagePercent < 20 then
+            elsif DamagePercent > 0.0 and DamagePercent < 20.0 then
                Append(ModuleInfo, "bit dusty");
-            elsif DamagePercent > 19 and DamagePercent < 50 then
+            elsif DamagePercent > 19.0 and DamagePercent < 50.0 then
                Append(ModuleInfo, "dusty");
-            elsif DamagePercent > 49 and DamagePercent < 80 then
+            elsif DamagePercent > 49.0 and DamagePercent < 80.0 then
                Append(ModuleInfo, "dirty");
-            elsif DamagePercent > 79 and DamagePercent < 100 then
+            elsif DamagePercent > 79.0 and DamagePercent < 100.0 then
                Append(ModuleInfo, "very dirty");
             else
                Append(ModuleInfo, "ruined");
