@@ -46,15 +46,79 @@ package body Ships.UI is
 
    Builder: Gtkada_Builder;
    ModuleIndex: Positive;
-   AssignAmmo: Boolean;
+
+   procedure ShowAssignMember is
+      AssignIter: Gtk_Tree_Iter;
+      AssignList: Gtk_List_Store;
+   begin
+      AssignList := Gtk_List_Store(Get_Object(Builder, "assigncrewlist"));
+      Clear(AssignList);
+      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+         if PlayerShip.Modules(ModuleIndex).Owner /= I and
+           PlayerShip.Crew(I).Skills.Length > 0 then
+            case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+              .MType is
+               when MEDICAL_ROOM =>
+                  if PlayerShip.Crew(I).Health = 100 then
+                     Append(AssignList, AssignIter);
+                     Set
+                       (AssignList,
+                        AssignIter,
+                        0,
+                        To_String(PlayerShip.Crew(I).Name));
+                     Set(AssignList, AssignIter, 1, Gint(I));
+                  end if;
+               when others =>
+                  Append(AssignList, AssignIter);
+                  Set
+                    (AssignList,
+                     AssignIter,
+                     0,
+                     To_String(PlayerShip.Crew(I).Name));
+                  Set(AssignList, AssignIter, 1, Gint(I));
+            end case;
+         end if;
+      end loop;
+      Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassigncrew")), 0);
+   end ShowAssignMember;
+
+   procedure ShowAssignAmmo is
+      AssignIter: Gtk_Tree_Iter;
+      AssignList: Gtk_List_Store;
+      HaveAmmo: Boolean := False;
+   begin
+      AssignList := Gtk_List_Store(Get_Object(Builder, "assignammolist"));
+      Clear(AssignList);
+      for I in PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
+         if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
+           Items_Types
+             (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                .Value) and
+           I /= PlayerShip.Modules(ModuleIndex).Data(1) then
+            Append(AssignList, AssignIter);
+            Set
+              (AssignList,
+               AssignIter,
+               0,
+               To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name));
+            Set(AssignList, AssignIter, 1, Gint(I));
+            HaveAmmo := True;
+         end if;
+      end loop;
+      if not HaveAmmo then
+         Hide(Gtk_Widget(Get_Object(Builder, "boxassignammo")));
+         return;
+      end if;
+      Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassignammo")), 0);
+   end ShowAssignAmmo;
 
    procedure ShowModuleOptions is
       MaxValue: Positive;
       IsPassenger: Boolean := False;
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
-      Hide(Gtk_Widget(Get_Object(Builder, "btnassigncrew")));
-      Hide(Gtk_Widget(Get_Object(Builder, "btnassignammo")));
+      Hide(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
+      Hide(Gtk_Widget(Get_Object(Builder, "boxassignammo")));
       MaxValue :=
         Natural
           (Float
@@ -121,10 +185,8 @@ package body Ships.UI is
             if not IsPassenger then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
-                  "Assign owner");
-               Show_All(Gtk_Widget(Get_Object(Builder, "btnassigncrew")));
-            else
-               Hide(Gtk_Widget(Get_Object(Builder, "btnassigncrew")));
+                  "Assign as owner");
+               Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
             end if;
          when GUN | HARPOON_GUN =>
             MaxValue :=
@@ -151,9 +213,9 @@ package body Ships.UI is
             end if;
             Set_Label
               (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
-               "Assign gunner");
-            Show_All(Gtk_Widget(Get_Object(Builder, "btnassigncrew")));
-            Show_All(Gtk_Widget(Get_Object(Builder, "btnassignammo")));
+               "Assign as gunner");
+            Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
+            Show_All(Gtk_Widget(Get_Object(Builder, "boxassignammo")));
          when BATTERING_RAM =>
             MaxValue :=
               Natural
@@ -188,8 +250,8 @@ package body Ships.UI is
             if PlayerShip.Modules(ModuleIndex).Data(1) /= 0 then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
-                  "Assign worker");
-               Show_All(Gtk_Widget(Get_Object(Builder, "btnassigncrew")));
+                  "Assign as worker");
+               Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
             end if;
          when MEDICAL_ROOM =>
             for Member of PlayerShip.Crew loop
@@ -200,8 +262,8 @@ package body Ships.UI is
                    0 then
                   Set_Label
                     (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
-                     "Assign medic");
-                  Show_All(Gtk_Widget(Get_Object(Builder, "btnassigncrew")));
+                     "Assign as medic");
+                  Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
                   exit;
                end if;
             end loop;
@@ -228,6 +290,12 @@ package body Ships.UI is
          Hide(Gtk_Widget(Get_Object(Builder, "btnremovepriority")));
       else
          Show_All(Gtk_Widget(Get_Object(Builder, "btnremovepriority")));
+      end if;
+      if Is_Visible(Gtk_Widget(Get_Object(Builder, "boxassigncrew"))) then
+         ShowAssignMember;
+      end if;
+      if Is_Visible(Gtk_Widget(Get_Object(Builder, "boxassignammo"))) then
+         ShowAssignAmmo;
       end if;
    end ShowModuleOptions;
 
@@ -762,76 +830,6 @@ package body Ships.UI is
          return;
    end SetUpgrade;
 
-   procedure ShowAssignMember(Object: access Gtkada_Builder_Record'Class) is
-      AssignIter: Gtk_Tree_Iter;
-      AssignList: Gtk_List_Store;
-   begin
-      AssignAmmo := False;
-      AssignList := Gtk_List_Store(Get_Object(Builder, "assignlist"));
-      Clear(AssignList);
-      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-         if PlayerShip.Modules(ModuleIndex).Owner /= I and
-           PlayerShip.Crew(I).Skills.Length > 0 then
-            case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-              .MType is
-               when MEDICAL_ROOM =>
-                  if PlayerShip.Crew(I).Health = 100 then
-                     Append(AssignList, AssignIter);
-                     Set
-                       (AssignList,
-                        AssignIter,
-                        0,
-                        To_String(PlayerShip.Crew(I).Name));
-                     Set(AssignList, AssignIter, 1, Gint(I));
-                  end if;
-               when others =>
-                  Append(AssignList, AssignIter);
-                  Set
-                    (AssignList,
-                     AssignIter,
-                     0,
-                     To_String(PlayerShip.Crew(I).Name));
-                  Set(AssignList, AssignIter, 1, Gint(I));
-            end case;
-         end if;
-      end loop;
-      Show_All(Gtk_Widget(Get_Object(Object, "assignwindow")));
-      Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbassign")), 0);
-   end ShowAssignMember;
-
-   procedure ShowAssignAmmo(Object: access Gtkada_Builder_Record'Class) is
-      AssignIter: Gtk_Tree_Iter;
-      AssignList: Gtk_List_Store;
-      HaveAmmo: Boolean := False;
-   begin
-      AssignAmmo := True;
-      AssignList := Gtk_List_Store(Get_Object(Builder, "assignlist"));
-      Clear(AssignList);
-      for I in PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-         if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
-           Items_Types
-             (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                .Value) and
-           I /= PlayerShip.Modules(ModuleIndex).Data(1) then
-            Set
-              (AssignList,
-               AssignIter,
-               0,
-               To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name));
-            Set(AssignList, AssignIter, 1, Gint(I));
-            HaveAmmo := True;
-         end if;
-      end loop;
-      if not HaveAmmo then
-         ShowDialog
-           ("You don't have any ammo to this gun.",
-            Gtk_Window(Get_Object(Object, "shipwindow")));
-         return;
-      end if;
-      Show_All(Gtk_Widget(Get_Object(Object, "assignwindow")));
-      Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbassign")), 0);
-   end ShowAssignAmmo;
-
    procedure StopUpgrading(Object: access Gtkada_Builder_Record'Class) is
    begin
       PlayerShip.UpgradeModule := 0;
@@ -865,19 +863,29 @@ package body Ships.UI is
       ShowModuleInfo(Builder);
    end SetRepair;
 
-   procedure Assign(Object: access Gtkada_Builder_Record'Class) is
-      ActiveIndex: constant Natural :=
-        Natural(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbassign"))));
-      AssignList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Object, "assignlist"));
-      AssignIndex: constant Positive :=
+   procedure Assign(User_Data: access GObject_Record'Class) is
+      ActiveIndex: Natural;
+      AssignList: Gtk_List_Store;
+      AssignIndex: Positive;
+   begin
+      if User_Data = Get_Object(Builder, "btnassigncrew") then
+         ActiveIndex :=
+           Natural
+             (Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassigncrew"))));
+         AssignList := Gtk_List_Store(Get_Object(Builder, "assigncrewlist"));
+      else
+         ActiveIndex :=
+           Natural
+             (Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassignammo"))));
+         AssignList := Gtk_List_Store(Get_Object(Builder, "assignammolist"));
+      end if;
+      AssignIndex :=
         Positive
           (Get_Int
              (AssignList,
               Get_Iter_From_String(AssignList, Natural'Image(ActiveIndex)),
               1));
-   begin
-      if not AssignAmmo then
+      if User_Data = Get_Object(Builder, "btnassigncrew") then
          case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
             when CABIN =>
                for I in PlayerShip.Modules.Iterate loop
@@ -915,10 +923,9 @@ package body Ships.UI is
             ".",
             OrderMessage);
       end if;
-      Hide(Gtk_Widget(Get_Object(Object, "assignwindow")));
-      ShowLastMessage(Object);
+      ShowLastMessage(Builder);
       ShowShipInfo;
-      ShowModuleInfo(Object);
+      ShowModuleInfo(Builder);
    end Assign;
 
    procedure CreateShipUI is
@@ -940,11 +947,8 @@ package body Ships.UI is
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Module_Info", ShowModuleInfo'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
-      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Change_Ship_Name", ChangeShipName'Access);
       Register_Handler(Builder, "Set_Upgrade", SetUpgrade'Access);
-      Register_Handler(Builder, "Show_Assign_Member", ShowAssignMember'Access);
-      Register_Handler(Builder, "Show_Assign_Ammo", ShowAssignAmmo'Access);
       Register_Handler(Builder, "Stop_Upgrading", StopUpgrading'Access);
       Register_Handler(Builder, "Set_Repair", SetRepair'Access);
       Register_Handler(Builder, "Assign", Assign'Access);
@@ -954,9 +958,6 @@ package body Ships.UI is
          ChangeModuleName'Access);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "shipwindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "assignwindow")),
          CloseWindow'Access);
    end CreateShipUI;
 
