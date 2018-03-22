@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Exceptions; use Ada.Exceptions;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
@@ -737,6 +738,12 @@ package body Ships.UI is
       ShowLastMessage(Builder);
       ShowShipInfo;
       ShowModuleInfo(Builder);
+   exception
+      when An_Exception : Ship_Upgrade_Error =>
+         ShowDialog
+           (Exception_Message(An_Exception),
+            Gtk_Window(Get_Object(Builder, "shipwindow")));
+         return;
    end SetUpgrade;
 
    procedure ShowAssignMember(Object: access Gtkada_Builder_Record'Class) is
