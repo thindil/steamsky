@@ -58,7 +58,6 @@ package body Statistics.UI is
    procedure ShowMore(User_Data: access GObject_Record'Class) is
       InfoIter: Gtk_Tree_Iter;
       InfoList: Gtk_List_Store;
-      ItemIndex: Positive;
    begin
       InfoList := Gtk_List_Store(Get_Object(Builder, "infolist"));
       Clear(InfoList);
@@ -87,22 +86,6 @@ package body Statistics.UI is
                InfoIter,
                1,
                Gint(GameStats.FinishedMissions(I).Amount));
-         end loop;
-      else
-         Set_Label
-           (Gtk_Label(Get_Object(Builder, "lblinfo")),
-            "Finished crafting orders:");
-         for I in GameStats.CraftingOrders.Iterate loop
-            Append(InfoList, InfoIter);
-            ItemIndex :=
-              Recipes_List(FindRecipe(GameStats.CraftingOrders(I).Index))
-                .ResultIndex;
-            Set(InfoList, InfoIter, 0, To_String(Items_List(ItemIndex).Name));
-            Set
-              (InfoList,
-               InfoIter,
-               1,
-               Gint(GameStats.CraftingOrders(I).Amount));
          end loop;
       end if;
       Show_All(Gtk_Widget(Get_Object(Builder, "showmorewindow")));
@@ -162,6 +145,7 @@ package body Statistics.UI is
       Iter: Gtk_Tree_Iter;
       List: Gtk_List_Store;
       ProtoIndex: Positive;
+      ItemIndex: Positive;
    begin
       GameState := OldState;
       MinutesDiff :=
@@ -241,8 +225,20 @@ package body Statistics.UI is
          TotalFinished := TotalFinished + CraftingOrder.Amount;
       end loop;
       Set_Label
-        (Gtk_Button(Get_Object(Builder, "btncrafts")),
+        (Gtk_Label(Get_Object(Builder, "lblcrafts")),
          "Crafting orders finished:" & Natural'Image(TotalFinished));
+      List := Gtk_List_Store(Get_Object(Builder, "craftslist"));
+      Clear(List);
+      if TotalFinished > 0 then
+         for I in GameStats.CraftingOrders.Iterate loop
+            Append(List, Iter);
+            ItemIndex :=
+              Recipes_List(FindRecipe(GameStats.CraftingOrders(I).Index))
+                .ResultIndex;
+            Set(List, Iter, 0, To_String(Items_List(ItemIndex).Name));
+            Set(List, Iter, 1, Gint(GameStats.CraftingOrders(I).Amount));
+         end loop;
+      end if;
       TotalFinished := 0;
       for FinishedMission of GameStats.FinishedMissions loop
          TotalFinished := TotalFinished + FinishedMission.Amount;
@@ -322,9 +318,9 @@ package body Statistics.UI is
          Hide(Gtk_Widget(Get_Object(Builder, "scrollgoals")));
       end if;
       if GameStats.FinishedMissions.Length > 0 then
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btncrafts")), True);
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expcrafts")), True);
       else
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btncrafts")), False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expcrafts")), False);
       end if;
       if GameStats.CraftingOrders.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnmissions")), True);
