@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 
+<!-- Generated with glade 3.20.4 
 
 Copyright (C) 2018 Bartek thindil Jasicki
 
@@ -61,6 +61,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkLabel" id="lblstats">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -102,6 +103,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="halign">start</property>
                 <signal name="clicked" handler="Show_Goals" swapped="no"/>
               </object>
               <packing>
@@ -114,6 +116,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkLabel" id="lblpoints">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -125,6 +128,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkLabel" id="lblfinishedgoals">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
