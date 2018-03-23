@@ -313,6 +313,7 @@ package body Ships.UI is
       DamageBar: constant Gtk_Progress_Bar :=
         Gtk_Progress_Bar(Get_Object(Object, "damagebar"));
       CleanBar: constant GObject := Get_Object(Object, "cleanbar");
+      QualityBar: constant GObject := Get_Object(Object, "qualitybar");
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -389,6 +390,7 @@ package body Ships.UI is
          To_String(ModuleInfo));
       ModuleInfo := Null_Unbounded_String;
       Hide(Gtk_Widget(CleanBar));
+      Hide(Gtk_Widget(QualityBar));
       case Modules_List(Module.ProtoIndex).MType is
          when ENGINE =>
             Append(ModuleInfo, "Max power:" & Integer'Image(Module.Data(2)));
@@ -429,20 +431,25 @@ package body Ships.UI is
             else
                Append(ModuleInfo, "Owner: none");
             end if;
-            Append(ModuleInfo, ASCII.LF & "Quality: ");
+            Show_All(Gtk_Widget(QualityBar));
+            Set_Fraction
+              (Gtk_Progress_Bar(QualityBar),
+               Gdouble(Module.Data(2)) / 100.0);
             if Module.Data(2) < 30 then
-               Append(ModuleInfo, "minimal");
+               Set_Text(Gtk_Progress_Bar(QualityBar), "Minimal quality");
             elsif Module.Data(2) > 29 and Module.Data(2) < 60 then
-               Append(ModuleInfo, "basic");
+               Set_Text(Gtk_Progress_Bar(QualityBar), "Basic quality");
             elsif Module.Data(2) > 59 and Module.Data(2) < 80 then
-               Append(ModuleInfo, "extended");
+               Set_Text(Gtk_Progress_Bar(QualityBar), "Extended quality");
             else
-               Append(ModuleInfo, "luxury");
+               Set_Text(Gtk_Progress_Bar(QualityBar), "Luxury");
             end if;
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
             if Module.Data(2) = MaxValue then
-               Append(ModuleInfo, " (max upgrade)");
+               Set_Text
+                 (Gtk_Progress_Bar(QualityBar),
+                  Get_Text(Gtk_Progress_Bar(QualityBar)) & " (max upgrade)");
             end if;
             Show_All(Gtk_Widget(CleanBar));
             if Module.Data(1) = Module.Data(2) then
