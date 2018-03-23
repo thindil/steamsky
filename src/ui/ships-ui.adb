@@ -304,16 +304,16 @@ package body Ships.UI is
       ModulesIter: Gtk_Tree_Iter;
       ModulesModel: Gtk_Tree_Model;
       ModuleInfo: Unbounded_String;
-      UpgradePercent: Natural;
       Module: ModuleData;
       MaxValue, MaxUpgrade: Positive;
       HaveAmmo: Boolean;
       Mamount: Natural := 0;
-      DamagePercent: Gdouble;
+      DamagePercent, UpgradePercent: Gdouble;
       DamageBar: constant Gtk_Progress_Bar :=
         Gtk_Progress_Bar(Get_Object(Object, "damagebar"));
       CleanBar: constant GObject := Get_Object(Object, "cleanbar");
       QualityBar: constant GObject := Get_Object(Object, "qualitybar");
+      UpgradeBar: constant GObject := Get_Object(Object, "upgradebar2");
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -412,16 +412,21 @@ package body Ships.UI is
               (ModuleInfo,
                "Max cargo:" & Integer'Image(Module.Data(2)) & " kg");
          when HULL =>
-            Append
-              (ModuleInfo,
-               "Modules space:" &
+            Show_All(Gtk_Widget(CleanBar));
+            DamagePercent := Gdouble(Module.Data(1)) / Gdouble(Module.Data(2));
+            Set_Fraction(Gtk_Progress_Bar(CleanBar), DamagePercent);
+            Set_Text
+              (Gtk_Progress_Bar(CleanBar),
+               "Modules installed:" &
                Integer'Image(Module.Data(1)) &
                " /" &
                Integer'Image(Module.Data(2)));
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
             if Module.Data(2) = MaxValue then
-               Append(ModuleInfo, " (max upgrade)");
+               Set_Text
+                 (Gtk_Progress_Bar(CleanBar),
+                  Get_Text(Gtk_Progress_Bar(CleanBar)) & " (max upgrade)");
             end if;
          when CABIN =>
             if Module.Owner > 0 then
@@ -581,8 +586,20 @@ package body Ships.UI is
            (ModuleInfo,
             "Size:" & Natural'Image(Modules_List(Module.ProtoIndex).Size));
       end if;
+      if Modules_List(Module.ProtoIndex).Description /=
+        Null_Unbounded_String then
+         if ModuleInfo /= Null_Unbounded_String then
+            Append(ModuleInfo, ASCII.LF);
+         end if;
+         Append
+           (ModuleInfo,
+            ASCII.LF & To_String(Modules_List(Module.ProtoIndex).Description));
+      end if;
+      Set_Markup
+        (Gtk_Label(Get_Object(Object, "lblmoduleinfo2")),
+         To_String(ModuleInfo));
       if Module.UpgradeAction /= NONE then
-         Append(ModuleInfo, ASCII.LF & "Upgrading: ");
+         ModuleInfo := To_Unbounded_String("Upgrading: ");
          case Module.UpgradeAction is
             when DURABILITY =>
                Append(ModuleInfo, "durability");
@@ -615,41 +632,33 @@ package body Ships.UI is
             when others =>
                null;
          end case;
-         Append(ModuleInfo, ASCII.LF & "Upgrade progress: ");
          UpgradePercent :=
-           100 -
-           Natural
-             ((Float(Module.UpgradeProgress) / Float(MaxUpgrade)) * 100.0);
-         if UpgradePercent < 11 then
-            Append(ModuleInfo, "started");
-         elsif UpgradePercent < 31 then
-            Append(ModuleInfo, "designing");
-         elsif UpgradePercent < 51 then
-            Append(ModuleInfo, "base upgrades");
-         elsif UpgradePercent < 80 then
-            Append(ModuleInfo, "advanced upgrades");
+           1.0 - (Gdouble(Module.UpgradeProgress) / Gdouble(MaxUpgrade));
+         Set_Fraction(Gtk_Progress_Bar(UpgradeBar), UpgradePercent);
+         if UpgradePercent < 0.11 then
+            Append(ModuleInfo, " (started)");
+         elsif UpgradePercent < 0.31 then
+            Append(ModuleInfo, " (designing)");
+         elsif UpgradePercent < 0.51 then
+            Append(ModuleInfo, " (base upgrades)");
+         elsif UpgradePercent < 0.80 then
+            Append(ModuleInfo, " (advanced upgrades)");
          else
-            Append(ModuleInfo, "final upgrades");
+            Append(ModuleInfo, " (final upgrades)");
          end if;
+         Set_Text(Gtk_Progress_Bar(UpgradeBar), To_String(ModuleInfo));
+         Show_All(Gtk_Widget(UpgradeBar));
+      else
+         Hide(Gtk_Widget(UpgradeBar));
       end if;
-      if Modules_List(Module.ProtoIndex).Description /=
-        Null_Unbounded_String then
-         Append
-           (ModuleInfo,
-            ASCII.LF &
-            ASCII.LF &
-            To_String(Modules_List(Module.ProtoIndex).Description));
-      end if;
-      Set_Markup
-        (Gtk_Label(Get_Object(Object, "lblmoduleinfo2")),
-         To_String(ModuleInfo));
       ShowModuleOptions;
    end ShowModuleInfo;
 
    procedure ShowShipInfo is
-      ShipInfo: Unbounded_String;
-      UpgradePercent: Natural;
+      ShipInfo, UpgradeInfo: Unbounded_String;
+      UpgradePercent: Gdouble;
       MaxUpgrade: Positive;
+      UpgradeBar: constant GObject := Get_Object(Builder, "upgradebar");
    begin
       Set_Text
         (Gtk_Entry(Get_Object(Builder, "edtname")),
@@ -657,36 +666,36 @@ package body Ships.UI is
       ShipInfo :=
         To_Unbounded_String
           ("Home: " & To_String(SkyBases(PlayerShip.HomeBase).Name));
-      Append(ShipInfo, ASCII.LF & "Upgrading: ");
       if PlayerShip.UpgradeModule = 0 then
-         Append(ShipInfo, "Nothing");
+         Hide(Gtk_Widget(UpgradeBar));
       else
+         UpgradeInfo := To_Unbounded_String("Upgrading: ");
          Append
-           (ShipInfo,
+           (UpgradeInfo,
             To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
             " ");
          case PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction is
             when DURABILITY =>
-               Append(ShipInfo, "(durability)");
+               Append(UpgradeInfo, "(durability)");
                MaxUpgrade := 10;
             when MAX_VALUE =>
                case Modules_List
                  (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
                  .MType is
                   when ENGINE =>
-                     Append(ShipInfo, "(power)");
+                     Append(UpgradeInfo, "(power)");
                      MaxUpgrade := 10;
                   when CABIN =>
-                     Append(ShipInfo, "(quality)");
+                     Append(UpgradeInfo, "(quality)");
                      MaxUpgrade := 100;
                   when GUN | BATTERING_RAM =>
-                     Append(ShipInfo, "(damage)");
+                     Append(UpgradeInfo, "(damage)");
                      MaxUpgrade := 100;
                   when HULL =>
-                     Append(ShipInfo, "(enlarge)");
+                     Append(UpgradeInfo, "(enlarge)");
                      MaxUpgrade := 500;
                   when HARPOON_GUN =>
-                     Append(ShipInfo, "(strength)");
+                     Append(UpgradeInfo, "(strength)");
                      MaxUpgrade := 100;
                   when others =>
                      null;
@@ -696,7 +705,7 @@ package body Ships.UI is
                  (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
                  .MType is
                   when ENGINE =>
-                     Append(ShipInfo, "(fuel usage)");
+                     Append(UpgradeInfo, "(fuel usage)");
                      MaxUpgrade := 100;
                   when others =>
                      null;
@@ -704,26 +713,25 @@ package body Ships.UI is
             when others =>
                null;
          end case;
-         Append(ShipInfo, ASCII.LF & "Upgrade progress: ");
          UpgradePercent :=
-           100 -
-           Natural
-             ((Float
-                 (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                    .UpgradeProgress) /
-               Float(MaxUpgrade)) *
-              100.0);
-         if UpgradePercent < 11 then
-            Append(ShipInfo, "started");
-         elsif UpgradePercent < 31 then
-            Append(ShipInfo, "designing");
-         elsif UpgradePercent < 51 then
-            Append(ShipInfo, "base upgrades");
-         elsif UpgradePercent < 80 then
-            Append(ShipInfo, "advanced upgrades");
+           1.0 -
+           (Gdouble
+              (PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress) /
+            Gdouble(MaxUpgrade));
+         Set_Fraction(Gtk_Progress_Bar(UpgradeBar), UpgradePercent);
+         if UpgradePercent < 0.11 then
+            Append(UpgradeInfo, " (started)");
+         elsif UpgradePercent < 0.31 then
+            Append(UpgradeInfo, " (designing)");
+         elsif UpgradePercent < 0.51 then
+            Append(UpgradeInfo, " (base upgrades)");
+         elsif UpgradePercent < 0.80 then
+            Append(UpgradeInfo, " (advanced upgrades)");
          else
-            Append(ShipInfo, "final upgrades");
+            Append(UpgradeInfo, " (final upgrades)");
          end if;
+         Set_Text(Gtk_Progress_Bar(UpgradeBar), To_String(UpgradeInfo));
+         Show_All(Gtk_Widget(UpgradeBar));
       end if;
       Append(ShipInfo, ASCII.LF & "Repair first: ");
       if PlayerShip.RepairModule = 0 then
