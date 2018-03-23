@@ -312,6 +312,7 @@ package body Ships.UI is
       DamagePercent: Gdouble;
       DamageBar: constant Gtk_Progress_Bar :=
         Gtk_Progress_Bar(Get_Object(Object, "damagebar"));
+      CleanBar: constant GObject := Get_Object(Object, "cleanbar");
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -326,9 +327,7 @@ package body Ships.UI is
       Module := PlayerShip.Modules(ModuleIndex);
       if Module.Durability < Module.MaxDurability then
          DamagePercent :=
-           1.0 -
-           (Gdouble(Module.Durability) / Gdouble(Module.MaxDurability)) /
-             100.0;
+           1.0 - (Gdouble(Module.Durability) / Gdouble(Module.MaxDurability));
          if DamagePercent < 1.0 and DamagePercent > 0.79 then
             Set_Text(DamageBar, "Slightly damaged");
          elsif DamagePercent < 0.8 and DamagePercent > 0.49 then
@@ -384,7 +383,12 @@ package body Ships.UI is
            (Attributes_Names
               (Skills_List(Modules_List(Module.ProtoIndex).RepairSkill)
                  .Attribute)));
-      Append(ModuleInfo, ASCII.LF);
+
+      Set_Markup
+        (Gtk_Label(Get_Object(Object, "lblmoduleinfo")),
+         To_String(ModuleInfo));
+      ModuleInfo := Null_Unbounded_String;
+      Hide(Gtk_Widget(CleanBar));
       case Modules_List(Module.ProtoIndex).MType is
          when ENGINE =>
             Append(ModuleInfo, "Max power:" & Integer'Image(Module.Data(2)));
@@ -440,23 +444,26 @@ package body Ships.UI is
             if Module.Data(2) = MaxValue then
                Append(ModuleInfo, " (max upgrade)");
             end if;
-            DamagePercent :=
-              100.0 -
-              ((Gdouble(Module.Data(1)) / Gdouble(Module.Data(2))) * 100.0);
-            Append(ModuleInfo, ASCII.LF & "State: ");
-            if DamagePercent = 0.0 then
-               Append(ModuleInfo, "clean");
-            elsif DamagePercent > 0.0 and DamagePercent < 20.0 then
-               Append(ModuleInfo, "bit dusty");
-            elsif DamagePercent > 19.0 and DamagePercent < 50.0 then
-               Append(ModuleInfo, "dusty");
-            elsif DamagePercent > 49.0 and DamagePercent < 80.0 then
-               Append(ModuleInfo, "dirty");
-            elsif DamagePercent > 79.0 and DamagePercent < 100.0 then
-               Append(ModuleInfo, "very dirty");
+            Show_All(Gtk_Widget(CleanBar));
+            if Module.Data(1) = Module.Data(2) then
+               DamagePercent := 0.0;
+               Set_Text(Gtk_Progress_Bar(CleanBar), "Clean");
             else
-               Append(ModuleInfo, "ruined");
+               DamagePercent :=
+                 1.0 - (Gdouble(Module.Data(1)) / Gdouble(Module.Data(2)));
+               if DamagePercent > 0.0 and DamagePercent < 0.2 then
+                  Set_Text(Gtk_Progress_Bar(CleanBar), "Bit dusty");
+               elsif DamagePercent > 0.19 and DamagePercent < 0.5 then
+                  Set_Text(Gtk_Progress_Bar(CleanBar), "Dusty");
+               elsif DamagePercent > 0.49 and DamagePercent < 0.8 then
+                  Set_Text(Gtk_Progress_Bar(CleanBar), "Dirty");
+               elsif DamagePercent > 0.79 and DamagePercent < 1.0 then
+                  Set_Text(Gtk_Progress_Bar(CleanBar), "Very dirty");
+               else
+                  Set_Text(Gtk_Progress_Bar(CleanBar), "Ruined");
+               end if;
             end if;
+            Set_Fraction(Gtk_Progress_Bar(CleanBar), DamagePercent);
          when GUN | HARPOON_GUN =>
             Append(ModuleInfo, "Ammunition: ");
             if Module.Data(1) >= PlayerShip.Cargo.First_Index and
@@ -560,11 +567,12 @@ package body Ships.UI is
             null;
       end case;
       if Modules_List(Module.ProtoIndex).Size > 0 then
+         if ModuleInfo /= Null_Unbounded_String then
+            Append(ModuleInfo, ASCII.LF);
+         end if;
          Append
            (ModuleInfo,
-            ASCII.LF &
-            "Size:" &
-            Natural'Image(Modules_List(Module.ProtoIndex).Size));
+            "Size:" & Natural'Image(Modules_List(Module.ProtoIndex).Size));
       end if;
       if Module.UpgradeAction /= NONE then
          Append(ModuleInfo, ASCII.LF & "Upgrading: ");
@@ -626,7 +634,7 @@ package body Ships.UI is
             To_String(Modules_List(Module.ProtoIndex).Description));
       end if;
       Set_Markup
-        (Gtk_Label(Get_Object(Object, "lblmoduleinfo")),
+        (Gtk_Label(Get_Object(Object, "lblmoduleinfo2")),
          To_String(ModuleInfo));
       ShowModuleOptions;
    end ShowModuleInfo;
