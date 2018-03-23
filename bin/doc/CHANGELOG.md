@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
   inquisition ship mk IV
 - Keyboard shortcuts for ship movement and menu
 - Option to set keyboard shortcuts for ship movement and menu
-- New item type: orichalcumore
+- New item types: orichalcumore and orichalcum
 - New item: orichalcum ore
 
 ### Changed
