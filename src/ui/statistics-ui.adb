@@ -55,42 +55,6 @@ package body Statistics.UI is
           (Gtk_Widget(Get_Object(Object, "statisticswindow")));
    end HideStatistics;
 
-   procedure ShowMore(User_Data: access GObject_Record'Class) is
-      InfoIter: Gtk_Tree_Iter;
-      InfoList: Gtk_List_Store;
-   begin
-      InfoList := Gtk_List_Store(Get_Object(Builder, "infolist"));
-      Clear(InfoList);
-      if User_Data = Get_Object(Builder, "btnmissions") then
-         Set_Label
-           (Gtk_Label(Get_Object(Builder, "lblinfo")),
-            "Finished missions:");
-         for I in GameStats.FinishedMissions.Iterate loop
-            Append(InfoList, InfoIter);
-            case Missions_Types'Val
-              (Integer'Value
-                 (To_String(GameStats.FinishedMissions(I).Index))) is
-               when Deliver =>
-                  Set(InfoList, InfoIter, 0, "Delivered items");
-               when Patrol =>
-                  Set(InfoList, InfoIter, 0, "Patroled areas");
-               when Destroy =>
-                  Set(InfoList, InfoIter, 0, "Destroyed ships");
-               when Explore =>
-                  Set(InfoList, InfoIter, 0, "Explored areas");
-               when Passenger =>
-                  Set(InfoList, InfoIter, 0, "Passengers transported");
-            end case;
-            Set
-              (InfoList,
-               InfoIter,
-               1,
-               Gint(GameStats.FinishedMissions(I).Amount));
-         end loop;
-      end if;
-      Show_All(Gtk_Widget(Get_Object(Builder, "showmorewindow")));
-   end ShowMore;
-
    procedure ShowGoals(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
    begin
@@ -120,16 +84,11 @@ package body Statistics.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Hide_Statistics", HideStatistics'Access);
-      Register_Handler(Builder, "Show_More", ShowMore'Access);
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
       Do_Connect(Builder);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "statisticswindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "showmorewindow")),
          CloseWindow'Access);
    end CreateStatsUI;
 
@@ -250,7 +209,7 @@ package body Statistics.UI is
               100.0);
       end if;
       Set_Label
-        (Gtk_Button(Get_Object(Builder, "btnmissions")),
+        (Gtk_Label(Get_Object(Builder, "lblmissions")),
          "Missions finished:" &
          Natural'Image(TotalFinished) &
          " (" &
@@ -259,6 +218,28 @@ package body Statistics.UI is
               (To_Unbounded_String(Natural'Image(MissionsPercent)),
                Ada.Strings.Left)) &
          "%)");
+      List := Gtk_List_Store(Get_Object(Builder, "missionslist"));
+      Clear(List);
+      if TotalFinished > 0 then
+         for I in GameStats.FinishedMissions.Iterate loop
+            Append(List, Iter);
+            case Missions_Types'Val
+              (Integer'Value
+                 (To_String(GameStats.FinishedMissions(I).Index))) is
+               when Deliver =>
+                  Set(List, Iter, 0, "Delivered items");
+               when Patrol =>
+                  Set(List, Iter, 0, "Patroled areas");
+               when Destroy =>
+                  Set(List, Iter, 0, "Destroyed ships");
+               when Explore =>
+                  Set(List, Iter, 0, "Explored areas");
+               when Passenger =>
+                  Set(List, Iter, 0, "Passengers transported");
+            end case;
+            Set(List, Iter, 1, Gint(GameStats.FinishedMissions(I).Amount));
+         end loop;
+      end if;
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btngoals")),
          "Current goal: " & GoalText(0));
@@ -323,9 +304,9 @@ package body Statistics.UI is
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expcrafts")), False);
       end if;
       if GameStats.CraftingOrders.Length > 0 then
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnmissions")), True);
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expmissions")), True);
       else
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnmissions")), False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expmissions")), False);
       end if;
       if PlayerShip.Crew(1).Health = 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btngoals")), False);
