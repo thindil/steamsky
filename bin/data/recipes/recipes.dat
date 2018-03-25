@@ -1100,4 +1100,15 @@ Skill = Blacksmith
 Difficulty = 20
 BaseType = 1
 Tool = BlacksmithSet
+[111]
+Material = OrichalcumOre, Fuel
+Amount = 1, 2
+Result = 131
+Crafted = 1
+Workplace = Furnace
+Skill = Metalsmith
+Time = 90
+Difficulty = 20
+BaseType = 1
+Tool = Mold
 []
