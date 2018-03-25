@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.2] - 2018-03-25
 
 ### Added
 - New enemy ships: armored pirate ship mk IV, attacking clockwork drone mk IV,
