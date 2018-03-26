@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New item: titanium mold
 
+### Changed
+- Updated interface
+
 ## [2.2] - 2018-03-25
 
 ### Added
