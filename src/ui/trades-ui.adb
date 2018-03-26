@@ -29,6 +29,7 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -73,8 +74,10 @@ package body Trades.UI is
       BaseType: Positive;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      DamagePercent, MoneyIndex2: Natural;
+      MoneyIndex2: Natural;
       FreeSpace: Integer;
+      DamagePercent: Gdouble;
+      DamageBar: constant GObject := Get_Object(Object, "damagebar");
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -177,30 +180,21 @@ package body Trades.UI is
             "Owned:" &
             Positive'Image(PlayerShip.Cargo(CargoIndex).Amount));
          if PlayerShip.Cargo(CargoIndex).Durability < 100 then
+            Set_Visible(Gtk_Widget(DamageBar), True);
             DamagePercent :=
-              100 -
-              Natural
-                ((Float(PlayerShip.Cargo(CargoIndex).Durability) / 100.0) *
-                 100.0);
-            Append(ItemInfo, ASCII.LF & "Status: ");
-            case DamagePercent is
-               when 1 .. 19 =>
-                  Append
-                    (ItemInfo,
-                     "<span foreground=""green"">Slightly used</span>");
-               when 20 .. 49 =>
-                  Append
-                    (ItemInfo,
-                     "<span foreground=""yellow"">Damaged</span>");
-               when 50 .. 79 =>
-                  Append
-                    (ItemInfo,
-                     "<span foreground=""red"">Heavily damaged</span>");
-               when others =>
-                  Append
-                    (ItemInfo,
-                     "<span foreground=""blue"">Almost destroyed</span>");
-            end case;
+              1.0 - (Gdouble(PlayerShip.Cargo(CargoIndex).Durability) / 100.0);
+            Set_Fraction(Gtk_Progress_Bar(DamageBar), DamagePercent);
+            if DamagePercent < 0.2 then
+               Set_Text(Gtk_Progress_Bar(DamageBar), "Slightly used");
+            elsif DamagePercent < 0.5 then
+               Set_Text(Gtk_Progress_Bar(DamageBar), "Damaged");
+            elsif DamagePercent < 0.8 then
+               Set_Text(Gtk_Progress_Bar(DamageBar), "Heavily damaged");
+            else
+               Set_Text(Gtk_Progress_Bar(DamageBar), "Almost destroyed");
+            end if;
+         else
+            Set_Visible(Gtk_Widget(DamageBar), False);
          end if;
       end if;
       if BaseCargoIndex > 0 then
@@ -211,12 +205,12 @@ package body Trades.UI is
          end if;
          Append(ItemInfo, Positive'Image(Amount));
       end if;
-      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
-         Append
-           (ItemInfo,
-            ASCII.LF & ASCII.LF & Items_List(ProtoIndex).Description);
-      end if;
       Set_Label(Gtk_Label(Get_Object(Object, "lblinfo")), To_String(ItemInfo));
+      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lbldescription")),
+            ASCII.LF & To_String(Items_List(ProtoIndex).Description));
+      end if;
       if CargoIndex = 0 then
          Set_Visible(Gtk_Widget(Get_Object(Object, "btnsell")), False);
       else
