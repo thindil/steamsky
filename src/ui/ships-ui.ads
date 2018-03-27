@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Utils.UI; use Utils.UI;
+with Gtkada.Builder; use Gtkada.Builder;
 
 package Ships.UI is
 
@@ -23,4 +24,10 @@ package Ships.UI is
    procedure ShowShipUI
      (OldState: GameStates); -- Show interface for show player ship info
 
+private
+   Builder: Gtkada_Builder; -- Gtk builder for user interface
+   ModuleIndex: Positive; -- Index of selected module
+
+   procedure ShowModuleOptions; -- Show options for selected module
+   procedure ShowShipInfo; -- Show general info about player's ship
 end Ships.UI;
