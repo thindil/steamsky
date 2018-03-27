@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New item: titanium mold
+- New crafting recipe: titanium mold
 
 ### Changed
 - Updated interface
