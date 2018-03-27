@@ -1111,4 +1111,14 @@ Time = 90
 Difficulty = 20
 BaseType = 1
 Tool = Mold
+[112]
+Material = Titanium
+Amount = 2
+Result = 132
+Crafted = 1
+Workplace = Furnace
+Skill = Blacksmith
+Difficulty = 15
+BaseType = 1
+Tool = BlacksmithSet
 []
