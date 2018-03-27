@@ -71,3 +71,15 @@ GtkFrame > GtkLabel {
    border-width:1px;
    padding:4px;
 }
+
+.entry {
+   border-style:solid;
+   border-width:1px;
+   border-color:rgb(64,69,82);
+}
+
+.entry:focus, .entry:active {
+   border-style:solid;
+   border-width:2px;
+   border-color:rgb(204,87,93);
+}
