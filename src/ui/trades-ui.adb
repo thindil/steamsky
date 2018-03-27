@@ -74,10 +74,12 @@ package body Trades.UI is
       BaseType: Positive;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      MoneyIndex2: Natural;
+      MoneyIndex2, MaxAmount: Natural;
       FreeSpace: Integer;
       DamagePercent: Gdouble;
       DamageBar: constant GObject := Get_Object(Object, "damagebar");
+      AmountAdj2: constant Gtk_Adjustment :=
+        Gtk_Adjustment(Get_Object(Builder, "amountadj1"));
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -218,9 +220,25 @@ package body Trades.UI is
       end if;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if BaseCargoIndex = 0 or MoneyIndex2 = 0 then
-         Set_Visible(Gtk_Widget(Get_Object(Object, "btnbuy")), False);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "expbuy")), False);
       else
-         Set_Visible(Gtk_Widget(Get_Object(Object, "btnbuy")), True);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "expbuy")), True);
+         Set_Value(AmountAdj2, 1.0);
+         MaxAmount := PlayerShip.Cargo(MoneyIndex2).Amount / Price;
+         if BaseIndex > 0 then
+            if MaxAmount >
+              SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount then
+               MaxAmount := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
+            end if;
+         else
+            if MaxAmount > TraderCargo(BaseCargoIndex).Amount then
+               MaxAmount := TraderCargo(BaseCargoIndex).Amount;
+            end if;
+         end if;
+         Set_Upper(AmountAdj2, Gdouble(MaxAmount));
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblbuyamount")),
+            "(max" & Natural'Image(MaxAmount) & "):");
       end if;
       if MoneyIndex2 > 0 then
          Set_Label
@@ -286,9 +304,10 @@ package body Trades.UI is
    end ShowHelp;
 
    procedure ShowTradeItem(User_Data: access GObject_Record'Class) is
+      pragma Unreferenced(User_Data);
       ItemsIter: Gtk_Tree_Iter;
       ItemsModel: Gtk_Tree_Model;
-      MaxAmount, MoneyIndex2: Natural;
+      MaxAmount: Natural;
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -338,41 +357,21 @@ package body Trades.UI is
          end if;
       end if;
       Set_Value(AmountAdj, 1.0);
-      if User_Data = Get_Object(Builder, "btnbuy") then
-         MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
-         MaxAmount := PlayerShip.Cargo(MoneyIndex2).Amount / Price;
-         if BaseIndex > 0 then
-            if MaxAmount >
-              SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount then
-               MaxAmount := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
-            end if;
-         else
-            if MaxAmount > TraderCargo(BaseCargoIndex).Amount then
-               MaxAmount := TraderCargo(BaseCargoIndex).Amount;
-            end if;
+      MaxAmount := PlayerShip.Cargo(CargoIndex).Amount;
+      if BaseIndex > 0 then
+         if MaxAmount > (SkyBases(BaseIndex).Cargo(1).Amount / Price) then
+            MaxAmount := SkyBases(BaseIndex).Cargo(1).Amount / Price;
          end if;
-         Set_Upper(AmountAdj, Gdouble(MaxAmount));
-         Set_Label
-           (Gtk_Label(Get_Object(Builder, "lblbuyamount")),
-            "Amount to buy (max" & Natural'Image(MaxAmount) & "):");
-         Show_All(Gtk_Widget(Get_Object(Builder, "buywindow")));
       else
-         MaxAmount := PlayerShip.Cargo(CargoIndex).Amount;
-         if BaseIndex > 0 then
-            if MaxAmount > (SkyBases(BaseIndex).Cargo(1).Amount / Price) then
-               MaxAmount := SkyBases(BaseIndex).Cargo(1).Amount / Price;
-            end if;
-         else
-            if MaxAmount > (TraderCargo(1).Amount / Price) then
-               MaxAmount := TraderCargo(1).Amount / Price;
-            end if;
+         if MaxAmount > (TraderCargo(1).Amount / Price) then
+            MaxAmount := TraderCargo(1).Amount / Price;
          end if;
-         Set_Upper(AmountAdj, Gdouble(MaxAmount));
-         Set_Label
-           (Gtk_Label(Get_Object(Builder, "lblsellamount")),
-            "Amount to sell (max" & Natural'Image(MaxAmount) & "):");
-         Show_All(Gtk_Widget(Get_Object(Builder, "sellwindow")));
       end if;
+      Set_Upper(AmountAdj, Gdouble(MaxAmount));
+      Set_Label
+        (Gtk_Label(Get_Object(Builder, "lblsellamount")),
+         "Amount to sell (max" & Natural'Image(MaxAmount) & "):");
+      Show_All(Gtk_Widget(Get_Object(Builder, "sellwindow")));
    end ShowTradeItem;
 
    procedure TradeItem(User_Data: access GObject_Record'Class) is
@@ -382,8 +381,7 @@ package body Trades.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseCargoIndex, CargoIndex: Natural := 0;
       Trader: String(1 .. 4);
-      Amount: constant Natural :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "amountadj"))));
+      Amount: Natural;
       ParentWindow: Gtk_Window;
    begin
       Get_Selected
@@ -402,9 +400,15 @@ package body Trades.UI is
          Trader := "ship";
       end if;
       if User_Data = Get_Object(Builder, "btnbuyitem") then
-         ParentWindow := Gtk_Window(Get_Object(Builder, "buywindow"));
+         Amount :=
+           Natural
+             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "amountadj1"))));
+         ParentWindow := Gtk_Window(Get_Object(Builder, "tradewindow"));
          BuyItems(BaseCargoIndex, Natural'Image(Amount));
       else
+         Amount :=
+           Natural
+             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "amountadj"))));
          ParentWindow := Gtk_Window(Get_Object(Builder, "sellwindow"));
          if User_Data = Get_Object(Builder, "btnsellitem") then
             SellItems(CargoIndex, Natural'Image(Amount));
@@ -413,8 +417,8 @@ package body Trades.UI is
               (CargoIndex,
                Positive'Image(PlayerShip.Cargo.Element(CargoIndex).Amount));
          end if;
+         Hide(Gtk_Widget(ParentWindow));
       end if;
-      Hide(Gtk_Widget(ParentWindow));
       ShowTradeUI;
    exception
       when An_Exception : Trade_Cant_Buy =>
@@ -511,9 +515,6 @@ package body Trades.UI is
       Do_Connect(Builder);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "tradewindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "buywindow")),
          CloseWindow'Access);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "sellwindow")),
