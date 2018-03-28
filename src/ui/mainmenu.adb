@@ -228,9 +228,36 @@ package body MainMenu is
             Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
             Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
          end if;
-         Set_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page1");
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
+            "page1");
       elsif User_Data = Get_Object(Builder, "btnback") then
-         Set_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page0");
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
+            "page0");
+      elsif User_Data = Get_Object(Builder, "btnhalloffame") then
+         declare
+            HofList: constant Gtk_List_Store :=
+              Gtk_List_Store(Get_Object(Builder, "hoflist"));
+            Iter: Gtk_Tree_Iter;
+         begin
+            Clear(HofList);
+            for I in HallOfFame_Array'Range loop
+               exit when HallOfFame_Array(I).Name = Null_Unbounded_String;
+               Append(HofList, Iter);
+               Set(HofList, Iter, 0, Gint(I));
+               Set(HofList, Iter, 1, To_String(HallOfFame_Array(I).Name));
+               Set(HofList, Iter, 2, Gint(HallOfFame_Array(I).Points));
+               Set
+                 (HofList,
+                  Iter,
+                  3,
+                  To_String(HallOfFame_Array(I).DeathReason));
+            end loop;
+         end;
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
+            "page2");
       end if;
    end ShowPage;
 
@@ -277,23 +304,6 @@ package body MainMenu is
             "Show all changes");
       end if;
    end ShowAllNews;
-
-   procedure ShowHallOfFame(Object: access Gtkada_Builder_Record'Class) is
-      HofList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Object, "hoflist"));
-      Iter: Gtk_Tree_Iter;
-   begin
-      Clear(HofList);
-      for I in HallOfFame_Array'Range loop
-         exit when HallOfFame_Array(I).Name = Null_Unbounded_String;
-         Append(HofList, Iter);
-         Set(HofList, Iter, 0, Gint(I));
-         Set(HofList, Iter, 1, To_String(HallOfFame_Array(I).Name));
-         Set(HofList, Iter, 2, Gint(HallOfFame_Array(I).Points));
-         Set(HofList, Iter, 3, To_String(HallOfFame_Array(I).DeathReason));
-      end loop;
-      Show_All(Gtk_Widget(Get_Object(Object, "hofwindow")));
-   end ShowHallOfFame;
 
    procedure RandomName(User_Data: access GObject_Record'Class) is
    begin
@@ -395,7 +405,6 @@ package body MainMenu is
       Register_Handler(Builder, "Main_Quit", Quit'Access);
       Register_Handler(Builder, "Show_All_News", ShowAllNews'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
-      Register_Handler(Builder, "Show_Hall_Of_Fame", ShowHallOfFame'Access);
       Register_Handler(Builder, "Random_Name", RandomName'Access);
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
       Register_Handler(Builder, "Load_Game", LoadGame'Access);
@@ -418,9 +427,6 @@ package body MainMenu is
          To_String(NewGameSettings.ShipName));
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "aboutdialog")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "hofwindow")),
          CloseWindow'Access);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "newswindow")),
