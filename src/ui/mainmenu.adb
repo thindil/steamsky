@@ -27,7 +27,6 @@ with Gtk.Label; use Gtk.Label;
 with Gtk.Main; use Gtk.Main;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Button; use Gtk.Button;
-with Gtk.About_Dialog; use Gtk.About_Dialog;
 with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.GEntry; use Gtk.GEntry;
@@ -262,6 +261,10 @@ package body MainMenu is
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
             "page3");
+      elsif User_Data = Get_Object(Builder, "btnabout") then
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
+            "page4");
       end if;
    end ShowPage;
 
@@ -420,18 +423,12 @@ package body MainMenu is
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
       end if;
       UpdateNews;
-      Set_Version
-        (Gtk_About_Dialog(Get_Object(Builder, "aboutdialog")),
-         GameVersion);
       Set_Text
         (Gtk_Entry(Get_Object(Builder, "entrycharactername")),
          To_String(NewGameSettings.PlayerName));
       Set_Text
         (Gtk_Entry(Get_Object(Builder, "entryshipname")),
          To_String(NewGameSettings.ShipName));
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "aboutdialog")),
-         CloseWindow'Access);
       ShowMainMenu;
    end CreateMainMenu;
 
