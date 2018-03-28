@@ -56,6 +56,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Steam Sky</property>
     <property name="window_position">center</property>
+    <property name="default_width">300</property>
     <signal name="destroy" handler="Main_Quit" swapped="no"/>
     <child>
       <object class="GtkStack" id="mainmenustack">
@@ -164,6 +165,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <signal name="clicked" handler="Show_Page" object="btnabout" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -552,57 +554,98 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="position">3</property>
           </packing>
         </child>
-      </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-  </object>
-  <object class="GtkAboutDialog" id="aboutdialog">
-    <property name="can_focus">False</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
-    <property name="window_position">center</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">dialog</property>
-    <property name="transient_for">mainmenuwindow</property>
-    <property name="program_name">Steam Sky</property>
-    <property name="version">ver 2.1</property>
-    <property name="copyright" translatable="yes">(c) 2016-2018 Bartek thindil Jasicki</property>
-    <property name="comments" translatable="yes">Roguelike in the sky with steampunk theme</property>
-    <property name="website">https://thindil.github.io/steamsky/</property>
-    <property name="authors">Bartek thindil Jasicki</property>
-    <property name="logo_icon_name">image-missing</property>
-    <property name="license_type">gpl-3-0</property>
-    <signal name="delete-event" handler="Hide_Window" object="aboutdialog" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox">
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox">
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="orientation">vertical</property>
             <child>
-              <placeholder/>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Roguelike in the sky with steampunk theme.</property>
+                <property name="wrap">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkLinkButton">
+                <property name="label" translatable="yes">Website</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="relief">none</property>
+                <property name="uri">https://thindil.github.io/steamsky/</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">(c) 2016-2018 Bartek thindil Jasicki</property>
+                <property name="wrap">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">5</property>
+                <property name="margin_right">5</property>
+                <property name="margin_top">5</property>
+                <property name="margin_bottom">5</property>
+                <property name="label" translatable="yes">Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</property>
+                <property name="wrap">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnback4">
+                <property name="label" translatable="yes">_Back to menu</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">end</property>
+                <property name="valign">end</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="Show_Page" object="btnback" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
+            <property name="name">page4</property>
+            <property name="title" translatable="yes">page4</property>
+            <property name="position">4</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
     </child>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>
