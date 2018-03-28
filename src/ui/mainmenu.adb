@@ -258,6 +258,10 @@ package body MainMenu is
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
             "page2");
+      elsif User_Data = Get_Object(Builder, "btnnews") then
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
+            "page3");
       end if;
    end ShowPage;
 
@@ -427,9 +431,6 @@ package body MainMenu is
          To_String(NewGameSettings.ShipName));
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "aboutdialog")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "newswindow")),
          CloseWindow'Access);
       ShowMainMenu;
    end CreateMainMenu;
