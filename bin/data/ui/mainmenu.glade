@@ -57,7 +57,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="title" translatable="yes">Steam Sky</property>
     <property name="window_position">center</property>
     <property name="default_width">300</property>
-    <signal name="destroy" handler="Main_Quit" swapped="no"/>
+    <property name="deletable">False</property>
     <child>
       <object class="GtkStack" id="mainmenustack">
         <property name="visible">True</property>
