@@ -35,6 +35,7 @@ with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Css_Provider; use Gtk.Css_Provider;
 with Gtk.Style_Context; use Gtk.Style_Context;
+with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -205,9 +206,9 @@ package body MainMenu is
          return False;
    end LoadGameData;
 
-   procedure ShowWindow(User_Data: access GObject_Record'Class) is
+   procedure ShowPage(User_Data: access GObject_Record'Class) is
    begin
-      if User_Data = Get_Object(Builder, "newgamewindow") then
+      if User_Data = Get_Object(Builder, "btnnewgame") then
          if LoadGameData then
             if Get_Text
                 (Gtk_GEntry(Get_Object(Builder, "entrycharactername"))) =
@@ -227,9 +228,11 @@ package body MainMenu is
             Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
             Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
          end if;
+         Set_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page1");
+      elsif User_Data = Get_Object(Builder, "btnback") then
+         Set_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page0");
       end if;
-      Show_All(Gtk_Widget(User_Data));
-   end ShowWindow;
+   end ShowPage;
 
    procedure UpdateNews is
       ChangesFile: File_Type;
@@ -352,7 +355,6 @@ package body MainMenu is
         Get_Text(Gtk_Entry(Get_Object(Object, "entryshipname")));
       Gender: Character;
    begin
-      Hide(Gtk_Widget(Get_Object(Object, "newgamewindow")));
       if Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender"))) = 0 then
          Gender := 'M';
       else
@@ -393,12 +395,12 @@ package body MainMenu is
       Register_Handler(Builder, "Main_Quit", Quit'Access);
       Register_Handler(Builder, "Show_All_News", ShowAllNews'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
-      Register_Handler(Builder, "Show_Window", ShowWindow'Access);
       Register_Handler(Builder, "Show_Hall_Of_Fame", ShowHallOfFame'Access);
       Register_Handler(Builder, "Random_Name", RandomName'Access);
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
       Register_Handler(Builder, "Load_Game", LoadGame'Access);
       Register_Handler(Builder, "New_Game", NewGame'Access);
+      Register_Handler(Builder, "Show_Page", ShowPage'Access);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if HallOfFame_Array(1).Name = Null_Unbounded_String then
@@ -419,9 +421,6 @@ package body MainMenu is
          CloseWindow'Access);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "hofwindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "newgamewindow")),
          CloseWindow'Access);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "newswindow")),
