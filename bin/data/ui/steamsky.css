@@ -8,7 +8,8 @@
 
 *:hover, 
    GtkButton:hover *, 
-   GtkMenuItem:hover * {
+   GtkMenuItem:hover *,
+   .entry:selected {
   background:rgb(64,69,82);
 }
 
@@ -83,3 +84,4 @@ GtkFrame > GtkLabel {
    border-width:2px;
    border-color:rgb(204,87,93);
 }
+
