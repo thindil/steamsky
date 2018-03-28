@@ -230,10 +230,12 @@ package body MainMenu is
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
             "page1");
+         Grab_Focus(Gtk_Widget(Get_Object(Builder, "entrycharactername")));
       elsif User_Data = Get_Object(Builder, "btnback") then
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
             "page0");
+         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
       elsif User_Data = Get_Object(Builder, "btnhalloffame") then
          declare
             HofList: constant Gtk_List_Store :=
@@ -257,14 +259,17 @@ package body MainMenu is
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
             "page2");
+         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback2")));
       elsif User_Data = Get_Object(Builder, "btnnews") then
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
             "page3");
+         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnfull")));
       elsif User_Data = Get_Object(Builder, "btnabout") then
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
             "page4");
+         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback4")));
       end if;
    end ShowPage;
 
