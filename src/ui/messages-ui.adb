@@ -15,18 +15,13 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Window; use Gtk.Window;
-with Glib; use Glib;
-with Glib.Error; use Glib.Error;
-with Game; use Game;
+with Gtk.Stack; use Gtk.Stack;
 
 package body Messages.UI is
 
@@ -88,35 +83,22 @@ package body Messages.UI is
       end if;
    end DeleteMessages;
 
-   procedure CreateMessagesUI is
-      Error: aliased GError;
+   procedure CreateMessagesUI(NewBuilder: Gtkada_Builder) is
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "messages.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Register_Handler(Builder, "Hide_Ship_Info", HideShipInfo'Access);
+      Builder := NewBuilder;
       Register_Handler(Builder, "Select_Messages", SelectMessages'Access);
       Register_Handler(Builder, "Delete_Messages", DeleteMessages'Access);
-      Do_Connect(Builder);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "messageswindow")),
-         CloseWindow'Access);
+      Register_Handler(Builder, "Close_Messages", CloseMessages'Access);
    end CreateMessagesUI;
 
    procedure ShowMessagesUI(OldState: GameStates) is
    begin
       PreviousGameState := OldState;
       ShowMessages(Default);
-      Show_All(Gtk_Widget(Get_Object(Builder, "messageswindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "lastmessages");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
    end ShowMessagesUI;
 
 end Messages.UI;

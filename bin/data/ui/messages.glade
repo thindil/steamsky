@@ -64,6 +64,20 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <object class="GtkTextBuffer" id="txtmessages">
     <property name="tag_table">messagestags</property>
   </object>
+  <object class="GtkWindow" id="messageswindow">
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Steam Sky - Messages</property>
+    <property name="window_position">center</property>
+    <property name="default_width">800</property>
+    <property name="default_height">600</property>
+    <signal name="delete-event" handler="Hide_Ship_Info" object="messageswindow" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+  </object>
   <object class="GtkListStore" id="typeslist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -92,97 +106,5 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <col id="0" translatable="yes">Missions</col>
       </row>
     </data>
-  </object>
-  <object class="GtkWindow" id="messageswindow">
-    <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Steam Sky - Messages</property>
-    <property name="window_position">center</property>
-    <property name="default_width">800</property>
-    <property name="default_height">600</property>
-    <signal name="delete-event" handler="Hide_Ship_Info" object="messageswindow" swapped="no"/>
-    <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkComboBox" id="cmbmessages">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="model">typeslist</property>
-                <property name="active">0</property>
-                <property name="button_sensitivity">on</property>
-                <property name="entry_text_column">0</property>
-                <property name="id_column">0</property>
-                <signal name="changed" handler="Select_Messages" swapped="no"/>
-                <child>
-                  <object class="GtkCellRendererText"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="btnclear">
-                <property name="label" translatable="yes">Delete all messages</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="Delete_Messages" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack_type">end</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="hscrollbar_policy">never</property>
-            <property name="shadow_type">in</property>
-            <child>
-              <object class="GtkTextView" id="messagesview">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can_focus">False</property>
-                <property name="editable">False</property>
-                <property name="wrap_mode">word</property>
-                <property name="cursor_visible">False</property>
-                <property name="buffer">txtmessages</property>
-                <property name="accepts_tab">False</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
 </interface>
