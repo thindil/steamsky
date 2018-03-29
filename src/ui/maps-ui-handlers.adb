@@ -1014,6 +1014,7 @@ package body Maps.UI.Handlers is
          ShowBasesListUI;
       elsif User_Data = Get_Object(Builder, "menuevents") then
          ShowEventsUI;
+         return;
       elsif User_Data = Get_Object(Builder, "menuoptions") then
          ShowGameOptions;
       end if;

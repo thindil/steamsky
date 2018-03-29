@@ -49,6 +49,7 @@ with Messages.UI; use Messages.UI;
 with Crew; use Crew;
 with ShipModules; use ShipModules;
 with Events; use Events;
+with Events.UI; use Events.UI;
 with Items; use Items;
 with Config; use Config;
 with Bases; use Bases;
@@ -620,6 +621,7 @@ package body Maps.UI is
             return;
          end if;
          CreateMessagesUI(Builder);
+         CreateEventsUI(Builder);
          Register_Handler(Builder, "Quit_Game", QuitGame'Access);
          Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
          Register_Handler
