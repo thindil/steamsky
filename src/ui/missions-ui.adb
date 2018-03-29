@@ -15,11 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Exceptions; use Ada.Exceptions;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -29,8 +26,8 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -197,7 +194,7 @@ package body Missions.UI is
          To_String(MoneyName));
       if User_Data = Get_Object(Builder, "treemissions") then
          Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lblinfo")),
+           (Gtk_Label(Get_Object(Builder, "lblavailablemissioninfo")),
             To_String(MissionInfo));
          case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
            .Reputation
@@ -221,20 +218,24 @@ package body Missions.UI is
          end loop;
          if MissionsLimit > 0 then
             Set_Label
-              (Gtk_Label(Get_Object(Builder, "lblavailable")),
+              (Gtk_Label(Get_Object(Builder, "lblavailablemissions")),
                "You can take" &
                Natural'Image(MissionsLimit) &
                " more missions in this base.");
          else
             Set_Label
-              (Gtk_Label(Get_Object(Builder, "lblavailable")),
+              (Gtk_Label(Get_Object(Builder, "lblavailablemissions")),
                "You can't take any more missions in this base.");
             CanAccept := False;
          end if;
          if not CanAccept then
-            Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnaccept")), False);
+            Set_Sensitive
+              (Gtk_Widget(Get_Object(Builder, "btnacceptmission")),
+               False);
          else
-            Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnaccept")), True);
+            Set_Sensitive
+              (Gtk_Widget(Get_Object(Builder, "btnacceptmission")),
+               True);
          end if;
       else
          Set_Markup
@@ -281,13 +282,13 @@ package body Missions.UI is
       when An_Exception : Missions_Accepting_Error =>
          ShowDialog
            (Exception_Message(An_Exception),
-            Gtk_Window(Get_Object(Object, "missionswindow")));
+            Gtk_Window(Get_Object(Object, "skymapwindow")));
    end AcceptSelectedMission;
 
    procedure ButtonMission(User_Data: access GObject_Record'Class) is
       X, Y: Integer;
    begin
-      if User_Data = Get_Object(Builder, "btncenter") then
+      if User_Data = Get_Object(Builder, "btnmissioncenter") then
          CreateSkyMap
            (PlayerShip.Missions(MissionIndex).TargetX,
             PlayerShip.Missions(MissionIndex).TargetY);
@@ -302,7 +303,7 @@ package body Missions.UI is
          if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
             ShowDialog
               ("You are at this target now.",
-               Gtk_Window(Get_Object(Builder, "missionsinfowindow")));
+               Gtk_Window(Get_Object(Builder, "skymapwindow")));
             return;
          end if;
          PlayerShip.DestinationX := X;
@@ -310,39 +311,21 @@ package body Missions.UI is
          AddMessage("You set travel destination for your ship.", OrderMessage);
          CreateSkyMap;
       end if;
-      Hide(Gtk_Widget(Get_Object(Builder, "missionsinfowindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "skymap");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
    end ButtonMission;
 
-   procedure CreateMissionsUI is
-      Error: aliased GError;
+   procedure CreateMissionsUI(NewBuilder: Gtkada_Builder) is
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "missions.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Register_Handler(Builder, "Hide_Missions", HideInfo'Access);
-      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
+      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Mission_Info", ShowMissionInfo'Access);
       Register_Handler(Builder, "Button_Mission", ButtonMission'Access);
       Register_Handler
         (Builder,
          "Accept_Mission",
          AcceptSelectedMission'Access);
-      Do_Connect(Builder);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "missionswindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "missionsinfowindow")),
-         CloseWindow'Access);
    end CreateMissionsUI;
 
    procedure ShowMissionsUI is
@@ -387,7 +370,10 @@ package body Missions.UI is
                  (SkyBases(BaseIndex).Missions(I).TargetX,
                   SkyBases(BaseIndex).Missions(I).TargetY)));
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "missionswindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "availablemissions");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions")),
          Gtk_Tree_Path_New_From_String("0"),
@@ -436,7 +422,10 @@ package body Missions.UI is
                  (PlayerShip.Missions(I).TargetX,
                   PlayerShip.Missions(I).TargetY)));
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "missionsinfowindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "acceptedmissions");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions1")),
          Gtk_Tree_Path_New_From_String("0"),
