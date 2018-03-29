@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: titanium mold and orichalcum mold
-- New crafting recipe: titanium mold
+- New crafting recipes: titanium mold and orichalcum mold
 
 ### Changed
 - Updated interface
