@@ -15,9 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Gtkada.Builder; use Gtkada.Builder;
+
 package Missions.UI is
 
-   procedure CreateMissionsUI; -- Create infterace for show available missions
+   procedure CreateMissionsUI
+     (NewBuilder: Gtkada_Builder); -- Create infterace for show available missions
    procedure ShowMissionsUI; -- Show interface for show available missions
    procedure ShowAcceptedMissions; -- Show interface for show accepted missions
 

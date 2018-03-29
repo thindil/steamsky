@@ -56,6 +56,7 @@ with Bases; use Bases;
 with Statistics.UI; use Statistics.UI;
 with MainMenu; use MainMenu;
 with Maps.UI.Handlers; use Maps.UI.Handlers;
+with Missions.UI; use Missions.UI;
 
 package body Maps.UI is
 
@@ -622,6 +623,7 @@ package body Maps.UI is
          end if;
          CreateMessagesUI(Builder);
          CreateEventsUI(Builder);
+         CreateMissionsUI(Builder);
          Register_Handler(Builder, "Quit_Game", QuitGame'Access);
          Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
          Register_Handler
