@@ -612,7 +612,7 @@ package body Maps.UI is
          Gtk_New(Builder);
          if Add_From_File
              (Builder,
-              To_String(DataDirectory) & "ui" & Dir_Separator & "skymap.glade",
+              To_String(DataDirectory) & "ui" & Dir_Separator & "game.glade",
               Error'Access) =
            Guint(0) then
             Put_Line("Error : " & Get_Message(Error));
