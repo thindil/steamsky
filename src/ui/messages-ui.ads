@@ -15,11 +15,13 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Gtkada.Builder; use Gtkada.Builder;
 with Utils.UI; use Utils.UI;
 
 package Messages.UI is
 
-   procedure CreateMessagesUI; -- Create infterace for show messages
+   procedure CreateMessagesUI
+     (NewBuilder: Gtkada_Builder); -- Create infterace for show messages
    procedure ShowMessagesUI
      (OldState: GameStates); -- Show interface for show messages
 

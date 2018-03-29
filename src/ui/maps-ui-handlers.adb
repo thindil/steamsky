@@ -962,6 +962,7 @@ package body Maps.UI.Handlers is
    begin
       if User_Data = Get_Object(Builder, "menumessages") then
          ShowMessagesUI(SkyMap_View);
+         return;
       elsif User_Data = Get_Object(Builder, "menucargo") then
          ShowCargoUI(SkyMap_View);
       elsif User_Data = Get_Object(Builder, "menuship") then

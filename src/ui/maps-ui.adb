@@ -45,6 +45,7 @@ with Game; use Game;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 with Messages; use Messages;
+with Messages.UI; use Messages.UI;
 with Crew; use Crew;
 with ShipModules; use ShipModules;
 with Events; use Events;
@@ -618,6 +619,7 @@ package body Maps.UI is
             Put_Line("Error : " & Get_Message(Error));
             return;
          end if;
+         CreateMessagesUI(Builder);
          Register_Handler(Builder, "Quit_Game", QuitGame'Access);
          Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
          Register_Handler
@@ -794,19 +796,19 @@ package body Maps.UI is
            (Gtk_Widget(Get_Object(Builder, "menuwait")),
             "<skymapwindow>/Menu/WaitOrders",
             Accelerators);
+         On_Key_Release_Event
+           (Gtk_Widget(Get_Object(Builder, "mapinfowindow")),
+            CloseWindow'Access);
+         On_Key_Release_Event
+           (Gtk_Widget(Get_Object(Builder, "movemapwindow")),
+            CloseWindow'Access);
+         On_Key_Release_Event
+           (Gtk_Widget(Get_Object(Builder, "orderswindow")),
+            CloseWindow'Access);
+         On_Key_Release_Event
+           (Gtk_Widget(Get_Object(Builder, "waitwindow")),
+            CloseWindow'Access);
       end if;
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "mapinfowindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "movemapwindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "orderswindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "waitwindow")),
-         CloseWindow'Access);
       UpdateMessages;
       Set_Text
         (Gtk_Text_Buffer(Get_Object(Builder, "txtmap")),
