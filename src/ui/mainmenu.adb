@@ -61,7 +61,6 @@ with Utils.UI; use Utils.UI;
 with Log; use Log;
 with Combat.UI; use Combat.UI;
 with Help.UI; use Help.UI;
-with Messages.UI; use Messages.UI;
 with Statistics.UI; use Statistics.UI;
 with Missions.UI; use Missions.UI;
 with Trades.UI; use Trades.UI;
@@ -342,7 +341,6 @@ package body MainMenu is
       Hide(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       CreateCombatUI;
       CreateHelpUI;
-      CreateMessagesUI;
       CreateCrewUI;
       CreateCargoUI;
       CreateShipUI;

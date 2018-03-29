@@ -54,5 +54,8 @@ package Utils.UI is
    function CloseWindow
      (Self: access Gtk_Widget_Record'Class;
       Event: Gdk_Event_Key) return Boolean; -- Close window on press Escape key
+   procedure CloseMessages
+     (Object: access Gtkada_Builder_Record'
+        Class); -- Switch back to skymap or combat from info
 
 end Utils.UI;

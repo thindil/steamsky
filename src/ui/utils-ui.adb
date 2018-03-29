@@ -20,6 +20,7 @@ with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Label; use Gtk.Label;
+with Gtk.Stack; use Gtk.Stack;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with MainMenu; use MainMenu;
@@ -139,5 +140,23 @@ package body Utils.UI is
       end if;
       return True;
    end CloseWindow;
+
+   procedure CloseMessages(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      case PreviousGameState is
+         when SkyMap_View =>
+            CreateSkyMap;
+            Set_Deletable
+              (Gtk_Window(Get_Object(Object, "skymapwindow")),
+               True);
+            Set_Visible_Child_Name
+              (Gtk_Stack(Get_Object(Object, "gamestack")),
+               "skymap");
+         when Combat_View =>
+            ShowCombatUI(False);
+         when others =>
+            null;
+      end case;
+   end CloseMessages;
 
 end Utils.UI;

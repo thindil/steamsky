@@ -822,6 +822,35 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="typeslist">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">All</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Combat</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Trade</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Orders</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Craft</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Others</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Missions</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkWindow" id="skymapwindow">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Steam Sky</property>
@@ -1494,13 +1523,120 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
           </object>
           <packing>
-            <property name="name">page0</property>
+            <property name="name">skymap</property>
             <property name="title" translatable="yes">page0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkComboBox" id="cmbmessages">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="model">typeslist</property>
+                    <property name="active">0</property>
+                    <property name="button_sensitivity">on</property>
+                    <property name="entry_text_column">0</property>
+                    <property name="id_column">0</property>
+                    <signal name="changed" handler="Select_Messages" swapped="no"/>
+                    <child>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnclearmessages">
+                    <property name="label" translatable="yes">Delete all messages</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <signal name="clicked" handler="Delete_Messages" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnmessagesback">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <signal name="clicked" handler="Close_Messages" swapped="no"/>
+                    <child>
+                      <object class="GtkAccelLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Close</property>
+                        <property name="accel_widget">btnmessagesback</property>
+                      </object>
+                    </child>
+                    <accelerator key="Escape" signal="clicked"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTextView" id="messagesview1">
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can_focus">False</property>
+                    <property name="editable">False</property>
+                    <property name="wrap_mode">word</property>
+                    <property name="cursor_visible">False</property>
+                    <property name="buffer">txtmessages</property>
+                    <property name="accepts_tab">False</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="name">lastmessages</property>
+            <property name="title" translatable="yes">page0</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>
     </child>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
   </object>
