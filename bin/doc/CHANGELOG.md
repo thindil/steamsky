@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New items: titanium mold and orichalcum mold
+- New items: titanium mold, orichalcum mold and titanium gunsmith set
 - New crafting recipes: titanium mold and orichalcum mold
 
 ### Changed
