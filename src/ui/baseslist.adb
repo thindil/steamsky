@@ -115,13 +115,13 @@ package body BasesList is
             Gtk_Tree_Path_New_From_String("0"),
             Gtk_Tree_View_Column(Get_Object(Builder, "columnnames1")),
             False);
-         Set_Visible(Gtk_Widget(Get_Object(Object, "lblbaseinfo")), True);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "baseinfoframe")), True);
          Set_Visible(Gtk_Widget(Get_Object(Object, "btnshowbase")), True);
          Set_Visible
            (Gtk_Widget(Get_Object(Object, "btndestinationbase")),
             True);
       else
-         Set_Visible(Gtk_Widget(Get_Object(Object, "lblbaseinfo")), False);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "baseinfoframe")), False);
          Set_Visible(Gtk_Widget(Get_Object(Object, "btnshowbase")), False);
          Set_Visible
            (Gtk_Widget(Get_Object(Object, "btndestinationbase")),
