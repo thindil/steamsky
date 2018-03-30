@@ -1016,6 +1016,7 @@ package body Maps.UI.Handlers is
          ShowCraftsUI;
       elsif User_Data = Get_Object(Builder, "menubaseslist") then
          ShowBasesListUI;
+         return;
       elsif User_Data = Get_Object(Builder, "menuevents") then
          ShowEventsUI;
          return;
