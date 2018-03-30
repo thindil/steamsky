@@ -15,9 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Gtkada.Builder; use Gtkada.Builder;
+
 package BasesList is
 
-   procedure CreateBasesListUI; -- Create infterace for list of bases
+   procedure CreateBasesListUI
+     (NewBuilder: Gtkada_Builder); -- Create infterace for list of bases
    procedure ShowBasesListUI; -- Show interface for list of bases
 
 end BasesList;

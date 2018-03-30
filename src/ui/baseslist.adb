@@ -15,11 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -29,8 +26,8 @@ with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Game; use Game;
 with Bases; use Bases;
 with Maps; use Maps;
@@ -116,15 +113,19 @@ package body BasesList is
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treebases")),
             Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columnnames")),
+            Gtk_Tree_View_Column(Get_Object(Builder, "columnnames1")),
             False);
-         Set_Visible(Gtk_Widget(Get_Object(Object, "lblinfo")), True);
-         Set_Visible(Gtk_Widget(Get_Object(Object, "btnshow")), True);
-         Set_Visible(Gtk_Widget(Get_Object(Object, "btndestination")), True);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "lblbaseinfo")), True);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "btnshowbase")), True);
+         Set_Visible
+           (Gtk_Widget(Get_Object(Object, "btndestinationbase")),
+            True);
       else
-         Set_Visible(Gtk_Widget(Get_Object(Object, "lblinfo")), False);
-         Set_Visible(Gtk_Widget(Get_Object(Object, "btnshow")), False);
-         Set_Visible(Gtk_Widget(Get_Object(Object, "btndestination")), False);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "lblbaseinfo")), False);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "btnshowbase")), False);
+         Set_Visible
+           (Gtk_Widget(Get_Object(Object, "btndestinationbase")),
+            False);
       end if;
    end RefreshBasesList;
 
@@ -254,16 +255,18 @@ package body BasesList is
       else
          BaseInfo := To_Unbounded_String("Not visited yet.");
       end if;
-      Set_Label(Gtk_Label(Get_Object(Object, "lblinfo")), To_String(BaseInfo));
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblbaseinfo")),
+         To_String(BaseInfo));
    end ShowBaseInfo;
 
-   procedure SetDestination(Object: access Gtkada_Builder_Record'Class) is
+   procedure SetDestinationBase(Object: access Gtkada_Builder_Record'Class) is
    begin
       if SkyBases(BaseIndex).SkyX = PlayerShip.SkyX and
         SkyBases(BaseIndex).SkyY = PlayerShip.SkyY then
          ShowDialog
            ("You are at this base now.",
-            Gtk_Window(Get_Object(Object, "baseslistwindow")));
+            Gtk_Window(Get_Object(Object, "skymapwindow")));
          return;
       end if;
       PlayerShip.DestinationX := SkyBases(BaseIndex).SkyX;
@@ -273,40 +276,36 @@ package body BasesList is
          To_String(SkyBases(BaseIndex).Name) &
          " as a destination for your ship.",
          OrderMessage);
-      Hide(Gtk_Widget(Get_Object(Object, "baseslistwindow")));
       CreateSkyMap;
-   end SetDestination;
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "skymap");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
+   end SetDestinationBase;
 
    procedure ShowBase(Object: access Gtkada_Builder_Record'Class) is
    begin
-      Hide(Gtk_Widget(Get_Object(Object, "baseslistwindow")));
       CreateSkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Object, "gamestack")),
+         "skymap");
+      Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end ShowBase;
 
-   procedure CreateBasesListUI is
-      Error: aliased GError;
+   procedure CreateBasesListUI(NewBuilder: Gtkada_Builder) is
       Iter: Gtk_Tree_Iter;
       List: Gtk_List_Store;
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "baseslist.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
+      Builder := NewBuilder;
       Register_Handler(Builder, "Hide_Bases_List", HideInfo'Access);
       Register_Handler(Builder, "Refresh_Bases_List", RefreshBasesList'Access);
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
-      Register_Handler(Builder, "Set_Destination", SetDestination'Access);
+      Register_Handler
+        (Builder,
+         "Set_Destination_Base",
+         SetDestinationBase'Access);
       Register_Handler(Builder, "Show_Base", ShowBase'Access);
-      Do_Connect(Builder);
-      List := Gtk_List_Store(Get_Object(Builder, "typeslist"));
+      List := Gtk_List_Store(Get_Object(Builder, "typeslist1"));
       for I in Bases_Types loop
          Append(List, Iter);
          Set
@@ -326,14 +325,10 @@ package body BasesList is
             Bases_Owners'Image(I)(1) &
             To_Lower(Bases_Owners'Image(I)(2 .. Bases_Owners'Image(I)'Last)));
       end loop;
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "baseslistwindow")),
-         CloseWindow'Access);
    end CreateBasesListUI;
 
    procedure ShowBasesListUI is
    begin
-      Show_All(Gtk_Widget(Get_Object(Builder, "baseslistwindow")));
       SettingTime := True;
       Set_Active
         (Gtk_Combo_Box(Get_Object(Builder, "cmbtype")),
@@ -343,7 +338,11 @@ package body BasesList is
         (Gtk_Combo_Box(Get_Object(Builder, "cmbowner")),
          Bases_Owners'Pos(Bases_Owners'Last));
       SettingTime := False;
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "baseslist");
       RefreshBasesList(Builder);
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
    end ShowBasesListUI;
 
 end BasesList;
