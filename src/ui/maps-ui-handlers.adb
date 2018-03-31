@@ -995,15 +995,19 @@ package body Maps.UI.Handlers is
       elsif User_Data = Get_Object(Builder, "btnrecruit") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowRecruitUI;
+         return;
       elsif User_Data = Get_Object(Builder, "btnrecipes") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowBuyRecipesUI;
+         return;
       elsif User_Data = Get_Object(Builder, "btnrepair") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowRepairUI;
+         return;
       elsif User_Data = Get_Object(Builder, "btnheal") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowHealUI;
+         return;
       elsif User_Data = Get_Object(Builder, "btnschool") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowSchoolUI;
