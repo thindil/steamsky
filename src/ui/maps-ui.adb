@@ -54,6 +54,7 @@ with Items; use Items;
 with Config; use Config;
 with Bases; use Bases;
 with Bases.UI; use Bases.UI;
+with Bases.LootUI; use Bases.LootUI;
 with Statistics.UI; use Statistics.UI;
 with MainMenu; use MainMenu;
 with Maps.UI.Handlers; use Maps.UI.Handlers;
@@ -629,6 +630,7 @@ package body Maps.UI is
          CreateBasesListUI(Builder);
          CreateStatsUI(Builder);
          CreateBasesUI(Builder);
+         CreateBasesLootUI(Builder);
          Register_Handler(Builder, "Quit_Game", QuitGame'Access);
          Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
          Register_Handler

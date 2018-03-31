@@ -1017,6 +1017,7 @@ package body Maps.UI.Handlers is
       elsif User_Data = Get_Object(Builder, "btnloot") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowLootUI;
+         return;
       elsif User_Data = Get_Object(Builder, "menucrafting") then
          ShowCraftsUI;
       elsif User_Data = Get_Object(Builder, "menubaseslist") then
