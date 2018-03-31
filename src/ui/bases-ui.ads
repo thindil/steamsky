@@ -15,9 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Gtkada.Builder; use Gtkada.Builder;
+
 package Bases.UI is
 
-   procedure CreateBasesUI; -- Create infterace for various bases options
+   procedure CreateBasesUI
+     (NewBuilder: Gtkada_Builder); -- Create infterace for various bases options
    procedure ShowRecruitUI; -- Show interface for recruit new crew members
    procedure ShowBuyRecipesUI; -- Show interface for buying crafting recipes
    procedure ShowRepairUI; -- Show interface for buying ship repairs in bases
