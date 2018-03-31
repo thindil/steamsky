@@ -15,9 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -27,9 +24,9 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Stack; use Gtk.Stack;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
 with Maps; use Maps;
@@ -54,7 +51,7 @@ package body Bases.LootUI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       DamagePercent: Gdouble;
       FreeSpace: Integer;
-      DamageBar: constant GObject := Get_Object(Object, "damagebar");
+      DamageBar: constant GObject := Get_Object(Object, "lootdamagebar");
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -134,10 +131,12 @@ package body Bases.LootUI is
       end if;
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Set_Label
-           (Gtk_Label(Get_Object(Object, "lbldescription")),
+           (Gtk_Label(Get_Object(Object, "lbllootdescription")),
             ASCII.LF & To_String(Items_List(ProtoIndex).Description));
       end if;
-      Set_Label(Gtk_Label(Get_Object(Object, "lblinfo")), To_String(ItemInfo));
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lbllootinfo")),
+         To_String(ItemInfo));
       if CargoIndex = 0 then
          Set_Visible(Gtk_Widget(Get_Object(Object, "dropexpand")), False);
       else
@@ -230,7 +229,7 @@ package body Bases.LootUI is
               ("You can't take that much " &
                To_String(Items_List(ProtoIndex).Name) &
                ".",
-               Gtk_Window(Get_Object(Builder, "lootitemwindow")));
+               Gtk_Window(Get_Object(Builder, "skymapwindow")));
             return;
          end if;
          if CargoIndex > 0 then
@@ -264,33 +263,11 @@ package body Bases.LootUI is
       ShowLootUI;
    end LootItem;
 
-   procedure CreateBasesLootUI is
-      Error: aliased GError;
+   procedure CreateBasesLootUI(NewBuilder: Gtkada_Builder) is
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) &
-           "ui" &
-           Dir_Separator &
-           "bases-loot.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Register_Handler(Builder, "Hide_Loot", HideInfo'Access);
-      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
+      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
-      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Loot_Item", LootItem'Access);
-      Do_Connect(Builder);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "lootwindow")),
-         CloseWindow'Access);
    end CreateBasesLootUI;
 
    procedure ShowLootUI is
@@ -303,7 +280,7 @@ package body Bases.LootUI is
       IndexesList: Positive_Container.Vector;
       BaseCargoIndex: Natural;
    begin
-      ItemsList := Gtk_List_Store(Get_Object(Builder, "itemslist"));
+      ItemsList := Gtk_List_Store(Get_Object(Builder, "itemslist1"));
       Clear(ItemsList);
       for I in PlayerShip.Cargo.Iterate loop
          if Items_List(PlayerShip.Cargo(I).ProtoIndex).Prices(BaseType) >
@@ -344,15 +321,17 @@ package body Bases.LootUI is
             Set(ItemsList, ItemsIter, 2, Gint(I));
          end if;
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "lootwindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "loot");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Hide(Gtk_Widget(Get_Object(Builder, "dropexpand")));
       Hide(Gtk_Widget(Get_Object(Builder, "takeexpand")));
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treeitems")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnname")),
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnname1")),
          False);
-      ShowLastMessage(Builder);
    end ShowLootUI;
 
 end Bases.LootUI;
