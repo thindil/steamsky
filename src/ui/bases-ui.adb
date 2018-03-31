@@ -15,9 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -26,12 +23,12 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Window; use Gtk.Window;
+with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
-with Messages; use Messages;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
 with Items; use Items;
@@ -45,25 +42,6 @@ package body Bases.UI is
    Builder: Gtkada_Builder;
    type States is (RECIPES, REPAIRS, HEAL, CLEARING);
    CurrentState: States;
-
-   procedure HideLastMessage2(User_Data: access GObject_Record'Class) is
-   begin
-      Hide(Gtk_Widget(User_Data));
-      LastMessage := Null_Unbounded_String;
-   end HideLastMessage2;
-
-   procedure ShowLastMessage2 is
-   begin
-      if LastMessage = Null_Unbounded_String then
-         HideLastMessage2(Get_Object(Builder, "infolastmessage1"));
-      else
-         Set_Text
-           (Gtk_Label(Get_Object(Builder, "lbllastmessage1")),
-            To_String(LastMessage));
-         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage1")));
-         LastMessage := Null_Unbounded_String;
-      end if;
-   end ShowLastMessage2;
 
    procedure ShowRecruitInfo(Object: access Gtkada_Builder_Record'Class) is
       RecruitIter, Iter: Gtk_Tree_Iter;
@@ -124,18 +102,20 @@ package body Bases.UI is
          Cost := Recruit.Price;
          CountPrice(Cost, FindMember(Talk));
          Set_Label
-           (Gtk_Button(Get_Object(Object, "btnrecruit")),
+           (Gtk_Button(Get_Object(Object, "btnrecruit1")),
             "Hire for" & Positive'Image(Cost) & " " & To_String(MoneyName));
          if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
-            Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnrecruit")), False);
+            Set_Sensitive
+              (Gtk_Widget(Get_Object(Object, "btnrecruit1")),
+               False);
          else
-            Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnrecruit")), True);
+            Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnrecruit1")), True);
          end if;
       else
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblrecruitmoney")),
             "You don't have any money for recruit anyone");
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnrecruit")), False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnrecruit1")), False);
       end if;
    end ShowRecruitInfo;
 
@@ -183,7 +163,7 @@ package body Bases.UI is
       end if;
       Get_Selected
         (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treebases"))),
+           (Gtk_Tree_View(Get_Object(Object, "treebases1"))),
          Model,
          Iter);
       if Iter = Null_Iter then
@@ -235,7 +215,7 @@ package body Bases.UI is
             end if;
             CountPrice(Cost, FindMember(Talk));
             Set_Label
-              (Gtk_Label(Get_Object(Object, "lblinfo")),
+              (Gtk_Label(Get_Object(Object, "lblbaseinfo2")),
                "Base price:" &
                Positive'Image(Cost) &
                " " &
@@ -244,7 +224,7 @@ package body Bases.UI is
             RepairCost(Cost, Time, ObjectIndex);
             CountPrice(Cost, FindMember(Talk));
             Set_Label
-              (Gtk_Label(Get_Object(Object, "lblinfo")),
+              (Gtk_Label(Get_Object(Object, "lblbaseinfo2")),
                "Repair cost:" &
                Natural'Image(Cost) &
                " " &
@@ -256,7 +236,7 @@ package body Bases.UI is
          when HEAL =>
             HealCost(Cost, Time, ObjectIndex);
             Set_Label
-              (Gtk_Label(Get_Object(Object, "lblinfo")),
+              (Gtk_Label(Get_Object(Object, "lblbaseinfo2")),
                "Heal cost:" &
                Natural'Image(Cost) &
                " " &
@@ -278,12 +258,16 @@ package body Bases.UI is
             To_String(MoneyName) &
             ".");
          if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
-            Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnaccept")), False);
+            Set_Sensitive
+              (Gtk_Widget(Get_Object(Object, "btnacceptbase")),
+               False);
          else
-            Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnaccept")), True);
+            Set_Sensitive
+              (Gtk_Widget(Get_Object(Object, "btnacceptbase")),
+               True);
          end if;
       else
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnaccept")), False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnacceptbase")), False);
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblmoneyamount")),
             "You don't have any money.");
@@ -296,7 +280,7 @@ package body Bases.UI is
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treebases"))),
+           (Gtk_Tree_View(Get_Object(Object, "treebases1"))),
          Model,
          Iter);
       if Iter = Null_Iter then
@@ -313,38 +297,16 @@ package body Bases.UI is
             null;
       end case;
       Remove(-(Model), Iter);
-      SetActiveRow("treebases", "columnbases");
-      ShowLastMessage2;
+      SetActiveRow("treebases1", "columnbases");
    end AcceptAction;
 
-   procedure CreateBasesUI is
-      Error: aliased GError;
+   procedure CreateBasesUI(NewBuilder: Gtkada_Builder) is
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "bases.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Register_Handler(Builder, "Hide_Base_Window", HideInfo'Access);
-      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage2'Access);
+      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Recruit_Info", ShowRecruitInfo'Access);
       Register_Handler(Builder, "Hire_Recruit", Hire'Access);
       Register_Handler(Builder, "Object_Selected", ObjectSelected'Access);
       Register_Handler(Builder, "Accept_Action", AcceptAction'Access);
-      Do_Connect(Builder);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "basewindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "recruitwindow")),
-         CloseWindow'Access);
    end CreateBasesUI;
 
    procedure ShowRecruitUI is
@@ -364,7 +326,10 @@ package body Bases.UI is
             To_String(SkyBases(BaseIndex).Recruits(I).Name));
          Set(RecruitList, RecruitIter, 1, Gint(Recruit_Container.To_Index(I)));
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "recruitwindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "recruit");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       SetActiveRow("treerecruits", "columnname");
       ShowLastMessage(Builder);
    end ShowRecruitUI;
@@ -398,10 +363,15 @@ package body Bases.UI is
                Gint(Recipes_Container.To_Index(I)));
          end if;
       end loop;
-      Set_Label(Gtk_Button(Get_Object(Builder, "btnaccept")), "Buy recipe");
-      Show_All(Gtk_Widget(Get_Object(Builder, "basewindow")));
-      SetActiveRow("treebases", "columnbases");
-      ShowLastMessage2;
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnacceptbase")),
+         "Buy recipe");
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "base");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
+      SetActiveRow("treebases1", "columnbases");
+      ShowLastMessage(Builder);
    end ShowBuyRecipesUI;
 
    procedure ShowRepairUI is
@@ -443,10 +413,15 @@ package body Bases.UI is
          Set(RepairsList, RepairsIter, 0, "Fast repair whole ship");
          Set(RepairsList, RepairsIter, 1, -2);
       end if;
-      Set_Label(Gtk_Button(Get_Object(Builder, "btnaccept")), "Buy repairs");
-      Show_All(Gtk_Widget(Get_Object(Builder, "basewindow")));
-      SetActiveRow("treebases", "columnbases");
-      ShowLastMessage2;
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnacceptbase")),
+         "Buy repairs");
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "base");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
+      SetActiveRow("treebases1", "columnbases");
+      ShowLastMessage(Builder);
    end ShowRepairUI;
 
    procedure ShowHealUI is
@@ -467,10 +442,15 @@ package body Bases.UI is
       Append(HealsList, HealsIter);
       Set(HealsList, HealsIter, 0, "Heal all wounded crew members");
       Set(HealsList, HealsIter, 1, 0);
-      Set_Label(Gtk_Button(Get_Object(Builder, "btnaccept")), "Buy healing");
-      Show_All(Gtk_Widget(Get_Object(Builder, "basewindow")));
-      SetActiveRow("treebases", "columnbases");
-      ShowLastMessage2;
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnacceptbase")),
+         "Buy healing");
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "base");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
+      SetActiveRow("treebases1", "columnbases");
+      ShowLastMessage(Builder);
    end ShowHealUI;
 
 end Bases.UI;
