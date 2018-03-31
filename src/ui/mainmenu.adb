@@ -64,7 +64,6 @@ with Help.UI; use Help.UI;
 with Trades.UI; use Trades.UI;
 with Bases.SchoolUI; use Bases.SchoolUI;
 with Bases.ShipyardUI; use Bases.ShipyardUI;
-with Bases.LootUI; use Bases.LootUI;
 with Crafts.UI; use Crafts.UI;
 with GameOptions; use GameOptions;
 
@@ -343,7 +342,6 @@ package body MainMenu is
       CreateTradeUI;
       CreateBasesSchoolUI;
       CreateBasesShipyardUI;
-      CreateBasesLootUI;
       CreateCraftsUI;
       CreateGameOptions;
       CreateSkyMap;
