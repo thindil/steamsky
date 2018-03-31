@@ -61,7 +61,6 @@ with Utils.UI; use Utils.UI;
 with Log; use Log;
 with Combat.UI; use Combat.UI;
 with Help.UI; use Help.UI;
-with Statistics.UI; use Statistics.UI;
 with Trades.UI; use Trades.UI;
 with Bases.UI; use Bases.UI;
 with Bases.SchoolUI; use Bases.SchoolUI;
@@ -341,7 +340,6 @@ package body MainMenu is
       CreateCrewUI;
       CreateCargoUI;
       CreateShipUI;
-      CreateStatsUI;
       CreateGoalsMenu;
       CreateTradeUI;
       CreateBasesUI;

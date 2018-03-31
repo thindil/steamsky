@@ -974,6 +974,7 @@ package body Maps.UI.Handlers is
          ShowCrewUI(SkyMap_View);
       elsif User_Data = Get_Object(Builder, "menustats") then
          ShowStatsUI(SkyMap_View);
+         return;
       elsif User_Data = Get_Object(Builder, "menumissions") then
          if PlayerShip.Missions.Length = 0 then
             ShowDialog

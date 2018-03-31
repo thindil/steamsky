@@ -626,6 +626,7 @@ package body Maps.UI is
          CreateEventsUI(Builder);
          CreateMissionsUI(Builder);
          CreateBasesListUI(Builder);
+         CreateStatsUI(Builder);
          Register_Handler(Builder, "Quit_Game", QuitGame'Access);
          Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
          Register_Handler
