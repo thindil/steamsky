@@ -17,15 +17,14 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Float_Text_IO; use Ada.Float_Text_IO;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
+with Gtk.Window; use Gtk.Window;
+with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
@@ -42,17 +41,19 @@ package body Statistics.UI is
    Builder: Gtkada_Builder;
    GameState: GameStates;
 
-   function HideStatistics
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   procedure HideStatistics(Object: access Gtkada_Builder_Record'Class) is
    begin
       if GameState = SkyMap_View then
          CreateSkyMap;
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Object, "gamestack")),
+            "skymap");
+         Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
       else
          EndGame(False);
+         Hide(Gtk_Widget(Get_Object(Object, "skymapwindow")));
          ShowMainMenu;
       end if;
-      return Hide_On_Delete
-          (Gtk_Widget(Get_Object(Object, "statisticswindow")));
    end HideStatistics;
 
    procedure ShowGoals(Object: access Gtkada_Builder_Record'Class) is
@@ -66,30 +67,11 @@ package body Statistics.UI is
       Set_Label(Gtk_Button(Get_Object(Builder, "btngoals")), Message);
    end UpdateGoalsButton;
 
-   procedure CreateStatsUI is
-      Error: aliased GError;
+   procedure CreateStatsUI(NewBuilder: Gtkada_Builder) is
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) &
-           "ui" &
-           Dir_Separator &
-           "statistics.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
+      Builder := NewBuilder;
       Register_Handler(Builder, "Hide_Statistics", HideStatistics'Access);
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
-      Do_Connect(Builder);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "statisticswindow")),
-         CloseWindow'Access);
    end CreateStatsUI;
 
    procedure ShowStatsUI(OldState: GameStates) is
@@ -218,7 +200,7 @@ package body Statistics.UI is
               (To_Unbounded_String(Natural'Image(MissionsPercent)),
                Ada.Strings.Left)) &
          "%)");
-      List := Gtk_List_Store(Get_Object(Builder, "missionslist"));
+      List := Gtk_List_Store(Get_Object(Builder, "finishedmissionslist"));
       Clear(List);
       if TotalFinished > 0 then
          for I in GameStats.FinishedMissions.Iterate loop
@@ -246,7 +228,10 @@ package body Statistics.UI is
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblpoints")),
          "Points:" & Natural'Image(GameStats.Points));
-      Show_All(Gtk_Widget(Get_Object(Builder, "statisticswindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "gamestats");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       if GameStats.DestroyedShips.Length > 0 then
          List := Gtk_List_Store(Get_Object(Builder, "destroyedlist"));
          Clear(List);
