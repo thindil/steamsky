@@ -15,9 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Gtkada.Builder; use Gtkada.Builder;
+
 package Bases.SchoolUI is
 
-   procedure CreateBasesSchoolUI; -- Create infterace for training skills in bases
+   procedure CreateBasesSchoolUI
+     (NewBuilder: Gtkada_Builder); -- Create infterace for training skills in bases
    procedure ShowSchoolUI; -- Show interface for training skills in bases
 
 end Bases.SchoolUI;
