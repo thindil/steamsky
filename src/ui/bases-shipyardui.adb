@@ -15,10 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Exceptions; use Ada.Exceptions;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -29,8 +26,8 @@ with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
+with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
 with ShipModules; use ShipModules;
@@ -94,7 +91,7 @@ package body Bases.ShipyardUI is
         (ModuleType'Val
            (Natural
               (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbtypes"))))));
-      SetActiveModule("treeinstall", "columnname");
+      SetActiveModule("treeinstall", "columnnames3");
    end ChangeType;
 
    procedure ShowInstallInfo(Object: access Gtkada_Builder_Record'Class) is
@@ -276,7 +273,7 @@ package body Bases.ShipyardUI is
       Cost: Positive;
       MAmount, MoneyIndex2, UsedSpace, AllSpace: Natural;
       Damage: Gdouble;
-      DamageBar: constant GObject := Get_Object(Object, "damagebar");
+      DamageBar: constant GObject := Get_Object(Object, "removedamagebar");
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -396,7 +393,7 @@ package body Bases.ShipyardUI is
           .Description /=
         Null_Unbounded_String then
          Set_Label
-           (Gtk_Label(Get_Object(Object, "lbldescription")),
+           (Gtk_Label(Get_Object(Object, "lblremovedescription")),
             ASCII.LF &
             To_String
               (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
@@ -466,7 +463,7 @@ package body Bases.ShipyardUI is
    procedure ManipulateModule(User_Data: access GObject_Record'Class) is
       Install: Boolean;
       ParentWindow: constant Gtk_Window :=
-        Gtk_Window(Get_Object(Builder, "shipyardwindow"));
+        Gtk_Window(Get_Object(Builder, "skymapwindow"));
       ModulesIter: Gtk_Tree_Iter;
       ModulesModel: Gtk_Tree_Model;
    begin
@@ -520,34 +517,13 @@ package body Bases.ShipyardUI is
             ParentWindow);
    end ManipulateModule;
 
-   procedure CreateBasesShipyardUI is
-      Error: aliased GError;
+   procedure CreateBasesShipyardUI(NewBuilder: Gtkada_Builder) is
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) &
-           "ui" &
-           Dir_Separator &
-           "bases-shipyard.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Register_Handler(Builder, "Hide_Shipyard", HideInfo'Access);
-      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
+      Builder := NewBuilder;
       Register_Handler(Builder, "Change_Type", ChangeType'Access);
       Register_Handler(Builder, "Show_Install_Info", ShowInstallInfo'Access);
       Register_Handler(Builder, "Manipulate_Module", ManipulateModule'Access);
       Register_Handler(Builder, "Show_Remove_Info", ShowRemoveInfo'Access);
-      Do_Connect(Builder);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "shipyardwindow")),
-         CloseWindow'Access);
    end CreateBasesShipyardUI;
 
    procedure ShowShipyardUI is
@@ -555,10 +531,13 @@ package body Bases.ShipyardUI is
       SetRemoveModulesList;
       SetInstallModulesList(ANY);
       Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbtypes")), 0);
-      Show_All(Gtk_Widget(Get_Object(Builder, "shipyardwindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "shipyard");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
-      SetActiveModule("treeinstall", "columnname");
-      SetActiveModule("treeremove", "columnname1");
+      SetActiveModule("treeinstall", "columnname3");
+      SetActiveModule("treeremove", "columnnames4");
    end ShowShipyardUI;
 
 end Bases.ShipyardUI;
