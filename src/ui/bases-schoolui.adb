@@ -15,9 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -25,9 +22,9 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Stack; use Gtk.Stack;
 with Gtk.Label; use Gtk.Label;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Ships; use Ships;
 with Bases.Trade; use Bases.Trade;
 with Utils.UI; use Utils.UI;
@@ -55,7 +52,7 @@ package body Bases.SchoolUI is
          return;
       end if;
       CrewIndex := Natural'Value(To_String(Get_Path(CrewModel, CrewIter))) + 1;
-      SkillsList := Gtk_List_Store(Get_Object(Builder, "skillslist"));
+      SkillsList := Gtk_List_Store(Get_Object(Builder, "skillslist1"));
       Clear(SkillsList);
       for I in Skills_List.Iterate loop
          Cost := Gint(TrainCost(CrewIndex, SkillsData_Container.To_Index(I)));
@@ -95,7 +92,7 @@ package body Bases.SchoolUI is
 
    procedure TrainSelectedSkill(Object: access Gtkada_Builder_Record'Class) is
       ParentWindow: constant Gtk_Window :=
-        Gtk_Window(Get_Object(Object, "schoolwindow"));
+        Gtk_Window(Get_Object(Object, "skymapwindow"));
       SkillsIter: Gtk_Tree_Iter;
       SkillsModel: Gtk_Tree_Model;
       SkillName: Unbounded_String;
@@ -136,35 +133,14 @@ package body Bases.SchoolUI is
          ShowDialog("You can't train this skill any more.", ParentWindow);
    end TrainSelectedSkill;
 
-   procedure CreateBasesSchoolUI is
-      Error: aliased GError;
+   procedure CreateBasesSchoolUI(NewBuilder: Gtkada_Builder) is
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) &
-           "ui" &
-           Dir_Separator &
-           "bases-school.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Register_Handler(Builder, "Hide_School", HideInfo'Access);
-      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
+      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Train_Info", ShowTrainInfo'Access);
       Register_Handler
         (Builder,
          "Train_Selected_Skill",
          TrainSelectedSkill'Access);
-      Do_Connect(Builder);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "schoolwindow")),
-         CloseWindow'Access);
    end CreateBasesSchoolUI;
 
    procedure ShowSchoolUI is
@@ -177,12 +153,15 @@ package body Bases.SchoolUI is
          Append(CrewList, CrewIter);
          Set(CrewList, CrewIter, 0, To_String(Member.Name));
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "schoolwindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "school");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treecrew")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnname")),
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnnames2")),
          False);
    end ShowSchoolUI;
 
