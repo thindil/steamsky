@@ -1011,6 +1011,7 @@ package body Maps.UI.Handlers is
       elsif User_Data = Get_Object(Builder, "btnschool") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowSchoolUI;
+         return;
       elsif User_Data = Get_Object(Builder, "btnshipyard") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowShipyardUI;
