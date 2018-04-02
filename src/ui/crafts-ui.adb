@@ -29,6 +29,7 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
+with Gtk.Expander; use Gtk.Expander;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
@@ -48,6 +49,62 @@ package body Crafts.UI is
    begin
       ShowHelpUI(5);
    end ShowHelp;
+
+   procedure ShowSetRecipe(Object: access Gtkada_Builder_Record'Class) is
+      ModulesIter: Gtk_Tree_Iter;
+      ModulesList: Gtk_List_Store;
+      MaxAmount: Positive;
+      AmountAdj: constant Gtk_Adjustment :=
+        Gtk_Adjustment(Get_Object(Builder, "amountadj"));
+      MType: ModuleType;
+   begin
+      MaxAmount := CheckRecipe(RecipeIndex);
+      Set_Value(AmountAdj, 1.0);
+      Set_Upper(AmountAdj, Gdouble(MaxAmount));
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lbltimes")),
+         "(max" & Positive'Image(MaxAmount) & "):");
+      if RecipeIndex > 0 then
+         MType := Recipes_List(RecipeIndex).Workplace;
+      else
+         MType := ALCHEMY_LAB;
+      end if;
+      ModulesList := Gtk_List_Store(Get_Object(Object, "moduleslist"));
+      Clear(ModulesList);
+      for Module of PlayerShip.Modules loop
+         if Modules_List(Module.ProtoIndex).MType = MType then
+            Append(ModulesList, ModulesIter);
+            Set(ModulesList, ModulesIter, 0, To_String(Module.Name));
+         end if;
+      end loop;
+      if RecipeIndex < 1 then
+         Hide(Gtk_Widget(Get_Object(Object, "boxamount")));
+      end if;
+      Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmodules")), 0);
+   exception
+      when An_Exception : Crafting_No_Materials =>
+         ShowDialog
+           ("You don't have enough materials to start manufacturing " &
+            Exception_Message(An_Exception) &
+            ".",
+            Gtk_Window(Get_Object(Object, "craftswindow")));
+      when An_Exception : Crafting_No_Tools =>
+         ShowDialog
+           ("You don't have proper tool to start manufacturing " &
+            Exception_Message(An_Exception) &
+            ".",
+            Gtk_Window(Get_Object(Object, "craftswindow")));
+      when Trade_No_Free_Cargo =>
+         ShowDialog
+           ("You don't have that much free space in your ship cargo.",
+            Gtk_Window(Get_Object(Object, "craftswindow")));
+      when An_Exception : Crafting_No_Workshop =>
+         ShowDialog
+           ("You don't have proper workplace to start manufacturing " &
+            Exception_Message(An_Exception) &
+            ".",
+            Gtk_Window(Get_Object(Object, "craftswindow")));
+   end ShowSetRecipe;
 
    procedure ShowRecipeInfo(Object: access Gtkada_Builder_Record'Class) is
       RecipesIter: Gtk_Tree_Iter;
@@ -214,84 +271,29 @@ package body Crafts.UI is
         (Gtk_Label(Get_Object(Object, "lblinfo")),
          To_String(RecipeInfo));
       if HaveMaterials and HaveTool and HaveWorkplace then
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btncraft")), True);
-         Set_Has_Tooltip(Gtk_Widget(Get_Object(Object, "btncraft")), False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "expcraft")), True);
+         Set_Has_Tooltip(Gtk_Widget(Get_Object(Object, "expcraft")), False);
+         ShowSetRecipe(Object);
       else
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btncraft")), False);
+         Set_Expanded(Gtk_Expander(Get_Object(Object, "expcraft")), False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "expcraft")), False);
          if not HaveMaterials then
             Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Object, "btncraft")),
+              (Gtk_Widget(Get_Object(Object, "expcraft")),
                "You can't craft this recipe because you don't have proper materials.");
          end if;
          if not HaveTool then
             Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Object, "btncraft")),
+              (Gtk_Widget(Get_Object(Object, "expcraft")),
                "You can't craft this recipe because you don't have proper tool.");
          end if;
          if not HaveWorkplace then
             Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Object, "btncraft")),
+              (Gtk_Widget(Get_Object(Object, "expcraft")),
                "You can't craft this recipe because you don't have proper workshop.");
          end if;
       end if;
    end ShowRecipeInfo;
-
-   procedure ShowSetRecipe(Object: access Gtkada_Builder_Record'Class) is
-      ModulesIter: Gtk_Tree_Iter;
-      ModulesList: Gtk_List_Store;
-      MaxAmount: Positive;
-      AmountAdj: constant Gtk_Adjustment :=
-        Gtk_Adjustment(Get_Object(Builder, "amountadj"));
-      MType: ModuleType;
-   begin
-      MaxAmount := CheckRecipe(RecipeIndex);
-      Set_Value(AmountAdj, 1.0);
-      Set_Upper(AmountAdj, Gdouble(MaxAmount));
-      Set_Label
-        (Gtk_Label(Get_Object(Object, "lbltimes")),
-         "Times (max" & Positive'Image(MaxAmount) & "):");
-      if RecipeIndex > 0 then
-         MType := Recipes_List(RecipeIndex).Workplace;
-      else
-         MType := ALCHEMY_LAB;
-      end if;
-      ModulesList := Gtk_List_Store(Get_Object(Object, "moduleslist"));
-      Clear(ModulesList);
-      for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = MType then
-            Append(ModulesList, ModulesIter);
-            Set(ModulesList, ModulesIter, 0, To_String(Module.Name));
-         end if;
-      end loop;
-      Show_All(Gtk_Widget(Get_Object(Object, "recipewindow")));
-      if RecipeIndex < 1 then
-         Hide(Gtk_Widget(Get_Object(Object, "boxamount")));
-      end if;
-      Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmodules")), 0);
-   exception
-      when An_Exception : Crafting_No_Materials =>
-         ShowDialog
-           ("You don't have enough materials to start manufacturing " &
-            Exception_Message(An_Exception) &
-            ".",
-            Gtk_Window(Get_Object(Object, "craftswindow")));
-      when An_Exception : Crafting_No_Tools =>
-         ShowDialog
-           ("You don't have proper tool to start manufacturing " &
-            Exception_Message(An_Exception) &
-            ".",
-            Gtk_Window(Get_Object(Object, "craftswindow")));
-      when Trade_No_Free_Cargo =>
-         ShowDialog
-           ("You don't have that much free space in your ship cargo.",
-            Gtk_Window(Get_Object(Object, "craftswindow")));
-      when An_Exception : Crafting_No_Workshop =>
-         ShowDialog
-           ("You don't have proper workplace to start manufacturing " &
-            Exception_Message(An_Exception) &
-            ".",
-            Gtk_Window(Get_Object(Object, "craftswindow")));
-   end ShowSetRecipe;
 
    procedure SetCrafting(Object: access Gtkada_Builder_Record'Class) is
       ModulesBox: constant Gtk_Combo_Box :=
@@ -308,7 +310,6 @@ package body Crafts.UI is
             exit;
          end if;
       end loop;
-      Hide(Gtk_Widget(Get_Object(Object, "recipewindow")));
       ShowLastMessage(Object);
    end SetCrafting;
 
@@ -331,15 +332,10 @@ package body Crafts.UI is
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Help", ShowHelp'Access);
       Register_Handler(Builder, "Show_Recipe_Info", ShowRecipeInfo'Access);
-      Register_Handler(Builder, "Show_Set_Recipe", ShowSetRecipe'Access);
-      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Set_Crafting", SetCrafting'Access);
       Do_Connect(Builder);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "craftswindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "recipewindow")),
          CloseWindow'Access);
    end CreateCraftsUI;
 
