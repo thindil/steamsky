@@ -75,7 +75,11 @@ package body Crafts.UI is
          end if;
       end loop;
       if RecipeIndex < 1 then
-         Hide(Gtk_Widget(Get_Object(Object, "boxamount")));
+         Hide(Gtk_Widget(Get_Object(Object, "spincraftamount")));
+         Hide(Gtk_Widget(Get_Object(Object, "lbltimes")));
+      else
+         Show_All(Gtk_Widget(Get_Object(Object, "spincraftamount")));
+         Show_All(Gtk_Widget(Get_Object(Object, "lbltimes")));
       end if;
       Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmodules")), 0);
    exception
