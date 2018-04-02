@@ -61,7 +61,6 @@ with Utils.UI; use Utils.UI;
 with Log; use Log;
 with Help.UI; use Help.UI;
 with Trades.UI; use Trades.UI;
-with Crafts.UI; use Crafts.UI;
 with GameOptions; use GameOptions;
 
 package body MainMenu is
@@ -336,7 +335,6 @@ package body MainMenu is
       CreateShipUI;
       CreateGoalsMenu;
       CreateTradeUI;
-      CreateCraftsUI;
       CreateGameOptions;
       CreateSkyMap;
    end StartGame;

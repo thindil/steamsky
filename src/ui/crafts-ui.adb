@@ -15,10 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Exceptions; use Ada.Exceptions;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -30,8 +27,8 @@ with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Expander; use Gtk.Expander;
+with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Game; use Game;
 with Help.UI; use Help.UI;
 with Ships; use Ships;
@@ -44,11 +41,11 @@ package body Crafts.UI is
    Builder: Gtkada_Builder;
    RecipeIndex: Integer;
 
-   procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowCraftHelp(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
    begin
       ShowHelpUI(5);
-   end ShowHelp;
+   end ShowCraftHelp;
 
    procedure ShowSetRecipe(Object: access Gtkada_Builder_Record'Class) is
       ModulesIter: Gtk_Tree_Iter;
@@ -87,13 +84,13 @@ package body Crafts.UI is
            ("You don't have enough materials to start manufacturing " &
             Exception_Message(An_Exception) &
             ".",
-            Gtk_Window(Get_Object(Object, "craftswindow")));
+            Gtk_Window(Get_Object(Object, "skymapwindow")));
       when An_Exception : Crafting_No_Tools =>
          ShowDialog
            ("You don't have proper tool to start manufacturing " &
             Exception_Message(An_Exception) &
             ".",
-            Gtk_Window(Get_Object(Object, "craftswindow")));
+            Gtk_Window(Get_Object(Object, "skymapwindow")));
       when Trade_No_Free_Cargo =>
          ShowDialog
            ("You don't have that much free space in your ship cargo.",
@@ -103,7 +100,7 @@ package body Crafts.UI is
            ("You don't have proper workplace to start manufacturing " &
             Exception_Message(An_Exception) &
             ".",
-            Gtk_Window(Get_Object(Object, "craftswindow")));
+            Gtk_Window(Get_Object(Object, "skymapwindow")));
    end ShowSetRecipe;
 
    procedure ShowRecipeInfo(Object: access Gtkada_Builder_Record'Class) is
@@ -268,7 +265,7 @@ package body Crafts.UI is
         (RecipeInfo,
          ASCII.LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes");
       Set_Markup
-        (Gtk_Label(Get_Object(Object, "lblinfo")),
+        (Gtk_Label(Get_Object(Object, "lblrecipeinfo")),
          To_String(RecipeInfo));
       if HaveMaterials and HaveTool and HaveWorkplace then
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "expcraft")), True);
@@ -313,30 +310,12 @@ package body Crafts.UI is
       ShowLastMessage(Object);
    end SetCrafting;
 
-   procedure CreateCraftsUI is
-      Error: aliased GError;
+   procedure CreateCraftsUI(NewBuilder: Gtkada_Builder) is
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "crafts.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Register_Handler(Builder, "Hide_Crafts", HideInfo'Access);
-      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
-      Register_Handler(Builder, "Show_Help", ShowHelp'Access);
+      Builder := NewBuilder;
+      Register_Handler(Builder, "Show_Craft_Help", ShowCraftHelp'Access);
       Register_Handler(Builder, "Show_Recipe_Info", ShowRecipeInfo'Access);
       Register_Handler(Builder, "Set_Crafting", SetCrafting'Access);
-      Do_Connect(Builder);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "craftswindow")),
-         CloseWindow'Access);
    end CreateCraftsUI;
 
    procedure ShowCraftsUI is
@@ -378,11 +357,14 @@ package body Crafts.UI is
             "Deconstruct " & To_String(Items_List(Deconstructs(I)).Name));
          Set(RecipesList, RecipesIter, 1, Gint(0 - Deconstructs(I)));
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "craftswindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "crafts");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treerecipes")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnname")),
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnname2")),
          False);
       ShowLastMessage(Builder);
    end ShowCraftsUI;
