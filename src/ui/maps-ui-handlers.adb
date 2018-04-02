@@ -555,7 +555,6 @@ package body Maps.UI.Handlers is
          CenterY := PlayerShip.SkyY;
       end if;
       if StartsCombat then
-         Hide(Gtk_Window(Get_Object(Builder, "skymapwindow")));
          ShowCombatUI;
       end if;
       if Result > 0 then
@@ -950,7 +949,6 @@ package body Maps.UI.Handlers is
       if Label = "Wait" then
          Show_All(Gtk_Widget(Get_Object(Builder, "waitwindow")));
       else
-         Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
          ShowCombatUI;
       end if;
    end AttackOrder;
@@ -1092,7 +1090,6 @@ package body Maps.UI.Handlers is
          end if;
       end loop;
       if StartsCombat then
-         Hide(Gtk_Window(Get_Object(Builder, "skymapwindow")));
          ShowCombatUI;
          return;
       end if;

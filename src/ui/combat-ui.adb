@@ -15,10 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -33,8 +30,8 @@ with Gtk.Container; use Gtk.Container;
 with Gtk.Check_Button; use Gtk.Check_Button;
 with Gtk.Toggle_Button; use Gtk.Toggle_Button;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Glib.Properties; use Glib.Properties;
 with Glib.Types; use Glib.Types;
@@ -168,7 +165,7 @@ package body Combat.UI is
             Insert(MessagesBuffer, MessagesIter, "" & ASCII.LF);
          end if;
       end loop;
-      List := Gtk_List_Store(Get_Object(Builder, "crewlist"));
+      List := Gtk_List_Store(Get_Object(Builder, "crewlist1"));
       Clear(List);
       Append(List, Iter);
       MemberIndex := FindMember(Pilot);
@@ -417,7 +414,10 @@ package body Combat.UI is
             Set(EnemyList, EnemyIter, 1, Gint(DamagePercent));
          end loop;
       end if;
-      Show_All(Gtk_Widget(Get_Object(Builder, "combatwindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "combat");
+      Hide(Gtk_Widget(Get_Object(Builder, "btnclosecombat")));
       if (HarpoonDuration = 0 and Enemy.HarpoonDuration = 0) or
         ProtoShips_List(EnemyShipIndex).Crew.Length = 0 then
          Hide(Gtk_Widget(Get_Object(Builder, "expboard")));
@@ -439,7 +439,7 @@ package body Combat.UI is
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treecrew"))),
+           (Gtk_Tree_View(Get_Object(Object, "treecrew1"))),
          CrewModel,
          CrewIter);
       if CrewIter = Null_Iter then
@@ -620,31 +620,28 @@ package body Combat.UI is
       if EndCombat then
          Hide(Gtk_Widget(Get_Object(Object, "btnboxactions")));
          Hide(Gtk_Widget(Get_Object(Object, "expmoreinfo")));
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew")), False);
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), False);
+         Show_All(Gtk_Widget(Get_Object(Object, "btnclosecombat")));
       end if;
    end NextTurn;
 
-   function CloseWindow
-     (User_Data: access GObject_Record'Class) return Boolean is
+   procedure CloseCombat(Object: access Gtkada_Builder_Record'Class) is
    begin
-      if not EndCombat then
-         return QuitGame(User_Data);
-      end if;
-      Set_Sensitive(Gtk_Widget(Get_Object(Builder, "treecrew")), True);
-      Hide(Gtk_Widget(Get_Object(Builder, "combatwindow")));
+      Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), True);
       CreateSkyMap;
-      return True;
-   end CloseWindow;
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "skymap");
+   end CloseCombat;
 
-   procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowCombatHelp(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
    begin
       ShowHelpUI(4);
-   end ShowHelp;
+   end ShowCombatHelp;
 
-   procedure ShowInfo(User_Data: access GObject_Record'Class) is
+   procedure ShowCombatInfo(User_Data: access GObject_Record'Class) is
    begin
-      Hide(Gtk_Widget(Get_Object(Builder, "combatwindow")));
       if User_Data = Get_Object(Builder, "btnmessages") then
          ShowMessagesUI(Combat_View);
       elsif User_Data = Get_Object(Builder, "btncargoinfo") then
@@ -654,30 +651,16 @@ package body Combat.UI is
       else
          ShowCrewUI(Combat_View);
       end if;
-   end ShowInfo;
+   end ShowCombatInfo;
 
-   procedure CreateCombatUI is
-      Error: aliased GError;
+   procedure CreateCombatUI(NewBuilder: Gtkada_Builder) is
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "combat.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
-      Register_Handler(Builder, "Close_Window", CloseWindow'Access);
+      Builder := NewBuilder;
+      Register_Handler(Builder, "Close_Combat", CloseCombat'Access);
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);
       Register_Handler(Builder, "Next_Turn", NextTurn'Access);
-      Register_Handler(Builder, "Show_Help", ShowHelp'Access);
-      Register_Handler(Builder, "Show_Info", ShowInfo'Access);
-      Do_Connect(Builder);
+      Register_Handler(Builder, "Show_Combat_Help", ShowCombatHelp'Access);
+      Register_Handler(Builder, "Show_Combat_Info", ShowCombatInfo'Access);
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders")),
          GiveCombatOrders'Access);
