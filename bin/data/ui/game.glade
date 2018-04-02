@@ -4890,15 +4890,15 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="model">recipeslist</property>
-                        <property name="headers_visible">False</property>
-                        <property name="headers_clickable">False</property>
                         <signal name="cursor-changed" handler="Show_Recipe_Info" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="columnname2">
-                            <property name="title" translatable="yes">column</property>
+                            <property name="title" translatable="yes">Name</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">0</property>
                             <child>
                               <object class="GtkCellRendererText"/>
                               <attributes>
@@ -4993,7 +4993,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton">
+                              <object class="GtkSpinButton" id="spincraftamount">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="adjustment">amountadj</property>
