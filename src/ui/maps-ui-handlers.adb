@@ -1029,6 +1029,7 @@ package body Maps.UI.Handlers is
          return;
       elsif User_Data = Get_Object(Builder, "menuoptions") then
          ShowGameOptions;
+         return;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
    end ShowInfo;
