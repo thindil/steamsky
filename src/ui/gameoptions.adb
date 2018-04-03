@@ -15,10 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Switch; use Gtk.Switch;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
@@ -27,8 +24,8 @@ with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Gdk.Event; use Gdk.Event;
 with Gdk.Types; use Gdk.Types;
@@ -98,14 +95,13 @@ package body GameOptions is
       To_Unbounded_String("edtmenu"),
       To_Unbounded_String("edtwaitorders"));
 
-   function HideOptions
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   procedure CloseOptions(Object: access Gtkada_Builder_Record'Class) is
    begin
       GameSettings.AutoRest :=
         Get_State(Gtk_Switch(Get_Object(Object, "switchautorest")));
       GameSettings.UndockSpeed :=
         ShipSpeed'Val
-          (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbspeed"))) + 1);
+          (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbspeed1"))) + 1);
       GameSettings.AutoCenter :=
         Get_State(Gtk_Switch(Get_Object(Object, "switchautocenter")));
       GameSettings.AutoReturn :=
@@ -123,10 +119,12 @@ package body GameOptions is
           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbautomovestop"))));
       SaveConfig;
       Save(To_String(SaveDirectory) & "keys.cfg");
-      Hide(Gtk_Widget(Get_Object(Object, "optionswindow")));
       CreateSkyMap;
-      return True;
-   end HideOptions;
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "skymap");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
+   end CloseOptions;
 
    function SetAccelerator
      (Self: access Gtk_Widget_Record'Class;
@@ -147,7 +145,7 @@ package body GameOptions is
          if Key.Accel_Key = KeyPressed and Key.Accel_Mods = KeyMods then
             ShowDialog
               ("You can't set this key because it is set for other action. Please choice another key.",
-               Gtk_Window(Get_Object(Builder, "optionswindow")));
+               Gtk_Window(Get_Object(Builder, "skymapwindow")));
             return False;
          end if;
       end loop;
@@ -171,34 +169,15 @@ package body GameOptions is
       return False;
    end SetAccelerator;
 
-   procedure CreateGameOptions is
-      Error: aliased GError;
+   procedure CreateGameOptions(NewBuilder: Gtkada_Builder) is
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) &
-           "ui" &
-           Dir_Separator &
-           "gameoptions.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Register_Handler(Builder, "Hide_Options", HideOptions'Access);
-      Do_Connect(Builder);
+      Builder := NewBuilder;
+      Register_Handler(Builder, "Close_Options", CloseOptions'Access);
       for I in EditNames'Range loop
          On_Key_Press_Event
            (Gtk_Widget(Get_Object(Builder, To_String(EditNames(I)))),
             SetAccelerator'Access);
       end loop;
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "optionswindow")),
-         CloseWindow'Access);
    end CreateGameOptions;
 
    procedure ShowGameOptions is
@@ -209,7 +188,7 @@ package body GameOptions is
         (Gtk_Switch(Get_Object(Builder, "switchautorest")),
          GameSettings.AutoRest);
       Set_Active
-        (Gtk_Combo_Box(Get_Object(Builder, "cmbspeed")),
+        (Gtk_Combo_Box(Get_Object(Builder, "cmbspeed1")),
          (ShipSpeed'Pos(GameSettings.UndockSpeed) - 1));
       Set_State
         (Gtk_Switch(Get_Object(Builder, "switchautocenter")),
@@ -238,7 +217,10 @@ package body GameOptions is
            (Gtk_Entry(Get_Object(Builder, To_String(EditNames(I)))),
             Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods));
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "optionswindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "options");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
    end ShowGameOptions;
 
 end GameOptions;
