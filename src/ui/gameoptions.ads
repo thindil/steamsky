@@ -15,9 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Gtkada.Builder; use Gtkada.Builder;
+
 package GameOptions is
 
-   procedure CreateGameOptions; -- Create infterace for game options
+   procedure CreateGameOptions
+     (NewBuilder: Gtkada_Builder); -- Create infterace for game options
    procedure ShowGameOptions; -- Show interface for game options
 
 end GameOptions;
