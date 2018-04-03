@@ -25,7 +25,7 @@ package Crew.UI.Handlers is
 
    procedure ShowMemberInfo
      (Object: access Gtkada_Builder_Record'Class); -- Show selected member info
-   procedure ShowHelp
+   procedure ShowCrewHelp
      (Object: access Gtkada_Builder_Record'
         Class); -- Show help about crew management
    procedure GiveOrdersAll
@@ -34,7 +34,7 @@ package Crew.UI.Handlers is
    procedure ShowInventory
      (Object: access Gtkada_Builder_Record'
         Class); -- Refresh informations about selected member inventory
-   procedure ShowItemInfo
+   procedure ShowItemInfo2
      (Object: access Gtkada_Builder_Record'
         Class); -- Show informations about selected item
    procedure UseItem
@@ -56,5 +56,8 @@ package Crew.UI.Handlers is
    procedure DismissMember
      (Object: access Gtkada_Builder_Record'
         Class); -- Dismiss selected crew member
+   procedure CloseInventory
+     (Object: access Gtkada_Builder_Record'
+        Class); -- Close inventory window and back to crew window
 
 end Crew.UI.Handlers;

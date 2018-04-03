@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -25,8 +23,9 @@ with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Cell_Renderer_Combo; use Gtk.Cell_Renderer_Combo;
 with Gtk.Cell_Renderer_Toggle; use Gtk.Cell_Renderer_Toggle;
+with Gtk.Stack; use Gtk.Stack;
+with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Glib.Types; use Glib.Types;
 with Glib.Properties; use Glib.Properties;
@@ -55,7 +54,7 @@ package body Crew.UI is
    begin
       OrdersModel :=
         Get_Property
-          (Get_Object(Builder, "renderorders"),
+          (Get_Object(Builder, "renderorders1"),
            Gtk.Cell_Renderer_Combo.Model_Property);
       OrdersList := -(Gtk_Tree_Model(OrdersModel));
       OrdersList.Clear;
@@ -195,7 +194,7 @@ package body Crew.UI is
          end if;
       end loop;
       Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblfreespace")),
+        (Gtk_Label(Get_Object(Builder, "lblinventoryfreespace")),
          "Free inventory space:" &
          Integer'Image(FreeInventory(MemberIndex, 0)) &
          " kg");
@@ -229,7 +228,7 @@ package body Crew.UI is
          To_Unbounded_String("Boarding"),
          To_Unbounded_String("Defends ship"));
    begin
-      CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist"));
+      CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist2"));
       Clear(CrewList);
       for I in PlayerShip.Crew.Iterate loop
          Append(CrewList, CrewIter);
@@ -247,50 +246,29 @@ package body Crew.UI is
    procedure SetActiveMember is
    begin
       Set_Cursor
-        (Gtk_Tree_View(Get_Object(Builder, "treecrew")),
+        (Gtk_Tree_View(Get_Object(Builder, "treecrew2")),
          Gtk_Tree_Path_New_From_String("0"),
          Gtk_Tree_View_Column(Get_Object(Builder, "columncrew")),
          False);
    end SetActiveMember;
 
-   procedure CreateCrewUI is
-      Error: aliased GError;
+   procedure CreateCrewUI(NewBuilder: Gtkada_Builder) is
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "crew.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Register_Handler(Builder, "Hide_Ship_Info", HideShipInfo'Access);
+      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Member_Info", ShowMemberInfo'Access);
-      Register_Handler(Builder, "Show_Help", ShowHelp'Access);
-      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
+      Register_Handler(Builder, "Show_Crew_Help", ShowCrewHelp'Access);
       Register_Handler(Builder, "Give_Orders_All", GiveOrdersAll'Access);
-      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Show_Inventory", ShowInventory'Access);
-      Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
+      Register_Handler(Builder, "Show_Item_Info2", ShowItemInfo2'Access);
       Register_Handler(Builder, "Move_Item", MoveItem'Access);
       Register_Handler(Builder, "Dismiss_Member", DismissMember'Access);
-      Do_Connect(Builder);
+      Register_Handler(Builder, "Close_Inventory", CloseInventory'Access);
       On_Changed
-        (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders")),
+        (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders1")),
          GiveCrewOrders'Access);
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderpriorities")),
          SetPriority'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "crewwindow")),
-         CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "inventorywindow")),
-         CloseWindow'Access);
       On_Toggled
         (Gtk_Cell_Renderer_Toggle(Get_Object(Builder, "renderused")),
          UseItem'Access);
@@ -300,7 +278,10 @@ package body Crew.UI is
    begin
       RefreshCrewInfo;
       PreviousGameState := OldState;
-      Show_All(Gtk_Widget(Get_Object(Builder, "crewwindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "crew");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
       SetActiveMember;
       ShowOrdersForAll;
