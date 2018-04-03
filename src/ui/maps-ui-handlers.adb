@@ -968,6 +968,7 @@ package body Maps.UI.Handlers is
          ShowCargoUI(SkyMap_View);
       elsif User_Data = Get_Object(Builder, "menuship") then
          ShowShipUI(SkyMap_View);
+         return;
       elsif User_Data = Get_Object(Builder, "menucrew") then
          ShowCrewUI(SkyMap_View);
          return;

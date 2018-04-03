@@ -24,7 +24,7 @@ package Ships.UI.Handlers is
    procedure ShowModuleInfo
      (Object: access Gtkada_Builder_Record'
         Class); -- Show informations about selected module
-   procedure ShowHelp
+   procedure ShowShipHelp
      (Object: access Gtkada_Builder_Record'
         Class); -- Show help about ship management
    procedure ChangeShipName

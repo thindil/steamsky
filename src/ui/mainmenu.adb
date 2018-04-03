@@ -43,7 +43,6 @@ with Gdk.Display; use Gdk.Display;
 with Game; use Game;
 with HallOfFame; use HallOfFame;
 with Ships; use Ships;
-with Ships.UI; use Ships.UI;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Crew; use Crew;
 with Config; use Config;
@@ -329,7 +328,6 @@ package body MainMenu is
       Hide(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       CreateHelpUI;
       CreateCargoUI;
-      CreateShipUI;
       CreateGoalsMenu;
       CreateTradeUI;
       CreateSkyMap;
