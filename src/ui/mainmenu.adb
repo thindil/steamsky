@@ -46,7 +46,6 @@ with Ships; use Ships;
 with Ships.UI; use Ships.UI;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Crew; use Crew;
-with Crew.UI; use Crew.UI;
 with Config; use Config;
 with Goals.UI; use Goals.UI;
 with Maps.UI; use Maps.UI;
@@ -329,7 +328,6 @@ package body MainMenu is
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       CreateHelpUI;
-      CreateCrewUI;
       CreateCargoUI;
       CreateShipUI;
       CreateGoalsMenu;

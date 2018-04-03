@@ -47,6 +47,7 @@ with Utils.UI; use Utils.UI;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
 with Crew; use Crew;
+with Crew.UI; use Crew.UI;
 with ShipModules; use ShipModules;
 with Events; use Events;
 with Events.UI; use Events.UI;
@@ -641,6 +642,7 @@ package body Maps.UI is
          CreateCombatUI(Builder);
          CreateCraftsUI(Builder);
          CreateGameOptions(Builder);
+         CreateCrewUI(Builder);
          Register_Handler(Builder, "Quit_Game", QuitGame'Access);
          Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
          Register_Handler

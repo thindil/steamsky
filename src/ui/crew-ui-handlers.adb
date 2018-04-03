@@ -26,6 +26,7 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
+with Gtk.Stack; use Gtk.Stack;
 with Glib.Types; use Glib.Types;
 with Glib.Properties; use Glib.Properties;
 with Game; use Game;
@@ -70,7 +71,7 @@ package body Crew.UI.Handlers is
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treecrew"))),
+           (Gtk_Tree_View(Get_Object(Object, "treecrew2"))),
          CrewModel,
          CrewIter);
       if CrewIter = Null_Iter then
@@ -84,25 +85,25 @@ package body Crew.UI.Handlers is
          MemberInfo := To_Unbounded_String("Gender: Female");
       end if;
       Set_Label
-        (Gtk_Label(Get_Object(Object, "lblinfo")),
+        (Gtk_Label(Get_Object(Object, "lblcrewinfo")),
          To_String(MemberInfo));
       Foreach
         (Gtk_List_Store(Get_Object(Builder, "prioritieslist")),
          UpdatePriorities'Access);
       if Member.Skills.Length = 0 then
-         Hide(Gtk_Widget(Get_Object(Object, "treestats")));
-         Hide(Gtk_Widget(Get_Object(Object, "scrollskills")));
+         Hide(Gtk_Widget(Get_Object(Object, "treestats1")));
+         Hide(Gtk_Widget(Get_Object(Object, "scrollskills1")));
          Hide(Gtk_Widget(Get_Object(Object, "btninventory")));
          Hide(Gtk_Widget(Get_Object(Object, "exppriorities")));
-         Hide(Gtk_Widget(Get_Object(Object, "lblstats")));
+         Hide(Gtk_Widget(Get_Object(Object, "lblstats1")));
          Hide(Gtk_Widget(Get_Object(Object, "lblskills")));
          Append(MemberInfo, ASCII.LF & "Passenger");
       else
-         Show_All(Gtk_Widget(Get_Object(Object, "treestats")));
-         Show_All(Gtk_Widget(Get_Object(Object, "scrollskills")));
+         Show_All(Gtk_Widget(Get_Object(Object, "treestats1")));
+         Show_All(Gtk_Widget(Get_Object(Object, "scrollskills1")));
          Show_All(Gtk_Widget(Get_Object(Object, "btninventory")));
          Show_All(Gtk_Widget(Get_Object(Object, "exppriorities")));
-         Show_All(Gtk_Widget(Get_Object(Object, "lblstats")));
+         Show_All(Gtk_Widget(Get_Object(Object, "lblstats1")));
          Show_All(Gtk_Widget(Get_Object(Object, "lblskills")));
       end if;
       if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
@@ -200,7 +201,7 @@ package body Crew.UI.Handlers is
          Hide(Gtk_Widget(Get_Object(Object, "progresshunger")));
       end if;
       if Member.Skills.Length > 0 then
-         List := Gtk_List_Store(Get_Object(Builder, "statslist"));
+         List := Gtk_List_Store(Get_Object(Builder, "statslist1"));
          Clear(List);
          for I in Member.Attributes.Iterate loop
             Append(List, Iter);
@@ -211,7 +212,7 @@ package body Crew.UI.Handlers is
                To_String(Attributes_Names(Attributes_Container.To_Index(I))));
             Set(List, Iter, 1, Gint(Member.Attributes(I)(1) * 2));
          end loop;
-         List := Gtk_List_Store(Get_Object(Builder, "skillslist"));
+         List := Gtk_List_Store(Get_Object(Builder, "skillslist2"));
          Clear(List);
          for Skill of Member.Skills loop
             Append(List, Iter);
@@ -222,11 +223,11 @@ package body Crew.UI.Handlers is
       SetOrdersList;
    end ShowMemberInfo;
 
-   procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowCrewHelp(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
    begin
       ShowHelpUI(7);
-   end ShowHelp;
+   end ShowCrewHelp;
 
    procedure GiveOrdersAll(User_Data: access GObject_Record'Class) is
       Order: Crew_Orders;
@@ -246,23 +247,19 @@ package body Crew.UI.Handlers is
             end;
          end if;
       end loop;
-      if LastMessage /= Null_Unbounded_String then
-         Set_Text
-           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
-            To_String(LastMessage));
-         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
-         LastMessage := Null_Unbounded_String;
-      end if;
+      ShowLastMessage(Builder);
    end GiveOrdersAll;
 
    procedure ShowInventory(Object: access Gtkada_Builder_Record'Class) is
    begin
       RefreshInventory;
-      Show_All(Gtk_Widget(Get_Object(Object, "inventorywindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Object, "gamestack")),
+         "inventory");
       SetActiveItem;
    end ShowInventory;
 
-   procedure ShowItemInfo(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowItemInfo2(Object: access Gtkada_Builder_Record'Class) is
       InventoryIter: Gtk_Tree_Iter;
       InventoryModel: Gtk_Tree_Model;
       ItemInfo: Unbounded_String;
@@ -270,7 +267,7 @@ package body Crew.UI.Handlers is
       DamagePercent: Gdouble;
       AmountAdj: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Object, "amountadj"));
-      DamageBar: constant GObject := Get_Object(Object, "damagebar");
+      DamageBar: constant GObject := Get_Object(Object, "itemdamagebar");
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -347,14 +344,14 @@ package body Crew.UI.Handlers is
          To_String(ItemInfo));
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Set_Label
-           (Gtk_Label(Get_Object(Object, "lbldescription")),
+           (Gtk_Label(Get_Object(Object, "lblitemdescription")),
             ASCII.LF & To_String(Items_List(ProtoIndex).Description));
       end if;
       Set_Upper
         (AmountAdj,
          Gdouble(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount));
       Set_Value(AmountAdj, 1.0);
-   end ShowItemInfo;
+   end ShowItemInfo2;
 
    procedure UseItem
      (Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
@@ -400,7 +397,7 @@ package body Crew.UI.Handlers is
          ShowDialog
            ("No free space in ship cargo for that amount of " &
             GetItemName(Item),
-            Gtk_Window(Get_Object(Object, "moveitemwindow")));
+            Gtk_Window(Get_Object(Object, "skymapwindow")));
          return;
       end if;
       UpdateCargo(PlayerShip, Item.ProtoIndex, Amount, Item.Durability);
@@ -504,7 +501,7 @@ package body Crew.UI.Handlers is
    begin
       if ShowConfirmDialog
           ("Are you sure want to dismiss this crew member?",
-           Gtk_Window(Get_Object(Object, "crewwindow"))) then
+           Gtk_Window(Get_Object(Object, "skymapwindow"))) then
          AddMessage
            ("You dismissed " &
             To_String(PlayerShip.Crew(MemberIndex).Name) &
@@ -518,5 +515,12 @@ package body Crew.UI.Handlers is
          SetActiveMember;
       end if;
    end DismissMember;
+
+   procedure CloseInventory(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Object, "gamestack")),
+         "crew");
+   end CloseInventory;
 
 end Crew.UI.Handlers;

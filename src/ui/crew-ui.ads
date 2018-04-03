@@ -20,7 +20,8 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Crew.UI is
 
-   procedure CreateCrewUI; -- Create infterace for show player ship crew info
+   procedure CreateCrewUI
+     (NewBuilder: Gtkada_Builder); -- Create infterace for show player ship crew info
    procedure ShowCrewUI
      (OldState: GameStates); -- Show interface for show player ship crew info
 
