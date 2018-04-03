@@ -20,7 +20,8 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Ships.UI is
 
-   procedure CreateShipUI; -- Create infterace for show player ship info
+   procedure CreateShipUI
+     (NewBuilder: Gtkada_Builder); -- Create infterace for show player ship info
    procedure ShowShipUI
      (OldState: GameStates); -- Show interface for show player ship info
 

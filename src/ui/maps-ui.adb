@@ -66,6 +66,7 @@ with BasesList; use BasesList;
 with Combat.UI; use Combat.UI;
 with Crafts.UI; use Crafts.UI;
 with GameOptions; use GameOptions;
+with Ships.UI; use Ships.UI;
 
 package body Maps.UI is
 
@@ -643,6 +644,7 @@ package body Maps.UI is
          CreateCraftsUI(Builder);
          CreateGameOptions(Builder);
          CreateCrewUI(Builder);
+         CreateShipUI(Builder);
          Register_Handler(Builder, "Quit_Game", QuitGame'Access);
          Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
          Register_Handler
