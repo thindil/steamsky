@@ -46,7 +46,7 @@ package body Ships.UI.Handlers is
       Mamount: Natural := 0;
       DamagePercent, UpgradePercent: Gdouble;
       DamageBar: constant Gtk_Progress_Bar :=
-        Gtk_Progress_Bar(Get_Object(Object, "damagebar"));
+        Gtk_Progress_Bar(Get_Object(Object, "moduledamagebar"));
       CleanBar: constant GObject := Get_Object(Object, "cleanbar");
       QualityBar: constant GObject := Get_Object(Object, "qualitybar");
       UpgradeBar: constant GObject := Get_Object(Object, "upgradebar2");
@@ -390,11 +390,11 @@ package body Ships.UI.Handlers is
       ShowModuleOptions;
    end ShowModuleInfo;
 
-   procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowShipHelp(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
    begin
       ShowHelpUI(6);
-   end ShowHelp;
+   end ShowShipHelp;
 
    procedure ChangeShipName(Object: access Gtkada_Builder_Record'Class) is
       NewName: Unbounded_String :=
@@ -405,7 +405,7 @@ package body Ships.UI.Handlers is
       if Length(NewName) = 0 then
          ShowDialog
            ("You must enter new ship name",
-            Gtk_Window(Get_Object(Builder, "shipwindow")));
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
          return;
       end if;
       SemicolonIndex := Index(NewName, ";");
@@ -422,14 +422,14 @@ package body Ships.UI.Handlers is
       New_Text: UTF8_String) is
       pragma Unreferenced(Self);
       ModulesList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "moduleslist"));
+        Gtk_List_Store(Get_Object(Builder, "moduleslist1"));
       NewName: Unbounded_String := To_Unbounded_String(New_Text);
       SemicolonIndex: Natural;
    begin
       if Length(NewName) = 0 then
          ShowDialog
            ("You must enter new module name",
-            Gtk_Window(Get_Object(Builder, "shipwindow")));
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
          return;
       end if;
       SemicolonIndex := Index(NewName, ";");
@@ -466,7 +466,7 @@ package body Ships.UI.Handlers is
       when An_Exception : Ship_Upgrade_Error =>
          ShowDialog
            (Exception_Message(An_Exception),
-            Gtk_Window(Get_Object(Builder, "shipwindow")));
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
          return;
    end SetUpgrade;
 

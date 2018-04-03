@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -28,8 +26,9 @@ with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
+with Gtk.Window; use Gtk.Window;
+with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Maps; use Maps;
 with ShipModules; use ShipModules;
@@ -410,37 +409,19 @@ package body Ships.UI is
          To_String(ShipInfo));
    end ShowShipInfo;
 
-   procedure CreateShipUI is
-      Error: aliased GError;
+   procedure CreateShipUI(NewBuilder: Gtkada_Builder) is
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "ships.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Register_Handler(Builder, "Hide_Ship_Info", HideShipInfo'Access);
-      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
+      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Module_Info", ShowModuleInfo'Access);
-      Register_Handler(Builder, "Show_Help", ShowHelp'Access);
+      Register_Handler(Builder, "Show_Ship_Help", ShowShipHelp'Access);
       Register_Handler(Builder, "Change_Ship_Name", ChangeShipName'Access);
       Register_Handler(Builder, "Set_Upgrade", SetUpgrade'Access);
       Register_Handler(Builder, "Stop_Upgrading", StopUpgrading'Access);
       Register_Handler(Builder, "Set_Repair", SetRepair'Access);
       Register_Handler(Builder, "Assign", Assign'Access);
-      Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "rendername")),
          ChangeModuleName'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "shipwindow")),
-         CloseWindow'Access);
    end CreateShipUI;
 
    procedure ShowShipUI(OldState: GameStates) is
@@ -448,13 +429,16 @@ package body Ships.UI is
       ModulesList: Gtk_List_Store;
    begin
       PreviousGameState := OldState;
-      ModulesList := Gtk_List_Store(Get_Object(Builder, "moduleslist"));
+      ModulesList := Gtk_List_Store(Get_Object(Builder, "moduleslist1"));
       Clear(ModulesList);
       for Module of PlayerShip.Modules loop
          Append(ModulesList, ModulesIter);
          Set(ModulesList, ModulesIter, 0, To_String(Module.Name));
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "shipwindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "ship");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemodules")),
          Gtk_Tree_Path_New_From_String("0"),
