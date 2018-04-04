@@ -57,7 +57,6 @@ with Game.SaveLoad; use Game.SaveLoad;
 with Utils.UI; use Utils.UI;
 with Log; use Log;
 with Help.UI; use Help.UI;
-with Trades.UI; use Trades.UI;
 
 package body MainMenu is
 
@@ -327,7 +326,6 @@ package body MainMenu is
       Hide(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       CreateHelpUI;
       CreateGoalsMenu;
-      CreateTradeUI;
       CreateSkyMap;
    end StartGame;
 

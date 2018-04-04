@@ -15,9 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Gtkada.Builder; use Gtkada.Builder;
+
 package Trades.UI is
 
-   procedure CreateTradeUI; -- Create infterace for trades
+   procedure CreateTradeUI
+     (NewBuilder: Gtkada_Builder); -- Create infterace for trades
    procedure ShowTradeUI; -- Show interface for trades
 
 end Trades.UI;
