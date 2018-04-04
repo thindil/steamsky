@@ -428,8 +428,14 @@ package body MainMenu is
    procedure ShowMainMenu is
    begin
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
+         "page0");
       if not Exists(To_String(SaveDirectory) & "savegame.dat") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+      else
+         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
       end if;
       if not Exists(To_String(DataDirectory) & "halloffame.dat") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
