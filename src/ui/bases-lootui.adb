@@ -332,6 +332,7 @@ package body Bases.LootUI is
          Gtk_Tree_Path_New_From_String("0"),
          Gtk_Tree_View_Column(Get_Object(Builder, "columnname1")),
          False);
+      ShowLastMessage(Builder);
    end ShowLootUI;
 
 end Bases.LootUI;
