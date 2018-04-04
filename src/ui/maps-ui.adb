@@ -68,6 +68,7 @@ with Crafts.UI; use Crafts.UI;
 with GameOptions; use GameOptions;
 with Ships.UI; use Ships.UI;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
+with Trades.UI; use Trades.UI;
 
 package body Maps.UI is
 
@@ -647,6 +648,7 @@ package body Maps.UI is
          CreateCrewUI(Builder);
          CreateShipUI(Builder);
          CreateCargoUI(Builder);
+         CreateTradeUI(Builder);
          Register_Handler(Builder, "Quit_Game", QuitGame'Access);
          Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
          Register_Handler

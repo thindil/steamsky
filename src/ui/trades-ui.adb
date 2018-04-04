@@ -15,11 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Exceptions; use Ada.Exceptions;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -30,8 +27,8 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
+with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
 with Maps; use Maps;
@@ -48,8 +45,7 @@ package body Trades.UI is
 
    Builder: Gtkada_Builder;
 
-   function HideTrade
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   procedure CloseTrade(Object: access Gtkada_Builder_Record'Class) is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       EventIndex: constant Natural :=
@@ -58,12 +54,14 @@ package body Trades.UI is
       if BaseIndex = 0 and EventIndex > 0 then
          DeleteEvent(EventIndex);
       end if;
-      Hide(Gtk_Widget(Get_Object(Object, "tradewindow")));
       CreateSkyMap;
-      return True;
-   end HideTrade;
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Object, "gamestack")),
+         "skymap");
+      Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
+   end CloseTrade;
 
-   procedure ShowItemInfo(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowItemTradeInfo(Object: access Gtkada_Builder_Record'Class) is
       ItemsIter: Gtk_Tree_Iter;
       ItemsModel: Gtk_Tree_Model;
       ItemInfo: Unbounded_String;
@@ -77,7 +75,7 @@ package body Trades.UI is
       MoneyIndex2, MaxAmount: Natural;
       FreeSpace: Integer;
       DamagePercent: Gdouble;
-      DamageBar: constant GObject := Get_Object(Object, "damagebar");
+      DamageBar: constant GObject := Get_Object(Object, "tradedamagebar");
       AmountAdj2: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Builder, "amountadj1"));
       AmountAdj: constant Gtk_Adjustment :=
@@ -85,7 +83,7 @@ package body Trades.UI is
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treeitems"))),
+           (Gtk_Tree_View(Get_Object(Object, "treeitems1"))),
          ItemsModel,
          ItemsIter);
       if ItemsIter = Null_Iter then
@@ -209,10 +207,12 @@ package body Trades.UI is
          end if;
          Append(ItemInfo, Positive'Image(Amount));
       end if;
-      Set_Label(Gtk_Label(Get_Object(Object, "lblinfo")), To_String(ItemInfo));
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lbltradeinfo")),
+         To_String(ItemInfo));
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Set_Label
-           (Gtk_Label(Get_Object(Object, "lbldescription")),
+           (Gtk_Label(Get_Object(Object, "lbltradedescription")),
             ASCII.LF & To_String(Items_List(ProtoIndex).Description));
       end if;
       if CargoIndex = 0 then
@@ -277,7 +277,7 @@ package body Trades.UI is
          FreeSpace := 0;
       end if;
       Set_Label
-        (Gtk_Label(Get_Object(Object, "lblshipspace")),
+        (Gtk_Label(Get_Object(Object, "lblshipspace1")),
          "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
       if BaseIndex > 0 then
          if SkyBases(BaseIndex).Cargo(1).Amount = 0 then
@@ -312,13 +312,13 @@ package body Trades.UI is
                ".");
          end if;
       end if;
-   end ShowItemInfo;
+   end ShowItemTradeInfo;
 
-   procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowTradeHelp(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
    begin
       ShowHelpUI(3);
-   end ShowHelp;
+   end ShowTradeHelp;
 
    procedure TradeItem(User_Data: access GObject_Record'Class) is
       ItemsIter: Gtk_Tree_Iter;
@@ -331,7 +331,7 @@ package body Trades.UI is
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Builder, "treeitems"))),
+           (Gtk_Tree_View(Get_Object(Builder, "treeitems1"))),
          ItemsModel,
          ItemsIter);
       if ItemsIter = Null_Iter then
@@ -370,24 +370,24 @@ package body Trades.UI is
             " in this " &
             Trader &
             ".",
-            Gtk_Window(Get_Object(Builder, "tradewindow")));
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when An_Exception : Trade_Not_For_Sale_Now =>
          ShowDialog
            ("You can't buy " &
             Exception_Message(An_Exception) &
             " in this base at this moment.",
-            Gtk_Window(Get_Object(Builder, "tradewindow")));
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when An_Exception : Trade_Buying_Too_Much =>
          ShowDialog
            (Trader &
             " don't have that much " &
             Exception_Message(An_Exception) &
             " for sale.",
-            Gtk_Window(Get_Object(Builder, "tradewindow")));
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when Trade_No_Free_Cargo =>
          ShowDialog
            ("You don't have that much free space in your ship cargo.",
-            Gtk_Window(Get_Object(Builder, "tradewindow")));
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when An_Exception : Trade_No_Money =>
          ShowDialog
            ("You don't have any " &
@@ -395,7 +395,7 @@ package body Trades.UI is
             " to buy " &
             Exception_Message(An_Exception) &
             ".",
-            Gtk_Window(Get_Object(Builder, "tradewindow")));
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when An_Exception : Trade_Not_Enough_Money =>
          ShowDialog
            ("You don't have enough " &
@@ -403,23 +403,23 @@ package body Trades.UI is
             " to buy so much " &
             Exception_Message(An_Exception) &
             ".",
-            Gtk_Window(Get_Object(Builder, "tradewindow")));
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when Trade_Invalid_Amount =>
          if User_Data = Get_Object(Builder, "btnbuyitem") then
             ShowDialog
               ("You entered invalid amount to buy.",
-               Gtk_Window(Get_Object(Builder, "tradewindow")));
+               Gtk_Window(Get_Object(Builder, "skymapwindow")));
          else
             ShowDialog
               ("You entered invalid amount to sell.",
-               Gtk_Window(Get_Object(Builder, "tradewindow")));
+               Gtk_Window(Get_Object(Builder, "skymapwindow")));
          end if;
       when An_Exception : Trade_Too_Much_For_Sale =>
          ShowDialog
            ("You dont have that much " &
             Exception_Message(An_Exception) &
             " in ship cargo.",
-            Gtk_Window(Get_Object(Builder, "tradewindow")));
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when An_Exception : Trade_No_Money_In_Base =>
          ShowDialog
            ("You can't sell so much " &
@@ -429,37 +429,23 @@ package body Trades.UI is
             " don't have that much " &
             To_String(MoneyName) &
             " to buy it.",
-            Gtk_Window(Get_Object(Builder, "tradewindow")));
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when Trade_No_Trader =>
          ShowDialog
            ("You don't have assigned anyone in crew to talk in bases duty.",
-            Gtk_Window(Get_Object(Builder, "tradewindow")));
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
    end TradeItem;
 
-   procedure CreateTradeUI is
-      Error: aliased GError;
+   procedure CreateTradeUI(NewBuilder: Gtkada_Builder) is
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "trades.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Register_Handler(Builder, "Hide_Trade", HideTrade'Access);
-      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
-      Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
-      Register_Handler(Builder, "Show_Help", ShowHelp'Access);
+      Builder := NewBuilder;
+      Register_Handler
+        (Builder,
+         "Show_Item_Trade_Info",
+         ShowItemTradeInfo'Access);
+      Register_Handler(Builder, "Show_Trade_Help", ShowTradeHelp'Access);
       Register_Handler(Builder, "Trade_Item", TradeItem'Access);
-      Do_Connect(Builder);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "tradewindow")),
-         CloseWindow'Access);
+      Register_Handler(Builder, "Close_Trade", CloseTrade'Access);
    end CreateTradeUI;
 
    procedure ShowTradeUI is
@@ -479,7 +465,7 @@ package body Trades.UI is
          BaseType := 1;
          BaseCargo := TraderCargo;
       end if;
-      ItemsList := Gtk_List_Store(Get_Object(Builder, "itemslist"));
+      ItemsList := Gtk_List_Store(Get_Object(Builder, "itemslist2"));
       Clear(ItemsList);
       for I in PlayerShip.Cargo.Iterate loop
          if Items_List(PlayerShip.Cargo(I).ProtoIndex).Prices(BaseType) >
@@ -518,11 +504,14 @@ package body Trades.UI is
             Set(ItemsList, ItemsIter, 2, Gint(I));
          end if;
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "tradewindow")));
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         "trade");
+      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
-        (Gtk_Tree_View(Get_Object(Builder, "treeitems")),
+        (Gtk_Tree_View(Get_Object(Builder, "treeitems1")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnname")),
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnname3")),
          False);
       ShowLastMessage(Builder);
    end ShowTradeUI;

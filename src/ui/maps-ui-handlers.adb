@@ -963,19 +963,14 @@ package body Maps.UI.Handlers is
    begin
       if User_Data = Get_Object(Builder, "menumessages") then
          ShowMessagesUI(SkyMap_View);
-         return;
       elsif User_Data = Get_Object(Builder, "menucargo") then
          ShowCargoUI(SkyMap_View);
-         return;
       elsif User_Data = Get_Object(Builder, "menuship") then
          ShowShipUI(SkyMap_View);
-         return;
       elsif User_Data = Get_Object(Builder, "menucrew") then
          ShowCrewUI(SkyMap_View);
-         return;
       elsif User_Data = Get_Object(Builder, "menustats") then
          ShowStatsUI(SkyMap_View);
-         return;
       elsif User_Data = Get_Object(Builder, "menumissions") then
          if PlayerShip.Missions.Length = 0 then
             ShowDialog
@@ -984,7 +979,6 @@ package body Maps.UI.Handlers is
             return;
          end if;
          ShowAcceptedMissions;
-         return;
       elsif User_Data = Get_Object(Builder, "btntrade") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
@@ -996,45 +990,33 @@ package body Maps.UI.Handlers is
       elsif User_Data = Get_Object(Builder, "btnrecruit") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowRecruitUI;
-         return;
       elsif User_Data = Get_Object(Builder, "btnrecipes") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowBuyRecipesUI;
-         return;
       elsif User_Data = Get_Object(Builder, "btnrepair") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowRepairUI;
-         return;
       elsif User_Data = Get_Object(Builder, "btnheal") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowHealUI;
-         return;
       elsif User_Data = Get_Object(Builder, "btnschool") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowSchoolUI;
-         return;
       elsif User_Data = Get_Object(Builder, "btnshipyard") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowShipyardUI;
-         return;
       elsif User_Data = Get_Object(Builder, "btnloot") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          ShowLootUI;
-         return;
       elsif User_Data = Get_Object(Builder, "menucrafting") then
          ShowCraftsUI;
-         return;
       elsif User_Data = Get_Object(Builder, "menubaseslist") then
          ShowBasesListUI;
-         return;
       elsif User_Data = Get_Object(Builder, "menuevents") then
          ShowEventsUI;
-         return;
       elsif User_Data = Get_Object(Builder, "menuoptions") then
          ShowGameOptions;
-         return;
       end if;
-      Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
    end ShowInfo;
 
    procedure ResignFromGame(Object: access Gtkada_Builder_Record'Class) is
