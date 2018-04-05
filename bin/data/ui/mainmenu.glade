@@ -343,6 +343,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="Show_Page" object="btnback" swapped="no"/>
+                    <accelerator key="Escape" signal="clicked"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -458,6 +459,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="halign">end</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="Show_Page" object="btnback" swapped="no"/>
+                <accelerator key="Escape" signal="clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -529,6 +531,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="Show_Page" object="btnback" swapped="no"/>
+                    <accelerator key="Escape" signal="clicked"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -625,6 +628,7 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
                 <property name="valign">end</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="Show_Page" object="btnback" swapped="no"/>
+                <accelerator key="Escape" signal="clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
