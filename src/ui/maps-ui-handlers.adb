@@ -961,6 +961,16 @@ package body Maps.UI.Handlers is
 
    procedure ShowInfo(User_Data: access GObject_Record'Class) is
    begin
+      if User_Data = Get_Object(Builder, "menumissions") then
+         if PlayerShip.Missions.Length = 0 then
+            ShowDialog
+              ("You didn't accepted any mission yet.",
+               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            return;
+         end if;
+      end if;
+      Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
+      Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
       if User_Data = Get_Object(Builder, "menumessages") then
          ShowMessagesUI(SkyMap_View);
       elsif User_Data = Get_Object(Builder, "menucargo") then
@@ -972,12 +982,6 @@ package body Maps.UI.Handlers is
       elsif User_Data = Get_Object(Builder, "menustats") then
          ShowStatsUI(SkyMap_View);
       elsif User_Data = Get_Object(Builder, "menumissions") then
-         if PlayerShip.Missions.Length = 0 then
-            ShowDialog
-              ("You didn't accepted any mission yet.",
-               Gtk_Window(Get_Object(Builder, "skymapwindow")));
-            return;
-         end if;
          ShowAcceptedMissions;
       elsif User_Data = Get_Object(Builder, "btntrade") then
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
