@@ -846,6 +846,7 @@ package body Maps.UI is
       UpdateHeader;
       UpdateMoveButtons;
       Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
+      Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
    end CreateSkyMap;
 
 end Maps.UI;
