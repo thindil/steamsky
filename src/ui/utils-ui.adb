@@ -106,28 +106,6 @@ package body Utils.UI is
       end if;
    end ShowLastMessage;
 
-   function HideShipInfo
-     (User_Data: access GObject_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(User_Data));
-      case PreviousGameState is
-         when SkyMap_View =>
-            CreateSkyMap;
-         when Combat_View =>
-            ShowCombatUI(False);
-         when others =>
-            null;
-      end case;
-      return True;
-   end HideShipInfo;
-
-   function HideInfo(User_Data: access GObject_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(User_Data));
-      CreateSkyMap;
-      return True;
-   end HideInfo;
-
    function CloseWindow
      (Self: access Gtk_Widget_Record'Class;
       Event: Gdk_Event_Key) return Boolean is
