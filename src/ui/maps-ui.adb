@@ -32,6 +32,7 @@ with Gtk.Enums; use Gtk.Enums;
 with Gtk.Container; use Gtk.Container;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
+with Gtk.Image; use Gtk.Image;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -837,6 +838,38 @@ package body Maps.UI is
          On_Key_Release_Event
            (Gtk_Widget(Get_Object(Builder, "waitwindow")),
             CloseWindow'Access);
+         Set
+           (Gtk_Image(Get_Object(Builder, "image1")),
+            To_String(DataDirectory) &
+            "ui" &
+            Dir_Separator &
+            "images" &
+            Dir_Separator &
+            "up.png");
+         Set
+           (Gtk_Image(Get_Object(Builder, "image2")),
+            To_String(DataDirectory) &
+            "ui" &
+            Dir_Separator &
+            "images" &
+            Dir_Separator &
+            "down.png");
+         Set
+           (Gtk_Image(Get_Object(Builder, "image3")),
+            To_String(DataDirectory) &
+            "ui" &
+            Dir_Separator &
+            "images" &
+            Dir_Separator &
+            "left.png");
+         Set
+           (Gtk_Image(Get_Object(Builder, "image4")),
+            To_String(DataDirectory) &
+            "ui" &
+            Dir_Separator &
+            "images" &
+            Dir_Separator &
+            "right.png");
       end if;
       UpdateMessages;
       Set_Text
