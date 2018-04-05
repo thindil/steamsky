@@ -45,12 +45,6 @@ package Utils.UI is
      (Object: access Gtkada_Builder_Record'Class); -- Hide last message window
    procedure ShowLastMessage
      (Object: access Gtkada_Builder_Record'Class); -- Show last message window
-   function HideShipInfo
-     (User_Data: access GObject_Record'Class)
-     return Boolean; -- Hide info window and back to sky map/combat
-   function HideInfo
-     (User_Data: access GObject_Record'Class)
-     return Boolean; -- Hide info window and back to sky map
    function CloseWindow
      (Self: access Gtk_Widget_Record'Class;
       Event: Gdk_Event_Key) return Boolean; -- Close window on press Escape key

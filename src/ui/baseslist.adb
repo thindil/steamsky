@@ -297,7 +297,6 @@ package body BasesList is
       List: Gtk_List_Store;
    begin
       Builder := NewBuilder;
-      Register_Handler(Builder, "Hide_Bases_List", HideInfo'Access);
       Register_Handler(Builder, "Refresh_Bases_List", RefreshBasesList'Access);
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
       Register_Handler
