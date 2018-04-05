@@ -1164,4 +1164,13 @@ Buyable = Y, N, N, N
 ShowType = Tool
 Value = 3
 Description = Set of tools made of titanium, used to cook items.
+[137]
+Name = Orichalcum cooking set
+Weight = 15
+Type = CookingSet
+Prices = 33, 35, 35, 35
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 2
+Description = Set of tools made of orichalcum, used to cook items.
 []
