@@ -414,6 +414,8 @@ package body Combat.UI is
             Set(EnemyList, EnemyIter, 1, Gint(DamagePercent));
          end loop;
       end if;
+      Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
+      Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "combat");
@@ -632,6 +634,8 @@ package body Combat.UI is
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "skymap");
+      Show_All(Gtk_Widget(Get_Object(Object, "btnmenu")));
+      Hide(Gtk_Widget(Get_Object(Object, "btnclose")));
    end CloseCombat;
 
    procedure ShowCombatHelp(Object: access Gtkada_Builder_Record'Class) is
