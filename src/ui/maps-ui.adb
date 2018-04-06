@@ -827,9 +827,6 @@ package body Maps.UI is
             "<skymapwindow>/Menu/WaitOrders",
             Accelerators);
          On_Key_Release_Event
-           (Gtk_Widget(Get_Object(Builder, "mapinfowindow")),
-            CloseWindow'Access);
-         On_Key_Release_Event
            (Gtk_Widget(Get_Object(Builder, "movemapwindow")),
             CloseWindow'Access);
          On_Key_Release_Event
