@@ -150,7 +150,7 @@ package body Maps.UI.Handlers is
          declare
             BaseIndex: constant Positive := SkyMap(MapX, MapY).BaseIndex;
          begin
-            Append(MapInfoText, "Base info");
+            Append(MapInfoText, "Base info:");
             Append(MapInfoText, ASCII.LF);
             Append
               (MapInfoText,
@@ -206,6 +206,10 @@ package body Maps.UI.Handlers is
                      when others =>
                         null;
                   end case;
+               end if;
+               if BaseIndex = PlayerShip.HomeBase then
+                  Append(MapInfoText, ASCII.LF);
+                  Append(MapInfoText, "It is your home base");
                end if;
             end if;
          end;
