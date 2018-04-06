@@ -1040,6 +1040,8 @@ package body Maps.UI.Handlers is
    procedure ShowMissions(Object: access Gtkada_Builder_Record'Class) is
    begin
       Hide(Gtk_Widget(Get_Object(Object, "orderswindow")));
+      Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
+      Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
       ShowMissionsUI;
    end ShowMissions;
 
