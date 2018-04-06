@@ -618,6 +618,7 @@ package body Game is
       ClearGameStats;
       Known_Recipes.Clear;
       ClearCurrentGoal;
+      SaveConfig;
    end EndGame;
 
    function FindSkillIndex(SkillName: Unbounded_String) return Positive is

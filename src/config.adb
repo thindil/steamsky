@@ -39,7 +39,9 @@ package body Config is
          LowFuel => 100,
          LowDrinks => 50,
          LowFood => 25,
-         AutoMoveStop => NEVER);
+         AutoMoveStop => NEVER,
+         WindowWidth => 800,
+         WindowHeight => 600);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -91,6 +93,10 @@ package body Config is
             elsif FieldName = To_Unbounded_String("AutoMoveStop") then
                GameSettings.AutoMoveStop :=
                  AutoMoveBreak'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("WindowWidth") then
+               GameSettings.WindowWidth := Positive'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("WindowHeight") then
+               GameSettings.WindowHeight := Positive'Value(To_String(Value));
             end if;
          end if;
       end loop;
@@ -139,6 +145,12 @@ package body Config is
       Put_Line
         (ConfigFile,
          "AutoMoveStop = " & AutoMoveBreak'Image(GameSettings.AutoMoveStop));
+      Put_Line
+        (ConfigFile,
+         "WindowWidth =" & Positive'Image(GameSettings.WindowWidth));
+      Put_Line
+        (ConfigFile,
+         "WindowHeight =" & Positive'Image(GameSettings.WindowHeight));
       Close(ConfigFile);
    end SaveConfig;
 
