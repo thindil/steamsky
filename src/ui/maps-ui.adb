@@ -870,6 +870,10 @@ package body Maps.UI is
             "images" &
             Dir_Separator &
             "right.png");
+         Set_Default_Size
+           (Gtk_Window(Get_Object(Builder, "skymapwindow")),
+            Gint(GameSettings.WindowWidth),
+            Gint(GameSettings.WindowHeight));
       end if;
       UpdateMessages;
       Set_Text

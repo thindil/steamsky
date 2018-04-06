@@ -114,6 +114,10 @@ package body Maps.UI.Handlers is
       MapCellHeight := Positive(Location.Y);
       Set_Text(MapBuffer, "");
       DrawMap;
+      Get_Size
+        (Gtk_Window(Get_Object(Object, "skymapwindow")),
+         Gint(GameSettings.WindowWidth),
+         Gint(GameSettings.WindowHeight));
    end GetMapSize;
 
    function ShowMapCellInfo

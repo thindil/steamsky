@@ -42,6 +42,8 @@ package Config is
       LowDrinks: Positive; -- Amount of drinkis below which warning about low level is show
       LowFood: Positive; -- Amount of food below which warning about low level is show
       AutoMoveStop: AutoMoveBreak; -- When stop automoving of player ship
+      WindowWidth: Positive; -- Game window default width
+      WindowHeight: Positive; -- Game window default height
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
