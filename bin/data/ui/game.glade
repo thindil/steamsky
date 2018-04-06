@@ -502,11 +502,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btncloseinfo">
-            <property name="label" translatable="yes">Close</property>
+            <property name="label" translatable="yes">Close [Escape]</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <signal name="clicked" handler="Hide_Map_Info" object="mapinfowindow" swapped="no"/>
+            <accelerator key="Escape" signal="clicked"/>
           </object>
           <packing>
             <property name="expand">False</property>
