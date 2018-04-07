@@ -252,6 +252,9 @@ package body BasesList is
             when others =>
                null;
          end case;
+         if BaseIndex = PlayerShip.HomeBase then
+            Append(BaseInfo, ASCII.LF & "It is your home base.");
+         end if;
       else
          BaseInfo := To_Unbounded_String("Not visited yet.");
       end if;
