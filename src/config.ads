@@ -44,6 +44,7 @@ package Config is
       AutoMoveStop: AutoMoveBreak; -- When stop automoving of player ship
       WindowWidth: Positive; -- Game window default width
       WindowHeight: Positive; -- Game window default height
+      AnimationsEnabled: Natural; -- If 1 then UI animations are enabled, disabled when 0.
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;

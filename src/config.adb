@@ -41,7 +41,8 @@ package body Config is
          LowFood => 25,
          AutoMoveStop => NEVER,
          WindowWidth => 800,
-         WindowHeight => 600);
+         WindowHeight => 600,
+         AnimationsEnabled => 1);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -97,6 +98,12 @@ package body Config is
                GameSettings.WindowWidth := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("WindowHeight") then
                GameSettings.WindowHeight := Positive'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("AnimationsEnabled") then
+               if Value = To_Unbounded_String("Yes") then
+                  GameSettings.AnimationsEnabled := 1;
+               else
+                  GameSettings.AnimationsEnabled := 0;
+               end if;
             end if;
          end if;
       end loop;
@@ -151,6 +158,11 @@ package body Config is
       Put_Line
         (ConfigFile,
          "WindowHeight =" & Positive'Image(GameSettings.WindowHeight));
+      if GameSettings.AnimationsEnabled = 1 then
+         Put_Line(ConfigFile, "AnimationsEnabled = Yes");
+      else
+         Put_Line(ConfigFile, "AnimationsEnabled = No");
+      end if;
       Close(ConfigFile);
    end SaveConfig;
 
