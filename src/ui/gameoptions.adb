@@ -124,7 +124,7 @@ package body GameOptions is
          GameSettings.AnimationsEnabled := 0;
       end if;
       Set_Long_Property
-         (Get_Default,
+        (Get_Default,
          "gtk-enable-animations",
          Glong(GameSettings.AnimationsEnabled),
          "");

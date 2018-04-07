@@ -28,6 +28,7 @@ with Game; use Game;
 with Messages; use Messages;
 with Maps.UI; use Maps.UI;
 with Combat.UI; use Combat.UI;
+with GameOptions; use GameOptions;
 
 package body Utils.UI is
 
@@ -121,6 +122,11 @@ package body Utils.UI is
 
    procedure CloseMessages(Object: access Gtkada_Builder_Record'Class) is
    begin
+      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack"))) =
+        "options" then
+         CloseOptions(Object);
+         return;
+      end if;
       case PreviousGameState is
          when SkyMap_View =>
             CreateSkyMap;
