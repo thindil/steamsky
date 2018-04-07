@@ -243,7 +243,7 @@ package body Ships.Cargo.UI is
       CrewIter: Gtk_Tree_Iter;
       CrewList: Gtk_List_Store;
    begin
-      CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist3"));
+      CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist"));
       Clear(CrewList);
       for Member of PlayerShip.Crew loop
          Append(CrewList, CrewIter);

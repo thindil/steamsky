@@ -465,7 +465,7 @@ package body Trades.UI is
          BaseType := 1;
          BaseCargo := TraderCargo;
       end if;
-      ItemsList := Gtk_List_Store(Get_Object(Builder, "itemslist2"));
+      ItemsList := Gtk_List_Store(Get_Object(Builder, "itemslist1"));
       Clear(ItemsList);
       for I in PlayerShip.Cargo.Iterate loop
          if Items_List(PlayerShip.Cargo(I).ProtoIndex).Prices(BaseType) >
