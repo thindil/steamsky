@@ -429,7 +429,7 @@ package body Ships.UI is
       ModulesList: Gtk_List_Store;
    begin
       PreviousGameState := OldState;
-      ModulesList := Gtk_List_Store(Get_Object(Builder, "moduleslist1"));
+      ModulesList := Gtk_List_Store(Get_Object(Builder, "moduleslist"));
       Clear(ModulesList);
       for Module of PlayerShip.Modules loop
          Append(ModulesList, ModulesIter);
