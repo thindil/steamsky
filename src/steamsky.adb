@@ -22,7 +22,9 @@ with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtk.Main; use Gtk.Main;
+with Gtk.Settings; use Gtk.Settings;
 with Gtkada.Bindings; use Gtkada.Bindings;
+with Glib; use Glib;
 with Game; use Game;
 with Config; use Config;
 with Log; use Log;
@@ -113,6 +115,11 @@ begin
    --  Initializes GtkAda
    Init;
    Set_On_Exception(On_Exception'Access);
+   Set_Long_Property
+     (Get_Default,
+      "gtk-enable-animations",
+      Glong(GameSettings.AnimationsEnabled),
+      "");
    CreateMainMenu;
    Main;
 
