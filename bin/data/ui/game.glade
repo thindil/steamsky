@@ -122,12 +122,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="guint"/>
     </columns>
   </object>
-  <object class="GtkListStore" id="crewlist3">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkListStore" id="crewnames">
     <columns>
       <!-- column-name gchararray1 -->
@@ -379,16 +373,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </columns>
   </object>
   <object class="GtkListStore" id="itemslist1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-      <!-- column-name guint2 -->
-      <column type="guint"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="itemslist2">
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
@@ -777,12 +761,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </columns>
   </object>
   <object class="GtkListStore" id="moduleslist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="moduleslist1">
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
@@ -6754,7 +6732,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkTreeView" id="treemodules">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="model">moduleslist1</property>
+                            <property name="model">moduleslist</property>
                             <property name="headers_visible">False</property>
                             <property name="headers_clickable">False</property>
                             <property name="search_column">0</property>
@@ -7413,7 +7391,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                   <object class="GtkComboBox" id="cmbmember">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="model">crewlist3</property>
+                                    <property name="model">crewlist</property>
                                     <child>
                                       <object class="GtkCellRendererText"/>
                                       <attributes>
@@ -7479,7 +7457,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkTreeView" id="treeitems1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="model">itemslist2</property>
+                        <property name="model">itemslist1</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Item_Trade_Info" swapped="no"/>
                         <child internal-child="selection">

@@ -422,7 +422,7 @@ package body Ships.UI.Handlers is
       New_Text: UTF8_String) is
       pragma Unreferenced(Self);
       ModulesList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "moduleslist1"));
+        Gtk_List_Store(Get_Object(Builder, "moduleslist"));
       NewName: Unbounded_String := To_Unbounded_String(New_Text);
       SemicolonIndex: Natural;
    begin
