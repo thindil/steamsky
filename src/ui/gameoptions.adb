@@ -25,6 +25,7 @@ with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Settings; use Gtk.Settings;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Gdk.Event; use Gdk.Event;
@@ -117,6 +118,16 @@ package body GameOptions is
       GameSettings.AutoMoveStop :=
         AutoMoveBreak'Val
           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbautomovestop"))));
+      if Get_State(Gtk_Switch(Get_Object(Object, "switchanimations"))) then
+         GameSettings.AnimationsEnabled := 1;
+      else
+         GameSettings.AnimationsEnabled := 0;
+      end if;
+      Set_Long_Property
+         (Get_Default,
+         "gtk-enable-animations",
+         Glong(GameSettings.AnimationsEnabled),
+         "");
       SaveConfig;
       Save(To_String(SaveDirectory) & "keys.cfg");
       CreateSkyMap;
@@ -217,6 +228,11 @@ package body GameOptions is
            (Gtk_Entry(Get_Object(Builder, To_String(EditNames(I)))),
             Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods));
       end loop;
+      if GameSettings.AnimationsEnabled = 1 then
+         Set_State(Gtk_Switch(Get_Object(Builder, "switchanimations")), True);
+      else
+         Set_State(Gtk_Switch(Get_Object(Builder, "switchanimations")), False);
+      end if;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "options");
