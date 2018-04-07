@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
   sickle
 - New crafting recipes: titanium mold, orichalcum mold, titanium gunsmith set,
   orichalcum gunsmith set, titanium cooking set and orichalcum cooking set
+- Ability to enable/disable interface animations
 
 ### Changed
 - Updated interface
