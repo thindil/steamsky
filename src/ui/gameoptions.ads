@@ -22,5 +22,8 @@ package GameOptions is
    procedure CreateGameOptions
      (NewBuilder: Gtkada_Builder); -- Create infterace for game options
    procedure ShowGameOptions; -- Show interface for game options
+   procedure CloseOptions
+     (Object: access Gtkada_Builder_Record'
+        Class); -- Close options, save them and back to sky map view
 
 end GameOptions;
