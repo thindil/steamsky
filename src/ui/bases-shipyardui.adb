@@ -536,7 +536,7 @@ package body Bases.ShipyardUI is
          "shipyard");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
-      SetActiveModule("treeinstall", "columnname3");
+      SetActiveModule("treeinstall", "columnnames3");
       SetActiveModule("treeremove", "columnnames4");
    end ShowShipyardUI;
 
