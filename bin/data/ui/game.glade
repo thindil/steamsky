@@ -1140,14 +1140,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="guint"/>
     </columns>
   </object>
-  <object class="GtkListStore" id="skillslist2">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-    </columns>
-  </object>
   <object class="GtkListStore" id="speedlist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -1168,35 +1160,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="speedlist1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Full stop</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Quarter speed</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Half speed</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Full speed</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkListStore" id="statslist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="statslist1">
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
@@ -5170,7 +5134,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes">Default speed of ship after undock from base.</property>
-                            <property name="model">speedlist1</property>
+                            <property name="model">speedlist</property>
                             <child>
                               <object class="GtkCellRendererText"/>
                               <attributes>
@@ -6145,7 +6109,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="sensitive">False</property>
                                     <property name="can_focus">False</property>
-                                    <property name="model">statslist1</property>
+                                    <property name="model">statslist</property>
                                     <property name="headers_visible">False</property>
                                     <property name="headers_clickable">False</property>
                                     <property name="search_column">0</property>
@@ -6194,7 +6158,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">False</property>
-                                        <property name="model">skillslist2</property>
+                                        <property name="model">skillslist</property>
                                         <property name="headers_visible">False</property>
                                         <property name="headers_clickable">False</property>
                                         <property name="search_column">0</property>
