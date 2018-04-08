@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file.
   gunsmith set, titanium cooking set, orichalcum cooking set and titanium 
   sickle
 - New crafting recipes: titanium mold, orichalcum mold, titanium gunsmith set,
-  orichalcum gunsmith set, titanium cooking set and orichalcum cooking set
+  orichalcum gunsmith set, titanium cooking set, orichalcum cooking set and
+  titanium sickle
 - Ability to enable/disable interface animations
 
 ### Changed
