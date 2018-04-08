@@ -3918,7 +3918,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="shipyardbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
@@ -3939,6 +3939,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkStack" id="stack1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="transition_type">crossfade</property>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
