@@ -201,7 +201,7 @@ package body Crew.UI.Handlers is
          Hide(Gtk_Widget(Get_Object(Object, "progresshunger")));
       end if;
       if Member.Skills.Length > 0 then
-         List := Gtk_List_Store(Get_Object(Builder, "statslist1"));
+         List := Gtk_List_Store(Get_Object(Object, "statslist"));
          Clear(List);
          for I in Member.Attributes.Iterate loop
             Append(List, Iter);
@@ -212,7 +212,7 @@ package body Crew.UI.Handlers is
                To_String(Attributes_Names(Attributes_Container.To_Index(I))));
             Set(List, Iter, 1, Gint(Member.Attributes(I)(1) * 2));
          end loop;
-         List := Gtk_List_Store(Get_Object(Builder, "skillslist2"));
+         List := Gtk_List_Store(Get_Object(Builder, "skillslist"));
          Clear(List);
          for Skill of Member.Skills loop
             Append(List, Iter);
