@@ -24,6 +24,7 @@ package Maps.UI is
    procedure CreateSkyMap
      (X: Integer := PlayerShip.SkyX;
       Y: Integer := PlayerShip.SkyY); -- Create and show sky map
+   procedure UpdateHeader; -- Update game header informations
 
 private
 
@@ -40,7 +41,6 @@ private
    ButtonsVisible: Boolean := False;
 
    procedure DeathConfirm; -- Show confirmation to show game stats when player died
-   procedure UpdateHeader; -- Update game header informations
    procedure UpdateMoveButtons; -- Update move buttons
    procedure DrawMap; -- Draw sky map
    procedure UpdateMessages; -- Update game messages and last message
