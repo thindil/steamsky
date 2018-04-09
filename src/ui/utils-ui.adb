@@ -105,6 +105,7 @@ package body Utils.UI is
          Show_All(Gtk_Widget(Get_Object(Object, "infolastmessage")));
          LastMessage := Null_Unbounded_String;
       end if;
+      UpdateHeader;
    end ShowLastMessage;
 
    function CloseWindow
