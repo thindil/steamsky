@@ -1180,6 +1180,15 @@ Type = Sickle
 Prices = 20, 22, 22, 22
 Buyable = Y, N, N, N
 ShowType = Tool
-Value = 5
+Value = 3
 Description = Titanium tool used in cultivating plants.
+[139]
+Name = Orichalcum sickle
+Weight = 1
+Type = Sickle
+Prices = 24, 26, 26, 26
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 2
+Description = Orichalcum tool used in cultivating plants.
 []
