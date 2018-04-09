@@ -26,7 +26,6 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
-with Gtk.Expander; use Gtk.Expander;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Game; use Game;
@@ -272,25 +271,25 @@ package body Crafts.UI is
         (Gtk_Label(Get_Object(Object, "lblrecipeinfo")),
          To_String(RecipeInfo));
       if HaveMaterials and HaveTool and HaveWorkplace then
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "expcraft")), True);
-         Set_Has_Tooltip(Gtk_Widget(Get_Object(Object, "expcraft")), False);
+         Show_All(Gtk_Widget(Get_Object(Object, "setcraftbox")));
+         Hide(Gtk_Widget(Get_Object(Object, "lblcrafterror")));
          ShowSetRecipe(Object);
       else
-         Set_Expanded(Gtk_Expander(Get_Object(Object, "expcraft")), False);
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "expcraft")), False);
+         Hide(Gtk_Widget(Get_Object(Object, "setcraftbox")));
+         Show_All(Gtk_Widget(Get_Object(Object, "lblcrafterror")));
          if not HaveMaterials then
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Object, "expcraft")),
+            Set_Label
+              (Gtk_Label(Get_Object(Object, "lblcrafterror")),
                "You can't craft this recipe because you don't have proper materials.");
          end if;
          if not HaveTool then
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Object, "expcraft")),
+            Set_Label
+              (Gtk_Label(Get_Object(Object, "lblcrafterror")),
                "You can't craft this recipe because you don't have proper tool.");
          end if;
          if not HaveWorkplace then
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Object, "expcraft")),
+            Set_Label
+              (Gtk_Label(Get_Object(Object, "lblcrafterror")),
                "You can't craft this recipe because you don't have proper workshop.");
          end if;
       end if;
