@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
   orichalcum gunsmith set, titanium cooking set, orichalcum cooking set and
   titanium sickle
 - Ability to enable/disable interface animations
+- Ability to set type of interface animations
 
 ### Changed
 - Updated interface
