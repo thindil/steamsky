@@ -42,7 +42,8 @@ package body Config is
          AutoMoveStop => NEVER,
          WindowWidth => 800,
          WindowHeight => 600,
-         AnimationsEnabled => 1);
+         AnimationsEnabled => 1,
+         AnimationType => 1);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -104,6 +105,8 @@ package body Config is
                else
                   GameSettings.AnimationsEnabled := 0;
                end if;
+            elsif FieldName = To_Unbounded_String("AnimationType") then
+               GameSettings.AnimationType := Positive'Value(To_String(Value));
             end if;
          end if;
       end loop;
@@ -163,6 +166,9 @@ package body Config is
       else
          Put_Line(ConfigFile, "AnimationsEnabled = No");
       end if;
+      Put_Line
+        (ConfigFile,
+         "AnimationType =" & Positive'Image(GameSettings.AnimationType));
       Close(ConfigFile);
    end SaveConfig;
 
