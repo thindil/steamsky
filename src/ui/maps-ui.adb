@@ -33,6 +33,7 @@ with Gtk.Container; use Gtk.Container;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Image; use Gtk.Image;
+with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -867,6 +868,15 @@ package body Maps.UI is
             "images" &
             Dir_Separator &
             "right.png");
+         Set_Transition_Type
+           (Gtk_Stack(Get_Object(Builder, "gamestack")),
+            Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
+         Set_Transition_Type
+           (Gtk_Stack(Get_Object(Builder, "shipyardstack")),
+            Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
+         Set_Transition_Type
+           (Gtk_Stack(Get_Object(Builder, "optionsstack")),
+            Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
          Set_Default_Size
            (Gtk_Window(Get_Object(Builder, "skymapwindow")),
             Gint(GameSettings.WindowWidth),
