@@ -128,6 +128,18 @@ package body GameOptions is
          "gtk-enable-animations",
          Glong(GameSettings.AnimationsEnabled),
          "");
+      GameSettings.AnimationType :=
+        Positive
+          (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbanimations"))) + 1);
+      Set_Transition_Type
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
+      Set_Transition_Type
+        (Gtk_Stack(Get_Object(Builder, "shipyardstack")),
+         Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
+      Set_Transition_Type
+        (Gtk_Stack(Get_Object(Builder, "optionsstack")),
+         Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
       SaveConfig;
       Save(To_String(SaveDirectory) & "keys.cfg");
       CreateSkyMap;
@@ -233,6 +245,9 @@ package body GameOptions is
       else
          Set_State(Gtk_Switch(Get_Object(Builder, "switchanimations")), False);
       end if;
+      Set_Active
+        (Gtk_Combo_Box(Get_Object(Builder, "cmbanimations")),
+         Gint(GameSettings.AnimationType - 1));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "options");
