@@ -25,6 +25,9 @@ with Gtk.Menu_Item; use Gtk.Menu_Item;
 with Gtk.Menu_Shell; use Gtk.Menu_Shell;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
+with Gtk.Text_Iter; use Gtk.Text_Iter;
+with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
+with Gtk.Text_Tag; use Gtk.Text_Tag;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
@@ -137,14 +140,55 @@ package body Help.UI is
          To_Unbounded_String("<skymapwindow>/Menu/ResignFromGame"),
          To_Unbounded_String("<skymapwindow>/Menu"),
          To_Unbounded_String("<skymapwindow>/Menu/WaitOrders"));
+      HelpBuffer: constant Gtk_Text_Buffer :=
+        Gtk_Text_Buffer(Get_Object(Builder, "helpbuffer"));
+      StartIter, EndIter: Gtk_Text_Iter;
+      Tags: constant Gtk_Text_Tag_Table := Get_Tag_Table(HelpBuffer);
+      BoldText: constant Gtk_Text_Tag := Lookup(Tags, "bold");
    begin
       NewText := Help_List(Topic).Text;
+      Set_Text(HelpBuffer, To_String(NewText));
+      for I in VariablesNames'Range loop
+         loop
+            VariableIndex := Index(NewText, To_String(VariablesNames(I)));
+            exit when VariableIndex = 0;
+            Get_Iter_At_Offset(HelpBuffer, StartIter, Gint(VariableIndex - 1));
+            Get_Iter_At_Offset
+              (HelpBuffer,
+               EndIter,
+               Gint(VariableIndex + Length(VariablesNames(I)) - 1));
+            Delete(HelpBuffer, StartIter, EndIter);
+            Insert_With_Tags
+              (HelpBuffer,
+               StartIter,
+               To_String(VariablesValues(I)),
+               BoldText);
+            Replace_Slice
+              (NewText,
+               VariableIndex,
+               (VariableIndex + Length(VariablesNames(I)) - 1),
+               To_String(VariablesValues(I)));
+         end loop;
+      end loop;
       for I in AccelNames'Range loop
          loop
             VariableIndex :=
               Index(NewText, "{GameKey" & Positive'Image(I) & "}");
             exit when VariableIndex = 0;
             Lookup_Entry(To_String(AccelNames(I)), Key, Found);
+            Get_Iter_At_Offset(HelpBuffer, StartIter, Gint(VariableIndex - 1));
+            Get_Iter_At_Offset
+              (HelpBuffer,
+               EndIter,
+               Gint(VariableIndex + 8 + Positive'Image(I)'Length));
+            Delete(HelpBuffer, StartIter, EndIter);
+            Insert_With_Tags
+              (HelpBuffer,
+               StartIter,
+               "'" &
+               Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
+               "'",
+               BoldText);
             Replace_Slice
               (NewText,
                VariableIndex,
@@ -154,23 +198,9 @@ package body Help.UI is
                "'");
          end loop;
       end loop;
-      for I in VariablesNames'Range loop
-         loop
-            VariableIndex := Index(NewText, To_String(VariablesNames(I)));
-            exit when VariableIndex = 0;
-            Replace_Slice
-              (NewText,
-               VariableIndex,
-               VariableIndex + (Length(VariablesNames(I)) - 1),
-               To_String(VariablesValues(I)));
-         end loop;
-      end loop;
       Set_Text
         (Gtk_Label(Get_Object(Builder, "lblhelptopic")),
          To_String(Help_List(Topic).Title));
-      Set_Text
-        (Gtk_Text_Buffer(Get_Object(Builder, "helpbuffer")),
-         To_String(NewText));
       Show_All(Gtk_Widget(Get_Object(Builder, "helpwindow")));
    end ShowHelpUI;
 
