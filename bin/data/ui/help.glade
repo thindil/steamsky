@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 
+<!-- Generated with glade 3.20.4 
 
 Copyright (C) 2018 Bartek thindil Jasicki
 
@@ -24,10 +24,22 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <!-- interface-license-type gplv3 -->
   <!-- interface-name Steam Sky -->
   <!-- interface-copyright 2018 Bartek thindil Jasicki -->
-  <object class="GtkTextBuffer" id="helpbuffer"/>
   <object class="GtkMenu" id="helpmenu">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+  </object>
+  <object class="GtkTextTagTable" id="helptagtable">
+    <child type="tag">
+      <object class="GtkTextTag" id="bold">
+        <property name="name">bold</property>
+        <property name="background">black</property>
+        <property name="font">Normal</property>
+        <property name="weight">700</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTextBuffer" id="helpbuffer">
+    <property name="tag_table">helptagtable</property>
   </object>
   <object class="GtkWindow" id="helpwindow">
     <property name="can_focus">False</property>
