@@ -58,6 +58,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Click here to select help topic from list.</property>
             <property name="popup">helpmenu</property>
             <child>
               <object class="GtkLabel" id="lblhelptopic">
