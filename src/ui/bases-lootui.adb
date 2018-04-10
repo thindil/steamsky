@@ -138,17 +138,17 @@ package body Bases.LootUI is
         (Gtk_Label(Get_Object(Object, "lbllootinfo")),
          To_String(ItemInfo));
       if CargoIndex = 0 then
-         Set_Visible(Gtk_Widget(Get_Object(Object, "dropexpand")), False);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "dropbox")), False);
       else
-         Set_Visible(Gtk_Widget(Get_Object(Object, "dropexpand")), True);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "dropbox")), True);
          Set_Upper
            (Gtk_Adjustment(Get_Object(Object, "amountadj")),
             Gdouble(PlayerShip.Cargo(CargoIndex).Amount));
       end if;
       if BaseCargoIndex = 0 then
-         Set_Visible(Gtk_Widget(Get_Object(Object, "takeexpand")), False);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "takebox")), False);
       elsif SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
-         Set_Visible(Gtk_Widget(Get_Object(Object, "takeexpand")), True);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "takebox")), True);
          Set_Upper
            (Gtk_Adjustment(Get_Object(Object, "amountadj1")),
             Gdouble(SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount));
@@ -325,8 +325,8 @@ package body Bases.LootUI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "loot");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
-      Hide(Gtk_Widget(Get_Object(Builder, "dropexpand")));
-      Hide(Gtk_Widget(Get_Object(Builder, "takeexpand")));
+      Hide(Gtk_Widget(Get_Object(Builder, "dropbox")));
+      Hide(Gtk_Widget(Get_Object(Builder, "takebox")));
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treeitems")),
          Gtk_Tree_Path_New_From_String("0"),
