@@ -355,6 +355,7 @@ package body Combat.UI is
            (Gtk_Container(Get_Object(Builder, "btnboxboard")),
             SetBoardingParty'Access);
       end if;
+      UpdateHeader;
    end RefreshCombatUI;
 
    procedure ShowCombatUI(NewCombat: Boolean := True) is
@@ -420,6 +421,7 @@ package body Combat.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "combat");
       Hide(Gtk_Widget(Get_Object(Builder, "btnclosecombat")));
+      HideLastMessage(Builder);
       if (HarpoonDuration = 0 and Enemy.HarpoonDuration = 0) or
         ProtoShips_List(EnemyShipIndex).Crew.Length = 0 then
          Hide(Gtk_Widget(Get_Object(Builder, "expboard")));
