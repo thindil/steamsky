@@ -128,6 +128,13 @@ package body Utils.UI is
          CloseOptions(Object);
          return;
       end if;
+      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack"))) =
+        "inventory" then
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Object, "gamestack")),
+            "crew");
+         return;
+      end if;
       case PreviousGameState is
          when SkyMap_View =>
             CreateSkyMap;
