@@ -40,6 +40,7 @@ package Game is
    record
       Name: Unbounded_String; -- Name of skill
       Attribute: Positive; -- Attribute used with that skill
+      Description: Unbounded_String; -- Description of skill
    end record;
    package SkillsData_Container is new Vectors(Positive, Skill_Record);
    Skills_List: SkillsData_Container.Vector; -- Contains data for all skills
