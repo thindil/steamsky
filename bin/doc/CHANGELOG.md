@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: titanium mold, orichalcum mold, titanium gunsmith set, orichalcum
-  gunsmith set, titanium cooking set, orichalcum cooking set, titanium sickle
-  and orichalcum sickle
+  gunsmith set, titanium cooking set, orichalcum cooking set, titanium sickle,
+  orichalcum sickle and titanium saw
 - New crafting recipes: titanium mold, orichalcum mold, titanium gunsmith set,
   orichalcum gunsmith set, titanium cooking set, orichalcum cooking set,
   titanium sickle and orichalcum sickle
