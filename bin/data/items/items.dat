@@ -1191,4 +1191,13 @@ Buyable = Y, N, N, N
 ShowType = Tool
 Value = 2
 Description = Orichalcum tool used in cultivating plants.
+[140]
+Name = Titanium saw
+Weight = 1
+Type = Saw
+Prices = 20, 22, 22, 22
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 3
+Description = Titanium tool used to cut wood.
 []
