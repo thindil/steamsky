@@ -148,9 +148,9 @@ package body Ships.Cargo.UI is
       end if;
       if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
         MissionItemsType then
-         Hide(Gtk_Widget(Get_Object(Builder, "expgive")));
+         Hide(Gtk_Widget(Get_Object(Builder, "givebox")));
       else
-         Show_All(Gtk_Widget(Get_Object(Builder, "expgive")));
+         Show_All(Gtk_Widget(Get_Object(Builder, "givebox")));
       end if;
       Set_Upper(AmountAdj, Gdouble(PlayerShip.Cargo(ItemIndex).Amount));
       Set_Value(AmountAdj, 1.0);
