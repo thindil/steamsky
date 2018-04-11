@@ -60,6 +60,14 @@ package body Bases.SchoolUI is
             Append(SkillsList, SkillsIter);
             Set(SkillsList, SkillsIter, 0, To_String(Skills_List(I).Name));
             Set(SkillsList, SkillsIter, 1, Cost);
+            Set
+              (SkillsList,
+               SkillsIter,
+               2,
+               "Related statistic: " &
+               To_String(Attributes_Names(Skills_List(I).Attribute)) &
+               ". " &
+               To_String(Skills_List(I).Description));
          end if;
       end loop;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
