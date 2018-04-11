@@ -399,6 +399,7 @@ package body Game is
          To_Unbounded_String("WeaponType"),
          To_Unbounded_String("DodgeSkill"),
          To_Unbounded_String("UnarmedSkill"));
+      SeparatorString: String(Positive range 1 .. 2);
    begin
       if BaseSyllablesStart.Length > 0 then
          return True;
@@ -415,9 +416,15 @@ package body Game is
          for I in FieldsNames'Range loop
             if FieldName = FieldsNames(I) then
                StartIndex := 1;
-               Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
+               if I = 9 then
+                  SeparatorString := "; ";
+               else
+                  SeparatorString := ", ";
+               end if;
+               Amount :=
+                 Ada.Strings.Unbounded.Count(Value, SeparatorString) + 1;
                for J in 1 .. Amount loop
-                  EndIndex := Index(Value, ", ", StartIndex);
+                  EndIndex := Index(Value, SeparatorString, StartIndex);
                   if EndIndex = 0 then
                      EndIndex := Length(Value) + 1;
                   end if;
@@ -456,15 +463,16 @@ package body Game is
                            Unbounded_Slice(Value, StartIndex, EndIndex - 1));
                      when 9 =>
                         declare
-                           ColonIndex, AttributeIndex: Positive;
+                           ColonIndex, AttributeIndex, ColonIndex2: Positive;
                            AttributeName: Unbounded_String;
                         begin
                            ColonIndex := Index(Value, ":", StartIndex);
+                           ColonIndex2 := Index(Value, ":", ColonIndex + 1);
                            AttributeName :=
                              Unbounded_Slice
                                (Value,
                                 ColonIndex + 1,
-                                EndIndex - 1);
+                                ColonIndex2 - 1);
                            for I in Attributes_Names.Iterate loop
                               if Attributes_Names(I) = AttributeName then
                                  AttributeIndex :=
@@ -479,7 +487,12 @@ package body Game is
                                    (Value,
                                     StartIndex,
                                     ColonIndex - 1),
-                               Attribute => AttributeIndex));
+                               Attribute => AttributeIndex,
+                               Description =>
+                                 Unbounded_Slice
+                                   (Value,
+                                    ColonIndex2 + 1,
+                                    EndIndex - 1)));
                         end;
                      when 10 =>
                         Items_Types.Append
