@@ -218,6 +218,14 @@ package body Crew.UI.Handlers is
             Append(List, Iter);
             Set(List, Iter, 0, To_String(Skills_List(Skill(1)).Name));
             Set(List, Iter, 1, Gint(Skill(2)));
+            Set
+              (List,
+               Iter,
+               2,
+               "Related statistic: " &
+               To_String(Attributes_Names(Skills_List(Skill(1)).Attribute)) &
+               ". " &
+               To_String(Skills_List(Skill(1)).Description));
          end loop;
       end if;
       SetOrdersList;
