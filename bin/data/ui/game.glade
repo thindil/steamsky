@@ -1195,6 +1195,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
       <!-- column-name guint1 -->
       <column type="guint"/>
+      <!-- column-name gchararray2 -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkListStore" id="skillslist1">
@@ -1203,6 +1205,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
       <!-- column-name guint1 -->
       <column type="guint"/>
+      <!-- column-name gchararray2 -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkListStore" id="speedlist">
@@ -3209,7 +3213,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="recruitbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
@@ -3316,6 +3320,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="model">skillslist</property>
                             <property name="headers_visible">False</property>
                             <property name="headers_clickable">False</property>
+                            <property name="tooltip_column">2</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection">
                                 <property name="mode">none</property>
@@ -3818,7 +3823,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="schoolbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
@@ -3877,6 +3882,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="can_focus">True</property>
                             <property name="model">skillslist1</property>
                             <property name="search_column">0</property>
+                            <property name="tooltip_column">2</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection"/>
                             </child>
@@ -6017,7 +6023,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="crewbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
@@ -6234,6 +6240,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="headers_visible">False</property>
                                         <property name="headers_clickable">False</property>
                                         <property name="search_column">0</property>
+                                        <property name="tooltip_column">2</property>
                                         <child internal-child="selection">
                                           <object class="GtkTreeSelection"/>
                                         </child>

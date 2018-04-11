@@ -89,6 +89,14 @@ package body Bases.UI is
          Append(List, Iter);
          Set(List, Iter, 0, To_String(Skills_List(Skill(1)).Name));
          Set(List, Iter, 1, Gint(Skill(2)));
+         Set
+           (List,
+            Iter,
+            2,
+            "Related statistic: " &
+            To_String(Attributes_Names(Skills_List(Skill(1)).Attribute)) &
+            ". " &
+            To_String(Skills_List(Skill(1)).Description));
       end loop;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if MoneyIndex2 > 0 then
