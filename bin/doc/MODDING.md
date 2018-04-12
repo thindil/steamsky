@@ -98,10 +98,11 @@ to AttributesNames entry.
 ### General informations
 - Open file *game.dat* in *data* directory and edit line which starts with
   Skills.
-- Each value for skills must be separated by comma and space: `, `
-- Each value have format Skill Name`:`Attribute Name. Attribute Name must be
-  name of existing attribute from AttributesNames list. Example: 
-  *Gunnery:Dexterity*
+- Each value for skills must be separated by semicolon and space: `; `
+- Each value have format Skill Name`:`Attribute Name`:`Description. Attribute
+  Name must be name of existing attribute from AttributesNames list. Example: 
+  *Gunnery:Dexterity:Used by gunners, determine chance to hit enemy in ship 
+  combat*
 - Whole Skills entry must be done in one line (if your text editor have
   automatic line wrap enabled, don't forget to fix it).
 
