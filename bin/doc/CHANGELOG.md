@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 - Updated game data
+- Updated MODDING.md
 
 ## [2.2] - 2018-03-25
 
