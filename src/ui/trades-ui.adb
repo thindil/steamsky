@@ -172,8 +172,9 @@ package body Trades.UI is
             To_String(Skills_List(Items_List(ProtoIndex).Value(3)).Name) &
             "/" &
             To_String
-              (Attributes_Names
-                 (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)));
+              (Attributes_List
+                 (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
+                 .Name));
       end if;
       if CargoIndex > 0 then
          Append
@@ -216,9 +217,9 @@ package body Trades.UI is
             ASCII.LF & To_String(Items_List(ProtoIndex).Description));
       end if;
       if CargoIndex = 0 then
-         Set_Visible(Gtk_Widget(Get_Object(Object, "expsell")), False);
+         Hide(Gtk_Widget(Get_Object(Object, "sellbox")));
       else
-         Set_Visible(Gtk_Widget(Get_Object(Object, "expsell")), True);
+         Show_All(Gtk_Widget(Get_Object(Object, "sellbox")));
          Set_Value(AmountAdj, 1.0);
          MaxAmount := PlayerShip.Cargo(CargoIndex).Amount;
          if BaseIndex > 0 then
@@ -237,9 +238,9 @@ package body Trades.UI is
       end if;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if BaseCargoIndex = 0 or MoneyIndex2 = 0 then
-         Set_Visible(Gtk_Widget(Get_Object(Object, "expbuy")), False);
+         Hide(Gtk_Widget(Get_Object(Object, "buybox")));
       else
-         Set_Visible(Gtk_Widget(Get_Object(Object, "expbuy")), True);
+         Show_All(Gtk_Widget(Get_Object(Object, "buybox")));
          Set_Value(AmountAdj2, 1.0);
          MaxAmount := PlayerShip.Cargo(MoneyIndex2).Amount / Price;
          if BaseIndex > 0 then

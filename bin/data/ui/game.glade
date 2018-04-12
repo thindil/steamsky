@@ -7343,7 +7343,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="givebox">
+                      <object class="GtkBox" id="giveboxg">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
@@ -7424,7 +7424,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="tradebox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
@@ -7585,61 +7585,49 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkExpander" id="expbuy">
+                      <object class="GtkBox" id="buybox">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkBox">
+                          <object class="GtkButton" id="btnbuyitem">
+                            <property name="label" translatable="yes">Buy</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkButton" id="btnbuyitem">
-                                <property name="label" translatable="yes">Buy</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <signal name="clicked" handler="Trade_Item" object="btnbuyitem" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="lblbuyamount">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="adjustment">amountadj1</property>
-                                <property name="numeric">True</property>
-                                <property name="update_policy">if-valid</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="halign">start</property>
+                            <signal name="clicked" handler="Trade_Item" object="btnbuyitem" swapped="no"/>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
                         </child>
-                        <child type="label">
-                          <object class="GtkLabel">
+                        <child>
+                          <object class="GtkLabel" id="lblbuyamount">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Buy item</property>
+                            <property name="label" translatable="yes">label</property>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="adjustment">amountadj1</property>
+                            <property name="numeric">True</property>
+                            <property name="update_policy">if-valid</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
@@ -7649,89 +7637,80 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkExpander" id="expsell">
+                      <object class="GtkBox" id="sellbox">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
                         <child>
-                          <object class="GtkBox">
+                          <object class="GtkButton" id="btnsellitem">
+                            <property name="label" translatable="yes">Sell</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="halign">start</property>
+                            <signal name="clicked" handler="Trade_Item" object="btnsellitem" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="lblsellamount">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkButton" id="btnsellitem">
-                                <property name="label" translatable="yes">Sell</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <signal name="clicked" handler="Trade_Item" object="btnsellitem" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="lblsellamount">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="text" translatable="yes">1</property>
-                                <property name="adjustment">amountadj</property>
-                                <property name="numeric">True</property>
-                                <property name="update_policy">if-valid</property>
-                                <property name="value">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">or</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="btnsellall">
-                                <property name="label" translatable="yes">Sell all</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <signal name="clicked" handler="Trade_Item" object="btnsellall" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">4</property>
-                              </packing>
-                            </child>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">label</property>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
                         </child>
-                        <child type="label">
+                        <child>
+                          <object class="GtkSpinButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="text" translatable="yes">1</property>
+                            <property name="adjustment">amountadj</property>
+                            <property name="numeric">True</property>
+                            <property name="update_policy">if-valid</property>
+                            <property name="value">1</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Sell item</property>
+                            <property name="label" translatable="yes">or</property>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="btnsellall">
+                            <property name="label" translatable="yes">Sell all</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="halign">start</property>
+                            <signal name="clicked" handler="Trade_Item" object="btnsellall" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">4</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
