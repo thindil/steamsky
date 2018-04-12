@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
   titanium sickle, orichalcum sickle and titanium saw
 - Ability to enable/disable interface animations
 - Ability to set type of interface animations
-- Descriptions to skills
+- Descriptions to skills and stats
 
 ### Changed
 - Updated interface
