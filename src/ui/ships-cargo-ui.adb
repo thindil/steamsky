@@ -118,8 +118,9 @@ package body Ships.Cargo.UI is
             "Skill: " &
             Skills_List(Items_List(ProtoIndex).Value(3)).Name &
             "/" &
-            Attributes_Names
-              (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute));
+            Attributes_List
+              (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
+              .Name);
       end if;
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lbliteminfo2")),

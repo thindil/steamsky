@@ -97,8 +97,9 @@ package body Bases.LootUI is
             To_String(Skills_List(Items_List(ProtoIndex).Value(3)).Name) &
             "/" &
             To_String
-              (Attributes_Names
-                 (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)));
+              (Attributes_List
+                 (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
+                 .Name));
       end if;
       if CargoIndex > 0 then
          Append

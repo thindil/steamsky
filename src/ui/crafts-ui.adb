@@ -263,7 +263,7 @@ package body Crafts.UI is
          "Skill: " &
          To_String(Skills_List(Recipe.Skill).Name) &
          "/" &
-         To_String(Attributes_Names(Skills_List(Recipe.Skill).Attribute)));
+         To_String(Attributes_List(Skills_List(Recipe.Skill).Attribute).Name));
       Append
         (RecipeInfo,
          ASCII.LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes");

@@ -102,7 +102,7 @@ package body Help.UI is
       VariablesValues: constant array(Positive range <>) of Unbounded_String :=
         (MoneyName,
          Items_List(FindProtoItem(ItemType => FuelType)).Name,
-         Attributes_Names(StrengthIndex),
+         Attributes_List(StrengthIndex).Name,
          HealingTools,
          Skills_List(HealingSkill).Name,
          Skills_List(PilotingSkill).Name,
@@ -110,7 +110,7 @@ package body Help.UI is
          Skills_List(GunnerySkill).Name,
          Skills_List(TalkingSkill).Name,
          Skills_List(PerceptionSkill).Name,
-         Attributes_Names(ConditionIndex),
+         Attributes_List(ConditionIndex).Name,
          Skills_List(DodgeSkill).Name);
       AccelNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("<skymapwindow>/btnupleft"),

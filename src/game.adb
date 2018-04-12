@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -381,7 +381,7 @@ package body Game is
          To_Unbounded_String("FuelType"),
          To_Unbounded_String("MoneyIndex"),
          To_Unbounded_String("TradersName"),
-         To_Unbounded_String("AttributesNames"),
+         To_Unbounded_String("Attributes"),
          To_Unbounded_String("ConditionName"),
          To_Unbounded_String("StrengthName"),
          To_Unbounded_String("HealingSkill"),
@@ -416,7 +416,7 @@ package body Game is
          for I in FieldsNames'Range loop
             if FieldName = FieldsNames(I) then
                StartIndex := 1;
-               if I = 9 then
+               if I = 9 or I = 31 then
                   SeparatorString := "; ";
                else
                   SeparatorString := ", ";
@@ -473,10 +473,10 @@ package body Game is
                                (Value,
                                 ColonIndex + 1,
                                 ColonIndex2 - 1);
-                           for I in Attributes_Names.Iterate loop
-                              if Attributes_Names(I) = AttributeName then
+                           for I in Attributes_List.Iterate loop
+                              if Attributes_List(I).Name = AttributeName then
                                  AttributeIndex :=
-                                   UnboundedString_Container.To_Index(I);
+                                   AttributesData_Container.To_Index(I);
                                  exit;
                               end if;
                            end loop;
@@ -557,15 +557,39 @@ package body Game is
                      when 30 =>
                         TradersName := Value;
                      when 31 =>
-                        Attributes_Names.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
+                        declare
+                           ColonIndex: Positive;
+                        begin
+                           ColonIndex := Index(Value, ":", StartIndex);
+                           Attributes_List.Append
+                           (New_Item =>
+                              (Name =>
+                                 Unbounded_Slice
+                                   (Value,
+                                    StartIndex,
+                                    ColonIndex - 1),
+                               Description =>
+                                 Unbounded_Slice
+                                   (Value,
+                                    ColonIndex + 1,
+                                    EndIndex - 1)));
+                        end;
                      when 32 =>
-                        ConditionIndex :=
-                          Attributes_Names.Find_Index(Item => Value);
+                        for I in Attributes_List.Iterate loop
+                           if Attributes_List(I).Name = Value then
+                              ConditionIndex :=
+                                AttributesData_Container.To_Index(I);
+                              exit;
+                           end if;
+                        end loop;
                      when 33 =>
-                        StrengthIndex :=
-                          Attributes_Names.Find_Index(Item => Value);
+                        for I in Attributes_List.Iterate loop
+                           if Attributes_List(I).Name = Value then
+                              StrengthIndex :=
+                                AttributesData_Container.To_Index(I);
+                              exit;
+                           end if;
+                        end loop;
                      when 34 =>
                         HealingSkill := FindSkillIndex(Value);
                      when 35 =>
