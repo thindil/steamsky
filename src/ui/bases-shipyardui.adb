@@ -208,8 +208,9 @@ package body Bases.ShipyardUI is
          To_String(Skills_List(Modules_List(ModuleIndex).RepairSkill).Name) &
          "/" &
          To_String
-           (Attributes_Names
-              (Skills_List(Modules_List(ModuleIndex).RepairSkill).Attribute)));
+           (Attributes_List
+              (Skills_List(Modules_List(ModuleIndex).RepairSkill).Attribute)
+              .Name));
       if Modules_List(ModuleIndex).Description /= Null_Unbounded_String then
          Append
            (ModuleInfo,

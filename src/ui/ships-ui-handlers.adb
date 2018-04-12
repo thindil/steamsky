@@ -117,9 +117,10 @@ package body Ships.UI.Handlers is
            (Skills_List(Modules_List(Module.ProtoIndex).RepairSkill).Name) &
          "/" &
          To_String
-           (Attributes_Names
+           (Attributes_List
               (Skills_List(Modules_List(Module.ProtoIndex).RepairSkill)
-                 .Attribute)));
+                 .Attribute)
+              .Name));
 
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lblmoduleinfo")),

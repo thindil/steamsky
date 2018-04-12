@@ -209,7 +209,8 @@ package body Crew.UI.Handlers is
               (List,
                Iter,
                0,
-               To_String(Attributes_Names(Attributes_Container.To_Index(I))));
+               To_String
+                 (Attributes_List(Attributes_Container.To_Index(I)).Name));
             Set(List, Iter, 1, Gint(Member.Attributes(I)(1) * 2));
          end loop;
          List := Gtk_List_Store(Get_Object(Builder, "skillslist"));
@@ -223,7 +224,8 @@ package body Crew.UI.Handlers is
                Iter,
                2,
                "Related statistic: " &
-               To_String(Attributes_Names(Skills_List(Skill(1)).Attribute)) &
+               To_String
+                 (Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
                ". " &
                To_String(Skills_List(Skill(1)).Description));
          end loop;
@@ -323,8 +325,9 @@ package body Crew.UI.Handlers is
             "Skill: " &
             Skills_List(Items_List(ProtoIndex).Value(3)).Name &
             "/" &
-            Attributes_Names
-              (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute));
+            Attributes_List
+              (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
+              .Name);
       end if;
       if PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability <
         100 then
