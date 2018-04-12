@@ -65,7 +65,7 @@ package body Bases.SchoolUI is
                SkillsIter,
                2,
                "Related statistic: " &
-               To_String(Attributes_Names(Skills_List(I).Attribute)) &
+               To_String(Attributes_List(Skills_List(I).Attribute).Name) &
                ". " &
                To_String(Skills_List(I).Description));
          end if;

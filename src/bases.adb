@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -213,7 +213,7 @@ package body Bases is
                (Index => SkillIndex, New_Item => (SkillNumber, SkillLevel, 0));
             end if;
          end loop;
-         for J in Attributes_Names.Iterate loop
+         for J in Attributes_List.Iterate loop
             Attributes.Append(New_Item => (GetRandom(3, 50), 0));
          end loop;
          for Skill of Skills loop

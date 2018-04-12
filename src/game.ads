@@ -43,6 +43,12 @@ package Game is
       Description: Unbounded_String; -- Description of skill
    end record;
    package SkillsData_Container is new Vectors(Positive, Skill_Record);
+   type Attribute_Record is -- Data for attributes
+   record
+      Name: Unbounded_String; -- Name of attribute
+      Description: Unbounded_String; -- Description of attribute
+   end record;
+   package AttributesData_Container is new Vectors(Positive, Attribute_Record);
    Skills_List: SkillsData_Container.Vector; -- Contains data for all skills
    RepairTools: Unbounded_String; -- Name of item type used as tool in repairing/upgrading ship
    CleaningTools: Unbounded_String; -- Name of item type used as tool in cleaning ship
@@ -64,8 +70,8 @@ package Game is
      To_Unbounded_String
        ("data" & Dir_Separator); -- Path to directory where are game data files
    TradersName: Unbounded_String; -- Word used in ships names for traders ships (for events)
-   Attributes_Names: UnboundedString_Container
-     .Vector; -- Names of characters attributes
+   Attributes_List: AttributesData_Container
+     .Vector; -- Contains data for all characters attributes
    ConditionIndex: Positive; -- Index of attribute used as bonus to character condition
    StrengthIndex: Positive; -- Index of attribute used to count max character encumbrance
    HealingSkill: Positive; -- Index of skill used to heal wounded crew members

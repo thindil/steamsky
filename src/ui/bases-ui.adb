@@ -80,7 +80,7 @@ package body Bases.UI is
            (List,
             Iter,
             0,
-            To_String(Attributes_Names(Attributes_Container.To_Index(I))));
+            To_String(Attributes_List(Attributes_Container.To_Index(I)).Name));
          Set(List, Iter, 1, Gint(Recruit.Attributes(I)(1) * 2));
       end loop;
       List := Gtk_List_Store(Get_Object(Object, "skillslist"));
@@ -94,7 +94,7 @@ package body Bases.UI is
             Iter,
             2,
             "Related statistic: " &
-            To_String(Attributes_Names(Skills_List(Skill(1)).Attribute)) &
+            To_String(Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
             ". " &
             To_String(Skills_List(Skill(1)).Description));
       end loop;

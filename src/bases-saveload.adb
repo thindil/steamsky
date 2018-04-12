@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -295,7 +295,7 @@ package body Bases.SaveLoad is
                   BaseRecruits(BaseRecruits.Last_Index).Skills := Skills;
                   SkillsLength :=
                     Positive'Value(To_String(ReadData(SaveGame)));
-                  if SkillsLength /= Natural(Attributes_Names.Length) then
+                  if SkillsLength /= Natural(Attributes_List.Length) then
                      raise SaveGame_Invalid_Data
                        with "Different amount of character statistics.";
                   end if;
