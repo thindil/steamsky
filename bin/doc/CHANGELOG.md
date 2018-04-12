@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
   orichalcum sickle and titanium saw
 - New crafting recipes: titanium mold, orichalcum mold, titanium gunsmith set,
   orichalcum gunsmith set, titanium cooking set, orichalcum cooking set,
-  titanium sickle and orichalcum sickle
+  titanium sickle, orichalcum sickle and titanium saw
 - Ability to enable/disable interface animations
 - Ability to set type of interface animations
 - Descriptions to skills
