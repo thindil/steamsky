@@ -539,10 +539,9 @@ Description = Large leather sheet used in crafting.
 [66]
 Name = Bronze sword
 Weight = 2
-Type = MeleeWeapon
+Type = Weapon
 Prices = 10, 15, 15, 15
 Buyable = Y, N, N, N
-ShowType = Weapon
 Value = 15, 20, 17
 Description = Simple sword made of bronze, used in melee combat.
 [67]
@@ -607,10 +606,9 @@ Description = Standard shield made of wood, used in melee combat.
 [74]
 Name = Bronze short sword
 Weight = 1
-Type = MeleeWeapon
+Type = Weapon
 Prices = 7, 10, 10, 10
 Buyable = Y, N, N, N
-ShowType = Weapon
 Value = 15, 15, 17
 Description = Simple short sword made of bronze, used in melee combat.
 [75]
@@ -625,19 +623,17 @@ Description = Iron tool used in metalsmith recipes.
 [76]
 Name = Iron sword
 Weight = 2
-Type = MeleeWeapon
+Type = Weapon
 Prices = 15, 17, 17, 17
 Buyable = Y, N, N, N
-ShowType = Weapon
 Value = 10, 25, 17
 Description = Simple sword made of iron, used in melee combat.
 [77]
 Name = Iron short sword
 Weight = 1
-Type = MeleeWeapon
+Type = Weapon
 Prices = 10, 12, 12, 12
 Buyable = Y, N, N, N
-ShowType = Weapon
 Value = 10, 20, 17
 Description = Simple short sword made of iron, used in melee combat.
 [78]
@@ -723,19 +719,17 @@ Description = Standard type of armor, made of iron, protects legs.
 [87]
 Name = Steel short sword
 Weight = 1
-Type = MeleeWeapon
+Type = Weapon
 Prices = 15, 17, 17, 17
 Buyable = Y, N, N, N
-ShowType = Weapon
 Value = 5, 25, 17
 Description = Simple short sword made of steel, used in melee combat.
 [88]
 Name = Steel sword
 Weight = 2
-Type = MeleeWeapon
+Type = Weapon
 Prices = 20, 22, 22, 22
 Buyable = Y, N, N, N
-ShowType = Weapon
 Value = 5, 30, 17
 Description = Simple sword made of steel, used in melee combat.
 [89]
@@ -1044,19 +1038,17 @@ Description = Harpoon made of titanium with long rope. Used as ammunition for ha
 [123]
 Name = Titanium short sword
 Weight = 2
-Type = MeleeWeapon
+Type = Weapon
 Prices = 22, 24, 24, 24
 Buyable = Y, N, N, N
-ShowType = Weapon
 Value = 3, 30, 17
 Description = Simple short sword made of titanium, used in melee combat.
 [124]
 Name = Titanium sword
 Weight = 3
-Type = MeleeWeapon
+Type = Weapon
 Prices = 25, 27, 27, 27
 Buyable = Y, N, N, N
-ShowType = Weapon
 Value = 3, 35, 17
 Description = Simple sword made of titanium, used in melee combat.
 [125]
