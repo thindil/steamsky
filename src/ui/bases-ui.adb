@@ -82,6 +82,12 @@ package body Bases.UI is
             0,
             To_String(Attributes_List(Attributes_Container.To_Index(I)).Name));
          Set(List, Iter, 1, Gint(Recruit.Attributes(I)(1) * 2));
+         Set
+           (List,
+            Iter,
+            2,
+            To_String
+              (Attributes_List(Attributes_Container.To_Index(I)).Description));
       end loop;
       List := Gtk_List_Store(Get_Object(Object, "skillslist"));
       Clear(List);
