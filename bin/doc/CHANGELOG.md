@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated game data
 - Updated MODDING.md
+- Changed item type MeleeWeapon to Weapon
 
 ## [2.2] - 2018-03-25
 
