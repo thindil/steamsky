@@ -86,12 +86,23 @@ edit line which starts with TradersName. Value after equal sign can be any
 single word.
 
 ## Characters attributes
-To change/add/remove characters attributes, open file *game.dat* in *data* 
-directory and edit line which starts with AttributesNames. Each value for item
-type must be separated by comma and space: `, `. Whole AttributesNames entry 
-must be done in one line (if your text editor have automatic line wrap 
-enabled, don't forget to fix it). To add new attribute, just append it name 
-to AttributesNames entry.
+
+### General informations
+- To change/add/remove characters attributes, open file *game.dat* in *data* 
+  directory and edit line which starts with Attributes. 
+- Each value for attribute must have format Attribute Name`:`Description and 
+  be separated by semicolon and space: `; `. Example: *Dexterity:Nimbleness 
+  of character, used in many crafts*
+- Whole Attributes entry must be done in one line (if your text editor have 
+  automatic line wrap enabled, don't forget to fix it).
+
+### Changing existing attribute
+- After change attribute name, don't forget to made proper changes in this
+  same data file (if needed).
+
+### Adding new attribute
+- To add new attribute, just append it name and description to Attributes 
+  entry. Name must be unique for each attribute.
 
 ## Skills
 
@@ -100,7 +111,7 @@ to AttributesNames entry.
   Skills.
 - Each value for skills must be separated by semicolon and space: `; `
 - Each value have format Skill Name`:`Attribute Name`:`Description. Attribute
-  Name must be name of existing attribute from AttributesNames list. Example: 
+  Name must be name of existing attribute from Attributes list. Example: 
   *Gunnery:Dexterity:Used by gunners, determine chance to hit enemy in ship 
   combat*
 - Whole Skills entry must be done in one line (if your text editor have
@@ -110,7 +121,7 @@ to AttributesNames entry.
 - After change skill name, you been need to made proper changes in other game
   data files (recipes, items and this same file) if needed.
 - To change which attribute is assigned to selected skill, just enter new name
-  of existing attribute from AttributesNames list.
+  of existing attribute from Attributes list.
 
 ### Adding new skills
 - To add new skill, just append it name and assigned attribute name to Skills
