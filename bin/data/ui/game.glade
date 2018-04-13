@@ -1235,6 +1235,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
       <!-- column-name guint1 -->
       <column type="guint"/>
+      <!-- column-name gchararray2 -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkListStore" id="statuseslist">
@@ -3282,6 +3284,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="headers_visible">False</property>
                         <property name="headers_clickable">False</property>
                         <property name="search_column">0</property>
+                        <property name="tooltip_column">2</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection">
                             <property name="mode">none</property>
@@ -6191,6 +6194,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="headers_visible">False</property>
                                     <property name="headers_clickable">False</property>
                                     <property name="search_column">0</property>
+                                    <property name="tooltip_column">2</property>
                                     <child internal-child="selection">
                                       <object class="GtkTreeSelection"/>
                                     </child>
