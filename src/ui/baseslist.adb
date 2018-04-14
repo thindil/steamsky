@@ -191,7 +191,7 @@ package body BasesList is
          else
             Append
               (BaseInfo,
-               ASCII.LF & "You can't recruit crew members on this base.");
+               ASCII.LF & "You can't recruit crew members at this base.");
          end if;
          if SkyBases(BaseIndex).Owner /= Abandoned and
            SkyBases(BaseIndex).Reputation(1) > -25 then
@@ -209,7 +209,7 @@ package body BasesList is
          else
             Append
               (BaseInfo,
-               ASCII.LF & "You can't ask for events in this base.");
+               ASCII.LF & "You can't ask for events at this base.");
          end if;
          if SkyBases(BaseIndex).Owner /= Abandoned and
            SkyBases(BaseIndex).Reputation(1) > -1 then
@@ -227,7 +227,7 @@ package body BasesList is
          else
             Append
               (BaseInfo,
-               ASCII.LF & "You can't take missions in this base.");
+               ASCII.LF & "You can't take missions at this base.");
          end if;
          Append(BaseInfo, ASCII.LF & "Reputation: ");
          case SkyBases(BaseIndex).Reputation(1) is

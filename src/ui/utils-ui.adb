@@ -80,7 +80,7 @@ package body Utils.UI is
    function QuitGame(User_Data: access GObject_Record'Class) return Boolean is
    begin
       if ShowConfirmDialog
-          ("Are you sure want to quit game?",
+          ("Are you sure want to quit?",
            Gtk_Window(User_Data)) then
          EndGame(True);
          ShowMainMenu;
