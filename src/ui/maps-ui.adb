@@ -254,7 +254,7 @@ package body Maps.UI is
             "[<span foreground=""#4E9A06"">P</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblpilot")),
-            "Pilot is on position.");
+            "Pilot is in position.");
       else
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblpilot")),
@@ -269,7 +269,7 @@ package body Maps.UI is
             "[<span foreground=""#4E9A06"">E</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblengineer")),
-            "Engineer is on position.");
+            "Engineer is in position.");
       else
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblengineer")),
@@ -291,7 +291,7 @@ package body Maps.UI is
             "[<span foreground=""red"">G</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblgunners")),
-            "One or more guns don't have gunner.");
+            "One or more guns don't have a gunner.");
       end if;
       if NeedRepairs then
          if HaveRepairman then
@@ -313,7 +313,7 @@ package body Maps.UI is
          Set_Text(Gtk_Label(Get_Object(Builder, "lblrepairs")), "[R]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblrepairs")),
-            "Ship no need repairs.");
+            "Ship needs no repairs.");
       end if;
       if NeedWorker then
          if HaveWorker then
@@ -329,7 +329,7 @@ package body Maps.UI is
                "[<span foreground=""red"">M</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblcrafting")),
-               "You need to assing some crew members to manufacturing.");
+               "You need to assign crew members to manufacturing.");
          end if;
       else
          Set_Text(Gtk_Label(Get_Object(Builder, "lblcrafting")), "[M]");
@@ -365,14 +365,14 @@ package body Maps.UI is
             "[<span foreground=""#4E9A06"">T</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lbltalk")),
-            "Trader is on position.");
+            "Trader is in position.");
       elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lbltalk")),
             "[<span foreground=""red"">T</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lbltalk")),
-            "No trader assigned. You need one for talk/trade.");
+            "No trader assigned. You need one to talk/trade.");
       elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
          if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
              .EType =
@@ -382,7 +382,7 @@ package body Maps.UI is
                "[<span foreground=""red"">T</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lbltalk")),
-               "No trader assigned. You need one for talk/trade.");
+               "No trader assigned. You need one to talk/trade.");
          end if;
       else
          Set_Text(Gtk_Label(Get_Object(Builder, "lbltalk")), "[T]");
@@ -410,7 +410,7 @@ package body Maps.UI is
          Set_Text(Gtk_Label(Get_Object(Builder, "lblclean")), "[C]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblclean")),
-            "Ship no need cleaning.");
+            "Ship needs no cleaning.");
       end if;
    end UpdateHeader;
 

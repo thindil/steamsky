@@ -221,11 +221,11 @@ package body Missions.UI is
               (Gtk_Label(Get_Object(Builder, "lblavailablemissions")),
                "You can take" &
                Natural'Image(MissionsLimit) &
-               " more missions in this base.");
+               " more missions in from base.");
          else
             Set_Label
               (Gtk_Label(Get_Object(Builder, "lblavailablemissions")),
-               "You can't take any more missions in this base.");
+               "You can't take any more missions from this base.");
             CanAccept := False;
          end if;
          if not CanAccept then
@@ -252,7 +252,7 @@ package body Missions.UI is
             Set_Label(Gtk_Label(Get_Object(Builder, "lblfinished")), "");
             Set_Label
               (Gtk_Button(Get_Object(Builder, "btndestination")),
-               "Set mission as destination for ship");
+               "Set mission as destination for the ship");
          end if;
       end if;
    end ShowMissionInfo;
@@ -308,7 +308,7 @@ package body Missions.UI is
          end if;
          PlayerShip.DestinationX := X;
          PlayerShip.DestinationY := Y;
-         AddMessage("You set travel destination for your ship.", OrderMessage);
+         AddMessage("You set the travel destination for your ship.", OrderMessage);
          CreateSkyMap;
       end if;
       Set_Visible_Child_Name
