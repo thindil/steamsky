@@ -192,7 +192,7 @@ package body Statistics.UI is
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblmissions")),
-         "Missions finished:" &
+         "Missions completed:" &
          Natural'Image(TotalFinished) &
          " (" &
          To_String

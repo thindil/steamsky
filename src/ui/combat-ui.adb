@@ -68,9 +68,9 @@ package body Combat.UI is
      (To_Unbounded_String("Don't shoot"),
       To_Unbounded_String("Precise fire"),
       To_Unbounded_String("Fire at will"),
-      To_Unbounded_String("Aim for engine"),
-      To_Unbounded_String("Aim in weapon"),
-      To_Unbounded_String("Aim in hull"));
+      To_Unbounded_String("Aim for their engine"),
+      To_Unbounded_String("Aim for their weapon"),
+      To_Unbounded_String("Aim for their hull"));
 
    procedure RefreshCombatUI;
 

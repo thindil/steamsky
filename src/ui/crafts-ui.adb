@@ -280,17 +280,17 @@ package body Crafts.UI is
          if not HaveMaterials then
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblcrafterror")),
-               "You can't craft this recipe because you don't have proper materials.");
+               "You can't craft this recipe because you don't have the proper materials.");
          end if;
          if not HaveTool then
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblcrafterror")),
-               "You can't craft this recipe because you don't have proper tool.");
+               "You can't craft this recipe because you don't have the proper tool.");
          end if;
          if not HaveWorkplace then
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblcrafterror")),
-               "You can't craft this recipe because you don't have proper workshop.");
+               "You can't craft this recipe because you don't have the proper workshop.");
          end if;
       end if;
    end ShowRecipeInfo;
