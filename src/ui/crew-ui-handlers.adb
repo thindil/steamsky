@@ -333,6 +333,13 @@ package body Crew.UI.Handlers is
             Attributes_List
               (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
               .Name);
+         if Items_List(ProtoIndex).Value(4) = 1 then
+            Append(ItemInfo, ASCII.LF & "Can be used with shield.");
+         else
+            Append
+              (ItemInfo,
+               ASCII.LF & "Can't be used with shield (two-handed weapon).");
+         end if;
       end if;
       ShowItemDamage
         (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability,
