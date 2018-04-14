@@ -26,7 +26,6 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
-with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
@@ -74,8 +73,6 @@ package body Trades.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       MoneyIndex2, MaxAmount: Natural;
       FreeSpace: Integer;
-      DamagePercent: Gdouble;
-      DamageBar: constant GObject := Get_Object(Object, "tradedamagebar");
       AmountAdj2: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Builder, "amountadj1"));
       AmountAdj: constant Gtk_Adjustment :=
@@ -182,23 +179,9 @@ package body Trades.UI is
             ASCII.LF &
             "Owned:" &
             Positive'Image(PlayerShip.Cargo(CargoIndex).Amount));
-         if PlayerShip.Cargo(CargoIndex).Durability < 100 then
-            Set_Visible(Gtk_Widget(DamageBar), True);
-            DamagePercent :=
-              1.0 - (Gdouble(PlayerShip.Cargo(CargoIndex).Durability) / 100.0);
-            Set_Fraction(Gtk_Progress_Bar(DamageBar), DamagePercent);
-            if DamagePercent < 0.2 then
-               Set_Text(Gtk_Progress_Bar(DamageBar), "Slightly used");
-            elsif DamagePercent < 0.5 then
-               Set_Text(Gtk_Progress_Bar(DamageBar), "Damaged");
-            elsif DamagePercent < 0.8 then
-               Set_Text(Gtk_Progress_Bar(DamageBar), "Heavily damaged");
-            else
-               Set_Text(Gtk_Progress_Bar(DamageBar), "Almost destroyed");
-            end if;
-         else
-            Set_Visible(Gtk_Widget(DamageBar), False);
-         end if;
+         ShowItemDamage
+           (PlayerShip.Cargo(CargoIndex).Durability,
+            Get_Object(Object, "tradedamagebar"));
       end if;
       if BaseCargoIndex > 0 then
          if BaseIndex > 0 then

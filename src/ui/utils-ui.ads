@@ -18,6 +18,7 @@
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Widget; use Gtk.Widget;
+with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Gdk.Event; use Gdk.Event;
 
@@ -51,5 +52,8 @@ package Utils.UI is
    procedure CloseMessages
      (Object: access Gtkada_Builder_Record'
         Class); -- Switch back to skymap or combat from info
+   procedure ShowItemDamage
+     (ItemDurability: Natural;
+      DamageBar: GObject); -- Show or hide info about item damage
 
 end Utils.UI;
