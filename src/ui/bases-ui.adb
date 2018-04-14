@@ -128,7 +128,7 @@ package body Bases.UI is
       else
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblrecruitmoney")),
-            "You don't have any money for recruit anyone");
+            "You don't have enough money to recruit anyone");
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnrecruit1")), False);
       end if;
    end ShowRecruitInfo;
@@ -415,16 +415,16 @@ package body Bases.UI is
          end if;
       end loop;
       Append(RepairsList, RepairsIter);
-      Set(RepairsList, RepairsIter, 0, "Slowly repair whole ship");
+      Set(RepairsList, RepairsIter, 0, "Slowly repair the whole ship");
       Set(RepairsList, RepairsIter, 1, 0);
       if SkyBases(BaseIndex).Population > 149 then
          Append(RepairsList, RepairsIter);
-         Set(RepairsList, RepairsIter, 0, "Repair whole ship");
+         Set(RepairsList, RepairsIter, 0, "Repair the whole ship");
          Set(RepairsList, RepairsIter, 1, -1);
       end if;
       if SkyBases(BaseIndex).Population > 299 then
          Append(RepairsList, RepairsIter);
-         Set(RepairsList, RepairsIter, 0, "Fast repair whole ship");
+         Set(RepairsList, RepairsIter, 0, "Quickly repair the whole ship");
          Set(RepairsList, RepairsIter, 1, -2);
       end if;
       Set_Label
