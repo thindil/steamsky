@@ -355,17 +355,37 @@ package body Crew.UI.Handlers is
      (Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
       Path: UTF8_String) is
       pragma Unreferenced(Path);
+      Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
       ItemType: constant Unbounded_String :=
-        Items_List
-          (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
-          .IType;
+        Items_List(Member.Inventory(ItemIndex).ProtoIndex).IType;
    begin
       if Get_Active(Self) then
          TakeOffItem(MemberIndex, ItemIndex);
       else
          if ItemType = WeaponType then
+            if Items_List(Member.Inventory(ItemIndex).ProtoIndex).Value(4) =
+              2 and
+              Member.Equipment(2) /= 0 then
+               ShowDialog
+                 (To_String(Member.Name) &
+                  " can't use this weapon because have shield equiped. Take off shield first.",
+                  Gtk_Window(Get_Object(Builder, "skymapwindow")));
+               return;
+            end if;
             PlayerShip.Crew(MemberIndex).Equipment(1) := ItemIndex;
          elsif ItemType = ShieldType then
+            if Member.Equipment(1) > 0 then
+               if Items_List(Member.Inventory(Member.Equipment(1)).ProtoIndex)
+                   .Value
+                   (4) =
+                 2 then
+                  ShowDialog
+                    (To_String(Member.Name) &
+                     " can't use shield because have equiped two-hand weapon. Take off weapon first.",
+                     Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                  return;
+               end if;
+            end if;
             PlayerShip.Crew(MemberIndex).Equipment(2) := ItemIndex;
          elsif ItemType = HeadArmor then
             PlayerShip.Crew(MemberIndex).Equipment(3) := ItemIndex;
