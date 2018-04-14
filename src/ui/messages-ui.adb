@@ -39,7 +39,7 @@ package body Messages.UI is
          To_Unbounded_String("cyan"));
    begin
       if MessagesAmount(MessagesType) = 0 then
-         Set_Text(MessagesBuffer, "There no messages of that type.");
+         Set_Text(MessagesBuffer, "There are no messages of that type.");
       else
          Set_Text(MessagesBuffer, "");
          Get_Start_Iter(MessagesBuffer, MessagesIter);
@@ -76,7 +76,7 @@ package body Messages.UI is
    procedure DeleteMessages(Object: access Gtkada_Builder_Record'Class) is
    begin
       if ShowConfirmDialog
-          ("Are you sure want to clear all messages?",
+          ("Are you sure you want to clear all messages?",
            Gtk_Window(Get_Object(Object, "messageswindow"))) then
          ClearMessages;
          ShowMessages(Default);
