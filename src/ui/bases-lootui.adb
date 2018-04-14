@@ -25,7 +25,6 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
-with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
@@ -49,9 +48,7 @@ package body Bases.LootUI is
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      DamagePercent: Gdouble;
       FreeSpace: Integer;
-      DamageBar: constant GObject := Get_Object(Object, "lootdamagebar");
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -107,23 +104,9 @@ package body Bases.LootUI is
             ASCII.LF &
             "Owned:" &
             Positive'Image(PlayerShip.Cargo(CargoIndex).Amount));
-         if PlayerShip.Cargo(CargoIndex).Durability < 100 then
-            Set_Visible(Gtk_Widget(DamageBar), True);
-            DamagePercent :=
-              1.0 - (Gdouble(PlayerShip.Cargo(CargoIndex).Durability) / 100.0);
-            Set_Fraction(Gtk_Progress_Bar(DamageBar), DamagePercent);
-            if DamagePercent < 0.2 then
-               Set_Text(Gtk_Progress_Bar(DamageBar), "Slightly used");
-            elsif DamagePercent < 0.5 then
-               Set_Text(Gtk_Progress_Bar(DamageBar), "Damaged");
-            elsif DamagePercent < 0.8 then
-               Set_Text(Gtk_Progress_Bar(DamageBar), "Heavily damaged");
-            else
-               Set_Text(Gtk_Progress_Bar(DamageBar), "Almost destroyed");
-            end if;
-         else
-            Set_Visible(Gtk_Widget(DamageBar), False);
-         end if;
+         ShowItemDamage
+           (PlayerShip.Cargo(CargoIndex).Durability,
+            Get_Object(Object, "lootdamagebar"));
       end if;
       if BaseCargoIndex > 0 then
          if SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then

@@ -25,7 +25,6 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Window; use Gtk.Window;
-with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
@@ -69,8 +68,6 @@ package body Ships.Cargo.UI is
       CargoModel: Gtk_Tree_Model;
       ItemInfo: Unbounded_String;
       ProtoIndex, ItemWeight: Positive;
-      DamagePercent: Gdouble;
-      DamageBar: constant GObject := Get_Object(Object, "itemdamagebar2");
       AmountAdj: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Object, "amountadj"));
       AmountAdj2: constant Gtk_Adjustment :=
@@ -125,23 +122,9 @@ package body Ships.Cargo.UI is
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lbliteminfo2")),
          To_String(ItemInfo));
-      if PlayerShip.Cargo(ItemIndex).Durability < 100 then
-         Set_Visible(Gtk_Widget(DamageBar), True);
-         DamagePercent :=
-           1.0 - (Gdouble(PlayerShip.Cargo(ItemIndex).Durability) / 100.0);
-         Set_Fraction(Gtk_Progress_Bar(DamageBar), DamagePercent);
-         if DamagePercent < 0.2 then
-            Set_Text(Gtk_Progress_Bar(DamageBar), "Slightly used");
-         elsif DamagePercent < 0.5 then
-            Set_Text(Gtk_Progress_Bar(DamageBar), "Damaged");
-         elsif DamagePercent < 0.8 then
-            Set_Text(Gtk_Progress_Bar(DamageBar), "Heavily damaged");
-         else
-            Set_Text(Gtk_Progress_Bar(DamageBar), "Almost destroyed");
-         end if;
-      else
-         Set_Visible(Gtk_Widget(DamageBar), False);
-      end if;
+      ShowItemDamage
+        (PlayerShip.Cargo(ItemIndex).Durability,
+         Get_Object(Object, "itemdamagebar2"));
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lbldescription2")),
