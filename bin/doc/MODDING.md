@@ -237,13 +237,14 @@ DodgeSkill. Value after equal sign must be existing skill name.
   reduced by one portion. For 'Drink', value of thirst reduced by one portion.
   For ammunition it is damage done by that ammunition. For working tools it is
   chance for item to be damaged during work. For harpoon guns ammunition it is
-  how long (in combat turns) item will be stuck in enemy ship. For melee
-  weapons and armor pieces first value is change for item to be damaged during
-  combat, second value separated by `, ` (comma and space) for melee weapons
-  is damage done by weapon and for armor piece it is amount of damage reduced
-  by this armor. Third value for melee weapons is number of skill used by this
-  weapon (from *game.dat* file, entry *Skills*) and for armor is amount of
-  levels of dodge skill which this armor reduce when weared.
+  how long (in combat turns) item will be stuck in enemy ship. For weapons and
+  armor pieces first value is change for item to be damaged during combat, 
+  second value separated by `, ` (comma and space) for weapons is damage done
+  by weapon and for armor piece it is amount of damage reduced by this armor.
+  Third value for weapons is number of skill used by this weapon (from 
+  *game.dat* file, entry *Skills*) and for armor is amount of levels of dodge 
+  skill which this armor reduce when weared. Forth value for weapon is amount
+  of hands used (1 for one-handed, 2 for two-handed weapons).
 - Description: Any length description of item.
 
 ## Recipes
