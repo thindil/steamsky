@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Ability to enable/disable interface animations
 - Ability to set type of interface animations
 - Descriptions for skills and stats
+- Option to set how much hands weapons needs to use (one-handed, two-handed)
 
 ### Changed
 - Updated interface
