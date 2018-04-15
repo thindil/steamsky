@@ -85,3 +85,13 @@ GtkFrame > GtkLabel {
    border-color:rgb(204,87,93);
 }
 
+.tooltip {
+   border-style:solid;
+   border-width:1px;
+   border-color:rgb(64,69,82);
+   background:rgb(25,25,25);
+}
+
+.tooltip * {
+   background:rgb(25,25,25);
+}
