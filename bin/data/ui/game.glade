@@ -6484,6 +6484,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkTreeView" id="treeinventory">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">To wear/take off item select item and then click on Used checkbox.</property>
                         <property name="model">inventorylist</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Item_Info2" swapped="no"/>
@@ -6493,6 +6494,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <child>
                           <object class="GtkTreeViewColumn" id="columninventory">
                             <property name="title" translatable="yes">Name</property>
+                            <property name="expand">True</property>
                             <property name="sort_indicator">True</property>
                             <property name="sort_column_id">0</property>
                             <child>
@@ -6505,6 +6507,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn">
+                            <property name="sizing">fixed</property>
                             <property name="title" translatable="yes">Used</property>
                             <property name="sort_indicator">True</property>
                             <property name="sort_column_id">2</property>
