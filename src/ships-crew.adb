@@ -404,7 +404,7 @@ package body Ships.Crew is
          end if;
    end GiveOrders;
 
-   procedure UpdateOrders(Ship: in out ShipRecord) is
+   procedure UpdateOrders(Ship: in out ShipRecord; Combat: Boolean := False) is
       HavePilot,
       HaveEngineer,
       HaveUpgrade,
@@ -421,11 +421,16 @@ package body Ships.Crew is
       function UpdatePosition
         (Order: Crew_Orders;
          MaxPriority: Boolean := True) return Boolean is
-         ModuleIndex, MemberIndex: Natural := 0;
+         ModuleIndex, MemberIndex, OrderIndex: Natural := 0;
       begin
+         if Crew_Orders'Pos(Order) < Crew_Orders'Pos(Defend) then
+            OrderIndex := Crew_Orders'Pos(Order) + 1;
+         else
+            OrderIndex := Crew_Orders'Pos(Order);
+         end if;
          if MaxPriority then
             for I in Ship.Crew.Iterate loop
-               if Ship.Crew(I).Orders(Crew_Orders'Pos(Order) + 1) = 2 and
+               if Ship.Crew(I).Orders(OrderIndex) = 2 and
                  Ship.Crew(I).Order /= Order and
                  Ship.Crew(I).PreviousOrder /= Order then
                   MemberIndex := Crew_Container.To_Index(I);
@@ -434,7 +439,7 @@ package body Ships.Crew is
             end loop;
          else
             for I in Ship.Crew.Iterate loop
-               if Ship.Crew(I).Orders(Crew_Orders'Pos(Order) + 1) = 1 and
+               if Ship.Crew(I).Orders(OrderIndex) = 1 and
                  Ship.Crew(I).Order = Rest and
                  Ship.Crew(I).PreviousOrder = Rest then
                   MemberIndex := Crew_Container.To_Index(I);
@@ -634,6 +639,14 @@ package body Ships.Crew is
             UpdateOrders(Ship);
          end if;
       end if;
+      if Combat then
+         if UpdatePosition(Defend) then
+            UpdateOrders(Ship);
+         end if;
+         if UpdatePosition(Boarding) then
+            UpdateOrders(Ship);
+         end if;
+      end if;
       if not HavePilot then
          if UpdatePosition(Pilot, False) then
             UpdateOrders(Ship);
@@ -687,6 +700,14 @@ package body Ships.Crew is
       if NeedRepairs and
         FindItem(Inventory => Ship.Cargo, ItemType => RepairTools) > 0 then
          if UpdatePosition(Repair, False) then
+            UpdateOrders(Ship);
+         end if;
+      end if;
+      if Combat then
+         if UpdatePosition(Defend, False) then
+            UpdateOrders(Ship);
+         end if;
+         if UpdatePosition(Boarding, False) then
             UpdateOrders(Ship);
          end if;
       end if;

@@ -1163,6 +1163,14 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <col id="0" translatable="yes">Cleaning ship</col>
         <col id="1" translatable="yes">None</col>
       </row>
+      <row>
+        <col id="0" translatable="yes">Defend ship</col>
+        <col id="1" translatable="yes">None</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Board enemy ship</col>
+        <col id="1" translatable="yes">None</col>
+      </row>
     </data>
   </object>
   <object class="GtkListStore" id="recipeslist">
