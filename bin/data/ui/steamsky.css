@@ -9,16 +9,14 @@
 *:hover, 
    GtkButton:hover *, 
    GtkMenuItem:hover *,
-   .entry:selected {
+   .entry:selected,
+   GtkButton:focus,
+   GtkButton:focus * {
   background:rgb(64,69,82);
 }
 
-GtkButton:focus,
-   GtkButton:active,
-   GtkButton:focus *, 
+GtkButton:active,
    GtkButton:active *, 
-   GtkMenuItem:focus *, 
-   GtkMenuItem:active *,
    GtkTreeView:selected, 
    GtkTreeView:selected:focus {
   background:rgb(204,87,93);
