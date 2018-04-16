@@ -29,7 +29,7 @@ with Goals; use Goals;
 
 package body Game.SaveLoad is
 
-   SaveVersion: constant String := "1.8";
+   SaveVersion: constant String := "2.3";
 
    procedure SaveGame is
       SaveGame: File_Type;

@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -37,7 +37,7 @@ package Crew is
       Rest,
       Defend,
       Boarding);
-   type Orders_Array is array(1 .. 9) of Natural;
+   type Orders_Array is array(1 .. 11) of Natural;
    type Attributes_Array is array(1 .. 2) of Natural;
    type Equipment_Array is array(1 .. 7) of Natural;
    package Attributes_Container is new Vectors(Positive, Attributes_Array);

@@ -1149,6 +1149,10 @@ package body Combat is
       if HarpoonDuration > 0 then
          HarpoonDuration := HarpoonDuration - 1;
       end if;
+      if Enemy.HarpoonDuration > 0 or
+        HarpoonDuration > 0 then -- Set defenders/boarding party on player ship
+         UpdateOrders(PlayerShip, True);
+      end if;
       if not EndCombat then
          UpdateGame(1);
       elsif PlayerShip.Crew(1).Health > 0 then

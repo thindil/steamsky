@@ -42,6 +42,8 @@ package Ships.Crew is
       CheckPriorities: Boolean :=
         True); -- Change order for selected crew member
    procedure UpdateOrders
-     (Ship: in out ShipRecord); -- Update crew orders based on their orders priorities
+     (Ship: in out ShipRecord;
+      Combat: Boolean :=
+        False); -- Update crew orders based on their orders priorities
 
 end Ships.Crew;
