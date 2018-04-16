@@ -7328,7 +7328,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="giveboxg">
+                      <object class="GtkBox" id="givebox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
