@@ -1645,7 +1645,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="can_focus">False</property>
             <property name="transition_type">crossfade</property>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="mapbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
@@ -2066,7 +2066,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="messagesbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
@@ -2099,10 +2099,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnclearmessages">
-                        <property name="label" translatable="yes">Delete all messages</property>
+                        <property name="label" translatable="yes">_Delete all messages</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="Delete_Messages" swapped="no"/>
                       </object>
                       <packing>

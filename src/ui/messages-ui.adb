@@ -63,7 +63,6 @@ package body Messages.UI is
             end if;
          end loop;
       end if;
-      null;
    end ShowMessages;
 
    procedure SelectMessages(Object: access Gtkada_Builder_Record'Class) is
@@ -99,6 +98,7 @@ package body Messages.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "lastmessages");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
+      Grab_Focus(Gtk_Widget(Get_Object(Builder, "cmbmessages")));
    end ShowMessagesUI;
 
 end Messages.UI;
