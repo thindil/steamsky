@@ -103,7 +103,9 @@ package body Events.UI is
       end if;
       PlayerShip.DestinationX := Events_List(EventIndex).SkyX;
       PlayerShip.DestinationY := Events_List(EventIndex).SkyY;
-      AddMessage("You set the travel destination for your ship.", OrderMessage);
+      AddMessage
+        ("You set the travel destination for your ship.",
+         OrderMessage);
       CreateSkyMap;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")),

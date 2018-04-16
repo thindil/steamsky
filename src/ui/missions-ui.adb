@@ -308,7 +308,9 @@ package body Missions.UI is
          end if;
          PlayerShip.DestinationX := X;
          PlayerShip.DestinationY := Y;
-         AddMessage("You set the travel destination for your ship.", OrderMessage);
+         AddMessage
+           ("You set the travel destination for your ship.",
+            OrderMessage);
          CreateSkyMap;
       end if;
       Set_Visible_Child_Name
