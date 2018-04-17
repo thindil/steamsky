@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -50,7 +50,9 @@ package body Mobs is
          To_Unbounded_String("Upgrading ship"),
          To_Unbounded_String("Talking in bases"),
          To_Unbounded_String("Healing wounded"),
-         To_Unbounded_String("Cleaning ship"));
+         To_Unbounded_String("Cleaning ship"),
+         To_Unbounded_String("Defend ship"),
+         To_Unbounded_String("Board enemy ship"));
    begin
       if ProtoMobs_List.Length > 0 then
          return;
