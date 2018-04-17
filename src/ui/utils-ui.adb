@@ -136,6 +136,7 @@ package body Utils.UI is
             "crew");
          return;
       end if;
+      Hide(Gtk_Widget(Get_Object(Object, "btnclose")));
       case PreviousGameState is
          when SkyMap_View =>
             CreateSkyMap;
@@ -145,7 +146,6 @@ package body Utils.UI is
             Set_Visible_Child_Name
               (Gtk_Stack(Get_Object(Object, "gamestack")),
                "skymap");
-            Hide(Gtk_Widget(Get_Object(Object, "btnclose")));
             Show_All(Gtk_Widget(Get_Object(Object, "btnmenu")));
          when Combat_View =>
             ShowCombatUI(False);
