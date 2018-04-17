@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -88,7 +88,9 @@ package body Messages.UI is
          end if;
          MessagesPad := New_Pad(LinesAmount + 1, Columns - 4);
          if MessagesAmount(MessagesType) = 0 then
-            Add(Win => MessagesPad, Str => "There no messages of that type.");
+            Add
+              (Win => MessagesPad,
+               Str => "There are no messages of that type.");
          else
             CurrentLine := 0;
             for Message of reverse Messages_List loop

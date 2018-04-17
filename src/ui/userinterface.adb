@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -757,7 +757,7 @@ package body UserInterface is
          when Quit_Confirm =>
             ShowSkyMap;
             Refresh_Without_Update;
-            ShowConfirm("Are you sure want to quit game?");
+            ShowConfirm("Are you sure want to quit?");
          when Combat_State =>
             ShowCombat;
          when Craft_View =>
@@ -774,7 +774,7 @@ package body UserInterface is
          when Clear_Confirm =>
             ShowMessages;
             Refresh_Without_Update;
-            ShowConfirm("Are you sure want to clear all messages?");
+            ShowConfirm("Are you sure you want to clear all messages?");
          when Shipyard_View =>
             ShowShipyard;
          when Recruits_View =>

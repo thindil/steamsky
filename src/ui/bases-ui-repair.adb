@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -106,15 +106,17 @@ package body Bases.UI.Repair is
          Refresh;
          return;
       end if;
-      Repair_Items.all(MenuIndex) := New_Item("Slowly repair whole ship", "0");
+      Repair_Items.all(MenuIndex) :=
+        New_Item("Slowly repair the whole ship", "0");
       if SkyBases(BaseIndex).Population > 149 then
          MenuIndex := MenuIndex + 1;
-         Repair_Items.all(MenuIndex) := New_Item("Repair whole ship", "-1");
+         Repair_Items.all(MenuIndex) :=
+           New_Item("Repair the whole ship", "-1");
       end if;
       if SkyBases(BaseIndex).Population > 299 then
          MenuIndex := MenuIndex + 1;
          Repair_Items.all(MenuIndex) :=
-           New_Item("Fast repair whole ship", "-2");
+           New_Item("Fast repair the whole ship", "-2");
       end if;
       MenuIndex := MenuIndex + 1;
       for I in MenuIndex .. Repair_Items'Last loop

@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -267,7 +267,7 @@ package body Bases.UI.Missions is
          Str =>
            "You can take" &
            Natural'Image(CountMissionsLimit) &
-           " more missions in this base.");
+           " more missions from this base.");
       Get_Cursor_Position
         (Win => ActionsWindow,
          Line => CurrentLine,

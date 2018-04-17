@@ -243,7 +243,8 @@ package body Missions.UI is
          Move_Cursor(Win => ActionsWindow, Line => 1, Column => 0);
          Add
            (Win => ActionsWindow,
-            Str => "Press Enter to set start base as a destination for ship");
+            Str =>
+              "Press Enter to set start base as a destination for the ship");
          Get_Cursor_Position
            (Win => ActionsWindow,
             Line => CurrentLine,
@@ -269,7 +270,7 @@ package body Missions.UI is
          Move_Cursor(Win => ActionsWindow, Line => 1, Column => 0);
          Add
            (Win => ActionsWindow,
-            Str => "Press Enter to set mission as a destination for ship");
+            Str => "Press Enter to set mission as a destination for the ship");
          Get_Cursor_Position
            (Win => ActionsWindow,
             Line => CurrentLine,
@@ -405,7 +406,7 @@ package body Missions.UI is
                PlayerShip.DestinationX := X;
                PlayerShip.DestinationY := Y;
                AddMessage
-                 ("You set travel destination for your ship.",
+                 ("You set the travel destination for your ship.",
                   OrderMessage);
                if GameSettings.AutoCenter then
                   CenterMap;

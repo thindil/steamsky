@@ -154,7 +154,7 @@ package body Combat is
             if RealSpeed(PlayerShip) < RealSpeed(Enemy.Ship) then
                OldSpeed := PlayerShip.Speed;
                LogMessage
-                 ("You was attacked by " & To_String(Enemy.Ship.Name),
+                 ("You were attacked by " & To_String(Enemy.Ship.Name),
                   Log.Combat);
                return Combat_State;
             end if;
@@ -364,7 +364,7 @@ package body Combat is
                      Integer'Image(Enemy.Accuracy),
                      Log.Combat);
                   LogMessage
-                    ("Chance for hit:" & Integer'Image(HitChance),
+                    ("Chance to hit:" & Integer'Image(HitChance),
                      Log.Combat);
                   for I in 1 .. Shoots loop
                      if Modules_List(Ship.Modules(K).ProtoIndex).MType = GUN or
@@ -373,7 +373,7 @@ package body Combat is
                         if Ship = PlayerShip then
                            ShootMessage :=
                              Ship.Crew(GunnerIndex).Name &
-                             To_Unbounded_String(" shoots to ") &
+                             To_Unbounded_String(" shoots at ") &
                              EnemyNameOwner;
                         else
                            ShootMessage :=
@@ -393,7 +393,7 @@ package body Combat is
                      if HitChance + GetRandom(1, 50) >
                        GetRandom(1, HitChance + 50) then
                         ShootMessage :=
-                          ShootMessage & To_Unbounded_String(" and hit in ");
+                          ShootMessage & To_Unbounded_String(" and hit ");
                         ArmorIndex := 0;
                         for J in
                           EnemyShip.Modules.First_Index ..
@@ -592,7 +592,7 @@ package body Combat is
                         end if;
                      else
                         ShootMessage :=
-                          ShootMessage & To_Unbounded_String(" and miss.");
+                          ShootMessage & To_Unbounded_String(" and misses.");
                         if Ship = PlayerShip then
                            AddMessage
                              (To_String(ShootMessage),
@@ -730,7 +730,8 @@ package body Combat is
             Damage := 1;
          end if;
          if HitChance < 1 then
-            AttackMessage := AttackMessage & To_Unbounded_String(" and miss.");
+            AttackMessage :=
+              AttackMessage & To_Unbounded_String(" and misses.");
             if PlayerAttack then
                MessageColor := 4;
             else
@@ -742,7 +743,7 @@ package body Combat is
          else
             AttackMessage :=
               AttackMessage &
-              To_Unbounded_String(" and hit in ") &
+              To_Unbounded_String(" and hit ") &
               LocationNames(HitLocation) &
               To_Unbounded_String(".");
             if PlayerAttack then

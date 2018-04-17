@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -132,7 +132,7 @@ package body Bases.UI.Recruits is
          Add
            (Win => OptionsWindow,
             Str =>
-              "You don't have any " &
+              "You don't have enough " &
               To_String(MoneyName) &
               " to hire anyone.");
          CurrentLine := 1;

@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -114,7 +114,7 @@ package body BasesList is
          else
             Add
               (Win => InfoWindow,
-               Str => "You can't recruit crew members on this base.");
+               Str => "You can't recruit crew members at this base.");
          end if;
          Get_Cursor_Position
            (Win => InfoWindow,
@@ -140,7 +140,7 @@ package body BasesList is
          else
             Add
               (Win => InfoWindow,
-               Str => "You can't ask for events in this base.");
+               Str => "You can't ask for events at this base.");
          end if;
          Get_Cursor_Position
            (Win => InfoWindow,
@@ -166,7 +166,7 @@ package body BasesList is
          else
             Add
               (Win => InfoWindow,
-               Str => "You can't take missions in this base.");
+               Str => "You can't take missions at this base.");
          end if;
          Get_Cursor_Position
            (Win => InfoWindow,
