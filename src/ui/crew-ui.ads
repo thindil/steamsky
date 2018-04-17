@@ -35,6 +35,7 @@ private
    procedure RefreshInventory; -- Refresh informations about selected crew member inventory
    procedure SetActiveItem; -- Set active item in inventory list
    procedure RefreshCrewInfo; -- Refresh crew list
-   procedure SetActiveMember; -- Set active crew member in crew list
+   procedure SetActiveMember
+     (NewMemberIndex: Natural := 0); -- Set active crew member in crew list
 
 end Crew.UI;

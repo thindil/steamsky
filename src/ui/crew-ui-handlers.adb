@@ -454,6 +454,7 @@ package body Crew.UI.Handlers is
       New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
       Model: Glib.Types.GType_Interface;
       List: Gtk_List_Store;
+      OldMemberIndex: constant Positive := MemberIndex;
    begin
       Model := Get_Property(Self, Gtk.Cell_Renderer_Combo.Model_Property);
       List := -(Gtk_Tree_Model(Model));
@@ -465,6 +466,7 @@ package body Crew.UI.Handlers is
       RefreshCrewInfo;
       ShowLastMessage(Builder);
       ShowOrdersForAll;
+      SetActiveMember(OldMemberIndex - 1);
    end GiveCrewOrders;
 
    function ReducePriority
@@ -518,12 +520,7 @@ package body Crew.UI.Handlers is
       RefreshCrewInfo;
       ShowLastMessage(Builder);
       ShowOrdersForAll;
-      MemberIndex := OldMemberIndex;
-      Set_Cursor
-        (Gtk_Tree_View(Get_Object(Builder, "treecrew2")),
-         Gtk_Tree_Path_New_From_String(Natural'Image(MemberIndex - 1)),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columncrew")),
-         False);
+      SetActiveMember(OldMemberIndex - 1);
    end SetPriority;
 
    procedure DismissMember(Object: access Gtkada_Builder_Record'Class) is
