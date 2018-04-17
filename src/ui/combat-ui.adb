@@ -648,6 +648,7 @@ package body Combat.UI is
 
    procedure ShowCombatInfo(User_Data: access GObject_Record'Class) is
    begin
+      Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
       if User_Data = Get_Object(Builder, "btnmessages") then
          ShowMessagesUI(Combat_View);
       elsif User_Data = Get_Object(Builder, "btncargoinfo") then
