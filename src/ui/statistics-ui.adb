@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -187,7 +187,7 @@ package body Statistics.UI is
          Move_Cursor(Line => 7, Column => 2);
          Add
            (Str =>
-              "Missions finished:" &
+              "Missions completed:" &
               Natural'Image(TotalFinished) &
               " (" &
               To_String
