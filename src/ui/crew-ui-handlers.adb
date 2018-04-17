@@ -490,6 +490,7 @@ package body Crew.UI.Handlers is
       PriorityLevel: Unbounded_String;
       PrioritiesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "prioritieslist"));
+      OldMemberIndex: constant Positive := MemberIndex;
    begin
       Model := Get_Property(Self, Gtk.Cell_Renderer_Combo.Model_Property);
       PriorityLevel :=
@@ -517,7 +518,12 @@ package body Crew.UI.Handlers is
       RefreshCrewInfo;
       ShowLastMessage(Builder);
       ShowOrdersForAll;
-      SetActiveMember;
+      MemberIndex := OldMemberIndex;
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treecrew2")),
+         Gtk_Tree_Path_New_From_String(Natural'Image(MemberIndex - 1)),
+         Gtk_Tree_View_Column(Get_Object(Builder, "columncrew")),
+         False);
    end SetPriority;
 
    procedure DismissMember(Object: access Gtkada_Builder_Record'Class) is
