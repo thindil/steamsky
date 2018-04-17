@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -266,7 +266,7 @@ package body Events.UI is
                PlayerShip.DestinationX := Events_List(EventIndex).SkyX;
                PlayerShip.DestinationY := Events_List(EventIndex).SkyY;
                AddMessage
-                 ("You set travel destination for your ship.",
+                 ("You set the travel destination for your ship.",
                   OrderMessage);
                if GameSettings.AutoCenter then
                   CenterMap;

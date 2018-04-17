@@ -601,7 +601,7 @@ package body GameOptions is
                SetDescription
                  ("You can't use '" &
                   To_String(FieldValue) &
-                  "' because it is set for other action. Please choice another key.",
+                  "' because it is set for other action. Please choose a different key.",
                   FieldIndex);
                Refresh(FormWindow);
                return;
