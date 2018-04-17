@@ -243,11 +243,12 @@ package body Crew.UI is
       end loop;
    end RefreshCrewInfo;
 
-   procedure SetActiveMember is
+   procedure SetActiveMember(NewMemberIndex: Natural := 0) is
    begin
+      MemberIndex := NewMemberIndex + 1;
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treecrew2")),
-         Gtk_Tree_Path_New_From_String("0"),
+         Gtk_Tree_Path_New_From_String(Natural'Image(NewMemberIndex)),
          Gtk_Tree_View_Column(Get_Object(Builder, "columncrew")),
          False);
    end SetActiveMember;
