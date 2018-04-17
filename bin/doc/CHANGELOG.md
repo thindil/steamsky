@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Ability to set type of interface animations
 - Descriptions for skills and stats
 - Option to set how much hands weapons needs to use (one-handed, two-handed)
+- New orders priorities: for defending ship and boarding enemy ship
 
 ### Changed
 - Updated interface
