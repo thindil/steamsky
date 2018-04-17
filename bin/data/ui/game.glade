@@ -2160,7 +2160,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="eventsbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
@@ -2183,6 +2183,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <child>
                           <object class="GtkTreeViewColumn" id="columnnames">
                             <property name="title" translatable="yes">Name</property>
+                            <property name="expand">True</property>
                             <property name="sort_indicator">True</property>
                             <property name="sort_column_id">0</property>
                             <child>
@@ -2261,11 +2262,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnshowevent">
-                        <property name="label" translatable="yes">Show on map</property>
+                        <property name="label" translatable="yes">_Show on map</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="halign">center</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="Show_Event" swapped="no"/>
                       </object>
                       <packing>
@@ -2276,11 +2278,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btneventdestination">
-                        <property name="label" translatable="yes">Set as destination for ship</property>
+                        <property name="label" translatable="yes">S_et as destination for ship</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="halign">center</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="Set_Event_As_Destination" swapped="no"/>
                       </object>
                       <packing>
