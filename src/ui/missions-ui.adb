@@ -242,14 +242,12 @@ package body Missions.UI is
            (Gtk_Label(Get_Object(Builder, "lblmissioninfo")),
             To_String(MissionInfo));
          if Mission.Finished then
-            Set_Label
-              (Gtk_Label(Get_Object(Builder, "lblfinished")),
-               "Mission is ready to return.");
+            Show_All(Gtk_Widget(Get_Object(Builder, "lblfinished")));
             Set_Label
               (Gtk_Button(Get_Object(Builder, "btndestination")),
                "Set starting base as destination for ship");
          else
-            Set_Label(Gtk_Label(Get_Object(Builder, "lblfinished")), "");
+            Hide(Gtk_Widget(Get_Object(Builder, "lblfinished")));
             Set_Label
               (Gtk_Button(Get_Object(Builder, "btndestination")),
                "Set mission as destination for the ship");
