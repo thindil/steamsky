@@ -3,7 +3,7 @@ Skills = Rhetoric, Swords, Dodge
 SkillsLevels = 5, 5, 5
 Attributes = 3, 3, 3, 3
 Order = Talk
-Priorities = Repair ship:Normal, Manufacturing:Normal, Upgrading ship:Normal, Talking in bases:High, Healing wounded:Normal, Cleaning ship:Normal
+Priorities = Repair ship:Normal, Manufacturing:Normal, Upgrading ship:Normal, Talking in bases:High, Healing wounded:Normal, Cleaning ship:Normal, Defend ship:Normal
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
 Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 [2]
@@ -115,7 +115,7 @@ Skills = Rhetoric, Swords, Dodge
 SkillsLevels = 1..5, 1..5, 1..5
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Talk
-Priorities = Talking in bases:Normal
+Priorities = Talking in bases:Normal, Defend ship:Normal
 Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [16]
@@ -202,7 +202,7 @@ Skills = Rhetoric, Swords, Dodge
 SkillsLevels = 5..10, 15..25, 15..25
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Talk
-Priorities = Talking in bases:Normal
+Priorities = Talking in bases:Normal, Defend ship:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [27]
@@ -274,7 +274,7 @@ Skills = Rhetoric, Swords, Dodge
 SkillsLevels = 2..6, 7..20, 7..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Talk
-Priorities = Talking in bases:Normal
+Priorities = Talking in bases:Normal, Defend ship:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [36]
@@ -330,7 +330,7 @@ Skills = Rhetoric, Swords, Dodge
 SkillsLevels = 10..20, 30..50, 30..50
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Talk
-Priorities = Talking in bases:Normal
+Priorities = Talking in bases:Normal, Defend ship:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [43]
@@ -362,7 +362,7 @@ Skills = Rhetoric, Swords, Dodge
 SkillsLevels = 20..40, 40..60, 40..60
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Talk
-Priorities = Talking in bases:Normal
+Priorities = Talking in bases:Normal, Defend ship:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [47]
@@ -434,6 +434,7 @@ Skills = Brawling, Dodge
 SkillsLevels = 2, 2
 Attributes = 1, 1, 1, 1
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x67, 1x68, 1x69, 1x71
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [56]
@@ -441,6 +442,7 @@ Skills = Brawling, Dodge
 SkillsLevels = 2..6, 2..6
 Attributes = 3, 3, 3, 3
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x67, 1x68, 1x69, 1x71
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [57]
@@ -448,6 +450,7 @@ Skills = Swords, Dodge
 SkillsLevels = 3..6, 3..6
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [58]
@@ -455,6 +458,7 @@ Skills = Swords, Dodge
 SkillsLevels = 7..14, 7..14
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [59]
@@ -462,6 +466,7 @@ Skills = Swords, Dodge
 SkillsLevels = 3..7, 3..7
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [60]
@@ -469,6 +474,7 @@ Skills = Swords, Dodge
 SkillsLevels = 5..15, 5..15
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [61]
@@ -476,6 +482,7 @@ Skills = Swords, Dodge
 SkillsLevels = 15..25, 15..25
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [62]
@@ -483,6 +490,7 @@ Skills = Brawling, Dodge
 SkillsLevels = 5..15, 5..15
 Attributes = 2..4, 2..4, 2..4, 2..4
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x78, 1x79, 1x80, 1x81
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [63]
@@ -490,6 +498,7 @@ Skills = Brawling, Dodge
 SkillsLevels = 15..25, 15..25
 Attributes = 5..15, 5..15, 5..15, 5..15
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x83, 1x84, 1x85, 1x86
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [64]
@@ -497,6 +506,7 @@ Skills = Swords, Dodge
 SkillsLevels = 15..25, 15..25
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [65]
@@ -504,6 +514,7 @@ Skills = Swords, Dodge
 SkillsLevels = 7..20, 7..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [66]
@@ -511,6 +522,7 @@ Skills = Brawling, Dodge
 SkillsLevels = 5..15, 5..15
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x83, 1x84, 1x85, 1x86
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [67]
@@ -518,6 +530,7 @@ Skills = Swords, Dodge
 SkillsLevels = 5..15, 5..15
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [68]
@@ -525,6 +538,7 @@ Skills = Swords, Dodge
 SkillsLevels = 30..50, 30..50
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [69]
@@ -532,6 +546,7 @@ Skills = Swords, Dodge
 SkillsLevels = 40..60, 40..60
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [70]
@@ -539,6 +554,7 @@ Skills = Brawling, Dodge
 SkillsLevels = 30..50, 30..50
 Attributes = 15..20, 15..20, 15..20, 15..20
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x90, 1x91, 1x92, 1x93
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [71]
@@ -546,6 +562,7 @@ Skills = Brawling, Dodge
 SkillsLevels = 40..60, 40..60
 Attributes = 20..30, 20..30, 20..30, 20..30
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x90, 1x91, 1x92, 1x93
 Equipment = Head:2, Torso:1, Arms:3, Legs:4
 [72]
@@ -553,6 +570,7 @@ Skills = Swords, Dodge
 SkillsLevels = 40..60, 40..60
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [73]
@@ -560,6 +578,7 @@ Skills = Swords, Dodge
 SkillsLevels = 50..70, 50..70
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [74]
@@ -567,6 +586,7 @@ Skills = Swords, Dodge
 SkillsLevels = 1, 1
 Attributes = 3, 3, 3, 3
 Order = Defend
+Priorities = Defend ship:High
 Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
 Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 []
