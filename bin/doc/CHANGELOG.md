@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Changed item type MeleeWeapon to Weapon
 - Updated data for weapons
+- Updated data for mobs
 
 ### Fixed
 - Lots of grammar/spelling errors by LJNIC (pull request #16)
