@@ -9,7 +9,7 @@ Material = Bronze
 Skill = Engineering
 Price = 5000 
 InstallTime = 180
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [2]
 Name = Light bronze armor
 Type = Armor
@@ -22,7 +22,7 @@ Skill = Engineering
 Price = 5000
 InstallTime = 180
 Unique = Yes
-Description = Weakest type of armor. Protect whole ship.
+Description = Weakest type of armor. Protects whole ship.
 [3]
 Name = Small bronze engine
 Type = Engine
@@ -62,7 +62,7 @@ Price = 750
 InstallTime = 60
 Unique = Yes
 Size = 1
-Description = Each ship require one cockpit to fly.
+Description = Each ship requires one cockpit to fly.
 [6]
 Name = Small bronze alchemy lab
 Type = Alchemy_lab
@@ -88,7 +88,7 @@ Skill = Engineering
 Price = 300
 InstallTime = 60
 Size = 1
-Description = Space for hold ship cargo.
+Description = Space for holding ship cargo.
 [8]
 Name = Small bronze turret
 Type = Turret
@@ -101,7 +101,7 @@ Skill = Engineering
 Price = 500
 InstallTime = 60
 Size = 1
-Description = Smallest available turret. If turret is destroyed, gun is destroyed too and gunner killed.
+Description = Smallest available turret. If the turret is destroyed, the gun is destroyed along with the gunner.
 [9]
 Name = Iron 20mm gun
 Type = Gun
@@ -113,7 +113,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 500
 InstallTime = 30
-Description = Standard 20mm ship gun. Require empty turret.
+Description = Standard 20mm ship gun. Requires empty turret.
 [10]
 Name = Clockwork drone hull
 Type = Hull
@@ -132,7 +132,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 250
 InstallTime = 30
-Description = Smalled and weakest type of ship gun. Require empty turret.
+Description = Smalled and weakest type of ship gun. Requires empty turret.
 [12]
 Name = Bronze battering ram
 Type = Battering_ram
@@ -198,7 +198,7 @@ Material = Bronze
 Skill = Engineering
 Price = 7500 
 InstallTime = 200
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [17]
 Name = Medium bronze hull
 Type = Hull
@@ -210,7 +210,7 @@ Material = Bronze
 Skill = Engineering
 Price = 10000 
 InstallTime = 220
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [18]
 Name = Medium advanced bronze engine
 Type = Engine
@@ -274,7 +274,7 @@ Material = Bronze
 Skill = Engineering
 Price = 12500 
 InstallTime = 240
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [23]
 Name = Large bronze hull
 Type = Hull
@@ -286,7 +286,7 @@ Material = Bronze
 Skill = Engineering
 Price = 15000 
 InstallTime = 260
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [24]
 Name = Advanced large bronze hull
 Type = Hull
@@ -298,7 +298,7 @@ Material = Bronze
 Skill = Engineering
 Price = 17500 
 InstallTime = 280
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [25]
 Name = Bronze armor
 Type = Armor
@@ -311,7 +311,7 @@ Skill = Engineering
 Price = 7500
 InstallTime = 220
 Unique = Yes
-Description = Standard type of bronze armor. Protect whole ship.
+Description = Standard type of bronze armor. Protects whole ship.
 [26]
 Name = Heavy bronze armor
 Type = Armor
@@ -324,7 +324,7 @@ Skill = Engineering
 Price = 10000
 InstallTime = 240
 Unique = Yes
-Description = Heaviest type of bronze armor. Protect whole ship.
+Description = Heaviest type of bronze armor. Protects whole ship.
 [27]
 Name = Iron 40mm gun
 Type = Gun
@@ -336,7 +336,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 1000
 InstallTime = 45
-Description = Standard 40mm ship gun. Require empty turret.
+Description = Standard 40mm ship gun. Requires empty turret.
 [28]
 Name = Bronze turret
 Type = Turret
@@ -349,7 +349,7 @@ Skill = Engineering
 Price = 750
 InstallTime = 90
 Size = 1
-Description = Standard bronze turret. If turret is destroyed, gun is destroyed too and gunner killed.
+Description = Standard bronze turret. If the turret is destroyed, the gun is destroyed along with the gunner.
 [29]
 Name = Iron 60mm gun
 Type = Gun
@@ -361,7 +361,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 2000
 InstallTime = 60
-Description = Standard 60mm ship gun. Require empty turret.
+Description = Standard 60mm ship gun. Requires empty turret.
 [30]
 Name = Small bronze greenhouse
 Type = Greenhouse
@@ -413,7 +413,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 4000
 InstallTime = 90
-Description = Standard 80mm ship gun. Require empty turret.
+Description = Standard 80mm ship gun. Requires empty turret.
 [34]
 Name = Iron 100mm gun
 Type = Gun
@@ -425,7 +425,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 8000
 InstallTime = 120
-Description = Standard 100mm ship gun. Require empty turret.
+Description = Standard 100mm ship gun. Requires empty turret.
 [35]
 Name = Iron 120mm gun
 Type = Gun
@@ -437,7 +437,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 16000
 InstallTime = 150
-Description = Standard 120mm ship gun. Require empty turret.
+Description = Standard 120mm ship gun. Requires empty turret.
 [36]
 Name = Advanced bronze cabin
 Type = Cabin
@@ -489,7 +489,7 @@ Skill = Engineering
 Price = 1000
 InstallTime = 120
 Size = 1
-Description = Heaviest bronze turret. If turret is destroyed, gun is destroyed too and gunner killed.
+Description = Heaviest bronze turret. If the turret is destroyed, the gun is destroyed along with the gunner.
 [40]
 Name = Heavy bronze battering ram
 Type = Battering_ram
@@ -517,7 +517,7 @@ Price = 1500
 InstallTime = 60
 Unique = Yes
 Size = 1
-Description = Each ship require one cockpit to fly. This is better version of standard cockpit.
+Description = Each ship requires one cockpit to fly. This is better version of standard cockpit.
 [42]
 Name = Small iron cargo bay
 Type = Cargo
@@ -530,7 +530,7 @@ Skill = Engineering
 Price = 600
 InstallTime = 60
 Size = 1
-Description = Space for hold ship cargo, made of iron.
+Description = Space for holding ship cargo, made of iron.
 [43]
 Name = Small iron alchemy lab
 Type = Alchemy_lab
@@ -608,7 +608,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 500
 InstallTime = 30
-Description = Smalled type of ship gun. Require empty turret.
+Description = Smalled type of ship gun. Requires empty turret.
 [49]
 Name = Steel 20mm gun
 Type = Gun
@@ -620,7 +620,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 1000
 InstallTime = 30
-Description = Upgraded 20mm ship gun. Require empty turret.
+Description = Upgraded 20mm ship gun. Requires empty turret.
 [50]
 Name = Steel 40mm gun
 Type = Gun
@@ -632,7 +632,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 2000
 InstallTime = 45
-Description = Upgraded 40mm ship gun. Require empty turret.
+Description = Upgraded 40mm ship gun. Requires empty turret.
 [51]
 Name = Steel 60mm gun
 Type = Gun
@@ -644,7 +644,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 4000
 InstallTime = 60
-Description = Upgraded 60mm ship gun. Require empty turret.
+Description = Upgraded 60mm ship gun. Requires empty turret.
 [52]
 Name = Steel 80mm gun
 Type = Gun
@@ -656,7 +656,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 8000
 InstallTime = 90
-Description = Upgraded 80mm ship gun. Require empty turret.
+Description = Upgraded 80mm ship gun. Requires empty turret.
 [53]
 Name = Steel 100mm gun
 Type = Gun
@@ -668,7 +668,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 16000
 InstallTime = 120
-Description = Upgraded 100mm ship gun. Require empty turret.
+Description = Upgraded 100mm ship gun. Requires empty turret.
 [54]
 Name = Steel 120mm gun
 Type = Gun
@@ -680,7 +680,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 32000
 InstallTime = 150
-Description = Upgraded 120mm ship gun. Require empty turret.
+Description = Upgraded 120mm ship gun. Requires empty turret.
 [55]
 Name = Light iron armor
 Type = Armor
@@ -693,7 +693,7 @@ Skill = Engineering
 Price = 7500
 InstallTime = 180
 Unique = Yes
-Description = Weakest type of iron armor. Protect whole ship.
+Description = Weakest type of iron armor. Protects whole ship.
 [56]
 Name = Iron armor
 Type = Armor
@@ -706,7 +706,7 @@ Skill = Engineering
 Price = 10000
 InstallTime = 220
 Unique = Yes
-Description = Standard type of iron armor. Protect whole ship.
+Description = Standard type of iron armor. Protects whole ship.
 [57]
 Name = Heavy iron armor
 Type = Armor
@@ -719,7 +719,7 @@ Skill = Engineering
 Price = 12500
 InstallTime = 240
 Unique = Yes
-Description = Best type of iron armor. Protect whole ship.
+Description = Best type of iron armor. Protects whole ship.
 [58]
 Name = Small bronze workshop
 Type = Workshop
@@ -757,7 +757,7 @@ Material = Bronze
 Skill = Engineering
 Price = 20000 
 InstallTime = 300
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [61]
 Name = Advanced huge bronze hull
 Type = Hull
@@ -769,7 +769,7 @@ Material = Bronze
 Skill = Engineering
 Price = 22500 
 InstallTime = 320
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [62]
 Name = Huge bronze engine
 Type = Engine
@@ -807,7 +807,7 @@ Material = Iron
 Skill = Engineering
 Price = 6500 
 InstallTime = 180
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [65]
 Name = Small advanced iron hull
 Type = Hull
@@ -819,7 +819,7 @@ Material = Iron
 Skill = Engineering
 Price = 8500 
 InstallTime = 200
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [66]
 Name = Medium iron hull
 Type = Hull
@@ -831,7 +831,7 @@ Material = Iron
 Skill = Engineering
 Price = 11000 
 InstallTime = 220
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [67]
 Name = Advanced medium iron hull
 Type = Hull
@@ -843,7 +843,7 @@ Material = Iron
 Skill = Engineering
 Price = 13500 
 InstallTime = 240
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [68]
 Name = Large iron hull
 Type = Hull
@@ -855,7 +855,7 @@ Material = Iron
 Skill = Engineering
 Price = 16000 
 InstallTime = 260
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [69]
 Name = Advanced large iron hull
 Type = Hull
@@ -867,7 +867,7 @@ Material = Iron
 Skill = Engineering
 Price = 18500 
 InstallTime = 280
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [70]
 Name = Huge iron hull
 Type = Hull
@@ -879,7 +879,7 @@ Material = Iron
 Skill = Engineering
 Price = 21000 
 InstallTime = 300
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [71]
 Name = Advanced huge iron hull
 Type = Hull
@@ -891,7 +891,7 @@ Material = Iron
 Skill = Engineering
 Price = 24000 
 InstallTime = 320
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [72]
 Name = Small iron engine
 Type = Engine
@@ -1060,7 +1060,7 @@ Skill = Engineering
 Price = 600
 InstallTime = 60
 Size = 1
-Description = Smallest available turret made of iron. If turret is destroyed, gun is destroyed too and gunner killed.
+Description = Smallest available turret made of iron. If the turret is destroyed, the gun is destroyed along with the gunner.
 [85]
 Name = Iron turret
 Type = Turret
@@ -1073,7 +1073,7 @@ Skill = Engineering
 Price = 850
 InstallTime = 90
 Size = 1
-Description = Standard iron turret. If turret is destroyed, gun is destroyed too and gunner killed.
+Description = Standard iron turret. If the turret is destroyed, the gun is destroyed along with the gunner.
 [86]
 Name = Heavy iron turret
 Type = Turret
@@ -1086,7 +1086,7 @@ Skill = Engineering
 Price = 1100
 InstallTime = 120
 Size = 1
-Description = Heaviest iron turret. If turret is destroyed, gun is destroyed too and gunner killed.
+Description = Heaviest iron turret. If the turret is destroyed, the gun is destroyed along with the gunner.
 [87]
 Name = Iron battering ram
 Type = Battering_ram
@@ -1140,7 +1140,7 @@ Material = Steel
 Skill = Engineering
 Price = 7500
 InstallTime = 180
-Description = Base module of each ship. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship. The entire ship goes down is destroyed if hull is destroyed.
 [91]
 Name = Light steel armor
 Type = Armor
@@ -1153,7 +1153,7 @@ Skill = Engineering
 Price = 10000
 InstallTime = 180
 Unique = Yes
-Description = Weakest type of steel armor. Protect whole ship.
+Description = Weakest type of steel armor. Protects whole ship.
 [92]
 Name = Small steel engine
 Type = Engine
@@ -1193,7 +1193,7 @@ Price = 3000
 InstallTime = 60
 Unique = Yes
 Size = 1
-Description = Each ship require one cockpit to fly. This is steel version of standard cockpit.
+Description = Each ship requires one cockpit to fly. This is steel version of standard cockpit.
 [95]
 Name = Small steel alchemy lab
 Type = Alchemy_lab
@@ -1219,7 +1219,7 @@ Skill = Engineering
 Price = 1200
 InstallTime = 60
 Size = 1
-Description = Space for hold ship cargo, made of steel.
+Description = Space for holding ship cargo, made of steel.
 [97]
 Name = Small steel turret
 Type = Turret
@@ -1232,7 +1232,7 @@ Skill = Engineering
 Price = 750
 InstallTime = 60
 Size = 1
-Description = Smallest available turret made of steel. If turret is destroyed, gun is destroyed too and gunner killed.
+Description = Smallest available turret made of steel. If the turret is destroyed, the gun is destroyed along with the gunner.
 [98]
 Name = Steel battering ram
 Type = Battering_ram
@@ -1298,7 +1298,7 @@ Material = Steel
 Skill = Engineering
 Price = 9500 
 InstallTime = 200
-Description = Base module of each ship made of steel. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship made of steel. The entire ship goes down is destroyed if hull is destroyed.
 [103]
 Name = Medium steel hull
 Type = Hull
@@ -1310,7 +1310,7 @@ Material = Steel
 Skill = Engineering
 Price = 12000 
 InstallTime = 220
-Description = Base module of each ship made of steel. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship made of steel. The entire ship goes down is destroyed if hull is destroyed.
 [104]
 Name = Medium advanced steel engine
 Type = Engine
@@ -1374,7 +1374,7 @@ Material = Steel
 Skill = Engineering
 Price = 14500 
 InstallTime = 240
-Description = Base module of each ship, made of steel. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship, made of steel. The entire ship goes down is destroyed if hull is destroyed.
 [109]
 Name = Large steel hull
 Type = Hull
@@ -1386,7 +1386,7 @@ Material = Steel
 Skill = Engineering
 Price = 17000 
 InstallTime = 260
-Description = Base module of each ship, made of steel. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship, made of steel. The entire ship goes down is destroyed if hull is destroyed.
 [110]
 Name = Advanced large steel hull
 Type = Hull
@@ -1398,7 +1398,7 @@ Material = Steel
 Skill = Engineering
 Price = 19500 
 InstallTime = 280
-Description = Base module of each ship, made of steel. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship, made of steel. The entire ship goes down is destroyed if hull is destroyed.
 [111]
 Name = Steel armor
 Type = Armor
@@ -1411,7 +1411,7 @@ Skill = Engineering
 Price = 12000
 InstallTime = 220
 Unique = Yes
-Description = Standard type of steel armor. Protect whole ship.
+Description = Standard type of steel armor. Protects whole ship.
 [112]
 Name = Heavy steel armor
 Type = Armor
@@ -1424,7 +1424,7 @@ Skill = Engineering
 Price = 15000
 InstallTime = 240
 Unique = Yes
-Description = Heaviest type of steel armor. Protect whole ship.
+Description = Heaviest type of steel armor. Protects whole ship.
 [113]
 Name = Steel turret
 Type = Turret
@@ -1437,7 +1437,7 @@ Skill = Engineering
 Price = 950
 InstallTime = 90
 Size = 1
-Description = Standard steel turret. If turret is destroyed, gun is destroyed too and gunner killed.
+Description = Standard steel turret. If the turret is destroyed, the gun is destroyed along with the gunner.
 [114]
 Name = Small steel greenhouse
 Type = Greenhouse
@@ -1529,7 +1529,7 @@ Skill = Engineering
 Price = 1200
 InstallTime = 120
 Size = 1
-Description = Heaviest steel turret. If turret is destroyed, gun is destroyed too and gunner killed.
+Description = Heaviest steel turret. If the turret is destroyed, the gun is destroyed along with the gunner.
 [121]
 Name = Heavy steel battering ram
 Type = Battering_ram
@@ -1568,7 +1568,7 @@ Material = Steel
 Skill = Engineering
 Price = 22000
 InstallTime = 300
-Description = Base module of each ship, made of steel. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship, made of steel. The entire ship goes down is destroyed if hull is destroyed.
 [124]
 Name = Advanced huge steel hull
 Type = Hull
@@ -1580,7 +1580,7 @@ Material = Steel
 Skill = Engineering
 Price = 25500
 InstallTime = 320
-Description = Base module of each ship, made of steel. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship, made of steel. The entire ship goes down is destroyed if hull is destroyed.
 [125]
 Name = Huge steel engine
 Type = Engine
@@ -1618,7 +1618,7 @@ Material = Bronze
 Skill = Gunsmith
 Price = 250
 InstallTime = 20
-Description = Weakest harpoon gun. As other guns, require empty turret to install.
+Description = Weakest harpoon gun. As other guns, requires empty turret to install.
 [128]
 Name = Iron harpoon gun
 Type = Harpoon_Gun
@@ -1630,7 +1630,7 @@ Material = Iron
 Skill = Gunsmith
 Price = 500
 InstallTime = 30
-Description = Harpoon gun made of iron. As other guns, require empty turret to install.
+Description = Harpoon gun made of iron. As other guns, requires empty turret to install.
 [129]
 Name = Steel harpoon gun
 Type = Harpoon_Gun
@@ -1642,7 +1642,7 @@ Material = Steel
 Skill = Gunsmith
 Price = 1000
 InstallTime = 30
-Description = Harpoon gun made of steel. As other guns, require empty turret to install.
+Description = Harpoon gun made of steel. As other guns, requires empty turret to install.
 [130]
 Name = Titanium cockpit
 Type = Cockpit
@@ -1656,7 +1656,7 @@ Price = 6000
 InstallTime = 90
 Unique = Yes
 Size = 1
-Description = Each ship require one cockpit to fly. This is titanium version of standard cockpit.
+Description = Each ship requires one cockpit to fly. This is titanium version of standard cockpit.
 [131]
 Name = Small titanium alchemy lab
 Type = Alchemy_lab
@@ -1682,7 +1682,7 @@ Skill = Engineering
 Price = 2400
 InstallTime = 90
 Size = 1
-Description = Space for hold ship cargo, made of titanium.
+Description = Space for holding ship cargo, made of titanium.
 [133]
 Name = Titanium battering ram
 Type = Battering_ram
@@ -1721,7 +1721,7 @@ Material = Titanium
 Skill = Engineering
 Price = 15000 
 InstallTime = 250
-Description = Base module of each ship made of titanium. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship made of titanium. The entire ship goes down is destroyed if hull is destroyed.
 [136]
 Name = Medium advanced titanium engine
 Type = Engine
@@ -1785,7 +1785,7 @@ Material = Titanium
 Skill = Engineering
 Price = 18000 
 InstallTime = 270
-Description = Base module of each ship, made of titanium. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship, made of titanium. The entire ship goes down is destroyed if hull is destroyed.
 [141]
 Name = Large titanium hull
 Type = Hull
@@ -1797,7 +1797,7 @@ Material = Titanium
 Skill = Engineering
 Price = 22000 
 InstallTime = 290
-Description = Base module of each ship, made of titanium. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship, made of titanium. The entire ship goes down is destroyed if hull is destroyed.
 [142]
 Name = Advanced large titanium hull
 Type = Hull
@@ -1809,5 +1809,5 @@ Material = Titanium
 Skill = Engineering
 Price = 25000 
 InstallTime = 310
-Description = Base module of each ship, made of titanium. Whole ship is destroyed if hull is destroyed.
+Description = Base module of each ship, made of titanium. The entire ship goes down is destroyed if hull is destroyed.
 []
