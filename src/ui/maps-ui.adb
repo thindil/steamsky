@@ -383,6 +383,11 @@ package body Maps.UI is
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lbltalk")),
                "No trader assigned. You need one to talk/trade.");
+         else
+            Set_Text(Gtk_Label(Get_Object(Builder, "lbltalk")), "[T]");
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, "lbltalk")),
+               "No trader needed.");
          end if;
       else
          Set_Text(Gtk_Label(Get_Object(Builder, "lbltalk")), "[T]");
