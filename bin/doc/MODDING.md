@@ -463,12 +463,13 @@ DodgeSkill. Value after equal sign must be existing skill name.
   and space). Can be constant value or range from minimum value to max value,
   separated by `..` (double dots).
 - Order: Current ship order of selected mob. Possible values are: Pilot,
-  Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest, Defend.
+  Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest, Defend,
+  Boarding.
 - Priorities: Orders priorities for selected mob, separated by `, ` (comma and
   space). Each priority entry is Order`:`Priority where Order is: Piloting,
   Engineering, Operating guns, Repair ship, Manufacturing, Upgrading ship,
-  Talking in bases, Healing wounded, Cleaning ship and Priority is: Normal or
-  High.
+  Talking in bases, Healing wounded, Cleaning ship, Defend ship, Board enemy
+  ship and Priority is: Normal or High.
 - Inventory: List of inventory of selected mob. Each item in inventory is 
   separated by `, ` (comma and space). Each item entry is Amount`x`Item index
   (from *items* directory). Amount can be constant value or range from minimum
