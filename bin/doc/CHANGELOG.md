@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Option to set how much hands weapons needs to use (one-handed, two-handed)
 - New orders priorities: for defending ship and boarding enemy ship which made
   saves from previous version incompatible
+- Ability to board player ship by enemies
 
 ### Changed
 - Updated interface
