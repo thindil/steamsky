@@ -32,7 +32,6 @@ with Utils; use Utils;
 with Log; use Log;
 with Goals; use Goals;
 with Game; use Game;
-with Ada.Text_IO; use Ada.Text_IO;
 
 package body Combat is
 
@@ -631,7 +630,8 @@ package body Combat is
          AttackDone, Riposte: Boolean;
          AttackerIndex, DefenderIndex: Positive;
          function CharacterAttack
-           (AttackerIndex, DefenderIndex: Positive; PlayerAttack2: Boolean) return Boolean is
+           (AttackerIndex, DefenderIndex: Positive;
+            PlayerAttack2: Boolean) return Boolean is
             Attacker, Defender: Member_Data;
             HitChance, Damage: Integer;
             HitLocation: constant Positive := GetRandom(3, 6);
@@ -755,7 +755,7 @@ package body Combat is
                  To_Unbounded_String(" and hit ") &
                  LocationNames(HitLocation) &
                  To_Unbounded_String(".");
-               if PlayerAttack then
+               if PlayerAttack2 then
                   MessageColor := 2;
                else
                   MessageColor := 1;
@@ -774,7 +774,7 @@ package body Combat is
                      0,
                      DefenderIndex);
                end if;
-               if PlayerAttack then
+               if PlayerAttack2 then
                   GainExp
                     (1,
                      Items_List
@@ -790,7 +790,6 @@ package body Combat is
                end if;
             end if;
             AddMessage(To_String(AttackMessage), CombatMessage, MessageColor);
-            Put_Line(To_String(AttackMessage));
             Attacker.Tired := Attacker.Tired + 1;
             Defender.Tired := Defender.Tired + 1;
             if PlayerAttack2 then
@@ -819,16 +818,22 @@ package body Combat is
          end CharacterAttack;
       begin
          AttackerIndex := Attackers.First_Index;
-         while AttackerIndex <= Attackers.Last_Index loop -- Boarding party attacks first
+         while AttackerIndex <=
+           Attackers.Last_Index loop -- Boarding party attacks first
             Riposte := True;
             if Attackers(AttackerIndex).Order = Boarding then
                AttackDone := False;
                for Defender in
                  Defenders.First_Index .. Defenders.Last_Index loop
                   if Defenders(Defender).Order = Defend then
-                     Riposte := CharacterAttack(AttackerIndex, Defender, PlayerAttack);
+                     Riposte :=
+                       CharacterAttack(AttackerIndex, Defender, PlayerAttack);
                      if not EndCombat and Riposte then
-                        Riposte := CharacterAttack(Defender, AttackerIndex, not PlayerAttack);
+                        Riposte :=
+                          CharacterAttack
+                            (Defender,
+                             AttackerIndex,
+                             not PlayerAttack);
                      end if;
                      AttackDone := True;
                      exit;
@@ -842,10 +847,17 @@ package body Combat is
                   else
                      GiveOrders(PlayerShip, DefenderIndex, Defend, 0, False);
                   end if;
-                  Riposte := CharacterAttack(AttackerIndex => AttackerIndex, DefenderIndex => DefenderIndex, PlayerAttack2 => not PlayerAttack);
+                  Riposte :=
+                    CharacterAttack
+                      (AttackerIndex => AttackerIndex,
+                       DefenderIndex => DefenderIndex,
+                       PlayerAttack2 => PlayerAttack);
                   if not EndCombat and Riposte then
-                     Put_Line("Defender riposte");
-                     Riposte := CharacterAttack(AttackerIndex => DefenderIndex, DefenderIndex => AttackerIndex, PlayerAttack2 => PlayerAttack);
+                     Riposte :=
+                       CharacterAttack
+                         (AttackerIndex => DefenderIndex,
+                          DefenderIndex => AttackerIndex,
+                          PlayerAttack2 => not PlayerAttack);
                   end if;
                end if;
             end if;
@@ -861,10 +873,17 @@ package body Combat is
                for Attacker in
                  Attackers.First_Index .. Attackers.Last_Index loop
                   if Attackers(Attacker).Order = Boarding then
-                     Riposte := CharacterAttack(DefenderIndex, Attacker, not PlayerAttack);
+                     Riposte :=
+                       CharacterAttack
+                         (DefenderIndex,
+                          Attacker,
+                          not PlayerAttack);
                      if not EndCombat and Riposte then
-                        Put_Line("Attacker riposte");
-                        Riposte := CharacterAttack(Attacker, DefenderIndex, PlayerAttack);
+                        Riposte :=
+                          CharacterAttack
+                            (Attacker,
+                             DefenderIndex,
+                             PlayerAttack);
                      end if;
                      exit;
                   end if;
@@ -1154,15 +1173,13 @@ package body Combat is
       end if;
       if Enemy.HarpoonDuration > 0 or HarpoonDuration > 0 then
          if not EndCombat and
-            Enemy.Ship.Crew.Length >
-            0 then -- Characters combat (player boarding party)
-            Put_Line("Player attack");
+           Enemy.Ship.Crew.Length >
+             0 then -- Characters combat (player boarding party)
             MeleeCombat(PlayerShip.Crew, Enemy.Ship.Crew, True);
          end if;
          if not EndCombat and
-            Enemy.Ship.Crew.Length >
-            0 then -- Characters combat (enemy boarding party)
-            Put_Line("Enemy attack");
+           Enemy.Ship.Crew.Length >
+             0 then -- Characters combat (enemy boarding party)
             MeleeCombat(Enemy.Ship.Crew, PlayerShip.Crew, False);
          end if;
       end if;
