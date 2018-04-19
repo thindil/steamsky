@@ -2477,7 +2477,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="availablemissionsbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
@@ -2500,12 +2500,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <child>
                           <object class="GtkTreeViewColumn" id="columnmission">
                             <property name="title" translatable="yes">Name</property>
+                            <property name="expand">True</property>
                             <property name="sort_indicator">True</property>
                             <property name="sort_column_id">0</property>
                             <child>
-                              <object class="GtkCellRendererText">
-                                <property name="editable">True</property>
-                              </object>
+                              <object class="GtkCellRendererText"/>
                               <attributes>
                                 <attribute name="text">0</attribute>
                               </attributes>
