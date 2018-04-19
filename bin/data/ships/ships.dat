@@ -583,7 +583,7 @@ Modules = 70, 57, 78, 41, 10x42, 89
 CombatAI = Berserker
 Loot = 500..750
 Cargo = 5000..7000x1, 500..750x13
-Description = Huge, well armored nd upgraded version of undead flying vessel. Dangerous at close range.
+Description = Huge, well armored and upgraded version of undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 47, 10..14x70
 [62]
@@ -595,7 +595,7 @@ Evasion = 60..80
 Loot = 500..900
 Perception = 60..80
 Cargo = 2000..4000x1, 500..1000x31, 500..750x13
-Description = Huge, well armored nd upgraded version of attacking clockwork drone.
+Description = Huge, well armored and upgraded version of attacking clockwork drone.
 Owner = Drones
 [63]
 Name = Advanced huge undead ship mk II
@@ -603,7 +603,7 @@ Modules = 71, 57, 79, 41, 10x42, 89
 CombatAI = Berserker
 Loot = 600..900
 Cargo = 6000..8000x1, 600..800x13
-Description = Advanced and upgraded version of huge, well armored ndead flying vessel. Dangerous at close range.
+Description = Advanced and upgraded version of huge, well armored undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 38, 11..15x71
 [64]
@@ -623,7 +623,7 @@ Modules = 70, 57, 78, 13x80, 41, 9x42, 89, 4x86, 4x33
 CombatAI = Attacker
 Loot = 750..1000
 Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x31, 400..600x13
-Description = Huge, well armored nd upgraded version of inquisition flying vessel.
+Description = Huge, well armored and upgraded version of inquisition flying vessel.
 Owner = Inquisition
 Crew = 49, 4x50, 6..10x72
 [66]
@@ -865,7 +865,7 @@ Modules = 123, 112, 125, 94, 10x96, 121
 CombatAI = Berserker
 Loot = 500..750
 Cargo = 5000..7000x1, 500..750x21
-Description = Huge, well armored nd upgraded version of undead flying vessel. Dangerous at close range.
+Description = Huge, well armored and upgraded version of undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 47, 10..14x70
 [91]
@@ -877,7 +877,7 @@ Evasion = 60..80
 Loot = 500..900
 Perception = 60..80
 Cargo = 2000..4000x1, 500..1000x32, 500..750x21
-Description = Huge, well armored nd upgraded version of attacking clockwork drone.
+Description = Huge, well armored and upgraded version of attacking clockwork drone.
 Owner = Drones
 [92]
 Name = Advanced huge undead ship mk III
@@ -885,7 +885,7 @@ Modules = 124, 112, 126, 94, 10x96, 121
 CombatAI = Berserker
 Loot = 600..900
 Cargo = 6000..8000x1, 600..800x21
-Description = Advanced and upgraded version of huge, well armored ndead flying vessel. Dangerous at close range.
+Description = Advanced and upgraded version of huge, well armored undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 48, 11..15x71
 [93]
@@ -905,7 +905,7 @@ Modules = 123, 112, 125, 13x93, 94, 9x96, 121, 4x120, 4x52
 CombatAI = Attacker
 Loot = 750..1000
 Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x32, 400..600x21
-Description = Huge, well armored nd upgraded version of inquisition flying vessel.
+Description = Huge, well armored and upgraded version of inquisition flying vessel.
 Owner = Inquisition
 Crew = 49, 4x50, 6..10x72
 [95]
@@ -995,7 +995,7 @@ Modules = 23, 26, 19, 10x4, 5, 12x7, 2x28, 2x29
 CombatAI = Coward
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
-Description = Large, well armored ersion of poleis traders ship. Avoids any fights.
+Description = Large, well armored version of poleis traders ship. Avoids any fights.
 Owner = Poleis
 Crew = 23, 2x24, 25, 26, 3x61
 [105]
@@ -1004,7 +1004,7 @@ Modules = 23, 26, 19, 10x4, 5, 12x7, 2x28, 2x29
 CombatAI = Coward
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
-Description = Large, well armored ersion of independent traders ship. Avoids any fights.
+Description = Large, well armored version of independent traders ship. Avoids any fights.
 Owner = Independent
 Crew = 23, 2x24, 25, 26, 3x61
 [106]
@@ -1139,7 +1139,7 @@ Modules = 23, 26, 19, 10x4, 5, 6x7, 3x28, 3x29
 CombatAI = Disarmer
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
-Description = Large, well armored oleis patrol ship. As a law enforcers they trying dismarm enemies first.
+Description = Large, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.
 Owner = Poleis
 Crew = 23, 3x24, 25, 3..7x65
 [121]
@@ -1148,7 +1148,7 @@ Modules = 23, 26, 19, 10x4, 5, 6x7, 3x28, 3x29
 CombatAI = Disarmer
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
-Description = Large, well armored ndependent patrol ship. As a law enforcers they trying dismarm enemies first.
+Description = Large, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.
 Owner = Independent
 Crew = 23, 3x24, 25, 3..7x65
 [122]
@@ -1408,7 +1408,7 @@ Modules = 155, 144, 157, 13x93, 130, 9x132, 153, 4x152, 4x162
 CombatAI = Attacker
 Loot = 750..1000
 Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x119, 400..600x116
-Description = Huge, well armored nd upgraded version of inquisition flying vessel.
+Description = Huge, well armored and upgraded version of inquisition flying vessel.
 Owner = Inquisition
 Crew = 49, 4x50, 6..10x72
 [149]
