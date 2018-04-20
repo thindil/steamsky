@@ -2619,7 +2619,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="baseslistbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
@@ -2627,6 +2627,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">center</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
@@ -2752,6 +2753,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <child>
                               <object class="GtkTreeViewColumn" id="columnnames1">
                                 <property name="title" translatable="yes">Name</property>
+                                <property name="expand">True</property>
                                 <property name="sort_indicator">True</property>
                                 <property name="sort_column_id">0</property>
                                 <child>
@@ -2880,7 +2882,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="gamestatsbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
@@ -3403,7 +3405,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="basebox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
