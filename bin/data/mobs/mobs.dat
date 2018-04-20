@@ -450,7 +450,7 @@ Skills = Swords, Dodge
 SkillsLevels = 3..6, 3..6
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Defend
-Priorities = Defend ship:High
+Priorities = Defend ship:High, Board enemy ship:Normal
 Inventory = 1x77, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [58]
@@ -458,7 +458,7 @@ Skills = Swords, Dodge
 SkillsLevels = 7..14, 7..14
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Defend
-Priorities = Defend ship:High
+Priorities = Defend ship:High, Board enemy ship:Normal
 Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [59]
@@ -466,7 +466,7 @@ Skills = Swords, Dodge
 SkillsLevels = 3..7, 3..7
 Attributes = 3..5, 3..5, 3..5, 3..5
 Order = Defend
-Priorities = Defend ship:High
+Priorities = Defend ship:High, Board enemy ship:Normal
 Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
 Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
 [60]
@@ -474,7 +474,7 @@ Skills = Swords, Dodge
 SkillsLevels = 5..15, 5..15
 Attributes = 5..10, 5..10, 5..10, 5..10
 Order = Defend
-Priorities = Defend ship:High
+Priorities = Defend ship:High, Board enemy ship:Normal
 Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [61]
@@ -482,7 +482,7 @@ Skills = Swords, Dodge
 SkillsLevels = 15..25, 15..25
 Attributes = 10..20, 10..20, 10..20, 10..20
 Order = Defend
-Priorities = Defend ship:High
+Priorities = Defend ship:High, Board enemy ship:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [62]
@@ -506,7 +506,7 @@ Skills = Swords, Dodge
 SkillsLevels = 15..25, 15..25
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Defend
-Priorities = Defend ship:High
+Priorities = Defend ship:High, Board enemy ship:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [65]
@@ -514,7 +514,7 @@ Skills = Swords, Dodge
 SkillsLevels = 7..20, 7..20
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Defend
-Priorities = Defend ship:High
+Priorities = Defend ship:High, Board enemy ship:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [66]
@@ -530,7 +530,7 @@ Skills = Swords, Dodge
 SkillsLevels = 5..15, 5..15
 Attributes = 7..15, 7..15, 7..15, 7..15
 Order = Defend
-Priorities = Defend ship:High
+Priorities = Defend ship:High, Board enemy ship:Normal
 Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [68]
@@ -538,7 +538,7 @@ Skills = Swords, Dodge
 SkillsLevels = 30..50, 30..50
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Defend
-Priorities = Defend ship:High
+Priorities = Defend ship:High, Board enemy ship:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [69]
@@ -546,7 +546,7 @@ Skills = Swords, Dodge
 SkillsLevels = 40..60, 40..60
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Defend
-Priorities = Defend ship:High
+Priorities = Defend ship:High, Board enemy ship:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [70]
@@ -570,7 +570,7 @@ Skills = Swords, Dodge
 SkillsLevels = 40..60, 40..60
 Attributes = 15..25, 15..25, 15..25, 15..25
 Order = Defend
-Priorities = Defend ship:High
+Priorities = Defend ship:High, Board enemy ship:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [73]
@@ -578,7 +578,7 @@ Skills = Swords, Dodge
 SkillsLevels = 50..70, 50..70
 Attributes = 25..35, 25..35, 25..35, 25..35
 Order = Defend
-Priorities = Defend ship:High
+Priorities = Defend ship:High, Board enemy ship:Normal
 Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
 Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
 [74]
@@ -586,7 +586,7 @@ Skills = Swords, Dodge
 SkillsLevels = 1, 1
 Attributes = 3, 3, 3, 3
 Order = Defend
-Priorities = Defend ship:High
+Priorities = Defend ship:High, Board enemy ship:Normal
 Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
 Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
 []
