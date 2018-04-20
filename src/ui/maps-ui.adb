@@ -882,6 +882,9 @@ package body Maps.UI is
          Set_Transition_Type
            (Gtk_Stack(Get_Object(Builder, "optionsstack")),
             Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
+         Set_Transition_Type
+           (Gtk_Stack(Get_Object(Builder, "combatstack")),
+            Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
          Set_Default_Size
            (Gtk_Window(Get_Object(Builder, "skymapwindow")),
             Gint(GameSettings.WindowWidth),
