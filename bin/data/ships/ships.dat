@@ -10,7 +10,7 @@ Modules = 1, 3, 2x4, 5, 7, 2x8, 11, 127
 CombatAI = Disarmer
 Loot = 10..100
 Cargo = 800..1000x1, 80..100x2, 150..200x3, 300..500x14, 50..75x62
-Description = Smallest known pirates ship. As many pirates they prefer to dismarm enemies first.
+Description = Smallest known pirate ship. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 5, 2x6
 [3]
@@ -39,7 +39,7 @@ Modules = 1, 3, 3x4, 5, 2x7, 2x8, 9, 127
 CombatAI = Disarmer
 Loot = 20..200
 Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13, 50..75x63
-Description = Small, fast pirate vessel. As many pirates they prefer to dismarm enemies first.
+Description = Small, fast pirate vessel. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 8, 2x9, 10
 [6]
@@ -68,7 +68,7 @@ Modules = 17, 15, 8x4, 5, 4x7, 2x28, 27, 128
 CombatAI = Disarmer
 Loot = 100..200
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x5, 10..40x13, 75..100x63
-Description = Standard pirate vessel. As many pirates they prefer to dismarm enemies first.
+Description = Standard pirate vessel. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 12, 2x13, 14, 3..5x57
 [9]
@@ -77,7 +77,7 @@ Modules = 17, 25, 15, 8x4, 5, 4x7, 2x28, 27, 128
 CombatAI = Disarmer
 Loot = 150..300
 Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x20, 100..200x5, 20..40x13, 100..150x63
-Description = Armored version of pirate ship. As many pirates they prefer to dismarm enemies first.
+Description = Armored version of pirate ship. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 16, 2x17, 18, 3..5x58
 [10]
@@ -159,7 +159,7 @@ Evasion = 15..25
 Loot = 200..400
 Perception = 25..35
 Cargo = 1800..2000x1, 450..500x20, 120..250x5, 20..60x13
-Description = Large, good armored and aggresive clockwork drone.
+Description = Large, well armored and aggresive clockwork drone.
 Owner = Drones
 [18]
 Name = Large pirate ship
@@ -167,7 +167,7 @@ Modules = 23, 26, 19, 10x4, 5, 6x7, 4x28, 3x29, 129
 CombatAI = Disarmer
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13, 100..150x64
-Description = Large, good armored pirate ship. As many pirates they prefer to dismarm enemies first.
+Description = Large, well armored pirate ship. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 23, 4x24, 25, 3..5x61
 [19]
@@ -185,7 +185,7 @@ Modules = 23, 26, 19, 5, 6x7, 40
 CombatAI = Berserker
 Loot = 200..400
 Cargo = 3000..4000x1, 300..400x5
-Description = Large, good armored version of undead flying vessel. Dangerous at close range.
+Description = Large, well armored version of undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 28, 8..12x63
 [21]
@@ -194,7 +194,7 @@ Modules = 23, 26, 19, 10x4, 5, 6x7, 40, 2x28, 2x27
 CombatAI = Attacker
 Loot = 250..500
 Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x20, 200..400x5, 20..50x13
-Description = Large, good armored version of inquisition flying vessel.
+Description = Large, well armored version of inquisition flying vessel.
 Owner = Inquisition
 Crew = 29, 2x30, 31, 5..9x64
 [22]
@@ -206,7 +206,7 @@ Evasion = 25..35
 Loot = 250..450
 Perception = 40..50
 Cargo = 1500..2000x1, 450..500x20, 150..300x5, 20..40x13
-Description = Large, good armored version of attacking clockwork drone.
+Description = Large, well armored version of attacking clockwork drone.
 Owner = Drones
 [23]
 Name = Advanced attacking drone
@@ -225,7 +225,7 @@ Modules = 22, 25, 18, 6x4, 5, 5x7, 2x28, 27, 128
 CombatAI = Disarmer
 Loot = 200..250
 Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x5, 20..40x13, 75..100x64
-Description = Advanced version of standard pirate ship. As many pirates they prefer to dismarm enemies first.
+Description = Advanced version of standard pirate ship. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 32, 2x33, 34, 2x65
 [25]
@@ -255,7 +255,7 @@ Modules = 60, 26, 2x62, 14x4, 5, 10x7, 5x39, 4x33, 129
 CombatAI = Disarmer
 Loot = 500..1000
 Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13, 100..200x64
-Description = Huge, well armored pirate ship. As many pirates they prefer to dismarm enemies first.
+Description = Huge, well armored pirate ship. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 39, 5x40, 41, 5..9x68
 [28]
@@ -264,7 +264,7 @@ Modules = 61, 26, 2x63, 16x4, 5, 12x7, 5x39, 4x34, 129
 CombatAI = Disarmer
 Loot = 750..1200
 Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x5, 300..500x13, 150..300x64
-Description = Advanced version of huge, well armored pirate ship. As many pirates they prefer to dismarm enemies first.
+Description = Advanced version of huge, well armored pirate ship. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 43, 5x44, 45, 7..11x69
 [29]
@@ -273,7 +273,7 @@ Modules = 60, 26, 62, 5, 10x7, 40
 CombatAI = Berserker
 Loot = 500..750
 Cargo = 5000..7000x1, 500..750x5
-Description = Huge, good armored version of undead flying vessel. Dangerous at close range.
+Description = Huge, well armored version of undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 47, 10..14x70
 [30]
@@ -285,7 +285,7 @@ Evasion = 60..80
 Loot = 500..900
 Perception = 60..80
 Cargo = 2000..4000x1, 500..1000x31, 500..750x5, 150..300x13
-Description = Huge, good armored version of attacking clockwork drone.
+Description = Huge, well armored version of attacking clockwork drone.
 Owner = Drones
 [31]
 Name = Advanced huge undead ship
@@ -293,7 +293,7 @@ Modules = 61, 26, 63, 5, 10x7, 40
 CombatAI = Berserker
 Loot = 600..900
 Cargo = 6000..8000x1, 600..800x5
-Description = Advanced version of huge, good armored undead flying vessel. Dangerous at close range.
+Description = Advanced version of huge, well armored undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 48, 11..15x71
 [32]
@@ -305,7 +305,7 @@ Evasion = 75..90
 Loot = 600..1000
 Perception = 75..90
 Cargo = 4000..6000x1, 600..1000x33, 600..800x5, 150..300x13
-Description = Advanced version of huge, good armored, attacking clockwork drone.
+Description = Advanced version of huge, well armored, attacking clockwork drone.
 Owner = Drones
 [33]
 Name = Huge inquisition ship
@@ -313,7 +313,7 @@ Modules = 60, 26, 62, 13x4, 5, 9x7, 40, 4x39, 4x33
 CombatAI = Attacker
 Loot = 750..1000
 Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x31, 400..600x5, 50..100x13
-Description = Huge, good armored version of inquisition flying vessel.
+Description = Huge, well armored version of inquisition flying vessel.
 Owner = Inquisition
 Crew = 49, 4x50, 6..10x72
 [34]
@@ -322,7 +322,7 @@ Modules = 61, 26, 63, 15x4, 5, 11x7, 40, 4x39, 4x34
 CombatAI = Attacker
 Loot = 900..1200
 Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x33, 500..650x5, 75..120x13
-Description = Advanced version of huge, good armored, inquisition flying vessel.
+Description = Advanced version of huge, well armored, inquisition flying vessel.
 Owner = Inquisition
 Crew = 51, 4x52, 8..12x73
 [35]
@@ -331,7 +331,7 @@ Modules = 64, 72, 2x80, 41, 42, 2x84, 11, 127
 CombatAI = Disarmer
 Loot = 10..100
 Cargo = 800..1000x1, 80..100x2, 150..200x3, 300..500x14, 50..75x62
-Description = Smallest known pirates ship (upgraded version). As many pirates they prefer to dismarm enemies first.
+Description = Smallest known pirates ship (upgraded version). Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 53, 2x54, 74
 [36]
@@ -349,7 +349,7 @@ Modules = 64, 72, 3x80, 41, 2x42, 2x84, 9, 127
 CombatAI = Disarmer
 Loot = 20..200
 Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x13, 50..75x63
-Description = Small, fast pirate vessel (upgraded version). As many pirates they prefer to dismarm enemies first.
+Description = Small, fast pirate vessel (upgraded version). Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 8, 2x9, 10
 [38]
@@ -378,7 +378,7 @@ Modules = 66, 74, 8x80, 41, 4x42, 2x85, 27, 128
 CombatAI = Disarmer
 Loot = 100..200
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x13, 75..100x63
-Description = Standard pirate vessel (upgraded version). As many pirates they prefer to dismarm enemies first.
+Description = Standard pirate vessel (upgraded version). Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 12, 2x13, 14, 3..5x57
 [41]
@@ -387,7 +387,7 @@ Modules = 66, 56, 74, 8x80, 41, 4x42, 2x85, 27, 128
 CombatAI = Disarmer
 Loot = 150..300
 Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x20, 100..200x13, 100..150x63
-Description = Armored version of pirate ship (upgraded version). As many pirates they prefer to dismarm enemies first.
+Description = Armored version of pirate ship (upgraded version). Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 16, 2x17, 18, 3..5x58
 [42]
@@ -469,7 +469,7 @@ Evasion = 15..25
 Loot = 200..400
 Perception = 25..35
 Cargo = 1800..2000x1, 450..500x20, 120..250x13
-Description = Large, good armored, upgraded and aggresive clockwork drone.
+Description = Large, well armored, upgraded and aggresive clockwork drone.
 Owner = Drones
 [50]
 Name = Large pirate ship mk II
@@ -477,7 +477,7 @@ Modules = 68, 57, 76, 10x80, 41, 6x42, 42, 4x85, 3x29, 129
 CombatAI = Disarmer
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x13, 100..150x64
-Description = Large, good armored, upgraded version of pirate ship. As many pirates they prefer to dismarm enemies first.
+Description = Large, well armored, upgraded version of pirate ship. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 23, 4x24, 25, 3..5x61
 [51]
@@ -495,7 +495,7 @@ Modules = 68, 57, 76, 41, 6x42, 89
 CombatAI = Berserker
 Loot = 200..400
 Cargo = 3000..4000x1, 300..400x13
-Description = Large, good armored, upgraded version of undead flying vessel. Dangerous at close range.
+Description = Large, well armored, upgraded version of undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 28, 8..12x63
 [53]
@@ -504,7 +504,7 @@ Modules = 68, 57, 76, 10x80, 41, 7x42, 2x85, 2x27
 CombatAI = Attacker
 Loot = 250..500
 Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x20, 200..400x13
-Description = Large, good armored, upgraded version of inquisition flying vessel.
+Description = Large, well armored, upgraded version of inquisition flying vessel.
 Owner = Inquisition
 Crew = 29, 30, 31, 5..9x64
 [54]
@@ -516,7 +516,7 @@ Evasion = 25..35
 Loot = 250..450
 Perception = 40..50
 Cargo = 1500..2000x1, 450..500x20, 150..300x13
-Description = Large, good armored, upgraded version of attacking clockwork drone.
+Description = Large, well armored, upgraded version of attacking clockwork drone.
 Owner = Drones
 [55]
 Name = Advanced attacking drone mk II
@@ -535,7 +535,7 @@ Modules = 67, 56, 75, 6x80, 41, 5x42, 85, 27, 85, 128
 CombatAI = Disarmer
 Loot = 200..250
 Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x13, 75..100x64
-Description = Advanced and upgraded version of standard pirate ship. As many pirates they prefer to dismarm enemies first.
+Description = Advanced and upgraded version of standard pirate ship. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 32, 2x33, 34, 2x65
 [57]
@@ -565,7 +565,7 @@ Modules = 70, 57, 2x78, 14x80, 41, 10x42, 86, 5x33, 4x86, 129
 CombatAI = Disarmer
 Loot = 500..1000
 Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x13, 150..200x64
-Description = Huge, well armored pirate ship (upgraded version). As many pirates they prefer to dismarm enemies first.
+Description = Huge, well armored pirate ship (upgraded version). Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 39, 5x40, 41, 5..9x68
 [60]
@@ -574,7 +574,7 @@ Modules = 71, 57, 2x79, 16x80, 41, 12x42, 5x86, 4x34, 129
 CombatAI = Disarmer
 Loot = 750..1200
 Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x13, 300..500x64
-Description = Advanced and upgraded version of huge, well armored pirate ship. As many pirates they prefer to dismarm enemies first.
+Description = Advanced and upgraded version of huge, well armored pirate ship. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 43, 5x44, 45, 7..11x69
 [61]
@@ -583,7 +583,7 @@ Modules = 70, 57, 78, 41, 10x42, 89
 CombatAI = Berserker
 Loot = 500..750
 Cargo = 5000..7000x1, 500..750x13
-Description = Huge, good armored and upgraded version of undead flying vessel. Dangerous at close range.
+Description = Huge, well armored and upgraded version of undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 47, 10..14x70
 [62]
@@ -595,7 +595,7 @@ Evasion = 60..80
 Loot = 500..900
 Perception = 60..80
 Cargo = 2000..4000x1, 500..1000x31, 500..750x13
-Description = Huge, good armored and upgraded version of attacking clockwork drone.
+Description = Huge, well armored and upgraded version of attacking clockwork drone.
 Owner = Drones
 [63]
 Name = Advanced huge undead ship mk II
@@ -603,7 +603,7 @@ Modules = 71, 57, 79, 41, 10x42, 89
 CombatAI = Berserker
 Loot = 600..900
 Cargo = 6000..8000x1, 600..800x13
-Description = Advanced and upgraded version of huge, good armored undead flying vessel. Dangerous at close range.
+Description = Advanced and upgraded version of huge, well armored undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 38, 11..15x71
 [64]
@@ -615,7 +615,7 @@ Evasion = 75..90
 Loot = 600..1000
 Perception = 75..90
 Cargo = 4000..6000x1, 600..1000x33, 600..800x13
-Description = Advanced and upgraded version of huge, good armored, attacking clockwork drone.
+Description = Advanced and upgraded version of huge, well armored, attacking clockwork drone.
 Owner = Drones
 [65]
 Name = Huge inquisition ship mk II
@@ -623,7 +623,7 @@ Modules = 70, 57, 78, 13x80, 41, 9x42, 89, 4x86, 4x33
 CombatAI = Attacker
 Loot = 750..1000
 Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x31, 400..600x13
-Description = Huge, good armored and upgraded version of inquisition flying vessel.
+Description = Huge, well armored and upgraded version of inquisition flying vessel.
 Owner = Inquisition
 Crew = 49, 4x50, 6..10x72
 [66]
@@ -632,7 +632,7 @@ Modules = 71, 57, 79, 15x80, 41, 11x42, 89, 4x86, 4x34
 CombatAI = Attacker
 Loot = 900..1200
 Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x33, 500..650x13
-Description = Advanced and upgraded version of huge, good armored, inquisition flying vessel.
+Description = Advanced and upgraded version of huge, well armored, inquisition flying vessel.
 Owner = Inquisition
 Crew = 51, 4x52, 8..12x73
 [67]
@@ -641,7 +641,7 @@ Modules = 90, 92, 3x93, 94, 2x96, 2x97, 49, 127
 CombatAI = Disarmer
 Loot = 20..200
 Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x23, 80..100x21, 50..75x63
-Description = Small, fast pirate vessel (upgraded version). As many pirates they prefer to dismarm enemies first.
+Description = Small, fast pirate vessel (upgraded version). Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 8, 2x9, 10
 [68]
@@ -670,7 +670,7 @@ Modules = 103, 101, 7x93, 94, 4x96, 2x113, 50, 128
 CombatAI = Disarmer
 Loot = 100..200
 Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x25, 150..200x21, 75..100x63
-Description = Standard pirate vessel (upgraded version). As many pirates they prefer to dismarm enemies first.
+Description = Standard pirate vessel (upgraded version). Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 12, 2x13, 14, 3..5x57
 [71]
@@ -679,7 +679,7 @@ Modules = 103, 111, 101, 8x93, 94, 4x96, 2x113, 50, 128
 CombatAI = Disarmer
 Loot = 150..300
 Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x25, 100..200x21, 100..150x63
-Description = Armored version of pirate ship (upgraded version). As many pirates they prefer to dismarm enemies first.
+Description = Armored version of pirate ship (upgraded version). Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 16, 2x17, 18, 3..5x58
 [72]
@@ -751,7 +751,7 @@ Evasion = 15..25
 Loot = 200..400
 Perception = 25..35
 Cargo = 1800..2000x1, 450..500x25, 120..250x21
-Description = Large, good armored, upgraded and aggresive clockwork drone.
+Description = Large, well armored, upgraded and aggresive clockwork drone.
 Owner = Drones
 [79]
 Name = Large pirate ship mk III
@@ -759,7 +759,7 @@ Modules = 109, 112, 105, 9x93, 94, 6x96, 4x113, 3x51, 129
 CombatAI = Disarmer
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x27, 200..400x21, 100..150x64
-Description = Large, good armored, upgraded version of pirate ship. As many pirates they prefer to dismarm enemies first.
+Description = Large, well armored, upgraded version of pirate ship. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 23, 4x24, 25, 3..5x61
 [80]
@@ -777,7 +777,7 @@ Modules = 109, 112, 105, 94, 6x96, 121
 CombatAI = Berserker
 Loot = 200..400
 Cargo = 3000..4000x1, 300..400x21
-Description = Large, good armored, upgraded version of undead flying vessel. Dangerous at close range.
+Description = Large, well armored, upgraded version of undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 28, 8..12x63
 [82]
@@ -786,7 +786,7 @@ Modules = 109, 112, 105, 10x93, 94, 7x96, 2x113, 2x50
 CombatAI = Attacker
 Loot = 250..500
 Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x25, 200..400x21
-Description = Large, good armored, upgraded version of inquisition flying vessel.
+Description = Large, well armored, upgraded version of inquisition flying vessel.
 Owner = Inquisition
 Crew = 29, 30, 31, 5..9x64
 [83]
@@ -798,7 +798,7 @@ Evasion = 25..35
 Loot = 250..450
 Perception = 40..50
 Cargo = 1500..2000x1, 450..500x25, 150..300x21
-Description = Large, good armored, upgraded version of attacking clockwork drone.
+Description = Large, well armored, upgraded version of attacking clockwork drone.
 Owner = Drones
 [84]
 Name = Advanced attacking drone mk III
@@ -817,7 +817,7 @@ Modules = 108, 111, 104, 6x93, 94, 5x96, 2x113, 50, 128
 CombatAI = Disarmer
 Loot = 200..250
 Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x25, 100..200x21, 75..100x64
-Description = Advanced and upgraded version of standard pirate ship. As many pirates they prefer to dismarm enemies first.
+Description = Advanced and upgraded version of standard pirate ship. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 32, 2x33, 34, 2x65
 [86]
@@ -847,7 +847,7 @@ Modules = 123, 112, 2x125, 14x93, 94, 10x96, 5x120, 4x52, 129
 CombatAI = Disarmer
 Loot = 500..1000
 Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x32, 500..750x21, 100..200x64
-Description = Huge, well armored pirate ship (upgraded version). As many pirates they prefer to dismarm enemies first.
+Description = Huge, well armored pirate ship (upgraded version). Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 39, 5x40, 41, 5..9x68
 [89]
@@ -856,7 +856,7 @@ Modules = 124, 112, 2x126, 16x93, 94, 12x96, 5x120, 4x53, 129
 CombatAI = Disarmer
 Loot = 750..1200
 Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x34, 600..800x21, 150..300x64
-Description = Advanced and upgraded version of huge, well armored pirate ship. As many pirates they prefer to dismarm enemies first.
+Description = Advanced and upgraded version of huge, well armored pirate ship. Like many pirates, they prefer to dismarm enemies first.
 Owner = Pirates
 Crew = 43, 5x44, 45, 7..11x69
 [90]
@@ -865,7 +865,7 @@ Modules = 123, 112, 125, 94, 10x96, 121
 CombatAI = Berserker
 Loot = 500..750
 Cargo = 5000..7000x1, 500..750x21
-Description = Huge, good armored and upgraded version of undead flying vessel. Dangerous at close range.
+Description = Huge, well armored and upgraded version of undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 47, 10..14x70
 [91]
@@ -877,7 +877,7 @@ Evasion = 60..80
 Loot = 500..900
 Perception = 60..80
 Cargo = 2000..4000x1, 500..1000x32, 500..750x21
-Description = Huge, good armored and upgraded version of attacking clockwork drone.
+Description = Huge, well armored and upgraded version of attacking clockwork drone.
 Owner = Drones
 [92]
 Name = Advanced huge undead ship mk III
@@ -885,7 +885,7 @@ Modules = 124, 112, 126, 94, 10x96, 121
 CombatAI = Berserker
 Loot = 600..900
 Cargo = 6000..8000x1, 600..800x21
-Description = Advanced and upgraded version of huge, good armored undead flying vessel. Dangerous at close range.
+Description = Advanced and upgraded version of huge, well armored undead flying vessel. Dangerous at close range.
 Owner = Undead
 Crew = 48, 11..15x71
 [93]
@@ -897,7 +897,7 @@ Evasion = 75..90
 Loot = 600..1000
 Perception = 75..90
 Cargo = 4000..6000x1, 600..1000x34, 600..800x21
-Description = Advanced and upgraded version of huge, good armored, attacking clockwork drone.
+Description = Advanced and upgraded version of huge, well armored, attacking clockwork drone.
 Owner = Drones
 [94]
 Name = Huge inquisition ship mk III
@@ -905,7 +905,7 @@ Modules = 123, 112, 125, 13x93, 94, 9x96, 121, 4x120, 4x52
 CombatAI = Attacker
 Loot = 750..1000
 Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x32, 400..600x21
-Description = Huge, good armored and upgraded version of inquisition flying vessel.
+Description = Huge, well armored and upgraded version of inquisition flying vessel.
 Owner = Inquisition
 Crew = 49, 4x50, 6..10x72
 [95]
@@ -914,7 +914,7 @@ Modules = 124, 112, 126, 15x93, 94, 11x96, 121, 4x120, 4x53
 CombatAI = Attacker
 Loot = 900..1200
 Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x34, 500..650x21
-Description = Advanced and upgraded version of huge, good armored, inquisition flying vessel.
+Description = Advanced and upgraded version of huge, well armored, inquisition flying vessel.
 Owner = Inquisition
 Crew = 51, 4x52, 8..12x73
 [96]
@@ -995,7 +995,7 @@ Modules = 23, 26, 19, 10x4, 5, 12x7, 2x28, 2x29
 CombatAI = Coward
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
-Description = Large, good armored version of poleis traders ship. Avoids any fights.
+Description = Large, well armored version of poleis traders ship. Avoids any fights.
 Owner = Poleis
 Crew = 23, 2x24, 25, 26, 3x61
 [105]
@@ -1004,7 +1004,7 @@ Modules = 23, 26, 19, 10x4, 5, 12x7, 2x28, 2x29
 CombatAI = Coward
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
-Description = Large, good armored version of independent traders ship. Avoids any fights.
+Description = Large, well armored version of independent traders ship. Avoids any fights.
 Owner = Independent
 Crew = 23, 2x24, 25, 26, 3x61
 [106]
@@ -1139,7 +1139,7 @@ Modules = 23, 26, 19, 10x4, 5, 6x7, 3x28, 3x29
 CombatAI = Disarmer
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
-Description = Large, good armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.
+Description = Large, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.
 Owner = Poleis
 Crew = 23, 3x24, 25, 3..7x65
 [121]
@@ -1148,7 +1148,7 @@ Modules = 23, 26, 19, 10x4, 5, 6x7, 3x28, 3x29
 CombatAI = Disarmer
 Loot = 300..500
 Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
-Description = Large, good armored independent patrol ship. As a law enforcers they trying dismarm enemies first.
+Description = Large, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.
 Owner = Independent
 Crew = 23, 3x24, 25, 3..7x65
 [122]
