@@ -1231,4 +1231,14 @@ Skill = Blacksmith
 Difficulty = 30
 BaseType = 1
 Tool = BlacksmithSet
+[124]
+Material = Titanium
+Amount = 10
+Result = 144
+Crafted = 1
+Workplace = Furnace
+Skill = Blacksmith
+Difficulty = 25
+BaseType = 1
+Tool = BlacksmithSet
 []
