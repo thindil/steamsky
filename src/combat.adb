@@ -1205,6 +1205,8 @@ package body Combat is
                if PlayerShip.Crew(I).Order = Boarding then
                   GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
                   WasBoarded := True;
+               elsif PlayerShip.Crew(I).Order = Defend then
+                  GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
                end if;
             end loop;
             Enemy.Ship.Modules(1).Durability := 0;
