@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Clearing combat orders after ship combat
+
 ## [2.0.3] - 2018-03-11
 
 ### Fixed
