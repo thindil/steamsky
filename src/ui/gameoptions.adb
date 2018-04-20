@@ -140,6 +140,9 @@ package body GameOptions is
       Set_Transition_Type
         (Gtk_Stack(Get_Object(Builder, "optionsstack")),
          Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
+      Set_Transition_Type
+        (Gtk_Stack(Get_Object(Builder, "combatstack")),
+         Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
       SaveConfig;
       Save(To_String(SaveDirectory) & "keys.cfg");
       CreateSkyMap;
