@@ -28,7 +28,8 @@ package Combat is
      array(1 .. 2) of Positive; -- Data structure for guns informations
    package Guns_Container is new Vectors(Positive, GunsInfoArray);
    Guns: Guns_Container.Vector; -- List of guns installed on player ship
-   BoardingOrders: Natural_Container.Vector; -- List of orders for boarding party
+   BoardingOrders: Natural_Container
+     .Vector; -- List of orders for boarding party
    type Enemy_Record is -- Data structure for enemies
    record
       Ship: ShipRecord; -- Ship data for enemy
