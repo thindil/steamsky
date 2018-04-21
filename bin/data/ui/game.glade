@@ -4891,6 +4891,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="title" translatable="yes">Order</property>
                                         <child>
                                           <object class="GtkCellRendererCombo" id="renderboardorders">
+                                            <property name="editable">True</property>
                                             <property name="has_entry">False</property>
                                             <property name="model">orders2</property>
                                             <property name="text_column">0</property>
