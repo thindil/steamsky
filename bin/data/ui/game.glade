@@ -193,10 +193,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
       <!-- column-name guint1 -->
       <column type="guint"/>
-      <!-- column-name guint2 -->
-      <column type="guint"/>
       <!-- column-name guint3 -->
       <column type="guint"/>
+      <!-- column-name gchararray2 -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkListStore" id="crewnames">
@@ -872,6 +872,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="guint"/>
       <!-- column-name guint2 -->
       <column type="guint"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="orders2">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkMenu" id="ordersmenu">
@@ -4844,7 +4850,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="can_focus">True</property>
                                 <property name="shadow_type">in</property>
                                 <child>
-                                  <object class="GtkTreeView">
+                                  <object class="GtkTreeView" id="treecrew3">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="model">crewlist3</property>
@@ -4883,14 +4889,15 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <child>
                                       <object class="GtkTreeViewColumn">
                                         <property name="title" translatable="yes">Order</property>
-                                        <property name="sort_indicator">True</property>
-                                        <property name="sort_column_id">2</property>
                                         <child>
                                           <object class="GtkCellRendererCombo" id="renderboardorders">
                                             <property name="has_entry">False</property>
-                                            <property name="model">orders</property>
+                                            <property name="model">orders2</property>
                                             <property name="text_column">0</property>
                                           </object>
+                                          <attributes>
+                                            <attribute name="text">3</attribute>
+                                          </attributes>
                                         </child>
                                       </object>
                                     </child>
@@ -4915,7 +4922,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="model">enemycrewlist</property>
                                     <property name="search_column">0</property>
                                     <child internal-child="selection">
-                                      <object class="GtkTreeSelection"/>
+                                      <object class="GtkTreeSelection">
+                                        <property name="mode">none</property>
+                                      </object>
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn">
@@ -4934,6 +4943,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <child>
                                       <object class="GtkTreeViewColumn">
                                         <property name="title" translatable="yes">Health</property>
+                                        <property name="expand">True</property>
                                         <property name="clickable">True</property>
                                         <property name="sort_indicator">True</property>
                                         <property name="sort_column_id">1</property>
@@ -4988,28 +4998,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="btnclosecombat1">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <signal name="clicked" handler="Close_Combat" swapped="no"/>
-                            <child>
-                              <object class="GtkAccelLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Back to map</property>
-                                <property name="accel_widget">btnclosecombat</property>
-                              </object>
-                            </child>
-                            <accelerator key="Escape" signal="clicked"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
                           </packing>
                         </child>
                       </object>
