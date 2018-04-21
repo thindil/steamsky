@@ -50,6 +50,7 @@ with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
 with Help.UI; use Help.UI;
+with Ada.Text_IO; use Ada.Text_IO;
 
 package body Combat.UI is
 
@@ -626,21 +627,35 @@ package body Combat.UI is
       Iter, OrdersIter: Gtk_Tree_Iter;
       List, OrdersList: Gtk_List_Store;
       OrderIndex: Positive := 1;
-      BoardingOrder: Natural;
+      OrderName: Unbounded_String;
    begin
+      if BoardingOrders.Length = 0 then
+         for Member of PlayerShip.Crew loop
+            if Member.Order = Boarding then
+               BoardingOrders.Append(New_Item => 0);
+            end if;
+         end loop;
+      end if;
       UpdateMessages;
       List := Gtk_List_Store(Get_Object(Builder, "enemycrewlist"));
       Clear(List);
-      OrdersList := Gtk_List_Store(Get_Object(Builder, "orders"));
+      OrdersList := Gtk_List_Store(Get_Object(Builder, "orders2"));
       Clear(OrdersList);
+      Append(OrdersList, OrdersIter);
+      Set(OrdersList, OrdersIter, 0, "Attack");
       for I in Enemy.Ship.Crew.Iterate loop
          Append(List, Iter);
          Set(List, Iter, 0, To_String(Enemy.Ship.Crew(I).Name));
          Set(List, Iter, 1, Gint(Enemy.Ship.Crew(I).Health));
-         Set(List, Iter, 2, Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
-         Set(List, Iter, 3, Gint(Crew_Container.To_Index(I)));
+         Set(List, Iter, 2, Gint(Crew_Container.To_Index(I)));
+         OrderName := To_Unbounded_String(Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
+         Replace_Slice(OrderName, 2, Length(OrderName), To_Lower(Slice(OrderName, 2, Length(OrderName))));
+         Set(List, Iter, 3, To_String(OrderName));
          Append(OrdersList, OrdersIter);
+         Set(OrdersList, OrdersIter, 0, "Attack " & To_String(Enemy.Ship.Crew(I).Name));
       end loop;
+      Append(OrdersList, OrdersIter);
+      Set(OrdersList, OrdersIter, 0, "Back to ship");
       List := Gtk_List_Store(Get_Object(Builder, "crewlist3"));
       Clear(List);
       for I in PlayerShip.Crew.Iterate loop
@@ -648,9 +663,9 @@ package body Combat.UI is
             Append(List, Iter);
             Set(List, Iter, 0, To_String(PlayerShip.Crew(I).Name));
             Set(List, Iter, 1, Gint(PlayerShip.Crew(I).Health));
-            BoardingOrder := BoardingOrders(OrderIndex);
-            Set(List, Iter, 2, Gint(BoardingOrder));
-            Set(List, Iter, 3, Gint(Crew_Container.To_Index(I)));
+            Set(List, Iter, 2, Gint(Crew_Container.To_Index(I)));
+            OrdersIter := Get_Iter_From_String(OrdersList, Natural'Image(BoardingOrders(OrderIndex)));
+            Set(List, Iter, 3, Get_String(OrdersList, OrdersIter, 0));
             OrderIndex := OrderIndex + 1;
          end if;
       end loop;
@@ -672,10 +687,15 @@ package body Combat.UI is
          RefreshBoardingUI;
       end if;
       if EndCombat then
-         Hide(Gtk_Widget(Get_Object(Object, "btnboxactions")));
-         Hide(Gtk_Widget(Get_Object(Object, "expmoreinfo")));
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), False);
-         Show_All(Gtk_Widget(Get_Object(Object, "btnclosecombat")));
+         if Get_Visible_Child_Name(CombatStack) = "shipcombat" then
+            Hide(Gtk_Widget(Get_Object(Object, "btnboxactions")));
+            Hide(Gtk_Widget(Get_Object(Object, "expmoreinfo")));
+            Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), False);
+            Show_All(Gtk_Widget(Get_Object(Object, "btnclosecombat")));
+         else
+            Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew3")), False);
+            Show_All(Gtk_Widget(Get_Object(Object, "btnclosecombat1")));
+         end if;
       end if;
    end NextTurn;
 
@@ -710,6 +730,14 @@ package body Combat.UI is
       end if;
    end ShowCombatInfo;
 
+   procedure GiveBoardingOrders
+     (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
+      Path_String: UTF8_String;
+      New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
+   begin
+      Put_Line(Path_String);
+   end GiveBoardingOrders;
+
    procedure CreateCombatUI(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
@@ -724,6 +752,9 @@ package body Combat.UI is
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "rendercrew")),
          GiveCombatOrders'Access);
+      On_Changed
+        (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderboardorders")),
+         GiveBoardingOrders'Access);
    end CreateCombatUI;
 
 end Combat.UI;
