@@ -1175,13 +1175,6 @@ package body Combat is
          if not EndCombat and
            Enemy.Ship.Crew.Length >
              0 then -- Characters combat (player boarding party)
-            if BoardingOrders.Length = 0 then
-               for Member of PlayerShip.Crew loop
-                  if Member.Order = Boarding then
-                     BoardingOrders.Append(New_Item(0));
-                  end if;
-               end loop;
-            end if;
             MeleeCombat(PlayerShip.Crew, Enemy.Ship.Crew, True);
          end if;
          if not EndCombat and
