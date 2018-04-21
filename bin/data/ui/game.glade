@@ -3929,6 +3929,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <child>
                               <object class="GtkTreeViewColumn" id="columnskill">
                                 <property name="title" translatable="yes">Name</property>
+                                <property name="expand">True</property>
                                 <property name="sort_indicator">True</property>
                                 <property name="sort_column_id">0</property>
                                 <child>
@@ -4883,6 +4884,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       <object class="GtkTreeViewColumn">
                                         <property name="title" translatable="yes">Order</property>
                                         <property name="sort_indicator">True</property>
+                                        <property name="sort_column_id">2</property>
                                         <child>
                                           <object class="GtkCellRendererCombo" id="renderboardorders">
                                             <property name="has_entry">False</property>
@@ -6906,7 +6908,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="shipinfobox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="homogeneous">True</property>
