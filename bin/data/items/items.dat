@@ -1221,11 +1221,20 @@ Value = 2
 Description = Simple bucket made of orichalcum.
 [144]
 Name = Titanium blacksmith set
-Weight = 100
+Weight = 140
 Type = BlacksmithSet
 Prices = 110, 112, 112, 112
 Buyable = Y, N, N, N
 ShowType = Tool
 Value = 3
 Description = Titanium set of tools used in blacksmith recipes.
+[145]
+Name = Orichalcum blacksmith set
+Weight = 140
+Type = BlacksmithSet
+Prices = 115, 117, 117, 117
+Buyable = Y, N, N, N
+ShowType = Tool
+Value = 2
+Description = Orichalcum set of tools used in blacksmith recipes.
 []
