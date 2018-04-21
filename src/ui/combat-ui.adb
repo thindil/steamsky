@@ -50,7 +50,6 @@ with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
 with Help.UI; use Help.UI;
-with Ada.Text_IO; use Ada.Text_IO;
 
 package body Combat.UI is
 
@@ -106,7 +105,6 @@ package body Combat.UI is
          if PlayerShip.Crew(I).Name = MemberName and
            PlayerShip.Crew(I).Order = Boarding then
             Set_Active(Gtk_Toggle_Button(Widget), True);
-            exit;
          end if;
       end loop;
       On_Toggled(Gtk_Toggle_Button(Widget), SetBoardingOrder'Access);
@@ -648,11 +646,20 @@ package body Combat.UI is
          Set(List, Iter, 0, To_String(Enemy.Ship.Crew(I).Name));
          Set(List, Iter, 1, Gint(Enemy.Ship.Crew(I).Health));
          Set(List, Iter, 2, Gint(Crew_Container.To_Index(I)));
-         OrderName := To_Unbounded_String(Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
-         Replace_Slice(OrderName, 2, Length(OrderName), To_Lower(Slice(OrderName, 2, Length(OrderName))));
+         OrderName :=
+           To_Unbounded_String(Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
+         Replace_Slice
+           (OrderName,
+            2,
+            Length(OrderName),
+            To_Lower(Slice(OrderName, 2, Length(OrderName))));
          Set(List, Iter, 3, To_String(OrderName));
          Append(OrdersList, OrdersIter);
-         Set(OrdersList, OrdersIter, 0, "Attack " & To_String(Enemy.Ship.Crew(I).Name));
+         Set
+           (OrdersList,
+            OrdersIter,
+            0,
+            "Attack " & To_String(Enemy.Ship.Crew(I).Name));
       end loop;
       Append(OrdersList, OrdersIter);
       Set(OrdersList, OrdersIter, 0, "Back to ship");
@@ -664,7 +671,10 @@ package body Combat.UI is
             Set(List, Iter, 0, To_String(PlayerShip.Crew(I).Name));
             Set(List, Iter, 1, Gint(PlayerShip.Crew(I).Health));
             Set(List, Iter, 2, Gint(Crew_Container.To_Index(I)));
-            OrdersIter := Get_Iter_From_String(OrdersList, Natural'Image(BoardingOrders(OrderIndex)));
+            OrdersIter :=
+              Get_Iter_From_String
+                (OrdersList,
+                 Natural'Image(BoardingOrders(OrderIndex)));
             Set(List, Iter, 3, Get_String(OrdersList, OrdersIter, 0));
             OrderIndex := OrderIndex + 1;
          end if;
@@ -672,15 +682,18 @@ package body Combat.UI is
    end RefreshBoardingUI;
 
    procedure NextTurn(Object: access Gtkada_Builder_Record'Class) is
-      CombatStack: constant Gtk_Stack := Gtk_Stack(Get_Object(Object, "combatstack"));
+      CombatStack: constant Gtk_Stack :=
+        Gtk_Stack(Get_Object(Object, "combatstack"));
    begin
-      CombatTurn;
-      if PlayerShip.Crew(1).Order = Boarding and Get_Visible_Child_Name(CombatStack) = "shipcombat" then
+      if PlayerShip.Crew(1).Order = Boarding and
+        Get_Visible_Child_Name(CombatStack) = "shipcombat" then
          Set_Visible_Child_Name(CombatStack, "boarding");
       end if;
-      if PlayerShip.Crew(1).Order /= Boarding and Get_Visible_Child_Name(CombatStack) = "boarding" then
+      if PlayerShip.Crew(1).Order /= Boarding and
+        Get_Visible_Child_Name(CombatStack) = "boarding" then
          Set_Visible_Child_Name(CombatStack, "shipcombat");
       end if;
+      CombatTurn;
       if Get_Visible_Child_Name(CombatStack) = "shipcombat" then
          RefreshCombatUI;
       else
@@ -734,8 +747,19 @@ package body Combat.UI is
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String;
       New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
+      List, OrdersList: Gtk_List_Store;
+      Model: Glib.Types.GType_Interface;
    begin
-      Put_Line(Path_String);
+      Model := Get_Property(Self, Gtk.Cell_Renderer_Combo.Model_Property);
+      OrdersList := -(Gtk_Tree_Model(Model));
+      List := Gtk_List_Store(Get_Object(Builder, "crewlist3"));
+      Set
+        (List,
+         Get_Iter_From_String(List, Path_String),
+         3,
+         Get_String(OrdersList, New_Iter, 0));
+      BoardingOrders(Positive'Value(Path_String) + 1) :=
+        Natural'Value(To_String(Get_Path(OrdersList, New_Iter)));
    end GiveBoardingOrders;
 
    procedure CreateCombatUI(NewBuilder: Gtkada_Builder) is
