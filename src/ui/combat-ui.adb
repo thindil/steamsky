@@ -81,14 +81,21 @@ package body Combat.UI is
 
    procedure SetBoardingOrder(Self: access Gtk_Toggle_Button_Record'Class) is
       MemberName: Unbounded_String;
+      OrderIndex: Natural := 0;
    begin
       MemberName := To_Unbounded_String(Get_Label(Self));
       for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Crew(I).Order = Boarding then
+            OrderIndex := OrderIndex + 1;
+         end if;
          if PlayerShip.Crew(I).Name = MemberName then
             if Get_Active(Self) then
                GiveOrders(PlayerShip, Crew_Container.To_Index(I), Boarding, 0);
+               BoardingOrders.Append(New_Item => 0);
             else
                GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
+               BoardingOrders.Delete(Index => OrderIndex);
+               OrderIndex := OrderIndex - 1;
             end if;
             exit;
          end if;
@@ -627,13 +634,6 @@ package body Combat.UI is
       OrderIndex: Positive := 1;
       OrderName: Unbounded_String;
    begin
-      if BoardingOrders.Length = 0 then
-         for Member of PlayerShip.Crew loop
-            if Member.Order = Boarding then
-               BoardingOrders.Append(New_Item => 0);
-            end if;
-         end loop;
-      end if;
       UpdateMessages;
       List := Gtk_List_Store(Get_Object(Builder, "enemycrewlist"));
       Clear(List);
@@ -700,15 +700,14 @@ package body Combat.UI is
          RefreshBoardingUI;
       end if;
       if EndCombat then
-         if Get_Visible_Child_Name(CombatStack) = "shipcombat" then
-            Hide(Gtk_Widget(Get_Object(Object, "btnboxactions")));
-            Hide(Gtk_Widget(Get_Object(Object, "expmoreinfo")));
-            Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), False);
-            Show_All(Gtk_Widget(Get_Object(Object, "btnclosecombat")));
-         else
-            Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew3")), False);
-            Show_All(Gtk_Widget(Get_Object(Object, "btnclosecombat1")));
+         if Get_Visible_Child_Name(CombatStack) = "boarding" then
+            RefreshCombatUI;
+            Set_Visible_Child_Name(CombatStack, "shipcombat");
          end if;
+         Hide(Gtk_Widget(Get_Object(Object, "btnboxactions")));
+         Hide(Gtk_Widget(Get_Object(Object, "expmoreinfo")));
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), False);
+         Show_All(Gtk_Widget(Get_Object(Object, "btnclosecombat")));
       end if;
    end NextTurn;
 
@@ -749,6 +748,7 @@ package body Combat.UI is
       New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
       List, OrdersList: Gtk_List_Store;
       Model: Glib.Types.GType_Interface;
+      NewOrder: Integer;
    begin
       Model := Get_Property(Self, Gtk.Cell_Renderer_Combo.Model_Property);
       OrdersList := -(Gtk_Tree_Model(Model));
@@ -758,8 +758,11 @@ package body Combat.UI is
          Get_Iter_From_String(List, Path_String),
          3,
          Get_String(OrdersList, New_Iter, 0));
-      BoardingOrders(Positive'Value(Path_String) + 1) :=
-        Natural'Value(To_String(Get_Path(OrdersList, New_Iter)));
+      NewOrder := Natural'Value(To_String(Get_Path(OrdersList, New_Iter)));
+      if NewOrder > Integer(Enemy.Ship.Crew.Length) then
+         NewOrder := -1;
+      end if;
+      BoardingOrders(Positive'Value(Path_String) + 1) := NewOrder;
    end GiveBoardingOrders;
 
    procedure CreateCombatUI(NewBuilder: Gtkada_Builder) is
