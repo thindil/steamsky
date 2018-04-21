@@ -4824,7 +4824,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         </child>
                       </object>
                       <packing>
-                        <property name="name">page0</property>
+                        <property name="name">shipcombat</property>
                         <property name="title" translatable="yes">page0</property>
                       </packing>
                     </child>
@@ -5014,7 +5014,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         </child>
                       </object>
                       <packing>
-                        <property name="name">page1</property>
+                        <property name="name">boarding</property>
                         <property name="title" translatable="yes">page1</property>
                         <property name="position">1</property>
                       </packing>
