@@ -31,6 +31,7 @@ with Ships.Movement; use Ships.Movement;
 with Utils; use Utils;
 with Log; use Log;
 with Goals; use Goals;
+with Game; use Game;
 
 package body Combat is
 
@@ -629,6 +630,7 @@ package body Combat is
          PlayerAttack: Boolean) is
          AttackDone, Riposte: Boolean;
          AttackerIndex, DefenderIndex: Positive;
+         OrderIndex: Natural;
          function CharacterAttack
            (AttackerIndex, DefenderIndex: Positive;
             PlayerAttack2: Boolean) return Boolean is
@@ -802,10 +804,26 @@ package body Combat is
             if Defender.Health = 0 then
                if PlayerAttack then
                   Death(DefenderIndex, Attacker.Name, Enemy.Ship);
+                  for Order of BoardingOrders loop
+                     if Order >= DefenderIndex then
+                        Order := Order - 1;
+                     end if;
+                  end loop;
                   if Enemy.Ship.Crew.Length = 0 then
                      EndCombat := True;
                   end if;
                else
+                  OrderIndex := 0;
+                  for I in PlayerShip.Crew.Iterate loop
+                     if PlayerShip.Crew(I).Order = Boarding then
+                        OrderIndex := OrderIndex + 1;
+                     end if;
+                     if Crew_Container.To_Index(I) = DefenderIndex then
+                        BoardingOrders.Delete(Index => OrderIndex);
+                        OrderIndex := OrderIndex - 1;
+                        exit;
+                     end if;
+                  end loop;
                   Death(DefenderIndex, Attacker.Name, PlayerShip);
                   if DefenderIndex = 1 then -- Player is dead
                      EndCombat := True;
@@ -818,27 +836,69 @@ package body Combat is
          end CharacterAttack;
       begin
          AttackerIndex := Attackers.First_Index;
+         OrderIndex := 1;
          while AttackerIndex <=
            Attackers.Last_Index loop -- Boarding party attacks first
             Riposte := True;
             if Attackers(AttackerIndex).Order = Boarding then
                AttackDone := False;
-               for Defender in
-                 Defenders.First_Index .. Defenders.Last_Index loop
-                  if Defenders(Defender).Order = Defend then
+               if PlayerAttack then
+                  if OrderIndex > BoardingOrders.Last_Index then
+                     OrderIndex := BoardingOrders.Last_Index;
+                  end if;
+                  if BoardingOrders(OrderIndex) in
+                      Defenders.First_Index .. Defenders.Last_Index then
+                     DefenderIndex := BoardingOrders(OrderIndex);
                      Riposte :=
-                       CharacterAttack(AttackerIndex, Defender, PlayerAttack);
+                       CharacterAttack
+                         (AttackerIndex,
+                          DefenderIndex,
+                          PlayerAttack);
                      if not EndCombat and Riposte then
                         Riposte :=
                           CharacterAttack
-                            (Defender,
+                            (DefenderIndex,
                              AttackerIndex,
                              not PlayerAttack);
+                        if Enemy.Ship.Crew(DefenderIndex).Order /= Defend then
+                           GiveOrders
+                             (Enemy.Ship,
+                              DefenderIndex,
+                              Defend,
+                              0,
+                              False);
+                        end if;
                      end if;
                      AttackDone := True;
-                     exit;
+                  elsif BoardingOrders(OrderIndex) = -1 then
+                     GiveOrders(PlayerShip, AttackerIndex, Rest);
+                     BoardingOrders.Delete(Index => OrderIndex);
+                     OrderIndex := OrderIndex - 1;
+                     AttackDone := True;
                   end if;
-               end loop;
+                  OrderIndex := OrderIndex + 1;
+               end if;
+               if not AttackDone then
+                  for Defender in
+                    Defenders.First_Index .. Defenders.Last_Index loop
+                     if Defenders(Defender).Order = Defend then
+                        Riposte :=
+                          CharacterAttack
+                            (AttackerIndex,
+                             Defender,
+                             PlayerAttack);
+                        if not EndCombat and Riposte then
+                           Riposte :=
+                             CharacterAttack
+                               (Defender,
+                                AttackerIndex,
+                                not PlayerAttack);
+                        end if;
+                        AttackDone := True;
+                        exit;
+                     end if;
+                  end loop;
+               end if;
                if not AttackDone then
                   DefenderIndex :=
                     GetRandom(Defenders.First_Index, Defenders.Last_Index);
