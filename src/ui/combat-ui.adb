@@ -112,13 +112,7 @@ package body Combat.UI is
       Show_All(Widget);
    end SetBoardingParty;
 
-   procedure RefreshCombatUI is
-      Iter: Gtk_Tree_Iter;
-      List: Gtk_List_Store;
-      DamagePercent: Gint;
-      IsDamaged: Boolean := False;
-      EnemyInfo, ModuleName: Unbounded_String;
-      MemberIndex, SpaceIndex: Natural;
+   procedure UpdateMessages is
       MessagesBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Builder, "txtmessages"));
       LoopStart: Integer := 0 - MessagesAmount;
@@ -130,15 +124,7 @@ package body Combat.UI is
          To_Unbounded_String("red"),
          To_Unbounded_String("blue"),
          To_Unbounded_String("cyan"));
-      ButtonBox: constant Gtk_Container :=
-        Gtk_Container(Get_Object(Builder, "btnboxboard"));
    begin
-      if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
-        ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
-         Show_All(Gtk_Widget(Get_Object(Builder, "expboard")));
-      else
-         Hide(Gtk_Widget(Get_Object(Builder, "expboard")));
-      end if;
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmessages")), "");
       Get_Start_Iter(MessagesBuffer, MessagesIter);
       if LoopStart = 0 then
@@ -165,6 +151,25 @@ package body Combat.UI is
             Insert(MessagesBuffer, MessagesIter, "" & ASCII.LF);
          end if;
       end loop;
+   end UpdateMessages;
+
+   procedure RefreshCombatUI is
+      Iter: Gtk_Tree_Iter;
+      List: Gtk_List_Store;
+      DamagePercent: Gint;
+      IsDamaged: Boolean := False;
+      EnemyInfo, ModuleName: Unbounded_String;
+      MemberIndex, SpaceIndex: Natural;
+      ButtonBox: constant Gtk_Container :=
+        Gtk_Container(Get_Object(Builder, "btnboxboard"));
+   begin
+      if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
+        ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
+         Show_All(Gtk_Widget(Get_Object(Builder, "expboard")));
+      else
+         Hide(Gtk_Widget(Get_Object(Builder, "expboard")));
+      end if;
+      UpdateMessages;
       List := Gtk_List_Store(Get_Object(Builder, "crewlist1"));
       Clear(List);
       Append(List, Iter);
@@ -617,10 +622,55 @@ package body Combat.UI is
       RefreshCombatUI;
    end GiveCombatOrders;
 
+   procedure RefreshBoardingUI is
+      Iter, OrdersIter: Gtk_Tree_Iter;
+      List, OrdersList: Gtk_List_Store;
+      OrderIndex: Positive := 1;
+      BoardingOrder: Natural;
+   begin
+      UpdateMessages;
+      List := Gtk_List_Store(Get_Object(Builder, "enemycrewlist"));
+      Clear(List);
+      OrdersList := Gtk_List_Store(Get_Object(Builder, "orders"));
+      Clear(OrdersList);
+      for I in Enemy.Ship.Crew.Iterate loop
+         Append(List, Iter);
+         Set(List, Iter, 0, To_String(Enemy.Ship.Crew(I).Name));
+         Set(List, Iter, 1, Gint(Enemy.Ship.Crew(I).Health));
+         Set(List, Iter, 2, Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
+         Set(List, Iter, 3, Gint(Crew_Container.To_Index(I)));
+         Append(OrdersList, OrdersIter);
+      end loop;
+      List := Gtk_List_Store(Get_Object(Builder, "crewlist3"));
+      Clear(List);
+      for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Crew(I).Order = Boarding then
+            Append(List, Iter);
+            Set(List, Iter, 0, To_String(PlayerShip.Crew(I).Name));
+            Set(List, Iter, 1, Gint(PlayerShip.Crew(I).Health));
+            BoardingOrder := BoardingOrders(OrderIndex);
+            Set(List, Iter, 2, Gint(BoardingOrder));
+            Set(List, Iter, 3, Gint(Crew_Container.To_Index(I)));
+            OrderIndex := OrderIndex + 1;
+         end if;
+      end loop;
+   end RefreshBoardingUI;
+
    procedure NextTurn(Object: access Gtkada_Builder_Record'Class) is
+      CombatStack: constant Gtk_Stack := Gtk_Stack(Get_Object(Object, "combatstack"));
    begin
       CombatTurn;
-      RefreshCombatUI;
+      if PlayerShip.Crew(1).Order = Boarding and Get_Visible_Child_Name(CombatStack) = "shipcombat" then
+         Set_Visible_Child_Name(CombatStack, "boarding");
+      end if;
+      if PlayerShip.Crew(1).Order /= Boarding and Get_Visible_Child_Name(CombatStack) = "boarding" then
+         Set_Visible_Child_Name(CombatStack, "shipcombat");
+      end if;
+      if Get_Visible_Child_Name(CombatStack) = "shipcombat" then
+         RefreshCombatUI;
+      else
+         RefreshBoardingUI;
+      end if;
       if EndCombat then
          Hide(Gtk_Widget(Get_Object(Object, "btnboxactions")));
          Hide(Gtk_Widget(Get_Object(Object, "expmoreinfo")));

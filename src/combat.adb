@@ -31,7 +31,6 @@ with Ships.Movement; use Ships.Movement;
 with Utils; use Utils;
 with Log; use Log;
 with Goals; use Goals;
-with Game; use Game;
 
 package body Combat is
 
@@ -72,6 +71,7 @@ package body Combat is
    begin
       EnemyShipIndex := EnemyIndex;
       HarpoonDuration := 0;
+      BoardingOrders.Clear;
       EnemyShip :=
         CreateShip
           (EnemyIndex,
@@ -1175,6 +1175,13 @@ package body Combat is
          if not EndCombat and
            Enemy.Ship.Crew.Length >
              0 then -- Characters combat (player boarding party)
+            if BoardingOrders.Length = 0 then
+               for Member of PlayerShip.Crew loop
+                  if Member.Order = Boarding then
+                     BoardingOrders.Append(New_Item(0));
+                  end if;
+               end loop;
+            end if;
             MeleeCombat(PlayerShip.Crew, Enemy.Ship.Crew, True);
          end if;
          if not EndCombat and
