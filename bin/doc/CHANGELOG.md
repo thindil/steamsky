@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Clearing combat orders after ship combat
+- Crash in combat during boarding party fight
 
 ## [2.0.3] - 2018-03-11
 
