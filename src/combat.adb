@@ -1084,12 +1084,12 @@ package body Combat is
       if not EndCombat and Enemy.Ship.Crew.Length > 0 then -- Characters combat
          declare
             AttackDone, Riposte: Boolean;
-            DefenderIndex: Positive;
+            DefenderIndex, Attacker, Defender: Positive;
          begin
-            for Attacker in
-              PlayerShip.Crew.First_Index ..
-                  PlayerShip
-                    .Crew.Last_Index loop -- Boarding party attacks first
+            Attacker := PlayerShip.Crew.First_Index;
+            while Attacker <=
+              PlayerShip.Crew.Last_Index loop  -- Boarding party attacks first
+               Riposte := True;
                if PlayerShip.Crew(Attacker).Order = Boarding then
                   AttackDone := False;
                   for Defender in
@@ -1119,10 +1119,14 @@ package body Combat is
                   end if;
                end if;
                exit when EndCombat;
+               if Riposte then
+                  Attacker := Attacker + 1;
+               end if;
             end loop;
-            for Defender in
-              Enemy.Ship.Crew.First_Index ..
-                  Enemy.Ship.Crew.Last_Index loop -- Defenders attacks
+            Defender := Enemy.Ship.Crew.First_Index;
+            while Defender <=
+              Enemy.Ship.Crew.Last_Index loop -- Defenders attacks
+               Riposte := True;
                if Enemy.Ship.Crew(Defender).Order = Defend then
                   for Attacker in
                     PlayerShip.Crew.First_Index ..
@@ -1136,6 +1140,9 @@ package body Combat is
                         exit;
                      end if;
                   end loop;
+               end if;
+               if Riposte then
+                  Defender := Defender + 1;
                end if;
             end loop;
             if FindMember(Boarding) = 0 then
