@@ -47,12 +47,17 @@ GtkButton * {
    font-weight:bold;
 }
 
-.progressbar {
+.progressbar, 
+   .progressbar:selected, 
+   .progressbar:selected:focus {
    background:linear-gradient(to bottom, blue, black);
    border-radius:10px;
 }
 
-GtkProgressBar.trough, GtkTreeView.view.trough {
+GtkProgressBar.trough, 
+   GtkTreeView.view.trough, 
+   GtkTreeView.view.trough:selected, 
+   GtkTreeView.view.trough:selected:focus {
   border-radius: 10px;
   background:linear-gradient(to bottom, rgb(64,69,82), rgb(35,41,51)); 
 }
