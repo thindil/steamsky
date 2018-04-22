@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - New orders priorities: for defending ship and boarding enemy ship which made
   saves from previous version incompatible
 - Ability to board player ship by enemies
+- Option to give orders to boarding party (if player is in this party)
 
 ### Changed
 - Updated interface
