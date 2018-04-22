@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.3] - 2018-04-22
 
 ### Added
 - New items: titanium mold, orichalcum mold, titanium gunsmith set, orichalcum
