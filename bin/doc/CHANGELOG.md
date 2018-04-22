@@ -11,7 +11,8 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: titanium mold, orichalcum mold, titanium gunsmith set,
   orichalcum gunsmith set, titanium cooking set, orichalcum cooking set,
   titanium sickle, orichalcum sickle, titanium saw, orichalcum saw, titanium
-  bucket, orichalcum bucket and titanium blacksmith set
+  bucket, orichalcum bucket, titanium blacksmith set and orichalcum blacksmith
+  set
 - Ability to enable/disable interface animations
 - Ability to set type of interface animations
 - Descriptions for skills and stats
