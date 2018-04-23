@@ -1100,6 +1100,8 @@ package body Combat is
                         if not EndCombat and Riposte then
                            Riposte :=
                              CharacterAttack(Defender, Attacker, False);
+                        else
+                           Riposte := True;
                         end if;
                         AttackDone := True;
                         exit;
@@ -1115,6 +1117,8 @@ package body Combat is
                      if not EndCombat and Riposte then
                         Riposte :=
                           CharacterAttack(DefenderIndex, Attacker, False);
+                     else
+                        Riposte := True;
                      end if;
                   end if;
                end if;
@@ -1136,6 +1140,8 @@ package body Combat is
                         if not EndCombat and Riposte then
                            Riposte :=
                              CharacterAttack(Attacker, Defender, True);
+                        else
+                           Riposte := True;
                         end if;
                         exit;
                      end if;
