@@ -843,9 +843,6 @@ package body Combat is
             if Attackers(AttackerIndex).Order = Boarding then
                AttackDone := False;
                if PlayerAttack then
-                  if OrderIndex > BoardingOrders.Last_Index then
-                     OrderIndex := BoardingOrders.Last_Index;
-                  end if;
                   if BoardingOrders(OrderIndex) in
                       Defenders.First_Index .. Defenders.Last_Index then
                      DefenderIndex := BoardingOrders(OrderIndex);
@@ -855,11 +852,6 @@ package body Combat is
                           DefenderIndex,
                           PlayerAttack);
                      if not EndCombat and Riposte then
-                        Riposte :=
-                          CharacterAttack
-                            (DefenderIndex,
-                             AttackerIndex,
-                             not PlayerAttack);
                         if Enemy.Ship.Crew(DefenderIndex).Order /= Defend then
                            GiveOrders
                              (Enemy.Ship,
@@ -868,6 +860,13 @@ package body Combat is
                               0,
                               False);
                         end if;
+                        Riposte :=
+                          CharacterAttack
+                            (DefenderIndex,
+                             AttackerIndex,
+                             not PlayerAttack);
+                     else
+                        Riposte := True;
                      end if;
                      AttackDone := True;
                   elsif BoardingOrders(OrderIndex) = -1 then
@@ -893,6 +892,8 @@ package body Combat is
                                (Defender,
                                 AttackerIndex,
                                 not PlayerAttack);
+                        else
+                           Riposte := True;
                         end if;
                         AttackDone := True;
                         exit;
@@ -918,6 +919,8 @@ package body Combat is
                          (AttackerIndex => DefenderIndex,
                           DefenderIndex => AttackerIndex,
                           PlayerAttack2 => not PlayerAttack);
+                  else
+                     Riposte := True;
                   end if;
                end if;
             end if;
