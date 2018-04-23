@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New item: titanium woodworker set
 
+### Changed
+- Updated interface
+
 ## [2.3] - 2018-04-22
 
 ### Added
