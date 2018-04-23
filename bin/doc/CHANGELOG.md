@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New item: titanium woodworker set
+
 ## [2.3] - 2018-04-22
 
 ### Added
