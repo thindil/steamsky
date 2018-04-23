@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 
+### Fixed
+- Double attack in melee combat after kill
+
 ## [2.3] - 2018-04-22
 
 ### Added
