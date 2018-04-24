@@ -37,6 +37,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkTextBuffer" id="licensebuffer"/>
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name gchararray1 -->
@@ -619,16 +620,43 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btnback4">
-                <property name="label" translatable="yes">_Back to menu</property>
+              <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="valign">end</property>
-                <property name="use_underline">True</property>
-                <signal name="clicked" handler="Show_Page" object="btnback" swapped="no"/>
-                <accelerator key="Escape" signal="clicked"/>
+                <child>
+                  <object class="GtkButton" id="btnback4">
+                    <property name="label" translatable="yes">_Back to menu</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">end</property>
+                    <property name="use_underline">True</property>
+                    <signal name="clicked" handler="Show_Page" object="btnback" swapped="no"/>
+                    <accelerator key="Escape" signal="clicked"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnlicense">
+                    <property name="label" translatable="yes">_Show full license</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_underline">True</property>
+                    <signal name="clicked" handler="Show_Page" object="btnlicense" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -641,6 +669,58 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
             <property name="name">page4</property>
             <property name="title" translatable="yes">page4</property>
             <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTextView">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="editable">False</property>
+                    <property name="wrap_mode">word</property>
+                    <property name="cursor_visible">False</property>
+                    <property name="buffer">licensebuffer</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnback5">
+                <property name="label" translatable="yes">_Back</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">end</property>
+                <property name="valign">end</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="Show_Page" object="btnabout" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="name">page5</property>
+            <property name="title" translatable="yes">page5</property>
+            <property name="position">5</property>
           </packing>
         </child>
       </object>
