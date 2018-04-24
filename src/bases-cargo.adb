@@ -44,7 +44,7 @@ package body Bases.Cargo is
          Chance := 15;
       end if;
       Chance := Chance + DaysDifference(SkyBases(BaseIndex).Visited);
-      if SkyBases(BaseIndex).Cargo.Length /= 0 then
+      if SkyBases(BaseIndex).Cargo.Length = 0 then
          Chance := 101;
       end if;
       if GetRandom(1, 100) > Chance then
