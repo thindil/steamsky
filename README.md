@@ -34,7 +34,7 @@ To build it (works on Linux and Windows too), you need:
   https://www.adacore.com/download/more
 
   At this moment tested version of GtkAda is 2017 and game require GTK library
-  in version 3.14 or above.
+  in version 3.14 (may not works with other versions).
 
 If you have all, in main source code directory (where this file is):
 
