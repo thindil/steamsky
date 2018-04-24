@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New item: titanium woodworker set
+- New crafting recipe: titanium woodworker set
 
 ### Changed
 - Updated interface
