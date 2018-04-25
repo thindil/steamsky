@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - New item: titanium woodworker set
 - New crafting recipe: titanium woodworker set
 - Showing license full text in info about game
+- New sky base type: military
 
 ### Changed
 - Updated interface
@@ -15,6 +16,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Double attack in melee combat after kill
 - Generating cargo in first time visited bases
+- Crash in repairing ship in bases
 
 ## [2.3] - 2018-04-22
 
@@ -49,7 +51,6 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Lots of grammar/spelling errors by LJNIC (pull request #16)
 - Clearing combat orders after combat
-- Crash in repairing ship in bases
 
 ## [2.2] - 2018-03-25
 
