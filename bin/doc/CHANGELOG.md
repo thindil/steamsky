@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New item: titanium woodworker set
+- New items: titanium woodworker set and orichalcum woodworker set
 - New crafting recipe: titanium woodworker set
 - Showing license full text in info about game
 - New sky base type: military
