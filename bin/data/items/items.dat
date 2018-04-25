@@ -1246,4 +1246,13 @@ Buyable = Y, N, N, N, N
 ShowType = Tool
 Value = 3
 Description = Titanium set of tools used in woodworker recipes.
+[147]
+Name = Orichalcum woodworker set
+Weight = 10
+Type = WoodworkerSet
+Prices = 26, 28, 28, 28, 28
+Buyable = Y, N, N, N, N
+ShowType = Tool
+Value = 2
+Description = Orichalcum set of tools used in woodworker recipes.
 []
