@@ -653,6 +653,14 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="font">Normal</property>
       </object>
     </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="lime">
+        <property name="name">lime</property>
+        <property name="background">black</property>
+        <property name="foreground">lime</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
   </object>
   <object class="GtkTextBuffer" id="txtmap">
     <property name="tag_table">maptags</property>

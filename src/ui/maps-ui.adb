@@ -479,6 +479,7 @@ package body Maps.UI is
       GreenColor: constant Gtk_Text_Tag := Lookup(Tags, "green");
       YellowColor: constant Gtk_Text_Tag := Lookup(Tags, "yellow");
       CyanColor: constant Gtk_Text_Tag := Lookup(Tags, "cyan");
+      LimeColor: constant Gtk_Text_Tag := Lookup(Tags, "lime");
       MapChar: Character;
       MapColor: Gtk_Text_Tag;
       TextWindow: constant Gdk_Window :=
@@ -539,6 +540,8 @@ package body Maps.UI is
                               MapColor := YellowColor;
                            when Shipyard =>
                               MapColor := CyanColor;
+                           when Military =>
+                              MapColor := LimeColor;
                            when others =>
                               null;
                         end case;

@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -22,9 +22,9 @@ with Game; use Game;
 package Items is
 
    Items_Types: UnboundedString_Container.Vector; -- Types of items
-   type Object_Prices is array(1 .. 4) of Natural; -- Prices of item in bases
+   type Object_Prices is array(1 .. 5) of Natural; -- Prices of item in bases
    type Object_Buyable is
-     array(1 .. 4) of Boolean; -- Did item is buyable in bases
+     array(1 .. 5) of Boolean; -- Did item is buyable in bases
    type Object_Data is -- Data structure for objects prototypes
    record
       Name: Unbounded_String; -- Name of item

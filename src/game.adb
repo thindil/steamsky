@@ -162,7 +162,7 @@ package body Game is
             Visited => (0, 0, 0, 0, 0),
             SkyX => Integer(PosX),
             SkyY => Integer(PosY),
-            BaseType => Bases_Types'Val(GetRandom(0, 3)),
+            BaseType => Bases_Types'Val(GetRandom(0, 4)),
             Population => BasePopulation,
             RecruitDate => (0, 0, 0, 0, 0),
             Recruits => TmpRecruits,

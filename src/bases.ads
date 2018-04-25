@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -23,7 +23,8 @@ with Missions; use Missions;
 
 package Bases is
 
-   type Bases_Types is (Industrial, Agricultural, Refinery, Shipyard, Any);
+   type Bases_Types is
+     (Industrial, Agricultural, Refinery, Shipyard, Military, Any);
    type Recruit_Data is -- Data structure for recruits
    record
       Name: Unbounded_String; -- Name of recruit
