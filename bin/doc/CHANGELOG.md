@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Lots of grammar/spelling errors by LJNIC (pull request #16)
 - Clearing combat orders after combat
+- Crash in repairing ship in bases
 
 ## [2.2] - 2018-03-25
 
