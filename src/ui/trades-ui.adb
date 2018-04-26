@@ -64,14 +64,14 @@ package body Trades.UI is
       ItemsIter: Gtk_Tree_Iter;
       ItemsModel: Gtk_Tree_Model;
       ItemInfo: Unbounded_String;
-      Amount, ProtoIndex, Price: Positive;
+      ProtoIndex, Price: Positive;
       CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: Positive;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      MoneyIndex2, MaxAmount: Natural;
+      MoneyIndex2, MaxAmount, Amount: Natural;
       FreeSpace: Integer;
       AmountAdj2: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Builder, "amountadj1"));
