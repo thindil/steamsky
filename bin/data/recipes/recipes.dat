@@ -34,7 +34,7 @@ Result = 4
 Crafted = 5
 Workplace = Alchemy_Lab
 Skill = Gunsmith
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [5]
 Material = Iron, Gunpowder
@@ -43,7 +43,7 @@ Result = 14
 Crafted = 10
 Workplace = Alchemy_Lab
 Skill = Gunsmith
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [6]
 Material = CopperOre
@@ -90,7 +90,7 @@ Crafted = 2
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 5
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [11]
 Material = IronOre, Fuel
@@ -111,7 +111,7 @@ Crafted = 5
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 5
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [13]
 Material = Steel, Gunpowder
@@ -120,7 +120,7 @@ Result = 24
 Crafted = 10
 Workplace = Alchemy_Lab
 Skill = Gunsmith
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [14]
 Material = Steel, Gunpowder
@@ -130,7 +130,7 @@ Crafted = 2
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 10
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [15]
 Material = Iron, Gunpowder
@@ -140,7 +140,7 @@ Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 15
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [16]
 Material = Steel, Gunpowder
@@ -150,7 +150,7 @@ Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 15
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [17]
 Material = Herbs
@@ -201,7 +201,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 30
 Difficulty = 20
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [22]
 Material = Steel, Gunpowder
@@ -212,7 +212,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 30
 Difficulty = 20
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [23]
 Material = Iron, Gunpowder
@@ -223,7 +223,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 45
 Difficulty = 25
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [24]
 Material = Steel, Gunpowder
@@ -234,7 +234,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 45
 Difficulty = 25
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [25]
 Material = Iron, Gunpowder
@@ -245,7 +245,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 60
 Difficulty = 30
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [26]
 Material = Steel, Gunpowder
@@ -256,7 +256,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 60
 Difficulty = 30
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [27]
 Material = AndraeSeeds
@@ -452,7 +452,7 @@ Result = 62
 Crafted = 1
 Workplace = Workshop
 Skill = Blacksmith
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [46]
 Material = Iron, Leather
@@ -462,7 +462,7 @@ Crafted = 1
 Workplace = Workshop
 Skill = Blacksmith
 Difficulty = 5
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [47]
 Material = Steel, Leather
@@ -472,7 +472,7 @@ Crafted = 1
 Workplace = Workshop
 Skill = Blacksmith
 Difficulty = 10
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [48]
 Material = Bronze
@@ -481,7 +481,7 @@ Result = 66
 Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [49]
 Material = Leather
@@ -490,7 +490,7 @@ Result = 67
 Crafted = 1
 Workplace = Workshop
 Skill = Leatherworking
-BaseType = 1
+BaseType = 5
 Tool = SewingKit
 [50]
 Material = Leather
@@ -499,7 +499,7 @@ Result = 68
 Crafted = 1
 Workplace = Workshop
 Skill = Leatherworking
-BaseType = 1
+BaseType = 5
 Tool = SewingKit
 [51]
 Material = Leather
@@ -508,7 +508,7 @@ Result = 69
 Crafted = 1
 Workplace = Workshop
 Skill = Leatherworking
-BaseType = 1
+BaseType = 5
 Tool = SewingKit
 [52]
 Material = Bronze
@@ -526,7 +526,7 @@ Result = 71
 Crafted = 1
 Workplace = Workshop
 Skill = Leatherworking
-BaseType = 1
+BaseType = 5
 Tool = SewingKit
 [54]
 Material = Bronze
@@ -536,7 +536,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 5
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [55]
 Material = Wood
@@ -545,7 +545,7 @@ Result = 73
 Crafted = 1
 Workplace = Workshop
 Skill = Woodworking
-BaseType = 1
+BaseType = 5
 Tool = WoodworkerSet
 [56]
 Material = Bronze
@@ -554,7 +554,7 @@ Result = 74
 Crafted = 2
 Workplace = Furnace
 Skill = Blacksmith
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [57]
 Material = Iron
@@ -574,7 +574,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 5
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [59]
 Material = Iron
@@ -584,7 +584,7 @@ Crafted = 2
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 5
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [60]
 Material = Bronze
@@ -594,7 +594,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 5
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [61]
 Material = Bronze
@@ -604,7 +604,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 5
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [62]
 Material = Bronze
@@ -614,7 +614,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 5
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [63]
 Material = Bronze
@@ -624,7 +624,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 5
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [64]
 Material = Iron
@@ -634,7 +634,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 10
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [65]
 Material = Iron
@@ -644,7 +644,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 10
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [66]
 Material = Iron
@@ -654,7 +654,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 10
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [67]
 Material = Iron
@@ -664,7 +664,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 10
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [68]
 Material = Iron
@@ -674,7 +674,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 10
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [69]
 Material = Steel
@@ -684,7 +684,7 @@ Crafted = 2
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 10
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [70]
 Material = Steel
@@ -694,7 +694,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 10
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [71]
 Material = Steel
@@ -704,7 +704,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 15
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [72]
 Material = Steel
@@ -714,7 +714,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 15
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [73]
 Material = Steel
@@ -724,7 +724,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 15
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [74]
 Material = Steel
@@ -734,7 +734,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 15
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [75]
 Material = Steel
@@ -744,7 +744,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 15
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [76]
 Material = Steel
@@ -975,7 +975,7 @@ Crafted = 2
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 15
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [99]
 Material = Titanium, Gunpowder
@@ -985,7 +985,7 @@ Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Gunsmith
 Difficulty = 20
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [100]
 Material = Titanium, Gunpowder
@@ -996,7 +996,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 45
 Difficulty = 25
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [101]
 Material = Titanium, Gunpowder
@@ -1007,7 +1007,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 60
 Difficulty = 30
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [102]
 Material = Titanium, Gunpowder
@@ -1018,7 +1018,7 @@ Workplace = Alchemy_Lab
 Skill = Gunsmith
 Time = 75
 Difficulty = 35
-BaseType = 1
+BaseType = 5
 Tool = GunsmithSet
 [103]
 Material = Titanium, Leather
@@ -1028,7 +1028,7 @@ Crafted = 1
 Workplace = Workshop
 Skill = Blacksmith
 Difficulty = 15
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [104]
 Material = Titanium
@@ -1038,7 +1038,7 @@ Crafted = 2
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 15
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [105]
 Material = Titanium
@@ -1048,7 +1048,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 15
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [106]
 Material = Titanium
@@ -1058,7 +1058,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 20
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [107]
 Material = Titanium
@@ -1068,7 +1068,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 20
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [108]
 Material = Titanium
@@ -1078,7 +1078,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 20
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [109]
 Material = Titanium
@@ -1088,7 +1088,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 20
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [110]
 Material = Titanium
@@ -1098,7 +1098,7 @@ Crafted = 1
 Workplace = Furnace
 Skill = Blacksmith
 Difficulty = 20
-BaseType = 1
+BaseType = 5
 Tool = BlacksmithSet
 [111]
 Material = OrichalcumOre, Fuel
