@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated README.md
 - Updated items data
+- Updated MODDING.md
 
 ### Fixed
 - Double attack in melee combat after kill
