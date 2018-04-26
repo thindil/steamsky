@@ -225,11 +225,11 @@ DodgeSkill. Value after equal sign must be existing skill name.
 - Weight: weight of one item in kilograms
 - Type: item type of item (from *game.dat* file, entry *ItemsTypes*)
 - Prices: item base price in bases. Each value mean price in selected base
-  type: Industrial, Agricultural, Refinery, Shipyard. If you want that item
-  will be not possible to buy/sellable in bases (or only selected base type) 
-  set it price to 0.
+  type: Industrial, Agricultural, Refinery, Shipyard, Military. If you want 
+  that item will be not possible to buy/sellable in bases (or only selected 
+  base type) set it price to 0.
 - Buyable: did item can be bough in selected type of base: Industrial,
-  Agricultural, Refinery, Shipyard. Y mean yes, N means No.
+  Agricultural, Refinery, Shipyard, Military. Y mean yes, N means No.
 - ShowType: optional parameter. If you want to show item type in game (for
   example in cargo or in trade screen) different than item type from *game.dat*
   file, you can set this parameter to any text value.
@@ -277,7 +277,7 @@ DodgeSkill. Value after equal sign must be existing skill name.
   1 and 100.
 - BaseType: In which bases type recipe can be bought. If not set, recipe will be
   know from beginning of game. Values: 1 for Industrial, 2 for Agricultural, 3
-  for Refinery and 4 for Shipyard
+  for Refinery, 4 for Shipyard and 5 for Military.
 - Time: optional parameter. How long in minutes take crafting selected recipe.
   If not set, it take 15 minutes.
 
