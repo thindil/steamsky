@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Double attack in melee combat after kill
 - Generating cargo in first time visited bases
 - Crash in repairing ship in bases
+- Crash in buying items in bases
 
 ## [2.3] - 2018-04-22
 
