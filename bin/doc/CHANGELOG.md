@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: titanium woodworker set and orichalcum woodworker set
 - Showing license full text in info about game
 - New sky base type: military
+- Damage type for personal weapons
 
 ### Changed
 - Updated interface
