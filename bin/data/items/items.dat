@@ -1255,4 +1255,13 @@ Buyable = Y, N, N, N, N
 ShowType = Tool
 Value = 2
 Description = Orichalcum set of tools used in woodworker recipes.
+[148]
+Name = Titanium repair tools
+Weight = 10
+Type = RepairTools
+Prices = 20, 22, 22, 22, 22
+Buyable = Y, N, N, N, N
+ShowType = Tool
+Value = 3
+Description = Titanium set of tools needed to repair or upgrade ship modules.
 []
