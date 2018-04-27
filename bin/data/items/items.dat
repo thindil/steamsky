@@ -542,7 +542,7 @@ Weight = 2
 Type = Weapon
 Prices = 15, 15, 15, 15, 10
 Buyable = N, N, N, N, Y
-Value = 15, 20, 17, 1
+Value = 15, 20, 17, 1, 1
 Description = Simple sword made of bronze, used in melee combat.
 [67]
 Name = Leather jacket
@@ -609,7 +609,7 @@ Weight = 1
 Type = Weapon
 Prices = 10, 10, 10, 10, 7
 Buyable = N, N, N, N, Y
-Value = 15, 15, 17, 1
+Value = 15, 15, 17, 1, 1
 Description = Simple short sword made of bronze, used in melee combat.
 [75]
 Name = Iron mold
@@ -626,7 +626,7 @@ Weight = 2
 Type = Weapon
 Prices = 17, 17, 17, 17, 15
 Buyable = N, N, N, N, Y
-Value = 10, 25, 17, 1
+Value = 10, 25, 17, 1, 1
 Description = Simple sword made of iron, used in melee combat.
 [77]
 Name = Iron short sword
@@ -634,7 +634,7 @@ Weight = 1
 Type = Weapon
 Prices = 12, 12, 12, 12, 10
 Buyable = N, N, N, N, Y
-Value = 10, 20, 17, 1
+Value = 10, 20, 17, 1, 1
 Description = Simple short sword made of iron, used in melee combat.
 [78]
 Name = Bronze chestplate
@@ -722,7 +722,7 @@ Weight = 1
 Type = Weapon
 Prices = 17, 17, 17, 17, 15
 Buyable = N, N, N, N, Y
-Value = 5, 25, 17, 1
+Value = 5, 25, 17, 1, 1
 Description = Simple short sword made of steel, used in melee combat.
 [88]
 Name = Steel sword
@@ -730,7 +730,7 @@ Weight = 2
 Type = Weapon
 Prices = 22, 22, 22, 22, 20
 Buyable = N, N, N, N, Y
-Value = 5, 30, 17, 1
+Value = 5, 30, 17, 1, 1
 Description = Simple sword made of steel, used in melee combat.
 [89]
 Name = Steel shield
@@ -1041,7 +1041,7 @@ Weight = 2
 Type = Weapon
 Prices = 24, 24, 24, 24, 22
 Buyable = N, N, N, N, Y
-Value = 3, 30, 17, 1
+Value = 3, 30, 17, 1, 1
 Description = Simple short sword made of titanium, used in melee combat.
 [124]
 Name = Titanium sword
@@ -1049,7 +1049,7 @@ Weight = 3
 Type = Weapon
 Prices = 27, 27, 27, 27, 25
 Buyable = N, N, N, N, Y
-Value = 3, 35, 17, 1
+Value = 3, 35, 17, 1, 1
 Description = Simple sword made of titanium, used in melee combat.
 [125]
 Name = Titanium shield
