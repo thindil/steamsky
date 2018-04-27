@@ -683,6 +683,7 @@ package body Combat is
                    .Value
                    (2);
             end if;
+         -- Count damage based on attacker wounds, fatigue, hunger and thirst
             Wounds := 1.0 - DamageFactor(Float(Attacker.Health) / 100.0);
             Damage :=
               (BaseDamage - Integer(Float(BaseDamage) * Float(Wounds)));
@@ -739,6 +740,22 @@ package body Combat is
             end if;
             if Damage < 1 then
                Damage := 1;
+            end if;
+            -- Count damage based on damage type of weapon
+            if Attacker.Equipment(1) > 0 then
+               if Items_List
+                   (Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
+                   .Value
+                   (5) =
+                 1 then -- cutting weapon
+                  Damage := Integer(Float(Damage) * 1.5);
+               elsif Items_List
+                   (Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
+                   .Value
+                   (5) =
+                 2 then -- impale weapon
+                  Damage := Damage * 2;
+               end if;
             end if;
             if HitChance < 1 then
                AttackMessage :=
