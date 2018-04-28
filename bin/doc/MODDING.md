@@ -244,7 +244,9 @@ DodgeSkill. Value after equal sign must be existing skill name.
   Third value for weapons is number of skill used by this weapon (from 
   *game.dat* file, entry *Skills*) and for armor is amount of levels of dodge 
   skill which this armor reduce when weared. Forth value for weapon is amount
-  of hands used (1 for one-handed, 2 for two-handed weapons).
+  of hands used (1 for one-handed, 2 for two-handed weapons). Fifth value for
+  weapon is damage type (1 - cutting damage, 2 - impaling damage, 3 - blunt
+  damage).
 - Description: Any length description of item.
 
 ## Recipes
