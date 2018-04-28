@@ -819,7 +819,7 @@ package body Combat is
                Enemy.Ship.Crew(AttackerIndex) := Attacker;
             end if;
             if Defender.Health = 0 then
-               if PlayerAttack then
+               if PlayerAttack2 then
                   Death(DefenderIndex, Attacker.Name, Enemy.Ship);
                   for Order of BoardingOrders loop
                      if Order >= DefenderIndex then
