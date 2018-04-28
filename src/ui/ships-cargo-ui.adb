@@ -125,6 +125,17 @@ package body Ships.Cargo.UI is
               (ItemInfo,
                ASCII.LF & "Can't be used with shield (two-handed weapon).");
          end if;
+         Append(ItemInfo, ASCII.LF & "Damage type: ");
+         case Items_List(ProtoIndex).Value(5) is
+            when 1 =>
+               Append(ItemInfo, "cutting");
+            when 2 =>
+               Append(ItemInfo, "impaling");
+            when 3 =>
+               Append(ItemInfo, "blunt");
+            when others =>
+               null;
+         end case;
       end if;
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lbliteminfo2")),
