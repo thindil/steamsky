@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Updated items data
 - Updated MODDING.md
 - Updated recipes data
+- Updated help
 
 ### Fixed
 - Double attack in melee combat after kill
