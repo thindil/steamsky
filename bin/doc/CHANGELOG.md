@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New items: titanium woodworker set, orichalcum woodworker set and titanium
   repair tools
-- New crafting recipes: titanium woodworker set and orichalcum woodworker set
+- New crafting recipes: titanium woodworker set, orichalcum woodworker set and
+  titanium repair tools
 - Showing license full text in info about game
 - New sky base type: military
 - Damage type for personal weapons
