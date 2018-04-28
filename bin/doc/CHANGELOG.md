@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Generating cargo in first time visited bases
 - Crash in repairing ship in bases
 - Crash in buying items in bases
+- Crash in combat on death of crew member
 
 ## [2.3] - 2018-04-22
 
