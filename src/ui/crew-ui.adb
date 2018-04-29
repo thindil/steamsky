@@ -257,7 +257,6 @@ package body Crew.UI is
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Member_Info", ShowMemberInfo'Access);
-      Register_Handler(Builder, "Show_Crew_Help", ShowCrewHelp'Access);
       Register_Handler(Builder, "Give_Orders_All", GiveOrdersAll'Access);
       Register_Handler(Builder, "Show_Inventory", ShowInventory'Access);
       Register_Handler(Builder, "Show_Item_Info2", ShowItemInfo2'Access);

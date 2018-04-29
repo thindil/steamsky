@@ -49,7 +49,6 @@ with Ships.UI; use Ships.UI;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
-with Help.UI; use Help.UI;
 
 package body Combat.UI is
 
@@ -428,6 +427,7 @@ package body Combat.UI is
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
+      Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "combat");
@@ -722,12 +722,6 @@ package body Combat.UI is
       Hide(Gtk_Widget(Get_Object(Object, "btnclose")));
    end CloseCombat;
 
-   procedure ShowCombatHelp(Object: access Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
-   begin
-      ShowHelpUI(4);
-   end ShowCombatHelp;
-
    procedure ShowCombatInfo(User_Data: access GObject_Record'Class) is
    begin
       Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
@@ -771,7 +765,6 @@ package body Combat.UI is
       Register_Handler(Builder, "Close_Combat", CloseCombat'Access);
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);
       Register_Handler(Builder, "Next_Turn", NextTurn'Access);
-      Register_Handler(Builder, "Show_Combat_Help", ShowCombatHelp'Access);
       Register_Handler(Builder, "Show_Combat_Info", ShowCombatInfo'Access);
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders")),

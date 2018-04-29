@@ -413,7 +413,6 @@ package body Ships.UI is
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Module_Info", ShowModuleInfo'Access);
-      Register_Handler(Builder, "Show_Ship_Help", ShowShipHelp'Access);
       Register_Handler(Builder, "Change_Ship_Name", ChangeShipName'Access);
       Register_Handler(Builder, "Set_Upgrade", SetUpgrade'Access);
       Register_Handler(Builder, "Stop_Upgrading", StopUpgrading'Access);
