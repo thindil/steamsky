@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Containers; use Ada.Containers;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Label; use Gtk.Label;
@@ -32,10 +31,8 @@ with Gtk.Adjustment; use Gtk.Adjustment;
 with Glib; use Glib;
 with Gdk; use Gdk;
 with Gdk.Rectangle; use Gdk.Rectangle;
-with Gdk.Device_Manager; use Gdk.Device_Manager;
 with Gdk.Device; use Gdk.Device;
 with Gdk.Window; use Gdk.Window;
-with Gdk.Types; use Gdk.Types;
 with Game; use Game;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
@@ -122,162 +119,16 @@ package body Maps.UI.Handlers is
 
    function ShowMapCellInfo
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
-      MouseX, MouseY: Gint;
-      DeviceManager: constant Gdk_Device_Manager :=
-        Get_Device_Manager
-          (Get_Display(Gtk_Widget(Get_Object(Builder, "mapview"))));
-      Mouse: constant Gdk_Device := Get_Client_Pointer(DeviceManager);
-      Mask: Gdk_Modifier_Type;
-      Window: Gdk_Window;
       MapInfoText: Unbounded_String;
    begin
-      Get_Device_Position
-        (Get_Window(Gtk_Widget(Get_Object(Builder, "mapview"))),
-         Mouse,
-         MouseX,
-         MouseY,
-         Mask,
-         Window);
-      MapX := (Positive(MouseX) / MapCellWidth) + StartX;
-      MapY := (Positive(MouseY) / MapCellHeight) + StartY;
+      GetCurrentCellCoords;
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblmapx")),
          "X:" & Positive'Image(MapX));
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblmapy")),
          "Y:" & Positive'Image(MapY));
-      if SkyMap(MapX, MapY).BaseIndex > 0 then
-         declare
-            BaseIndex: constant Positive := SkyMap(MapX, MapY).BaseIndex;
-         begin
-            Append(MapInfoText, "Base info:");
-            Append(MapInfoText, ASCII.LF);
-            Append
-              (MapInfoText,
-               To_Unbounded_String("Name: ") & SkyBases(BaseIndex).Name);
-            if SkyBases(SkyMap(MapX, MapY).BaseIndex).Visited.Year > 0 then
-               Append(MapInfoText, ASCII.LF);
-               Append
-                 (MapInfoText,
-                  "Type: " &
-                  To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
-               Append(MapInfoText, ASCII.LF);
-               if SkyBases(BaseIndex).Population > 0 and
-                 SkyBases(BaseIndex).Population < 150 then
-                  Append(MapInfoText, "Population: small");
-               elsif SkyBases(BaseIndex).Population > 149 and
-                 SkyBases(BaseIndex).Population < 300 then
-                  Append(MapInfoText, "Population: medium");
-               elsif SkyBases(BaseIndex).Population > 299 then
-                  Append(MapInfoText, "Population: large");
-               end if;
-               if SkyBases(BaseIndex).Population > 0 then
-                  Append(MapInfoText, ASCII.LF);
-               end if;
-               if SkyBases(BaseIndex).Owner = Abandoned then
-                  Append(MapInfoText, "Base is abandoned");
-               else
-                  Append
-                    (MapInfoText,
-                     "Owner: " &
-                     To_Lower(Bases_Owners'Image(SkyBases(BaseIndex).Owner)));
-               end if;
-               if SkyBases(BaseIndex).Population > 0 then
-                  Append(MapInfoText, ASCII.LF);
-                  case SkyBases(BaseIndex).Reputation(1) is
-                     when -100 .. -75 =>
-                        Append(MapInfoText, "You are hated here");
-                     when -74 .. -50 =>
-                        Append(MapInfoText, "You are outlaw here");
-                     when -49 .. -25 =>
-                        Append(MapInfoText, "You are hostile here");
-                     when -24 .. -1 =>
-                        Append(MapInfoText, "They are unfriendly to you");
-                     when 0 =>
-                        Append(MapInfoText, "You are unknown here");
-                     when 1 .. 25 =>
-                        Append(MapInfoText, "You are know here as visitor");
-                     when 26 .. 50 =>
-                        Append(MapInfoText, "You are know here as trader");
-                     when 51 .. 75 =>
-                        Append(MapInfoText, "You are know here as friend");
-                     when 76 .. 100 =>
-                        Append(MapInfoText, "You are well know here");
-                     when others =>
-                        null;
-                  end case;
-               end if;
-               if BaseIndex = PlayerShip.HomeBase then
-                  Append(MapInfoText, ASCII.LF);
-                  Append(MapInfoText, "It is your home base");
-               end if;
-            end if;
-         end;
-      end if;
-      if SkyMap(MapX, MapY).EventIndex > 0 then
-         declare
-            EventIndex: constant Positive := SkyMap(MapX, MapY).EventIndex;
-         begin
-            if Events_List(EventIndex).EType /= BaseRecovery and
-              SkyMap(MapX, MapY).BaseIndex > 0 then
-               Append(MapInfoText, ASCII.LF & ASCII.LF);
-            end if;
-            case Events_List(EventIndex).EType is
-               when EnemyShip | Trader | FriendlyShip =>
-                  Append
-                    (MapInfoText,
-                     ProtoShips_List(Events_List(EventIndex).Data).Name);
-               when FullDocks =>
-                  Append(MapInfoText, "Full docks in base");
-               when AttackOnBase =>
-                  Append(MapInfoText, "Base is under attack");
-               when Disease =>
-                  Append(MapInfoText, "Disease in base");
-               when EnemyPatrol =>
-                  Append(MapInfoText, "Enemy patrol");
-               when DoublePrice =>
-                  Append
-                    (MapInfoText,
-                     "Double price for " &
-                     To_String(Items_List(Events_List(EventIndex).Data).Name));
-               when None | BaseRecovery =>
-                  null;
-            end case;
-         end;
-      end if;
-      if SkyMap(MapX, MapY).MissionIndex > 0 then
-         declare
-            MissionIndex: constant Positive := SkyMap(MapX, MapY).MissionIndex;
-         begin
-            if SkyMap(MapX, MapY).BaseIndex > 0 or
-              SkyMap(MapX, MapY).EventIndex > 0 then
-               Append(MapInfoText, ASCII.LF & ASCII.LF);
-            end if;
-            case PlayerShip.Missions(MissionIndex).MType is
-               when Deliver =>
-                  Append
-                    (MapInfoText,
-                     "Deliver " &
-                     To_String
-                       (Items_List(PlayerShip.Missions(MissionIndex).Target)
-                          .Name));
-               when Destroy =>
-                  Append
-                    (MapInfoText,
-                     "Destroy " &
-                     To_String
-                       (ProtoShips_List
-                          (PlayerShip.Missions(MissionIndex).Target)
-                          .Name));
-               when Patrol =>
-                  Append(MapInfoText, "Patrol area");
-               when Explore =>
-                  Append(MapInfoText, "Explore area");
-               when Passenger =>
-                  Append(MapInfoText, "Transport passenger");
-            end case;
-         end;
-      end if;
+      BuildMapInfo(MapInfoText);
       if MapX /= PlayerShip.SkyX or MapY /= PlayerShip.SkyY then
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "btndestination")));
          if Length(MapInfoText) > 0 then
@@ -1229,5 +1080,20 @@ package body Maps.UI.Handlers is
       Set_Visible(Gtk_Widget(Get_Object(Object, "btnwaitrest")), NeedRest);
       Show_All(Gtk_Widget(Get_Object(Object, "waitwindow")));
    end ShowWaitOrders;
+
+   function UpdateTooltip
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+      MapInfoText: Unbounded_String;
+   begin
+      GetCurrentCellCoords;
+      Append
+        (MapInfoText,
+         "X:" & Positive'Image(MapX) & " Y:" & Positive'Image(MapY));
+      BuildMapInfo(MapInfoText);
+      Set_Tooltip_Text
+        (Gtk_Widget(Get_Object(Object, "mapview")),
+         To_String(MapInfoText));
+      return False;
+   end UpdateTooltip;
 
 end Maps.UI.Handlers;

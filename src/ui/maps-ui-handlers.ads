@@ -73,5 +73,8 @@ package Maps.UI.Handlers is
    procedure ShowWaitOrders
      (Object: access Gtkada_Builder_Record'
         Class); -- Show available wait orders
+   function UpdateTooltip
+     (Object: access Gtkada_Builder_Record'Class)
+     return Boolean; -- Update map tooltip with information about cell on mouse movement
 
 end Maps.UI.Handlers;
