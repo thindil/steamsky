@@ -1264,4 +1264,13 @@ Buyable = Y, N, N, N, N
 ShowType = Tool
 Value = 3
 Description = Titanium set of tools needed to repair or upgrade ship modules.
+[149]
+Name = Orichalcum repair tools
+Weight = 10
+Type = RepairTools
+Prices = 25, 27, 27, 27, 27
+Buyable = Y, N, N, N, N
+ShowType = Tool
+Value = 2
+Description = Orichalcum set of tools needed to repair or upgrade ship modules.
 []
