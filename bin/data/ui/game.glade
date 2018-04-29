@@ -1484,11 +1484,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
             <child>
               <object class="GtkButton" id="btnshowhelp">
-                <property name="label" translatable="yes">Help</property>
+                <property name="label" translatable="yes">Help [F1]</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <signal name="clicked" handler="Show_Help2" swapped="no"/>
+                <accelerator key="F1" signal="clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>

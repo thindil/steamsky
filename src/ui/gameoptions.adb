@@ -30,6 +30,7 @@ with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Gdk.Event; use Gdk.Event;
 with Gdk.Types; use Gdk.Types;
+with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Config; use Config;
@@ -175,6 +176,12 @@ package body GameOptions is
             return False;
          end if;
       end loop;
+      if KeyPressed = GDK_F1 then
+         ShowDialog
+           ("You can't set this key because it is set for help. Please choose a different key.",
+            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+         return False;
+      end if;
       for I in EditNames'Range loop
          if Self =
            Gtk_Widget(Get_Object(Builder, To_String(EditNames(I)))) then
