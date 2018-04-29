@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New items: titanium woodworker set, orichalcum woodworker set and titanium
-  repair tools
+- New items: titanium woodworker set, orichalcum woodworker set, titanium
+  repair tools and orichalcum repair tools
 - New crafting recipes: titanium woodworker set, orichalcum woodworker set and
   titanium repair tools
 - Showing license full text in info about game
