@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Clearing combat orders after ship combat
 - Crash in combat during boarding party fight
 - Double attack in melee combat after kill
+- Lots of grammar/spelling errors by LJNIC
 
 ## [2.0.3] - 2018-03-11
 
