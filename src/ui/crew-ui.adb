@@ -278,6 +278,7 @@ package body Crew.UI is
    begin
       RefreshCrewInfo;
       PreviousGameState := OldState;
+      Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "crew");
