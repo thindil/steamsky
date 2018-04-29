@@ -830,6 +830,7 @@ package body Maps.UI.Handlers is
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
+      Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       if User_Data = Get_Object(Builder, "menumessages") then
          ShowMessagesUI(SkyMap_View);
       elsif User_Data = Get_Object(Builder, "menucargo") then

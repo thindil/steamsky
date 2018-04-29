@@ -34,7 +34,6 @@ with Maps; use Maps;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
 with Ships.Cargo; use Ships.Cargo;
-with Help.UI; use Help.UI;
 with Messages; use Messages;
 with Crew.Inventory; use Crew.Inventory;
 with Bases; use Bases;
@@ -239,12 +238,6 @@ package body Crew.UI.Handlers is
       end if;
       SetOrdersList;
    end ShowMemberInfo;
-
-   procedure ShowCrewHelp(Object: access Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
-   begin
-      ShowHelpUI(7);
-   end ShowCrewHelp;
 
    procedure GiveOrdersAll(User_Data: access GObject_Record'Class) is
       Order: Crew_Orders;

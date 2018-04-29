@@ -37,7 +37,6 @@ with Ships.Cargo; use Ships.Cargo;
 with Events; use Events;
 with Items; use Items;
 with Bases.Cargo; use Bases.Cargo;
-with Help.UI; use Help.UI;
 with Utils.UI; use Utils.UI;
 
 package body Trades.UI is
@@ -316,12 +315,6 @@ package body Trades.UI is
       end if;
    end ShowItemTradeInfo;
 
-   procedure ShowTradeHelp(Object: access Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
-   begin
-      ShowHelpUI(3);
-   end ShowTradeHelp;
-
    procedure TradeItem(User_Data: access GObject_Record'Class) is
       ItemsIter: Gtk_Tree_Iter;
       ItemsModel: Gtk_Tree_Model;
@@ -445,7 +438,6 @@ package body Trades.UI is
         (Builder,
          "Show_Item_Trade_Info",
          ShowItemTradeInfo'Access);
-      Register_Handler(Builder, "Show_Trade_Help", ShowTradeHelp'Access);
       Register_Handler(Builder, "Trade_Item", TradeItem'Access);
       Register_Handler(Builder, "Close_Trade", CloseTrade'Access);
    end CreateTradeUI;
