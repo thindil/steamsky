@@ -1754,6 +1754,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="buffer">txtmap</property>
                             <property name="accepts_tab">False</property>
                             <signal name="button-press-event" handler="Show_Map_Info" swapped="no"/>
+                            <signal name="motion-notify-event" handler="Update_Tooltip" swapped="no"/>
                           </object>
                         </child>
                       </object>
