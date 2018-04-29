@@ -25,9 +25,6 @@ package Crew.UI.Handlers is
 
    procedure ShowMemberInfo
      (Object: access Gtkada_Builder_Record'Class); -- Show selected member info
-   procedure ShowCrewHelp
-     (Object: access Gtkada_Builder_Record'
-        Class); -- Show help about crew management
    procedure GiveOrdersAll
      (User_Data: access GObject_Record'
         Class); -- Give orders to all crew members

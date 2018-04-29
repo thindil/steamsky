@@ -30,7 +30,6 @@ with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Crafts; use Crafts;
-with Help.UI; use Help.UI;
 with Ships.Upgrade; use Ships.Upgrade;
 with Ships.Crew; use Ships.Crew;
 
@@ -390,12 +389,6 @@ package body Ships.UI.Handlers is
       end if;
       ShowModuleOptions;
    end ShowModuleInfo;
-
-   procedure ShowShipHelp(Object: access Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
-   begin
-      ShowHelpUI(6);
-   end ShowShipHelp;
 
    procedure ChangeShipName(Object: access Gtkada_Builder_Record'Class) is
       NewName: Unbounded_String :=

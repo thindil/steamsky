@@ -29,7 +29,6 @@ with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Game; use Game;
-with Help.UI; use Help.UI;
 with Ships; use Ships;
 with Items; use Items;
 with Utils.UI; use Utils.UI;
@@ -39,12 +38,6 @@ package body Crafts.UI is
 
    Builder: Gtkada_Builder;
    RecipeIndex: Integer;
-
-   procedure ShowCraftHelp(Object: access Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
-   begin
-      ShowHelpUI(5);
-   end ShowCraftHelp;
 
    procedure ShowSetRecipe(Object: access Gtkada_Builder_Record'Class) is
       ModulesIter: Gtk_Tree_Iter;
@@ -316,7 +309,6 @@ package body Crafts.UI is
    procedure CreateCraftsUI(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
-      Register_Handler(Builder, "Show_Craft_Help", ShowCraftHelp'Access);
       Register_Handler(Builder, "Show_Recipe_Info", ShowRecipeInfo'Access);
       Register_Handler(Builder, "Set_Crafting", SetCrafting'Access);
    end CreateCraftsUI;
