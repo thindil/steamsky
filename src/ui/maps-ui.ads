@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Ships; use Ships;
@@ -49,4 +50,7 @@ private
    procedure CheckButtons
      (Widget: not null access Gtk_Widget_Record'
         Class); -- Check selected button
+   procedure GetCurrentCellCoords; -- Get current map cell coordinates based on mouse position
+   procedure BuildMapInfo
+     (MapInfoText: in out Unbounded_String); -- Build info about selected map cell
 end Maps.UI;
