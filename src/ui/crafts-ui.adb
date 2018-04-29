@@ -352,6 +352,7 @@ package body Crafts.UI is
             "Deconstruct " & To_String(Items_List(Deconstructs(I)).Name));
          Set(RecipesList, RecipesIter, 1, Gint(0 - Deconstructs(I)));
       end loop;
+      Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "crafts");
