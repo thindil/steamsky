@@ -49,7 +49,8 @@ package Maps.UI.Handlers is
      (Object: access Gtkada_Builder_Record'
         Class); -- Execute attack or show wait order
    procedure ShowHelp
-     (Object: access Gtkada_Builder_Record'Class); -- Show help window
+     (Object: access Gtkada_Builder_Record'
+        Class); -- Show help for selected topic
    procedure ShowInfo
      (User_Data: access GObject_Record'
         Class); -- Show selected info (ship/crew/cargo/etc)
