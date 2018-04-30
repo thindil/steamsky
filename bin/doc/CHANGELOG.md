@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Assigning gunners to harpoon guns in enemies ships
+
 ## [2.0.4] - 2018-04-29
 
 ### Fixed
@@ -35,7 +40,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: steel saw, bronze bucket, iron bucket, steel bucket, iron
-  blacksmith set, steel blackmith set, iron woodworker set, steel woodworker
+  blacksmith set, steel blacksmith set, iron woodworker set, steel woodworker
   set, iron repair tools, steel repair tools, iron sewing kit, steel sewing
   kit, titanium ore and titanium plates
 - New crafting recipes: steel saw, bronze bucket, iron bucket, steel bucket,
