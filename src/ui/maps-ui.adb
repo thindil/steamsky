@@ -642,8 +642,8 @@ package body Maps.UI is
          MouseY,
          Mask,
          Window);
-      MapX := (Positive(MouseX) / MapCellWidth) + StartX;
-      MapY := (Positive(MouseY) / MapCellHeight) + StartY;
+      MapX := (Natural(MouseX) / MapCellWidth) + StartX;
+      MapY := (Natural(MouseY) / MapCellHeight) + StartY;
    end GetCurrentCellCoords;
 
    procedure BuildMapInfo(MapInfoText: in out Unbounded_String) is
