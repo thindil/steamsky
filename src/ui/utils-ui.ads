@@ -55,8 +55,5 @@ package Utils.UI is
    procedure ShowItemDamage
      (ItemDurability: Natural;
       DamageBar: GObject); -- Show or hide info about item damage
-   procedure ShowHelp
-     (Object: access Gtkada_Builder_Record'
-        Class); -- Show help about selected game part
 
 end Utils.UI;

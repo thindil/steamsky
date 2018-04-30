@@ -846,10 +846,7 @@ package body Maps.UI is
          Register_Handler(Builder, "Show_Orders", ShowOrders'Access);
          Register_Handler(Builder, "Wait_Order", WaitOrder'Access);
          Register_Handler(Builder, "Attack_Order", AttackOrder'Access);
-         Register_Handler
-           (Builder,
-            "Show_Help",
-            Maps.UI.Handlers.ShowHelp'Access);
+         Register_Handler(Builder, "Show_Help", ShowHelp'Access);
          Register_Handler(Builder, "Show_Info", ShowInfo'Access);
          Register_Handler(Builder, "Resign_From_Game", ResignFromGame'Access);
          Register_Handler(Builder, "Show_Missions", ShowMissions'Access);
@@ -858,7 +855,6 @@ package body Maps.UI is
          Register_Handler(Builder, "Execute_Order", ExecuteOrder'Access);
          Register_Handler(Builder, "Show_Wait_Orders", ShowWaitOrders'Access);
          Register_Handler(Builder, "Update_Tooltip", UpdateTooltip'Access);
-         Register_Handler(Builder, "Show_Help2", Utils.UI.ShowHelp'Access);
          Register_Handler
            (Builder,
             "Deliver_Medicines",
