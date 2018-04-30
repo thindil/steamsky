@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -110,7 +110,8 @@ package body Ships is
                        TempModule.MType = CABIN or
                        TempModule.MType = GUN or
                        TempModule.MType = BATTERING_RAM or
-                       TempModule.MType = HULL then
+                       TempModule.MType = HULL or
+                       TempModule.MType = HARPOON_GUN then
                         MaxValue :=
                           Positive(Float(Modules_List(Module).MaxValue) * 1.5);
                         TempModule.MaxValue :=
@@ -216,7 +217,9 @@ package body Ships is
             end loop;
             for Module of ShipModules loop
                if Module.Owner = 0 then
-                  if Modules_List(Module.ProtoIndex).MType = GUN and
+                  if
+                    (Modules_List(Module.ProtoIndex).MType = GUN or
+                     Modules_List(Module.ProtoIndex).MType = HARPOON_GUN) and
                     Member.Order = Gunner then
                      Module.Owner := ShipCrew.Last_Index;
                      exit;
