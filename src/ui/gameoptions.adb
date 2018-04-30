@@ -26,11 +26,11 @@ with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Settings; use Gtk.Settings;
+with Gtk.Button; use Gtk.Button;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Gdk.Event; use Gdk.Event;
 with Gdk.Types; use Gdk.Types;
-with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Config; use Config;
@@ -144,6 +144,9 @@ package body GameOptions is
       Set_Transition_Type
         (Gtk_Stack(Get_Object(Builder, "combatstack")),
          Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnshowhelp")),
+         "Help [" & Get_Text(Gtk_Entry(Get_Object(Object, "edthelp"))) & "]");
       SaveConfig;
       Save(To_String(SaveDirectory) & "keys.cfg");
       CreateSkyMap;
@@ -176,12 +179,6 @@ package body GameOptions is
             return False;
          end if;
       end loop;
-      if KeyPressed = GDK_F1 then
-         ShowDialog
-           ("You can't set this key because it is set for help. Please choose a different key.",
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
-         return False;
-      end if;
       for I in EditNames'Range loop
          if Self =
            Gtk_Widget(Get_Object(Builder, To_String(EditNames(I)))) then

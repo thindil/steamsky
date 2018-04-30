@@ -1008,6 +1008,21 @@ package body Maps.UI is
            (Gtk_Widget(Get_Object(Builder, "menuwait")),
             "<skymapwindow>/Menu/WaitOrders",
             Accelerators);
+         Set_Accel_Path
+           (Gtk_Widget(Get_Object(Builder, "btnshowhelp")),
+            "<skymapwindow>/Menu/Help",
+            Accelerators);
+         declare
+            Key: Gtk_Accel_Key;
+            Found: Boolean;
+         begin
+            Lookup_Entry("<skymapwindow>/Menu/Help", Key, Found);
+            Set_Label
+              (Gtk_Button(Get_Object(Builder, "btnshowhelp")),
+               "Help [" &
+               Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
+               "]");
+         end;
          On_Key_Release_Event
            (Gtk_Widget(Get_Object(Builder, "movemapwindow")),
             CloseWindow'Access);
