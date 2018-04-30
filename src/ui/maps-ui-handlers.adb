@@ -28,6 +28,7 @@ with Gtk.Button; use Gtk.Button;
 with Gtk.Enums; use Gtk.Enums;
 with Gtk.Container; use Gtk.Container;
 with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Gdk; use Gdk;
 with Gdk.Rectangle; use Gdk.Rectangle;
@@ -813,9 +814,31 @@ package body Maps.UI.Handlers is
    end AttackOrder;
 
    procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
    begin
-      ShowHelpUI(1);
+      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack"))) =
+        "combat" then
+         ShowHelpUI(4);
+      elsif Get_Visible_Child_Name
+          (Gtk_Stack(Get_Object(Object, "gamestack"))) =
+        "crafts" then
+         ShowHelpUI(5);
+      elsif Get_Visible_Child_Name
+          (Gtk_Stack(Get_Object(Object, "gamestack"))) =
+        "crew" then
+         ShowHelpUI(7);
+      elsif Get_Visible_Child_Name
+          (Gtk_Stack(Get_Object(Object, "gamestack"))) =
+        "ship" then
+         ShowHelpUI(6);
+      elsif Get_Visible_Child_Name
+          (Gtk_Stack(Get_Object(Object, "gamestack"))) =
+        "trade" then
+         ShowHelpUI(3);
+      elsif Get_Visible_Child_Name
+          (Gtk_Stack(Get_Object(Object, "gamestack"))) =
+        "skymap" then
+         ShowHelpUI(1);
+      end if;
    end ShowHelp;
 
    procedure ShowInfo(User_Data: access GObject_Record'Class) is
