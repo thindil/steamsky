@@ -239,8 +239,11 @@ package body Combat is
                   Modules_List(Ship.Modules(K).ProtoIndex).MType =
                     HARPOON_GUN) then
                   GunnerIndex := Ship.Modules(K).Owner;
+                  LogMessage
+                    ("Gunner index:" & Natural'Image(GunnerIndex) & ".",
+                     Log.Combat);
                   if Ship = PlayerShip then
-                     if Ship.Modules(K).Owner = 0 then
+                     if GunnerIndex = 0 then
                         Shoots := 0;
                      else
                         for Gun of Guns loop
