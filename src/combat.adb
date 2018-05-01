@@ -275,6 +275,9 @@ package body Combat is
                      end if;
                   else
                      Shoots := 2;
+                     if Ship.Crew.Length > 0 and GunnerIndex = 0 then
+                        Shoots := 0;
+                     end if;
                   end if;
                   if Ship.Modules(K).Data(1) >= Ship.Cargo.First_Index and
                     Ship.Modules(K).Data(1) <= Ship.Cargo.Last_Index then
