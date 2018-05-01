@@ -1273,4 +1273,13 @@ Buyable = Y, N, N, N, N
 ShowType = Tool
 Value = 2
 Description = Orichalcum set of tools needed to repair or upgrade ship modules.
+[150]
+Name = Titanium sewing kit
+Weight = 4
+Type = SewingKit
+Prices = 21, 23, 23, 23, 23
+Buyable = Y, N, N, N, N
+ShowType = Tool
+Value = 3
+Description = Titanium set of tools needed to sew items.
 []
