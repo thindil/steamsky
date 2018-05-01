@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Crash in buying items in bases
 - Crash in combat on death of crew member
 - Assigning gunners to harpoon guns in enemies ships
+- Typo in old changelog file
 
 ## [2.3] - 2018-04-22
 
