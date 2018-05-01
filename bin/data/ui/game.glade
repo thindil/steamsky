@@ -1876,10 +1876,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                             <child>
                               <object class="GtkButton" id="btndock">
-                                <property name="label" translatable="yes">Undock</property>
+                                <property name="label" translatable="yes">_Undock</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Dock_Ship" swapped="no"/>
                               </object>
                               <packing>
