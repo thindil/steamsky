@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Assigning gunners to harpoon guns in enemies ships
+- Shooting by enemy when no gunner at gun
 
 ## [2.0.4] - 2018-04-29
 
