@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Crash in combat on death of crew member
 - Assigning gunners to harpoon guns in enemies ships
 - Typo in old changelog file
+- Shooting by enemy when no gunner at gun
 
 ## [2.3] - 2018-04-22
 
