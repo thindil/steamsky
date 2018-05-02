@@ -30,6 +30,7 @@ with Messages; use Messages;
 with Maps.UI; use Maps.UI;
 with Combat.UI; use Combat.UI;
 with GameOptions; use GameOptions;
+with Statistics.UI; use Statistics.UI;
 
 package body Utils.UI is
 
@@ -134,6 +135,11 @@ package body Utils.UI is
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Object, "gamestack")),
             "crew");
+         return;
+      end if;
+      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack"))) =
+        "gamestats" then
+         HideStatistics;
          return;
       end if;
       Hide(Gtk_Widget(Get_Object(Object, "btnclose")));

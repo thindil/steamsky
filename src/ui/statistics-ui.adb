@@ -41,17 +41,18 @@ package body Statistics.UI is
    Builder: Gtkada_Builder;
    GameState: GameStates;
 
-   procedure HideStatistics(Object: access Gtkada_Builder_Record'Class) is
+   procedure HideStatistics is
    begin
+      Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
       if GameState = SkyMap_View then
          CreateSkyMap;
          Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Object, "gamestack")),
+           (Gtk_Stack(Get_Object(Builder, "gamestack")),
             "skymap");
-         Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
+         Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
       else
+         Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
          EndGame(False);
-         Hide(Gtk_Widget(Get_Object(Object, "skymapwindow")));
          ShowMainMenu;
       end if;
    end HideStatistics;
@@ -70,7 +71,6 @@ package body Statistics.UI is
    procedure CreateStatsUI(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
-      Register_Handler(Builder, "Hide_Statistics", HideStatistics'Access);
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
    end CreateStatsUI;
 
@@ -232,6 +232,7 @@ package body Statistics.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "gamestats");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
+      Hide(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       if GameStats.DestroyedShips.Length > 0 then
          List := Gtk_List_Store(Get_Object(Builder, "destroyedlist"));
          Clear(List);

@@ -79,10 +79,10 @@ package body Maps.UI is
 
    procedure DeathConfirm is
    begin
-      Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       if ShowConfirmDialog
           ("You are dead. Did you want to see your game statistics?",
            Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
+         Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
          ShowStatsUI(Main_Menu);
       else
          EndGame(False);
