@@ -514,14 +514,14 @@ package body Maps.UI.Handlers is
                            Set_Label
                              (Gtk_Button
                                 (Get_Object(Object, "btnfinishmission")),
-                              "Complete delivery of " &
+                              "_Complete delivery of " &
                               To_String(Items_List(Mission.Target).Name));
                         when Destroy =>
                            if Mission.Finished then
                               Set_Label
                                 (Gtk_Button
                                    (Get_Object(Object, "btnfinishmission")),
-                                 "Complete destroy " &
+                                 "_Complete destroy " &
                                  To_String
                                    (ProtoShips_List(Mission.Target).Name));
                            end if;
@@ -530,21 +530,21 @@ package body Maps.UI.Handlers is
                               Set_Label
                                 (Gtk_Button
                                    (Get_Object(Object, "btnfinishmission")),
-                                 "Complete Patrol area mission");
+                                 "_Complete Patrol area mission");
                            end if;
                         when Explore =>
                            if Mission.Finished then
                               Set_Label
                                 (Gtk_Button
                                    (Get_Object(Object, "btnfinishmission")),
-                                 "Complete Explore area mission");
+                                 "_Complete Explore area mission");
                            end if;
                         when Passenger =>
                            if Mission.Finished then
                               Set_Label
                                 (Gtk_Button
                                    (Get_Object(Object, "btnfinishmission")),
-                                 "Complete Transport passenger mission");
+                                 "_Complete Transport passenger mission");
                            end if;
                      end case;
                      Set_No_Show_All
@@ -588,7 +588,7 @@ package body Maps.UI.Handlers is
                Set_No_Show_All
                  (Gtk_Widget(Get_Object(Object, "btnattack")),
                   False);
-               Set_Label(Gtk_Button(Get_Object(Object, "btnattack")), "Wait");
+               Set_Label(Gtk_Button(Get_Object(Object, "btnattack")), "_Wait");
             when AttackOnBase =>
                Set_No_Show_All
                  (Gtk_Widget(Get_Object(Object, "btnattack")),
@@ -620,14 +620,14 @@ package body Maps.UI.Handlers is
                               Set_Label
                                 (Gtk_Button
                                    (Get_Object(Object, "btnfinishmission")),
-                                 "Complete delivery of " &
+                                 "_Complete delivery of " &
                                  To_String(Items_List(Mission.Target).Name));
                            when Destroy =>
                               if Mission.Finished then
                                  Set_Label
                                    (Gtk_Button
                                       (Get_Object(Object, "btnfinishmission")),
-                                    "Complete destroy " &
+                                    "_Complete destroy " &
                                     To_String
                                       (ProtoShips_List(Mission.Target).Name));
                               end if;
@@ -636,21 +636,21 @@ package body Maps.UI.Handlers is
                                  Set_Label
                                    (Gtk_Button
                                       (Get_Object(Object, "btnfinishmission")),
-                                    "Complete Patrol area mission");
+                                    "_Complete Patrol area mission");
                               end if;
                            when Explore =>
                               if Mission.Finished then
                                  Set_Label
                                    (Gtk_Button
                                       (Get_Object(Object, "btnfinishmission")),
-                                    "Complete Explore area mission");
+                                    "_Complete Explore area mission");
                               end if;
                            when Passenger =>
                               if Mission.Finished then
                                  Set_Label
                                    (Gtk_Button
                                       (Get_Object(Object, "btnfinishmission")),
-                                    "Complete Transport passenger mission");
+                                    "_Complete Transport passenger mission");
                               end if;
                         end case;
                         Set_No_Show_All
@@ -670,19 +670,19 @@ package body Maps.UI.Handlers is
                               Set_Label
                                 (Gtk_Button
                                    (Get_Object(Object, "btncurrentmission")),
-                                 "Search for " &
+                                 "_Search for " &
                                  To_String
                                    (ProtoShips_List(Mission.Target).Name));
                            when Patrol =>
                               Set_Label
                                 (Gtk_Button
                                    (Get_Object(Object, "btncurrentmission")),
-                                 "Patrol area");
+                                 "_Patrol area");
                            when Explore =>
                               Set_Label
                                 (Gtk_Button
                                    (Get_Object(Object, "btncurrentmission")),
-                                 "Explore area");
+                                 "_Explore area");
                         end case;
                         Set_No_Show_All
                           (Gtk_Widget(Get_Object(Object, "btncurrentmission")),
