@@ -2515,11 +2515,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnmissioncenter">
-                        <property name="label" translatable="yes">Show mission on map</property>
+                        <property name="label" translatable="yes">_Show mission on map</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="halign">center</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="Button_Mission" object="btnmissioncenter" swapped="no"/>
                       </object>
                       <packing>
@@ -2530,11 +2531,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnmissiondestination">
-                        <property name="label" translatable="yes">Set mission as destination for ship</property>
+                        <property name="label" translatable="yes">S_et mission as destination for ship</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="halign">center</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="Button_Mission" object="btnmissiondestination" swapped="no"/>
                       </object>
                       <packing>
