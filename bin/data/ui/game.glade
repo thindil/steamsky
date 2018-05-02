@@ -923,6 +923,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Complete_Mission" swapped="no"/>
           </object>
           <packing>
@@ -933,10 +934,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnattack">
-            <property name="label" translatable="yes">Attack</property>
+            <property name="label" translatable="yes">_Attack</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Attack_Order" swapped="no"/>
           </object>
           <packing>
@@ -947,10 +949,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnfreemedicines">
-            <property name="label" translatable="yes">Deliver medicines for free</property>
+            <property name="label" translatable="yes">_Deliver medicines for free</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Deliver_Medicines" object="btnfreemedicines" swapped="no"/>
           </object>
           <packing>
@@ -961,10 +964,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnpricedmedicines">
-            <property name="label" translatable="yes">Deliver medicines for price</property>
+            <property name="label" translatable="yes">Deliver _medicines for price</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Deliver_Medicines" object="btnpricedmedicines" swapped="no"/>
           </object>
           <packing>
@@ -975,10 +979,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btntrade">
-            <property name="label" translatable="yes">Trade</property>
+            <property name="label" translatable="yes">_Trade</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Show_Info" object="btntrade" swapped="no"/>
           </object>
           <packing>
@@ -989,10 +994,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnschool">
-            <property name="label" translatable="yes">School</property>
+            <property name="label" translatable="yes">_School</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Show_Info" object="btnschool" swapped="no"/>
           </object>
           <packing>
@@ -1003,10 +1009,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnrecruit">
-            <property name="label" translatable="yes">Recruit</property>
+            <property name="label" translatable="yes">_Recruit</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Show_Info" object="btnrecruit" swapped="no"/>
           </object>
           <packing>
@@ -1017,10 +1024,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnaskevents">
-            <property name="label" translatable="yes">Ask for events</property>
+            <property name="label" translatable="yes">Ask for _events</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Execute_Order" object="btnaskevents" swapped="no"/>
           </object>
           <packing>
@@ -1031,10 +1039,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnaskbases">
-            <property name="label" translatable="yes">Ask for bases</property>
+            <property name="label" translatable="yes">Ask for _bases</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Execute_Order" object="btnaskbases" swapped="no"/>
           </object>
           <packing>
@@ -1045,10 +1054,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnheal">
-            <property name="label" translatable="yes">Heal wounded</property>
+            <property name="label" translatable="yes">_Heal wounded</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Show_Info" object="btnheal" swapped="no"/>
           </object>
           <packing>
@@ -1059,10 +1069,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnrepair">
-            <property name="label" translatable="yes">Repair ship</property>
+            <property name="label" translatable="yes">R_epair ship</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Show_Info" object="btnrepair" swapped="no"/>
           </object>
           <packing>
@@ -1073,10 +1084,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnshipyard">
-            <property name="label" translatable="yes">Shipyard</property>
+            <property name="label" translatable="yes">_Shipyard</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Show_Info" object="btnshipyard" swapped="no"/>
           </object>
           <packing>
@@ -1087,10 +1099,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnrecipes">
-            <property name="label" translatable="yes">Buy recipes</property>
+            <property name="label" translatable="yes">B_uy recipes</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Show_Info" object="btnrecipes" swapped="no"/>
           </object>
           <packing>
@@ -1101,10 +1114,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnmissions">
-            <property name="label" translatable="yes">Missions</property>
+            <property name="label" translatable="yes">_Missions</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Show_Missions" swapped="no"/>
           </object>
           <packing>
@@ -1115,10 +1129,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btncurrentmission">
-            <property name="label" translatable="yes">Patrol area</property>
+            <property name="label" translatable="yes">_Patrol area</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Start_Mission" swapped="no"/>
           </object>
           <packing>
@@ -1129,10 +1144,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnloot">
-            <property name="label" translatable="yes">Loot</property>
+            <property name="label" translatable="yes">_Loot</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Show_Info" object="btnloot" swapped="no"/>
           </object>
           <packing>
@@ -1143,10 +1159,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnsethome">
-            <property name="label" translatable="yes">Set as home</property>
+            <property name="label" translatable="yes">Se_t as home</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Execute_Order" object="btnsethome" swapped="no"/>
           </object>
           <packing>
