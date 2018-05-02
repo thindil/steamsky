@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Assigning gunners to harpoon guns in enemies ships
 - Typo in old changelog file
 - Shooting by enemy when no gunner at gun
+- Showing game statistics after player death
 
 ## [2.3] - 2018-04-22
 
