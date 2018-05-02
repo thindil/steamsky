@@ -76,10 +76,15 @@ GtkFrame > GtkLabel {
    padding:4px;
 }
 
+GtkSpinButton {
+   border-radius:20px;
+}
+
 .entry {
    border-style:solid;
    border-width:1px;
    border-color:rgb(64,69,82);
+   border-radius:20px;
 }
 
 .entry:focus, .entry:active {
