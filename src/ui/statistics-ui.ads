@@ -20,6 +20,7 @@ with Utils.UI; use Utils.UI;
 
 package Statistics.UI is
 
+   procedure HideStatistics; -- Hide stats and show sky map or main menu
    procedure CreateStatsUI
      (NewBuilder: Gtkada_Builder); -- Create infterace for show game statistics
    procedure ShowStatsUI
