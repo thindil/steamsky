@@ -1731,6 +1731,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <child>
               <placeholder/>
             </child>
+            <accelerator key="Escape" signal="close" />
           </object>
           <packing>
             <property name="expand">False</property>
