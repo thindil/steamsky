@@ -1731,7 +1731,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <child>
               <placeholder/>
             </child>
-            <accelerator key="Escape" signal="close" />
+            <accelerator key="Escape" signal="close"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -2714,11 +2714,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnacceptmission">
-                        <property name="label" translatable="yes">Accept mission</property>
+                        <property name="label" translatable="yes">_Accept mission</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="halign">center</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="Accept_Mission" swapped="no"/>
                       </object>
                       <packing>
