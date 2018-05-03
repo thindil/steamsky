@@ -17,49 +17,80 @@
 
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
-with Gtk.Text_Buffer; use Gtk.Text_Buffer;
-with Gtk.Text_Iter; use Gtk.Text_Iter;
-with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Tree_Model; use Gtk.Tree_Model;
+with Gtk.List_Store; use Gtk.List_Store;
 
 package body Messages.UI is
 
    Builder: Gtkada_Builder;
 
    procedure ShowMessages(MessagesType: Message_Type) is
-      MessagesBuffer: constant Gtk_Text_Buffer :=
-        Gtk_Text_Buffer(Get_Object(Builder, "txtmessages"));
-      MessagesIter: Gtk_Text_Iter;
-      TagNames: constant array(1 .. 5) of Unbounded_String :=
-        (To_Unbounded_String("yellow"),
-         To_Unbounded_String("green"),
-         To_Unbounded_String("red"),
-         To_Unbounded_String("blue"),
-         To_Unbounded_String("cyan"));
+      MessagesList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "messageslist"));
+      MessagesIter: Gtk_Tree_Iter;
    begin
+      Clear(MessagesList);
       if MessagesAmount(MessagesType) = 0 then
-         Set_Text(MessagesBuffer, "There are no messages of that type.");
+         Append(MessagesList, MessagesIter);
+         Set
+           (MessagesList,
+            MessagesIter,
+            0,
+            "There are no messages of that type.");
       else
-         Set_Text(MessagesBuffer, "");
-         Get_Start_Iter(MessagesBuffer, MessagesIter);
          for Message of reverse Messages_List loop
             if Message.MType = MessagesType or MessagesType = Default then
-               if Message.Color = 0 then
-                  Insert
-                    (MessagesBuffer,
-                     MessagesIter,
-                     To_String(Message.Message));
-               else
-                  Insert_With_Tags
-                    (MessagesBuffer,
-                     MessagesIter,
-                     To_String(Message.Message),
-                     Lookup
-                       (Get_Tag_Table(MessagesBuffer),
-                        To_String(TagNames(Message.Color))));
-               end if;
-               Insert(MessagesBuffer, MessagesIter, "" & ASCII.LF);
+               Append(MessagesList, MessagesIter);
+               case Message.Color is
+                  when 1 =>
+                     Set
+                       (MessagesList,
+                        MessagesIter,
+                        0,
+                        "<span foreground=""yellow"">" &
+                        To_String(Message.Message) &
+                        "</span>");
+                  when 2 =>
+                     Set
+                       (MessagesList,
+                        MessagesIter,
+                        0,
+                        "<span foreground=""#4E9A06"">" &
+                        To_String(Message.Message) &
+                        "</span>");
+                  when 3 =>
+                     Set
+                       (MessagesList,
+                        MessagesIter,
+                        0,
+                        "<span foreground=""red"">" &
+                        To_String(Message.Message) &
+                        "</span>");
+                  when 4 =>
+                     Set
+                       (MessagesList,
+                        MessagesIter,
+                        0,
+                        "<span foreground=""#3465A4"">" &
+                        To_String(Message.Message) &
+                        "</span>");
+                  when 5 =>
+                     Set
+                       (MessagesList,
+                        MessagesIter,
+                        0,
+                        "<span foreground=""cyan"">" &
+                        To_String(Message.Message) &
+                        "</span>");
+                  when others =>
+                     Set
+                       (MessagesList,
+                        MessagesIter,
+                        0,
+                        To_String(Message.Message));
+               end case;
             end if;
          end loop;
       end if;

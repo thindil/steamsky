@@ -817,6 +817,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <placeholder/>
     </child>
   </object>
+  <object class="GtkListStore" id="messageslist">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkTextTagTable" id="messagestags">
     <child type="tag">
       <object class="GtkTextTag" id="yellow1">
@@ -2215,15 +2221,29 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="hscrollbar_policy">never</property>
                     <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkTextView" id="messagesview1">
+                      <object class="GtkTreeView">
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
-                        <property name="editable">False</property>
-                        <property name="wrap_mode">word</property>
-                        <property name="cursor_visible">False</property>
-                        <property name="buffer">txtmessages</property>
-                        <property name="accepts_tab">False</property>
+                        <property name="model">messageslist</property>
+                        <property name="headers_visible">False</property>
+                        <property name="headers_clickable">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection">
+                            <property name="mode">none</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <property name="title" translatable="yes">column</property>
+                            <child>
+                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="markup">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
