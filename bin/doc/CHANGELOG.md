@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Showing license full text in info about game
 - New sky base type: military
 - Damage type for personal weapons
+- Option to search through messages
 
 ### Changed
 - Updated interface
