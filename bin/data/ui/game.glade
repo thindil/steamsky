@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.4 
+<!-- Generated with glade 3.22.1 
 
 Copyright (C) 2018 Bartek thindil Jasicki
 
@@ -506,6 +506,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="window_position">mouse</property>
     <property name="type_hint">dialog</property>
     <property name="deletable">False</property>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -600,9 +603,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
   <object class="GtkTextTagTable" id="maptags">
     <child type="tag">
@@ -686,6 +686,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="Hide_Window" object="movemapwindow" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -813,15 +816,15 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
   <object class="GtkListStore" id="messageslist">
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
     </columns>
+  </object>
+  <object class="GtkTreeModelFilter" id="messagesfilter">
+    <property name="child_model">messageslist</property>
   </object>
   <object class="GtkTextTagTable" id="messagestags">
     <child type="tag">
@@ -917,6 +920,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="Hide_Window" object="orderswindow" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkButtonBox" id="btnboxorders">
         <property name="visible">True</property>
@@ -1179,9 +1185,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
   <object class="GtkListStore" id="ownerslist">
@@ -1458,6 +1461,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </accel-groups>
     <signal name="check-resize" handler="Get_New_Size" swapped="no"/>
     <signal name="delete-event" handler="Quit_Game" object="skymapwindow" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -2193,6 +2199,19 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkEntry" id="entrysearch">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="placeholder_text" translatable="yes">&lt;Search messages&gt;</property>
+                        <signal name="changed" handler="Search_Messages" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkButton" id="btnclearmessages">
                         <property name="label" translatable="yes">_Delete all messages</property>
                         <property name="visible">True</property>
@@ -2204,7 +2223,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
@@ -2225,7 +2244,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
-                        <property name="model">messageslist</property>
+                        <property name="model">messagesfilter</property>
                         <property name="headers_visible">False</property>
                         <property name="headers_clickable">False</property>
                         <child internal-child="selection">
@@ -8024,9 +8043,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
   </object>
   <object class="GtkAdjustment" id="waitxadj">
     <property name="lower">1</property>
@@ -8043,6 +8059,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="Hide_Window" object="waitwindow" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkButtonBox">
         <property name="visible">True</property>
@@ -8215,9 +8234,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>
