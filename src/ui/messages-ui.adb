@@ -15,12 +15,15 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
+with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
+with Gtk.GEntry; use Gtk.GEntry;
 
 package body Messages.UI is
 
@@ -113,12 +116,36 @@ package body Messages.UI is
       end if;
    end DeleteMessages;
 
+   procedure SearchMessages(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "messagesfilter")));
+   end SearchMessages;
+
+   function VisibleMessages
+     (Model: Gtk_Tree_Model;
+      Iter: Gtk_Tree_Iter) return Boolean is
+      SearchEntry: constant Gtk_GEntry :=
+        Gtk_GEntry(Get_Object(Builder, "entrysearch"));
+   begin
+      if Get_Text(SearchEntry) = "" then
+         return True;
+      end if;
+      if Index(Get_String(Model, Iter, 0), Get_Text(SearchEntry), 1) > 0 then
+         return True;
+      end if;
+      return False;
+   end VisibleMessages;
+
    procedure CreateMessagesUI(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Select_Messages", SelectMessages'Access);
       Register_Handler(Builder, "Delete_Messages", DeleteMessages'Access);
       Register_Handler(Builder, "Close_Messages", CloseMessages'Access);
+      Register_Handler(Builder, "Search_Messages", SearchMessages'Access);
+      Set_Visible_Func
+        (Gtk_Tree_Model_Filter(Get_Object(Builder, "messagesfilter")),
+         VisibleMessages'Access);
    end CreateMessagesUI;
 
    procedure ShowMessagesUI(OldState: GameStates) is
