@@ -1081,7 +1081,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnrepair">
-            <property name="label" translatable="yes">R_epair ship</property>
+            <property name="label" translatable="yes">Re_pair ship</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
