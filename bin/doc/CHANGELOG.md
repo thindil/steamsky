@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Typo in old changelog file
 - Shooting by enemy when no gunner at gun
 - Showing game statistics after player death
+- Showing last message after buying recipes/ship repairs/crew healing in bases
 
 ## [2.3] - 2018-04-22
 
