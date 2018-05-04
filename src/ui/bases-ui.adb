@@ -171,6 +171,14 @@ package body Bases.UI is
       MoneyIndex2: Natural;
       ObjectIndex: Integer;
       MinChildren: Gint;
+      procedure ShowMap is
+      begin
+         CreateSkyMap;
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Builder, "gamestack")),
+            "skymap");
+         Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
+      end ShowMap;
    begin
       if CurrentState = CLEARING then
          return;
@@ -186,13 +194,7 @@ package body Bases.UI is
       case CurrentState is
          when RECIPES =>
             if N_Children(Model, Null_Iter) = 0 then
-               CreateSkyMap;
-               Set_Visible_Child_Name
-                 (Gtk_Stack(Get_Object(Builder, "gamestack")),
-                  "skymap");
-               Set_Deletable
-                 (Gtk_Window(Get_Object(Builder, "skymapwindow")),
-                  True);
+               ShowMap;
                return;
             end if;
          when REPAIRS =>
@@ -205,24 +207,12 @@ package body Bases.UI is
                MinChildren := 3;
             end if;
             if N_Children(Model, Null_Iter) = MinChildren then
-               CreateSkyMap;
-               Set_Visible_Child_Name
-                 (Gtk_Stack(Get_Object(Builder, "gamestack")),
-                  "skymap");
-               Set_Deletable
-                 (Gtk_Window(Get_Object(Builder, "skymapwindow")),
-                  True);
+               ShowMap;
                return;
             end if;
          when HEAL =>
             if N_Children(Model, Null_Iter) = 1 then
-               CreateSkyMap;
-               Set_Visible_Child_Name
-                 (Gtk_Stack(Get_Object(Builder, "gamestack")),
-                  "skymap");
-               Set_Deletable
-                 (Gtk_Window(Get_Object(Builder, "skymapwindow")),
-                  True);
+               ShowMap;
                return;
             end if;
          when CLEARING =>
@@ -325,6 +315,7 @@ package body Bases.UI is
          when CLEARING =>
             null;
       end case;
+      ShowLastMessage(Object);
       Remove(-(Model), Iter);
       SetActiveRow("treebases1", "columnbases");
    end AcceptAction;
