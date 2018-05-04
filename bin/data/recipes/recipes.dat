@@ -1301,4 +1301,14 @@ Skill = Blacksmith
 Difficulty = 20
 BaseType = 1
 Tool = BlacksmithSet
+[131]
+Material = Orichalcum
+Amount = 1
+Result = 150
+Crafted = 2
+Workplace = Furnace
+Skill = Blacksmith
+Difficulty = 25
+BaseType = 1
+Tool = BlacksmithSet
 []
