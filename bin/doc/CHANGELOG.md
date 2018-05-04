@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file.
   repair tools, orichalcum repair tools, titanium sewing kit and orichalcum
   sewing kit
 - New crafting recipes: titanium woodworker set, orichalcum woodworker set,
-  titanium repair tools, orichalcum repair tools and titanium sewing kit
+  titanium repair tools, orichalcum repair tools, titanium sewing kit and
+  orichalcum sewing kit
 - Showing license full text in info about game
 - New sky base type: military
 - Damage type for personal weapons
