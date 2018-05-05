@@ -117,7 +117,7 @@ package body Bases.UI is
          CountPrice(Cost, FindMember(Talk));
          Set_Label
            (Gtk_Button(Get_Object(Object, "btnrecruit1")),
-            "Hire for" & Positive'Image(Cost) & " " & To_String(MoneyName));
+            "_Hire for" & Positive'Image(Cost) & " " & To_String(MoneyName));
          if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
             Set_Sensitive
               (Gtk_Widget(Get_Object(Object, "btnrecruit1")),

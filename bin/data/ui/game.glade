@@ -3563,6 +3563,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="halign">center</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="Hire_Recruit" swapped="no"/>
                       </object>
                       <packing>
