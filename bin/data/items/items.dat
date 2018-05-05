@@ -1291,4 +1291,13 @@ Buyable = Y, N, N, N, N
 ShowType = Tool
 Value = 2
 Description = Orichalcum set of tools needed to sew items.
+[152]
+Name = Orichalcum 60mm ammo
+Weight = 8
+Type = Ammo60
+Prices = 30, 30, 30, 30, 28
+Buyable = N, N, N, N, Y
+Value = 64
+ShowType = Ammunition
+Description = Upgraded 60mm gun ammunition, made of orichalcum.
 []
