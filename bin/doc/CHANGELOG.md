@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Shooting by enemy when no gunner at gun
 - Showing game statistics after player death
 - Showing last message after buying recipes/ship repairs/crew healing in bases
+- Don't show empty know events list
 
 ## [2.3] - 2018-04-22
 
