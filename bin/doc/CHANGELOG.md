@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - New sky base type: military
 - Damage type for personal weapons
 - Option to search through messages
+- More info about player death in melee combat
 
 ### Changed
 - Updated interface
