@@ -46,6 +46,7 @@ package Config is
       WindowHeight: Positive; -- Game window default height
       AnimationsEnabled: Natural; -- If 1 then UI animations are enabled, disabled when 0
       AnimationType: Positive; -- Type of animation used to move between views
+      MessagesLimit: Positive; -- Max amount of messages showed in game
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
