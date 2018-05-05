@@ -850,6 +850,13 @@ package body Maps.UI.Handlers is
                Gtk_Window(Get_Object(Builder, "skymapwindow")));
             return;
          end if;
+      elsif User_Data = Get_Object(Builder, "menuevents") then
+         if Events_List.Length = 0 then
+            ShowDialog
+              ("You dont know any event yet.",
+               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            return;
+         end if;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
