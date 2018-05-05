@@ -542,7 +542,8 @@ package body Combat is
                           EnemyShip.Modules(HitLocation).Durability -
                           WeaponDamage;
                         if EnemyShip.Modules(HitLocation).Durability = 0 then
-                           DeathReason := To_Unbounded_String("enemy fire");
+                           DeathReason :=
+                             To_Unbounded_String("enemy fire in ships combat");
                            case Modules_List
                              (EnemyShip.Modules(HitLocation).ProtoIndex)
                              .MType is
@@ -550,7 +551,8 @@ package body Combat is
                                  EndCombat := True;
                                  if Ship /= PlayerShip then
                                     DeathReason :=
-                                      To_Unbounded_String("ship explosion");
+                                      To_Unbounded_String
+                                        ("ship explosion in ships combat");
                                     Death(1, DeathReason, PlayerShip);
                                  end if;
                               when TURRET =>
@@ -826,7 +828,11 @@ package body Combat is
             end if;
             if Defender.Health = 0 then
                if PlayerAttack2 then
-                  Death(DefenderIndex, Attacker.Name, Enemy.Ship);
+                  Death
+                    (DefenderIndex,
+                     Attacker.Name &
+                     To_Unbounded_String(" blow in melee combat"),
+                     Enemy.Ship);
                   for Order of BoardingOrders loop
                      if Order >= DefenderIndex then
                         Order := Order - 1;
@@ -847,7 +853,11 @@ package body Combat is
                         exit;
                      end if;
                   end loop;
-                  Death(DefenderIndex, Attacker.Name, PlayerShip);
+                  Death
+                    (DefenderIndex,
+                     Attacker.Name &
+                     To_Unbounded_String(" blow in melee combat"),
+                     PlayerShip);
                   if DefenderIndex = 1 then -- Player is dead
                      EndCombat := True;
                   end if;
