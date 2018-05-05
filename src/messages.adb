@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -14,6 +14,8 @@
 --
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+
+with Config; use Config;
 
 package body Messages is
 
@@ -53,7 +55,7 @@ package body Messages is
       MType: Message_Type;
       Color: Natural := 0) is
    begin
-      if Messages_List.Length = 500 then
+      if Natural(Messages_List.Length) = GameSettings.MessagesLimit then
          Messages_List.Delete(Index => 1);
       end if;
       LastIndex := LastIndex + 1;

@@ -43,7 +43,8 @@ package body Config is
          WindowWidth => 800,
          WindowHeight => 600,
          AnimationsEnabled => 1,
-         AnimationType => 1);
+         AnimationType => 1,
+         MessagesLimit => 500);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -107,6 +108,8 @@ package body Config is
                end if;
             elsif FieldName = To_Unbounded_String("AnimationType") then
                GameSettings.AnimationType := Positive'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("MessagesLimit") then
+               GameSettings.MessagesLimit := Positive'Value(To_String(Value));
             end if;
          end if;
       end loop;
@@ -169,6 +172,9 @@ package body Config is
       Put_Line
         (ConfigFile,
          "AnimationType =" & Positive'Image(GameSettings.AnimationType));
+      Put_Line
+        (ConfigFile,
+         "MessagesLimit =" & Positive'Image(GameSettings.MessagesLimit));
       Close(ConfigFile);
    end SaveConfig;
 
