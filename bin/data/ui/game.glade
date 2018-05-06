@@ -42,6 +42,13 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjmessageslimit">
+    <property name="lower">10</property>
+    <property name="upper">5000</property>
+    <property name="value">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="amountadj">
     <property name="lower">1</property>
     <property name="upper">100</property>
@@ -5651,6 +5658,31 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">7</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.</property>
+                            <property name="label" translatable="yes">Messages limit:</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">9</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.</property>
+                            <property name="adjustment">adjmessageslimit</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">9</property>
                           </packing>
                         </child>
                       </object>
