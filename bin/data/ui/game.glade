@@ -3675,6 +3675,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="halign">start</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="Accept_Action" swapped="no"/>
                       </object>
                       <packing>
