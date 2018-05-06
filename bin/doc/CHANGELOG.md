@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Damage type for personal weapons
 - Option to search through messages
 - More info about player death in melee combat
+- Option to set max amount of stored messages in game
 
 ### Changed
 - Updated interface
