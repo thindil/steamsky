@@ -1311,4 +1311,14 @@ Skill = Blacksmith
 Difficulty = 25
 BaseType = 1
 Tool = BlacksmithSet
+[132]
+Material = Orichalcum, Gunpowder
+Amount = 1, 1
+Result = 151
+Crafted = 1
+Workplace = Alchemy_Lab
+Skill = Gunsmith
+Difficulty = 25
+BaseType = 5
+Tool = GunsmithSet
 []
