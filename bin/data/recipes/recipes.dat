@@ -1304,7 +1304,7 @@ Tool = BlacksmithSet
 [131]
 Material = Orichalcum
 Amount = 1
-Result = 150
+Result = 151
 Crafted = 2
 Workplace = Furnace
 Skill = Blacksmith
@@ -1314,7 +1314,7 @@ Tool = BlacksmithSet
 [132]
 Material = Orichalcum, Gunpowder
 Amount = 1, 1
-Result = 151
+Result = 152
 Crafted = 1
 Workplace = Alchemy_Lab
 Skill = Gunsmith
