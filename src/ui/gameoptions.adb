@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Containers; use Ada.Containers;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Switch; use Gtk.Switch;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
@@ -36,6 +37,7 @@ with Maps.UI; use Maps.UI;
 with Config; use Config;
 with Ships; use Ships;
 with Utils.UI; use Utils.UI;
+with Messages; use Messages;
 
 package body GameOptions is
 
@@ -147,6 +149,14 @@ package body GameOptions is
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnshowhelp")),
          "Help [" & Get_Text(Gtk_Entry(Get_Object(Object, "edthelp"))) & "]");
+      GameSettings.MessagesLimit :=
+        Positive
+          (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmessageslimit"))));
+      if Natural(Messages_List.Length) > GameSettings.MessagesLimit then
+         Messages_List.Delete_First
+         (Count =>
+            (Messages_List.Length - Count_Type(GameSettings.MessagesLimit)));
+      end if;
       SaveConfig;
       Save(To_String(SaveDirectory) & "keys.cfg");
       CreateSkyMap;
@@ -255,6 +265,9 @@ package body GameOptions is
       Set_Active
         (Gtk_Combo_Box(Get_Object(Builder, "cmbanimations")),
          Gint(GameSettings.AnimationType - 1));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Builder, "adjmessageslimit")),
+         Gdouble(GameSettings.MessagesLimit));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "options");
