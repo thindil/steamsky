@@ -385,7 +385,7 @@ package body Bases.UI is
       end loop;
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")),
-         "Buy recipe");
+         "_Buy recipe");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "base");
@@ -435,7 +435,7 @@ package body Bases.UI is
       end if;
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")),
-         "Buy repairs");
+         "_Buy repairs");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "base");
@@ -464,7 +464,7 @@ package body Bases.UI is
       Set(HealsList, HealsIter, 1, 0);
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")),
-         "Buy healing");
+         "_Buy healing");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "base");
