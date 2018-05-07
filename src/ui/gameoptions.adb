@@ -157,6 +157,9 @@ package body GameOptions is
          (Count =>
             (Messages_List.Length - Count_Type(GameSettings.MessagesLimit)));
       end if;
+      GameSettings.SavedMessages :=
+        Positive
+          (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjsavedmessages"))));
       SaveConfig;
       Save(To_String(SaveDirectory) & "keys.cfg");
       CreateSkyMap;
@@ -268,6 +271,9 @@ package body GameOptions is
       Set_Value
         (Gtk_Adjustment(Get_Object(Builder, "adjmessageslimit")),
          Gdouble(GameSettings.MessagesLimit));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Builder, "adjsavedmessages")),
+         Gdouble(GameSettings.SavedMessages));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "options");
