@@ -188,9 +188,6 @@ package body Bases.UI is
            (Gtk_Tree_View(Get_Object(Object, "treebases1"))),
          Model,
          Iter);
-      if Iter = Null_Iter then
-         return;
-      end if;
       case CurrentState is
          when RECIPES =>
             if N_Children(Model, Null_Iter) = 0 then
@@ -218,6 +215,9 @@ package body Bases.UI is
          when CLEARING =>
             null;
       end case;
+      if Iter = Null_Iter then
+         return;
+      end if;
       ObjectIndex := Integer(Get_Int(Model, Iter, 1));
       case CurrentState is
          when RECIPES =>
