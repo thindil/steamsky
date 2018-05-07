@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -26,6 +26,7 @@ with Crafts; use Crafts;
 with Events; use Events;
 with Statistics; use Statistics;
 with Goals; use Goals;
+with Config; use Config;
 
 package body Game.SaveLoad is
 
@@ -34,7 +35,7 @@ package body Game.SaveLoad is
    procedure SaveGame is
       SaveGame: File_Type;
       RawValue: Unbounded_String;
-      Messages: Natural := 10;
+      Messages: Natural := GameSettings.SavedMessages;
       StartLoop: Positive;
       Message: Message_Data;
       VisitedFields: Natural := 0;
