@@ -3854,10 +3854,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="can_focus">False</property>
                             <child>
                               <object class="GtkButton" id="btntake">
-                                <property name="label" translatable="yes">Take </property>
+                                <property name="label" translatable="yes">_Take </property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Loot_Item" object="btntake" swapped="no"/>
                               </object>
                               <packing>
@@ -3907,10 +3908,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                             <child>
                               <object class="GtkButton" id="btntakeall">
-                                <property name="label" translatable="yes">Take all</property>
+                                <property name="label" translatable="yes">T_ake all</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Loot_Item" object="btntakeall" swapped="no"/>
                               </object>
                               <packing>
@@ -3944,10 +3946,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="can_focus">False</property>
                             <child>
                               <object class="GtkButton" id="btndrop">
-                                <property name="label" translatable="yes">Drop</property>
+                                <property name="label" translatable="yes">_Drop</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Loot_Item" object="btndrop" swapped="no"/>
                               </object>
                               <packing>
@@ -3997,10 +4000,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                             <child>
                               <object class="GtkButton" id="btndropall">
-                                <property name="label" translatable="yes">Drop all</property>
+                                <property name="label" translatable="yes">D_rop all</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Loot_Item" object="btndropall" swapped="no"/>
                               </object>
                               <packing>
