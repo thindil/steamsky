@@ -39,6 +39,17 @@ package body Game.SaveLoad is
       StartLoop: Positive;
       Message: Message_Data;
       VisitedFields: Natural := 0;
+      procedure SaveStatistics
+        (StatisticsVector: in out Statistics_Container.Vector) is
+      begin
+         RawValue := To_Unbounded_String(StatisticsVector.Length'Img);
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         for Statistic of StatisticsVector loop
+            Put(SaveGame, To_String(Statistic.Index) & ";");
+            RawValue := To_Unbounded_String(Integer'Image(Statistic.Amount));
+            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         end loop;
+      end SaveStatistics;
    begin
       Create(SaveGame, Out_File, To_String(SaveDirectory) & "savegame.dat");
       -- Save version
@@ -124,6 +135,7 @@ package body Game.SaveLoad is
          Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       end loop;
       -- Save game statistics
+      SaveStatistics(GameStats.DestroyedShips);
       RawValue := To_Unbounded_String(GameStats.DestroyedShips.Length'Img);
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       for DestroyedShip of GameStats.DestroyedShips loop
@@ -138,38 +150,13 @@ package body Game.SaveLoad is
       RawValue :=
         To_Unbounded_String(Positive'Image(GameStats.DistanceTraveled));
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      RawValue := To_Unbounded_String(GameStats.CraftingOrders.Length'Img);
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      for CraftingOrder of GameStats.CraftingOrders loop
-         Put(SaveGame, To_String(CraftingOrder.Index) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(CraftingOrder.Amount));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      end loop;
+      SaveStatistics(GameStats.CraftingOrders);
       RawValue :=
         To_Unbounded_String(Positive'Image(GameStats.AcceptedMissions));
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      RawValue := To_Unbounded_String(GameStats.FinishedMissions.Length'Img);
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      for FinishedMission of GameStats.FinishedMissions loop
-         Put(SaveGame, To_String(FinishedMission.Index) & ";");
-         RawValue :=
-           To_Unbounded_String(Integer'Image(FinishedMission.Amount));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      end loop;
-      RawValue := To_Unbounded_String(GameStats.FinishedGoals.Length'Img);
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      for FinishedGoal of GameStats.FinishedGoals loop
-         Put(SaveGame, To_String(FinishedGoal.Index) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(FinishedGoal.Amount));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      end loop;
-      RawValue := To_Unbounded_String(GameStats.KilledMobs.Length'Img);
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      for KilledMob of GameStats.KilledMobs loop
-         Put(SaveGame, To_String(KilledMob.Index) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(KilledMob.Amount));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      end loop;
+      SaveStatistics(GameStats.FinishedMissions);
+      SaveStatistics(GameStats.FinishedGoals);
+      SaveStatistics(GameStats.KilledMobs);
       RawValue := To_Unbounded_String(Natural'Image(GameStats.Points));
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       -- Save current goal
