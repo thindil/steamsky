@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Goals; use Goals;
 with Ships; use Ships;
 
@@ -55,6 +56,7 @@ package body Statistics is
       GameStats.AcceptedMissions := 0;
       GameStats.FinishedMissions.Clear;
       GameStats.FinishedGoals.Clear;
+      GameStats.KilledMobs.Clear;
       GameStats.Points := 0;
    end ClearGameStats;
 
@@ -119,5 +121,33 @@ package body Statistics is
       end if;
       GameStats.Points := GameStats.Points + 5;
    end UpdateCraftingOrders;
+
+   procedure UpdateKilledMobs(Mob: Member_Data; Fraction: Bases_Owners) is
+      Updated: Boolean := False;
+      FractionName: Unbounded_String;
+   begin
+      for Attribute of Mob.Attributes loop
+         GameStats.Points := GameStats.Points + Attribute(1);
+      end loop;
+      for Skill of Mob.Skills loop
+         GameStats.Points := GameStats.Points + Skill(2);
+      end loop;
+      FractionName := To_Unbounded_String(Bases_Owners'Image(Fraction));
+      FractionName :=
+        Unbounded_Slice(FractionName, 1, 1) &
+        To_Unbounded_String
+          (To_Lower(Slice(FractionName, 2, Length(FractionName))));
+      for KilledMob of GameStats.KilledMobs loop
+         if KilledMob.Index = FractionName then
+            KilledMob.Amount := KilledMob.Amount + 1;
+            Updated := True;
+            exit;
+         end if;
+      end loop;
+      if not Updated then
+         GameStats.KilledMobs.Append
+         (New_Item => (Index => FractionName, Amount => 1));
+      end if;
+   end UpdateKilledMobs;
 
 end Statistics;
