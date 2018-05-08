@@ -299,6 +299,26 @@ package body Statistics.UI is
       else
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btngoals")), True);
       end if;
+      if GameStats.KilledMobs.Length > 0 then
+         TotalDestroyed := 0;
+         List := Gtk_List_Store(Get_Object(Builder, "killedlist"));
+         Clear(List);
+         for KilledMob of GameStats.KilledMobs loop
+            Append(List, Iter);
+            Set(List, Iter, 0, To_String(KilledMob.Index));
+            Set(List, Iter, 1, Gint(KilledMob.Amount));
+            TotalDestroyed := TotalDestroyed + KilledMob.Amount;
+         end loop;
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblkilledstat")),
+            "Killed enemies (Total:" & Natural'Image(TotalDestroyed) & ")");
+         Show_All(Gtk_Widget(Get_Object(Builder, "scrollkilled")));
+      else
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblkilledstat")),
+            "Killed enemies: none");
+         Hide(Gtk_Widget(Get_Object(Builder, "scrollkilled")));
+      end if;
    end ShowStatsUI;
 
 end Statistics.UI;
