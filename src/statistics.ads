@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,13 +17,15 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Crew; use Crew;
+with Bases; use Bases;
 
 package Statistics is
 
-   type Statistics_Data is -- Data for finished goals and destroyed ships
+   type Statistics_Data is -- Data for finished goals, destroyed ships and killed mobs
    record
-      Index: Unbounded_String; -- Index of goal or ship name
-      Amount: Positive; -- Amount of finished goals or ships of that type
+      Index: Unbounded_String; -- Index of goal or ship name or name of fraction of killed mobs
+      Amount: Positive; -- Amount of finished goals or ships or mobs of that type
    end record;
    package Statistics_Container is new Vectors(Positive, Statistics_Data);
    type GameStats_Data is -- Data for game statistics
@@ -40,6 +42,8 @@ package Statistics is
         .Vector; -- Data for all finished missions
       FinishedGoals: Statistics_Container
         .Vector; -- Data for all finished goals
+      KilledMobs: Statistics_Container
+        .Vector; -- Data for all mobs killed by player
       Points: Natural; -- Amount of gained points
    end record;
    GameStats: GameStats_Data; -- Game statistics
@@ -53,5 +57,8 @@ package Statistics is
      (MType: Unbounded_String); -- Add new finished mission to list
    procedure UpdateCraftingOrders
      (Index: Unbounded_String); -- Add new finished crafting order to list
+   procedure UpdateKilledMobs
+     (Mob: Member_Data;
+      Fraction: Bases_Owners); -- Add new killed mob to list
 
 end Statistics;
