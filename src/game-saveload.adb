@@ -30,7 +30,7 @@ with Config; use Config;
 
 package body Game.SaveLoad is
 
-   SaveVersion: constant String := "2.3";
+   SaveVersion: constant String := "2.4";
 
    procedure SaveGame is
       SaveGame: File_Type;
@@ -163,6 +163,13 @@ package body Game.SaveLoad is
          RawValue := To_Unbounded_String(Integer'Image(FinishedGoal.Amount));
          Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       end loop;
+      RawValue := To_Unbounded_String(GameStats.KilledMobs.Length'Img);
+      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      for KilledMob of GameStats.KilledMobs loop
+         Put(SaveGame, To_String(KilledMob.Index) & ";");
+         RawValue := To_Unbounded_String(Integer'Image(KilledMob.Amount));
+         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      end loop;
       RawValue := To_Unbounded_String(Natural'Image(GameStats.Points));
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       -- Save current goal
@@ -182,6 +189,17 @@ package body Game.SaveLoad is
       Message: Unbounded_String;
       MType: Message_Type;
       VisitedFields: Positive;
+      procedure LoadStatistics
+        (StatisticsVector: in out Statistics_Container.Vector) is
+      begin
+         VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
+         for I in 1 .. VectorLength loop
+            StatisticsVector.Append
+            (New_Item =>
+               (Index => ReadData(SaveGame),
+                Amount => Positive'Value(To_String(ReadData(SaveGame)))));
+         end loop;
+      end LoadStatistics;
    begin
       Open(SaveGame, In_File, To_String(SaveDirectory) & "savegame.dat");
       -- Check save version
@@ -245,40 +263,17 @@ package body Game.SaveLoad is
          SkyMap(Events_List(I).SkyX, Events_List(I).SkyY).EventIndex := I;
       end loop;
       -- Load game statistics
-      VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
-      for I in 1 .. VectorLength loop
-         GameStats.DestroyedShips.Append
-         (New_Item =>
-            (Index => ReadData(SaveGame),
-             Amount => Positive'Value(To_String(ReadData(SaveGame)))));
-      end loop;
+      LoadStatistics(GameStats.DestroyedShips);
       GameStats.BasesVisited := Positive'Value(To_String(ReadData(SaveGame)));
       GameStats.MapVisited := Positive'Value(To_String(ReadData(SaveGame)));
       GameStats.DistanceTraveled :=
         Positive'Value(To_String(ReadData(SaveGame)));
-      VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
-      for I in 1 .. VectorLength loop
-         GameStats.CraftingOrders.Append
-         (New_Item =>
-            (Index => ReadData(SaveGame),
-             Amount => Positive'Value(To_String(ReadData(SaveGame)))));
-      end loop;
+      LoadStatistics(GameStats.CraftingOrders);
       GameStats.AcceptedMissions :=
         Positive'Value(To_String(ReadData(SaveGame)));
-      VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
-      for I in 1 .. VectorLength loop
-         GameStats.FinishedMissions.Append
-         (New_Item =>
-            (Index => ReadData(SaveGame),
-             Amount => Positive'Value(To_String(ReadData(SaveGame)))));
-      end loop;
-      VectorLength := Positive'Value(To_String(ReadData(SaveGame)));
-      for I in 1 .. VectorLength loop
-         GameStats.FinishedGoals.Append
-         (New_Item =>
-            (Index => ReadData(SaveGame),
-             Amount => Positive'Value(To_String(ReadData(SaveGame)))));
-      end loop;
+      LoadStatistics(GameStats.FinishedMissions);
+      LoadStatistics(GameStats.FinishedGoals);
+      LoadStatistics(GameStats.KilledMobs);
       GameStats.Points := Natural'Value(To_String(ReadData(SaveGame)));
       -- Load current goal
       CurrentGoal.Index := ReadData(SaveGame);

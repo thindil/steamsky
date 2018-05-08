@@ -18,7 +18,6 @@
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Crew; use Crew;
-with Bases; use Bases;
 
 package Statistics is
 
@@ -59,6 +58,6 @@ package Statistics is
      (Index: Unbounded_String); -- Add new finished crafting order to list
    procedure UpdateKilledMobs
      (Mob: Member_Data;
-      Fraction: Bases_Owners); -- Add new killed mob to list
+      ShipName: Unbounded_String); -- Add new killed mob to list
 
 end Statistics;
