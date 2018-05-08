@@ -4155,11 +4155,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btntrain">
-                        <property name="label" translatable="yes">Train selected skill</property>
+                        <property name="label" translatable="yes">_Train selected skill</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="halign">center</property>
+                        <property name="use_underline">True</property>
                         <signal name="clicked" handler="Train_Selected_Skill" swapped="no"/>
                       </object>
                       <packing>
