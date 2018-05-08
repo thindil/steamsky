@@ -136,13 +136,6 @@ package body Game.SaveLoad is
       end loop;
       -- Save game statistics
       SaveStatistics(GameStats.DestroyedShips);
-      RawValue := To_Unbounded_String(GameStats.DestroyedShips.Length'Img);
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      for DestroyedShip of GameStats.DestroyedShips loop
-         Put(SaveGame, To_String(DestroyedShip.Index) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(DestroyedShip.Amount));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      end loop;
       RawValue := To_Unbounded_String(Positive'Image(GameStats.BasesVisited));
       Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
       RawValue := To_Unbounded_String(Positive'Image(GameStats.MapVisited));
