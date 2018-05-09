@@ -115,18 +115,21 @@ package body Statistics.UI is
          end if;
       end loop;
       StatsText :=
-        To_Unbounded_String
-          ("Time passed:" &
-           Natural'Image(TimePassed.Year) &
-           "y," &
-           Natural'Image(TimePassed.Month) &
-           "m," &
-           Natural'Image(TimePassed.Day) &
-           "d," &
-           Natural'Image(TimePassed.Hour) &
-           "h," &
-           Natural'Image(TimePassed.Minutes) &
-           "mins");
+        To_Unbounded_String("Points:" & Natural'Image(GameStats.Points));
+      Append
+        (StatsText,
+         ASCII.LF &
+         "Time passed:" &
+         Natural'Image(TimePassed.Year) &
+         "y," &
+         Natural'Image(TimePassed.Month) &
+         "m," &
+         Natural'Image(TimePassed.Day) &
+         "d," &
+         Natural'Image(TimePassed.Hour) &
+         "h," &
+         Natural'Image(TimePassed.Minutes) &
+         "mins");
       VisitedPercent :=
         (VisitedFactor(GameStats.BasesVisited) / 1024.0) * 100.0;
       Put
@@ -225,15 +228,13 @@ package body Statistics.UI is
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btngoals")),
          "Current goal: " & GoalText(0));
-      Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblpoints")),
-         "Points:" & Natural'Image(GameStats.Points));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "gamestats");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Hide(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       if GameStats.DestroyedShips.Length > 0 then
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expdestroyed")), True);
          List := Gtk_List_Store(Get_Object(Builder, "destroyedlist"));
          Clear(List);
          for I in GameStats.DestroyedShips.Iterate loop
@@ -251,15 +252,15 @@ package body Statistics.UI is
          Set_Label
            (Gtk_Label(Get_Object(Builder, "lbldestroyed")),
             "Destroyed ships (Total:" & Natural'Image(TotalDestroyed) & ")");
-         Show_All(Gtk_Widget(Get_Object(Builder, "scrolldestroyed")));
       else
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expdestroyed")), False);
          Set_Label
            (Gtk_Label(Get_Object(Builder, "lbldestroyed")),
             "Destroyed ships: none");
-         Hide(Gtk_Widget(Get_Object(Builder, "scrolldestroyed")));
       end if;
       TotalFinished := 0;
       if GameStats.FinishedGoals.Length > 0 then
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expgoals")), True);
          List := Gtk_List_Store(Get_Object(Builder, "goalslist"));
          Clear(List);
          for I in GameStats.FinishedGoals.Iterate loop
@@ -279,10 +280,10 @@ package body Statistics.UI is
             "Finished goals (Total:" & Natural'Image(TotalFinished) & ")");
          Show_All(Gtk_Widget(Get_Object(Builder, "scrollgoals")));
       else
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expgoals")), False);
          Set_Label
            (Gtk_Label(Get_Object(Builder, "lblfinishedgoals")),
             "Finished goals: none");
-         Hide(Gtk_Widget(Get_Object(Builder, "scrollgoals")));
       end if;
       if GameStats.FinishedMissions.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expcrafts")), True);
@@ -300,6 +301,7 @@ package body Statistics.UI is
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btngoals")), True);
       end if;
       if GameStats.KilledMobs.Length > 0 then
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expkilledmobs")), True);
          TotalDestroyed := 0;
          List := Gtk_List_Store(Get_Object(Builder, "killedlist"));
          Clear(List);
@@ -312,12 +314,13 @@ package body Statistics.UI is
          Set_Label
            (Gtk_Label(Get_Object(Builder, "lblkilledstat")),
             "Killed enemies (Total:" & Natural'Image(TotalDestroyed) & ")");
-         Show_All(Gtk_Widget(Get_Object(Builder, "scrollkilled")));
       else
+         Set_Sensitive
+           (Gtk_Widget(Get_Object(Builder, "expkilledmobs")),
+            False);
          Set_Label
            (Gtk_Label(Get_Object(Builder, "lblkilledstat")),
             "Killed enemies: none");
-         Hide(Gtk_Widget(Get_Object(Builder, "scrollkilled")));
       end if;
    end ShowStatsUI;
 
