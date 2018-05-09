@@ -42,6 +42,7 @@ All notable changes to this project will be documented in this file.
 - Showing last message after buying recipes/ship repairs/crew healing in bases
 - Don't show empty know events list
 - Auto back to sky map after buying all recipes in base
+- Refreshing combat view after player back on ship
 
 ## [2.3] - 2018-04-22
 
