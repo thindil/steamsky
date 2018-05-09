@@ -123,6 +123,10 @@ package body Maps.UI.Handlers is
       MapInfoText: Unbounded_String;
    begin
       GetCurrentCellCoords;
+      if MapX = PlayerShip.SkyX and MapY = PlayerShip.SkyY then
+         ShowOrders(Object);
+         return True;
+      end if;
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblmapx")),
          "X:" & Positive'Image(MapX));
