@@ -4426,11 +4426,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="btninstall">
-                                    <property name="label" translatable="yes">Install module</property>
+                                    <property name="label" translatable="yes">_Install module</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="halign">center</property>
+                                    <property name="use_underline">True</property>
                                     <signal name="clicked" handler="Manipulate_Module" object="btninstall" swapped="no"/>
                                   </object>
                                   <packing>
@@ -4597,11 +4598,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                             <child>
                               <object class="GtkButton" id="btnremove">
-                                <property name="label" translatable="yes">Remove module</property>
+                                <property name="label" translatable="yes">_Remove module</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="halign">center</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Manipulate_Module" object="btnremove" swapped="no"/>
                               </object>
                               <packing>
