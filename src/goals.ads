@@ -27,7 +27,8 @@ package Goals is
       DISCOVER,
       VISIT,
       CRAFT,
-      MISSION); -- Types of goals
+      MISSION,
+      KILL); -- Types of goals
    type Goal_Data is -- Data structure for each goal
    record
       Index: Unbounded_String; -- Index of goal
