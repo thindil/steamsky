@@ -142,6 +142,10 @@ package body Utils.UI is
          HideStatistics;
          return;
       end if;
+      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack"))) =
+        "combat" then
+         Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), True);
+      end if;
       Hide(Gtk_Widget(Get_Object(Object, "btnclose")));
       Hide(Gtk_Widget(Get_Object(Object, "btnshowhelp")));
       case PreviousGameState is
