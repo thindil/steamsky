@@ -1309,7 +1309,7 @@ Buyable = N, N, N, N, Y
 Value = 128
 ShowType = Ammunition
 Description = Upgraded 80mm gun ammunition, made of orichalcum.
-[153]
+[154]
 Name = Orichalcum 100mm ammo
 Weight = 32
 Type = Ammo100
