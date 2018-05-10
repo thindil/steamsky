@@ -654,6 +654,11 @@ package body Combat is
             MessageColor, AttackSkill, BaseDamage: Natural;
             type DamageFactor is digits 2 range 0.0 .. 1.0;
             Wounds: DamageFactor := 0.0;
+            FractionName: constant Unbounded_String :=
+              To_Unbounded_String
+                ((To_Lower
+                    (Bases_Owners'Image
+                       (ProtoShips_List(EnemyShipIndex).Owner))));
          begin
             if PlayerAttack2 then
                Attacker := PlayerShip.Crew(AttackerIndex);
@@ -663,10 +668,7 @@ package body Combat is
                  To_Unbounded_String(" attacks ") &
                  Defender.Name &
                  To_Unbounded_String(" (") &
-                 To_Unbounded_String
-                   (To_Lower
-                      (Bases_Owners'Image
-                         (ProtoShips_List(EnemyShipIndex).Owner))) &
+                 FractionName &
                  To_Unbounded_String(")");
             else
                Attacker := Enemy.Ship.Crew(AttackerIndex);
@@ -674,10 +676,7 @@ package body Combat is
                AttackMessage :=
                  Attacker.Name &
                  To_Unbounded_String(" (") &
-                 To_Unbounded_String
-                   (To_Lower
-                      (Bases_Owners'Image
-                         (ProtoShips_List(EnemyShipIndex).Owner))) &
+                 FractionName &
                  To_Unbounded_String(")") &
                  To_Unbounded_String(" attacks ") &
                  Defender.Name;
@@ -839,6 +838,7 @@ package body Combat is
                      end if;
                   end loop;
                   UpdateKilledMobs(Defender, Enemy.Ship.Name);
+                  UpdateGoal(KILL, FractionName);
                   if Enemy.Ship.Crew.Length = 0 then
                      EndCombat := True;
                   end if;
