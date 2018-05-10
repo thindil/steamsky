@@ -4913,10 +4913,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="layout_style">center</property>
                                 <child>
                                   <object class="GtkButton" id="btncrewinfo">
-                                    <property name="label" translatable="yes">Crew info</property>
+                                    <property name="label" translatable="yes">_Crew info</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <property name="use_underline">True</property>
                                     <signal name="clicked" handler="Show_Combat_Info" object="btncrewinfo" swapped="no"/>
                                   </object>
                                   <packing>
@@ -4927,10 +4928,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="btncargoinfo">
-                                    <property name="label" translatable="yes">Ship cargo</property>
+                                    <property name="label" translatable="yes">Ship c_argo</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <property name="use_underline">True</property>
                                     <signal name="clicked" handler="Show_Combat_Info" object="btncargoinfo" swapped="no"/>
                                   </object>
                                   <packing>
@@ -4941,10 +4943,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="btnshipinfo">
-                                    <property name="label" translatable="yes">Ship modules</property>
+                                    <property name="label" translatable="yes">_Ship modules</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <property name="use_underline">True</property>
                                     <signal name="clicked" handler="Show_Combat_Info" object="btnshipinfo" swapped="no"/>
                                   </object>
                                   <packing>
@@ -4955,10 +4958,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="btnmessages">
-                                    <property name="label" translatable="yes">Messages</property>
+                                    <property name="label" translatable="yes">_Messages</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <property name="use_underline">True</property>
                                     <signal name="clicked" handler="Show_Combat_Info" object="btnmessages" swapped="no"/>
                                   </object>
                                   <packing>
