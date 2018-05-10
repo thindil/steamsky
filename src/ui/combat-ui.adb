@@ -431,7 +431,6 @@ package body Combat.UI is
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "combat");
-      Hide(Gtk_Widget(Get_Object(Builder, "btnclosecombat")));
       HideLastMessage(Builder);
       if (HarpoonDuration = 0 and Enemy.HarpoonDuration = 0) or
         ProtoShips_List(EnemyShipIndex).Crew.Length = 0 then
@@ -694,7 +693,7 @@ package body Combat.UI is
          Hide(Gtk_Widget(Get_Object(Object, "btnboxactions")));
          Hide(Gtk_Widget(Get_Object(Object, "expmoreinfo")));
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), False);
-         Show_All(Gtk_Widget(Get_Object(Object, "btnclosecombat")));
+         Show_All(Gtk_Widget(Get_Object(Object, "btnclose")));
          return;
       end if;
       if PlayerShip.Crew(1).Order = Boarding and
