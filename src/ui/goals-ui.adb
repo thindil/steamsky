@@ -142,6 +142,7 @@ package body Goals.UI is
       AddGoals("Visit bases", VISIT);
       AddGoals("Craft items", CRAFT);
       AddGoals("Finish missions", MISSION);
+      AddGoals("Kill enemies in melee combat", KILL);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "goalswindow")),
          CloseWindow'Access);

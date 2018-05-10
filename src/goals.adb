@@ -127,6 +127,8 @@ package body Goals is
             Text := To_Unbounded_String("Craft");
          when MISSION =>
             Text := To_Unbounded_String("Finish");
+         when KILL =>
+            Text := To_Unbounded_String("Kill");
          when RANDOM =>
             null;
       end case;
@@ -142,15 +144,26 @@ package body Goals is
             Append(Text, " item");
          when MISSION =>
             Append(Text, " mission");
+         when KILL =>
+            Append(Text, " enem");
          when RANDOM =>
             null;
       end case;
-      if Goal.GType /= RANDOM and Goal.Amount > 1 then
+      if (Goal.GType /= RANDOM and Goal.GType /= KILL) and Goal.Amount > 1 then
          Append(Text, "s");
       end if;
-      if Goal.GType = DISCOVER then
-         Append(Text, " of map");
-      end if;
+      case Goal.GType is
+         when DISCOVER =>
+            Append(Text, " of map");
+         when KILL =>
+            if Goal.Amount > 1 then
+               Append(Text, "ies in melee combat");
+            else
+               Append(Text, "y in melee combat");
+            end if;
+         when others =>
+            null;
+      end case;
       if Goal.TargetIndex /= Null_Unbounded_String then
          case Goal.GType is
             when REPUTATION | VISIT =>
@@ -198,6 +211,23 @@ package body Goals is
                   when Passenger =>
                      Append(Text, ": Transport passenger to base");
                end case;
+            when KILL =>
+               InsertPosition := Length(Text) - 20;
+               if Goal.Amount > 1 then
+                  InsertPosition := InsertPosition - 2;
+               end if;
+               declare
+                  StopPosition: Natural := InsertPosition + 4;
+               begin
+                  if Goal.Amount > 1 then
+                     StopPosition := StopPosition + 2;
+                  end if;
+                  Replace_Slice
+                    (Text,
+                     InsertPosition,
+                     StopPosition,
+                     To_String(Goal.TargetIndex));
+               end;
             when RANDOM | DISCOVER =>
                null;
          end case;
