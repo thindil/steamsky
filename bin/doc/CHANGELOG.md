@@ -46,6 +46,7 @@ All notable changes to this project will be documented in this file.
 - Auto back to sky map after buying all recipes in base
 - Refreshing combat view after player back on ship
 - Melee combat stops when no harpoons attached to ships
+- Showing empty goals category in goals select menu
 
 ## [2.3] - 2018-04-22
 
