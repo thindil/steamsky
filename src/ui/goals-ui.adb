@@ -114,6 +114,10 @@ package body Goals.UI is
                Set(GoalsList, GoalsIter, 1, Gint(Goals_Container.To_Index(I)));
             end if;
          end loop;
+         if not Has_Child(GoalsList, CategoryIter) then
+            Remove(GoalsList, CategoryIter);
+            CategoryIter := Nth_Child(GoalsList, Null_Iter, 0);
+         end if;
       end AddGoals;
    begin
       if Builder /= null then
