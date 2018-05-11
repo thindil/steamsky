@@ -618,4 +618,7 @@ Type = Mission
 Amount = 2500
 Target = Passenger
 Multiplier = 5
+[150]
+Type = Kill
+Amount = 800
 []
