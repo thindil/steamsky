@@ -427,7 +427,8 @@ DodgeSkill. Value after equal sign must be existing skill name.
 - Type: Type/category of goal which define what is needed to do for finish
   selected goal. Possible values: Reputation - gain max reputation in X bases,
   Destroy - destroy X ships, Discover - discover X fields of map, Visit - visit
-  (discover) X bases, Craft - craft X items, Mission - Finish X missions
+  (discover) X bases, Craft - craft X items, Mission - Finish X missions, 
+  Kill - Kill X enemies in melee combat
 - Amount: Amount of target for selected goal to do for finish it. For example
   100 ships to destroy, etc.
 - Target: Optional parameter, ignored for Discover type, exact target for 
@@ -438,7 +439,9 @@ DodgeSkill. Value after equal sign must be existing skill name.
   Craft, recipe index (from *recipes* directory), Type or ShowType (from
   *items* directory). For Mission, missions types: Deliver for deliver item to 
   bases, Destroy for destroy enemy ship, Patrol for patrol missions, Explore 
-  for explore missions, Passenger for transport passengers missions.
+  for explore missions, Passenger for transport passengers missions. For Kill,
+  enemy fraction name: Poleis, Independent, Pirates, Undead, Drones, 
+  Inquisition.
 - Multiplier: Optional parameter, multiplier for amount of game points earned
   by finishing this goal. Default value is 1, which mean goal give Amount of
   points for finish it.
