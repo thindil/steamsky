@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Statistics for killed enemies in melee combat which made saves from previous
   version incompatible
 - New type of goal: kill X enemies in melee combat
+- New goal: kill 800 enemies in melee combat
 
 ### Changed
 - Updated interface
