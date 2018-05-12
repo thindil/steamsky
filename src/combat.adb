@@ -837,7 +837,7 @@ package body Combat is
                         Order := Order - 1;
                      end if;
                   end loop;
-                  UpdateKilledMobs(Defender, Enemy.Ship.Name);
+                  UpdateKilledMobs(Defender, FractionName);
                   UpdateGoal(KILL, FractionName);
                   if Enemy.Ship.Crew.Length = 0 then
                      EndCombat := True;

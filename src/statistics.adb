@@ -15,10 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Goals; use Goals;
 with Ships; use Ships;
-with Bases; use Bases;
 
 package body Statistics is
 
@@ -123,9 +121,10 @@ package body Statistics is
       GameStats.Points := GameStats.Points + 5;
    end UpdateCraftingOrders;
 
-   procedure UpdateKilledMobs(Mob: Member_Data; ShipName: Unbounded_String) is
+   procedure UpdateKilledMobs
+     (Mob: Member_Data;
+      FractionName: Unbounded_String) is
       Updated: Boolean := False;
-      FractionName: Unbounded_String;
    begin
       for Attribute of Mob.Attributes loop
          GameStats.Points := GameStats.Points + Attribute(1);
@@ -133,17 +132,6 @@ package body Statistics is
       for Skill of Mob.Skills loop
          GameStats.Points := GameStats.Points + Skill(2);
       end loop;
-      for ProtoShip of ProtoShips_List loop
-         if ProtoShip.Name = ShipName then
-            FractionName :=
-              To_Unbounded_String(Bases_Owners'Image(ProtoShip.Owner));
-            exit;
-         end if;
-      end loop;
-      FractionName :=
-        Unbounded_Slice(FractionName, 1, 1) &
-        To_Unbounded_String
-          (To_Lower(Slice(FractionName, 2, Length(FractionName))));
       for KilledMob of GameStats.KilledMobs loop
          if KilledMob.Index = FractionName then
             KilledMob.Amount := KilledMob.Amount + 1;

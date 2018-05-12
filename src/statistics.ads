@@ -58,6 +58,6 @@ package Statistics is
      (Index: Unbounded_String); -- Add new finished crafting order to list
    procedure UpdateKilledMobs
      (Mob: Member_Data;
-      ShipName: Unbounded_String); -- Add new killed mob to list
+      FractionName: Unbounded_String); -- Add new killed mob to list
 
 end Statistics;
