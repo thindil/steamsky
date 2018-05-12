@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Goals; use Goals;
 with Ships; use Ships;
 
@@ -133,7 +134,7 @@ package body Statistics is
          GameStats.Points := GameStats.Points + Skill(2);
       end loop;
       for KilledMob of GameStats.KilledMobs loop
-         if KilledMob.Index = FractionName then
+         if To_Lower(To_String(KilledMob.Index)) = To_String(FractionName) then
             KilledMob.Amount := KilledMob.Amount + 1;
             Updated := True;
             exit;
@@ -141,7 +142,12 @@ package body Statistics is
       end loop;
       if not Updated then
          GameStats.KilledMobs.Append
-         (New_Item => (Index => FractionName, Amount => 1));
+         (New_Item =>
+            (Index =>
+               To_Unbounded_String
+                 (To_Upper(Slice(FractionName, 1, 1)) &
+                  Slice(FractionName, 2, Length(FractionName))),
+             Amount => 1));
       end if;
    end UpdateKilledMobs;
 
