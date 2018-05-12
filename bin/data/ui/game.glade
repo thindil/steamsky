@@ -5367,10 +5367,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="btnsetcrafting">
-                            <property name="label" translatable="yes">Craft</property>
+                            <property name="label" translatable="yes">_Craft</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="Set_Crafting" swapped="no"/>
                           </object>
                           <packing>
