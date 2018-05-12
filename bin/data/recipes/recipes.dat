@@ -1343,4 +1343,15 @@ Time = 60
 Difficulty = 35
 BaseType = 5
 Tool = GunsmithSet
+[135]
+Material = Orichalcum, Gunpowder
+Amount = 6, 2
+Result = 155
+Crafted = 1
+Workplace = Alchemy_Lab
+Skill = Gunsmith
+Time = 75
+Difficulty = 40
+BaseType = 5
+Tool = GunsmithSet
 []
