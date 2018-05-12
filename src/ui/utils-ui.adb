@@ -151,13 +151,6 @@ package body Utils.UI is
       case PreviousGameState is
          when SkyMap_View =>
             CreateSkyMap;
-            Set_Deletable
-              (Gtk_Window(Get_Object(Object, "skymapwindow")),
-               True);
-            Set_Visible_Child_Name
-              (Gtk_Stack(Get_Object(Object, "gamestack")),
-               "skymap");
-            Show_All(Gtk_Widget(Get_Object(Object, "btnmenu")));
          when Combat_View =>
             ShowCombatUI(False);
          when others =>
