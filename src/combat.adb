@@ -35,6 +35,8 @@ with Game; use Game;
 
 package body Combat is
 
+   FractionName: Unbounded_String;
+
    function StartCombat
      (EnemyIndex: Positive;
       NewCombat: Boolean := True) return Boolean is
@@ -71,6 +73,9 @@ package body Combat is
       end CountPerception;
    begin
       EnemyShipIndex := EnemyIndex;
+      FractionName :=
+        To_Unbounded_String
+          ((To_Lower(Bases_Owners'Image(ProtoShips_List(EnemyIndex).Owner))));
       HarpoonDuration := 0;
       BoardingOrders.Clear;
       EnemyShip :=
@@ -197,9 +202,7 @@ package body Combat is
          EnemyNameOwner: constant Unbounded_String :=
            EnemyName &
            To_Unbounded_String(" (") &
-           To_Unbounded_String
-             (To_Lower
-                (Bases_Owners'Image(ProtoShips_List(EnemyShipIndex).Owner))) &
+           FractionName &
            To_Unbounded_String(")");
          procedure RemoveGun(ModuleIndex: Positive) is
          begin
@@ -654,11 +657,6 @@ package body Combat is
             MessageColor, AttackSkill, BaseDamage: Natural;
             type DamageFactor is digits 2 range 0.0 .. 1.0;
             Wounds: DamageFactor := 0.0;
-            FractionName: constant Unbounded_String :=
-              To_Unbounded_String
-                ((To_Lower
-                    (Bases_Owners'Image
-                       (ProtoShips_List(EnemyShipIndex).Owner))));
          begin
             if PlayerAttack2 then
                Attacker := PlayerShip.Crew(AttackerIndex);
