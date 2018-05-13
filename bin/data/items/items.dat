@@ -1327,4 +1327,13 @@ Buyable = N, N, N, N, Y
 Value = 512
 ShowType = Ammunition
 Description = Upgraded 120mm gun ammunition, made of orichalcum.
+[156]
+Name = Orichalcum harpoon
+Weight = 20
+Type = Harpoon
+Prices = 27, 27, 27, 27, 25
+Buyable = N, N, N, N, Y
+Value = 16
+ShowType = Ammunition
+Description = Harpoon made of orichalcum with long rope. Used as ammunition for harpoon guns.
 []
