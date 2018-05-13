@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 - Melee combat stops when no harpoons attached to ships
 - Showing empty goals category in goals select menu
 - Showing sky map after starting/loading game
+- Block ability to back on ship during combat if no harpoon active
 
 ## [2.3] - 2018-04-22
 
