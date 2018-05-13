@@ -6861,10 +6861,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="layout_style">start</property>
                         <child>
                           <object class="GtkButton" id="btninventory">
-                            <property name="label" translatable="yes">Inventory</property>
+                            <property name="label" translatable="yes">_Inventory</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="Show_Inventory" swapped="no"/>
                           </object>
                           <packing>
@@ -6875,10 +6876,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         </child>
                         <child>
                           <object class="GtkButton" id="btndismiss">
-                            <property name="label" translatable="yes">Dismiss</property>
+                            <property name="label" translatable="yes">_Dismiss</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="Dismiss_Member" swapped="no"/>
                           </object>
                           <packing>
@@ -6889,10 +6891,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         </child>
                         <child>
                           <object class="GtkButton" id="btnclearall">
-                            <property name="label" translatable="yes">Clean ship everyone</property>
+                            <property name="label" translatable="yes">_Clean ship everyone</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="Give_Orders_All" object="btnclearall" swapped="no"/>
                           </object>
                           <packing>
@@ -6903,10 +6906,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         </child>
                         <child>
                           <object class="GtkButton" id="btnrepairall">
-                            <property name="label" translatable="yes">Repair ship everyone</property>
+                            <property name="label" translatable="yes">_Repair ship everyone</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="Give_Orders_All" object="btnrepairall" swapped="no"/>
                           </object>
                           <packing>
