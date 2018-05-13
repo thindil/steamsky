@@ -660,8 +660,10 @@ package body Combat.UI is
             0,
             "Attack " & To_String(Enemy.Ship.Crew(I).Name));
       end loop;
-      Append(OrdersList, OrdersIter);
-      Set(OrdersList, OrdersIter, 0, "Back to ship");
+      if HarpoonDuration > 0 or Enemy.HarpoonDuration > 0 then
+         Append(OrdersList, OrdersIter);
+         Set(OrdersList, OrdersIter, 0, "Back to ship");
+      end if;
       List := Gtk_List_Store(Get_Object(Builder, "crewlist3"));
       Clear(List);
       for I in PlayerShip.Crew.Iterate loop
