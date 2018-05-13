@@ -159,6 +159,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="guint"/>
     </columns>
   </object>
+  <object class="GtkTreeModelFilter" id="basesfilter">
+    <property name="child_model">baseslist</property>
+  </object>
   <object class="GtkListStore" id="cargolist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -2229,7 +2232,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="secondary_icon_tooltip_text" translatable="yes">Clear search criteria</property>
                         <property name="placeholder_text" translatable="yes">&lt;Search messages&gt;</property>
                         <signal name="changed" handler="Search_Messages" swapped="no"/>
-                        <signal name="icon-release" handler="Clear_Search" swapped="no"/>
+                        <signal name="icon-release" handler="Clear_Search" object="entrysearch" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -2776,7 +2779,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">center</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
@@ -2871,6 +2873,23 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="position">5</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkEntry" id="entrysearchbases">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="secondary_icon_pixbuf">images/clear.png</property>
+                        <property name="secondary_icon_tooltip_text" translatable="yes">Clear search criteria</property>
+                        <property name="secondary_icon_tooltip_markup" translatable="yes">Clear search criteria</property>
+                        <property name="placeholder_text" translatable="yes">&lt;Search bases&gt;</property>
+                        <signal name="changed" handler="Search_Bases" swapped="no"/>
+                        <signal name="icon-release" handler="Clear_Search" object="entrysearchbases" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">6</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -2893,8 +2912,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkTreeView" id="treebases">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="model">baseslist</property>
-                            <property name="search_column">0</property>
+                            <property name="model">basesfilter</property>
+                            <property name="enable_search">False</property>
                             <signal name="cursor-changed" handler="Show_Base_Info" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection"/>

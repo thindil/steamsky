@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -27,6 +28,8 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
+with Gtk.GEntry; use Gtk.GEntry;
 with Glib; use Glib;
 with Game; use Game;
 with Bases; use Bases;
@@ -115,17 +118,6 @@ package body BasesList is
             Gtk_Tree_Path_New_From_String("0"),
             Gtk_Tree_View_Column(Get_Object(Builder, "columnnames1")),
             False);
-         Set_Visible(Gtk_Widget(Get_Object(Object, "baseinfoframe")), True);
-         Set_Visible(Gtk_Widget(Get_Object(Object, "btnshowbase")), True);
-         Set_Visible
-           (Gtk_Widget(Get_Object(Object, "btndestinationbase")),
-            True);
-      else
-         Set_Visible(Gtk_Widget(Get_Object(Object, "baseinfoframe")), False);
-         Set_Visible(Gtk_Widget(Get_Object(Object, "btnshowbase")), False);
-         Set_Visible
-           (Gtk_Widget(Get_Object(Object, "btndestinationbase")),
-            False);
       end if;
    end RefreshBasesList;
 
@@ -141,8 +133,16 @@ package body BasesList is
          BasesModel,
          BasesIter);
       if BasesIter = Null_Iter then
+         Set_Visible(Gtk_Widget(Get_Object(Object, "baseinfoframe")), False);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "btnshowbase")), False);
+         Set_Visible
+           (Gtk_Widget(Get_Object(Object, "btndestinationbase")),
+            False);
          return;
       end if;
+      Set_Visible(Gtk_Widget(Get_Object(Object, "baseinfoframe")), True);
+      Set_Visible(Gtk_Widget(Get_Object(Object, "btnshowbase")), True);
+      Set_Visible(Gtk_Widget(Get_Object(Object, "btndestinationbase")), True);
       BaseIndex := Natural(Get_Int(BasesModel, BasesIter, 1));
       if SkyBases(BaseIndex).Visited.Year > 0 then
          BaseInfo :=
@@ -295,6 +295,40 @@ package body BasesList is
       Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end ShowBase;
 
+   procedure SearchBases(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "basesfilter")));
+      if N_Children
+          (Gtk_List_Store(Get_Object(Builder, "baseslist")),
+           Null_Iter) >
+        0 then
+         Set_Cursor
+           (Gtk_Tree_View(Get_Object(Builder, "treebases")),
+            Gtk_Tree_Path_New_From_String("0"),
+            Gtk_Tree_View_Column(Get_Object(Builder, "columnnames1")),
+            False);
+      end if;
+   end SearchBases;
+
+   function VisibleBases
+     (Model: Gtk_Tree_Model;
+      Iter: Gtk_Tree_Iter) return Boolean is
+      SearchEntry: constant Gtk_GEntry :=
+        Gtk_GEntry(Get_Object(Builder, "entrysearchbases"));
+   begin
+      if Get_Text(SearchEntry) = "" then
+         return True;
+      end if;
+      if Index
+          (To_Lower(Get_String(Model, Iter, 0)),
+           To_Lower(Get_Text(SearchEntry)),
+           1) >
+        0 then
+         return True;
+      end if;
+      return False;
+   end VisibleBases;
+
    procedure CreateBasesListUI(NewBuilder: Gtkada_Builder) is
       Iter: Gtk_Tree_Iter;
       List: Gtk_List_Store;
@@ -307,6 +341,7 @@ package body BasesList is
          "Set_Destination_Base",
          SetDestinationBase'Access);
       Register_Handler(Builder, "Show_Base", ShowBase'Access);
+      Register_Handler(Builder, "Search_Bases", SearchBases'Access);
       List := Gtk_List_Store(Get_Object(Builder, "typeslist1"));
       for I in Bases_Types loop
          Append(List, Iter);
@@ -327,6 +362,9 @@ package body BasesList is
             Bases_Owners'Image(I)(1) &
             To_Lower(Bases_Owners'Image(I)(2 .. Bases_Owners'Image(I)'Last)));
       end loop;
+      Set_Visible_Func
+        (Gtk_Tree_Model_Filter(Get_Object(Builder, "basesfilter")),
+         VisibleBases'Access);
    end CreateBasesListUI;
 
    procedure ShowBasesListUI is
