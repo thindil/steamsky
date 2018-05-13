@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.0.5] - 2018-05-13
 
 ### Fixed
 - Assigning gunners to harpoon guns in enemies ships
