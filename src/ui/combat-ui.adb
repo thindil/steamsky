@@ -716,7 +716,7 @@ package body Combat.UI is
    procedure CloseCombat(Object: access Gtkada_Builder_Record'Class) is
    begin
       Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), True);
-      CreateSkyMap;
+      ShowSkyMap;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "skymap");

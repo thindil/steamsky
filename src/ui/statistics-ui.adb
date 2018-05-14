@@ -45,7 +45,7 @@ package body Statistics.UI is
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
       if GameState = SkyMap_View then
-         CreateSkyMap;
+         ShowSkyMap;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "gamestack")),
             "skymap");

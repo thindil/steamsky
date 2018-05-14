@@ -106,7 +106,7 @@ package body Events.UI is
       AddMessage
         ("You set the travel destination for your ship.",
          OrderMessage);
-      CreateSkyMap;
+      ShowSkyMap;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")),
          "skymap");
@@ -115,7 +115,7 @@ package body Events.UI is
 
    procedure ShowEvent(Object: access Gtkada_Builder_Record'Class) is
    begin
-      CreateSkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY);
+      ShowSkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")),
          "skymap");

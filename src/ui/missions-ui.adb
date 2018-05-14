@@ -287,7 +287,7 @@ package body Missions.UI is
       X, Y: Integer;
    begin
       if User_Data = Get_Object(Builder, "btnmissioncenter") then
-         CreateSkyMap
+         ShowSkyMap
            (PlayerShip.Missions(MissionIndex).TargetX,
             PlayerShip.Missions(MissionIndex).TargetY);
       else
@@ -309,7 +309,7 @@ package body Missions.UI is
          AddMessage
            ("You set the travel destination for your ship.",
             OrderMessage);
-         CreateSkyMap;
+         ShowSkyMap;
       end if;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),

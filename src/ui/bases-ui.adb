@@ -173,7 +173,7 @@ package body Bases.UI is
       MinChildren: Gint;
       procedure ShowMap is
       begin
-         CreateSkyMap;
+         ShowSkyMap;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "gamestack")),
             "skymap");
