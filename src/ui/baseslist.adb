@@ -279,7 +279,7 @@ package body BasesList is
          To_String(SkyBases(BaseIndex).Name) &
          " as a destination for your ship.",
          OrderMessage);
-      CreateSkyMap;
+      ShowSkyMap;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "skymap");
@@ -288,7 +288,7 @@ package body BasesList is
 
    procedure ShowBase(Object: access Gtkada_Builder_Record'Class) is
    begin
-      CreateSkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
+      ShowSkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")),
          "skymap");

@@ -150,7 +150,7 @@ package body Utils.UI is
       Hide(Gtk_Widget(Get_Object(Object, "btnshowhelp")));
       case PreviousGameState is
          when SkyMap_View =>
-            CreateSkyMap;
+            ShowSkyMap;
          when Combat_View =>
             ShowCombatUI(False);
          when others =>

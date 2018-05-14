@@ -52,7 +52,7 @@ package body Trades.UI is
       if BaseIndex = 0 and EventIndex > 0 then
          DeleteEvent(EventIndex);
       end if;
-      CreateSkyMap;
+      ShowSkyMap;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")),
          "skymap");
