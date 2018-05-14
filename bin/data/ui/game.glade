@@ -6509,7 +6509,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       </object>
                       <packing>
                         <property name="name">page3</property>
-                        <property name="title" translatable="yes">Graphic</property>
+                        <property name="title" translatable="yes">Interface</property>
                         <property name="position">3</property>
                       </packing>
                     </child>
