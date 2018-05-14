@@ -22,9 +22,10 @@ with Ships; use Ships;
 
 package Maps.UI is
 
-   procedure CreateSkyMap
+   procedure CreateSkyMap; -- Create sky map
+   procedure ShowSkyMap
      (X: Integer := PlayerShip.SkyX;
-      Y: Integer := PlayerShip.SkyY); -- Create and show sky map
+      Y: Integer := PlayerShip.SkyY); -- Show sky map
    procedure UpdateHeader; -- Update game header informations
 
 private

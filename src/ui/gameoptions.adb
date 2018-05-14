@@ -162,7 +162,7 @@ package body GameOptions is
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjsavedmessages"))));
       SaveConfig;
       Save(To_String(SaveDirectory) & "keys.cfg");
-      CreateSkyMap;
+      ShowSkyMap;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "skymap");

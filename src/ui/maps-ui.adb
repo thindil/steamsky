@@ -791,292 +791,292 @@ package body Maps.UI is
       end if;
    end BuildMapInfo;
 
-   procedure CreateSkyMap
-     (X: Integer := PlayerShip.SkyX;
-      Y: Integer := PlayerShip.SkyY) is
+   procedure CreateSkyMap is
       Error: aliased GError;
       FontDescription: constant Pango_Font_Description :=
         Pango_Font_Description_New;
       Accelerators: Gtk_Accel_Group;
    begin
+      if Builder /= null then
+         ShowSkyMap;
+         return;
+      end if;
+      Gtk_New(Builder);
+      if Add_From_File
+          (Builder,
+           To_String(DataDirectory) & "ui" & Dir_Separator & "game.glade",
+           Error'Access) =
+        Guint(0) then
+         Put_Line("Error : " & Get_Message(Error));
+         return;
+      end if;
+      CreateMessagesUI(Builder);
+      CreateEventsUI(Builder);
+      CreateMissionsUI(Builder);
+      CreateBasesListUI(Builder);
+      CreateStatsUI(Builder);
+      CreateBasesUI(Builder);
+      CreateBasesLootUI(Builder);
+      CreateBasesSchoolUI(Builder);
+      CreateBasesShipyardUI(Builder);
+      CreateCombatUI(Builder);
+      CreateCraftsUI(Builder);
+      CreateGameOptions(Builder);
+      CreateCrewUI(Builder);
+      CreateShipUI(Builder);
+      CreateCargoUI(Builder);
+      CreateTradeUI(Builder);
+      Register_Handler(Builder, "Quit_Game", QuitGame'Access);
+      Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
+      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
+      Register_Handler(Builder, "Get_New_Size", GetMapSize'Access);
+      Register_Handler(Builder, "Show_Map_Info", ShowMapCellInfo'Access);
+      Register_Handler(Builder, "Hide_Map_Info", HideMapInfoWindow'Access);
+      Register_Handler(Builder, "Show_Window", ShowWindow'Access);
+      Register_Handler(Builder, "Set_Destination", SetDestination'Access);
+      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
+      Register_Handler(Builder, "Move_Map", MoveMap'Access);
+      Register_Handler(Builder, "Dock_Ship", BtnDockClicked'Access);
+      Register_Handler(Builder, "Change_Speed", ChangeSpeed'Access);
+      Register_Handler(Builder, "Move_Ship", MoveShip'Access);
+      Register_Handler(Builder, "Show_Orders", ShowOrders'Access);
+      Register_Handler(Builder, "Wait_Order", WaitOrder'Access);
+      Register_Handler(Builder, "Attack_Order", AttackOrder'Access);
+      Register_Handler(Builder, "Show_Help", ShowHelp'Access);
+      Register_Handler(Builder, "Show_Info", ShowInfo'Access);
+      Register_Handler(Builder, "Resign_From_Game", ResignFromGame'Access);
+      Register_Handler(Builder, "Show_Missions", ShowMissions'Access);
+      Register_Handler(Builder, "Start_Mission", StartMission'Access);
+      Register_Handler(Builder, "Complete_Mission", CompleteMission'Access);
+      Register_Handler(Builder, "Execute_Order", ExecuteOrder'Access);
+      Register_Handler(Builder, "Show_Wait_Orders", ShowWaitOrders'Access);
+      Register_Handler(Builder, "Update_Tooltip", UpdateTooltip'Access);
+      Register_Handler(Builder, "Deliver_Medicines", DeliverMedicines'Access);
+      Do_Connect(Builder);
+      Set_Family(FontDescription, "monospace");
+      Override_Font
+        (Gtk_Widget(Get_Object(Builder, "mapview")),
+         FontDescription);
+      Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
+      Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
+      Add_Entry("<skymapwindow>/btnupright", GDK_KP_9, 0);
+      Add_Entry("<skymapwindow>/btnleft", GDK_KP_4, 0);
+      Add_Entry("<skymapwindow>/btnmovewait", GDK_KP_5, 0);
+      Add_Entry("<skymapwindow>/btnright", GDK_KP_6, 0);
+      Add_Entry("<skymapwindow>/btnbottomleft", GDK_KP_1, 0);
+      Add_Entry("<skymapwindow>/btnbottom", GDK_KP_2, 0);
+      Add_Entry("<skymapwindow>/btnbottomright", GDK_KP_3, 0);
+      Add_Entry("<skymapwindow>/btnmoveto", GDK_KP_Divide, 0);
+      Add_Entry("<skymapwindow>/Menu/ShipInfo", GDK_S, 0);
+      Add_Entry("<skymapwindow>/Menu/ShipCargoInfo", GDK_A, 0);
+      Add_Entry("<skymapwindow>/Menu/CrewInfo", GDK_C, 0);
+      Add_Entry("<skymapwindow>/Menu/ShipOrders", GDK_O, 0);
+      Add_Entry("<skymapwindow>/Menu/CraftInfo", GDK_R, 0);
+      Add_Entry("<skymapwindow>/Menu/MessagesInfo", GDK_M, 0);
+      Add_Entry("<skymapwindow>/Menu/BasesInfo", GDK_B, 0);
+      Add_Entry("<skymapwindow>/Menu/EventsInfo", GDK_N, 0);
+      Add_Entry("<skymapwindow>/Menu/MissionsInfo", GDK_I, 0);
+      Add_Entry("<skymapwindow>/Menu/MoveMap", GDK_V, 0);
+      Add_Entry("<skymapwindow>/Menu/GameStats", GDK_G, 0);
+      Add_Entry("<skymapwindow>/Menu/Help", GDK_F1, 0);
+      Add_Entry("<skymapwindow>/Menu/GameOptions", GDK_P, 0);
+      Add_Entry("<skymapwindow>/Menu/QuitGame", GDK_Q, 0);
+      Add_Entry("<skymapwindow>/Menu/ResignFromGame", GDK_X, 0);
+      Add_Entry("<skymapwindow>/Menu", GDK_E, 0);
+      Add_Entry("<skymapwindow>/Menu/WaitOrders", GDK_W, 0);
+      if Exists(To_String(SaveDirectory) & "keys.cfg") then
+         Load(To_String(SaveDirectory) & "keys.cfg");
+      end if;
+      Accelerators := Gtk_Accel_Group(Get_Object(Builder, "movementaccels"));
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnupleft")),
+         "<skymapwindow>/btnupleft",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnup")),
+         "<skymapwindow>/btnup",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnupright")),
+         "<skymapwindow>/btnupright",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnleft")),
+         "<skymapwindow>/btnleft",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnmovewait")),
+         "<skymapwindow>/btnmovewait",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnright")),
+         "<skymapwindow>/btnright",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnbottomleft")),
+         "<skymapwindow>/btnbottomleft",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnbottom")),
+         "<skymapwindow>/btnbottom",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnbottomright")),
+         "<skymapwindow>/btnbottomleft",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnmoveto")),
+         "<skymapwindow>/btnmoveto",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnmenu")),
+         "<skymapwindow>/Menu",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menuship")),
+         "<skymapwindow>/Menu/ShipInfo",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menucargo")),
+         "<skymapwindow>/Menu/ShipCargoInfo",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menucrew")),
+         "<skymapwindow>/Menu/CrewInfo",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menuorders")),
+         "<skymapwindow>/Menu/ShipOrders",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menucrafting")),
+         "<skymapwindow>/Menu/CraftInfo",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menumessages")),
+         "<skymapwindow>/Menu/MessagesInfo",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menubaseslist")),
+         "<skymapwindow>/Menu/BasesInfo",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menuevents")),
+         "<skymapwindow>/Menu/EventsInfo",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menumissions")),
+         "<skymapwindow>/Menu/MissionsInfo",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menumovemap")),
+         "<skymapwindow>/Menu/MoveMap",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menustats")),
+         "<skymapwindow>/Menu/GameStats",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menuhelp")),
+         "<skymapwindow>/Menu/Help",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menuoptions")),
+         "<skymapwindow>/Menu/GameOptions",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menuquit")),
+         "<skymapwindow>/Menu/QuitGame",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menuresign")),
+         "<skymapwindow>/Menu/ResignFromGame",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menuwait")),
+         "<skymapwindow>/Menu/WaitOrders",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnshowhelp")),
+         "<skymapwindow>/Menu/Help",
+         Accelerators);
+      declare
+         Key: Gtk_Accel_Key;
+         Found: Boolean;
+      begin
+         Lookup_Entry("<skymapwindow>/Menu/Help", Key, Found);
+         Set_Label
+           (Gtk_Button(Get_Object(Builder, "btnshowhelp")),
+            "Help [" &
+            Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
+            "]");
+      end;
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "movemapwindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "orderswindow")),
+         CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "waitwindow")),
+         CloseWindow'Access);
+      Set
+        (Gtk_Image(Get_Object(Builder, "image1")),
+         To_String(DataDirectory) &
+         "ui" &
+         Dir_Separator &
+         "images" &
+         Dir_Separator &
+         "up.png");
+      Set
+        (Gtk_Image(Get_Object(Builder, "image2")),
+         To_String(DataDirectory) &
+         "ui" &
+         Dir_Separator &
+         "images" &
+         Dir_Separator &
+         "down.png");
+      Set
+        (Gtk_Image(Get_Object(Builder, "image3")),
+         To_String(DataDirectory) &
+         "ui" &
+         Dir_Separator &
+         "images" &
+         Dir_Separator &
+         "left.png");
+      Set
+        (Gtk_Image(Get_Object(Builder, "image4")),
+         To_String(DataDirectory) &
+         "ui" &
+         Dir_Separator &
+         "images" &
+         Dir_Separator &
+         "right.png");
+      Set_Transition_Type
+        (Gtk_Stack(Get_Object(Builder, "gamestack")),
+         Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
+      Set_Transition_Type
+        (Gtk_Stack(Get_Object(Builder, "shipyardstack")),
+         Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
+      Set_Transition_Type
+        (Gtk_Stack(Get_Object(Builder, "optionsstack")),
+         Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
+      Set_Transition_Type
+        (Gtk_Stack(Get_Object(Builder, "combatstack")),
+         Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
+      Set_Default_Size
+        (Gtk_Window(Get_Object(Builder, "skymapwindow")),
+         Gint(GameSettings.WindowWidth),
+         Gint(GameSettings.WindowHeight));
+      ShowSkyMap;
+   end CreateSkyMap;
+
+   procedure ShowSkyMap
+     (X: Integer := PlayerShip.SkyX;
+      Y: Integer := PlayerShip.SkyY) is
+   begin
       CenterX := X;
       CenterY := Y;
-      if Builder = null then
-         Gtk_New(Builder);
-         if Add_From_File
-             (Builder,
-              To_String(DataDirectory) & "ui" & Dir_Separator & "game.glade",
-              Error'Access) =
-           Guint(0) then
-            Put_Line("Error : " & Get_Message(Error));
-            return;
-         end if;
-         CreateMessagesUI(Builder);
-         CreateEventsUI(Builder);
-         CreateMissionsUI(Builder);
-         CreateBasesListUI(Builder);
-         CreateStatsUI(Builder);
-         CreateBasesUI(Builder);
-         CreateBasesLootUI(Builder);
-         CreateBasesSchoolUI(Builder);
-         CreateBasesShipyardUI(Builder);
-         CreateCombatUI(Builder);
-         CreateCraftsUI(Builder);
-         CreateGameOptions(Builder);
-         CreateCrewUI(Builder);
-         CreateShipUI(Builder);
-         CreateCargoUI(Builder);
-         CreateTradeUI(Builder);
-         Register_Handler(Builder, "Quit_Game", QuitGame'Access);
-         Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
-         Register_Handler
-           (Builder,
-            "Hide_Last_Message",
-            HideLastMessage'Access);
-         Register_Handler(Builder, "Get_New_Size", GetMapSize'Access);
-         Register_Handler(Builder, "Show_Map_Info", ShowMapCellInfo'Access);
-         Register_Handler(Builder, "Hide_Map_Info", HideMapInfoWindow'Access);
-         Register_Handler(Builder, "Show_Window", ShowWindow'Access);
-         Register_Handler(Builder, "Set_Destination", SetDestination'Access);
-         Register_Handler(Builder, "Hide_Window", HideWindow'Access);
-         Register_Handler(Builder, "Move_Map", MoveMap'Access);
-         Register_Handler(Builder, "Dock_Ship", BtnDockClicked'Access);
-         Register_Handler(Builder, "Change_Speed", ChangeSpeed'Access);
-         Register_Handler(Builder, "Move_Ship", MoveShip'Access);
-         Register_Handler(Builder, "Show_Orders", ShowOrders'Access);
-         Register_Handler(Builder, "Wait_Order", WaitOrder'Access);
-         Register_Handler(Builder, "Attack_Order", AttackOrder'Access);
-         Register_Handler(Builder, "Show_Help", ShowHelp'Access);
-         Register_Handler(Builder, "Show_Info", ShowInfo'Access);
-         Register_Handler(Builder, "Resign_From_Game", ResignFromGame'Access);
-         Register_Handler(Builder, "Show_Missions", ShowMissions'Access);
-         Register_Handler(Builder, "Start_Mission", StartMission'Access);
-         Register_Handler(Builder, "Complete_Mission", CompleteMission'Access);
-         Register_Handler(Builder, "Execute_Order", ExecuteOrder'Access);
-         Register_Handler(Builder, "Show_Wait_Orders", ShowWaitOrders'Access);
-         Register_Handler(Builder, "Update_Tooltip", UpdateTooltip'Access);
-         Register_Handler
-           (Builder,
-            "Deliver_Medicines",
-            DeliverMedicines'Access);
-         Do_Connect(Builder);
-         Set_Family(FontDescription, "monospace");
-         Override_Font
-           (Gtk_Widget(Get_Object(Builder, "mapview")),
-            FontDescription);
-         Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
-         Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
-         Add_Entry("<skymapwindow>/btnupright", GDK_KP_9, 0);
-         Add_Entry("<skymapwindow>/btnleft", GDK_KP_4, 0);
-         Add_Entry("<skymapwindow>/btnmovewait", GDK_KP_5, 0);
-         Add_Entry("<skymapwindow>/btnright", GDK_KP_6, 0);
-         Add_Entry("<skymapwindow>/btnbottomleft", GDK_KP_1, 0);
-         Add_Entry("<skymapwindow>/btnbottom", GDK_KP_2, 0);
-         Add_Entry("<skymapwindow>/btnbottomright", GDK_KP_3, 0);
-         Add_Entry("<skymapwindow>/btnmoveto", GDK_KP_Divide, 0);
-         Add_Entry("<skymapwindow>/Menu/ShipInfo", GDK_S, 0);
-         Add_Entry("<skymapwindow>/Menu/ShipCargoInfo", GDK_A, 0);
-         Add_Entry("<skymapwindow>/Menu/CrewInfo", GDK_C, 0);
-         Add_Entry("<skymapwindow>/Menu/ShipOrders", GDK_O, 0);
-         Add_Entry("<skymapwindow>/Menu/CraftInfo", GDK_R, 0);
-         Add_Entry("<skymapwindow>/Menu/MessagesInfo", GDK_M, 0);
-         Add_Entry("<skymapwindow>/Menu/BasesInfo", GDK_B, 0);
-         Add_Entry("<skymapwindow>/Menu/EventsInfo", GDK_N, 0);
-         Add_Entry("<skymapwindow>/Menu/MissionsInfo", GDK_I, 0);
-         Add_Entry("<skymapwindow>/Menu/MoveMap", GDK_V, 0);
-         Add_Entry("<skymapwindow>/Menu/GameStats", GDK_G, 0);
-         Add_Entry("<skymapwindow>/Menu/Help", GDK_F1, 0);
-         Add_Entry("<skymapwindow>/Menu/GameOptions", GDK_P, 0);
-         Add_Entry("<skymapwindow>/Menu/QuitGame", GDK_Q, 0);
-         Add_Entry("<skymapwindow>/Menu/ResignFromGame", GDK_X, 0);
-         Add_Entry("<skymapwindow>/Menu", GDK_E, 0);
-         Add_Entry("<skymapwindow>/Menu/WaitOrders", GDK_W, 0);
-         if Exists(To_String(SaveDirectory) & "keys.cfg") then
-            Load(To_String(SaveDirectory) & "keys.cfg");
-         end if;
-         Accelerators :=
-           Gtk_Accel_Group(Get_Object(Builder, "movementaccels"));
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "btnupleft")),
-            "<skymapwindow>/btnupleft",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "btnup")),
-            "<skymapwindow>/btnup",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "btnupright")),
-            "<skymapwindow>/btnupright",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "btnleft")),
-            "<skymapwindow>/btnleft",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "btnmovewait")),
-            "<skymapwindow>/btnmovewait",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "btnright")),
-            "<skymapwindow>/btnright",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "btnbottomleft")),
-            "<skymapwindow>/btnbottomleft",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "btnbottom")),
-            "<skymapwindow>/btnbottom",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "btnbottomright")),
-            "<skymapwindow>/btnbottomleft",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "btnmoveto")),
-            "<skymapwindow>/btnmoveto",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "btnmenu")),
-            "<skymapwindow>/Menu",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menuship")),
-            "<skymapwindow>/Menu/ShipInfo",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menucargo")),
-            "<skymapwindow>/Menu/ShipCargoInfo",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menucrew")),
-            "<skymapwindow>/Menu/CrewInfo",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menuorders")),
-            "<skymapwindow>/Menu/ShipOrders",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menucrafting")),
-            "<skymapwindow>/Menu/CraftInfo",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menumessages")),
-            "<skymapwindow>/Menu/MessagesInfo",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menubaseslist")),
-            "<skymapwindow>/Menu/BasesInfo",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menuevents")),
-            "<skymapwindow>/Menu/EventsInfo",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menumissions")),
-            "<skymapwindow>/Menu/MissionsInfo",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menumovemap")),
-            "<skymapwindow>/Menu/MoveMap",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menustats")),
-            "<skymapwindow>/Menu/GameStats",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menuhelp")),
-            "<skymapwindow>/Menu/Help",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menuoptions")),
-            "<skymapwindow>/Menu/GameOptions",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menuquit")),
-            "<skymapwindow>/Menu/QuitGame",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menuresign")),
-            "<skymapwindow>/Menu/ResignFromGame",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "menuwait")),
-            "<skymapwindow>/Menu/WaitOrders",
-            Accelerators);
-         Set_Accel_Path
-           (Gtk_Widget(Get_Object(Builder, "btnshowhelp")),
-            "<skymapwindow>/Menu/Help",
-            Accelerators);
-         declare
-            Key: Gtk_Accel_Key;
-            Found: Boolean;
-         begin
-            Lookup_Entry("<skymapwindow>/Menu/Help", Key, Found);
-            Set_Label
-              (Gtk_Button(Get_Object(Builder, "btnshowhelp")),
-               "Help [" &
-               Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
-               "]");
-         end;
-         On_Key_Release_Event
-           (Gtk_Widget(Get_Object(Builder, "movemapwindow")),
-            CloseWindow'Access);
-         On_Key_Release_Event
-           (Gtk_Widget(Get_Object(Builder, "orderswindow")),
-            CloseWindow'Access);
-         On_Key_Release_Event
-           (Gtk_Widget(Get_Object(Builder, "waitwindow")),
-            CloseWindow'Access);
-         Set
-           (Gtk_Image(Get_Object(Builder, "image1")),
-            To_String(DataDirectory) &
-            "ui" &
-            Dir_Separator &
-            "images" &
-            Dir_Separator &
-            "up.png");
-         Set
-           (Gtk_Image(Get_Object(Builder, "image2")),
-            To_String(DataDirectory) &
-            "ui" &
-            Dir_Separator &
-            "images" &
-            Dir_Separator &
-            "down.png");
-         Set
-           (Gtk_Image(Get_Object(Builder, "image3")),
-            To_String(DataDirectory) &
-            "ui" &
-            Dir_Separator &
-            "images" &
-            Dir_Separator &
-            "left.png");
-         Set
-           (Gtk_Image(Get_Object(Builder, "image4")),
-            To_String(DataDirectory) &
-            "ui" &
-            Dir_Separator &
-            "images" &
-            Dir_Separator &
-            "right.png");
-         Set_Transition_Type
-           (Gtk_Stack(Get_Object(Builder, "gamestack")),
-            Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
-         Set_Transition_Type
-           (Gtk_Stack(Get_Object(Builder, "shipyardstack")),
-            Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
-         Set_Transition_Type
-           (Gtk_Stack(Get_Object(Builder, "optionsstack")),
-            Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
-         Set_Transition_Type
-           (Gtk_Stack(Get_Object(Builder, "combatstack")),
-            Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
-         Set_Default_Size
-           (Gtk_Window(Get_Object(Builder, "skymapwindow")),
-            Gint(GameSettings.WindowWidth),
-            Gint(GameSettings.WindowHeight));
-      end if;
       UpdateMessages;
       Set_Text
         (Gtk_Text_Buffer(Get_Object(Builder, "txtmap")),
@@ -1092,6 +1092,6 @@ package body Maps.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "skymap");
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
-   end CreateSkyMap;
+   end ShowSkyMap;
 
 end Maps.UI;
