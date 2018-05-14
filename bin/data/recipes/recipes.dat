@@ -1354,4 +1354,14 @@ Time = 75
 Difficulty = 40
 BaseType = 5
 Tool = GunsmithSet
+[136]
+Material = Orichalcum, Leather
+Amount = 1, 1
+Result = 156
+Crafted = 1
+Workplace = Workshop
+Skill = Blacksmith
+Difficulty = 15
+BaseType = 5
+Tool = BlacksmithSet
 []
