@@ -50,6 +50,7 @@ All notable changes to this project will be documented in this file.
 - Showing empty goals category in goals select menu
 - Showing sky map after starting/loading game
 - Block ability to back on ship during combat if no harpoon active
+- Checking for needed materals before start crafting
 
 ## [2.3] - 2018-04-22
 
