@@ -7099,10 +7099,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="btnmove">
-                            <property name="label" translatable="yes">Move</property>
+                            <property name="label" translatable="yes">_Move</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="Move_Item" swapped="no"/>
                           </object>
                           <packing>
