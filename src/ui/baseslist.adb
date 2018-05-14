@@ -45,82 +45,6 @@ package body BasesList is
    SettingTime: Boolean;
    BaseIndex: Positive;
 
-   procedure RefreshBasesList(Object: access Gtkada_Builder_Record'Class) is
-      BaseIter: Gtk_Tree_Iter;
-      BaseList: Gtk_List_Store;
-      AddBase: Boolean := False;
-      BasesType: Bases_Types;
-      BasesStatus: Natural;
-      BasesOwner: Bases_Owners;
-   begin
-      if SettingTime then
-         return;
-      end if;
-      BasesType :=
-        Bases_Types'Val
-          (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbtype"))));
-      BasesStatus :=
-        Natural(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbstatus"))));
-      BasesOwner :=
-        Bases_Owners'Val
-          (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbowner"))));
-      BaseList := Gtk_List_Store(Get_Object(Builder, "baseslist"));
-      Clear(BaseList);
-      for I in SkyBases'Range loop
-         if SkyBases(I).Known then
-            case BasesStatus is
-               when 0 => -- All bases
-                  if
-                    (BasesType = Any or
-                     (BasesType /= Any and
-                      SkyBases(I).Visited.Year > 0 and
-                      SkyBases(I).BaseType = BasesType)) and
-                    (BasesOwner = Any or
-                     (BasesOwner /= Any and
-                      SkyBases(I).Visited.Year > 0 and
-                      SkyBases(I).Owner = BasesOwner)) then
-                     AddBase := True;
-                  end if;
-               when 1 => -- Only visited bases
-                  if
-                    ((BasesType = Any or
-                      (BasesType /= Any and
-                       SkyBases(I).BaseType = BasesType)) and
-                     (BasesOwner = Any or
-                      (BasesOwner /= Any and
-                       SkyBases(I).Owner = BasesOwner))) and
-                    SkyBases(I).Visited.Year > 0 then
-                     AddBase := True;
-                  end if;
-               when 2 => -- Only not visited bases
-                  if SkyBases(I).Visited.Year = 0 then
-                     AddBase := True;
-                  end if;
-               when others =>
-                  null;
-            end case;
-            if AddBase then
-               Append(BaseList, BaseIter);
-               Set(BaseList, BaseIter, 0, To_String(SkyBases(I).Name));
-               Set(BaseList, BaseIter, 1, Gint(I));
-               Set
-                 (BaseList,
-                  BaseIter,
-                  2,
-                  Gint(CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)));
-               AddBase := False;
-            end if;
-         end if;
-      end loop;
-      if N_Children(BaseList, Null_Iter) > 0 then
-         Set_Cursor
-           (Gtk_Tree_View(Get_Object(Builder, "treebases")),
-            Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columnnames1")),
-            False);
-      end if;
-   end RefreshBasesList;
-
    procedure ShowBaseInfo(Object: access Gtkada_Builder_Record'Class) is
       BasesIter: Gtk_Tree_Iter;
       BasesModel: Gtk_Tree_Model;
@@ -315,7 +239,58 @@ package body BasesList is
       Iter: Gtk_Tree_Iter) return Boolean is
       SearchEntry: constant Gtk_GEntry :=
         Gtk_GEntry(Get_Object(Builder, "entrysearchbases"));
+      ShowBase: Boolean := False;
+      BasesType: Bases_Types;
+      BasesStatus: Natural;
+      BasesOwner: Bases_Owners;
+      BaseIndex: Positive;
    begin
+      if SettingTime then
+         return True;
+      end if;
+      BasesType :=
+        Bases_Types'Val
+          (Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbtype"))));
+      BasesStatus :=
+        Natural(Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbstatus"))));
+      BasesOwner :=
+        Bases_Owners'Val
+          (Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbowner"))));
+      BaseIndex := Positive(Get_Int(Model, Iter, 1));
+      case BasesStatus is
+         when 0 => -- All bases
+            if
+              (BasesType = Any or
+               (BasesType /= Any and
+                SkyBases(BaseIndex).Visited.Year > 0 and
+                SkyBases(BaseIndex).BaseType = BasesType)) and
+              (BasesOwner = Any or
+               (BasesOwner /= Any and
+                SkyBases(BaseIndex).Visited.Year > 0 and
+                SkyBases(BaseIndex).Owner = BasesOwner)) then
+               ShowBase := True;
+            end if;
+         when 1 => -- Only visited bases
+            if
+              ((BasesType = Any or
+                (BasesType /= Any and
+                 SkyBases(BaseIndex).BaseType = BasesType)) and
+               (BasesOwner = Any or
+                (BasesOwner /= Any and
+                 SkyBases(BaseIndex).Owner = BasesOwner))) and
+              SkyBases(BaseIndex).Visited.Year > 0 then
+               ShowBase := True;
+            end if;
+         when 2 => -- Only not visited bases
+            if SkyBases(BaseIndex).Visited.Year = 0 then
+               ShowBase := True;
+            end if;
+         when others =>
+            null;
+      end case;
+      if not ShowBase then
+         return False;
+      end if;
       if Get_Text(SearchEntry) = "" then
          return True;
       end if;
@@ -334,7 +309,6 @@ package body BasesList is
       List: Gtk_List_Store;
    begin
       Builder := NewBuilder;
-      Register_Handler(Builder, "Refresh_Bases_List", RefreshBasesList'Access);
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
       Register_Handler
         (Builder,
@@ -368,8 +342,9 @@ package body BasesList is
    end CreateBasesListUI;
 
    procedure ShowBasesListUI is
+      BaseIter: Gtk_Tree_Iter;
+      BaseList: Gtk_List_Store;
    begin
-      SettingTime := True;
       Set_Active
         (Gtk_Combo_Box(Get_Object(Builder, "cmbtype")),
          Bases_Types'Pos(Bases_Types'Last));
@@ -377,11 +352,32 @@ package body BasesList is
       Set_Active
         (Gtk_Combo_Box(Get_Object(Builder, "cmbowner")),
          Bases_Owners'Pos(Bases_Owners'Last));
-      SettingTime := False;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "baseslist");
-      RefreshBasesList(Builder);
+      SettingTime := True;
+      BaseList := Gtk_List_Store(Get_Object(Builder, "baseslist"));
+      Clear(BaseList);
+      for I in SkyBases'Range loop
+         if SkyBases(I).Known then
+            Append(BaseList, BaseIter);
+            Set(BaseList, BaseIter, 0, To_String(SkyBases(I).Name));
+            Set(BaseList, BaseIter, 1, Gint(I));
+            Set
+              (BaseList,
+               BaseIter,
+               2,
+               Gint(CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)));
+         end if;
+      end loop;
+      if N_Children(BaseList, Null_Iter) > 0 then
+         Set_Cursor
+           (Gtk_Tree_View(Get_Object(Builder, "treebases")),
+            Gtk_Tree_Path_New_From_String("0"),
+            Gtk_Tree_View_Column(Get_Object(Builder, "columnnames1")),
+            False);
+      end if;
+      SettingTime := False;
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
    end ShowBasesListUI;
 
