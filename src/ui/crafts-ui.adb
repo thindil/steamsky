@@ -105,12 +105,8 @@ package body Crafts.UI is
       RecipeInfo, WorkplaceName: Unbounded_String := Null_Unbounded_String;
       Recipe: Craft_Data;
       MAmount, CargoIndex: Natural := 0;
-      HaveWorkplace,
-      IsMaterial,
-      IsTool,
-      HaveMaterials,
-      HaveTool: Boolean :=
-        False;
+      HaveWorkplace, IsMaterial, IsTool, HaveMaterials: Boolean := True;
+      HaveTool: Boolean := False;
       TextLength: Positive;
    begin
       Get_Selected
@@ -172,8 +168,7 @@ package body Crafts.UI is
                  FindItem(PlayerShip.Cargo, Objects_Container.To_Index(J));
                if CargoIndex = 0 then
                   Append(RecipeInfo, "<span foreground=""red"">");
-               else
-                  HaveMaterials := True;
+                  HaveMaterials := False;
                end if;
                Append
                  (RecipeInfo,
