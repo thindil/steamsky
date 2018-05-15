@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Don't allow to go on rests crew members in boarding party when ships are not
+  connected by harpoons
+
 ## [2.0.5] - 2018-05-13
 
 ### Fixed
