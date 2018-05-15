@@ -137,9 +137,9 @@ package body Messages.UI is
       return False;
    end VisibleMessages;
 
-   procedure ClearSearch(Object: access Gtkada_Builder_Record'Class) is
+   procedure ClearSearch(User_Data: access GObject_Record'Class) is
    begin
-      Set_Text(Gtk_GEntry(Get_Object(Object, "entrysearch")), "");
+      Set_Text(Gtk_GEntry(User_Data), "");
    end ClearSearch;
 
    procedure CreateMessagesUI(NewBuilder: Gtkada_Builder) is
