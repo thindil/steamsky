@@ -91,19 +91,19 @@ package body Crew.UI.Handlers is
          UpdatePriorities'Access);
       if Member.Skills.Length = 0 then
          Hide(Gtk_Widget(Get_Object(Object, "treestats1")));
-         Hide(Gtk_Widget(Get_Object(Object, "scrollskills1")));
          Hide(Gtk_Widget(Get_Object(Object, "btninventory")));
          Hide(Gtk_Widget(Get_Object(Object, "exppriorities")));
          Hide(Gtk_Widget(Get_Object(Object, "lblstats1")));
          Hide(Gtk_Widget(Get_Object(Object, "lblskills")));
+         Hide(Gtk_Widget(Get_Object(Object, "treeskills1")));
          Append(MemberInfo, ASCII.LF & "Passenger");
       else
          Show_All(Gtk_Widget(Get_Object(Object, "treestats1")));
-         Show_All(Gtk_Widget(Get_Object(Object, "scrollskills1")));
          Show_All(Gtk_Widget(Get_Object(Object, "btninventory")));
          Show_All(Gtk_Widget(Get_Object(Object, "exppriorities")));
          Show_All(Gtk_Widget(Get_Object(Object, "lblstats1")));
          Show_All(Gtk_Widget(Get_Object(Object, "lblskills")));
+         Show_All(Gtk_Widget(Get_Object(Object, "treeskills1")));
       end if;
       if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
          Show_All(Gtk_Widget(Get_Object(Object, "btndismiss")));
