@@ -24,6 +24,7 @@ with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Gtk.GEntry; use Gtk.GEntry;
+with Glib.Object; use Glib.Object;
 
 package body Messages.UI is
 
@@ -158,6 +159,7 @@ package body Messages.UI is
    begin
       PreviousGameState := OldState;
       ShowMessages(Default);
+      Set_Text(Gtk_GEntry(Get_Object(Builder, "entrysearch")), "");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "lastmessages");
