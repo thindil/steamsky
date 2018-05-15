@@ -377,6 +377,7 @@ package body BasesList is
             Gtk_Tree_View_Column(Get_Object(Builder, "columnnames1")),
             False);
       end if;
+      Set_Text(Gtk_GEntry(Get_Object(Builder, "entrysearchbases")), "");
       SettingTime := False;
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
    end ShowBasesListUI;
