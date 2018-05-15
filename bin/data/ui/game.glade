@@ -7786,10 +7786,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="btndropitem">
-                            <property name="label" translatable="yes">Drop</property>
+                            <property name="label" translatable="yes">_Drop</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="Drop_Item" swapped="no"/>
                           </object>
                           <packing>
@@ -7825,10 +7826,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="btngive">
-                            <property name="label" translatable="yes">Give</property>
+                            <property name="label" translatable="yes">_Give</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="Give_Item" swapped="no"/>
                           </object>
                           <packing>
