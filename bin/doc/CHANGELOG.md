@@ -52,6 +52,8 @@ All notable changes to this project will be documented in this file.
 - Showing sky map after starting/loading game
 - Block ability to back on ship during combat if no harpoon active
 - Checking for needed materals before start crafting
+- Don't allow to go on rests crew members in boarding party when ships are not
+  connected by harpoons
 
 ## [2.3] - 2018-04-22
 
