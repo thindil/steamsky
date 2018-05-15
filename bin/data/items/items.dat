@@ -1336,4 +1336,12 @@ Buyable = N, N, N, N, Y
 Value = 16
 ShowType = Ammunition
 Description = Harpoon made of orichalcum with long rope. Used as ammunition for harpoon guns.
+[157]
+Name = Orichalcum short sword
+Weight = 2
+Type = Weapon
+Prices = 30, 30, 30, 30, 28
+Buyable = N, N, N, N, Y
+Value = 2, 35, 17, 1, 1
+Description = Simple short sword made of orichalcum, used in melee combat.
 []
