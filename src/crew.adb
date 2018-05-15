@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -23,6 +23,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Maps; use Maps;
 with Crew.Inventory; use Crew.Inventory;
+with Combat; use Combat;
 
 package body Crew is
 
@@ -211,38 +212,47 @@ package body Crew is
          end if;
          if TiredLevel > (80 + Member.Attributes(ConditionIndex)(1)) and
            Member.Order /= Rest then
-            Member.PreviousOrder := Member.Order;
-            Member.Order := Rest;
-            Member.OrderTime := 15;
-            AddMessage
-              (To_String(Member.Name) & " is too tired to work, going rest.",
-               OrderMessage,
-               1);
             declare
                HaveCabin: Boolean := False;
+               CanRest: Boolean := True;
             begin
-               for Module of PlayerShip.Modules loop
-                  if Module.Owner = I and
-                    Modules_List(Module.ProtoIndex).MType = CABIN then
-                     HaveCabin := True;
-                     exit;
-                  end if;
-               end loop;
-               if not HaveCabin then
+               if Member.Order = Boarding and
+                 HarpoonDuration = 0 and
+                 Enemy.HarpoonDuration = 0 then
+                  CanRest := False;
+               end if;
+               if CanRest then
+                  Member.PreviousOrder := Member.Order;
+                  Member.Order := Rest;
+                  Member.OrderTime := 15;
+                  AddMessage
+                    (To_String(Member.Name) &
+                     " is too tired to work, going rest.",
+                     OrderMessage,
+                     1);
                   for Module of PlayerShip.Modules loop
-                     if Modules_List(Module.ProtoIndex).MType = CABIN and
-                       Module.Durability > 0 and
-                       Module.Owner = 0 then
-                        Module.Owner := I;
-                        AddMessage
-                          (To_String(Member.Name) &
-                           " take " &
-                           To_String(Module.Name) &
-                           " as own cabin.",
-                           OtherMessage);
+                     if Module.Owner = I and
+                       Modules_List(Module.ProtoIndex).MType = CABIN then
+                        HaveCabin := True;
                         exit;
                      end if;
                   end loop;
+                  if not HaveCabin then
+                     for Module of PlayerShip.Modules loop
+                        if Modules_List(Module.ProtoIndex).MType = CABIN and
+                          Module.Durability > 0 and
+                          Module.Owner = 0 then
+                           Module.Owner := I;
+                           AddMessage
+                             (To_String(Member.Name) &
+                              " take " &
+                              To_String(Module.Name) &
+                              " as own cabin.",
+                              OtherMessage);
+                           exit;
+                        end if;
+                     end loop;
+                  end if;
                end if;
             end;
          end if;
