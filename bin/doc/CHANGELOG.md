@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: titanium woodworker set, orichalcum woodworker set,
   titanium repair tools, orichalcum repair tools, titanium sewing kit,
   orichalcum sewing kit, orichalcum 60mm ammo, orichalcum 80mm ammo,
-  orichalcum 100mm ammo, orichalcum 120mm ammo and orichalcum harpoon
+  orichalcum 100mm ammo, orichalcum 120mm ammo, orichalcum harpoon and
+  orichalcum short sword
 - Showing license full text in info about game
 - New sky base type: military
 - Damage type for personal weapons
