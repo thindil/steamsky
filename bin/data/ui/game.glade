@@ -8069,11 +8069,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="btnbuyitem">
-                            <property name="label" translatable="yes">Buy</property>
+                            <property name="label" translatable="yes">_Buy</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="Trade_Item" object="btnbuyitem" swapped="no"/>
                           </object>
                           <packing>
@@ -8122,11 +8123,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="halign">start</property>
                         <child>
                           <object class="GtkButton" id="btnsellitem">
-                            <property name="label" translatable="yes">Sell</property>
+                            <property name="label" translatable="yes">_Sell</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="Trade_Item" object="btnsellitem" swapped="no"/>
                           </object>
                           <packing>
@@ -8178,11 +8180,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         </child>
                         <child>
                           <object class="GtkButton" id="btnsellall">
-                            <property name="label" translatable="yes">Sell all</property>
+                            <property name="label" translatable="yes">Sell _all</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="halign">start</property>
+                            <property name="use_underline">True</property>
                             <signal name="clicked" handler="Trade_Item" object="btnsellall" swapped="no"/>
                           </object>
                           <packing>
