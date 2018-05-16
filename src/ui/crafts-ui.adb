@@ -149,6 +149,7 @@ package body Crafts.UI is
             Recipe.MaterialTypes.Last_Index loop
          Append(RecipeInfo, ASCII.LF & "-");
          MAmount := 0;
+         HaveMaterials := False;
          for J in Items_List.Iterate loop
             IsMaterial := False;
             if RecipeIndex > 0 then
@@ -168,7 +169,8 @@ package body Crafts.UI is
                  FindItem(PlayerShip.Cargo, Objects_Container.To_Index(J));
                if CargoIndex = 0 then
                   Append(RecipeInfo, "<span foreground=""red"">");
-                  HaveMaterials := False;
+               else
+                  HaveMaterials := True;
                end if;
                Append
                  (RecipeInfo,
