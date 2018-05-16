@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Steam Sky"
-#define MyAppVersion "2.3"
+#define MyAppVersion "2.4"
 #define MyAppURL "https://thindil.github.io/steamsky/"
 #define MyAppExeName "steamsky.exe"
 
@@ -19,7 +19,7 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename=steamsky-2.3-Windows
+OutputBaseFilename=steamsky-2.4-Windows
 Compression=lzma
 SolidCompression=yes
 
