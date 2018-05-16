@@ -285,12 +285,12 @@ package body Statistics.UI is
            (Gtk_Label(Get_Object(Builder, "lblfinishedgoals")),
             "Finished goals: none");
       end if;
-      if GameStats.FinishedMissions.Length > 0 then
+      if GameStats.CraftingOrders.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expcrafts")), True);
       else
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expcrafts")), False);
       end if;
-      if GameStats.CraftingOrders.Length > 0 then
+      if GameStats.FinishedMissions.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expmissions")), True);
       else
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expmissions")), False);
