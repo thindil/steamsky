@@ -16,6 +16,10 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Text_IO.Text_Streams; use Ada.Text_IO.Text_Streams;
+with DOM.Core; use DOM.Core;
+with DOM.Core.Documents; use DOM.Core.Documents;
+with DOM.Core.Nodes; use DOM.Core.Nodes;
 with Bases; use Bases;
 with Bases.SaveLoad; use Bases.SaveLoad;
 with Maps; use Maps;
@@ -33,134 +37,202 @@ package body Game.SaveLoad is
    SaveVersion: constant String := "2.4";
 
    procedure SaveGame is
-      SaveGame: File_Type;
+      Save: DOM_Implementation;
+      SaveData: Document;
+      CategoryNode: DOM.Core.Element;
       RawValue: Unbounded_String;
-      Messages: Natural := GameSettings.SavedMessages;
-      StartLoop: Positive;
-      Message: Message_Data;
-      VisitedFields: Natural := 0;
-      procedure SaveStatistics
-        (StatisticsVector: in out Statistics_Container.Vector) is
+      SaveFile: File_Type;
+      procedure AddData
+        (NodeName, Value: String;
+         ParentNode: DOM.Core.Element := CategoryNode) is
+         DataNode: DOM.Core.Element;
+         Data: Text;
       begin
-         RawValue := To_Unbounded_String(StatisticsVector.Length'Img);
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         DataNode := Create_Element(SaveData, NodeName);
+         DataNode := Append_Child(ParentNode, DataNode);
+         Data := Create_Text_Node(SaveData, Value);
+         Data := Append_Child(DataNode, Data);
+      end AddData;
+      procedure SaveStatistics
+        (StatisticsVector: in out Statistics_Container.Vector;
+         NodeName, StatName: String) is
+         StatGroupNode, StatNode: DOM.Core.Element;
+      begin
+         StatGroupNode := Create_Element(SaveData, NodeName);
+         StatGroupNode := Append_Child(CategoryNode, StatGroupNode);
          for Statistic of StatisticsVector loop
-            Put(SaveGame, To_String(Statistic.Index) & ";");
+            StatNode := Create_Element(SaveData, StatName);
+            StatNode := Append_Child(StatGroupNode, StatNode);
+            AddData("index", To_String(Statistic.Index), StatNode);
             RawValue := To_Unbounded_String(Integer'Image(Statistic.Amount));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("amount",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               StatNode);
          end loop;
       end SaveStatistics;
    begin
-      Create(SaveGame, Out_File, To_String(SaveDirectory) & "savegame.dat");
-      -- Save version
-      Put(SaveGame, SaveVersion & ";");
+      SaveData := Create_Document(Save);
       -- Save game date
+      CategoryNode := Create_Element(SaveData, "date");
+      CategoryNode := Append_Child(SaveData, CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Year));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData("year", To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Month));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData("month", To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Day));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData("day", To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Hour));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData("hour", To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Minutes));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData("minutes", To_String(Trim(RawValue, Ada.Strings.Left)));
       -- Save map
-      for X in 1 .. 1024 loop
-         for Y in 1 .. 1024 loop
-            if SkyMap(X, Y).Visited then
-               VisitedFields := VisitedFields + 1;
-            end if;
+      CategoryNode := Create_Element(SaveData, "map");
+      CategoryNode := Append_Child(SaveData, CategoryNode);
+      declare
+         FieldNode: DOM.Core.Element;
+      begin
+         for X in SkyMap'Range loop
+            for Y in 1 .. 1024 loop
+               if SkyMap(X, Y).Visited then
+                  FieldNode := Create_Element(SaveData, "field");
+                  FieldNode := Append_Child(CategoryNode, FieldNode);
+                  RawValue := To_Unbounded_String(Integer'Image(X));
+                  AddData
+                    ("x",
+                     To_String(Trim(RawValue, Ada.Strings.Left)),
+                     FieldNode);
+                  RawValue := To_Unbounded_String(Integer'Image(Y));
+                  AddData
+                    ("y",
+                     To_String(Trim(RawValue, Ada.Strings.Left)),
+                     FieldNode);
+               end if;
+            end loop;
          end loop;
-      end loop;
-      RawValue := To_Unbounded_String(Integer'Image(VisitedFields));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      for X in 1 .. 1024 loop
-         for Y in 1 .. 1024 loop
-            if SkyMap(X, Y).Visited then
-               RawValue := To_Unbounded_String(Integer'Image(X));
-               Put
-                 (SaveGame,
-                  To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-               RawValue := To_Unbounded_String(Integer'Image(Y));
-               Put
-                 (SaveGame,
-                  To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            end if;
-         end loop;
-      end loop;
+      end;
       -- Save bases
-      SaveBases(SaveGame);
+      --SaveBases(SaveGame);
       -- Save player ship
-      SavePlayerShip(SaveGame);
+      --SavePlayerShip(SaveGame);
       -- Save known recipes
-      RawValue := To_Unbounded_String(Known_Recipes.Length'Img);
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      CategoryNode := Create_Element(SaveData, "known recipes");
+      CategoryNode := Append_Child(SaveData, CategoryNode);
       for Recipe of Known_Recipes loop
-         Put(SaveGame, To_String(Recipes_List(Recipe).Index) & ";");
+         AddData("index", To_String(Recipes_List(Recipe).Index));
       end loop;
       -- Save messages
-      if Messages > MessagesAmount then
-         Messages := MessagesAmount;
-      end if;
-      RawValue := To_Unbounded_String(Messages'Img);
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      if Messages > 0 then
-         StartLoop := MessagesAmount - Messages + 1;
-         for I in StartLoop .. MessagesAmount loop
-            Message := GetMessage(I);
-            Put(SaveGame, To_String(Message.Message) & ";");
+      declare
+         Messages: Natural := GameSettings.SavedMessages;
+         StartLoop: Positive;
+         MessageNode: DOM.Core.Element;
+         Message: Message_Data;
+      begin
+         if Messages > MessagesAmount then
+            Messages := MessagesAmount;
+         end if;
+         CategoryNode := Create_Element(SaveData, "messages");
+         CategoryNode := Append_Child(SaveData, CategoryNode);
+         if Messages > 0 then
+            StartLoop := MessagesAmount - Messages + 1;
+            for I in StartLoop .. MessagesAmount loop
+               Message := GetMessage(I);
+               MessageNode := Create_Element(SaveData, "message");
+               MessageNode := Append_Child(CategoryNode, MessageNode);
+               AddData("text", To_String(Message.Message), MessageNode);
+               RawValue :=
+                 To_Unbounded_String
+                   (Integer'Image(Message_Type'Pos(Message.MType)));
+               AddData
+                 ("type",
+                  To_String(Trim(RawValue, Ada.Strings.Left)),
+                  MessageNode);
+               RawValue := To_Unbounded_String(Integer'Image(Message.Color));
+               AddData
+                 ("color",
+                  To_String(Trim(RawValue, Ada.Strings.Left)),
+                  MessageNode);
+            end loop;
+         end if;
+      end;
+      -- Save events
+      CategoryNode := Create_Element(SaveData, "events");
+      CategoryNode := Append_Child(SaveData, CategoryNode);
+      declare
+         EventNode: DOM.Core.Element;
+      begin
+         for Event of Events_List loop
+            EventNode := Create_Element(SaveData, "event");
+            EventNode := Append_Child(CategoryNode, EventNode);
             RawValue :=
               To_Unbounded_String
-                (Integer'Image(Message_Type'Pos(Message.MType)));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            RawValue := To_Unbounded_String(Integer'Image(Message.Color));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                (Integer'Image(Events_Types'Pos(Event.EType)));
+            AddData
+              ("type",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               EventNode);
+            RawValue := To_Unbounded_String(Integer'Image(Event.SkyX));
+            AddData
+              ("x",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               EventNode);
+            RawValue := To_Unbounded_String(Integer'Image(Event.SkyY));
+            AddData
+              ("y",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               EventNode);
+            RawValue := To_Unbounded_String(Integer'Image(Event.Time));
+            AddData
+              ("time",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               EventNode);
+            RawValue := To_Unbounded_String(Integer'Image(Event.Data));
+            AddData
+              ("data",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               EventNode);
          end loop;
-      end if;
-      -- Save events
-      RawValue := To_Unbounded_String(Events_List.Length'Img);
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      for Event of Events_List loop
-         RawValue :=
-           To_Unbounded_String(Integer'Image(Events_Types'Pos(Event.EType)));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Event.SkyX));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Event.SkyY));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Event.Time));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Event.Data));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      end loop;
+      end;
       -- Save game statistics
-      SaveStatistics(GameStats.DestroyedShips);
+      CategoryNode := Create_Element(SaveData, "statistics");
+      CategoryNode := Append_Child(SaveData, CategoryNode);
+      SaveStatistics(GameStats.DestroyedShips, "destroyed ships", "ship");
       RawValue := To_Unbounded_String(Positive'Image(GameStats.BasesVisited));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData("visited bases", To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Positive'Image(GameStats.MapVisited));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData("map discovered", To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue :=
         To_Unbounded_String(Positive'Image(GameStats.DistanceTraveled));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      SaveStatistics(GameStats.CraftingOrders);
+      AddData
+        ("distance traveled",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
+      SaveStatistics(GameStats.CraftingOrders, "finished crafts", "order");
       RawValue :=
         To_Unbounded_String(Positive'Image(GameStats.AcceptedMissions));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      SaveStatistics(GameStats.FinishedMissions);
-      SaveStatistics(GameStats.FinishedGoals);
-      SaveStatistics(GameStats.KilledMobs);
+      AddData
+        ("accepted missions",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
+      SaveStatistics
+        (GameStats.FinishedMissions,
+         "finished missions",
+         "mission");
+      SaveStatistics(GameStats.FinishedGoals, "finished goals", "goal");
+      SaveStatistics(GameStats.KilledMobs, "killed mobs", "mob");
       RawValue := To_Unbounded_String(Natural'Image(GameStats.Points));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData("points", To_String(Trim(RawValue, Ada.Strings.Left)));
       -- Save current goal
-      Put(SaveGame, To_String(CurrentGoal.Index) & ";");
+      CategoryNode := Create_Element(SaveData, "current goal");
+      CategoryNode := Append_Child(SaveData, CategoryNode);
+      AddData("index", To_String(CurrentGoal.Index));
       RawValue :=
         To_Unbounded_String(Integer'Image(GoalTypes'Pos(CurrentGoal.GType)));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData("type", To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Natural'Image(CurrentGoal.Amount));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      Put(SaveGame, To_String(CurrentGoal.TargetIndex) & ";");
-      Close(SaveGame);
+      AddData("amount", To_String(Trim(RawValue, Ada.Strings.Left)));
+      AddData("target", To_String(CurrentGoal.TargetIndex));
+      Create(SaveFile, Out_File, To_String(SaveDirectory) & "savegame.dat");
+      Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => True);
+      Close(SaveFile);
    end SaveGame;
 
    procedure LoadGame is
