@@ -1,4 +1,5 @@
 with "gtkada";
+with "xmlada";
 
 project steamsky is
     
