@@ -170,7 +170,7 @@ package body Statistics.UI is
       end loop;
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblcrafts")),
-         "Crafting orders finished:" & Natural'Image(TotalFinished));
+         "_Crafting orders finished:" & Natural'Image(TotalFinished));
       List := Gtk_List_Store(Get_Object(Builder, "craftslist"));
       Clear(List);
       if TotalFinished > 0 then
@@ -195,7 +195,7 @@ package body Statistics.UI is
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblmissions")),
-         "Missions completed:" &
+         "_Missions completed:" &
          Natural'Image(TotalFinished) &
          " (" &
          To_String
@@ -227,7 +227,7 @@ package body Statistics.UI is
       end if;
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btngoals")),
-         "Current goal: " & GoalText(0));
+         "Current _goal: " & GoalText(0));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "gamestats");
@@ -251,7 +251,7 @@ package body Statistics.UI is
          end loop;
          Set_Label
            (Gtk_Label(Get_Object(Builder, "lbldestroyed")),
-            "Destroyed ships (Total:" & Natural'Image(TotalDestroyed) & ")");
+            "_Destroyed ships (Total:" & Natural'Image(TotalDestroyed) & ")");
       else
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expdestroyed")), False);
          Set_Label
@@ -277,7 +277,7 @@ package body Statistics.UI is
          end loop;
          Set_Label
            (Gtk_Label(Get_Object(Builder, "lblfinishedgoals")),
-            "Finished goals (Total:" & Natural'Image(TotalFinished) & ")");
+            "_Finished goals (Total:" & Natural'Image(TotalFinished) & ")");
          Show_All(Gtk_Widget(Get_Object(Builder, "scrollgoals")));
       else
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expgoals")), False);
@@ -313,7 +313,7 @@ package body Statistics.UI is
          end loop;
          Set_Label
            (Gtk_Label(Get_Object(Builder, "lblkilledstat")),
-            "Killed enemies (Total:" & Natural'Image(TotalDestroyed) & ")");
+            "_Killed enemies (Total:" & Natural'Image(TotalDestroyed) & ")");
       else
          Set_Sensitive
            (Gtk_Widget(Get_Object(Builder, "expkilledmobs")),
