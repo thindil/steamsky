@@ -23,12 +23,12 @@ with Game.SaveLoad; use Game.SaveLoad;
 
 package body Ships.SaveLoad is
 
-   procedure SavePlayerShip(SaveData: Document) is
+   procedure SavePlayerShip(SaveData: Document; MainNode: DOM.Core.Element) is
       RawValue: Unbounded_String;
       CategoryNode, SubNode, DataNode: DOM.Core.Element;
    begin
       CategoryNode := Create_Element(SaveData, "playership");
-      CategoryNode := Append_Child(SaveData, CategoryNode);
+      CategoryNode := Append_Child(MainNode, CategoryNode);
       AddData("name", To_String(PlayerShip.Name), CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.SkyX));
       AddData("x", To_String(Trim(RawValue, Ada.Strings.Left)), CategoryNode);
@@ -42,22 +42,22 @@ package body Ships.SaveLoad is
          CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.UpgradeModule));
       AddData
-        ("upgrade module",
+        ("upgrademodule",
          To_String(Trim(RawValue, Ada.Strings.Left)),
          CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.DestinationX));
       AddData
-        ("destination x",
+        ("destinationx",
          To_String(Trim(RawValue, Ada.Strings.Left)),
          CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.DestinationY));
       AddData
-        ("destination y",
+        ("destinationy",
          To_String(Trim(RawValue, Ada.Strings.Left)),
          CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.RepairModule));
       AddData
-        ("repair priority",
+        ("repairpriority",
          To_String(Trim(RawValue, Ada.Strings.Left)),
          CategoryNode);
       SubNode := Create_Element(SaveData, "modules");
@@ -86,7 +86,7 @@ package body Ships.SaveLoad is
             RawValue :=
               To_Unbounded_String(Integer'Image(Module.MaxDurability));
             AddData
-              ("max durability",
+              ("maxdurability",
                To_String(Trim(RawValue, Ada.Strings.Left)),
                DataNode);
             RawValue := To_Unbounded_String(Integer'Image(Module.Owner));
@@ -97,14 +97,14 @@ package body Ships.SaveLoad is
             RawValue :=
               To_Unbounded_String(Integer'Image(Module.UpgradeProgress));
             AddData
-              ("upgrade progress",
+              ("upgradeprogress",
                To_String(Trim(RawValue, Ada.Strings.Left)),
                DataNode);
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(ShipUpgrade'Pos(Module.UpgradeAction)));
             AddData
-              ("upgrade action",
+              ("upgradeaction",
                To_String(Trim(RawValue, Ada.Strings.Left)),
                DataNode);
             ModuleDataNode := Create_Element(SaveData, "moduledata");
@@ -180,12 +180,12 @@ package body Ships.SaveLoad is
               To_Unbounded_String
                 (Integer'Image(Crew_Orders'Pos(Member.PreviousOrder)));
             AddData
-              ("previous order",
+              ("previousorder",
                To_String(Trim(RawValue, Ada.Strings.Left)),
                DataNode);
             RawValue := To_Unbounded_String(Integer'Image(Member.OrderTime));
             AddData
-              ("order time",
+              ("ordertime",
                To_String(Trim(RawValue, Ada.Strings.Left)),
                DataNode);
             CrewDataNode := Create_Element(SaveData, "skills");
@@ -209,7 +209,7 @@ package body Ships.SaveLoad is
                   To_String(Trim(RawValue, Ada.Strings.Left)),
                   StatNode);
             end loop;
-            CrewDataNode := Create_Element(SaveData, "orders priorities");
+            CrewDataNode := Create_Element(SaveData, "orderspriorities");
             CrewDataNode := Append_Child(DataNode, CrewDataNode);
             for J in Member.Orders'Range loop
                RawValue :=
@@ -293,12 +293,12 @@ package body Ships.SaveLoad is
                DataNode);
             RawValue := To_Unbounded_String(Integer'Image(Mission.TargetX));
             AddData
-              ("target x",
+              ("targetx",
                To_String(Trim(RawValue, Ada.Strings.Left)),
                DataNode);
             RawValue := To_Unbounded_String(Integer'Image(Mission.TargetY));
             AddData
-              ("target y",
+              ("targety",
                To_String(Trim(RawValue, Ada.Strings.Left)),
                DataNode);
             RawValue := To_Unbounded_String(Integer'Image(Mission.Reward));
@@ -308,7 +308,7 @@ package body Ships.SaveLoad is
                DataNode);
             RawValue := To_Unbounded_String(Integer'Image(Mission.StartBase));
             AddData
-              ("start base",
+              ("startbase",
                To_String(Trim(RawValue, Ada.Strings.Left)),
                DataNode);
             if Mission.Finished then
@@ -320,7 +320,7 @@ package body Ships.SaveLoad is
       end if;
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.HomeBase));
       AddData
-        ("home base",
+        ("homebase",
          To_String(Trim(RawValue, Ada.Strings.Left)),
          CategoryNode);
    end SavePlayerShip;

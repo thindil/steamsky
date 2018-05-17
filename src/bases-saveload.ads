@@ -21,7 +21,8 @@ with DOM.Core; use DOM.Core;
 package Bases.SaveLoad is
 
    procedure SaveBases
-     (SaveData: Document); -- Save bases from current game in file
+     (SaveData: Document;
+      MainNode: DOM.Core.Element); -- Save bases from current game in file
    procedure LoadBases(SaveGame: File_Type); -- Load bases from file
 
 end Bases.SaveLoad;

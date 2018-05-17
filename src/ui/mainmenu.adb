@@ -165,11 +165,6 @@ package body MainMenu is
            ("Can't load ships data. Invalid value in file. Run game in debug mode to get more info.",
             Parent);
          return False;
-      when SaveGame_Invalid_Version =>
-         ShowDialog
-           ("This saved game is incompatible with this version of game and can't be loaded.",
-            Parent);
-         return False;
       when An_Exception : SaveGame_Invalid_Data =>
          LogMessage
            ("Invalid data in savegame: " & Exception_Message(An_Exception),
