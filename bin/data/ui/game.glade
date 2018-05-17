@@ -3138,6 +3138,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">expander</property>
+                                    <property name="use_underline">True</property>
                                   </object>
                                 </child>
                               </object>
@@ -3200,6 +3201,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">expander</property>
+                                    <property name="use_underline">True</property>
                                   </object>
                                 </child>
                               </object>
@@ -3217,6 +3219,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="receives_default">True</property>
                                 <property name="halign">start</property>
                                 <property name="margin_left">5</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Show_Goals" swapped="no"/>
                               </object>
                               <packing>
@@ -3278,6 +3281,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">expander</property>
+                                    <property name="use_underline">True</property>
                                   </object>
                                 </child>
                               </object>
@@ -3369,6 +3373,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">expander</property>
+                                    <property name="use_underline">True</property>
                                   </object>
                                 </child>
                               </object>
@@ -3432,6 +3437,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">expander</property>
+                                    <property name="use_underline">True</property>
                                   </object>
                                 </child>
                               </object>
