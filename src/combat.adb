@@ -32,6 +32,7 @@ with Utils; use Utils;
 with Log; use Log;
 with Goals; use Goals;
 with Game; use Game;
+with Ada.Text_IO; use Ada.Text_IO;
 
 package body Combat is
 
@@ -799,13 +800,18 @@ package body Combat is
                      DefenderIndex);
                end if;
                if PlayerAttack2 then
-                  GainExp
-                    (1,
-                     Items_List
-                       (Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
-                       .Value
-                       (3),
-                     AttackerIndex);
+                  if Attacker.Equipment(1) > 0 then
+                     GainExp
+                       (1,
+                        Items_List
+                          (Attacker.Inventory(Attacker.Equipment(1))
+                             .ProtoIndex)
+                          .Value
+                          (3),
+                        AttackerIndex);
+                  else
+                     GainExp(1, UnarmedSkill, AttackerIndex);
+                  end if;
                end if;
                if Damage > Defender.Health then
                   Defender.Health := 0;
