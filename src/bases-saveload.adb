@@ -15,208 +15,326 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with DOM.Core.Documents; use DOM.Core.Documents;
+with DOM.Core.Nodes; use DOM.Core.Nodes;
 with Maps; use Maps;
 with Items; use Items;
 with Game.SaveLoad; use Game.SaveLoad;
 
 package body Bases.SaveLoad is
 
-   procedure SaveBases(SaveGame: in out File_Type) is
+   procedure SaveBases(SaveData: Document) is
       RawValue: Unbounded_String;
+      CategoryNode, BaseNode, SubNode: DOM.Core.Element;
    begin
+      CategoryNode := Create_Element(SaveData, "bases");
+      CategoryNode := Append_Child(SaveData, CategoryNode);
       for I in SkyBases'Range loop
-         Put(SaveGame, To_String(SkyBases(I).Name) & ";");
+         BaseNode := Create_Element(SaveData, "base");
+         BaseNode := Append_Child(CategoryNode, BaseNode);
+         AddData("name", To_String(SkyBases(I).Name), BaseNode);
+         SubNode := Create_Element(SaveData, "visited date");
+         SubNode := Append_Child(BaseNode, SubNode);
          RawValue :=
            To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Year));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         AddData("year", To_String(Trim(RawValue, Ada.Strings.Left)), SubNode);
          if SkyBases(I).Visited.Year > 0 then
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Month));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("month",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               SubNode);
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Day));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("day",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               SubNode);
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Hour));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("hour",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               SubNode);
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Minutes));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("minutes",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               SubNode);
          end if;
          RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).SkyX));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         AddData("x", To_String(Trim(RawValue, Ada.Strings.Left)), BaseNode);
          RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).SkyY));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         AddData("y", To_String(Trim(RawValue, Ada.Strings.Left)), BaseNode);
          RawValue :=
            To_Unbounded_String
              (Integer'Image(Bases_Types'Pos(SkyBases(I).BaseType)));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         AddData
+           ("type",
+            To_String(Trim(RawValue, Ada.Strings.Left)),
+            BaseNode);
          RawValue :=
            To_Unbounded_String(Integer'Image(SkyBases(I).Population));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         AddData
+           ("population",
+            To_String(Trim(RawValue, Ada.Strings.Left)),
+            BaseNode);
          if SkyBases(I).Visited.Year > 0 then
+            SubNode := Create_Element(SaveData, "recruit date");
+            SubNode := Append_Child(BaseNode, SubNode);
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Year));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("year",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               SubNode);
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).RecruitDate.Month));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("month",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               SubNode);
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Day));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            RawValue := To_Unbounded_String(SkyBases(I).Recruits.Length'Img);
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("day",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               SubNode);
+            SubNode := Create_Element(SaveData, "recruits");
+            SubNode := Append_Child(BaseNode, SubNode);
             if SkyBases(I).Recruits.Length > 0 then
-               for Recruit of SkyBases(I).Recruits loop
-                  Put(SaveGame, To_String(Recruit.Name) & ";");
-                  Put(SaveGame, Recruit.Gender & ";");
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Recruit.Price));
-                  Put
-                    (SaveGame,
-                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                  RawValue := To_Unbounded_String(Recruit.Skills.Length'Img);
-                  Put
-                    (SaveGame,
-                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                  for Skill of Recruit.Skills loop
-                     RawValue := To_Unbounded_String(Integer'Image(Skill(1)));
-                     Put
-                       (SaveGame,
-                        To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                     RawValue := To_Unbounded_String(Integer'Image(Skill(2)));
-                     Put
-                       (SaveGame,
-                        To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                     RawValue := To_Unbounded_String(Integer'Image(Skill(3)));
-                     Put
-                       (SaveGame,
-                        To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                  end loop;
-                  RawValue :=
-                    To_Unbounded_String(Recruit.Attributes.Length'Img);
-                  Put
-                    (SaveGame,
-                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                  for Attribute of Recruit.Attributes loop
+               declare
+                  RecruitNode,
+                  RecruitStatsNode,
+                  RecruitDataNode: DOM.Core.Element;
+               begin
+                  for Recruit of SkyBases(I).Recruits loop
+                     RecruitNode := Create_Element(SaveData, "recruit");
+                     RecruitNode := Append_Child(SubNode, RecruitNode);
+                     AddData("name", To_String(Recruit.Name), RecruitNode);
+                     AddData("gender", Recruit.Gender & "", RecruitNode);
                      RawValue :=
-                       To_Unbounded_String(Integer'Image(Attribute(1)));
-                     Put
-                       (SaveGame,
-                        To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                     RawValue :=
-                       To_Unbounded_String(Integer'Image(Attribute(2)));
-                     Put
-                       (SaveGame,
-                        To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+                       To_Unbounded_String(Integer'Image(Recruit.Price));
+                     AddData
+                       ("price",
+                        To_String(Trim(RawValue, Ada.Strings.Left)),
+                        RecruitNode);
+                     RecruitStatsNode := Create_Element(SaveData, "skills");
+                     RecruitStatsNode :=
+                       Append_Child(RecruitNode, RecruitStatsNode);
+                     for Skill of Recruit.Skills loop
+                        RecruitDataNode := Create_Element(SaveData, "skill");
+                        RecruitDataNode :=
+                          Append_Child(RecruitStatsNode, RecruitDataNode);
+                        RawValue :=
+                          To_Unbounded_String(Integer'Image(Skill(1)));
+                        AddData
+                          ("index",
+                           To_String(Trim(RawValue, Ada.Strings.Left)),
+                           RecruitDataNode);
+                        RawValue :=
+                          To_Unbounded_String(Integer'Image(Skill(2)));
+                        AddData
+                          ("level",
+                           To_String(Trim(RawValue, Ada.Strings.Left)),
+                           RecruitDataNode);
+                        RawValue :=
+                          To_Unbounded_String(Integer'Image(Skill(3)));
+                        AddData
+                          ("experience",
+                           To_String(Trim(RawValue, Ada.Strings.Left)),
+                           RecruitDataNode);
+                     end loop;
+                     RecruitStatsNode :=
+                       Create_Element(SaveData, "attributes");
+                     RecruitStatsNode :=
+                       Append_Child(RecruitNode, RecruitStatsNode);
+                     for Attribute of Recruit.Attributes loop
+                        RecruitDataNode :=
+                          Create_Element(SaveData, "attribute");
+                        RecruitDataNode :=
+                          Append_Child(RecruitStatsNode, RecruitDataNode);
+                        RawValue :=
+                          To_Unbounded_String(Integer'Image(Attribute(1)));
+                        AddData
+                          ("level",
+                           To_String(Trim(RawValue, Ada.Strings.Left)),
+                           RecruitDataNode);
+                        RawValue :=
+                          To_Unbounded_String(Integer'Image(Attribute(2)));
+                        AddData
+                          ("experience",
+                           To_String(Trim(RawValue, Ada.Strings.Left)),
+                           RecruitDataNode);
+                     end loop;
                   end loop;
-               end loop;
+               end;
             end if;
             if SkyBases(I).AskedForBases then
-               Put(SaveGame, "Y;");
+               AddData("asked for bases", "Y", BaseNode);
             else
-               Put(SaveGame, "N;");
+               AddData("asked for bases", "N", BaseNode);
             end if;
+            SubNode := Create_Element(SaveData, "asked for events date");
+            SubNode := Append_Child(BaseNode, SubNode);
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).AskedForEvents.Year));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("year",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               SubNode);
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).AskedForEvents.Month));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("month",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               SubNode);
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).AskedForEvents.Day));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("day",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               SubNode);
          end if;
+         SubNode := Create_Element(SaveData, "reputation");
+         SubNode := Append_Child(BaseNode, SubNode);
          RawValue :=
            To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(1)));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         AddData
+           ("level",
+            To_String(Trim(RawValue, Ada.Strings.Left)),
+            SubNode);
          RawValue :=
            To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(2)));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         AddData
+           ("progress",
+            To_String(Trim(RawValue, Ada.Strings.Left)),
+            SubNode);
          if SkyBases(I).Visited.Year > 0 then
+            SubNode := Create_Element(SaveData, "missions date");
+            SubNode := Append_Child(BaseNode, SubNode);
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).MissionsDate.Year));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("year",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               SubNode);
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).MissionsDate.Month));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("month",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               SubNode);
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).MissionsDate.Day));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            RawValue := To_Unbounded_String(SkyBases(I).Missions.Length'Img);
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("day",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               SubNode);
+            SubNode := Create_Element(SaveData, "missions");
+            SubNode := Append_Child(BaseNode, SubNode);
             if SkyBases(I).Missions.Length > 0 then
-               for Mission of SkyBases(I).Missions loop
-                  RawValue :=
-                    To_Unbounded_String
-                      (Integer'Image(Missions_Types'Pos(Mission.MType)));
-                  Put
-                    (SaveGame,
-                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Mission.Target));
-                  Put
-                    (SaveGame,
-                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                  RawValue := To_Unbounded_String(Integer'Image(Mission.Time));
-                  Put
-                    (SaveGame,
-                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Mission.TargetX));
-                  Put
-                    (SaveGame,
-                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Mission.TargetY));
-                  Put
-                    (SaveGame,
-                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Mission.Reward));
-                  Put
-                    (SaveGame,
-                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-               end loop;
+               declare
+                  MissionNode: DOM.Core.Element;
+               begin
+                  for Mission of SkyBases(I).Missions loop
+                     MissionNode := Create_Element(SaveData, "mission");
+                     MissionNode := Append_Child(SubNode, MissionNode);
+                     RawValue :=
+                       To_Unbounded_String
+                         (Integer'Image(Missions_Types'Pos(Mission.MType)));
+                     AddData
+                       ("type",
+                        To_String(Trim(RawValue, Ada.Strings.Left)),
+                        MissionNode);
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Mission.Target));
+                     AddData
+                       ("target",
+                        To_String(Trim(RawValue, Ada.Strings.Left)),
+                        MissionNode);
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Mission.Time));
+                     AddData
+                       ("time",
+                        To_String(Trim(RawValue, Ada.Strings.Left)),
+                        MissionNode);
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Mission.TargetX));
+                     AddData
+                       ("target x",
+                        To_String(Trim(RawValue, Ada.Strings.Left)),
+                        MissionNode);
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Mission.TargetY));
+                     AddData
+                       ("target y",
+                        To_String(Trim(RawValue, Ada.Strings.Left)),
+                        MissionNode);
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Mission.Reward));
+                     AddData
+                       ("reward",
+                        To_String(Trim(RawValue, Ada.Strings.Left)),
+                        MissionNode);
+                  end loop;
+               end;
             end if;
-            RawValue := To_Unbounded_String(SkyBases(I).Cargo.Length'Img);
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            SubNode := Create_Element(SaveData, "cargo");
+            SubNode := Append_Child(BaseNode, SubNode);
             if SkyBases(I).Cargo.Length > 0 then
-               for Item of SkyBases(I).Cargo loop
-                  Put
-                    (SaveGame,
-                     To_String(Items_List(Item.ProtoIndex).Index) & ";");
-                  RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
-                  Put
-                    (SaveGame,
-                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Item.Durability));
-                  Put
-                    (SaveGame,
-                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-                  RawValue := To_Unbounded_String(Integer'Image(Item.Price));
-                  Put
-                    (SaveGame,
-                     To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-               end loop;
+               declare
+                  ItemNode: DOM.Core.Element;
+               begin
+                  for Item of SkyBases(I).Cargo loop
+                     ItemNode := Create_Element(SaveData, "item");
+                     ItemNode := Append_Child(SubNode, ItemNode);
+                     AddData
+                       ("index",
+                        To_String(Items_List(Item.ProtoIndex).Index),
+                        ItemNode);
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Item.Amount));
+                     AddData
+                       ("amount",
+                        To_String(Trim(RawValue, Ada.Strings.Left)),
+                        ItemNode);
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Item.Durability));
+                     AddData
+                       ("durability",
+                        To_String(Trim(RawValue, Ada.Strings.Left)),
+                        ItemNode);
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Item.Price));
+                     AddData
+                       ("price",
+                        To_String(Trim(RawValue, Ada.Strings.Left)),
+                        ItemNode);
+                  end loop;
+               end;
             end if;
          end if;
          if SkyBases(I).Known then
-            Put(SaveGame, "Y;");
+            AddData("known", "Y", BaseNode);
          else
-            Put(SaveGame, "N;");
+            AddData("known", "N", BaseNode);
          end if;
          RawValue :=
            To_Unbounded_String
              (Integer'Image(Bases_Owners'Pos(SkyBases(I).Owner)));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+         AddData
+           ("owner",
+            To_String(Trim(RawValue, Ada.Strings.Left)),
+            BaseNode);
       end loop;
    end SaveBases;
 
@@ -279,7 +397,8 @@ package body Bases.SaveLoad is
                   BaseRecruits.Append
                   (New_Item =>
                      (Name => ReadData(SaveGame),
-                      Gender => Element(ReadData(SaveGame), 1),
+                      Gender =>
+                        Ada.Strings.Unbounded.Element(ReadData(SaveGame), 1),
                       Price => Positive'Value(To_String(ReadData(SaveGame))),
                       Skills => Skills,
                       Attributes => Attributes));

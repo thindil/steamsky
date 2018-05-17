@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Text_IO; use Ada.Text_IO;
+with DOM.Core; use DOM.Core;
 
 package Game.SaveLoad is
 
@@ -27,5 +28,8 @@ package Game.SaveLoad is
    function ReadData
      (SaveGame: File_Type)
      return Unbounded_String; -- Read saved data from file
+   procedure AddData
+     (NodeName, Value: String;
+      ParentNode: DOM.Core.Element); -- Add xml data to save to file
 
 end Game.SaveLoad;
