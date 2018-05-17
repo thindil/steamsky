@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,11 +16,11 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Text_IO; use Ada.Text_IO;
+with DOM.Core; use DOM.Core;
 
 package Ships.SaveLoad is
 
-   procedure SavePlayerShip
-     (SaveGame: in out File_Type); -- Save player ship to file
+   procedure SavePlayerShip(SaveData: Document); -- Save player ship to file
    procedure LoadPlayerShip
      (SaveGame: File_Type); -- Load saved player ship from file
 

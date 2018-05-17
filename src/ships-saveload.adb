@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,155 +15,314 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with DOM.Core.Documents; use DOM.Core.Documents;
+with DOM.Core.Nodes; use DOM.Core.Nodes;
 with ShipModules; use ShipModules;
 with Maps; use Maps;
 with Game.SaveLoad; use Game.SaveLoad;
 
 package body Ships.SaveLoad is
 
-   procedure SavePlayerShip(SaveGame: in out File_Type) is
+   procedure SavePlayerShip(SaveData: Document) is
       RawValue: Unbounded_String;
+      CategoryNode, SubNode, DataNode: DOM.Core.Element;
    begin
-      Put(SaveGame, To_String(PlayerShip.Name) & ";");
+      CategoryNode := Create_Element(SaveData, "playership");
+      CategoryNode := Append_Child(SaveData, CategoryNode);
+      AddData("name", To_String(PlayerShip.Name), CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.SkyX));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData("x", To_String(Trim(RawValue, Ada.Strings.Left)), CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.SkyY));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData("y", To_String(Trim(RawValue, Ada.Strings.Left)), CategoryNode);
       RawValue :=
         To_Unbounded_String(Integer'Image(ShipSpeed'Pos(PlayerShip.Speed)));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData
+        ("speed",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.UpgradeModule));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData
+        ("upgrade module",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.DestinationX));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData
+        ("destination x",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.DestinationY));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData
+        ("destination y",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.RepairModule));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      RawValue := To_Unbounded_String(PlayerShip.Modules.Length'Img);
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      for Module of PlayerShip.Modules loop
-         Put(SaveGame, To_String(Module.Name) & ";");
-         Put(SaveGame, To_String(Modules_List(Module.ProtoIndex).Index) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Module.Weight));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Module.Durability));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Module.MaxDurability));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Module.Owner));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue :=
-           To_Unbounded_String(Integer'Image(Module.UpgradeProgress));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue :=
-           To_Unbounded_String
-             (Integer'Image(ShipUpgrade'Pos(Module.UpgradeAction)));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         for I in Module.Data'Range loop
-            RawValue := To_Unbounded_String(Integer'Image(Module.Data(I)));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         end loop;
-      end loop;
-      RawValue := To_Unbounded_String(PlayerShip.Cargo.Length'Img);
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      for Item of PlayerShip.Cargo loop
-         Put(SaveGame, To_String(Items_List(Item.ProtoIndex).Index) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         Put(SaveGame, To_String(Item.Name) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Item.Durability));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      end loop;
-      RawValue := To_Unbounded_String(PlayerShip.Crew.Length'Img);
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-      for Member of PlayerShip.Crew loop
-         Put(SaveGame, To_String(Member.Name) & ";");
-         Put(SaveGame, Member.Gender & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Member.Health));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Member.Tired));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Member.Hunger));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Member.Thirst));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue :=
-           To_Unbounded_String(Integer'Image(Crew_Orders'Pos(Member.Order)));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue :=
-           To_Unbounded_String
-             (Integer'Image(Crew_Orders'Pos(Member.PreviousOrder)));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Integer'Image(Member.OrderTime));
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         RawValue := To_Unbounded_String(Member.Skills.Length'Img);
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         for Skill of Member.Skills loop
-            RawValue := To_Unbounded_String(Integer'Image(Skill(1)));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            RawValue := To_Unbounded_String(Integer'Image(Skill(2)));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            RawValue := To_Unbounded_String(Integer'Image(Skill(3)));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         end loop;
-         for J in Member.Orders'Range loop
-            RawValue := To_Unbounded_String(Integer'Image(Member.Orders(J)));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         end loop;
-         RawValue := To_Unbounded_String(Member.Attributes.Length'Img);
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         for Attribute of Member.Attributes loop
-            RawValue := To_Unbounded_String(Integer'Image(Attribute(1)));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            RawValue := To_Unbounded_String(Integer'Image(Attribute(2)));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         end loop;
-         RawValue := To_Unbounded_String(Member.Inventory.Length'Img);
-         Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         for Item of Member.Inventory loop
-            Put(SaveGame, To_String(Items_List(Item.ProtoIndex).Index) & ";");
-            RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-            Put(SaveGame, To_String(Item.Name) & ";");
-            RawValue := To_Unbounded_String(Integer'Image(Item.Durability));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
-         end loop;
-         for I in Member.Equipment'Range loop
+      AddData
+        ("repair priority",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
+      SubNode := Create_Element(SaveData, "modules");
+      SubNode := Append_Child(CategoryNode, SubNode);
+      declare
+         ModuleDataNode: DOM.Core.Element;
+      begin
+         for Module of PlayerShip.Modules loop
+            DataNode := Create_Element(SaveData, "module");
+            DataNode := Append_Child(SubNode, DataNode);
+            AddData("name", To_String(Module.Name), DataNode);
+            AddData
+              ("index",
+               To_String(Modules_List(Module.ProtoIndex).Index),
+               DataNode);
+            RawValue := To_Unbounded_String(Integer'Image(Module.Weight));
+            AddData
+              ("weight",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
+            RawValue := To_Unbounded_String(Integer'Image(Module.Durability));
+            AddData
+              ("durability",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
             RawValue :=
-              To_Unbounded_String(Integer'Image(Member.Equipment(I)));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+              To_Unbounded_String(Integer'Image(Module.MaxDurability));
+            AddData
+              ("max durability",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
+            RawValue := To_Unbounded_String(Integer'Image(Module.Owner));
+            AddData
+              ("owner",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
+            RawValue :=
+              To_Unbounded_String(Integer'Image(Module.UpgradeProgress));
+            AddData
+              ("upgrade progress",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
+            RawValue :=
+              To_Unbounded_String
+                (Integer'Image(ShipUpgrade'Pos(Module.UpgradeAction)));
+            AddData
+              ("upgrade action",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
+            ModuleDataNode := Create_Element(SaveData, "moduledata");
+            ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+            for I in Module.Data'Range loop
+               RawValue := To_Unbounded_String(Integer'Image(Module.Data(I)));
+               AddData
+                 ("data",
+                  To_String(Trim(RawValue, Ada.Strings.Left)),
+                  ModuleDataNode);
+            end loop;
          end loop;
+      end;
+      SubNode := Create_Element(SaveData, "cargo");
+      SubNode := Append_Child(CategoryNode, SubNode);
+      for Item of PlayerShip.Cargo loop
+         DataNode := Create_Element(SaveData, "item");
+         DataNode := Append_Child(SubNode, DataNode);
+         AddData
+           ("index",
+            To_String(Items_List(Item.ProtoIndex).Index),
+            DataNode);
+         RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
+         AddData
+           ("amount",
+            To_String(Trim(RawValue, Ada.Strings.Left)),
+            DataNode);
+         AddData("name", To_String(Item.Name), DataNode);
+         RawValue := To_Unbounded_String(Integer'Image(Item.Durability));
+         AddData
+           ("durability",
+            To_String(Trim(RawValue, Ada.Strings.Left)),
+            DataNode);
       end loop;
-      RawValue := To_Unbounded_String(PlayerShip.Missions.Length'Img);
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      SubNode := Create_Element(SaveData, "crew");
+      SubNode := Append_Child(CategoryNode, SubNode);
+      declare
+         CrewDataNode, StatNode: DOM.Core.Element;
+      begin
+         for Member of PlayerShip.Crew loop
+            DataNode := Create_Element(SaveData, "member");
+            DataNode := Append_Child(SubNode, DataNode);
+            AddData("name", To_String(Member.Name), DataNode);
+            AddData("gender", Member.Gender & "", DataNode);
+            RawValue := To_Unbounded_String(Integer'Image(Member.Health));
+            AddData
+              ("health",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
+            RawValue := To_Unbounded_String(Integer'Image(Member.Tired));
+            AddData
+              ("tired",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
+            RawValue := To_Unbounded_String(Integer'Image(Member.Hunger));
+            AddData
+              ("hunger",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
+            RawValue := To_Unbounded_String(Integer'Image(Member.Thirst));
+            AddData
+              ("thirst",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
+            RawValue :=
+              To_Unbounded_String
+                (Integer'Image(Crew_Orders'Pos(Member.Order)));
+            AddData
+              ("order",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
+            RawValue :=
+              To_Unbounded_String
+                (Integer'Image(Crew_Orders'Pos(Member.PreviousOrder)));
+            AddData
+              ("previous order",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
+            RawValue := To_Unbounded_String(Integer'Image(Member.OrderTime));
+            AddData
+              ("order time",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
+            CrewDataNode := Create_Element(SaveData, "skills");
+            CrewDataNode := Append_Child(DataNode, CrewDataNode);
+            for Skill of Member.Skills loop
+               StatNode := Create_Element(SaveData, "skill");
+               StatNode := Append_Child(CrewDataNode, StatNode);
+               RawValue := To_Unbounded_String(Integer'Image(Skill(1)));
+               AddData
+                 ("index",
+                  To_String(Trim(RawValue, Ada.Strings.Left)),
+                  StatNode);
+               RawValue := To_Unbounded_String(Integer'Image(Skill(2)));
+               AddData
+                 ("level",
+                  To_String(Trim(RawValue, Ada.Strings.Left)),
+                  StatNode);
+               RawValue := To_Unbounded_String(Integer'Image(Skill(3)));
+               AddData
+                 ("experience",
+                  To_String(Trim(RawValue, Ada.Strings.Left)),
+                  StatNode);
+            end loop;
+            CrewDataNode := Create_Element(SaveData, "orders priorities");
+            CrewDataNode := Append_Child(DataNode, CrewDataNode);
+            for J in Member.Orders'Range loop
+               RawValue :=
+                 To_Unbounded_String(Integer'Image(Member.Orders(J)));
+               AddData
+                 ("priority",
+                  To_String(Trim(RawValue, Ada.Strings.Left)),
+                  CrewDataNode);
+            end loop;
+            CrewDataNode := Create_Element(SaveData, "attributes");
+            CrewDataNode := Append_Child(DataNode, CrewDataNode);
+            for Attribute of Member.Attributes loop
+               StatNode := Create_Element(SaveData, "attribute");
+               StatNode := Append_Child(CrewDataNode, StatNode);
+               RawValue := To_Unbounded_String(Integer'Image(Attribute(1)));
+               AddData
+                 ("level",
+                  To_String(Trim(RawValue, Ada.Strings.Left)),
+                  StatNode);
+               RawValue := To_Unbounded_String(Integer'Image(Attribute(2)));
+               AddData
+                 ("experience",
+                  To_String(Trim(RawValue, Ada.Strings.Left)),
+                  StatNode);
+            end loop;
+            CrewDataNode := Create_Element(SaveData, "inventory");
+            CrewDataNode := Append_Child(DataNode, CrewDataNode);
+            for Item of Member.Inventory loop
+               StatNode := Create_Element(SaveData, "item");
+               StatNode := Append_Child(CrewDataNode, StatNode);
+               AddData
+                 ("index",
+                  To_String(Items_List(Item.ProtoIndex).Index),
+                  StatNode);
+               RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
+               AddData
+                 ("amount",
+                  To_String(Trim(RawValue, Ada.Strings.Left)),
+                  StatNode);
+               AddData("name", To_String(Item.Name), StatNode);
+               RawValue := To_Unbounded_String(Integer'Image(Item.Durability));
+               AddData
+                 ("durability",
+                  To_String(Trim(RawValue, Ada.Strings.Left)),
+                  StatNode);
+            end loop;
+            CrewDataNode := Create_Element(SaveData, "equipment");
+            CrewDataNode := Append_Child(DataNode, CrewDataNode);
+            for I in Member.Equipment'Range loop
+               RawValue :=
+                 To_Unbounded_String(Integer'Image(Member.Equipment(I)));
+               AddData
+                 ("index",
+                  To_String(Trim(RawValue, Ada.Strings.Left)),
+                  CrewDataNode);
+            end loop;
+         end loop;
+      end;
+      SubNode := Create_Element(SaveData, "missions");
+      SubNode := Append_Child(CategoryNode, SubNode);
       if PlayerShip.Missions.Length > 0 then
          for Mission of PlayerShip.Missions loop
+            DataNode := Create_Element(SaveData, "mission");
+            DataNode := Append_Child(SubNode, DataNode);
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(Missions_Types'Pos(Mission.MType)));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("type",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
             RawValue := To_Unbounded_String(Integer'Image(Mission.Target));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("target",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
             RawValue := To_Unbounded_String(Integer'Image(Mission.Time));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("time",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
             RawValue := To_Unbounded_String(Integer'Image(Mission.TargetX));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("target x",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
             RawValue := To_Unbounded_String(Integer'Image(Mission.TargetY));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("target y",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
             RawValue := To_Unbounded_String(Integer'Image(Mission.Reward));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("reward",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
             RawValue := To_Unbounded_String(Integer'Image(Mission.StartBase));
-            Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+            AddData
+              ("start base",
+               To_String(Trim(RawValue, Ada.Strings.Left)),
+               DataNode);
             if Mission.Finished then
-               Put(SaveGame, "Y;");
+               AddData("finished", "Y", DataNode);
             else
-               Put(SaveGame, "N;");
+               AddData("finished", "N", DataNode);
             end if;
          end loop;
       end if;
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.HomeBase));
-      Put(SaveGame, To_String(Trim(RawValue, Ada.Strings.Left)) & ";");
+      AddData
+        ("home base",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
    end SavePlayerShip;
 
    procedure LoadPlayerShip(SaveGame: File_Type) is
@@ -225,7 +384,7 @@ package body Ships.SaveLoad is
          ShipCrew.Append
          (New_Item =>
             (Name => ReadData(SaveGame),
-             Gender => Element(ReadData(SaveGame), 1),
+             Gender => Ada.Strings.Unbounded.Element(ReadData(SaveGame), 1),
              Health => Natural'Value(To_String(ReadData(SaveGame))),
              Tired => Natural'Value(To_String(ReadData(SaveGame))),
              Skills => Skills,
