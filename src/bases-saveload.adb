@@ -23,17 +23,17 @@ with Game.SaveLoad; use Game.SaveLoad;
 
 package body Bases.SaveLoad is
 
-   procedure SaveBases(SaveData: Document) is
+   procedure SaveBases(SaveData: Document; MainNode: DOM.Core.Element) is
       RawValue: Unbounded_String;
       CategoryNode, BaseNode, SubNode: DOM.Core.Element;
    begin
       CategoryNode := Create_Element(SaveData, "bases");
-      CategoryNode := Append_Child(SaveData, CategoryNode);
+      CategoryNode := Append_Child(MainNode, CategoryNode);
       for I in SkyBases'Range loop
          BaseNode := Create_Element(SaveData, "base");
          BaseNode := Append_Child(CategoryNode, BaseNode);
          AddData("name", To_String(SkyBases(I).Name), BaseNode);
-         SubNode := Create_Element(SaveData, "visited date");
+         SubNode := Create_Element(SaveData, "visiteddate");
          SubNode := Append_Child(BaseNode, SubNode);
          RawValue :=
            To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Year));
@@ -82,7 +82,7 @@ package body Bases.SaveLoad is
             To_String(Trim(RawValue, Ada.Strings.Left)),
             BaseNode);
          if SkyBases(I).Visited.Year > 0 then
-            SubNode := Create_Element(SaveData, "recruit date");
+            SubNode := Create_Element(SaveData, "recruitdate");
             SubNode := Append_Child(BaseNode, SubNode);
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Year));
@@ -174,11 +174,11 @@ package body Bases.SaveLoad is
                end;
             end if;
             if SkyBases(I).AskedForBases then
-               AddData("asked for bases", "Y", BaseNode);
+               AddData("askedforbases", "Y", BaseNode);
             else
-               AddData("asked for bases", "N", BaseNode);
+               AddData("askedforbases", "N", BaseNode);
             end if;
-            SubNode := Create_Element(SaveData, "asked for events date");
+            SubNode := Create_Element(SaveData, "askedforeventsdate");
             SubNode := Append_Child(BaseNode, SubNode);
             RawValue :=
               To_Unbounded_String
@@ -217,7 +217,7 @@ package body Bases.SaveLoad is
             To_String(Trim(RawValue, Ada.Strings.Left)),
             SubNode);
          if SkyBases(I).Visited.Year > 0 then
-            SubNode := Create_Element(SaveData, "missions date");
+            SubNode := Create_Element(SaveData, "missionsdate");
             SubNode := Append_Child(BaseNode, SubNode);
             RawValue :=
               To_Unbounded_String
@@ -270,13 +270,13 @@ package body Bases.SaveLoad is
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Mission.TargetX));
                      AddData
-                       ("target x",
+                       ("targetx",
                         To_String(Trim(RawValue, Ada.Strings.Left)),
                         MissionNode);
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Mission.TargetY));
                      AddData
-                       ("target y",
+                       ("targety",
                         To_String(Trim(RawValue, Ada.Strings.Left)),
                         MissionNode);
                      RawValue :=

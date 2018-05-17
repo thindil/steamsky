@@ -20,7 +20,9 @@ with DOM.Core; use DOM.Core;
 
 package Ships.SaveLoad is
 
-   procedure SavePlayerShip(SaveData: Document); -- Save player ship to file
+   procedure SavePlayerShip
+     (SaveData: Document;
+      MainNode: DOM.Core.Element); -- Save player ship to file
    procedure LoadPlayerShip
      (SaveGame: File_Type); -- Load saved player ship from file
 

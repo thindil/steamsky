@@ -20,7 +20,6 @@ with DOM.Core; use DOM.Core;
 
 package Game.SaveLoad is
 
-   SaveGame_Invalid_Version: exception; -- Raised when trying to load unsuported version of savegame
    SaveGame_Invalid_Data: exception; -- Raised when invalid data found in savegame
 
    procedure SaveGame; -- Save game to file
