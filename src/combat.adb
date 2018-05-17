@@ -769,13 +769,17 @@ package body Combat is
                   DefenderIndex);
             end if;
             if PlayerAttack then
-               GainExp
-                 (1,
-                  Items_List
-                    (Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
-                    .Value
-                    (3),
-                  AttackerIndex);
+               if Attacker.Equipment(1) > 0 then
+                  GainExp
+                    (1,
+                     Items_List
+                       (Attacker.Inventory(Attacker.Equipment(1)).ProtoIndex)
+                       .Value
+                       (3),
+                     AttackerIndex);
+               else
+                  GainExp(1, UnarmedSkill, AttackerIndex);
+               end if;
             end if;
             if Damage > Defender.Health then
                Defender.Health := 0;
