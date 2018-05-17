@@ -17,7 +17,6 @@
 
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Text_IO.Text_Streams; use Ada.Text_IO.Text_Streams;
-with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with Bases; use Bases;
@@ -35,24 +34,13 @@ with Config; use Config;
 package body Game.SaveLoad is
 
    SaveVersion: constant String := "2.4";
+   SaveData: Document;
 
    procedure SaveGame is
       Save: DOM_Implementation;
-      SaveData: Document;
       CategoryNode: DOM.Core.Element;
       RawValue: Unbounded_String;
       SaveFile: File_Type;
-      procedure AddData
-        (NodeName, Value: String;
-         ParentNode: DOM.Core.Element := CategoryNode) is
-         DataNode: DOM.Core.Element;
-         Data: Text;
-      begin
-         DataNode := Create_Element(SaveData, NodeName);
-         DataNode := Append_Child(ParentNode, DataNode);
-         Data := Create_Text_Node(SaveData, Value);
-         Data := Append_Child(DataNode, Data);
-      end AddData;
       procedure SaveStatistics
         (StatisticsVector: in out Statistics_Container.Vector;
          NodeName, StatName: String) is
@@ -77,15 +65,30 @@ package body Game.SaveLoad is
       CategoryNode := Create_Element(SaveData, "date");
       CategoryNode := Append_Child(SaveData, CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Year));
-      AddData("year", To_String(Trim(RawValue, Ada.Strings.Left)));
+      AddData
+        ("year",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Month));
-      AddData("month", To_String(Trim(RawValue, Ada.Strings.Left)));
+      AddData
+        ("month",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Day));
-      AddData("day", To_String(Trim(RawValue, Ada.Strings.Left)));
+      AddData
+        ("day",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Hour));
-      AddData("hour", To_String(Trim(RawValue, Ada.Strings.Left)));
+      AddData
+        ("hour",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Minutes));
-      AddData("minutes", To_String(Trim(RawValue, Ada.Strings.Left)));
+      AddData
+        ("minutes",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       -- Save map
       CategoryNode := Create_Element(SaveData, "map");
       CategoryNode := Append_Child(SaveData, CategoryNode);
@@ -112,14 +115,14 @@ package body Game.SaveLoad is
          end loop;
       end;
       -- Save bases
-      --SaveBases(SaveGame);
+      SaveBases(SaveData);
       -- Save player ship
-      --SavePlayerShip(SaveGame);
+      -- SavePlayerShip(SaveGame);
       -- Save known recipes
       CategoryNode := Create_Element(SaveData, "known recipes");
       CategoryNode := Append_Child(SaveData, CategoryNode);
       for Recipe of Known_Recipes loop
-         AddData("index", To_String(Recipes_List(Recipe).Index));
+         AddData("index", To_String(Recipes_List(Recipe).Index), CategoryNode);
       end loop;
       -- Save messages
       declare
@@ -198,20 +201,28 @@ package body Game.SaveLoad is
       CategoryNode := Append_Child(SaveData, CategoryNode);
       SaveStatistics(GameStats.DestroyedShips, "destroyed ships", "ship");
       RawValue := To_Unbounded_String(Positive'Image(GameStats.BasesVisited));
-      AddData("visited bases", To_String(Trim(RawValue, Ada.Strings.Left)));
+      AddData
+        ("visited bases",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       RawValue := To_Unbounded_String(Positive'Image(GameStats.MapVisited));
-      AddData("map discovered", To_String(Trim(RawValue, Ada.Strings.Left)));
+      AddData
+        ("map discovered",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       RawValue :=
         To_Unbounded_String(Positive'Image(GameStats.DistanceTraveled));
       AddData
         ("distance traveled",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       SaveStatistics(GameStats.CraftingOrders, "finished crafts", "order");
       RawValue :=
         To_Unbounded_String(Positive'Image(GameStats.AcceptedMissions));
       AddData
         ("accepted missions",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       SaveStatistics
         (GameStats.FinishedMissions,
          "finished missions",
@@ -219,17 +230,26 @@ package body Game.SaveLoad is
       SaveStatistics(GameStats.FinishedGoals, "finished goals", "goal");
       SaveStatistics(GameStats.KilledMobs, "killed mobs", "mob");
       RawValue := To_Unbounded_String(Natural'Image(GameStats.Points));
-      AddData("points", To_String(Trim(RawValue, Ada.Strings.Left)));
+      AddData
+        ("points",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       -- Save current goal
       CategoryNode := Create_Element(SaveData, "current goal");
       CategoryNode := Append_Child(SaveData, CategoryNode);
-      AddData("index", To_String(CurrentGoal.Index));
+      AddData("index", To_String(CurrentGoal.Index), CategoryNode);
       RawValue :=
         To_Unbounded_String(Integer'Image(GoalTypes'Pos(CurrentGoal.GType)));
-      AddData("type", To_String(Trim(RawValue, Ada.Strings.Left)));
+      AddData
+        ("type",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
       RawValue := To_Unbounded_String(Natural'Image(CurrentGoal.Amount));
-      AddData("amount", To_String(Trim(RawValue, Ada.Strings.Left)));
-      AddData("target", To_String(CurrentGoal.TargetIndex));
+      AddData
+        ("amount",
+         To_String(Trim(RawValue, Ada.Strings.Left)),
+         CategoryNode);
+      AddData("target", To_String(CurrentGoal.TargetIndex), CategoryNode);
       Create(SaveFile, Out_File, To_String(SaveDirectory) & "savegame.dat");
       Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => True);
       Close(SaveFile);
@@ -351,5 +371,15 @@ package body Game.SaveLoad is
       end loop;
       return RawData;
    end ReadData;
+
+   procedure AddData(NodeName, Value: String; ParentNode: DOM.Core.Element) is
+      DataNode: DOM.Core.Element;
+      Data: Text;
+   begin
+      DataNode := Create_Element(SaveData, NodeName);
+      DataNode := Append_Child(ParentNode, DataNode);
+      Data := Create_Text_Node(SaveData, Value);
+      Data := Append_Child(DataNode, Data);
+   end AddData;
 
 end Game.SaveLoad;
