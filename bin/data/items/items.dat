@@ -1344,4 +1344,12 @@ Prices = 30, 30, 30, 30, 28
 Buyable = N, N, N, N, Y
 Value = 2, 35, 17, 1, 1
 Description = Simple short sword made of orichalcum, used in melee combat.
+[158]
+Name = Orichalcum sword
+Weight = 3
+Type = Weapon
+Prices = 37, 37, 37, 37, 35
+Buyable = N, N, N, N, Y
+Value = 2, 40, 17, 1, 1
+Description = Simple sword made of orichalcum, used in melee combat.
 []
