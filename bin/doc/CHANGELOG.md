@@ -55,6 +55,7 @@ All notable changes to this project will be documented in this file.
 - Checking for needed materals before start crafting
 - Don't allow to go on rests crew members in boarding party when ships are not
   connected by harpoons
+- Issue #17 - Crash when boarding party member don't have weapon
 
 ## [2.3] - 2018-04-22
 
