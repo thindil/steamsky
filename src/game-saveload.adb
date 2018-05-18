@@ -254,7 +254,7 @@ package body Game.SaveLoad is
          CategoryNode);
       AddData("target", To_String(CurrentGoal.TargetIndex), CategoryNode);
       Create(SaveFile, Out_File, To_String(SaveDirectory) & "savegame.dat");
-      Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => False);
+      Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => True);
       Close(SaveFile);
    end SaveGame;
 
@@ -353,9 +353,9 @@ package body Game.SaveLoad is
          end loop;
       end;
       -- Load sky bases
---      LoadBases(SaveGame);
+      LoadBases(SaveData);
       -- Load player ship
---      LoadPlayerShip(SaveGame);
+      --LoadPlayerShip(SaveGame);
       -- Load known recipes
       NodesList := Get_Elements_By_Tag_Name(SaveData, "knownrecipes");
       ChildNodes := Child_Nodes(Item(NodesList, 0));

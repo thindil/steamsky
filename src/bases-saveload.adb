@@ -338,159 +338,425 @@ package body Bases.SaveLoad is
       end loop;
    end SaveBases;
 
-   procedure LoadBases(SaveGame: File_Type) is
+   procedure LoadBases(SaveData: Document) is
       BaseRecruits: Recruit_Container.Vector;
       BaseMissions: Mission_Container.Vector;
       BaseCargo: BaseCargo_Container.Vector;
-      VectorLength, SkillsLength: Natural;
-      Skills: Skills_Container.Vector;
-      Attributes: Attributes_Container.Vector;
+      NodesList, ChildNodes, BaseData: Node_List;
+      BaseIndex: Positive;
    begin
-      for I in SkyBases'Range loop
-         SkyBases(I) :=
-           (Name => ReadData(SaveGame),
-            Visited => (0, 0, 0, 0, 0),
-            SkyX => 0,
-            SkyY => 0,
-            BaseType => Industrial,
-            Population => 0,
-            RecruitDate => (0, 0, 0, 0, 0),
-            Recruits => BaseRecruits,
-            Known => False,
-            AskedForBases => False,
-            AskedForEvents => (0, 0, 0, 0, 0),
-            Reputation => (0, 0),
-            MissionsDate => (0, 0, 0, 0, 0),
-            Missions => BaseMissions,
-            Owner => Poleis,
-            Cargo => BaseCargo);
-         SkyBases(I).Visited.Year :=
-           Natural'Value(To_String(ReadData(SaveGame)));
-         if SkyBases(I).Visited.Year > 0 then
-            SkyBases(I).Visited.Month :=
-              Natural'Value(To_String(ReadData(SaveGame)));
-            SkyBases(I).Visited.Day :=
-              Natural'Value(To_String(ReadData(SaveGame)));
-            SkyBases(I).Visited.Hour :=
-              Natural'Value(To_String(ReadData(SaveGame)));
-            SkyBases(I).Visited.Minutes :=
-              Natural'Value(To_String(ReadData(SaveGame)));
-         end if;
-         SkyBases(I).SkyX := Integer'Value(To_String(ReadData(SaveGame)));
-         SkyBases(I).SkyY := Integer'Value(To_String(ReadData(SaveGame)));
-         SkyBases(I).BaseType :=
-           Bases_Types'Val(Integer'Value(To_String(ReadData(SaveGame))));
-         SkyBases(I).Population :=
-           Natural'Value(To_String(ReadData(SaveGame)));
-         if SkyBases(I).Visited.Year > 0 then
-            SkyBases(I).RecruitDate.Year :=
-              Natural'Value(To_String(ReadData(SaveGame)));
-            SkyBases(I).RecruitDate.Month :=
-              Natural'Value(To_String(ReadData(SaveGame)));
-            SkyBases(I).RecruitDate.Day :=
-              Natural'Value(To_String(ReadData(SaveGame)));
-            VectorLength := Natural'Value(To_String(ReadData(SaveGame)));
-            if VectorLength > 0 then
-               for J in 1 .. VectorLength loop
-                  Skills.Clear;
-                  Attributes.Clear;
-                  BaseRecruits.Append
-                  (New_Item =>
-                     (Name => ReadData(SaveGame),
-                      Gender =>
-                        Ada.Strings.Unbounded.Element(ReadData(SaveGame), 1),
-                      Price => Positive'Value(To_String(ReadData(SaveGame))),
-                      Skills => Skills,
-                      Attributes => Attributes));
-                  SkillsLength :=
-                    Positive'Value(To_String(ReadData(SaveGame)));
-                  for K in 1 .. SkillsLength loop
-                     Skills.Append
-                     (New_Item =>
-                        (Natural'Value(To_String(ReadData(SaveGame))),
-                         Natural'Value(To_String(ReadData(SaveGame))),
-                         Natural'Value(To_String(ReadData(SaveGame)))));
-                  end loop;
-                  BaseRecruits(BaseRecruits.Last_Index).Skills := Skills;
-                  SkillsLength :=
-                    Positive'Value(To_String(ReadData(SaveGame)));
-                  if SkillsLength /= Natural(Attributes_List.Length) then
-                     raise SaveGame_Invalid_Data
-                       with "Different amount of character statistics.";
+      NodesList := Get_Elements_By_Tag_Name(SaveData, "bases");
+      ChildNodes := Child_Nodes(Item(NodesList, 0));
+      BaseIndex := 1;
+      for I in 0 .. Length(ChildNodes) - 1 loop
+         if Node_Name(Item(ChildNodes, I)) = "base" then
+            SkyBases(BaseIndex) :=
+              (Name => Null_Unbounded_String,
+               Visited => (0, 0, 0, 0, 0),
+               SkyX => 0,
+               SkyY => 0,
+               BaseType => Industrial,
+               Population => 0,
+               RecruitDate => (0, 0, 0, 0, 0),
+               Recruits => BaseRecruits,
+               Known => False,
+               AskedForBases => False,
+               AskedForEvents => (0, 0, 0, 0, 0),
+               Reputation => (0, 0),
+               MissionsDate => (0, 0, 0, 0, 0),
+               Missions => BaseMissions,
+               Owner => Poleis,
+               Cargo => BaseCargo);
+            BaseData := Child_Nodes(Item(ChildNodes, I));
+            for J in 0 .. Length(BaseData) - 1 loop
+               if Node_Name(Item(BaseData, J)) = "name" then
+                  SkyBases(BaseIndex).Name :=
+                    To_Unbounded_String
+                      (Node_Value(First_Child(Item(BaseData, J))));
+               elsif Node_Name(Item(BaseData, J)) = "visiteddate" then
+                  declare
+                     DateNode: Node_List;
+                  begin
+                     DateNode := Child_Nodes(Item(BaseData, J));
+                     for K in 0 .. Length(DateNode) - 1 loop
+                        if Node_Name(Item(DateNode, K)) = "year" then
+                           SkyBases(BaseIndex).Visited.Year :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        elsif Node_Name(Item(DateNode, K)) = "month" then
+                           SkyBases(BaseIndex).Visited.Month :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        elsif Node_Name(Item(DateNode, K)) = "day" then
+                           SkyBases(BaseIndex).Visited.Day :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        elsif Node_Name(Item(DateNode, K)) = "hour" then
+                           SkyBases(BaseIndex).Visited.Hour :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        elsif Node_Name(Item(DateNode, K)) = "minutes" then
+                           SkyBases(BaseIndex).Visited.Minutes :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        end if;
+                     end loop;
+                  end;
+               elsif Node_Name(Item(BaseData, J)) = "x" then
+                  SkyBases(BaseIndex).SkyX :=
+                    Integer'Value(Node_Value(First_Child(Item(BaseData, J))));
+               elsif Node_Name(Item(BaseData, J)) = "y" then
+                  SkyBases(BaseIndex).SkyY :=
+                    Integer'Value(Node_Value(First_Child(Item(BaseData, J))));
+               elsif Node_Name(Item(BaseData, J)) = "type" then
+                  SkyBases(BaseIndex).BaseType :=
+                    Bases_Types'Val
+                      (Integer'Value
+                         (Node_Value(First_Child(Item(BaseData, J)))));
+               elsif Node_Name(Item(BaseData, J)) = "population" then
+                  SkyBases(BaseIndex).Population :=
+                    Natural'Value(Node_Value(First_Child(Item(BaseData, J))));
+               elsif Node_Name(Item(BaseData, J)) = "recruitdate" then
+                  declare
+                     DateNode: Node_List;
+                  begin
+                     DateNode := Child_Nodes(Item(BaseData, J));
+                     for K in 0 .. Length(DateNode) - 1 loop
+                        if Node_Name(Item(DateNode, K)) = "year" then
+                           SkyBases(BaseIndex).RecruitDate.Year :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        elsif Node_Name(Item(DateNode, K)) = "month" then
+                           SkyBases(BaseIndex).RecruitDate.Month :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        elsif Node_Name(Item(DateNode, K)) = "day" then
+                           SkyBases(BaseIndex).RecruitDate.Day :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        elsif Node_Name(Item(DateNode, K)) = "hour" then
+                           SkyBases(BaseIndex).RecruitDate.Hour :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        elsif Node_Name(Item(DateNode, K)) = "minutes" then
+                           SkyBases(BaseIndex).RecruitDate.Minutes :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        end if;
+                     end loop;
+                  end;
+               elsif Node_Name(Item(BaseData, J)) = "recruits" then
+                  declare
+                     RecruitsNodes, RecruitData, StatsData: Node_List;
+                     Name: Unbounded_String;
+                     Gender: Character;
+                     Price: Positive;
+                     Skills: Skills_Container.Vector;
+                     Attributes: Attributes_Container.Vector;
+                     Index, Level, Experience: Natural;
+                  begin
+                     RecruitsNodes := Child_Nodes(Item(BaseData, J));
+                     for K in 0 .. Length(RecruitsNodes) - 1 loop
+                        if Node_Name(Item(RecruitsNodes, K)) = "recruit" then
+                           Skills.Clear;
+                           Attributes.Clear;
+                           RecruitData := Child_Nodes(Item(RecruitsNodes, K));
+                           for L in 0 .. Length(RecruitData) - 1 loop
+                              if Node_Name(Item(RecruitData, L)) = "name" then
+                                 Name :=
+                                   To_Unbounded_String
+                                     (Node_Value
+                                        (First_Child(Item(RecruitData, L))));
+                              elsif Node_Name(Item(RecruitData, L)) =
+                                "gender" then
+                                 Gender :=
+                                   Node_Value
+                                     (First_Child(Item(RecruitData, L)))
+                                     (1);
+                              elsif Node_Name(Item(RecruitData, L)) =
+                                "price" then
+                                 Price :=
+                                   Positive'Value
+                                     (Node_Value
+                                        (First_Child(Item(RecruitData, L))));
+                              elsif Node_Name(Item(RecruitData, L)) =
+                                "skills" then
+                                 StatsData :=
+                                   Child_Nodes(Item(RecruitData, L));
+                                 Index := 1;
+                                 Level := 1;
+                                 Experience := 0;
+                                 for M in 0 .. Length(StatsData) - 1 loop
+                                    if Node_Name(Item(StatsData, M)) =
+                                      "index" then
+                                       Index :=
+                                         Natural'Value
+                                           (Node_Value
+                                              (First_Child
+                                                 (Item(StatsData, M))));
+                                    elsif Node_Name(Item(StatsData, M)) =
+                                      "level" then
+                                       Level :=
+                                         Natural'Value
+                                           (Node_Value
+                                              (First_Child
+                                                 (Item(StatsData, M))));
+                                    elsif Node_Name(Item(StatsData, M)) =
+                                      "experience" then
+                                       Experience :=
+                                         Natural'Value
+                                           (Node_Value
+                                              (First_Child
+                                                 (Item(StatsData, M))));
+                                    end if;
+                                 end loop;
+                                 Skills.Append
+                                 (New_Item => (Index, Level, Experience));
+                              elsif Node_Name(Item(RecruitData, L)) =
+                                "attributes" then
+                                 StatsData :=
+                                   Child_Nodes(Item(RecruitData, L));
+                                 Level := 1;
+                                 Experience := 0;
+                                 for M in 0 .. Length(StatsData) - 1 loop
+                                    if Node_Name(Item(StatsData, M)) =
+                                      "level" then
+                                       Level :=
+                                         Natural'Value
+                                           (Node_Value
+                                              (First_Child
+                                                 (Item(StatsData, M))));
+                                    elsif Node_Name(Item(StatsData, M)) =
+                                      "experience" then
+                                       Experience :=
+                                         Natural'Value
+                                           (Node_Value
+                                              (First_Child
+                                                 (Item(StatsData, M))));
+                                    end if;
+                                 end loop;
+                                 Attributes.Append
+                                 (New_Item => (Level, Experience));
+                              end if;
+                           end loop;
+                           BaseRecruits.Append
+                           (New_Item =>
+                              (Name => Name,
+                               Gender => Gender,
+                               Price => Price,
+                               Skills => Skills,
+                               Attributes => Attributes));
+                        end if;
+                     end loop;
+                     SkyBases(BaseIndex).Recruits := BaseRecruits;
+                     BaseRecruits.Clear;
+                  end;
+               elsif Node_Name(Item(BaseData, J)) = "askedforbases" then
+                  if Node_Value(First_Child(Item(BaseData, J))) = "Y" then
+                     SkyBases(BaseIndex).AskedForBases := True;
                   end if;
-                  for K in 1 .. SkillsLength loop
-                     Attributes.Append
-                     (New_Item =>
-                        (Natural'Value(To_String(ReadData(SaveGame))),
-                         Natural'Value(To_String(ReadData(SaveGame)))));
-                  end loop;
-                  BaseRecruits(BaseRecruits.Last_Index).Attributes :=
-                    Attributes;
-               end loop;
-               SkyBases(I).Recruits := BaseRecruits;
-               BaseRecruits.Clear;
-            end if;
-            if ReadData(SaveGame) = To_Unbounded_String("Y") then
-               SkyBases(I).AskedForBases := True;
-            end if;
-            SkyBases(I).AskedForEvents.Year :=
-              Natural'Value(To_String(ReadData(SaveGame)));
-            SkyBases(I).AskedForEvents.Month :=
-              Natural'Value(To_String(ReadData(SaveGame)));
-            SkyBases(I).AskedForEvents.Day :=
-              Natural'Value(To_String(ReadData(SaveGame)));
+               elsif Node_Name(Item(BaseData, J)) = "askedforeventsdate" then
+                  declare
+                     DateNode: Node_List;
+                  begin
+                     DateNode := Child_Nodes(Item(BaseData, J));
+                     for K in 0 .. Length(DateNode) - 1 loop
+                        if Node_Name(Item(DateNode, K)) = "year" then
+                           SkyBases(BaseIndex).AskedForEvents.Year :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        elsif Node_Name(Item(DateNode, K)) = "month" then
+                           SkyBases(BaseIndex).AskedForEvents.Month :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        elsif Node_Name(Item(DateNode, K)) = "day" then
+                           SkyBases(BaseIndex).AskedForEvents.Day :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        end if;
+                     end loop;
+                  end;
+               elsif Node_Name(Item(BaseData, J)) = "reputation" then
+                  declare
+                     ReputationNode: Node_List;
+                  begin
+                     ReputationNode := Child_Nodes(Item(BaseData, J));
+                     for K in 0 .. Length(ReputationNode) - 1 loop
+                        if Node_Name(Item(ReputationNode, K)) = "level" then
+                           SkyBases(BaseIndex).Reputation(1) :=
+                             Integer'Value
+                               (Node_Value
+                                  (First_Child(Item(ReputationNode, K))));
+                        elsif Node_Name(Item(ReputationNode, K)) =
+                          "progress" then
+                           SkyBases(BaseIndex).Reputation(2) :=
+                             Integer'Value
+                               (Node_Value
+                                  (First_Child(Item(ReputationNode, K))));
+                        end if;
+                     end loop;
+                  end;
+               elsif Node_Name(Item(BaseData, J)) = "missionsdate" then
+                  declare
+                     DateNode: Node_List;
+                  begin
+                     DateNode := Child_Nodes(Item(BaseData, J));
+                     for K in 0 .. Length(DateNode) - 1 loop
+                        if Node_Name(Item(DateNode, K)) = "year" then
+                           SkyBases(BaseIndex).MissionsDate.Year :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        elsif Node_Name(Item(DateNode, K)) = "month" then
+                           SkyBases(BaseIndex).MissionsDate.Month :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        elsif Node_Name(Item(DateNode, K)) = "day" then
+                           SkyBases(BaseIndex).MissionsDate.Day :=
+                             Natural'Value
+                               (Node_Value(First_Child(Item(DateNode, K))));
+                        end if;
+                     end loop;
+                  end;
+               elsif Node_Name(Item(BaseData, J)) = "missions" then
+                  declare
+                     MissionsNodes, MissionData: Node_List;
+                     MType: Missions_Types;
+                     Target, TargetX, TargetY: Natural;
+                     Time, Reward: Positive;
+                  begin
+                     MissionsNodes := Child_Nodes(Item(BaseData, J));
+                     for K in 0 .. Length(MissionsNodes) - 1 loop
+                        if Node_Name(Item(MissionsNodes, K)) = "mission" then
+                           MissionData := Child_Nodes(Item(MissionsNodes, K));
+                           MType := Deliver;
+                           Target := 0;
+                           Time := 1;
+                           TargetX := 0;
+                           TargetY := 0;
+                           Reward := 1;
+                           for L in 0 .. Length(MissionData) - 1 loop
+                              if Node_Name(Item(MissionData, L)) = "type" then
+                                 MType :=
+                                   Missions_Types'Val
+                                     (Integer'Value
+                                        (Node_Value
+                                           (First_Child
+                                              (Item(MissionData, L)))));
+                              elsif Node_Name(Item(MissionData, L)) =
+                                "target" then
+                                 Target :=
+                                   Natural'Value
+                                     (Node_Value
+                                        (First_Child(Item(MissionData, L))));
+                              elsif Node_Name(Item(MissionData, L)) =
+                                "time" then
+                                 Time :=
+                                   Positive'Value
+                                     (Node_Value
+                                        (First_Child(Item(MissionData, L))));
+                              elsif Node_Name(Item(MissionData, L)) =
+                                "targetx" then
+                                 TargetX :=
+                                   Natural'Value
+                                     (Node_Value
+                                        (First_Child(Item(MissionData, L))));
+                              elsif Node_Name(Item(MissionData, L)) =
+                                "targety" then
+                                 TargetY :=
+                                   Natural'Value
+                                     (Node_Value
+                                        (First_Child(Item(MissionData, L))));
+                              elsif Node_Name(Item(MissionData, L)) =
+                                "reward" then
+                                 Reward :=
+                                   Positive'Value
+                                     (Node_Value
+                                        (First_Child(Item(MissionData, L))));
+                              end if;
+                           end loop;
+                           BaseMissions.Append
+                           (New_Item =>
+                              (MType => MType,
+                               Target => Target,
+                               Time => Time,
+                               TargetX => TargetX,
+                               TargetY => TargetY,
+                               Reward => Reward,
+                               StartBase => BaseIndex,
+                               Finished => False));
+                        end if;
+                     end loop;
+                     SkyBases(BaseIndex).Missions := BaseMissions;
+                     BaseMissions.Clear;
+                  end;
+               elsif Node_Name(Item(BaseData, J)) = "cargo" then
+                  declare
+                     CargoNodes, ItemData: Node_List;
+                     ProtoIndex, Durability: Positive;
+                     Amount, Price: Natural;
+                  begin
+                     CargoNodes := Child_Nodes(Item(BaseData, J));
+                     for K in 0 .. Length(CargoNodes) - 1 loop
+                        if Node_Name(Item(CargoNodes, K)) = "item" then
+                           ItemData := Child_Nodes(Item(CargoNodes, K));
+                           ProtoIndex := 1;
+                           Durability := 1;
+                           Amount := 0;
+                           Price := 0;
+                           for L in 0 .. Length(ItemData) - 1 loop
+                              if Node_Name(Item(ItemData, L)) = "index" then
+                                 ProtoIndex :=
+                                   FindProtoItem
+                                     (To_Unbounded_String
+                                        ((Node_Value
+                                            (First_Child
+                                               (Item(ItemData, L))))));
+                              elsif Node_Name(Item(ItemData, L)) =
+                                "amount" then
+                                 Amount :=
+                                   Natural'Value
+                                     (Node_Value
+                                        (First_Child(Item(ItemData, L))));
+                              elsif Node_Name(Item(ItemData, L)) =
+                                "durability" then
+                                 Durability :=
+                                   Positive'Value
+                                     (Node_Value
+                                        (First_Child(Item(ItemData, L))));
+                              elsif Node_Name(Item(ItemData, L)) = "price" then
+                                 Price :=
+                                   Natural'Value
+                                     (Node_Value
+                                        (First_Child(Item(ItemData, L))));
+                              end if;
+                           end loop;
+                           BaseCargo.Append
+                           (New_Item =>
+                              (ProtoIndex => ProtoIndex,
+                               Amount => Amount,
+                               Durability => Durability,
+                               Price => Price));
+                        end if;
+                     end loop;
+                     SkyBases(BaseIndex).Cargo := BaseCargo;
+                     BaseCargo.Clear;
+                  end;
+               elsif Node_Name(Item(BaseData, J)) = "known" then
+                  if Node_Value(First_Child(Item(BaseData, J))) = "Y" then
+                     SkyBases(BaseIndex).Known := True;
+                  end if;
+               elsif Node_Name(Item(BaseData, J)) = "owner" then
+                  SkyBases(BaseIndex).Owner :=
+                    Bases_Owners'Val
+                      (Integer'Value
+                         (Node_Value(First_Child(Item(BaseData, J)))));
+               end if;
+            end loop;
+            SkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY)
+              .BaseIndex :=
+              BaseIndex;
+            BaseIndex := BaseIndex + 1;
          end if;
-         SkyBases(I).Reputation(1) :=
-           Integer'Value(To_String(ReadData(SaveGame)));
-         SkyBases(I).Reputation(2) :=
-           Integer'Value(To_String(ReadData(SaveGame)));
-         if SkyBases(I).Visited.Year > 0 then
-            SkyBases(I).MissionsDate.Year :=
-              Natural'Value(To_String(ReadData(SaveGame)));
-            SkyBases(I).MissionsDate.Month :=
-              Natural'Value(To_String(ReadData(SaveGame)));
-            SkyBases(I).MissionsDate.Day :=
-              Natural'Value(To_String(ReadData(SaveGame)));
-            VectorLength := Natural'Value(To_String(ReadData(SaveGame)));
-            if VectorLength > 0 then
-               for J in 1 .. VectorLength loop
-                  BaseMissions.Append
-                  (New_Item =>
-                     (MType =>
-                        Missions_Types'Val
-                          (Integer'Value(To_String(ReadData(SaveGame)))),
-                      Target => Natural'Value(To_String(ReadData(SaveGame))),
-                      Time => Integer'Value(To_String(ReadData(SaveGame))),
-                      TargetX => Integer'Value(To_String(ReadData(SaveGame))),
-                      TargetY => Integer'Value(To_String(ReadData(SaveGame))),
-                      Reward => Integer'Value(To_String(ReadData(SaveGame))),
-                      StartBase => I,
-                      Finished => False));
-               end loop;
-               SkyBases(I).Missions := BaseMissions;
-               BaseMissions.Clear;
-            end if;
-            VectorLength := Natural'Value(To_String(ReadData(SaveGame)));
-            if VectorLength > 0 then
-               for J in 1 .. VectorLength loop
-                  BaseCargo.Append
-                  (New_Item =>
-                     (ProtoIndex => FindProtoItem(ReadData(SaveGame)),
-                      Amount => Natural'Value(To_String(ReadData(SaveGame))),
-                      Durability =>
-                        Positive'Value(To_String(ReadData(SaveGame))),
-                      Price => Positive'Value(To_String(ReadData(SaveGame)))));
-               end loop;
-               SkyBases(I).Cargo := BaseCargo;
-               BaseCargo.Clear;
-            end if;
-         end if;
-         if ReadData(SaveGame) = To_Unbounded_String("Y") then
-            SkyBases(I).Known := True;
-         end if;
-         SkyBases(I).Owner :=
-           Bases_Owners'Val(Integer'Value(To_String(ReadData(SaveGame))));
-         SkyMap(SkyBases(I).SkyX, SkyBases(I).SkyY).BaseIndex := I;
       end loop;
    end LoadBases;
 

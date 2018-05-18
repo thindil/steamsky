@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with DOM.Core; use DOM.Core;
 
 package Bases.SaveLoad is
@@ -23,6 +22,6 @@ package Bases.SaveLoad is
    procedure SaveBases
      (SaveData: Document;
       MainNode: DOM.Core.Element); -- Save bases from current game in file
-   procedure LoadBases(SaveGame: File_Type); -- Load bases from file
+   procedure LoadBases(SaveData: Document); -- Load bases from file
 
 end Bases.SaveLoad;
