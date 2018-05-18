@@ -32,7 +32,6 @@ with Utils; use Utils;
 with Log; use Log;
 with Goals; use Goals;
 with Game; use Game;
-with Ada.Text_IO; use Ada.Text_IO;
 
 package body Combat is
 
