@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Don't allow to go on rests crew members in boarding party when ships are not
   connected by harpoons
 - Issue #17 - Crash when boarding party member don't have weapon
+- Probably fixed issue #18 - Crash when crew member have more than maximum health
 
 ## [2.0.5] - 2018-05-13
 
