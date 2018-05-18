@@ -56,6 +56,7 @@ All notable changes to this project will be documented in this file.
 - Don't allow to go on rests crew members in boarding party when ships are not
   connected by harpoons
 - Issue #17 - Crash when boarding party member don't have weapon
+- Showing information about crew member order when he/she boarding enemy ship
 
 ## [2.3] - 2018-04-22
 
