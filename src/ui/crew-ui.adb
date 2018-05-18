@@ -225,8 +225,8 @@ package body Crew.UI is
          To_Unbounded_String("Healing wounded"),
          To_Unbounded_String("Cleans ship"),
          To_Unbounded_String("On break"),
-         To_Unbounded_String("Boarding"),
-         To_Unbounded_String("Defends ship"));
+         To_Unbounded_String("Defends ship"),
+         To_Unbounded_String("Boarding"));
    begin
       CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist2"));
       Clear(CrewList);
