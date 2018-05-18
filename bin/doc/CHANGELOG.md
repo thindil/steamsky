@@ -57,6 +57,7 @@ All notable changes to this project will be documented in this file.
   connected by harpoons
 - Issue #17 - Crash when boarding party member don't have weapon
 - Showing information about crew member order when he/she boarding enemy ship
+- Probably fixed issue #18 - Crash when crew member have more than maximum health
 
 ## [2.3] - 2018-04-22
 
