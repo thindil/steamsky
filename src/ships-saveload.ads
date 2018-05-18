@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with DOM.Core; use DOM.Core;
 
 package Ships.SaveLoad is
@@ -24,6 +23,6 @@ package Ships.SaveLoad is
      (SaveData: Document;
       MainNode: DOM.Core.Element); -- Save player ship to file
    procedure LoadPlayerShip
-     (SaveGame: File_Type); -- Load saved player ship from file
+     (SaveData: Document); -- Load saved player ship from file
 
 end Ships.SaveLoad;

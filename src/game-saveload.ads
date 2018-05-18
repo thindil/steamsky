@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with DOM.Core; use DOM.Core;
 
 package Game.SaveLoad is
@@ -24,9 +23,6 @@ package Game.SaveLoad is
 
    procedure SaveGame; -- Save game to file
    procedure LoadGame; -- Load game from file
-   function ReadData
-     (SaveGame: File_Type)
-     return Unbounded_String; -- Read saved data from file
    procedure AddData
      (NodeName, Value: String;
       ParentNode: DOM.Core.Element); -- Add xml data to save to file

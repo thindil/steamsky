@@ -17,6 +17,7 @@
 
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Text_IO.Text_Streams; use Ada.Text_IO.Text_Streams;
+with Ada.Text_IO; use Ada.Text_IO;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Readers; use DOM.Readers;
@@ -355,7 +356,7 @@ package body Game.SaveLoad is
       -- Load sky bases
       LoadBases(SaveData);
       -- Load player ship
-      --LoadPlayerShip(SaveGame);
+      LoadPlayerShip(SaveData);
       -- Load known recipes
       NodesList := Get_Elements_By_Tag_Name(SaveData, "knownrecipes");
       ChildNodes := Child_Nodes(Item(NodesList, 0));
@@ -531,18 +532,6 @@ package body Game.SaveLoad is
          Free(Reader);
          raise SaveGame_Invalid_Data with Exception_Message(An_Exception);
    end LoadGame;
-
-   function ReadData(SaveGame: File_Type) return Unbounded_String is
-      RawData: Unbounded_String := To_Unbounded_String("");
-      Char: Character;
-   begin
-      Get(SaveGame, Char);
-      while Char not in ';' loop
-         Append(RawData, Char);
-         Get(SaveGame, Char);
-      end loop;
-      return RawData;
-   end ReadData;
 
    procedure AddData(NodeName, Value: String; ParentNode: DOM.Core.Element) is
       DataNode: DOM.Core.Element;
