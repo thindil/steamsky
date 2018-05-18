@@ -352,6 +352,9 @@ package body Crew is
                end if;
                if HealthLevel > 0 and HealthLevel < 100 and CabinIndex > 0 then
                   HealthLevel := HealthLevel + Times;
+                  if HealthLevel > 100 then
+                     HealthLevel := 100;
+                  end if;
                end if;
             else
                if PlayerShip.Crew(I).Order /= Talk then
