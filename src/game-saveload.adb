@@ -18,8 +18,10 @@
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Text_IO.Text_Streams; use Ada.Text_IO.Text_Streams;
 with Ada.Text_IO; use Ada.Text_IO;
+with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
+with DOM.Core.Elements; use DOM.Core.Elements;
 with DOM.Readers; use DOM.Readers;
 with Input_Sources.File; use Input_Sources.File;
 with Bases; use Bases;
@@ -45,20 +47,18 @@ package body Game.SaveLoad is
       SaveFile: File_Type;
       procedure SaveStatistics
         (StatisticsVector: in out Statistics_Container.Vector;
-         NodeName, StatName: String) is
-         StatGroupNode, StatNode: DOM.Core.Element;
+         StatName: String) is
+         StatNode: DOM.Core.Element;
       begin
-         StatGroupNode := Create_Element(SaveData, NodeName);
-         StatGroupNode := Append_Child(CategoryNode, StatGroupNode);
          for Statistic of StatisticsVector loop
             StatNode := Create_Element(SaveData, StatName);
-            StatNode := Append_Child(StatGroupNode, StatNode);
-            AddData("index", To_String(Statistic.Index), StatNode);
+            StatNode := Append_Child(CategoryNode, StatNode);
+            Set_Attribute(StatNode, "index", To_String(Statistic.Index));
             RawValue := To_Unbounded_String(Integer'Image(Statistic.Amount));
-            AddData
-              ("amount",
-               To_String(Trim(RawValue, Ada.Strings.Left)),
-               StatNode);
+            Set_Attribute
+              (StatNode,
+               "amount",
+               To_String(Trim(RawValue, Ada.Strings.Left)));
          end loop;
       end SaveStatistics;
    begin
@@ -66,36 +66,34 @@ package body Game.SaveLoad is
       MainNode := Create_Element(SaveData, "save");
       MainNode := Append_Child(SaveData, MainNode);
       -- Save game date
-      CategoryNode := Create_Element(SaveData, "date");
+      CategoryNode := Create_Element(SaveData, "gamedate");
       CategoryNode := Append_Child(MainNode, CategoryNode);
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Year));
-      AddData
-        ("year",
-         To_String(Trim(RawValue, Ada.Strings.Left)),
-         CategoryNode);
+      Set_Attribute
+        (CategoryNode,
+         "year",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Month));
-      AddData
-        ("month",
-         To_String(Trim(RawValue, Ada.Strings.Left)),
-         CategoryNode);
+      Set_Attribute
+        (CategoryNode,
+         "month",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Day));
-      AddData
-        ("day",
-         To_String(Trim(RawValue, Ada.Strings.Left)),
-         CategoryNode);
+      Set_Attribute
+        (CategoryNode,
+         "day",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Hour));
-      AddData
-        ("hour",
-         To_String(Trim(RawValue, Ada.Strings.Left)),
-         CategoryNode);
+      Set_Attribute
+        (CategoryNode,
+         "hour",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(GameDate.Minutes));
-      AddData
-        ("minutes",
-         To_String(Trim(RawValue, Ada.Strings.Left)),
-         CategoryNode);
+      Set_Attribute
+        (CategoryNode,
+         "minutes",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
       -- Save map
-      CategoryNode := Create_Element(SaveData, "map");
-      CategoryNode := Append_Child(MainNode, CategoryNode);
       declare
          FieldNode: DOM.Core.Element;
       begin
@@ -103,17 +101,17 @@ package body Game.SaveLoad is
             for Y in 1 .. 1024 loop
                if SkyMap(X, Y).Visited then
                   FieldNode := Create_Element(SaveData, "field");
-                  FieldNode := Append_Child(CategoryNode, FieldNode);
+                  FieldNode := Append_Child(MainNode, FieldNode);
                   RawValue := To_Unbounded_String(Integer'Image(X));
-                  AddData
-                    ("x",
-                     To_String(Trim(RawValue, Ada.Strings.Left)),
-                     FieldNode);
+                  Set_Attribute
+                    (FieldNode,
+                     "x",
+                     To_String(Trim(RawValue, Ada.Strings.Left)));
                   RawValue := To_Unbounded_String(Integer'Image(Y));
-                  AddData
-                    ("y",
-                     To_String(Trim(RawValue, Ada.Strings.Left)),
-                     FieldNode);
+                  Set_Attribute
+                    (FieldNode,
+                     "y",
+                     To_String(Trim(RawValue, Ada.Strings.Left)));
                end if;
             end loop;
          end loop;
@@ -123,137 +121,143 @@ package body Game.SaveLoad is
       -- Save player ship
       SavePlayerShip(SaveData, MainNode);
       -- Save known recipes
-      CategoryNode := Create_Element(SaveData, "knownrecipes");
-      CategoryNode := Append_Child(MainNode, CategoryNode);
-      for Recipe of Known_Recipes loop
-         AddData("index", To_String(Recipes_List(Recipe).Index), CategoryNode);
-      end loop;
+      declare
+         RecipeNode: DOM.Core.Element;
+      begin
+         for Recipe of Known_Recipes loop
+            RecipeNode := Create_Element(SaveData, "recipe");
+            RecipeNode := Append_Child(MainNode, RecipeNode);
+            Set_Attribute
+              (RecipeNode,
+               "index",
+               To_String(Recipes_List(Recipe).Index));
+         end loop;
+      end;
       -- Save messages
       declare
          Messages: Natural := GameSettings.SavedMessages;
          StartLoop: Positive;
          MessageNode: DOM.Core.Element;
          Message: Message_Data;
+         MessageText: Text;
       begin
          if Messages > MessagesAmount then
             Messages := MessagesAmount;
          end if;
-         CategoryNode := Create_Element(SaveData, "messages");
-         CategoryNode := Append_Child(MainNode, CategoryNode);
          if Messages > 0 then
             StartLoop := MessagesAmount - Messages + 1;
             for I in StartLoop .. MessagesAmount loop
                Message := GetMessage(I);
                MessageNode := Create_Element(SaveData, "message");
-               MessageNode := Append_Child(CategoryNode, MessageNode);
-               AddData("text", To_String(Message.Message), MessageNode);
+               MessageNode := Append_Child(MainNode, MessageNode);
                RawValue :=
                  To_Unbounded_String
                    (Integer'Image(Message_Type'Pos(Message.MType)));
-               AddData
-                 ("type",
-                  To_String(Trim(RawValue, Ada.Strings.Left)),
-                  MessageNode);
+               Set_Attribute
+                 (MessageNode,
+                  "type",
+                  To_String(Trim(RawValue, Ada.Strings.Left)));
                RawValue := To_Unbounded_String(Integer'Image(Message.Color));
-               AddData
-                 ("color",
-                  To_String(Trim(RawValue, Ada.Strings.Left)),
-                  MessageNode);
+               Set_Attribute
+                 (MessageNode,
+                  "color",
+                  To_String(Trim(RawValue, Ada.Strings.Left)));
+               MessageText :=
+                 Create_Text_Node(SaveData, To_String(Message.Message));
+               MessageText := Append_Child(MessageNode, MessageText);
             end loop;
          end if;
       end;
       -- Save events
-      CategoryNode := Create_Element(SaveData, "events");
-      CategoryNode := Append_Child(MainNode, CategoryNode);
       declare
          EventNode: DOM.Core.Element;
       begin
          for Event of Events_List loop
             EventNode := Create_Element(SaveData, "event");
-            EventNode := Append_Child(CategoryNode, EventNode);
+            EventNode := Append_Child(MainNode, EventNode);
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(Events_Types'Pos(Event.EType)));
-            AddData
-              ("type",
-               To_String(Trim(RawValue, Ada.Strings.Left)),
-               EventNode);
+            Set_Attribute
+              (EventNode,
+               "type",
+               To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue := To_Unbounded_String(Integer'Image(Event.SkyX));
-            AddData
-              ("x",
-               To_String(Trim(RawValue, Ada.Strings.Left)),
-               EventNode);
+            Set_Attribute
+              (EventNode,
+               "x",
+               To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue := To_Unbounded_String(Integer'Image(Event.SkyY));
-            AddData
-              ("y",
-               To_String(Trim(RawValue, Ada.Strings.Left)),
-               EventNode);
+            Set_Attribute
+              (EventNode,
+               "y",
+               To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue := To_Unbounded_String(Integer'Image(Event.Time));
-            AddData
-              ("time",
-               To_String(Trim(RawValue, Ada.Strings.Left)),
-               EventNode);
+            Set_Attribute
+              (EventNode,
+               "time",
+               To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue := To_Unbounded_String(Integer'Image(Event.Data));
-            AddData
-              ("data",
-               To_String(Trim(RawValue, Ada.Strings.Left)),
-               EventNode);
+            Set_Attribute
+              (EventNode,
+               "data",
+               To_String(Trim(RawValue, Ada.Strings.Left)));
          end loop;
       end;
       -- Save game statistics
       CategoryNode := Create_Element(SaveData, "statistics");
       CategoryNode := Append_Child(MainNode, CategoryNode);
-      SaveStatistics(GameStats.DestroyedShips, "destroyedships", "ship");
+      SaveStatistics(GameStats.DestroyedShips, "destroyedships");
       RawValue := To_Unbounded_String(Positive'Image(GameStats.BasesVisited));
-      AddData
-        ("visitedbases",
-         To_String(Trim(RawValue, Ada.Strings.Left)),
-         CategoryNode);
+      Set_Attribute
+        (CategoryNode,
+         "visitedbases",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Positive'Image(GameStats.MapVisited));
-      AddData
-        ("mapdiscovered",
-         To_String(Trim(RawValue, Ada.Strings.Left)),
-         CategoryNode);
+      Set_Attribute
+        (CategoryNode,
+         "mapdiscovered",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue :=
         To_Unbounded_String(Positive'Image(GameStats.DistanceTraveled));
-      AddData
-        ("distancetraveled",
-         To_String(Trim(RawValue, Ada.Strings.Left)),
-         CategoryNode);
-      SaveStatistics(GameStats.CraftingOrders, "finishedcrafts", "order");
+      Set_Attribute
+        (CategoryNode,
+         "distancetraveled",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
+      SaveStatistics(GameStats.CraftingOrders, "finishedcrafts");
       RawValue :=
         To_Unbounded_String(Positive'Image(GameStats.AcceptedMissions));
-      AddData
-        ("acceptedmissions",
-         To_String(Trim(RawValue, Ada.Strings.Left)),
-         CategoryNode);
-      SaveStatistics
-        (GameStats.FinishedMissions,
-         "finishedmissions",
-         "mission");
-      SaveStatistics(GameStats.FinishedGoals, "finishedgoals", "goal");
-      SaveStatistics(GameStats.KilledMobs, "killedmobs", "mob");
+      Set_Attribute
+        (CategoryNode,
+         "acceptedmissions",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
+      SaveStatistics(GameStats.FinishedMissions, "finishedmissions");
+      SaveStatistics(GameStats.FinishedGoals, "finishedgoals");
+      SaveStatistics(GameStats.KilledMobs, "killedmobs");
       RawValue := To_Unbounded_String(Natural'Image(GameStats.Points));
-      AddData
-        ("points",
-         To_String(Trim(RawValue, Ada.Strings.Left)),
-         CategoryNode);
+      Set_Attribute
+        (CategoryNode,
+         "points",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
       -- Save current goal
       CategoryNode := Create_Element(SaveData, "currentgoal");
       CategoryNode := Append_Child(MainNode, CategoryNode);
-      AddData("index", To_String(CurrentGoal.Index), CategoryNode);
+      Set_Attribute(CategoryNode, "index", To_String(CurrentGoal.Index));
       RawValue :=
         To_Unbounded_String(Integer'Image(GoalTypes'Pos(CurrentGoal.GType)));
-      AddData
-        ("type",
-         To_String(Trim(RawValue, Ada.Strings.Left)),
-         CategoryNode);
+      Set_Attribute
+        (CategoryNode,
+         "type",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Natural'Image(CurrentGoal.Amount));
-      AddData
-        ("amount",
-         To_String(Trim(RawValue, Ada.Strings.Left)),
-         CategoryNode);
-      AddData("target", To_String(CurrentGoal.TargetIndex), CategoryNode);
+      Set_Attribute
+        (CategoryNode,
+         "amount",
+         To_String(Trim(RawValue, Ada.Strings.Left)));
+      Set_Attribute
+        (CategoryNode,
+         "target",
+         To_String(CurrentGoal.TargetIndex));
       Create(SaveFile, Out_File, To_String(SaveDirectory) & "savegame.dat");
       Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => True);
       Close(SaveFile);
@@ -263,62 +267,23 @@ package body Game.SaveLoad is
       SaveFile: File_Input;
       Reader: Tree_Reader;
       NodesList, ChildNodes: Node_List;
-      procedure LoadStatistics
-        (StatisticsVector: in out Statistics_Container.Vector;
-         StatName: String;
-         ParentNode: Node) is
-         StatList, StatData: Node_List;
-         Index: Unbounded_String;
-         Amount: Positive;
-      begin
-         StatList := Child_Nodes(ParentNode);
-         for I in 0 .. Length(StatList) - 1 loop
-            if Node_Name(Item(StatList, I)) = StatName then
-               StatData := Child_Nodes(ParentNode);
-               Index := Null_Unbounded_String;
-               Amount := 1;
-               for J in 0 .. Length(StatData) - 1 loop
-                  if Node_Name(Item(StatData, J)) = "index" then
-                     Index :=
-                       To_Unbounded_String
-                         (Node_Value(First_Child(Item(StatData, J))));
-                  elsif Node_Name(Item(StatData, J)) = "amount" then
-                     Amount :=
-                       Positive'Value
-                         (Node_Value(First_Child(Item(StatData, J))));
-                  end if;
-               end loop;
-               StatisticsVector.Append
-               (New_Item => (Index => Index, Amount => Amount));
-            end if;
-         end loop;
-      end LoadStatistics;
    begin
       Open(To_String(SaveDirectory) & "savegame.dat", SaveFile);
       Parse(Reader, SaveFile);
       Close(SaveFile);
       SaveData := Get_Tree(Reader);
       -- Load game date
-      NodesList := Get_Elements_By_Tag_Name(SaveData, "date");
-      ChildNodes := Child_Nodes(Item(NodesList, 0));
-      for I in 0 .. Length(ChildNodes) - 1 loop
-         if Node_Name(Item(ChildNodes, I)) = "year" then
-            GameDate.Year :=
-              Natural'Value(Node_Value(First_Child(Item(ChildNodes, I))));
-         elsif Node_Name(Item(ChildNodes, I)) = "month" then
-            GameDate.Month :=
-              Natural'Value(Node_Value(First_Child(Item(ChildNodes, I))));
-         elsif Node_Name(Item(ChildNodes, I)) = "day" then
-            GameDate.Day :=
-              Natural'Value(Node_Value(First_Child(Item(ChildNodes, I))));
-         elsif Node_Name(Item(ChildNodes, I)) = "hour" then
-            GameDate.Hour :=
-              Natural'Value(Node_Value(First_Child(Item(ChildNodes, I))));
-         elsif Node_Name(Item(ChildNodes, I)) = "minutes" then
-            GameDate.Minutes :=
-              Natural'Value(Node_Value(First_Child(Item(ChildNodes, I))));
-         end if;
-      end loop;
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "gamedate");
+      GameDate.Year :=
+        Natural'Value(Get_Attribute(Item(NodesList, 0), "year"));
+      GameDate.Month :=
+        Natural'Value(Get_Attribute(Item(NodesList, 0), "month"));
+      GameDate.Day := Natural'Value(Get_Attribute(Item(NodesList, 0), "day"));
+      GameDate.Hour :=
+        Natural'Value(Get_Attribute(Item(NodesList, 0), "hour"));
+      GameDate.Minutes :=
+        Natural'Value(Get_Attribute(Item(NodesList, 0), "minutes"));
       -- Load sky map
       SkyMap :=
         (others =>
@@ -327,30 +292,15 @@ package body Game.SaveLoad is
                Visited => False,
                EventIndex => 0,
                MissionIndex => 0)));
-      NodesList := Get_Elements_By_Tag_Name(SaveData, "map");
-      ChildNodes := Child_Nodes(Item(NodesList, 0));
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "field");
       declare
-         FieldData: Node_List;
          X, Y: Positive;
       begin
-         for I in 0 .. Length(ChildNodes) - 1 loop
-            if Node_Name(Item(ChildNodes, I)) = "field" then
-               FieldData := Child_Nodes(Item(ChildNodes, I));
-               X := 1;
-               Y := 1;
-               for J in 0 .. Length(FieldData) - 1 loop
-                  if Node_Name(Item(FieldData, J)) = "x" then
-                     X :=
-                       Positive'Value
-                         (Node_Value(First_Child(Item(FieldData, J))));
-                  elsif Node_Name(Item(FieldData, J)) = "y" then
-                     Y :=
-                       Positive'Value
-                         (Node_Value(First_Child(Item(FieldData, J))));
-                  end if;
-               end loop;
-               SkyMap(X, Y).Visited := True;
-            end if;
+         for I in 0 .. Length(NodesList) - 1 loop
+            X := Natural'Value(Get_Attribute(Item(NodesList, I), "x"));
+            Y := Natural'Value(Get_Attribute(Item(NodesList, I), "y"));
+            SkyMap(X, Y).Visited := True;
          end loop;
       end;
       -- Load sky bases
@@ -358,189 +308,122 @@ package body Game.SaveLoad is
       -- Load player ship
       LoadPlayerShip(SaveData);
       -- Load known recipes
-      NodesList := Get_Elements_By_Tag_Name(SaveData, "knownrecipes");
-      ChildNodes := Child_Nodes(Item(NodesList, 0));
-      for I in 0 .. Length(ChildNodes) - 1 loop
-         if Node_Name(Item(ChildNodes, I)) = "index" then
-            Known_Recipes.Append
-            (New_Item =>
-               FindRecipe
-                 (To_Unbounded_String
-                    (Node_Value(First_Child(Item(ChildNodes, I))))));
-         end if;
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "recipe");
+      for I in 0 .. Length(NodesList) - 1 loop
+         Known_Recipes.Append
+         (New_Item =>
+            FindRecipe
+              (To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "index"))));
       end loop;
       -- Load messages
-      NodesList := Get_Elements_By_Tag_Name(SaveData, "messages");
-      ChildNodes := Child_Nodes(Item(NodesList, 0));
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "message");
       declare
-         MessageData: Node_List;
          Text: Unbounded_String;
          MType: Message_Type;
          Color: Natural;
       begin
-         for I in 0 .. Length(ChildNodes) - 1 loop
-            if Node_Name(Item(ChildNodes, I)) = "message" then
-               MessageData := Child_Nodes(Item(ChildNodes, I));
-               Text := Null_Unbounded_String;
-               MType := OtherMessage;
-               Color := 0;
-               for J in 0 .. Length(MessageData) - 1 loop
-                  if Node_Name(Item(MessageData, J)) = "text" then
-                     Text :=
-                       To_Unbounded_String
-                         (Node_Value(First_Child(Item(MessageData, J))));
-                  elsif Node_Name(Item(MessageData, J)) = "type" then
-                     MType :=
-                       Message_Type'Val
-                         (Integer'Value
-                            (Node_Value(First_Child(Item(MessageData, J)))));
-                  elsif Node_Name(Item(MessageData, J)) = "color" then
-                     Color :=
-                       Natural'Value
-                         (Node_Value(First_Child(Item(MessageData, 5))));
-                  end if;
-               end loop;
-               RestoreMessage(Text, MType, Color);
-            end if;
+         for I in 0 .. Length(NodesList) - 1 loop
+            Text :=
+              To_Unbounded_String(Node_Value(First_Child(Item(NodesList, I))));
+            MType :=
+              Message_Type'Val
+                (Integer'Value(Get_Attribute(Item(NodesList, I), "type")));
+            Color := Natural'Value(Get_Attribute(Item(NodesList, I), "color"));
+            RestoreMessage(Text, MType, Color);
          end loop;
       end;
       -- Load events
-      NodesList := Get_Elements_By_Tag_Name(SaveData, "events");
-      ChildNodes := Child_Nodes(Item(NodesList, 0));
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "event");
       declare
-         EventData: Node_List;
-         EventIndex: Positive := 1;
          EType: Events_Types;
          X, Y, Time: Integer;
          Data: Positive;
       begin
-         for I in 0 .. Length(ChildNodes) - 1 loop
-            if Node_Name(Item(ChildNodes, I)) = "event" then
-               EventData := Child_Nodes(Item(ChildNodes, I));
-               EType := None;
-               X := 0;
-               Y := 0;
-               Time := 0;
-               Data := 1;
-               for J in 0 .. Length(EventData) - 1 loop
-                  if Node_Name(Item(EventData, J)) = "type" then
-                     EType :=
-                       Events_Types'Val
-                         (Integer'Value
-                            (Node_Value(First_Child(Item(EventData, J)))));
-                  elsif Node_Name(Item(EventData, J)) = "x" then
-                     X :=
-                       Integer'Value
-                         (Node_Value(First_Child(Item(EventData, J))));
-                  elsif Node_Name(Item(EventData, J)) = "y" then
-                     Y :=
-                       Integer'Value
-                         (Node_Value(First_Child(Item(EventData, J))));
-                  elsif Node_Name(Item(EventData, J)) = "time" then
-                     Time :=
-                       Integer'Value
-                         (Node_Value(First_Child(Item(EventData, J))));
-                  elsif Node_Name(Item(EventData, J)) = "data" then
-                     Data :=
-                       Positive'Value
-                         (Node_Value(First_Child(Item(EventData, J))));
-                  end if;
-               end loop;
-               Events_List.Append
-               (New_Item =>
-                  (EType => EType,
-                   SkyX => X,
-                   SkyY => Y,
-                   Time => Time,
-                   Data => Data));
-               SkyMap
-                 (Events_List(EventIndex).SkyX,
-                  Events_List(EventIndex).SkyY)
-                 .EventIndex :=
-                 EventIndex;
-               EventIndex := EventIndex + 1;
-            end if;
+         for I in 0 .. Length(NodesList) - 1 loop
+            EType :=
+              Events_Types'Val
+                (Integer'Value(Get_Attribute(Item(NodesList, I), "type")));
+            X := Integer'Value(Get_Attribute(Item(NodesList, I), "x"));
+            Y := Integer'Value(Get_Attribute(Item(NodesList, I), "y"));
+            Time := Integer'Value(Get_Attribute(Item(NodesList, I), "time"));
+            Data := Positive'Value(Get_Attribute(Item(NodesList, I), "data"));
+            Events_List.Append
+            (New_Item =>
+               (EType => EType,
+                SkyX => X,
+                SkyY => Y,
+                Time => Time,
+                Data => Data));
+            SkyMap(Events_List(I + 1).SkyX, Events_List(I + 1).SkyY)
+              .EventIndex :=
+              I + 1;
          end loop;
       end;
       -- Load game statistics
-      NodesList := Get_Elements_By_Tag_Name(SaveData, "statistics");
-      ChildNodes := Child_Nodes(Item(NodesList, 0));
-      for I in 0 .. Length(ChildNodes) - 1 loop
-         if Node_Name(Item(ChildNodes, I)) = "destroyedships" then
-            LoadStatistics
-              (GameStats.DestroyedShips,
-               "ship",
-               Item(ChildNodes, I));
-         elsif Node_Name(Item(ChildNodes, I)) = "visitedbases" then
-            GameStats.BasesVisited :=
-              Positive'Value(Node_Value(First_Child(Item(ChildNodes, I))));
-         elsif Node_Name(Item(ChildNodes, I)) = "mapdiscovered" then
-            GameStats.MapVisited :=
-              Positive'Value(Node_Value(First_Child(Item(ChildNodes, I))));
-         elsif Node_Name(Item(ChildNodes, I)) = "distancetraveled" then
-            GameStats.DistanceTraveled :=
-              Positive'Value(Node_Value(First_Child(Item(ChildNodes, I))));
-         elsif Node_Name(Item(ChildNodes, I)) = "finishedcrafts" then
-            LoadStatistics
-              (GameStats.CraftingOrders,
-               "order",
-               Item(ChildNodes, I));
-         elsif Node_Name(Item(ChildNodes, I)) = "acceptedmissions" then
-            GameStats.AcceptedMissions :=
-              Positive'Value(Node_Value(First_Child(Item(ChildNodes, I))));
-         elsif Node_Name(Item(ChildNodes, I)) = "finishedmissions" then
-            LoadStatistics
-              (GameStats.FinishedMissions,
-               "mission",
-               Item(ChildNodes, I));
-         elsif Node_Name(Item(ChildNodes, I)) = "finishedgoals" then
-            LoadStatistics
-              (GameStats.FinishedGoals,
-               "goal",
-               Item(ChildNodes, I));
-         elsif Node_Name(Item(ChildNodes, I)) = "killedmobs" then
-            LoadStatistics(GameStats.KilledMobs, "mob", Item(ChildNodes, I));
-         elsif Node_Name(Item(ChildNodes, I)) = "points" then
-            GameStats.Points :=
-              Natural'Value(Node_Value(First_Child(Item(ChildNodes, I))));
-         end if;
-      end loop;
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "statistics");
+      declare
+         StatIndex: Unbounded_String;
+         StatAmount: Positive;
+      begin
+         GameStats.BasesVisited :=
+           Positive'Value(Get_Attribute(Item(NodesList, 0), "visitedbases"));
+         GameStats.MapVisited :=
+           Positive'Value(Get_Attribute(Item(NodesList, 0), "mapdiscovered"));
+         GameStats.DistanceTraveled :=
+           Positive'Value
+             (Get_Attribute(Item(NodesList, 0), "distancetraveled"));
+         GameStats.AcceptedMissions :=
+           Natural'Value
+             (Get_Attribute(Item(NodesList, 0), "acceptedmissions"));
+         GameStats.Points :=
+           Positive'Value(Get_Attribute(Item(NodesList, 0), "points"));
+         ChildNodes := Child_Nodes(Item(NodesList, 0));
+         for I in 0 .. Length(ChildNodes) - 1 loop
+            StatIndex :=
+              To_Unbounded_String(Get_Attribute(Item(ChildNodes, I), "index"));
+            StatAmount :=
+              Positive'Value(Get_Attribute(Item(ChildNodes, I), "amount"));
+            if Node_Name(Item(ChildNodes, I)) = "destroyedships" then
+               GameStats.DestroyedShips.Append
+               (New_Item => (Index => StatIndex, Amount => StatAmount));
+            elsif Node_Name(Item(ChildNodes, I)) = "finishedcrafts" then
+               GameStats.CraftingOrders.Append
+               (New_Item => (Index => StatIndex, Amount => StatAmount));
+            elsif Node_Name(Item(ChildNodes, I)) = "finishedmissions" then
+               GameStats.FinishedMissions.Append
+               (New_Item => (Index => StatIndex, Amount => StatAmount));
+            elsif Node_Name(Item(ChildNodes, I)) = "finishedgoals" then
+               GameStats.FinishedGoals.Append
+               (New_Item => (Index => StatIndex, Amount => StatAmount));
+            elsif Node_Name(Item(ChildNodes, I)) = "killedmobs" then
+               GameStats.KilledMobs.Append
+               (New_Item => (Index => StatIndex, Amount => StatAmount));
+            end if;
+         end loop;
+      end;
       -- Load current goal
-      NodesList := Get_Elements_By_Tag_Name(SaveData, "currentgoal");
-      ChildNodes := Child_Nodes(Item(NodesList, 0));
-      for I in 0 .. Length(NodesList) loop
-         if Node_Name(Item(ChildNodes, I)) = "index" then
-            CurrentGoal.Index :=
-              To_Unbounded_String
-                (Node_Value(First_Child(Item(ChildNodes, I))));
-         elsif Node_Name(Item(ChildNodes, I)) = "type" then
-            CurrentGoal.GType :=
-              GoalTypes'Val
-                (Integer'Value(Node_Value(First_Child(Item(ChildNodes, I)))));
-         elsif Node_Name(Item(ChildNodes, I)) = "amount" then
-            CurrentGoal.Amount :=
-              Natural'Value(Node_Value(First_Child(Item(ChildNodes, I))));
-         elsif Node_Name(Item(ChildNodes, I)) = "target" then
-            CurrentGoal.TargetIndex :=
-              To_Unbounded_String
-                (Node_Value(First_Child(Item(ChildNodes, I))));
-         end if;
-      end loop;
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "currentgoal");
+      CurrentGoal.Index :=
+        To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "index"));
+      CurrentGoal.GType :=
+        GoalTypes'Val
+          (Integer'Value(Get_Attribute(Item(NodesList, 0), "type")));
+      CurrentGoal.Amount :=
+        Integer'Value(Get_Attribute(Item(NodesList, 0), "amount"));
+      CurrentGoal.TargetIndex :=
+        To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "target"));
       Free(Reader);
    exception
       when An_Exception : others =>
          Free(Reader);
+         PlayerShip.Crew.Clear;
          raise SaveGame_Invalid_Data with Exception_Message(An_Exception);
    end LoadGame;
-
-   procedure AddData(NodeName, Value: String; ParentNode: DOM.Core.Element) is
-      DataNode: DOM.Core.Element;
-      Data: Text;
-   begin
-      DataNode := Create_Element(SaveData, NodeName);
-      DataNode := Append_Child(ParentNode, DataNode);
-      Data := Create_Text_Node(SaveData, Value);
-      Data := Append_Child(DataNode, Data);
-   end AddData;
 
 end Game.SaveLoad;
