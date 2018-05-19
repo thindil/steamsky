@@ -624,7 +624,7 @@ package body Combat is
                            CargoIndex => AmmoIndex,
                            Amount => -1);
                      end if;
-                     if Ship = PlayerShip then
+                     if Ship = PlayerShip and GunnerIndex > 0 then
                         GainExp(1, GunnerySkill, GunnerIndex);
                      end if;
                      if PlayerShip.Crew(1).Health = 0 then -- player is dead
