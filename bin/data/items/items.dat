@@ -1352,4 +1352,12 @@ Prices = 37, 37, 37, 37, 35
 Buyable = N, N, N, N, Y
 Value = 2, 40, 17, 1, 1
 Description = Simple sword made of orichalcum, used in melee combat.
+[159]
+Name = Orichalcum shield
+Weight = 9
+Type = Shield
+Prices = 40, 40, 40, 40, 38
+Buyable = N, N, N, N, Y
+Value = 2, 16
+Description = Standard shield made of orichalcum, used in melee combat.
 []
