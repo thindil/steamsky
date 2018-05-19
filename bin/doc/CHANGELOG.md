@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Issue #17 - Crash when boarding party member don't have weapon
 - Probably fixed issue #18 - Crash when crew member have more than maximum health
 - Gaining experience by crew members during boariding enemy ship
+- Issue #20 - Crash when attacking with ram
 
 ## [2.0.5] - 2018-05-13
 
