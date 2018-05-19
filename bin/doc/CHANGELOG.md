@@ -7,8 +7,8 @@ All notable changes to this project will be documented in this file.
 - New items: titanium woodworker set, orichalcum woodworker set, titanium
   repair tools, orichalcum repair tools, titanium sewing kit, orichalcum
   sewing kit, orichalcum 60mm ammo, orichalcum 80mm ammo, orichalcum 100mm
-  ammo, orichalcum 120mm ammo, orichalcum harpoon, orichalcum short sword and
-  orichalcum sword
+  ammo, orichalcum 120mm ammo, orichalcum harpoon, orichalcum short sword,
+  orichalcum sword and orichalcum shield
 - New crafting recipes: titanium woodworker set, orichalcum woodworker set,
   titanium repair tools, orichalcum repair tools, titanium sewing kit,
   orichalcum sewing kit, orichalcum 60mm ammo, orichalcum 80mm ammo,
