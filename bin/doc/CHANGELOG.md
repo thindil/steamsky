@@ -58,6 +58,7 @@ All notable changes to this project will be documented in this file.
 - Issue #17 - Crash when boarding party member don't have weapon
 - Showing information about crew member order when he/she boarding enemy ship
 - Probably fixed issue #18 - Crash when crew member have more than maximum health
+- Gaining experience by crew members during boariding enemy ship
 
 ## [2.3] - 2018-04-22
 
