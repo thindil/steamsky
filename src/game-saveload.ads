@@ -15,16 +15,11 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with DOM.Core; use DOM.Core;
-
 package Game.SaveLoad is
 
    SaveGame_Invalid_Data: exception; -- Raised when invalid data found in savegame
 
    procedure SaveGame; -- Save game to file
    procedure LoadGame; -- Load game from file
-   procedure AddData
-     (NodeName, Value: String;
-      ParentNode: DOM.Core.Element); -- Add xml data to save to file
 
 end Game.SaveLoad;
