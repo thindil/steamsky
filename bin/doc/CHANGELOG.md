@@ -21,10 +21,10 @@ All notable changes to this project will be documented in this file.
 - More info about player death in melee combat
 - Option to set max amount of stored messages in game
 - Option to set max amount of saved messages
-- Statistics for killed enemies in melee combat which made saves from previous
-  version incompatible
+- Statistics for killed enemies in melee combat 
 - New type of goal: kill X enemies in melee combat
 - New goal: kill 800 enemies in melee combat
+- New format of save games which made saves from previous versions incompatible
 
 ### Changed
 - Updated interface
