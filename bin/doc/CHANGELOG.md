@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.4] - 2018-05-20
 
 ### Added
 - New items: titanium woodworker set, orichalcum woodworker set, titanium
