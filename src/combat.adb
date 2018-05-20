@@ -743,7 +743,8 @@ package body Combat is
             if not PlayerAttack then
                GainExp(1, DodgeSkill, DefenderIndex);
                Defender.Skills := PlayerShip.Crew(DefenderIndex).Skills;
-               Defender.Attributes := PlayerShip.Crew(DefenderIndex).Attributes;
+               Defender.Attributes :=
+                 PlayerShip.Crew(DefenderIndex).Attributes;
             end if;
          else
             AttackMessage :=
@@ -783,7 +784,8 @@ package body Combat is
                   GainExp(1, UnarmedSkill, AttackerIndex);
                end if;
                Attacker.Skills := PlayerShip.Crew(AttackerIndex).Skills;
-               Attacker.Attributes := PlayerShip.Crew(AttackerIndex).Attributes;
+               Attacker.Attributes :=
+                 PlayerShip.Crew(AttackerIndex).Attributes;
             end if;
             if Damage > Defender.Health then
                Defender.Health := 0;
