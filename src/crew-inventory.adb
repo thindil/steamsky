@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -74,7 +74,9 @@ package body Crew.Inventory is
          if NewAmount = 0 then
             PlayerShip.Crew(MemberIndex).Inventory.Delete(Index => ItemIndex);
             for Item of PlayerShip.Crew(MemberIndex).Equipment loop
-               if Item > ItemIndex then
+               if Item = ItemIndex then
+                  Item := 0;
+               elsif Item > ItemIndex then
                   Item := Item - 1;
                end if;
             end loop;
