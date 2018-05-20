@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
   titanium repair tools, orichalcum repair tools, titanium sewing kit,
   orichalcum sewing kit, orichalcum 60mm ammo, orichalcum 80mm ammo,
   orichalcum 100mm ammo, orichalcum 120mm ammo, orichalcum harpoon, orichalcum
-  short sword and orichalcum short sword
+  short sword, orichalcum sword and orichalcum shield
 - Showing license full text in info about game
 - New sky base type: military
 - Damage type for personal weapons
