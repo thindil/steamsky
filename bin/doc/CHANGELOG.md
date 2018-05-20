@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.0.6] - 2018-05-20
 
 ### Fixed
 - Don't allow to go on rests crew members in boarding party when ships are not
