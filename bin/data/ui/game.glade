@@ -7630,7 +7630,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Module options</property>
+                            <property name="label" translatable="yes">_Module options</property>
+                            <property name="use_underline">True</property>
                           </object>
                         </child>
                       </object>
