@@ -162,6 +162,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <object class="GtkTreeModelFilter" id="basesfilter">
     <property name="child_model">baseslist</property>
   </object>
+  <object class="GtkTreeModelSort" id="basessort">
+    <property name="model">basesfilter</property>
+  </object>
   <object class="GtkListStore" id="cargolist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -2912,7 +2915,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkTreeView" id="treebases">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="model">basesfilter</property>
+                            <property name="model">basessort</property>
                             <property name="enable_search">False</property>
                             <signal name="cursor-changed" handler="Show_Base_Info" swapped="no"/>
                             <child internal-child="selection">
