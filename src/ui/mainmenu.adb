@@ -303,7 +303,7 @@ package body MainMenu is
       FileText: Unbounded_String;
    begin
       if NewsPad = Null_Window then
-         LinesAmount := 0;
+         LinesAmount := 1;
          if not Exists(To_String(DocDirectory) & "CHANGELOG.md") then
             NewsText :=
               To_Unbounded_String
