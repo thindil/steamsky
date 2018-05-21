@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash on showing map cell info
+- Some typos in changelog
 
 ## [2.4] - 2018-05-20
 
