@@ -642,6 +642,9 @@ package body Maps.UI is
          MouseY,
          Mask,
          Window);
+      if MouseX < 0 or MouseY < 0 then
+         return;
+      end if;
       MapX := (Natural(MouseX) / MapCellWidth) + StartX;
       MapY := (Natural(MouseY) / MapCellHeight) + StartY;
    end GetCurrentCellCoords;
