@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New item: orichalcum chestplate
+
 ## [2.4] - 2018-05-20
 
 ### Added
