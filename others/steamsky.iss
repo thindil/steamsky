@@ -19,7 +19,7 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
-OutputBaseFilename=steamsky-2.4-Windows
+OutputBaseFilename=steamsky-2.5-Windows
 Compression=lzma
 SolidCompression=yes
 
