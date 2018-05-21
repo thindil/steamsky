@@ -1360,4 +1360,13 @@ Prices = 40, 40, 40, 40, 38
 Buyable = N, N, N, N, Y
 Value = 2, 16
 Description = Standard shield made of orichalcum, used in melee combat.
+[160]
+Name = Orichalcum chestplate
+Weight = 18
+Type = ChestArmor
+Prices = 45, 45, 45, 45, 43
+Buyable = N, N, N, N, Y
+ShowType = Armor
+Value = 2, 30, 7
+Description = Standard type of armor, made of orichalcum, weared on torso.
 []
