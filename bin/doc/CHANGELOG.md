@@ -60,15 +60,15 @@ All notable changes to this project will be documented in this file.
 - Showing empty goals category in goals select menu
 - Showing sky map after starting/loading game
 - Block ability to back on ship during combat if no harpoon active
-- Checking for needed materals before start crafting
+- Checking for needed materials before start crafting
 - Don't allow to go on rests crew members in boarding party when ships are not
   connected by harpoons
 - Issue #17 - Crash when boarding party member don't have weapon
 - Showing information about crew member order when he/she boarding enemy ship
 - Probably fixed issue #18 - Crash when crew member have more than maximum health
-- Gaining experience by crew members during boariding enemy ship
+- Gaining experience by crew members during boarding enemy ship
 - Issue #20 - Crash when attacking with ram
-- Issue #19 - Crash when crew member have non-existent item equiped
+- Issue #19 - Crash when crew member have non-existent item equipped
 
 ## [2.3] - 2018-04-22
 
