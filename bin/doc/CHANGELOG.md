@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New item: orichalcum chestplate
 
+### Fixed
+- Crash on showing map cell info
+
 ## [2.4] - 2018-05-20
 
 ### Added
