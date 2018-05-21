@@ -418,7 +418,8 @@ package body Ships.SaveLoad is
                  To_Unbounded_String
                    (Get_Attribute(Item(ChildNodes, I), "name"));
                Durability :=
-                 Natural'Value(Get_Attribute(Item(ChildNodes, I), "amount"));
+                 Natural'Value
+                   (Get_Attribute(Item(ChildNodes, I), "durability"));
                PlayerShip.Cargo.Append
                (New_Item =>
                   (ProtoIndex => ProtoIndex,
