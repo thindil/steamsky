@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Crash on showing map cell info
 - Some typos in changelog
 - Loading player ship cargo from savegame file
+- Default keyboard shortcuts for ship movement
 
 ## [2.4] - 2018-05-20
 
