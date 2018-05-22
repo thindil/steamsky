@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - New item: orichalcum chestplate
 - New crafting recipe: orichalcum chestplate
 
+### Changed
+- Raised gained experience in combat
+
 ### Fixed
 - Crash on showing map cell info
 - Some typos in changelog
