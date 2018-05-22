@@ -925,7 +925,7 @@ package body Maps.UI is
          Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnbottomright")),
-         "<skymapwindow>/btnbottomleft",
+         "<skymapwindow>/btnbottomright",
          Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnmoveto")),
