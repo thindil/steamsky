@@ -792,6 +792,9 @@ package body Maps.UI is
             end case;
          end;
       end if;
+      if MapX = PlayerShip.SkyX and MapY = PlayerShip.SkyY then
+         Append(MapInfoText, ASCII.LF & "You are here");
+      end if;
    end BuildMapInfo;
 
    procedure CreateSkyMap is
