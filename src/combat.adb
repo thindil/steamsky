@@ -625,7 +625,7 @@ package body Combat is
                            Amount => -1);
                      end if;
                      if Ship = PlayerShip and GunnerIndex > 0 then
-                        GainExp(1, GunnerySkill, GunnerIndex);
+                        GainExp(2, GunnerySkill, GunnerIndex);
                      end if;
                      if PlayerShip.Crew(1).Health = 0 then -- player is dead
                         EndCombat := True;
@@ -771,7 +771,7 @@ package body Combat is
                   MessageColor := 5;
                end if;
                if not PlayerAttack then
-                  GainExp(1, DodgeSkill, DefenderIndex);
+                  GainExp(2, DodgeSkill, DefenderIndex);
                   Defender.Skills := PlayerShip.Crew(DefenderIndex).Skills;
                   Defender.Attributes :=
                     PlayerShip.Crew(DefenderIndex).Attributes;
@@ -804,7 +804,7 @@ package body Combat is
                if PlayerAttack2 then
                   if Attacker.Equipment(1) > 0 then
                      GainExp
-                       (1,
+                       (2,
                         Items_List
                           (Attacker.Inventory(Attacker.Equipment(1))
                              .ProtoIndex)
@@ -812,7 +812,7 @@ package body Combat is
                           (3),
                         AttackerIndex);
                   else
-                     GainExp(1, UnarmedSkill, AttackerIndex);
+                     GainExp(2, UnarmedSkill, AttackerIndex);
                   end if;
                   Attacker.Skills := PlayerShip.Crew(AttackerIndex).Skills;
                   Attacker.Attributes :=
@@ -1008,10 +1008,10 @@ package body Combat is
          case PlayerShip.Crew(I).Order is
             when Pilot =>
                PilotIndex := Crew_Container.To_Index(I);
-               GainExp(1, PilotingSkill, PilotIndex);
+               GainExp(2, PilotingSkill, PilotIndex);
             when Engineer =>
                EngineerIndex := Crew_Container.To_Index(I);
-               GainExp(1, EngineeringSkill, EngineerIndex);
+               GainExp(2, EngineeringSkill, EngineerIndex);
             when others =>
                null;
          end case;
