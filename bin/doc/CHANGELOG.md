@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Raised gained experience in combat
+- Updated interface
 
 ### Fixed
 - Crash on showing map cell info
