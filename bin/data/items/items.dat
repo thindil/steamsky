@@ -1369,4 +1369,13 @@ Buyable = N, N, N, N, Y
 ShowType = Armor
 Value = 2, 30, 7
 Description = Standard type of armor, made of orichalcum, weared on torso.
+[161]
+Name = Orichalcum helmet
+Weight = 5
+Type = HeadArmor
+Prices = 32, 32, 32, 32, 30
+Buyable = N, N, N, N, Y
+ShowType = Armor
+Value = 2, 15, 3
+Description = Standard type of armor, made of orichalcum, weared on head.
 []
