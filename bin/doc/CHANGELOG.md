@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New item: orichalcum chestplate
+- New items: orichalcum chestplate and orichalcum helmet
 - New crafting recipe: orichalcum chestplate
 
 ### Changed
