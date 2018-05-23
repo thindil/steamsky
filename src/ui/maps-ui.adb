@@ -106,6 +106,7 @@ package body Maps.UI is
    begin
       if PlayerShip.Crew(1).Health = 0 then
          DeathConfirm;
+         return;
       end if;
       Set_Text(Gtk_Label(Get_Object(Builder, "lbltime")), FormatedTime);
       if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnofuel"))) then
