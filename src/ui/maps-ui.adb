@@ -647,6 +647,12 @@ package body Maps.UI is
       end if;
       MapX := (Natural(MouseX) / MapCellWidth) + StartX;
       MapY := (Natural(MouseY) / MapCellHeight) + StartY;
+      if MapX > SkyMap'Last then
+         MapX := SkyMap'Last;
+      end if;
+      if MapY > SkyMap'Last then
+         MapY := SkyMap'Last;
+      end if;
    end GetCurrentCellCoords;
 
    procedure BuildMapInfo(MapInfoText: in out Unbounded_String) is
