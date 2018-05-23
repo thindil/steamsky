@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Loading player ship cargo from savegame file
 - Default keyboard shortcuts for ship movement
 - Crash on moving map
+- Crash on player death
 
 ## [2.4] - 2018-05-20
 
