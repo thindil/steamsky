@@ -50,8 +50,7 @@ If you have all, in main source code directory (where this file is):
 
 ### Linux
 If you use downloaded binaries, you don't need any additional libraries. Just
-in terminal, run `steamsky.sh` script to start game. This script should works
-too if you use binaries compiled by self.
+run `steamsky` program to start game.
 
 ### Windows
 If you compiled game by self, just clicking on `steamsky.exe` should be enough 
@@ -61,22 +60,22 @@ to run game.
 You can set game directories by starting parameters. Possible options are:
 
 * --datadir=[directory] set directory where all game data files (and
-  directories like ships, items, etc.) are. Example: `./steamsky.sh
+  directories like ships, items, etc.) are. Example: `./steamsky
   --datadir=/home/user/game/tmp`. Default value is *data/*
 
 * --savedir=[directory] set directory where game (or logs) will be saved. Game
-  must have write permission to this directory. Example: `./steamsky.sh
+  must have write permission to this directory. Example: `./steamsky
   --savedir=/home/user/.saves`. Default value is *data/*
 
 * --docdir=[directory] set directory where game documentation is (at this
-  moment important only for license and changelog files). Example `./steamsky.sh
+  moment important only for license and changelog files). Example `./steamsky
   --docdir=/usr/share/steamsky/doc`. Default value is *doc/*.
 
-Of course, you can set all parameters together: `./steamsky.sh --datadir=somedir/
+Of course, you can set all parameters together: `./steamsky --datadir=somedir/
 --savedir=otherdir/ --docdir=anotherdir/`
 
 Paths to directories can be absolute or relative where file `steamsky` is. For
-Windows, use `steamsky.exe` instead `./steamsky.sh`.
+Windows, use `steamsky.exe` instead `./steamsky`.
 
 ## Modify game
 For detailed informations about modifying various game elements or debugging
