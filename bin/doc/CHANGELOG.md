@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Crash on moving map
 - Crash on player death
 - Hide map after player death
+- Showing death screen after lost ship fight
 
 ## [2.4] - 2018-05-20
 
