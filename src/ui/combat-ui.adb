@@ -688,8 +688,8 @@ package body Combat.UI is
    begin
       CombatTurn;
       if EndCombat then
+         RefreshCombatUI;
          if Get_Visible_Child_Name(CombatStack) = "boarding" then
-            RefreshCombatUI;
             Set_Visible_Child_Name(CombatStack, "shipcombat");
          end if;
          Hide(Gtk_Widget(Get_Object(Object, "btnboxactions")));
