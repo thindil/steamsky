@@ -20,7 +20,9 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Interfaces.C; use Interfaces.C;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Gtk.Main; use Gtk.Main;
 with Gtk.Settings; use Gtk.Settings;
 with Gtkada.Bindings; use Gtkada.Bindings;
@@ -111,6 +113,75 @@ begin
 
    LoadConfig;
    LoadHallOfFame;
+
+   -- Initializes environment variables (Linux only)
+   if Dir_Separator = '/' then
+      declare
+         VariablesNames: constant array(1 .. 4) of Unbounded_String :=
+           (To_Unbounded_String("LD_LIBRARY_PATH"),
+            To_Unbounded_String("GDK_PIXBUF_MODULE_FILE"),
+            To_Unbounded_String("GDK_PIXBUF_MODULEDIR"),
+            To_Unbounded_String("FONTCONFIG_FILE"));
+         VariablesValues: array(1 .. 4) of Unbounded_String;
+      begin
+         if Exists("../lib") then
+            VariablesValues(1) := (To_Unbounded_String("../lib"));
+            VariablesValues(2) :=
+              (To_Unbounded_String
+                 ("../lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"));
+            VariablesValues(3) :=
+              (To_Unbounded_String("../lib/gdk-pixbuf-2.0/2.10.0/loaders/"));
+            VariablesValues(4) :=
+              (To_Unbounded_String
+                 (Full_Name(Dir_Name(Command_Name)) &
+                  Dir_Separator &
+                  "../etc/fonts/fonts.conf"));
+         else
+            declare
+               function Sys(Arg: char_array) return Integer;
+               pragma Import(C, Sys, "system");
+               RunResult: Integer;
+               FileName: constant String :=
+                 To_String(SaveDirectory) & "gtkada.env";
+               TempFile: File_Type;
+               FileText: Unbounded_String;
+               StartIndex: Natural;
+            begin
+               RunResult :=
+                 Sys(To_C("gtkada-env.sh --print-only > " & FileName));
+               if RunResult /= 0 then
+                  Put_Line("Can't set GTK environment, terminating.");
+                  return;
+               end if;
+               Open(TempFile, In_File, FileName);
+               while not End_Of_File(TempFile) loop
+                  FileText := To_Unbounded_String(Get_Line(TempFile));
+                  for I in VariablesNames'Range loop
+                     if Index(FileText, To_String(VariablesNames(I))) > 0 then
+                        StartIndex := Index(FileText, "=");
+                        if StartIndex > 0 then
+                           VariablesValues(I) :=
+                             Unbounded_Slice
+                               (FileText,
+                                StartIndex + 2,
+                                Length(FileText) - 2);
+                           exit;
+                        end if;
+                     end if;
+                  end loop;
+               end loop;
+               Close(TempFile);
+               Delete_File(FileName);
+            end;
+         end if;
+         for I in VariablesNames'Range loop
+            Setenv
+              (To_String(VariablesNames(I)),
+               To_String(VariablesValues(I)));
+         end loop;
+         Setenv("GSETTINGS_BACKEND", "memory");
+      end;
+   end if;
 
    --  Initializes GtkAda
    Init;
