@@ -1378,4 +1378,13 @@ Buyable = N, N, N, N, Y
 ShowType = Armor
 Value = 2, 15, 3
 Description = Standard type of armor, made of orichalcum, weared on head.
+[162]
+Name = Orichalcum armsguard
+Weight = 4
+Type = ArmsArmor
+Prices = 35, 35, 35, 35, 33
+Buyable = N, N, N, N, Y
+ShowType = Armor
+Value = 2, 16, 3
+Description = Standard type of armor, made of orichalcum, protects arms.
 []
