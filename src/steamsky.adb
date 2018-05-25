@@ -34,6 +34,16 @@ with HallOfFame; use HallOfFame;
 with MainMenu; use MainMenu;
 
 procedure SteamSky is
+
+   LibraryDirectory: Unbounded_String :=
+     To_Unbounded_String("../lib" & Dir_Separator);
+   ConfigDirectory: Unbounded_String :=
+     To_Unbounded_String
+       (Full_Name(Dir_Name(Command_Name)) &
+        Dir_Separator &
+        "../etc" &
+        Dir_Separator);
+
 begin
    Set_Directory(Dir_Name(Command_Name));
    -- Command line arguments
@@ -99,6 +109,41 @@ begin
                   " not exists. You must use existing directory as documentation directory.");
                return;
             end if;
+         elsif Argument(I)(1 .. 8) = "--libdir" then
+            LibraryDirectory :=
+              To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
+            if Element(LibraryDirectory, Length(LibraryDirectory)) /=
+              Dir_Separator then
+               Append(LibraryDirectory, Dir_Separator);
+            end if;
+            LogMessage
+              ("Library directory sets to: " & To_String(LibraryDirectory),
+               Everything);
+            if not Exists(To_String(LibraryDirectory)) then
+               Put_Line
+                 ("Directory " &
+                  To_String(LibraryDirectory) &
+                  " not exists. You must use existing directory as library directory.");
+               return;
+            end if;
+         elsif Argument(I)(1 .. 8) = "--etcdir" then
+            ConfigDirectory :=
+              To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
+            if Element(ConfigDirectory, Length(ConfigDirectory)) /=
+              Dir_Separator then
+               Append(ConfigDirectory, Dir_Separator);
+            end if;
+            LogMessage
+              ("Configuration directory sets to: " &
+               To_String(ConfigDirectory),
+               Everything);
+            if not Exists(To_String(ConfigDirectory)) then
+               Put_Line
+                 ("Directory " &
+                  To_String(ConfigDirectory) &
+                  " not exists. You must use existing directory as configuration directory.");
+               return;
+            end if;
          end if;
       end if;
    end loop;
@@ -124,18 +169,17 @@ begin
             To_Unbounded_String("FONTCONFIG_FILE"));
          VariablesValues: array(1 .. 4) of Unbounded_String;
       begin
-         if Exists("../lib") then
-            VariablesValues(1) := (To_Unbounded_String("../lib"));
+         if Exists(To_String(LibraryDirectory)) then
+            VariablesValues(1) := LibraryDirectory;
             VariablesValues(2) :=
-              (To_Unbounded_String
-                 ("../lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"));
+              LibraryDirectory &
+              To_Unbounded_String("gdk-pixbuf-2.0/2.10.0/loaders.cache");
             VariablesValues(3) :=
-              (To_Unbounded_String("../lib/gdk-pixbuf-2.0/2.10.0/loaders/"));
+              LibraryDirectory &
+              To_Unbounded_String("gdk-pixbuf-2.0/2.10.0/loaders/");
             VariablesValues(4) :=
-              (To_Unbounded_String
-                 (Full_Name(Dir_Name(Command_Name)) &
-                  Dir_Separator &
-                  "../etc/fonts/fonts.conf"));
+              To_Unbounded_String
+                (To_String(ConfigDirectory) & "fonts/fonts.conf");
          else
             declare
                function Sys(Arg: char_array) return Integer;
