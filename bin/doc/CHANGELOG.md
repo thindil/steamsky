@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Crash on player death
 - Hide map after player death
 - Showing death screen after lost ship fight
+- Deleting savegame when it is saved in different directory than default
 
 ## [2.4] - 2018-05-20
 
