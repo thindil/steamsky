@@ -609,8 +609,8 @@ package body Game is
       if Save then
          SaveGame;
       else
-         if Exists("data/savegame.dat") then
-            Delete_File("data/savegame.dat");
+         if Exists(To_String(SaveDirectory) & "savegame.dat") then
+            Delete_File(To_String(SaveDirectory) & "savegame.dat");
          end if;
       end if;
       ClearMessages;
