@@ -470,7 +470,7 @@ package body MainMenu is
       else
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
       end if;
-      if not Exists(To_String(DataDirectory) & "halloffame.dat") then
+      if not Exists(To_String(SaveDirectory) & "halloffame.dat") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
       end if;
    end ShowMainMenu;
