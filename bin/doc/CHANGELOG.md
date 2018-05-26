@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: orichalcum chestplate, orichalcum helmet and orichalcum armsguard
-- New crafting recipes: orichalcum chestplate and orichalcum helmet
+- New crafting recipes: orichalcum chestplate, orichalcum helmet and 
+  orichalcum armsguard
 
 ### Changed
 - Raised gained experience in combat
