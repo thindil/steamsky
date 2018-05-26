@@ -15,8 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with DOM.Core; use DOM.Core;
+with DOM.Core.Nodes; use DOM.Core.Nodes;
+with DOM.Core.Elements; use DOM.Core.Elements;
+with DOM.Readers; use DOM.Readers;
+with Input_Sources.File; use Input_Sources.File;
 with Bases; use Bases;
 with Bases.Ship; use Bases.Ship;
 with Bases.Cargo; use Bases.Cargo;
@@ -347,59 +351,10 @@ package body Game is
    end UpdateGame;
 
    function LoadData return Boolean is
-      DataFile: File_Type;
-      RawData, FieldName, Value: Unbounded_String;
-      EqualIndex, StartIndex, EndIndex, Amount: Natural;
-      FieldsNames: constant array(Positive range <>) of Unbounded_String :=
-        (To_Unbounded_String("BasesSyllablesPre"),
-         To_Unbounded_String("BasesSyllablesStart"),
-         To_Unbounded_String("BasesSyllablesEnd"),
-         To_Unbounded_String("BasesSyllablesPost"),
-         To_Unbounded_String("MaleSyllablesStart"),
-         To_Unbounded_String("MaleSyllablesMiddle"),
-         To_Unbounded_String("MaleSyllablesEnd"),
-         To_Unbounded_String("FemaleSyllablesEnd"),
-         To_Unbounded_String("Skills"),
-         To_Unbounded_String("ItemsTypes"),
-         To_Unbounded_String("MaleVocals"),
-         To_Unbounded_String("MaleConsonants"),
-         To_Unbounded_String("FemaleSyllablesStart"),
-         To_Unbounded_String("FemaleSyllablesMiddle"),
-         To_Unbounded_String("FemaleVocals"),
-         To_Unbounded_String("ShipSyllablesStart"),
-         To_Unbounded_String("ShipSyllablesMiddle"),
-         To_Unbounded_String("ShipSyllablesEnd"),
-         To_Unbounded_String("RepairTools"),
-         To_Unbounded_String("CleaningTools"),
-         To_Unbounded_String("HealingTools"),
-         To_Unbounded_String("PlayerShipIndex"),
-         To_Unbounded_String("AlchemyTools"),
-         To_Unbounded_String("DrinksType"),
-         To_Unbounded_String("CorpseIndex"),
-         To_Unbounded_String("MissionItemsType"),
-         To_Unbounded_String("FoodTypes"),
-         To_Unbounded_String("FuelType"),
-         To_Unbounded_String("MoneyIndex"),
-         To_Unbounded_String("TradersName"),
-         To_Unbounded_String("Attributes"),
-         To_Unbounded_String("ConditionName"),
-         To_Unbounded_String("StrengthName"),
-         To_Unbounded_String("HealingSkill"),
-         To_Unbounded_String("PilotingSkill"),
-         To_Unbounded_String("EngineeringSkill"),
-         To_Unbounded_String("GunnerySkill"),
-         To_Unbounded_String("TalkingSkill"),
-         To_Unbounded_String("PerceptionSkill"),
-         To_Unbounded_String("PlayerIndex"),
-         To_Unbounded_String("HeadArmor"),
-         To_Unbounded_String("ChestArmor"),
-         To_Unbounded_String("ArmsArmor"),
-         To_Unbounded_String("LegsArmor"),
-         To_Unbounded_String("ShieldType"),
-         To_Unbounded_String("WeaponType"),
-         To_Unbounded_String("DodgeSkill"),
-         To_Unbounded_String("UnarmedSkill"));
-      SeparatorString: String(Positive range 1 .. 2);
+      DataFile: File_Input;
+      Reader: Tree_Reader;
+      GameData: Document;
+      NodesList: Node_List;
    begin
       if BaseSyllablesStart.Length > 0 then
          return True;
@@ -407,229 +362,246 @@ package body Game is
       if not Exists(To_String(DataDirectory) & "game.dat") then
          return False;
       end if;
-      Open(DataFile, In_File, To_String(DataDirectory) & "game.dat");
-      while not End_Of_File(DataFile) loop
-         RawData := To_Unbounded_String(Get_Line(DataFile));
-         EqualIndex := Index(RawData, "=");
-         FieldName := Head(RawData, EqualIndex - 2);
-         Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
-         for I in FieldsNames'Range loop
-            if FieldName = FieldsNames(I) then
-               StartIndex := 1;
-               if I = 9 or I = 31 then
-                  SeparatorString := "; ";
-               else
-                  SeparatorString := ", ";
-               end if;
-               Amount :=
-                 Ada.Strings.Unbounded.Count(Value, SeparatorString) + 1;
-               for J in 1 .. Amount loop
-                  EndIndex := Index(Value, SeparatorString, StartIndex);
-                  if EndIndex = 0 then
-                     EndIndex := Length(Value) + 1;
-                  end if;
-                  case I is
-                     when 1 =>
-                        BaseSyllablesPre.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 2 =>
-                        BaseSyllablesStart.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 3 =>
-                        BaseSyllablesEnd.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 4 =>
-                        BaseSyllablesPost.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 5 =>
-                        MaleSyllablesStart.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 6 =>
-                        MaleSyllablesMiddle.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 7 =>
-                        MaleSyllablesEnd.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 8 =>
-                        FemaleSyllablesEnd.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 9 =>
-                        declare
-                           ColonIndex, AttributeIndex, ColonIndex2: Positive;
-                           AttributeName: Unbounded_String;
-                        begin
-                           ColonIndex := Index(Value, ":", StartIndex);
-                           ColonIndex2 := Index(Value, ":", ColonIndex + 1);
-                           AttributeName :=
-                             Unbounded_Slice
-                               (Value,
-                                ColonIndex + 1,
-                                ColonIndex2 - 1);
-                           for I in Attributes_List.Iterate loop
-                              if Attributes_List(I).Name = AttributeName then
-                                 AttributeIndex :=
-                                   AttributesData_Container.To_Index(I);
-                                 exit;
-                              end if;
-                           end loop;
-                           Skills_List.Append
-                           (New_Item =>
-                              (Name =>
-                                 Unbounded_Slice
-                                   (Value,
-                                    StartIndex,
-                                    ColonIndex - 1),
-                               Attribute => AttributeIndex,
-                               Description =>
-                                 Unbounded_Slice
-                                   (Value,
-                                    ColonIndex2 + 1,
-                                    EndIndex - 1)));
-                        end;
-                     when 10 =>
-                        Items_Types.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 11 =>
-                        MaleVocals.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 12 =>
-                        MaleConsonants.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 13 =>
-                        FemaleSyllablesStart.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 14 =>
-                        FemaleSyllablesMiddle.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 15 =>
-                        FemaleVocals.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 16 =>
-                        ShipSyllablesStart.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 17 =>
-                        ShipSyllablesMiddle.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 18 =>
-                        ShipSyllablesEnd.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 19 =>
-                        RepairTools := Value;
-                     when 20 =>
-                        CleaningTools := Value;
-                     when 21 =>
-                        HealingTools := Value;
-                     when 22 =>
-                        PlayerShipIndex := Value;
-                     when 23 =>
-                        AlchemyTools := Value;
-                     when 24 =>
-                        DrinksType := Value;
-                     when 25 =>
-                        CorpseIndex := Value;
-                     when 26 =>
-                        MissionItemsType := Value;
-                     when 27 =>
-                        FoodTypes.Append
-                        (New_Item =>
-                           Unbounded_Slice(Value, StartIndex, EndIndex - 1));
-                     when 28 =>
-                        FuelType := Value;
-                     when 29 =>
-                        MoneyIndex := Value;
-                     when 30 =>
-                        TradersName := Value;
-                     when 31 =>
-                        declare
-                           ColonIndex: Positive;
-                        begin
-                           ColonIndex := Index(Value, ":", StartIndex);
-                           Attributes_List.Append
-                           (New_Item =>
-                              (Name =>
-                                 Unbounded_Slice
-                                   (Value,
-                                    StartIndex,
-                                    ColonIndex - 1),
-                               Description =>
-                                 Unbounded_Slice
-                                   (Value,
-                                    ColonIndex + 1,
-                                    EndIndex - 1)));
-                        end;
-                     when 32 =>
-                        for I in Attributes_List.Iterate loop
-                           if Attributes_List(I).Name = Value then
-                              ConditionIndex :=
-                                AttributesData_Container.To_Index(I);
-                              exit;
-                           end if;
-                        end loop;
-                     when 33 =>
-                        for I in Attributes_List.Iterate loop
-                           if Attributes_List(I).Name = Value then
-                              StrengthIndex :=
-                                AttributesData_Container.To_Index(I);
-                              exit;
-                           end if;
-                        end loop;
-                     when 34 =>
-                        HealingSkill := FindSkillIndex(Value);
-                     when 35 =>
-                        PilotingSkill := FindSkillIndex(Value);
-                     when 36 =>
-                        EngineeringSkill := FindSkillIndex(Value);
-                     when 37 =>
-                        GunnerySkill := FindSkillIndex(Value);
-                     when 38 =>
-                        TalkingSkill := FindSkillIndex(Value);
-                     when 39 =>
-                        PerceptionSkill := FindSkillIndex(Value);
-                     when 40 =>
-                        PlayerIndex := Value;
-                     when 41 =>
-                        HeadArmor := Value;
-                     when 42 =>
-                        ChestArmor := Value;
-                     when 43 =>
-                        ArmsArmor := Value;
-                     when 44 =>
-                        LegsArmor := Value;
-                     when 45 =>
-                        ShieldType := Value;
-                     when 46 =>
-                        WeaponType := Value;
-                     when 47 =>
-                        DodgeSkill := FindSkillIndex(Value);
-                     when 48 =>
-                        UnarmedSkill := FindSkillIndex(Value);
-                     when others =>
-                        null;
-                  end case;
-                  StartIndex := EndIndex + 2;
-               end loop;
-               exit;
-            end if;
-         end loop;
-      end loop;
+      Open(To_String(SaveDirectory) & "game.dat", DataFile);
+      Parse(Reader, DataFile);
       Close(DataFile);
+      GameData := Get_Tree(Reader);
+      NodesList := Child_Nodes(First_Child(GameData));
+      for I in 0 .. Length(NodesList) - 1 loop
+         if Node_Name(Item(NodesList, I)) = "basessyllablepre" then
+            BaseSyllablesPre.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "basessyllablestart" then
+            BaseSyllablesStart.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "basessyllableend" then
+            BaseSyllablesEnd.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "basessyllablepost" then
+            BaseSyllablesPost.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "malessyllablestart" then
+            MaleSyllablesStart.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "malessyllablemiddle" then
+            MaleSyllablesMiddle.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "malessyllableend" then
+            MaleSyllablesEnd.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "malesvocal" then
+            MaleVocals.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "malesconsonant" then
+            MaleConsonants.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "femalessyllablestart" then
+            FemaleSyllablesStart.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "femalessyllablemiddle" then
+            FemaleSyllablesMiddle.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "femalessyllableend" then
+            FemaleSyllablesEnd.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "femalesvocal" then
+            FemaleVocals.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "shipssyllablestart" then
+            ShipSyllablesStart.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "shipssyllablemiddle" then
+            ShipSyllablesMiddle.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "shipssyllableend" then
+            ShipSyllablesEnd.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "itemtype" then
+            Items_Types.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "repairtools" then
+            RepairTools :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "healingtools" then
+            HealingTools :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "cleaningtools" then
+            CleaningTools :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "alchemytools" then
+            AlchemyTools :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "playershipindex" then
+            PlayerShipIndex :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "drinkstype" then
+            DrinksType :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "corpseindex" then
+            CorpseIndex :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "missionitemstype" then
+            MissionItemsType :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "foodtype" then
+            FoodTypes.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "fueltype" then
+            FuelType :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "moneyindex" then
+            MoneyIndex :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "tradersname" then
+            TradersName :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "attribute" then
+            Attributes_List.Append
+            (New_Item =>
+               (Name =>
+                  To_Unbounded_String
+                    (Get_Attribute(Item(NodesList, I), "name")),
+                Description =>
+                  To_Unbounded_String
+                    (Node_Value(First_Child(Item(NodesList, I))))));
+         elsif Node_Name(Item(NodesList, I)) = "skill" then
+            for J in
+              Attributes_List.First_Index .. Attributes_List.Last_Index loop
+               if Attributes_List(J).Name =
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "attribute")) then
+                  Skills_List.Append
+                  (New_Item =>
+                     (Name =>
+                        To_Unbounded_String
+                          (Get_Attribute(Item(NodesList, I), "name")),
+                      Attribute => J,
+                      Description =>
+                        To_Unbounded_String
+                          (Node_Value(First_Child(Item(NodesList, I))))));
+                  exit;
+               end if;
+            end loop;
+         elsif Node_Name(Item(NodesList, I)) = "conditionname" then
+            for J in
+              Attributes_List.First_Index .. Attributes_List.Last_Index loop
+               if Attributes_List(J).Name =
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")) then
+                  ConditionIndex := J;
+                  exit;
+               end if;
+            end loop;
+         elsif Node_Name(Item(NodesList, I)) = "strengthname" then
+            for J in
+              Attributes_List.First_Index .. Attributes_List.Last_Index loop
+               if Attributes_List(J).Name =
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")) then
+                  StrengthIndex := J;
+                  exit;
+               end if;
+            end loop;
+         elsif Node_Name(Item(NodesList, I)) = "healingskill" then
+            HealingSkill :=
+              FindSkillIndex
+                (To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "pilotingskill" then
+            PilotingSkill :=
+              FindSkillIndex
+                (To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "engineeringskill" then
+            EngineeringSkill :=
+              FindSkillIndex
+                (To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "gunneryskill" then
+            GunnerySkill :=
+              FindSkillIndex
+                (To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "talkingskill" then
+            TalkingSkill :=
+              FindSkillIndex
+                (To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "perceptionskill" then
+            PerceptionSkill :=
+              FindSkillIndex
+                (To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "playerindex" then
+            PlayerIndex :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "headarmor" then
+            HeadArmor :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "chestarmor" then
+            ChestArmor :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "armsarmor" then
+            ArmsArmor :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "legsarmor" then
+            LegsArmor :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "shieldtype" then
+            ShieldType :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "weapontype" then
+            WeaponType :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
+         elsif Node_Name(Item(NodesList, I)) = "dodgeskill" then
+            DodgeSkill :=
+              FindSkillIndex
+                (To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "unarmedskill" then
+            UnarmedSkill :=
+              FindSkillIndex
+                (To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
+         end if;
+      end loop;
+      Free(Reader);
       return True;
    end LoadData;
 
