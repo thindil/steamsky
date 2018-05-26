@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - New items: orichalcum chestplate, orichalcum helmet and orichalcum armsguard
 - New crafting recipes: orichalcum chestplate, orichalcum helmet and 
   orichalcum armsguard
+- Option to set GTK directories via console parameters (Linux only)
 
 ### Changed
 - Raised gained experience in combat
