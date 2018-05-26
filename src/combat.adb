@@ -1277,47 +1277,50 @@ package body Combat is
       if not EndCombat then
          Attack(Enemy.Ship, PlayerShip); -- Enemy attack
       end if;
-      declare
-         HaveBoardingParty: Boolean := False;
-      begin
-         for Member of PlayerShip.Crew loop
-            if Member.Order = Boarding then
-               HaveBoardingParty := True;
-               exit;
+      if not EndCombat then
+         declare
+            HaveBoardingParty: Boolean := False;
+         begin
+            for Member of PlayerShip.Crew loop
+               if Member.Order = Boarding then
+                  HaveBoardingParty := True;
+                  exit;
+               end if;
+            end loop;
+            for Member of Enemy.Ship.Crew loop
+               if Member.Order = Boarding then
+                  HaveBoardingParty := True;
+                  exit;
+               end if;
+            end loop;
+            if Enemy.HarpoonDuration > 0 or
+              HarpoonDuration > 0 or
+              HaveBoardingParty then
+               if not EndCombat and
+                 Enemy.Ship.Crew.Length >
+                   0 then -- Characters combat (player boarding party)
+                  MeleeCombat(PlayerShip.Crew, Enemy.Ship.Crew, True);
+               end if;
+               if not EndCombat and
+                 Enemy.Ship.Crew.Length >
+                   0 then -- Characters combat (enemy boarding party)
+                  MeleeCombat(Enemy.Ship.Crew, PlayerShip.Crew, False);
+               end if;
             end if;
-         end loop;
-         for Member of Enemy.Ship.Crew loop
-            if Member.Order = Boarding then
-               HaveBoardingParty := True;
-               exit;
-            end if;
-         end loop;
-         if Enemy.HarpoonDuration > 0 or
-           HarpoonDuration > 0 or
-           HaveBoardingParty then
-            if not EndCombat and
-              Enemy.Ship.Crew.Length >
-                0 then -- Characters combat (player boarding party)
-               MeleeCombat(PlayerShip.Crew, Enemy.Ship.Crew, True);
-            end if;
-            if not EndCombat and
-              Enemy.Ship.Crew.Length >
-                0 then -- Characters combat (enemy boarding party)
-               MeleeCombat(Enemy.Ship.Crew, PlayerShip.Crew, False);
-            end if;
-         end if;
-      end;
-      if Enemy.HarpoonDuration > 0 then
-         Enemy.HarpoonDuration := Enemy.HarpoonDuration - 1;
-      end if;
-      if HarpoonDuration > 0 then
-         HarpoonDuration := HarpoonDuration - 1;
-      end if;
-      if Enemy.HarpoonDuration > 0 or
-        HarpoonDuration > 0 then -- Set defenders/boarding party on player ship
-         UpdateOrders(PlayerShip, True);
+         end;
       end if;
       if not EndCombat then
+         if Enemy.HarpoonDuration > 0 then
+            Enemy.HarpoonDuration := Enemy.HarpoonDuration - 1;
+         end if;
+         if HarpoonDuration > 0 then
+            HarpoonDuration := HarpoonDuration - 1;
+         end if;
+         if Enemy.HarpoonDuration > 0 or
+           HarpoonDuration >
+             0 then -- Set defenders/boarding party on player ship
+            UpdateOrders(PlayerShip, True);
+         end if;
          UpdateGame(1);
       elsif PlayerShip.Crew(1).Health > 0 then
          declare
