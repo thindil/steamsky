@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Showing death screen after lost ship fight
 - Deleting savegame when it is saved in different directory than default
 - Possible crash on saving hall of fame data
+- Updating crew orders in combat
 
 ## [2.4] - 2018-05-20
 
