@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New items: orichalcum chestplate, orichalcum helmet and orichalcum armsguard
+- New items: orichalcum chestplate, orichalcum helmet, orichalcum armsguard and
+  orichalcum legsguard
 - New crafting recipes: orichalcum chestplate, orichalcum helmet and 
   orichalcum armsguard
 - Option to set GTK directories via console parameters (Linux only)
