@@ -1387,4 +1387,13 @@ Buyable = N, N, N, N, Y
 ShowType = Armor
 Value = 2, 16, 3
 Description = Standard type of armor, made of orichalcum, protects arms.
+[163]
+Name = Orichalcum legsguard
+Weight = 5
+Type = LegsArmor
+Prices = 38, 38, 38, 38, 36
+Buyable = N, N, N, N, Y
+ShowType = Armor
+Value = 2, 24, 4
+Description = Standard type of armor, made of orichalcum, protects legs.
 []
