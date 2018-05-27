@@ -4,210 +4,222 @@ ships, ships modules, etc.)
 ## Items types
 
 ### General informations
-- Open file *game.dat* in *data* directory and edit line which starts with
-  ItemsTypes.
-- Each value for item type must be separated by comma and space: `, `
-- Whole ItemsTypes entry must be done in one line (if your text editor have
-  automatic line wrap enabled, don't forget to fix it).
+- Open file *game.dat* in *data* directory. Each item type is one line entry
+  with tag `itemtype`.
 
 ### Changing existing items types
+- To change name of existing item type, edit `value` attribute for selected 
+  type.
 - After change of Item Type don't forget to do proper changes in other data
   files (like items or recipes) and in this same file if item type was used in
   one of below settings.
 
 ### Adding new items types
-- To add new item type, just append it name to ItemsTypes entry.
+- To add new item type, just append new line with tag `itemtype` and it name
+  as `value` attribute.
 - Each new ammunition type must starts with `Ammo` (example: *Ammo150*).
 - Ammunition for harpoon guns must be named `Harpoon`.
 
+### Removing item types
+- Just remove line with tag `itemtype` and selected item type name as `value`
+  attribute.
+- After delete of Item Type don't forget to do proper changes in other data
+  files (like items or recipes) and in this same file if item type was used in
+  one of below settings.
+
 ## Repair tools type
 To change which item type is used for repair/upgrading tools, open file 
-*game.dat* in *data* directory and edit line which starts with RepairTools.
-Value after equal sign must be existing item type.
+*game.dat* in *data* directory and edit `value` attribue of tag `repairtools`.
+Value must be existing item type.
 
 ## Cleaning tools type
 To change which item type is used for cleaning ship, open file *game.dat* in 
-*data* directory and edit line which starts with CleaningTools. Value after 
-equal sign must be existing item type.
+*data* directory and edit `value` attribute of tag `cleaningrools`. Value must
+be existing item type.
 
 ## Healing tools type
 To change which item type is used for healing crew members and for deliver
-medicines to bases, open file *game.dat* in *data* directory and edit line
-which starts with HealingTools. Value after equal sign must be existing 
-item type.
+medicines to bases, open file *game.dat* in *data* directory and edit `value`
+attribute of tag `healingtools`. Value must be existing item type.
 
 ## Player Ship index
 To change which ship is used as a player ship, open file *game.dat* in *data*
-directory and edit line which starts with PlayerShipIndex. Value after equal
-sign must be existing ship index from any ships file from *data/ships*
-directory.
+directory and edit `value` attribute of tag `playershipindex`. Value must be 
+existing ship index from any ships file from *data/ships* directory.
 
 ## Alchemy tools type
 To change which item type is used for deconstruct items, open file *game.dat* 
-in *data* directory and edit line which starts with AlchemyTools. Value after 
-equal sign must be existing item type.
+in *data* directory and edit `value` attribute of tag `alchemytools`. Value 
+must be existing item type.
 
 ## Drinks type
 To change which item type is used for reduce thirst, open file *game.dat* 
-in *data* directory and edit line which starts with DrinksType. Value after 
-equal sign must be existing item type.
+in *data* directory and edit `value` attribute of tag `drinkstype`. Value must
+be existing item type.
 
 ## Corpse index
 To change which item is used as a body for dead, open file *game.dat* in *data*
-directory and edit line which starts with CorpseIndex. Value after equal sign 
-must be existing item index from any items file from *data/items* directory.
+directory and edit `value` attribute of tag `corpseindex`. Value must be 
+existing item index from any items file from *data/items* directory.
 
 ## Mission items type
 To change which item type is used for delivery missions, open file *game.dat* 
-in *data* directory and edit line which starts with MissionItemsType. Value 
-after equal sign must be existing item type.
+in *data* directory and edit `value` attribute of tag `missionitemstype`. Value
+must be existing item type.
 
 ## Food items types
-To change which items types are used as food, open file *game.dat* in *data*
-directory and edit line which starts with FoodTypes. First type is always
-main type, other types used only when items of previous types are not found
-in ship cargo. Values after equal sign must be existing items types, 
-separated by comma and space: `, `.
+Open file *game.dat* in *data* directory. Each food type is one line entry
+with tag `foodtype`. To change name of existing food type, edit `value`
+attribute for selected type. To add new food type, just append new line 
+with tag `itemtype` and it name as `value` attribute. Value must be existing
+item type. To remove food type, just remove line with tag `foodtype` and 
+selected food type name as `value` attribute.
 
 ## Fuel item type
 To change which item type is used as a fuel for ship, open file *game.dat* in 
-*data* directory and edit line which starts with FuelType. Value after equal 
-sign must be existing item type.
+*data* directory and edit `value` attribute of tag `fueltype`. Value must be 
+existing item type.
 
 ## Money index
 To change which item is used as a money, open file *game.dat* in *data* 
-directory and edit line which starts with MoneyIndex. Value after equal sign 
-must be existing item index from any items file from *data/items* directory.
+directory and edit `value` attribute of tag `moneyindex`. Value must be 
+existing item index from any items file from *data/items* directory.
 
 ## Traders ships name
 To change which word in ship names is used to determine trader ship (needed for
 friendly trader random event), open file *game.dat* in *data* directory and
-edit line which starts with TradersName. Value after equal sign can be any
-single word.
+edit `value` attribute for tag `tradersname`. Value can be any single word
+(but this word must be in trader ships names).
 
 ## Characters attributes
 
 ### General informations
-- To change/add/remove characters attributes, open file *game.dat* in *data* 
-  directory and edit line which starts with Attributes. 
-- Each value for attribute must have format Attribute Name`:`Description and 
-  be separated by semicolon and space: `; `. Example: *Dexterity:Nimbleness 
-  of character, used in many crafts*
-- Whole Attributes entry must be done in one line (if your text editor have 
-  automatic line wrap enabled, don't forget to fix it).
+- To add/remove/change characters attributes, open file *game.dat* in
+  *data* directory.
+- Each attribute starts with tag `attribute`. Attribute `name` is name of
+  selected attribute. Value between `attribute` tags is description of
+  attribute. Example *<attribute name="Dexterity">Nimbleness of character,
+  used in many crafts</attrbute>*.
 
 ### Changing existing attribute
 - After change attribute name, don't forget to made proper changes in this
   same data file (if needed).
+- To edit attribute name, just edit value of attribute `name`.
+- To change attribute description, just edit text between `attribute` tags.
 
 ### Adding new attribute
-- To add new attribute, just append it name and description to Attributes 
-  entry. Name must be unique for each attribute.
+- To add new attribute, just append new line with tag `attribute` with
+  it name as attribute `name` and description between tags `attribute`.
 
 ## Skills
 
 ### General informations
-- Open file *game.dat* in *data* directory and edit line which starts with
-  Skills.
-- Each value for skills must be separated by semicolon and space: `; `
-- Each value have format Skill Name`:`Attribute Name`:`Description. Attribute
-  Name must be name of existing attribute from Attributes list. Example: 
-  *Gunnery:Dexterity:Used by gunners, determine chance to hit enemy in ship 
-  combat*
-- Whole Skills entry must be done in one line (if your text editor have
-  automatic line wrap enabled, don't forget to fix it).
+- Open file *game.dat* in *data* directory to add/remove/change skills.
+- Each skill starts with tag `skill`. Attribute `name` is name of selected 
+  skill, attribute `attribute` is name of character attribute (must be defined
+  ealier in this same file). Value between `skills` tags is description of
+  skill. Example: *<skill name="Gunnery" attribute="Dexterity">Used by 
+  gunners, determine chance to hit enemy in ship combat.</skill>*.
 
 ### Changing existing skills
 - After change skill name, you been need to made proper changes in other game
   data files (recipes, items and this same file) if needed.
-- To change which attribute is assigned to selected skill, just enter new name
-  of existing attribute from Attributes list.
+- To change skill name, just edit value of `name` attribute of selected skill.
+- To change assigned attribute to selected skill enter new name in attribute
+  `attribute`. Name must be existing attribute name, defined ealier in this
+  same file.
+- To change skill description, just edit text between `skill` tags.
 
 ### Adding new skills
-- To add new skill, just append it name and assigned attribute name to Skills
-  entry.
+- To add new skill, just append new line with tag `skill` with it name as
+  attribute `name`, assigned attribute to skill as attribute `attribute` and
+  description between tags `skill`.
 
 ## Condition attribute name
 To change which attribute is used to raise character condition, open file 
-*game.dat* in *data* directory and edit line which starts with ConditionName.
-Value after equal sign must be existing attribute name.
+*game.dat* in *data* directory and edit attribute `value` of tag 
+`conditionname`. Value must be existing attribute name.
 
 ## Strength attribute name
 To change which attribute is used to count character maximum encumbrance, open
-file *game.dat* in *data* directory and edit line which starts with 
-StrenghtName. Value after equal sign must be existing attribute name.
+file *game.dat* in *data* directory and edit attribute `value` of tag 
+`strenghtname`. Value must be existing attribute name.
 
 ## Healing skill name
 To change which skill is used for healing wounded crew members, open file 
-*game.dat* in *data* directory and edit line which starts with HealingSkill.
-Value after equal sign must be existing skill name.
+*game.dat* in *data* directory and edit `value` attribute of tag 
+`healingskill`. Value must be existing skill name.
 
 ## Piloting skill name
 To change which skill is used for piloting ship, open file *game.dat* in 
-*data* directory and edit line which starts with PilotingSkill. Value after
-equal sign must be existing skill name.
+*data* directory and edit `value` attribute of tag `pilotingskill`. Value must 
+be existing skill name.
 
 ## Engineering skill name
 To change which skill is used for engineering duty, open file *game.dat* in 
-*data* directory and edit line which starts with EngineeringSkill. Value after
-equal sign must be existing skill name.
+*data* directory and edit `value` attribute of tag `engineeringskill`. Value
+must be existing skill name.
 
 ## Gunnery skill name
 To change which skill is used for operating guns on ship, open file *game.dat*
-in *data* directory and edit line which starts with GunnerySkill. Value after
-equal sign must be existing skill name.
+in *data* directory and edit `value` attribute of tag `gunneryskill`. Value 
+must be existing skill name.
 
 ## Talking skill name
 To change which skill is used for talking in bases or with other ships (trades,
-repairs, recruit, etc), open file *game.dat* in *data* directory and edit line
-which starts with TalkingSkill. Value after equal sign must be existing skill
-name.
+repairs, recruit, etc), open file *game.dat* in *data* directory and edit 
+`value` attribute of tag `talkingskill`. Value must be existing skill name.
 
 ## Spotting skill name
 To change which skill is used for spotting things (other ships, etc), open 
-file *game.dat* in *data* directory and edit line which starts with 
-PerceptionSkill. Value after equal sign must be existing skill name.
+file *game.dat* in *data* directory and edit `value` attribute of tag 
+`perceptionskill`. Value must be existing skill name.
 
 ## Player character index
 To change which mobile data is used for starting player character data 
 (attributes, skills, etc), open file *game.dat* in *data* directory and edit
-line which starts with PlayerIndex. Value after equal sign must be existing
-mobile index from any mobiles file from *data/mobs* directory.
+`value` attribute of tag `playerindex`. Value must be existing mobile index 
+from any mobiles file from *data/mobs* directory.
 
 ## Head armor type
 To change which item type is used as a head armor for characters, open file 
-*game.dat* in *data* directory and edit line which starts with HeadArmor.
-Value after equal sign must be existing item type.
+*game.dat* in *data* directory and edit `value` attribute of tag `headarmor`.
+Value must be existing item type.
 
 ## Torso armor type
 To change which item type is used as a torso armor for characters, open file 
-*game.dat* in *data* directory and edit line which starts with ChestArmor.
-Value after equal sign must be existing item type.
+*game.dat* in *data* directory and edit `value` attribute of tag `chestarmor`.
+Value must be existing item type.
 
 ## Arms armor type
 To change which item type is used as an arms armor for characters, open file 
-*game.dat* in *data* directory and edit line which starts with ArmsArmor.
-Value after equal sign must be existing item type.
+*game.dat* in *data* directory and edit `value` attribute of tag `armsarmor`.
+Value must be existing item type.
 
 ## Legs armor type
 To change which item type is used as a legs armor for characters, open file 
-*game.dat* in *data* directory and edit line which starts with LegsArmor.
-Value after equal sign must be existing item type.
+*game.dat* in *data* directory and edit `value` attribute of tag `legsarmor`.
+Value must be existing item type.
 
 ## Shield type
 To change which item type is used as a shield for characters, open file 
-*game.dat* in *data* directory and edit line which starts with ShieldType.
-Value after equal sign must be existing item type.
+*game.dat* in *data* directory and edit `value` attribute of tag `shieldtype`.
+Value must be existing item type.
 
 ## Weapon type
 To change which item type is used as a weapon by characters, open file 
-*game.dat* in *data* directory and edit line which starts with WeaponType.
-Value after equal sign must be existing item type.
+*game.dat* in *data* directory and edit `value` attribute of tag `weapontype`.
+Value must be existing item type.
 
 ## Dodging skill name
 To change which skill is used for dodges in character's combat, open 
-file *game.dat* in *data* directory and edit line which starts with 
-DodgeSkill. Value after equal sign must be existing skill name.
+file *game.dat* in *data* directory and edit `value` attribute of tag 
+`dodgeskill`. Value must be existing skill name.
+
+## Unarmed skill name
+To change which skill is used for chance to hit enemy in character's combat
+when character don't have weapon, open file *game.dat* in *data* directory and
+edit `value` attribute of tag `unarmedskill`. Value must be existing skill name.
 
 ## Items
 
