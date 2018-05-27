@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Raised gained experience in combat
 - Updated interface
 - Updated README.md
+- New format of game data file which made old incompatible
 
 ### Fixed
 - Crash on showing map cell info
