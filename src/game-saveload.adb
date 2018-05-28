@@ -384,10 +384,13 @@ package body Game.SaveLoad is
            Positive'Value(Get_Attribute(Item(NodesList, 0), "points"));
          ChildNodes := Child_Nodes(Item(NodesList, 0));
          for I in 0 .. Length(ChildNodes) - 1 loop
-            StatIndex :=
-              To_Unbounded_String(Get_Attribute(Item(ChildNodes, I), "index"));
-            StatAmount :=
-              Positive'Value(Get_Attribute(Item(ChildNodes, I), "amount"));
+            if Node_Name(Item(ChildNodes, I)) /= "#text" then
+               StatIndex :=
+                 To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, I), "index"));
+               StatAmount :=
+                 Positive'Value(Get_Attribute(Item(ChildNodes, I), "amount"));
+            end if;
             if Node_Name(Item(ChildNodes, I)) = "destroyedships" then
                GameStats.DestroyedShips.Append
                (New_Item => (Index => StatIndex, Amount => StatAmount));
