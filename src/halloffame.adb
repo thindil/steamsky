@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,17 +16,25 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Text_IO.Text_Streams; use Ada.Text_IO.Text_Streams;
 with Ada.Directories; use Ada.Directories;
-with GNAT.String_Split; use GNAT.String_Split;
+with DOM.Core; use DOM.Core;
+with DOM.Core.Documents; use DOM.Core.Documents;
+with DOM.Core.Nodes; use DOM.Core.Nodes;
+with DOM.Core.Elements; use DOM.Core.Elements;
+with DOM.Readers; use DOM.Readers;
+with Input_Sources.File; use Input_Sources.File;
 with Game; use Game;
 with Statistics; use Statistics;
 
 package body HallOfFame is
 
+   HoFData: Document;
+
    procedure LoadHallOfFame is
-      HoFFile: File_Type;
-      Index: Positive := 1;
-      SubStrings: Slice_Set;
+      HoFFile: File_Input;
+      Reader: Tree_Reader;
+      EntriesList: Node_List;
    begin
       if HallOfFame_Array(1).Name /= Null_Unbounded_String then
          return;
@@ -34,25 +42,29 @@ package body HallOfFame is
       if not Exists(To_String(SaveDirectory) & "halloffame.dat") then
          return;
       end if;
-      Open(HoFFile, In_File, To_String(SaveDirectory) & "halloffame.dat");
-      while not End_Of_File(HoFFile) loop
-         Create
-           (S => SubStrings,
-            From => Get_Line(HoFFile),
-            Separators => ";",
-            Mode => GNAT.String_Split.Single);
-         HallOfFame_Array(Index) :=
-           (Name => To_Unbounded_String(Slice(SubStrings, 1)),
-            Points => Natural'Value(Slice(SubStrings, 2)),
-            DeathReason => To_Unbounded_String(Slice(SubStrings, 3)));
-         Index := Index + 1;
-      end loop;
+      Open(To_String(SaveDirectory) & "halloffame.dat", HoFFile);
+      Parse(Reader, HoFFile);
       Close(HoFFile);
+      HoFData := Get_Tree(Reader);
+      EntriesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(HoFData, "entry");
+      for I in 0 .. Length(EntriesList) - 1 loop
+         HallOfFame_Array(I + 1).Name :=
+           To_Unbounded_String(Get_Attribute(Item(EntriesList, I), "name"));
+         HallOfFame_Array(I + 1).Points :=
+           Natural'Value(Get_Attribute(Item(EntriesList, I), "points"));
+         HallOfFame_Array(I + 1).DeathReason :=
+           To_Unbounded_String
+             (Get_Attribute(Item(EntriesList, I), "deathreason"));
+      end loop;
+      Free(Reader);
    end LoadHallOfFame;
 
    procedure UpdateHallOfFame(PlayerName, DeathReason: Unbounded_String) is
       NewIndex: Natural := 0;
       HoFFile: File_Type;
+      HoF: DOM_Implementation;
+      EntryNode, MainNode: DOM.Core.Element;
    begin
       for I in HallOfFame_Array'Range loop
          if HallOfFame_Array(I).Points < GameStats.Points then
@@ -70,22 +82,27 @@ package body HallOfFame is
         (Name => PlayerName,
          Points => GameStats.Points,
          DeathReason => DeathReason);
-      Create
-        (HoFFile,
-         Append_File,
-         To_String(SaveDirectory) & "halloffame.dat");
+      HoFData := Create_Document(HoF);
+      MainNode := Create_Element(HoFData, "halloffame");
+      MainNode := Append_Child(HoFData, MainNode);
       for I in HallOfFame_Array'Range loop
          if HallOfFame_Array(I).Name = Null_Unbounded_String then
             exit;
          end if;
-         Put_Line
-           (HoFFile,
-            To_String(HallOfFame_Array(I).Name) &
-            ";" &
-            Natural'Image(HallOfFame_Array(I).Points) &
-            ";" &
+         EntryNode := Create_Element(HoFData, "entry");
+         EntryNode := Append_Child(MainNode, EntryNode);
+         Set_Attribute(EntryNode, "name", To_String(HallOfFame_Array(I).Name));
+         Set_Attribute
+           (EntryNode,
+            "points",
+            Natural'Image(HallOfFame_Array(I).Points));
+         Set_Attribute
+           (EntryNode,
+            "deathreason",
             To_String(HallOfFame_Array(I).DeathReason));
       end loop;
+      Create(HoFFile, Out_File, To_String(SaveDirectory) & "halloffame.dat");
+      Write(Stream => Stream(HoFFile), N => HoFData, Pretty_Print => True);
       Close(HoFFile);
    end UpdateHallOfFame;
 
