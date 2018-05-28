@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Deleting savegame when it is saved in different directory than default
 - Possible crash on saving hall of fame data
 - Updating crew orders in combat
+- Showing buying option for unavailable items
 
 ## [2.4] - 2018-05-20
 
