@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Possible crash on saving hall of fame data
 - Updating crew orders in combat
 - Showing buying option for unavailable items
+- Loading saved game statistics
 
 ## [2.4] - 2018-05-20
 
