@@ -226,40 +226,40 @@ edit `value` attribute of tag `unarmedskill`. Value must be existing skill name.
 ### General informations
 - Open file *items.dat* in *data/items* directory or create new file with *dat*
   extension in this directory (example: *myitems.dat*)
-- Each value in item data structure must be one line length.
-- File must end with `[]`.
 
 ### Item data structure
-- Each item start from `[` symbol. Any value between `[` and `]` is a item
-  index (it can be number or text) and must be unique. This value is used in
-  ships and recipes data entries.
-- Name: name of item displayed in various places (cargo info, crafting, etc.)
-- Weight: weight of one item in kilograms
-- Type: item type of item (from *game.dat* file, entry *ItemsTypes*)
-- Prices: item base price in bases. Each value mean price in selected base
-  type: Industrial, Agricultural, Refinery, Shipyard, Military. If you want 
-  that item will be not possible to buy/sellable in bases (or only selected 
-  base type) set it price to 0.
-- Buyable: did item can be bough in selected type of base: Industrial,
-  Agricultural, Refinery, Shipyard, Military. Y mean yes, N means No.
-- ShowType: optional parameter. If you want to show item type in game (for
-  example in cargo or in trade screen) different than item type from *game.dat*
-  file, you can set this parameter to any text value.
-- Value: optional parameter. For 'Food' or 'Raw Food' it is value of hunger 
-  reduced by one portion. For 'Drink', value of thirst reduced by one portion.
-  For ammunition it is damage done by that ammunition. For working tools it is
-  chance for item to be damaged during work. For harpoon guns ammunition it is
-  how long (in combat turns) item will be stuck in enemy ship. For weapons and
-  armor pieces first value is change for item to be damaged during combat, 
-  second value separated by `, ` (comma and space) for weapons is damage done
-  by weapon and for armor piece it is amount of damage reduced by this armor.
-  Third value for weapons is number of skill used by this weapon (from 
+- Each item starts with tag `item`.
+- Attribute `index` is a item index (it can be number or text) and must be 
+  unique. This value is used in ships and recipes data entries.
+- `name` attribute: name of item displayed in various places (cargo info, 
+  crafting, etc.)
+- Attribute `weight`: weight of one item in kilograms
+- Attribute `type`: item type of item (from *game.dat* file, entry 
+  *ItemsTypes*)
+- Each `trade` tag is for selected type of bases: Industrial, Agricultural, 
+  Refinery, Shipyard, Military. Attribute `price` is price of item in selected
+  base type. If you want that item will be not possible to buy/sellable in 
+  bases (or only selected base type) set it price to 0. Attribute `buyable`
+  said did item can be bough in selected type of base. "Y" mean Yes, "N" means
+  No.
+- Attribute `showtype`: optional attribute. If you want to show item type in 
+  game (for example in cargo or in trade screen) different than item type 
+  from *game.dat* file, you can set this parameter to any text value.
+- Data: optional tags. Each tag is one value. For 'Food' or 'Raw Food' it is
+  value of hunger reduced by one portion. For 'Drink', value of thirst reduced
+  by one portion. For ammunition it is damage done by that ammunition. For 
+  working tools it is chance for item to be damaged during work. For harpoon 
+  guns ammunition it is how long (in combat turns) item will be stuck in enemy
+  ship. For weapons and armor pieces first value is change for item to be 
+  damaged during combat, second entry for weapons is damage done by weapon 
+  and for armor piece it is amount of damage reduced by this armor.
+  Third entry for weapons is number of skill used by this weapon (from 
   *game.dat* file, entry *Skills*) and for armor is amount of levels of dodge 
-  skill which this armor reduce when weared. Forth value for weapon is amount
-  of hands used (1 for one-handed, 2 for two-handed weapons). Fifth value for
+  skill which this armor reduce when weared. Forth entry for weapon is amount
+  of hands used (1 for one-handed, 2 for two-handed weapons). Fifth entry for
   weapon is damage type (1 - cutting damage, 2 - impaling damage, 3 - blunt
   damage).
-- Description: Any length description of item.
+- Tag `description`: In game description of item. Can have any value.
 
 ## Recipes
 
