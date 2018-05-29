@@ -259,7 +259,7 @@ package body Game.SaveLoad is
          "target",
          To_String(CurrentGoal.TargetIndex));
       Create(SaveFile, Out_File, To_String(SaveDirectory) & "savegame.dat");
-      Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => True);
+      Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => False);
       Close(SaveFile);
    end SaveGame;
 
@@ -308,6 +308,7 @@ package body Game.SaveLoad is
       -- Load player ship
       LoadPlayerShip(SaveData);
       -- Load known recipes
+      Known_Recipes.Clear;
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "recipe");
       for I in 0 .. Length(NodesList) - 1 loop
@@ -320,6 +321,7 @@ package body Game.SaveLoad is
       -- Load messages
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "message");
+      ClearMessages;
       declare
          Text: Unbounded_String;
          MType: Message_Type;
@@ -336,6 +338,7 @@ package body Game.SaveLoad is
          end loop;
       end;
       -- Load events
+      Events_List.Clear;
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "event");
       declare
