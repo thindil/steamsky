@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: orichalcum chestplate, orichalcum helmet, orichalcum 
   armsguard and orichalcum legsguard
 - Option to set GTK directories via console parameters (Linux only)
+- New goal: kill 1000 enemies in melee combat
 
 ### Changed
 - Raised gained experience in combat
