@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,9 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with DOM.Core; use DOM.Core;
+with DOM.Core.Documents; use DOM.Core.Documents;
+with DOM.Core.Nodes; use DOM.Core.Nodes;
+with DOM.Core.Elements; use DOM.Core.Elements;
+with DOM.Readers; use DOM.Readers;
+with Input_Sources.File; use Input_Sources.File;
 with Log; use Log;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
@@ -29,14 +34,14 @@ with Crafts; use Crafts;
 package body Items is
 
    procedure LoadItems is
-      ItemsFile: File_Type;
-      RawData, FieldName, Value: Unbounded_String;
-      EqualIndex, StartIndex, EndIndex: Natural;
       TempRecord: Object_Data;
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
+      ItemsFile: File_Input;
+      Reader: Tree_Reader;
+      NodesList, ChildNodes: Node_List;
+      ItemsData: Document;
       TempValue: Natural_Container.Vector;
-      Amount: Natural;
    begin
       if Items_List.Length > 0 then
          return;
@@ -64,89 +69,69 @@ package body Items is
             Description => Null_Unbounded_String,
             Index => Null_Unbounded_String);
          LogMessage("Loading item file: " & Full_Name(FoundFile), Everything);
-         Open(ItemsFile, In_File, Full_Name(FoundFile));
-         while not End_Of_File(ItemsFile) loop
-            RawData := To_Unbounded_String(Get_Line(ItemsFile));
-            if Element(RawData, 1) /= '[' then
-               EqualIndex := Index(RawData, "=");
-               FieldName := Head(RawData, EqualIndex - 2);
-               Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
-               if FieldName = To_Unbounded_String("Name") then
-                  TempRecord.Name := Value;
-                  if TempRecord.Index = MoneyIndex then
-                     MoneyName := Value;
-                  end if;
-               elsif FieldName = To_Unbounded_String("Weight") then
-                  TempRecord.Weight := Integer'Value(To_String(Value));
-               elsif FieldName = To_Unbounded_String("Type") then
-                  TempRecord.IType := Value;
-               elsif FieldName = To_Unbounded_String("Prices") then
-                  StartIndex := 1;
-                  for I in TempRecord.Prices'Range loop
-                     EndIndex := Index(Value, ", ", StartIndex);
-                     if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                     end if;
-                     TempRecord.Prices(I) :=
-                       Integer'Value(Slice(Value, StartIndex, EndIndex - 1));
-                     StartIndex := EndIndex + 2;
-                  end loop;
-               elsif FieldName = To_Unbounded_String("Buyable") then
-                  StartIndex := 1;
-                  for I in TempRecord.Prices'Range loop
-                     EndIndex := Index(Value, ", ", StartIndex);
-                     if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                     end if;
-                     if Slice(Value, StartIndex, EndIndex - 1) = "Y" then
-                        TempRecord.Buyable(I) := True;
-                     else
-                        TempRecord.Buyable(I) := False;
-                     end if;
-                     StartIndex := EndIndex + 2;
-                  end loop;
-               elsif FieldName = To_Unbounded_String("Value") then
-                  StartIndex := 1;
-                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                  for I in 1 .. Amount loop
-                     EndIndex := Index(Value, ", ", StartIndex);
-                     if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                     end if;
-                     TempRecord.Value.Append
-                     (New_Item =>
-                        Natural'Value(Slice(Value, StartIndex, EndIndex - 1)));
-                     StartIndex := EndIndex + 2;
-                  end loop;
-               elsif FieldName = To_Unbounded_String("ShowType") then
-                  TempRecord.ShowType := Value;
-               elsif FieldName = To_Unbounded_String("Description") then
-                  TempRecord.Description := Value;
-               end if;
-            else
-               if TempRecord.Name /= Null_Unbounded_String then
-                  Items_List.Append(New_Item => TempRecord);
-                  LogMessage
-                    ("Item added: " & To_String(TempRecord.Name),
-                     Everything);
-                  TempRecord :=
-                    (Name => Null_Unbounded_String,
-                     Weight => 1,
-                     IType => Null_Unbounded_String,
-                     Prices => (0, 0, 0, 0, 0),
-                     Buyable => (False, False, False, False, False),
-                     Value => TempValue,
-                     ShowType => Null_Unbounded_String,
-                     Description => Null_Unbounded_String,
-                     Index => Null_Unbounded_String);
-               end if;
-               if Length(RawData) > 2 then
-                  TempRecord.Index :=
-                    Unbounded_Slice(RawData, 2, (Length(RawData) - 1));
-               end if;
-            end if;
-         end loop;
+         Open(Full_Name(FoundFile), ItemsFile);
+         Parse(Reader, ItemsFile);
          Close(ItemsFile);
+         ItemsData := Get_Tree(Reader);
+         NodesList :=
+           DOM.Core.Documents.Get_Elements_By_Tag_Name(ItemsData, "item");
+         for I in 0 .. Length(NodesList) - 1 loop
+            TempRecord.Index :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
+            TempRecord.Name :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
+            TempRecord.Weight :=
+              Natural'Value(Get_Attribute(Item(NodesList, I), "weight"));
+            TempRecord.IType :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "type"));
+            if Get_Attribute(Item(NodesList, I), "showtype") /= "" then
+               TempRecord.ShowType :=
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "showtype"));
+            end if;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "trade");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               TempRecord.Prices(J + 1) :=
+                 Natural'Value(Get_Attribute(Item(ChildNodes, J), "price"));
+               if Get_Attribute(Item(ChildNodes, J), "buyable") = "Y" then
+                  TempRecord.Buyable(J + 1) := True;
+               end if;
+            end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "data");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               TempRecord.Value.Append
+               (New_Item =>
+                  Natural'Value(Get_Attribute(Item(ChildNodes, J), "value")));
+            end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "description");
+            TempRecord.Description :=
+              To_Unbounded_String
+                (Node_Value(First_Child(Item(ChildNodes, 0))));
+            Items_List.Append(New_Item => TempRecord);
+            LogMessage
+              ("Item added: " & To_String(TempRecord.Name),
+               Everything);
+            TempRecord :=
+              (Name => Null_Unbounded_String,
+               Weight => 1,
+               IType => Null_Unbounded_String,
+               Prices => (0, 0, 0, 0, 0),
+               Buyable => (False, False, False, False, False),
+               Value => TempValue,
+               ShowType => Null_Unbounded_String,
+               Description => Null_Unbounded_String,
+               Index => Null_Unbounded_String);
+         end loop;
+         Free(Reader);
       end loop;
       End_Search(Files);
    end LoadItems;
