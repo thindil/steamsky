@@ -343,6 +343,10 @@ package body Ships.SaveLoad is
         Integer'Value(Get_Attribute(Item(ShipNode, 0), "repairpriority"));
       PlayerShip.HomeBase :=
         Integer'Value(Get_Attribute(Item(ShipNode, 0), "homebase"));
+      PlayerShip.Modules.Clear;
+      PlayerShip.Cargo.Clear;
+      PlayerShip.Crew.Clear;
+      PlayerShip.Missions.Clear;
       ChildNodes := Child_Nodes(Item(ShipNode, 0));
       for I in 0 .. Length(ChildNodes) - 1 loop
          if Node_Name(Item(ChildNodes, I)) = "module" then
