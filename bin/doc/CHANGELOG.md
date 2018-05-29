@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Updating crew orders in combat
 - Showing buying option for unavailable items
 - Loading saved game statistics
+- Loading player ship data
 
 ## [2.4] - 2018-05-20
 
