@@ -621,4 +621,7 @@ Multiplier = 5
 [150]
 Type = Kill
 Amount = 800
+[151]
+Type = Kill
+Amount = 1000
 []
