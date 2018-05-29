@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - New format of game data file which made old incompatible
 - Updated MODDING.md
 - New format of hall of fame data file which made old incompatible
+- New format of items data file which made old incompatible
 
 ### Fixed
 - Crash on showing map cell info
