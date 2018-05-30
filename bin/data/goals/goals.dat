@@ -624,4 +624,7 @@ Amount = 800
 [151]
 Type = Kill
 Amount = 1000
+[152]
+Type = Kill
+Amount = 2000
 []
