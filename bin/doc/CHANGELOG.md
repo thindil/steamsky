@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - New format of hall of fame data file which made old incompatible
 - New format of items data file which made old incompatible
+- New format of ships modules data file which made old incompatible
 
 ### Fixed
 - Crash on showing map cell info
