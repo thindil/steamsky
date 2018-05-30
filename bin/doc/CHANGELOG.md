@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Showing buying option for unavailable items
 - Loading saved game statistics
 - Loading player ship data
+- Setting set mission as destination for ship button
 
 ## [2.4] - 2018-05-20
 
