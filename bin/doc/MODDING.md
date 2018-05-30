@@ -300,40 +300,42 @@ edit `value` attribute of tag `unarmedskill`. Value must be existing skill name.
 ### General informations
 - Open file *shipmodules.dat* in *data/shipmodules* directory or create new
   file with *dat* extension in that directory (example: *myshipmodules.dat*).
-- Each value in ship module data structure must be one line length.
-- File must end with `[]`.
 
 ### Ship module data structure
-- Each ship module start from `[` symbol. Any value between `[` and `]` is a
-  module index (it can be number or text) and must be unique. This value is
-  used in ships data entries.
-- Name: Standard name of module. Will be visible in ship info screen and in
-  shipyards.
-- Type: Type of module. Available options are: Engine, Cabin, Cockpit, Turret,
-  Gun, Cargo, Hull, Armor, Battering\_ram, Alchemy\_Lab, Furnace,
+- Each ship module starts with tag `module`.
+- Attribute `index` is a module index (it can be number or text) and must be 
+  unique. This value is used in ships data entries.
+- Attribute `name`: Standard name of module. Will be visible in ship info screen
+  and in shipyards.
+- Attribute `type`: Type of module. Available options are: Engine, Cabin, Cockpit,
+  Turret, Gun, Cargo, Hull, Armor, Battering\_ram, Alchemy\_Lab, Furnace,
   Water\_Collector, Workshop, Greenhouse, Medical\_room, Harpoon\_Gun
-- Weight: Weight of module in kilograms.
-- Value: Depends on type of module. For 'Engine' it is fuel usage for travel by
-  one map field. For 'Cabin' it is value of reduced tiredness of owner who rest
-  there. For 'Gun' or 'Harpoon\_Gun' it is index of item type used as 
-  ammunition (item types are in *game.dat* file). For any other type of modules
-  should be 0 (zero).
-- MaxValue: Depends on type of module. For 'Hull' it is max free module space.
-  For 'Engine' it is engine power. For 'Cabin' should be that same like Value
-  value. For 'Cargo' it is maximum capacity in kilograms for cargo for that
-  module. For 'Gun', 'Battering\_ram' it is amount of damage done by selected
-  weapon. For 'Harpoon\_Gun' it is amount of combat rounds by how long harpoon
-  is stuck in enemy ship. For any other type of modules should be 0 (zero).
-- Durability: Base durability of module. How many damage module can take before
-  will be destroyed.
-- Material: Type of item which will be used to repair or upgrade module.
-- Skill: Name of skill which will be used during repair or upgrading module.
-- Price: Base buy or sell price of module in shipyard.
-- InstallTime: How long in minutes take install/remove selected module from
-  ship.
-- Unique: If set to 'Yes' then each ship can have only one module of that type.
-- Size: Amount of hull module space used by module.
-- Description: Any length description of ship module.
+- Attribute `weight`: Weight of module in kilograms.
+- Attribute `value`: Depends on type of module. For 'Engine' it is fuel usage 
+  for travel by one map field. For 'Cabin' it is value of reduced tiredness of 
+  owner who rest there. For 'Gun' or 'Harpoon\_Gun' it is index of item type 
+  used as ammunition (item types are in *game.dat* file). For any other type 
+  of modules should be 0 (zero).
+- Attribute `maxvalue`: Depends on type of module. For 'Hull' it is max free 
+  module space. For 'Engine' it is engine power. For 'Cabin' should be that 
+  same like attribuge `value` value. For 'Cargo' it is maximum capacity in 
+  kilograms for cargo for that module. For 'Gun', 'Battering\_ram' it is amount
+  of damage done by selected weapon. For 'Harpoon\_Gun' it is amount of combat
+  rounds by how long harpoon is stuck in enemy ship. For any other type of 
+  modules should be 0 (zero).
+- Attribute `durability`: Base durability of module. How many damage module can
+  take before will be destroyed.
+- Attribute `material`: Type of item which will be used to repair or upgrade 
+  module.
+- Attribute `skill`: Name of skill which will be used during repair or upgrading 
+  module.
+- Attribute `price`: Base buy or sell price of module in shipyard.
+- Attribute `installtime`: How long in minutes take install/remove selected 
+  module from ship.
+- Optional attribute `unique`: If set to 'Y' then each ship can have only one 
+  module of that type.
+- Optional attribute `size`: Amount of hull module space used by module.
+- Text between `module` tags is module description.
 
 ## Ships
 
