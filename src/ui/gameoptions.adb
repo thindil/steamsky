@@ -187,7 +187,7 @@ package body GameOptions is
          Lookup_Entry(To_String(AccelNames(I)), Key, Found);
          if Key.Accel_Key = KeyPressed and Key.Accel_Mods = KeyMods then
             ShowDialog
-              ("You can't set this key because it is set for other action. Please choose a different key.",
+              ("This key is set for other action. Please choose a different key.",
                Gtk_Window(Get_Object(Builder, "skymapwindow")));
             return False;
          end if;
