@@ -266,34 +266,32 @@ edit `value` attribute of tag `unarmedskill`. Value must be existing skill name.
 ### General informations
 - Open file *recipes.dat* in *data/recipes* directory or create new file with
   *dat* extension in this directory (example: *myrecipes.dat*).
-- Each value in recipe data structure must be one line length.
-- File must end with `[]`.
 
 ### Recipe data structure
-- Each recipe start from `[` symbol. Any value between `[` and `]` is a recipe 
-  index (it can be number or text) and must be unique. This value is used at
-  this moment for set starting recipes and in Craft types of goals.
-- Material: Item type of materials need for recipe. Each material must be
-  separated with `, ` (comma and space)
-- Amount: Amount of crafting materials needed for recipe. If you set more than
-  one material for recipe, you must set amount for each of them. Each material
-  amount must be separated with `, ` (comma and space)
-- Result: Item index which will be produced by recipe (you can check this index
-  in *items* directory)
-- Crafted: Amount of items crafted from one recipe
-- Workplace: Type of ship module in which recipe is made. Available options
-  are: Alchemy\_Lab, Furnace, Water\_Collector, Workshop, Greenhouse
-- Skill: Name of skill used during crafting selected recipe (skills names are
-  in *game.dat* file)
-- Tool: Type of item used as tool in crafting selected recipe (items types are
-  in *game.dat* file)
-- Difficulty: optional parameter. How complicated recipe is. Should be between 
-  1 and 100.
-- BaseType: In which bases type recipe can be bought. If not set, recipe will be
-  know from beginning of game. Values: 1 for Industrial, 2 for Agricultural, 3
-  for Refinery, 4 for Shipyard and 5 for Military.
-- Time: optional parameter. How long in minutes take crafting selected recipe.
-  If not set, it take 15 minutes.
+- Each recipe starts with tag `recipe`.
+- Attribute `index` is a recipe index (it can be number or text) and must be
+  unique. This value is used at this moment for set starting recipes and in 
+  Craft types of goals.
+- Tag `material` contains data about material used to craft recipe. Attribute
+  `type` is item type of material need for recipe. Attribute `amount` is 
+  amount of crafting materials needed for recipe. If you want to add more 
+  materials to recipe, just add new tag `material` with proper data.
+- Attribute `result`: Item index which will be produced by recipe (you can 
+  check this index in *items* directory).
+- Attribute `crafted`: Amount of items crafted from one recipe.
+- Attribute `workplace`: Type of ship module in which recipe is made. Available
+  options are: Alchemy\_Lab, Furnace, Water\_Collector, Workshop, Greenhouse
+- Attribute `skill`: Name of skill used during crafting selected recipe (skills
+  names are in *game.dat* file).
+- Attribute `tool`: Type of item used as tool in crafting selected recipe 
+  (items types are in *game.dat* file).
+- Attribute `difficulty`: optional attribute. How complicated recipe is. Should
+  be between 1 and 100.
+- Attribute `basetype`: In which bases type recipe can be bought. If not set, 
+  recipe will be know from beginning of game. Values: 1 for Industrial, 2 for 
+  Agricultural, 3 for Refinery, 4 for Shipyard and 5 for Military.
+- Attribute `time`: optional attribute. How long in minutes take crafting selected
+  recipe. If not set, it take 15 minutes.
 
 ## Ship modules
 
