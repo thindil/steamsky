@@ -1,1437 +1,470 @@
-[1]
-Material = RawFood
-Amount = 1
-Result = 2
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Cooking
-BaseType = 2
-Tool = CookingSet
-[2]
-Material = Wood
-Amount = 1
-Result = 1
-Crafted = 5
-Workplace = Alchemy_Lab
-Skill = Alchemy
-BaseType = 3
-Tool = AlchemySet
-[3]
-Material = RawFood
-Amount = 2
-Result = 11
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Cooking
-Time = 30
-Difficulty = 5
-BaseType = 2
-Tool = CookingSet
-[4]
-Material = Iron, Gunpowder
-Amount = 1, 1
-Result = 4
-Crafted = 5
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-BaseType = 5
-Tool = GunsmithSet
-[5]
-Material = Iron, Gunpowder
-Amount = 1, 1
-Result = 14
-Crafted = 10
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-BaseType = 5
-Tool = GunsmithSet
-[6]
-Material = CopperOre
-Amount = 1
-Result = 17
-Crafted = 1
-Workplace = Furnace
-Skill = Metalsmith
-BaseType = 1
-Tool = Mold
-[7]
-Material = TinOre
-Amount = 1
-Result = 18
-Crafted = 1
-Workplace = Furnace
-Skill = Metalsmith
-BaseType = 1
-Tool = Mold
-[8]
-Material = Copper, Tin
-Amount = 1, 1
-Result = 5
-Crafted = 1
-Workplace = Furnace
-Skill = Metalsmith
-BaseType = 1
-Tool = Mold
-[9]
-Material = IronOre
-Amount = 1
-Result = 13
-Crafted = 1
-Workplace = Furnace
-Skill = Metalsmith
-Difficulty = 5
-BaseType = 1
-Tool = Mold
-[10]
-Material = Iron, Gunpowder
-Amount = 1, 1
-Result = 20
-Crafted = 2
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Difficulty = 5
-BaseType = 5
-Tool = GunsmithSet
-[11]
-Material = IronOre, Fuel
-Amount = 1, 1
-Result = 21
-Crafted = 1
-Workplace = Furnace
-Skill = Metalsmith
-Time = 30
-Difficulty = 10
-BaseType = 1
-Tool = Mold
-[12]
-Material = Steel, Gunpowder
-Amount = 1, 1
-Result = 23
-Crafted = 5
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Difficulty = 5
-BaseType = 5
-Tool = GunsmithSet
-[13]
-Material = Steel, Gunpowder
-Amount = 1, 1
-Result = 24
-Crafted = 10
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-BaseType = 5
-Tool = GunsmithSet
-[14]
-Material = Steel, Gunpowder
-Amount = 1, 1
-Result = 25
-Crafted = 2
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Difficulty = 10
-BaseType = 5
-Tool = GunsmithSet
-[15]
-Material = Iron, Gunpowder
-Amount = 1, 1
-Result = 26
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Difficulty = 15
-BaseType = 5
-Tool = GunsmithSet
-[16]
-Material = Steel, Gunpowder
-Amount = 1, 1
-Result = 27
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Difficulty = 15
-BaseType = 5
-Tool = GunsmithSet
-[17]
-Material = Herbs
-Amount = 1
-Result = 22
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Medicine
-Difficulty = 5
-BaseType = 2
-Tool = AlchemySet
-[18]
-Material = HerbSeeds
-Amount = 1
-Result = 28
-Crafted = 2
-Workplace = Greenhouse
-Skill = Farming
-Time = 120
-BaseType = 2
-Tool = Sickle
-[19]
-Material = VegetableSeeds
-Amount = 1
-Result = 6
-Crafted = 2
-Workplace = Greenhouse
-Skill = Farming
-Time = 60
-BaseType = 2
-Tool = Sickle
-[20]
-Material = Wood
-Amount = 1
-Result = 3
-Crafted = 3
-Workplace = Water_collector
-Skill = Engineering
-Time = 60
-BaseType = 2
-Tool = Bucket
-[21]
-Material = Iron, Gunpowder
-Amount = 2, 1
-Result = 31
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Time = 30
-Difficulty = 20
-BaseType = 5
-Tool = GunsmithSet
-[22]
-Material = Steel, Gunpowder
-Amount = 2, 1
-Result = 32
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Time = 30
-Difficulty = 20
-BaseType = 5
-Tool = GunsmithSet
-[23]
-Material = Iron, Gunpowder
-Amount = 4, 2
-Result = 33
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Time = 45
-Difficulty = 25
-BaseType = 5
-Tool = GunsmithSet
-[24]
-Material = Steel, Gunpowder
-Amount = 4, 2
-Result = 34
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Time = 45
-Difficulty = 25
-BaseType = 5
-Tool = GunsmithSet
-[25]
-Material = Iron, Gunpowder
-Amount = 6, 2
-Result = 35
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Time = 60
-Difficulty = 30
-BaseType = 5
-Tool = GunsmithSet
-[26]
-Material = Steel, Gunpowder
-Amount = 6, 2
-Result = 36
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Time = 60
-Difficulty = 30
-BaseType = 5
-Tool = GunsmithSet
-[27]
-Material = AndraeSeeds
-Amount = 1
-Result = 9
-Crafted = 3
-Workplace = Greenhouse
-Skill = Woodcutting
-Time = 240
-BaseType = 3
-Tool = Saw
-[28]
-Material = IllandruSeeds
-Amount = 1
-Result = 10
-Crafted = 3
-Workplace = Greenhouse
-Skill = Woodcutting
-Time = 240
-BaseType = 3
-Tool = Saw
-[29]
-Material = Barley
-Amount = 1
-Result = 54
-Crafted = 3
-Workplace = Alchemy_Lab
-Skill = Farming
-BaseType = 2
-Tool = AlchemySet
-[30]
-Material = BarleySeeds
-Amount = 1
-Result = 55
-Crafted = 2
-Workplace = Greenhouse
-Skill = Farming
-Time = 60
-BaseType = 2
-Tool = Sickle
-[31]
-Material = BarleySeeds
-Amount = 1
-Result = 44
-Crafted = 2
-Workplace = Alchemy_Lab
-Skill = Brewery
-BaseType = 2
-Tool = AlchemySet
-[32]
-Material = GrapeVine
-Amount = 1
-Result = 56
-Crafted = 2
-Workplace = Alchemy_Lab
-Skill = Farming
-Difficulty = 5
-BaseType = 2
-Tool = AlchemySet
-[33]
-Material = Grapes
-Amount = 1
-Result = 57
-Crafted = 2
-Workplace = Greenhouse
-Skill = Farming
-Time = 60
-Difficulty = 5
-BaseType = 2
-Tool = Bucket
-[34]
-Material = Grapes
-Amount = 1
-Result = 45
-Crafted = 2
-Workplace = Alchemy_Lab
-Skill = Brewery
-Difficulty = 5
-BaseType = 2
-Tool = AlchemySet
-[35]
-Material = RawFood
-Amount = 3
-Result = 46
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Cooking
-Time = 30
-Difficulty = 10
-BaseType = 2
-Tool = CookingSet
-[36]
-Material = Sand
-Amount = 2
-Result = 47
-Crafted = 1
-Workplace = Furnace
-Skill = Alchemy
-BaseType = 1
-Tool = Mold
-[37]
-Material = Bronze
-Amount = 2
-Result = 48
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-BaseType = 1
-Tool = BlacksmithSet
-[38]
-Material = Bronze
-Amount = 2
-Result = 49
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 1
-Tool = BlacksmithSet
-[38]
-Material = Bronze
-Amount = 1
-Result = 51
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-BaseType = 1
-Tool = BlacksmithSet
-[39]
-Material = Bronze
-Amount = 10
-Result = 59
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 1
-Tool = BlacksmithSet
-[40]
-Material = Bronze
-Amount = 1
-Result = 52
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 1
-Tool = BlacksmithSet
-[41]
-Material = Bronze
-Amount = 1
-Result = 60
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 1
-Tool = BlacksmithSet
-[42]
-Material = Wood
-Amount = 1
-Result = 50
-Crafted = 1
-Workplace = Workshop
-Skill = Woodworking
-Difficulty = 5
-BaseType = 1
-Tool = WoodworkerSet
-[43]
-Material = Wood
-Amount = 1
-Result = 53
-Crafted = 1
-Workplace = Workshop
-Skill = Woodworking
-Difficulty = 5
-BaseType = 1
-Tool = WoodworkerSet
-[44]
-Material = Bronze
-Amount = 1
-Result = 61
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 1
-Tool = BlacksmithSet
-[45]
-Material = Bronze, Leather
-Amount = 1, 1
-Result = 62
-Crafted = 1
-Workplace = Workshop
-Skill = Blacksmith
-BaseType = 5
-Tool = BlacksmithSet
-[46]
-Material = Iron, Leather
-Amount = 1, 1
-Result = 63
-Crafted = 1
-Workplace = Workshop
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 5
-Tool = BlacksmithSet
-[47]
-Material = Steel, Leather
-Amount = 1, 1
-Result = 64
-Crafted = 1
-Workplace = Workshop
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 5
-Tool = BlacksmithSet
-[48]
-Material = Bronze
-Amount = 1
-Result = 66
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-BaseType = 5
-Tool = BlacksmithSet
-[49]
-Material = Leather
-Amount = 2
-Result = 67
-Crafted = 1
-Workplace = Workshop
-Skill = Leatherworking
-BaseType = 5
-Tool = SewingKit
-[50]
-Material = Leather
-Amount = 1
-Result = 68
-Crafted = 1
-Workplace = Workshop
-Skill = Leatherworking
-BaseType = 5
-Tool = SewingKit
-[51]
-Material = Leather
-Amount = 1
-Result = 69
-Crafted = 1
-Workplace = Workshop
-Skill = Leatherworking
-BaseType = 5
-Tool = SewingKit
-[52]
-Material = Bronze
-Amount = 1
-Result = 70
-Crafted = 2
-Workplace = Furnace
-Skill = Blacksmith
-BaseType = 1
-Tool = BlacksmithSet
-[53]
-Material = Leather
-Amount = 2
-Result = 71
-Crafted = 1
-Workplace = Workshop
-Skill = Leatherworking
-BaseType = 5
-Tool = SewingKit
-[54]
-Material = Bronze
-Amount = 1
-Result = 72
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 5
-Tool = BlacksmithSet
-[55]
-Material = Wood
-Amount = 1
-Result = 73
-Crafted = 1
-Workplace = Workshop
-Skill = Woodworking
-BaseType = 5
-Tool = WoodworkerSet
-[56]
-Material = Bronze
-Amount = 1
-Result = 74
-Crafted = 2
-Workplace = Furnace
-Skill = Blacksmith
-BaseType = 5
-Tool = BlacksmithSet
-[57]
-Material = Iron
-Amount = 2
-Result = 75
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 1
-Tool = BlacksmithSet
-[58]
-Material = Iron
-Amount = 1
-Result = 76
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 5
-Tool = BlacksmithSet
-[59]
-Material = Iron
-Amount = 1
-Result = 77
-Crafted = 2
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 5
-Tool = BlacksmithSet
-[60]
-Material = Bronze
-Amount = 2
-Result = 78
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 5
-Tool = BlacksmithSet
-[61]
-Material = Bronze
-Amount = 1
-Result = 79
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 5
-Tool = BlacksmithSet
-[62]
-Material = Bronze
-Amount = 1
-Result = 80
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 5
-Tool = BlacksmithSet
-[63]
-Material = Bronze
-Amount = 2
-Result = 81
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 5
-Tool = BlacksmithSet
-[64]
-Material = Iron
-Amount = 1
-Result = 82
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 5
-Tool = BlacksmithSet
-[65]
-Material = Iron
-Amount = 2
-Result = 83
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 5
-Tool = BlacksmithSet
-[66]
-Material = Iron
-Amount = 1
-Result = 84
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 5
-Tool = BlacksmithSet
-[67]
-Material = Iron
-Amount = 1
-Result = 85
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 5
-Tool = BlacksmithSet
-[68]
-Material = Iron
-Amount = 2
-Result = 86
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 5
-Tool = BlacksmithSet
-[69]
-Material = Steel
-Amount = 1
-Result = 87
-Crafted = 2
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 5
-Tool = BlacksmithSet
-[70]
-Material = Steel
-Amount = 1
-Result = 88
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 5
-Tool = BlacksmithSet
-[71]
-Material = Steel
-Amount = 1
-Result = 89
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 5
-Tool = BlacksmithSet
-[72]
-Material = Steel
-Amount = 2
-Result = 90
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 5
-Tool = BlacksmithSet
-[73]
-Material = Steel
-Amount = 1
-Result = 91
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 5
-Tool = BlacksmithSet
-[74]
-Material = Steel
-Amount = 1
-Result = 92
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 5
-Tool = BlacksmithSet
-[75]
-Material = Steel
-Amount = 2
-Result = 93
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 5
-Tool = BlacksmithSet
-[76]
-Material = Steel
-Amount = 2
-Result = 94
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 1
-Tool = BlacksmithSet
-[77]
-Material = Iron
-Amount = 2
-Result = 95
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 1
-Tool = BlacksmithSet
-[78]
-Material = Steel
-Amount = 2
-Result = 96
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 1
-Tool = BlacksmithSet
-[79]
-Material = Bronze
-Amount = 1
-Result = 97
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 1
-Tool = BlacksmithSet
-[80]
-Material = Iron
-Amount = 1
-Result = 98
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 1
-Tool = BlacksmithSet
-[81]
-Material = Steel
-Amount = 1
-Result = 99
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 1
-Tool = BlacksmithSet
-[82]
-Material = Iron
-Amount = 1
-Result = 100
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 5
-BaseType = 1
-Tool = BlacksmithSet
-[83]
-Material = Steel
-Amount = 1
-Result = 101
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 1
-Tool = BlacksmithSet
-[84]
-Material = Iron
-Amount = 1
-Result = 102
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 1
-Tool = BlacksmithSet
-[85]
-Material = Steel
-Amount = 1
-Result = 103
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 1
-Tool = BlacksmithSet
-[86]
-Material = Bronze
-Amount = 1
-Result = 104
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 1
-Tool = BlacksmithSet
-[87]
-Material = Iron
-Amount = 1
-Result = 105
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 1
-Tool = BlacksmithSet
-[88]
-Material = Steel
-Amount = 1
-Result = 106
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 1
-Tool = BlacksmithSet
-[89]
-Material = Iron
-Amount = 10
-Result = 107
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 1
-Tool = BlacksmithSet
-[90]
-Material = Steel
-Amount = 10
-Result = 108
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 1
-Tool = BlacksmithSet
-[91]
-Material = Iron
-Amount = 1
-Result = 109
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 1
-Tool = BlacksmithSet
-[92]
-Material = Steel
-Amount = 1
-Result = 110
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 1
-Tool = BlacksmithSet
-[93]
-Material = Iron
-Amount = 1
-Result = 111
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 1
-Tool = BlacksmithSet
-[94]
-Material = Steel
-Amount = 1
-Result = 112
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 1
-Tool = BlacksmithSet
-[95]
-Material = Iron
-Amount = 1
-Result = 113
-Crafted = 2
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 10
-BaseType = 1
-Tool = BlacksmithSet
-[96]
-Material = Steel
-Amount = 1
-Result = 114
-Crafted = 2
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 1
-Tool = BlacksmithSet
-[97]
-Material = TitaniumOre, Fuel
-Amount = 1, 2
-Result = 116
-Crafted = 1
-Workplace = Furnace
-Skill = Metalsmith
-Time = 60
-Difficulty = 15
-BaseType = 1
-Tool = Mold
-[98]
-Material = Titanium, Gunpowder
-Amount = 1, 1
-Result = 117
-Crafted = 2
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Difficulty = 15
-BaseType = 5
-Tool = GunsmithSet
-[99]
-Material = Titanium, Gunpowder
-Amount = 1, 1
-Result = 118
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Difficulty = 20
-BaseType = 5
-Tool = GunsmithSet
-[100]
-Material = Titanium, Gunpowder
-Amount = 2, 1
-Result = 119
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Time = 45
-Difficulty = 25
-BaseType = 5
-Tool = GunsmithSet
-[101]
-Material = Titanium, Gunpowder
-Amount = 4, 2
-Result = 120
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Time = 60
-Difficulty = 30
-BaseType = 5
-Tool = GunsmithSet
-[102]
-Material = Titanium, Gunpowder
-Amount = 6, 2
-Result = 121
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Time = 75
-Difficulty = 35
-BaseType = 5
-Tool = GunsmithSet
-[103]
-Material = Titanium, Leather
-Amount = 1, 1
-Result = 122
-Crafted = 1
-Workplace = Workshop
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 5
-Tool = BlacksmithSet
-[104]
-Material = Titanium
-Amount = 1
-Result = 123
-Crafted = 2
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 5
-Tool = BlacksmithSet
-[105]
-Material = Titanium
-Amount = 1
-Result = 124
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 5
-Tool = BlacksmithSet
-[106]
-Material = Titanium
-Amount = 1
-Result = 125
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 5
-Tool = BlacksmithSet
-[107]
-Material = Titanium
-Amount = 2
-Result = 126
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 5
-Tool = BlacksmithSet
-[108]
-Material = Titanium
-Amount = 1
-Result = 127
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 5
-Tool = BlacksmithSet
-[109]
-Material = Titanium
-Amount = 1
-Result = 128
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 5
-Tool = BlacksmithSet
-[110]
-Material = Titanium
-Amount = 2
-Result = 129
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 5
-Tool = BlacksmithSet
-[111]
-Material = OrichalcumOre, Fuel
-Amount = 1, 2
-Result = 131
-Crafted = 1
-Workplace = Furnace
-Skill = Metalsmith
-Time = 90
-Difficulty = 20
-BaseType = 1
-Tool = Mold
-[112]
-Material = Titanium
-Amount = 2
-Result = 132
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 1
-Tool = BlacksmithSet
-[113]
-Material = Orichalcum
-Amount = 2
-Result = 133
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 1
-Tool = BlacksmithSet
-[114]
-Material = Titanium
-Amount = 2
-Result = 134
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 1
-Tool = BlacksmithSet
-[115]
-Material = Orichalcum
-Amount = 2
-Result = 135
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 25
-BaseType = 1
-Tool = BlacksmithSet
-[116]
-Material = Titanium
-Amount = 1
-Result = 136
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 25
-BaseType = 1
-Tool = BlacksmithSet
-[117]
-Material = Orichalcum
-Amount = 1
-Result = 137
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 30
-BaseType = 1
-Tool = BlacksmithSet
-[118]
-Material = Titanium
-Amount = 1
-Result = 138
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 1
-Tool = BlacksmithSet
-[119]
-Material = Orichalcum
-Amount = 1
-Result = 139
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 1
-Tool = BlacksmithSet
-[120]
-Material = Titanium
-Amount = 1
-Result = 140
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 1
-Tool = BlacksmithSet
-[121]
-Material = Orichalcum
-Amount = 1
-Result = 141
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 25
-BaseType = 1
-Tool = BlacksmithSet
-[122]
-Material = Titanium
-Amount = 1
-Result = 142
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 25
-BaseType = 1
-Tool = BlacksmithSet
-[123]
-Material = Orichalcum
-Amount = 1
-Result = 143
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 30
-BaseType = 1
-Tool = BlacksmithSet
-[124]
-Material = Titanium
-Amount = 10
-Result = 144
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 25
-BaseType = 1
-Tool = BlacksmithSet
-[125]
-Material = Orichalcum
-Amount = 10
-Result = 145
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 30
-BaseType = 1
-Tool = BlacksmithSet
-[126]
-Material = Titanium
-Amount = 1
-Result = 146
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 1
-Tool = BlacksmithSet
-[127]
-Material = Orichalcum
-Amount = 1
-Result = 147
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 25
-BaseType = 1
-Tool = BlacksmithSet
-[128]
-Material = Titanium
-Amount = 1
-Result = 148
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 1
-Tool = BlacksmithSet
-[129]
-Material = Orichalcum
-Amount = 1
-Result = 149
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 25
-BaseType = 1
-Tool = BlacksmithSet
-[130]
-Material = Titanium
-Amount = 1
-Result = 150
-Crafted = 2
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 1
-Tool = BlacksmithSet
-[131]
-Material = Orichalcum
-Amount = 1
-Result = 151
-Crafted = 2
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 25
-BaseType = 1
-Tool = BlacksmithSet
-[132]
-Material = Orichalcum, Gunpowder
-Amount = 1, 1
-Result = 152
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Difficulty = 25
-BaseType = 5
-Tool = GunsmithSet
-[133]
-Material = Orichalcum, Gunpowder
-Amount = 2, 1
-Result = 153
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Time = 45
-Difficulty = 30
-BaseType = 5
-Tool = GunsmithSet
-[134]
-Material = Orichalcum, Gunpowder
-Amount = 4, 2
-Result = 154
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Time = 60
-Difficulty = 35
-BaseType = 5
-Tool = GunsmithSet
-[135]
-Material = Orichalcum, Gunpowder
-Amount = 6, 2
-Result = 155
-Crafted = 1
-Workplace = Alchemy_Lab
-Skill = Gunsmith
-Time = 75
-Difficulty = 40
-BaseType = 5
-Tool = GunsmithSet
-[136]
-Material = Orichalcum, Leather
-Amount = 1, 1
-Result = 156
-Crafted = 1
-Workplace = Workshop
-Skill = Blacksmith
-Difficulty = 15
-BaseType = 5
-Tool = BlacksmithSet
-[137]
-Material = Orichalcum
-Amount = 1
-Result = 157
-Crafted = 2
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 5
-Tool = BlacksmithSet
-[138]
-Material = Orichalcum
-Amount = 1
-Result = 158
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 20
-BaseType = 5
-Tool = BlacksmithSet
-[139]
-Material = Orichalcum
-Amount = 1
-Result = 159
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 25
-BaseType = 5
-Tool = BlacksmithSet
-[140]
-Material = Orichalcum
-Amount = 2
-Result = 160
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 25
-BaseType = 5
-Tool = BlacksmithSet
-[141]
-Material = Orichalcum
-Amount = 1
-Result = 161
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 25
-BaseType = 5
-Tool = BlacksmithSet
-[142]
-Material = Orichalcum
-Amount = 1
-Result = 162
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 25
-BaseType = 5
-Tool = BlacksmithSet
-[143]
-Material = Orichalcum
-Amount = 2
-Result = 163
-Crafted = 1
-Workplace = Furnace
-Skill = Blacksmith
-Difficulty = 25
-BaseType = 5
-Tool = BlacksmithSet
-[]
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recipes>
+<!-- Each recipe is between "recipe" tags. Attribute "index" is a recipe index (it can be number or text) and must be unique. This value is used at this moment for set starting recipes and in Craft types of goals. Attribute "result": item index which will be produced by recipe (you can check this index in *items* directory). Attribute "crafted": amount of items crafted from one recipe. Attribute "workplace": type of ship module in which recipe is made. Available options are: Alchemy_Lab, Furnace, Water_Collector, Workshop, Greenhouse. Attribute "skill": name of skill used during crafting selected recipe (skills names are in *game.dat* file). Attribute "tool": type of item used as tool in crafting selected recipe (items types are in *game.dat* file). Optional attribute "difficulty": how complicated recipe is. Should be between 1 and 100. Attribute "basetype": In which bases type recipe can be bought. If not set, recipe will be know from beginning of game. Values: 1 for Industrial, 2 for Agricultural, 3 for Refinery, 4 for Shipyard and 5 for Military. Optional attribute "time": how long in minutes take crafting selected recipe. If not set, it take 15 minutes. -->
+ <recipe basetype="2" crafted="1" index="1" result="2" skill="Cooking" tool="CookingSet" workplace="ALCHEMY_LAB">
+<!-- Tags "material" contains data about materials used to craft selected recipe. Attribute "type" is item type of materials need for recipe.Attribute "amount": Amount of crafting materials needed for recipe. If you want add more materials to recipe, just add new tag "material" with proper data. -->
+  <material amount="1" type="RawFood"/>
+ </recipe>
+ <recipe basetype="3" crafted="5" index="2" result="1" skill="Alchemy" tool="AlchemySet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Wood"/>
+ </recipe>
+ <recipe basetype="2" crafted="1" difficulty="5" index="3" result="11" skill="Cooking" time="30" tool="CookingSet" workplace="ALCHEMY_LAB">
+  <material amount="2" type="RawFood"/>
+ </recipe>
+ <recipe basetype="5" crafted="5" index="4" result="4" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Iron"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="10" index="5" result="14" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Iron"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" index="6" result="17" skill="Metalsmith" tool="Mold" workplace="FURNACE">
+  <material amount="1" type="CopperOre"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" index="7" result="18" skill="Metalsmith" tool="Mold" workplace="FURNACE">
+  <material amount="1" type="TinOre"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" index="8" result="5" skill="Metalsmith" tool="Mold" workplace="FURNACE">
+  <material amount="1" type="Copper"/>
+  <material amount="1" type="Tin"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="5" index="9" result="13" skill="Metalsmith" tool="Mold" workplace="FURNACE">
+  <material amount="1" type="IronOre"/>
+ </recipe>
+ <recipe basetype="5" crafted="2" difficulty="5" index="10" result="20" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Iron"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="10" index="11" result="21" skill="Metalsmith" time="30" tool="Mold" workplace="FURNACE">
+  <material amount="1" type="IronOre"/>
+  <material amount="1" type="Fuel"/>
+ </recipe>
+ <recipe basetype="5" crafted="5" difficulty="5" index="12" result="23" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Steel"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="10" index="13" result="24" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Steel"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="2" difficulty="10" index="14" result="25" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Steel"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="15" index="15" result="26" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Iron"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="15" index="16" result="27" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Steel"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="2" crafted="1" difficulty="5" index="17" result="22" skill="Medicine" tool="AlchemySet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Herbs"/>
+ </recipe>
+ <recipe basetype="2" crafted="2" index="18" result="28" skill="Farming" time="120" tool="Sickle" workplace="GREENHOUSE">
+  <material amount="1" type="HerbSeeds"/>
+ </recipe>
+ <recipe basetype="2" crafted="2" index="19" result="6" skill="Farming" time="60" tool="Sickle" workplace="GREENHOUSE">
+  <material amount="1" type="VegetableSeeds"/>
+ </recipe>
+ <recipe basetype="2" crafted="3" index="20" result="3" skill="Engineering" time="60" tool="Bucket" workplace="WATER_COLLECTOR">
+  <material amount="1" type="Wood"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="20" index="21" result="31" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="2" type="Iron"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="20" index="22" result="32" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="2" type="Steel"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="25" index="23" result="33" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="4" type="Iron"/>
+  <material amount="2" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="25" index="24" result="34" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="4" type="Steel"/>
+  <material amount="2" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="30" index="25" result="35" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="6" type="Iron"/>
+  <material amount="2" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="30" index="26" result="36" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="6" type="Steel"/>
+  <material amount="2" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="3" crafted="3" index="27" result="9" skill="Woodcutting" time="240" tool="Saw" workplace="GREENHOUSE">
+  <material amount="1" type="AndraeSeeds"/>
+ </recipe>
+ <recipe basetype="3" crafted="3" index="28" result="10" skill="Woodcutting" time="240" tool="Saw" workplace="GREENHOUSE">
+  <material amount="1" type="IllandruSeeds"/>
+ </recipe>
+ <recipe basetype="2" crafted="3" index="29" result="54" skill="Farming" tool="AlchemySet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Barley"/>
+ </recipe>
+ <recipe basetype="2" crafted="2" index="30" result="55" skill="Farming" time="60" tool="Sickle" workplace="GREENHOUSE">
+  <material amount="1" type="BarleySeeds"/>
+ </recipe>
+ <recipe basetype="2" crafted="2" index="31" result="44" skill="Brewery" tool="AlchemySet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="BarleySeeds"/>
+ </recipe>
+ <recipe basetype="2" crafted="2" difficulty="5" index="32" result="56" skill="Farming" tool="AlchemySet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="GrapeVine"/>
+ </recipe>
+ <recipe basetype="2" crafted="2" difficulty="5" index="33" result="57" skill="Farming" time="60" tool="Bucket" workplace="GREENHOUSE">
+  <material amount="1" type="Grapes"/>
+ </recipe>
+ <recipe basetype="2" crafted="2" difficulty="5" index="34" result="45" skill="Brewery" tool="AlchemySet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Grapes"/>
+ </recipe>
+ <recipe basetype="2" crafted="1" difficulty="10" index="35" result="46" skill="Cooking" time="30" tool="CookingSet" workplace="ALCHEMY_LAB">
+  <material amount="3" type="RawFood"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" index="36" result="47" skill="Alchemy" tool="Mold" workplace="FURNACE">
+  <material amount="2" type="Sand"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" index="37" result="48" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Bronze"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="5" index="38" result="49" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Bronze"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" index="38" result="51" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Bronze"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="10" index="39" result="59" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="10" type="Bronze"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="5" index="40" result="52" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Bronze"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="5" index="41" result="60" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Bronze"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="5" index="42" result="50" skill="Woodworking" tool="WoodworkerSet" workplace="WORKSHOP">
+  <material amount="1" type="Wood"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="5" index="43" result="53" skill="Woodworking" tool="WoodworkerSet" workplace="WORKSHOP">
+  <material amount="1" type="Wood"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="5" index="44" result="61" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Bronze"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" index="45" result="62" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
+  <material amount="1" type="Bronze"/>
+  <material amount="1" type="Leather"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="5" index="46" result="63" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
+  <material amount="1" type="Iron"/>
+  <material amount="1" type="Leather"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="10" index="47" result="64" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
+  <material amount="1" type="Steel"/>
+  <material amount="1" type="Leather"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" index="48" result="66" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Bronze"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" index="49" result="67" skill="Leatherworking" tool="SewingKit" workplace="WORKSHOP">
+  <material amount="2" type="Leather"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" index="50" result="68" skill="Leatherworking" tool="SewingKit" workplace="WORKSHOP">
+  <material amount="1" type="Leather"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" index="51" result="69" skill="Leatherworking" tool="SewingKit" workplace="WORKSHOP">
+  <material amount="1" type="Leather"/>
+ </recipe>
+ <recipe basetype="1" crafted="2" index="52" result="70" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Bronze"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" index="53" result="71" skill="Leatherworking" tool="SewingKit" workplace="WORKSHOP">
+  <material amount="2" type="Leather"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="5" index="54" result="72" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Bronze"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" index="55" result="73" skill="Woodworking" tool="WoodworkerSet" workplace="WORKSHOP">
+  <material amount="1" type="Wood"/>
+ </recipe>
+ <recipe basetype="5" crafted="2" index="56" result="74" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Bronze"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="5" index="57" result="75" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Iron"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="5" index="58" result="76" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Iron"/>
+ </recipe>
+ <recipe basetype="5" crafted="2" difficulty="5" index="59" result="77" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Iron"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="5" index="60" result="78" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Bronze"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="5" index="61" result="79" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Bronze"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="5" index="62" result="80" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Bronze"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="5" index="63" result="81" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Bronze"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="10" index="64" result="82" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Iron"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="10" index="65" result="83" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Iron"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="10" index="66" result="84" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Iron"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="10" index="67" result="85" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Iron"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="10" index="68" result="86" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Iron"/>
+ </recipe>
+ <recipe basetype="5" crafted="2" difficulty="10" index="69" result="87" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Steel"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="10" index="70" result="88" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Steel"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="15" index="71" result="89" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Steel"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="15" index="72" result="90" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Steel"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="15" index="73" result="91" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Steel"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="15" index="74" result="92" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Steel"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="15" index="75" result="93" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Steel"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="10" index="76" result="94" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Steel"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="10" index="77" result="95" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Iron"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="15" index="78" result="96" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Steel"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="10" index="79" result="97" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Bronze"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="15" index="80" result="98" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Iron"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="20" index="81" result="99" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Steel"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="5" index="82" result="100" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Iron"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="10" index="83" result="101" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Steel"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="10" index="84" result="102" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Iron"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="15" index="85" result="103" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Steel"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="10" index="86" result="104" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Bronze"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="15" index="87" result="105" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Iron"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="20" index="88" result="106" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Steel"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="15" index="89" result="107" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="10" type="Iron"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="20" index="90" result="108" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="10" type="Steel"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="10" index="91" result="109" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Iron"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="15" index="92" result="110" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Steel"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="10" index="93" result="111" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Iron"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="15" index="94" result="112" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Steel"/>
+ </recipe>
+ <recipe basetype="1" crafted="2" difficulty="10" index="95" result="113" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Iron"/>
+ </recipe>
+ <recipe basetype="1" crafted="2" difficulty="15" index="96" result="114" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Steel"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="15" index="97" result="116" skill="Metalsmith" time="60" tool="Mold" workplace="FURNACE">
+  <material amount="1" type="TitaniumOre"/>
+  <material amount="2" type="Fuel"/>
+ </recipe>
+ <recipe basetype="5" crafted="2" difficulty="15" index="98" result="117" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Titanium"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="20" index="99" result="118" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Titanium"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="25" index="100" result="119" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="2" type="Titanium"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="30" index="101" result="120" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="4" type="Titanium"/>
+  <material amount="2" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="35" index="102" result="121" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="6" type="Titanium"/>
+  <material amount="2" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="15" index="103" result="122" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
+  <material amount="1" type="Titanium"/>
+  <material amount="1" type="Leather"/>
+ </recipe>
+ <recipe basetype="5" crafted="2" difficulty="15" index="104" result="123" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Titanium"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="15" index="105" result="124" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Titanium"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="20" index="106" result="125" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Titanium"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="20" index="107" result="126" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Titanium"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="20" index="108" result="127" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Titanium"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="20" index="109" result="128" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Titanium"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="20" index="110" result="129" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Titanium"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="20" index="111" result="131" skill="Metalsmith" time="90" tool="Mold" workplace="FURNACE">
+  <material amount="1" type="OrichalcumOre"/>
+  <material amount="2" type="Fuel"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="15" index="112" result="132" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Titanium"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="20" index="113" result="133" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="20" index="114" result="134" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Titanium"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="25" index="115" result="135" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="25" index="116" result="136" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Titanium"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="30" index="117" result="137" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="15" index="118" result="138" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Titanium"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="20" index="119" result="139" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="20" index="120" result="140" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Titanium"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="25" index="121" result="141" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="25" index="122" result="142" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Titanium"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="30" index="123" result="143" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="25" index="124" result="144" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="10" type="Titanium"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="30" index="125" result="145" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="10" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="20" index="126" result="146" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Titanium"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="25" index="127" result="147" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="20" index="128" result="148" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Titanium"/>
+ </recipe>
+ <recipe basetype="1" crafted="1" difficulty="25" index="129" result="149" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="1" crafted="2" difficulty="20" index="130" result="150" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Titanium"/>
+ </recipe>
+ <recipe basetype="1" crafted="2" difficulty="25" index="131" result="151" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="25" index="132" result="152" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="1" type="Orichalcum"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="30" index="133" result="153" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="2" type="Orichalcum"/>
+  <material amount="1" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="35" index="134" result="154" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="4" type="Orichalcum"/>
+  <material amount="2" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="40" index="135" result="155" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="6" type="Orichalcum"/>
+  <material amount="2" type="Gunpowder"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="15" index="136" result="156" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
+  <material amount="1" type="Orichalcum"/>
+  <material amount="1" type="Leather"/>
+ </recipe>
+ <recipe basetype="5" crafted="2" difficulty="20" index="137" result="157" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="20" index="138" result="158" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="25" index="139" result="159" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="25" index="140" result="160" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="25" index="141" result="161" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="25" index="142" result="162" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Orichalcum"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" difficulty="25" index="143" result="163" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Orichalcum"/>
+ </recipe>
+</recipes>
+
