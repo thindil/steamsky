@@ -80,7 +80,7 @@ package body Maps.UI is
    procedure DeathConfirm is
    begin
       if ShowConfirmDialog
-          ("You are dead. Did you want to see your game statistics?",
+          ("You are dead. Would you like to see your game statistics?",
            Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
          Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
          ShowStatsUI(Main_Menu);
@@ -305,20 +305,20 @@ package body Maps.UI is
                "[<span foreground=""#4E9A06"">R</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblrepairs")),
-               "Ship is being repaired.");
+               "The ship is being repaired.");
          else
             Set_Markup
               (Gtk_Label(Get_Object(Builder, "lblrepairs")),
                "[<span foreground=""red"">R</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblrepairs")),
-               "Ship needs repairs but no one is working on it.");
+               "The ship needs repairs but no one is working them.");
          end if;
       else
          Set_Text(Gtk_Label(Get_Object(Builder, "lblrepairs")), "[R]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblrepairs")),
-            "Ship needs no repairs.");
+            "The ship doesn't require repairs.");
       end if;
       if NeedWorker then
          if HaveWorker then
@@ -327,14 +327,14 @@ package body Maps.UI is
                "[<span foreground=""#4E9A06"">M</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblcrafting")),
-               "All crafting orders are executed.");
+               "All crafting orders are being executed.");
          else
             Set_Markup
               (Gtk_Label(Get_Object(Builder, "lblcrafting")),
                "[<span foreground=""red"">M</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblcrafting")),
-               "You need to assign crew members to manufacturing.");
+               "You need to assign crew members to begin manufacturing.");
          end if;
       else
          Set_Text(Gtk_Label(Get_Object(Builder, "lblcrafting")), "[M]");
@@ -349,14 +349,14 @@ package body Maps.UI is
                "[<span foreground=""#4E9A06"">U</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblupgrade")),
-               "Ship module upgrade in progress.");
+               "A ship module upgrade in progress.");
          else
             Set_Markup
               (Gtk_Label(Get_Object(Builder, "lblupgrade")),
                "[<span foreground=""red"">U</span>]");
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, "lblupgrade")),
-               "Ship module upgrade in progress but no one is working on it.");
+               "A ship module upgrade is in progress but no one is working on it.");
          end if;
       else
          Set_Text(Gtk_Label(Get_Object(Builder, "lblupgrade")), "[U]");
@@ -704,9 +704,9 @@ package body Maps.UI is
                      when -100 .. -75 =>
                         Append(MapInfoText, "You are hated here");
                      when -74 .. -50 =>
-                        Append(MapInfoText, "You are outlaw here");
+                        Append(MapInfoText, "You are outlawed here");
                      when -49 .. -25 =>
-                        Append(MapInfoText, "You are hostile here");
+                        Append(MapInfoText, "You are disliked here");
                      when -24 .. -1 =>
                         Append(MapInfoText, "They are unfriendly to you");
                      when 0 =>
@@ -718,7 +718,7 @@ package body Maps.UI is
                      when 51 .. 75 =>
                         Append(MapInfoText, "You are know here as friend");
                      when 76 .. 100 =>
-                        Append(MapInfoText, "You are well know here");
+                        Append(MapInfoText, "You are well known here");
                      when others =>
                         null;
                   end case;
