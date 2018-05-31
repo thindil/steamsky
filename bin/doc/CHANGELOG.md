@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash in showing news in small console
 - Deleting savegame when it is saved in different directory than default
+- Crash when trying to remove destroyed ship module
 
 ## [2.0.6] - 2018-05-20
 
