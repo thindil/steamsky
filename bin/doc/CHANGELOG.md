@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - Loading saved game statistics
 - Loading player ship data
 - Setting set mission as destination for ship button
+- Crash when trying to remove destroyed ship module
 
 ## [2.4] - 2018-05-20
 
