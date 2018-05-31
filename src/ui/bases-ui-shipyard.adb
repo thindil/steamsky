@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -57,10 +57,10 @@ package body Bases.UI.Shipyard is
       InfoWindow, BoxWindow, ClearWindow, ActionWindow: Window;
       TextCost, TextTime, AmmoText, MaterialText: Unbounded_String;
       CurrentLine: Line_Position := 3;
-      Cost, MTime: Positive;
+      MTime: Positive;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
-      MAmount, MoneyIndex2: Natural;
+      MAmount, MoneyIndex2, Cost: Natural;
       StartColumn: Column_Position;
       WindowHeight: Line_Position;
       WindowWidth: Column_Position := 1;
@@ -92,6 +92,9 @@ package body Bases.UI.Shipyard is
                 (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                    .Price) *
               Float(Damage));
+         if Cost = 0 then
+            Cost := 1;
+         end if;
          CountPrice(Cost, FindMember(Talk), False);
          MTime :=
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
