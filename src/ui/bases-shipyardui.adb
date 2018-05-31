@@ -271,7 +271,7 @@ package body Bases.ShipyardUI is
       ModulesIter: Gtk_Tree_Iter;
       ModulesModel: Gtk_Tree_Model;
       ModuleInfo, RemoveInfo: Unbounded_String;
-      Cost: Positive;
+      Cost: Natural;
       MAmount, MoneyIndex2, UsedSpace, AllSpace: Natural;
       Damage: Gdouble;
       DamageBar: constant GObject := Get_Object(Object, "removedamagebar");
@@ -299,6 +299,9 @@ package body Bases.ShipyardUI is
           (Float
              (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Price) *
            Float(Damage));
+      if Cost = 0 then
+         Cost := 1;
+      end if;
       CountPrice(Cost, FindMember(Talk), False);
       ModuleInfo := To_Unbounded_String("Remove gain:" & Positive'Image(Cost));
       Append
