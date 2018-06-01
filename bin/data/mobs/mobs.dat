@@ -1,592 +1,1599 @@
-[1]
-Skills = Rhetoric, Swords, Dodge
-SkillsLevels = 5, 5, 5
-Attributes = 3, 3, 3, 3
-Order = Talk
-Priorities = Repair ship:Normal, Manufacturing:Normal, Upgrading ship:Normal, Talking in bases:High, Healing wounded:Normal, Cleaning ship:Normal, Defend ship:Normal
-Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
-Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
-[2]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 5, 5, 5, 5
-Attributes = 3, 3, 3, 3
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
-Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
-[3]
-Skills = Engineering, Swords, Dodge
-SkillsLevels = 5, 5, 5
-Attributes = 3, 3, 3, 3
-Order = Engineer
-Priorities = Engineering:Normal
-Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
-Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
-[4]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 5, 5, 5, 5
-Attributes = 3, 3, 3, 3
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
-Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
-[5]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 1, 1, 1, 1
-Attributes = 2, 2, 2, 2
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x74, 1x67, 1x68, 1x69, 1x71
-Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
-[6]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 1, 1, 1, 1
-Attributes = 2, 2, 2, 2
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
-Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
-[7]
-Skills = Piloting, Perception, Brawling, Dodge
-SkillsLevels = 1, 1, 1, 1
-Attributes = 1, 1, 1, 1
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x67, 1x68, 1x69, 1x71
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[8]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 1, 2..4, 2..4, 2..4
-Attributes = 3, 3, 3, 3
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
-Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
-[9]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 3, 2..4, 2..4, 2..4
-Attributes = 3, 3, 3, 3
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x66, 1x67, 1x68, 1x69, 1x71, 1x72
-Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
-[10]
-Skills = Engineering, Swords, Dodge
-SkillsLevels = 3..6, 3..6, 3..6
-Attributes = 3, 3, 3, 3
-Order = Engineer
-Priorities = Engineering:Normal
-Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
-Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
-[11]
-Skills = Piloting, Perception, Brawling, Dodge
-SkillsLevels = 1, 1..4, 1..4, 1..4
-Attributes = 3, 3, 3, 3
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x67, 1x68, 1x69, 1x71
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[12]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 3..6, 3..6, 3..6, 3..6
-Attributes = 3..5, 3..5, 3..5, 3..5
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
-Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
-[13]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 7..14, 3..6, 3..6, 3..6
-Attributes = 3..5, 3..5, 3..5, 3..5
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x77, 1x78, 1x79, 1x80, 1x81, 1x72
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[14]
-Skills = Engineering, Swords, Dodge
-SkillsLevels = 7..12, 7..12, 7..12
-Attributes = 3..5, 3..5, 3..5, 3..5
-Order = Engineer
-Priorities = Engineering:Normal
-Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
-Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
-[15]
-Skills = Rhetoric, Swords, Dodge
-SkillsLevels = 1..5, 1..5, 1..5
-Attributes = 3..5, 3..5, 3..5, 3..5
-Order = Talk
-Priorities = Talking in bases:Normal, Defend ship:Normal
-Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[16]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 6..12, 3..6, 6..12, 6..12
-Attributes = 5..10, 5..10, 5..10, 5..10
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
-Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
-[17]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 7..14, 3..6, 7..14, 7..14
-Attributes = 5..10, 5..10, 5..10, 5..10
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[18]
-Skills = Engineering, Swords, Dodge
-SkillsLevels = 7..12, 7..12, 7..12
-Attributes = 5..10, 5..10, 5..10, 5..10
-Order = Engineer
-Priorities = Engineering:Normal
-Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
-Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
-[19]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 1, 1..2, 1..2, 1..2
-Attributes = 3, 3, 3, 3
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x74, 1x67, 1x68, 1x69, 1x71
-Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
-[20]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 3..7, 3..7, 3..7, 3..7
-Attributes = 3..5, 3..5, 3..5, 3..5
-Order = Pilot
-Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
-Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
-[21]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 5..15, 3..7, 5..15, 5..15
-Attributes = 5..10, 5..10, 5..10, 5..10
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x77, 1x78, 1x79, 1x80, 1x81
-Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
-[22]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 5..15, 3..7, 5..15, 5..15
-Attributes = 5..10, 5..10, 5..10, 5..10
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[23]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 15..25, 3..6, 15..25, 15..25
-Attributes = 10..20, 10..20, 10..20, 10..20
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[24]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 15..25, 3..6, 15..25, 15..25
-Attributes = 10..20, 10..20, 10..20, 10..20
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[25]
-Skills = Engineering, Swords, Dodge
-SkillsLevels = 15..25, 15..25, 15..25
-Attributes = 10..20, 10..20, 10..20, 10..20
-Order = Engineer
-Priorities = Engineering:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[26]
-Skills = Rhetoric, Swords, Dodge
-SkillsLevels = 5..10, 15..25, 15..25
-Attributes = 10..20, 10..20, 10..20, 10..20
-Order = Talk
-Priorities = Talking in bases:Normal, Defend ship:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[27]
-Skills = Piloting, Perception, Brawling, Dodge
-SkillsLevels = 3..6, 3..6, 5..15, 5..15
-Attributes = 2..4, 2..4, 2..4, 2..4
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x78, 1x79, 1x80, 1x81
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[28]
-Skills = Piloting, Perception, Brawling, Dodge
-SkillsLevels = 7..20, 7..20, 15..25, 15..25
-Attributes = 5..15, 5..15, 5..15, 5..15
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x83, 1x84, 1x85, 1x86
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[29]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 15..25, 7..15, 15..25, 15..25
-Attributes = 7..15, 7..15, 7..15, 7..15
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[30]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 10..20, 3..8, 15..25, 15..25
-Attributes = 7..15, 7..15, 7..15, 7..15
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[31]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 10..20, 3..7, 15..25, 15..25
-Attributes = 7..15, 7..15, 7..15, 7..15
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[32]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 7..20, 4..12, 7..20, 7..20
-Attributes = 7..15, 7..15, 7..15, 7..15
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[33]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 7..20, 3..10, 7..20, 7..20
-Attributes = 7..15, 7..15, 7..15, 7..15
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[34]
-Skills = Engineering, Swords, Dodge
-SkillsLevels = 7..20, 7..20, 7..20
-Attributes = 7..15, 7..15, 7..15, 7..15
-Order = Engineer
-Priorities = Engineering:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[35]
-Skills = Rhetoric, Swords, Dodge
-SkillsLevels = 2..6, 7..20, 7..20
-Attributes = 7..15, 7..15, 7..15, 7..15
-Order = Talk
-Priorities = Talking in bases:Normal, Defend ship:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[36]
-Skills = Piloting, Perception, Brawling, Dodge
-SkillsLevels = 5..15, 5..15, 5..15, 5..15
-Attributes = 5..10, 5..10, 5..10, 5..10
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x83, 1x84, 1x85, 1x86
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[37]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 7..2, 5..15, 10..20, 10..20
-Attributes = 7..15, 7..15, 7..15, 7..15
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[38]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 10..20, 5..15, 5..15, 5..15
-Attributes = 7..15, 7..15, 7..15, 7..15
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[39]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 30..50, 4..12, 30..50, 30..50
-Attributes = 15..25, 15..25, 15..25, 15..25
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[40]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 30..50, 4..12, 30..50, 30..50
-Attributes = 15..25, 15..25, 15..25, 15..25
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[41]
-Skills = Engineering, Swords, Dodge
-SkillsLevels = 30..50, 30..50, 30..50
-Attributes = 15..25, 15..25, 15..25, 15..25
-Order = Engineer
-Priorities = Engineering:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[42]
-Skills = Rhetoric, Swords, Dodge
-SkillsLevels = 10..20, 30..50, 30..50
-Attributes = 15..25, 15..25, 15..25, 15..25
-Order = Talk
-Priorities = Talking in bases:Normal, Defend ship:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[43]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 40..60, 8..15, 40..60, 40..60
-Attributes = 25..35, 25..35, 25..35, 25..35
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[44]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 40..60, 8..15, 40..60, 40..60
-Attributes = 25..35, 25..35, 25..35, 25..35
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[45]
-Skills = Engineering, Swords, Dodge
-SkillsLevels = 40..60, 40..60, 40..60
-Attributes = 25..35, 25..35, 25..35, 25..35
-Order = Engineer
-Priorities = Engineering:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[46]
-Skills = Rhetoric, Swords, Dodge
-SkillsLevels = 20..40, 40..60, 40..60
-Attributes = 25..35, 25..35, 25..35, 25..35
-Order = Talk
-Priorities = Talking in bases:Normal, Defend ship:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[47]
-Skills = Piloting, Perception, Brawling, Dodge
-SkillsLevels = 30..50, 30..50, 30..50, 30..50
-Attributes = 15..20, 15..20, 15..20, 15..20
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x90, 1x91, 1x92, 1x93
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[48]
-Skills = Piloting, Perception, Brawling, Dodge
-SkillsLevels = 40..60, 40..60, 40..60, 40..60
-Attributes = 20..30, 20..30, 20..30, 20..30
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x90, 1x91, 1x92, 1x93
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[49]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 40..60, 5..15, 40..60, 40..60
-Attributes = 15..25, 15..25, 15..25, 15..25
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[50]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 30..50, 5..15, 40..60, 40..60
-Attributes = 15..25, 15..25, 15..25, 15..25
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[51]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 50..70, 8..20, 50..70, 50..70
-Attributes = 25..35, 25..35, 25..35, 25..35
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[52]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 40..60, 8..20, 50..70, 50..70
-Attributes = 25..35, 25..35, 25..35, 25..35
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[53]
-Skills = Piloting, Perception, Swords, Dodge
-SkillsLevels = 1, 1, 1, 1
-Attributes = 3, 3, 3, 3
-Order = Pilot
-Priorities = Piloting:Normal
-Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
-Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
-[54]
-Skills = Gunnery, Perception, Swords, Dodge
-SkillsLevels = 1, 1, 1, 1
-Attributes = 3, 3, 3, 3
-Order = Gunner
-Priorities = Operating guns:Normal
-Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
-Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
-[55]
-Skills = Brawling, Dodge
-SkillsLevels = 2, 2
-Attributes = 1, 1, 1, 1
-Order = Defend
-Priorities = Defend ship:High
-Inventory = 1x67, 1x68, 1x69, 1x71
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[56]
-Skills = Brawling, Dodge
-SkillsLevels = 2..6, 2..6
-Attributes = 3, 3, 3, 3
-Order = Defend
-Priorities = Defend ship:High
-Inventory = 1x67, 1x68, 1x69, 1x71
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[57]
-Skills = Swords, Dodge
-SkillsLevels = 3..6, 3..6
-Attributes = 3..5, 3..5, 3..5, 3..5
-Order = Defend
-Priorities = Defend ship:High, Board enemy ship:Normal
-Inventory = 1x77, 1x78, 1x79, 1x80, 1x81, 1x72
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[58]
-Skills = Swords, Dodge
-SkillsLevels = 7..14, 7..14
-Attributes = 5..10, 5..10, 5..10, 5..10
-Order = Defend
-Priorities = Defend ship:High, Board enemy ship:Normal
-Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[59]
-Skills = Swords, Dodge
-SkillsLevels = 3..7, 3..7
-Attributes = 3..5, 3..5, 3..5, 3..5
-Order = Defend
-Priorities = Defend ship:High, Board enemy ship:Normal
-Inventory = 1x66, 1x67, 1x68, 1x69, 1x71
-Equipment = Weapon:1, Head:3, Torso:2, Arms:4, Legs:5
-[60]
-Skills = Swords, Dodge
-SkillsLevels = 5..15, 5..15
-Attributes = 5..10, 5..10, 5..10, 5..10
-Order = Defend
-Priorities = Defend ship:High, Board enemy ship:Normal
-Inventory = 1x76, 1x78, 1x79, 1x80, 1x81, 1x72
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[61]
-Skills = Swords, Dodge
-SkillsLevels = 15..25, 15..25
-Attributes = 10..20, 10..20, 10..20, 10..20
-Order = Defend
-Priorities = Defend ship:High, Board enemy ship:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[62]
-Skills = Brawling, Dodge
-SkillsLevels = 5..15, 5..15
-Attributes = 2..4, 2..4, 2..4, 2..4
-Order = Defend
-Priorities = Defend ship:High
-Inventory = 1x78, 1x79, 1x80, 1x81
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[63]
-Skills = Brawling, Dodge
-SkillsLevels = 15..25, 15..25
-Attributes = 5..15, 5..15, 5..15, 5..15
-Order = Defend
-Priorities = Defend ship:High
-Inventory = 1x83, 1x84, 1x85, 1x86
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[64]
-Skills = Swords, Dodge
-SkillsLevels = 15..25, 15..25
-Attributes = 7..15, 7..15, 7..15, 7..15
-Order = Defend
-Priorities = Defend ship:High, Board enemy ship:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[65]
-Skills = Swords, Dodge
-SkillsLevels = 7..20, 7..20
-Attributes = 7..15, 7..15, 7..15, 7..15
-Order = Defend
-Priorities = Defend ship:High, Board enemy ship:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[66]
-Skills = Brawling, Dodge
-SkillsLevels = 5..15, 5..15
-Attributes = 5..10, 5..10, 5..10, 5..10
-Order = Defend
-Priorities = Defend ship:High
-Inventory = 1x83, 1x84, 1x85, 1x86
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[67]
-Skills = Swords, Dodge
-SkillsLevels = 5..15, 5..15
-Attributes = 7..15, 7..15, 7..15, 7..15
-Order = Defend
-Priorities = Defend ship:High, Board enemy ship:Normal
-Inventory = 1x76, 1x83, 1x84, 1x85, 1x86, 1x82
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[68]
-Skills = Swords, Dodge
-SkillsLevels = 30..50, 30..50
-Attributes = 15..25, 15..25, 15..25, 15..25
-Order = Defend
-Priorities = Defend ship:High, Board enemy ship:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[69]
-Skills = Swords, Dodge
-SkillsLevels = 40..60, 40..60
-Attributes = 25..35, 25..35, 25..35, 25..35
-Order = Defend
-Priorities = Defend ship:High, Board enemy ship:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[70]
-Skills = Brawling, Dodge
-SkillsLevels = 30..50, 30..50
-Attributes = 15..20, 15..20, 15..20, 15..20
-Order = Defend
-Priorities = Defend ship:High
-Inventory = 1x90, 1x91, 1x92, 1x93
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[71]
-Skills = Brawling, Dodge
-SkillsLevels = 40..60, 40..60
-Attributes = 20..30, 20..30, 20..30, 20..30
-Order = Defend
-Priorities = Defend ship:High
-Inventory = 1x90, 1x91, 1x92, 1x93
-Equipment = Head:2, Torso:1, Arms:3, Legs:4
-[72]
-Skills = Swords, Dodge
-SkillsLevels = 40..60, 40..60
-Attributes = 15..25, 15..25, 15..25, 15..25
-Order = Defend
-Priorities = Defend ship:High, Board enemy ship:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[73]
-Skills = Swords, Dodge
-SkillsLevels = 50..70, 50..70
-Attributes = 25..35, 25..35, 25..35, 25..35
-Order = Defend
-Priorities = Defend ship:High, Board enemy ship:Normal
-Inventory = 1x88, 1x90, 1x91, 1x92, 1x93, 1x89
-Equipment = Weapon:1, Shield: 6, Head:3, Torso:2, Arms:4, Legs:5
-[74]
-Skills = Swords, Dodge
-SkillsLevels = 1, 1
-Attributes = 3, 3, 3, 3
-Order = Defend
-Priorities = Defend ship:High, Board enemy ship:Normal
-Inventory = 1x74, 1x67, 1x68, 1x69, 1x71, 1x73
-Equipment = Weapon:1, Shield:6, Head:3, Torso:2, Arms:4, Legs:5
-[]
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mobiles>
+<!-- Each mobile is between mobile tag. Attribute "index" is index of mobile (it can be number or text) and must be unique. At this moment it is used only in setting ships crews. Attribute "order": current ship order of selected mob. Possible values are: Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest, Defend, Boarding. -->
+ <mobile index="1" order="TALK">
+<!-- Tags "skill" define skill of mobile. Attribute "name" is name of skill (from *game.dat* from *data* directory). If mobile should have constant level of skill, add attribute "level" with level of selected skill. If mobile should have random level of skill, add attribute "minlevel" with minimum level of skill and attribute "maxlevel" with maximum level of skill. -->
+  <skill level="5" name="Rhetoric"/>
+  <skill level="5" name="Swords"/>
+  <skill level="5" name="Dodge"/>
+<!-- Tags "attribute" define attribute of mobile. If mobile should have constant level of attribute, add attribute "level" with level of selected attribute. If mobile should have random level of attribute, add attributes "minlevel" with minimum level of attribute and attribute "maxlevel" with maximum level of attribute. -->
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+<!-- Tags "priority" define orders priorities of mobile. Attribute "name" can have value: Piloting, Engineering, Operating guns, Repair ship, Manufacturing, Upgrading ship, Talking in bases, Healing wounded, Cleaning ship, Defend ship, Board enemy ship. Attribute "value" can have value Normal or High (only one High per mobile). -->
+  <priority name="Repair ship" value="Normal"/>
+  <priority name="Manufacturing" value="Normal"/>
+  <priority name="Upgrading ship" value="Normal"/>
+  <priority name="Talking in bases" value="High"/>
+  <priority name="Healing wounded" value="Normal"/>
+  <priority name="Cleaning ship" value="Normal"/>
+  <priority name="Defend ship" value="Normal"/>
+<!-- Tags "item" define item in mobile inventory. Attribute "index" is index of item from files from *items* directory. If mobile should have constant amount of item, add attribute "amount" with amount of item. If mobile should have random amount of item, add attribute "minamount" with minimum amount of item and attribute "maxamount" with maximum amount of item. -->
+  <item amount="1" index="66"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <item amount="1" index="72"/>
+<!-- Tags "equipment" define which items are used by mobile. Attribute "index" is item index from inventory. Item index always starts with 1. Attribute "slot" is name of equipment slot in which selected item is set. Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="2" order="PILOT">
+  <skill level="5" name="Piloting"/>
+  <skill level="5" name="Perception"/>
+  <skill level="5" name="Swords"/>
+  <skill level="5" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="66"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="3" order="ENGINEER">
+  <skill level="5" name="Engineering"/>
+  <skill level="5" name="Swords"/>
+  <skill level="5" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Engineering" value="Normal"/>
+  <item amount="1" index="66"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="4" order="GUNNER">
+  <skill level="5" name="Gunnery"/>
+  <skill level="5" name="Perception"/>
+  <skill level="5" name="Swords"/>
+  <skill level="5" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="66"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <item amount="1" index="72"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="5" order="PILOT">
+  <skill level="1" name="Piloting"/>
+  <skill level="1" name="Perception"/>
+  <skill level="1" name="Swords"/>
+  <skill level="1" name="Dodge"/>
+  <attribute level="2"/>
+  <attribute level="2"/>
+  <attribute level="2"/>
+  <attribute level="2"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="74"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="6" order="GUNNER">
+  <skill level="1" name="Gunnery"/>
+  <skill level="1" name="Perception"/>
+  <skill level="1" name="Swords"/>
+  <skill level="1" name="Dodge"/>
+  <attribute level="2"/>
+  <attribute level="2"/>
+  <attribute level="2"/>
+  <attribute level="2"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="74"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <item amount="1" index="73"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="7" order="PILOT">
+  <skill level="1" name="Piloting"/>
+  <skill level="1" name="Perception"/>
+  <skill level="1" name="Brawling"/>
+  <skill level="1" name="Dodge"/>
+  <attribute level="1"/>
+  <attribute level="1"/>
+  <attribute level="1"/>
+  <attribute level="1"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="8" order="PILOT">
+  <skill level="1" name="Piloting"/>
+  <skill maxlevel="4" minlevel="2" name="Perception"/>
+  <skill maxlevel="4" minlevel="2" name="Swords"/>
+  <skill maxlevel="4" minlevel="2" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="66"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="9" order="GUNNER">
+  <skill level="3" name="Gunnery"/>
+  <skill maxlevel="4" minlevel="2" name="Perception"/>
+  <skill maxlevel="4" minlevel="2" name="Swords"/>
+  <skill maxlevel="4" minlevel="2" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="66"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <item amount="1" index="72"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="10" order="ENGINEER">
+  <skill maxlevel="6" minlevel="3" name="Engineering"/>
+  <skill maxlevel="6" minlevel="3" name="Swords"/>
+  <skill maxlevel="6" minlevel="3" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Engineering" value="Normal"/>
+  <item amount="1" index="66"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="11" order="PILOT">
+  <skill level="1" name="Piloting"/>
+  <skill maxlevel="4" minlevel="1" name="Perception"/>
+  <skill maxlevel="4" minlevel="1" name="Brawling"/>
+  <skill maxlevel="4" minlevel="1" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="12" order="PILOT">
+  <skill maxlevel="6" minlevel="3" name="Piloting"/>
+  <skill maxlevel="6" minlevel="3" name="Perception"/>
+  <skill maxlevel="6" minlevel="3" name="Swords"/>
+  <skill maxlevel="6" minlevel="3" name="Dodge"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="77"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="13" order="GUNNER">
+  <skill maxlevel="14" minlevel="7" name="Gunnery"/>
+  <skill maxlevel="6" minlevel="3" name="Perception"/>
+  <skill maxlevel="6" minlevel="3" name="Swords"/>
+  <skill maxlevel="6" minlevel="3" name="Dodge"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="77"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <item amount="1" index="72"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="14" order="ENGINEER">
+  <skill maxlevel="12" minlevel="7" name="Engineering"/>
+  <skill maxlevel="12" minlevel="7" name="Swords"/>
+  <skill maxlevel="12" minlevel="7" name="Dodge"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <priority name="Engineering" value="Normal"/>
+  <item amount="1" index="77"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="15" order="TALK">
+  <skill maxlevel="5" minlevel="1" name="Rhetoric"/>
+  <skill maxlevel="5" minlevel="1" name="Swords"/>
+  <skill maxlevel="5" minlevel="1" name="Dodge"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <priority name="Talking in bases" value="Normal"/>
+  <priority name="Defend ship" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <item amount="1" index="72"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="16" order="PILOT">
+  <skill maxlevel="12" minlevel="6" name="Piloting"/>
+  <skill maxlevel="6" minlevel="3" name="Perception"/>
+  <skill maxlevel="12" minlevel="6" name="Swords"/>
+  <skill maxlevel="12" minlevel="6" name="Dodge"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="77"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="17" order="GUNNER">
+  <skill maxlevel="14" minlevel="7" name="Gunnery"/>
+  <skill maxlevel="6" minlevel="3" name="Perception"/>
+  <skill maxlevel="14" minlevel="7" name="Swords"/>
+  <skill maxlevel="14" minlevel="7" name="Dodge"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <item amount="1" index="72"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="18" order="ENGINEER">
+  <skill maxlevel="12" minlevel="7" name="Engineering"/>
+  <skill maxlevel="12" minlevel="7" name="Swords"/>
+  <skill maxlevel="12" minlevel="7" name="Dodge"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <priority name="Engineering" value="Normal"/>
+  <item amount="1" index="77"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="19" order="PILOT">
+  <skill level="1" name="Piloting"/>
+  <skill maxlevel="2" minlevel="1" name="Perception"/>
+  <skill maxlevel="2" minlevel="1" name="Swords"/>
+  <skill maxlevel="2" minlevel="1" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="74"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="20" order="PILOT">
+  <skill maxlevel="7" minlevel="3" name="Piloting"/>
+  <skill maxlevel="7" minlevel="3" name="Perception"/>
+  <skill maxlevel="7" minlevel="3" name="Swords"/>
+  <skill maxlevel="7" minlevel="3" name="Dodge"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <item amount="1" index="66"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="21" order="PILOT">
+  <skill maxlevel="15" minlevel="5" name="Piloting"/>
+  <skill maxlevel="7" minlevel="3" name="Perception"/>
+  <skill maxlevel="15" minlevel="5" name="Swords"/>
+  <skill maxlevel="15" minlevel="5" name="Dodge"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="77"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="22" order="GUNNER">
+  <skill maxlevel="15" minlevel="5" name="Gunnery"/>
+  <skill maxlevel="7" minlevel="3" name="Perception"/>
+  <skill maxlevel="15" minlevel="5" name="Swords"/>
+  <skill maxlevel="15" minlevel="5" name="Dodge"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <item amount="1" index="72"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="23" order="PILOT">
+  <skill maxlevel="25" minlevel="15" name="Piloting"/>
+  <skill maxlevel="6" minlevel="3" name="Perception"/>
+  <skill maxlevel="25" minlevel="15" name="Swords"/>
+  <skill maxlevel="25" minlevel="15" name="Dodge"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="24" order="GUNNER">
+  <skill maxlevel="25" minlevel="15" name="Gunnery"/>
+  <skill maxlevel="6" minlevel="3" name="Perception"/>
+  <skill maxlevel="25" minlevel="15" name="Swords"/>
+  <skill maxlevel="25" minlevel="15" name="Dodge"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="25" order="ENGINEER">
+  <skill maxlevel="25" minlevel="15" name="Engineering"/>
+  <skill maxlevel="25" minlevel="15" name="Swords"/>
+  <skill maxlevel="25" minlevel="15" name="Dodge"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <priority name="Engineering" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="26" order="TALK">
+  <skill maxlevel="10" minlevel="5" name="Rhetoric"/>
+  <skill maxlevel="25" minlevel="15" name="Swords"/>
+  <skill maxlevel="25" minlevel="15" name="Dodge"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <priority name="Talking in bases" value="Normal"/>
+  <priority name="Defend ship" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="27" order="PILOT">
+  <skill maxlevel="6" minlevel="3" name="Piloting"/>
+  <skill maxlevel="6" minlevel="3" name="Perception"/>
+  <skill maxlevel="15" minlevel="5" name="Brawling"/>
+  <skill maxlevel="15" minlevel="5" name="Dodge"/>
+  <attribute maxlevel="4" minlevel="2"/>
+  <attribute maxlevel="4" minlevel="2"/>
+  <attribute maxlevel="4" minlevel="2"/>
+  <attribute maxlevel="4" minlevel="2"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="28" order="PILOT">
+  <skill maxlevel="20" minlevel="7" name="Piloting"/>
+  <skill maxlevel="20" minlevel="7" name="Perception"/>
+  <skill maxlevel="25" minlevel="15" name="Brawling"/>
+  <skill maxlevel="25" minlevel="15" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="5"/>
+  <attribute maxlevel="15" minlevel="5"/>
+  <attribute maxlevel="15" minlevel="5"/>
+  <attribute maxlevel="15" minlevel="5"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="29" order="PILOT">
+  <skill maxlevel="25" minlevel="15" name="Piloting"/>
+  <skill maxlevel="15" minlevel="7" name="Perception"/>
+  <skill maxlevel="25" minlevel="15" name="Swords"/>
+  <skill maxlevel="25" minlevel="15" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="30" order="GUNNER">
+  <skill maxlevel="20" minlevel="10" name="Gunnery"/>
+  <skill maxlevel="8" minlevel="3" name="Perception"/>
+  <skill maxlevel="25" minlevel="15" name="Swords"/>
+  <skill maxlevel="25" minlevel="15" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="31" order="GUNNER">
+  <skill maxlevel="20" minlevel="10" name="Gunnery"/>
+  <skill maxlevel="7" minlevel="3" name="Perception"/>
+  <skill maxlevel="25" minlevel="15" name="Swords"/>
+  <skill maxlevel="25" minlevel="15" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="32" order="PILOT">
+  <skill maxlevel="20" minlevel="7" name="Piloting"/>
+  <skill maxlevel="12" minlevel="4" name="Perception"/>
+  <skill maxlevel="20" minlevel="7" name="Swords"/>
+  <skill maxlevel="20" minlevel="7" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="33" order="GUNNER">
+  <skill maxlevel="20" minlevel="7" name="Gunnery"/>
+  <skill maxlevel="10" minlevel="3" name="Perception"/>
+  <skill maxlevel="20" minlevel="7" name="Swords"/>
+  <skill maxlevel="20" minlevel="7" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="34" order="ENGINEER">
+  <skill maxlevel="20" minlevel="7" name="Engineering"/>
+  <skill maxlevel="20" minlevel="7" name="Swords"/>
+  <skill maxlevel="20" minlevel="7" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <priority name="Engineering" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="35" order="TALK">
+  <skill maxlevel="6" minlevel="2" name="Rhetoric"/>
+  <skill maxlevel="20" minlevel="7" name="Swords"/>
+  <skill maxlevel="20" minlevel="7" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <priority name="Talking in bases" value="Normal"/>
+  <priority name="Defend ship" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="36" order="PILOT">
+  <skill maxlevel="15" minlevel="5" name="Piloting"/>
+  <skill maxlevel="15" minlevel="5" name="Perception"/>
+  <skill maxlevel="15" minlevel="5" name="Brawling"/>
+  <skill maxlevel="15" minlevel="5" name="Dodge"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="37" order="PILOT">
+  <skill maxlevel="2" minlevel="7" name="Piloting"/>
+  <skill maxlevel="15" minlevel="5" name="Perception"/>
+  <skill maxlevel="20" minlevel="10" name="Swords"/>
+  <skill maxlevel="20" minlevel="10" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="38" order="GUNNER">
+  <skill maxlevel="20" minlevel="10" name="Gunnery"/>
+  <skill maxlevel="15" minlevel="5" name="Perception"/>
+  <skill maxlevel="15" minlevel="5" name="Swords"/>
+  <skill maxlevel="15" minlevel="5" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="39" order="PILOT">
+  <skill maxlevel="50" minlevel="30" name="Piloting"/>
+  <skill maxlevel="12" minlevel="4" name="Perception"/>
+  <skill maxlevel="50" minlevel="30" name="Swords"/>
+  <skill maxlevel="50" minlevel="30" name="Dodge"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="40" order="GUNNER">
+  <skill maxlevel="50" minlevel="30" name="Gunnery"/>
+  <skill maxlevel="12" minlevel="4" name="Perception"/>
+  <skill maxlevel="50" minlevel="30" name="Swords"/>
+  <skill maxlevel="50" minlevel="30" name="Dodge"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="41" order="ENGINEER">
+  <skill maxlevel="50" minlevel="30" name="Engineering"/>
+  <skill maxlevel="50" minlevel="30" name="Swords"/>
+  <skill maxlevel="50" minlevel="30" name="Dodge"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <priority name="Engineering" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="42" order="TALK">
+  <skill maxlevel="20" minlevel="10" name="Rhetoric"/>
+  <skill maxlevel="50" minlevel="30" name="Swords"/>
+  <skill maxlevel="50" minlevel="30" name="Dodge"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <priority name="Talking in bases" value="Normal"/>
+  <priority name="Defend ship" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="43" order="PILOT">
+  <skill maxlevel="60" minlevel="40" name="Piloting"/>
+  <skill maxlevel="15" minlevel="8" name="Perception"/>
+  <skill maxlevel="60" minlevel="40" name="Swords"/>
+  <skill maxlevel="60" minlevel="40" name="Dodge"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="44" order="GUNNER">
+  <skill maxlevel="60" minlevel="40" name="Gunnery"/>
+  <skill maxlevel="15" minlevel="8" name="Perception"/>
+  <skill maxlevel="60" minlevel="40" name="Swords"/>
+  <skill maxlevel="60" minlevel="40" name="Dodge"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="45" order="ENGINEER">
+  <skill maxlevel="60" minlevel="40" name="Engineering"/>
+  <skill maxlevel="60" minlevel="40" name="Swords"/>
+  <skill maxlevel="60" minlevel="40" name="Dodge"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <priority name="Engineering" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="46" order="TALK">
+  <skill maxlevel="40" minlevel="20" name="Rhetoric"/>
+  <skill maxlevel="60" minlevel="40" name="Swords"/>
+  <skill maxlevel="60" minlevel="40" name="Dodge"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <priority name="Talking in bases" value="Normal"/>
+  <priority name="Defend ship" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="47" order="PILOT">
+  <skill maxlevel="50" minlevel="30" name="Piloting"/>
+  <skill maxlevel="50" minlevel="30" name="Perception"/>
+  <skill maxlevel="50" minlevel="30" name="Brawling"/>
+  <skill maxlevel="50" minlevel="30" name="Dodge"/>
+  <attribute maxlevel="20" minlevel="15"/>
+  <attribute maxlevel="20" minlevel="15"/>
+  <attribute maxlevel="20" minlevel="15"/>
+  <attribute maxlevel="20" minlevel="15"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="48" order="PILOT">
+  <skill maxlevel="60" minlevel="40" name="Piloting"/>
+  <skill maxlevel="60" minlevel="40" name="Perception"/>
+  <skill maxlevel="60" minlevel="40" name="Brawling"/>
+  <skill maxlevel="60" minlevel="40" name="Dodge"/>
+  <attribute maxlevel="30" minlevel="20"/>
+  <attribute maxlevel="30" minlevel="20"/>
+  <attribute maxlevel="30" minlevel="20"/>
+  <attribute maxlevel="30" minlevel="20"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="49" order="PILOT">
+  <skill maxlevel="60" minlevel="40" name="Piloting"/>
+  <skill maxlevel="15" minlevel="5" name="Perception"/>
+  <skill maxlevel="60" minlevel="40" name="Swords"/>
+  <skill maxlevel="60" minlevel="40" name="Dodge"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="50" order="GUNNER">
+  <skill maxlevel="50" minlevel="30" name="Gunnery"/>
+  <skill maxlevel="15" minlevel="5" name="Perception"/>
+  <skill maxlevel="60" minlevel="40" name="Swords"/>
+  <skill maxlevel="60" minlevel="40" name="Dodge"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="51" order="PILOT">
+  <skill maxlevel="70" minlevel="50" name="Piloting"/>
+  <skill maxlevel="20" minlevel="8" name="Perception"/>
+  <skill maxlevel="70" minlevel="50" name="Swords"/>
+  <skill maxlevel="70" minlevel="50" name="Dodge"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="52" order="GUNNER">
+  <skill maxlevel="60" minlevel="40" name="Gunnery"/>
+  <skill maxlevel="20" minlevel="8" name="Perception"/>
+  <skill maxlevel="70" minlevel="50" name="Swords"/>
+  <skill maxlevel="70" minlevel="50" name="Dodge"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="53" order="PILOT">
+  <skill level="1" name="Piloting"/>
+  <skill level="1" name="Perception"/>
+  <skill level="1" name="Swords"/>
+  <skill level="1" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="74"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <item amount="1" index="73"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="54" order="GUNNER">
+  <skill level="1" name="Gunnery"/>
+  <skill level="1" name="Perception"/>
+  <skill level="1" name="Swords"/>
+  <skill level="1" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="74"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <item amount="1" index="73"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="55" order="DEFEND">
+  <skill level="2" name="Brawling"/>
+  <skill level="2" name="Dodge"/>
+  <attribute level="1"/>
+  <attribute level="1"/>
+  <attribute level="1"/>
+  <attribute level="1"/>
+  <priority name="Defend ship" value="High"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="56" order="DEFEND">
+  <skill maxlevel="6" minlevel="2" name="Brawling"/>
+  <skill maxlevel="6" minlevel="2" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Defend ship" value="High"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="57" order="DEFEND">
+  <skill maxlevel="6" minlevel="3" name="Swords"/>
+  <skill maxlevel="6" minlevel="3" name="Dodge"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="77"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <item amount="1" index="72"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="58" order="DEFEND">
+  <skill maxlevel="14" minlevel="7" name="Swords"/>
+  <skill maxlevel="14" minlevel="7" name="Dodge"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <item amount="1" index="72"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="59" order="DEFEND">
+  <skill maxlevel="7" minlevel="3" name="Swords"/>
+  <skill maxlevel="7" minlevel="3" name="Dodge"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <attribute maxlevel="5" minlevel="3"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="66"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="60" order="DEFEND">
+  <skill maxlevel="15" minlevel="5" name="Swords"/>
+  <skill maxlevel="15" minlevel="5" name="Dodge"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <item amount="1" index="72"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="61" order="DEFEND">
+  <skill maxlevel="25" minlevel="15" name="Swords"/>
+  <skill maxlevel="25" minlevel="15" name="Dodge"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <attribute maxlevel="20" minlevel="10"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="62" order="DEFEND">
+  <skill maxlevel="15" minlevel="5" name="Brawling"/>
+  <skill maxlevel="15" minlevel="5" name="Dodge"/>
+  <attribute maxlevel="4" minlevel="2"/>
+  <attribute maxlevel="4" minlevel="2"/>
+  <attribute maxlevel="4" minlevel="2"/>
+  <attribute maxlevel="4" minlevel="2"/>
+  <priority name="Defend ship" value="High"/>
+  <item amount="1" index="78"/>
+  <item amount="1" index="79"/>
+  <item amount="1" index="80"/>
+  <item amount="1" index="81"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="63" order="DEFEND">
+  <skill maxlevel="25" minlevel="15" name="Brawling"/>
+  <skill maxlevel="25" minlevel="15" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="5"/>
+  <attribute maxlevel="15" minlevel="5"/>
+  <attribute maxlevel="15" minlevel="5"/>
+  <attribute maxlevel="15" minlevel="5"/>
+  <priority name="Defend ship" value="High"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="64" order="DEFEND">
+  <skill maxlevel="25" minlevel="15" name="Swords"/>
+  <skill maxlevel="25" minlevel="15" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="65" order="DEFEND">
+  <skill maxlevel="20" minlevel="7" name="Swords"/>
+  <skill maxlevel="20" minlevel="7" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="66" order="DEFEND">
+  <skill maxlevel="15" minlevel="5" name="Brawling"/>
+  <skill maxlevel="15" minlevel="5" name="Dodge"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <attribute maxlevel="10" minlevel="5"/>
+  <priority name="Defend ship" value="High"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="67" order="DEFEND">
+  <skill maxlevel="15" minlevel="5" name="Swords"/>
+  <skill maxlevel="15" minlevel="5" name="Dodge"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <attribute maxlevel="15" minlevel="7"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="76"/>
+  <item amount="1" index="83"/>
+  <item amount="1" index="84"/>
+  <item amount="1" index="85"/>
+  <item amount="1" index="86"/>
+  <item amount="1" index="82"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="68" order="DEFEND">
+  <skill maxlevel="50" minlevel="30" name="Swords"/>
+  <skill maxlevel="50" minlevel="30" name="Dodge"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="69" order="DEFEND">
+  <skill maxlevel="60" minlevel="40" name="Swords"/>
+  <skill maxlevel="60" minlevel="40" name="Dodge"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="70" order="DEFEND">
+  <skill maxlevel="50" minlevel="30" name="Brawling"/>
+  <skill maxlevel="50" minlevel="30" name="Dodge"/>
+  <attribute maxlevel="20" minlevel="15"/>
+  <attribute maxlevel="20" minlevel="15"/>
+  <attribute maxlevel="20" minlevel="15"/>
+  <attribute maxlevel="20" minlevel="15"/>
+  <priority name="Defend ship" value="High"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="71" order="DEFEND">
+  <skill maxlevel="60" minlevel="40" name="Brawling"/>
+  <skill maxlevel="60" minlevel="40" name="Dodge"/>
+  <attribute maxlevel="30" minlevel="20"/>
+  <attribute maxlevel="30" minlevel="20"/>
+  <attribute maxlevel="30" minlevel="20"/>
+  <attribute maxlevel="30" minlevel="20"/>
+  <priority name="Defend ship" value="High"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="72" order="DEFEND">
+  <skill maxlevel="60" minlevel="40" name="Swords"/>
+  <skill maxlevel="60" minlevel="40" name="Dodge"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="73" order="DEFEND">
+  <skill maxlevel="70" minlevel="50" name="Swords"/>
+  <skill maxlevel="70" minlevel="50" name="Dodge"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <attribute maxlevel="35" minlevel="25"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="88"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <item amount="1" index="89"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="74" order="DEFEND">
+  <skill level="1" name="Swords"/>
+  <skill level="1" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="74"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <item amount="1" index="73"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+</mobiles>
+
