@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
   armsguard and orichalcum legsguard
 - Option to set GTK directories via console parameters (Linux only)
 - New goals: kill 1000 enemies in melee combat, kill 2000 enemies in melee
-  combat and kill 4000 enemise in melee combat
+  combat, kill 4000 enemise in melee combat and kill 6000 enemies in melee
+  combat
 
 ### Changed
 - Raised gained experience in combat
