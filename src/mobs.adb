@@ -15,9 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with DOM.Core; use DOM.Core;
+with DOM.Core.Documents; use DOM.Core.Documents;
+with DOM.Core.Nodes; use DOM.Core.Nodes;
+with DOM.Core.Elements; use DOM.Core.Elements;
+with DOM.Readers; use DOM.Readers;
+with Input_Sources.File; use Input_Sources.File;
 with Log; use Log;
 with Game; use Game;
 with Items; use Items;
@@ -25,22 +30,17 @@ with Items; use Items;
 package body Mobs is
 
    procedure LoadMobs is
-      MobsFile: File_Type;
-      RawData, FieldName, Value, EquipmentSlot: Unbounded_String;
-      EqualIndex,
-      StartIndex,
-      EndIndex,
-      Amount,
-      XIndex,
-      DotIndex,
-      ItemIndex: Natural;
+      Reader: Tree_Reader;
+      MobsFile: File_Input;
+      MobsData: Document;
+      NodesList, ChildNodes: Node_List;
+      Files: Search_Type;
+      FoundFile: Directory_Entry_Type;
       TempRecord: ProtoMobRecord;
       TempSkills, TempInventory: Skills_Container.Vector;
       TempAttributes: Attributes_Container.Vector;
-      Files: Search_Type;
-      FoundFile: Directory_Entry_Type;
-      TempPriorities: Orders_Array := (others => 0);
-      TempEquipment: Equipment_Array := (others => 0);
+      TempPriorities: constant Orders_Array := (others => 0);
+      TempEquipment: constant Equipment_Array := (others => 0);
       OrdersNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("Piloting"),
          To_Unbounded_String("Engineering"),
@@ -53,6 +53,14 @@ package body Mobs is
          To_Unbounded_String("Cleaning ship"),
          To_Unbounded_String("Defend ship"),
          To_Unbounded_String("Board enemy ship"));
+      EquipmentNames: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("Weapon"),
+         To_Unbounded_String("Shield"),
+         To_Unbounded_String("Head"),
+         To_Unbounded_String("Torso"),
+         To_Unbounded_String("Arms"),
+         To_Unbounded_String("Legs"),
+         To_Unbounded_String("Tool"));
    begin
       if ProtoMobs_List.Length > 0 then
          return;
@@ -78,218 +86,138 @@ package body Mobs is
             Inventory => TempInventory,
             Equipment => TempEquipment);
          LogMessage("Loading mobs file: " & Full_Name(FoundFile), Everything);
-         Open(MobsFile, In_File, Full_Name(FoundFile));
-         while not End_Of_File(MobsFile) loop
-            RawData := To_Unbounded_String(Get_Line(MobsFile));
-            if Element(RawData, 1) /= '[' then
-               EqualIndex := Index(RawData, "=");
-               FieldName := Head(RawData, EqualIndex - 2);
-               Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
-               if FieldName = To_Unbounded_String("Skills") then
-                  StartIndex := 1;
-                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                  for I in 1 .. Amount loop
-                     EndIndex := Index(Value, ", ", StartIndex);
-                     if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                     end if;
-                     TempSkills.Append
-                     (New_Item =>
-                        (FindSkillIndex
-                           (Unbounded_Slice(Value, StartIndex, EndIndex - 1)),
-                         0,
-                         0));
-                     StartIndex := EndIndex + 2;
-                  end loop;
-               elsif FieldName = To_Unbounded_String("SkillsLevels") then
-                  StartIndex := 1;
-                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                  for I in 1 .. Amount loop
-                     EndIndex := Index(Value, ", ", StartIndex);
-                     if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                     end if;
-                     DotIndex := Index(Value, "..", StartIndex);
-                     if DotIndex = 0 or DotIndex > EndIndex then
-                        TempSkills(I)(2) :=
-                          Integer'Value
-                            (Slice(Value, StartIndex, EndIndex - 1));
-                        TempSkills(I)(3) := 0;
-                     else
-                        TempSkills(I)(2) :=
-                          Integer'Value
-                            (Slice(Value, StartIndex, DotIndex - 1));
-                        TempSkills(I)(3) :=
-                          Integer'Value
-                            (Slice(Value, DotIndex + 2, EndIndex - 1));
-                     end if;
-                     StartIndex := EndIndex + 2;
-                  end loop;
-                  TempRecord.Skills := TempSkills;
-                  TempSkills.Clear;
-               elsif FieldName = To_Unbounded_String("Attributes") then
-                  StartIndex := 1;
-                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                  for J in 1 .. Amount loop
-                     EndIndex := Index(Value, ", ", StartIndex);
-                     if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                     end if;
-                     DotIndex := Index(Value, "..", StartIndex);
-                     if DotIndex = 0 or DotIndex > EndIndex then
-                        TempAttributes.Append
-                        (New_Item =>
-                           (Integer'Value
-                              (Slice(Value, StartIndex, EndIndex - 1)),
-                            0));
-                     else
-                        TempAttributes.Append
-                        (New_Item =>
-                           (Integer'Value
-                              (Slice(Value, StartIndex, DotIndex - 1)),
-                            Integer'Value
-                              (Slice(Value, DotIndex + 2, EndIndex - 1))));
-                     end if;
-                     StartIndex := EndIndex + 2;
-                  end loop;
-                  TempRecord.Attributes := TempAttributes;
-                  TempAttributes.Clear;
-                  StartIndex := EndIndex + 2;
-               elsif FieldName = To_Unbounded_String("Order") then
-                  TempRecord.Order := Crew_Orders'Value(To_String(Value));
-               elsif FieldName = To_Unbounded_String("Priorities") then
-                  StartIndex := 1;
-                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                  for J in 1 .. Amount loop
-                     EndIndex := Index(Value, ", ", StartIndex);
-                     if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                     end if;
-                     XIndex := Index(Value, ":", StartIndex);
-                     for K in OrdersNames'Range loop
-                        if OrdersNames(K) =
-                          Unbounded_Slice(Value, StartIndex, XIndex - 1) then
-                           if Slice(Value, XIndex + 1, EndIndex - 1) =
-                             "Normal" then
-                              TempPriorities(K) := 1;
-                           else
-                              TempPriorities(K) := 2;
-                           end if;
-                           exit;
-                        end if;
-                     end loop;
-                     StartIndex := EndIndex + 2;
-                  end loop;
-                  TempRecord.Priorities := TempPriorities;
-                  TempPriorities := (others => 0);
-               elsif FieldName = To_Unbounded_String("Inventory") then
-                  StartIndex := 1;
-                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                  for I in 1 .. Amount loop
-                     EndIndex := Index(Value, ", ", StartIndex);
-                     if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                     end if;
-                     XIndex := Index(Value, "x", StartIndex);
-                     DotIndex := Index(Value, "..", StartIndex);
-                     ItemIndex :=
-                       FindProtoItem
-                         (Unbounded_Slice(Value, XIndex + 1, EndIndex - 1));
-                     if ItemIndex = 0 then
-                        Close(MobsFile);
-                        End_Search(Files);
-                        raise Mobs_Invalid_Data
-                          with "Invalid item index: |" &
-                          Slice(Value, XIndex + 1, EndIndex - 1) &
-                          "| in " &
-                          To_String(TempRecord.Index) &
-                          ".";
-                     end if;
-                     if DotIndex = 0 or DotIndex > EndIndex then
-                        TempRecord.Inventory.Append
-                        (New_Item =>
-                           (ItemIndex,
-                            Integer'Value
-                              (Slice(Value, StartIndex, XIndex - 1)),
-                            0));
-                     else
-                        TempRecord.Inventory.Append
-                        (New_Item =>
-                           (ItemIndex,
-                            Integer'Value
-                              (Slice(Value, StartIndex, DotIndex - 1)),
-                            Integer'Value
-                              (Slice(Value, DotIndex + 2, XIndex - 1))));
-                     end if;
-                     StartIndex := EndIndex + 2;
-                  end loop;
-               elsif FieldName = To_Unbounded_String("Equipment") then
-                  StartIndex := 1;
-                  Amount := Ada.Strings.Unbounded.Count(Value, ", ") + 1;
-                  for J in 1 .. Amount loop
-                     EndIndex := Index(Value, ", ", StartIndex);
-                     if EndIndex = 0 then
-                        EndIndex := Length(Value) + 1;
-                     end if;
-                     XIndex := Index(Value, ":", StartIndex);
-                     EquipmentSlot :=
-                       Unbounded_Slice(Value, StartIndex, XIndex - 1);
-                     if EquipmentSlot = "Weapon" then
-                        TempEquipment(1) :=
-                          Positive'Value
-                            (Slice(Value, XIndex + 1, EndIndex - 1));
-                     elsif EquipmentSlot = "Shield" then
-                        TempEquipment(2) :=
-                          Positive'Value
-                            (Slice(Value, XIndex + 1, EndIndex - 1));
-                     elsif EquipmentSlot = "Head" then
-                        TempEquipment(3) :=
-                          Positive'Value
-                            (Slice(Value, XIndex + 1, EndIndex - 1));
-                     elsif EquipmentSlot = "Torso" then
-                        TempEquipment(4) :=
-                          Positive'Value
-                            (Slice(Value, XIndex + 1, EndIndex - 1));
-                     elsif EquipmentSlot = "Arms" then
-                        TempEquipment(5) :=
-                          Positive'Value
-                            (Slice(Value, XIndex + 1, EndIndex - 1));
-                     elsif EquipmentSlot = "Legs" then
-                        TempEquipment(6) :=
-                          Positive'Value
-                            (Slice(Value, XIndex + 1, EndIndex - 1));
-                     elsif EquipmentSlot = "Tool" then
-                        TempEquipment(7) :=
-                          Positive'Value
-                            (Slice(Value, XIndex + 1, EndIndex - 1));
-                     end if;
-                     StartIndex := EndIndex + 2;
-                  end loop;
-                  TempRecord.Equipment := TempEquipment;
-                  TempEquipment := (others => 0);
-               end if;
-            else
-               if TempRecord.Index /= Null_Unbounded_String then
-                  ProtoMobs_List.Append(New_Item => TempRecord);
-                  LogMessage
-                    ("Mob added: " & To_String(TempRecord.Index),
-                     Everything);
-                  TempRecord :=
-                    (Index => Null_Unbounded_String,
-                     Skills => TempSkills,
-                     Attributes => TempAttributes,
-                     Order => Rest,
-                     Priorities => TempPriorities,
-                     Inventory => TempInventory,
-                     Equipment => TempEquipment);
-               end if;
-               if Length(RawData) > 2 then
-                  TempRecord.Index :=
-                    Unbounded_Slice(RawData, 2, (Length(RawData) - 1));
-               end if;
-            end if;
-         end loop;
+         Open(Full_Name(FoundFile), MobsFile);
+         Parse(Reader, MobsFile);
          Close(MobsFile);
+         MobsData := Get_Tree(Reader);
+         NodesList :=
+           DOM.Core.Documents.Get_Elements_By_Tag_Name(MobsData, "mobile");
+         for I in 0 .. Length(NodesList) - 1 loop
+            TempRecord.Index :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "skill");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               if Get_Attribute(Item(ChildNodes, J), "level") /= "" then
+                  TempRecord.Skills.Append
+                  (New_Item =>
+                     (FindSkillIndex
+                        (To_Unbounded_String
+                           (Get_Attribute(Item(ChildNodes, J), "name"))),
+                      Integer'Value
+                        (Get_Attribute(Item(ChildNodes, J), "level")),
+                      0));
+               else
+                  TempRecord.Skills.Append
+                  (New_Item =>
+                     (FindSkillIndex
+                        (To_Unbounded_String
+                           (Get_Attribute(Item(ChildNodes, J), "name"))),
+                      Integer'Value
+                        (Get_Attribute(Item(ChildNodes, J), "minlevel")),
+                      Integer'Value
+                        (Get_Attribute(Item(ChildNodes, J), "maxlevel"))));
+               end if;
+            end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "attribute");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               if Get_Attribute(Item(ChildNodes, J), "level") /= "" then
+                  TempRecord.Attributes.Append
+                  (New_Item =>
+                     (Integer'Value
+                        (Get_Attribute(Item(ChildNodes, J), "level")),
+                      0));
+               else
+                  TempRecord.Attributes.Append
+                  (New_Item =>
+                     (Integer'Value
+                        (Get_Attribute(Item(ChildNodes, J), "minlevel")),
+                      Integer'Value
+                        (Get_Attribute(Item(ChildNodes, J), "maxlevel"))));
+               end if;
+            end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "priority");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               for K in OrdersNames'Range loop
+                  if OrdersNames(K) =
+                    To_Unbounded_String
+                      (Get_Attribute(Item(ChildNodes, J), "name")) then
+                     if Get_Attribute(Item(ChildNodes, J), "value") =
+                       "Normal" then
+                        TempRecord.Priorities(K) := 1;
+                     else
+                        TempRecord.Priorities(K) := 2;
+                     end if;
+                     exit;
+                  end if;
+               end loop;
+            end loop;
+            TempRecord.Order :=
+              Crew_Orders'Value(Get_Attribute(Item(NodesList, I), "order"));
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "item");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               if Get_Attribute(Item(ChildNodes, J), "amount") /= "" then
+                  TempRecord.Inventory.Append
+                  (New_Item =>
+                     (FindProtoItem
+                        (To_Unbounded_String
+                           (Get_Attribute(Item(ChildNodes, J), "index"))),
+                      Integer'Value
+                        (Get_Attribute(Item(ChildNodes, J), "amount")),
+                      0));
+               else
+                  TempRecord.Inventory.Append
+                  (New_Item =>
+                     (FindProtoItem
+                        (To_Unbounded_String
+                           (Get_Attribute(Item(ChildNodes, J), "index"))),
+                      Integer'Value
+                        (Get_Attribute(Item(ChildNodes, J), "minamount")),
+                      Integer'Value
+                        (Get_Attribute(Item(ChildNodes, J), "maxamount"))));
+               end if;
+            end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "equipment");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               for K in EquipmentNames'Range loop
+                  if EquipmentNames(K) =
+                    To_Unbounded_String
+                      (Get_Attribute(Item(ChildNodes, J), "slot")) then
+                     TempRecord.Equipment(K) :=
+                       Positive'Value
+                         (Get_Attribute(Item(ChildNodes, J), "index"));
+                     exit;
+                  end if;
+               end loop;
+            end loop;
+            ProtoMobs_List.Append(New_Item => TempRecord);
+            LogMessage
+              ("Mob added: " & To_String(TempRecord.Index),
+               Everything);
+            TempRecord :=
+              (Index => Null_Unbounded_String,
+               Skills => TempSkills,
+               Attributes => TempAttributes,
+               Order => Rest,
+               Priorities => TempPriorities,
+               Inventory => TempInventory,
+               Equipment => TempEquipment);
+         end loop;
+         Free(Reader);
       end loop;
       End_Search(Files);
    end LoadMobs;
