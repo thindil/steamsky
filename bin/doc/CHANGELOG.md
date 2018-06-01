@@ -41,6 +41,8 @@ All notable changes to this project will be documented in this file.
 - Loading player ship data
 - Setting set mission as destination for ship button
 - Crash when trying to remove destroyed ship module
+- Keyboard shortcut for shipyard in orders menu
+- Again, lots of grammar/spelling errors by LJNIC (pull request #25)
 
 ## [2.4] - 2018-05-20
 
