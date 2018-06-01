@@ -463,38 +463,38 @@ edit `value` attribute of tag `unarmedskill`. Value must be existing skill name.
 ### General informations
 - Open file *mobs.dat* in *data/mobs* directory or create new file with *dat*
   extension in that directory (example: *mymobs.dat*).
-- Each value in goal data structure must be one line length.
-- File must end with `[]`.
-- First entry in file *mobs.dat* is player character.
 
 ### Mob data structure
-- Each ship start from `[` symbol. Any value between `[` and `]` is a index 
-  (it can be number or text) and must be unique.
-- Skills: List of separated by `, ` (comma and space) names of skills (from
-  *game.dat* from *data* directory) which selected mob known.
-- SkillsLevels: List of levels of skills which selected mob known, separated
-  by `, ` (comma and space). Skill level can be constant value or range from
-  minimum value to max value, separated by `..` (double dots). Must be that
-  same amount as for Skills entry.
-- Attributes: List of levels of mobile attributes, separated by `, ` (comma
-  and space). Can be constant value or range from minimum value to max value,
-  separated by `..` (double dots).
-- Order: Current ship order of selected mob. Possible values are: Pilot,
-  Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest, Defend,
-  Boarding.
-- Priorities: Orders priorities for selected mob, separated by `, ` (comma and
-  space). Each priority entry is Order`:`Priority where Order is: Piloting,
-  Engineering, Operating guns, Repair ship, Manufacturing, Upgrading ship,
-  Talking in bases, Healing wounded, Cleaning ship, Defend ship, Board enemy
-  ship and Priority is: Normal or High.
-- Inventory: List of inventory of selected mob. Each item in inventory is 
-  separated by `, ` (comma and space). Each item entry is Amount`x`Item index
-  (from *items* directory). Amount can be constant value or range from minimum
-  value to max value, separated by `..` (double dots).
-- Equipment: List of items from inventory used by selected mob. Each item in
-  equipment is separated by `, ` (comma and space). Each item entry is Slot
-  name`:`Item index from inventory, where Slot name is: Weapon, Shield, Head,
-  Torso, Arms, Legs, Tools. Item index always starts from 1.
+- Each mobile starts with tag `mobile`.
+- Attribute `index` is is a mobile index (it can be number or text) and must be
+  unique. At this moment this value is used to set crew on ships.
+- Attribute "order": current ship order of selected mob. Possible values are:
+  Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest,
+  Defend, Boarding.
+- Tag `skill` define skill of mobile. Attribute `name` is name of skill (from
+  *game.dat* from *data* directory). If mobile should have constant level of 
+  skill, add attribute `level` with level of selected skill. If mobile should 
+  have random level of skill, add attribute `minlevel` with minimum level of 
+  skill and attribute `maxlevel` with maximum level of skill.
+- Tag `attribute` define attribute of mobile. If mobile should have constant
+  level of attribute, add attribute `level` with level of selected attribute.
+  If mobile should have random level of attribute, add attributes `minlevel`
+  with minimum level of attribute and attribute `maxlevel` with maximum level
+  of attribute.
+- Tag `priority` define orders priorities of mobile. Attribute `name` can have
+  value: Piloting, Engineering, Operating guns, Repair ship, Manufacturing,
+  Upgrading ship, Talking in bases, Healing wounded, Cleaning ship, Defend ship,
+  Board enemy ship. Attribute `value` can have value Normal or High (only
+  one High per mobile).
+- Tag `item` define item in mobile inventory. Attribute `index` is index of 
+  item from files from *items* directory. If mobile should have constant amount
+  of item, add attribute `amount` with amount of item. If mobile should have 
+  random amount of item, add attribute `minamount` with minimum amount of item
+  and attribute `maxamount` with maximum amount of item.
+- Tag `equipment` define which items are used by mobile. Attribute `index` is
+  item index from inventory. Item index always starts with 1. Attribute `slot`
+  is name of equipment slot in which selected item is set. Possible values for
+  `slot`: Weapon, Shield, Head, Torso, Arms, Legs, Tools.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
