@@ -83,17 +83,17 @@ package body Crafts.UI is
             Gtk_Window(Get_Object(Object, "skymapwindow")));
       when An_Exception : Crafting_No_Tools =>
          ShowDialog
-           ("You don't have proper tool to start manufacturing " &
+           ("You don't have the proper tool to start manufacturing " &
             Exception_Message(An_Exception) &
             ".",
             Gtk_Window(Get_Object(Object, "skymapwindow")));
       when Trade_No_Free_Cargo =>
          ShowDialog
-           ("You don't have that much free space in your ship cargo.",
+           ("You don't have that much free space in your ship's cargo.",
             Gtk_Window(Get_Object(Object, "craftswindow")));
       when An_Exception : Crafting_No_Workshop =>
          ShowDialog
-           ("You don't have proper workplace to start manufacturing " &
+           ("You don't have proper a workplace to start manufacturing " &
             Exception_Message(An_Exception) &
             ".",
             Gtk_Window(Get_Object(Object, "skymapwindow")));
