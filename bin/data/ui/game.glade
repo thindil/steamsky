@@ -1124,7 +1124,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnshipyard">
-            <property name="label" translatable="yes">_Shipyard</property>
+            <property name="label" translatable="yes">Sh_ipyard</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
