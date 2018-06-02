@@ -1,8 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <items>
-<!-- Each item is between "item" tags. Attribute "index" must be unique for each item. This value is used in ships and recipes data entries. Attribute "name" is name of item displayed in various places (cargo info, crafting, etc.). Attribute "type" is item type of item (from *game.dat* file, entry *ItemsTypes*). Attribute "showtype" is optional. If you want to show item type in game (for example in cargo or in trade screen) different than item type from *game.dat* file, you can set this parameter to any text value.-->
+<!-- 
+- Each item is between "item" tags. 
+- Attribute "index" must be unique for each item. This value is used in ships
+and recipes data entries. 
+- Attribute "name" is name of item displayed in various places (cargo info, 
+crafting, etc.). 
+- Attribute "type" is item type of item (from *game.dat* file, entry 
+*ItemsTypes*). 
+- Attribute "showtype" is optional. If you want to show item type in game 
+(for example in cargo or in trade screen) different than item type from 
+*game.dat* file, you can set this parameter to any text value.
+-->
  <item index="1" name="Charcollum" showtype="Fuel/Moneys" type="Fuel" weight="1">
-<!-- Each trade entry is for selected type of bases: Industrial, Agricultural, Refinery, Shipyard, Military. Attribute "price" is price of item in selected base type. If you want that item will be not possible to buy/sellable in bases (or only selected base type) set it price to 0. Attribute "buyable" said did item can be bough in selected type of base. "Y" mean Yes, "N" means No. -->
+<!-- 
+- Each trade entry is for selected type of bases: Industrial, Agricultural,
+Refinery, Shipyard, Military. 
+- Attribute "price" is price of item in selected base type. If you want that
+item will be not possible to buy/sellable in bases (or only selected base type)
+set it price to 0. 
+- Attribute "buyable" said did item can be bough in selected type of base. 
+"Y" mean Yes, "N" means No. 
+-->
   <trade buyable="N" price="0"/>
   <trade buyable="N" price="0"/>
   <trade buyable="N" price="0"/>
@@ -17,7 +36,19 @@
   <trade buyable="N" price="3"/>
   <trade buyable="N" price="3"/>
   <trade buyable="N" price="3"/>
-<!-- Optional tags "data". For 'Food' or 'Raw Food' it is value of hunger reduced by one portion. For 'Drink', value of thirst reduced by one portion. For ammunition it is damage done by that ammunition. For working tools it is chance for item to be damaged during work. For harpoon guns ammunition it is how long (in combat turns) item will be stuck in enemy ship. For weapons and armor pieces first value is change for item to be damaged during combat, second entry for weapons is damage done by weapon and for armor piece it is amount of damage reduced by this armor. Third entry for weapons is number of skill used by this weapon (from *game.dat* file, entry *Skills*) and for armor is amount of levels of dodge skill which this armor reduce when weared. Forth entry for weapon is amount of hands used (1 for one-handed, 2 for two-handed weapons). Fifth value for weapon is damage type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage). -->
+<!-- Optional tags "data". For 'Food' or 'Raw Food' it is value of hunger
+reduced by one portion. For 'Drink', value of thirst reduced by one portion. 
+For ammunition it is damage done by that ammunition. For working tools it is
+chance for item to be damaged during work. For harpoon guns ammunition it is
+how long (in combat turns) item will be stuck in enemy ship. For weapons and
+armor pieces first value is change for item to be damaged during combat, second
+entry for weapons is damage done by weapon and for armor piece it is amount of
+damage reduced by this armor. Third entry for weapons is number of skill used
+by this weapon (from *game.dat* file, entry *Skills*) and for armor is amount
+of levels of dodge skill which this armor reduce when weared. Forth entry for
+weapon is amount of hands used (1 for one-handed, 2 for two-handed weapons). 
+Fifth value for weapon is damage type (1 - cutting damage, 2 - impaling damage,
+3 - blunt damage). -->
   <data value="60"/>
   <description>Standard food rations for crew members.</description>
  </item>
