@@ -137,6 +137,7 @@ package body ShipModules is
          end loop;
          Free(Reader);
       end loop;
+      End_Search(Files);
    end LoadShipModules;
 
    function FindProtoModule(Index: Unbounded_String) return Natural is
