@@ -1,1423 +1,2627 @@
-[1]
-Name = Player Ship
-Modules = 1, 2, 3, 4x4, 5, 6, 2x7, 8, 9
-Cargo = 2000x1, 100x2, 200x3, 500x4, 100x5, 20x13, 1x47, 1x49, 1x50, 4x61, 1x53, 10x22
-Recipes = 1, 2, 4, 20
-Crew = 2, 3, 4
-[2]
-Name = Tiny pirates ship
-Modules = 1, 3, 2x4, 5, 7, 2x8, 11, 127
-CombatAI = Disarmer
-Loot = 10..100
-Cargo = 800..1000x1, 80..100x2, 150..200x3, 300..500x14, 50..75x62
-Description = Smallest known pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 5, 2x6
-[3]
-Name = Tiny undead ship
-Modules = 1, 3, 5, 7, 12
-CombatAI = Berserker
-Loot = 10..100
-Cargo = 750..1000x1
-Description = Smallest known undead ship. Dangerous at close range.
-Owner = Undead
-Crew = 7, 2x55
-[4]
-Name = Tiny clockwork drone
-Modules = 10, 3, 7, 13
-Accuracy = 2
-CombatAI = Berserker
-Evasion = 2
-Loot = 5..50
-Perception = 5
-Cargo = 800..1000x1
-Description = Smallest known clockwork drone. Dangerous at close range.
-Owner = Drones
-[5]
-Name = Small pirates ship
-Modules = 1, 3, 3x4, 5, 2x7, 2x8, 9, 127
-CombatAI = Disarmer
-Loot = 20..200
-Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13, 50..75x63
-Description = Small, fast pirate vessel. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 8, 2x9, 10
-[6]
-Name = Small undead ship
-Modules = 1, 2, 3, 5, 2x7, 12
-CombatAI = Berserker
-Loot = 20..200
-Cargo = 1500..2000x1, 80..100x5
-Description = Small undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 11, 3x56
-[7]
-Name = Small clockwork drone
-Modules = 1, 3, 7, 12
-Accuracy = 5..10
-CombatAI = Berserker
-Evasion = 5..10
-Loot = 10..100
-Perception = 10..15
-Cargo = 500..1000x1
-Description = Small flying clockwork drone. Dangerous at close range.
-Owner = Drones
-[8]
-Name = Pirate ship
-Modules = 17, 15, 8x4, 5, 4x7, 2x28, 27, 128
-CombatAI = Disarmer
-Loot = 100..200
-Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x5, 10..40x13, 75..100x63
-Description = Standard pirate vessel. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 12, 2x13, 14, 3..5x57
-[9]
-Name = Armored pirate ship
-Modules = 17, 25, 15, 8x4, 5, 4x7, 2x28, 27, 128
-CombatAI = Disarmer
-Loot = 150..300
-Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x20, 100..200x5, 20..40x13, 100..150x63
-Description = Armored version of pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 16, 2x17, 18, 3..5x58
-[10]
-Name = Small attacking drone
-Modules = 1, 3, 7, 12, 8, 11
-Accuracy = 5..10
-CombatAI = Berserker
-Evasion = 5..10
-Loot = 20..200
-Perception = 5..10
-Cargo = 200..1000x1, 200..500x14
-Description = Small, more aggresive version of clockwork drone.
-Owner = Drones
-[11]
-Name = Attacking clockwork drone
-Modules = 17, 15, 2x7, 12, 8, 9
-Accuracy = 5..10
-CombatAI = Berserker
-Evasion = 5..10
-Loot = 10..100
-Perception = 10..20
-Cargo = 800..1000x1, 100..500x4
-Description = Standard, very aggresive version of clockwork drone.
-Owner = Drones
-[12]
-Name = Armored attacking drone
-Modules = 17, 2, 15, 2x7, 12, 8, 9
-Accuracy = 5..12
-CombatAI = Berserker
-Evasion = 5..12
-Loot = 10..100
-Perception = 10..20
-Cargo = 900..1000x1, 450..500x4, 90..100x5, 5..20x13
-Description = Armored, very aggresive version of clockwork drone.
-Owner = Drones
-[13]
-Name = Tiny inquisition ship
-Modules = 1, 3, 4, 5, 7, 12
-Accuracy = 1
-CombatAI = Attacker
-Loot = 10..100
-Cargo = 500..1000x1, 20..100x2, 40..200x3
-Description = Smallest know inquisition ship.
-Owner = Inquisition
-Crew = 19
-[14]
-Name = Small inquisition ship
-Modules = 1, 3, 4x4, 5, 2x7, 12
-CombatAI = Attacker
-Loot = 15..150
-Cargo = 1000..2000x1, 30..100x2, 150..200x3, 20..100x5
-Description = Small flying vessel of inquisition, dangerous at close range.
-Owner = Inquisition
-Crew = 20, 3x59
-[15]
-Name = Inquisition ship
-Modules = 17, 15, 8x4, 5, 4x7, 12, 8, 9
-CombatAI = Attacker
-Loot = 100..200
-Cargo = 1500..2000x1, 100..200x2, 300..400x3, 300..500x4, 50..200x5, 5..40x13
-Description = Standard ship of inquisition.
-Owner = Inquisition
-Crew = 21, 22, 4..8x60
-[16]
-Name = Armored inquisition ship
-Modules = 17, 2, 15, 8x4, 5, 4x7, 12, 8, 9
-CombatAI = Attacker
-Loot = 120..240
-Cargo = 1800..2000x1, 100..200x2, 350..400x3, 250..500x4, 100..200x5, 10..40x13
-Description = Armored version of standard flying vessel of inquisition.
-Owner = Inquisition
-Crew = 21, 22, 2x60
-[17]
-Name = Large clockwork drone
-Modules = 23, 25, 19, 4x7, 12, 2x28, 2x27
-Accuracy = 15..25
-CombatAI = Berserker
-Evasion = 15..25
-Loot = 200..400
-Perception = 25..35
-Cargo = 1800..2000x1, 450..500x20, 120..250x5, 20..60x13
-Description = Large, well armored and aggresive clockwork drone.
-Owner = Drones
-[18]
-Name = Large pirate ship
-Modules = 23, 26, 19, 10x4, 5, 6x7, 4x28, 3x29, 129
-CombatAI = Disarmer
-Loot = 300..500
-Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13, 100..150x64
-Description = Large, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 23, 4x24, 25, 3..5x61
-[19]
-Name = Undead ship
-Modules = 17, 25, 15, 5, 4x7, 40
-CombatAI = Berserker
-Loot = 100..300
-Cargo = 2000..2500x1, 150..300x5
-Description = Standard version of undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 27, 6..10x62
-[20]
-Name = Large undead ship
-Modules = 23, 26, 19, 5, 6x7, 40
-CombatAI = Berserker
-Loot = 200..400
-Cargo = 3000..4000x1, 300..400x5
-Description = Large, well armored version of undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 28, 8..12x63
-[21]
-Name = Large inquisition ship
-Modules = 23, 26, 19, 10x4, 5, 6x7, 40, 2x28, 2x27
-CombatAI = Attacker
-Loot = 250..500
-Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x20, 200..400x5, 20..50x13
-Description = Large, well armored version of inquisition flying vessel.
-Owner = Inquisition
-Crew = 29, 2x30, 31, 5..9x64
-[22]
-Name = Large attacking drone
-Modules = 23, 26, 19, 6x7, 40, 2x28, 2x27
-Accuracy = 25..35
-CombatAI = Berserker
-Evasion = 25..35
-Loot = 250..450
-Perception = 40..50
-Cargo = 1500..2000x1, 450..500x20, 150..300x5, 20..40x13
-Description = Large, well armored version of attacking clockwork drone.
-Owner = Drones
-[23]
-Name = Advanced attacking drone
-Modules = 22, 25, 18, 5x7, 40, 28, 27
-Accuracy = 15..25
-CombatAI = Berserker
-Evasion = 15..25
-Loot = 100..250
-Perception = 40..50
-Cargo = 1000..1500x1, 200..300x20, 100..200x5, 10..20x13
-Description = Advanced version of standard attacking clockwork drone.
-Owner = Drones
-[24]
-Name = Advanced pirate ship
-Modules = 22, 25, 18, 6x4, 5, 5x7, 2x28, 27, 128
-CombatAI = Disarmer
-Loot = 200..250
-Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x5, 20..40x13, 75..100x64
-Description = Advanced version of standard pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 32, 2x33, 34, 2x65
-[25]
-Name = Advanced undead ship
-Modules = 22, 25, 18, 5, 5x7, 40
-CombatAI = Berserker
-Loot = 200..300
-Cargo = 2500..3000x1, 200..350x5
-Description = Advanced version of standard undead ship. Dangerous at close range.
-Owner = Undead
-Crew = 36, 6x66
-[26]
-Name = Advanced inquisition ship
-Modules = 22, 25, 18, 8x4, 5, 4x7, 40, 28, 29
-Accuracy = 15
-CombatAI = Attacker
-Evasion = 15
-Loot = 120..240
-Perception = 15
-Cargo = 2000..2200x1, 150..220x2, 400..500x3, 400..600x20, 150..250x5, 20..50x13
-Description = Advanced version of standard flying vessel of inquisition.
-Owner = Inquisition
-Crew = 37, 38, 4..8x67
-[27]
-Name = Huge pirate ship
-Modules = 60, 26, 2x62, 14x4, 5, 10x7, 5x39, 4x33, 129
-CombatAI = Disarmer
-Loot = 500..1000
-Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13, 100..200x64
-Description = Huge, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 39, 5x40, 41, 5..9x68
-[28]
-Name = Advanced huge pirate ship
-Modules = 61, 26, 2x63, 16x4, 5, 12x7, 5x39, 4x34, 129
-CombatAI = Disarmer
-Loot = 750..1200
-Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x5, 300..500x13, 150..300x64
-Description = Advanced version of huge, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 43, 5x44, 45, 7..11x69
-[29]
-Name = Huge undead ship
-Modules = 60, 26, 62, 5, 10x7, 40
-CombatAI = Berserker
-Loot = 500..750
-Cargo = 5000..7000x1, 500..750x5
-Description = Huge, well armored version of undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 47, 10..14x70
-[30]
-Name = Huge attacking drone
-Modules = 60, 26, 62, 10x7, 40, 3x39, 3x33
-Accuracy = 60..80
-CombatAI = Berserker
-Evasion = 60..80
-Loot = 500..900
-Perception = 60..80
-Cargo = 2000..4000x1, 500..1000x31, 500..750x5, 150..300x13
-Description = Huge, well armored version of attacking clockwork drone.
-Owner = Drones
-[31]
-Name = Advanced huge undead ship
-Modules = 61, 26, 63, 5, 10x7, 40
-CombatAI = Berserker
-Loot = 600..900
-Cargo = 6000..8000x1, 600..800x5
-Description = Advanced version of huge, well armored undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 48, 11..15x71
-[32]
-Name = Advanced huge attacking drone
-Modules = 61, 26, 63, 12x7, 40, 3x39, 3x34
-Accuracy = 75..90
-CombatAI = Berserker
-Evasion = 75..90
-Loot = 600..1000
-Perception = 75..90
-Cargo = 4000..6000x1, 600..1000x33, 600..800x5, 150..300x13
-Description = Advanced version of huge, well armored  attacking clockwork drone.
-Owner = Drones
-[33]
-Name = Huge inquisition ship
-Modules = 60, 26, 62, 13x4, 5, 9x7, 40, 4x39, 4x33
-CombatAI = Attacker
-Loot = 750..1000
-Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x31, 400..600x5, 50..100x13
-Description = Huge, well armored version of inquisition flying vessel.
-Owner = Inquisition
-Crew = 49, 4x50, 6..10x72
-[34]
-Name = Advanced huge inquisition ship
-Modules = 61, 26, 63, 15x4, 5, 11x7, 40, 4x39, 4x34
-CombatAI = Attacker
-Loot = 900..1200
-Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x33, 500..650x5, 75..120x13
-Description = Advanced version of huge, well armored  inquisition flying vessel.
-Owner = Inquisition
-Crew = 51, 4x52, 8..12x73
-[35]
-Name = Tiny pirates ship mk II
-Modules = 64, 72, 2x80, 41, 42, 2x84, 11, 127
-CombatAI = Disarmer
-Loot = 10..100
-Cargo = 800..1000x1, 80..100x2, 150..200x3, 300..500x14, 50..75x62
-Description = Smallest known pirates ship (upgraded version). Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 53, 2x54, 74
-[36]
-Name = Tiny undead ship mk II
-Modules = 64, 72, 41, 42, 87
-CombatAI = Berserker
-Loot = 10..100
-Cargo = 750..1000x1
-Description = Smallest known undead ship (upgraded version). Dangerous at close range.
-Owner = Undead
-Crew = 7, 2x55
-[37]
-Name = Small pirates ship mk II
-Modules = 64, 72, 3x80, 41, 2x42, 2x84, 9, 127
-CombatAI = Disarmer
-Loot = 20..200
-Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x13, 50..75x63
-Description = Small, fast pirate vessel (upgraded version). Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 8, 2x9, 10
-[38]
-Name = Small undead ship mk II
-Modules = 64, 55, 72, 41, 2x42, 87
-CombatAI = Berserker
-Loot = 20..200
-Cargo = 1500..2000x1, 80..100x13
-Description = Small undead flying vessel (upgraded version). Dangerous at close range.
-Owner = Undead
-Crew = 11, 3x56
-[39]
-Name = Small clockwork drone mk II
-Modules = 64, 72, 42, 87
-Accuracy = 5..10
-CombatAI = Berserker
-Evasion = 5..10
-Loot = 10..100
-Perception = 10..15
-Cargo = 500..1000x1
-Description = Small flying clockwork drone (upgraded version). Dangerous at close range.
-Owner = Drones
-[40]
-Name = Pirate ship mk II
-Modules = 66, 74, 8x80, 41, 4x42, 2x85, 27, 128
-CombatAI = Disarmer
-Loot = 100..200
-Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x13, 75..100x63
-Description = Standard pirate vessel (upgraded version). Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 12, 2x13, 14, 3..5x57
-[41]
-Name = Armored pirate ship mk II
-Modules = 66, 56, 74, 8x80, 41, 4x42, 2x85, 27, 128
-CombatAI = Disarmer
-Loot = 150..300
-Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x20, 100..200x13, 100..150x63
-Description = Armored version of pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 16, 2x17, 18, 3..5x58
-[42]
-Name = Small attacking drone mk II
-Modules = 64, 72, 42, 87, 84, 11
-Accuracy = 5..10
-CombatAI = Berserker
-Evasion = 5..10
-Loot = 20..200
-Perception = 5..10
-Cargo = 200..1000x1, 200..500x14
-Description = Small, more aggresive, upgraded version of clockwork drone.
-Owner = Drones
-[43]
-Name = Attacking clockwork drone mk II
-Modules = 66, 74, 2x42, 87, 84, 9
-Accuracy = 5..10
-CombatAI = Berserker
-Evasion = 5..10
-Loot = 10..100
-Perception = 10..20
-Cargo = 800..1000x1, 100..500x4
-Description = Standard, very aggresive, upgraded version of clockwork drone.
-Owner = Drones
-[44]
-Name = Armored attacking drone mk II
-Modules = 66, 55, 74, 2x42, 87, 84, 9
-Accuracy = 5..12
-CombatAI = Berserker
-Evasion = 5..12
-Loot = 10..100
-Perception = 10..20
-Cargo = 900..1000x1, 450..500x4, 90..100x13
-Description = Armored, very aggresive, upgraded version of clockwork drone.
-Owner = Drones
-[45]
-Name = Tiny inquisition ship mk II
-Modules = 64, 72, 80, 41, 42, 87
-Accuracy = 1
-CombatAI = Attacker
-Loot = 10..100
-Cargo = 500..1000x1, 20..100x2, 40..200x3
-Description = Smallest know inquisition ship (upgraded version).
-Owner = Inquisition
-Crew = 19
-[46]
-Name = Small inquisition ship mk II
-Modules = 64, 72, 4x80, 41, 2x42, 87
-CombatAI = Attacker
-Loot = 15..150
-Cargo = 1000..2000x1, 30..100x2, 150..200x3, 20..100x13
-Description = Small flying vessel of inquisition (upgraded version), dangerous at close range.
-Owner = Inquisition
-Crew = 20, 2..4x59
-[47]
-Name = Inquisition ship mk II
-Modules = 66, 74, 8x80, 41, 4x42, 87, 84, 9
-CombatAI = Attacker
-Loot = 100..200
-Cargo = 1500..2000x1, 100..200x2, 300..400x3, 300..500x4, 5..40x13
-Description = Standard ship of inquisition (upgraded version).
-Owner = Inquisition
-Crew = 21, 22, 4..8x60
-[48]
-Name = Armored inquisition ship mk II
-Modules = 66, 55, 74, 8x80, 41, 4x42, 87, 84, 9
-CombatAI = Attacker
-Loot = 120..240
-Cargo = 1800..2000x1, 100..200x2, 350..400x3, 250..500x4, 100..200x13
-Description = Armored and upgraded version of standard flying vessel of inquisition.
-Owner = Inquisition
-Crew = 21, 22, 4..8x60
-[49]
-Name = Large clockwork drone mk II
-Modules = 68, 56, 76, 4x42, 87, 2x85, 2x27
-Accuracy = 15..25
-CombatAI = Berserker
-Evasion = 15..25
-Loot = 200..400
-Perception = 25..35
-Cargo = 1800..2000x1, 450..500x20, 120..250x13
-Description = Large, well armored upgraded and aggresive clockwork drone.
-Owner = Drones
-[50]
-Name = Large pirate ship mk II
-Modules = 68, 57, 76, 10x80, 41, 6x42, 42, 4x85, 3x29, 129
-CombatAI = Disarmer
-Loot = 300..500
-Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x13, 100..150x64
-Description = Large, well armored upgraded version of pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 23, 4x24, 25, 3..5x61
-[51]
-Name = Undead ship mk II
-Modules = 66, 56, 74, 41, 4x42, 89
-CombatAI = Berserker
-Loot = 100..300
-Cargo = 2000..2500x1, 150..300x13
-Description = Upgraded version of undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 27, 6..10x62
-[52]
-Name = Large undead ship mk II
-Modules = 68, 57, 76, 41, 6x42, 89
-CombatAI = Berserker
-Loot = 200..400
-Cargo = 3000..4000x1, 300..400x13
-Description = Large, well armored upgraded version of undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 28, 8..12x63
-[53]
-Name = Large inquisition ship mk II
-Modules = 68, 57, 76, 10x80, 41, 7x42, 2x85, 2x27
-CombatAI = Attacker
-Loot = 250..500
-Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x20, 200..400x13
-Description = Large, well armored upgraded version of inquisition flying vessel.
-Owner = Inquisition
-Crew = 29, 30, 31, 5..9x64
-[54]
-Name = Large attacking drone mk II
-Modules = 68, 57, 76, 6x42, 89, 2x85, 2x27
-Accuracy = 25..35
-CombatAI = Berserker
-Evasion = 25..35
-Loot = 250..450
-Perception = 40..50
-Cargo = 1500..2000x1, 450..500x20, 150..300x13
-Description = Large, well armored upgraded version of attacking clockwork drone.
-Owner = Drones
-[55]
-Name = Advanced attacking drone mk II
-Modules = 67, 56, 75, 5x42, 89, 85, 27
-Accuracy = 15..25
-CombatAI = Berserker
-Evasion = 15..25
-Loot = 100..250
-Perception = 40..50
-Cargo = 1000..1500x1, 200..300x20, 100..200x13
-Description = Advanced and upgraded version of standard attacking clockwork drone.
-Owner = Drones
-[56]
-Name = Advanced pirate ship mk II
-Modules = 67, 56, 75, 6x80, 41, 5x42, 85, 27, 85, 128
-CombatAI = Disarmer
-Loot = 200..250
-Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x13, 75..100x64
-Description = Advanced and upgraded version of standard pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 32, 2x33, 34, 2x65
-[57]
-Name = Advanced undead ship mk II
-Modules = 67, 56, 75, 41, 5x42, 89
-CombatAI = Berserker
-Loot = 200..300
-Cargo = 2500..3000x1, 200..350x13
-Description = Advanced and upgraded version of standard undead ship. Dangerous at close range.
-Owner = Undead
-Crew = 36, 4..8x66
-[58]
-Name = Advanced inquisition ship mk II
-Modules = 67, 56, 75, 8x80, 41, 4x42, 89, 85, 27
-Accuracy = 15
-CombatAI = Attacker
-Evasion = 15
-Loot = 120..240
-Perception = 15
-Cargo = 2000..2200x1, 150..220x2, 400..500x3, 400..600x20, 150..250x13
-Description = Advanced and upgraded version of standard flying vessel of inquisition.
-Owner = Inquisition
-Crew = 37, 38, 4..8x67
-[59]
-Name = Huge pirate ship mk II
-Modules = 70, 57, 2x78, 14x80, 41, 10x42, 86, 5x33, 4x86, 129
-CombatAI = Disarmer
-Loot = 500..1000
-Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x13, 150..200x64
-Description = Huge, well armored pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 39, 5x40, 41, 5..9x68
-[60]
-Name = Advanced huge pirate ship mk II
-Modules = 71, 57, 2x79, 16x80, 41, 12x42, 5x86, 4x34, 129
-CombatAI = Disarmer
-Loot = 750..1200
-Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x13, 300..500x64
-Description = Advanced and upgraded version of huge, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 43, 5x44, 45, 7..11x69
-[61]
-Name = Huge undead ship mk II
-Modules = 70, 57, 78, 41, 10x42, 89
-CombatAI = Berserker
-Loot = 500..750
-Cargo = 5000..7000x1, 500..750x13
-Description = Huge, well armored and upgraded version of undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 47, 10..14x70
-[62]
-Name = Huge attacking drone mk II
-Modules = 70, 57, 78, 10x42, 89, 3x86, 3x33
-Accuracy = 60..80
-CombatAI = Berserker
-Evasion = 60..80
-Loot = 500..900
-Perception = 60..80
-Cargo = 2000..4000x1, 500..1000x31, 500..750x13
-Description = Huge, well armored and upgraded version of attacking clockwork drone.
-Owner = Drones
-[63]
-Name = Advanced huge undead ship mk II
-Modules = 71, 57, 79, 41, 10x42, 89
-CombatAI = Berserker
-Loot = 600..900
-Cargo = 6000..8000x1, 600..800x13
-Description = Advanced and upgraded version of huge, well armored undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 38, 11..15x71
-[64]
-Name = Advanced huge attacking drone mk II
-Modules = 71, 57, 79, 12x42, 89, 3x86, 3x34
-Accuracy = 75..90
-CombatAI = Berserker
-Evasion = 75..90
-Loot = 600..1000
-Perception = 75..90
-Cargo = 4000..6000x1, 600..1000x33, 600..800x13
-Description = Advanced and upgraded version of huge, well armored attacking clockwork drone.
-Owner = Drones
-[65]
-Name = Huge inquisition ship mk II
-Modules = 70, 57, 78, 13x80, 41, 9x42, 89, 4x86, 4x33
-CombatAI = Attacker
-Loot = 750..1000
-Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x31, 400..600x13
-Description = Huge, well armored and upgraded version of inquisition flying vessel.
-Owner = Inquisition
-Crew = 49, 4x50, 6..10x72
-[66]
-Name = Advanced huge inquisition ship mk II
-Modules = 71, 57, 79, 15x80, 41, 11x42, 89, 4x86, 4x34
-CombatAI = Attacker
-Loot = 900..1200
-Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x33, 500..650x13
-Description = Advanced and upgraded version of huge, well armored inquisition flying vessel.
-Owner = Inquisition
-Crew = 51, 4x52, 8..12x73
-[67]
-Name = Small pirates ship mk III
-Modules = 90, 92, 3x93, 94, 2x96, 2x97, 49, 127
-CombatAI = Disarmer
-Loot = 20..200
-Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x23, 80..100x21, 50..75x63
-Description = Small, fast pirate vessel (upgraded version). Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 8, 2x9, 10
-[68]
-Name = Small undead ship mk III
-Modules = 90, 91, 92, 94, 2x96, 98
-CombatAI = Berserker
-Loot = 20..200
-Cargo = 1500..2000x1, 80..100x21
-Description = Small undead flying vessel (upgraded version). Dangerous at close range.
-Owner = Undead
-Crew = 11, 3x56
-[69]
-Name = Small clockwork drone mk III
-Modules = 90, 92, 96, 98
-Accuracy = 5..10
-CombatAI = Berserker
-Evasion = 5..10
-Loot = 10..100
-Perception = 10..15
-Cargo = 500..1000x1
-Description = Small flying clockwork drone (upgraded version). Dangerous at close range.
-Owner = Drones
-[70]
-Name = Pirate ship mk III
-Modules = 103, 101, 7x93, 94, 4x96, 2x113, 50, 128
-CombatAI = Disarmer
-Loot = 100..200
-Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x25, 150..200x21, 75..100x63
-Description = Standard pirate vessel (upgraded version). Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 12, 2x13, 14, 3..5x57
-[71]
-Name = Armored pirate ship mk III
-Modules = 103, 111, 101, 8x93, 94, 4x96, 2x113, 50, 128
-CombatAI = Disarmer
-Loot = 150..300
-Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x25, 100..200x21, 100..150x63
-Description = Armored version of pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 16, 2x17, 18, 3..5x58
-[72]
-Name = Small attacking drone mk III
-Modules = 90, 92, 96, 98, 97, 48
-Accuracy = 5..10
-CombatAI = Berserker
-Evasion = 5..10
-Loot = 20..200
-Perception = 5..10
-Cargo = 200..1000x1, 200..500x24
-Description = Small, more aggresive, upgraded version of clockwork drone.
-Owner = Drones
-[73]
-Name = Attacking clockwork drone mk III
-Modules = 103, 101, 2x96, 98, 97, 49
-Accuracy = 5..10
-CombatAI = Berserker
-Evasion = 5..10
-Loot = 10..100
-Perception = 10..20
-Cargo = 800..1000x1, 100..500x23
-Description = Standard, very aggresive, upgraded version of clockwork drone.
-Owner = Drones
-[74]
-Name = Armored attacking drone mk III
-Modules = 103, 91, 101, 2x96, 98, 97, 49
-Accuracy = 5..12
-CombatAI = Berserker
-Evasion = 5..12
-Loot = 10..100
-Perception = 10..20
-Cargo = 900..1000x1, 450..500x23, 90..100x21
-Description = Armored, very aggresive, upgraded version of clockwork drone.
-Owner = Drones
-[75]
-Name = Small inquisition ship mk III
-Modules = 90, 92, 4x93, 94, 2x96, 98
-CombatAI = Attacker
-Loot = 15..150
-Cargo = 1000..2000x1, 30..100x2, 150..200x3, 20..100x21
-Description = Small flying vessel of inquisition (upgraded version), dangerous at close range.
-Owner = Inquisition
-Crew = 20, 2..4x59
-[76]
-Name = Inquisition ship mk III
-Modules = 103, 101, 8x93, 94, 4x96, 98, 97, 49
-CombatAI = Attacker
-Loot = 100..200
-Cargo = 1500..2000x1, 100..200x2, 300..400x3, 300..500x23, 5..40x21
-Description = Standard ship of inquisition (upgraded version).
-Owner = Inquisition
-Crew = 21, 22, 4..8x60
-[77]
-Name = Armored inquisition ship mk III
-Modules = 103, 91, 101, 8x93, 94, 4x96, 98, 97, 49
-CombatAI = Attacker
-Loot = 120..240
-Cargo = 1800..2000x1, 100..200x2, 350..400x3, 250..500x23, 100..200x21
-Description = Armored and upgraded version of standard flying vessel of inquisition.
-Owner = Inquisition
-Crew = 21, 22, 4..8x60
-[78]
-Name = Large clockwork drone mk III
-Modules = 109, 111, 105, 4x96, 98, 2x113, 50, 50
-Accuracy = 15..25
-CombatAI = Berserker
-Evasion = 15..25
-Loot = 200..400
-Perception = 25..35
-Cargo = 1800..2000x1, 450..500x25, 120..250x21
-Description = Large, well armored upgraded and aggresive clockwork drone.
-Owner = Drones
-[79]
-Name = Large pirate ship mk III
-Modules = 109, 112, 105, 9x93, 94, 6x96, 4x113, 3x51, 129
-CombatAI = Disarmer
-Loot = 300..500
-Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x27, 200..400x21, 100..150x64
-Description = Large, well armored upgraded version of pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 23, 4x24, 25, 3..5x61
-[80]
-Name = Undead ship mk III
-Modules = 103, 111, 101, 94, 4x96, 121
-CombatAI = Berserker
-Loot = 100..300
-Cargo = 2000..2500x1, 150..300x21
-Description = Upgraded version of undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 27, 6..10x62
-[81]
-Name = Large undead ship mk III
-Modules = 109, 112, 105, 94, 6x96, 121
-CombatAI = Berserker
-Loot = 200..400
-Cargo = 3000..4000x1, 300..400x21
-Description = Large, well armored upgraded version of undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 28, 8..12x63
-[82]
-Name = Large inquisition ship mk III
-Modules = 109, 112, 105, 10x93, 94, 7x96, 2x113, 2x50
-CombatAI = Attacker
-Loot = 250..500
-Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x25, 200..400x21
-Description = Large, well armored upgraded version of inquisition flying vessel.
-Owner = Inquisition
-Crew = 29, 30, 31, 5..9x64
-[83]
-Name = Large attacking drone mk III
-Modules = 109, 112, 105, 6x96, 121, 2x113, 2x50
-Accuracy = 25..35
-CombatAI = Berserker
-Evasion = 25..35
-Loot = 250..450
-Perception = 40..50
-Cargo = 1500..2000x1, 450..500x25, 150..300x21
-Description = Large, well armored upgraded version of attacking clockwork drone.
-Owner = Drones
-[84]
-Name = Advanced attacking drone mk III
-Modules = 108, 111, 104, 5x96, 121, 113, 50
-Accuracy = 15..25
-CombatAI = Berserker
-Evasion = 15..25
-Loot = 100..250
-Perception = 40..50
-Cargo = 1000..1500x1, 200..300x25, 100..200x21
-Description = Advanced and upgraded version of standard attacking clockwork drone.
-Owner = Drones
-[85]
-Name = Advanced pirate ship mk III
-Modules = 108, 111, 104, 6x93, 94, 5x96, 2x113, 50, 128
-CombatAI = Disarmer
-Loot = 200..250
-Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x25, 100..200x21, 75..100x64
-Description = Advanced and upgraded version of standard pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 32, 2x33, 34, 2x65
-[86]
-Name = Advanced undead ship mk III
-Modules = 108, 111, 104, 94, 5x96, 121
-CombatAI = Berserker
-Loot = 200..300
-Cargo = 2500..3000x1, 200..350x21
-Description = Advanced and upgraded version of standard undead ship. Dangerous at close range.
-Owner = Undead
-Crew = 36, 4..8x66
-[87]
-Name = Advanced inquisition ship mk III
-Modules = 108, 111, 104, 8x93, 94, 4x96, 121, 113, 50
-Accuracy = 15
-CombatAI = Attacker
-Evasion = 15
-Loot = 120..240
-Perception = 15
-Cargo = 2000..2200x1, 150..220x2, 400..500x3, 400..600x25, 150..250x21
-Description = Advanced and upgraded version of standard flying vessel of inquisition.
-Owner = Inquisition
-Crew = 37, 38, 4..8x67
-[88]
-Name = Huge pirate ship mk III
-Modules = 123, 112, 2x125, 14x93, 94, 10x96, 5x120, 4x52, 129
-CombatAI = Disarmer
-Loot = 500..1000
-Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x32, 500..750x21, 100..200x64
-Description = Huge, well armored pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 39, 5x40, 41, 5..9x68
-[89]
-Name = Advanced huge pirate ship mk III
-Modules = 124, 112, 2x126, 16x93, 94, 12x96, 5x120, 4x53, 129
-CombatAI = Disarmer
-Loot = 750..1200
-Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x34, 600..800x21, 150..300x64
-Description = Advanced and upgraded version of huge, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 43, 5x44, 45, 7..11x69
-[90]
-Name = Huge undead ship mk III
-Modules = 123, 112, 125, 94, 10x96, 121
-CombatAI = Berserker
-Loot = 500..750
-Cargo = 5000..7000x1, 500..750x21
-Description = Huge, well armored and upgraded version of undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 47, 10..14x70
-[91]
-Name = Huge attacking drone mk III
-Modules = 123, 112, 125, 10x96, 121, 3x120, 3x52
-Accuracy = 60..80
-CombatAI = Berserker
-Evasion = 60..80
-Loot = 500..900
-Perception = 60..80
-Cargo = 2000..4000x1, 500..1000x32, 500..750x21
-Description = Huge, well armored and upgraded version of attacking clockwork drone.
-Owner = Drones
-[92]
-Name = Advanced huge undead ship mk III
-Modules = 124, 112, 126, 94, 10x96, 121
-CombatAI = Berserker
-Loot = 600..900
-Cargo = 6000..8000x1, 600..800x21
-Description = Advanced and upgraded version of huge, well armored undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 48, 11..15x71
-[93]
-Name = Advanced huge attacking drone mk III
-Modules = 124, 112, 126, 12x96, 121, 3x120, 3x53
-Accuracy = 75..90
-CombatAI = Berserker
-Evasion = 75..90
-Loot = 600..1000
-Perception = 75..90
-Cargo = 4000..6000x1, 600..1000x34, 600..800x21
-Description = Advanced and upgraded version of huge, well armored attacking clockwork drone.
-Owner = Drones
-[94]
-Name = Huge inquisition ship mk III
-Modules = 123, 112, 125, 13x93, 94, 9x96, 121, 4x120, 4x52
-CombatAI = Attacker
-Loot = 750..1000
-Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x32, 400..600x21
-Description = Huge, well armored and upgraded version of inquisition flying vessel.
-Owner = Inquisition
-Crew = 49, 4x50, 6..10x72
-[95]
-Name = Advanced huge inquisition ship mk III
-Modules = 124, 112, 126, 15x93, 94, 11x96, 121, 4x120, 4x53
-CombatAI = Attacker
-Loot = 900..1200
-Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x34, 500..650x21
-Description = Advanced and upgraded version of huge, well armored inquisition flying vessel.
-Owner = Inquisition
-Crew = 51, 4x52, 8..12x73
-[96]
-Name = Tiny poleis trader
-Modules = 1, 3, 2x4, 5, 2x7, 8, 11
-CombatAI = Coward
-Loot = 10..100
-Cargo = 800..1000x1, 80..100x2, 150..200x3, 100..200x14
-Description = Smallest known poleis trader. Avoids any fights.
-Owner = Poleis
-Crew = 5, 6
-[97]
-Name = Tiny independent trader
-Modules = 1, 3, 2x4, 5, 2x7, 8, 11
-CombatAI = Coward
-Loot = 10..100
-Cargo = 800..1000x1, 80..100x2, 150..200x3, 100..200x14
-Description = Smallest known independent trader. Avoids any fights.
-Owner = Independent
-Crew = 5, 6
-[98]
-Name = Small poleis trader
-Modules = 1, 3, 3x4, 5, 4x7, 8, 9
-CombatAI = Coward
-Loot = 20..200
-Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13
-Description = Small poleis traders vessel. Avoids any fights.
-Owner = Poleis
-Crew = 8, 9, 10
-[99]
-Name = Small independent trader
-Modules = 1, 3, 3x4, 5, 4x7, 8, 9
-CombatAI = Coward
-Loot = 20..200
-Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13
-Description = Small independent traders vessel. Avoids any fights.
-Owner = Independent
-Crew = 8, 9, 10
-[100]
-Name = Poleis trader
-Modules = 17, 15, 8x4, 5, 8x7, 28, 27
-CombatAI = Coward
-Loot = 100..200
-Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x5, 10..40x13
-Description = Standard poleis traders vessel. Avoids any fights.
-Owner = Poleis
-Crew = 12, 13, 14, 15, 2x57
-[101]
-Name = Independent trader
-Modules = 17, 15, 8x4, 5, 8x7, 28, 27
-CombatAI = Coward
-Loot = 100..200
-Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x5, 10..40x13
-Description = Standard independent traders vessel. Avoids any fights.
-Owner = Independent
-Crew = 12, 13, 14, 15, 2x57
-[102]
-Name = Advanced poleis trader
-Modules = 22, 25, 18, 6x4, 5, 10x7, 28, 27
-CombatAI = Coward
-Loot = 200..250
-Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x5, 20..40x13
-Description = Advanced version of standard poleis traders vessel. Avoids any fights.
-Owner = Poleis
-Crew = 32, 33, 34, 35, 2x65
-[103]
-Name = Advanced independent trader
-Modules = 22, 25, 18, 6x4, 5, 10x7, 28, 27
-CombatAI = Coward
-Loot = 200..250
-Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x5, 20..40x13
-Description = Advanced version of standard independent traders vessel. Avoids any fights.
-Owner = Independent
-Crew = 32, 33, 34, 35, 2x65
-[104]
-Name = Large poleis trader
-Modules = 23, 26, 19, 10x4, 5, 12x7, 2x28, 2x29
-CombatAI = Coward
-Loot = 300..500
-Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
-Description = Large, well armored version of poleis traders ship. Avoids any fights.
-Owner = Poleis
-Crew = 23, 2x24, 25, 26, 3x61
-[105]
-Name = Large independent trader
-Modules = 23, 26, 19, 10x4, 5, 12x7, 2x28, 2x29
-CombatAI = Coward
-Loot = 300..500
-Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
-Description = Large, well armored version of independent traders ship. Avoids any fights.
-Owner = Independent
-Crew = 23, 2x24, 25, 26, 3x61
-[106]
-Name = Huge poleis trader
-Modules = 60, 26, 2x62, 14x4, 5, 16x7, 3x39, 3x33
-CombatAI = Coward
-Loot = 500..1000
-Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13
-Description = Huge, well armored version of poleis traders ship. Avoids any fights.
-Owner = Poleis
-Crew = 39, 3x40, 41, 42, 3..5x68
-[107]
-Name = Huge independent trader
-Modules = 60, 26, 2x62, 14x4, 5, 16x7, 3x39, 3x33
-CombatAI = Coward
-Loot = 500..1000
-Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13
-Description = Huge, well armored version of independent traders ship. Avoids any fights.
-Owner = Independent
-Crew = 39, 3x40, 41, 42, 3..5x68
-[108]
-Name = Advanced huge poleis trader
-Modules = 61, 26, 2x63, 16x4, 5, 20x7, 3x39, 3x34
-CombatAI = Coward
-Loot = 750..1200
-Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x5, 300..500x13
-Description = Advanced version of huge, well armored poleis traders ship. Avoids any fights.
-Owner = Poleis
-Crew = 43, 3x44, 45, 46, 4..8x69
-[109]
-Name = Advanced huge independent trader
-Modules = 61, 26, 2x63, 16x4, 5, 20x7, 3x39, 3x34
-CombatAI = Coward
-Loot = 750..1200
-Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x5, 300..500x13
-Description = Advanced version of huge, well armored independent traders ship. Avoids any fights.
-Owner = Independent
-Crew = 43, 3x44, 45, 46, 4..8x69
-[110]
-Name = Tiny poleis patrol ship
-Modules = 1, 3, 2x4, 5, 7, 8, 11
-CombatAI = Disarmer
-Loot = 10..100
-Cargo = 800..1000x1, 80..100x2, 150..200x3, 300..500x14
-Description = Smallest known poleis patrol ship. As law enforcers they trying to dismarm enemies first.
-Owner = Poleis
-Crew = 5, 6
-[111]
-Name = Tiny independent patrol ship
-Modules = 1, 3, 2x4, 5, 7, 8, 11
-CombatAI = Disarmer
-Loot = 10..100
-Cargo = 800..1000x1, 80..100x2, 150..200x3, 300..500x14
-Description = Smallest known independent patrol ship. As law enforcers they trying to dismarm enemies first.
-Owner = Independent
-Crew = 5, 6
-[112]
-Name = Small poleis patrol ship
-Modules = 1, 3, 3x4, 5, 2x7, 8, 9
-CombatAI = Disarmer
-Loot = 20..200
-Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13
-Description = Small, fast poleis patrol vessel. As a law enforcers they trying to dismarm enemies first.
-Owner = Poleis
-Crew = 8, 9, 10
-[113]
-Name = Small independent patrol ship
-Modules = 1, 3, 3x4, 5, 2x7, 8, 9
-CombatAI = Disarmer
-Loot = 20..200
-Cargo = 1800..2000x1, 80..100x2, 170..200x3, 450..500x4, 80..100x5, 10..20x13
-Description = Small, fast independent patrol vessel. As a law enforcers they trying to dismarm enemies first.
-Owner = Independent
-Crew = 8, 9, 10
-[114]
-Name = Poleis patrol ship
-Modules = 17, 15, 8x4, 5, 4x7, 28, 27
-CombatAI = Disarmer
-Loot = 100..200
-Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x5, 10..40x13
-Description = Standard poleis patrol vessel. As a law enforcers they trying to dismarm enemies first.
-Owner = Poleis
-Crew = 12, 13, 14, 5x57
-[115]
-Name = Independent patrol ship
-Modules = 17, 15, 8x4, 5, 4x7, 28, 27
-CombatAI = Disarmer
-Loot = 100..200
-Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x20, 150..200x5, 10..40x13
-Description = Standard independent patrol vessel. As a law enforcers they trying to dismarm enemies first.
-Owner = Independent
-Crew = 12, 13, 14, 3..7x57
-[116]
-Name = Armored poleis patrol ship
-Modules = 17, 25, 15, 8x4, 5, 4x7, 28, 27
-CombatAI = Disarmer
-Loot = 150..300
-Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x20, 100..200x5, 20..40x13
-Description = Armored version of poleis patrol ship. As a law enforcers they trying dismarm enemies first.
-Owner = Poleis
-Crew = 16, 17, 18, 3..7x58
-[117]
-Name = Armored independent patrol ship
-Modules = 17, 25, 15, 8x4, 5, 4x7, 28, 27
-CombatAI = Disarmer
-Loot = 150..300
-Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x20, 100..200x5, 20..40x13
-Description = Armored version of independent patrol ship. As a law enforcers they trying dismarm enemies first.
-Owner = Independent
-Crew = 16, 17, 18, 3..7x58
-[118]
-Name = Advanced poleis patrol ship
-Modules = 22, 25, 18, 6x4, 5, 4x7, 28, 27
-CombatAI = Disarmer
-Loot = 200..250
-Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x5, 20..40x13
-Description = Advanced version of standard poleis patrol ship. As a law enforcers they trying dismarm enemies first.
-Owner = Poleis
-Crew = 32, 33, 34, 3x65
-[119]
-Name = Advanced independent patrol ship
-Modules = 22, 25, 18, 6x4, 5, 4x7, 28, 27
-CombatAI = Disarmer
-Loot = 200..250
-Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x20, 100..200x5, 20..40x13
-Description = Advanced version of standard independent patrol ship. As a law enforcers they trying dismarm enemies first.
-Owner = Independent
-Crew = 32, 33, 34, 3x65
-[120]
-Name = Large poleis patrol ship
-Modules = 23, 26, 19, 10x4, 5, 6x7, 3x28, 3x29
-CombatAI = Disarmer
-Loot = 300..500
-Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
-Description = Large, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.
-Owner = Poleis
-Crew = 23, 3x24, 25, 3..7x65
-[121]
-Name = Large independent patrol ship
-Modules = 23, 26, 19, 10x4, 5, 6x7, 3x28, 3x29
-CombatAI = Disarmer
-Loot = 300..500
-Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x26, 200..400x5, 50..100x13
-Description = Large, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.
-Owner = Independent
-Crew = 23, 3x24, 25, 3..7x65
-[122]
-Name = Huge poleis patrol ship
-Modules = 60, 26, 2x62, 14x4, 5, 10x7, 4x39, 4x33
-CombatAI = Disarmer
-Loot = 500..1000
-Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13
-Description = Huge, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.
-Owner = Poleis
-Crew = 39, 4x40, 41, 6..10x68
-[123]
-Name = Huge independent patrol ship
-Modules = 60, 26, 2x62, 14x4, 5, 10x7, 4x39, 4x33
-CombatAI = Disarmer
-Loot = 500..1000
-Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x31, 500..750x5, 200..400x13
-Description = Huge, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.
-Owner = Independent
-Crew = 39, 4x40, 41, 6..10x68
-[124]
-Name = Advanced huge poleis patrol ship
-Modules = 61, 26, 2x63, 16x4, 5, 12x7, 4x39, 4x34
-CombatAI = Disarmer
-Loot = 750..1200
-Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x5, 300..500x13
-Description = Advanced version of huge, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.
-Owner = Poleis
-Crew = 43, 4x44, 45, 8..12x69
-[125]
-Name = Advanced huge independent patrol ship
-Modules = 61, 26, 2x63, 16x4, 5, 12x7, 4x39, 4x34
-CombatAI = Disarmer
-Loot = 750..1200
-Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x33, 600..800x5, 300..500x13
-Description = Advanced version of huge, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.
-Owner = Independent
-Crew = 43, 4x44, 45, 8..12x69
-[126]
-Name = Pirate ship mk IV
-Modules = 135, 134, 7x149, 130, 4x132, 2x145, 160, 129
-CombatAI = Disarmer
-Loot = 100..200
-Cargo = 1500..2000x1, 100..200x2, 300..400x3, 750..1000x117, 150..200x116, 75..100x64
-Description = Standard pirate vessel (upgraded version). Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 12, 2x13, 14, 3..5x57
-[127]
-Name = Armored pirate ship mk IV
-Modules = 135, 143, 134, 8x149, 130, 4x132, 2x145, 160, 129
-CombatAI = Disarmer
-Loot = 150..300
-Cargo = 1000..2000x1, 100..200x2, 200..400x3, 500..1000x117, 100..200x116, 100..150x64
-Description = Armored version of pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 16, 2x17, 18, 3..5x58
-[128]
-Name = Attacking clockwork drone mk IV
-Modules = 135, 134, 2x132, 133, 97, 49
-Accuracy = 5..10
-CombatAI = Berserker
-Evasion = 5..10
-Loot = 10..100
-Perception = 10..20
-Cargo = 800..1000x1, 100..500x23
-Description = Standard, very aggresive, upgraded version of clockwork drone.
-Owner = Drones
-[129]
-Name = Armored attacking drone mk IV
-Modules = 135, 91, 134, 2x132, 133, 97, 49
-Accuracy = 5..12
-CombatAI = Berserker
-Evasion = 5..12
-Loot = 10..100
-Perception = 10..20
-Cargo = 900..1000x1, 450..500x23, 30..50x116, 50..80x21
-Description = Armored, very aggresive, upgraded version of clockwork drone.
-Owner = Drones
-[130]
-Name = Inquisition ship mk IV
-Modules = 135, 134, 8x93, 130, 4x132, 133, 97, 49
-CombatAI = Attacker
-Loot = 100..200
-Cargo = 1500..2000x1, 100..200x2, 300..400x3, 300..500x23, 5..30x21, 2..10x116
-Description = Standard ship of inquisition (upgraded version).
-Owner = Inquisition
-Crew = 21, 22, 4..8x60
-[131]
-Name = Armored inquisition ship mk IV
-Modules = 135, 91, 134, 8x93, 130, 4x132, 133, 97, 49
-CombatAI = Attacker
-Loot = 120..240
-Cargo = 1800..2000x1, 100..200x2, 350..400x3, 250..500x23, 80..160x21, 20..40x116
-Description = Armored and upgraded version of standard flying vessel of inquisition.
-Owner = Inquisition
-Crew = 21, 22, 4..8x60
-[132]
-Name = Large clockwork drone mk IV
-Modules = 141, 143, 137, 4x132, 133, 2x145, 2x160
-Accuracy = 15..25
-CombatAI = Berserker
-Evasion = 15..25
-Loot = 200..400
-Perception = 25..35
-Cargo = 1800..2000x1, 450..500x117, 120..250x116
-Description = Large, well armored upgraded and aggresive clockwork drone.
-Owner = Drones
-[133]
-Name = Large pirate ship mk IV
-Modules = 141, 144, 137, 9x93, 130, 6x132, 4x145, 3x161, 159
-CombatAI = Disarmer
-Loot = 300..500
-Cargo = 1500..3000x1, 200..400x2, 400..600x3, 500..1000x118, 200..400x116, 100..150x122
-Description = Large, well armored upgraded version of pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 23, 4x24, 25, 3..5x61
-[134]
-Name = Undead ship mk IV
-Modules = 135, 143, 134, 130, 4x132, 153
-CombatAI = Berserker
-Loot = 100..300
-Cargo = 2000..2500x1, 150..300x116
-Description = Upgraded version of undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 27, 6..10x62
-[135]
-Name = Large undead ship mk IV
-Modules = 141, 144, 137, 130, 6x132, 153
-CombatAI = Berserker
-Loot = 200..400
-Cargo = 3000..4000x1, 300..400x116
-Description = Large, well armored upgraded version of undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 28, 8..12x63
-[136]
-Name = Large inquisition ship mk IV
-Modules = 141, 144, 137, 10x93, 130, 7x132, 2x145, 2x160
-CombatAI = Attacker
-Loot = 250..500
-Cargo = 2000..3000x1, 150..300x2, 400..500x3, 300..600x117, 200..400x116
-Description = Large, well armored upgraded version of inquisition flying vessel.
-Owner = Inquisition
-Crew = 29, 30, 31, 5..9x64
-[137]
-Name = Large attacking drone mk IV
-Modules = 141, 144, 137, 6x132, 153, 2x145, 2x160
-Accuracy = 25..35
-CombatAI = Berserker
-Evasion = 25..35
-Loot = 250..450
-Perception = 40..50
-Cargo = 1500..2000x1, 450..500x117, 150..300x116
-Description = Large, well armored upgraded version of attacking clockwork drone.
-Owner = Drones
-[138]
-Name = Advanced attacking drone mk IV
-Modules = 140, 143, 136, 5x132, 153, 145, 160
-Accuracy = 15..25
-CombatAI = Berserker
-Evasion = 15..25
-Loot = 100..250
-Perception = 40..50
-Cargo = 1000..1500x1, 200..300x117, 100..200x116
-Description = Advanced and upgraded version of standard attacking clockwork drone.
-Owner = Drones
-[139]
-Name = Advanced pirate ship mk IV
-Modules = 140, 143, 136, 6x93, 130, 5x132, 2x145, 160, 129
-CombatAI = Disarmer
-Loot = 200..250
-Cargo = 1000..1700x1, 100..200x2, 200..400x3, 300..500x117, 100..200x116, 75..100x122
-Description = Advanced and upgraded version of standard pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 32, 2x33, 34, 2x65
-[140]
-Name = Advanced undead ship mk IV
-Modules = 140, 143, 136, 130, 5x132, 153
-CombatAI = Berserker
-Loot = 200..300
-Cargo = 2500..3000x1, 200..350x116
-Description = Advanced and upgraded version of standard undead ship. Dangerous at close range.
-Owner = Undead
-Crew = 36, 4..8x66
-[141]
-Name = Advanced inquisition ship mk IV
-Modules = 140, 143, 136, 8x93, 130, 4x132, 153, 145, 160
-Accuracy = 15
-CombatAI = Attacker
-Evasion = 15
-Loot = 120..240
-Perception = 15
-Cargo = 2000..2200x1, 150..220x2, 400..500x3, 400..600x117, 150..250x116
-Description = Advanced and upgraded version of standard flying vessel of inquisition.
-Owner = Inquisition
-Crew = 37, 38, 4..8x67
-[142]
-Name = Huge pirate ship mk IV
-Modules = 155, 144, 2x157, 14x93, 130, 10x132, 5x152, 4x162, 159
-CombatAI = Disarmer
-Loot = 500..1000
-Cargo = 3000..5000x1, 500..750x2, 1000..1500x3, 500..1000x119, 500..750x116, 100..200x122
-Description = Huge, well armored pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 39, 5x40, 41, 5..9x68
-[143]
-Name = Advanced huge pirate ship mk IV
-Modules = 156, 144, 2x158, 16x93, 130, 12x132, 5x152, 4x163, 159
-CombatAI = Disarmer
-Loot = 750..1200
-Cargo = 4000..6000x1, 600..800x2, 1500..2000x3, 500..1000x120, 600..800x116, 150..300x122
-Description = Advanced and upgraded version of huge, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.
-Owner = Pirates
-Crew = 43, 5x44, 45, 7..11x69
-[144]
-Name = Huge undead ship mk IV
-Modules = 155, 144, 157, 130, 10x132, 153
-CombatAI = Berserker
-Loot = 500..750
-Cargo = 5000..7000x1, 500..750x116
-Description = Huge, well armored and upgraded version of undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 47, 10..14x70
-[145]
-Name = Huge attacking drone mk IV
-Modules = 155, 144, 157, 10x132, 153, 3x152, 3x162
-Accuracy = 60..80
-CombatAI = Berserker
-Evasion = 60..80
-Loot = 500..900
-Perception = 60..80
-Cargo = 2000..4000x1, 500..1000x119, 500..750x116
-Description = Huge, well armored and upgraded version of attacking clockwork drone.
-Owner = Drones
-[146]
-Name = Advanced huge undead ship mk IV
-Modules = 156, 144, 158, 130, 10x132, 153
-CombatAI = Berserker
-Loot = 600..900
-Cargo = 6000..8000x1, 600..800x116
-Description = Advanced and upgraded version of huge, well armored undead flying vessel. Dangerous at close range.
-Owner = Undead
-Crew = 48, 11..15x71
-[147]
-Name = Advanced huge attacking drone mk IV
-Modules = 156, 144, 158, 12x132, 153, 3x152, 3x163
-Accuracy = 75..90
-CombatAI = Berserker
-Evasion = 75..90
-Loot = 600..1000
-Perception = 75..90
-Cargo = 4000..6000x1, 600..1000x120, 600..800x116
-Description = Advanced and upgraded version of huge, well armored attacking clockwork drone.
-Owner = Drones
-[148]
-Name = Huge inquisition ship mk IV
-Modules = 155, 144, 157, 13x93, 130, 9x132, 153, 4x152, 4x162
-CombatAI = Attacker
-Loot = 750..1000
-Cargo = 4000..6000x1, 300..500x2, 500..750x3, 500..750x119, 400..600x116
-Description = Huge, well armored and upgraded version of inquisition flying vessel.
-Owner = Inquisition
-Crew = 49, 4x50, 6..10x72
-[149]
-Name = Advanced huge inquisition ship mk IV
-Modules = 156, 144, 158, 15x93, 130, 11x132, 153, 4x152, 4x163
-CombatAI = Attacker
-Loot = 900..1200
-Cargo = 5000..6500x1, 400..600x2, 600..750x3, 600..750x120, 500..650x116
-Description = Advanced and upgraded version of huge, well armored inquisition flying vessel.
-Owner = Inquisition
-Crew = 51, 4x52, 8..12x73
-[]
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ships>
+<!-- 
+- Each ship is between "ship" tags. Attribute "index" is a index (it can be 
+number or text) and must be unique. This value is used at this moment to 
+set player ship and in Destroy types of goals.
+- Attribute "name": Type of ship. Will be visible during combat information. 
+If you want that ship will be used in friendly trader random event, you must
+have word which you set in *game.dat* as *TraderNames* in ship name. Example:
+if you use *trader* word, ship name can be *small poleis trader*.
+- Attribute "accuracy": Bonus to accuracy for ship.
+- Attributes "minaccuracy" and "maxaccuracy": If bonus to accuracy for ship
+should be random, add attribute "minaccuracy" for minimum value and 
+"maxaccuracy" for maximum value.
+- Attribute "combatai": Behavior of ship in combat (NPC ships only). Possible 
+values are: Berserker - attack to end, no matter how heavy damage take. 
+Attacker - aggressive but will be run away from combat when lost all 
+ammunition or weapons. Coward - try run from combat, attack only in 
+self-defense. Disarmer - same as Attacker but first aim for player ship weapons
+before start destroying ship.
+- Attribute "evasion": Bonus to evasion for ship.
+- Attributes "minevasion" and "maxevasion": If bonus to evasion for ship should
+be random, add attribute "minevasion" for minimum value and "maxevasion" for 
+maximum value.
+- Attribute "loot": Amount of money earned for destroying that ship.
+- Attributes "minloot" and "maxloot": If amount of earned money for destroying 
+that ship should be random, add attribute "minloot" for minimum value and 
+"maxloot" for maximum value.
+- Attribute "perception": Bonus to perception for ship.
+- Attributes "minperception" and "maxperception": If bonus to perception for 
+ship should be random, add attribute "minperception" for minimum value and 
+"maxperception" for maximum value.
+- Attribute "owner": Which fraction own ship. Possible values are: Poleis, 
+Independent, Pirates, Undead, Drones, Inquisition.
+-->
+ <ship index="1" name="Player Ship">
+<!-- Tag "module": Ship module installed on selected ship. 
+- Attribute "index" is module index from files from *shipmodules* directory. 
+- Attribute"amount" is optional: if ship should have more than one that module,
+just add attribute "amount" with number of modules.-->
+  <module index="1"/>
+  <module index="2"/>
+  <module index="3"/>
+  <module amount="4" index="4"/>
+  <module index="5"/>
+  <module index="6"/>
+  <module amount="2" index="7"/>
+  <module index="8"/>
+  <module index="9"/>
+<!-- Tag "cargo": Item in cargo of ship. 
+- Attribute "index" is index of item from files from *items* directory. 
+If amount of that item should be constant, add attribute "amount" with proper 
+value. If amount of that item should be random, add attributes "minamount" with
+minimum amount and attribute "maxamount" with maximum amount of that item.-->
+  <cargo amount="2000" index="1"/>
+  <cargo amount="100" index="2"/>
+  <cargo amount="200" index="3"/>
+  <cargo amount="500" index="4"/>
+  <cargo amount="100" index="5"/>
+  <cargo amount="20" index="13"/>
+  <cargo amount="1" index="47"/>
+  <cargo amount="1" index="49"/>
+  <cargo amount="1" index="50"/>
+  <cargo amount="4" index="61"/>
+  <cargo amount="1" index="53"/>
+  <cargo amount="10" index="22"/>
+<!-- Tag "recipe": Know recipe (player ship only). 
+- Attribute "index" is recipe index from files from *recipes*. -->
+  <recipe index="1"/>
+  <recipe index="2"/>
+  <recipe index="4"/>
+  <recipe index="20"/>
+<!-- Tag "member": meber of crew of ship. 
+- Attribute "index" is mobile index from files form *mobs* directory. 
+If ship should have more than one that same mobile if crew, add 
+attribute "amount". If ship should have more than one that same mobile and 
+amount should be random, add attributes "minamount" for minimum amount of 
+that mobile and attribute "maxamount" for maximum amount of that mobile. -->
+  <member index="2"/>
+  <member index="3"/>
+  <member index="4"/>
+ </ship>
+ <ship combatai="DISARMER" index="2" maxloot="100" minloot="10" name="Tiny pirates ship" owner="PIRATES">
+  <module index="1"/>
+  <module index="3"/>
+  <module amount="2" index="4"/>
+  <module index="5"/>
+  <module index="7"/>
+  <module amount="2" index="8"/>
+  <module index="11"/>
+  <module index="127"/>
+  <cargo index="1" maxamount="1000" minamount="800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="150"/>
+  <cargo index="14" maxamount="500" minamount="300"/>
+  <cargo index="62" maxamount="75" minamount="50"/>
+  <member index="5"/>
+  <member amount="2" index="6"/>
+<!-- Tag "description": Description of ship (NPC ships only). Will be displayed
+during combat. -->
+  <description>Smallest known pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="3" maxloot="100" minloot="10" name="Tiny undead ship" owner="UNDEAD">
+  <module index="1"/>
+  <module index="3"/>
+  <module index="5"/>
+  <module index="7"/>
+  <module index="12"/>
+  <cargo index="1" maxamount="1000" minamount="750"/>
+  <member index="7"/>
+  <member amount="2" index="55"/>
+  <description>Smallest known undead ship. Dangerous at close range.</description>
+ </ship>
+ <ship accuracy="2" combatai="BERSERKER" evasion="2" index="4" maxloot="50" minloot="5" name="Tiny clockwork drone" owner="DRONES" perception="5">
+  <module index="10"/>
+  <module index="3"/>
+  <module index="7"/>
+  <module index="13"/>
+  <cargo index="1" maxamount="1000" minamount="800"/>
+  <description>Smallest known clockwork drone. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="DISARMER" index="5" maxloot="200" minloot="20" name="Small pirates ship" owner="PIRATES">
+  <module index="1"/>
+  <module index="3"/>
+  <module amount="3" index="4"/>
+  <module index="5"/>
+  <module amount="2" index="7"/>
+  <module amount="2" index="8"/>
+  <module index="9"/>
+  <module index="127"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="170"/>
+  <cargo index="4" maxamount="500" minamount="450"/>
+  <cargo index="5" maxamount="100" minamount="80"/>
+  <cargo index="13" maxamount="20" minamount="10"/>
+  <cargo index="63" maxamount="75" minamount="50"/>
+  <member index="8"/>
+  <member amount="2" index="9"/>
+  <member index="10"/>
+  <description>Small, fast pirate vessel. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="6" maxloot="200" minloot="20" name="Small undead ship" owner="UNDEAD">
+  <module index="1"/>
+  <module index="2"/>
+  <module index="3"/>
+  <module index="5"/>
+  <module amount="2" index="7"/>
+  <module index="12"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="5" maxamount="100" minamount="80"/>
+  <member index="11"/>
+  <member amount="3" index="56"/>
+  <description>Small undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="7" maxaccuracy="10" maxevasion="10" maxloot="100" maxperception="15" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Small clockwork drone" owner="DRONES">
+  <module index="1"/>
+  <module index="3"/>
+  <module index="7"/>
+  <module index="12"/>
+  <cargo index="1" maxamount="1000" minamount="500"/>
+  <description>Small flying clockwork drone. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="DISARMER" index="8" maxloot="200" minloot="100" name="Pirate ship" owner="PIRATES">
+  <module index="17"/>
+  <module index="15"/>
+  <module amount="8" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module amount="2" index="28"/>
+  <module index="27"/>
+  <module index="128"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="20" maxamount="1000" minamount="750"/>
+  <cargo index="5" maxamount="200" minamount="150"/>
+  <cargo index="13" maxamount="40" minamount="10"/>
+  <cargo index="63" maxamount="100" minamount="75"/>
+  <member index="12"/>
+  <member amount="2" index="13"/>
+  <member index="14"/>
+  <member index="57" maxamount="5" minamount="3"/>
+  <description>Standard pirate vessel. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="9" maxloot="300" minloot="150" name="Armored pirate ship" owner="PIRATES">
+  <module index="17"/>
+  <module index="25"/>
+  <module index="15"/>
+  <module amount="8" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module amount="2" index="28"/>
+  <module index="27"/>
+  <module index="128"/>
+  <cargo index="1" maxamount="2000" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="20" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="200" minamount="100"/>
+  <cargo index="13" maxamount="40" minamount="20"/>
+  <cargo index="63" maxamount="150" minamount="100"/>
+  <member index="16"/>
+  <member amount="2" index="17"/>
+  <member index="18"/>
+  <member index="58" maxamount="5" minamount="3"/>
+  <description>Armored version of pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="10" maxaccuracy="10" maxevasion="10" maxloot="200" maxperception="10" minaccuracy="5" minevasion="5" minloot="20" minperception="5" name="Small attacking drone" owner="DRONES">
+  <module index="1"/>
+  <module index="3"/>
+  <module index="7"/>
+  <module index="12"/>
+  <module index="8"/>
+  <module index="11"/>
+  <cargo index="1" maxamount="1000" minamount="200"/>
+  <cargo index="14" maxamount="500" minamount="200"/>
+  <description>Small, more aggresive version of clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="11" maxaccuracy="10" maxevasion="10" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Attacking clockwork drone" owner="DRONES">
+  <module index="17"/>
+  <module index="15"/>
+  <module amount="2" index="7"/>
+  <module index="12"/>
+  <module index="8"/>
+  <module index="9"/>
+  <cargo index="1" maxamount="1000" minamount="800"/>
+  <cargo index="4" maxamount="500" minamount="100"/>
+  <description>Standard, very aggresive version of clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="12" maxaccuracy="12" maxevasion="12" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Armored attacking drone" owner="DRONES">
+  <module index="17"/>
+  <module index="2"/>
+  <module index="15"/>
+  <module amount="2" index="7"/>
+  <module index="12"/>
+  <module index="8"/>
+  <module index="9"/>
+  <cargo index="1" maxamount="1000" minamount="900"/>
+  <cargo index="4" maxamount="500" minamount="450"/>
+  <cargo index="5" maxamount="100" minamount="90"/>
+  <cargo index="13" maxamount="20" minamount="5"/>
+  <description>Armored, very aggresive version of clockwork drone.</description>
+ </ship>
+ <ship accuracy="1" combatai="ATTACKER" index="13" maxloot="100" minloot="10" name="Tiny inquisition ship" owner="INQUISITION">
+  <module index="1"/>
+  <module index="3"/>
+  <module index="4"/>
+  <module index="5"/>
+  <module index="7"/>
+  <module index="12"/>
+  <cargo index="1" maxamount="1000" minamount="500"/>
+  <cargo index="2" maxamount="100" minamount="20"/>
+  <cargo index="3" maxamount="200" minamount="40"/>
+  <member index="19"/>
+  <description>Smallest know inquisition ship.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="14" maxloot="150" minloot="15" name="Small inquisition ship" owner="INQUISITION">
+  <module index="1"/>
+  <module index="3"/>
+  <module amount="4" index="4"/>
+  <module index="5"/>
+  <module amount="2" index="7"/>
+  <module index="12"/>
+  <cargo index="1" maxamount="2000" minamount="1000"/>
+  <cargo index="2" maxamount="100" minamount="30"/>
+  <cargo index="3" maxamount="200" minamount="150"/>
+  <cargo index="5" maxamount="100" minamount="20"/>
+  <member index="20"/>
+  <member amount="3" index="59"/>
+  <description>Small flying vessel of inquisition, dangerous at close range.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="15" maxloot="200" minloot="100" name="Inquisition ship" owner="INQUISITION">
+  <module index="17"/>
+  <module index="15"/>
+  <module amount="8" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module index="12"/>
+  <module index="8"/>
+  <module index="9"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="4" maxamount="500" minamount="300"/>
+  <cargo index="5" maxamount="200" minamount="50"/>
+  <cargo index="13" maxamount="40" minamount="5"/>
+  <member index="21"/>
+  <member index="22"/>
+  <member index="60" maxamount="8" minamount="4"/>
+  <description>Standard ship of inquisition.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="16" maxloot="240" minloot="120" name="Armored inquisition ship" owner="INQUISITION">
+  <module index="17"/>
+  <module index="2"/>
+  <module index="15"/>
+  <module amount="8" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module index="12"/>
+  <module index="8"/>
+  <module index="9"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="350"/>
+  <cargo index="4" maxamount="500" minamount="250"/>
+  <cargo index="5" maxamount="200" minamount="100"/>
+  <cargo index="13" maxamount="40" minamount="10"/>
+  <member index="21"/>
+  <member index="22"/>
+  <member amount="2" index="60"/>
+  <description>Armored version of standard flying vessel of inquisition.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="17" maxaccuracy="25" maxevasion="25" maxloot="400" maxperception="35" minaccuracy="15" minevasion="15" minloot="200" minperception="25" name="Large clockwork drone" owner="DRONES">
+  <module index="23"/>
+  <module index="25"/>
+  <module index="19"/>
+  <module amount="4" index="7"/>
+  <module index="12"/>
+  <module amount="2" index="28"/>
+  <module amount="2" index="27"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="20" maxamount="500" minamount="450"/>
+  <cargo index="5" maxamount="250" minamount="120"/>
+  <cargo index="13" maxamount="60" minamount="20"/>
+  <description>Large, well armored and aggresive clockwork drone.</description>
+ </ship>
+ <ship combatai="DISARMER" index="18" maxloot="500" minloot="300" name="Large pirate ship" owner="PIRATES">
+  <module index="23"/>
+  <module index="26"/>
+  <module index="19"/>
+  <module amount="10" index="4"/>
+  <module index="5"/>
+  <module amount="6" index="7"/>
+  <module amount="4" index="28"/>
+  <module amount="3" index="29"/>
+  <module index="129"/>
+  <cargo index="1" maxamount="3000" minamount="1500"/>
+  <cargo index="2" maxamount="400" minamount="200"/>
+  <cargo index="3" maxamount="600" minamount="400"/>
+  <cargo index="26" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="400" minamount="200"/>
+  <cargo index="13" maxamount="100" minamount="50"/>
+  <cargo index="64" maxamount="150" minamount="100"/>
+  <member index="23"/>
+  <member amount="4" index="24"/>
+  <member index="25"/>
+  <member index="61" maxamount="5" minamount="3"/>
+  <description>Large, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="19" maxloot="300" minloot="100" name="Undead ship" owner="UNDEAD">
+  <module index="17"/>
+  <module index="25"/>
+  <module index="15"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module index="40"/>
+  <cargo index="1" maxamount="2500" minamount="2000"/>
+  <cargo index="5" maxamount="300" minamount="150"/>
+  <member index="27"/>
+  <member index="62" maxamount="10" minamount="6"/>
+  <description>Standard version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="20" maxloot="400" minloot="200" name="Large undead ship" owner="UNDEAD">
+  <module index="23"/>
+  <module index="26"/>
+  <module index="19"/>
+  <module index="5"/>
+  <module amount="6" index="7"/>
+  <module index="40"/>
+  <cargo index="1" maxamount="4000" minamount="3000"/>
+  <cargo index="5" maxamount="400" minamount="300"/>
+  <member index="28"/>
+  <member index="63" maxamount="12" minamount="8"/>
+  <description>Large, well armored version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="21" maxloot="500" minloot="250" name="Large inquisition ship" owner="INQUISITION">
+  <module index="23"/>
+  <module index="26"/>
+  <module index="19"/>
+  <module amount="10" index="4"/>
+  <module index="5"/>
+  <module amount="6" index="7"/>
+  <module index="40"/>
+  <module amount="2" index="28"/>
+  <module amount="2" index="27"/>
+  <cargo index="1" maxamount="3000" minamount="2000"/>
+  <cargo index="2" maxamount="300" minamount="150"/>
+  <cargo index="3" maxamount="500" minamount="400"/>
+  <cargo index="20" maxamount="600" minamount="300"/>
+  <cargo index="5" maxamount="400" minamount="200"/>
+  <cargo index="13" maxamount="50" minamount="20"/>
+  <member index="29"/>
+  <member amount="2" index="30"/>
+  <member index="31"/>
+  <member index="64" maxamount="9" minamount="5"/>
+  <description>Large, well armored version of inquisition flying vessel.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="22" maxaccuracy="35" maxevasion="35" maxloot="450" maxperception="50" minaccuracy="25" minevasion="25" minloot="250" minperception="40" name="Large attacking drone" owner="DRONES">
+  <module index="23"/>
+  <module index="26"/>
+  <module index="19"/>
+  <module amount="6" index="7"/>
+  <module index="40"/>
+  <module amount="2" index="28"/>
+  <module amount="2" index="27"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="20" maxamount="500" minamount="450"/>
+  <cargo index="5" maxamount="300" minamount="150"/>
+  <cargo index="13" maxamount="40" minamount="20"/>
+  <description>Large, well armored version of attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="23" maxaccuracy="25" maxevasion="25" maxloot="250" maxperception="50" minaccuracy="15" minevasion="15" minloot="100" minperception="40" name="Advanced attacking drone" owner="DRONES">
+  <module index="22"/>
+  <module index="25"/>
+  <module index="18"/>
+  <module amount="5" index="7"/>
+  <module index="40"/>
+  <module index="28"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="1500" minamount="1000"/>
+  <cargo index="20" maxamount="300" minamount="200"/>
+  <cargo index="5" maxamount="200" minamount="100"/>
+  <cargo index="13" maxamount="20" minamount="10"/>
+  <description>Advanced version of standard attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="DISARMER" index="24" maxloot="250" minloot="200" name="Advanced pirate ship" owner="PIRATES">
+  <module index="22"/>
+  <module index="25"/>
+  <module index="18"/>
+  <module amount="6" index="4"/>
+  <module index="5"/>
+  <module amount="5" index="7"/>
+  <module amount="2" index="28"/>
+  <module index="27"/>
+  <module index="128"/>
+  <cargo index="1" maxamount="1700" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="20" maxamount="500" minamount="300"/>
+  <cargo index="5" maxamount="200" minamount="100"/>
+  <cargo index="13" maxamount="40" minamount="20"/>
+  <cargo index="64" maxamount="100" minamount="75"/>
+  <member index="32"/>
+  <member amount="2" index="33"/>
+  <member index="34"/>
+  <member amount="2" index="65"/>
+  <description>Advanced version of standard pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="25" maxloot="300" minloot="200" name="Advanced undead ship" owner="UNDEAD">
+  <module index="22"/>
+  <module index="25"/>
+  <module index="18"/>
+  <module index="5"/>
+  <module amount="5" index="7"/>
+  <module index="40"/>
+  <cargo index="1" maxamount="3000" minamount="2500"/>
+  <cargo index="5" maxamount="350" minamount="200"/>
+  <member index="36"/>
+  <member amount="6" index="66"/>
+  <description>Advanced version of standard undead ship. Dangerous at close range.</description>
+ </ship>
+ <ship accuracy="15" combatai="ATTACKER" evasion="15" index="26" maxloot="240" minloot="120" name="Advanced inquisition ship" owner="INQUISITION" perception="15">
+  <module index="22"/>
+  <module index="25"/>
+  <module index="18"/>
+  <module amount="8" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module index="40"/>
+  <module index="28"/>
+  <module index="29"/>
+  <cargo index="1" maxamount="2200" minamount="2000"/>
+  <cargo index="2" maxamount="220" minamount="150"/>
+  <cargo index="3" maxamount="500" minamount="400"/>
+  <cargo index="20" maxamount="600" minamount="400"/>
+  <cargo index="5" maxamount="250" minamount="150"/>
+  <cargo index="13" maxamount="50" minamount="20"/>
+  <member index="37"/>
+  <member index="38"/>
+  <member index="67" maxamount="8" minamount="4"/>
+  <description>Advanced version of standard flying vessel of inquisition.</description>
+ </ship>
+ <ship combatai="DISARMER" index="27" maxloot="1000" minloot="500" name="Huge pirate ship" owner="PIRATES">
+  <module index="60"/>
+  <module index="26"/>
+  <module amount="2" index="62"/>
+  <module amount="14" index="4"/>
+  <module index="5"/>
+  <module amount="10" index="7"/>
+  <module amount="5" index="39"/>
+  <module amount="4" index="33"/>
+  <module index="129"/>
+  <cargo index="1" maxamount="5000" minamount="3000"/>
+  <cargo index="2" maxamount="750" minamount="500"/>
+  <cargo index="3" maxamount="1500" minamount="1000"/>
+  <cargo index="31" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="750" minamount="500"/>
+  <cargo index="13" maxamount="400" minamount="200"/>
+  <cargo index="64" maxamount="200" minamount="100"/>
+  <member index="39"/>
+  <member amount="5" index="40"/>
+  <member index="41"/>
+  <member index="68" maxamount="9" minamount="5"/>
+  <description>Huge, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="28" maxloot="1200" minloot="750" name="Advanced huge pirate ship" owner="PIRATES">
+  <module index="61"/>
+  <module index="26"/>
+  <module amount="2" index="63"/>
+  <module amount="16" index="4"/>
+  <module index="5"/>
+  <module amount="12" index="7"/>
+  <module amount="5" index="39"/>
+  <module amount="4" index="34"/>
+  <module index="129"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="800" minamount="600"/>
+  <cargo index="3" maxamount="2000" minamount="1500"/>
+  <cargo index="33" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="800" minamount="600"/>
+  <cargo index="13" maxamount="500" minamount="300"/>
+  <cargo index="64" maxamount="300" minamount="150"/>
+  <member index="43"/>
+  <member amount="5" index="44"/>
+  <member index="45"/>
+  <member index="69" maxamount="11" minamount="7"/>
+  <description>Advanced version of huge, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="29" maxloot="750" minloot="500" name="Huge undead ship" owner="UNDEAD">
+  <module index="60"/>
+  <module index="26"/>
+  <module index="62"/>
+  <module index="5"/>
+  <module amount="10" index="7"/>
+  <module index="40"/>
+  <cargo index="1" maxamount="7000" minamount="5000"/>
+  <cargo index="5" maxamount="750" minamount="500"/>
+  <member index="47"/>
+  <member index="70" maxamount="14" minamount="10"/>
+  <description>Huge, well armored version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="30" maxaccuracy="80" maxevasion="80" maxloot="900" maxperception="80" minaccuracy="60" minevasion="60" minloot="500" minperception="60" name="Huge attacking drone" owner="DRONES">
+  <module index="60"/>
+  <module index="26"/>
+  <module index="62"/>
+  <module amount="10" index="7"/>
+  <module index="40"/>
+  <module amount="3" index="39"/>
+  <module amount="3" index="33"/>
+  <cargo index="1" maxamount="4000" minamount="2000"/>
+  <cargo index="31" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="750" minamount="500"/>
+  <cargo index="13" maxamount="300" minamount="150"/>
+  <description>Huge, well armored version of attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="31" maxloot="900" minloot="600" name="Advanced huge undead ship" owner="UNDEAD">
+  <module index="61"/>
+  <module index="26"/>
+  <module index="63"/>
+  <module index="5"/>
+  <module amount="10" index="7"/>
+  <module index="40"/>
+  <cargo index="1" maxamount="8000" minamount="6000"/>
+  <cargo index="5" maxamount="800" minamount="600"/>
+  <member index="48"/>
+  <member index="71" maxamount="15" minamount="11"/>
+  <description>Advanced version of huge, well armored undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="32" maxaccuracy="90" maxevasion="90" maxloot="1000" maxperception="90" minaccuracy="75" minevasion="75" minloot="600" minperception="75" name="Advanced huge attacking drone" owner="DRONES">
+  <module index="61"/>
+  <module index="26"/>
+  <module index="63"/>
+  <module amount="12" index="7"/>
+  <module index="40"/>
+  <module amount="3" index="39"/>
+  <module amount="3" index="34"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="33" maxamount="1000" minamount="600"/>
+  <cargo index="5" maxamount="800" minamount="600"/>
+  <cargo index="13" maxamount="300" minamount="150"/>
+  <description>Advanced version of huge, well armored  attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="33" maxloot="1000" minloot="750" name="Huge inquisition ship" owner="INQUISITION">
+  <module index="60"/>
+  <module index="26"/>
+  <module index="62"/>
+  <module amount="13" index="4"/>
+  <module index="5"/>
+  <module amount="9" index="7"/>
+  <module index="40"/>
+  <module amount="4" index="39"/>
+  <module amount="4" index="33"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="500" minamount="300"/>
+  <cargo index="3" maxamount="750" minamount="500"/>
+  <cargo index="31" maxamount="750" minamount="500"/>
+  <cargo index="5" maxamount="600" minamount="400"/>
+  <cargo index="13" maxamount="100" minamount="50"/>
+  <member index="49"/>
+  <member amount="4" index="50"/>
+  <member index="72" maxamount="10" minamount="6"/>
+  <description>Huge, well armored version of inquisition flying vessel.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="34" maxloot="1200" minloot="900" name="Advanced huge inquisition ship" owner="INQUISITION">
+  <module index="61"/>
+  <module index="26"/>
+  <module index="63"/>
+  <module amount="15" index="4"/>
+  <module index="5"/>
+  <module amount="11" index="7"/>
+  <module index="40"/>
+  <module amount="4" index="39"/>
+  <module amount="4" index="34"/>
+  <cargo index="1" maxamount="6500" minamount="5000"/>
+  <cargo index="2" maxamount="600" minamount="400"/>
+  <cargo index="3" maxamount="750" minamount="600"/>
+  <cargo index="33" maxamount="750" minamount="600"/>
+  <cargo index="5" maxamount="650" minamount="500"/>
+  <cargo index="13" maxamount="120" minamount="75"/>
+  <member index="51"/>
+  <member amount="4" index="52"/>
+  <member index="73" maxamount="12" minamount="8"/>
+  <description>Advanced version of huge, well armored  inquisition flying vessel.</description>
+ </ship>
+ <ship combatai="DISARMER" index="35" maxloot="100" minloot="10" name="Tiny pirates ship mk II" owner="PIRATES">
+  <module index="64"/>
+  <module index="72"/>
+  <module amount="2" index="80"/>
+  <module index="41"/>
+  <module index="42"/>
+  <module amount="2" index="84"/>
+  <module index="11"/>
+  <module index="127"/>
+  <cargo index="1" maxamount="1000" minamount="800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="150"/>
+  <cargo index="14" maxamount="500" minamount="300"/>
+  <cargo index="62" maxamount="75" minamount="50"/>
+  <member index="53"/>
+  <member amount="2" index="54"/>
+  <member index="74"/>
+  <description>Smallest known pirates ship (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="36" maxloot="100" minloot="10" name="Tiny undead ship mk II" owner="UNDEAD">
+  <module index="64"/>
+  <module index="72"/>
+  <module index="41"/>
+  <module index="42"/>
+  <module index="87"/>
+  <cargo index="1" maxamount="1000" minamount="750"/>
+  <member index="7"/>
+  <member amount="2" index="55"/>
+  <description>Smallest known undead ship (upgraded version). Dangerous at close range.</description>
+ </ship>
+ <ship combatai="DISARMER" index="37" maxloot="200" minloot="20" name="Small pirates ship mk II" owner="PIRATES">
+  <module index="64"/>
+  <module index="72"/>
+  <module amount="3" index="80"/>
+  <module index="41"/>
+  <module amount="2" index="42"/>
+  <module amount="2" index="84"/>
+  <module index="9"/>
+  <module index="127"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="170"/>
+  <cargo index="4" maxamount="500" minamount="450"/>
+  <cargo index="13" maxamount="100" minamount="80"/>
+  <cargo index="63" maxamount="75" minamount="50"/>
+  <member index="8"/>
+  <member amount="2" index="9"/>
+  <member index="10"/>
+  <description>Small, fast pirate vessel (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="38" maxloot="200" minloot="20" name="Small undead ship mk II" owner="UNDEAD">
+  <module index="64"/>
+  <module index="55"/>
+  <module index="72"/>
+  <module index="41"/>
+  <module amount="2" index="42"/>
+  <module index="87"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="13" maxamount="100" minamount="80"/>
+  <member index="11"/>
+  <member amount="3" index="56"/>
+  <description>Small undead flying vessel (upgraded version). Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="39" maxaccuracy="10" maxevasion="10" maxloot="100" maxperception="15" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Small clockwork drone mk II" owner="DRONES">
+  <module index="64"/>
+  <module index="72"/>
+  <module index="42"/>
+  <module index="87"/>
+  <cargo index="1" maxamount="1000" minamount="500"/>
+  <description>Small flying clockwork drone (upgraded version). Dangerous at close range.</description>
+ </ship>
+ <ship combatai="DISARMER" index="40" maxloot="200" minloot="100" name="Pirate ship mk II" owner="PIRATES">
+  <module index="66"/>
+  <module index="74"/>
+  <module amount="8" index="80"/>
+  <module index="41"/>
+  <module amount="4" index="42"/>
+  <module amount="2" index="85"/>
+  <module index="27"/>
+  <module index="128"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="20" maxamount="1000" minamount="750"/>
+  <cargo index="13" maxamount="200" minamount="150"/>
+  <cargo index="63" maxamount="100" minamount="75"/>
+  <member index="12"/>
+  <member amount="2" index="13"/>
+  <member index="14"/>
+  <member index="57" maxamount="5" minamount="3"/>
+  <description>Standard pirate vessel (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="41" maxloot="300" minloot="150" name="Armored pirate ship mk II" owner="PIRATES">
+  <module index="66"/>
+  <module index="56"/>
+  <module index="74"/>
+  <module amount="8" index="80"/>
+  <module index="41"/>
+  <module amount="4" index="42"/>
+  <module amount="2" index="85"/>
+  <module index="27"/>
+  <module index="128"/>
+  <cargo index="1" maxamount="2000" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="20" maxamount="1000" minamount="500"/>
+  <cargo index="13" maxamount="200" minamount="100"/>
+  <cargo index="63" maxamount="150" minamount="100"/>
+  <member index="16"/>
+  <member amount="2" index="17"/>
+  <member index="18"/>
+  <member index="58" maxamount="5" minamount="3"/>
+  <description>Armored version of pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="42" maxaccuracy="10" maxevasion="10" maxloot="200" maxperception="10" minaccuracy="5" minevasion="5" minloot="20" minperception="5" name="Small attacking drone mk II" owner="DRONES">
+  <module index="64"/>
+  <module index="72"/>
+  <module index="42"/>
+  <module index="87"/>
+  <module index="84"/>
+  <module index="11"/>
+  <cargo index="1" maxamount="1000" minamount="200"/>
+  <cargo index="14" maxamount="500" minamount="200"/>
+  <description>Small, more aggresive, upgraded version of clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="43" maxaccuracy="10" maxevasion="10" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Attacking clockwork drone mk II" owner="DRONES">
+  <module index="66"/>
+  <module index="74"/>
+  <module amount="2" index="42"/>
+  <module index="87"/>
+  <module index="84"/>
+  <module index="9"/>
+  <cargo index="1" maxamount="1000" minamount="800"/>
+  <cargo index="4" maxamount="500" minamount="100"/>
+  <description>Standard, very aggresive, upgraded version of clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="44" maxaccuracy="12" maxevasion="12" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Armored attacking drone mk II" owner="DRONES">
+  <module index="66"/>
+  <module index="55"/>
+  <module index="74"/>
+  <module amount="2" index="42"/>
+  <module index="87"/>
+  <module index="84"/>
+  <module index="9"/>
+  <cargo index="1" maxamount="1000" minamount="900"/>
+  <cargo index="4" maxamount="500" minamount="450"/>
+  <cargo index="13" maxamount="100" minamount="90"/>
+  <description>Armored, very aggresive, upgraded version of clockwork drone.</description>
+ </ship>
+ <ship accuracy="1" combatai="ATTACKER" index="45" maxloot="100" minloot="10" name="Tiny inquisition ship mk II" owner="INQUISITION">
+  <module index="64"/>
+  <module index="72"/>
+  <module index="80"/>
+  <module index="41"/>
+  <module index="42"/>
+  <module index="87"/>
+  <cargo index="1" maxamount="1000" minamount="500"/>
+  <cargo index="2" maxamount="100" minamount="20"/>
+  <cargo index="3" maxamount="200" minamount="40"/>
+  <member index="19"/>
+  <description>Smallest know inquisition ship (upgraded version).</description>
+ </ship>
+ <ship combatai="ATTACKER" index="46" maxloot="150" minloot="15" name="Small inquisition ship mk II" owner="INQUISITION">
+  <module index="64"/>
+  <module index="72"/>
+  <module amount="4" index="80"/>
+  <module index="41"/>
+  <module amount="2" index="42"/>
+  <module index="87"/>
+  <cargo index="1" maxamount="2000" minamount="1000"/>
+  <cargo index="2" maxamount="100" minamount="30"/>
+  <cargo index="3" maxamount="200" minamount="150"/>
+  <cargo index="13" maxamount="100" minamount="20"/>
+  <member index="20"/>
+  <member index="59" maxamount="4" minamount="2"/>
+  <description>Small flying vessel of inquisition (upgraded version), dangerous at close range.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="47" maxloot="200" minloot="100" name="Inquisition ship mk II" owner="INQUISITION">
+  <module index="66"/>
+  <module index="74"/>
+  <module amount="8" index="80"/>
+  <module index="41"/>
+  <module amount="4" index="42"/>
+  <module index="87"/>
+  <module index="84"/>
+  <module index="9"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="4" maxamount="500" minamount="300"/>
+  <cargo index="13" maxamount="40" minamount="5"/>
+  <member index="21"/>
+  <member index="22"/>
+  <member index="60" maxamount="8" minamount="4"/>
+  <description>Standard ship of inquisition (upgraded version).</description>
+ </ship>
+ <ship combatai="ATTACKER" index="48" maxloot="240" minloot="120" name="Armored inquisition ship mk II" owner="INQUISITION">
+  <module index="66"/>
+  <module index="55"/>
+  <module index="74"/>
+  <module amount="8" index="80"/>
+  <module index="41"/>
+  <module amount="4" index="42"/>
+  <module index="87"/>
+  <module index="84"/>
+  <module index="9"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="350"/>
+  <cargo index="4" maxamount="500" minamount="250"/>
+  <cargo index="13" maxamount="200" minamount="100"/>
+  <member index="21"/>
+  <member index="22"/>
+  <member index="60" maxamount="8" minamount="4"/>
+  <description>Armored and upgraded version of standard flying vessel of inquisition.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="49" maxaccuracy="25" maxevasion="25" maxloot="400" maxperception="35" minaccuracy="15" minevasion="15" minloot="200" minperception="25" name="Large clockwork drone mk II" owner="DRONES">
+  <module index="68"/>
+  <module index="56"/>
+  <module index="76"/>
+  <module amount="4" index="42"/>
+  <module index="87"/>
+  <module amount="2" index="85"/>
+  <module amount="2" index="27"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="20" maxamount="500" minamount="450"/>
+  <cargo index="13" maxamount="250" minamount="120"/>
+  <description>Large, well armored upgraded and aggresive clockwork drone.</description>
+ </ship>
+ <ship combatai="DISARMER" index="50" maxloot="500" minloot="300" name="Large pirate ship mk II" owner="PIRATES">
+  <module index="68"/>
+  <module index="57"/>
+  <module index="76"/>
+  <module amount="10" index="80"/>
+  <module index="41"/>
+  <module amount="7" index="42"/>
+  <module amount="4" index="85"/>
+  <module amount="3" index="29"/>
+  <module index="129"/>
+  <cargo index="1" maxamount="3000" minamount="1500"/>
+  <cargo index="2" maxamount="400" minamount="200"/>
+  <cargo index="3" maxamount="600" minamount="400"/>
+  <cargo index="26" maxamount="1000" minamount="500"/>
+  <cargo index="13" maxamount="400" minamount="200"/>
+  <cargo index="64" maxamount="150" minamount="100"/>
+  <member index="23"/>
+  <member amount="4" index="24"/>
+  <member index="25"/>
+  <member index="61" maxamount="5" minamount="3"/>
+  <description>Large, well armored upgraded version of pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="51" maxloot="300" minloot="100" name="Undead ship mk II" owner="UNDEAD">
+  <module index="66"/>
+  <module index="56"/>
+  <module index="74"/>
+  <module index="41"/>
+  <module amount="4" index="42"/>
+  <module index="89"/>
+  <cargo index="1" maxamount="2500" minamount="2000"/>
+  <cargo index="13" maxamount="300" minamount="150"/>
+  <member index="27"/>
+  <member index="62" maxamount="10" minamount="6"/>
+  <description>Upgraded version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="52" maxloot="400" minloot="200" name="Large undead ship mk II" owner="UNDEAD">
+  <module index="68"/>
+  <module index="57"/>
+  <module index="76"/>
+  <module index="41"/>
+  <module amount="6" index="42"/>
+  <module index="89"/>
+  <cargo index="1" maxamount="4000" minamount="3000"/>
+  <cargo index="13" maxamount="400" minamount="300"/>
+  <member index="28"/>
+  <member index="63" maxamount="12" minamount="8"/>
+  <description>Large, well armored upgraded version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="53" maxloot="500" minloot="250" name="Large inquisition ship mk II" owner="INQUISITION">
+  <module index="68"/>
+  <module index="57"/>
+  <module index="76"/>
+  <module amount="10" index="80"/>
+  <module index="41"/>
+  <module amount="7" index="42"/>
+  <module amount="2" index="85"/>
+  <module amount="2" index="27"/>
+  <cargo index="1" maxamount="3000" minamount="2000"/>
+  <cargo index="2" maxamount="300" minamount="150"/>
+  <cargo index="3" maxamount="500" minamount="400"/>
+  <cargo index="20" maxamount="600" minamount="300"/>
+  <cargo index="13" maxamount="400" minamount="200"/>
+  <member index="29"/>
+  <member index="30"/>
+  <member index="31"/>
+  <member index="64" maxamount="9" minamount="5"/>
+  <description>Large, well armored upgraded version of inquisition flying vessel.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="54" maxaccuracy="35" maxevasion="35" maxloot="450" maxperception="50" minaccuracy="25" minevasion="25" minloot="250" minperception="40" name="Large attacking drone mk II" owner="DRONES">
+  <module index="68"/>
+  <module index="57"/>
+  <module index="76"/>
+  <module amount="6" index="42"/>
+  <module index="89"/>
+  <module amount="2" index="85"/>
+  <module amount="2" index="27"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="20" maxamount="500" minamount="450"/>
+  <cargo index="13" maxamount="300" minamount="150"/>
+  <description>Large, well armored upgraded version of attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="55" maxaccuracy="25" maxevasion="25" maxloot="250" maxperception="50" minaccuracy="15" minevasion="15" minloot="100" minperception="40" name="Advanced attacking drone mk II" owner="DRONES">
+  <module index="67"/>
+  <module index="56"/>
+  <module index="75"/>
+  <module amount="5" index="42"/>
+  <module index="89"/>
+  <module index="85"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="1500" minamount="1000"/>
+  <cargo index="20" maxamount="300" minamount="200"/>
+  <cargo index="13" maxamount="200" minamount="100"/>
+  <description>Advanced and upgraded version of standard attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="DISARMER" index="56" maxloot="250" minloot="200" name="Advanced pirate ship mk II" owner="PIRATES">
+  <module index="67"/>
+  <module index="56"/>
+  <module index="75"/>
+  <module amount="6" index="80"/>
+  <module index="41"/>
+  <module amount="5" index="42"/>
+  <module amount="2" index="85"/>
+  <module index="27"/>
+  <module index="128"/>
+  <cargo index="1" maxamount="1700" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="20" maxamount="500" minamount="300"/>
+  <cargo index="13" maxamount="200" minamount="100"/>
+  <cargo index="64" maxamount="100" minamount="75"/>
+  <member index="32"/>
+  <member amount="2" index="33"/>
+  <member index="34"/>
+  <member amount="2" index="65"/>
+  <description>Advanced and upgraded version of standard pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="57" maxloot="300" minloot="200" name="Advanced undead ship mk II" owner="UNDEAD">
+  <module index="67"/>
+  <module index="56"/>
+  <module index="75"/>
+  <module index="41"/>
+  <module amount="5" index="42"/>
+  <module index="89"/>
+  <cargo index="1" maxamount="3000" minamount="2500"/>
+  <cargo index="13" maxamount="350" minamount="200"/>
+  <member index="36"/>
+  <member index="66" maxamount="8" minamount="4"/>
+  <description>Advanced and upgraded version of standard undead ship. Dangerous at close range.</description>
+ </ship>
+ <ship accuracy="15" combatai="ATTACKER" evasion="15" index="58" maxloot="240" minloot="120" name="Advanced inquisition ship mk II" owner="INQUISITION" perception="15">
+  <module index="67"/>
+  <module index="56"/>
+  <module index="75"/>
+  <module amount="8" index="80"/>
+  <module index="41"/>
+  <module amount="4" index="42"/>
+  <module index="89"/>
+  <module index="85"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="2200" minamount="2000"/>
+  <cargo index="2" maxamount="220" minamount="150"/>
+  <cargo index="3" maxamount="500" minamount="400"/>
+  <cargo index="20" maxamount="600" minamount="400"/>
+  <cargo index="13" maxamount="250" minamount="150"/>
+  <member index="37"/>
+  <member index="38"/>
+  <member index="67" maxamount="8" minamount="4"/>
+  <description>Advanced and upgraded version of standard flying vessel of inquisition.</description>
+ </ship>
+ <ship combatai="DISARMER" index="59" maxloot="1000" minloot="500" name="Huge pirate ship mk II" owner="PIRATES">
+  <module index="70"/>
+  <module index="57"/>
+  <module amount="2" index="78"/>
+  <module amount="14" index="80"/>
+  <module index="41"/>
+  <module amount="10" index="42"/>
+  <module amount="5" index="86"/>
+  <module amount="5" index="33"/>
+  <module index="129"/>
+  <cargo index="1" maxamount="5000" minamount="3000"/>
+  <cargo index="2" maxamount="750" minamount="500"/>
+  <cargo index="3" maxamount="1500" minamount="1000"/>
+  <cargo index="31" maxamount="1000" minamount="500"/>
+  <cargo index="13" maxamount="750" minamount="500"/>
+  <cargo index="64" maxamount="200" minamount="150"/>
+  <member index="39"/>
+  <member amount="5" index="40"/>
+  <member index="41"/>
+  <member index="68" maxamount="9" minamount="5"/>
+  <description>Huge, well armored pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="60" maxloot="1200" minloot="750" name="Advanced huge pirate ship mk II" owner="PIRATES">
+  <module index="71"/>
+  <module index="57"/>
+  <module amount="2" index="79"/>
+  <module amount="16" index="80"/>
+  <module index="41"/>
+  <module amount="12" index="42"/>
+  <module amount="5" index="86"/>
+  <module amount="4" index="34"/>
+  <module index="129"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="800" minamount="600"/>
+  <cargo index="3" maxamount="2000" minamount="1500"/>
+  <cargo index="33" maxamount="1000" minamount="500"/>
+  <cargo index="13" maxamount="800" minamount="600"/>
+  <cargo index="64" maxamount="500" minamount="300"/>
+  <member index="43"/>
+  <member amount="5" index="44"/>
+  <member index="45"/>
+  <member index="69" maxamount="11" minamount="7"/>
+  <description>Advanced and upgraded version of huge, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="61" maxloot="750" minloot="500" name="Huge undead ship mk II" owner="UNDEAD">
+  <module index="70"/>
+  <module index="57"/>
+  <module index="78"/>
+  <module index="41"/>
+  <module amount="10" index="42"/>
+  <module index="89"/>
+  <cargo index="1" maxamount="7000" minamount="5000"/>
+  <cargo index="13" maxamount="750" minamount="500"/>
+  <member index="47"/>
+  <member index="70" maxamount="14" minamount="10"/>
+  <description>Huge, well armored and upgraded version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="62" maxaccuracy="80" maxevasion="80" maxloot="900" maxperception="80" minaccuracy="60" minevasion="60" minloot="500" minperception="60" name="Huge attacking drone mk II" owner="DRONES">
+  <module index="70"/>
+  <module index="57"/>
+  <module index="78"/>
+  <module amount="10" index="42"/>
+  <module index="89"/>
+  <module amount="3" index="86"/>
+  <module amount="3" index="33"/>
+  <cargo index="1" maxamount="4000" minamount="2000"/>
+  <cargo index="31" maxamount="1000" minamount="500"/>
+  <cargo index="13" maxamount="750" minamount="500"/>
+  <description>Huge, well armored and upgraded version of attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="63" maxloot="900" minloot="600" name="Advanced huge undead ship mk II" owner="UNDEAD">
+  <module index="71"/>
+  <module index="57"/>
+  <module index="79"/>
+  <module index="41"/>
+  <module amount="10" index="42"/>
+  <module index="89"/>
+  <cargo index="1" maxamount="8000" minamount="6000"/>
+  <cargo index="13" maxamount="800" minamount="600"/>
+  <member index="38"/>
+  <member index="71" maxamount="15" minamount="11"/>
+  <description>Advanced and upgraded version of huge, well armored undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="64" maxaccuracy="90" maxevasion="90" maxloot="1000" maxperception="90" minaccuracy="75" minevasion="75" minloot="600" minperception="75" name="Advanced huge attacking drone mk II" owner="DRONES">
+  <module index="71"/>
+  <module index="57"/>
+  <module index="79"/>
+  <module amount="12" index="42"/>
+  <module index="89"/>
+  <module amount="3" index="86"/>
+  <module amount="3" index="34"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="33" maxamount="1000" minamount="600"/>
+  <cargo index="13" maxamount="800" minamount="600"/>
+  <description>Advanced and upgraded version of huge, well armored attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="65" maxloot="1000" minloot="750" name="Huge inquisition ship mk II" owner="INQUISITION">
+  <module index="70"/>
+  <module index="57"/>
+  <module index="78"/>
+  <module amount="13" index="80"/>
+  <module index="41"/>
+  <module amount="9" index="42"/>
+  <module index="89"/>
+  <module amount="4" index="86"/>
+  <module amount="4" index="33"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="500" minamount="300"/>
+  <cargo index="3" maxamount="750" minamount="500"/>
+  <cargo index="31" maxamount="750" minamount="500"/>
+  <cargo index="13" maxamount="600" minamount="400"/>
+  <member index="49"/>
+  <member amount="4" index="50"/>
+  <member index="72" maxamount="10" minamount="6"/>
+  <description>Huge, well armored and upgraded version of inquisition flying vessel.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="66" maxloot="1200" minloot="900" name="Advanced huge inquisition ship mk II" owner="INQUISITION">
+  <module index="71"/>
+  <module index="57"/>
+  <module index="79"/>
+  <module amount="15" index="80"/>
+  <module index="41"/>
+  <module amount="11" index="42"/>
+  <module index="89"/>
+  <module amount="4" index="86"/>
+  <module amount="4" index="34"/>
+  <cargo index="1" maxamount="6500" minamount="5000"/>
+  <cargo index="2" maxamount="600" minamount="400"/>
+  <cargo index="3" maxamount="750" minamount="600"/>
+  <cargo index="33" maxamount="750" minamount="600"/>
+  <cargo index="13" maxamount="650" minamount="500"/>
+  <member index="51"/>
+  <member amount="4" index="52"/>
+  <member index="73" maxamount="12" minamount="8"/>
+  <description>Advanced and upgraded version of huge, well armored inquisition flying vessel.</description>
+ </ship>
+ <ship combatai="DISARMER" index="67" maxloot="200" minloot="20" name="Small pirates ship mk III" owner="PIRATES">
+  <module index="90"/>
+  <module index="92"/>
+  <module amount="3" index="93"/>
+  <module index="94"/>
+  <module amount="2" index="96"/>
+  <module amount="2" index="97"/>
+  <module index="49"/>
+  <module index="127"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="170"/>
+  <cargo index="23" maxamount="500" minamount="450"/>
+  <cargo index="21" maxamount="100" minamount="80"/>
+  <cargo index="63" maxamount="75" minamount="50"/>
+  <member index="8"/>
+  <member amount="2" index="9"/>
+  <member index="10"/>
+  <description>Small, fast pirate vessel (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="68" maxloot="200" minloot="20" name="Small undead ship mk III" owner="UNDEAD">
+  <module index="90"/>
+  <module index="91"/>
+  <module index="92"/>
+  <module index="94"/>
+  <module amount="2" index="96"/>
+  <module index="98"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="21" maxamount="100" minamount="80"/>
+  <member index="11"/>
+  <member amount="3" index="56"/>
+  <description>Small undead flying vessel (upgraded version). Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="69" maxaccuracy="10" maxevasion="10" maxloot="100" maxperception="15" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Small clockwork drone mk III" owner="DRONES">
+  <module index="90"/>
+  <module index="92"/>
+  <module index="96"/>
+  <module index="98"/>
+  <cargo index="1" maxamount="1000" minamount="500"/>
+  <description>Small flying clockwork drone (upgraded version). Dangerous at close range.</description>
+ </ship>
+ <ship combatai="DISARMER" index="70" maxloot="200" minloot="100" name="Pirate ship mk III" owner="PIRATES">
+  <module index="103"/>
+  <module index="101"/>
+  <module amount="7" index="93"/>
+  <module index="94"/>
+  <module amount="4" index="96"/>
+  <module amount="2" index="113"/>
+  <module index="50"/>
+  <module index="128"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="25" maxamount="1000" minamount="750"/>
+  <cargo index="21" maxamount="200" minamount="150"/>
+  <cargo index="63" maxamount="100" minamount="75"/>
+  <member index="12"/>
+  <member amount="2" index="13"/>
+  <member index="14"/>
+  <member index="57" maxamount="5" minamount="3"/>
+  <description>Standard pirate vessel (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="71" maxloot="300" minloot="150" name="Armored pirate ship mk III" owner="PIRATES">
+  <module index="103"/>
+  <module index="111"/>
+  <module index="101"/>
+  <module amount="8" index="93"/>
+  <module index="94"/>
+  <module amount="4" index="96"/>
+  <module amount="2" index="113"/>
+  <module index="50"/>
+  <module index="128"/>
+  <cargo index="1" maxamount="2000" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="25" maxamount="1000" minamount="500"/>
+  <cargo index="21" maxamount="200" minamount="100"/>
+  <cargo index="63" maxamount="150" minamount="100"/>
+  <member index="16"/>
+  <member amount="2" index="17"/>
+  <member index="18"/>
+  <member index="58" maxamount="5" minamount="3"/>
+  <description>Armored version of pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="72" maxaccuracy="10" maxevasion="10" maxloot="200" maxperception="10" minaccuracy="5" minevasion="5" minloot="20" minperception="5" name="Small attacking drone mk III" owner="DRONES">
+  <module index="90"/>
+  <module index="92"/>
+  <module index="96"/>
+  <module index="98"/>
+  <module index="97"/>
+  <module index="48"/>
+  <cargo index="1" maxamount="1000" minamount="200"/>
+  <cargo index="24" maxamount="500" minamount="200"/>
+  <description>Small, more aggresive, upgraded version of clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="73" maxaccuracy="10" maxevasion="10" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Attacking clockwork drone mk III" owner="DRONES">
+  <module index="103"/>
+  <module index="101"/>
+  <module amount="2" index="96"/>
+  <module index="98"/>
+  <module index="97"/>
+  <module index="49"/>
+  <cargo index="1" maxamount="1000" minamount="800"/>
+  <cargo index="23" maxamount="500" minamount="100"/>
+  <description>Standard, very aggresive, upgraded version of clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="74" maxaccuracy="12" maxevasion="12" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Armored attacking drone mk III" owner="DRONES">
+  <module index="103"/>
+  <module index="91"/>
+  <module index="101"/>
+  <module amount="2" index="96"/>
+  <module index="98"/>
+  <module index="97"/>
+  <module index="49"/>
+  <cargo index="1" maxamount="1000" minamount="900"/>
+  <cargo index="23" maxamount="500" minamount="450"/>
+  <cargo index="21" maxamount="100" minamount="90"/>
+  <description>Armored, very aggresive, upgraded version of clockwork drone.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="75" maxloot="150" minloot="15" name="Small inquisition ship mk III" owner="INQUISITION">
+  <module index="90"/>
+  <module index="92"/>
+  <module amount="4" index="93"/>
+  <module index="94"/>
+  <module amount="2" index="96"/>
+  <module index="98"/>
+  <cargo index="1" maxamount="2000" minamount="1000"/>
+  <cargo index="2" maxamount="100" minamount="30"/>
+  <cargo index="3" maxamount="200" minamount="150"/>
+  <cargo index="21" maxamount="100" minamount="20"/>
+  <member index="20"/>
+  <member index="59" maxamount="4" minamount="2"/>
+  <description>Small flying vessel of inquisition (upgraded version), dangerous at close range.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="76" maxloot="200" minloot="100" name="Inquisition ship mk III" owner="INQUISITION">
+  <module index="103"/>
+  <module index="101"/>
+  <module amount="8" index="93"/>
+  <module index="94"/>
+  <module amount="4" index="96"/>
+  <module index="98"/>
+  <module index="97"/>
+  <module index="49"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="23" maxamount="500" minamount="300"/>
+  <cargo index="21" maxamount="40" minamount="5"/>
+  <member index="21"/>
+  <member index="22"/>
+  <member index="60" maxamount="8" minamount="4"/>
+  <description>Standard ship of inquisition (upgraded version).</description>
+ </ship>
+ <ship combatai="ATTACKER" index="77" maxloot="240" minloot="120" name="Armored inquisition ship mk III" owner="INQUISITION">
+  <module index="103"/>
+  <module index="91"/>
+  <module index="101"/>
+  <module amount="8" index="93"/>
+  <module index="94"/>
+  <module amount="4" index="96"/>
+  <module index="98"/>
+  <module index="97"/>
+  <module index="49"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="350"/>
+  <cargo index="23" maxamount="500" minamount="250"/>
+  <cargo index="21" maxamount="200" minamount="100"/>
+  <member index="21"/>
+  <member index="22"/>
+  <member index="60" maxamount="8" minamount="4"/>
+  <description>Armored and upgraded version of standard flying vessel of inquisition.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="78" maxaccuracy="25" maxevasion="25" maxloot="400" maxperception="35" minaccuracy="15" minevasion="15" minloot="200" minperception="25" name="Large clockwork drone mk III" owner="DRONES">
+  <module index="109"/>
+  <module index="111"/>
+  <module index="105"/>
+  <module amount="4" index="96"/>
+  <module index="98"/>
+  <module amount="2" index="113"/>
+  <module amount="2" index="50"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="25" maxamount="500" minamount="450"/>
+  <cargo index="21" maxamount="250" minamount="120"/>
+  <description>Large, well armored upgraded and aggresive clockwork drone.</description>
+ </ship>
+ <ship combatai="DISARMER" index="79" maxloot="500" minloot="300" name="Large pirate ship mk III" owner="PIRATES">
+  <module index="109"/>
+  <module index="112"/>
+  <module index="105"/>
+  <module amount="9" index="93"/>
+  <module index="94"/>
+  <module amount="6" index="96"/>
+  <module amount="4" index="113"/>
+  <module amount="3" index="51"/>
+  <module index="129"/>
+  <cargo index="1" maxamount="3000" minamount="1500"/>
+  <cargo index="2" maxamount="400" minamount="200"/>
+  <cargo index="3" maxamount="600" minamount="400"/>
+  <cargo index="27" maxamount="1000" minamount="500"/>
+  <cargo index="21" maxamount="400" minamount="200"/>
+  <cargo index="64" maxamount="150" minamount="100"/>
+  <member index="23"/>
+  <member amount="4" index="24"/>
+  <member index="25"/>
+  <member index="61" maxamount="5" minamount="3"/>
+  <description>Large, well armored upgraded version of pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="80" maxloot="300" minloot="100" name="Undead ship mk III" owner="UNDEAD">
+  <module index="103"/>
+  <module index="111"/>
+  <module index="101"/>
+  <module index="94"/>
+  <module amount="4" index="96"/>
+  <module index="121"/>
+  <cargo index="1" maxamount="2500" minamount="2000"/>
+  <cargo index="21" maxamount="300" minamount="150"/>
+  <member index="27"/>
+  <member index="62" maxamount="10" minamount="6"/>
+  <description>Upgraded version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="81" maxloot="400" minloot="200" name="Large undead ship mk III" owner="UNDEAD">
+  <module index="109"/>
+  <module index="112"/>
+  <module index="105"/>
+  <module index="94"/>
+  <module amount="6" index="96"/>
+  <module index="121"/>
+  <cargo index="1" maxamount="4000" minamount="3000"/>
+  <cargo index="21" maxamount="400" minamount="300"/>
+  <member index="28"/>
+  <member index="63" maxamount="12" minamount="8"/>
+  <description>Large, well armored upgraded version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="82" maxloot="500" minloot="250" name="Large inquisition ship mk III" owner="INQUISITION">
+  <module index="109"/>
+  <module index="112"/>
+  <module index="105"/>
+  <module amount="10" index="93"/>
+  <module index="94"/>
+  <module amount="7" index="96"/>
+  <module amount="2" index="113"/>
+  <module amount="2" index="50"/>
+  <cargo index="1" maxamount="3000" minamount="2000"/>
+  <cargo index="2" maxamount="300" minamount="150"/>
+  <cargo index="3" maxamount="500" minamount="400"/>
+  <cargo index="25" maxamount="600" minamount="300"/>
+  <cargo index="21" maxamount="400" minamount="200"/>
+  <member index="29"/>
+  <member index="30"/>
+  <member index="31"/>
+  <member index="64" maxamount="9" minamount="5"/>
+  <description>Large, well armored upgraded version of inquisition flying vessel.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="83" maxaccuracy="35" maxevasion="35" maxloot="450" maxperception="50" minaccuracy="25" minevasion="25" minloot="250" minperception="40" name="Large attacking drone mk III" owner="DRONES">
+  <module index="109"/>
+  <module index="112"/>
+  <module index="105"/>
+  <module amount="6" index="96"/>
+  <module index="121"/>
+  <module amount="2" index="113"/>
+  <module amount="2" index="50"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="25" maxamount="500" minamount="450"/>
+  <cargo index="21" maxamount="300" minamount="150"/>
+  <description>Large, well armored upgraded version of attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="84" maxaccuracy="25" maxevasion="25" maxloot="250" maxperception="50" minaccuracy="15" minevasion="15" minloot="100" minperception="40" name="Advanced attacking drone mk III" owner="DRONES">
+  <module index="108"/>
+  <module index="111"/>
+  <module index="104"/>
+  <module amount="5" index="96"/>
+  <module index="121"/>
+  <module index="113"/>
+  <module index="50"/>
+  <cargo index="1" maxamount="1500" minamount="1000"/>
+  <cargo index="25" maxamount="300" minamount="200"/>
+  <cargo index="21" maxamount="200" minamount="100"/>
+  <description>Advanced and upgraded version of standard attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="DISARMER" index="85" maxloot="250" minloot="200" name="Advanced pirate ship mk III" owner="PIRATES">
+  <module index="108"/>
+  <module index="111"/>
+  <module index="104"/>
+  <module amount="6" index="93"/>
+  <module index="94"/>
+  <module amount="5" index="96"/>
+  <module amount="2" index="113"/>
+  <module index="50"/>
+  <module index="128"/>
+  <cargo index="1" maxamount="1700" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="25" maxamount="500" minamount="300"/>
+  <cargo index="21" maxamount="200" minamount="100"/>
+  <cargo index="64" maxamount="100" minamount="75"/>
+  <member index="32"/>
+  <member amount="2" index="33"/>
+  <member index="34"/>
+  <member amount="2" index="65"/>
+  <description>Advanced and upgraded version of standard pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="86" maxloot="300" minloot="200" name="Advanced undead ship mk III" owner="UNDEAD">
+  <module index="108"/>
+  <module index="111"/>
+  <module index="104"/>
+  <module index="94"/>
+  <module amount="5" index="96"/>
+  <module index="121"/>
+  <cargo index="1" maxamount="3000" minamount="2500"/>
+  <cargo index="21" maxamount="350" minamount="200"/>
+  <member index="36"/>
+  <member index="66" maxamount="8" minamount="4"/>
+  <description>Advanced and upgraded version of standard undead ship. Dangerous at close range.</description>
+ </ship>
+ <ship accuracy="15" combatai="ATTACKER" evasion="15" index="87" maxloot="240" minloot="120" name="Advanced inquisition ship mk III" owner="INQUISITION" perception="15">
+  <module index="108"/>
+  <module index="111"/>
+  <module index="104"/>
+  <module amount="8" index="93"/>
+  <module index="94"/>
+  <module amount="4" index="96"/>
+  <module index="121"/>
+  <module index="113"/>
+  <module index="50"/>
+  <cargo index="1" maxamount="2200" minamount="2000"/>
+  <cargo index="2" maxamount="220" minamount="150"/>
+  <cargo index="3" maxamount="500" minamount="400"/>
+  <cargo index="25" maxamount="600" minamount="400"/>
+  <cargo index="21" maxamount="250" minamount="150"/>
+  <member index="37"/>
+  <member index="38"/>
+  <member index="67" maxamount="8" minamount="4"/>
+  <description>Advanced and upgraded version of standard flying vessel of inquisition.</description>
+ </ship>
+ <ship combatai="DISARMER" index="88" maxloot="1000" minloot="500" name="Huge pirate ship mk III" owner="PIRATES">
+  <module index="123"/>
+  <module index="112"/>
+  <module amount="2" index="125"/>
+  <module amount="14" index="93"/>
+  <module index="94"/>
+  <module amount="10" index="96"/>
+  <module amount="5" index="120"/>
+  <module amount="4" index="52"/>
+  <module index="129"/>
+  <cargo index="1" maxamount="5000" minamount="3000"/>
+  <cargo index="2" maxamount="750" minamount="500"/>
+  <cargo index="3" maxamount="1500" minamount="1000"/>
+  <cargo index="32" maxamount="1000" minamount="500"/>
+  <cargo index="21" maxamount="750" minamount="500"/>
+  <cargo index="64" maxamount="200" minamount="100"/>
+  <member index="39"/>
+  <member amount="5" index="40"/>
+  <member index="41"/>
+  <member index="68" maxamount="9" minamount="5"/>
+  <description>Huge, well armored pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="89" maxloot="1200" minloot="750" name="Advanced huge pirate ship mk III" owner="PIRATES">
+  <module index="124"/>
+  <module index="112"/>
+  <module amount="2" index="126"/>
+  <module amount="16" index="93"/>
+  <module index="94"/>
+  <module amount="12" index="96"/>
+  <module amount="5" index="120"/>
+  <module amount="4" index="53"/>
+  <module index="129"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="800" minamount="600"/>
+  <cargo index="3" maxamount="2000" minamount="1500"/>
+  <cargo index="34" maxamount="1000" minamount="500"/>
+  <cargo index="21" maxamount="800" minamount="600"/>
+  <cargo index="64" maxamount="300" minamount="150"/>
+  <member index="43"/>
+  <member amount="5" index="44"/>
+  <member index="45"/>
+  <member index="69" maxamount="11" minamount="7"/>
+  <description>Advanced and upgraded version of huge, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="90" maxloot="750" minloot="500" name="Huge undead ship mk III" owner="UNDEAD">
+  <module index="123"/>
+  <module index="112"/>
+  <module index="125"/>
+  <module index="94"/>
+  <module amount="10" index="96"/>
+  <module index="121"/>
+  <cargo index="1" maxamount="7000" minamount="5000"/>
+  <cargo index="21" maxamount="750" minamount="500"/>
+  <member index="47"/>
+  <member index="70" maxamount="14" minamount="10"/>
+  <description>Huge, well armored and upgraded version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="91" maxaccuracy="80" maxevasion="80" maxloot="900" maxperception="80" minaccuracy="60" minevasion="60" minloot="500" minperception="60" name="Huge attacking drone mk III" owner="DRONES">
+  <module index="123"/>
+  <module index="112"/>
+  <module index="125"/>
+  <module amount="10" index="96"/>
+  <module index="121"/>
+  <module amount="3" index="120"/>
+  <module amount="3" index="52"/>
+  <cargo index="1" maxamount="4000" minamount="2000"/>
+  <cargo index="32" maxamount="1000" minamount="500"/>
+  <cargo index="21" maxamount="750" minamount="500"/>
+  <description>Huge, well armored and upgraded version of attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="92" maxloot="900" minloot="600" name="Advanced huge undead ship mk III" owner="UNDEAD">
+  <module index="124"/>
+  <module index="112"/>
+  <module index="126"/>
+  <module index="94"/>
+  <module amount="10" index="96"/>
+  <module index="121"/>
+  <cargo index="1" maxamount="8000" minamount="6000"/>
+  <cargo index="21" maxamount="800" minamount="600"/>
+  <member index="48"/>
+  <member index="71" maxamount="15" minamount="11"/>
+  <description>Advanced and upgraded version of huge, well armored undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="93" maxaccuracy="90" maxevasion="90" maxloot="1000" maxperception="90" minaccuracy="75" minevasion="75" minloot="600" minperception="75" name="Advanced huge attacking drone mk III" owner="DRONES">
+  <module index="124"/>
+  <module index="112"/>
+  <module index="126"/>
+  <module amount="12" index="96"/>
+  <module index="121"/>
+  <module amount="3" index="120"/>
+  <module amount="3" index="53"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="34" maxamount="1000" minamount="600"/>
+  <cargo index="21" maxamount="800" minamount="600"/>
+  <description>Advanced and upgraded version of huge, well armored attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="94" maxloot="1000" minloot="750" name="Huge inquisition ship mk III" owner="INQUISITION">
+  <module index="123"/>
+  <module index="112"/>
+  <module index="125"/>
+  <module amount="13" index="93"/>
+  <module index="94"/>
+  <module amount="9" index="96"/>
+  <module index="121"/>
+  <module amount="4" index="120"/>
+  <module amount="4" index="52"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="500" minamount="300"/>
+  <cargo index="3" maxamount="750" minamount="500"/>
+  <cargo index="32" maxamount="750" minamount="500"/>
+  <cargo index="21" maxamount="600" minamount="400"/>
+  <member index="49"/>
+  <member amount="4" index="50"/>
+  <member index="72" maxamount="10" minamount="6"/>
+  <description>Huge, well armored and upgraded version of inquisition flying vessel.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="95" maxloot="1200" minloot="900" name="Advanced huge inquisition ship mk III" owner="INQUISITION">
+  <module index="124"/>
+  <module index="112"/>
+  <module index="126"/>
+  <module amount="15" index="93"/>
+  <module index="94"/>
+  <module amount="11" index="96"/>
+  <module index="121"/>
+  <module amount="4" index="120"/>
+  <module amount="4" index="53"/>
+  <cargo index="1" maxamount="6500" minamount="5000"/>
+  <cargo index="2" maxamount="600" minamount="400"/>
+  <cargo index="3" maxamount="750" minamount="600"/>
+  <cargo index="34" maxamount="750" minamount="600"/>
+  <cargo index="21" maxamount="650" minamount="500"/>
+  <member index="51"/>
+  <member amount="4" index="52"/>
+  <member index="73" maxamount="12" minamount="8"/>
+  <description>Advanced and upgraded version of huge, well armored inquisition flying vessel.</description>
+ </ship>
+ <ship combatai="COWARD" index="96" maxloot="100" minloot="10" name="Tiny poleis trader" owner="POLEIS">
+  <module index="1"/>
+  <module index="3"/>
+  <module amount="2" index="4"/>
+  <module index="5"/>
+  <module amount="2" index="7"/>
+  <module index="8"/>
+  <module index="11"/>
+  <cargo index="1" maxamount="1000" minamount="800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="150"/>
+  <cargo index="14" maxamount="200" minamount="100"/>
+  <member index="5"/>
+  <member index="6"/>
+  <description>Smallest known poleis trader. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="97" maxloot="100" minloot="10" name="Tiny independent trader" owner="INDEPENDENT">
+  <module index="1"/>
+  <module index="3"/>
+  <module amount="2" index="4"/>
+  <module index="5"/>
+  <module amount="2" index="7"/>
+  <module index="8"/>
+  <module index="11"/>
+  <cargo index="1" maxamount="1000" minamount="800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="150"/>
+  <cargo index="14" maxamount="200" minamount="100"/>
+  <member index="5"/>
+  <member index="6"/>
+  <description>Smallest known independent trader. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="98" maxloot="200" minloot="20" name="Small poleis trader" owner="POLEIS">
+  <module index="1"/>
+  <module index="3"/>
+  <module amount="3" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module index="8"/>
+  <module index="9"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="170"/>
+  <cargo index="4" maxamount="500" minamount="450"/>
+  <cargo index="5" maxamount="100" minamount="80"/>
+  <cargo index="13" maxamount="20" minamount="10"/>
+  <member index="8"/>
+  <member index="9"/>
+  <member index="10"/>
+  <description>Small poleis traders vessel. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="99" maxloot="200" minloot="20" name="Small independent trader" owner="INDEPENDENT">
+  <module index="1"/>
+  <module index="3"/>
+  <module amount="3" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module index="8"/>
+  <module index="9"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="170"/>
+  <cargo index="4" maxamount="500" minamount="450"/>
+  <cargo index="5" maxamount="100" minamount="80"/>
+  <cargo index="13" maxamount="20" minamount="10"/>
+  <member index="8"/>
+  <member index="9"/>
+  <member index="10"/>
+  <description>Small independent traders vessel. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="100" maxloot="200" minloot="100" name="Poleis trader" owner="POLEIS">
+  <module index="17"/>
+  <module index="15"/>
+  <module amount="8" index="4"/>
+  <module index="5"/>
+  <module amount="8" index="7"/>
+  <module index="28"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="20" maxamount="1000" minamount="750"/>
+  <cargo index="5" maxamount="200" minamount="150"/>
+  <cargo index="13" maxamount="40" minamount="10"/>
+  <member index="12"/>
+  <member index="13"/>
+  <member index="14"/>
+  <member index="15"/>
+  <member amount="2" index="57"/>
+  <description>Standard poleis traders vessel. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="101" maxloot="200" minloot="100" name="Independent trader" owner="INDEPENDENT">
+  <module index="17"/>
+  <module index="15"/>
+  <module amount="8" index="4"/>
+  <module index="5"/>
+  <module amount="8" index="7"/>
+  <module index="28"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="20" maxamount="1000" minamount="750"/>
+  <cargo index="5" maxamount="200" minamount="150"/>
+  <cargo index="13" maxamount="40" minamount="10"/>
+  <member index="12"/>
+  <member index="13"/>
+  <member index="14"/>
+  <member index="15"/>
+  <member amount="2" index="57"/>
+  <description>Standard independent traders vessel. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="102" maxloot="250" minloot="200" name="Advanced poleis trader" owner="POLEIS">
+  <module index="22"/>
+  <module index="25"/>
+  <module index="18"/>
+  <module amount="6" index="4"/>
+  <module index="5"/>
+  <module amount="10" index="7"/>
+  <module index="28"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="1700" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="20" maxamount="500" minamount="300"/>
+  <cargo index="5" maxamount="200" minamount="100"/>
+  <cargo index="13" maxamount="40" minamount="20"/>
+  <member index="32"/>
+  <member index="33"/>
+  <member index="34"/>
+  <member index="35"/>
+  <member amount="2" index="65"/>
+  <description>Advanced version of standard poleis traders vessel. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="103" maxloot="250" minloot="200" name="Advanced independent trader" owner="INDEPENDENT">
+  <module index="22"/>
+  <module index="25"/>
+  <module index="18"/>
+  <module amount="6" index="4"/>
+  <module index="5"/>
+  <module amount="10" index="7"/>
+  <module index="28"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="1700" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="20" maxamount="500" minamount="300"/>
+  <cargo index="5" maxamount="200" minamount="100"/>
+  <cargo index="13" maxamount="40" minamount="20"/>
+  <member index="32"/>
+  <member index="33"/>
+  <member index="34"/>
+  <member index="35"/>
+  <member amount="2" index="65"/>
+  <description>Advanced version of standard independent traders vessel. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="104" maxloot="500" minloot="300" name="Large poleis trader" owner="POLEIS">
+  <module index="23"/>
+  <module index="26"/>
+  <module index="19"/>
+  <module amount="10" index="4"/>
+  <module index="5"/>
+  <module amount="12" index="7"/>
+  <module amount="2" index="28"/>
+  <module amount="2" index="29"/>
+  <cargo index="1" maxamount="3000" minamount="1500"/>
+  <cargo index="2" maxamount="400" minamount="200"/>
+  <cargo index="3" maxamount="600" minamount="400"/>
+  <cargo index="26" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="400" minamount="200"/>
+  <cargo index="13" maxamount="100" minamount="50"/>
+  <member index="23"/>
+  <member amount="2" index="24"/>
+  <member index="25"/>
+  <member index="26"/>
+  <member amount="3" index="61"/>
+  <description>Large, well armored version of poleis traders ship. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="105" maxloot="500" minloot="300" name="Large independent trader" owner="INDEPENDENT">
+  <module index="23"/>
+  <module index="26"/>
+  <module index="19"/>
+  <module amount="10" index="4"/>
+  <module index="5"/>
+  <module amount="12" index="7"/>
+  <module amount="2" index="28"/>
+  <module amount="2" index="29"/>
+  <cargo index="1" maxamount="3000" minamount="1500"/>
+  <cargo index="2" maxamount="400" minamount="200"/>
+  <cargo index="3" maxamount="600" minamount="400"/>
+  <cargo index="26" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="400" minamount="200"/>
+  <cargo index="13" maxamount="100" minamount="50"/>
+  <member index="23"/>
+  <member amount="2" index="24"/>
+  <member index="25"/>
+  <member index="26"/>
+  <member amount="3" index="61"/>
+  <description>Large, well armored version of independent traders ship. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="106" maxloot="1000" minloot="500" name="Huge poleis trader" owner="POLEIS">
+  <module index="60"/>
+  <module index="26"/>
+  <module amount="2" index="62"/>
+  <module amount="14" index="4"/>
+  <module index="5"/>
+  <module amount="16" index="7"/>
+  <module amount="3" index="39"/>
+  <module amount="3" index="33"/>
+  <cargo index="1" maxamount="5000" minamount="3000"/>
+  <cargo index="2" maxamount="750" minamount="500"/>
+  <cargo index="3" maxamount="1500" minamount="1000"/>
+  <cargo index="31" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="750" minamount="500"/>
+  <cargo index="13" maxamount="400" minamount="200"/>
+  <member index="39"/>
+  <member amount="3" index="40"/>
+  <member index="41"/>
+  <member index="42"/>
+  <member index="68" maxamount="5" minamount="3"/>
+  <description>Huge, well armored version of poleis traders ship. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="107" maxloot="1000" minloot="500" name="Huge independent trader" owner="INDEPENDENT">
+  <module index="60"/>
+  <module index="26"/>
+  <module amount="2" index="62"/>
+  <module amount="14" index="4"/>
+  <module index="5"/>
+  <module amount="16" index="7"/>
+  <module amount="3" index="39"/>
+  <module amount="3" index="33"/>
+  <cargo index="1" maxamount="5000" minamount="3000"/>
+  <cargo index="2" maxamount="750" minamount="500"/>
+  <cargo index="3" maxamount="1500" minamount="1000"/>
+  <cargo index="31" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="750" minamount="500"/>
+  <cargo index="13" maxamount="400" minamount="200"/>
+  <member index="39"/>
+  <member amount="3" index="40"/>
+  <member index="41"/>
+  <member index="42"/>
+  <member index="68" maxamount="5" minamount="3"/>
+  <description>Huge, well armored version of independent traders ship. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="108" maxloot="1200" minloot="750" name="Advanced huge poleis trader" owner="POLEIS">
+  <module index="61"/>
+  <module index="26"/>
+  <module amount="2" index="63"/>
+  <module amount="16" index="4"/>
+  <module index="5"/>
+  <module amount="20" index="7"/>
+  <module amount="3" index="39"/>
+  <module amount="3" index="34"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="800" minamount="600"/>
+  <cargo index="3" maxamount="2000" minamount="1500"/>
+  <cargo index="33" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="800" minamount="600"/>
+  <cargo index="13" maxamount="500" minamount="300"/>
+  <member index="43"/>
+  <member amount="3" index="44"/>
+  <member index="45"/>
+  <member index="46"/>
+  <member index="69" maxamount="8" minamount="4"/>
+  <description>Advanced version of huge, well armored poleis traders ship. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="109" maxloot="1200" minloot="750" name="Advanced huge independent trader" owner="INDEPENDENT">
+  <module index="61"/>
+  <module index="26"/>
+  <module amount="2" index="63"/>
+  <module amount="16" index="4"/>
+  <module index="5"/>
+  <module amount="20" index="7"/>
+  <module amount="3" index="39"/>
+  <module amount="3" index="34"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="800" minamount="600"/>
+  <cargo index="3" maxamount="2000" minamount="1500"/>
+  <cargo index="33" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="800" minamount="600"/>
+  <cargo index="13" maxamount="500" minamount="300"/>
+  <member index="43"/>
+  <member amount="3" index="44"/>
+  <member index="45"/>
+  <member index="46"/>
+  <member index="69" maxamount="8" minamount="4"/>
+  <description>Advanced version of huge, well armored independent traders ship. Avoids any fights.</description>
+ </ship>
+ <ship combatai="DISARMER" index="110" maxloot="100" minloot="10" name="Tiny poleis patrol ship" owner="POLEIS">
+  <module index="1"/>
+  <module index="3"/>
+  <module amount="2" index="4"/>
+  <module index="5"/>
+  <module index="7"/>
+  <module index="8"/>
+  <module index="11"/>
+  <cargo index="1" maxamount="1000" minamount="800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="150"/>
+  <cargo index="14" maxamount="500" minamount="300"/>
+  <member index="5"/>
+  <member index="6"/>
+  <description>Smallest known poleis patrol ship. As law enforcers they trying to dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="111" maxloot="100" minloot="10" name="Tiny independent patrol ship" owner="INDEPENDENT">
+  <module index="1"/>
+  <module index="3"/>
+  <module amount="2" index="4"/>
+  <module index="5"/>
+  <module index="7"/>
+  <module index="8"/>
+  <module index="11"/>
+  <cargo index="1" maxamount="1000" minamount="800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="150"/>
+  <cargo index="14" maxamount="500" minamount="300"/>
+  <member index="5"/>
+  <member index="6"/>
+  <description>Smallest known independent patrol ship. As law enforcers they trying to dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="112" maxloot="200" minloot="20" name="Small poleis patrol ship" owner="POLEIS">
+  <module index="1"/>
+  <module index="3"/>
+  <module amount="3" index="4"/>
+  <module index="5"/>
+  <module amount="2" index="7"/>
+  <module index="8"/>
+  <module index="9"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="170"/>
+  <cargo index="4" maxamount="500" minamount="450"/>
+  <cargo index="5" maxamount="100" minamount="80"/>
+  <cargo index="13" maxamount="20" minamount="10"/>
+  <member index="8"/>
+  <member index="9"/>
+  <member index="10"/>
+  <description>Small, fast poleis patrol vessel. As a law enforcers they trying to dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="113" maxloot="200" minloot="20" name="Small independent patrol ship" owner="INDEPENDENT">
+  <module index="1"/>
+  <module index="3"/>
+  <module amount="3" index="4"/>
+  <module index="5"/>
+  <module amount="2" index="7"/>
+  <module index="8"/>
+  <module index="9"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="170"/>
+  <cargo index="4" maxamount="500" minamount="450"/>
+  <cargo index="5" maxamount="100" minamount="80"/>
+  <cargo index="13" maxamount="20" minamount="10"/>
+  <member index="8"/>
+  <member index="9"/>
+  <member index="10"/>
+  <description>Small, fast independent patrol vessel. As a law enforcers they trying to dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="114" maxloot="200" minloot="100" name="Poleis patrol ship" owner="POLEIS">
+  <module index="17"/>
+  <module index="15"/>
+  <module amount="8" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module index="28"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="20" maxamount="1000" minamount="750"/>
+  <cargo index="5" maxamount="200" minamount="150"/>
+  <cargo index="13" maxamount="40" minamount="10"/>
+  <member index="12"/>
+  <member index="13"/>
+  <member index="14"/>
+  <member amount="5" index="57"/>
+  <description>Standard poleis patrol vessel. As a law enforcers they trying to dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="115" maxloot="200" minloot="100" name="Independent patrol ship" owner="INDEPENDENT">
+  <module index="17"/>
+  <module index="15"/>
+  <module amount="8" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module index="28"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="20" maxamount="1000" minamount="750"/>
+  <cargo index="5" maxamount="200" minamount="150"/>
+  <cargo index="13" maxamount="40" minamount="10"/>
+  <member index="12"/>
+  <member index="13"/>
+  <member index="14"/>
+  <member index="57" maxamount="7" minamount="3"/>
+  <description>Standard independent patrol vessel. As a law enforcers they trying to dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="116" maxloot="300" minloot="150" name="Armored poleis patrol ship" owner="POLEIS">
+  <module index="17"/>
+  <module index="25"/>
+  <module index="15"/>
+  <module amount="8" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module index="28"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="2000" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="20" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="200" minamount="100"/>
+  <cargo index="13" maxamount="40" minamount="20"/>
+  <member index="16"/>
+  <member index="17"/>
+  <member index="18"/>
+  <member index="58" maxamount="7" minamount="3"/>
+  <description>Armored version of poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="117" maxloot="300" minloot="150" name="Armored independent patrol ship" owner="INDEPENDENT">
+  <module index="17"/>
+  <module index="25"/>
+  <module index="15"/>
+  <module amount="8" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module index="28"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="2000" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="20" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="200" minamount="100"/>
+  <cargo index="13" maxamount="40" minamount="20"/>
+  <member index="16"/>
+  <member index="17"/>
+  <member index="18"/>
+  <member index="58" maxamount="7" minamount="3"/>
+  <description>Armored version of independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="118" maxloot="250" minloot="200" name="Advanced poleis patrol ship" owner="POLEIS">
+  <module index="22"/>
+  <module index="25"/>
+  <module index="18"/>
+  <module amount="6" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module index="28"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="1700" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="20" maxamount="500" minamount="300"/>
+  <cargo index="5" maxamount="200" minamount="100"/>
+  <cargo index="13" maxamount="40" minamount="20"/>
+  <member index="32"/>
+  <member index="33"/>
+  <member index="34"/>
+  <member amount="3" index="65"/>
+  <description>Advanced version of standard poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="119" maxloot="250" minloot="200" name="Advanced independent patrol ship" owner="INDEPENDENT">
+  <module index="22"/>
+  <module index="25"/>
+  <module index="18"/>
+  <module amount="6" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="7"/>
+  <module index="28"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="1700" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="20" maxamount="500" minamount="300"/>
+  <cargo index="5" maxamount="200" minamount="100"/>
+  <cargo index="13" maxamount="40" minamount="20"/>
+  <member index="32"/>
+  <member index="33"/>
+  <member index="34"/>
+  <member amount="3" index="65"/>
+  <description>Advanced version of standard independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="120" maxloot="500" minloot="300" name="Large poleis patrol ship" owner="POLEIS">
+  <module index="23"/>
+  <module index="26"/>
+  <module index="19"/>
+  <module amount="10" index="4"/>
+  <module index="5"/>
+  <module amount="6" index="7"/>
+  <module amount="3" index="28"/>
+  <module amount="3" index="29"/>
+  <cargo index="1" maxamount="3000" minamount="1500"/>
+  <cargo index="2" maxamount="400" minamount="200"/>
+  <cargo index="3" maxamount="600" minamount="400"/>
+  <cargo index="26" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="400" minamount="200"/>
+  <cargo index="13" maxamount="100" minamount="50"/>
+  <member index="23"/>
+  <member amount="3" index="24"/>
+  <member index="25"/>
+  <member index="65" maxamount="7" minamount="3"/>
+  <description>Large, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="121" maxloot="500" minloot="300" name="Large independent patrol ship" owner="INDEPENDENT">
+  <module index="23"/>
+  <module index="26"/>
+  <module index="19"/>
+  <module amount="10" index="4"/>
+  <module index="5"/>
+  <module amount="6" index="7"/>
+  <module amount="3" index="28"/>
+  <module amount="3" index="29"/>
+  <cargo index="1" maxamount="3000" minamount="1500"/>
+  <cargo index="2" maxamount="400" minamount="200"/>
+  <cargo index="3" maxamount="600" minamount="400"/>
+  <cargo index="26" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="400" minamount="200"/>
+  <cargo index="13" maxamount="100" minamount="50"/>
+  <member index="23"/>
+  <member amount="3" index="24"/>
+  <member index="25"/>
+  <member index="65" maxamount="7" minamount="3"/>
+  <description>Large, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="122" maxloot="1000" minloot="500" name="Huge poleis patrol ship" owner="POLEIS">
+  <module index="60"/>
+  <module index="26"/>
+  <module amount="2" index="62"/>
+  <module amount="14" index="4"/>
+  <module index="5"/>
+  <module amount="10" index="7"/>
+  <module amount="4" index="39"/>
+  <module amount="4" index="33"/>
+  <cargo index="1" maxamount="5000" minamount="3000"/>
+  <cargo index="2" maxamount="750" minamount="500"/>
+  <cargo index="3" maxamount="1500" minamount="1000"/>
+  <cargo index="31" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="750" minamount="500"/>
+  <cargo index="13" maxamount="400" minamount="200"/>
+  <member index="39"/>
+  <member amount="4" index="40"/>
+  <member index="41"/>
+  <member index="68" maxamount="10" minamount="6"/>
+  <description>Huge, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="123" maxloot="1000" minloot="500" name="Huge independent patrol ship" owner="INDEPENDENT">
+  <module index="60"/>
+  <module index="26"/>
+  <module amount="2" index="62"/>
+  <module amount="14" index="4"/>
+  <module index="5"/>
+  <module amount="10" index="7"/>
+  <module amount="4" index="39"/>
+  <module amount="4" index="33"/>
+  <cargo index="1" maxamount="5000" minamount="3000"/>
+  <cargo index="2" maxamount="750" minamount="500"/>
+  <cargo index="3" maxamount="1500" minamount="1000"/>
+  <cargo index="31" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="750" minamount="500"/>
+  <cargo index="13" maxamount="400" minamount="200"/>
+  <member index="39"/>
+  <member amount="4" index="40"/>
+  <member index="41"/>
+  <member index="68" maxamount="10" minamount="6"/>
+  <description>Huge, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="124" maxloot="1200" minloot="750" name="Advanced huge poleis patrol ship" owner="POLEIS">
+  <module index="61"/>
+  <module index="26"/>
+  <module amount="2" index="63"/>
+  <module amount="16" index="4"/>
+  <module index="5"/>
+  <module amount="12" index="7"/>
+  <module amount="4" index="39"/>
+  <module amount="4" index="34"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="800" minamount="600"/>
+  <cargo index="3" maxamount="2000" minamount="1500"/>
+  <cargo index="33" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="800" minamount="600"/>
+  <cargo index="13" maxamount="500" minamount="300"/>
+  <member index="43"/>
+  <member amount="4" index="44"/>
+  <member index="45"/>
+  <member index="69" maxamount="12" minamount="8"/>
+  <description>Advanced version of huge, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="125" maxloot="1200" minloot="750" name="Advanced huge independent patrol ship" owner="INDEPENDENT">
+  <module index="61"/>
+  <module index="26"/>
+  <module amount="2" index="63"/>
+  <module amount="16" index="4"/>
+  <module index="5"/>
+  <module amount="12" index="7"/>
+  <module amount="4" index="39"/>
+  <module amount="4" index="34"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="800" minamount="600"/>
+  <cargo index="3" maxamount="2000" minamount="1500"/>
+  <cargo index="33" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="800" minamount="600"/>
+  <cargo index="13" maxamount="500" minamount="300"/>
+  <member index="43"/>
+  <member amount="4" index="44"/>
+  <member index="45"/>
+  <member index="69" maxamount="12" minamount="8"/>
+  <description>Advanced version of huge, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="126" maxloot="200" minloot="100" name="Pirate ship mk IV" owner="PIRATES">
+  <module index="135"/>
+  <module index="134"/>
+  <module amount="7" index="149"/>
+  <module index="130"/>
+  <module amount="4" index="132"/>
+  <module amount="2" index="145"/>
+  <module index="160"/>
+  <module index="129"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="117" maxamount="1000" minamount="750"/>
+  <cargo index="116" maxamount="200" minamount="150"/>
+  <cargo index="64" maxamount="100" minamount="75"/>
+  <member index="12"/>
+  <member amount="2" index="13"/>
+  <member index="14"/>
+  <member index="57" maxamount="5" minamount="3"/>
+  <description>Standard pirate vessel (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="127" maxloot="300" minloot="150" name="Armored pirate ship mk IV" owner="PIRATES">
+  <module index="135"/>
+  <module index="143"/>
+  <module index="134"/>
+  <module amount="8" index="149"/>
+  <module index="130"/>
+  <module amount="4" index="132"/>
+  <module amount="2" index="145"/>
+  <module index="160"/>
+  <module index="129"/>
+  <cargo index="1" maxamount="2000" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="117" maxamount="1000" minamount="500"/>
+  <cargo index="116" maxamount="200" minamount="100"/>
+  <cargo index="64" maxamount="150" minamount="100"/>
+  <member index="16"/>
+  <member amount="2" index="17"/>
+  <member index="18"/>
+  <member index="58" maxamount="5" minamount="3"/>
+  <description>Armored version of pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="128" maxaccuracy="10" maxevasion="10" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Attacking clockwork drone mk IV" owner="DRONES">
+  <module index="135"/>
+  <module index="134"/>
+  <module amount="2" index="132"/>
+  <module index="133"/>
+  <module index="97"/>
+  <module index="49"/>
+  <cargo index="1" maxamount="1000" minamount="800"/>
+  <cargo index="23" maxamount="500" minamount="100"/>
+  <description>Standard, very aggresive, upgraded version of clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="129" maxaccuracy="12" maxevasion="12" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Armored attacking drone mk IV" owner="DRONES">
+  <module index="135"/>
+  <module index="91"/>
+  <module index="134"/>
+  <module amount="2" index="132"/>
+  <module index="133"/>
+  <module index="97"/>
+  <module index="49"/>
+  <cargo index="1" maxamount="1000" minamount="900"/>
+  <cargo index="23" maxamount="500" minamount="450"/>
+  <cargo index="116" maxamount="50" minamount="30"/>
+  <cargo index="21" maxamount="80" minamount="50"/>
+  <description>Armored, very aggresive, upgraded version of clockwork drone.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="130" maxloot="200" minloot="100" name="Inquisition ship mk IV" owner="INQUISITION">
+  <module index="135"/>
+  <module index="134"/>
+  <module amount="8" index="93"/>
+  <module index="130"/>
+  <module amount="4" index="132"/>
+  <module index="133"/>
+  <module index="97"/>
+  <module index="49"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="23" maxamount="500" minamount="300"/>
+  <cargo index="21" maxamount="30" minamount="5"/>
+  <cargo index="116" maxamount="10" minamount="2"/>
+  <member index="21"/>
+  <member index="22"/>
+  <member index="60" maxamount="8" minamount="4"/>
+  <description>Standard ship of inquisition (upgraded version).</description>
+ </ship>
+ <ship combatai="ATTACKER" index="131" maxloot="240" minloot="120" name="Armored inquisition ship mk IV" owner="INQUISITION">
+  <module index="135"/>
+  <module index="91"/>
+  <module index="134"/>
+  <module amount="8" index="93"/>
+  <module index="130"/>
+  <module amount="4" index="132"/>
+  <module index="133"/>
+  <module index="97"/>
+  <module index="49"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="350"/>
+  <cargo index="23" maxamount="500" minamount="250"/>
+  <cargo index="21" maxamount="160" minamount="80"/>
+  <cargo index="116" maxamount="40" minamount="20"/>
+  <member index="21"/>
+  <member index="22"/>
+  <member index="60" maxamount="8" minamount="4"/>
+  <description>Armored and upgraded version of standard flying vessel of inquisition.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="132" maxaccuracy="25" maxevasion="25" maxloot="400" maxperception="35" minaccuracy="15" minevasion="15" minloot="200" minperception="25" name="Large clockwork drone mk IV" owner="DRONES">
+  <module index="141"/>
+  <module index="143"/>
+  <module index="137"/>
+  <module amount="4" index="132"/>
+  <module index="133"/>
+  <module amount="2" index="145"/>
+  <module amount="2" index="160"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="117" maxamount="500" minamount="450"/>
+  <cargo index="116" maxamount="250" minamount="120"/>
+  <description>Large, well armored upgraded and aggresive clockwork drone.</description>
+ </ship>
+ <ship combatai="DISARMER" index="133" maxloot="500" minloot="300" name="Large pirate ship mk IV" owner="PIRATES">
+  <module index="141"/>
+  <module index="144"/>
+  <module index="137"/>
+  <module amount="9" index="93"/>
+  <module index="130"/>
+  <module amount="6" index="132"/>
+  <module amount="4" index="145"/>
+  <module amount="3" index="161"/>
+  <module index="159"/>
+  <cargo index="1" maxamount="3000" minamount="1500"/>
+  <cargo index="2" maxamount="400" minamount="200"/>
+  <cargo index="3" maxamount="600" minamount="400"/>
+  <cargo index="118" maxamount="1000" minamount="500"/>
+  <cargo index="116" maxamount="400" minamount="200"/>
+  <cargo index="122" maxamount="150" minamount="100"/>
+  <member index="23"/>
+  <member amount="4" index="24"/>
+  <member index="25"/>
+  <member index="61" maxamount="5" minamount="3"/>
+  <description>Large, well armored upgraded version of pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="134" maxloot="300" minloot="100" name="Undead ship mk IV" owner="UNDEAD">
+  <module index="135"/>
+  <module index="143"/>
+  <module index="134"/>
+  <module index="130"/>
+  <module amount="4" index="132"/>
+  <module index="153"/>
+  <cargo index="1" maxamount="2500" minamount="2000"/>
+  <cargo index="116" maxamount="300" minamount="150"/>
+  <member index="27"/>
+  <member index="62" maxamount="10" minamount="6"/>
+  <description>Upgraded version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="135" maxloot="400" minloot="200" name="Large undead ship mk IV" owner="UNDEAD">
+  <module index="141"/>
+  <module index="144"/>
+  <module index="137"/>
+  <module index="130"/>
+  <module amount="6" index="132"/>
+  <module index="153"/>
+  <cargo index="1" maxamount="4000" minamount="3000"/>
+  <cargo index="116" maxamount="400" minamount="300"/>
+  <member index="28"/>
+  <member index="63" maxamount="12" minamount="8"/>
+  <description>Large, well armored upgraded version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="136" maxloot="500" minloot="250" name="Large inquisition ship mk IV" owner="INQUISITION">
+  <module index="141"/>
+  <module index="144"/>
+  <module index="137"/>
+  <module amount="10" index="93"/>
+  <module index="130"/>
+  <module amount="7" index="132"/>
+  <module amount="2" index="145"/>
+  <module amount="2" index="160"/>
+  <cargo index="1" maxamount="3000" minamount="2000"/>
+  <cargo index="2" maxamount="300" minamount="150"/>
+  <cargo index="3" maxamount="500" minamount="400"/>
+  <cargo index="117" maxamount="600" minamount="300"/>
+  <cargo index="116" maxamount="400" minamount="200"/>
+  <member index="29"/>
+  <member index="30"/>
+  <member index="31"/>
+  <member index="64" maxamount="9" minamount="5"/>
+  <description>Large, well armored upgraded version of inquisition flying vessel.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="137" maxaccuracy="35" maxevasion="35" maxloot="450" maxperception="50" minaccuracy="25" minevasion="25" minloot="250" minperception="40" name="Large attacking drone mk IV" owner="DRONES">
+  <module index="141"/>
+  <module index="144"/>
+  <module index="137"/>
+  <module amount="6" index="132"/>
+  <module index="153"/>
+  <module amount="2" index="145"/>
+  <module amount="2" index="160"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="117" maxamount="500" minamount="450"/>
+  <cargo index="116" maxamount="300" minamount="150"/>
+  <description>Large, well armored upgraded version of attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="138" maxaccuracy="25" maxevasion="25" maxloot="250" maxperception="50" minaccuracy="15" minevasion="15" minloot="100" minperception="40" name="Advanced attacking drone mk IV" owner="DRONES">
+  <module index="140"/>
+  <module index="143"/>
+  <module index="136"/>
+  <module amount="5" index="132"/>
+  <module index="153"/>
+  <module index="145"/>
+  <module index="160"/>
+  <cargo index="1" maxamount="1500" minamount="1000"/>
+  <cargo index="117" maxamount="300" minamount="200"/>
+  <cargo index="116" maxamount="200" minamount="100"/>
+  <description>Advanced and upgraded version of standard attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="DISARMER" index="139" maxloot="250" minloot="200" name="Advanced pirate ship mk IV" owner="PIRATES">
+  <module index="140"/>
+  <module index="143"/>
+  <module index="136"/>
+  <module amount="6" index="93"/>
+  <module index="130"/>
+  <module amount="5" index="132"/>
+  <module amount="2" index="145"/>
+  <module index="160"/>
+  <module index="129"/>
+  <cargo index="1" maxamount="1700" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="117" maxamount="500" minamount="300"/>
+  <cargo index="116" maxamount="200" minamount="100"/>
+  <cargo index="122" maxamount="100" minamount="75"/>
+  <member index="32"/>
+  <member amount="2" index="33"/>
+  <member index="34"/>
+  <member amount="2" index="65"/>
+  <description>Advanced and upgraded version of standard pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="140" maxloot="300" minloot="200" name="Advanced undead ship mk IV" owner="UNDEAD">
+  <module index="140"/>
+  <module index="143"/>
+  <module index="136"/>
+  <module index="130"/>
+  <module amount="5" index="132"/>
+  <module index="153"/>
+  <cargo index="1" maxamount="3000" minamount="2500"/>
+  <cargo index="116" maxamount="350" minamount="200"/>
+  <member index="36"/>
+  <member index="66" maxamount="8" minamount="4"/>
+  <description>Advanced and upgraded version of standard undead ship. Dangerous at close range.</description>
+ </ship>
+ <ship accuracy="15" combatai="ATTACKER" evasion="15" index="141" maxloot="240" minloot="120" name="Advanced inquisition ship mk IV" owner="INQUISITION" perception="15">
+  <module index="140"/>
+  <module index="143"/>
+  <module index="136"/>
+  <module amount="8" index="93"/>
+  <module index="130"/>
+  <module amount="4" index="132"/>
+  <module index="153"/>
+  <module index="145"/>
+  <module index="160"/>
+  <cargo index="1" maxamount="2200" minamount="2000"/>
+  <cargo index="2" maxamount="220" minamount="150"/>
+  <cargo index="3" maxamount="500" minamount="400"/>
+  <cargo index="117" maxamount="600" minamount="400"/>
+  <cargo index="116" maxamount="250" minamount="150"/>
+  <member index="37"/>
+  <member index="38"/>
+  <member index="67" maxamount="8" minamount="4"/>
+  <description>Advanced and upgraded version of standard flying vessel of inquisition.</description>
+ </ship>
+ <ship combatai="DISARMER" index="142" maxloot="1000" minloot="500" name="Huge pirate ship mk IV" owner="PIRATES">
+  <module index="155"/>
+  <module index="144"/>
+  <module amount="2" index="157"/>
+  <module amount="14" index="93"/>
+  <module index="130"/>
+  <module amount="10" index="132"/>
+  <module amount="5" index="152"/>
+  <module amount="4" index="162"/>
+  <module index="159"/>
+  <cargo index="1" maxamount="5000" minamount="3000"/>
+  <cargo index="2" maxamount="750" minamount="500"/>
+  <cargo index="3" maxamount="1500" minamount="1000"/>
+  <cargo index="119" maxamount="1000" minamount="500"/>
+  <cargo index="116" maxamount="750" minamount="500"/>
+  <cargo index="122" maxamount="200" minamount="100"/>
+  <member index="39"/>
+  <member amount="5" index="40"/>
+  <member index="41"/>
+  <member index="68" maxamount="9" minamount="5"/>
+  <description>Huge, well armored pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="143" maxloot="1200" minloot="750" name="Advanced huge pirate ship mk IV" owner="PIRATES">
+  <module index="156"/>
+  <module index="144"/>
+  <module amount="2" index="158"/>
+  <module amount="16" index="93"/>
+  <module index="130"/>
+  <module amount="12" index="132"/>
+  <module amount="5" index="152"/>
+  <module amount="4" index="163"/>
+  <module index="159"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="800" minamount="600"/>
+  <cargo index="3" maxamount="2000" minamount="1500"/>
+  <cargo index="120" maxamount="1000" minamount="500"/>
+  <cargo index="116" maxamount="800" minamount="600"/>
+  <cargo index="122" maxamount="300" minamount="150"/>
+  <member index="43"/>
+  <member amount="5" index="44"/>
+  <member index="45"/>
+  <member index="69" maxamount="11" minamount="7"/>
+  <description>Advanced and upgraded version of huge, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="144" maxloot="750" minloot="500" name="Huge undead ship mk IV" owner="UNDEAD">
+  <module index="155"/>
+  <module index="144"/>
+  <module index="157"/>
+  <module index="130"/>
+  <module amount="10" index="132"/>
+  <module index="153"/>
+  <cargo index="1" maxamount="7000" minamount="5000"/>
+  <cargo index="116" maxamount="750" minamount="500"/>
+  <member index="47"/>
+  <member index="70" maxamount="14" minamount="10"/>
+  <description>Huge, well armored and upgraded version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="145" maxaccuracy="80" maxevasion="80" maxloot="900" maxperception="80" minaccuracy="60" minevasion="60" minloot="500" minperception="60" name="Huge attacking drone mk IV" owner="DRONES">
+  <module index="155"/>
+  <module index="144"/>
+  <module index="157"/>
+  <module amount="10" index="132"/>
+  <module index="153"/>
+  <module amount="3" index="152"/>
+  <module amount="3" index="162"/>
+  <cargo index="1" maxamount="4000" minamount="2000"/>
+  <cargo index="119" maxamount="1000" minamount="500"/>
+  <cargo index="116" maxamount="750" minamount="500"/>
+  <description>Huge, well armored and upgraded version of attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="146" maxloot="900" minloot="600" name="Advanced huge undead ship mk IV" owner="UNDEAD">
+  <module index="156"/>
+  <module index="144"/>
+  <module index="158"/>
+  <module index="130"/>
+  <module amount="10" index="132"/>
+  <module index="153"/>
+  <cargo index="1" maxamount="8000" minamount="6000"/>
+  <cargo index="116" maxamount="800" minamount="600"/>
+  <member index="48"/>
+  <member index="71" maxamount="15" minamount="11"/>
+  <description>Advanced and upgraded version of huge, well armored undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="BERSERKER" index="147" maxaccuracy="90" maxevasion="90" maxloot="1000" maxperception="90" minaccuracy="75" minevasion="75" minloot="600" minperception="75" name="Advanced huge attacking drone mk IV" owner="DRONES">
+  <module index="156"/>
+  <module index="144"/>
+  <module index="158"/>
+  <module amount="12" index="132"/>
+  <module index="153"/>
+  <module amount="3" index="152"/>
+  <module amount="3" index="163"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="120" maxamount="1000" minamount="600"/>
+  <cargo index="116" maxamount="800" minamount="600"/>
+  <description>Advanced and upgraded version of huge, well armored attacking clockwork drone.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="148" maxloot="1000" minloot="750" name="Huge inquisition ship mk IV" owner="INQUISITION">
+  <module index="155"/>
+  <module index="144"/>
+  <module index="157"/>
+  <module amount="13" index="93"/>
+  <module index="130"/>
+  <module amount="9" index="132"/>
+  <module index="153"/>
+  <module amount="4" index="152"/>
+  <module amount="4" index="162"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="500" minamount="300"/>
+  <cargo index="3" maxamount="750" minamount="500"/>
+  <cargo index="119" maxamount="750" minamount="500"/>
+  <cargo index="116" maxamount="600" minamount="400"/>
+  <member index="49"/>
+  <member amount="4" index="50"/>
+  <member index="72" maxamount="10" minamount="6"/>
+  <description>Huge, well armored and upgraded version of inquisition flying vessel.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="149" maxloot="1200" minloot="900" name="Advanced huge inquisition ship mk IV" owner="INQUISITION">
+  <module index="156"/>
+  <module index="144"/>
+  <module index="158"/>
+  <module amount="15" index="93"/>
+  <module index="130"/>
+  <module amount="11" index="132"/>
+  <module index="153"/>
+  <module amount="4" index="152"/>
+  <module amount="4" index="163"/>
+  <cargo index="1" maxamount="6500" minamount="5000"/>
+  <cargo index="2" maxamount="600" minamount="400"/>
+  <cargo index="3" maxamount="750" minamount="600"/>
+  <cargo index="120" maxamount="750" minamount="600"/>
+  <cargo index="116" maxamount="650" minamount="500"/>
+  <member index="51"/>
+  <member amount="4" index="52"/>
+  <member index="73" maxamount="12" minamount="8"/>
+  <description>Advanced and upgraded version of huge, well armored inquisition flying vessel.</description>
+ </ship>
+</ships>
+
