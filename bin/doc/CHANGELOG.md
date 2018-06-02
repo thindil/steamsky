@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - New format of ships modules data file which made old incompatible
 - New format of recipes data file which made old incompatible
 - New format of mobiles data file which made old incompatible
+- New format of ships data file which made old incompatible
 
 ### Fixed
 - Crash on showing map cell info
@@ -68,7 +69,6 @@ All notable changes to this project will be documented in this file.
 - Statistics for killed enemies in melee combat 
 - New type of goal: kill X enemies in melee combat
 - New goal: kill 800 enemies in melee combat
-- New format of save games which made saves from previous versions incompatible
 
 ### Changed
 - Updated interface
@@ -77,6 +77,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Updated recipes data
 - Updated help
+- New format of save games which made saves from previous versions incompatible
 
 ### Fixed
 - Double attack in melee combat after kill
