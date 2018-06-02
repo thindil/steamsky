@@ -1,13 +1,13 @@
 [General Informations]
-SteamSky is roguelike game where you command flying ship with crew. You must take care about ship and crew. You can trade items between sky bases, fight with enemies or manufacturing items. Game ends when your character die.
+Steam Sky is a roguelike game where you commandeer a flying ship. You must take care of ship and crew. You can trade items between sky bases, fight with enemies or manufacture items. The game ends when your character dies.
 Whole game interface is keyboard based. Most options/menus are accessible by keyboard shortcuts. When you need arrow keys, you can use normal arrows and keypad arrows (after enabling Num Lock at your keyboard).
 You can use shortcuts on most in-game menus too (not only navigate by arrows keys).
 Most texts in game, can be scrolled with arrow keys by one line, by one screen with PageUp/PageDown keys or to beginning by Home key and end to End key.
 Forms (for example, renaming modules) can be navigated by arrow keys too. To quit from form without changes, just jump with arrows keys to Cancel button and hit Enter. To accept changes, navigate with arrows to Ok button and then hit Enter. If you left empty field in form and press Enter, it will be count as quit without changes. 
-On most screens you can see in top right corner informations about needed crew positions in ship. P means pilot, E - engineer, G - gunner, R - repairs, M - manufacturing, U - upgrading ship module, T - talking in bases, C - clean ship. 
-For pilot and engineer if letter is green, position is taken by crew member, red means you don't have anyone assigned to this position.
-For gunners and manufacturing - green letter mean all positions are taken (all guns, all crafting modules), red letter mean you have free positions (not all guns/crafting modules are taken), white letter mean, you don't have or no need anyone assigned to this positions.
-For repairs, upgrading ship modules, talking in bases and cleaning ship, green you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white letter means you don't have anyone assigned to this position and you don't need anyone.
+On most screens you can see information about needed crew positions in the top right corner. P means pilot, E - engineer, G - gunner, R - repairs, M - manufacturing, U - upgrading ship module, T - talking in bases, C - clean ship. 
+For pilots and engineers: if their letter is green, the position is taken by a crew member, and if it's red you don't have anyone assigned to this position.
+For gunners and manufacturing: a green letter mean all positions are taken (all guns, all crafting modules), a red letter means you have free positions (not all guns/crafting modules are taken), and a white letter means you don't have or don't need anyone assigned to this positions.
+For repairs, upgrading ship modules, talking in bases and cleaning ship, green means you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white letter means you don't have anyone assigned to this position and you don't need anyone.
 To move map without moving ship (with default keys settings), hold SHIFT and use keypad keys this same which are used for moving ship. Press {GameKey 19} to center map on ship. In that way, you can see informations about selected map cell (for example, bases info). Window in right up corner of screen always show info about your current map cell.
 At this moment, help is under development (as whole game).
 [Ship movement]
@@ -143,11 +143,11 @@ You can see more detailed informations about finished missions by pressing key '
 * What enemy you meet depends on how much upgraded ship you have - especially on upgrades of hull, armor, weapons and type of ammo. At beginning of game you can meet weakest enemies, with every ship upgrade you meet stronger. Of course, there is always small chance that you encounter enemy stronger than you.
 * Each enemy can be different: very often enemy ships have some modules upgrades installed (stronger version of weapon, more durability, etc).
 * Which orders are available for crew members, depends on orders prerequisites. For example, if you don't have set any crafting order set, you can't assign crew member to manufacturing.
-* Ship gets dirty with start of every day. You can send as much as you want crew members to clean ship or give order to clean ship for whole crew. It is only order which don't give any experience to assigned crew members. You need any type of bucket to execute this order.
-* Bases population may change with time. Don't be surprised when small base may be abandoned after successful attack on it or after disease. Same, bases population may growth with time.
+* Your ship gets dirty at the start of every day. You can send as many crew members as you want to clean the ship or give an order to the whole crew. It is the only order which don't give any experience to assigned crew members. You need any type of bucket to execute this order.
+* A base's population may change with time. Don't be surprised when a small base may be abandoned after a successful attack on it or after disease. A base's population may grow with time.
 * You may set some game options during play by selecting 'Game Options' menu (key {GameKey 34}). To navigate between settings, use Up and Down arrows keys. To change selected setting value use keys Right and Left arrows. To save options press key 'q' (to quit from settings). Changes done to options are used in current and each next game.
-* If you deliver {HealingTools} for free to diseased base, you gain some reputation in that base. If you sell {HealingTools} to diseased base, you earn some money but lost reputation. Amount of gained or lost reputation depends on how much {HealingTools} you gave or sold.
-* You can check progress of your character goal in 'Game statistics' menu (key {GameKey 32}). There you can change it too, but if you do it, progress of old goal will be lost. If you finish your current goal, new random goal will be set.
-* Abandoned bases may be recovered by someone. In that situation, they gains small population and new owner.
+* If you deliver {HealingTools} for free to diseased base, you gain some reputation in that base. If you sell {HealingTools} to diseased base, you earn some money but lose reputation. The amount of gained or lost reputation depends on how much {HealingTools} you gave or sold.
+* You can check the progress of your character goal in 'Game statistics' menu (key {GameKey 32}). There you can change it too, but if you do it, progress of old goal will be lost. If you finish your current goal, a new random goal will be given.
+* Abandoned bases may be recovered by someone. In that situation, they gain a small population and a new owner.
 * You may move most items (with exception of items needed for missions) between ship cargo and crew members inventory in cargo screen and from inventory to ship in selected crew member inventory screen.
 []
