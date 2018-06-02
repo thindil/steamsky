@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -89,7 +89,7 @@ package body DeathScreen is
       Move_Cursor(Line => StartLine + 22, Column => StartColumn + 6);
       Add(Str => "_.%%%%%%@@@@@@%%_/%\_%@@%%@@@@@@@%%%%%%");
       Move_Cursor(Line => StartLine + 23, Column => StartColumn);
-      Add(Str => "Did you want to see your game statistics? (Y/N)");
+      Add(Str => "Would you like to see your game statistics? (Y/N)");
    end ShowDeathScreen;
 
 end DeathScreen;
