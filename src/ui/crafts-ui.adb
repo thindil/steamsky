@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -584,18 +584,19 @@ package body Crafts.UI is
          return Craft_View;
       when An_Exception : Crafting_No_Tools =>
          ShowDialog
-           ("You don't have proper tool to start manufacturing " &
+           ("You don't have the proper tool to start manufacturing " &
             Exception_Message(An_Exception) &
             ".");
          DrawGame(Craft_View);
          return Craft_View;
       when Trade_No_Free_Cargo =>
-         ShowDialog("You don't have that much free space in your ship cargo.");
+         ShowDialog
+           ("You don't have that much free space in your ship's cargo.");
          DrawGame(Craft_View);
          return Craft_View;
       when An_Exception : Crafting_No_Workshop =>
          ShowDialog
-           ("You don't have proper workplace to start manufacturing " &
+           ("You don't have proper a workplace to start manufacturing " &
             Exception_Message(An_Exception) &
             ".");
          DrawGame(Craft_View);
