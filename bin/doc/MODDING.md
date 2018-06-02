@@ -340,49 +340,58 @@ edit `value` attribute of tag `unarmedskill`. Value must be existing skill name.
 ### General informations
 - Open file *ships.dat* in *data/ships* directory or create new file with *dat*
   extension in that directory (example: *myships.dat*).
-- Each value in ship data structure must be one line length.
-- File must end with `[]`.
 
 ### Ship data structure
-- Each ship start from `[` symbol. Any value between `[` and `]` is a index 
-  (it can be number or text) and must be unique. This value is used at this
-  moment to set player ship and in Destroy types of goals.
-- Name: Type of ship. Will be visible during combat information. If you want
-  that ship will be used in friendly trader random event, you must have word
-  which you set in *game.dat* as *TraderNames* in ship name. Example: if you
-  use *trader* word, ship name can be *small poleis trader*.
-- Modules: List of modules indexes (from *shipmodules* directory), separated 
-  by `, ` (comma and space). Each module entry can be only module index or
-  Amount`x`Module index.
-- Accuracy: Bonus to accuracy for ship. Can be constant value (example: 1) or 
-  range from minimum value to max value, separated by `..` (double dots)
-  (example: 1..5).
-- CombatAI: Behavior of ship in combat (NPC ships only). Possible values are:
-  Berserker - attack to end, no matter how heavy damage take.
-  Attacker - aggressive but will be run away from combat when lost all
-  ammunition or weapons.
-  Coward - try run from combat, attack only in self-defense.
-  Disarmer - same as Attacker but first aim for player ship weapons before
-  start destroying ship.
-- Evasion: Bonus to evasion for ship. Can be constant value or range from 
-  minimum value to max value, separated by `..` (double dots).
-- Loot: Amount of moneys earned for destroying that ship. Can be constant value
-  or range from minimum value to max value, separated by `..` (double dots).
-- Perception: Bonus to perception for ship. Can be constant value or range 
-  from minimum value to max value, separated by `..` (double dots).
-- Cargo: List of cargo of ship. Each item in cargo is separated by `, ` (comma
-  and space). Each item entry is Amount`x`Item index (from *items* directory).
-  Amount can be constant value or range from minimum value to max value, 
-  separated by `..` (double dots).
-- Description: Any length description of ship.
-- Owner: Which fraction own ship. Possible values are: Poleis, Independent,
-  Pirates, Undead, Drones, Inquisition.
-- Recipes: List of know recipes indexes (from *recipes* directory, player ship
-  only), separated by `, ` (comma and space).
-- Crew: List of crew members indexes (from *mobs* directory), separated by 
-  `, ` (comma and space). Each crew entry can be only mob index or
-  Amount`x`Mob index. Amount can be constant value or range from minimum
-  value to max value, separated by `..` (double dots).
+- Each ship is between `ship` tags. Attribute `index` is a index (it can be 
+  number or text) and must be unique. This value is used at this moment to 
+  set player ship and in Destroy types of goals.
+- Attribute `name`: Type of ship. Will be visible during combat information. 
+  If you want that ship will be used in friendly trader random event, you must
+  have word which you set in *game.dat* as *TraderNames* in ship name. Example:
+  if you use *trader* word, ship name can be *small poleis trader*.
+- Tags `module`: List of ship modules installed on selected ship. Attribute
+  `index` is module index from files from *shipmodules* directory. Attribute
+  `amount` is optional: if ship should have more than one that module, just
+  add attribute `amount` with number of modules.
+- Attribute `accuracy`: Bonus to accuracy for ship.
+- Attributes `minaccuracy` and `maxaccuracy`: If bonus to accuracy for ship
+  should be random, add attribute `minaccuracy` for minimum value and 
+  `maxaccuracy` for maximum value.
+- Attribute `combatai`: Behavior of ship in combat (NPC ships only). Possible 
+  values are: Berserker - attack to end, no matter how heavy damage take. 
+  Attacker - aggressive but will be run away from combat when lost all 
+  ammunition or weapons. Coward - try run from combat, attack only in 
+  self-defense. Disarmer - same as Attacker but first aim for player ship 
+  weapons before start destroying ship.
+- Attribute `evasion`: Bonus to evasion for ship.
+- Attributes `minevasion` and `maxevasion`: If bonus to evasion for ship should
+  be random, add attribute `minevasion` for minimum value and `maxevasion` for 
+  maximum value.
+- Attribute `loot`: Amount of money earned for destroying that ship.
+- Attributes `minloot` and `maxloot`: If amount of earned money for destroying 
+  that ship should be random, add attribute `minloot` for minimum value and 
+  `maxloot` for maximum value.
+- Attribute `perception`: Bonus to perception for ship.
+- Attributes `minperception` and `maxperception`: If bonus to perception for 
+  ship should be random, add attribute `minperception` for minimum value and 
+  `maxperception` for maximum value.
+- Tags `cargo`: List of items in cargo of ship. Attribute `index` is index of
+  item from files from *items* directory. If amount of that item should be 
+  constant, add attribute `amount` with proper value. If amount of that item
+  should be random, add attributes `minamount` with minimum amount and attribute
+  `maxamount` with maximum amount of that item.
+- Tag `description`: Description of ship (NPC ships only). Will be displayed
+  during combat.
+- Attribute `owner`: Which fraction own ship. Possible values are: Poleis, 
+  Independent, Pirates, Undead, Drones, Inquisition.
+- Tags `recipes`: List of know recipes. Attribute `index` is recipe index from
+  files from *recipes* directory (player ship only).
+- Tags `member`: List of crew members. Attribute `index` is mobile index from
+  files form *mobs* directory. If ship should have more than one that same 
+  mobile if crew, add attribute `amount`. If ship should have more than one 
+  that same mobile and amount should be random, add attributes `minamount` for 
+  minimum amount of that mobile and attribute `maxamount` for maximum amount of 
+  that mobile.
 
 ## Help
 
@@ -468,7 +477,7 @@ edit `value` attribute of tag `unarmedskill`. Value must be existing skill name.
 - Each mobile starts with tag `mobile`.
 - Attribute `index` is is a mobile index (it can be number or text) and must be
   unique. At this moment this value is used to set crew on ships.
-- Attribute "order": current ship order of selected mob. Possible values are:
+- Attribute `order`: current ship order of selected mob. Possible values are:
   Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest,
   Defend, Boarding.
 - Tag `skill` define skill of mobile. Attribute `name` is name of skill (from
