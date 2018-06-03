@@ -438,23 +438,21 @@ edit `value` attribute of tag `unarmedskill`. Value must be existing skill name.
 ### General informations
 - Open file *goals.dat* in *data/goals* directory or create new file with *dat*
   extension in that directory (example: *mygoals.dat*).
-- Each value in goal data structure must be one line length.
-- File must end with `[]`.
 
 ### Goal data structure
-- Each ship start from `[` symbol. Any value between `[` and `]` is a index 
-  (it can be number or text) and must be unique. At this moment this value is
-  used to set/update goal in game.
-- Type: Type/category of goal which define what is needed to do for finish
-  selected goal. Possible values: Reputation - gain max reputation in X bases,
-  Destroy - destroy X ships, Discover - discover X fields of map, Visit - visit
-  (discover) X bases, Craft - craft X items, Mission - Finish X missions, 
-  Kill - Kill X enemies in melee combat
-- Amount: Amount of target for selected goal to do for finish it. For example
-  100 ships to destroy, etc.
-- Target: Optional parameter, ignored for Discover type, exact target for 
-  goal, depends on type of goal. Possible values: for Reputation and Visit, 
-  bases owners names: Poleis, Independent, Pirates, Undead, Drones, 
+- Each goal starts with tag `goal`.
+- Attribute `index` is index of goal (it can be number or text) and must be 
+  unique. At this moment this value is used to set/update goal in game.
+- Attribute `type`: Type/category of goal which define what is needed to do for
+  finish selected goal. Possible values: Reputation - gain max reputation in X 
+  bases, Destroy - destroy X ships, Discover - discover X fields of map, 
+  Visit - visit (discover) X bases, Craft - craft X items, Mission - Finish X
+  missions, Kill - Kill X enemies in melee combat.
+- Attribute `amount`: Amount of target for selected goal to do for finish it.
+  For example 100 ships to destroy, etc.
+- Attribute `target`: Optional attribute, ignored for Discover type, exact 
+  target for goal, depends on type of goal. Possible values: for Reputation 
+  and Visit, bases owners names: Poleis, Independent, Pirates, Undead, Drones, 
   Inquisition. For Destroy, any enemy ship index (from *ships* directory) or
   owners names: Poleis, Independent, Pirates, Undead, Drones, Inquisition. For
   Craft, recipe index (from *recipes* directory), Type or ShowType (from
@@ -463,9 +461,9 @@ edit `value` attribute of tag `unarmedskill`. Value must be existing skill name.
   for explore missions, Passenger for transport passengers missions. For Kill,
   enemy fraction name: Poleis, Independent, Pirates, Undead, Drones, 
   Inquisition.
-- Multiplier: Optional parameter, multiplier for amount of game points earned
-  by finishing this goal. Default value is 1, which mean goal give Amount of
-  points for finish it.
+- Attribute `multiplier`: Optional attribute, multiplier for amount of game 
+  points earned by finishing this goal. Default value is 1, which mean goal
+  give attribute `amount` of points for finish it.
 
 ## Mobiles
 
