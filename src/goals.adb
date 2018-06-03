@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,10 +15,15 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with DOM.Core; use DOM.Core;
+with DOM.Core.Documents; use DOM.Core.Documents;
+with DOM.Core.Nodes; use DOM.Core.Nodes;
+with DOM.Core.Elements; use DOM.Core.Elements;
+with DOM.Readers; use DOM.Readers;
+with Input_Sources.File; use Input_Sources.File;
 with Game; use Game;
 with Log; use Log;
 with Ships; use Ships;
@@ -32,12 +37,13 @@ with Missions; use Missions;
 package body Goals is
 
    procedure LoadGoals is
-      GoalsFile: File_Type;
-      RawData, FieldName, Value: Unbounded_String;
-      EqualIndex: Natural;
       TempRecord: Goal_Data;
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
+      GoalsFile: File_Input;
+      Reader: Tree_Reader;
+      NodesList: Node_List;
+      GoalsData: Document;
    begin
       if Goals_List.Length > 0 then
          return;
@@ -61,43 +67,40 @@ package body Goals is
             TargetIndex => Null_Unbounded_String,
             Multiplier => 1);
          LogMessage("Loading goals file: " & Full_Name(FoundFile), Everything);
-         Open(GoalsFile, In_File, Full_Name(FoundFile));
-         while not End_Of_File(GoalsFile) loop
-            RawData := To_Unbounded_String(Get_Line(GoalsFile));
-            if Element(RawData, 1) /= '[' then
-               EqualIndex := Index(RawData, "=");
-               FieldName := Head(RawData, EqualIndex - 2);
-               Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
-               if FieldName = To_Unbounded_String("Type") then
-                  TempRecord.GType := GoalTypes'Value(To_String(Value));
-               elsif FieldName = To_Unbounded_String("Amount") then
-                  TempRecord.Amount := Natural'Value(To_String(Value));
-               elsif FieldName = To_Unbounded_String("Target") and
-                 TempRecord.GType /= DISCOVER then
-                  TempRecord.TargetIndex := Value;
-               elsif FieldName = To_Unbounded_String("Multiplier") then
-                  TempRecord.Multiplier := Positive'Value(To_String(Value));
-               end if;
-            else
-               if TempRecord.GType /= RANDOM then
-                  LogMessage
-                    ("Goal added: " & To_String(TempRecord.Index),
-                     Everything);
-                  Goals_List.Append(New_Item => TempRecord);
-                  TempRecord :=
-                    (Index => Null_Unbounded_String,
-                     GType => RANDOM,
-                     Amount => 0,
-                     TargetIndex => Null_Unbounded_String,
-                     Multiplier => 1);
-               end if;
-               if Length(RawData) > 2 then
-                  TempRecord.Index :=
-                    Unbounded_Slice(RawData, 2, (Length(RawData) - 1));
-               end if;
-            end if;
-         end loop;
+         Open(Full_Name(FoundFile), GoalsFile);
+         Parse(Reader, GoalsFile);
          Close(GoalsFile);
+         GoalsData := Get_Tree(Reader);
+         NodesList :=
+           DOM.Core.Documents.Get_Elements_By_Tag_Name(GoalsData, "goal");
+         for I in 0 .. Length(NodesList) - 1 loop
+            TempRecord.Index :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
+            TempRecord.GType :=
+              GoalTypes'Value(Get_Attribute(Item(NodesList, I), "type"));
+            TempRecord.Amount :=
+              Natural'Value(Get_Attribute(Item(NodesList, I), "amount"));
+            if Get_Attribute(Item(NodesList, I), "target") /= "" then
+               TempRecord.TargetIndex :=
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "target"));
+            end if;
+            if Get_Attribute(Item(NodesList, I), "multiplier") /= "" then
+               TempRecord.Multiplier :=
+                 Natural'Value
+                   (Get_Attribute(Item(NodesList, I), "multiplier"));
+            end if;
+            LogMessage
+              ("Goal added: " & To_String(TempRecord.Index),
+               Everything);
+            Goals_List.Append(New_Item => TempRecord);
+            TempRecord :=
+              (Index => Null_Unbounded_String,
+               GType => RANDOM,
+               Amount => 0,
+               TargetIndex => Null_Unbounded_String,
+               Multiplier => 1);
+         end loop;
       end loop;
       End_Search(Files);
    end LoadGoals;
