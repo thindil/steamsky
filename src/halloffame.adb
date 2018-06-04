@@ -65,6 +65,7 @@ package body HallOfFame is
       HoFFile: File_Type;
       HoF: DOM_Implementation;
       EntryNode, MainNode: DOM.Core.Element;
+      RawValue: Unbounded_String;
    begin
       for I in HallOfFame_Array'Range loop
          if HallOfFame_Array(I).Points < GameStats.Points then
@@ -92,10 +93,12 @@ package body HallOfFame is
          EntryNode := Create_Element(HoFData, "entry");
          EntryNode := Append_Child(MainNode, EntryNode);
          Set_Attribute(EntryNode, "name", To_String(HallOfFame_Array(I).Name));
+         RawValue :=
+           To_Unbounded_String(Integer'Image(HallOfFame_Array(I).Points));
          Set_Attribute
            (EntryNode,
             "points",
-            Natural'Image(HallOfFame_Array(I).Points));
+            To_String(Trim(RawValue, Ada.Strings.Left)));
          Set_Attribute
            (EntryNode,
             "deathreason",
