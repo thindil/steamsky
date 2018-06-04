@@ -398,13 +398,13 @@ edit `value` attribute of tag `unarmedskill`. Value must be existing skill name.
 ### General informations
 - Open file *help.dat* in *data/help* directory or create new file with *dat* 
   extension in that directory (example: *myhelp.dat*).
-- File must end with `[]`.
 
 ### Help data structure
-- Each help entry starts from `[` symbol. Any value between `[` and `]` is a
-  menu entry in main help menu. It can be number or text.
-- Whole text below (until next new line which starts from `[`) is help entry
-  text visible when player select this option from help menu.
+- Each help entry is between `entry` tags. 
+- Attribute `title` is help menu entry in main help menu. It can be number or
+  text.
+- Text between tags `entry` is help entry text text visible when player select
+  this option from help menu.
 - Inside help text you can use special variables which later will be replaced
   by proper keys names. All  that variables have name `{GameKey [number]}`
   where `[number]` is between 1 and 27 (example: `{GameKey 9}`). Proper game 
