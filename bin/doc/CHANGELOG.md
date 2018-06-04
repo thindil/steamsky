@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - New format of mobiles data file which made old incompatible
 - New format of ships data file which made old incompatible
 - New format of goals data file which made old incompatible
+- New format of help data file which made old incompatible
 
 ### Fixed
 - Crash on showing map cell info
