@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<factions>
+<!-- Each faction is between "faction" tags.
+- Attribute "index": index of faction (it can be number or text) and must be
+unique. At this moment this value is used to create bases during starting new
+game and to determine which ships are enemies or friends.
+- Attribute "name": name of factions displayed in game. Can be any text and
+unique.
+- Attribute "membername": name of single mobile from this faction. Can be any
+text.
+- Attribute "pluralmembername": plural of name of mobiles from this faction.
+Can be any text.
+- Attributes "minspawn", "maxspawn" and "spawn": chance to that newly created 
+sky base will be owned by that faction. Value of this attributes is roll on 
+dice 100 and must be unique for each faction. If it should be only one roll, 
+use attribute "spawn". If it should be range, use "minspawn" for minimum roll 
+and "maxspawn" for maximum roll.
+- Attributes "population", "minpopulation" and "maxpopulation": starting 
+population of base owned by that faction. If it should be constant value, use
+attribute "population". If it should be random value, use attribute 
+"minpopulation" for minimum population and "maxpopulation" for maximum 
+population. Minumum value is 0.
+- Attributes "reputation", "minreputation" and "maxreputation": starting 
+reputation of player in bases owned by that faction. If it should be constant
+value, use attribute "reputation". If it should be random value, use attribute
+"minreputation" for minimum level of reputation and "maxreputation" for maximum
+level of reputation. Minumum value is -100 and maximum is 100.
+- Attribute "friendly": did that faction is friendly to player or not. Value "Y"
+means "Yes", value "N" means "No". Used mostly to generate enemy ships.
+-->
+ <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="94" minpopulation="10" maxpopulation="500" reputation="0" friendly="Y"/>
+ <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="95" minpopulation="10" maxpopulation="500" minreputation="-3" maxreputation="2" friendly="Y"/>
+ <faction index="ABANDONED" name="Abandoned" spawn="96" population="0" reputation="0" friendly="Y"/>
+ <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="97" minpopulation="10" maxpopulation="500" reputation="-10" friendly="N"/>
+ <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="98" minpopulation="10" maxpopulation="500" reputation="-100" friendly="N"/>
+ <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" spawn="99" minpopulation="10" maxpopulation="500" reputation="-100" friendly="N"/>
+ <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="100" minpopulation="10" maxpopulation="500" reputation="-50" friendly="N"/>
+</factions>
+
