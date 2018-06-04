@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,20 +15,27 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with DOM.Core; use DOM.Core;
+with DOM.Core.Documents; use DOM.Core.Documents;
+with DOM.Core.Nodes; use DOM.Core.Nodes;
+with DOM.Core.Elements; use DOM.Core.Elements;
+with DOM.Readers; use DOM.Readers;
+with Input_Sources.File; use Input_Sources.File;
 with Log; use Log;
 with Game; use Game;
 
 package body Help is
 
    procedure LoadHelp is
-      HelpFile: File_Type;
-      RawData: Unbounded_String;
       TmpHelp: Help_Data;
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
+      HelpFile: File_Input;
+      Reader: Tree_Reader;
+      NodesList: Node_List;
+      HelpData: Document;
    begin
       if Help_List.Length > 0 then
          return;
@@ -48,30 +55,22 @@ package body Help is
          TmpHelp :=
            (Title => Null_Unbounded_String, Text => Null_Unbounded_String);
          LogMessage("Loading help file: " & Full_Name(FoundFile), Everything);
-         Open(HelpFile, In_File, Full_Name(FoundFile));
-         while not End_Of_File(HelpFile) loop
-            RawData := To_Unbounded_String(Get_Line(HelpFile));
-            if Element(RawData, 1) /= '[' then
-               Append(TmpHelp.Text, RawData);
-               Append(TmpHelp.Text, ASCII.LF);
-            else
-               if TmpHelp.Text /= Null_Unbounded_String then
-                  Help_List.Append(New_Item => TmpHelp);
-                  LogMessage
-                    ("Help added: " & To_String(TmpHelp.Title),
-                     Everything);
-                  TmpHelp :=
-                    (Title => Null_Unbounded_String,
-                     Text => Null_Unbounded_String);
-               end if;
-               if Length(RawData) > 2 then
-                  TmpHelp.Title :=
-                    To_Unbounded_String
-                      (Slice(RawData, 2, Length(RawData) - 1));
-               end if;
-            end if;
-         end loop;
+         Open(Full_Name(FoundFile), HelpFile);
+         Parse(Reader, HelpFile);
          Close(HelpFile);
+         HelpData := Get_Tree(Reader);
+         NodesList :=
+           DOM.Core.Documents.Get_Elements_By_Tag_Name(HelpData, "entry");
+         for I in 0 .. Length(NodesList) - 1 loop
+            TmpHelp.Title :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "title"));
+            TmpHelp.Text :=
+              To_Unbounded_String(Node_Value(First_Child(Item(NodesList, I))));
+            Help_List.Append(New_Item => TmpHelp);
+            LogMessage("Help added: " & To_String(TmpHelp.Title), Everything);
+            TmpHelp :=
+              (Title => Null_Unbounded_String, Text => Null_Unbounded_String);
+         end loop;
       end loop;
       End_Search(Files);
    end LoadHelp;
