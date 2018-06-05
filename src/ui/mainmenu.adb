@@ -58,6 +58,7 @@ with Game.SaveLoad; use Game.SaveLoad;
 with Utils.UI; use Utils.UI;
 with Log; use Log;
 with Help.UI; use Help.UI;
+with Factions; use Factions;
 
 package body MainMenu is
 
@@ -79,6 +80,7 @@ package body MainMenu is
       LoadShipModules;
       LoadRecipes;
       LoadMobs;
+      LoadFactions;
       LoadShips;
       LoadGoals;
       SetToolsList;
@@ -181,6 +183,16 @@ package body MainMenu is
       when Goals_Files_Not_Found =>
          ShowDialog
            ("Can't load goals data. Files with goals data not found.",
+            Parent);
+         return False;
+      when Factions_Directory_Not_Found =>
+         ShowDialog
+           ("Can't load NPC factions data. Directory with NPC factions data files not found.",
+            Parent);
+         return False;
+      when Factions_Files_Not_Found =>
+         ShowDialog
+           ("Can't load NPC factions data. Files with NPC factions data not found.",
             Parent);
          return False;
    end LoadGameData;
