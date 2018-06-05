@@ -39,5 +39,8 @@ package Factions is
    Factions_Files_Not_Found: exception; -- Raised when no files with factions
 
    procedure LoadFactions; -- Load NPC factions from file
+   function Friendly
+     (FactionIndex: Unbounded_String)
+     return Boolean; -- Check if selected faction is friendly. Return true if yes, otherwise false
 
 end Factions;

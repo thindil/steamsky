@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Directories; use Ada.Directories;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
@@ -30,6 +31,7 @@ with Crafts; use Crafts;
 with Events; use Events;
 with Maps; use Maps;
 with Mobs; use Mobs;
+with Factions; use Factions;
 
 package body Ships is
 
@@ -314,8 +316,10 @@ package body Ships is
          for SkyX in StartX .. EndX loop
             for SkyY in StartY .. EndY loop
                if SkyMap(SkyX, SkyY).BaseIndex > 0 then
-                  if SkyBases(SkyMap(SkyX, SkyY).BaseIndex).Owner =
-                    ProtoShip.Owner then
+                  if To_Lower
+                      (Bases_Owners'Image
+                         (SkyBases(SkyMap(SkyX, SkyY).BaseIndex).Owner)) =
+                    To_Lower(To_String(ProtoShip.Owner)) then
                      TmpShip.HomeBase := SkyMap(SkyX, SkyY).BaseIndex;
                      exit Bases_Loop;
                   end if;
@@ -324,7 +328,8 @@ package body Ships is
          end loop Bases_Loop;
          if TmpShip.HomeBase = 0 then
             for I in SkyBases'Range loop
-               if SkyBases(I).Owner = ProtoShip.Owner then
+               if To_Lower(Bases_Owners'Image(SkyBases(I).Owner)) =
+                 To_Lower(To_String(ProtoShip.Owner)) then
                   TmpShip.HomeBase := I;
                   exit;
                end if;
@@ -384,7 +389,7 @@ package body Ships is
             CombatValue => 1,
             Crew => TempCrew,
             Description => Null_Unbounded_String,
-            Owner => Poleis,
+            Owner => Null_Unbounded_String,
             Index => Null_Unbounded_String,
             KnownRecipes => TempRecipes);
          LogMessage("Loading ships file: " & Full_Name(FoundFile), Everything);
@@ -513,9 +518,13 @@ package body Ships is
                end if;
             end loop;
             if Get_Attribute(Item(NodesList, I), "owner") /= "" then
-               TempRecord.Owner :=
-                 Bases_Owners'Value
-                   (Get_Attribute(Item(NodesList, I), "owner"));
+               for Faction of Factions_List loop
+                  if To_Lower(To_String(Faction.Index)) =
+                    To_Lower(Get_Attribute(Item(NodesList, I), "owner")) then
+                     TempRecord.Owner := Faction.Index;
+                     exit;
+                  end if;
+               end loop;
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -626,7 +635,7 @@ package body Ships is
                CombatValue => 1,
                Crew => TempCrew,
                Description => Null_Unbounded_String,
-               Owner => Poleis,
+               Owner => Null_Unbounded_String,
                Index => Null_Unbounded_String,
                KnownRecipes => TempRecipes);
          end loop;
@@ -660,26 +669,6 @@ package body Ships is
       subtype Numbers is Character range '0' .. '9';
    begin
       case Owner is
-         when Any =>
-            NewName :=
-              ShipSyllablesStart
-                (GetRandom
-                   (ShipSyllablesStart.First_Index,
-                    ShipSyllablesStart.Last_Index));
-            if GetRandom(1, 100) < 51 then
-               Append
-                 (NewName,
-                  ShipSyllablesMiddle
-                    (GetRandom
-                       (ShipSyllablesMiddle.First_Index,
-                        ShipSyllablesMiddle.Last_Index)));
-            end if;
-            Append
-              (NewName,
-               ShipSyllablesEnd
-                 (GetRandom
-                    (ShipSyllablesEnd.First_Index,
-                     ShipSyllablesEnd.Last_Index)));
          when Drones =>
             LettersAmount := GetRandom(2, 5);
             for I in 1 .. LettersAmount loop
@@ -701,7 +690,25 @@ package body Ships is
                         Numbers'Pos(Numbers'Last))));
             end loop;
          when others =>
-            null;
+            NewName :=
+              ShipSyllablesStart
+                (GetRandom
+                   (ShipSyllablesStart.First_Index,
+                    ShipSyllablesStart.Last_Index));
+            if GetRandom(1, 100) < 51 then
+               Append
+                 (NewName,
+                  ShipSyllablesMiddle
+                    (GetRandom
+                       (ShipSyllablesMiddle.First_Index,
+                        ShipSyllablesMiddle.Last_Index)));
+            end if;
+            Append
+              (NewName,
+               ShipSyllablesEnd
+                 (GetRandom
+                    (ShipSyllablesEnd.First_Index,
+                     ShipSyllablesEnd.Last_Index)));
       end case;
       return NewName;
    end GenerateShipName;
