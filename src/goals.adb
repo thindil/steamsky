@@ -33,6 +33,7 @@ with Utils; use Utils;
 with Statistics; use Statistics;
 with Messages; use Messages;
 with Missions; use Missions;
+with Factions; use Factions;
 
 package body Goals is
 
@@ -111,6 +112,25 @@ package body Goals is
       Goal: Goal_Data;
       InsertPosition: Positive;
       Added: Boolean := False;
+      function GetFactionName
+        (FactionIndex: Unbounded_String;
+         FType: String) return String is
+      begin
+         for Faction of Factions_List loop
+            if To_Lower(To_String(Faction.Index)) =
+              To_Lower(To_String(FactionIndex)) then
+               if FType = "name" then
+                  return To_String(Faction.Name);
+               elsif FType = "membername" then
+                  return To_String(Faction.MemberName);
+               elsif FType = "pluralmembername" then
+                  return To_String(Faction.PluralMemberName);
+               end if;
+               exit;
+            end if;
+         end loop;
+         return "Error";
+      end GetFactionName;
    begin
       if Index > 0 then
          Goal := Goals_List(Index);
@@ -174,7 +194,10 @@ package body Goals is
                if Goal.Amount > 1 then
                   InsertPosition := InsertPosition - 1;
                end if;
-               Insert(Text, InsertPosition, To_String(Goal.TargetIndex) & " ");
+               Insert
+                 (Text,
+                  InsertPosition,
+                  GetFactionName(Goal.TargetIndex, "name") & " ");
             when DESTROY =>
                for I in ProtoShips_List.Iterate loop
                   if ProtoShips_List(I).Index = Goal.TargetIndex then
@@ -224,12 +247,18 @@ package body Goals is
                begin
                   if Goal.Amount > 1 then
                      StopPosition := StopPosition + 2;
+                     Replace_Slice
+                       (Text,
+                        InsertPosition,
+                        StopPosition,
+                        GetFactionName(Goal.TargetIndex, "pluralmembername"));
+                  else
+                     Replace_Slice
+                       (Text,
+                        InsertPosition,
+                        StopPosition,
+                        GetFactionName(Goal.TargetIndex, "membername"));
                   end if;
-                  Replace_Slice
-                    (Text,
-                     InsertPosition,
-                     StopPosition,
-                     To_String(Goal.TargetIndex));
                end;
             when RANDOM | DISCOVER =>
                null;
