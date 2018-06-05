@@ -317,7 +317,9 @@ package body MainMenu is
    procedure RandomName(User_Data: access GObject_Record'Class) is
    begin
       if User_Data = Get_Object(Builder, "entryshipname") then
-         Set_Text(Gtk_Entry(User_Data), To_String(GenerateShipName));
+         Set_Text
+           (Gtk_Entry(User_Data),
+            To_String(GenerateShipName(To_Unbounded_String("poleis"))));
       else
          if Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender"))) =
            0 then
