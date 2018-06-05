@@ -32,6 +32,7 @@ with Utils; use Utils;
 with Log; use Log;
 with Goals; use Goals;
 with Game; use Game;
+with Factions; use Factions;
 
 package body Combat is
 
@@ -73,9 +74,13 @@ package body Combat is
       end CountPerception;
    begin
       EnemyShipIndex := EnemyIndex;
-      FractionName :=
-        To_Unbounded_String
-          ((To_Lower(Bases_Owners'Image(ProtoShips_List(EnemyIndex).Owner))));
+      for Faction of Factions_List loop
+         if To_Lower(To_String(ProtoShips_List(EnemyIndex).Owner)) =
+           To_Lower(To_String(Faction.Index)) then
+            FractionName := Faction.Name;
+            exit;
+         end if;
+      end loop;
       HarpoonDuration := 0;
       BoardingOrders.Clear;
       EnemyShip :=
@@ -129,11 +134,9 @@ package body Combat is
       PilotOrder := 2;
       EngineerOrder := 3;
       EndCombat := False;
-      if ProtoShips_List(EnemyIndex).Owner /= Drones then
-         EnemyName := GenerateShipName;
-      else
-         EnemyName := GenerateShipName(Drones);
-      end if;
+      EnemyName :=
+        GenerateShipName
+          (Bases_Owners'Value(To_String(ProtoShips_List(EnemyIndex).Owner)));
       MessagesStarts := GetLastMessageIndex + 1;
       Guns.Clear;
       for I in PlayerShip.Modules.Iterate loop
@@ -1423,10 +1426,7 @@ package body Combat is
          UpdateDestroyedShips(Enemy.Ship.Name);
          UpdateGoal(DESTROY, ProtoShips_List(EnemyShipIndex).Index);
          if CurrentGoal.TargetIndex /= Null_Unbounded_String then
-            UpdateGoal
-              (DESTROY,
-               To_Unbounded_String
-                 (Bases_Owners'Image(ProtoShips_List(EnemyShipIndex).Owner)));
+            UpdateGoal(DESTROY, ProtoShips_List(EnemyShipIndex).Owner);
          end if;
       end if;
    end CombatTurn;

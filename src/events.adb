@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
@@ -29,6 +30,7 @@ with ShipModules; use ShipModules;
 with Items; use Items;
 with Utils; use Utils;
 with Game; use Game;
+with Factions; use Factions;
 
 package body Events is
 
@@ -54,16 +56,21 @@ package body Events is
             PlayerValue := CountCombatValue;
             for Ship of ProtoShips_List loop
                if Ship.CombatValue <= PlayerValue and
-                 (Owner = Any or Ship.Owner = Owner) and
-                 (Ship.Owner /= Poleis and Ship.Owner /= Independent) then
+                 (Owner = Any or
+                  To_Lower(To_String(Ship.Owner)) =
+                    To_Lower(Bases_Owners'Image(Owner))) and
+                 not Friendly(Ship.Owner) then
                   Enemies.Append(New_Item => EnemyIndex);
                end if;
                EnemyIndex := EnemyIndex + 1;
             end loop;
          else
             for Ship of ProtoShips_List loop
-               if (Owner = Any or Ship.Owner = Owner) and
-                 (Ship.Owner /= Poleis and Ship.Owner /= Independent) then
+               if
+                 (Owner = Any or
+                  To_Lower(To_String(Ship.Owner)) =
+                    To_Lower(Bases_Owners'Image(Owner))) and
+                 not Friendly(Ship.Owner) then
                   Enemies.Append(New_Item => EnemyIndex);
                end if;
                EnemyIndex := EnemyIndex + 1;
@@ -422,8 +429,7 @@ package body Events is
       end loop;
       TraderIndex := ProtoShips_List.First_Index;
       for Ship of ProtoShips_List loop
-         if (Ship.Owner = Poleis or Ship.Owner = Independent) and
-           Ship.Index /= PlayerShipIndex then
+         if Friendly(Ship.Owner) and Ship.Index /= PlayerShipIndex then
             FriendlyShips.Append(New_Item => TraderIndex);
          end if;
          TraderIndex := TraderIndex + 1;

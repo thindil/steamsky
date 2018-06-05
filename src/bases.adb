@@ -24,6 +24,7 @@ with Ships.Crew; use Ships.Crew;
 with Events; use Events;
 with Utils; use Utils;
 with Goals; use Goals;
+with Factions; use Factions;
 
 package body Bases is
 
@@ -433,15 +434,13 @@ package body Bases is
          PlayerValue := CountCombatValue;
          for C in ProtoShips_List.Iterate loop
             if ProtoShips_List(C).CombatValue <= PlayerValue and
-              (ProtoShips_List(C).Owner /= Poleis and
-               ProtoShips_List(C).Owner /= Independent) then
+              not Friendly(ProtoShips_List(C).Owner) then
                Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
             end if;
          end loop;
       else
          for C in ProtoShips_List.Iterate loop
-            if ProtoShips_List(C).Owner /= Poleis and
-              ProtoShips_List(C).Owner /= Independent then
+            if not Friendly(ProtoShips_List(C).Owner) then
                Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
             end if;
          end loop;
