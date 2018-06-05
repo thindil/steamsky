@@ -34,6 +34,7 @@ with ShipModules; use ShipModules;
 with Config; use Config;
 with Events; use Events;
 with Goals; use Goals;
+with Factions; use Factions;
 
 package body Missions is
 
@@ -135,8 +136,7 @@ package body Missions is
       end loop;
       for I in ProtoShips_List.Iterate loop
          if ProtoShips_List(I).CombatValue <= PlayerValue and
-           (ProtoShips_List(I).Owner /= Poleis and
-            ProtoShips_List(I).Owner /= Independent) then
+           not Friendly(ProtoShips_List(I).Owner) then
             Enemies.Append(New_Item => ProtoShips_Container.To_Index(I));
          end if;
       end loop;

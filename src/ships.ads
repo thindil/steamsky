@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -74,7 +74,7 @@ package Ships is
       CombatValue: Positive; -- Combat value of ship (used to generate enemies)
       Crew: Skills_Container.Vector; -- List of mobs indexes of ship crew
       Description: Unbounded_String; -- Description of ship
-      Owner: Bases_Owners; -- Faction to which ship belong
+      Owner: Unbounded_String; -- Faction to which ship belong
       Index: Unbounded_String; -- Index of ship
       KnownRecipes: Positive_Container.Vector; -- List of known recipes
    end record;
