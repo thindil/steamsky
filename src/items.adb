@@ -116,6 +116,9 @@ package body Items is
             TempRecord.Description :=
               To_Unbounded_String
                 (Node_Value(First_Child(Item(ChildNodes, 0))));
+            if TempRecord.Index = MoneyIndex then
+               MoneyName := TempRecord.Name;
+            end if;
             Items_List.Append(New_Item => TempRecord);
             LogMessage
               ("Item added: " & To_String(TempRecord.Name),
