@@ -134,9 +134,7 @@ package body Combat is
       PilotOrder := 2;
       EngineerOrder := 3;
       EndCombat := False;
-      EnemyName :=
-        GenerateShipName
-          (Bases_Owners'Value(To_String(ProtoShips_List(EnemyIndex).Owner)));
+      EnemyName := GenerateShipName(ProtoShips_List(EnemyIndex).Owner);
       MessagesStarts := GetLastMessageIndex + 1;
       Guns.Clear;
       for I in PlayerShip.Modules.Iterate loop

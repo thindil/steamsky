@@ -20,7 +20,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Crew; use Crew;
 with Game; use Game;
 with Missions; use Missions;
-with Bases; use Bases;
 with Items; use Items;
 
 package Ships is
@@ -99,8 +98,7 @@ package Ships is
      (Ship: ShipRecord)
      return Positive; -- Count weight of ship (with modules and cargo)
    function GenerateShipName
-     (Owner: Bases_Owners :=
-        Any)
+     (Owner: Unbounded_String)
      return Unbounded_String; -- Generate random name for ship
    function CountCombatValue
      return Natural; -- Count combat value of player ship

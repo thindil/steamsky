@@ -276,7 +276,7 @@ package body Bases is
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) &
             " asked ship '" &
-            To_String(GenerateShipName) &
+            To_String(GenerateShipName(ProtoShips_List(ShipIndex).Owner)) &
             "' for directions to other bases.",
             OrderMessage);
          DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
@@ -407,7 +407,7 @@ package body Bases is
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) &
             " asked ship '" &
-            To_String(GenerateShipName) &
+            To_String(GenerateShipName(ProtoShips_List(ShipIndex).Owner)) &
             "' for events.",
             OrderMessage);
          DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);

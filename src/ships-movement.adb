@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -22,6 +22,7 @@ with Statistics; use Statistics;
 with Maps; use Maps;
 with Messages; use Messages;
 with Config; use Config;
+with Bases; use Bases;
 
 package body Ships.Movement is
 
