@@ -21,7 +21,7 @@ with Crew; use Crew;
 
 package Factions is
 
-
+   type Reputation_Array is array(1 .. 2) of Integer;
    type FactionRecord is -- Data structure for faction
    record
       Index: Unbounded_String; -- Index of faction, used in code
@@ -30,10 +30,14 @@ package Factions is
       PluralMemberName: Unbounded_String; -- Plural name of members of faction
       SpawnChance: Attributes_Array; -- Chance that created at new game base will be owned by this faction
       Population: Attributes_Array; -- Min and max population for new bases with this faction as owner
-      Reputation: Attributes_Array; -- Min and max value for starting reputation in bases owned by this faction
+      Reputation: Reputation_Array; -- Min and max value for starting reputation in bases owned by this faction
       Friendly: Boolean; -- Did faction is friendly or enemy for player
    end record;
    package Factions_Container is new Vectors(Positive, FactionRecord);
    Factions_List: Factions_Container.Vector;
+   Factions_Directory_Not_Found: exception; -- Raised when no directory with factions files
+   Factions_Files_Not_Found: exception; -- Raised when no files with factions
+
+   procedure LoadFactions; -- Load NPC factions from file
 
 end Factions;
