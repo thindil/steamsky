@@ -32,6 +32,7 @@ package Factions is
       Population: Attributes_Array; -- Min and max population for new bases with this faction as owner
       Reputation: Reputation_Array; -- Min and max value for starting reputation in bases owned by this faction
       Friendly: Boolean; -- Did faction is friendly or enemy for player
+      NamesType: Unbounded_String; -- Type of names of members of faction (used in generating names of ships)
    end record;
    package Factions_Container is new Vectors(Positive, FactionRecord);
    Factions_List: Factions_Container.Vector;

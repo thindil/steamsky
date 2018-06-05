@@ -61,7 +61,8 @@ package body Factions is
             SpawnChance => (0, 0),
             Population => (0, 0),
             Reputation => (0, 0),
-            Friendly => False);
+            Friendly => False,
+            NamesType => To_Unbounded_String("standard"));
          LogMessage
            ("Loading factions file: " & Full_Name(FoundFile),
             Everything);
@@ -127,6 +128,11 @@ package body Factions is
             if Get_Attribute(Item(NodesList, I), "friendly") = "Y" then
                TempRecord.Friendly := True;
             end if;
+            if Get_Attribute(Item(NodesList, I), "namestype") /= "" then
+               TempRecord.NamesType :=
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "namestype"));
+            end if;
             Factions_List.Append(New_Item => TempRecord);
             LogMessage
               ("Faction added: " & To_String(TempRecord.Name),
@@ -139,7 +145,8 @@ package body Factions is
                SpawnChance => (0, 0),
                Population => (0, 0),
                Reputation => (0, 0),
-               Friendly => False);
+               Friendly => False,
+               NamesType => To_Unbounded_String("standard"));
          end loop;
          Free(Reader);
       end loop;

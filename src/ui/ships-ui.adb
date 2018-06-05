@@ -33,6 +33,7 @@ with Glib.Object; use Glib.Object;
 with Maps; use Maps;
 with ShipModules; use ShipModules;
 with Ships.UI.Handlers; use Ships.UI.Handlers;
+with Bases; use Bases;
 
 package body Ships.UI is
 
