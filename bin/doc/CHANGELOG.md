@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
   kill 8000 enemies in melee combat, kill 10000 enemies in melee combat, kill
   800 pirates in melee combat, kill 1000 pirates in melee combat and kill 2000
   pirates in melee combat
+- Option to set player faction
 
 ### Changed
 - Raised gained experience in combat
