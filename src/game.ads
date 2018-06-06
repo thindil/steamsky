@@ -91,6 +91,7 @@ package Game is
    DocDirectory: Unbounded_String :=
      To_Unbounded_String
        ("doc" & Dir_Separator); -- Path to directory where documentation is
+   PlayerFaction: Unbounded_String; -- Index of faction to which player belongs
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
