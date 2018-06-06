@@ -216,6 +216,14 @@ package body Maps.UI.Handlers is
             return;
          end if;
       else
+         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+            if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                .EType =
+              FullDocks then
+               ShowWaitOrders(Object);
+               return;
+            end if;
+         end if;
          Message := To_Unbounded_String(DockShip(True));
          if Length(Message) > 0 then
             ShowDialog

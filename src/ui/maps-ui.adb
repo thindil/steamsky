@@ -456,6 +456,15 @@ package body Maps.UI is
             Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Wait");
          end if;
          Set_Label(Gtk_Button(Get_Object(Builder, "btndock")), "_Dock");
+         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+            if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                .EType =
+              FullDocks then
+               Set_Label
+                 (Gtk_Button(Get_Object(Builder, "btndock")),
+                  "_Wait (full docks)");
+            end if;
+         end if;
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
             Show_All(Gtk_Widget(Get_Object(Builder, "btndock")));
          else
