@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 - Crash when trying to remove destroyed ship module
 - Keyboard shortcut for shipyard in orders menu
 - Again, lots of grammar/spelling errors by LJNIC (pull request #25)
+- Ability to dock when base docks are full
 
 ## [2.4] - 2018-05-20
 
