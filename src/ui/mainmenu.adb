@@ -319,7 +319,7 @@ package body MainMenu is
       if User_Data = Get_Object(Builder, "entryshipname") then
          Set_Text
            (Gtk_Entry(User_Data),
-            To_String(GenerateShipName(To_Unbounded_String("poleis"))));
+            To_String(GenerateShipName(PlayerFaction)));
       else
          if Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender"))) =
            0 then

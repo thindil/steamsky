@@ -599,6 +599,9 @@ package body Game is
               FindSkillIndex
                 (To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "playerfaction" then
+            PlayerFaction :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
          end if;
       end loop;
       Free(Reader);
