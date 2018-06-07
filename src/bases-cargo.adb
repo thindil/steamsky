@@ -76,7 +76,7 @@ package body Bases.Cargo is
                   MaxAmount := 1;
                end if;
                Item.Amount := Item.Amount - GetRandom(1, MaxAmount);
-            elsif Roll < 60 and SkyBases(BaseIndex).Owner /= Abandoned then
+            elsif Roll < 60 and SkyBases(BaseIndex).Population > 0 then
                if Item.Amount = 0 then
                   Item.Amount := GetRandom(1, 10) * Population;
                else

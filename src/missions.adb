@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -49,7 +49,7 @@ package body Missions is
       PlayerValue: Natural := 0;
    begin
       if DaysDifference(SkyBases(BaseIndex).MissionsDate) < 7 or
-        SkyBases(BaseIndex).Owner = Abandoned then
+        SkyBases(BaseIndex).Population = 0 then
          return;
       end if;
       case SkyBases(BaseIndex).Population is
@@ -102,7 +102,7 @@ package body Missions is
          if I /= BaseIndex and
            SkyBases(I).SkyX in MinX .. MaxX and
            SkyBases(I).SkyY in MinY .. MaxY and
-           SkyBases(I).Owner /= Abandoned then
+           SkyBases(I).Population > 0 then
             BasesInRange.Append(New_Item => I);
          end if;
       end loop;
@@ -110,7 +110,7 @@ package body Missions is
          TmpBaseIndex := GetRandom(1, 1024);
          if BasesInRange.Find_Index(Item => TmpBaseIndex) =
            Positive_Container.No_Index and
-           SkyBases(TmpBaseIndex).Owner /= Abandoned then
+           SkyBases(TmpBaseIndex).Population > 0 then
             BasesInRange.Append(New_Item => TmpBaseIndex);
          end if;
       end loop;
