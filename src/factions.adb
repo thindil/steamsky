@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Directories; use Ada.Directories;
-with Ada.Characters.Handling; use Ada.Characters.Handling;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
@@ -152,16 +151,5 @@ package body Factions is
       end loop;
       End_Search(Files);
    end LoadFactions;
-
-   function Friendly(FactionIndex: Unbounded_String) return Boolean is
-   begin
-      for Faction of Factions_List loop
-         if To_Lower(To_String(Faction.Index)) =
-           To_Lower(To_String(FactionIndex)) then
-            return Faction.Friendly;
-         end if;
-      end loop;
-      return True;
-   end Friendly;
 
 end Factions;

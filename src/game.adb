@@ -58,7 +58,7 @@ package body Game is
       TmpRecruits: Recruit_Container.Vector;
       TmpMissions: Mission_Container.Vector;
       CabinAssigned: Boolean := False;
-      BaseOwner: Unbounded_String;
+      BaseOwner: Positive;
       BasePopulation: Natural;
       TmpCargo: BaseCargo_Container.Vector;
       TmpInventory: Inventory_Container.Vector;
@@ -122,22 +122,26 @@ package body Game is
             EventIndex => 0,
             MissionIndex => 0);
          FactionRoll := GetRandom(1, 100);
-         for Faction of Factions_List loop
-            if (FactionRoll = Faction.SpawnChance(1)) or
-              (FactionRoll > Faction.SpawnChance(1) and
-               FactionRoll <= Faction.SpawnChance(2)) then
-               BaseOwner := Faction.Index;
-               if Faction.Population(2) = 0 then
-                  BasePopulation := Faction.Population(1);
+         for J in Factions_List.Iterate loop
+            if (FactionRoll = Factions_List(J).SpawnChance(1)) or
+              (FactionRoll > Factions_List(J).SpawnChance(1) and
+               FactionRoll <= Factions_List(J).SpawnChance(2)) then
+               BaseOwner := Factions_Container.To_Index(J);
+               if Factions_List(J).Population(2) = 0 then
+                  BasePopulation := Factions_List(J).Population(1);
                else
                   BasePopulation :=
-                    GetRandom(Faction.Population(1), Faction.Population(2));
+                    GetRandom
+                      (Factions_List(J).Population(1),
+                       Factions_List(J).Population(2));
                end if;
-               if Faction.Reputation(2) = 0 then
-                  BaseReputation := Faction.Reputation(1);
+               if Factions_List(J).Reputation(2) = 0 then
+                  BaseReputation := Factions_List(J).Reputation(1);
                else
                   BaseReputation :=
-                    GetRandom(Faction.Reputation(1), Faction.Reputation(2));
+                    GetRandom
+                      (Factions_List(J).Reputation(1),
+                       Factions_List(J).Reputation(2));
                end if;
                exit;
             end if;
@@ -164,7 +168,8 @@ package body Game is
       loop
          RandomBase := GetRandom(1, 1024);
          exit when SkyBases(RandomBase).Population > 299 and
-           To_Lower(To_String(SkyBases(RandomBase).Owner)) =
+           To_Lower
+               (To_String(Factions_List(SkyBases(RandomBase).Owner).Index)) =
              To_Lower(To_String(PlayerFaction));
       end loop;
       -- Create player ship
@@ -298,7 +303,7 @@ package body Game is
          if SkyBases(BaseIndex).Visited.Year = 0 then
             GameStats.BasesVisited := GameStats.BasesVisited + 1;
             GameStats.Points := GameStats.Points + 1;
-            UpdateGoal(VISIT, SkyBases(BaseIndex).Owner);
+            UpdateGoal(VISIT, Factions_List(SkyBases(BaseIndex).Owner).Index);
          end if;
          SkyBases(BaseIndex).Visited := GameDate;
          if not SkyBases(BaseIndex).Known then

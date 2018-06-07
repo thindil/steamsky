@@ -20,6 +20,7 @@ with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Maps; use Maps;
 with Items; use Items;
+with Factions; use Factions;
 
 package body Bases.SaveLoad is
 
@@ -325,7 +326,10 @@ package body Bases.SaveLoad is
          else
             Set_Attribute(BaseNode, "known", "N");
          end if;
-         Set_Attribute(BaseNode, "owner", To_String(SkyBases(I).Owner));
+         Set_Attribute
+           (BaseNode,
+            "owner",
+            To_String(Factions_List(SkyBases(I).Owner).Index));
       end loop;
    end SaveBases;
 
@@ -359,9 +363,16 @@ package body Bases.SaveLoad is
             Reputation => (0, 0),
             MissionsDate => (0, 0, 0, 0, 0),
             Missions => BaseMissions,
-            Owner =>
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "owner")),
+            Owner => 1,
             Cargo => BaseCargo);
+         for J in Factions_List.Iterate loop
+            if Factions_List(J).Index =
+              To_Unbounded_String
+                (Get_Attribute(Item(NodesList, I), "owner")) then
+               SkyBases(BaseIndex).Owner := Factions_Container.To_Index(J);
+               exit;
+            end if;
+         end loop;
          if Get_Attribute(Item(NodesList, I), "known") = "Y" then
             SkyBases(BaseIndex).Known := True;
          end if;

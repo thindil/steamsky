@@ -55,7 +55,9 @@ package body Bases is
       end loop;
       SkyBases(BaseIndex).Reputation(2) := NewPoints;
       if SkyBases(BaseIndex).Reputation(1) = 100 then
-         UpdateGoal(REPUTATION, SkyBases(BaseIndex).Owner);
+         UpdateGoal
+           (REPUTATION,
+            Factions_List(SkyBases(BaseIndex).Owner).Index);
       end if;
    end GainRep;
 
@@ -273,7 +275,9 @@ package body Bases is
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) &
             " asked ship '" &
-            To_String(GenerateShipName(ProtoShips_List(ShipIndex).Owner)) &
+            To_String
+              (GenerateShipName
+                 (Factions_List(ProtoShips_List(ShipIndex).Owner).Name)) &
             "' for directions to other bases.",
             OrderMessage);
          DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
@@ -404,7 +408,9 @@ package body Bases is
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) &
             " asked ship '" &
-            To_String(GenerateShipName(ProtoShips_List(ShipIndex).Owner)) &
+            To_String
+              (GenerateShipName
+                 (Factions_List(ProtoShips_List(ShipIndex).Owner).Name)) &
             "' for events.",
             OrderMessage);
          DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
@@ -431,13 +437,13 @@ package body Bases is
          PlayerValue := CountCombatValue;
          for C in ProtoShips_List.Iterate loop
             if ProtoShips_List(C).CombatValue <= PlayerValue and
-              not Friendly(ProtoShips_List(C).Owner) then
+              not Factions_List(ProtoShips_List(C).Owner).Friendly then
                Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
             end if;
          end loop;
       else
          for C in ProtoShips_List.Iterate loop
-            if not Friendly(ProtoShips_List(C).Owner) then
+            if not Factions_List(ProtoShips_List(C).Owner).Friendly then
                Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
             end if;
          end loop;
@@ -480,8 +486,9 @@ package body Bases is
                      exit;
                   end if;
                   if (Event = Disease or Event = DoublePrice) and
-                    Friendly
-                      (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner) then
+                    Factions_List
+                      (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner)
+                      .Friendly then
                      exit;
                   end if;
                   if Event = BaseRecovery and
@@ -575,9 +582,7 @@ package body Bases is
          end if;
          SkyBases(BaseIndex).Population := GetRandom(5, 10);
          SkyBases(BaseIndex).Owner :=
-           Factions_List
-             (GetRandom(Factions_List.First_Index, Factions_List.Last_Index))
-             .Index;
+           GetRandom(Factions_List.First_Index, Factions_List.Last_Index);
       end if;
    end UpdatePopulation;
 

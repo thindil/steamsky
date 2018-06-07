@@ -317,10 +317,8 @@ package body Ships is
          for SkyX in StartX .. EndX loop
             for SkyY in StartY .. EndY loop
                if SkyMap(SkyX, SkyY).BaseIndex > 0 then
-                  if To_Lower
-                      (To_String
-                         (SkyBases(SkyMap(SkyX, SkyY).BaseIndex).Owner)) =
-                    To_Lower(To_String(ProtoShip.Owner)) then
+                  if SkyBases(SkyMap(SkyX, SkyY).BaseIndex).Owner =
+                    ProtoShip.Owner then
                      TmpShip.HomeBase := SkyMap(SkyX, SkyY).BaseIndex;
                      exit Bases_Loop;
                   end if;
@@ -329,8 +327,7 @@ package body Ships is
          end loop Bases_Loop;
          if TmpShip.HomeBase = 0 then
             for I in SkyBases'Range loop
-               if To_Lower(To_String(SkyBases(I).Owner)) =
-                 To_Lower(To_String(ProtoShip.Owner)) then
+               if SkyBases(I).Owner = ProtoShip.Owner then
                   TmpShip.HomeBase := I;
                   exit;
                end if;
@@ -390,7 +387,7 @@ package body Ships is
             CombatValue => 1,
             Crew => TempCrew,
             Description => Null_Unbounded_String,
-            Owner => Null_Unbounded_String,
+            Owner => 1,
             Index => Null_Unbounded_String,
             KnownRecipes => TempRecipes);
          LogMessage("Loading ships file: " & Full_Name(FoundFile), Everything);
@@ -519,10 +516,10 @@ package body Ships is
                end if;
             end loop;
             if Get_Attribute(Item(NodesList, I), "owner") /= "" then
-               for Faction of Factions_List loop
-                  if To_Lower(To_String(Faction.Index)) =
+               for J in Factions_List.Iterate loop
+                  if To_Lower(To_String(Factions_List(J).Index)) =
                     To_Lower(Get_Attribute(Item(NodesList, I), "owner")) then
-                     TempRecord.Owner := Faction.Index;
+                     TempRecord.Owner := Factions_Container.To_Index(J);
                      exit;
                   end if;
                end loop;
@@ -636,7 +633,7 @@ package body Ships is
                CombatValue => 1,
                Crew => TempCrew,
                Description => Null_Unbounded_String,
-               Owner => Null_Unbounded_String,
+               Owner => 1,
                Index => Null_Unbounded_String,
                KnownRecipes => TempRecipes);
          end loop;

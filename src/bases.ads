@@ -64,7 +64,7 @@ package Bases is
       Reputation: Reputation_Array; -- Reputation level and progress of player
       MissionsDate: Date_Record; -- Time when missions was generated
       Missions: Mission_Container.Vector; -- List of available missions
-      Owner: Unbounded_String; -- Owner of base
+      Owner: Positive; -- Index of faction which own base
       Cargo: BaseCargo_Container.Vector; -- List of all cargo in base
    end record;
    SkyBases: array(1 .. 1024) of BaseRecord; -- List of sky bases
