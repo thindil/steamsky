@@ -12,8 +12,8 @@ All notable changes to this project will be documented in this file.
 - New goals: kill 1000 enemies in melee combat, kill 2000 enemies in melee
   combat, kill 4000 enemies in melee combat, kill 6000 enemies in melee combat,
   kill 8000 enemies in melee combat, kill 10000 enemies in melee combat, kill
-  800 pirates in melee combat, kill 1000 pirates in melee combat and kill 2000
-  pirates in melee combat
+  800 pirates in melee combat, kill 1000 pirates in melee combat, kill 2000
+  pirates in melee combat and kill 4000 pirates in melee combat
 - Option to set player faction
 
 ### Changed
