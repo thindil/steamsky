@@ -221,6 +221,11 @@ To change which skill is used for chance to hit enemy in character's combat
 when character don't have weapon, open file *game.dat* in *data* directory and
 edit `value` attribute of tag `unarmedskill`. Value must be existing skill name.
 
+## Player faction
+To change which faction is player faction, edit `value` attribute of tag
+`playerfaction`. Value must be existing faction index from factions files from
+*data/factions* directory.
+
 ## Items
 
 ### General informations
@@ -502,6 +507,44 @@ edit `value` attribute of tag `unarmedskill`. Value must be existing skill name.
   item index from inventory. Item index always starts with 1. Attribute `slot`
   is name of equipment slot in which selected item is set. Possible values for
   `slot`: Weapon, Shield, Head, Torso, Arms, Legs, Tools.
+
+## Factions
+
+### General informations
+- Open file *factions.dat* in *data/factions* directory or create new file 
+  with *dat* extension in that directory (example: *myfactions.dat*).
+
+### Faction data structure
+- Each faction is between `faction` tags.
+- Attribute `index`: index of faction (it can be number or text) and must be
+  unique. At this moment this value is used to create bases during starting new
+  game and to determine which ships are enemies or friends.
+- Attribute `name`: name of factions displayed in game. Can be any text and
+  unique.
+- Attribute `membername`: name of single mobile from this faction. Can be any
+  text.
+- Attribute `pluralmembername`: plural of name of mobiles from this faction.
+  Can be any text.
+- Attributes `minspawn`, `maxspawn` and `spawn`: chance to that newly created 
+  sky base will be owned by that faction. Value of this attributes is roll on 
+  dice 100 and must be unique for each faction. If it should be only one roll, 
+  use attribute `spawn`. If it should be range, use `minspawn` for minimum roll 
+  and `maxspawn` for maximum roll.
+- Attributes `population`, `minpopulation` and `maxpopulation`: starting 
+  population of base owned by that faction. If it should be constant value, use
+  attribute `population`. If it should be random value, use attribute 
+  `minpopulation` for minimum population and `maxpopulation` for maximum 
+  population. Minumum value is 0.
+- Attributes `reputation`, `minreputation` and `maxreputation`: starting 
+  reputation of player in bases owned by that faction. If it should be constant
+  value, use attribute `reputation`. If it should be random value, use attribute
+  `minreputation` for minimum level of reputation and `maxreputation` for maximum
+  level of reputation. Minumum value is -100 and maximum is 100.
+- Attribute `friendly`: did that faction is friendly to player or not. Value `Y`
+  means `Yes`, value `N` means `No`. Used mostly to generate enemy ships.
+- Optional attribute `namestype`: Used in generating ship names of that faction.
+  Can be `standard` (default value) or `robotic`.
+
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
