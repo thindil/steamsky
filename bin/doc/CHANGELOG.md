@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
   800 pirates in melee combat, kill 1000 pirates in melee combat, kill 2000
   pirates in melee combat and kill 4000 pirates in melee combat
 - Option to set player faction
+- Moved NPC factions data to data file
 
 ### Changed
 - Raised gained experience in combat
@@ -30,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - New format of ships data file which made old incompatible
 - New format of goals data file which made old incompatible
 - New format of help data file which made old incompatible
+- Removed Abandoned faction
 
 ### Fixed
 - Crash on showing map cell info
