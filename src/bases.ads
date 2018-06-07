@@ -40,15 +40,6 @@ package Bases is
      array
      (1 ..
           2) of Integer; -- Data structure for reputation, 1 = level, 2 = points to next level
-   type Bases_Owners is
-     (Poleis,
-      Independent,
-      Abandoned,
-      Pirates,
-      Undead,
-      Drones,
-      Inquisition,
-      Any);
    type Base_Cargo is -- Data structure for bases cargo
    record
       ProtoIndex: Positive; -- Index of item prototype
