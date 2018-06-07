@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,8 +19,8 @@ with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 
 package body Utils is
 
-   function GetRandom(Min: Natural; Max: Positive) return Natural is
-      subtype Rand_Range is Natural range Min .. Max;
+   function GetRandom(Min, Max: Integer) return Integer is
+      subtype Rand_Range is Integer range Min .. Max;
       package Rand_Roll is new Discrete_Random(Rand_Range);
       Generator: Rand_Roll.Generator;
    begin

@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,8 +18,8 @@
 package Utils is
 
    function GetRandom
-     (Min: Natural;
-      Max: Positive)
-     return Natural; -- Return random number from Min to Max range
+     (Min,
+      Max: Integer)
+     return Integer; -- Return random number from Min to Max range
 
 end Utils;

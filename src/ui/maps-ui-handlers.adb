@@ -452,7 +452,7 @@ package body Maps.UI.Handlers is
          HaveTrader := True;
       end if;
       if PlayerShip.Speed = DOCKED then
-         if HaveTrader and SkyBases(BaseIndex).Owner /= Abandoned then
+         if HaveTrader and SkyBases(BaseIndex).Population > 0 then
             Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btntrade")), False);
             Set_No_Show_All
               (Gtk_Widget(Get_Object(Object, "btnschool")),
@@ -579,7 +579,7 @@ package body Maps.UI.Handlers is
                   False);
             end if;
          end if;
-         if SkyBases(BaseIndex).Owner = Abandoned then
+         if SkyBases(BaseIndex).Population = 0 then
             Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btnloot")), False);
          end if;
       else

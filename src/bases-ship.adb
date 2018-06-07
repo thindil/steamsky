@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -319,7 +319,7 @@ package body Bases.Ship is
       DockingCost: Positive;
       TraderIndex: constant Natural := FindMember(Talk);
    begin
-      if SkyBases(BaseIndex).Owner = Abandoned then
+      if SkyBases(BaseIndex).Population = 0 then
          return;
       end if;
       if MoneyIndex2 = 0 then

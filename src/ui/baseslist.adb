@@ -38,6 +38,7 @@ with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Ships; use Ships;
 with Utils.UI; use Utils.UI;
+with Factions; use Factions;
 
 package body BasesList is
 
@@ -80,11 +81,15 @@ package body BasesList is
             ASCII.LF &
             "Type: " &
             To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
-         Append
-           (BaseInfo,
-            ASCII.LF &
-            "Owner: " &
-            To_Lower(Bases_Owners'Image(SkyBases(BaseIndex).Owner)));
+         for Faction of Factions_List loop
+            if To_Lower(To_String(Faction.Index)) =
+              To_Lower(To_String(SkyBases(BaseIndex).Owner)) then
+               Append
+                 (BaseInfo,
+                  ASCII.LF & "Owner: " & To_String(Faction.Name));
+               exit;
+            end if;
+         end loop;
          Append(BaseInfo, ASCII.LF & "Size: ");
          if SkyBases(BaseIndex).Population < 150 then
             Append(BaseInfo, "small");
@@ -99,7 +104,7 @@ package body BasesList is
             ASCII.LF &
             "Last visited: " &
             FormatedTime(SkyBases(BaseIndex).Visited));
-         if SkyBases(BaseIndex).Owner /= Abandoned and
+         if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -25 then
             TimeDiff := 30 - DaysDifference(SkyBases(BaseIndex).RecruitDate);
             if TimeDiff > 0 then
@@ -117,7 +122,7 @@ package body BasesList is
               (BaseInfo,
                ASCII.LF & "You can't recruit crew members at this base.");
          end if;
-         if SkyBases(BaseIndex).Owner /= Abandoned and
+         if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -25 then
             TimeDiff := DaysDifference(SkyBases(BaseIndex).AskedForEvents);
             if TimeDiff < 7 then
@@ -135,7 +140,7 @@ package body BasesList is
               (BaseInfo,
                ASCII.LF & "You can't ask for events at this base.");
          end if;
-         if SkyBases(BaseIndex).Owner /= Abandoned and
+         if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -1 then
             TimeDiff := 7 - DaysDifference(SkyBases(BaseIndex).MissionsDate);
             if TimeDiff > 0 then
@@ -241,8 +246,7 @@ package body BasesList is
         Gtk_GEntry(Get_Object(Builder, "entrysearchbases"));
       ShowBase: Boolean := False;
       BasesType: Bases_Types;
-      BasesStatus: Natural;
-      BasesOwner: Bases_Owners;
+      BasesStatus, BasesOwner: Natural;
       BaseIndex: Positive;
    begin
       if SettingTime then
@@ -254,32 +258,46 @@ package body BasesList is
       BasesStatus :=
         Natural(Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbstatus"))));
       BasesOwner :=
-        Bases_Owners'Val
-          (Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbowner"))));
+        Natural(Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbowner")))) +
+        1;
       BaseIndex := Positive(Get_Int(Model, Iter, 1));
       case BasesStatus is
          when 0 => -- All bases
-            if
-              (BasesType = Any or
-               (BasesType /= Any and
-                SkyBases(BaseIndex).Visited.Year > 0 and
-                SkyBases(BaseIndex).BaseType = BasesType)) and
-              (BasesOwner = Any or
-               (BasesOwner /= Any and
-                SkyBases(BaseIndex).Visited.Year > 0 and
-                SkyBases(BaseIndex).Owner = BasesOwner)) then
-               ShowBase := True;
+            if BasesType = Any then
+               if BasesOwner <= Factions_List.Last_Index and
+                 SkyBases(BaseIndex).Visited.Year > 0 then
+                  if SkyBases(BaseIndex).Owner =
+                    Factions_List(BasesOwner).Index then
+                     ShowBase := True;
+                  end if;
+               elsif BasesOwner > Factions_List.Last_Index then
+                  ShowBase := True;
+               end if;
+            elsif SkyBases(BaseIndex).Visited.Year > 0 and
+              SkyBases(BaseIndex).BaseType = BasesType then
+               if BasesOwner <= Factions_List.Last_Index then
+                  if SkyBases(BaseIndex).Owner =
+                    Factions_List(BasesOwner).Index then
+                     ShowBase := True;
+                  end if;
+               else
+                  ShowBase := True;
+               end if;
             end if;
          when 1 => -- Only visited bases
             if
-              ((BasesType = Any or
-                (BasesType /= Any and
-                 SkyBases(BaseIndex).BaseType = BasesType)) and
-               (BasesOwner = Any or
-                (BasesOwner /= Any and
-                 SkyBases(BaseIndex).Owner = BasesOwner))) and
+              (BasesType = Any or
+               (BasesType /= Any and
+                SkyBases(BaseIndex).BaseType = BasesType)) and
               SkyBases(BaseIndex).Visited.Year > 0 then
-               ShowBase := True;
+               if BasesOwner <= Factions_List.Last_Index then
+                  if SkyBases(BaseIndex).Owner =
+                    Factions_List(BasesOwner).Index then
+                     ShowBase := True;
+                  end if;
+               else
+                  ShowBase := True;
+               end if;
             end if;
          when 2 => -- Only not visited bases
             if SkyBases(BaseIndex).Visited.Year = 0 then
@@ -327,15 +345,12 @@ package body BasesList is
             To_Lower(Bases_Types'Image(I)(2 .. Bases_Types'Image(I)'Last)));
       end loop;
       List := Gtk_List_Store(Get_Object(Builder, "ownerslist"));
-      for I in Bases_Owners loop
+      for Faction of Factions_List loop
          Append(List, Iter);
-         Set
-           (List,
-            Iter,
-            0,
-            Bases_Owners'Image(I)(1) &
-            To_Lower(Bases_Owners'Image(I)(2 .. Bases_Owners'Image(I)'Last)));
+         Set(List, Iter, 0, To_String(Faction.Name));
       end loop;
+      Append(List, Iter);
+      Set(List, Iter, 0, "Any");
       Set_Visible_Func
         (Gtk_Tree_Model_Filter(Get_Object(Builder, "basesfilter")),
          VisibleBases'Access);
@@ -351,7 +366,7 @@ package body BasesList is
       Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbstatus")), 0);
       Set_Active
         (Gtk_Combo_Box(Get_Object(Builder, "cmbowner")),
-         Bases_Owners'Pos(Bases_Owners'Last));
+         Gint(Factions_List.Last_Index));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "baseslist");

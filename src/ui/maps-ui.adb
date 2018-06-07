@@ -74,6 +74,7 @@ with GameOptions; use GameOptions;
 with Ships.UI; use Ships.UI;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Trades.UI; use Trades.UI;
+with Factions; use Factions;
 
 package body Maps.UI is
 
@@ -698,14 +699,17 @@ package body Maps.UI is
                end if;
                if SkyBases(BaseIndex).Population > 0 then
                   Append(MapInfoText, ASCII.LF);
-               end if;
-               if SkyBases(BaseIndex).Owner = Abandoned then
-                  Append(MapInfoText, "Base is abandoned");
+                  for Faction of Factions_List loop
+                     if To_Lower(To_String(SkyBases(BaseIndex).Owner)) =
+                       To_Lower(To_String(Faction.Index)) then
+                        Append
+                          (MapInfoText,
+                           "Owner: " & To_String(Faction.Name));
+                        exit;
+                     end if;
+                  end loop;
                else
-                  Append
-                    (MapInfoText,
-                     "Owner: " &
-                     To_Lower(Bases_Owners'Image(SkyBases(BaseIndex).Owner)));
+                  Append(MapInfoText, "Base is abandoned");
                end if;
                if SkyBases(BaseIndex).Population > 0 then
                   Append(MapInfoText, ASCII.LF);
