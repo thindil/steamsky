@@ -73,7 +73,7 @@ package Ships is
       CombatValue: Positive; -- Combat value of ship (used to generate enemies)
       Crew: Skills_Container.Vector; -- List of mobs indexes of ship crew
       Description: Unbounded_String; -- Description of ship
-      Owner: Unbounded_String; -- Faction to which ship belong
+      Owner: Positive; -- Index of faction to which ship belong
       Index: Unbounded_String; -- Index of ship
       KnownRecipes: Positive_Container.Vector; -- List of known recipes
    end record;

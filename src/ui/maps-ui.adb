@@ -699,15 +699,10 @@ package body Maps.UI is
                end if;
                if SkyBases(BaseIndex).Population > 0 then
                   Append(MapInfoText, ASCII.LF);
-                  for Faction of Factions_List loop
-                     if To_Lower(To_String(SkyBases(BaseIndex).Owner)) =
-                       To_Lower(To_String(Faction.Index)) then
-                        Append
-                          (MapInfoText,
-                           "Owner: " & To_String(Faction.Name));
-                        exit;
-                     end if;
-                  end loop;
+                  Append
+                    (MapInfoText,
+                     "Owner: " &
+                     To_String(Factions_List(SkyBases(BaseIndex).Owner).Name));
                else
                   Append(MapInfoText, "Base is abandoned");
                end if;

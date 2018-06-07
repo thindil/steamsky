@@ -81,15 +81,11 @@ package body BasesList is
             ASCII.LF &
             "Type: " &
             To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
-         for Faction of Factions_List loop
-            if To_Lower(To_String(Faction.Index)) =
-              To_Lower(To_String(SkyBases(BaseIndex).Owner)) then
-               Append
-                 (BaseInfo,
-                  ASCII.LF & "Owner: " & To_String(Faction.Name));
-               exit;
-            end if;
-         end loop;
+         Append
+           (BaseInfo,
+            ASCII.LF &
+            "Owner: " &
+            To_String(Factions_List(SkyBases(BaseIndex).Owner).Name));
          Append(BaseInfo, ASCII.LF & "Size: ");
          if SkyBases(BaseIndex).Population < 150 then
             Append(BaseInfo, "small");
@@ -266,8 +262,7 @@ package body BasesList is
             if BasesType = Any then
                if BasesOwner <= Factions_List.Last_Index and
                  SkyBases(BaseIndex).Visited.Year > 0 then
-                  if SkyBases(BaseIndex).Owner =
-                    Factions_List(BasesOwner).Index then
+                  if SkyBases(BaseIndex).Owner = BasesOwner then
                      ShowBase := True;
                   end if;
                elsif BasesOwner > Factions_List.Last_Index then
@@ -276,8 +271,7 @@ package body BasesList is
             elsif SkyBases(BaseIndex).Visited.Year > 0 and
               SkyBases(BaseIndex).BaseType = BasesType then
                if BasesOwner <= Factions_List.Last_Index then
-                  if SkyBases(BaseIndex).Owner =
-                    Factions_List(BasesOwner).Index then
+                  if SkyBases(BaseIndex).Owner = BasesOwner then
                      ShowBase := True;
                   end if;
                else
@@ -291,8 +285,7 @@ package body BasesList is
                 SkyBases(BaseIndex).BaseType = BasesType)) and
               SkyBases(BaseIndex).Visited.Year > 0 then
                if BasesOwner <= Factions_List.Last_Index then
-                  if SkyBases(BaseIndex).Owner =
-                    Factions_List(BasesOwner).Index then
+                  if SkyBases(BaseIndex).Owner = BasesOwner then
                      ShowBase := True;
                   end if;
                else

@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Crew; use Crew;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
@@ -36,7 +35,7 @@ with Factions; use Factions;
 
 package body Combat is
 
-   FractionName: Unbounded_String;
+   FactionName: Unbounded_String;
 
    function StartCombat
      (EnemyIndex: Positive;
@@ -74,13 +73,7 @@ package body Combat is
       end CountPerception;
    begin
       EnemyShipIndex := EnemyIndex;
-      for Faction of Factions_List loop
-         if To_Lower(To_String(ProtoShips_List(EnemyIndex).Owner)) =
-           To_Lower(To_String(Faction.Index)) then
-            FractionName := Faction.Name;
-            exit;
-         end if;
-      end loop;
+      FactionName := Factions_List(ProtoShips_List(EnemyIndex).Owner).Name;
       HarpoonDuration := 0;
       BoardingOrders.Clear;
       EnemyShip :=
@@ -134,7 +127,9 @@ package body Combat is
       PilotOrder := 2;
       EngineerOrder := 3;
       EndCombat := False;
-      EnemyName := GenerateShipName(ProtoShips_List(EnemyIndex).Owner);
+      EnemyName :=
+        GenerateShipName
+          (Factions_List(ProtoShips_List(EnemyIndex).Owner).Index);
       MessagesStarts := GetLastMessageIndex + 1;
       Guns.Clear;
       for I in PlayerShip.Modules.Iterate loop
@@ -203,7 +198,7 @@ package body Combat is
          EnemyNameOwner: constant Unbounded_String :=
            EnemyName &
            To_Unbounded_String(" (") &
-           FractionName &
+           FactionName &
            To_Unbounded_String(")");
          procedure RemoveGun(ModuleIndex: Positive) is
          begin
@@ -667,7 +662,7 @@ package body Combat is
                  To_Unbounded_String(" attacks ") &
                  Defender.Name &
                  To_Unbounded_String(" (") &
-                 FractionName &
+                 FactionName &
                  To_Unbounded_String(")");
             else
                Attacker := Enemy.Ship.Crew(AttackerIndex);
@@ -675,7 +670,7 @@ package body Combat is
                AttackMessage :=
                  Attacker.Name &
                  To_Unbounded_String(" (") &
-                 FractionName &
+                 FactionName &
                  To_Unbounded_String(")") &
                  To_Unbounded_String(" attacks ") &
                  Defender.Name;
@@ -847,8 +842,8 @@ package body Combat is
                         Order := Order - 1;
                      end if;
                   end loop;
-                  UpdateKilledMobs(Defender, FractionName);
-                  UpdateGoal(KILL, FractionName);
+                  UpdateKilledMobs(Defender, FactionName);
+                  UpdateGoal(KILL, FactionName);
                   if Enemy.Ship.Crew.Length = 0 then
                      EndCombat := True;
                   end if;
@@ -1424,7 +1419,9 @@ package body Combat is
          UpdateDestroyedShips(Enemy.Ship.Name);
          UpdateGoal(DESTROY, ProtoShips_List(EnemyShipIndex).Index);
          if CurrentGoal.TargetIndex /= Null_Unbounded_String then
-            UpdateGoal(DESTROY, ProtoShips_List(EnemyShipIndex).Owner);
+            UpdateGoal
+              (DESTROY,
+               Factions_List(ProtoShips_List(EnemyShipIndex).Owner).Index);
          end if;
       end if;
    end CombatTurn;
