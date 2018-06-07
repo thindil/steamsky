@@ -30,12 +30,11 @@ means "Yes", value "N" means "No". Used mostly to generate enemy ships.
 - Optional attribute "namestype": Used in generating ship names of that faction.
 Can be "standard" (default value) or "robotic".
 -->
- <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="94" minpopulation="10" maxpopulation="500" reputation="0" friendly="Y"/>
- <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="95" minpopulation="10" maxpopulation="500" minreputation="-3" maxreputation="2" friendly="Y"/>
- <faction index="ABANDONED" name="Abandoned" spawn="96" population="0" reputation="0" friendly="Y"/>
- <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="97" minpopulation="10" maxpopulation="500" reputation="-10" friendly="N"/>
- <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="98" minpopulation="10" maxpopulation="500" reputation="-100" friendly="N"/>
- <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" spawn="99" minpopulation="10" maxpopulation="500" reputation="-100" friendly="N" namestype="robotic"/>
- <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="100" minpopulation="10" maxpopulation="500" reputation="-50" friendly="N"/>
+ <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="95" minpopulation="0" maxpopulation="500" reputation="0" friendly="Y"/>
+ <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="96" minpopulation="0" maxpopulation="500" minreputation="-3" maxreputation="2" friendly="Y"/>
+ <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="97" minpopulation="0" maxpopulation="500" reputation="-10" friendly="N"/>
+ <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="98" minpopulation="0" maxpopulation="500" reputation="-100" friendly="N"/>
+ <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" spawn="99" minpopulation="0" maxpopulation="500" reputation="-100" friendly="N" namestype="robotic"/>
+ <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="100" minpopulation="0" maxpopulation="500" reputation="-50" friendly="N"/>
 </factions>
 
