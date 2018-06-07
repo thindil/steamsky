@@ -318,7 +318,7 @@ package body Ships is
             for SkyY in StartY .. EndY loop
                if SkyMap(SkyX, SkyY).BaseIndex > 0 then
                   if To_Lower
-                      (Bases_Owners'Image
+                      (To_String
                          (SkyBases(SkyMap(SkyX, SkyY).BaseIndex).Owner)) =
                     To_Lower(To_String(ProtoShip.Owner)) then
                      TmpShip.HomeBase := SkyMap(SkyX, SkyY).BaseIndex;
@@ -329,7 +329,7 @@ package body Ships is
          end loop Bases_Loop;
          if TmpShip.HomeBase = 0 then
             for I in SkyBases'Range loop
-               if To_Lower(Bases_Owners'Image(SkyBases(I).Owner)) =
+               if To_Lower(To_String(SkyBases(I).Owner)) =
                  To_Lower(To_String(ProtoShip.Owner)) then
                   TmpShip.HomeBase := I;
                   exit;

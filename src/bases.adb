@@ -55,10 +55,7 @@ package body Bases is
       end loop;
       SkyBases(BaseIndex).Reputation(2) := NewPoints;
       if SkyBases(BaseIndex).Reputation(1) = 100 then
-         UpdateGoal
-           (REPUTATION,
-            To_Unbounded_String
-              (Bases_Owners'Image(SkyBases(BaseIndex).Owner)));
+         UpdateGoal(REPUTATION, SkyBases(BaseIndex).Owner);
       end if;
    end GainRep;
 
@@ -159,7 +156,7 @@ package body Bases is
       Attributes: Attributes_Container.Vector;
    begin
       if DaysDifference(SkyBases(BaseIndex).RecruitDate) < 30 or
-        SkyBases(BaseIndex).Owner = Abandoned then
+        SkyBases(BaseIndex).Population = 0 then
          return;
       end if;
       if SkyBases(BaseIndex).Population < 150 then
@@ -478,22 +475,18 @@ package body Bases is
                  SkyMap(EventX, EventY).EventIndex = 0 and
                  SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
                   if Event = AttackOnBase and
-                    SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /=
-                      Abandoned then
+                    SkyBases(SkyMap(EventX, EventY).BaseIndex).Population /=
+                      0 then
                      exit;
                   end if;
                   if (Event = Disease or Event = DoublePrice) and
-                    (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /=
-                     Abandoned or
-                     SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /=
-                       Drones or
-                     SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner /=
-                       Undead) then
+                    Friendly
+                      (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner) then
                      exit;
                   end if;
                   if Event = BaseRecovery and
-                    SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner =
-                      Abandoned then
+                    SkyBases(SkyMap(EventX, EventY).BaseIndex).Population =
+                      0 then
                      exit;
                   end if;
                end if;
@@ -559,7 +552,7 @@ package body Bases is
       if DaysDifference(SkyBases(BaseIndex).RecruitDate) < 30 then
          return;
       end if;
-      if SkyBases(BaseIndex).Owner /= Abandoned then
+      if SkyBases(BaseIndex).Population > 0 then
          if GetRandom(1, 100) > 30 then
             return;
          end if;
@@ -574,7 +567,6 @@ package body Bases is
          SkyBases(BaseIndex).Population :=
            SkyBases(BaseIndex).Population + PopulationDiff;
          if SkyBases(BaseIndex).Population = 0 then
-            SkyBases(BaseIndex).Owner := Abandoned;
             SkyBases(BaseIndex).Reputation := (0, 0);
          end if;
       else
@@ -582,15 +574,10 @@ package body Bases is
             return;
          end if;
          SkyBases(BaseIndex).Population := GetRandom(5, 10);
-         loop
-            SkyBases(BaseIndex).Owner :=
-              Bases_Owners'Val
-                (GetRandom
-                   (Bases_Owners'Pos(Bases_Owners'First),
-                    Bases_Owners'Pos(Bases_Owners'Last)));
-            exit when SkyBases(BaseIndex).Owner /= Abandoned and
-              SkyBases(BaseIndex).Owner /= Any;
-         end loop;
+         SkyBases(BaseIndex).Owner :=
+           Factions_List
+             (GetRandom(Factions_List.First_Index, Factions_List.Last_Index))
+             .Index;
       end if;
    end UpdatePopulation;
 
@@ -599,7 +586,7 @@ package body Bases is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Chance, Roll: Positive;
    begin
-      if SkyBases(BaseIndex).Owner = Abandoned then
+      if SkyBases(BaseIndex).Population = 0 then
          return;
       end if;
       if SkyBases(BaseIndex).Population < 150 then

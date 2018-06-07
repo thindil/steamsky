@@ -210,8 +210,8 @@ package body Ships.Movement is
       end if;
       if Docking then
          if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-             .Owner /=
-           Abandoned then
+             .Population >
+           0 then
             if MoneyIndex2 = 0 then
                return "You can't dock to base because you don't have " &
                  To_String(MoneyName) &

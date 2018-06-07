@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Directories; use Ada.Directories;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
@@ -42,6 +43,7 @@ with Utils; use Utils;
 with Goals; use Goals;
 with Game.SaveLoad; use Game.SaveLoad;
 with Mobs; use Mobs;
+with Factions; use Factions;
 
 package body Game is
 
@@ -50,13 +52,13 @@ package body Game is
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
       Gender: Character) is
-      PosX, PosY, RandomBase, ShipIndex, Amount: Positive;
+      PosX, PosY, RandomBase, ShipIndex, Amount, FactionRoll: Positive;
       ValidLocation: Boolean;
       TempX, TempY, BaseReputation: Integer;
       TmpRecruits: Recruit_Container.Vector;
       TmpMissions: Mission_Container.Vector;
       CabinAssigned: Boolean := False;
-      BaseOwner: Bases_Owners;
+      BaseOwner: Unbounded_String;
       BasePopulation: Natural;
       TmpCargo: BaseCargo_Container.Vector;
       TmpInventory: Inventory_Container.Vector;
@@ -119,48 +121,27 @@ package body Game is
             Visited => False,
             EventIndex => 0,
             MissionIndex => 0);
-         BasePopulation := GetRandom(10, 500);
-         case GetRandom(1, 100) is
-            when 1 .. 94 =>
-               BaseOwner := Poleis;
-               BaseReputation := 0;
-            when 95 =>
-               BaseOwner := Independent;
-               case GetRandom(1, 100) is
-                  when 1 .. 95 =>
-                     BaseReputation := 0;
-                  when 96 =>
-                     BaseReputation := -1;
-                  when 97 =>
-                     BaseReputation := -2;
-                  when 98 =>
-                     BaseReputation := -3;
-                  when 99 =>
-                     BaseReputation := 1;
-                  when 100 =>
-                     BaseReputation := 2;
-                  when others =>
-                     null;
-               end case;
-            when 96 =>
-               BaseOwner := Abandoned;
-               BaseReputation := 0;
-               BasePopulation := 0;
-            when 97 =>
-               BaseOwner := Pirates;
-               BaseReputation := -10;
-            when 98 =>
-               BaseOwner := Undead;
-               BaseReputation := -100;
-            when 99 =>
-               BaseOwner := Drones;
-               BaseReputation := -100;
-            when 100 =>
-               BaseOwner := Inquisition;
-               BaseReputation := -50;
-            when others =>
-               null;
-         end case;
+         FactionRoll := GetRandom(1, 100);
+         for Faction of Factions_List loop
+            if (FactionRoll = Faction.SpawnChance(1)) or
+              (FactionRoll > Faction.SpawnChance(1) and
+               FactionRoll <= Faction.SpawnChance(2)) then
+               BaseOwner := Faction.Index;
+               if Faction.Population(2) = 0 then
+                  BasePopulation := Faction.Population(1);
+               else
+                  BasePopulation :=
+                    GetRandom(Faction.Population(1), Faction.Population(2));
+               end if;
+               if Faction.Reputation(2) = 0 then
+                  BaseReputation := Faction.Reputation(1);
+               else
+                  BaseReputation :=
+                    GetRandom(Faction.Reputation(1), Faction.Reputation(2));
+               end if;
+               exit;
+            end if;
+         end loop;
          SkyBases(I) :=
            (Name => GenerateBaseName,
             Visited => (0, 0, 0, 0, 0),
@@ -183,7 +164,8 @@ package body Game is
       loop
          RandomBase := GetRandom(1, 1024);
          exit when SkyBases(RandomBase).Population > 299 and
-           SkyBases(RandomBase).Owner = Poleis;
+           To_Lower(To_String(SkyBases(RandomBase).Owner)) =
+             To_Lower(To_String(PlayerFaction));
       end loop;
       -- Create player ship
       for I in ProtoShips_List.Iterate loop
@@ -316,10 +298,7 @@ package body Game is
          if SkyBases(BaseIndex).Visited.Year = 0 then
             GameStats.BasesVisited := GameStats.BasesVisited + 1;
             GameStats.Points := GameStats.Points + 1;
-            UpdateGoal
-              (VISIT,
-               To_Unbounded_String
-                 (Bases_Owners'Image(SkyBases(BaseIndex).Owner)));
+            UpdateGoal(VISIT, SkyBases(BaseIndex).Owner);
          end if;
          SkyBases(BaseIndex).Visited := GameDate;
          if not SkyBases(BaseIndex).Known then

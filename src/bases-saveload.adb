@@ -325,13 +325,7 @@ package body Bases.SaveLoad is
          else
             Set_Attribute(BaseNode, "known", "N");
          end if;
-         RawValue :=
-           To_Unbounded_String
-             (Integer'Image(Bases_Owners'Pos(SkyBases(I).Owner)));
-         Set_Attribute
-           (BaseNode,
-            "owner",
-            To_String(Trim(RawValue, Ada.Strings.Left)));
+         Set_Attribute(BaseNode, "owner", To_String(SkyBases(I).Owner));
       end loop;
    end SaveBases;
 
@@ -366,8 +360,7 @@ package body Bases.SaveLoad is
             MissionsDate => (0, 0, 0, 0, 0),
             Missions => BaseMissions,
             Owner =>
-              Bases_Owners'Val
-                (Integer'Value(Get_Attribute(Item(NodesList, I), "owner"))),
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "owner")),
             Cargo => BaseCargo);
          if Get_Attribute(Item(NodesList, I), "known") = "Y" then
             SkyBases(BaseIndex).Known := True;

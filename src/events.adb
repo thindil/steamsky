@@ -49,16 +49,17 @@ package body Events is
       Enemies, Engines: Positive_Container.Vector;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      procedure GenerateEnemies(Owner: Bases_Owners := Any) is
+      procedure GenerateEnemies
+        (Owner: Unbounded_String := To_Unbounded_String("Any")) is
       begin
          EnemyIndex := ProtoShips_List.First_Index;
          if GetRandom(1, 100) < 99 then
             PlayerValue := CountCombatValue;
             for Ship of ProtoShips_List loop
                if Ship.CombatValue <= PlayerValue and
-                 (Owner = Any or
+                 (Owner = To_Unbounded_String("Any") or
                   To_Lower(To_String(Ship.Owner)) =
-                    To_Lower(Bases_Owners'Image(Owner))) and
+                    To_Lower(To_String(Owner))) and
                  not Friendly(Ship.Owner) then
                   Enemies.Append(New_Item => EnemyIndex);
                end if;
@@ -67,9 +68,9 @@ package body Events is
          else
             for Ship of ProtoShips_List loop
                if
-                 (Owner = Any or
+                 (Owner = To_Unbounded_String("Any") or
                   To_Lower(To_String(Ship.Owner)) =
-                    To_Lower(Bases_Owners'Image(Owner))) and
+                    To_Lower(To_String(Owner))) and
                  not Friendly(Ship.Owner) then
                   Enemies.Append(New_Item => EnemyIndex);
                end if;
@@ -220,7 +221,7 @@ package body Events is
                   return StartCombat(Events_List(Events_List.Last_Index).Data);
             end case;
          else
-            if SkyBases(BaseIndex).Owner = Abandoned then
+            if SkyBases(BaseIndex).Population = 0 then
                if Roll < 6 and
                  PlayerShip.Speed /=
                    DOCKED then -- Change owner of abandoned base
@@ -230,8 +231,7 @@ package body Events is
             end if;
             if PlayerShip.Speed /= DOCKED then
                if Roll in 21 .. 30 and
-                 (SkyBases(BaseIndex).Owner = Drones or
-                  SkyBases(BaseIndex).Owner = Undead) then
+                 SkyBases(BaseIndex).Reputation(1) = -100 then
                   Roll := 31;
                end if;
                case Roll is
@@ -280,9 +280,7 @@ package body Events is
                          ItemIndex));
                   when others => -- Full docks or enemy patrol
                      if Roll in 20 .. 40 and
-                       (SkyBases(BaseIndex).Owner /= Poleis and
-                        SkyBases(BaseIndex).Owner /= Independent) and
-                       SkyBases(BaseIndex).Reputation(1) < -24 then
+                       not Friendly(SkyBases(BaseIndex).Owner) then
                         GenerateEnemies(SkyBases(BaseIndex).Owner);
                         Events_List.Append
                         (New_Item =>
@@ -382,7 +380,6 @@ package body Events is
                PopulationLost := GetRandom(1, 10);
                if PopulationLost > SkyBases(BaseIndex).Population then
                   PopulationLost := SkyBases(BaseIndex).Population;
-                  SkyBases(BaseIndex).Owner := Abandoned;
                   SkyBases(BaseIndex).Reputation := (0, 0);
                end if;
                SkyBases(BaseIndex).Population :=
@@ -437,67 +434,30 @@ package body Events is
    end GenerateTraders;
 
    procedure RecoverBase(BaseIndex: Positive) is
+      FactionRoll: constant Positive := GetRandom(1, 100);
    begin
-      SkyBases(BaseIndex).Owner := Bases_Owners'Val(GetRandom(1, 7));
-      case GetRandom(1, 100) is
-         when 1 .. 94 =>
-            SkyBases(BaseIndex).Owner := Poleis;
-         when 95 =>
-            SkyBases(BaseIndex).Owner := Independent;
-         when 96 =>
-            SkyBases(BaseIndex).Owner := Abandoned;
-         when 97 =>
-            SkyBases(BaseIndex).Owner := Pirates;
-         when 98 =>
-            SkyBases(BaseIndex).Owner := Undead;
-         when 99 =>
-            SkyBases(BaseIndex).Owner := Drones;
-         when 100 =>
-            SkyBases(BaseIndex).Owner := Inquisition;
-         when others =>
-            null;
-      end case;
-      if SkyBases(BaseIndex).Owner /= Abandoned then
-         SkyBases(BaseIndex).Population := GetRandom(2, 50);
-         SkyBases(BaseIndex).Visited := (0, 0, 0, 0, 0);
-         SkyBases(BaseIndex).RecruitDate := (0, 0, 0, 0, 0);
-         SkyBases(BaseIndex).MissionsDate := (0, 0, 0, 0, 0);
-         case SkyBases(BaseIndex).Owner is
-            when Poleis =>
-               SkyBases(BaseIndex).Reputation(1) := 0;
-            when Independent =>
-               case GetRandom(1, 100) is
-                  when 1 .. 95 =>
-                     SkyBases(BaseIndex).Reputation(1) := 0;
-                  when 96 =>
-                     SkyBases(BaseIndex).Reputation(1) := -1;
-                  when 97 =>
-                     SkyBases(BaseIndex).Reputation(1) := -2;
-                  when 98 =>
-                     SkyBases(BaseIndex).Reputation(1) := -3;
-                  when 99 =>
-                     SkyBases(BaseIndex).Reputation(1) := 1;
-                  when 100 =>
-                     SkyBases(BaseIndex).Reputation(1) := 2;
-                  when others =>
-                     null;
-               end case;
-            when Pirates =>
-               SkyBases(BaseIndex).Reputation(1) := -10;
-            when Undead =>
-               SkyBases(BaseIndex).Reputation(1) := -100;
-            when Drones =>
-               SkyBases(BaseIndex).Reputation(1) := -100;
-            when Inquisition =>
-               SkyBases(BaseIndex).Reputation(1) := -50;
-            when others =>
-               null;
-         end case;
-         AddMessage
-           ("Base " & To_String(SkyBases(BaseIndex).Name) & " have new owner.",
-            OtherMessage,
-            5);
-      end if;
+      for Faction of Factions_List loop
+         if (FactionRoll = Faction.SpawnChance(1)) or
+           (FactionRoll > Faction.SpawnChance(1) and
+            FactionRoll <= Faction.SpawnChance(2)) then
+            SkyBases(BaseIndex).Owner := Faction.Index;
+            if Faction.Reputation(2) = 0 then
+               SkyBases(BaseIndex).Reputation(1) := Faction.Reputation(1);
+            else
+               SkyBases(BaseIndex).Reputation(1) :=
+                 GetRandom(Faction.Reputation(1), Faction.Reputation(2));
+            end if;
+            exit;
+         end if;
+      end loop;
+      SkyBases(BaseIndex).Population := GetRandom(2, 50);
+      SkyBases(BaseIndex).Visited := (0, 0, 0, 0, 0);
+      SkyBases(BaseIndex).RecruitDate := (0, 0, 0, 0, 0);
+      SkyBases(BaseIndex).MissionsDate := (0, 0, 0, 0, 0);
+      AddMessage
+        ("Base " & To_String(SkyBases(BaseIndex).Name) & " have new owner.",
+         OtherMessage,
+         5);
    end RecoverBase;
 
 end Events;
