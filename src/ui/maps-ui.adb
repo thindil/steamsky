@@ -431,7 +431,6 @@ package body Maps.UI is
          Hide(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
          Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Wait");
-         Set_Label(Gtk_Button(Get_Object(Builder, "btndock")), "_Undock");
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupleft")), False);
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnup")), False);
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupright")), False);
@@ -455,21 +454,6 @@ package body Maps.UI is
          else
             Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
             Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Wait");
-         end if;
-         Set_Label(Gtk_Button(Get_Object(Builder, "btndock")), "_Dock");
-         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
-            if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                .EType =
-              FullDocks then
-               Set_Label
-                 (Gtk_Button(Get_Object(Builder, "btndock")),
-                  "_Wait (full docks)");
-            end if;
-         end if;
-         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
-            Show_All(Gtk_Widget(Get_Object(Builder, "btndock")));
-         else
-            Hide(Gtk_Widget(Get_Object(Builder, "btndock")));
          end if;
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupleft")));
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnup")));
