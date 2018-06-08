@@ -207,6 +207,7 @@ package body Maps.UI.Handlers is
    procedure BtnDockClicked(Object: access Gtkada_Builder_Record'Class) is
       Message: Unbounded_String := Null_Unbounded_String;
    begin
+      Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
       if PlayerShip.Speed = DOCKED then
          Message := To_Unbounded_String(DockShip(False));
          if Length(Message) > 0 then
@@ -452,6 +453,8 @@ package body Maps.UI.Handlers is
          HaveTrader := True;
       end if;
       if PlayerShip.Speed = DOCKED then
+         Set_Label(Gtk_Button(Get_Object(Builder, "btndock")), "_Undock");
+         Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btndock")), False);
          if HaveTrader and SkyBases(BaseIndex).Population > 0 then
             Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btntrade")), False);
             Set_No_Show_All
@@ -600,6 +603,12 @@ package body Maps.UI.Handlers is
                Set_No_Show_All
                  (Gtk_Widget(Get_Object(Object, "btnattack")),
                   False);
+               Set_Label
+                 (Gtk_Button(Get_Object(Builder, "btndock")),
+                  "_Wait (full docks)");
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btndock")),
+                  False);
                Set_Label(Gtk_Button(Get_Object(Object, "btnattack")), "_Wait");
             when AttackOnBase =>
                Set_No_Show_All
@@ -625,6 +634,12 @@ package body Maps.UI.Handlers is
                end if;
             when None | DoublePrice | BaseRecovery =>
                if BaseIndex > 0 then
+                  Set_Label
+                    (Gtk_Button(Get_Object(Builder, "btndock")),
+                     "_Dock");
+                  Set_No_Show_All
+                    (Gtk_Widget(Get_Object(Object, "btndock")),
+                     False);
                   for Mission of PlayerShip.Missions loop
                      if HaveTrader then
                         case Mission.MType is
