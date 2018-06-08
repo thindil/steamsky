@@ -27,8 +27,8 @@ value, use attribute "reputation". If it should be random value, use attribute
 level of reputation. Minumum value is -100 and maximum is 100.
 - Attribute "friendly": did that faction is friendly to player or not. Value "Y"
 means "Yes", value "N" means "No". Used mostly to generate enemy ships.
-- Optional attribute "namestype": Used in generating ship names of that faction.
-Can be "standard" (default value) or "robotic".
+- Optional attribute "namestype": Used in generating ship names of that faction
+and names of all bases. Can be "standard" (default value) or "robotic".
 -->
  <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="95" minpopulation="0" maxpopulation="500" reputation="0" friendly="Y"/>
  <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="96" minpopulation="0" maxpopulation="500" minreputation="-3" maxreputation="2" friendly="Y"/>
