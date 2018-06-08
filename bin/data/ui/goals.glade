@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 
+<!-- Generated with glade 3.22.1 
 
 Copyright (C) 2018 Bartek thindil Jasicki
 
@@ -34,11 +34,14 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   </object>
   <object class="GtkWindow" id="goalswindow">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Steam Sky - select goal</property>
+    <property name="title" translatable="yes">Steam Sky - Select Goal</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="default_height">600</property>
     <signal name="delete-event" handler="Hide_Goals" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -58,6 +61,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="headers_visible">False</property>
                 <property name="headers_clickable">False</property>
                 <signal name="cursor-changed" handler="Goal_Selected" swapped="no"/>
+                <signal name="row-activated" handler="Select_Goal" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
                 </child>
@@ -96,9 +100,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>
