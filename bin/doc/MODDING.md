@@ -542,8 +542,8 @@ To change which faction is player faction, edit `value` attribute of tag
   level of reputation. Minumum value is -100 and maximum is 100.
 - Attribute `friendly`: did that faction is friendly to player or not. Value `Y`
   means `Yes`, value `N` means `No`. Used mostly to generate enemy ships.
-- Optional attribute `namestype`: Used in generating ship names of that faction.
-  Can be `standard` (default value) or `robotic`.
+- Optional attribute `namestype`: Used in generating ship names of that faction
+  and names of all bases. Can be `standard` (default value) or `robotic`.
 
 
 ## Debugging
