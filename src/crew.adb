@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ships; use Ships;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
@@ -24,6 +25,7 @@ with Ships.Crew; use Ships.Crew;
 with Maps; use Maps;
 with Crew.Inventory; use Crew.Inventory;
 with Combat; use Combat;
+with Factions; use Factions;
 
 package body Crew is
 
@@ -86,68 +88,101 @@ package body Crew is
    function GenerateMemberName
      (Gender: Character)
      return Unbounded_String is -- based on name generator from libtcod
-      NewName: Unbounded_String;
+      NewName, NameType: Unbounded_String;
+      LettersAmount, NumbersAmount: Positive;
+      subtype Letters is Character range 'A' .. 'Z';
+      subtype Numbers is Character range '0' .. '9';
    begin
-      if Gender = 'M' then
-         NewName :=
-           MaleSyllablesStart
-             (GetRandom
-                (MaleSyllablesStart.First_Index,
-                 MaleSyllablesStart.Last_Index)) &
-           MaleVocals
-             (GetRandom(MaleVocals.First_Index, MaleVocals.Last_Index));
-         if GetRandom(1, 100) < 36 then
+      for Faction of Factions_List loop
+         if To_Lower(To_String(Faction.Index)) =
+           To_Lower(To_String(PlayerFaction)) then
+            NameType := Faction.NamesType;
+            exit;
+         end if;
+      end loop;
+      NewName := Null_Unbounded_String;
+      if To_Lower(To_String(NameType)) = "standard" then
+         if Gender = 'M' then
+            NewName :=
+              MaleSyllablesStart
+                (GetRandom
+                   (MaleSyllablesStart.First_Index,
+                    MaleSyllablesStart.Last_Index)) &
+              MaleVocals
+                (GetRandom(MaleVocals.First_Index, MaleVocals.Last_Index));
+            if GetRandom(1, 100) < 36 then
+               Append
+                 (NewName,
+                  MaleSyllablesMiddle
+                    (GetRandom
+                       (MaleSyllablesMiddle.First_Index,
+                        MaleSyllablesMiddle.Last_Index)));
+            end if;
+            if GetRandom(1, 100) < 11 then
+               Append
+                 (NewName,
+                  MaleConsonants
+                    (GetRandom
+                       (MaleConsonants.First_Index,
+                        MaleConsonants.Last_Index)));
+            end if;
             Append
               (NewName,
-               MaleSyllablesMiddle
+               MaleSyllablesEnd
                  (GetRandom
-                    (MaleSyllablesMiddle.First_Index,
-                     MaleSyllablesMiddle.Last_Index)));
-         end if;
-         if GetRandom(1, 100) < 11 then
+                    (MaleSyllablesEnd.First_Index,
+                     MaleSyllablesEnd.Last_Index)));
+         else
+            NewName :=
+              FemaleSyllablesStart
+                (GetRandom
+                   (FemaleSyllablesStart.First_Index,
+                    FemaleSyllablesStart.Last_Index)) &
+              FemaleVocals
+                (GetRandom(FemaleVocals.First_Index, FemaleVocals.Last_Index));
+            if GetRandom(1, 100) < 36 then
+               Append
+                 (NewName,
+                  FemaleSyllablesMiddle
+                    (GetRandom
+                       (FemaleSyllablesMiddle.First_Index,
+                        FemaleSyllablesMiddle.Last_Index)));
+            end if;
+            if GetRandom(1, 100) < 11 then
+               Append
+                 (NewName,
+                  FemaleSyllablesMiddle
+                    (GetRandom
+                       (FemaleSyllablesMiddle.First_Index,
+                        FemaleSyllablesMiddle.Last_Index)));
+            end if;
             Append
               (NewName,
-               MaleConsonants
+               FemaleSyllablesEnd
                  (GetRandom
-                    (MaleConsonants.First_Index,
-                     MaleConsonants.Last_Index)));
+                    (FemaleSyllablesEnd.First_Index,
+                     FemaleSyllablesEnd.Last_Index)));
          end if;
-         Append
-           (NewName,
-            MaleSyllablesEnd
-              (GetRandom
-                 (MaleSyllablesEnd.First_Index,
-                  MaleSyllablesEnd.Last_Index)));
       else
-         NewName :=
-           FemaleSyllablesStart
-             (GetRandom
-                (FemaleSyllablesStart.First_Index,
-                 FemaleSyllablesStart.Last_Index)) &
-           FemaleVocals
-             (GetRandom(FemaleVocals.First_Index, FemaleVocals.Last_Index));
-         if GetRandom(1, 100) < 36 then
+         LettersAmount := GetRandom(2, 5);
+         for I in 1 .. LettersAmount loop
             Append
               (NewName,
-               FemaleSyllablesMiddle
+               Letters'Val
                  (GetRandom
-                    (FemaleSyllablesMiddle.First_Index,
-                     FemaleSyllablesMiddle.Last_Index)));
-         end if;
-         if GetRandom(1, 100) < 11 then
+                    (Letters'Pos(Letters'First),
+                     Letters'Pos(Letters'Last))));
+         end loop;
+         Append(NewName, '-');
+         NumbersAmount := GetRandom(2, 4);
+         for I in 1 .. NumbersAmount loop
             Append
               (NewName,
-               FemaleSyllablesMiddle
+               Numbers'Val
                  (GetRandom
-                    (FemaleSyllablesMiddle.First_Index,
-                     FemaleSyllablesMiddle.Last_Index)));
-         end if;
-         Append
-           (NewName,
-            FemaleSyllablesEnd
-              (GetRandom
-                 (FemaleSyllablesEnd.First_Index,
-                  FemaleSyllablesEnd.Last_Index)));
+                    (Numbers'Pos(Numbers'First),
+                     Numbers'Pos(Numbers'Last))));
+         end loop;
       end if;
       return NewName;
    end GenerateMemberName;
