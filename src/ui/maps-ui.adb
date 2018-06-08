@@ -426,23 +426,29 @@ package body Maps.UI is
    end UpdateHeader;
 
    procedure UpdateMoveButtons is
+      MoveButtonsNames: constant array
+        (Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("btnupleft"),
+         To_Unbounded_String("btnup"),
+         To_Unbounded_String("btnupright"),
+         To_Unbounded_String("btnleft"),
+         To_Unbounded_String("btnright"),
+         To_Unbounded_String("btnbottomleft"),
+         To_Unbounded_String("btnbottom"),
+         To_Unbounded_String("btnbottomright"));
    begin
       if PlayerShip.Speed = DOCKED then
          Hide(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
          Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Wait");
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupleft")), False);
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnup")), False);
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupright")), False);
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnleft")), False);
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnright")), False);
-         Set_Sensitive
-           (Gtk_Widget(Get_Object(Builder, "btnbottomleft")),
-            False);
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnbottom")), False);
-         Set_Sensitive
-           (Gtk_Widget(Get_Object(Builder, "btnbottomright")),
-            False);
+         for I in MoveButtonsNames'Range loop
+            Set_Sensitive
+              (Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I)))),
+               False);
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I)))),
+               "You must give order 'Undock' from Ship Orders first to move ship.");
+         end loop;
       else
          Set_Active
            (Gtk_Combo_Box(Get_Object(Builder, "cmbspeed")),
@@ -455,14 +461,14 @@ package body Maps.UI is
             Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
             Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Wait");
          end if;
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupleft")));
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnup")));
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnupright")));
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnleft")));
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnright")));
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnbottomleft")));
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnbottom")));
-         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "btnbottomright")));
+         for I in MoveButtonsNames'Range loop
+            Set_Sensitive
+              (Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I)))),
+               True);
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I)))),
+               "");
+         end loop;
       end if;
    end UpdateMoveButtons;
 
