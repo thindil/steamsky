@@ -72,6 +72,10 @@ package body Goals.UI is
       GoalsModel: Gtk_Tree_Model;
    begin
       Get_Selected(Get_Selection(GoalsView), GoalsModel, Iter);
+      if Get_String(GoalsModel, Iter, 0) /= "Random" and
+        Get_Int(GoalsModel, Iter, 1) = 0 then
+         return;
+      end if;
       if Get_String(GoalsModel, Iter, 0) = "Random" then
          ClearCurrentGoal;
          if FromMainMenu then
