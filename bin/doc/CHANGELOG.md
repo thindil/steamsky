@@ -54,6 +54,7 @@ All notable changes to this project will be documented in this file.
 - Keyboard shortcut for shipyard in orders menu
 - Again, lots of grammar/spelling errors by LJNIC (pull request #25)
 - Ability to dock when base docks are full
+- Showing info about unknown bases on map
 
 ## [2.4] - 2018-05-20
 
