@@ -104,3 +104,10 @@ GtkSpinButton {
 .tooltip * {
    background:rgb(25,25,25);
 }
+
+GtkLabel#overlaylabel {
+   border-style:none none solid solid;
+   border-width:2px;
+   border-color:green;
+   background:rgb(25,25,25);
+}
