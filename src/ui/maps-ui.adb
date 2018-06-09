@@ -34,6 +34,7 @@ with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Image; use Gtk.Image;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Overlay; use Gtk.Overlay;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -838,6 +839,9 @@ package body Maps.UI is
       CreateShipUI(Builder);
       CreateCargoUI(Builder);
       CreateTradeUI(Builder);
+      Add_Overlay
+        (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
+         Gtk_Widget(Get_Object(Builder, "lblmaptooltip")));
       Register_Handler(Builder, "Quit_Game", QuitGame'Access);
       Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
@@ -1104,6 +1108,20 @@ package body Maps.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "skymap");
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
+      UpdateMapInfo(Builder);
    end ShowSkyMap;
+
+   procedure UpdateMapInfo(Object: access Gtkada_Builder_Record'Class) is
+      MapInfoText: Unbounded_String;
+   begin
+      GetCurrentCellCoords;
+      Append
+        (MapInfoText,
+         "X:" & Positive'Image(MapX) & " Y:" & Positive'Image(MapY));
+      BuildMapInfo(MapInfoText);
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblmaptooltip")),
+         To_String(MapInfoText));
+   end UpdateMapInfo;
 
 end Maps.UI;

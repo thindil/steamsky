@@ -1140,16 +1140,8 @@ package body Maps.UI.Handlers is
 
    function UpdateTooltip
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
-      MapInfoText: Unbounded_String;
    begin
-      GetCurrentCellCoords;
-      Append
-        (MapInfoText,
-         "X:" & Positive'Image(MapX) & " Y:" & Positive'Image(MapY));
-      BuildMapInfo(MapInfoText);
-      Set_Tooltip_Text
-        (Gtk_Widget(Get_Object(Object, "mapview")),
-         To_String(MapInfoText));
+      UpdateMapInfo(Object);
       return False;
    end UpdateTooltip;
 
