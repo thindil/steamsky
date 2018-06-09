@@ -288,11 +288,7 @@ package body Bases.LootUI is
          if Items_List(PlayerShip.Cargo(I).ProtoIndex).Prices(BaseType) >
            0 then
             Append(ItemsList, ItemsIter);
-            Set
-              (ItemsList,
-               ItemsIter,
-               0,
-               To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name));
+            Set(ItemsList, ItemsIter, 0, GetItemName(PlayerShip.Cargo(I)));
             Set
               (ItemsList,
                ItemsIter,

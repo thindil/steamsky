@@ -162,11 +162,27 @@ package body Items is
    end FindProtoItem;
 
    function GetItemName(Item: InventoryData) return String is
+      ItemName: Unbounded_String;
+      DamagePercent: Float;
    begin
       if Item.Name /= Null_Unbounded_String then
-         return To_String(Item.Name);
+         ItemName := Item.Name;
+      else
+         ItemName := Items_List(Item.ProtoIndex).Name;
       end if;
-      return To_String(Items_List(Item.ProtoIndex).Name);
+      if Item.Durability < 100 then
+         DamagePercent := 1.0 - (Float(Item.Durability) / 100.0);
+         if DamagePercent < 0.2 then
+            Append(ItemName, " (slightly used)");
+         elsif DamagePercent < 0.5 then
+            Append(ItemName, " (damaged)");
+         elsif DamagePercent < 0.8 then
+            Append(ItemName, " (heavily damaged)");
+         else
+            Append(ItemName, " (almost destroyed)");
+         end if;
+      end if;
+      return To_String(ItemName);
    end GetItemName;
 
    procedure DamageItem
