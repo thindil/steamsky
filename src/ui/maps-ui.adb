@@ -664,15 +664,17 @@ package body Maps.UI is
          declare
             BaseIndex: constant Positive := SkyMap(MapX, MapY).BaseIndex;
          begin
-            if Length(MapInfoText) > 0 then
+            if SkyBases(BaseIndex).Known then
+               if Length(MapInfoText) > 0 then
+                  Append(MapInfoText, ASCII.LF);
+               end if;
+               Append(MapInfoText, "Base info:");
                Append(MapInfoText, ASCII.LF);
+               Append
+                 (MapInfoText,
+                  To_Unbounded_String("Name: ") & SkyBases(BaseIndex).Name);
             end if;
-            Append(MapInfoText, "Base info:");
-            Append(MapInfoText, ASCII.LF);
-            Append
-              (MapInfoText,
-               To_Unbounded_String("Name: ") & SkyBases(BaseIndex).Name);
-            if SkyBases(SkyMap(MapX, MapY).BaseIndex).Visited.Year > 0 then
+            if SkyBases(BaseIndex).Visited.Year > 0 then
                Append(MapInfoText, ASCII.LF);
                Append
                  (MapInfoText,
