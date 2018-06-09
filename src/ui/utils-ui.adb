@@ -124,26 +124,24 @@ package body Utils.UI is
    end CloseWindow;
 
    procedure CloseMessages(Object: access Gtkada_Builder_Record'Class) is
+      VisibleChildName: constant String :=
+        Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack")));
    begin
-      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack"))) =
-        "options" then
+      if VisibleChildName = "options" then
          CloseOptions(Object);
          return;
       end if;
-      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack"))) =
-        "inventory" then
+      if VisibleChildName = "inventory" then
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Object, "gamestack")),
             "crew");
          return;
       end if;
-      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack"))) =
-        "gamestats" then
+      if VisibleChildName = "gamestats" then
          HideStatistics;
          return;
       end if;
-      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack"))) =
-        "combat" then
+      if VisibleChildName = "combat" then
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), True);
       end if;
       Hide(Gtk_Widget(Get_Object(Object, "btnclose")));
