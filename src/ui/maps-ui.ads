@@ -54,4 +54,8 @@ private
    procedure GetCurrentCellCoords; -- Get current map cell coordinates based on mouse position
    procedure BuildMapInfo
      (MapInfoText: in out Unbounded_String); -- Build info about selected map cell
+   procedure UpdateMapInfo
+     (Object: access Gtkada_Builder_Record'
+        Class); -- Update info about current map cell
+
 end Maps.UI;
