@@ -34,6 +34,8 @@ package Bases is
       Price: Positive; -- Cost of enlist of recruit
       Attributes: Attributes_Container
         .Vector; -- Names indexes, levels and experience in attributes of recruit
+      Inventory: Positive_Container.Vector; -- Owned items by recruit
+      Equipment: Equipment_Array; -- Items indexes from inventory used by recruit: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
    end record;
    package Recruit_Container is new Vectors(Positive, Recruit_Data);
    type Reputation_Array is

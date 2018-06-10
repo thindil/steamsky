@@ -50,6 +50,18 @@ package Items is
    Items_List: Objects_Container.Vector; -- List of item available in game
    Tools_List: UnboundedString_Container
      .Vector; -- List of all tools types in game
+   Weapons_List: Positive_Container
+     .Vector; -- List of indexes of all weapons in game
+   Shields_List: Positive_Container
+     .Vector; -- List of indexes of all shields in game
+   HeadArmors_List: Positive_Container
+     .Vector; -- List of indexes of all head armors in game
+   ChestArmors_List: Positive_Container
+     .Vector; -- List of indexes of all chest armors in game
+   ArmsArmors_List: Positive_Container
+     .Vector; -- List of indexes of all arms armors in game
+   LegsArmors_List: Positive_Container
+     .Vector; -- List of indexes of all legs armors in game
    Items_Directory_Not_Found: exception; -- Raised when no directory with items files
    Items_Files_Not_Found: exception; -- Raised when no files with items
 

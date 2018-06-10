@@ -189,6 +189,8 @@ package body Bases is
       Price: Natural;
       SkillIndex: Integer;
       Attributes: Attributes_Container.Vector;
+      Inventory: Positive_Container.Vector;
+      Equipment: Equipment_Array; 
    begin
       if DaysDifference(SkyBases(BaseIndex).RecruitDate) < 30 or
         SkyBases(BaseIndex).Population = 0 then
@@ -210,18 +212,13 @@ package body Bases is
          Skills.Clear;
          Attributes.Clear;
          Price := 0;
+         Inventory.Clear;
+         Equipment := (others => 0);
          if GetRandom(1, 2) = 1 then
             Gender := 'M';
          else
             Gender := 'F';
          end if;
-         BaseRecruits.Append
-         (New_Item =>
-            (Name => GenerateMemberName(Gender),
-             Gender => Gender,
-             Price => 1,
-             Skills => Skills,
-             Attributes => Attributes));
          SkillsAmount :=
            GetRandom(Skills_List.First_Index, Skills_List.Last_Index);
          for J in 1 .. SkillsAmount loop
@@ -256,9 +253,15 @@ package body Bases is
             Price := Price + (Stat(2) * 5);
          end loop;
          Price := Price * 100;
-         BaseRecruits(BaseRecruits.Last_Index).Skills := Skills;
-         BaseRecruits(BaseRecruits.Last_Index).Attributes := Attributes;
-         BaseRecruits(BaseRecruits.Last_Index).Price := Price;
+         BaseRecruits.Append
+         (New_Item =>
+            (Name => GenerateMemberName(Gender),
+             Gender => Gender,
+             Price => Price,
+             Skills => Skills,
+             Attributes => Attributes,
+             Inventory => Inventory,
+             Equipment => Equipment));
       end loop;
       SkyBases(BaseIndex).RecruitDate := GameDate;
       SkyBases(BaseIndex).Recruits := BaseRecruits;
