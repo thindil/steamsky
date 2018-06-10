@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.0.7] - 2018-06-10
 
 ### Fixed
 - Crash in showing news in small console
