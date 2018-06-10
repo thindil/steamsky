@@ -104,6 +104,12 @@ package body Bases.UI is
             ". " &
             To_String(Skills_List(Skill(1)).Description));
       end loop;
+      List := Gtk_List_Store(Get_Object(Object, "equipmentlist"));
+      Clear(List);
+      for Item of Recruit.Inventory loop
+         Append(List, Iter);
+         Set(List, Iter, 0, To_String(Items_List(Item).Name));
+      end loop;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if MoneyIndex2 > 0 then
          Set_Label

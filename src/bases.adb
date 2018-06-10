@@ -204,7 +204,7 @@ package body Bases is
          end if;
          ItemIndex :=
            GetRandom(ItemsIndexes.First_Index, ItemsIndexes.Last_Index);
-         Inventory.Append(New_Item => ItemIndex);
+         Inventory.Append(New_Item => ItemsIndexes(ItemIndex));
          Equipment(EquipIndex) := Inventory.Last_Index;
          Price := Price + (Items_List(ItemIndex).Prices(1) * 2);
       end AddInventory;
