@@ -14,7 +14,8 @@ All notable changes to this project will be documented in this file.
   kill 8000 enemies in melee combat, kill 10000 enemies in melee combat, kill
   800 pirates in melee combat, kill 1000 pirates in melee combat, kill 2000
   pirates in melee combat, kill 4000 pirates in melee combat, kill 6000 pirates
-  in melee combat and kill 8000 pirates in melee combat
+  in melee combat, kill 8000 pirates in melee combat and kill 10000 pirates in
+  melee combat
 - Option to set player faction
 
 ### Changed
@@ -32,7 +33,6 @@ All notable changes to this project will be documented in this file.
 - New format of goals data file which made old incompatible
 - New format of help data file which made old incompatible
 - Moved NPC factions data to data file
-- Removed Abandoned faction
 
 ### Fixed
 - Crash on showing map cell info
@@ -55,6 +55,9 @@ All notable changes to this project will be documented in this file.
 - Again, lots of grammar/spelling errors by LJNIC (pull request #25)
 - Ability to dock when base docks are full
 - Showing info about unknown bases on map
+
+### Removed
+- Abandoned faction
 
 ## [2.4] - 2018-05-20
 
