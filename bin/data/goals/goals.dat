@@ -182,5 +182,6 @@ attribute "amount" of points for finish it.
  <goal amount="4000" index="160" multiplier="2" target="Pirates" type="KILL"/>
  <goal amount="6000" index="161" multiplier="2" target="Pirates" type="KILL"/>
  <goal amount="8000" index="162" multiplier="2" target="Pirates" type="KILL"/>
+ <goal amount="10000" index="163" multiplier="2" target="Pirates" type="KILL"/>
 </goals>
 
