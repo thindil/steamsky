@@ -26,6 +26,7 @@ with Events; use Events;
 with Utils; use Utils;
 with Goals; use Goals;
 with Factions; use Factions;
+with Crafts; use Crafts;
 
 package body Bases is
 
@@ -182,15 +183,31 @@ package body Bases is
       RecruitsAmount,
       SkillsAmount,
       SkillNumber,
-      SkillLevel: Positive;
+      SkillLevel,
+      HighestSkill,
+      HighestLevel: Positive;
       BaseRecruits: Recruit_Container.Vector;
       Skills: Skills_Container.Vector;
       Gender: Character;
       Price: Natural;
       SkillIndex: Integer;
       Attributes: Attributes_Container.Vector;
-      Inventory: Positive_Container.Vector;
-      Equipment: Equipment_Array; 
+      Inventory, TempTools: Positive_Container.Vector;
+      Equipment: Equipment_Array;
+      procedure AddInventory
+        (ItemsIndexes: Positive_Container.Vector;
+         EquipIndex: Positive) is
+         ItemIndex: Positive;
+      begin
+         if GetRandom(1, 100) > 80 then
+            return;
+         end if;
+         ItemIndex :=
+           GetRandom(ItemsIndexes.First_Index, ItemsIndexes.Last_Index);
+         Inventory.Append(New_Item => ItemIndex);
+         Equipment(EquipIndex) := Inventory.Last_Index;
+         Price := Price + (Items_List(ItemIndex).Prices(1) * 2);
+      end AddInventory;
    begin
       if DaysDifference(SkyBases(BaseIndex).RecruitDate) < 30 or
         SkyBases(BaseIndex).Population = 0 then
@@ -213,6 +230,7 @@ package body Bases is
          Attributes.Clear;
          Price := 0;
          Inventory.Clear;
+         TempTools.Clear;
          Equipment := (others => 0);
          if GetRandom(1, 2) = 1 then
             Gender := 'M';
@@ -221,10 +239,16 @@ package body Bases is
          end if;
          SkillsAmount :=
            GetRandom(Skills_List.First_Index, Skills_List.Last_Index);
+         HighestLevel := 1;
+         HighestSkill := 1;
          for J in 1 .. SkillsAmount loop
             SkillNumber :=
               GetRandom(Skills_List.First_Index, Skills_List.Last_Index);
             SkillLevel := GetRandom(1, 100);
+            if SkillLevel > HighestLevel then
+               HighestLevel := SkillLevel;
+               HighestSkill := SkillNumber;
+            end if;
             SkillIndex := 0;
             for C in Skills.Iterate loop
                if Skills(C)(1) = SkillNumber then
@@ -251,6 +275,24 @@ package body Bases is
          end loop;
          for Stat of Attributes loop
             Price := Price + (Stat(2) * 5);
+         end loop;
+         AddInventory(Weapons_List, 1);
+         AddInventory(Shields_List, 2);
+         AddInventory(HeadArmors_List, 3);
+         AddInventory(ChestArmors_List, 4);
+         AddInventory(ArmsArmors_List, 5);
+         AddInventory(LegsArmors_List, 6);
+         for Recipe of Recipes_List loop
+            if HighestSkill = Recipe.Skill then
+               for J in Items_List.Iterate loop
+                  if Items_List(J).IType = Recipe.Tool then
+                     TempTools.Append
+                     (New_Item => Objects_Container.To_Index(J));
+                  end if;
+               end loop;
+               AddInventory(TempTools, 7);
+               exit;
+            end if;
          end loop;
          Price := Price * 100;
          BaseRecruits.Append
