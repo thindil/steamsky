@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
   in melee combat, kill 8000 pirates in melee combat and kill 10000 pirates in
   melee combat
 - Option to set player faction
+- Random equipment to recruits in bases
 
 ### Changed
 - Raised gained experience in combat
