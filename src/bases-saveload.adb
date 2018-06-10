@@ -170,6 +170,27 @@ package body Bases.SaveLoad is
                            "experience",
                            To_String(Trim(RawValue, Ada.Strings.Left)));
                      end loop;
+                     for Item of Recruit.Inventory loop
+                        RecruitDataNode := Create_Element(SaveData, "item");
+                        RecruitDataNode :=
+                          Append_Child(RecruitNode, RecruitDataNode);
+                        RawValue := To_Unbounded_String(Integer'Image(Item));
+                        Set_Attribute
+                          (RecruitDataNode,
+                           "index",
+                           To_String(Trim(RawValue, Ada.Strings.Left)));
+                     end loop;
+                     for Item of Recruit.Equipment loop
+                        RecruitDataNode :=
+                          Create_Element(SaveData, "equipment");
+                        RecruitDataNode :=
+                          Append_Child(RecruitNode, RecruitDataNode);
+                        RawValue := To_Unbounded_String(Integer'Image(Item));
+                        Set_Attribute
+                          (RecruitDataNode,
+                           "index",
+                           To_String(Trim(RawValue, Ada.Strings.Left)));
+                     end loop;
                   end loop;
                end;
             end if;
@@ -404,13 +425,18 @@ package body Bases.SaveLoad is
                   RecruitData: Node_List;
                   RecruitName: Unbounded_String;
                   Gender: String(1 .. 1);
-                  Price: Positive;
+                  Price, EquipmentIndex: Positive;
                   Skills: Skills_Container.Vector;
                   Attributes: Attributes_Container.Vector;
                   Index, Level, Experience: Natural;
+                  Inventory: Positive_Container.Vector;
+                  Equipment: Equipment_Array;
                begin
                   Skills.Clear;
                   Attributes.Clear;
+                  Inventory.Clear;
+                  Equipment := (others => 0);
+                  EquipmentIndex := 1;
                   RecruitName :=
                     To_Unbounded_String
                       (Get_Attribute(Item(BaseData, J), "name"));
@@ -442,6 +468,16 @@ package body Bases.SaveLoad is
                                (Item(RecruitData, L),
                                 "experience"));
                         Attributes.Append(New_Item => (Level, Experience));
+                     elsif Node_Name(Item(RecruitData, L)) = "item" then
+                        Inventory.Append
+                        (New_Item =>
+                           Positive'Value
+                             (Get_Attribute(Item(RecruitData, L), "index")));
+                     elsif Node_Name(Item(RecruitData, L)) = "equipment" then
+                        Equipment(EquipmentIndex) :=
+                          Natural'Value
+                            (Get_Attribute(Item(RecruitData, L), "index"));
+                        EquipmentIndex := EquipmentIndex + 1;
                      end if;
                   end loop;
                   SkyBases(BaseIndex).Recruits.Append
@@ -450,7 +486,9 @@ package body Bases.SaveLoad is
                       Gender => Gender(1),
                       Price => Price,
                       Skills => Skills,
-                      Attributes => Attributes));
+                      Attributes => Attributes,
+                      Inventory => Inventory,
+                      Equipment => Equipment));
                end;
             elsif Node_Name(Item(BaseData, J)) = "askedforeventsdate" then
                SkyBases(BaseIndex).AskedForEvents.Year :=

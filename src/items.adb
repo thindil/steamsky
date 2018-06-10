@@ -120,6 +120,19 @@ package body Items is
                MoneyName := TempRecord.Name;
             end if;
             Items_List.Append(New_Item => TempRecord);
+            if TempRecord.IType = WeaponType then
+               Weapons_List.Append(New_Item => Items_List.Last_Index);
+            elsif TempRecord.IType = ShieldType then
+               Shields_List.Append(New_Item => Items_List.Last_Index);
+            elsif TempRecord.IType = HeadArmor then
+               HeadArmors_List.Append(New_Item => Items_List.Last_Index);
+            elsif TempRecord.IType = ChestArmor then
+               ChestArmors_List.Append(New_Item => Items_List.Last_Index);
+            elsif TempRecord.IType = ArmsArmor then
+               ArmsArmors_List.Append(New_Item => Items_List.Last_Index);
+            elsif TempRecord.IType = LegsArmor then
+               LegsArmors_List.Append(New_Item => Items_List.Last_Index);
+            end if;
             LogMessage
               ("Item added: " & To_String(TempRecord.Name),
                Everything);
