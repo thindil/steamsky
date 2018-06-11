@@ -132,6 +132,7 @@ package body Utils.UI is
          return;
       end if;
       if VisibleChildName = "inventory" then
+         Show_All(Gtk_Widget(Get_Object(Object, "btnshowhelp")));
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Object, "gamestack")),
             "crew");
