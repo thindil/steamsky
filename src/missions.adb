@@ -316,7 +316,8 @@ package body Missions is
                 Orders => (others => 0),
                 Attributes => Attributes,
                 Inventory => Inventory,
-                Equipment => (others => 0)));
+                Equipment => (others => 0),
+                Payment => (others => 0)));
             for Module of PlayerShip.Modules loop
                if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
                   Module.Owner := PlayerShip.Crew.Last_Index;
