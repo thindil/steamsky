@@ -216,7 +216,8 @@ package body Game is
           Orders => ProtoMobs_List(PlayerIndex2).Priorities,
           Attributes => ProtoMobs_List(PlayerIndex2).Attributes,
           Inventory => TmpInventory,
-          Equipment => ProtoMobs_List(PlayerIndex2).Equipment));
+          Equipment => ProtoMobs_List(PlayerIndex2).Equipment,
+          Payment => (others => 0)));
       for Module of PlayerShip.Modules loop
          if Module.Owner > 0 then
             Module.Owner := Module.Owner + 1;
