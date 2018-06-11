@@ -57,6 +57,7 @@ All notable changes to this project will be documented in this file.
 - Again, lots of grammar/spelling errors by LJNIC (pull request #25)
 - Ability to dock when base docks are full
 - Showing info about unknown bases on map
+- Showing help button in crew member inventory
 
 ### Removed
 - Abandoned faction
