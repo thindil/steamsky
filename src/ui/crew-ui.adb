@@ -262,7 +262,6 @@ package body Crew.UI is
       Register_Handler(Builder, "Show_Item_Info2", ShowItemInfo2'Access);
       Register_Handler(Builder, "Move_Item", MoveItem'Access);
       Register_Handler(Builder, "Dismiss_Member", DismissMember'Access);
-      Register_Handler(Builder, "Close_Inventory", CloseInventory'Access);
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders1")),
          GiveCrewOrders'Access);

@@ -266,6 +266,7 @@ package body Crew.UI.Handlers is
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")),
          "inventory");
+      Hide(Gtk_Widget(Get_Object(Object, "btnshowhelp")));
       SetActiveItem;
    end ShowInventory;
 
@@ -547,12 +548,5 @@ package body Crew.UI.Handlers is
          SetActiveMember;
       end if;
    end DismissMember;
-
-   procedure CloseInventory(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Object, "gamestack")),
-         "crew");
-   end CloseInventory;
 
 end Crew.UI.Handlers;

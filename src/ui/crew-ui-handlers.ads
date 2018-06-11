@@ -53,8 +53,4 @@ package Crew.UI.Handlers is
    procedure DismissMember
      (Object: access Gtkada_Builder_Record'
         Class); -- Dismiss selected crew member
-   procedure CloseInventory
-     (Object: access Gtkada_Builder_Record'
-        Class); -- Close inventory window and back to crew window
-
 end Crew.UI.Handlers;
