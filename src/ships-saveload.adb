@@ -268,6 +268,16 @@ package body Ships.SaveLoad is
                   "index",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
             end loop;
+            RawValue := To_Unbounded_String(Integer'Image(Member.Payment(1)));
+            Set_Attribute
+              (DataNode,
+               "dailypay",
+               To_String(Trim(RawValue, Ada.Strings.Left)));
+            RawValue := To_Unbounded_String(Integer'Image(Member.Payment(2)));
+            Set_Attribute
+              (DataNode,
+               "tradepay",
+               To_String(Trim(RawValue, Ada.Strings.Left)));
          end loop;
       end;
       if PlayerShip.Missions.Length > 0 then
@@ -451,6 +461,7 @@ package body Ships.SaveLoad is
                Equipment: Equipment_Array;
                OrderTime: Integer;
                Amount, Durability, EquipmentIndex, PriorityIndex: Positive;
+               Payment: Attributes_Array;
             begin
                Skills.Clear;
                Attributes.Clear;
@@ -483,6 +494,15 @@ package body Ships.SaveLoad is
                EquipmentIndex := 1;
                MemberData := Child_Nodes(Item(ChildNodes, I));
                PriorityIndex := 1;
+               Payment := (20, 0);
+               if Get_Attribute(Item(ChildNodes, I), "dailypay") /= "" then
+                  Payment(1) :=
+                    Natural'Value
+                      (Get_Attribute(Item(ChildNodes, I), "dailypay"));
+                  Payment(2) :=
+                    Natural'Value
+                      (Get_Attribute(Item(ChildNodes, I), "tradepay"));
+               end if;
                for K in 0 .. Length(MemberData) - 1 loop
                   if Node_Name(Item(MemberData, K)) = "skill" then
                      Index :=
@@ -550,7 +570,8 @@ package body Ships.SaveLoad is
                    Orders => Orders,
                    Attributes => Attributes,
                    Inventory => Inventory,
-                   Equipment => Equipment));
+                   Equipment => Equipment,
+                   Payment => Payment));
             end;
          elsif Node_Name(Item(ChildNodes, I)) = "mission" then
             declare

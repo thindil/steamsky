@@ -59,6 +59,7 @@ package Crew is
         .Vector; -- Levels and experience in attributes of member
       Inventory: Inventory_Container.Vector; -- Owned items by member
       Equipment: Equipment_Array; -- Items indexes from inventory used by character: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
+      Payment: Attributes_Array; -- How much money member takes as payment. 1 - daily payment, 2 - percent from each trade
    end record;
    MaleSyllablesStart: UnboundedString_Container.Vector;
    MaleSyllablesMiddle: UnboundedString_Container.Vector;
