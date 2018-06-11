@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -64,6 +64,14 @@ package body Bases.Trade is
       Price := Recruit.Price;
       CountPrice(Price, TraderIndex);
       MoneyIndex2 := CheckMoney(Price, To_String(Recruit.Name));
+      for Item of Recruit.Inventory loop
+         Inventory.Append
+         (New_Item =>
+            (ProtoIndex => Item,
+             Amount => 1,
+             Name => Null_Unbounded_String,
+             Durability => 100));
+      end loop;
       PlayerShip.Crew.Append
       (New_Item =>
          (Name => Recruit.Name,
@@ -79,7 +87,7 @@ package body Bases.Trade is
           Orders => (others => 0),
           Attributes => Recruit.Attributes,
           Inventory => Inventory,
-          Equipment => (others => 0)));
+          Equipment => Recruit.Equipment));
       UpdateCargo
         (Ship => PlayerShip,
          CargoIndex => MoneyIndex2,
