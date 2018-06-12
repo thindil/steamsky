@@ -201,16 +201,10 @@ package body Bases.SaveLoad is
                         end if;
                      end loop;
                      RawValue :=
-                       To_Unbounded_String(Integer'Image(Recruit.Payment(1)));
+                       To_Unbounded_String(Integer'Image(Recruit.Payment));
                      Set_Attribute
                        (RecruitNode,
-                        "dailypay",
-                        To_String(Trim(RawValue, Ada.Strings.Left)));
-                     RawValue :=
-                       To_Unbounded_String(Integer'Image(Recruit.Payment(2)));
-                     Set_Attribute
-                       (RecruitNode,
-                        "tradepay",
+                        "payment",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                   end loop;
                end;
@@ -446,13 +440,12 @@ package body Bases.SaveLoad is
                   RecruitData: Node_List;
                   RecruitName: Unbounded_String;
                   Gender: String(1 .. 1);
-                  Price: Positive;
+                  Price, Payment: Positive;
                   Skills: Skills_Container.Vector;
                   Attributes: Attributes_Container.Vector;
                   Index, Level, Experience: Natural;
                   Inventory: Positive_Container.Vector;
                   Equipment: Equipment_Array;
-                  Payment: Attributes_Array;
                begin
                   Skills.Clear;
                   Attributes.Clear;
@@ -464,7 +457,7 @@ package body Bases.SaveLoad is
                   Gender := Get_Attribute(Item(BaseData, J), "gender");
                   Price :=
                     Positive'Value(Get_Attribute(Item(BaseData, J), "price"));
-                  Payment := (20, 0);
+                  Payment := 20;
                   RecruitData := Child_Nodes(Item(BaseData, J));
                   for L in 0 .. Length(RecruitData) - 1 loop
                      if Node_Name(Item(RecruitData, L)) = "skill" then
@@ -502,13 +495,10 @@ package body Bases.SaveLoad is
                           Natural'Value
                             (Get_Attribute(Item(RecruitData, L), "index"));
                      end if;
-                     if Get_Attribute(Item(BaseData, J), "dailypay") /= "" then
-                        Payment(1) :=
+                     if Get_Attribute(Item(BaseData, J), "payment") /= "" then
+                        Payment :=
                           Natural'Value
-                            (Get_Attribute(Item(BaseData, J), "dailypay"));
-                        Payment(2) :=
-                          Natural'Value
-                            (Get_Attribute(Item(BaseData, J), "tradepay"));
+                            (Get_Attribute(Item(BaseData, J), "payment"));
                      end if;
                   end loop;
                   SkyBases(BaseIndex).Recruits.Append
