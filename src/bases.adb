@@ -308,7 +308,7 @@ package body Bases is
              Attributes => Attributes,
              Inventory => Inventory,
              Equipment => Equipment,
-             Payment => (Payment, 0)));
+             Payment => Payment));
       end loop;
       SkyBases(BaseIndex).RecruitDate := GameDate;
       SkyBases(BaseIndex).Recruits := BaseRecruits;
