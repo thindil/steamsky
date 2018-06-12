@@ -88,7 +88,7 @@ package body Bases.Trade is
           Attributes => Recruit.Attributes,
           Inventory => Inventory,
           Equipment => Recruit.Equipment,
-          Payment => Recruit.Payment));
+          Payment => (Recruit.Payment, 0)));
       UpdateCargo
         (Ship => PlayerShip,
          CargoIndex => MoneyIndex2,
