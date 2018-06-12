@@ -110,6 +110,13 @@ package body Bases.UI is
          Append(List, Iter);
          Set(List, Iter, 0, To_String(Items_List(Item).Name));
       end loop;
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblpayment")),
+         "Payment:" &
+         Natural'Image(Recruit.Payment) &
+         " " &
+         To_String(MoneyName) &
+         " each day.");
       MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if MoneyIndex2 > 0 then
          Set_Label

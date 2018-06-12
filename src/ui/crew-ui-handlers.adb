@@ -96,6 +96,7 @@ package body Crew.UI.Handlers is
          Hide(Gtk_Widget(Get_Object(Object, "lblstats1")));
          Hide(Gtk_Widget(Get_Object(Object, "lblskills")));
          Hide(Gtk_Widget(Get_Object(Object, "treeskills1")));
+         Hide(Gtk_Widget(Get_Object(Object, "lblcrewpay")));
          Append(MemberInfo, ASCII.LF & "Passenger");
       else
          Show_All(Gtk_Widget(Get_Object(Object, "treestats1")));
@@ -104,6 +105,11 @@ package body Crew.UI.Handlers is
          Show_All(Gtk_Widget(Get_Object(Object, "lblstats1")));
          Show_All(Gtk_Widget(Get_Object(Object, "lblskills")));
          Show_All(Gtk_Widget(Get_Object(Object, "treeskills1")));
+         if MemberIndex > 1 then
+            Show_All(Gtk_Widget(Get_Object(Object, "lblcrewpay")));
+         else
+            Hide(Gtk_Widget(Get_Object(Object, "lblcrewpay")));
+         end if;
       end if;
       if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
          Show_All(Gtk_Widget(Get_Object(Object, "btndismiss")));
@@ -235,6 +241,17 @@ package body Crew.UI.Handlers is
                ". " &
                To_String(Skills_List(Skill(1)).Description));
          end loop;
+         if MemberIndex > 1 then
+            Set_Label
+              (Gtk_Label(Get_Object(Object, "lblcrewpay")),
+               "Payment:" &
+               Natural'Image(Member.Payment(1)) &
+               " " &
+               To_String(MoneyName) &
+               " each day and " &
+               Natural'Image(Member.Payment(2)) &
+               " percent of profit from each trade.");
+         end if;
       end if;
       SetOrdersList;
    end ShowMemberInfo;
