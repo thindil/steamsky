@@ -282,6 +282,7 @@ package body Game is
          if PlayerShip.Speed = DOCKED then
             PayForDock;
          end if;
+         DailyPayment;
       end if;
       if GameDate.Day > 30 then
          GameDate.Day := 1;

@@ -703,4 +703,49 @@ package body Crew is
       end case;
    end GetAttributeLevelName;
 
+   procedure DailyPayment is
+      MoneyIndex2: constant Natural :=
+        FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      PayMessage: Unbounded_String;
+   begin
+      for Member of PlayerShip.Crew loop
+         if Member.Payment(1) > 0 then
+            if MoneyIndex2 = 0 then
+               AddMessage
+                 ("You don't have " &
+                  To_String(MoneyName) &
+                  " to pay your crew members.",
+                  TradeMessage,
+                  3);
+               return;
+            end if;
+            if PlayerShip.Cargo(MoneyIndex2).Amount < Member.Payment(1) then
+               UpdateCargo
+                 (Ship => PlayerShip,
+                  CargoIndex => MoneyIndex2,
+                  Amount => (0 - PlayerShip.Cargo(MoneyIndex2).Amount));
+               AddMessage
+                 ("You don't have enough " &
+                  To_String(MoneyName) &
+                  " to pay your crew members.",
+                  TradeMessage,
+                  3);
+               return;
+            end if;
+            UpdateCargo
+              (Ship => PlayerShip,
+               CargoIndex => MoneyIndex2,
+               Amount => (0 - Member.Payment(1)));
+            PayMessage := To_Unbounded_String("You pay ") & Member.Name;
+            if Member.Gender = 'M' then
+               Append(PayMessage, " his ");
+            else
+               Append(PayMessage, " her ");
+            end if;
+            Append(PayMessage, " daily payment.");
+            AddMessage(To_String(PayMessage), TradeMessage);
+         end if;
+      end loop;
+   end DailyPayment;
+
 end Crew;

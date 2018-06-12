@@ -197,6 +197,15 @@ package body Trades is
                  (Float(PlayerShip.Cargo(ItemIndex).Durability) / 100.0)));
       end if;
       CountPrice(Profit, TraderIndex, False);
+      for Member of PlayerShip.Crew loop
+         if Member.Payment(2) > 0 then
+            Profit :=
+              Profit -
+              Positive
+                (Float'Floor
+                   (Float(Profit) * (Float(Member.Payment(2)) / 100.0)));
+         end if;
+      end loop;
       if FreeCargo((Items_List(ProtoIndex).Weight * SellAmount) - Profit) <
         0 then
          raise Trade_No_Free_Cargo;

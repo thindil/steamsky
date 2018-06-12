@@ -88,5 +88,6 @@ package Crew is
    function GetAttributeLevelName
      (AttributeLevel: Positive)
      return String; -- Get member attribute level name
+   procedure DailyPayment; -- Daily payment for player ship crew members
 
 end Crew;
