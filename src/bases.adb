@@ -277,8 +277,8 @@ package body Bases is
             Payment := Payment + Skill(2);
          end loop;
          for Stat of Attributes loop
-            Price := Price + (Stat(2) * 5);
-            Payment := Payment + (Stat(2) * 2);
+            Price := Price + (Stat(1) * 2);
+            Payment := Payment + (Stat(1) * 2);
          end loop;
          AddInventory(Weapons_List, 1);
          AddInventory(Shields_List, 2);
