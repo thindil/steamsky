@@ -24,9 +24,6 @@ To build you need:
   
   http://libre.adacore.com/download/
 
-  At this moment tested compilers (all on Linux) are GCC 7.1 and GNAT GPL 2017.
-  Game not works with old compilers (like GCC 4.9) due to lack of full support
-  for Ada 2012.
   Build testing has been done using both GCC 7.1 and GNAT GPL 2017.
   Game does not work with old compilers (like GCC 4.9) since it 
   lacks full support for Ada 2012
@@ -58,10 +55,10 @@ If you have all, in main source code directory (where this file is):
   mode: `gprbuild -XMode=release`
 
 
-## Running game
-If you build the game from sources only ncurses library is 
-required to run the game. Enter *bin* directory and type `./steamsky`.
-If you used released binaries, you don't need any additional libraries. In
+## Running Steam Sky
+If you build game from sources you need only ncurses library to run game. Enter
+*bin* directory and type `./steamsky`.
+If you use released binaries, you don't need any additional libraries, just in
 main game directory (where this file is) type `./steamsky`.
 The Game only works through the terminal.
 
