@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Counting hire price for recruits
+
 ## [2.0.7] - 2018-06-10
 
 ### Fixed
