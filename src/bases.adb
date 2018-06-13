@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -220,7 +220,7 @@ package body Bases is
             Price := Price + Skill(2);
          end loop;
          for Stat of Attributes loop
-            Price := Price + (Stat(2) * 5);
+            Price := Price + (Stat(1) * 2);
          end loop;
          Price := Price * 100;
          BaseRecruits(BaseRecruits.Last_Index).Skills := Skills;
