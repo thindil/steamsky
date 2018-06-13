@@ -60,6 +60,7 @@ All notable changes to this project will be documented in this file.
 - Ability to dock when base docks are full
 - Showing info about unknown bases on map
 - Showing help button in crew member inventory
+- Counting hire price for recruits
 
 ### Removed
 - Abandoned faction
