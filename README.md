@@ -1,20 +1,20 @@
 ## General Info
 
-Steam Sky is open source, roguelike game in steampunk theme. Your role is to 
-command flying ship and its crew, traveling between floating bases, fighting 
-with enemies, trade in goods, etc. Here are no end goal for game, you can play
-as long as your character not die. Game is under heavy development, but 
-generally is playable. Now game is available (and tested) only on Linux 
-64-bit.
+Steam Sky is an open source roguelike with a steampunk setting. You are a 
+commander of a flying ship, as leader you will be traveling across floating 
+bases, engaging in combat, trading goods etc... There is no ending to this 
+game, the game continues until your character dies. The game is currently 
+under heavy development, but is in a playable state. Steam Sky is available
+on Linux 64-bit and Windows (development version only) platforms.
 
 ## Game versions
 At this moment are available 2 game versions:
 - 2.0.x: "stable" version of game. This version receive only fixes of bug but
   no new features. Source code for this version is in *2.0* branch.
-- 2.x: "development" version of game, future version 3.0. This is main place
-  where game development happen. It often break save compatibilities between
-  releases so use at your own risk. Source code for this version is in *master*
-  branch.
+- 2.x: "development" version of game, future version 3.0. This is where 
+  game feature updates will happen. Due to new features, save compatibility 
+  will typically break between releases. Use this version at your own risk. 
+  Source code for this version is in the *master* branch.
 
 ## Build game from sources
 
@@ -25,8 +25,8 @@ To build it, you need:
   http://libre.adacore.com/download/
 
   At this moment tested compilers (all on Linux) are GCC 7.1 and GNAT GPL 2017.
-  Game not works with old compilers (like GCC 4.9) due to lack of full support
-  for Ada 2012.
+  Game does not works with old compilers (like GCC 4.9) due to lack of full
+  support for Ada 2012.
 
 * ncurses Ada binding (should be available in most distributions or with ncurses 
   package or as standalone package). If not, you can download it from:
@@ -55,7 +55,7 @@ If you have all, in main source code directory (where this file is):
   mode: `gprbuild -XMode=release`
 
 
-## Running game
+## Running Steam Sky
 If you build game from sources you need only ncurses library to run game. Enter
 *bin* directory and type `./steamsky`.
 If you use released binaries, you don't need any additional libraries, just in
@@ -82,7 +82,7 @@ Of course, you can set all parameters together: `./steamsky --datadir=somedir/
 
 Paths to directories can be absolute or relative where file `steamsky` is. 
 
-## Modify game
+## Modding Support
 For detailed informations about modifying various game elements or debugging
 game, see [MODDING.md](bin/doc/MODDING.md)
 
