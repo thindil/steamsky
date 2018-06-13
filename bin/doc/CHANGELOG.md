@@ -61,6 +61,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about unknown bases on map
 - Showing help button in crew member inventory
 - Counting hire price for recruits
+- Lots of grammar/spelling errors in README.md by MagiOC (pull request #26)
 
 ### Removed
 - Abandoned faction
