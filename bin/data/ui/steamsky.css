@@ -111,3 +111,7 @@ GtkLabel#overlaylabel {
    border-color:green;
    background:rgb(25,25,25);
 }
+
+GtkScale, GtkScale:hover {
+   background:grey;
+}
