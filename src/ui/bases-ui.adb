@@ -147,6 +147,16 @@ package body Bases.UI is
       RecruitIter: Gtk_Tree_Iter;
       RecruitModel: Gtk_Tree_Model;
       RecruitIndex: Positive;
+      DailyPayment: constant Natural :=
+        Natural
+          (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjdailypayment"))));
+      TradePayment: constant Natural :=
+        Natural
+          (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjtradepayment"))));
+      Cost: Integer;
+      Recruit: Recruit_Data;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -155,7 +165,16 @@ package body Bases.UI is
          RecruitIter);
       RecruitIndex :=
         Natural'Value(To_String(Get_Path(RecruitModel, RecruitIter))) + 1;
-      HireRecruit(RecruitIndex);
+      Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
+      Cost :=
+        Recruit.Price -
+        ((DailyPayment - Recruit.Payment) * 50) -
+        (TradePayment * 5000);
+      if Cost < 1 then
+         Cost := 1;
+      end if;
+      Hide(Gtk_Widget(Get_Object(Object, "negotiatewindow")));
+      HireRecruit(RecruitIndex, Cost, DailyPayment, TradePayment);
       Remove(-(RecruitModel), RecruitIter);
       SetActiveRow("treerecruits", "columnname");
       ShowLastMessage(Object);
