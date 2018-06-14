@@ -1121,8 +1121,8 @@ package body Maps.UI is
         (MapInfoText,
          "X:" & Positive'Image(MapX) & " Y:" & Positive'Image(MapY));
       Append
-         (MapInfoText, ASCII.LF & 
-         "Distance:" & Positive'Image(CountDistance(MapX, MapY)));
+        (MapInfoText,
+         ASCII.LF & "Distance:" & Positive'Image(CountDistance(MapX, MapY)));
       BuildMapInfo(MapInfoText);
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblmaptooltip")),
