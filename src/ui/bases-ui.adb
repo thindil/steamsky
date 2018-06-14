@@ -25,6 +25,7 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Adjustment; use Gtk.Adjustment;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Maps; use Maps;
@@ -51,7 +52,6 @@ package body Bases.UI is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       List: Gtk_List_Store;
-      MoneyIndex2: Natural;
       Cost, RecruitIndex: Positive;
    begin
       Get_Selected
@@ -110,40 +110,28 @@ package body Bases.UI is
          Append(List, Iter);
          Set(List, Iter, 0, To_String(Items_List(Item).Name));
       end loop;
-      Set_Label
-        (Gtk_Label(Get_Object(Object, "lblpayment")),
+      RecruitInfo := To_Unbounded_String("Starting offer:");
+      Append
+        (RecruitInfo,
+         ASCII.LF &
          "Payment:" &
          Natural'Image(Recruit.Payment) &
          " " &
          To_String(MoneyName) &
          " each day.");
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
-      if MoneyIndex2 > 0 then
-         Set_Label
-           (Gtk_Label(Get_Object(Object, "lblrecruitmoney")),
-            "You have" &
-            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-            " " &
-            To_String(MoneyName) &
-            ".");
-         Cost := Recruit.Price;
-         CountPrice(Cost, FindMember(Talk));
-         Set_Label
-           (Gtk_Button(Get_Object(Object, "btnrecruit1")),
-            "_Hire for" & Positive'Image(Cost) & " " & To_String(MoneyName));
-         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
-            Set_Sensitive
-              (Gtk_Widget(Get_Object(Object, "btnrecruit1")),
-               False);
-         else
-            Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnrecruit1")), True);
-         end if;
-      else
-         Set_Label
-           (Gtk_Label(Get_Object(Object, "lblrecruitmoney")),
-            "You don't have enough money to recruit anyone");
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnrecruit1")), False);
-      end if;
+      Cost := Recruit.Price;
+      CountPrice(Cost, FindMember(Talk));
+      Append
+        (RecruitInfo,
+         ASCII.LF &
+         "One time fee:" &
+         Positive'Image(Cost) &
+         " " &
+         To_String(MoneyName) &
+         ".");
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblpayment")),
+         To_String(RecruitInfo));
    end ShowRecruitInfo;
 
    procedure SetActiveRow(TreeViewName, ColumnName: String) is
@@ -333,6 +321,116 @@ package body Bases.UI is
       SetActiveRow("treebases1", "columnbases");
    end AcceptAction;
 
+   procedure StartNegotiations(Object: access Gtkada_Builder_Record'Class) is
+      MoneyIndex2: constant Natural :=
+        FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      Cost, RecruitIndex: Positive;
+      RecruitIter: Gtk_Tree_Iter;
+      RecruitModel: Gtk_Tree_Model;
+      Recruit: Recruit_Data;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      Get_Selected
+        (Gtk.Tree_View.Get_Selection
+           (Gtk_Tree_View(Get_Object(Object, "treerecruits"))),
+         RecruitModel,
+         RecruitIter);
+      if RecruitIter = Null_Iter then
+         return;
+      end if;
+      RecruitIndex := Positive(Get_Int(RecruitModel, RecruitIter, 1));
+      Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
+      Set_Upper
+        (Gtk_Adjustment(Get_Object(Object, "adjdailypayment")),
+         Gdouble(Recruit.Payment * 2));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjdailypayment")),
+         Gdouble(Recruit.Payment));
+      Cost := Recruit.Price;
+      CountPrice(Cost, FindMember(Talk));
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblrecruitcost")),
+         "Hire for" & Positive'Image(Cost) & " " & To_String(MoneyName));
+      if MoneyIndex2 > 0 then
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lblrecruitmoney")),
+            "You have" &
+            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
+            " " &
+            To_String(MoneyName) &
+            ".");
+         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+            Set_Sensitive
+              (Gtk_Widget(Get_Object(Object, "btnhirerecruit")),
+               False);
+         else
+            Set_Sensitive
+              (Gtk_Widget(Get_Object(Object, "btnhirerecruit")),
+               True);
+         end if;
+      else
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lblrecruitmoney")),
+            "You don't have enough money to recruit anyone");
+         Set_Sensitive
+           (Gtk_Widget(Get_Object(Object, "btnhirerecruit")),
+            False);
+      end if;
+      Show_All(Gtk_Widget(Get_Object(Object, "negotiatewindow")));
+   end StartNegotiations;
+
+   procedure NegotiateHire(Object: access Gtkada_Builder_Record'Class) is
+      MoneyIndex2: constant Natural :=
+        FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      RecruitIndex: Positive;
+      RecruitIter: Gtk_Tree_Iter;
+      RecruitModel: Gtk_Tree_Model;
+      Recruit: Recruit_Data;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      Cost: Integer;
+      DailyPayment: constant Natural :=
+        Natural
+          (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjdailypayment"))));
+      TradePayment: constant Natural :=
+        Natural
+          (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjtradepayment"))));
+   begin
+      Get_Selected
+        (Gtk.Tree_View.Get_Selection
+           (Gtk_Tree_View(Get_Object(Object, "treerecruits"))),
+         RecruitModel,
+         RecruitIter);
+      if RecruitIter = Null_Iter then
+         return;
+      end if;
+      RecruitIndex := Positive(Get_Int(RecruitModel, RecruitIter, 1));
+      Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
+      Cost :=
+        Recruit.Price -
+        ((DailyPayment - Recruit.Payment) * 50) -
+        (TradePayment * 5000);
+      if Cost < 1 then
+         Cost := 1;
+      end if;
+      CountPrice(Cost, FindMember(Talk));
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblrecruitcost")),
+         "Hire for" & Positive'Image(Cost) & " " & To_String(MoneyName));
+      if MoneyIndex2 > 0 then
+         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+            Set_Sensitive
+              (Gtk_Widget(Get_Object(Object, "btnhirerecruit")),
+               False);
+         else
+            Set_Sensitive
+              (Gtk_Widget(Get_Object(Object, "btnhirerecruit")),
+               True);
+         end if;
+      end if;
+   end NegotiateHire;
+
    procedure CreateBasesUI(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
@@ -340,6 +438,11 @@ package body Bases.UI is
       Register_Handler(Builder, "Hire_Recruit", Hire'Access);
       Register_Handler(Builder, "Object_Selected", ObjectSelected'Access);
       Register_Handler(Builder, "Accept_Action", AcceptAction'Access);
+      Register_Handler
+        (Builder,
+         "Start_Negotiations",
+         StartNegotiations'Access);
+      Register_Handler(Builder, "Negotiate_Hire", NegotiateHire'Access);
    end CreateBasesUI;
 
    procedure ShowRecruitUI is
