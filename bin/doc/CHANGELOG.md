@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Option to set player faction
 - Random equipment to recruits in bases
 - Payment for crew members
+- Negotiating hiring of recruits in bases
 
 ### Changed
 - Raised gained experience in combat
