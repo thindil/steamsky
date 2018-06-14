@@ -51,7 +51,9 @@ package body Bases.Trade is
       return MoneyIndex2;
    end CheckMoney;
 
-   procedure HireRecruit(RecruitIndex: Positive) is
+   procedure HireRecruit
+     (RecruitIndex, Cost: Positive;
+      DailyPayment, TradePayment: Natural) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2, Price: Natural;
@@ -61,7 +63,7 @@ package body Bases.Trade is
       Inventory: Inventory_Container.Vector;
    begin
       TraderIndex := FindMember(Talk);
-      Price := Recruit.Price;
+      Price := Cost;
       CountPrice(Price, TraderIndex);
       MoneyIndex2 := CheckMoney(Price, To_String(Recruit.Name));
       for Item of Recruit.Inventory loop
@@ -88,7 +90,7 @@ package body Bases.Trade is
           Attributes => Recruit.Attributes,
           Inventory => Inventory,
           Equipment => Recruit.Equipment,
-          Payment => (Recruit.Payment, 0)));
+          Payment => (DailyPayment, TradePayment)));
       UpdateCargo
         (Ship => PlayerShip,
          CargoIndex => MoneyIndex2,
