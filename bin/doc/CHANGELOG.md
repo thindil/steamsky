@@ -64,6 +64,7 @@ All notable changes to this project will be documented in this file.
 - Showing help button in crew member inventory
 - Counting hire price for recruits
 - Lots of grammar/spelling errors in README.md by MagiOC (pull request #26)
+- Crash on repair whole ship in bases
 
 ### Removed
 - Abandoned faction
