@@ -328,16 +328,16 @@ package body Bases.UI is
       case CurrentState is
          when RECIPES =>
             BuyRecipe(Positive(Get_Int(Model, Iter, 1)));
+            ShowBuyRecipesUI;
          when REPAIRS =>
             Bases.Ship.RepairShip(Integer(Get_Int(Model, Iter, 1)));
+            ShowRepairUI;
          when HEAL =>
             HealWounded(Natural(Get_Int(Model, Iter, 1)));
+            ShowHealUI;
          when CLEARING =>
             null;
       end case;
-      ShowLastMessage(Object);
-      Remove(-(Model), Iter);
-      SetActiveRow("treebases1", "columnbases");
    end AcceptAction;
 
    procedure StartNegotiations(Object: access Gtkada_Builder_Record'Class) is
