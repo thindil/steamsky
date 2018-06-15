@@ -841,30 +841,24 @@ package body Maps.UI.Handlers is
    end AttackOrder;
 
    procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
+      VisibleChildName: constant String :=
+        Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack")));
    begin
-      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack"))) =
-        "combat" then
+      if VisibleChildName = "combat" then
          ShowHelpUI(4);
-      elsif Get_Visible_Child_Name
-          (Gtk_Stack(Get_Object(Object, "gamestack"))) =
-        "crafts" then
+      elsif VisibleChildName = "crafts" then
          ShowHelpUI(5);
-      elsif Get_Visible_Child_Name
-          (Gtk_Stack(Get_Object(Object, "gamestack"))) =
-        "crew" then
+      elsif VisibleChildName = "crew" then
          ShowHelpUI(7);
-      elsif Get_Visible_Child_Name
-          (Gtk_Stack(Get_Object(Object, "gamestack"))) =
-        "ship" then
+      elsif VisibleChildName = "ship" then
          ShowHelpUI(6);
-      elsif Get_Visible_Child_Name
-          (Gtk_Stack(Get_Object(Object, "gamestack"))) =
-        "trade" then
+      elsif VisibleChildName = "trade" then
          ShowHelpUI(3);
-      elsif Get_Visible_Child_Name
-          (Gtk_Stack(Get_Object(Object, "gamestack"))) =
-        "skymap" then
+      elsif VisibleChildName = "skymap" then
          ShowHelpUI(1);
+      elsif VisibleChildName = "availablemissions" or
+        VisibleChildName = "acceptedmissions" then
+         ShowHelpUI(8);
       end if;
    end ShowHelp;
 
