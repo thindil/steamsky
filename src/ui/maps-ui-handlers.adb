@@ -859,6 +859,8 @@ package body Maps.UI.Handlers is
       elsif VisibleChildName = "availablemissions" or
         VisibleChildName = "acceptedmissions" then
          ShowHelpUI(8);
+      elsif VisibleChildName = "recruit" then
+         ShowHelpUI(9);
       end if;
    end ShowHelp;
 
