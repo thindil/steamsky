@@ -481,6 +481,7 @@ package body Bases.UI is
             To_String(SkyBases(BaseIndex).Recruits(I).Name));
          Set(RecruitList, RecruitIter, 1, Gint(Recruit_Container.To_Index(I)));
       end loop;
+      Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "recruit");
