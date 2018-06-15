@@ -370,6 +370,7 @@ package body Missions.UI is
                  (SkyBases(BaseIndex).Missions(I).TargetX,
                   SkyBases(BaseIndex).Missions(I).TargetY)));
       end loop;
+      Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "availablemissions");
@@ -422,6 +423,7 @@ package body Missions.UI is
                  (PlayerShip.Missions(I).TargetX,
                   PlayerShip.Missions(I).TargetY)));
       end loop;
+      Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "acceptedmissions");
