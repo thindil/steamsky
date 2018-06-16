@@ -65,6 +65,7 @@ All notable changes to this project will be documented in this file.
 - Counting hire price for recruits
 - Lots of grammar/spelling errors in README.md by MagiOC (pull request #26)
 - Crash on repair whole ship in bases
+- Showing Wait order when there are full docks in base
 
 ### Removed
 - Abandoned faction
