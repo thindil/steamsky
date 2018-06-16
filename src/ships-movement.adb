@@ -209,9 +209,7 @@ package body Ships.Movement is
          return To_String(Message);
       end if;
       if Docking then
-         if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-             .Population >
-           0 then
+         if SkyBases(BaseIndex).Population > 0 then
             if MoneyIndex2 = 0 then
                return "You can't dock to base because you don't have " &
                  To_String(MoneyName) &
@@ -246,6 +244,19 @@ package body Ships.Movement is
             if TraderIndex > 0 then
                GainExp(1, TalkingSkill, TraderIndex);
             end if;
+            declare
+               MemberIndex: Positive := 1;
+            begin
+               while MemberIndex <= PlayerShip.Crew.Last_Index loop
+                  if PlayerShip.Crew(MemberIndex).ContractLength = 0 then
+                     DeleteMember(MemberIndex, PlayerShip);
+                     SkyBases(BaseIndex).Population :=
+                       SkyBases(BaseIndex).Population + 1;
+                  else
+                     MemberIndex := MemberIndex + 1;
+                  end if;
+               end loop;
+            end;
          else
             AddMessage
               ("Ship docked to base " &
