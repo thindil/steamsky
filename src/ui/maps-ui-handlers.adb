@@ -600,16 +600,12 @@ package body Maps.UI.Handlers is
                  (Gtk_Button(Get_Object(Object, "btnattack")),
                   "Attack");
             when FullDocks =>
-               Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnattack")),
-                  False);
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btndock")),
                   "_Wait (full docks)");
                Set_No_Show_All
                  (Gtk_Widget(Get_Object(Object, "btndock")),
                   False);
-               Set_Label(Gtk_Button(Get_Object(Object, "btnattack")), "_Wait");
             when AttackOnBase =>
                Set_No_Show_All
                  (Gtk_Widget(Get_Object(Object, "btnattack")),
