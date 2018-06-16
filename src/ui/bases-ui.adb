@@ -26,6 +26,7 @@ with Gtk.Button; use Gtk.Button;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Maps; use Maps;
@@ -153,10 +154,12 @@ package body Bases.UI is
       TradePayment: constant Natural :=
         Natural
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjtradepayment"))));
-      Cost: Integer;
+      Cost, ContractLength2: Integer;
       Recruit: Recruit_Data;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      ContractLength: constant Gint :=
+        Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbcontractlength")));
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -170,11 +173,32 @@ package body Bases.UI is
         Recruit.Price -
         ((DailyPayment - Recruit.Payment) * 50) -
         (TradePayment * 5000);
+      case ContractLength is
+         when 1 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.1);
+            ContractLength2 := 100;
+         when 2 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.5);
+            ContractLength2 := 30;
+         when 3 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.75);
+            ContractLength2 := 20;
+         when 4 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.9);
+            ContractLength2 := 10;
+         when others =>
+            ContractLength2 := -1;
+      end case;
       if Cost < 1 then
          Cost := 1;
       end if;
       Hide(Gtk_Widget(Get_Object(Object, "negotiatewindow")));
-      HireRecruit(RecruitIndex, Cost, DailyPayment, TradePayment);
+      HireRecruit
+        (RecruitIndex,
+         Cost,
+         DailyPayment,
+         TradePayment,
+         ContractLength2);
       Remove(-(RecruitModel), RecruitIter);
       SetActiveRow("treerecruits", "columnname");
       ShowLastMessage(Object);
@@ -415,6 +439,8 @@ package body Bases.UI is
       TradePayment: constant Natural :=
         Natural
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjtradepayment"))));
+      ContractLength: constant Gint :=
+        Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbcontractlength")));
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -430,6 +456,18 @@ package body Bases.UI is
         Recruit.Price -
         ((DailyPayment - Recruit.Payment) * 50) -
         (TradePayment * 5000);
+      case ContractLength is
+         when 1 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.1);
+         when 2 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.5);
+         when 3 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.75);
+         when 4 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.9);
+         when others =>
+            null;
+      end case;
       if Cost < 1 then
          Cost := 1;
       end if;
