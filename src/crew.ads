@@ -60,6 +60,7 @@ package Crew is
       Inventory: Inventory_Container.Vector; -- Owned items by member
       Equipment: Equipment_Array; -- Items indexes from inventory used by character: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
       Payment: Attributes_Array; -- How much money member takes as payment. 1 - daily payment, 2 - percent from each trade
+      ContractLength: Integer; -- How many days crew member will be in crew. -1 mean pernament contract
    end record;
    MaleSyllablesStart: UnboundedString_Container.Vector;
    MaleSyllablesMiddle: UnboundedString_Container.Vector;
@@ -88,6 +89,6 @@ package Crew is
    function GetAttributeLevelName
      (AttributeLevel: Positive)
      return String; -- Get member attribute level name
-   procedure DailyPayment; -- Daily payment for player ship crew members
+   procedure DailyPayment; -- Daily payment and upgrade contracts length for player ship crew members
 
 end Crew;

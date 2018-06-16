@@ -45,7 +45,8 @@ package body Ships.UI is
       Clear(AssignList);
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          if PlayerShip.Modules(ModuleIndex).Owner /= I and
-           PlayerShip.Crew(I).Skills.Length > 0 then
+           PlayerShip.Crew(I).Skills.Length > 0 and
+           PlayerShip.Crew(I).ContractLength /= 0 then
             case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
               .MType is
                when MEDICAL_ROOM =>
