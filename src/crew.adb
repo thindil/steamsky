@@ -26,6 +26,7 @@ with Maps; use Maps;
 with Crew.Inventory; use Crew.Inventory;
 with Combat; use Combat;
 with Factions; use Factions;
+with Bases; use Bases;
 
 package body Crew is
 
@@ -713,6 +714,7 @@ package body Crew is
       MoneyIndex2: constant Natural :=
         FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       PayMessage: Unbounded_String;
+      MemberIndex: Positive;
    begin
       for Member of PlayerShip.Crew loop
          if Member.Payment(1) > 0 then
@@ -752,21 +754,34 @@ package body Crew is
             AddMessage(To_String(PayMessage), TradeMessage);
          end if;
       end loop;
-      for I in PlayerShip.Crew.Iterate loop
-         if PlayerShip.Crew(I).ContractLength > 0 then
-            PlayerShip.Crew(I).ContractLength :=
-              PlayerShip.Crew(I).ContractLength - 1;
-            if PlayerShip.Crew(I).ContractLength = 0 then
+      MemberIndex := 1;
+      while MemberIndex <= PlayerShip.Crew.Last_Index loop
+         if PlayerShip.Crew(MemberIndex).ContractLength > 0 then
+            PlayerShip.Crew(MemberIndex).ContractLength :=
+              PlayerShip.Crew(MemberIndex).ContractLength - 1;
+            if PlayerShip.Crew(MemberIndex).ContractLength = 0 then
                AddMessage
                  ("Your contract with " &
-                  To_String(PlayerShip.Crew(I).Name) &
+                  To_String(PlayerShip.Crew(MemberIndex).Name) &
                   " has ended.",
                   TradeMessage,
                   3);
-               PlayerShip.Crew(I).Orders := (others => 0);
-               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
+               if PlayerShip.Speed /= DOCKED then
+                  PlayerShip.Crew(MemberIndex).Orders := (others => 0);
+                  GiveOrders(PlayerShip, MemberIndex, Rest);
+               else
+                  DeleteMember(MemberIndex, PlayerShip);
+                  SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+                    .Population :=
+                    SkyBases
+                      (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+                      .Population +
+                    1;
+                  MemberIndex := MemberIndex - 1;
+               end if;
             end if;
          end if;
+         MemberIndex := MemberIndex + 1;
       end loop;
    end DailyPayment;
 

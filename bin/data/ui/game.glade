@@ -183,6 +183,29 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="guint"/>
     </columns>
   </object>
+  <object class="GtkListStore" id="contractlength">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Pernament</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">100 days</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">30 days</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">20 days</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">10 days</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkListStore" id="craftslist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -8405,6 +8428,50 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Contract time:</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="cmbcontractlength">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="model">contractlength</property>
+                    <property name="active">0</property>
+                    <property name="id_column">0</property>
+                    <signal name="changed" handler="Negotiate_Hire" swapped="no"/>
+                    <child>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="lblrecruitmoney">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -8412,7 +8479,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">4</property>
+                <property name="position">5</property>
               </packing>
             </child>
             <child>
@@ -8423,7 +8490,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">5</property>
+                <property name="position">6</property>
               </packing>
             </child>
           </object>

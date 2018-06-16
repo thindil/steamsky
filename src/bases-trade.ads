@@ -19,7 +19,8 @@ package Bases.Trade is
 
    procedure HireRecruit
      (RecruitIndex, Cost: Positive;
-      DailyPayment, TradePayment: Natural); -- Hire selected recruit from bases
+      DailyPayment, TradePayment: Natural;
+      ContractLenght: Integer); -- Hire selected recruit from bases
    procedure BuyRecipe(RecipeIndex: Positive); -- Buy new crafting recipe
    procedure HealWounded
      (MemberIndex: Natural); -- Heals wounded crew members in bases

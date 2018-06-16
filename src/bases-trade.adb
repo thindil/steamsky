@@ -53,7 +53,8 @@ package body Bases.Trade is
 
    procedure HireRecruit
      (RecruitIndex, Cost: Positive;
-      DailyPayment, TradePayment: Natural) is
+      DailyPayment, TradePayment: Natural;
+      ContractLenght: Integer) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2, Price: Natural;
@@ -91,7 +92,7 @@ package body Bases.Trade is
           Inventory => Inventory,
           Equipment => Recruit.Equipment,
           Payment => (DailyPayment, TradePayment),
-          ContractLength => -1));
+          ContractLength => ContractLenght));
       UpdateCargo
         (Ship => PlayerShip,
          CargoIndex => MoneyIndex2,
