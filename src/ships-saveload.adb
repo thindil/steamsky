@@ -278,6 +278,12 @@ package body Ships.SaveLoad is
               (DataNode,
                "tradepay",
                To_String(Trim(RawValue, Ada.Strings.Left)));
+            RawValue :=
+              To_Unbounded_String(Integer'Image(Member.ContractLength));
+            Set_Attribute
+              (DataNode,
+               "contractlength",
+               To_String(Trim(RawValue, Ada.Strings.Left)));
          end loop;
       end;
       if PlayerShip.Missions.Length > 0 then
@@ -459,7 +465,7 @@ package body Ships.SaveLoad is
                Orders: Orders_Array;
                Inventory: Inventory_Container.Vector;
                Equipment: Equipment_Array;
-               OrderTime: Integer;
+               OrderTime, ContractLength: Integer;
                Amount, Durability, EquipmentIndex, PriorityIndex: Positive;
                Payment: Attributes_Array;
             begin
@@ -494,15 +500,13 @@ package body Ships.SaveLoad is
                EquipmentIndex := 1;
                MemberData := Child_Nodes(Item(ChildNodes, I));
                PriorityIndex := 1;
-               Payment := (20, 0);
-               if Get_Attribute(Item(ChildNodes, I), "dailypay") /= "" then
-                  Payment(1) :=
-                    Natural'Value
-                      (Get_Attribute(Item(ChildNodes, I), "dailypay"));
-                  Payment(2) :=
-                    Natural'Value
-                      (Get_Attribute(Item(ChildNodes, I), "tradepay"));
-               end if;
+               Payment(1) :=
+                 Natural'Value(Get_Attribute(Item(ChildNodes, I), "dailypay"));
+               Payment(2) :=
+                 Natural'Value(Get_Attribute(Item(ChildNodes, I), "tradepay"));
+               ContractLength :=
+                 Integer'Value
+                   (Get_Attribute(Item(ChildNodes, I), "contractlength"));
                for K in 0 .. Length(MemberData) - 1 loop
                   if Node_Name(Item(MemberData, K)) = "skill" then
                      Index :=
@@ -571,7 +575,8 @@ package body Ships.SaveLoad is
                    Attributes => Attributes,
                    Inventory => Inventory,
                    Equipment => Equipment,
-                   Payment => Payment));
+                   Payment => Payment,
+                   ContractLength => ContractLength));
             end;
          elsif Node_Name(Item(ChildNodes, I)) = "mission" then
             declare

@@ -90,7 +90,8 @@ package body Bases.Trade is
           Attributes => Recruit.Attributes,
           Inventory => Inventory,
           Equipment => Recruit.Equipment,
-          Payment => (DailyPayment, TradePayment)));
+          Payment => (DailyPayment, TradePayment),
+          ContractLength => -1));
       UpdateCargo
         (Ship => PlayerShip,
          CargoIndex => MoneyIndex2,

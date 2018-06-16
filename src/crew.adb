@@ -336,6 +336,12 @@ package body Crew is
            Member.Order /= Upgrading then
             Member.OrderTime := OrderTime;
          end if;
+         if Member.Skills.Length = 0 then
+            Member.ContractLength := Member.ContractLength - Minutes;
+            if Member.ContractLength < 0 then
+               Member.ContractLength := 0;
+            end if;
+         end if;
       end UpdateMember;
    begin
       I := PlayerShip.Crew.First_Index;
@@ -744,6 +750,22 @@ package body Crew is
             end if;
             Append(PayMessage, " daily payment.");
             AddMessage(To_String(PayMessage), TradeMessage);
+         end if;
+      end loop;
+      for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Crew(I).ContractLength > 0 then
+            PlayerShip.Crew(I).ContractLength :=
+              PlayerShip.Crew(I).ContractLength - 1;
+            if PlayerShip.Crew(I).ContractLength = 0 then
+               AddMessage
+                 ("Your contract with " &
+                  To_String(PlayerShip.Crew(I).Name) &
+                  " has ended.",
+                  TradeMessage,
+                  3);
+               PlayerShip.Crew(I).Orders := (others => 0);
+               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
+            end if;
          end if;
       end loop;
    end DailyPayment;

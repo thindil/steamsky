@@ -83,13 +83,10 @@ package body Crew.UI.Handlers is
       else
          MemberInfo := To_Unbounded_String("Gender: Female");
       end if;
-      Set_Label
-        (Gtk_Label(Get_Object(Object, "lblcrewinfo")),
-         To_String(MemberInfo));
       Foreach
         (Gtk_List_Store(Get_Object(Builder, "prioritieslist")),
          UpdatePriorities'Access);
-      if Member.Skills.Length = 0 then
+      if Member.Skills.Length = 0 or Member.ContractLength = 0 then
          Hide(Gtk_Widget(Get_Object(Object, "treestats1")));
          Hide(Gtk_Widget(Get_Object(Object, "btninventory")));
          Hide(Gtk_Widget(Get_Object(Object, "exppriorities")));
@@ -98,6 +95,51 @@ package body Crew.UI.Handlers is
          Hide(Gtk_Widget(Get_Object(Object, "treeskills1")));
          Hide(Gtk_Widget(Get_Object(Object, "lblcrewpay")));
          Append(MemberInfo, ASCII.LF & "Passenger");
+         if Member.ContractLength > 0 then
+            declare
+               MinutesDiff: Natural;
+               MissionTime: Date_Record :=
+                 (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
+            begin
+               MinutesDiff := Member.ContractLength;
+               while MinutesDiff > 0 loop
+                  if MinutesDiff >= 518400 then
+                     MissionTime.Year := MissionTime.Year + 1;
+                     MinutesDiff := MinutesDiff - 518400;
+                  elsif MinutesDiff >= 43200 then
+                     MissionTime.Month := MissionTime.Month + 1;
+                     MinutesDiff := MinutesDiff - 43200;
+                  elsif MinutesDiff >= 1440 then
+                     MissionTime.Day := MissionTime.Day + 1;
+                     MinutesDiff := MinutesDiff - 1440;
+                  elsif MinutesDiff >= 60 then
+                     MissionTime.Hour := MissionTime.Hour + 1;
+                     MinutesDiff := MinutesDiff - 60;
+                  else
+                     MissionTime.Minutes := MinutesDiff;
+                     MinutesDiff := 0;
+                  end if;
+               end loop;
+               Append(MemberInfo, ASCII.LF & "Time limit:");
+               if MissionTime.Year > 0 then
+                  Append(MemberInfo, Positive'Image(MissionTime.Year) & "y");
+               end if;
+               if MissionTime.Month > 0 then
+                  Append(MemberInfo, Positive'Image(MissionTime.Month) & "m");
+               end if;
+               if MissionTime.Day > 0 then
+                  Append(MemberInfo, Positive'Image(MissionTime.Day) & "d");
+               end if;
+               if MissionTime.Hour > 0 then
+                  Append(MemberInfo, Positive'Image(MissionTime.Hour) & "h");
+               end if;
+               if MissionTime.Minutes > 0 then
+                  Append
+                    (MemberInfo,
+                     Positive'Image(MissionTime.Minutes) & "mins");
+               end if;
+            end;
+         end if;
       else
          Show_All(Gtk_Widget(Get_Object(Object, "treestats1")));
          Show_All(Gtk_Widget(Get_Object(Object, "btninventory")));
@@ -106,11 +148,29 @@ package body Crew.UI.Handlers is
          Show_All(Gtk_Widget(Get_Object(Object, "lblskills")));
          Show_All(Gtk_Widget(Get_Object(Object, "treeskills1")));
          if MemberIndex > 1 then
-            Show_All(Gtk_Widget(Get_Object(Object, "lblcrewpay")));
-         else
-            Hide(Gtk_Widget(Get_Object(Object, "lblcrewpay")));
+            Append(MemberInfo, ASCII.LF & "Contract length:");
+            if Member.ContractLength > 0 then
+               Append
+                 (MemberInfo,
+                  Integer'Image(Member.ContractLength) & " days.");
+            else
+               Append(MemberInfo, " pernament.");
+            end if;
+            Append
+              (MemberInfo,
+               ASCII.LF &
+               "Payment:" &
+               Natural'Image(Member.Payment(1)) &
+               " " &
+               To_String(MoneyName) &
+               " each day and " &
+               Natural'Image(Member.Payment(2)) &
+               " percent of profit from each trade.");
          end if;
       end if;
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblcrewinfo")),
+         To_String(MemberInfo));
       if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
          Show_All(Gtk_Widget(Get_Object(Object, "btndismiss")));
       else
@@ -205,7 +265,7 @@ package body Crew.UI.Handlers is
       else
          Hide(Gtk_Widget(Get_Object(Object, "progresshunger")));
       end if;
-      if Member.Skills.Length > 0 then
+      if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
          List := Gtk_List_Store(Get_Object(Object, "statslist"));
          Clear(List);
          for I in Member.Attributes.Iterate loop
@@ -241,17 +301,6 @@ package body Crew.UI.Handlers is
                ". " &
                To_String(Skills_List(Skill(1)).Description));
          end loop;
-         if MemberIndex > 1 then
-            Set_Label
-              (Gtk_Label(Get_Object(Object, "lblcrewpay")),
-               "Payment:" &
-               Natural'Image(Member.Payment(1)) &
-               " " &
-               To_String(MoneyName) &
-               " each day and " &
-               Natural'Image(Member.Payment(2)) &
-               " percent of profit from each trade.");
-         end if;
       end if;
       SetOrdersList;
    end ShowMemberInfo;
