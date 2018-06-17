@@ -658,8 +658,16 @@ package body Maps.UI is
       end if;
    end GetCurrentCellCoords;
 
-   procedure BuildMapInfo(MapInfoText: in out Unbounded_String) is
+   procedure UpdateMapInfo(Object: access Gtkada_Builder_Record'Class) is
+      MapInfoText: Unbounded_String;
    begin
+      GetCurrentCellCoords;
+      Append
+        (MapInfoText,
+         "X:" & Positive'Image(MapX) & " Y:" & Positive'Image(MapY));
+      Append
+        (MapInfoText,
+         ASCII.LF & "Distance:" & Positive'Image(CountDistance(MapX, MapY)));
       if SkyMap(MapX, MapY).BaseIndex > 0 then
          declare
             BaseIndex: constant Positive := SkyMap(MapX, MapY).BaseIndex;
@@ -804,7 +812,10 @@ package body Maps.UI is
       if MapX = PlayerShip.SkyX and MapY = PlayerShip.SkyY then
          Append(MapInfoText, ASCII.LF & "You are here");
       end if;
-   end BuildMapInfo;
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblmaptooltip")),
+         To_String(MapInfoText));
+   end UpdateMapInfo;
 
    procedure CreateSkyMap is
       Error: aliased GError;
@@ -848,7 +859,6 @@ package body Maps.UI is
       Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Get_New_Size", GetMapSize'Access);
-      Register_Handler(Builder, "Show_Map_Info", ShowMapCellInfo'Access);
       Register_Handler(Builder, "Hide_Map_Info", HideMapInfoWindow'Access);
       Register_Handler(Builder, "Show_Window", ShowWindow'Access);
       Register_Handler(Builder, "Set_Destination", SetDestination'Access);
@@ -1112,21 +1122,5 @@ package body Maps.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       UpdateMapInfo(Builder);
    end ShowSkyMap;
-
-   procedure UpdateMapInfo(Object: access Gtkada_Builder_Record'Class) is
-      MapInfoText: Unbounded_String;
-   begin
-      GetCurrentCellCoords;
-      Append
-        (MapInfoText,
-         "X:" & Positive'Image(MapX) & " Y:" & Positive'Image(MapY));
-      Append
-        (MapInfoText,
-         ASCII.LF & "Distance:" & Positive'Image(CountDistance(MapX, MapY)));
-      BuildMapInfo(MapInfoText);
-      Set_Label
-        (Gtk_Label(Get_Object(Object, "lblmaptooltip")),
-         To_String(MapInfoText));
-   end UpdateMapInfo;
 
 end Maps.UI;
