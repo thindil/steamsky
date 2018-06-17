@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Counting hire price for recruits
-- Grammar/spelling errors in README.md by MagiOC
+- Grammar/spelling errors in README.md by MagiOC (pull request #27)
 
 ## [2.0.7] - 2018-06-10
 
