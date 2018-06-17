@@ -423,14 +423,11 @@ package body Maps.UI.Handlers is
            (To_String(Message),
             Gtk_Window(Get_Object(Builder, "skymapwindow")));
       end if;
-      if Result > 0 then
-         CenterX := PlayerShip.SkyX;
-         CenterY := PlayerShip.SkyY;
-      end if;
+      CenterX := PlayerShip.SkyX;
+      CenterY := PlayerShip.SkyY;
       if StartsCombat then
          ShowCombatUI;
-      end if;
-      if Result > 0 then
+      else
          UpdateHeader;
          UpdateMessages;
          UpdateMoveButtons;
