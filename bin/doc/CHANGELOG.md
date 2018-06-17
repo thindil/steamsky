@@ -68,6 +68,7 @@ All notable changes to this project will be documented in this file.
 - Lots of grammar/spelling errors in README.md by MagiOC (pull request #26)
 - Crash on repair whole ship in bases
 - Showing Wait order when there are full docks in base
+- Refreshing map after stop automove due to lack of crew members on position
 
 ### Removed
 - Abandoned faction
