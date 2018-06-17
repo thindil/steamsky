@@ -25,11 +25,9 @@ package Maps.UI.Handlers is
      (User_Data: access GObject_Record'Class); -- Hide selected window
    procedure GetMapSize
      (Object: access Gtkada_Builder_Record'Class); -- Get size of map cell
-   function ShowMapCellInfo
+   function SetDestination
      (Object: access Gtkada_Builder_Record'Class)
-     return Boolean; -- Show informations about selected map cell
-   procedure SetDestination
-     (Object: access Gtkada_Builder_Record'Class); -- Set ship destination
+     return Boolean; -- Set ship destination
    procedure MoveMap
      (User_Data: access GObject_Record'Class); -- Move map to selected position
    procedure BtnDockClicked
