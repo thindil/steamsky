@@ -18,7 +18,6 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers; use Ada.Containers;
 with Gtk.Window; use Gtk.Window;
-with Gtk.Label; use Gtk.Label;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Text_Iter; use Gtk.Text_Iter;
@@ -118,50 +117,16 @@ package body Maps.UI.Handlers is
          Gint(GameSettings.WindowHeight));
    end GetMapSize;
 
-   function ShowMapCellInfo
+   function SetDestination
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
-      MapInfoText: Unbounded_String;
-   begin
-      GetCurrentCellCoords;
-      if MapX = PlayerShip.SkyX and MapY = PlayerShip.SkyY then
-         ShowOrders(Object);
-         return True;
-      end if;
-      Set_Label
-        (Gtk_Label(Get_Object(Object, "lblmapx")),
-         "X:" & Positive'Image(MapX));
-      Set_Label
-        (Gtk_Label(Get_Object(Object, "lblmapy")),
-         "Y:" & Positive'Image(MapY));
-      BuildMapInfo(MapInfoText);
-      if MapX /= PlayerShip.SkyX or MapY /= PlayerShip.SkyY then
-         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btndestination")));
-         if Length(MapInfoText) > 0 then
-            Append(MapInfoText, ASCII.LF);
-         end if;
-         Append
-           (MapInfoText,
-            "Distance:" & Positive'Image(CountDistance(MapX, MapY)));
-      else
-         Set_Sensitive
-           (Gtk_Widget(Get_Object(Object, "btndestination")),
-            False);
-      end if;
-      Set_Label
-        (Gtk_Label(Get_Object(Object, "lblmapinfo")),
-         To_String(MapInfoText));
-      Show_All(Gtk_Widget(Get_Object(Builder, "mapinfowindow")));
-      return True;
-   end ShowMapCellInfo;
-
-   procedure SetDestination(Object: access Gtkada_Builder_Record'Class) is
+      pragma Unreferenced(Object);
    begin
       PlayerShip.DestinationX := MapX;
       PlayerShip.DestinationY := MapY;
       AddMessage("You set travel destination for your ship.", OrderMessage);
-      Hide(Gtk_Window(Get_Object(Object, "mapinfowindow")));
       UpdateMessages;
       UpdateMoveButtons;
+      return True;
    end SetDestination;
 
    procedure MoveMap(User_Data: access GObject_Record'Class) is
