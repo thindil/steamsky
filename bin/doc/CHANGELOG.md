@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.5] - 2018-06-17
 
 ### Added
 - New items: orichalcum chestplate, orichalcum helmet, orichalcum armsguard and
