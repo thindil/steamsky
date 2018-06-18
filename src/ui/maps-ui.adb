@@ -912,7 +912,7 @@ package body Maps.UI is
       Add_Entry("<skymapwindow>/Menu/ResignFromGame", GDK_X, 0);
       Add_Entry("<skymapwindow>/Menu", GDK_E, 0);
       Add_Entry("<skymapwindow>/Menu/WaitOrders", GDK_W, 0);
-      Add_Entry("<movemapwindow>/btncenter", GDK_space, 1);
+      Add_Entry("<movemapwindow>/btncenter", GDK_Return, 1);
       if Exists(To_String(SaveDirectory) & "keys.cfg") then
          Load(To_String(SaveDirectory) & "keys.cfg");
       end if;
