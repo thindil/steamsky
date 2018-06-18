@@ -912,6 +912,7 @@ package body Maps.UI is
       Add_Entry("<skymapwindow>/Menu/ResignFromGame", GDK_X, 0);
       Add_Entry("<skymapwindow>/Menu", GDK_E, 0);
       Add_Entry("<skymapwindow>/Menu/WaitOrders", GDK_W, 0);
+      Add_Entry("<movemapwindow>/btncenter", GDK_space, 1);
       if Exists(To_String(SaveDirectory) & "keys.cfg") then
          Load(To_String(SaveDirectory) & "keys.cfg");
       end if;
@@ -1028,6 +1029,10 @@ package body Maps.UI is
         (Gtk_Widget(Get_Object(Builder, "btnshowhelp")),
          "<skymapwindow>/Menu/Help",
          Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btncenter")),
+         "<movemapwindow>/btncenter",
+         Accelerators);
       declare
          Key: Gtk_Accel_Key;
          Found: Boolean;
@@ -1048,6 +1053,9 @@ package body Maps.UI is
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "waitwindow")),
          CloseWindow'Access);
+      On_Key_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "skymapwindow")),
+         MapKeyReleased'Access);
       Set
         (Gtk_Image(Get_Object(Builder, "image1")),
          To_String(DataDirectory) &
