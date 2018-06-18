@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -22,6 +22,7 @@ with Terminal_Interface.Curses.Forms.Field_Types.IntField;
 use Terminal_Interface.Curses.Forms.Field_Types.IntField;
 with Ships; use Ships;
 with Ships.Movement; use Ships.Movement;
+with Ships.Crew; use Ships.Crew;
 with Bases; use Bases;
 with UserInterface; use UserInterface;
 with Messages; use Messages;
@@ -550,6 +551,9 @@ package body Maps.UI is
             end if;
             if Result = 8 then
                WaitForRest;
+               if FindMember(Pilot) = 0 or FindMember(Engineer) = 0 then
+                  WaitForRest;
+               end if;
                Result := 1;
                if CheckForEvent(Sky_Map_View) /= Sky_Map_View then
                   return 5;
