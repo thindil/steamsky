@@ -16,6 +16,8 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Glib.Object; use Glib.Object;
+with Gdk; use Gdk;
+with Gdk.Event; use Gdk.Event;
 
 package Maps.UI.Handlers is
 
@@ -75,5 +77,9 @@ package Maps.UI.Handlers is
    function UpdateTooltip
      (Object: access Gtkada_Builder_Record'Class)
      return Boolean; -- Update map tooltip with information about cell on mouse movement
+   function MapKeyReleased
+     (Self: access Gtk_Widget_Record'Class;
+      Event: Gdk.Event.Gdk_Event_Key)
+     return Boolean; -- Center map on player ship
 
 end Maps.UI.Handlers;
