@@ -28,11 +28,13 @@ with Gtk.Enums; use Gtk.Enums;
 with Gtk.Container; use Gtk.Container;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Accel_Map; use Gtk.Accel_Map;
+with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Glib; use Glib;
-with Gdk; use Gdk;
 with Gdk.Rectangle; use Gdk.Rectangle;
 with Gdk.Device; use Gdk.Device;
 with Gdk.Window; use Gdk.Window;
+with Gdk.Types; use Gdk.Types;
 with Game; use Game;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
@@ -1104,5 +1106,29 @@ package body Maps.UI.Handlers is
       UpdateMapInfo(Object);
       return False;
    end UpdateTooltip;
+
+   function MapKeyReleased
+     (Self: access Gtk_Widget_Record'Class;
+      Event: Gdk.Event.Gdk_Event_Key) return Boolean is
+      pragma Unreferenced(Self);
+      KeyMods: constant Gdk_Modifier_Type :=
+        Event.State and Get_Default_Mod_Mask;
+      Key: Gtk_Accel_Key;
+      Found: Boolean;
+   begin
+      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack"))) /=
+        "skymap" then
+         return True;
+      end if;
+      Lookup_Entry("<movemapwindow>/btncenter", Key, Found);
+      if not Found then
+         return True;
+      end if;
+      if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
+         MoveMap(Get_Object(Builder, "btncenter"));
+         return False;
+      end if;
+      return True;
+   end MapKeyReleased;
 
 end Maps.UI.Handlers;

@@ -649,12 +649,81 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkListStore" id="messageslist">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeModelFilter" id="messagesfilter">
+    <property name="child_model">messageslist</property>
+  </object>
+  <object class="GtkTextTagTable" id="messagestags">
+    <child type="tag">
+      <object class="GtkTextTag" id="yellow1">
+        <property name="name">yellow</property>
+        <property name="foreground">yellow</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="green1">
+        <property name="name">green</property>
+        <property name="foreground_rgba">rgb(78,154,6)</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="red1">
+        <property name="name">red</property>
+        <property name="foreground">red</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="blue1">
+        <property name="name">blue</property>
+        <property name="foreground_rgba">rgb(52,101,164)</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="cyan1">
+        <property name="name">cyan</property>
+        <property name="foreground">cyan</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTextBuffer" id="txtmessages">
+    <property name="tag_table">messagestags</property>
+  </object>
+  <object class="GtkListStore" id="missionslist">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+      <!-- column-name guint1 -->
+      <column type="guint"/>
+      <!-- column-name guint2 -->
+      <column type="guint"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="moduleslist">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkAccelGroup" id="movementaccels"/>
   <object class="GtkWindow" id="movemapwindow">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Steam Sky - move map</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
+    <accel-groups>
+      <group name="movementaccels"/>
+    </accel-groups>
     <signal name="delete-event" handler="Hide_Window" object="movemapwindow" swapped="no"/>
     <child type="titlebar">
       <placeholder/>
@@ -787,72 +856,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </object>
     </child>
   </object>
-  <object class="GtkListStore" id="messageslist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkTreeModelFilter" id="messagesfilter">
-    <property name="child_model">messageslist</property>
-  </object>
-  <object class="GtkTextTagTable" id="messagestags">
-    <child type="tag">
-      <object class="GtkTextTag" id="yellow1">
-        <property name="name">yellow</property>
-        <property name="foreground">yellow</property>
-        <property name="font">Normal</property>
-      </object>
-    </child>
-    <child type="tag">
-      <object class="GtkTextTag" id="green1">
-        <property name="name">green</property>
-        <property name="foreground_rgba">rgb(78,154,6)</property>
-        <property name="font">Normal</property>
-      </object>
-    </child>
-    <child type="tag">
-      <object class="GtkTextTag" id="red1">
-        <property name="name">red</property>
-        <property name="foreground">red</property>
-        <property name="font">Normal</property>
-      </object>
-    </child>
-    <child type="tag">
-      <object class="GtkTextTag" id="blue1">
-        <property name="name">blue</property>
-        <property name="foreground_rgba">rgb(52,101,164)</property>
-        <property name="font">Normal</property>
-      </object>
-    </child>
-    <child type="tag">
-      <object class="GtkTextTag" id="cyan1">
-        <property name="name">cyan</property>
-        <property name="foreground">cyan</property>
-        <property name="font">Normal</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkTextBuffer" id="txtmessages">
-    <property name="tag_table">messagestags</property>
-  </object>
-  <object class="GtkListStore" id="missionslist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-      <!-- column-name guint2 -->
-      <column type="guint"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="moduleslist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkAccelGroup" id="movementaccels"/>
   <object class="GtkListStore" id="orders">
     <columns>
       <!-- column-name gchararray1 -->
