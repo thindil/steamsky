@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New goal: kill 800 inquisitors in melee combat
+- Keyboard shortcut (and option to set it) to center map on player ship
 
 ### Fixed
 - Resting during automovement
