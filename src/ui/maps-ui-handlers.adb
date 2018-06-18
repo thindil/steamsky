@@ -290,6 +290,9 @@ package body Maps.UI.Handlers is
             end if;
             if Result = 8 then
                WaitForRest;
+               if FindMember(Pilot) = 0 or FindMember(Engineer) = 0 then
+                  WaitForRest;
+               end if;
                Result := 1;
                StartsCombat := CheckForEvent;
                if StartsCombat then
@@ -375,6 +378,9 @@ package body Maps.UI.Handlers is
             StartsCombat := CheckForEvent;
             if not StartsCombat then
                WaitForRest;
+               if FindMember(Pilot) = 0 or FindMember(Engineer) = 0 then
+                  WaitForRest;
+               end if;
                StartsCombat := CheckForEvent;
             end if;
             if not StartsCombat and GameSettings.AutoFinish then
