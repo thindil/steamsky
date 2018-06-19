@@ -149,51 +149,46 @@ package body Ships.SaveLoad is
       end loop;
       declare
          StatNode: DOM.Core.Element;
+         AttributesNames: constant array
+           (Positive range <>) of Unbounded_String :=
+           (To_Unbounded_String("health"),
+            To_Unbounded_String("tired"),
+            To_Unbounded_String("hunger"),
+            To_Unbounded_String("thirst"),
+            To_Unbounded_String("order"),
+            To_Unbounded_String("previousorder"),
+            To_Unbounded_String("ordertime"),
+            To_Unbounded_String("dailypay"),
+            To_Unbounded_String("tradepay"),
+            To_Unbounded_String("contractlength"),
+            To_Unbounded_String("morale"));
+         AttributesValues: array(AttributesNames'Range) of Integer;
       begin
          for Member of PlayerShip.Crew loop
             DataNode := Create_Element(SaveData, "member");
             DataNode := Append_Child(CategoryNode, DataNode);
             Set_Attribute(DataNode, "name", To_String(Member.Name));
             Set_Attribute(DataNode, "gender", Member.Gender & "");
-            RawValue := To_Unbounded_String(Integer'Image(Member.Health));
-            Set_Attribute
-              (DataNode,
-               "health",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Member.Tired));
-            Set_Attribute
-              (DataNode,
-               "tired",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Member.Hunger));
-            Set_Attribute
-              (DataNode,
-               "hunger",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Member.Thirst));
-            Set_Attribute
-              (DataNode,
-               "thirst",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue :=
-              To_Unbounded_String
-                (Integer'Image(Crew_Orders'Pos(Member.Order)));
-            Set_Attribute
-              (DataNode,
-               "order",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue :=
-              To_Unbounded_String
-                (Integer'Image(Crew_Orders'Pos(Member.PreviousOrder)));
-            Set_Attribute
-              (DataNode,
-               "previousorder",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Member.OrderTime));
-            Set_Attribute
-              (DataNode,
-               "ordertime",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+            AttributesValues :=
+              (Member.Health,
+               Member.Tired,
+               Member.Hunger,
+               Member.Thirst,
+               Crew_Orders'Pos(Member.Order),
+               Crew_Orders'Pos(Member.PreviousOrder),
+               Member.OrderTime,
+               Member.Payment(1),
+               Member.Payment(2),
+               Member.ContractLength,
+               Member.Morale);
+            for I in AttributesNames'Range loop
+               RawValue :=
+                 To_Unbounded_String(Integer'Image(AttributesValues(I)));
+               Set_Attribute
+                 (DataNode,
+                  To_String(AttributesNames(I)),
+                  To_String(Trim(RawValue, Ada.Strings.Left)));
+            end loop;
             for Skill of Member.Skills loop
                StatNode := Create_Element(SaveData, "skill");
                StatNode := Append_Child(DataNode, StatNode);
@@ -268,22 +263,6 @@ package body Ships.SaveLoad is
                   "index",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
             end loop;
-            RawValue := To_Unbounded_String(Integer'Image(Member.Payment(1)));
-            Set_Attribute
-              (DataNode,
-               "dailypay",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Member.Payment(2)));
-            Set_Attribute
-              (DataNode,
-               "tradepay",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue :=
-              To_Unbounded_String(Integer'Image(Member.ContractLength));
-            Set_Attribute
-              (DataNode,
-               "contractlength",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
          end loop;
       end;
       if PlayerShip.Missions.Length > 0 then
@@ -458,7 +437,8 @@ package body Ships.SaveLoad is
                Thirst,
                Index,
                Level,
-               Experience: Natural;
+               Experience,
+               Morale: Natural;
                Skills: Skills_Container.Vector;
                Attributes: Attributes_Container.Vector;
                Order, PreviousOrder: Crew_Orders;
@@ -507,6 +487,13 @@ package body Ships.SaveLoad is
                ContractLength :=
                  Integer'Value
                    (Get_Attribute(Item(ChildNodes, I), "contractlength"));
+               if Get_Attribute(Item(ChildNodes, I), "morale") /= "" then
+                  Morale :=
+                    Natural'Value
+                      (Get_Attribute(Item(ChildNodes, I), "morale"));
+               else
+                  Morale := 50;
+               end if;
                for K in 0 .. Length(MemberData) - 1 loop
                   if Node_Name(Item(MemberData, K)) = "skill" then
                      Index :=
@@ -576,7 +563,8 @@ package body Ships.SaveLoad is
                    Inventory => Inventory,
                    Equipment => Equipment,
                    Payment => Payment,
-                   ContractLength => ContractLength));
+                   ContractLength => ContractLength,
+                   Morale => Morale));
             end;
          elsif Node_Name(Item(ChildNodes, I)) = "mission" then
             declare

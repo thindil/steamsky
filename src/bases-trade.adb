@@ -92,7 +92,8 @@ package body Bases.Trade is
           Inventory => Inventory,
           Equipment => Recruit.Equipment,
           Payment => (DailyPayment, TradePayment),
-          ContractLength => ContractLenght));
+          ContractLength => ContractLenght,
+          Morale => 50 + SkyBases(BaseIndex).Reputation(1)));
       UpdateCargo
         (Ship => PlayerShip,
          CargoIndex => MoneyIndex2,
