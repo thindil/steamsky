@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Resting during automovement
+- Adding keyboards shortcuts with special keys
 
 ## [2.5] - 2018-06-17
 
