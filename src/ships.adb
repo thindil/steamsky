@@ -213,7 +213,8 @@ package body Ships is
                 Inventory => TmpInventory,
                 Equipment => Member.Equipment,
                 Payment => (20, 0),
-                ContractLength => -1));
+                ContractLength => -1,
+                Morale => 50));
             TmpSkills.Clear;
             TmpAttributes.Clear;
             TmpInventory.Clear;

@@ -61,6 +61,7 @@ package Crew is
       Equipment: Equipment_Array; -- Items indexes from inventory used by character: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
       Payment: Attributes_Array; -- How much money member takes as payment. 1 - daily payment, 2 - percent from each trade
       ContractLength: Integer; -- How many days crew member will be in crew. -1 mean pernament contract
+      Morale: Natural; -- Morale of crew member, between 0 and 100
    end record;
    MaleSyllablesStart: UnboundedString_Container.Vector;
    MaleSyllablesMiddle: UnboundedString_Container.Vector;

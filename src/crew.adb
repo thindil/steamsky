@@ -189,7 +189,7 @@ package body Crew is
    end GenerateMemberName;
 
    procedure UpdateCrew(Minutes: Positive; TiredPoints: Natural) is
-      TiredLevel, HungerLevel, ThirstLevel: Integer := 0;
+      TiredLevel, HungerLevel, ThirstLevel, MoraleLevel: Integer := 0;
       HealthLevel: Integer := 100;
       DeathReason: Unbounded_String;
       CabinIndex, Times, RestAmount, I, ToolIndex: Natural;
@@ -243,6 +243,10 @@ package body Crew is
                  (To_String(Member.Name) & " back to work, fully rested.",
                   OrderMessage,
                   1);
+               MoraleLevel := MoraleLevel - 1;
+               if MoraleLevel < 0 then
+                  MoraleLevel := 0;
+               end if;
             end if;
             Member.PreviousOrder := Rest;
          end if;
@@ -295,6 +299,7 @@ package body Crew is
                      " is very tired but can't go to rest.",
                      OrderMessage,
                      3);
+                  MoraleLevel := MoraleLevel - GetRandom(1, 5);
                end if;
             end;
          end if;
@@ -343,6 +348,7 @@ package body Crew is
                Member.ContractLength := 0;
             end if;
          end if;
+         Member.Morale := MoraleLevel;
       end UpdateMember;
    begin
       I := PlayerShip.Crew.First_Index;
@@ -364,6 +370,7 @@ package body Crew is
          HungerLevel := PlayerShip.Crew(I).Hunger;
          ThirstLevel := PlayerShip.Crew(I).Thirst;
          TiredLevel := PlayerShip.Crew(I).Tired;
+         MoraleLevel := PlayerShip.Crew(I).Morale;
          if Times > 0 then
             if PlayerShip.Crew(I).Order = Rest then
                CabinIndex := 0;
@@ -375,6 +382,7 @@ package body Crew is
                      exit;
                   end if;
                end loop;
+               RestAmount := 0;
                if PlayerShip.Crew(I).Tired > 0 then
                   if CabinIndex > 0 then
                      Damage :=
@@ -402,6 +410,12 @@ package body Crew is
                   HealthLevel := HealthLevel + Times;
                   if HealthLevel > 100 then
                      HealthLevel := 100;
+                  end if;
+               end if;
+               if MoraleLevel < 50 then
+                  MoraleLevel := MoraleLevel + Times + RestAmount;
+                  if MoraleLevel > 50 then
+                     MoraleLevel := 50;
                   end if;
                end if;
             else
@@ -715,43 +729,61 @@ package body Crew is
         FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       PayMessage: Unbounded_String;
       MemberIndex: Positive;
+      HaveMoney: Boolean := True;
+      NewMorale: Integer;
    begin
       for Member of PlayerShip.Crew loop
          if Member.Payment(1) > 0 then
-            if MoneyIndex2 = 0 then
+            if MoneyIndex2 = 0 and HaveMoney then
                AddMessage
                  ("You don't have " &
                   To_String(MoneyName) &
                   " to pay your crew members.",
                   TradeMessage,
                   3);
-               return;
+               HaveMoney := False;
             end if;
-            if PlayerShip.Cargo(MoneyIndex2).Amount < Member.Payment(1) then
-               UpdateCargo
-                 (Ship => PlayerShip,
-                  CargoIndex => MoneyIndex2,
-                  Amount => (0 - PlayerShip.Cargo(MoneyIndex2).Amount));
-               AddMessage
-                 ("You don't have enough " &
-                  To_String(MoneyName) &
-                  " to pay your crew members.",
-                  TradeMessage,
-                  3);
-               return;
+            if HaveMoney then
+               if PlayerShip.Cargo(MoneyIndex2).Amount < Member.Payment(1) then
+                  UpdateCargo
+                    (Ship => PlayerShip,
+                     CargoIndex => MoneyIndex2,
+                     Amount => (0 - PlayerShip.Cargo(MoneyIndex2).Amount));
+                  AddMessage
+                    ("You don't have enough " &
+                     To_String(MoneyName) &
+                     " to pay your crew members.",
+                     TradeMessage,
+                     3);
+                  HaveMoney := False;
+               end if;
+               if HaveMoney then
+                  UpdateCargo
+                    (Ship => PlayerShip,
+                     CargoIndex => MoneyIndex2,
+                     Amount => (0 - Member.Payment(1)));
+                  PayMessage := To_Unbounded_String("You pay ") & Member.Name;
+                  if Member.Gender = 'M' then
+                     Append(PayMessage, " his ");
+                  else
+                     Append(PayMessage, " her ");
+                  end if;
+                  Append(PayMessage, " daily payment.");
+                  AddMessage(To_String(PayMessage), TradeMessage);
+                  NewMorale := Member.Morale + GetRandom(1, 5);
+                  if NewMorale > 100 then
+                     NewMorale := 100;
+                  end if;
+                  Member.Morale := NewMorale;
+               end if;
             end if;
-            UpdateCargo
-              (Ship => PlayerShip,
-               CargoIndex => MoneyIndex2,
-               Amount => (0 - Member.Payment(1)));
-            PayMessage := To_Unbounded_String("You pay ") & Member.Name;
-            if Member.Gender = 'M' then
-               Append(PayMessage, " his ");
-            else
-               Append(PayMessage, " her ");
+            if not HaveMoney then
+               NewMorale := Member.Morale - GetRandom(10, 50);
+               if NewMorale < 0 then
+                  NewMorale := 0;
+               end if;
+               Member.Morale := NewMorale;
             end if;
-            Append(PayMessage, " daily payment.");
-            AddMessage(To_String(PayMessage), TradeMessage);
          end if;
       end loop;
       MemberIndex := 1;

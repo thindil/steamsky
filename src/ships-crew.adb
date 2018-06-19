@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -23,6 +23,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Maps; use Maps;
 with Events; use Events;
 with Crew.Inventory; use Crew.Inventory;
+with Utils; use Utils;
 
 package body Ships.Crew is
 
@@ -53,6 +54,11 @@ package body Ships.Crew is
                SkillLevel :=
                  SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
             end if;
+            if Member.Morale < 25 then
+               Damage := DamageFactor(Float(Member.Morale) / 100.0);
+               SkillLevel :=
+                 SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
+            end if;
             if SkillLevel < 0 then
                SkillLevel := 0;
             end if;
@@ -67,6 +73,7 @@ package body Ships.Crew is
       Reason: Unbounded_String;
       Ship: in out ShipRecord;
       CreateBody: Boolean := True) is
+      NewMorale: Integer;
    begin
       if MemberIndex > 1 then
          if Ship = PlayerShip then
@@ -100,6 +107,13 @@ package body Ships.Crew is
              Durability => 100));
       end if;
       DeleteMember(MemberIndex, Ship);
+      for Member of Ship.Crew loop
+         NewMorale := Member.Morale - GetRandom(10, 25);
+         if NewMorale < 0 then
+            NewMorale := 0;
+         end if;
+         Member.Morale := NewMorale;
+      end loop;
    end Death;
 
    procedure DeleteMember(MemberIndex: Positive; Ship: in out ShipRecord) is
@@ -160,6 +174,11 @@ package body Ships.Crew is
          else
             return;
          end if;
+      end if;
+      if GivenOrder /= Rest and
+        Ship.Crew(MemberIndex).Morale < 11 and
+        GetRandom(1, 100) < 50 then
+         raise Crew_Order_Error with MemberName & " refuses to execute order.";
       end if;
       if GivenOrder = Upgrading or
         GivenOrder = Repair or
@@ -392,6 +411,17 @@ package body Ships.Crew is
       end if;
       Ship.Crew(MemberIndex).Order := GivenOrder;
       Ship.Crew(MemberIndex).OrderTime := 15;
+      if GivenOrder /= Rest then
+         declare
+            NewMorale: Integer;
+         begin
+            NewMorale := Ship.Crew(MemberIndex).Morale - 1;
+            if NewMorale < 0 then
+               NewMorale := 0;
+            end if;
+            Ship.Crew(MemberIndex).Morale := NewMorale;
+         end;
+      end if;
       if CheckPriorities then
          UpdateOrders(Ship);
       end if;
