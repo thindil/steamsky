@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
 - Keyboard shortcut (and option to set it) to center map on player ship
 - Morale to crew members
 
+### Changed
+- Updated help
+
 ### Fixed
 - Resting during automovement
 - Adding keyboards shortcuts with special keys
