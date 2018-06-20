@@ -19,6 +19,8 @@ with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with ShipModules; use ShipModules;
+with Maps; use Maps;
+with Bases; use Bases;
 
 package body Ships.SaveLoad is
 
@@ -570,7 +572,7 @@ package body Ships.SaveLoad is
             declare
                MType: Missions_Types;
                Target, TargetX, TargetY, StartBase: Natural;
-               Time, Reward: Positive;
+               Time, Reward, MIndex: Positive;
                Finished: Boolean;
             begin
                MType :=
@@ -604,6 +606,20 @@ package body Ships.SaveLoad is
                    Reward => Reward,
                    StartBase => StartBase,
                    Finished => Finished));
+               MIndex := PlayerShip.Missions.Last_Index;
+               if not Finished then
+                  SkyMap
+                    (PlayerShip.Missions(MIndex).TargetX,
+                     PlayerShip.Missions(MIndex).TargetY)
+                    .MissionIndex :=
+                    MIndex;
+               else
+                  SkyMap
+                    (SkyBases(PlayerShip.Missions(MIndex).StartBase).SkyX,
+                     SkyBases(PlayerShip.Missions(MIndex).StartBase).SkyY)
+                    .MissionIndex :=
+                    MIndex;
+               end if;
             end;
          end if;
       end loop;
