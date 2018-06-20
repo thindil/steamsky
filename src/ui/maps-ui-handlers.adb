@@ -422,6 +422,7 @@ package body Maps.UI.Handlers is
       if FindMember(Talk) > 0 then
          HaveTrader := True;
       end if;
+      Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btncloseorders")), False);
       if PlayerShip.Speed = DOCKED then
          Set_Label(Gtk_Button(Get_Object(Builder, "btndock")), "_Undock");
          Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btndock")), False);
