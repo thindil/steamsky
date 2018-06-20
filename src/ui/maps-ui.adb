@@ -624,6 +624,9 @@ package body Maps.UI is
 
    procedure CheckButtons(Widget: not null access Gtk_Widget_Record'Class) is
    begin
+      if Widget = Gtk_Widget(Get_Object(Builder, "btncloseorders")) then
+         return;
+      end if;
       if not Get_No_Show_All(Widget) and not ButtonsVisible then
          ButtonsVisible := True;
       end if;
