@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   melee combat and kill 2000 inquisitors in melee combat
 - Keyboard shortcut (and option to set it) to center map on player ship
 - Morale to crew members
+- Loyalty to crew members
 
 ### Changed
 - Updated help
