@@ -319,7 +319,8 @@ package body Missions is
                 Equipment => (others => 0),
                 Payment => (others => 0),
                 ContractLength => Mission.Time,
-                Morale => 50 + SkyBases(BaseIndex).Reputation(1)));
+                Morale => 50 + SkyBases(BaseIndex).Reputation(1),
+                Loyalty => 50 + SkyBases(BaseIndex).Reputation(1)));
             for Module of PlayerShip.Modules loop
                if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
                   Module.Owner := PlayerShip.Crew.Last_Index;

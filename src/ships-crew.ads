@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -45,5 +45,9 @@ package Ships.Crew is
      (Ship: in out ShipRecord;
       Combat: Boolean :=
         False); -- Update crew orders based on their orders priorities
+   procedure UpdateMorale
+     (Ship: in out ShipRecord;
+      MemberIndex: Positive;
+      Value: Integer); -- Update morale of selected crew member by value
 
 end Ships.Crew;
