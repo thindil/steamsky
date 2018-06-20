@@ -73,7 +73,6 @@ package body Ships.Crew is
       Reason: Unbounded_String;
       Ship: in out ShipRecord;
       CreateBody: Boolean := True) is
-      NewMorale: Integer;
    begin
       if MemberIndex > 1 then
          if Ship = PlayerShip then
@@ -107,12 +106,8 @@ package body Ships.Crew is
              Durability => 100));
       end if;
       DeleteMember(MemberIndex, Ship);
-      for Member of Ship.Crew loop
-         NewMorale := Member.Morale - GetRandom(10, 25);
-         if NewMorale < 0 then
-            NewMorale := 0;
-         end if;
-         Member.Morale := NewMorale;
+      for I in Ship.Crew.Iterate loop
+         UpdateMorale(Ship, Crew_Container.To_Index(I), GetRandom(-25, -10));
       end loop;
    end Death;
 
@@ -176,8 +171,8 @@ package body Ships.Crew is
          end if;
       end if;
       if GivenOrder /= Rest and
-        Ship.Crew(MemberIndex).Morale < 11 and
-        GetRandom(1, 100) < 50 then
+        ((Ship.Crew(MemberIndex).Morale < 11 and GetRandom(1, 100) < 50) or
+         Ship.Crew(MemberIndex).Loyalty < 20) then
          raise Crew_Order_Error with MemberName & " refuses to execute order.";
       end if;
       if GivenOrder = Upgrading or
@@ -412,15 +407,7 @@ package body Ships.Crew is
       Ship.Crew(MemberIndex).Order := GivenOrder;
       Ship.Crew(MemberIndex).OrderTime := 15;
       if GivenOrder /= Rest then
-         declare
-            NewMorale: Integer;
-         begin
-            NewMorale := Ship.Crew(MemberIndex).Morale - 1;
-            if NewMorale < 0 then
-               NewMorale := 0;
-            end if;
-            Ship.Crew(MemberIndex).Morale := NewMorale;
-         end;
+         UpdateMorale(Ship, MemberIndex, -1);
       end if;
       if CheckPriorities then
          UpdateOrders(Ship);
@@ -742,5 +729,36 @@ package body Ships.Crew is
          end if;
       end if;
    end UpdateOrders;
+
+   procedure UpdateMorale
+     (Ship: in out ShipRecord;
+      MemberIndex: Positive;
+      Value: Integer) is
+      NewMorale, NewLoyalty: Integer;
+   begin
+      NewMorale := Ship.Crew(MemberIndex).Morale + Value;
+      if NewMorale > 100 then
+         NewMorale := 100;
+      elsif NewMorale < 0 then
+         NewMorale := 0;
+      end if;
+      Ship.Crew(MemberIndex).Morale := NewMorale;
+      if Ship = PlayerShip and MemberIndex = 1 then
+         return;
+      end if;
+      NewLoyalty := Ship.Crew(MemberIndex).Loyalty;
+      if NewMorale > 75 and NewLoyalty < 100 then
+         NewLoyalty := NewLoyalty + 1;
+      end if;
+      if NewMorale < 25 and NewLoyalty > 0 then
+         NewLoyalty := NewLoyalty - GetRandom(5, 10);
+      end if;
+      if NewLoyalty > 100 then
+         NewLoyalty := 100;
+      elsif NewLoyalty < 0 then
+         NewLoyalty := 0;
+      end if;
+      Ship.Crew(MemberIndex).Loyalty := NewLoyalty;
+   end UpdateMorale;
 
 end Ships.Crew;

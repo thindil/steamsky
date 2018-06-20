@@ -349,6 +349,12 @@ package body Crew is
             end if;
          end if;
          Member.Morale := MoraleLevel;
+         if MoraleLevel > 75 then
+            Member.Loyalty := Member.Loyalty + 1;
+            if Member.Loyalty > 100 then
+               Member.Loyalty := 100;
+            end if;
+         end if;
       end UpdateMember;
    begin
       I := PlayerShip.Crew.First_Index;
@@ -730,8 +736,8 @@ package body Crew is
       PayMessage: Unbounded_String;
       MemberIndex: Positive;
       HaveMoney: Boolean := True;
-      NewMorale: Integer;
    begin
+      MemberIndex := 1;
       for Member of PlayerShip.Crew loop
          if Member.Payment(1) > 0 then
             if MoneyIndex2 = 0 and HaveMoney then
@@ -770,21 +776,14 @@ package body Crew is
                   end if;
                   Append(PayMessage, " daily payment.");
                   AddMessage(To_String(PayMessage), TradeMessage);
-                  NewMorale := Member.Morale + GetRandom(1, 5);
-                  if NewMorale > 100 then
-                     NewMorale := 100;
-                  end if;
-                  Member.Morale := NewMorale;
+                  UpdateMorale(PlayerShip, MemberIndex, GetRandom(1, 5));
                end if;
             end if;
             if not HaveMoney then
-               NewMorale := Member.Morale - GetRandom(10, 50);
-               if NewMorale < 0 then
-                  NewMorale := 0;
-               end if;
-               Member.Morale := NewMorale;
+               UpdateMorale(PlayerShip, MemberIndex, GetRandom(-50, -10));
             end if;
          end if;
+         MemberIndex := MemberIndex + 1;
       end loop;
       MemberIndex := 1;
       while MemberIndex <= PlayerShip.Crew.Last_Index loop
