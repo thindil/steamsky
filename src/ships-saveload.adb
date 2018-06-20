@@ -163,7 +163,8 @@ package body Ships.SaveLoad is
             To_Unbounded_String("dailypay"),
             To_Unbounded_String("tradepay"),
             To_Unbounded_String("contractlength"),
-            To_Unbounded_String("morale"));
+            To_Unbounded_String("morale"),
+            To_Unbounded_String("loyalty"));
          AttributesValues: array(AttributesNames'Range) of Integer;
       begin
          for Member of PlayerShip.Crew loop
@@ -182,7 +183,8 @@ package body Ships.SaveLoad is
                Member.Payment(1),
                Member.Payment(2),
                Member.ContractLength,
-               Member.Morale);
+               Member.Morale,
+               Member.Loyalty);
             for I in AttributesNames'Range loop
                RawValue :=
                  To_Unbounded_String(Integer'Image(AttributesValues(I)));
@@ -440,7 +442,8 @@ package body Ships.SaveLoad is
                Index,
                Level,
                Experience,
-               Morale: Natural;
+               Morale,
+               Loyalty: Natural;
                Skills: Skills_Container.Vector;
                Attributes: Attributes_Container.Vector;
                Order, PreviousOrder: Crew_Orders;
@@ -495,6 +498,13 @@ package body Ships.SaveLoad is
                       (Get_Attribute(Item(ChildNodes, I), "morale"));
                else
                   Morale := 50;
+               end if;
+               if Get_Attribute(Item(ChildNodes, I), "loyalty") /= "" then
+                  Loyalty :=
+                    Natural'Value
+                      (Get_Attribute(Item(ChildNodes, I), "loyalty"));
+               else
+                  Loyalty := 100;
                end if;
                for K in 0 .. Length(MemberData) - 1 loop
                   if Node_Name(Item(MemberData, K)) = "skill" then
@@ -566,7 +576,8 @@ package body Ships.SaveLoad is
                    Equipment => Equipment,
                    Payment => Payment,
                    ContractLength => ContractLength,
-                   Morale => Morale));
+                   Morale => Morale,
+                   Loyalty => Loyalty));
             end;
          elsif Node_Name(Item(ChildNodes, I)) = "mission" then
             declare
