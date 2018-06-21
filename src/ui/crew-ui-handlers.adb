@@ -37,6 +37,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Messages; use Messages;
 with Crew.Inventory; use Crew.Inventory;
 with Bases; use Bases;
+with Utils; use Utils;
 
 package body Crew.UI.Handlers is
 
@@ -631,6 +632,12 @@ package body Crew.UI.Handlers is
             OrderMessage);
          DeleteMember(MemberIndex, PlayerShip);
          SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
+         for I in PlayerShip.Crew.Iterate loop
+            UpdateMorale
+              (PlayerShip,
+               Crew_Container.To_Index(I),
+               GetRandom(-5, -1));
+         end loop;
          RefreshCrewInfo;
          ShowLastMessage(Object);
          ShowOrdersForAll;
