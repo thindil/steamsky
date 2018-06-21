@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Resting during automovement
 - Adding keyboards shortcuts with special keys
 - Loading missions data from saved game
+- Mouse click on map field with player ship should bring orders menu
 
 ## [2.5] - 2018-06-17
 
