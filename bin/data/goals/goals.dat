@@ -193,5 +193,6 @@ attribute "amount" of points for finish it.
  <goal amount="800" index="171" multiplier="2" target="Inquisition" type="KILL"/>
  <goal amount="1000" index="172" multiplier="2" target="Inquisition" type="KILL"/>
  <goal amount="2000" index="173" multiplier="2" target="Inquisition" type="KILL"/>
+ <goal amount="4000" index="174" multiplier="2" target="Inquisition" type="KILL"/>
 </goals>
 
