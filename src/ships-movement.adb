@@ -23,6 +23,7 @@ with Maps; use Maps;
 with Messages; use Messages;
 with Config; use Config;
 with Bases; use Bases;
+with Utils; use Utils;
 
 package body Ships.Movement is
 
@@ -252,6 +253,22 @@ package body Ships.Movement is
                      DeleteMember(MemberIndex, PlayerShip);
                      SkyBases(BaseIndex).Population :=
                        SkyBases(BaseIndex).Population + 1;
+                  elsif PlayerShip.Crew(MemberIndex).Loyalty < 20 and
+                    GetRandom(0, PlayerShip.Crew(MemberIndex).Loyalty) <
+                      10 then
+                     AddMessage
+                       (To_String(PlayerShip.Crew(MemberIndex).Name) &
+                        " resign from working for you.",
+                        OrderMessage);
+                     DeleteMember(MemberIndex, PlayerShip);
+                     SkyBases(BaseIndex).Population :=
+                       SkyBases(BaseIndex).Population + 1;
+                     for I in PlayerShip.Crew.Iterate loop
+                        UpdateMorale
+                          (PlayerShip,
+                           Crew_Container.To_Index(I),
+                           GetRandom(-5, -1));
+                     end loop;
                   else
                      MemberIndex := MemberIndex + 1;
                   end if;
