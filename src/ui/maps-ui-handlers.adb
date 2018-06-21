@@ -121,8 +121,11 @@ package body Maps.UI.Handlers is
 
    function SetDestination
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
-      pragma Unreferenced(Object);
    begin
+      if PlayerShip.SkyX = MapX and PlayerShip.SkyY = MapY then
+         ShowOrders(Object);
+         return True;
+      end if;
       PlayerShip.DestinationX := MapX;
       PlayerShip.DestinationY := MapY;
       AddMessage("You set travel destination for your ship.", OrderMessage);
