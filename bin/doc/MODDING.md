@@ -312,7 +312,8 @@ To change which faction is player faction, edit `value` attribute of tag
   and in shipyards.
 - Attribute `type`: Type of module. Available options are: Engine, Cabin, Cockpit,
   Turret, Gun, Cargo, Hull, Armor, Battering\_ram, Alchemy\_Lab, Furnace,
-  Water\_Collector, Workshop, Greenhouse, Medical\_room, Harpoon\_Gun
+  Water\_Collector, Workshop, Greenhouse, Medical\_room, Harpoon\_Gun, 
+  Training\_Room
 - Attribute `weight`: Weight of module in kilograms.
 - Attribute `value`: Depends on type of module. For 'Engine' it is fuel usage 
   for travel by one map field. For 'Cabin' it is value of reduced tiredness of 
