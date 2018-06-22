@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -37,7 +37,8 @@ package ShipModules is
       WORKSHOP,
       GREENHOUSE,
       MEDICAL_ROOM,
-      HARPOON_GUN);
+      HARPOON_GUN,
+      TRAINING_ROOM);
    type BaseModule_Data is -- Data structure for prototypes of ship modules
    record
       Name: Unbounded_String; -- Name of module
