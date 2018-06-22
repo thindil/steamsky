@@ -7,7 +7,8 @@ unique. This value is used in ships data entries.
 screen and in shipyards. 
 - Attribute "type": Type of module. Available options are: Engine, Cabin, 
 Cockpit, Turret, Gun, Cargo, Hull, Armor, Battering_ram, Alchemy_Lab, Furnace,
-Water_Collector, Workshop, Greenhouse, Medical_room, Harpoon_Gun. 
+Water_Collector, Workshop, Greenhouse, Medical_room, Harpoon_Gun, 
+Training_Room. 
 - Attribute "weight": Weight of module in kilograms. 
 - Attribute "value": Depends on type of module. For 'Engine' it is fuel usage
 for travel by one map field. For 'Cabin' it is value of reduced tiredness of 
