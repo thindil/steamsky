@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Keyboard shortcut (and option to set it) to center map on player ship
 - Morale to crew members
 - Loyalty to crew members
+- New type of ship modules: training room
 
 ### Changed
 - Updated help
