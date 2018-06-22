@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Adding keyboards shortcuts with special keys
 - Loading missions data from saved game
 - Mouse click on map field with player ship should bring orders menu
+- Docking to bases where player have very low reputation
 
 ## [2.5] - 2018-06-17
 
