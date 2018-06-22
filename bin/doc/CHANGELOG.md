@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated help
 - Updated interface
+- Updated MODDING.md
 
 ### Fixed
 - Resting during automovement
