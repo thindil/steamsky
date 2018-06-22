@@ -604,12 +604,14 @@ package body Maps.UI.Handlers is
                end if;
             when None | DoublePrice | BaseRecovery =>
                if BaseIndex > 0 then
-                  Set_Label
-                    (Gtk_Button(Get_Object(Builder, "btndock")),
-                     "_Dock");
-                  Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btndock")),
-                     False);
+                  if SkyBases(BaseIndex).Reputation(1) > -25 then
+                     Set_Label
+                       (Gtk_Button(Get_Object(Builder, "btndock")),
+                        "_Dock");
+                     Set_No_Show_All
+                       (Gtk_Widget(Get_Object(Object, "btndock")),
+                        False);
+                  end if;
                   for Mission of PlayerShip.Missions loop
                      if HaveTrader then
                         case Mission.MType is
