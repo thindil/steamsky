@@ -1453,6 +1453,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <row>
         <col id="0" translatable="yes">Harpoon guns</col>
       </row>
+      <row>
+        <col id="0" translatable="yes">Training rooms</col>
+      </row>
     </data>
   </object>
   <object class="GtkWindow" id="skymapwindow">

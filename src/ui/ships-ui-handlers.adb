@@ -311,6 +311,14 @@ package body Ships.UI.Handlers is
             else
                Append(ModuleInfo, "Medic: none");
             end if;
+         when TRAINING_ROOM =>
+            if Module.Owner > 0 then
+               Append
+                 (ModuleInfo,
+                  "Trainee: " & To_String(PlayerShip.Crew(Module.Owner).Name));
+            else
+               Append(ModuleInfo, "Trainee: none");
+            end if;
          when others =>
             null;
       end case;
