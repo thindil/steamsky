@@ -106,10 +106,26 @@ package body Ships.UI is
    procedure ShowModuleOptions is
       MaxValue: Positive;
       IsPassenger: Boolean := False;
+      procedure ShowAssignSkill is
+         AssignIter: Gtk_Tree_Iter;
+         AssignList: Gtk_List_Store;
+      begin
+         AssignList := Gtk_List_Store(Get_Object(Builder, "assignskilllist"));
+         if N_Children(AssignList) > 0 then
+            return;
+         end if;
+         for I in Skills_List.First_Index .. Skills_List.Last_Index loop
+            Append(AssignList, AssignIter);
+            Set(AssignList, AssignIter, 0, To_String(Skills_List(I).Name));
+            Set(AssignList, AssignIter, 1, Gint(I));
+         end loop;
+         Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassignskill")), 0);
+      end ShowAssignSkill;
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
       Hide(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
       Hide(Gtk_Widget(Get_Object(Builder, "boxassignammo")));
+      Hide(Gtk_Widget(Get_Object(Builder, "boxassignskill")));
       MaxValue :=
         Natural
           (Float
@@ -258,6 +274,8 @@ package body Ships.UI is
                   exit;
                end if;
             end loop;
+         when TRAINING_ROOM =>
+            Show_All(Gtk_Widget(Get_Object(Builder, "boxassignskill")));
          when others =>
             null;
       end case;
@@ -287,6 +305,9 @@ package body Ships.UI is
       end if;
       if Is_Visible(Gtk_Widget(Get_Object(Builder, "boxassignammo"))) then
          ShowAssignAmmo;
+      end if;
+      if Is_Visible(Gtk_Widget(Get_Object(Builder, "boxassignskill"))) then
+         ShowAssignSkill;
       end if;
    end ShowModuleOptions;
 

@@ -97,6 +97,14 @@ package body Crew.UI is
                         AddOrder("Clean ship", 8, 0);
                         NeedClean := False;
                      end if;
+                  when TRAINING_ROOM =>
+                     if PlayerShip.Modules(I).Owner /= MemberIndex then
+                        AddOrder
+                          ("Go on training in " &
+                           To_String(PlayerShip.Modules(I).Name),
+                           12,
+                           Modules_Container.To_Index(I));
+                     end if;
                   when others =>
                      null;
                end case;
@@ -226,7 +234,8 @@ package body Crew.UI is
          To_Unbounded_String("Cleans ship"),
          To_Unbounded_String("On break"),
          To_Unbounded_String("Defends ship"),
-         To_Unbounded_String("Boarding"));
+         To_Unbounded_String("Boarding"),
+         To_Unbounded_String("Trains"));
    begin
       CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist2"));
       Clear(CrewList);

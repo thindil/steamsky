@@ -312,12 +312,23 @@ package body Ships.UI.Handlers is
                Append(ModuleInfo, "Medic: none");
             end if;
          when TRAINING_ROOM =>
+            if Module.Data(1) > 0 then
+               Append
+                 (ModuleInfo,
+                  "Set for training " &
+                  To_String(Skills_List(Module.Data(1)).Name) &
+                  ".");
+            else
+               Append(ModuleInfo, "Must be set for training.");
+            end if;
             if Module.Owner > 0 then
                Append
                  (ModuleInfo,
-                  "Trainee: " & To_String(PlayerShip.Crew(Module.Owner).Name));
+                  ASCII.LF &
+                  "Trainee: " &
+                  To_String(PlayerShip.Crew(Module.Owner).Name));
             else
-               Append(ModuleInfo, "Trainee: none");
+               Append(ModuleInfo, ASCII.LF & "Trainee: none");
             end if;
          when others =>
             null;
@@ -515,11 +526,17 @@ package body Ships.UI.Handlers is
            Natural
              (Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassigncrew"))));
          AssignList := Gtk_List_Store(Get_Object(Builder, "assigncrewlist"));
-      else
+      elsif User_Data = Get_Object(Builder, "btnassignammo") then
          ActiveIndex :=
            Natural
              (Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassignammo"))));
          AssignList := Gtk_List_Store(Get_Object(Builder, "assignammolist"));
+      elsif User_Data = Get_Object(Builder, "btnassignskill") then
+         ActiveIndex :=
+           Natural
+             (Get_Active
+                (Gtk_Combo_Box(Get_Object(Builder, "cmbassignskill"))));
+         AssignList := Gtk_List_Store(Get_Object(Builder, "assignskilllist"));
       end if;
       AssignIndex :=
         Positive
@@ -554,7 +571,7 @@ package body Ships.UI.Handlers is
             when others =>
                null;
          end case;
-      else
+      elsif User_Data = Get_Object(Builder, "btnassignammo") then
          PlayerShip.Modules(ModuleIndex).Data(1) := AssignIndex;
          AddMessage
            ("You assigned " &
@@ -562,6 +579,15 @@ package body Ships.UI.Handlers is
               (Items_List(PlayerShip.Cargo(AssignIndex).ProtoIndex).Name) &
             " to " &
             To_String(PlayerShip.Modules(ModuleIndex).Name) &
+            ".",
+            OrderMessage);
+      elsif User_Data = Get_Object(Builder, "btnassignskill") then
+         PlayerShip.Modules(ModuleIndex).Data(1) := AssignIndex;
+         AddMessage
+           ("You prepared " &
+            To_String(PlayerShip.Modules(ModuleIndex).Name) &
+            " for training " &
+            To_String(Skills_List(AssignIndex).Name) &
             ".",
             OrderMessage);
       end if;

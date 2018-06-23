@@ -36,7 +36,8 @@ package Crew is
       Clean,
       Rest,
       Defend,
-      Boarding);
+      Boarding,
+      Train);
    type Orders_Array is array(1 .. 11) of Natural;
    type Attributes_Array is array(1 .. 2) of Natural;
    type Equipment_Array is array(1 .. 7) of Natural;
