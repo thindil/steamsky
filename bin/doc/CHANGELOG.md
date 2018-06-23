@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Loading missions data from saved game
 - Mouse click on map field with player ship should bring orders menu
 - Docking to bases where player have very low reputation
+- Saving reputation in bases
 
 ## [2.5] - 2018-06-17
 
