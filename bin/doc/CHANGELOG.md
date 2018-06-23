@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Morale to crew members
 - Loyalty to crew members
 - New type of ship modules: training room
+- New ship module: small bronze training room
 
 ### Changed
 - Updated help
