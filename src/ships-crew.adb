@@ -226,12 +226,14 @@ package body Ships.Crew is
             end case;
          end if;
       end if;
-      if GivenOrder = Train and Ship.Modules(ModuleIndex).Data(1) = 0 then
-         raise Crew_Order_Error
-           with MemberName &
-           " can't starts training because " &
-           To_String(Ship.Modules(ModuleIndex).Name) &
-           " isn't prepared.";
+      if GivenOrder = Train then
+         if Ship.Modules(ModuleIndex).Data(1) = 0 then
+            raise Crew_Order_Error
+              with MemberName &
+              " can't starts training because " &
+              To_String(Ship.Modules(ModuleIndex).Name) &
+              " isn't prepared.";
+         end if;
       end if;
       if GivenOrder = Pilot or
         GivenOrder = Engineer or
@@ -413,6 +415,7 @@ package body Ships.Crew is
                AddMessage
                  (MemberName & " starts personal training.",
                   OrderMessage);
+               Ship.Modules(ModuleIndex2).Owner := MemberIndex;
          end case;
       end if;
       Ship.Crew(MemberIndex).Order := GivenOrder;
