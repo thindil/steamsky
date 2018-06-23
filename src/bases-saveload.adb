@@ -238,7 +238,7 @@ package body Bases.SaveLoad is
                "day",
                To_String(Trim(RawValue, Ada.Strings.Left)));
          end if;
-         if SkyBases(I).Reputation(1) > 0 or SkyBases(I).Reputation(2) > 0 then
+         if SkyBases(I).Reputation(1) /= 0 then
             SubNode := Create_Element(SaveData, "reputation");
             SubNode := Append_Child(BaseNode, SubNode);
             RawValue :=
