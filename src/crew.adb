@@ -588,6 +588,28 @@ package body Crew is
                        0 then
                         GiveOrders(PlayerShip, I, Rest);
                      end if;
+                  when Train =>
+                     declare
+                        SkillIndex: Positive;
+                     begin
+                        for Module of PlayerShip.Modules loop
+                           if Modules_List(Module.ProtoIndex).MType =
+                             TRAINING_ROOM and
+                             Module.Owner = I then
+                              SkillIndex := Module.Data(1);
+                              exit;
+                           end if;
+                        end loop;
+                        for J in 1 .. Times loop
+                           GainExp(GetRandom(1, 5), SkillIndex, I);
+                        end loop;
+                        AddMessage
+                          (To_String(PlayerShip.Crew(I).Name) &
+                           " trained a little " &
+                           To_String(Skills_List(SkillIndex).Name) &
+                           ".",
+                           OrderMessage);
+                     end;
                   when others =>
                      null;
                end case;
