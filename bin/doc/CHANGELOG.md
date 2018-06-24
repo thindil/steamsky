@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Mouse click on map field with player ship should bring orders menu
 - Docking to bases where player have very low reputation
 - Saving reputation in bases
+- Crash on giving invalid order to crew member
 
 ## [2.5] - 2018-06-17
 
