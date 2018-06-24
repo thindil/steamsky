@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Loyalty to crew members
 - New type of ship modules: training room
 - New ship module: small bronze training room
+- Ability to train skills on ship
 
 ### Changed
 - Updated help
