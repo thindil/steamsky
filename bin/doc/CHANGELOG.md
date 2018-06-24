@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New goals: kill 800 inquisitors in melee combat, kill 1000 inquisitors in
   melee combat, kill 2000 inquisitors in melee combat, kill 4000 inquisitors
-  in melee combat, kill 6000 inquisitors in melee combat and kill 8000
-  inquisitors in melee combat
+  in melee combat, kill 6000 inquisitors in melee combat, kill 8000 inquisitors
+  in melee combat and kill 10000 inquisitors in melee combat
 - Keyboard shortcut (and option to set it) to center map on player ship
 - Morale to crew members
 - Loyalty to crew members
