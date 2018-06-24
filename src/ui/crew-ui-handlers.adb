@@ -343,7 +343,8 @@ package body Crew.UI.Handlers is
                GiveOrders(PlayerShip, I, Order);
             exception
                when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
-                  AddMessage(Exception_Message(An_Exception), OrderMessage);
+                  AddMessage(Exception_Message(An_Exception), OrderMessage, 3);
+                  ShowLastMessage(Builder);
             end;
          end if;
       end loop;
@@ -562,6 +563,10 @@ package body Crew.UI.Handlers is
       ShowLastMessage(Builder);
       ShowOrdersForAll;
       SetActiveMember(OldMemberIndex - 1);
+   exception
+      when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
+         AddMessage(Exception_Message(An_Exception), OrderMessage, 3);
+         ShowLastMessage(Builder);
    end GiveCrewOrders;
 
    function ReducePriority
