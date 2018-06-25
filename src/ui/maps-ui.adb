@@ -916,6 +916,10 @@ package body Maps.UI is
       Add_Entry("<skymapwindow>/Menu", GDK_E, 0);
       Add_Entry("<skymapwindow>/Menu/WaitOrders", GDK_W, 0);
       Add_Entry("<movemapwindow>/btncenter", GDK_Return, 1);
+      Add_Entry("<skymapwindow>/btnmapleft", GDK_Left, 1);
+      Add_Entry("<skymapwindow>/btnmapright", GDK_Right, 1);
+      Add_Entry("<skymapwindow>/btnmapup", GDK_Up, 1);
+      Add_Entry("<skymapwindow>/btnmapdown", GDK_Down, 1);
       if Exists(To_String(SaveDirectory) & "keys.cfg") then
          Load(To_String(SaveDirectory) & "keys.cfg");
       end if;
@@ -1035,6 +1039,22 @@ package body Maps.UI is
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btncenter")),
          "<movemapwindow>/btncenter",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnmapleft")),
+         "<skymapwindow>/btnmapleft",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnmapright")),
+         "<skymapwindow>/btnmapright",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnmapup")),
+         "<skymapwindow>/btnmapup",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btnmapdown")),
+         "<skymapwindow>/btnmapdown",
          Accelerators);
       declare
          Key: Gtk_Accel_Key;
