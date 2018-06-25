@@ -98,7 +98,8 @@ package body Crew.UI is
                         NeedClean := False;
                      end if;
                   when TRAINING_ROOM =>
-                     if PlayerShip.Modules(I).Owner /= MemberIndex then
+                     if PlayerShip.Modules(I).Owner /= MemberIndex and
+                       PlayerShip.Modules(I).Data(1) > 0 then
                         AddOrder
                           ("Go on training in " &
                            To_String(PlayerShip.Modules(I).Name),
