@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - New type of ship modules: training room
 - New ship modules: small bronze training room and small iron training room
 - Ability to train skills on ship
+- Keyboard shortcuts (and option to set them) to move map
 
 ### Changed
 - Updated help
