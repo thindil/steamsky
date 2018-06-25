@@ -242,23 +242,38 @@ package body Trades.UI is
         not Items_List(ProtoIndex).Buyable(BaseType) then
          Hide(Gtk_Widget(Get_Object(Object, "buybox")));
       else
-         Show_All(Gtk_Widget(Get_Object(Object, "buybox")));
-         Set_Value(AmountAdj2, 1.0);
-         MaxAmount := PlayerShip.Cargo(MoneyIndex2).Amount / Price;
          if BaseIndex > 0 then
-            if MaxAmount >
-              SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount then
-               MaxAmount := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
+            if SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
+               Show_All(Gtk_Widget(Get_Object(Object, "buybox")));
+            else
+               Hide(Gtk_Widget(Get_Object(Object, "buybox")));
             end if;
          else
-            if MaxAmount > TraderCargo(BaseCargoIndex).Amount then
-               MaxAmount := TraderCargo(BaseCargoIndex).Amount;
+            if TraderCargo(BaseCargoIndex).Amount > 0 then
+               Show_All(Gtk_Widget(Get_Object(Object, "buybox")));
+            else
+               Hide(Gtk_Widget(Get_Object(Object, "buybox")));
             end if;
          end if;
-         Set_Upper(AmountAdj2, Gdouble(MaxAmount));
-         Set_Label
-           (Gtk_Label(Get_Object(Builder, "lblbuyamount")),
-            "(max" & Natural'Image(MaxAmount) & "):");
+         if Is_Visible(Gtk_Widget(Get_Object(Object, "buybox"))) then
+            Set_Value(AmountAdj2, 1.0);
+            MaxAmount := PlayerShip.Cargo(MoneyIndex2).Amount / Price;
+            if BaseIndex > 0 then
+               if MaxAmount >
+                 SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount then
+                  MaxAmount :=
+                    SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
+               end if;
+            else
+               if MaxAmount > TraderCargo(BaseCargoIndex).Amount then
+                  MaxAmount := TraderCargo(BaseCargoIndex).Amount;
+               end if;
+            end if;
+            Set_Upper(AmountAdj2, Gdouble(MaxAmount));
+            Set_Label
+              (Gtk_Label(Get_Object(Builder, "lblbuyamount")),
+               "(max" & Natural'Image(MaxAmount) & "):");
+         end if;
       end if;
       if MoneyIndex2 > 0 then
          Set_Label
