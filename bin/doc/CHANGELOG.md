@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
   small steel training room
 - Ability to train skills on ship
 - Keyboard shortcuts (and option to set them) to move map
+- New item type: storyitem
 
 ### Changed
 - Updated help
