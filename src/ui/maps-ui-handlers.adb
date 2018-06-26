@@ -146,25 +146,25 @@ package body Maps.UI.Handlers is
            Positive(Get_Value(Gtk_Adjustment(Get_Object(Builder, "mapyadj"))));
       elsif User_Data = Get_Object(Builder, "btnmapup") then
          if CenterY - (MapHeight / 3) < 1 then
-            CenterY := 1;
+            CenterY := MapHeight / 3;
          else
             CenterY := CenterY - (MapHeight / 3);
          end if;
       elsif User_Data = Get_Object(Builder, "btnmapdown") then
          if CenterY + (MapHeight / 3) > 1024 then
-            CenterY := 1024;
+            CenterY := 1024 - (MapHeight / 3);
          else
             CenterY := CenterY + (MapHeight / 3);
          end if;
       elsif User_Data = Get_Object(Builder, "btnmapleft") then
          if CenterX - (MapWidth / 3) < 1 then
-            CenterX := 1;
+            CenterX := MapWidth / 3;
          else
             CenterX := CenterX - (MapWidth / 3);
          end if;
       elsif User_Data = Get_Object(Builder, "btnmapright") then
          if CenterX + (MapWidth / 3) > 1024 then
-            CenterX := 1024;
+            CenterX := 1024 - (MapWidth / 3);
          else
             CenterX := CenterX + (MapWidth / 3);
          end if;
