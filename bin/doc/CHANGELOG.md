@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Saving reputation in bases
 - Crash on giving invalid order to crew member
 - Showing buy option when trader don't have that item
+- Moving map near borders
 
 ## [2.5] - 2018-06-17
 
