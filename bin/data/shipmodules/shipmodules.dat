@@ -202,5 +202,6 @@ Text between "module" tags is module description.
  <module durability="400" index="164" installtime="180" material="Titanium" maxvalue="520" name="Titanium 120mm gun" price="64000" skill="Gunsmith" type="GUN" value="25" weight="1600">Upgraded 120mm ship gun, made of titanium. Requires an empty turret.</module>
  <module durability="100" index="165" installtime="60" material="Bronze" maxvalue="0" name="Small bronze training room" price="2000" size="1" skill="Engineering" type="TRAINING_ROOM" value="0" weight="400">Allow training skills on ship.</module>
  <module durability="200" index="166" installtime="60" material="Iron" maxvalue="0" name="Small iron training room" price="4000" size="1" skill="Engineering" type="TRAINING_ROOM" value="0" weight="400">Allow training skills on ship. More durable version.</module>
+ <module durability="300" index="166" installtime="60" material="Steel" maxvalue="0" name="Small steel training room" price="8000" size="1" skill="Engineering" type="TRAINING_ROOM" value="0" weight="450">Allow training skills on ship. More durable version made of steel.</module>
 </modules>
 
