@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
 - Morale to crew members
 - Loyalty to crew members
 - New type of ship modules: training room
-- New ship modules: small bronze training room and small iron training room
+- New ship modules: small bronze training room, small iron training room and
+  small steel training room
 - Ability to train skills on ship
 - Keyboard shortcuts (and option to set them) to move map
 
