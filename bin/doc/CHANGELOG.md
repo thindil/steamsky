@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Ability to train skills on ship
 - Keyboard shortcuts (and option to set them) to move map
 - New item type: storyitem
+- New item: strange medalion
 
 ### Changed
 - Updated help
