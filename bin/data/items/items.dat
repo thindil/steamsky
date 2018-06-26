@@ -1563,5 +1563,13 @@ Fifth value for weapon is damage type (1 - cutting damage, 2 - impaling damage,
   <data value="4"/>
   <description>Standard type of armor, made of orichalcum, protects legs.</description>
  </item>
+ <item index="164" name="Strange medalion" showtype="Special" type="StoryItem" weight="1">
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <description>Weird looking medalion made from shining metal. Maybe someone in any base will be know, what to do with it?</description>
+ </item>
 </items>
 
