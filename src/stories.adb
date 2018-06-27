@@ -24,6 +24,8 @@ with DOM.Core.Elements; use DOM.Core.Elements;
 with DOM.Readers; use DOM.Readers;
 with Input_Sources.File; use Input_Sources.File;
 with Log; use Log;
+with Factions; use Factions;
+with Utils; use Utils;
 
 package body Stories is
 
@@ -40,6 +42,12 @@ package body Stories is
       TempSteps: Steps_Container.Vector;
       StartStep: Unbounded_String;
    begin
+      CurrentStory :=
+        (Index => Null_Unbounded_String,
+         Step => 1,
+         CurrentStep => Null_Unbounded_String,
+         MaxSteps => 1,
+         ShowText => False);
       if Stories_List.Length > 0 then
          return;
       end if;
@@ -55,9 +63,14 @@ package body Stories is
       end if;
       while More_Entries(Files) loop
          Get_Next_Entry(Files, FoundFile);
+         TempStep :=
+           (Index => Null_Unbounded_String,
+            FinishCondition => ASKINBASE,
+            FinishData => TempValue,
+            Text => Null_Unbounded_String);
          TempRecord :=
            (Index => Null_Unbounded_String,
-            StartCondition => Null_Unbounded_String,
+            StartCondition => DROPITEM,
             StartData => TempValue,
             MinSteps => 1,
             MaxSteps => 2,
@@ -80,8 +93,8 @@ package body Stories is
             TempRecord.Index :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
             TempRecord.StartCondition :=
-              To_Unbounded_String
-                (Get_Attribute(Item(NodesList, I), "startcondition"));
+              StartConditionType'Value
+                (Get_Attribute(Item(NodesList, I), "start"));
             TempRecord.MinSteps :=
               Positive'Value(Get_Attribute(Item(NodesList, I), "minsteps"));
             TempRecord.MaxSteps :=
@@ -103,15 +116,15 @@ package body Stories is
             for J in 0 .. Length(ChildNodes) - 1 loop
                TempStep :=
                  (Index => Null_Unbounded_String,
-                  FinishCondition => Null_Unbounded_String,
+                  FinishCondition => ASKINBASE,
                   FinishData => TempValue,
                   Text => Null_Unbounded_String);
                TempStep.Index :=
                  To_Unbounded_String
                    (Get_Attribute(Item(ChildNodes, J), "index"));
                TempStep.FinishCondition :=
-                 To_Unbounded_String
-                   (Get_Attribute(Item(ChildNodes, J), "finishcondition"));
+                 StepConditionType'Value
+                   (Get_Attribute(Item(ChildNodes, J), "finish"));
                StepDataNodes :=
                  DOM.Core.Elements.Get_Elements_By_Tag_Name
                    (Item(ChildNodes, J),
@@ -141,7 +154,7 @@ package body Stories is
                Everything);
             TempRecord :=
               (Index => Null_Unbounded_String,
-               StartCondition => Null_Unbounded_String,
+               StartCondition => DROPITEM,
                StartData => TempValue,
                MinSteps => 1,
                MaxSteps => 2,
@@ -153,13 +166,39 @@ package body Stories is
       End_Search(Files);
    end LoadStories;
 
-   procedure ClearCurrentStory is
+   procedure StartStory
+     (FactionName: Unbounded_String;
+      Condition: StartConditionType) is
+      FactionIndex: Unbounded_String := Null_Unbounded_String;
    begin
-      CurrentStory :=
-        (Index => Null_Unbounded_String,
-         Step => 1,
-         CurrentStep => Null_Unbounded_String,
-         MaxSteps => 1);
-   end ClearCurrentStory;
+      for Faction of Factions_List loop
+         if Faction.Name = FactionName then
+            FactionIndex := Faction.Index;
+            exit;
+         end if;
+      end loop;
+      if FactionIndex = Null_Unbounded_String then
+         return;
+      end if;
+      for Story of Stories_List loop
+         case Condition is
+            when DROPITEM =>
+               if Story.StartData(2) = FactionIndex then
+                  if GetRandom
+                      (1,
+                       Positive'Value(To_String(Story.StartData(3)))) =
+                    1 then
+                     CurrentStory :=
+                       (Index => Story.Index,
+                        Step => 1,
+                        CurrentStep => To_Unbounded_String("start"),
+                        MaxSteps => GetRandom(Story.MinSteps, Story.MaxSteps),
+                        ShowText => True);
+                     return;
+                  end if;
+               end if;
+         end case;
+      end loop;
+   end StartStory;
 
 end Stories;

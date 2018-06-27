@@ -18,7 +18,7 @@ item will be dropped, chance (1 to that number) for drop.
  <story index="1" start="dropitem" minsteps="3" maxsteps="10" startstep="1">
   <startdata value="164" />
   <startdata value="UNDEAD" />
-  <startdata value="1000" />
+  <startdata value="100" />
 <!--
 - Tag "step" contains data for step of story.
 - Attribute "finish": condition which must be met to finish this step. Possible
