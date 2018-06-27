@@ -59,6 +59,7 @@ with Utils.UI; use Utils.UI;
 with Log; use Log;
 with Help.UI; use Help.UI;
 with Factions; use Factions;
+with Stories; use Stories;
 
 package body MainMenu is
 
@@ -83,6 +84,7 @@ package body MainMenu is
       LoadFactions;
       LoadShips;
       LoadGoals;
+      LoadStories;
       SetToolsList;
       if not NewGame then
          LoadGame;
@@ -193,6 +195,16 @@ package body MainMenu is
       when Factions_Files_Not_Found =>
          ShowDialog
            ("Can't load NPC factions data. Files with NPC factions data not found.",
+            Parent);
+         return False;
+      when Stories_Directory_Not_Found =>
+         ShowDialog
+           ("Can't load stories data. Directory with stories data files not found.",
+            Parent);
+         return False;
+      when Stories_Files_Not_Found =>
+         ShowDialog
+           ("Can't load stories data. Files with stories data not found.",
             Parent);
          return False;
    end LoadGameData;
