@@ -192,11 +192,8 @@ package body Ships.UI.Handlers is
                  (Gtk_Progress_Bar(QualityBar),
                   Get_Text(Gtk_Progress_Bar(QualityBar)) & " (max upgrade)");
             end if;
-            Show_All(Gtk_Widget(CleanBar));
-            if Module.Data(1) = Module.Data(2) then
-               DamagePercent := 0.0;
-               Set_Text(Gtk_Progress_Bar(CleanBar), "Clean");
-            else
+            if Module.Data(1) /= Module.Data(2) then
+               Show_All(Gtk_Widget(CleanBar));
                DamagePercent :=
                  1.0 - (Gdouble(Module.Data(1)) / Gdouble(Module.Data(2)));
                if DamagePercent > 0.0 and DamagePercent < 0.2 then
@@ -210,8 +207,8 @@ package body Ships.UI.Handlers is
                else
                   Set_Text(Gtk_Progress_Bar(CleanBar), "Ruined");
                end if;
+               Set_Fraction(Gtk_Progress_Bar(CleanBar), DamagePercent);
             end if;
-            Set_Fraction(Gtk_Progress_Bar(CleanBar), DamagePercent);
          when GUN | HARPOON_GUN =>
             Append(ModuleInfo, "Ammunition: ");
             if Module.Data(1) >= PlayerShip.Cargo.First_Index and
