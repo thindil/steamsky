@@ -32,6 +32,7 @@ with Log; use Log;
 with Goals; use Goals;
 with Game; use Game;
 with Factions; use Factions;
+with Stories; use Stories;
 
 package body Combat is
 
@@ -1386,6 +1387,7 @@ package body Combat is
                   end if;
                end loop;
                AddMessage(To_String(Message) & ".", CombatMessage);
+               StartStory(FactionName, DROPITEM);
             end if;
          end;
          Enemy.Ship.Speed := FULL_STOP;

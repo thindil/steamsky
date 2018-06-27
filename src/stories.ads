@@ -21,10 +21,14 @@ with Game; use Game;
 
 package Stories is
 
+   type StartConditionType is
+     (DROPITEM); -- Types of conditions to start stories
+   type StepConditionType is
+     (ASKINBASE); -- Types of conditions to finish story step
    type Step_Data is -- Data structure for stories steps
    record
       Index: Unbounded_String; -- Index of step
-      FinishCondition: Unbounded_String; -- Condition which must be met to finish selected step and process to next
+      FinishCondition: StepConditionType; -- Condition which must be met to finish selected step and process to next
       FinishData: UnboundedString_Container
         .Vector; -- Data for finish condition
       Text: Unbounded_String; -- Text which will be show to player when step starts.
@@ -33,7 +37,7 @@ package Stories is
    type Story_Data is -- Data structure for stories
    record
       Index: Unbounded_String; -- Index of story
-      StartCondition: Unbounded_String; -- Condition which must be met to start story
+      StartCondition: StartConditionType; -- Condition which must be met to start story
       StartData: UnboundedString_Container
         .Vector; -- Data for starting condition
       MinSteps: Positive; -- Minimal amount of steps in story
@@ -48,6 +52,7 @@ package Stories is
       Step: Positive; -- Number of current step in story
       CurrentStep: Unbounded_String; -- Index of current step
       MaxSteps: Positive; -- Number of maxium  amounts of steps in story
+      ShowText: Boolean; -- If true, show text of current step to player
    end record;
    CurrentStory: CurrentStory_Data; -- Contains data about current story on which player is
    Stories_List: Stories_Container.Vector; -- List of available stories in game
@@ -55,6 +60,8 @@ package Stories is
    Stories_Files_Not_Found: exception; -- Raised when no files with stories
 
    procedure LoadStories; -- Load stories data from files
-   procedure ClearCurrentStory; -- Reset current story
+   procedure StartStory
+     (FactionName: Unbounded_String;
+      Condition: StartConditionType); -- Check if any story can starts
 
 end Stories;
