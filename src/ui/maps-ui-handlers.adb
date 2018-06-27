@@ -84,6 +84,9 @@ package body Maps.UI.Handlers is
    procedure HideMapInfoWindow(User_Data: access GObject_Record'Class) is
    begin
       Hide(Gtk_Window(User_Data));
+      if User_Data = Get_Object(Builder, "orderswindow") then
+         UpdateMapInfo(Builder);
+      end if;
    end HideMapInfoWindow;
 
    procedure GetMapSize(Object: access Gtkada_Builder_Record'Class) is
