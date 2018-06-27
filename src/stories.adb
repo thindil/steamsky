@@ -153,4 +153,13 @@ package body Stories is
       End_Search(Files);
    end LoadStories;
 
+   procedure ClearCurrentStory is
+   begin
+      CurrentStory :=
+        (Index => Null_Unbounded_String,
+         Step => 1,
+         CurrentStep => Null_Unbounded_String,
+         MaxSteps => 1);
+   end ClearCurrentStory;
+
 end Stories;

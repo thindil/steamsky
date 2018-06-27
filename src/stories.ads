@@ -55,5 +55,6 @@ package Stories is
    Stories_Files_Not_Found: exception; -- Raised when no files with stories
 
    procedure LoadStories; -- Load stories data from files
+   procedure ClearCurrentStory; -- Reset current story
 
 end Stories;

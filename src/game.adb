@@ -44,6 +44,7 @@ with Goals; use Goals;
 with Game.SaveLoad; use Game.SaveLoad;
 with Mobs; use Mobs;
 with Factions; use Factions;
+with Stories; use Stories;
 
 package body Game is
 
@@ -619,6 +620,7 @@ package body Game is
       ClearGameStats;
       Known_Recipes.Clear;
       ClearCurrentGoal;
+      ClearCurrentStory;
       SaveConfig;
    end EndGame;
 
