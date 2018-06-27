@@ -76,6 +76,7 @@ with Ships.UI; use Ships.UI;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Trades.UI; use Trades.UI;
 with Factions; use Factions;
+with Stories; use Stories;
 
 package body Maps.UI is
 
@@ -1152,6 +1153,29 @@ package body Maps.UI is
          "skymap");
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       UpdateMapInfo(Builder);
+      if CurrentStory.Index /= Null_Unbounded_String and
+        CurrentStory.ShowText then
+         for Story of Stories_List loop
+            if Story.Index = CurrentStory.Index then
+               if CurrentStory.CurrentStep = To_Unbounded_String("start") then
+                  ShowDialog
+                    (To_String(Story.StartingStep.Text),
+                     Gtk_Window(Get_Object(Builder, "skymapwindow")));
+               else
+                  for Step of Story.Steps loop
+                     if Step.Index = CurrentStory.CurrentStep then
+                        ShowDialog
+                          (To_String(Step.Text),
+                           Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                        exit;
+                     end if;
+                  end loop;
+               end if;
+               exit;
+            end if;
+         end loop;
+         CurrentStory.ShowText := False;
+      end if;
    end ShowSkyMap;
 
 end Maps.UI;
