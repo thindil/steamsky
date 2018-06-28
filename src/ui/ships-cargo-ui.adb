@@ -30,6 +30,7 @@ with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Messages; use Messages;
 with Crew.Inventory; use Crew.Inventory;
+with Stories; use Stories;
 
 package body Ships.Cargo.UI is
 
@@ -179,6 +180,15 @@ package body Ships.Cargo.UI is
                   exit;
                end if;
             end loop;
+         end loop;
+      elsif CurrentStory.Index /= Null_Unbounded_String then
+         for Story of Stories_List loop
+            if Story.Index = CurrentStory.Index and
+              Positive'Value(To_String(Story.StartData(1))) =
+                PlayerShip.Cargo(ItemIndex).ProtoIndex then
+               ClearCurrentStory;
+               exit;
+            end if;
          end loop;
       end if;
       if DropAmount > 0 then
