@@ -54,6 +54,7 @@ package Stories is
       CurrentStep: Unbounded_String; -- Index of current step
       MaxSteps: Positive; -- Number of maxium  amounts of steps in story
       ShowText: Boolean; -- If true, show text of current step to player
+      Data: Unbounded_String; -- Various data for current step, depends on step
    end record;
    CurrentStory: CurrentStory_Data; -- Contains data about current story on which player is
    Stories_List: Stories_Container.Vector; -- List of available stories in game
