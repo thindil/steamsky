@@ -13,7 +13,8 @@ All notable changes to this project will be documented in this file.
 - Loyalty to crew members
 - New type of ship modules: training room
 - New ship modules: small bronze training room, small iron training room, small
-  steel training room and small titanium training room
+  steel training room, small titanium training room and small orichalcum
+  training room
 - Ability to train skills on ship
 - Keyboard shortcuts (and option to set them) to move map
 - New item type: storyitem
