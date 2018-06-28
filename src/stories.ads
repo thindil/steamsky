@@ -65,5 +65,6 @@ package Stories is
    procedure StartStory
      (FactionName: Unbounded_String;
       Condition: StartConditionType); -- Check if any story can starts
+   procedure ClearCurrentStory; -- Resets current story
 
 end Stories;
