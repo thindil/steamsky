@@ -26,6 +26,8 @@ with Input_Sources.File; use Input_Sources.File;
 with Log; use Log;
 with Factions; use Factions;
 with Utils; use Utils;
+with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 
 package body Stories is
 
@@ -67,7 +69,8 @@ package body Stories is
            (Index => Null_Unbounded_String,
             FinishCondition => ASKINBASE,
             FinishData => TempValue,
-            Text => Null_Unbounded_String);
+            Text => Null_Unbounded_String,
+            FailText => Null_Unbounded_String);
          TempRecord :=
            (Index => Null_Unbounded_String,
             StartCondition => DROPITEM,
@@ -118,7 +121,8 @@ package body Stories is
                  (Index => Null_Unbounded_String,
                   FinishCondition => ASKINBASE,
                   FinishData => TempValue,
-                  Text => Null_Unbounded_String);
+                  Text => Null_Unbounded_String,
+                  FailText => Null_Unbounded_String);
                TempStep.Index :=
                  To_Unbounded_String
                    (Get_Attribute(Item(ChildNodes, J), "index"));
@@ -140,6 +144,13 @@ package body Stories is
                    (Item(ChildNodes, J),
                     "text");
                TempStep.Text :=
+                 To_Unbounded_String
+                   (Node_Value(First_Child(Item(StepDataNodes, 0))));
+               StepDataNodes :=
+                 DOM.Core.Elements.Get_Elements_By_Tag_Name
+                   (Item(ChildNodes, J),
+                    "failtext");
+               TempStep.FailText :=
                  To_Unbounded_String
                    (Node_Value(First_Child(Item(StepDataNodes, 0))));
                if TempStep.Index = StartStep then
@@ -194,6 +205,10 @@ package body Stories is
                         CurrentStep => To_Unbounded_String("start"),
                         MaxSteps => GetRandom(Story.MinSteps, Story.MaxSteps),
                         ShowText => True);
+                     UpdateCargo
+                       (PlayerShip,
+                        Positive'Value(To_String(Story.StartData(1))),
+                        1);
                      return;
                   end if;
                end if;

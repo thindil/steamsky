@@ -32,6 +32,7 @@ package Stories is
       FinishData: UnboundedString_Container
         .Vector; -- Data for finish condition
       Text: Unbounded_String; -- Text which will be show to player when step starts.
+      FailText: Unbounded_String; -- Text which will be show to player when step fails to progress.
    end record;
    package Steps_Container is new Vectors(Positive, Step_Data);
    type Story_Data is -- Data structure for stories
