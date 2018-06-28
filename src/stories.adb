@@ -28,6 +28,7 @@ with Factions; use Factions;
 with Utils; use Utils;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
+with Bases; use Bases;
 
 package body Stories is
 
@@ -49,7 +50,8 @@ package body Stories is
          Step => 1,
          CurrentStep => Null_Unbounded_String,
          MaxSteps => 1,
-         ShowText => False);
+         ShowText => False,
+         Data => Null_Unbounded_String);
       if Stories_List.Length > 0 then
          return;
       end if;
@@ -177,6 +179,20 @@ package body Stories is
       End_Search(Files);
    end LoadStories;
 
+   function SelectBase(Value: String) return Unbounded_String is
+      BaseIndex: Positive;
+   begin
+      if Value = "any" then
+         return To_Unbounded_String(Value);
+      end if;
+      loop
+         BaseIndex := GetRandom(1, 1024);
+         if SkyBases(BaseIndex).Known then
+            return SkyBases(BaseIndex).Name;
+         end if;
+      end loop;
+   end SelectBase;
+
    procedure StartStory
      (FactionName: Unbounded_String;
       Condition: StartConditionType) is
@@ -204,7 +220,10 @@ package body Stories is
                         Step => 1,
                         CurrentStep => To_Unbounded_String("start"),
                         MaxSteps => GetRandom(Story.MinSteps, Story.MaxSteps),
-                        ShowText => True);
+                        ShowText => True,
+                        Data =>
+                          SelectBase
+                            (To_String(Story.StartingStep.FinishData(3))));
                      UpdateCargo
                        (PlayerShip,
                         Positive'Value(To_String(Story.StartData(1))),
