@@ -35,6 +35,7 @@ with Events; use Events;
 with Statistics; use Statistics;
 with Goals; use Goals;
 with Config; use Config;
+with Stories; use Stories;
 
 package body Game.SaveLoad is
 
@@ -258,6 +259,32 @@ package body Game.SaveLoad is
         (CategoryNode,
          "target",
          To_String(CurrentGoal.TargetIndex));
+      -- Save current story
+      if CurrentStory.Index /= Null_Unbounded_String then
+         CategoryNode := Create_Element(SaveData, "currentstory");
+         CategoryNode := Append_Child(MainNode, CategoryNode);
+         Set_Attribute(CategoryNode, "index", To_String(CurrentStory.Index));
+         RawValue := To_Unbounded_String(Positive'Image(CurrentStory.Step));
+         Set_Attribute
+           (CategoryNode,
+            "step",
+            To_String(Trim(RawValue, Ada.Strings.Left)));
+         Set_Attribute
+           (CategoryNode,
+            "currentstep",
+            To_String(CurrentStory.CurrentStep));
+         RawValue :=
+           To_Unbounded_String(Positive'Image(CurrentStory.MaxSteps));
+         Set_Attribute
+           (CategoryNode,
+            "maxsteps",
+            To_String(Trim(RawValue, Ada.Strings.Left)));
+         if CurrentStory.ShowText then
+            Set_Attribute(CategoryNode, "showtext", "Y");
+         else
+            Set_Attribute(CategoryNode, "showtext", "N");
+         end if;
+      end if;
       Create(SaveFile, Out_File, To_String(SaveDirectory) & "savegame.dat");
       Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => False);
       Close(SaveFile);
@@ -424,6 +451,25 @@ package body Game.SaveLoad is
         Integer'Value(Get_Attribute(Item(NodesList, 0), "amount"));
       CurrentGoal.TargetIndex :=
         To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "target"));
+      -- Load current story
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "currentstory");
+      if Length(NodesList) > 0 then
+         CurrentStory.Index :=
+           To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "index"));
+         CurrentStory.Step :=
+           Positive'Value(Get_Attribute(Item(NodesList, 0), "step"));
+         CurrentStory.CurrentStep :=
+           To_Unbounded_String
+             (Get_Attribute(Item(NodesList, 0), "currentstep"));
+         CurrentStory.MaxSteps :=
+           Positive'Value(Get_Attribute(Item(NodesList, 0), "maxsteps"));
+         if Get_Attribute(Item(NodesList, 0), "maxsteps") = "Y" then
+            CurrentStory.ShowText := True;
+         else
+            CurrentStory.ShowText := False;
+         end if;
+      end if;
       Free(Reader);
    exception
       when An_Exception : others =>
