@@ -284,6 +284,9 @@ package body Game.SaveLoad is
          else
             Set_Attribute(CategoryNode, "showtext", "N");
          end if;
+         if CurrentStory.Data /= Null_Unbounded_String then
+            Set_Attribute(CategoryNode, "data", To_String(CurrentStory.Data));
+         end if;
       end if;
       Create(SaveFile, Out_File, To_String(SaveDirectory) & "savegame.dat");
       Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => False);
@@ -468,6 +471,10 @@ package body Game.SaveLoad is
             CurrentStory.ShowText := True;
          else
             CurrentStory.ShowText := False;
+         end if;
+         if Get_Attribute(Item(NodesList, 0), "data") /= "" then
+            CurrentStory.Index :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "data"));
          end if;
       end if;
       Free(Reader);
