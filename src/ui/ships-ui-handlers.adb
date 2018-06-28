@@ -61,7 +61,9 @@ package body Ships.UI.Handlers is
       ModuleIndex :=
         Natural'Value(To_String(Get_Path(ModulesModel, ModulesIter))) + 1;
       Module := PlayerShip.Modules(ModuleIndex);
+      Hide(Gtk_Widget(DamageBar));
       if Module.Durability < Module.MaxDurability then
+         Show_All(Gtk_Widget(DamageBar));
          DamagePercent :=
            1.0 - (Gdouble(Module.Durability) / Gdouble(Module.MaxDurability));
          if DamagePercent < 1.0 and DamagePercent > 0.79 then
@@ -75,11 +77,8 @@ package body Ships.UI.Handlers is
          elsif DamagePercent = 0.0 then
             Set_Text(DamageBar, "Destroyed");
          end if;
-      else
-         Set_Text(DamageBar, "Not damaged");
-         DamagePercent := 1.0;
+         Set_Fraction(DamageBar, DamagePercent);
       end if;
-      Set_Fraction(DamageBar, DamagePercent);
       MaxValue :=
         Positive(Float(Modules_List(Module.ProtoIndex).Durability) * 1.5);
       if Module.MaxDurability = MaxValue then
