@@ -25,12 +25,17 @@ item will be dropped, chance (1 to that number) for drop.
 values are: "askinbase" - go to next step when player ask about something in
 any base.
 - Tags "finishdata": contains data needed for finish selected step. For 
-"askinbase" and "dropitem" it will be index of item of which to ask.
+"askinbase" and "dropitem" it will be index of item of which to ask and chance
+(1 to that number) that step progress to next.
 - Tag "text": text which will be show to player when step starts.
+- Tag "failtext": text which will be show to player if step not progress to 
+next.
 -->
   <step index="1" finish="askinbase">
    <finishdata value="164" />
+   <finishdata value="2" />
    <text>During combat at one of bodies you found strange medalion. Maybe you should ask about it in nearest bases?</text>
+   <failtext>You asked few people around base but no one can help you with this medalion. Try again here or maybe in another base?</failtext>
   </step>
  </story>
 </stories>
