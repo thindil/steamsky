@@ -45,13 +45,7 @@ package body Stories is
       TempSteps: Steps_Container.Vector;
       StartStep: Unbounded_String;
    begin
-      CurrentStory :=
-        (Index => Null_Unbounded_String,
-         Step => 1,
-         CurrentStep => Null_Unbounded_String,
-         MaxSteps => 1,
-         ShowText => False,
-         Data => Null_Unbounded_String);
+      ClearCurrentStory;
       if Stories_List.Length > 0 then
          return;
       end if;
@@ -234,5 +228,16 @@ package body Stories is
          end case;
       end loop;
    end StartStory;
+
+   procedure ClearCurrentStory is
+   begin
+      CurrentStory :=
+        (Index => Null_Unbounded_String,
+         Step => 1,
+         CurrentStep => Null_Unbounded_String,
+         MaxSteps => 1,
+         ShowText => False,
+         Data => Null_Unbounded_String);
+   end ClearCurrentStory;
 
 end Stories;
