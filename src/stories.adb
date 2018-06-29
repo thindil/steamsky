@@ -201,26 +201,32 @@ package body Stories is
       if FactionIndex = Null_Unbounded_String then
          return;
       end if;
-      for Story of Stories_List loop
+      for I in Stories_List.Iterate loop
          case Condition is
             when DROPITEM =>
-               if Story.StartData(2) = FactionIndex then
+               if Stories_List(I).StartData(2) = FactionIndex then
                   if GetRandom
                       (1,
-                       Positive'Value(To_String(Story.StartData(3)))) =
+                       Positive'Value
+                         (To_String(Stories_List(I).StartData(3)))) =
                     1 then
                      CurrentStory :=
-                       (Index => Story.Index,
+                       (Index => Stories_Container.To_Index(I),
                         Step => 1,
-                        CurrentStep => To_Unbounded_String("start"),
-                        MaxSteps => GetRandom(Story.MinSteps, Story.MaxSteps),
+                        CurrentStep => 0,
+                        MaxSteps =>
+                          GetRandom
+                            (Stories_List(I).MinSteps,
+                             Stories_List(I).MaxSteps),
                         ShowText => True,
                         Data =>
                           SelectBase
-                            (To_String(Story.StartingStep.FinishData(3))));
+                            (To_String
+                               (Stories_List(I).StartingStep.FinishData(3))));
                      UpdateCargo
                        (PlayerShip,
-                        Positive'Value(To_String(Story.StartData(1))),
+                        Positive'Value
+                          (To_String(Stories_List(I).StartData(1))),
                         1);
                      return;
                   end if;
@@ -232,9 +238,9 @@ package body Stories is
    procedure ClearCurrentStory is
    begin
       CurrentStory :=
-        (Index => Null_Unbounded_String,
+        (Index => 0,
          Step => 1,
-         CurrentStep => Null_Unbounded_String,
+         CurrentStep => 0,
          MaxSteps => 1,
          ShowText => False,
          Data => Null_Unbounded_String);

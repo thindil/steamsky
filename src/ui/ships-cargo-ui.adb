@@ -181,15 +181,12 @@ package body Ships.Cargo.UI is
                end if;
             end loop;
          end loop;
-      elsif CurrentStory.Index /= Null_Unbounded_String then
-         for Story of Stories_List loop
-            if Story.Index = CurrentStory.Index and
-              Positive'Value(To_String(Story.StartData(1))) =
-                PlayerShip.Cargo(ItemIndex).ProtoIndex then
-               ClearCurrentStory;
-               exit;
-            end if;
-         end loop;
+      elsif CurrentStory.Index /= 0 then
+         if Positive'Value
+             (To_String(Stories_List(CurrentStory.Index).StartData(1))) =
+           PlayerShip.Cargo(ItemIndex).ProtoIndex then
+            ClearCurrentStory;
+         end if;
       end if;
       if DropAmount > 0 then
          AddMessage

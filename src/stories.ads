@@ -49,9 +49,9 @@ package Stories is
    package Stories_Container is new Vectors(Positive, Story_Data);
    type CurrentStory_Data is -- Data structure for stories
    record
-      Index: Unbounded_String; -- Index of story
+      Index: Natural; -- Index of story or 0 if no story currently active
       Step: Positive; -- Number of current step in story
-      CurrentStep: Unbounded_String; -- Index of current step
+      CurrentStep: Integer; -- Index of current step, 0 for starting step, -1 for finish step
       MaxSteps: Positive; -- Number of maxium  amounts of steps in story
       ShowText: Boolean; -- If true, show text of current step to player
       Data: Unbounded_String; -- Various data for current step, depends on step
