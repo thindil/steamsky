@@ -180,7 +180,7 @@ package body Stories is
          return To_Unbounded_String(Value);
       end if;
       loop
-         BaseIndex := GetRandom(1, 1024);
+         BaseIndex := GetRandom(SkyBases'First, SkyBases'Last);
          if SkyBases(BaseIndex).Known then
             return SkyBases(BaseIndex).Name;
          end if;
