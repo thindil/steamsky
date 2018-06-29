@@ -240,10 +240,45 @@ package body Stories is
       CurrentStory :=
         (Index => 0,
          Step => 1,
-         CurrentStep => 0,
+         CurrentStep => -3,
          MaxSteps => 1,
          ShowText => False,
          Data => Null_Unbounded_String);
    end ClearCurrentStory;
+
+   function ProgressStory return Boolean is
+      Step: Step_Data;
+   begin
+      if CurrentStory.CurrentStep = 0 then
+         Step := Stories_List(CurrentStory.Index).StartingStep;
+      else
+         Step :=
+           Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep);
+      end if;
+      if GetRandom(1, Positive'Value(To_String(Step.FinishData(2)))) > 1 then
+         UpdateGame(10);
+         return False;
+      end if;
+      UpdateGame(30);
+      CurrentStory.Step := CurrentStory.Step + 1;
+      if CurrentStory.Step < CurrentStory.MaxSteps then
+         CurrentStory.CurrentStep :=
+           GetRandom
+             (Stories_List(CurrentStory.Index).Steps.First_Index,
+              Stories_List(CurrentStory.Index).Steps.Last_Index);
+         CurrentStory.Data :=
+           SelectBase
+             (To_String
+                (Stories_List(CurrentStory.Index).Steps
+                   (CurrentStory.CurrentStep)
+                   .FinishData
+                   (3)));
+      elsif CurrentStory.Step = CurrentStory.MaxSteps then
+         CurrentStory.CurrentStep := -1;
+      else
+         CurrentStory.CurrentStep := -2;
+      end if;
+      return True;
+   end ProgressStory;
 
 end Stories;
