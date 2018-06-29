@@ -81,5 +81,9 @@ package Maps.UI.Handlers is
      (Self: access Gtk_Widget_Record'Class;
       Event: Gdk.Event.Gdk_Event_Key)
      return Boolean; -- Center map on player ship
+   function MapKeyPressed
+     (Self: access Gtk_Widget_Record'Class;
+      Event: Gdk.Event.Gdk_Event_Key)
+     return Boolean; -- Move mouse cursor on map by keyboard
 
 end Maps.UI.Handlers;
