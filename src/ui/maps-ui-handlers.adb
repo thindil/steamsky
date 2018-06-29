@@ -35,6 +35,9 @@ with Gdk.Rectangle; use Gdk.Rectangle;
 with Gdk.Device; use Gdk.Device;
 with Gdk.Window; use Gdk.Window;
 with Gdk.Types; use Gdk.Types;
+with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
+with Gdk.Device_Manager; use Gdk.Device_Manager;
+with Gdk.Screen; use Gdk.Screen;
 with Game; use Game;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
@@ -1139,5 +1142,63 @@ package body Maps.UI.Handlers is
       end if;
       return True;
    end MapKeyReleased;
+
+   function MapKeyPressed
+     (Self: access Gtk_Widget_Record'Class;
+      Event: Gdk.Event.Gdk_Event_Key) return Boolean is
+      pragma Unreferenced(Self);
+      KeyMods: constant Gdk_Modifier_Type :=
+        Event.State and Get_Default_Mod_Mask;
+      MouseX, MouseY, NewX, NewY: Gint;
+      DeviceManager: constant Gdk_Device_Manager :=
+        Get_Device_Manager
+          (Get_Display(Gtk_Widget(Get_Object(Builder, "mapview"))));
+      Mouse: constant Gdk_Device := Get_Client_Pointer(DeviceManager);
+      Screen: Gdk_Screen :=
+        Get_Screen(Get_Window(Gtk_Widget(Get_Object(Builder, "mapview"))));
+   begin
+      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack"))) /=
+        "skymap" then
+         return False;
+      end if;
+      Get_Position_Double(Mouse, Screen, Gdouble(MouseX), Gdouble(MouseY));
+      if MouseX < 0 or MouseY < 0 then
+         return False;
+      end if;
+      if KeyMods = 1 then
+         NewX := MouseX;
+         NewY := MouseY;
+         case Event.Keyval is
+            when GDK_KP_Up =>
+               NewY := NewY - Gint(MapCellHeight);
+            when GDK_KP_Down =>
+               NewY := NewY + Gint(MapCellHeight);
+            when GDK_KP_Left =>
+               NewX := NewX - Gint(MapCellWidth);
+            when GDK_KP_Right =>
+               NewX := NewX + Gint(MapCellWidth);
+            when GDK_KP_Home =>
+               NewX := NewX - Gint(MapCellWidth);
+               NewY := NewY - Gint(MapCellHeight);
+            when GDK_KP_Page_Up =>
+               NewX := NewX + Gint(MapCellWidth);
+               NewY := NewY - Gint(MapCellHeight);
+            when GDK_KP_End =>
+               NewX := NewX - Gint(MapCellWidth);
+               NewY := NewY + Gint(MapCellHeight);
+            when GDK_KP_Page_Down =>
+               NewX := NewX + Gint(MapCellWidth);
+               NewY := NewY + Gint(MapCellHeight);
+            when others =>
+               null;
+         end case;
+         if NewX /= MouseX or NewY /= MouseY then
+            Warp(Mouse, Screen, NewX, NewY);
+            UpdateMapInfo(Builder);
+            return True;
+         end if;
+      end if;
+      return False;
+   end MapKeyPressed;
 
 end Maps.UI.Handlers;
