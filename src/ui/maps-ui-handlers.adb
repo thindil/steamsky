@@ -806,16 +806,9 @@ package body Maps.UI.Handlers is
    end WaitOrder;
 
    procedure AttackOrder(Object: access Gtkada_Builder_Record'Class) is
-      BtnAttack: constant Gtk_Button :=
-        Gtk_Button(Get_Object(Object, "btnattack"));
-      Label: constant String := Get_Label(BtnAttack);
    begin
-      Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
-      if Label = "Wait" then
-         Show_All(Gtk_Widget(Get_Object(Builder, "waitwindow")));
-      else
-         ShowCombatUI;
-      end if;
+      Hide(Gtk_Widget(Get_Object(Object, "orderswindow")));
+      ShowCombatUI;
    end AttackOrder;
 
    procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
