@@ -72,6 +72,7 @@ with Trades.UI; use Trades.UI;
 with Crafts.UI; use Crafts.UI;
 with BasesList; use BasesList;
 with GameOptions; use GameOptions;
+with Stories; use Stories;
 
 package body Maps.UI.Handlers is
 
@@ -432,6 +433,37 @@ package body Maps.UI.Handlers is
          HaveTrader := True;
       end if;
       Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btncloseorders")), False);
+      if CurrentStory.Index > 0 then
+         declare
+            Step: Step_Data;
+         begin
+            if CurrentStory.CurrentStep = 0 then
+               Step := Stories_List(CurrentStory.Index).StartingStep;
+            else
+               Step :=
+                 Stories_List(CurrentStory.Index).Steps
+                   (CurrentStory.CurrentStep);
+            end if;
+            case Step.FinishCondition is
+               when ASKINBASE =>
+                  if BaseIndex > 0 then
+                     if CurrentStory.Data = To_Unbounded_String("any") or
+                       CurrentStory.Data = SkyBases(BaseIndex).Name then
+                        Set_Label
+                          (Gtk_Button(Get_Object(Builder, "btnstory")),
+                           "Ask for " &
+                           To_String
+                             (Items_List
+                                (Positive'Value(To_String(Step.FinishData(1))))
+                                .Name));
+                        Set_No_Show_All
+                          (Gtk_Widget(Get_Object(Object, "btnstory")),
+                           False);
+                     end if;
+                  end if;
+            end case;
+         end;
+      end if;
       if PlayerShip.Speed = DOCKED then
          Set_Label(Gtk_Button(Get_Object(Builder, "btndock")), "_Undock");
          Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btndock")), False);
@@ -996,6 +1028,37 @@ package body Maps.UI.Handlers is
          AskForEvents;
       elsif User_Data = Get_Object(Builder, "btnaskbases") then
          AskForBases;
+      elsif User_Data = Get_Object(Builder, "btnstory") then
+         declare
+            Step: Step_Data;
+            Message: Unbounded_String;
+         begin
+            if PlayerShip.Speed /= DOCKED then
+               Message := To_Unbounded_String(DockShip(True));
+               if Message /= Null_Unbounded_String then
+                  ShowDialog
+                    (To_String(Message),
+                     Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                  return;
+               end if;
+            end if;
+            if CurrentStory.CurrentStep = 0 then
+               Step := Stories_List(CurrentStory.Index).StartingStep;
+            else
+               Step :=
+                 Stories_List(CurrentStory.Index).Steps
+                   (CurrentStory.CurrentStep);
+            end if;
+            if ProgressStory then
+               ShowDialog
+                 (To_String(Step.Text),
+                  Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            else
+               ShowDialog
+                 (To_String(Step.FailText),
+                  Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            end if;
+         end;
       else
          CountPrice(Price, TraderIndex);
          if ShowConfirmDialog

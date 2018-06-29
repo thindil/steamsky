@@ -66,5 +66,7 @@ package Stories is
      (FactionName: Unbounded_String;
       Condition: StartConditionType); -- Check if any story can starts
    procedure ClearCurrentStory; -- Resets current story
+   function ProgressStory
+     return Boolean; -- Returns true if story goes to next step, otherwise false
 
 end Stories;
