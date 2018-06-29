@@ -1080,6 +1080,9 @@ package body Maps.UI is
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "skymapwindow")),
          MapKeyReleased'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "skymapwindow")),
+         MapKeyPressed'Access);
       Set
         (Gtk_Image(Get_Object(Builder, "image1")),
          To_String(DataDirectory) &
