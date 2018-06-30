@@ -177,7 +177,7 @@ package body Stories is
       BaseIndex: Positive;
    begin
       if Value = "any" then
-         return To_Unbounded_String(Value);
+         return Null_Unbounded_String;
       end if;
       loop
          BaseIndex := GetRandom(SkyBases'First, SkyBases'Last);
@@ -192,7 +192,7 @@ package body Stories is
    procedure StartStory
      (FactionName: Unbounded_String;
       Condition: StartConditionType) is
-      FactionIndex: Unbounded_String := Null_Unbounded_String;
+      FactionIndex, StepData: Unbounded_String := Null_Unbounded_String;
    begin
       for Faction of Factions_List loop
          if Faction.Name = FactionName then
@@ -212,6 +212,14 @@ package body Stories is
                        Positive'Value
                          (To_String(Stories_List(I).StartData(3)))) =
                     1 then
+                     case Stories_List(I).StartingStep.FinishCondition is
+                        when ASKINBASE =>
+                           StepData :=
+                             SelectBase
+                               (To_String
+                                  (Stories_List(I).StartingStep.FinishData
+                                     (3)));
+                     end case;
                      CurrentStory :=
                        (Index => Stories_Container.To_Index(I),
                         Step => 1,
@@ -221,10 +229,7 @@ package body Stories is
                             (Stories_List(I).MinSteps,
                              Stories_List(I).MaxSteps),
                         ShowText => True,
-                        Data =>
-                          SelectBase
-                            (To_String
-                               (Stories_List(I).StartingStep.FinishData(3))));
+                        Data => StepData);
                      UpdateCargo
                        (PlayerShip,
                         Positive'Value
@@ -268,13 +273,17 @@ package body Stories is
            GetRandom
              (Stories_List(CurrentStory.Index).Steps.First_Index,
               Stories_List(CurrentStory.Index).Steps.Last_Index);
-         CurrentStory.Data :=
-           SelectBase
-             (To_String
-                (Stories_List(CurrentStory.Index).Steps
-                   (CurrentStory.CurrentStep)
-                   .FinishData
-                   (3)));
+         case Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep)
+           .FinishCondition is
+            when ASKINBASE =>
+               CurrentStory.Data :=
+                 SelectBase
+                   (To_String
+                      (Stories_List(CurrentStory.Index).Steps
+                         (CurrentStory.CurrentStep)
+                         .FinishData
+                         (3)));
+         end case;
       elsif CurrentStory.Step = CurrentStory.MaxSteps then
          CurrentStory.CurrentStep := -1;
       else
