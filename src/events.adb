@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
@@ -29,7 +28,6 @@ with Bases; use Bases;
 with ShipModules; use ShipModules;
 with Items; use Items;
 with Utils; use Utils;
-with Game; use Game;
 with Factions; use Factions;
 
 package body Events is
@@ -38,46 +36,16 @@ package body Events is
 
    function CheckForEvent return Boolean is
       TimePassed: Integer;
-      CrewIndex, PlayerValue: Natural := 0;
+      CrewIndex: Natural := 0;
       Roll,
       Roll2,
       ItemIndex,
-      EnemyIndex,
       EngineIndex,
       Injuries,
       LostCargo: Positive;
       Enemies, Engines: Positive_Container.Vector;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      procedure GenerateEnemies
-        (Owner: Unbounded_String := To_Unbounded_String("Any")) is
-      begin
-         EnemyIndex := ProtoShips_List.First_Index;
-         if GetRandom(1, 100) < 99 then
-            PlayerValue := CountCombatValue;
-            for Ship of ProtoShips_List loop
-               if Ship.CombatValue <= PlayerValue and
-                 (Owner = To_Unbounded_String("Any") or
-                  To_Lower(To_String(Factions_List(Ship.Owner).Index)) =
-                    To_Lower(To_String(Owner))) and
-                 not Factions_List(Ship.Owner).Friendly then
-                  Enemies.Append(New_Item => EnemyIndex);
-               end if;
-               EnemyIndex := EnemyIndex + 1;
-            end loop;
-         else
-            for Ship of ProtoShips_List loop
-               if
-                 (Owner = To_Unbounded_String("Any") or
-                  To_Lower(To_String(Factions_List(Ship.Owner).Index)) =
-                    To_Lower(To_String(Owner))) and
-                 not Factions_List(Ship.Owner).Friendly then
-                  Enemies.Append(New_Item => EnemyIndex);
-               end if;
-               EnemyIndex := EnemyIndex + 1;
-            end loop;
-         end if;
-      end GenerateEnemies;
       procedure GainPerception is
       begin
          for I in PlayerShip.Crew.Iterate loop
@@ -207,7 +175,7 @@ package body Events is
                   GainPerception;
                   UpdateOrders(PlayerShip);
                when others => -- Combat
-                  GenerateEnemies;
+                  GenerateEnemies(Enemies);
                   Events_List.Append
                   (New_Item =>
                      (EnemyShip,
@@ -236,7 +204,7 @@ package body Events is
                end if;
                case Roll is
                   when 1 .. 20 => -- Base is attacked
-                     GenerateEnemies;
+                     GenerateEnemies(Enemies);
                      Events_List.Append
                      (New_Item =>
                         (AttackOnBase,
@@ -283,7 +251,7 @@ package body Events is
                        not Factions_List(SkyBases(BaseIndex).Owner)
                          .Friendly then
                         GenerateEnemies
-                          (Factions_List(SkyBases(BaseIndex).Owner).Index);
+                          (Enemies, Factions_List(SkyBases(BaseIndex).Owner).Index);
                         Events_List.Append
                         (New_Item =>
                            (EnemyPatrol,
@@ -465,5 +433,37 @@ package body Events is
          OtherMessage,
          5);
    end RecoverBase;
+
+   procedure GenerateEnemies
+      (Enemies: in out Positive_Container.Vector; Owner: Unbounded_String := To_Unbounded_String("Any")) is
+      EnemyIndex: Positive;
+      PlayerValue: Natural := 0;
+   begin
+      EnemyIndex := ProtoShips_List.First_Index;
+      if GetRandom(1, 100) < 99 then
+         PlayerValue := CountCombatValue;
+         for Ship of ProtoShips_List loop
+            if Ship.CombatValue <= PlayerValue and
+               (Owner = To_Unbounded_String("Any") or
+               To_Lower(To_String(Factions_List(Ship.Owner).Index)) =
+                  To_Lower(To_String(Owner))) and
+                  not Factions_List(Ship.Owner).Friendly then
+                  Enemies.Append(New_Item => EnemyIndex);
+            end if;
+            EnemyIndex := EnemyIndex + 1;
+         end loop;
+      else
+         for Ship of ProtoShips_List loop
+            if
+               (Owner = To_Unbounded_String("Any") or
+               To_Lower(To_String(Factions_List(Ship.Owner).Index)) =
+                  To_Lower(To_String(Owner))) and
+                  not Factions_List(Ship.Owner).Friendly then
+                  Enemies.Append(New_Item => EnemyIndex);
+            end if;
+            EnemyIndex := EnemyIndex + 1;
+         end loop;
+      end if;
+   end GenerateEnemies;
 
 end Events;
