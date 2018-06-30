@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Keyboard shortcuts (and option to set them) to move map
 - New item type: storyitem
 - New item: strange medalion
+- Keyboard shortcuts (and option to set them) to move cursor around map
 
 ### Changed
 - Updated help
