@@ -182,6 +182,8 @@ package body Stories is
       loop
          BaseIndex := GetRandom(SkyBases'First, SkyBases'Last);
          if SkyBases(BaseIndex).Known then
+            PlayerShip.DestinationX := SkyBases(BaseIndex).SkyX;
+            PlayerShip.DestinationY := SkyBases(BaseIndex).SkyY;
             return SkyBases(BaseIndex).Name;
          end if;
       end loop;
