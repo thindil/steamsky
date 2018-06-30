@@ -16,6 +16,8 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Game; use Game;
 
 package Events is
 
@@ -47,5 +49,7 @@ package Events is
    procedure DeleteEvent(EventIndex: Positive); -- Delete selected event
    procedure GenerateTraders; -- Create list of traders needed for trader event
    procedure RecoverBase(BaseIndex: Positive); -- Recover abandoned base
+   procedure GenerateEnemies
+      (Enemies: in out Positive_Container.Vector; Owner: Unbounded_String := To_Unbounded_String("Any")); -- Create list of enemies ships
 
 end Events;

@@ -24,7 +24,7 @@ package Stories is
    type StartConditionType is
      (DROPITEM); -- Types of conditions to start stories
    type StepConditionType is
-     (ASKINBASE); -- Types of conditions to finish story step
+     (ASKINBASE, DESTROYSHIP); -- Types of conditions to finish story step
    type Step_Data is -- Data structure for stories steps
    record
       Index: Unbounded_String; -- Index of step
