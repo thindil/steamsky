@@ -921,6 +921,14 @@ package body Maps.UI is
       Add_Entry("<skymapwindow>/btnmapright", GDK_Right, 1);
       Add_Entry("<skymapwindow>/btnmapup", GDK_Up, 1);
       Add_Entry("<skymapwindow>/btnmapdown", GDK_Down, 1);
+      Add_Entry("<skymapwindow>/cursorupleft", GDK_KP_Home, 1);
+      Add_Entry("<skymapwindow>/cursorup", GDK_KP_Up, 1);
+      Add_Entry("<skymapwindow>/cursorupright", GDK_KP_Page_Up, 1);
+      Add_Entry("<skymapwindow>/cursorleft", GDK_KP_Left, 1);
+      Add_Entry("<skymapwindow>/cursorright", GDK_KP_Right, 1);
+      Add_Entry("<skymapwindow>/cursordownleft", GDK_KP_End, 1);
+      Add_Entry("<skymapwindow>/cursordown", GDK_KP_Down, 1);
+      Add_Entry("<skymapwindow>/cursordownright", GDK_KP_Page_Down, 1);
       if Exists(To_String(SaveDirectory) & "keys.cfg") then
          Load(To_String(SaveDirectory) & "keys.cfg");
       end if;
