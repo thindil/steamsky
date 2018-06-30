@@ -23,12 +23,18 @@ item will be dropped, chance (1 to that number) for drop.
 - Tag "step" contains data for step of story.
 - Attribute "finish": condition which must be met to finish this step. Possible
 values are: "askinbase" - go to next step when player ask about something in
-any base.
+any or selected base, "destroyship" - go to next step when player destroy
+selected ship.
 - Tags "finishdata": contains data needed for finish selected step. For 
 "askinbase" and "dropitem" it will be index of item of which to ask, chance
 (1 to that number) that step progress to next and did ask in any base (value
 "any") or selected base (value "selected", game will randomly select base which
-is know to player).
+is know to player). For "destroyship" if will be index of faction to which
+selected ship belongs, index of ship to destroy (or "random" if ship should be
+selected randomly, same as normal enemies in game), X coordinate of place where
+to search for enemy, Y coordinate of place where to search for enemy (in both,
+value "random" means randomly selected place on map), chance (1 to that number)
+that enemy ship will be found and fight starts.
 - Tag "text": text which will be show to player when step starts.
 - Tag "failtext": text which will be show to player if step not progress to 
 next.
@@ -44,8 +50,17 @@ next.
    <finishdata value="164" />
    <finishdata value="2" />
    <finishdata value="selected" />
-   <text>One of inhibitants of base looked at medalion very closely and told you: I think I know someone other who can tell you more about this medalion. But he lives in different base. Then he show on map in which base.</text>
+   <text>After some search, you found that someone who can tell you more about this medalion lives in one of skybases. You noted your discovery on map.</text>
    <failtext>You asked few people around base but no one can help you with this medalion. Maybe try again?</failtext>
+  </step>
+  <step index="3" finish="destroyship">
+   <finishdata value="UNDEAD" />
+   <finishdata value="random" />
+   <finishdata value="random" />
+   <finishdata value="random" />
+   <finishdata value="2" />
+   <text>You got clue for your find. Someone saw similiar medalion on one of undead ships. You noted your discovery on your map.</text>
+   <failtext>You searched area by some time, but can't find any sign of your target. Maybe try again?</failtext>
   </step>
  </story>
 </stories>
