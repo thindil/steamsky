@@ -35,7 +35,6 @@ with Gdk.Rectangle; use Gdk.Rectangle;
 with Gdk.Device; use Gdk.Device;
 with Gdk.Window; use Gdk.Window;
 with Gdk.Types; use Gdk.Types;
-with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Gdk.Device_Manager; use Gdk.Device_Manager;
 with Gdk.Screen; use Gdk.Screen;
 with Game; use Game;
@@ -1212,6 +1211,17 @@ package body Maps.UI.Handlers is
       Mouse: constant Gdk_Device := Get_Client_Pointer(DeviceManager);
       Screen: Gdk_Screen :=
         Get_Screen(Get_Window(Gtk_Widget(Get_Object(Builder, "mapview"))));
+      KeysNames: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("<skymapwindow>/cursorupleft"),
+         To_Unbounded_String("<skymapwindow>/cursorup"),
+         To_Unbounded_String("<skymapwindow>/cursorupright"),
+         To_Unbounded_String("<skymapwindow>/cursorleft"),
+         To_Unbounded_String("<skymapwindow>/cursorright"),
+         To_Unbounded_String("<skymapwindow>/cursordownleft"),
+         To_Unbounded_String("<skymapwindow>/cursordown"),
+         To_Unbounded_String("<skymapwindow>/cursordownright"));
+      Key: Gtk_Accel_Key;
+      Found: Boolean;
    begin
       if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack"))) /=
         "skymap" then
@@ -1221,38 +1231,45 @@ package body Maps.UI.Handlers is
       if MouseX < 0 or MouseY < 0 then
          return False;
       end if;
-      if KeyMods = 1 then
-         NewX := MouseX;
-         NewY := MouseY;
-         case Event.Keyval is
-            when GDK_KP_Up =>
-               NewY := NewY - Gint(MapCellHeight);
-            when GDK_KP_Down =>
-               NewY := NewY + Gint(MapCellHeight);
-            when GDK_KP_Left =>
-               NewX := NewX - Gint(MapCellWidth);
-            when GDK_KP_Right =>
-               NewX := NewX + Gint(MapCellWidth);
-            when GDK_KP_Home =>
-               NewX := NewX - Gint(MapCellWidth);
-               NewY := NewY - Gint(MapCellHeight);
-            when GDK_KP_Page_Up =>
-               NewX := NewX + Gint(MapCellWidth);
-               NewY := NewY - Gint(MapCellHeight);
-            when GDK_KP_End =>
-               NewX := NewX - Gint(MapCellWidth);
-               NewY := NewY + Gint(MapCellHeight);
-            when GDK_KP_Page_Down =>
-               NewX := NewX + Gint(MapCellWidth);
-               NewY := NewY + Gint(MapCellHeight);
-            when others =>
-               null;
-         end case;
-         if NewX /= MouseX or NewY /= MouseY then
-            Warp(Mouse, Screen, NewX, NewY);
-            UpdateMapInfo(Builder);
-            return True;
+      NewX := MouseX;
+      NewY := MouseY;
+      for I in KeysNames'Range loop
+         Lookup_Entry(To_String(KeysNames(I)), Key, Found);
+         if not Found then
+            return False;
          end if;
+         if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
+            case I is
+               when 1 =>
+                  NewX := NewX - Gint(MapCellWidth);
+                  NewY := NewY - Gint(MapCellHeight);
+               when 2 =>
+                  NewY := NewY - Gint(MapCellHeight);
+               when 3 =>
+                  NewX := NewX + Gint(MapCellWidth);
+                  NewY := NewY - Gint(MapCellHeight);
+               when 4 =>
+                  NewX := NewX - Gint(MapCellWidth);
+               when 5 =>
+                  NewX := NewX + Gint(MapCellWidth);
+               when 6 =>
+                  NewX := NewX - Gint(MapCellWidth);
+                  NewY := NewY + Gint(MapCellHeight);
+               when 7 =>
+                  NewY := NewY + Gint(MapCellHeight);
+               when 8 =>
+                  NewX := NewX + Gint(MapCellWidth);
+                  NewY := NewY + Gint(MapCellHeight);
+               when others =>
+                  null;
+            end case;
+            exit;
+         end if;
+      end loop;
+      if NewX /= MouseX or NewY /= MouseY then
+         Warp(Mouse, Screen, NewX, NewY);
+         UpdateMapInfo(Builder);
+         return True;
       end if;
       return False;
    end MapKeyPressed;

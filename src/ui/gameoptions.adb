@@ -74,7 +74,15 @@ package body GameOptions is
       To_Unbounded_String("<skymapwindow>/btnmapleft"),
       To_Unbounded_String("<skymapwindow>/btnmapright"),
       To_Unbounded_String("<skymapwindow>/btnmapup"),
-      To_Unbounded_String("<skymapwindow>/btnmapdown"));
+      To_Unbounded_String("<skymapwindow>/btnmapdown"),
+      To_Unbounded_String("<skymapwindow>/cursorupleft"),
+      To_Unbounded_String("<skymapwindow>/cursorup"),
+      To_Unbounded_String("<skymapwindow>/cursorupright"),
+      To_Unbounded_String("<skymapwindow>/cursorleft"),
+      To_Unbounded_String("<skymapwindow>/cursorright"),
+      To_Unbounded_String("<skymapwindow>/cursordownleft"),
+      To_Unbounded_String("<skymapwindow>/cursordown"),
+      To_Unbounded_String("<skymapwindow>/cursordownright"));
    EditNames: constant array(Positive range <>) of Unbounded_String :=
      (To_Unbounded_String("edtupleft"),
       To_Unbounded_String("edtup"),
@@ -107,7 +115,15 @@ package body GameOptions is
       To_Unbounded_String("edtmovemapleft"),
       To_Unbounded_String("edtmovemapright"),
       To_Unbounded_String("edtmovemapup"),
-      To_Unbounded_String("edtmovemapdown"));
+      To_Unbounded_String("edtmovemapdown"),
+      To_Unbounded_String("edtmovecursorupleft"),
+      To_Unbounded_String("edtmovecursorup"),
+      To_Unbounded_String("edtmovecursorupright"),
+      To_Unbounded_String("edtmovecursorleft"),
+      To_Unbounded_String("edtmovecursorright"),
+      To_Unbounded_String("edtmovecursordownleft"),
+      To_Unbounded_String("edtmovecursordown"),
+      To_Unbounded_String("edtmovecursordownright"));
 
    procedure CloseOptions(Object: access Gtkada_Builder_Record'Class) is
    begin
