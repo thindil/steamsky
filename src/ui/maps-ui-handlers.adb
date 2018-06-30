@@ -1049,9 +1049,21 @@ package body Maps.UI.Handlers is
                    (CurrentStory.CurrentStep);
             end if;
             if ProgressStory then
-               ShowDialog
-                 (To_String(Step.Text),
-                  Gtk_Window(Get_Object(Builder, "skymapwindow")));
+               declare
+                  TargetText: Unbounded_String := Null_Unbounded_String;
+               begin
+                  case Step.FinishCondition is
+                     when ASKINBASE =>
+                        if CurrentStory.Data /= Null_Unbounded_String then
+                           TargetText :=
+                             To_Unbounded_String(" You must travel to base ") &
+                             CurrentStory.Data;
+                        end if;
+                  end case;
+                  ShowDialog
+                    (To_String(Step.Text & TargetText),
+                     Gtk_Window(Get_Object(Builder, "skymapwindow")));
+               end;
             else
                ShowDialog
                  (To_String(Step.FailText),
