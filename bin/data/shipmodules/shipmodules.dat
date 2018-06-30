@@ -206,5 +206,6 @@ Text between "module" tags is module description.
  <module durability="400" index="167" installtime="90" material="Titanium" maxvalue="0" name="Small titanium training room" price="16000" size="1" skill="Engineering" type="TRAINING_ROOM" value="0" weight="450">Allow training skills on ship. More durable version made of titanium.</module>
  <module durability="500" index="168" installtime="90" material="Orichalcum" maxvalue="0" name="Small orichalcum training room" price="32000" size="1" skill="Engineering" type="TRAINING_ROOM" value="0" weight="450">Allow training skills on ship. More durable version made of orichalcum.</module>
  <module durability="1000" index="169" installtime="90" material="Orichalcum" maxvalue="0" name="Orichalcum cockpit" price="12000" size="1" skill="Engineering" type="COCKPIT" unique="Y" value="0" weight="600">Each ship requires one cockpit to fly. This is the orichalcum version of a standard cockpit.</module>
+ <module durability="500" index="170" installtime="90" material="Orichalcum" maxvalue="0" name="Small orichalcum alchemy lab" price="12000" size="1" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="900">Allows research of new crafting recipes and crafting of some items. More durable version made of orichalcum.</module>
 </modules>
 
