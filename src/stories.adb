@@ -29,6 +29,8 @@ with Utils; use Utils;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Bases; use Bases;
+with Events; use Events;
+with Maps; use Maps;
 
 package body Stories is
 
@@ -189,6 +191,31 @@ package body Stories is
       end loop;
    end SelectBase;
 
+   function SelectEnemy(StepData: UnboundedString_Container.Vector) return Unbounded_String is
+      Enemies: Positive_Container.Vector;
+      EnemyData: Unbounded_String;
+   begin
+      if StepData(3) = To_Unbounded_String("random") then
+         EnemyData := To_Unbounded_String(GetRandom(SkyMap'First, SkyMap'Last));
+         Append(EnemyData, ";");
+      else
+         EnemyData := StepData(3);
+         Append(EnemyData, ";");
+      end if;
+      if StepData(4) = To_Unbounded_String("random") then
+         Append(EnemyData, Integer'Image(GetRandom(SkyMap'First, SkyMap'Last)));
+         Append(EnemyData, ";");
+      else
+         Append(EnemyData, StepData(4));
+         Append(EnemyData, ";");
+      end if;
+      if StepData(2) /= To_Unbounded_String("random") then
+         return EnemyData & StepData(2);
+      end if;
+      GenerateEnemies(Enemies, StepData(1));
+      return EnemyData & To_Unbounded_String(Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index)));
+   end SelectEnemy;
+
    procedure StartStory
      (FactionName: Unbounded_String;
       Condition: StartConditionType) is
@@ -219,6 +246,8 @@ package body Stories is
                                (To_String
                                   (Stories_List(I).StartingStep.FinishData
                                      (3)));
+                        when DESTROYSHIP =>
+                           StepData := SelectEnemy(Stories_List(I).StartingStep.FinishData);
                      end case;
                      CurrentStory :=
                        (Index => Stories_Container.To_Index(I),
@@ -283,6 +312,8 @@ package body Stories is
                          (CurrentStory.CurrentStep)
                          .FinishData
                          (3)));
+            when DESTROYSHIP =>
+               CurrentStory.Data := SelectEnemy(Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep).FinishData);
          end case;
       elsif CurrentStory.Step = CurrentStory.MaxSteps then
          CurrentStory.CurrentStep := -1;
