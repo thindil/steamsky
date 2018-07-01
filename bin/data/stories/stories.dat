@@ -35,7 +35,9 @@ selected randomly, same as normal enemies in game), X coordinate of place where
 to search for enemy, Y coordinate of place where to search for enemy (in both,
 value "random" means randomly selected place on map), chance (1 to that number)
 that enemy ship will be found and fight starts.
-- Tag "text": text which will be show to player when step starts.
+- Tag "text": text which will be show to player when step starts. Attribute
+"condition": finish condition of previous step which was lead to this one.
+Possible values: "any", "askinbase" and "destroyship".
 - Tag "failtext": text which will be show to player if step not progress to 
 next.
 -->
@@ -43,14 +45,15 @@ next.
    <finishdata value="164" />
    <finishdata value="2" />
    <finishdata value="any" />
-   <text>During combat at one of bodies you found strange medalion. Maybe you should ask about it in nearest bases?</text>
+   <text condition="any">During combat at one of bodies you found strange medalion. Maybe you should ask about it in nearest bases?</text>
    <failtext>You asked few people around base but no one can help you with this medalion. Try again here or maybe in another base?</failtext>
   </step>
   <step index="2" finish="askinbase">
    <finishdata value="164" />
    <finishdata value="2" />
    <finishdata value="selected" />
-   <text>After some search, you found that someone who can tell you more about this medalion lives in one of skybases. You noted your discovery on map.</text>
+   <text condition="askinbase">One of inhibitants of base looked at medalion very closely and told you: I think I know someone other who can tell you more about this medalion. But he lives in different base. Then he show on map in which base.</text>
+   <text condition="destroyship">In wreck of destroyed ship before explosion, you found some scraps of this same metal from which your medalion is made. On one of this scraps you see name of base. You quickly note it position on map.</text>
    <failtext>You asked few people around base but no one can help you with this medalion. Maybe try again?</failtext>
   </step>
   <step index="3" finish="destroyship">
@@ -59,7 +62,8 @@ next.
    <finishdata value="random" />
    <finishdata value="random" />
    <finishdata value="2" />
-   <text>You got clue for your find. Someone saw similiar medalion on one of undead ships. You noted your discovery on your map.</text>
+   <text condition="askinbase">One of captains of docked ship told you, that he saw undead ship with this same symbols like on your medalion. When you show him map, he mark area where he saw that ship.</text>
+   <text condition="destroyship">After fast search destroyed ship, you found very damaged captains log. In one of last entries, you spotted this same werid symbols which are on your medalion. Entry contains informations about encountered undead ship with it name and general location. You quickly note this information on map.</text>
    <failtext>You searched area by some time, but can't find any sign of your target. Maybe try again?</failtext>
   </step>
  </story>
