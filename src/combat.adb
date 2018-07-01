@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with GNAT.String_Split; use GNAT.String_Split;
 with Crew; use Crew;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
@@ -1424,6 +1425,35 @@ package body Combat is
             UpdateGoal
               (DESTROY,
                Factions_List(ProtoShips_List(EnemyShipIndex).Owner).Index);
+         end if;
+         if CurrentStory.Index > 0 then
+            declare
+               FinishCondition: StepConditionType;
+               Tokens: Slice_Set;
+            begin
+               if CurrentStory.CurrentStep = 0 then
+                  FinishCondition :=
+                    Stories_List(CurrentStory.Index).StartingStep
+                      .FinishCondition;
+               else
+                  FinishCondition :=
+                    Stories_List(CurrentStory.Index).Steps
+                      (CurrentStory.CurrentStep)
+                      .FinishCondition;
+               end if;
+               if FinishCondition /= DESTROYSHIP then
+                  return;
+               end if;
+               Create(Tokens, To_String(CurrentStory.Data), ";");
+               if PlayerShip.SkyX = Positive'Value(Slice(Tokens, 1)) and
+                 PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) and
+                 ProtoShips_List(EnemyShipIndex).Index =
+                   To_Unbounded_String(Slice(Tokens, 3)) then
+                  if not ProgressStory(True) then
+                     return;
+                  end if;
+               end if;
+            end;
          end if;
       end if;
    end CombatTurn;

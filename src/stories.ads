@@ -67,6 +67,8 @@ package Stories is
       Condition: StartConditionType); -- Check if any story can starts
    procedure ClearCurrentStory; -- Resets current story
    function ProgressStory
+     (NextStep: Boolean :=
+        False)
      return Boolean; -- Returns true if story goes to next step, otherwise false
 
 end Stories;

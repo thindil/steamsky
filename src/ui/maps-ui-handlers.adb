@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers; use Ada.Containers;
+with GNAT.String_Split; use GNAT.String_Split;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
@@ -460,6 +461,24 @@ package body Maps.UI.Handlers is
                            False);
                      end if;
                   end if;
+               when DESTROYSHIP =>
+                  declare
+                     Tokens: Slice_Set;
+                  begin
+                     Create(Tokens, To_String(CurrentStory.Data), ";");
+                     if PlayerShip.SkyX = Positive'Value(Slice(Tokens, 1)) and
+                       PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) then
+                        Set_Label
+                          (Gtk_Button(Get_Object(Builder, "btnstory")),
+                           "Search for " &
+                           To_String
+                             (ProtoShips_List(Positive'Value(Slice(Tokens, 3)))
+                                .Name));
+                        Set_No_Show_All
+                          (Gtk_Widget(Get_Object(Object, "btnstory")),
+                           False);
+                     end if;
+                  end;
             end case;
          end;
       end if;
@@ -1059,6 +1078,17 @@ package body Maps.UI.Handlers is
                              To_Unbounded_String(" You must travel to base ") &
                              CurrentStory.Data;
                         end if;
+                     when DESTROYSHIP =>
+                        declare
+                           Tokens: Slice_Set;
+                        begin
+                           Create(Tokens, To_String(CurrentStory.Data), ";");
+                           if StartCombat
+                               (Positive'Value(Slice(Tokens, 3)),
+                                False) then
+                              ShowCombatUI;
+                           end if;
+                        end;
                   end case;
                   ShowDialog
                     (To_String(Step.Text & TargetText),

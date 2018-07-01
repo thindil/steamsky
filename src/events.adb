@@ -37,12 +37,7 @@ package body Events is
    function CheckForEvent return Boolean is
       TimePassed: Integer;
       CrewIndex: Natural := 0;
-      Roll,
-      Roll2,
-      ItemIndex,
-      EngineIndex,
-      Injuries,
-      LostCargo: Positive;
+      Roll, Roll2, ItemIndex, EngineIndex, Injuries, LostCargo: Positive;
       Enemies, Engines: Positive_Container.Vector;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -251,7 +246,8 @@ package body Events is
                        not Factions_List(SkyBases(BaseIndex).Owner)
                          .Friendly then
                         GenerateEnemies
-                          (Enemies, Factions_List(SkyBases(BaseIndex).Owner).Index);
+                          (Enemies,
+                           Factions_List(SkyBases(BaseIndex).Owner).Index);
                         Events_List.Append
                         (New_Item =>
                            (EnemyPatrol,
@@ -435,7 +431,8 @@ package body Events is
    end RecoverBase;
 
    procedure GenerateEnemies
-      (Enemies: in out Positive_Container.Vector; Owner: Unbounded_String := To_Unbounded_String("Any")) is
+     (Enemies: in out Positive_Container.Vector;
+      Owner: Unbounded_String := To_Unbounded_String("Any")) is
       EnemyIndex: Positive;
       PlayerValue: Natural := 0;
    begin
@@ -444,22 +441,22 @@ package body Events is
          PlayerValue := CountCombatValue;
          for Ship of ProtoShips_List loop
             if Ship.CombatValue <= PlayerValue and
-               (Owner = To_Unbounded_String("Any") or
+              (Owner = To_Unbounded_String("Any") or
                To_Lower(To_String(Factions_List(Ship.Owner).Index)) =
-                  To_Lower(To_String(Owner))) and
-                  not Factions_List(Ship.Owner).Friendly then
-                  Enemies.Append(New_Item => EnemyIndex);
+                 To_Lower(To_String(Owner))) and
+              not Factions_List(Ship.Owner).Friendly then
+               Enemies.Append(New_Item => EnemyIndex);
             end if;
             EnemyIndex := EnemyIndex + 1;
          end loop;
       else
          for Ship of ProtoShips_List loop
             if
-               (Owner = To_Unbounded_String("Any") or
+              (Owner = To_Unbounded_String("Any") or
                To_Lower(To_String(Factions_List(Ship.Owner).Index)) =
-                  To_Lower(To_String(Owner))) and
-                  not Factions_List(Ship.Owner).Friendly then
-                  Enemies.Append(New_Item => EnemyIndex);
+                 To_Lower(To_String(Owner))) and
+              not Factions_List(Ship.Owner).Friendly then
+               Enemies.Append(New_Item => EnemyIndex);
             end if;
             EnemyIndex := EnemyIndex + 1;
          end loop;
