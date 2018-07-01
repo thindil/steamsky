@@ -1165,18 +1165,29 @@ package body Maps.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       UpdateMapInfo(Builder);
       if CurrentStory.Index > 0 and CurrentStory.ShowText then
-         if CurrentStory.CurrentStep = 0 then
+         declare
+            StepText: Unbounded_String;
+            StepTexts: StepTexts_Container.Vector;
+         begin
+            if CurrentStory.CurrentStep = 0 then
+               StepTexts :=
+                 Stories_List(CurrentStory.Index).StartingStep.Texts;
+            else
+               StepTexts :=
+                 Stories_List(CurrentStory.Index).Steps
+                   (CurrentStory.CurrentStep)
+                   .Texts;
+            end if;
+            for Text of StepTexts loop
+               if Text.Condition = CurrentStory.FinishedStep then
+                  StepText := Text.Text;
+                  exit;
+               end if;
+            end loop;
             ShowDialog
-              (To_String(Stories_List(CurrentStory.Index).StartingStep.Text),
+              (To_String(StepText),
                Gtk_Window(Get_Object(Builder, "skymapwindow")));
-         else
-            ShowDialog
-              (To_String
-                 (Stories_List(CurrentStory.Index).Steps
-                    (CurrentStory.CurrentStep)
-                    .Text),
-               Gtk_Window(Get_Object(Builder, "skymapwindow")));
-         end if;
+         end;
          CurrentStory.ShowText := False;
       end if;
    end ShowSkyMap;
