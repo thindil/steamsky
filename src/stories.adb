@@ -202,11 +202,12 @@ package body Stories is
    function SelectEnemy
      (StepData: UnboundedString_Container.Vector) return Unbounded_String is
       Enemies: Positive_Container.Vector;
-      EnemyData: Unbounded_String;
+      EnemyData: Unbounded_String := Null_Unbounded_String;
    begin
       if StepData(3) = To_Unbounded_String("random") then
          EnemyData :=
-           To_Unbounded_String(GetRandom(SkyMap'First, SkyMap'Last));
+           To_Unbounded_String
+             (Integer'Image(GetRandom(SkyMap'First, SkyMap'Last)));
          Append(EnemyData, ";");
       else
          EnemyData := StepData(3);
@@ -227,7 +228,8 @@ package body Stories is
       GenerateEnemies(Enemies, StepData(1));
       return EnemyData &
         To_Unbounded_String
-          (Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index)));
+          (Integer'Image
+             (Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
    end SelectEnemy;
 
    procedure StartStory

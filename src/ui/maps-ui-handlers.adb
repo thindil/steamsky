@@ -1072,26 +1072,36 @@ package body Maps.UI.Handlers is
             if ProgressStory then
                declare
                   TargetText: Unbounded_String := Null_Unbounded_String;
+                  Tokens: Slice_Set;
                begin
+                  Create(Tokens, To_String(CurrentStory.Data), ";");
                   case Step.FinishCondition is
                      when ASKINBASE =>
                         if CurrentStory.Data /= Null_Unbounded_String then
-                           TargetText :=
-                             To_Unbounded_String(" You must travel to base ") &
-                             CurrentStory.Data;
+                           if Slice_Count(Tokens) < 3 then
+                              TargetText :=
+                                To_Unbounded_String
+                                  (" You must travel to base ") &
+                                CurrentStory.Data;
+                           else
+                              TargetText :=
+                                To_Unbounded_String(" You must find ") &
+                                ProtoShips_List
+                                  (Positive'Value(Slice(Tokens, 3)))
+                                  .Name &
+                                To_Unbounded_String(" at X:") &
+                                To_Unbounded_String(Slice(Tokens, 1)) &
+                                To_Unbounded_String(" Y:") &
+                                To_Unbounded_String(Slice(Tokens, 2));
+                           end if;
                         end if;
                      when DESTROYSHIP =>
-                        declare
-                           Tokens: Slice_Set;
-                        begin
-                           Create(Tokens, To_String(CurrentStory.Data), ";");
-                           if StartCombat
-                               (Positive'Value(Slice(Tokens, 3)),
-                                False) then
-                              ShowCombatUI;
-                              return;
-                           end if;
-                        end;
+                        if StartCombat
+                            (Positive'Value(Slice(Tokens, 3)),
+                             False) then
+                           ShowCombatUI;
+                           return;
+                        end if;
                      when ANY =>
                         null;
                   end case;
