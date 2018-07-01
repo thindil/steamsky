@@ -24,14 +24,21 @@ package Stories is
    type StartConditionType is
      (DROPITEM); -- Types of conditions to start stories
    type StepConditionType is
-     (ASKINBASE, DESTROYSHIP); -- Types of conditions to finish story step
+     (ASKINBASE, DESTROYSHIP, ANY); -- Types of conditions to finish story step
+   type StepText_Data is -- Data structure for stories steps texts
+   record
+      Condition: StepConditionType; -- Finish condition of previous step
+      Text: Unbounded_String; -- Text which will be show to player when step starts.
+   end record;
+   package StepTexts_Container is new Vectors(Positive, StepText_Data);
    type Step_Data is -- Data structure for stories steps
    record
       Index: Unbounded_String; -- Index of step
       FinishCondition: StepConditionType; -- Condition which must be met to finish selected step and process to next
       FinishData: UnboundedString_Container
         .Vector; -- Data for finish condition
-      Text: Unbounded_String; -- Text which will be show to player when step starts.
+      Texts: StepTexts_Container
+        .Vector; -- Texts which will be show to player when step starts, depends on finish condition of previous step.
       FailText: Unbounded_String; -- Text which will be show to player when step fails to progress.
    end record;
    package Steps_Container is new Vectors(Positive, Step_Data);
@@ -55,6 +62,7 @@ package Stories is
       MaxSteps: Positive; -- Number of maxium  amounts of steps in story
       ShowText: Boolean; -- If true, show text of current step to player
       Data: Unbounded_String; -- Various data for current step, depends on step
+      FinishedStep: StepConditionType; -- Finish condition for previous step
    end record;
    CurrentStory: CurrentStory_Data; -- Contains data about current story on which player is
    Stories_List: Stories_Container.Vector; -- List of available stories in game

@@ -479,6 +479,8 @@ package body Maps.UI.Handlers is
                            False);
                      end if;
                   end;
+               when ANY =>
+                  null;
             end case;
          end;
       end if;
@@ -1087,12 +1089,23 @@ package body Maps.UI.Handlers is
                                (Positive'Value(Slice(Tokens, 3)),
                                 False) then
                               ShowCombatUI;
+                              return;
                            end if;
                         end;
+                     when ANY =>
+                        null;
                   end case;
-                  ShowDialog
-                    (To_String(Step.Text & TargetText),
-                     Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                  for Text of
+                    Stories_List(CurrentStory.Index).Steps
+                      (CurrentStory.CurrentStep)
+                      .Texts loop
+                     if CurrentStory.FinishedStep = Text.Condition then
+                        ShowDialog
+                          (To_String(Text.Text & TargetText),
+                           Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                        exit;
+                     end if;
+                  end loop;
                end;
             else
                ShowDialog

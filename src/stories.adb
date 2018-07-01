@@ -46,6 +46,7 @@ package body Stories is
       TempStep: Step_Data;
       TempSteps: Steps_Container.Vector;
       StartStep: Unbounded_String;
+      TempTexts: StepTexts_Container.Vector;
    begin
       ClearCurrentStory;
       if Stories_List.Length > 0 then
@@ -67,8 +68,8 @@ package body Stories is
            (Index => Null_Unbounded_String,
             FinishCondition => ASKINBASE,
             FinishData => TempValue,
-            Text => Null_Unbounded_String,
-            FailText => Null_Unbounded_String);
+            FailText => Null_Unbounded_String,
+            Texts => TempTexts);
          TempRecord :=
            (Index => Null_Unbounded_String,
             StartCondition => DROPITEM,
@@ -119,8 +120,8 @@ package body Stories is
                  (Index => Null_Unbounded_String,
                   FinishCondition => ASKINBASE,
                   FinishData => TempValue,
-                  Text => Null_Unbounded_String,
-                  FailText => Null_Unbounded_String);
+                  FailText => Null_Unbounded_String,
+                  Texts => TempTexts);
                TempStep.Index :=
                  To_Unbounded_String
                    (Get_Attribute(Item(ChildNodes, J), "index"));
@@ -141,9 +142,16 @@ package body Stories is
                  DOM.Core.Elements.Get_Elements_By_Tag_Name
                    (Item(ChildNodes, J),
                     "text");
-               TempStep.Text :=
-                 To_Unbounded_String
-                   (Node_Value(First_Child(Item(StepDataNodes, 0))));
+               for K in 0 .. Length(StepDataNodes) - 1 loop
+                  TempStep.Texts.Append
+                  (New_Item =>
+                     (Condition =>
+                        StepConditionType'Value
+                          (Get_Attribute(Item(StepDataNodes, K), "condition")),
+                      Text =>
+                        To_Unbounded_String
+                          (Node_Value(First_Child(Item(StepDataNodes, K))))));
+               end loop;
                StepDataNodes :=
                  DOM.Core.Elements.Get_Elements_By_Tag_Name
                    (Item(ChildNodes, J),
@@ -256,6 +264,8 @@ package body Stories is
                            StepData :=
                              SelectEnemy
                                (Stories_List(I).StartingStep.FinishData);
+                        when ANY =>
+                           null;
                      end case;
                      CurrentStory :=
                        (Index => Stories_Container.To_Index(I),
@@ -266,7 +276,8 @@ package body Stories is
                             (Stories_List(I).MinSteps,
                              Stories_List(I).MaxSteps),
                         ShowText => True,
-                        Data => StepData);
+                        Data => StepData,
+                        FinishedStep => ANY);
                      UpdateCargo
                        (PlayerShip,
                         Positive'Value
@@ -287,7 +298,8 @@ package body Stories is
          CurrentStep => -3,
          MaxSteps => 1,
          ShowText => False,
-         Data => Null_Unbounded_String);
+         Data => Null_Unbounded_String,
+         FinishedStep => ANY);
    end ClearCurrentStory;
 
    function ProgressStory(NextStep: Boolean := False) return Boolean is
@@ -308,6 +320,7 @@ package body Stories is
          return True;
       end if;
       CurrentStory.Step := CurrentStory.Step + 1;
+      CurrentStory.FinishedStep := Step.FinishCondition;
       if CurrentStory.Step < CurrentStory.MaxSteps then
          CurrentStory.CurrentStep :=
            GetRandom
@@ -329,6 +342,8 @@ package body Stories is
                    (Stories_List(CurrentStory.Index).Steps
                       (CurrentStory.CurrentStep)
                       .FinishData);
+            when ANY =>
+               null;
          end case;
       elsif CurrentStory.Step = CurrentStory.MaxSteps then
          CurrentStory.CurrentStep := -1;
