@@ -45,7 +45,7 @@ package body Stories is
       TempValue: UnboundedString_Container.Vector;
       TempStep: Step_Data;
       TempSteps: Steps_Container.Vector;
-      StartStep: Unbounded_String;
+      StartStep, FinalStep: Unbounded_String;
       TempTexts: StepTexts_Container.Vector;
    begin
       ClearCurrentStory;
@@ -77,7 +77,8 @@ package body Stories is
             MinSteps => 1,
             MaxSteps => 2,
             StartingStep => TempStep,
-            Steps => TempSteps);
+            Steps => TempSteps,
+            FinalStep => TempStep);
          StartStep := Null_Unbounded_String;
          LogMessage
            ("Loading stories file: " & Full_Name(FoundFile),
@@ -92,6 +93,9 @@ package body Stories is
             StartStep :=
               To_Unbounded_String
                 (Get_Attribute(Item(NodesList, I), "startstep"));
+            FinalStep :=
+              To_Unbounded_String
+                (Get_Attribute(Item(NodesList, I), "finalstep"));
             TempRecord.Index :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
             TempRecord.StartCondition :=
@@ -161,6 +165,8 @@ package body Stories is
                    (Node_Value(First_Child(Item(StepDataNodes, 0))));
                if TempStep.Index = StartStep then
                   TempRecord.StartingStep := TempStep;
+               elsif TempStep.Index = FinalStep then
+                  TempRecord.FinalStep := TempStep;
                else
                   TempRecord.Steps.Append(New_Item => TempStep);
                end if;
@@ -176,7 +182,8 @@ package body Stories is
                MinSteps => 1,
                MaxSteps => 2,
                StartingStep => TempStep,
-               Steps => TempSteps);
+               Steps => TempSteps,
+               FinalStep => TempStep);
          end loop;
          Free(Reader);
       end loop;
