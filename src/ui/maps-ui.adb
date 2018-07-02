@@ -1172,11 +1172,13 @@ package body Maps.UI is
             if CurrentStory.CurrentStep = 0 then
                StepTexts :=
                  Stories_List(CurrentStory.Index).StartingStep.Texts;
-            else
+            elsif CurrentStory.CurrentStep > 0 then
                StepTexts :=
                  Stories_List(CurrentStory.Index).Steps
                    (CurrentStory.CurrentStep)
                    .Texts;
+            else
+               StepTexts := Stories_List(CurrentStory.Index).FinalStep.Texts;
             end if;
             for Text of StepTexts loop
                if Text.Condition = CurrentStory.FinishedStep then

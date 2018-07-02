@@ -1065,10 +1065,12 @@ package body Maps.UI.Handlers is
             end if;
             if CurrentStory.CurrentStep = 0 then
                Step := Stories_List(CurrentStory.Index).StartingStep;
-            else
+            elsif CurrentStory.CurrentStep > 0 then
                Step :=
                  Stories_List(CurrentStory.Index).Steps
                    (CurrentStory.CurrentStep);
+            else
+               Step := Stories_List(CurrentStory.Index).FinalStep;
             end if;
             if ProgressStory then
                declare
@@ -1106,10 +1108,14 @@ package body Maps.UI.Handlers is
                      when ANY =>
                         null;
                   end case;
-                  for Text of
-                    Stories_List(CurrentStory.Index).Steps
-                      (CurrentStory.CurrentStep)
-                      .Texts loop
+                  if CurrentStory.CurrentStep > 0 then
+                     Step :=
+                       Stories_List(CurrentStory.Index).Steps
+                         (CurrentStory.CurrentStep);
+                  else
+                     Step := Stories_List(CurrentStory.Index).FinalStep;
+                  end if;
+                  for Text of Step.Texts loop
                      if CurrentStory.FinishedStep = Text.Condition then
                         ShowDialog
                           (To_String(Text.Text & TargetText),
