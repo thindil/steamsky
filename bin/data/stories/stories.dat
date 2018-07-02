@@ -16,11 +16,13 @@ story.
 - Tags "startdata": contains data needed for story starting condition. For
 "dropitem" it will be index of item which should drop, mob faction from which
 item will be dropped, chance (1 to that number) for drop.
+- Tag "endtext": text which will be show to player when he/she finish story.
 -->
  <story index="1" start="dropitem" minsteps="3" maxsteps="10" startstep="1" finalstep="4">
   <startdata value="164" />
   <startdata value="UNDEAD" />
   <startdata value="100" />
+  <endtext>Enemy ship dissapering in huge explosion. Rest of undead fleet starts slowly falling from sky. You are victorious.</endtext>
 <!--
 - Tag "step" contains data for step of story.
 - Attribute "finish": condition which must be met to finish this step. Possible
