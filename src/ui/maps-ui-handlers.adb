@@ -36,6 +36,7 @@ with Gdk.Rectangle; use Gdk.Rectangle;
 with Gdk.Device; use Gdk.Device;
 with Gdk.Window; use Gdk.Window;
 with Gdk.Types; use Gdk.Types;
+with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Gdk.Device_Manager; use Gdk.Device_Manager;
 with Gdk.Screen; use Gdk.Screen;
 with Game; use Game;
@@ -1259,6 +1260,9 @@ package body Maps.UI.Handlers is
       if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
          MoveMap(Get_Object(Builder, "btncenter"));
          return False;
+      end if;
+      if Event.Keyval = GDK_space and KeyMods = 1 then
+         return SetDestination(Builder);
       end if;
       return True;
    end MapKeyReleased;
