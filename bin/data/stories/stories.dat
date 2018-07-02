@@ -11,11 +11,13 @@ selected faction.
 - Attribute "maxsteps": maxiumum amount of steps in that story.
 - Attribute "startstep": index of step which will be used as first step in
 story.
+- Attribute "finalstep": index of step which will be used as final step in
+story.
 - Tags "startdata": contains data needed for story starting condition. For
 "dropitem" it will be index of item which should drop, mob faction from which
 item will be dropped, chance (1 to that number) for drop.
 -->
- <story index="1" start="dropitem" minsteps="3" maxsteps="10" startstep="1">
+ <story index="1" start="dropitem" minsteps="3" maxsteps="10" startstep="1" finalstep="4">
   <startdata value="164" />
   <startdata value="UNDEAD" />
   <startdata value="100" />
@@ -64,6 +66,15 @@ next.
    <finishdata value="2" />
    <text condition="askinbase">One of captains of docked ship told you, that he saw undead ship with this same symbols like on your medalion. When you show him map, he mark area where he saw that ship.</text>
    <text condition="destroyship">After fast search destroyed ship, you found very damaged captains log. In one of last entries, you spotted this same werid symbols which are on your medalion. Entry contains informations about encountered undead ship with it name and general location. You quickly note this information on map.</text>
+   <failtext>You searched area by some time, but can't find any sign of your target. Maybe try again?</failtext>
+  </step>
+  <step index="4" finish="destroyship">
+   <finishdata value="UNDEAD" />
+   <finishdata value="146" />
+   <finishdata value="random" />
+   <finishdata value="random" />
+   <text condition="askinbase">You asked different people in base but no one can answered your questions about medalion. Resigned you goes to bar. After spend there some time, you hear like one captain tells other about gigantic undead ship which he saw in distance. This ship was symbols near identical like on strange medalion. You asked that captain about direction to area where he saw this ship and you marked it at your map.</text>
+   <text condition="destroyship">After fast search of destroyed ship, you found that it was flying to encounter gigantic undead ship. Documents left on ship suggest that more undead ships going in this same direction. Looks like something big is starting in that area. You quickly note location on your map.</text>
    <failtext>You searched area by some time, but can't find any sign of your target. Maybe try again?</failtext>
   </step>
  </story>
