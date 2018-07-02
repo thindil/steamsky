@@ -440,10 +440,12 @@ package body Maps.UI.Handlers is
          begin
             if CurrentStory.CurrentStep = 0 then
                Step := Stories_List(CurrentStory.Index).StartingStep;
-            else
+            elsif CurrentStory.CurrentStep > 0 then
                Step :=
                  Stories_List(CurrentStory.Index).Steps
                    (CurrentStory.CurrentStep);
+            else
+               Step := Stories_List(CurrentStory.Index).FinalStep;
             end if;
             case Step.FinishCondition is
                when ASKINBASE =>
@@ -1111,16 +1113,16 @@ package body Maps.UI.Handlers is
                   if CurrentStory.CurrentStep > -2 then
                      if CurrentStory.CurrentStep > 0 then
                         Step :=
-                           Stories_List(CurrentStory.Index).Steps
-                              (CurrentStory.CurrentStep);
+                          Stories_List(CurrentStory.Index).Steps
+                            (CurrentStory.CurrentStep);
                      else
                         Step := Stories_List(CurrentStory.Index).FinalStep;
                      end if;
                      for Text of Step.Texts loop
                         if CurrentStory.FinishedStep = Text.Condition then
                            ShowDialog
-                              (To_String(Text.Text & TargetText),
-                           Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                             (To_String(Text.Text & TargetText),
+                              Gtk_Window(Get_Object(Builder, "skymapwindow")));
                            exit;
                         end if;
                      end loop;

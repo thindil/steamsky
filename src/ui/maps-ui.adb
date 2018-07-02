@@ -1190,10 +1190,11 @@ package body Maps.UI is
                   end if;
                end loop;
                ShowDialog
-                  (To_String(StepText),
+                 (To_String(StepText),
                   Gtk_Window(Get_Object(Builder, "skymapwindow")));
             else
                FinishStory;
+               DeathConfirm;
             end if;
          end;
          CurrentStory.ShowText := False;
@@ -1201,13 +1202,19 @@ package body Maps.UI is
    end ShowSkyMap;
 
    procedure FinishStory is
-      Message: constant String := To_String(Stories_List(CurrentStory.Index).EndText) & " Are you want to finish game?";
+      Message: constant String :=
+        To_String(Stories_List(CurrentStory.Index).EndText) &
+        " Are you want to finish game?";
    begin
       GameStats.Points := GameStats.Points + (10000 * CurrentStory.MaxSteps);
       ClearCurrentStory;
-      if ShowConfirmDialog(Message, Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
-         Death(1, To_Unbounded_String("finished game"), PlayerShip);
-         DeathConfirm;
+      if ShowConfirmDialog
+          (Message,
+           Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
+         Death
+           (1,
+            To_Unbounded_String("retired after finished the game"),
+            PlayerShip);
       end if;
    end FinishStory;
 

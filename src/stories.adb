@@ -176,9 +176,9 @@ package body Stories is
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (Item(NodesList, I),
                  "endtext");
-               TempRecord.EndText :=
-                 To_Unbounded_String
-                   (Node_Value(First_Child(Item(ChildNodes, 0))));
+            TempRecord.EndText :=
+              To_Unbounded_String
+                (Node_Value(First_Child(Item(ChildNodes, 0))));
             Stories_List.Append(New_Item => TempRecord);
             LogMessage
               ("Story added: " & To_String(TempRecord.Index),
@@ -219,25 +219,28 @@ package body Stories is
      (StepData: UnboundedString_Container.Vector) return Unbounded_String is
       Enemies: Positive_Container.Vector;
       EnemyData: Unbounded_String := Null_Unbounded_String;
+      Coord: Integer;
    begin
       if StepData(3) = To_Unbounded_String("random") then
-         EnemyData :=
-           To_Unbounded_String
-             (Integer'Image(GetRandom(SkyMap'First, SkyMap'Last)));
+         Coord := GetRandom(SkyMap'First, SkyMap'Last);
+         EnemyData := To_Unbounded_String(Integer'Image(Coord));
          Append(EnemyData, ";");
       else
+         Coord := Integer'Value(To_String(StepData(3)));
          EnemyData := StepData(3);
          Append(EnemyData, ";");
       end if;
+      PlayerShip.DestinationX := Coord;
       if StepData(4) = To_Unbounded_String("random") then
-         Append
-           (EnemyData,
-            Integer'Image(GetRandom(SkyMap'First, SkyMap'Last)));
+         Coord := GetRandom(SkyMap'First, SkyMap'Last);
+         Append(EnemyData, Integer'Image(Coord));
          Append(EnemyData, ";");
       else
+         Coord := Integer'Value(To_String(StepData(4)));
          Append(EnemyData, StepData(4));
          Append(EnemyData, ";");
       end if;
+      PlayerShip.DestinationY := Coord;
       if StepData(2) /= To_Unbounded_String("random") then
          return EnemyData & StepData(2);
       end if;
@@ -325,9 +328,11 @@ package body Stories is
    begin
       if CurrentStory.CurrentStep = 0 then
          Step := Stories_List(CurrentStory.Index).StartingStep;
-      else
+      elsif CurrentStory.CurrentStep > 0 then
          Step :=
            Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep);
+      else
+         Step := Stories_List(CurrentStory.Index).FinalStep;
       end if;
       if GetRandom(1, Positive'Value(To_String(Step.FinishData(2)))) > 1 then
          UpdateGame(10);
