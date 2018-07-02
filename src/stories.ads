@@ -53,6 +53,7 @@ package Stories is
       StartingStep: Step_Data; -- Starting step of story
       Steps: Steps_Container.Vector; -- Contains all steps in story
       FinalStep: Step_Data; -- Final step of story
+      EndText: Unbounded_String; -- Text which will be show to player when story ends.
    end record;
    package Stories_Container is new Vectors(Positive, Story_Data);
    type CurrentStory_Data is -- Data structure for stories

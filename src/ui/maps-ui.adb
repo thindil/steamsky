@@ -63,6 +63,7 @@ with Bases.UI; use Bases.UI;
 with Bases.LootUI; use Bases.LootUI;
 with Bases.SchoolUI; use Bases.SchoolUI;
 with Bases.ShipyardUI; use Bases.ShipyardUI;
+with Statistics; use Statistics;
 with Statistics.UI; use Statistics.UI;
 with MainMenu; use MainMenu;
 with Maps.UI.Handlers; use Maps.UI.Handlers;
@@ -72,6 +73,7 @@ with BasesList; use BasesList;
 with Combat.UI; use Combat.UI;
 with Crafts.UI; use Crafts.UI;
 with GameOptions; use GameOptions;
+with Ships.Crew; use Ships.Crew;
 with Ships.UI; use Ships.UI;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Trades.UI; use Trades.UI;
@@ -1180,18 +1182,33 @@ package body Maps.UI is
             else
                StepTexts := Stories_List(CurrentStory.Index).FinalStep.Texts;
             end if;
-            for Text of StepTexts loop
-               if Text.Condition = CurrentStory.FinishedStep then
-                  StepText := Text.Text;
-                  exit;
-               end if;
-            end loop;
-            ShowDialog
-              (To_String(StepText),
-               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            if CurrentStory.CurrentStep > -2 then
+               for Text of StepTexts loop
+                  if Text.Condition = CurrentStory.FinishedStep then
+                     StepText := Text.Text;
+                     exit;
+                  end if;
+               end loop;
+               ShowDialog
+                  (To_String(StepText),
+                  Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            else
+               FinishStory;
+            end if;
          end;
          CurrentStory.ShowText := False;
       end if;
    end ShowSkyMap;
+
+   procedure FinishStory is
+      Message: constant String := To_String(Stories_List(CurrentStory.Index).EndText) & " Are you want to finish game?";
+   begin
+      GameStats.Points := GameStats.Points + (10000 * CurrentStory.MaxSteps);
+      ClearCurrentStory;
+      if ShowConfirmDialog(Message, Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
+         Death(1, To_Unbounded_String("finished game"), PlayerShip);
+         DeathConfirm;
+      end if;
+   end FinishStory;
 
 end Maps.UI;
