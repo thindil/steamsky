@@ -1108,21 +1108,25 @@ package body Maps.UI.Handlers is
                      when ANY =>
                         null;
                   end case;
-                  if CurrentStory.CurrentStep > 0 then
-                     Step :=
-                       Stories_List(CurrentStory.Index).Steps
-                         (CurrentStory.CurrentStep);
-                  else
-                     Step := Stories_List(CurrentStory.Index).FinalStep;
-                  end if;
-                  for Text of Step.Texts loop
-                     if CurrentStory.FinishedStep = Text.Condition then
-                        ShowDialog
-                          (To_String(Text.Text & TargetText),
-                           Gtk_Window(Get_Object(Builder, "skymapwindow")));
-                        exit;
+                  if CurrentStory.CurrentStep > -2 then
+                     if CurrentStory.CurrentStep > 0 then
+                        Step :=
+                           Stories_List(CurrentStory.Index).Steps
+                              (CurrentStory.CurrentStep);
+                     else
+                        Step := Stories_List(CurrentStory.Index).FinalStep;
                      end if;
-                  end loop;
+                     for Text of Step.Texts loop
+                        if CurrentStory.FinishedStep = Text.Condition then
+                           ShowDialog
+                              (To_String(Text.Text & TargetText),
+                           Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                           exit;
+                        end if;
+                     end loop;
+                  else
+                     FinishStory;
+                  end if;
                end;
             else
                ShowDialog

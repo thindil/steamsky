@@ -78,7 +78,8 @@ package body Stories is
             MaxSteps => 2,
             StartingStep => TempStep,
             Steps => TempSteps,
-            FinalStep => TempStep);
+            FinalStep => TempStep,
+            EndText => Null_Unbounded_String);
          StartStep := Null_Unbounded_String;
          LogMessage
            ("Loading stories file: " & Full_Name(FoundFile),
@@ -171,6 +172,13 @@ package body Stories is
                   TempRecord.Steps.Append(New_Item => TempStep);
                end if;
             end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "endtext");
+               TempRecord.EndText :=
+                 To_Unbounded_String
+                   (Node_Value(First_Child(Item(ChildNodes, 0))));
             Stories_List.Append(New_Item => TempRecord);
             LogMessage
               ("Story added: " & To_String(TempRecord.Index),
@@ -183,7 +191,8 @@ package body Stories is
                MaxSteps => 2,
                StartingStep => TempStep,
                Steps => TempSteps,
-               FinalStep => TempStep);
+               FinalStep => TempStep,
+               EndText => Null_Unbounded_String);
          end loop;
          Free(Reader);
       end loop;

@@ -55,5 +55,6 @@ private
    procedure UpdateMapInfo
      (Object: access Gtkada_Builder_Record'
         Class); -- Update info about current map cell
+   procedure FinishStory; -- Finish current story and show confirm dialog to player
 
 end Maps.UI;
