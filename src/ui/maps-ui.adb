@@ -931,6 +931,7 @@ package body Maps.UI is
       Add_Entry("<skymapwindow>/cursordownleft", GDK_KP_End, 1);
       Add_Entry("<skymapwindow>/cursordown", GDK_KP_Down, 1);
       Add_Entry("<skymapwindow>/cursordownright", GDK_KP_Page_Down, 1);
+      Add_Entry("<skymapwindow>/mouseclick", GDK_space, 1);
       if Exists(To_String(SaveDirectory) & "keys.cfg") then
          Load(To_String(SaveDirectory) & "keys.cfg");
       end if;
