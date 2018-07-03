@@ -19,6 +19,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.String_Split; use GNAT.String_Split;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
@@ -1169,8 +1170,9 @@ package body Maps.UI is
       UpdateMapInfo(Builder);
       if CurrentStory.Index > 0 and CurrentStory.ShowText then
          declare
-            StepText: Unbounded_String;
+            StepText, TargetText: Unbounded_String;
             StepTexts: StepTexts_Container.Vector;
+            Tokens: Slice_Set;
          begin
             if CurrentStory.CurrentStep = 0 then
                StepTexts :=
@@ -1190,8 +1192,24 @@ package body Maps.UI is
                      exit;
                   end if;
                end loop;
+               if CurrentStory.Data /= Null_Unbounded_String then
+                  Create(Tokens, To_String(CurrentStory.Data), ";");
+                  if Slice_Count(Tokens) < 3 then
+                     TargetText :=
+                       To_Unbounded_String(" You must travel to base ") &
+                       CurrentStory.Data;
+                  else
+                     TargetText :=
+                       To_Unbounded_String(" You must find ") &
+                       ProtoShips_List(Positive'Value(Slice(Tokens, 3))).Name &
+                       To_Unbounded_String(" at X:") &
+                       To_Unbounded_String(Slice(Tokens, 1)) &
+                       To_Unbounded_String(" Y:") &
+                       To_Unbounded_String(Slice(Tokens, 2));
+                  end if;
+               end if;
                ShowDialog
-                 (To_String(StepText),
+                 (To_String(StepText & TargetText),
                   Gtk_Window(Get_Object(Builder, "skymapwindow")));
             else
                FinishStory;
