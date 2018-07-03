@@ -325,6 +325,7 @@ package body Stories is
 
    function ProgressStory(NextStep: Boolean := False) return Boolean is
       Step: Step_Data;
+      MaxRandom: Positive;
    begin
       if CurrentStory.CurrentStep = 0 then
          Step := Stories_List(CurrentStory.Index).StartingStep;
@@ -334,7 +335,15 @@ package body Stories is
       else
          Step := Stories_List(CurrentStory.Index).FinalStep;
       end if;
-      if GetRandom(1, Positive'Value(To_String(Step.FinishData(2)))) > 1 then
+      case Step.FinishCondition is
+         when ASKINBASE =>
+            MaxRandom := Positive'Value(To_String(Step.FinishData(2)));
+         when DESTROYSHIP =>
+            MaxRandom := Positive'Value(To_String(Step.FinishData(5)));
+         when others =>
+            null;
+      end case;
+      if GetRandom(1, MaxRandom) > 1 then
          UpdateGame(10);
          return False;
       end if;
