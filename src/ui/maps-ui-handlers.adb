@@ -1123,6 +1123,7 @@ package body Maps.UI.Handlers is
                            ShowDialog
                              (To_String(Text.Text & TargetText),
                               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                           CurrentStory.ShowText := False;
                            exit;
                         end if;
                      end loop;
@@ -1134,6 +1135,7 @@ package body Maps.UI.Handlers is
                ShowDialog
                  (To_String(Step.FailText),
                   Gtk_Window(Get_Object(Builder, "skymapwindow")));
+               CurrentStory.ShowText := False;
             end if;
          end;
       else

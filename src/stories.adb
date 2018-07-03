@@ -340,6 +340,9 @@ package body Stories is
             MaxRandom := Positive'Value(To_String(Step.FinishData(2)));
          when DESTROYSHIP =>
             MaxRandom := Positive'Value(To_String(Step.FinishData(5)));
+            if NextStep then
+               MaxRandom := 1;
+            end if;
          when others =>
             null;
       end case;
@@ -347,12 +350,13 @@ package body Stories is
          UpdateGame(10);
          return False;
       end if;
-      UpdateGame(30);
       if Step.FinishCondition = DESTROYSHIP and not NextStep then
          return True;
       end if;
+      UpdateGame(30);
       CurrentStory.Step := CurrentStory.Step + 1;
       CurrentStory.FinishedStep := Step.FinishCondition;
+      CUrrentStory.ShowText := True;
       if CurrentStory.Step < CurrentStory.MaxSteps then
          CurrentStory.CurrentStep :=
            GetRandom

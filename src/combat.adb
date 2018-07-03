@@ -1435,10 +1435,14 @@ package body Combat is
                   FinishCondition :=
                     Stories_List(CurrentStory.Index).StartingStep
                       .FinishCondition;
-               else
+               elsif CurrentStory.CurrentStep > 0 then
                   FinishCondition :=
                     Stories_List(CurrentStory.Index).Steps
                       (CurrentStory.CurrentStep)
+                      .FinishCondition;
+               else
+                  FinishCondition :=
+                    Stories_List(CurrentStory.Index).FinalStep
                       .FinishCondition;
                end if;
                if FinishCondition /= DESTROYSHIP then
@@ -1447,8 +1451,7 @@ package body Combat is
                Create(Tokens, To_String(CurrentStory.Data), ";");
                if PlayerShip.SkyX = Positive'Value(Slice(Tokens, 1)) and
                  PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) and
-                 ProtoShips_List(EnemyShipIndex).Index =
-                   To_Unbounded_String(Slice(Tokens, 3)) then
+                 EnemyShipIndex = Positive'Value(Slice(Tokens, 3)) then
                   if not ProgressStory(True) then
                      return;
                   end if;
