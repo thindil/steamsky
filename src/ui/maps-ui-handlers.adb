@@ -1055,15 +1055,6 @@ package body Maps.UI.Handlers is
             Step: Step_Data;
             Message: Unbounded_String;
          begin
-            if PlayerShip.Speed /= DOCKED then
-               Message := To_Unbounded_String(DockShip(True));
-               if Message /= Null_Unbounded_String then
-                  ShowDialog
-                    (To_String(Message),
-                     Gtk_Window(Get_Object(Builder, "skymapwindow")));
-                  return;
-               end if;
-            end if;
             if CurrentStory.CurrentStep = 0 then
                Step := Stories_List(CurrentStory.Index).StartingStep;
             elsif CurrentStory.CurrentStep > 0 then
@@ -1072,6 +1063,16 @@ package body Maps.UI.Handlers is
                    (CurrentStory.CurrentStep);
             else
                Step := Stories_List(CurrentStory.Index).FinalStep;
+            end if;
+            if PlayerShip.Speed /= DOCKED and
+              Step.FinishCondition = ASKINBASE then
+               Message := To_Unbounded_String(DockShip(True));
+               if Message /= Null_Unbounded_String then
+                  ShowDialog
+                    (To_String(Message),
+                     Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                  return;
+               end if;
             end if;
             if ProgressStory then
                declare
