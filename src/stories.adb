@@ -356,7 +356,7 @@ package body Stories is
       UpdateGame(30);
       CurrentStory.Step := CurrentStory.Step + 1;
       CurrentStory.FinishedStep := Step.FinishCondition;
-      CUrrentStory.ShowText := True;
+      CurrentStory.ShowText := True;
       if CurrentStory.Step < CurrentStory.MaxSteps then
          CurrentStory.CurrentStep :=
            GetRandom

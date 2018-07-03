@@ -1442,8 +1442,7 @@ package body Combat is
                       .FinishCondition;
                else
                   FinishCondition :=
-                    Stories_List(CurrentStory.Index).FinalStep
-                      .FinishCondition;
+                    Stories_List(CurrentStory.Index).FinalStep.FinishCondition;
                end if;
                if FinishCondition /= DESTROYSHIP then
                   return;
