@@ -224,28 +224,32 @@ package body Stories is
      (StepData: UnboundedString_Container.Vector) return Unbounded_String is
       Enemies: Positive_Container.Vector;
       EnemyData: Unbounded_String := Null_Unbounded_String;
-      Coord: Integer;
+      EnemyX, EnemyY: Integer;
    begin
       if StepData(3) = To_Unbounded_String("random") then
-         Coord := GetRandom(SkyMap'First, SkyMap'Last);
-         EnemyData := To_Unbounded_String(Integer'Image(Coord));
+         EnemyX := GetRandom(SkyMap'First, SkyMap'Last);
+         EnemyData := To_Unbounded_String(Integer'Image(EnemyX));
          Append(EnemyData, ";");
       else
-         Coord := Integer'Value(To_String(StepData(3)));
+         EnemyX := Integer'Value(To_String(StepData(3)));
          EnemyData := StepData(3);
          Append(EnemyData, ";");
       end if;
-      PlayerShip.DestinationX := Coord;
+      PlayerShip.DestinationX := EnemyX;
       if StepData(4) = To_Unbounded_String("random") then
-         Coord := GetRandom(SkyMap'First, SkyMap'Last);
-         Append(EnemyData, Integer'Image(Coord));
+         loop
+            EnemyY := GetRandom(SkyMap'First, SkyMap'Last);
+            exit when SkyMap(EnemyX, EnemyY).BaseIndex = 0 and
+              EnemyY /= PlayerShip.SkyY;
+         end loop;
+         Append(EnemyData, Integer'Image(EnemyY));
          Append(EnemyData, ";");
       else
-         Coord := Integer'Value(To_String(StepData(4)));
+         EnemyY := Integer'Value(To_String(StepData(4)));
          Append(EnemyData, StepData(4));
          Append(EnemyData, ";");
       end if;
-      PlayerShip.DestinationY := Coord;
+      PlayerShip.DestinationY := EnemyY;
       if StepData(2) /= To_Unbounded_String("random") then
          return EnemyData & StepData(2);
       end if;
