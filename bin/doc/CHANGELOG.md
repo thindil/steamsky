@@ -15,7 +15,8 @@ All notable changes to this project will be documented in this file.
 - New ship modules: small bronze training room, small iron training room, small
   steel training room, small titanium training room, small orichalcum training
   room, orichalcum cockpit, small orichalcum alchemy lab, small orichalcum
-  cargo bay, large orichalcum engine and large advanced orichalcum engine
+  cargo bay, large orichalcum engine, large advanced orichalcum engine and
+  small orichalcum furnace
 - Ability to train skills on ship
 - Keyboard shortcuts (and option to set them) to move map
 - New item type: storyitem
