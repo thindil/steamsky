@@ -362,29 +362,23 @@ package body Stories is
            GetRandom
              (Stories_List(CurrentStory.Index).Steps.First_Index,
               Stories_List(CurrentStory.Index).Steps.Last_Index);
-         case Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep)
-           .FinishCondition is
+         Step :=
+           Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep);
+      elsif CurrentStory.Step = CurrentStory.MaxSteps then
+         CurrentStory.CurrentStep := -1;
+         Step := Stories_List(CurrentStory.Index).FinalStep;
+      else
+         CurrentStory.CurrentStep := -2;
+      end if;
+      if CurrentStory.CurrentStep /= -2 then
+         case Step.FinishCondition is
             when ASKINBASE =>
-               CurrentStory.Data :=
-                 SelectBase
-                   (To_String
-                      (Stories_List(CurrentStory.Index).Steps
-                         (CurrentStory.CurrentStep)
-                         .FinishData
-                         (3)));
+               CurrentStory.Data := SelectBase(To_String(Step.FinishData(3)));
             when DESTROYSHIP =>
-               CurrentStory.Data :=
-                 SelectEnemy
-                   (Stories_List(CurrentStory.Index).Steps
-                      (CurrentStory.CurrentStep)
-                      .FinishData);
+               CurrentStory.Data := SelectEnemy(Step.FinishData);
             when ANY =>
                null;
          end case;
-      elsif CurrentStory.Step = CurrentStory.MaxSteps then
-         CurrentStory.CurrentStep := -1;
-      else
-         CurrentStory.CurrentStep := -2;
       end if;
       return True;
    end ProgressStory;
