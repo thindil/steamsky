@@ -89,7 +89,7 @@ package body Maps.UI.Handlers is
    begin
       Hide(Gtk_Window(User_Data));
       if User_Data = Get_Object(Builder, "orderswindow") then
-         UpdateMapInfo(Builder);
+         UpdateMapInfo;
       end if;
    end HideMapInfoWindow;
 
@@ -426,6 +426,7 @@ package body Maps.UI.Handlers is
       Event: Events_Types := None;
       ItemIndex: Natural;
    begin
+      UpdateMapInfo(True);
       Foreach
         (Gtk_Container(Get_Object(Object, "btnboxorders")),
          HideButtons'Access);
@@ -1249,8 +1250,9 @@ package body Maps.UI.Handlers is
 
    function UpdateTooltip
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
+      pragma Unreferenced(Object);
    begin
-      UpdateMapInfo(Object);
+      UpdateMapInfo;
       return False;
    end UpdateTooltip;
 
@@ -1355,7 +1357,7 @@ package body Maps.UI.Handlers is
       end loop;
       if NewX /= MouseX or NewY /= MouseY then
          Warp(Mouse, Screen, NewX, NewY);
-         UpdateMapInfo(Builder);
+         UpdateMapInfo;
          return True;
       end if;
       return False;
