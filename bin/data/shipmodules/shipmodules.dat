@@ -210,5 +210,6 @@ Text between "module" tags is module description.
  <module durability="250" index="171" installtime="90" material="Orichalcum" maxvalue="5000" name="Small orichalcum cargo bay" price="4800" size="1" skill="Engineering" type="CARGO" value="0" weight="300">Space for holding ship cargo, made of orichalcum.</module>
  <module durability="500" index="172" installtime="230" material="Orichalcum" maxvalue="24000" name="Large orichalcum engine" price="40000" size="3" skill="Engineering" type="ENGINE" value="8" weight="4500">Large engine made of orichalcum. Each ship needs at least one engine to fly.</module>
  <module durability="500" index="173" installtime="250" material="Orichalcum" maxvalue="32000" name="Large advanced orichalcum engine" price="50000" size="3" skill="Engineering" type="ENGINE" value="9" weight="5000">Updated version of large engine made of orichalcum. Each ship needs at least one engine to fly.</module>
+ <module durability="500" index="174" installtime="90" material="Orichalcum" maxvalue="0" name="Small orichalcum furnace" price="12000" size="1" skill="Metalsmith" type="FURNACE" value="0" weight="1800">Allow smelt ores into metals. Made of orichalcum.</module>
 </modules>
 
