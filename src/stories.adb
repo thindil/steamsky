@@ -211,7 +211,8 @@ package body Stories is
       end if;
       loop
          BaseIndex := GetRandom(SkyBases'First, SkyBases'Last);
-         if SkyBases(BaseIndex).Known then
+         if SkyBases(BaseIndex).Known and
+           SkyBases(BaseIndex).Reputation(1) > -25 then
             PlayerShip.DestinationX := SkyBases(BaseIndex).SkyX;
             PlayerShip.DestinationY := SkyBases(BaseIndex).SkyY;
             return SkyBases(BaseIndex).Name;
