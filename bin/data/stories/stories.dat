@@ -18,7 +18,7 @@ story.
 item will be dropped, chance (1 to that number) for drop.
 - Tag "endtext": text which will be show to player when he/she finish story.
 -->
- <story index="1" start="dropitem" minsteps="3" maxsteps="10" startstep="1" finalstep="4">
+ <story index="1" start="dropitem" minsteps="3" maxsteps="10" startstep="1" finalstep="4" name="Strange find">
   <startdata value="164" />
   <startdata value="UNDEAD" />
   <startdata value="100" />
