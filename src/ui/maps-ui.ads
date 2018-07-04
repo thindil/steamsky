@@ -53,8 +53,7 @@ private
         Class); -- Check selected button
    procedure GetCurrentCellCoords; -- Get current map cell coordinates based on mouse position
    procedure UpdateMapInfo
-     (Object: access Gtkada_Builder_Record'
-        Class); -- Update info about current map cell
+     (ShowOrdersInfo: Boolean := False); -- Update info about current map cell
    procedure FinishStory; -- Finish current story and show confirm dialog to player
 
 end Maps.UI;
