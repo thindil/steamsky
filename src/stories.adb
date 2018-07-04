@@ -79,7 +79,8 @@ package body Stories is
             StartingStep => TempStep,
             Steps => TempSteps,
             FinalStep => TempStep,
-            EndText => Null_Unbounded_String);
+            EndText => Null_Unbounded_String,
+            Name => Null_Unbounded_String);
          StartStep := Null_Unbounded_String;
          LogMessage
            ("Loading stories file: " & Full_Name(FoundFile),
@@ -106,6 +107,8 @@ package body Stories is
               Positive'Value(Get_Attribute(Item(NodesList, I), "minsteps"));
             TempRecord.MaxSteps :=
               Positive'Value(Get_Attribute(Item(NodesList, I), "maxsteps"));
+            TempRecord.Name :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (Item(NodesList, I),
@@ -192,7 +195,8 @@ package body Stories is
                StartingStep => TempStep,
                Steps => TempSteps,
                FinalStep => TempStep,
-               EndText => Null_Unbounded_String);
+               EndText => Null_Unbounded_String,
+               Name => Null_Unbounded_String);
          end loop;
          Free(Reader);
       end loop;
