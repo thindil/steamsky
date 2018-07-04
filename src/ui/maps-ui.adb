@@ -665,10 +665,15 @@ package body Maps.UI is
       end if;
    end GetCurrentCellCoords;
 
-   procedure UpdateMapInfo(Object: access Gtkada_Builder_Record'Class) is
+   procedure UpdateMapInfo(ShowOrdersInfo: Boolean := False) is
       MapInfoText: Unbounded_String;
    begin
-      GetCurrentCellCoords;
+      if not ShowOrdersInfo then
+         GetCurrentCellCoords;
+      else
+         MapX := PlayerShip.SkyX;
+         MapY := PlayerShip.SkyY;
+      end if;
       Append
         (MapInfoText,
          "X:" & Positive'Image(MapX) & " Y:" & Positive'Image(MapY));
@@ -820,7 +825,7 @@ package body Maps.UI is
          Append(MapInfoText, ASCII.LF & "You are here");
       end if;
       Set_Label
-        (Gtk_Label(Get_Object(Object, "lblmaptooltip")),
+        (Gtk_Label(Get_Object(Builder, "lblmaptooltip")),
          To_String(MapInfoText));
    end UpdateMapInfo;
 
@@ -1167,7 +1172,7 @@ package body Maps.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          "skymap");
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
-      UpdateMapInfo(Builder);
+      UpdateMapInfo;
       if CurrentStory.Index > 0 and CurrentStory.ShowText then
          declare
             StepText, TargetText: Unbounded_String;
