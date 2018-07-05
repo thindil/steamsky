@@ -625,6 +625,7 @@ package body Maps.UI.Handlers is
             Event :=
               Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
                 .EType;
+            Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btnstory")), True);
          end if;
          case Event is
             when EnemyShip | EnemyPatrol =>
@@ -716,6 +717,9 @@ package body Maps.UI.Handlers is
                         Set_No_Show_All
                           (Gtk_Widget(Get_Object(Object, "btnfinishmission")),
                            False);
+                        Set_No_Show_All
+                          (Gtk_Widget(Get_Object(Object, "btnstory")),
+                           False);
                      end if;
                   end loop;
                else
@@ -768,6 +772,9 @@ package body Maps.UI.Handlers is
                Set_Label
                  (Gtk_Button(Get_Object(Object, "btnattack")),
                   "Attack");
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btnstory")),
+                  False);
             when FriendlyShip =>
                if HaveTrader then
                   if Index
@@ -796,6 +803,9 @@ package body Maps.UI.Handlers is
                Set_Label
                  (Gtk_Button(Get_Object(Object, "btnattack")),
                   "Attack");
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btnstory")),
+                  False);
          end case;
       end if;
       ButtonsVisible := False;
