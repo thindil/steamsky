@@ -318,7 +318,7 @@ package body Stories is
                      FinishedStories.Append
                      (New_Item =>
                         (Index => CurrentStory.Index,
-                         StepsAmount => 1,
+                         StepsAmount => CurrentStory.MaxSteps,
                          StepsTexts => TempTexts));
                      return;
                   end if;
@@ -373,7 +373,6 @@ package body Stories is
       for FinishedStory of FinishedStories loop
          if FinishedStory.Index = CurrentStory.Index then
             FinishedStory.StepsTexts.Append(New_Item => GetCurrentStoryText);
-            FinishedStory.StepsAmount := FinishedStory.StepsAmount + 1;
             exit;
          end if;
       end loop;
@@ -418,13 +417,11 @@ package body Stories is
       else
          StepTexts := Stories_List(CurrentStory.Index).FinalStep.Texts;
       end if;
-      if CurrentStory.CurrentStep > -2 then
-         for Text of StepTexts loop
-            if Text.Condition = CurrentStory.FinishedStep then
-               return Text.Text;
-            end if;
-         end loop;
-      end if;
+      for Text of StepTexts loop
+         if Text.Condition = CurrentStory.FinishedStep then
+            return Text.Text;
+         end if;
+      end loop;
       return Null_Unbounded_String;
    end GetCurrentStoryText;
 
