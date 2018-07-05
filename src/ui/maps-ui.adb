@@ -1218,7 +1218,9 @@ package body Maps.UI is
                   Gtk_Window(Get_Object(Builder, "skymapwindow")));
             else
                FinishStory;
-               DeathConfirm;
+               if PlayerShip.Crew(1).Health = 0 then
+                  DeathConfirm;
+               end if;
             end if;
          end;
          CurrentStory.ShowText := False;
