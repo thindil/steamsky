@@ -938,6 +938,7 @@ package body Maps.UI is
       Add_Entry("<skymapwindow>/cursordown", GDK_KP_Down, 1);
       Add_Entry("<skymapwindow>/cursordownright", GDK_KP_Page_Down, 1);
       Add_Entry("<skymapwindow>/mouseclick", GDK_space, 1);
+      Add_Entry("<skymapwindow>/Menu/Stories", GDK_T, 0);
       if Exists(To_String(SaveDirectory) & "keys.cfg") then
          Load(To_String(SaveDirectory) & "keys.cfg");
       end if;
@@ -1073,6 +1074,10 @@ package body Maps.UI is
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnmapdown")),
          "<skymapwindow>/btnmapdown",
+         Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "menustory")),
+         "<skymapwindow>/Menu/Stories",
          Accelerators);
       declare
          Key: Gtk_Accel_Key;
