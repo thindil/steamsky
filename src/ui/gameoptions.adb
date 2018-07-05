@@ -83,7 +83,8 @@ package body GameOptions is
       To_Unbounded_String("<skymapwindow>/cursordownleft"),
       To_Unbounded_String("<skymapwindow>/cursordown"),
       To_Unbounded_String("<skymapwindow>/cursordownright"),
-      To_Unbounded_String("<skymapwindow>/mouseclick"));
+      To_Unbounded_String("<skymapwindow>/mouseclick"),
+      To_Unbounded_String("<skymapwindow>/Menu/Stories"));
    EditNames: constant array(AccelNames'Range) of Unbounded_String :=
      (To_Unbounded_String("edtupleft"),
       To_Unbounded_String("edtup"),
@@ -125,7 +126,8 @@ package body GameOptions is
       To_Unbounded_String("edtmovecursordownleft"),
       To_Unbounded_String("edtmovecursordown"),
       To_Unbounded_String("edtmovecursordownright"),
-      To_Unbounded_String("edtclickmouse"));
+      To_Unbounded_String("edtclickmouse"),
+      To_Unbounded_String("edtstories"));
 
    procedure CloseOptions(Object: access Gtkada_Builder_Record'Class) is
    begin
