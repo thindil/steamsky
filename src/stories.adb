@@ -49,6 +49,7 @@ package body Stories is
       TempTexts: StepTexts_Container.Vector;
    begin
       ClearCurrentStory;
+      FinishedStories.Clear;
       if Stories_List.Length > 0 then
          return;
       end if;
@@ -264,6 +265,7 @@ package body Stories is
      (FactionName: Unbounded_String;
       Condition: StartConditionType) is
       FactionIndex, StepData: Unbounded_String := Null_Unbounded_String;
+      TempTexts: UnboundedString_Container.Vector;
    begin
       for Faction of Factions_List loop
          if Faction.Name = FactionName then
@@ -313,6 +315,11 @@ package body Stories is
                         Positive'Value
                           (To_String(Stories_List(I).StartData(1))),
                         1);
+                     FinishedStories.Append
+                     (New_Item =>
+                        (Index => CurrentStory.Index,
+                         StepsAmount => 1,
+                         StepsTexts => TempTexts));
                      return;
                   end if;
                end if;
@@ -363,6 +370,13 @@ package body Stories is
          return True;
       end if;
       UpdateGame(30);
+      for FinishedStory of FinishedStories loop
+         if FinishedStory.Index = CurrentStory.Index then
+            FinishedStory.StepsTexts.Append(New_Item => GetCurrentStoryText);
+            FinishedStory.StepsAmount := FinishedStory.StepsAmount + 1;
+            exit;
+         end if;
+      end loop;
       CurrentStory.Step := CurrentStory.Step + 1;
       CurrentStory.FinishedStep := Step.FinishCondition;
       CurrentStory.ShowText := True;
@@ -391,5 +405,27 @@ package body Stories is
       end if;
       return True;
    end ProgressStory;
+
+   function GetCurrentStoryText return Unbounded_String is
+      StepTexts: StepTexts_Container.Vector;
+   begin
+      if CurrentStory.CurrentStep = 0 then
+         StepTexts := Stories_List(CurrentStory.Index).StartingStep.Texts;
+      elsif CurrentStory.CurrentStep > 0 then
+         StepTexts :=
+           Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep)
+             .Texts;
+      else
+         StepTexts := Stories_List(CurrentStory.Index).FinalStep.Texts;
+      end if;
+      if CurrentStory.CurrentStep > -2 then
+         for Text of StepTexts loop
+            if Text.Condition = CurrentStory.FinishedStep then
+               return Text.Text;
+            end if;
+         end loop;
+      end if;
+      return Null_Unbounded_String;
+   end GetCurrentStoryText;
 
 end Stories;
