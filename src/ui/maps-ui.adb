@@ -1181,27 +1181,10 @@ package body Maps.UI is
       if CurrentStory.Index > 0 and CurrentStory.ShowText then
          declare
             StepText, TargetText: Unbounded_String;
-            StepTexts: StepTexts_Container.Vector;
             Tokens: Slice_Set;
          begin
-            if CurrentStory.CurrentStep = 0 then
-               StepTexts :=
-                 Stories_List(CurrentStory.Index).StartingStep.Texts;
-            elsif CurrentStory.CurrentStep > 0 then
-               StepTexts :=
-                 Stories_List(CurrentStory.Index).Steps
-                   (CurrentStory.CurrentStep)
-                   .Texts;
-            else
-               StepTexts := Stories_List(CurrentStory.Index).FinalStep.Texts;
-            end if;
             if CurrentStory.CurrentStep > -2 then
-               for Text of StepTexts loop
-                  if Text.Condition = CurrentStory.FinishedStep then
-                     StepText := Text.Text;
-                     exit;
-                  end if;
-               end loop;
+               StepText := GetCurrentStoryText;
                if CurrentStory.Data /= Null_Unbounded_String then
                   Create(Tokens, To_String(CurrentStory.Data), ";");
                   if Slice_Count(Tokens) < 3 then
