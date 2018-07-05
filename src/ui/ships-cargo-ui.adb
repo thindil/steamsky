@@ -185,6 +185,7 @@ package body Ships.Cargo.UI is
          if Positive'Value
              (To_String(Stories_List(CurrentStory.Index).StartData(1))) =
            PlayerShip.Cargo(ItemIndex).ProtoIndex then
+            FinishedStories.Delete(FinishedStories.Last_Index);
             ClearCurrentStory;
          end if;
       end if;

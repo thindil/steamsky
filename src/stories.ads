@@ -67,8 +67,20 @@ package Stories is
       Data: Unbounded_String; -- Various data for current step, depends on step
       FinishedStep: StepConditionType; -- Finish condition for previous step
    end record;
+   type FinishedStory_Data is -- Data structure for finished story/steps
+   record
+      Index: Positive; -- Index of story
+      StepsAmount: Positive; -- Amount of steps in this story
+      StepsTexts: UnboundedString_Container
+        .Vector; -- Texts of steps done in this story. If less than StepsAmount then it is current story.
+   end record;
+   package FinishedStories_Container is new Vectors
+     (Positive,
+      FinishedStory_Data);
    CurrentStory: CurrentStory_Data; -- Contains data about current story on which player is
    Stories_List: Stories_Container.Vector; -- List of available stories in game
+   FinishedStories: FinishedStories_Container
+     .Vector; -- List of finished stories (or past data of current story)
    Stories_Directory_Not_Found: exception; -- Raised when no directory with stories files
    Stories_Files_Not_Found: exception; -- Raised when no files with stories
 
@@ -81,5 +93,7 @@ package Stories is
      (NextStep: Boolean :=
         False)
      return Boolean; -- Returns true if story goes to next step, otherwise false
+   function GetCurrentStoryText
+     return Unbounded_String; -- Get text of current step in story
 
 end Stories;
