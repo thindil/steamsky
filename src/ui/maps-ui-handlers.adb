@@ -450,7 +450,7 @@ package body Maps.UI.Handlers is
             case Step.FinishCondition is
                when ASKINBASE =>
                   if BaseIndex > 0 then
-                     if CurrentStory.Data = To_Unbounded_String("any") or
+                     if CurrentStory.Data = Null_Unbounded_String or
                        CurrentStory.Data = SkyBases(BaseIndex).Name then
                         Set_Label
                           (Gtk_Button(Get_Object(Builder, "btnstory")),
