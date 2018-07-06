@@ -300,6 +300,32 @@ package body Game.SaveLoad is
             Set_Attribute(CategoryNode, "data", To_String(CurrentStory.Data));
          end if;
       end if;
+      -- Save finished stories data
+      declare
+         StepNode: DOM.Core.Element;
+         StepText: Text;
+      begin
+         for FinishedStory of FinishedStories loop
+            CategoryNode := Create_Element(SaveData, "finishedstory");
+            CategoryNode := Append_Child(MainNode, CategoryNode);
+            Set_Attribute
+              (CategoryNode,
+               "index",
+               To_String(Stories_List(FinishedStory.Index).Index));
+            RawValue :=
+              To_Unbounded_String(Positive'Image(FinishedStory.StepsAmount));
+            Set_Attribute
+              (CategoryNode,
+               "stepsamount",
+               To_String(Trim(RawValue, Ada.Strings.Left)));
+            for Step of FinishedStory.StepsTexts loop
+               StepNode := Create_Element(SaveData, "steptext");
+               StepNode := Append_Child(CategoryNode, StepNode);
+               StepText := Create_Text_Node(SaveData, To_String(Step));
+               StepText := Append_Child(StepNode, StepText);
+            end loop;
+         end loop;
+      end;
       Create(SaveFile, Out_File, To_String(SaveDirectory) & "savegame.dat");
       Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => False);
       Close(SaveFile);
@@ -496,7 +522,7 @@ package body Game.SaveLoad is
          end if;
          CurrentStory.MaxSteps :=
            Positive'Value(Get_Attribute(Item(NodesList, 0), "maxsteps"));
-         if Get_Attribute(Item(NodesList, 0), "maxsteps") = "Y" then
+         if Get_Attribute(Item(NodesList, 0), "showtext") = "Y" then
             CurrentStory.ShowText := True;
          else
             CurrentStory.ShowText := False;
@@ -506,6 +532,39 @@ package body Game.SaveLoad is
               To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "data"));
          end if;
       end if;
+      -- Load finished stories data
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "finishedstory");
+      declare
+         StoryIndex, StepsAmount: Positive;
+         TempTexts: UnboundedString_Container.Vector;
+      begin
+         for I in 0 .. Length(NodesList) - 1 loop
+            for J in Stories_List.Iterate loop
+               if Stories_List(J).Index =
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "index")) then
+                  StoryIndex := Stories_Container.To_Index(J);
+                  exit;
+               end if;
+            end loop;
+            StepsAmount :=
+              Positive'Value(Get_Attribute(Item(NodesList, I), "stepsamount"));
+            TempTexts.Clear;
+            ChildNodes := Child_Nodes(Item(NodesList, I));
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               TempTexts.Append
+               (New_Item =>
+                  (To_Unbounded_String
+                     (Node_Value(First_Child(Item(ChildNodes, J))))));
+            end loop;
+            FinishedStories.Append
+            (New_Item =>
+               (Index => StoryIndex,
+                StepsAmount => StepsAmount,
+                StepsTexts => TempTexts));
+         end loop;
+      end;
       Free(Reader);
    exception
       when An_Exception : others =>
