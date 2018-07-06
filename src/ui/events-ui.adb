@@ -98,7 +98,7 @@ package body Events.UI is
         Events_List(EventIndex).SkyY = PlayerShip.SkyY then
          ShowDialog
            ("You are at this event now.",
-            Gtk_Window(Get_Object(Object, "eventswindow")));
+            Gtk_Window(Get_Object(Object, "skymapwindow")));
          return;
       end if;
       PlayerShip.DestinationX := Events_List(EventIndex).SkyX;
