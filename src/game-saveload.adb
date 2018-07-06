@@ -300,7 +300,8 @@ package body Game.SaveLoad is
             Set_Attribute(CategoryNode, "data", To_String(CurrentStory.Data));
          end if;
          RawValue :=
-            To_Unbounded_String(Integer'Image(StepConditionType'Pos(CurrentStory.FinishedStep)));
+           To_Unbounded_String
+             (Integer'Image(StepConditionType'Pos(CurrentStory.FinishedStep)));
          Set_Attribute
            (CategoryNode,
             "finishedstep",
@@ -538,8 +539,9 @@ package body Game.SaveLoad is
               To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "data"));
          end if;
          CurrentStory.FinishedStep :=
-            StepConditionType'Val
-               (Integer'Value(Get_Attribute(Item(NodesList, 0), "finishedstep")));
+           StepConditionType'Val
+             (Integer'Value
+                (Get_Attribute(Item(NodesList, 0), "finishedstep")));
       end if;
       -- Load finished stories data
       NodesList :=
