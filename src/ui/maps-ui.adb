@@ -80,6 +80,7 @@ with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Trades.UI; use Trades.UI;
 with Factions; use Factions;
 with Stories; use Stories;
+with Stories.UI; use Stories.UI;
 
 package body Maps.UI is
 
@@ -864,6 +865,7 @@ package body Maps.UI is
       CreateShipUI(Builder);
       CreateCargoUI(Builder);
       CreateTradeUI(Builder);
+      CreateStoriesUI(Builder);
       Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
          Gtk_Widget(Get_Object(Builder, "lblmaptooltip")));
