@@ -418,6 +418,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Stories</property>
         <property name="use_underline">True</property>
+        <signal name="activate" handler="Show_Info" object="menustory" swapped="no"/>
       </object>
     </child>
     <child>
@@ -1396,10 +1397,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
     </columns>
   </object>
+  <object class="GtkTextBuffer" id="storybuffer"/>
   <object class="GtkListStore" id="typeslist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -8693,29 +8693,90 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkComboBox" id="cmbstories">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="model">storieslist</property>
-                    <property name="active">0</property>
-                    <property name="button_sensitivity">on</property>
-                    <property name="entry_text_column">0</property>
-                    <property name="id_column">0</property>
                     <child>
-                      <object class="GtkCellRendererText"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
+                      <object class="GtkComboBox" id="cmbstories">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="model">storieslist</property>
+                        <property name="active">0</property>
+                        <property name="button_sensitivity">on</property>
+                        <property name="entry_text_column">0</property>
+                        <property name="id_column">0</property>
+                        <signal name="changed" handler="Show_Story_Info" swapped="no"/>
+                        <child>
+                          <object class="GtkCellRendererText"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="btnstorycenter">
+                        <property name="label" translatable="yes">Show on map</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <signal name="activate" handler="Show_Story" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="btnstorydestination">
+                        <property name="label" translatable="yes">Set as destination for ship</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <signal name="activate" handler="Set_Story_As_Destination" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkTextView">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="editable">False</property>
+                        <property name="wrap_mode">word</property>
+                        <property name="indent">5</property>
+                        <property name="cursor_visible">False</property>
+                        <property name="buffer">storybuffer</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
               <packing>

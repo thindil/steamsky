@@ -73,6 +73,7 @@ with Crafts.UI; use Crafts.UI;
 with BasesList; use BasesList;
 with GameOptions; use GameOptions;
 with Stories; use Stories;
+with Stories.UI; use Stories.UI;
 
 package body Maps.UI.Handlers is
 
@@ -968,6 +969,8 @@ package body Maps.UI.Handlers is
          ShowEventsUI;
       elsif User_Data = Get_Object(Builder, "menuoptions") then
          ShowGameOptions;
+      elsif User_Data = Get_Object(Builder, "menustory") then
+         ShowStoriesUI;
       end if;
    end ShowInfo;
 
