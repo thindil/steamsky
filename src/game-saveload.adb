@@ -299,6 +299,12 @@ package body Game.SaveLoad is
          if CurrentStory.Data /= Null_Unbounded_String then
             Set_Attribute(CategoryNode, "data", To_String(CurrentStory.Data));
          end if;
+         RawValue :=
+            To_Unbounded_String(Integer'Image(StepConditionType'Pos(CurrentStory.FinishedStep)));
+         Set_Attribute
+           (CategoryNode,
+            "finishedstep",
+            To_String(Trim(RawValue, Ada.Strings.Left)));
       end if;
       -- Save finished stories data
       declare
@@ -531,6 +537,9 @@ package body Game.SaveLoad is
             CurrentStory.Data :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "data"));
          end if;
+         CurrentStory.FinishedStep :=
+            StepConditionType'Val
+               (Integer'Value(Get_Attribute(Item(NodesList, 0), "finishedstep")));
       end if;
       -- Load finished stories data
       NodesList :=
