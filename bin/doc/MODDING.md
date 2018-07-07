@@ -546,6 +546,50 @@ To change which faction is player faction, edit `value` attribute of tag
 - Optional attribute `namestype`: Used in generating ship names of that faction
   and names of all bases. Can be `standard` (default value) or `robotic`.
 
+## Stories
+
+### General informations
+- Open file *stories.dat* in *data/stories* directory or create new file 
+  with *dat* extension in that directory (example: *mystories.dat*).
+
+### Story data structure
+-- Each story is between "story" tags.
+- Attribute `index`: index of story (it can be number or text) and must be
+unique. At this moment this value is used to manage current story in which
+player is involved.
+- Attribute `start`: condition which must be met to start that story. Possible
+values are: dropitem - story starts on drop selected item from enemies from
+selected faction.
+- Attribute `minsteps`: minumum amount of steps in that story.
+- Attribute `maxsteps`: maxiumum amount of steps in that story.
+- Attribute `startstep`: index of step which will be used as first step in
+story.
+- Attribute `finalstep`: index of step which will be used as final step in
+story.
+- Tags `startdata`: contains data needed for story starting condition. For
+"dropitem" it will be index of item which should drop, mob faction from which
+item will be dropped, chance (1 to that number) for drop.
+- Tag `endtext`: text which will be show to player when he/she finish story.
+- Tag `step` contains data for step of story.
+- Attribute `finish`: condition which must be met to finish this step. Possible
+values are: `askinbase` - go to next step when player ask about something in
+any or selected base, `destroyship` - go to next step when player destroy
+selected ship.
+- Tags `finishdata`: contains data needed for finish selected step. For 
+`askinbase` and `dropitem` it will be index of item of which to ask, chance
+(1 to that number) that step progress to next and did ask in any base (value
+`any`) or selected base (value `selected`, game will randomly select base which
+is know to player). For `destroyship` if will be index of faction to which
+selected ship belongs, index of ship to destroy (or `random` if ship should be
+selected randomly, same as normal enemies in game), X coordinate of place where
+to search for enemy, Y coordinate of place where to search for enemy (in both,
+value "random" means randomly selected place on map), chance (1 to that number)
+that enemy ship will be found and fight starts.
+- Tag `text`: text which will be show to player when step starts. Attribute
+"condition": finish condition of previous step which was lead to this one.
+Possible values: `any`, `askinbase` and `destroyship`.
+- Tag `failtext`: text which will be show to player if step not progress to 
+next.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
