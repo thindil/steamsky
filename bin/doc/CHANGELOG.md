@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file.
 - Crash on giving invalid order to crew member
 - Showing buy option when trader don't have that item
 - Moving map near borders
+- Crash during selecting event as destination for player ship
 
 ## [2.5] - 2018-06-17
 
