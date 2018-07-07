@@ -161,6 +161,7 @@ Some details about different types of missions:
 * You can check the progress of your character goal in 'Game statistics' menu (key {GameKey 21}). There you can change it too, but if you do it, progress of old goal will be lost. If you finish your current goal, a new random goal will be given.
 * Abandoned bases may be recovered by someone. In that situation, they gain a small population and a new owner.
 * You may move most items (with exception of items needed for missions) between ship cargo and crew members inventory in cargo screen and from inventory to ship in selected crew member inventory screen.
-* Enemies during combat can send boarding parties to your ship too, so when you are caught by a harpoon (or you caught an enemy by your harpoon), don't forget to set someone to defends ship.</entry>
+* Enemies during combat can send boarding parties to your ship too, so when you are caught by a harpoon (or you caught an enemy by your harpoon), don't forget to set someone to defends ship.
+* During combat with undead ships, it is good to send boarding party on enemy ship. After combat they may find interesting thing...</entry>
 </help>
 
