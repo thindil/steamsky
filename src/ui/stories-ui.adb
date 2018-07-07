@@ -64,6 +64,8 @@ package body Stories.UI is
       StoryBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Object, "txtstory"));
       Iter: Gtk_Text_Iter;
+      TargetText: Unbounded_String;
+      Tokens: Slice_Set;
    begin
       if Setting then
          return;
@@ -73,13 +75,38 @@ package body Stories.UI is
         1;
       Set_Text(StoryBuffer, "");
       Get_Start_Iter(StoryBuffer, Iter);
-      Insert(StoryBuffer, Iter, "" & ASCII.LF);
       for StepText of FinishedStories(StoryIndex).StepsTexts loop
          Insert(StoryBuffer, Iter, To_String(StepText) & ASCII.LF & ASCII.LF);
       end loop;
       if Natural(FinishedStories(StoryIndex).StepsTexts.Length) <
         FinishedStories(StoryIndex).StepsAmount then
          Insert(StoryBuffer, Iter, To_String(GetCurrentStoryText) & ASCII.LF);
+         if CurrentStory.Data /= Null_Unbounded_String then
+            Create(Tokens, To_String(CurrentStory.Data), ";");
+            if Slice_Count(Tokens) < 3 then
+               TargetText :=
+                 To_Unbounded_String(" You must travel to base ") &
+                 CurrentStory.Data &
+                 To_Unbounded_String(" at X:");
+               for I in SkyBases'Range loop
+                  if SkyBases(I).Name = CurrentStory.Data then
+                     Append(TargetText, Positive'Image(SkyBases(I).SkyX));
+                     Append(TargetText, " Y:");
+                     Append(TargetText, Positive'Image(SkyBases(I).SkyY));
+                     exit;
+                  end if;
+               end loop;
+            else
+               TargetText :=
+                 To_Unbounded_String(" You must find ") &
+                 ProtoShips_List(Positive'Value(Slice(Tokens, 3))).Name &
+                 To_Unbounded_String(" at X:") &
+                 To_Unbounded_String(Slice(Tokens, 1)) &
+                 To_Unbounded_String(" Y:") &
+                 To_Unbounded_String(Slice(Tokens, 2));
+            end if;
+         end if;
+         Insert(StoryBuffer, Iter, To_String(TargetText) & ASCII.LF);
          Show_All(Gtk_Widget(Get_Object(Builder, "btnstorycenter")));
          Show_All(Gtk_Widget(Get_Object(Builder, "btnstorydestination")));
       else
