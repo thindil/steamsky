@@ -1399,7 +1399,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkTextBuffer" id="storybuffer"/>
+  <object class="GtkTextBuffer" id="txtstory"/>
   <object class="GtkListStore" id="typeslist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -8725,7 +8725,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="activate" handler="Show_Story" swapped="no"/>
+                        <signal name="clicked" handler="Show_Story" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8739,7 +8739,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="activate" handler="Set_Story_As_Destination" swapped="no"/>
+                        <signal name="clicked" handler="Set_Story_As_Destination" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8766,9 +8766,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">True</property>
                         <property name="editable">False</property>
                         <property name="wrap_mode">word</property>
-                        <property name="indent">5</property>
+                        <property name="indent">10</property>
                         <property name="cursor_visible">False</property>
-                        <property name="buffer">storybuffer</property>
+                        <property name="buffer">txtstory</property>
                       </object>
                     </child>
                   </object>
