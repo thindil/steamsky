@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Updated interface
 - Updated MODDING.md
+- Updated README.md
 
 ### Fixed
 - Resting during automovement
