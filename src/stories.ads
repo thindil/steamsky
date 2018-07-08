@@ -24,7 +24,10 @@ package Stories is
    type StartConditionType is
      (DROPITEM); -- Types of conditions to start stories
    type StepConditionType is
-     (ASKINBASE, DESTROYSHIP, ANY); -- Types of conditions to finish story step
+     (ASKINBASE,
+      DESTROYSHIP,
+      EXPLORE,
+      ANY); -- Types of conditions to finish story step
    type StepText_Data is -- Data structure for stories steps texts
    record
       Condition: StepConditionType; -- Finish condition of previous step

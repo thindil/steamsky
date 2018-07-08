@@ -83,7 +83,7 @@ package body Stories.UI is
          Insert(StoryBuffer, Iter, To_String(GetCurrentStoryText) & ASCII.LF);
          if CurrentStory.Data /= Null_Unbounded_String then
             Create(Tokens, To_String(CurrentStory.Data), ";");
-            if Slice_Count(Tokens) < 3 then
+            if Slice_Count(Tokens) < 2 then
                TargetText :=
                  To_Unbounded_String(" You must travel to base ") &
                  CurrentStory.Data &
@@ -96,11 +96,17 @@ package body Stories.UI is
                      exit;
                   end if;
                end loop;
-            else
+            elsif Slice_Count(Tokens) < 3 then
                TargetText :=
                  To_Unbounded_String(" You must find ") &
                  ProtoShips_List(Positive'Value(Slice(Tokens, 3))).Name &
                  To_Unbounded_String(" at X:") &
+                 To_Unbounded_String(Slice(Tokens, 1)) &
+                 To_Unbounded_String(" Y:") &
+                 To_Unbounded_String(Slice(Tokens, 2));
+            else
+               TargetText :=
+                 To_Unbounded_String(" You must travel to X:") &
                  To_Unbounded_String(Slice(Tokens, 1)) &
                  To_Unbounded_String(" Y:") &
                  To_Unbounded_String(Slice(Tokens, 2));
