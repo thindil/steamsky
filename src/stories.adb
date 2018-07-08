@@ -221,40 +221,48 @@ package body Stories is
       end loop;
    end SelectBase;
 
+   function SelectLocation
+     (StepData: UnboundedString_Container.Vector) return Unbounded_String is
+      LocationData: Unbounded_String := Null_Unbounded_String;
+      LocationX, LocationY: Integer;
+   begin
+      if StepData(1) = To_Unbounded_String("random") then
+         LocationX := GetRandom(SkyMap'First, SkyMap'Last);
+         LocationData := To_Unbounded_String(Integer'Image(LocationX));
+         Append(LocationData, ";");
+      else
+         LocationX := Integer'Value(To_String(StepData(1)));
+         LocationData := StepData(1);
+         Append(LocationData, ";");
+      end if;
+      PlayerShip.DestinationX := LocationX;
+      if StepData(2) = To_Unbounded_String("random") then
+         loop
+            LocationY := GetRandom(SkyMap'First, SkyMap'Last);
+            exit when SkyMap(LocationX, LocationY).BaseIndex = 0 and
+              LocationY /= PlayerShip.SkyY;
+         end loop;
+         Append(LocationData, Integer'Image(LocationY));
+         Append(LocationData, ";");
+      else
+         LocationY := Integer'Value(To_String(StepData(2)));
+         Append(LocationData, StepData(2));
+         Append(LocationData, ";");
+      end if;
+      PlayerShip.DestinationY := LocationY;
+      return LocationData;
+   end SelectLocation;
+
    function SelectEnemy
      (StepData: UnboundedString_Container.Vector) return Unbounded_String is
       Enemies: Positive_Container.Vector;
       EnemyData: Unbounded_String := Null_Unbounded_String;
-      EnemyX, EnemyY: Integer;
    begin
-      if StepData(3) = To_Unbounded_String("random") then
-         EnemyX := GetRandom(SkyMap'First, SkyMap'Last);
-         EnemyData := To_Unbounded_String(Integer'Image(EnemyX));
-         Append(EnemyData, ";");
-      else
-         EnemyX := Integer'Value(To_String(StepData(3)));
-         EnemyData := StepData(3);
-         Append(EnemyData, ";");
+      EnemyData := SelectLocation(StepData);
+      if StepData(4) /= To_Unbounded_String("random") then
+         return EnemyData & StepData(4);
       end if;
-      PlayerShip.DestinationX := EnemyX;
-      if StepData(4) = To_Unbounded_String("random") then
-         loop
-            EnemyY := GetRandom(SkyMap'First, SkyMap'Last);
-            exit when SkyMap(EnemyX, EnemyY).BaseIndex = 0 and
-              EnemyY /= PlayerShip.SkyY;
-         end loop;
-         Append(EnemyData, Integer'Image(EnemyY));
-         Append(EnemyData, ";");
-      else
-         EnemyY := Integer'Value(To_String(StepData(4)));
-         Append(EnemyData, StepData(4));
-         Append(EnemyData, ";");
-      end if;
-      PlayerShip.DestinationY := EnemyY;
-      if StepData(2) /= To_Unbounded_String("random") then
-         return EnemyData & StepData(2);
-      end if;
-      GenerateEnemies(Enemies, StepData(1));
+      GenerateEnemies(Enemies, StepData(3));
       return EnemyData &
         To_Unbounded_String
           (Integer'Image
@@ -295,6 +303,10 @@ package body Stories is
                         when DESTROYSHIP =>
                            StepData :=
                              SelectEnemy
+                               (Stories_List(I).StartingStep.FinishData);
+                        when EXPLORE =>
+                           StepData :=
+                             SelectLocation
                                (Stories_List(I).StartingStep.FinishData);
                         when ANY =>
                            null;
@@ -359,6 +371,8 @@ package body Stories is
             if NextStep then
                MaxRandom := 1;
             end if;
+         when EXPLORE =>
+            MaxRandom := Positive'Value(To_String(Step.FinishData(3)));
          when others =>
             null;
       end case;
@@ -398,6 +412,8 @@ package body Stories is
                CurrentStory.Data := SelectBase(To_String(Step.FinishData(3)));
             when DESTROYSHIP =>
                CurrentStory.Data := SelectEnemy(Step.FinishData);
+            when EXPLORE =>
+               CurrentStory.Data := SelectLocation(Step.FinishData);
             when ANY =>
                null;
          end case;

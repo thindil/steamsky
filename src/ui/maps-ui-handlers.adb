@@ -483,6 +483,21 @@ package body Maps.UI.Handlers is
                            False);
                      end if;
                   end;
+               when EXPLORE =>
+                  declare
+                     Tokens: Slice_Set;
+                  begin
+                     Create(Tokens, To_String(CurrentStory.Data), ";");
+                     if PlayerShip.SkyX = Positive'Value(Slice(Tokens, 1)) and
+                       PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) then
+                        Set_Label
+                          (Gtk_Button(Get_Object(Builder, "btnstory")),
+                           "Search area");
+                        Set_No_Show_All
+                          (Gtk_Widget(Get_Object(Object, "btnstory")),
+                           False);
+                     end if;
+                  end;
                when ANY =>
                   null;
             end case;
