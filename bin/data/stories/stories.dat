@@ -35,11 +35,12 @@ field.
 "base" - ask in any base (value "any") or randomly selected (value "selected")
 needed for "askinbase" steps. Names "faction" - index of faction to which ship
 belongs, "ship" - index of ship which must be destroyed (for "destroyship"
-steps). Names "x" and "y" are location on map where player must go to progress
-in story. Value "random" mean randomly selected place on map or numeric 
-coordinates of map field. Both used by "destroyship" and "explore" steps. Name
-"chance" is used by all steps and mean chance (1 to that number) that step will
-progress to next.
+steps) or "random" value if enemy ship should be selected randomly. Names "x" 
+and "y" are location on map where player must go to progress in story. Value 
+"random" mean randomly selected place on map or numeric coordinates of map 
+field. Both used by "destroyship" and "explore" steps. Name "chance" is used 
+by all steps and mean chance (1 to that number) that step will progress to 
+next.
 - Tag "text": text which will be show to player when step starts. Attribute
 "condition": finish condition of previous step which was lead to this one.
 Possible values: "any", "askinbase", "destroyship" and "explore".
