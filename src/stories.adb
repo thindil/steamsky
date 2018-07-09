@@ -275,6 +275,9 @@ package body Stories is
       FactionIndex, StepData: Unbounded_String := Null_Unbounded_String;
       TempTexts: UnboundedString_Container.Vector;
    begin
+      if CurrentStory.Index > 0 then
+         return;
+      end if;
       for Faction of Factions_List loop
          if Faction.Name = FactionName then
             FactionIndex := Faction.Index;
