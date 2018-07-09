@@ -458,7 +458,9 @@ package body Maps.UI.Handlers is
                            "Ask for " &
                            To_String
                              (Items_List
-                                (Positive'Value(To_String(Step.FinishData(1))))
+                                (Positive'Value
+                                   (To_String
+                                      (GetStepData(Step.FinishData, "item"))))
                                 .Name));
                         Set_No_Show_All
                           (Gtk_Widget(Get_Object(Object, "btnstory")),

@@ -34,12 +34,17 @@ package Stories is
       Text: Unbounded_String; -- Text which will be show to player when step starts.
    end record;
    package StepTexts_Container is new Vectors(Positive, StepText_Data);
+   type StepFinish_Data is -- Structure for finish condition data
+   record
+      Name: Unbounded_String; -- Name of data
+      Value: Unbounded_String; -- Value of data
+   end record;
+   package StepData_Container is new Vectors(Positive, StepFinish_Data);
    type Step_Data is -- Data structure for stories steps
    record
       Index: Unbounded_String; -- Index of step
       FinishCondition: StepConditionType; -- Condition which must be met to finish selected step and process to next
-      FinishData: UnboundedString_Container
-        .Vector; -- Data for finish condition
+      FinishData: StepData_Container.Vector; -- Data for finish condition
       Texts: StepTexts_Container
         .Vector; -- Texts which will be show to player when step starts, depends on finish condition of previous step.
       FailText: Unbounded_String; -- Text which will be show to player when step fails to progress.
@@ -98,5 +103,9 @@ package Stories is
      return Boolean; -- Returns true if story goes to next step, otherwise false
    function GetCurrentStoryText
      return Unbounded_String; -- Get text of current step in story
+   function GetStepData
+     (FinishData: StepData_Container.Vector;
+      Name: String)
+     return Unbounded_String; -- Get step finish data with selected name
 
 end Stories;

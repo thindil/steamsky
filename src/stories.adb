@@ -47,6 +47,7 @@ package body Stories is
       TempSteps: Steps_Container.Vector;
       StartStep, FinalStep: Unbounded_String;
       TempTexts: StepTexts_Container.Vector;
+      TempData: StepData_Container.Vector;
    begin
       ClearCurrentStory;
       FinishedStories.Clear;
@@ -68,7 +69,7 @@ package body Stories is
          TempStep :=
            (Index => Null_Unbounded_String,
             FinishCondition => ASKINBASE,
-            FinishData => TempValue,
+            FinishData => TempData,
             FailText => Null_Unbounded_String,
             Texts => TempTexts);
          TempRecord :=
@@ -128,7 +129,7 @@ package body Stories is
                TempStep :=
                  (Index => Null_Unbounded_String,
                   FinishCondition => ASKINBASE,
-                  FinishData => TempValue,
+                  FinishData => TempData,
                   FailText => Null_Unbounded_String,
                   Texts => TempTexts);
                TempStep.Index :=
@@ -144,8 +145,12 @@ package body Stories is
                for K in 0 .. Length(StepDataNodes) - 1 loop
                   TempStep.FinishData.Append
                   (New_Item =>
-                     To_Unbounded_String
-                       (Get_Attribute(Item(StepDataNodes, K), "value")));
+                     (Name =>
+                        To_Unbounded_String
+                          (Get_Attribute(Item(StepDataNodes, K), "name")),
+                      Value =>
+                        To_Unbounded_String
+                          (Get_Attribute(Item(StepDataNodes, K), "value"))));
                end loop;
                StepDataNodes :=
                  DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -222,21 +227,23 @@ package body Stories is
    end SelectBase;
 
    function SelectLocation
-     (StepData: UnboundedString_Container.Vector) return Unbounded_String is
-      LocationData: Unbounded_String := Null_Unbounded_String;
+     (StepData: StepData_Container.Vector) return Unbounded_String is
+      LocationData, Value: Unbounded_String := Null_Unbounded_String;
       LocationX, LocationY: Integer;
    begin
-      if StepData(1) = To_Unbounded_String("random") then
+      Value := GetStepData(StepData, "x");
+      if Value = To_Unbounded_String("random") then
          LocationX := GetRandom(SkyMap'First, SkyMap'Last);
          LocationData := To_Unbounded_String(Integer'Image(LocationX));
          Append(LocationData, ";");
       else
-         LocationX := Integer'Value(To_String(StepData(1)));
-         LocationData := StepData(1);
+         LocationX := Integer'Value(To_String(Value));
+         LocationData := Value;
          Append(LocationData, ";");
       end if;
       PlayerShip.DestinationX := LocationX;
-      if StepData(2) = To_Unbounded_String("random") then
+      Value := GetStepData(StepData, "y");
+      if Value = To_Unbounded_String("random") then
          loop
             LocationY := GetRandom(SkyMap'First, SkyMap'Last);
             exit when SkyMap(LocationX, LocationY).BaseIndex = 0 and
@@ -245,8 +252,8 @@ package body Stories is
          Append(LocationData, Integer'Image(LocationY));
          Append(LocationData, ";");
       else
-         LocationY := Integer'Value(To_String(StepData(2)));
-         Append(LocationData, StepData(2));
+         LocationY := Integer'Value(To_String(Value));
+         Append(LocationData, Value);
          Append(LocationData, ";");
       end if;
       PlayerShip.DestinationY := LocationY;
@@ -254,15 +261,17 @@ package body Stories is
    end SelectLocation;
 
    function SelectEnemy
-     (StepData: UnboundedString_Container.Vector) return Unbounded_String is
+     (StepData: StepData_Container.Vector) return Unbounded_String is
       Enemies: Positive_Container.Vector;
-      EnemyData: Unbounded_String := Null_Unbounded_String;
+      EnemyData, Value: Unbounded_String := Null_Unbounded_String;
    begin
       EnemyData := SelectLocation(StepData);
-      if StepData(4) /= To_Unbounded_String("random") then
-         return EnemyData & StepData(4);
+      Value := GetStepData(StepData, "ship");
+      if Value /= To_Unbounded_String("random") then
+         return EnemyData & Value;
       end if;
-      GenerateEnemies(Enemies, StepData(3));
+      Value := GetStepData(StepData, "faction");
+      GenerateEnemies(Enemies, Value);
       return EnemyData &
         To_Unbounded_String
           (Integer'Image
@@ -301,8 +310,9 @@ package body Stories is
                            StepData :=
                              SelectBase
                                (To_String
-                                  (Stories_List(I).StartingStep.FinishData
-                                     (3)));
+                                  (GetStepData
+                                     (Stories_List(I).StartingStep.FinishData,
+                                      "base")));
                         when DESTROYSHIP =>
                            StepData :=
                              SelectEnemy
@@ -368,14 +378,20 @@ package body Stories is
       end if;
       case Step.FinishCondition is
          when ASKINBASE =>
-            MaxRandom := Positive'Value(To_String(Step.FinishData(2)));
+            MaxRandom :=
+              Positive'Value
+                (To_String(GetStepData(Step.FinishData, "chance")));
          when DESTROYSHIP =>
-            MaxRandom := Positive'Value(To_String(Step.FinishData(5)));
+            MaxRandom :=
+              Positive'Value
+                (To_String(GetStepData(Step.FinishData, "chance")));
             if NextStep then
                MaxRandom := 1;
             end if;
          when EXPLORE =>
-            MaxRandom := Positive'Value(To_String(Step.FinishData(3)));
+            MaxRandom :=
+              Positive'Value
+                (To_String(GetStepData(Step.FinishData, "chance")));
          when others =>
             null;
       end case;
@@ -412,7 +428,8 @@ package body Stories is
       if CurrentStory.CurrentStep /= -2 then
          case Step.FinishCondition is
             when ASKINBASE =>
-               CurrentStory.Data := SelectBase(To_String(Step.FinishData(3)));
+               CurrentStory.Data :=
+                 SelectBase(To_String(GetStepData(Step.FinishData, "base")));
             when DESTROYSHIP =>
                CurrentStory.Data := SelectEnemy(Step.FinishData);
             when EXPLORE =>
@@ -443,5 +460,17 @@ package body Stories is
       end loop;
       return Null_Unbounded_String;
    end GetCurrentStoryText;
+
+   function GetStepData
+     (FinishData: StepData_Container.Vector;
+      Name: String) return Unbounded_String is
+   begin
+      for Data of FinishData loop
+         if Data.Name = To_Unbounded_String(Name) then
+            return Data.Value;
+         end if;
+      end loop;
+      return Null_Unbounded_String;
+   end GetStepData;
 
 end Stories;
