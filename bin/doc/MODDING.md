@@ -574,17 +574,21 @@ item will be dropped, chance (1 to that number) for drop.
 - Attribute `finish`: condition which must be met to finish this step. Possible
 values are: `askinbase` - go to next step when player ask about something in
 any or selected base, `destroyship` - go to next step when player destroy
-selected ship.
+selected ship, `explore` - go to next step when player search selected map
+field.
 - Tags `finishdata`: contains data needed for finish selected step. For 
 `askinbase` and `dropitem` it will be index of item of which to ask, chance
 (1 to that number) that step progress to next and did ask in any base (value
 `any`) or selected base (value `selected`, game will randomly select base which
-is know to player). For `destroyship` if will be index of faction to which
-selected ship belongs, index of ship to destroy (or `random` if ship should be
-selected randomly, same as normal enemies in game), X coordinate of place where
+is know to player). For `destroyship` if will be X coordinate of place where
 to search for enemy, Y coordinate of place where to search for enemy (in both,
+value "random" means randomly selected place on map), index of faction to which
+selected ship belongs, index of ship to destroy (or `random` if ship should be
+selected randomly, same as normal enemies in game), chance (1 to that number)
+that enemy ship will be found and fight starts. For `explore` it will be X
+coordinate of place where to search and Y coordinate where to search (in both,
 value "random" means randomly selected place on map), chance (1 to that number)
-that enemy ship will be found and fight starts.
+that step will progress to next.
 - Tag `text`: text which will be show to player when step starts. Attribute
 "condition": finish condition of previous step which was lead to this one.
 Possible values: `any`, `askinbase` and `destroyship`.
