@@ -1569,7 +1569,15 @@ Fifth value for weapon is damage type (1 - cutting damage, 2 - impaling damage,
   <trade buyable="N" price="0"/>
   <trade buyable="N" price="0"/>
   <trade buyable="N" price="0"/>
-  <description>Weird looking medalion made from shining metal. Maybe someone in any base will be know, what to do with it?</description>
+  <description>Weird looking medalion made from shining metal.</description>
+ </item>
+ <item index="165" name="Strange metal scrap" showtype="Special" type="StoryItem" weight="1">
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <description>Scrap of strange shining metal. Very similiar to medalion which you found ealier.</description>
  </item>
 </items>
 
