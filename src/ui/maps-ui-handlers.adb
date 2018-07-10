@@ -500,7 +500,7 @@ package body Maps.UI.Handlers is
                            False);
                      end if;
                   end;
-               when ANY =>
+               when ANY | LOOT =>
                   null;
             end case;
          end;

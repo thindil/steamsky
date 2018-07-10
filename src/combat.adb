@@ -1388,7 +1388,38 @@ package body Combat is
                   end if;
                end loop;
                AddMessage(To_String(Message) & ".", CombatMessage);
-               StartStory(FactionName, DROPITEM);
+               if CurrentStory.Index > 0 then
+                  declare
+                     Step: Step_Data;
+                     Tokens: Slice_Set;
+                  begin
+                     if CurrentStory.CurrentStep = 0 then
+                        Step := Stories_List(CurrentStory.Index).StartingStep;
+                     elsif CurrentStory.CurrentStep > 0 then
+                        Step :=
+                          Stories_List(CurrentStory.Index).Steps
+                            (CurrentStory.CurrentStep);
+                     else
+                        Step := Stories_List(CurrentStory.Index).FinalStep;
+                     end if;
+                     if Step.FinishCondition = LOOT then
+                        Create(Tokens, To_String(CurrentStory.Data), ";");
+                        if ProgressStory then
+                           case Step.FinishCondition is
+                              when LOOT =>
+                                 UpdateCargo
+                                   (PlayerShip,
+                                    Positive'Value(Slice(Tokens, 1)),
+                                    1);
+                              when others =>
+                                 null;
+                           end case;
+                        end if;
+                     end if;
+                  end;
+               else
+                  StartStory(FactionName, DROPITEM);
+               end if;
             end if;
          end;
          Enemy.Ship.Speed := FULL_STOP;
