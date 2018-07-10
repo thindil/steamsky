@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file.
 - Ability to train skills on ship
 - Keyboard shortcuts (and option to set them) to move map
 - New item type: storyitem
-- New item: strange medalion
+- New items: strange medalion and strange metal scrap
 - Keyboard shortcuts (and option to set them) to move cursor around map
 - Keyboard shortcut (and option to set it) for selecting map field
 - Randomly generated stories
