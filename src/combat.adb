@@ -1404,16 +1404,21 @@ package body Combat is
                      end if;
                      if Step.FinishCondition = LOOT then
                         Create(Tokens, To_String(CurrentStory.Data), ";");
-                        if ProgressStory then
-                           case Step.FinishCondition is
-                              when LOOT =>
-                                 UpdateCargo
-                                   (PlayerShip,
-                                    Positive'Value(Slice(Tokens, 1)),
-                                    1);
-                              when others =>
-                                 null;
-                           end case;
+                        if Slice(Tokens, 2) = "any" or
+                          Slice(Tokens, 2) =
+                            To_String
+                              (ProtoShips_List(EnemyShipIndex).Index) then
+                           if ProgressStory then
+                              case Step.FinishCondition is
+                                 when LOOT =>
+                                    UpdateCargo
+                                      (PlayerShip,
+                                       Positive'Value(Slice(Tokens, 1)),
+                                       1);
+                                 when others =>
+                                    null;
+                              end case;
+                           end if;
                         end if;
                      end if;
                   end;
