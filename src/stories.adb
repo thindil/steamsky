@@ -278,6 +278,25 @@ package body Stories is
              (Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
    end SelectEnemy;
 
+   function SelectLoot(StepData: StepData_Container.Vector) return Unbounded_String is
+      Enemies: Positive_Container.Vector;
+      LootData, Value: Unbounded_String := Null_Unbounded_String;
+   begin
+      LootData := GetStepData(StepData, "item");
+      Append(LootData, ";");
+      Value := GetStepData(StepData, "ship");
+      if Value /= To_Unbounded_String("random") then
+         return LootData & Value;
+      end if;
+      Value := GetStepData(StepData, "faction");
+      GenerateEnemies(Enemies, Value);
+      return LootData &
+      To_Unbounded_String
+         (Integer'Image
+            (Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
+   end SelectLoot;
+
+
    procedure StartStory
      (FactionName: Unbounded_String;
       Condition: StartConditionType) is
@@ -321,6 +340,8 @@ package body Stories is
                            StepData :=
                              SelectLocation
                                (Stories_List(I).StartingStep.FinishData);
+                        when LOOT =>
+                           StepData := SelectLoot(Stories_List(I).StartingStep.FinishData);
                         when ANY =>
                            null;
                      end case;
@@ -377,7 +398,7 @@ package body Stories is
          Step := Stories_List(CurrentStory.Index).FinalStep;
       end if;
       case Step.FinishCondition is
-         when ASKINBASE =>
+         when ASKINBASE | EXPLORE | LOOT =>
             MaxRandom :=
               Positive'Value
                 (To_String(GetStepData(Step.FinishData, "chance")));
@@ -388,10 +409,6 @@ package body Stories is
             if NextStep then
                MaxRandom := 1;
             end if;
-         when EXPLORE =>
-            MaxRandom :=
-              Positive'Value
-                (To_String(GetStepData(Step.FinishData, "chance")));
          when others =>
             null;
       end case;
@@ -434,6 +451,8 @@ package body Stories is
                CurrentStory.Data := SelectEnemy(Step.FinishData);
             when EXPLORE =>
                CurrentStory.Data := SelectLocation(Step.FinishData);
+            when LOOT =>
+               CurrentStory.Data := SelectLoot(Step.FinishData);
             when ANY =>
                null;
          end case;

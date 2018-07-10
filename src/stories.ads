@@ -27,7 +27,8 @@ package Stories is
      (ASKINBASE,
       DESTROYSHIP,
       EXPLORE,
-      ANY); -- Types of conditions to finish story step
+      ANY,
+      LOOT); -- Types of conditions to finish story step
    type StepText_Data is -- Data structure for stories steps texts
    record
       Condition: StepConditionType; -- Finish condition of previous step
