@@ -30,6 +30,8 @@ with Messages; use Messages;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Bases; use Bases;
+with Items; use Items;
+with Factions; use Factions;
 
 package body Stories.UI is
 
@@ -66,6 +68,7 @@ package body Stories.UI is
       Iter: Gtk_Text_Iter;
       TargetText: Unbounded_String;
       Tokens: Slice_Set;
+      Step: Step_Data;
    begin
       if Setting then
          return;
@@ -82,35 +85,81 @@ package body Stories.UI is
         FinishedStories(StoryIndex).StepsAmount then
          Insert(StoryBuffer, Iter, To_String(GetCurrentStoryText) & ASCII.LF);
          if CurrentStory.Data /= Null_Unbounded_String then
-            Create(Tokens, To_String(CurrentStory.Data), ";");
-            if Slice_Count(Tokens) < 2 then
-               TargetText :=
-                 To_Unbounded_String(" You must travel to base ") &
-                 CurrentStory.Data &
-                 To_Unbounded_String(" at X:");
-               for I in SkyBases'Range loop
-                  if SkyBases(I).Name = CurrentStory.Data then
-                     Append(TargetText, Positive'Image(SkyBases(I).SkyX));
-                     Append(TargetText, " Y:");
-                     Append(TargetText, Positive'Image(SkyBases(I).SkyY));
-                     exit;
-                  end if;
-               end loop;
-            elsif Slice_Count(Tokens) < 3 then
-               TargetText :=
-                 To_Unbounded_String(" You must find ") &
-                 ProtoShips_List(Positive'Value(Slice(Tokens, 3))).Name &
-                 To_Unbounded_String(" at X:") &
-                 To_Unbounded_String(Slice(Tokens, 1)) &
-                 To_Unbounded_String(" Y:") &
-                 To_Unbounded_String(Slice(Tokens, 2));
+            if CurrentStory.CurrentStep = 0 then
+               Step := Stories_List(CurrentStory.Index).StartingStep;
+            elsif CurrentStory.CurrentStep > 0 then
+               Step :=
+                 Stories_List(CurrentStory.Index).Steps
+                   (CurrentStory.CurrentStep);
             else
-               TargetText :=
-                 To_Unbounded_String(" You must travel to X:") &
-                 To_Unbounded_String(Slice(Tokens, 1)) &
-                 To_Unbounded_String(" Y:") &
-                 To_Unbounded_String(Slice(Tokens, 2));
+               Step := Stories_List(CurrentStory.Index).FinalStep;
             end if;
+            Create(Tokens, To_String(CurrentStory.Data), ";");
+            case Step.FinishCondition is
+               when ASKINBASE =>
+                  if Slice_Count(Tokens) < 2 then
+                     TargetText :=
+                       To_Unbounded_String(" You must travel to base ") &
+                       CurrentStory.Data &
+                       To_Unbounded_String(" at X:");
+                     for I in SkyBases'Range loop
+                        if SkyBases(I).Name = CurrentStory.Data then
+                           Append
+                             (TargetText,
+                              Positive'Image(SkyBases(I).SkyX));
+                           Append(TargetText, " Y:");
+                           Append
+                             (TargetText,
+                              Positive'Image(SkyBases(I).SkyY));
+                           exit;
+                        end if;
+                     end loop;
+                  else
+                     TargetText :=
+                       To_Unbounded_String(" You can ask in any base. ");
+                  end if;
+               when DESTROYSHIP =>
+                  TargetText :=
+                    To_Unbounded_String(" You must find ") &
+                    ProtoShips_List(Positive'Value(Slice(Tokens, 3))).Name &
+                    To_Unbounded_String(" at X:") &
+                    To_Unbounded_String(Slice(Tokens, 1)) &
+                    To_Unbounded_String(" Y:") &
+                    To_Unbounded_String(Slice(Tokens, 2));
+               when EXPLORE =>
+                  TargetText :=
+                    To_Unbounded_String(" You must travel to X:") &
+                    To_Unbounded_String(Slice(Tokens, 1)) &
+                    To_Unbounded_String(" Y:") &
+                    To_Unbounded_String(Slice(Tokens, 2));
+               when LOOT =>
+                  TargetText :=
+                    To_Unbounded_String(" You must loot: ") &
+                    Items_List(Positive'Value(Slice(Tokens, 1))).Name &
+                    To_Unbounded_String(" from ");
+                  if Slice(Tokens, 2) = "any" then
+                     Append(TargetText, "any ");
+                     for Faction of Factions_List loop
+                        if Faction.Index =
+                          GetStepData(Step.FinishData, "faction") then
+                           Append(TargetText, Faction.Name);
+                           Append(TargetText, " ship.");
+                           exit;
+                        end if;
+                     end loop;
+                  else
+                     for ProtoShip of ProtoShips_List loop
+                        if ProtoShip.Index =
+                          To_Unbounded_String(Slice(Tokens, 2)) then
+                           Append(TargetText, ProtoShip.Name);
+                           Append(TargetText, ".");
+                           exit;
+                        end if;
+                     end loop;
+                  end if;
+               when ANY =>
+                  null;
+            end case;
          end if;
          Insert(StoryBuffer, Iter, To_String(TargetText) & ASCII.LF);
          Show_All(Gtk_Widget(Get_Object(Builder, "btnstorycenter")));
