@@ -216,5 +216,6 @@ Text between "module" tags is module description.
  <module durability="1300" index="177" installtime="270" material="Orichalcum" maxvalue="10" name="Heavy orichalcum armor" price="25000" skill="Engineering" type="ARMOR" unique="Y" value="5" weight="12000">Heaviest type of orichalcum armor. Protects whole ship.</module>
  <module durability="500" index="178" installtime="90" material="Orichalcum" maxvalue="0" name="Small orichalcum greenhouse" price="12000" size="1" skill="Engineering" type="GREENHOUSE" value="0" weight="2200">Allows cultivation of plants. Made of orichalcum.</module>
  <module durability="500" index="179" installtime="90" material="Orichalcum" maxvalue="0" name="Small orichalcum water collector" price="12000" size="1" skill="Engineering" type="WATER_COLLECTOR" value="0" weight="1800">Allows collection of water from air. Made of orichalcum.</module>
+ <module durability="500" index="180" installtime="90" material="Orichalcum" maxvalue="0" name="Small orichalcum medical room" price="12000" size="1" skill="Engineering" type="MEDICAL_ROOM" unique="Y" value="0" weight="1000">Allows treatment of wounded crew members. Made of orichalcum.</module>
 </modules>
 
