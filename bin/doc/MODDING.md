@@ -577,15 +577,17 @@ any or selected base, `destroyship` - go to next step when player destroy
 selected ship, `explore` - go to next step when player search selected map
 field.
 - Tags `finishdata`: contains data needed for finish selected step. Attribute
-`name` is name of data. Possible values: `item` - item index (for `askinbase`),
-`base` - ask in any base (value `any`) or randomly selected (value `selected`)
-needed for `askinbase` steps. Names `faction` - index of faction to which ship
-belongs, `ship` - index of ship which must be destroyed (for `destroyship`
-steps) or `random` for randomly selected enemy ship. Names `x` and `y` are 
-location on map where player must go to progress in story. Value `random` mean
-randomly selected place on map or numeric coordinates of map field. Both used 
-by `destroyship` and `explore` steps. Name `chance` is used by all steps and 
-mean chance (1 to that number) that step will progress to next.
+`name` is name of data. Possible values: `item` - item index (for `askinbase`
+and `loot` steps), `base` - ask in any base (value `any`) or randomly 
+selected (value `selected`) needed for `askinbase` steps. Names `faction` - 
+index of faction to which ship belongs, `ship` - index of ship which must be 
+destroyed (for `destroyship` and `loot` steps), `random` value if enemy ship
+should be selected randomly or `any` for any enemy ship (for `loot` step only).
+Names `x` and `y` are location on map where player must go to progress in 
+story. Value `random` mean randomly selected place on map or numeric 
+coordinates of map field. Both used by `destroyship` and `explore` steps. 
+Name `chance` is used by all steps and mean chance (1 to that number) that 
+step will progress to next.
 - Tag `text`: text which will be show to player when step starts. Attribute
 "condition": finish condition of previous step which was lead to this one.
 Possible values: `any`, `askinbase` and `destroyship`.
