@@ -43,6 +43,19 @@ procedure SteamSky is
         Dir_Separator &
         "../etc" &
         Dir_Separator);
+   ShareDirectory: Unbounded_String :=
+     To_Unbounded_String
+       (Full_Name(Dir_Name(Command_Name)) &
+        Dir_Separator &
+        "../share" &
+        Dir_Separator);
+   procedure UpdatePath(Path: in out Unbounded_String) is
+   begin
+      if Element(Path, Length(Path)) /=
+         Dir_Separator then
+         Append(Path, Dir_Separator);
+      end if;
+   end UpdatePath;
 
 begin
    Set_Directory(Dir_Name(Command_Name));
@@ -61,10 +74,7 @@ begin
          elsif Argument(I)(1 .. 8) = "--datadi" then
             DataDirectory :=
               To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
-            if Element(DataDirectory, Length(DataDirectory)) /=
-              Dir_Separator then
-               Append(DataDirectory, Dir_Separator);
-            end if;
+            UpdatePath(DataDirectory);
             LogMessage
               ("Data directory sets to: " & To_String(DataDirectory),
                Everything);
@@ -78,10 +88,7 @@ begin
          elsif Argument(I)(1 .. 8) = "--savedi" then
             SaveDirectory :=
               To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
-            if Element(SaveDirectory, Length(SaveDirectory)) /=
-              Dir_Separator then
-               Append(SaveDirectory, Dir_Separator);
-            end if;
+            UpdatePath(SaveDirectory);
             LogMessage
               ("Save directory sets to: " & To_String(SaveDirectory),
                Everything);
@@ -95,6 +102,7 @@ begin
          elsif Argument(I)(1 .. 8) = "--docdir" then
             DocDirectory :=
               To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
+            UpdatePath(SaveDirectory);
             if Element(DocDirectory, Length(DocDirectory)) /=
               Dir_Separator then
                Append(DocDirectory, Dir_Separator);
@@ -112,10 +120,7 @@ begin
          elsif Argument(I)(1 .. 8) = "--libdir" then
             LibraryDirectory :=
               To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
-            if Element(LibraryDirectory, Length(LibraryDirectory)) /=
-              Dir_Separator then
-               Append(LibraryDirectory, Dir_Separator);
-            end if;
+            UpdatePath(LibraryDirectory);
             LogMessage
               ("Library directory sets to: " & To_String(LibraryDirectory),
                Everything);
@@ -129,10 +134,7 @@ begin
          elsif Argument(I)(1 .. 8) = "--etcdir" then
             ConfigDirectory :=
               To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
-            if Element(ConfigDirectory, Length(ConfigDirectory)) /=
-              Dir_Separator then
-               Append(ConfigDirectory, Dir_Separator);
-            end if;
+            UpdatePath(ConfigDirectory);
             LogMessage
               ("Configuration directory sets to: " &
                To_String(ConfigDirectory),
@@ -142,6 +144,20 @@ begin
                  ("Directory " &
                   To_String(ConfigDirectory) &
                   " not exists. You must use existing directory as configuration directory.");
+               return;
+            end if;
+         elsif Argument(I)(1 .. 8) = "--shared" then
+            ShareDirectory :=
+              To_Unbounded_String(Argument(I)(12 .. (Argument(I)'Last)));
+            UpdatePath(ShareDirectory);
+            LogMessage
+              ("Share directory sets to: " & To_String(ShareDirectory),
+               Everything);
+            if not Exists(To_String(ShareDirectory)) then
+               Put_Line
+                 ("Directory " &
+                  To_String(ShareDirectory) &
+                  " not exists. You must use existing directory as share directory.");
                return;
             end if;
          end if;
@@ -162,12 +178,13 @@ begin
    -- Initializes environment variables (Linux only)
    if Dir_Separator = '/' then
       declare
-         VariablesNames: constant array(1 .. 4) of Unbounded_String :=
+         VariablesNames: constant array(1 .. 5) of Unbounded_String :=
            (To_Unbounded_String("LD_LIBRARY_PATH"),
             To_Unbounded_String("GDK_PIXBUF_MODULE_FILE"),
             To_Unbounded_String("GDK_PIXBUF_MODULEDIR"),
-            To_Unbounded_String("FONTCONFIG_FILE"));
-         VariablesValues: array(1 .. 4) of Unbounded_String;
+            To_Unbounded_String("FONTCONFIG_FILE"),
+            To_Unbounded_String("XDG_DATA_DIRS"));
+         VariablesValues: array(1 .. 5) of Unbounded_String;
       begin
          if Exists(To_String(LibraryDirectory)) then
             VariablesValues(1) := LibraryDirectory;
@@ -180,6 +197,7 @@ begin
             VariablesValues(4) :=
               To_Unbounded_String
                 (To_String(ConfigDirectory) & "fonts/fonts.conf");
+            VariablesValues(5) := ShareDirectory;
          else
             declare
                function Sys(Arg: char_array) return Integer;
