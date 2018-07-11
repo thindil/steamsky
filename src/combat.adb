@@ -1326,14 +1326,9 @@ package body Combat is
             LootAmount: Integer;
             MoneyIndex2: constant Positive := FindProtoItem(MoneyIndex);
          begin
-            for I in PlayerShip.Crew.Iterate loop
-               if PlayerShip.Crew(I).Order = Boarding then
-                  GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
-                  WasBoarded := True;
-               elsif PlayerShip.Crew(I).Order = Defend then
-                  GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
-               end if;
-            end loop;
+            if FindMember(Boarding) > 0 then
+               WasBoarded := True;
+            end if;
             Enemy.Ship.Modules(1).Durability := 0;
             AddMessage(To_String(EnemyName) & " is destroyed!", CombatMessage);
             LootAmount := Enemy.Loot;
@@ -1426,6 +1421,13 @@ package body Combat is
                   StartStory(FactionName, DROPITEM);
                end if;
             end if;
+            for I in PlayerShip.Crew.Iterate loop
+               if PlayerShip.Crew(I).Order = Boarding then
+                  GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
+               elsif PlayerShip.Crew(I).Order = Defend then
+                  GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
+               end if;
+            end loop;
          end;
          Enemy.Ship.Speed := FULL_STOP;
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
