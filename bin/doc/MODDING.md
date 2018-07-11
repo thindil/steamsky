@@ -586,8 +586,11 @@ should be selected randomly or `any` for any enemy ship (for `loot` step only).
 Names `x` and `y` are location on map where player must go to progress in 
 story. Value `random` mean randomly selected place on map or numeric 
 coordinates of map field. Both used by `destroyship` and `explore` steps. 
-Name `chance` is used by all steps and mean chance (1 to that number) that 
-step will progress to next.
+Name `condition` is used by all steps and mean which skill should be used
+for check did step will progress to next, or value `random` for random
+chance. Name `chance` is used by all steps and mean chance (1 to that number
+for `random` condition or Skill + roll from 1 to 100) that step will 
+progress to next.
 - Tag `text`: text which will be show to player when step starts. Attribute
 "condition": finish condition of previous step which was lead to this one.
 Possible values: `any`, `askinbase` and `destroyship`.
