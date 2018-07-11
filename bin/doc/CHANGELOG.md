@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Keyboard shortcuts (and option to set them) to move cursor around map
 - Keyboard shortcut (and option to set it) for selecting map field
 - Randomly generated stories
+- Option to set GTK share directory via console parameter (Linux only)
 
 ### Changed
 - Updated help
