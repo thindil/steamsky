@@ -31,6 +31,8 @@ with Ships.Cargo; use Ships.Cargo;
 with Bases; use Bases;
 with Events; use Events;
 with Maps; use Maps;
+with Crew; use Crew;
+with Ships.Crew; use Ships.Crew;
 
 package body Stories is
 
@@ -278,7 +280,8 @@ package body Stories is
              (Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
    end SelectEnemy;
 
-   function SelectLoot(StepData: StepData_Container.Vector) return Unbounded_String is
+   function SelectLoot
+     (StepData: StepData_Container.Vector) return Unbounded_String is
       Enemies: Positive_Container.Vector;
       LootData, Value: Unbounded_String := Null_Unbounded_String;
    begin
@@ -291,11 +294,10 @@ package body Stories is
       Value := GetStepData(StepData, "faction");
       GenerateEnemies(Enemies, Value);
       return LootData &
-      To_Unbounded_String
-         (Integer'Image
-            (Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
+        To_Unbounded_String
+          (Integer'Image
+             (Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
    end SelectLoot;
-
 
    procedure StartStory
      (FactionName: Unbounded_String;
@@ -341,7 +343,9 @@ package body Stories is
                              SelectLocation
                                (Stories_List(I).StartingStep.FinishData);
                         when LOOT =>
-                           StepData := SelectLoot(Stories_List(I).StartingStep.FinishData);
+                           StepData :=
+                             SelectLoot
+                               (Stories_List(I).StartingStep.FinishData);
                         when ANY =>
                            null;
                      end case;
@@ -388,6 +392,8 @@ package body Stories is
    function ProgressStory(NextStep: Boolean := False) return Boolean is
       Step: Step_Data;
       MaxRandom: Positive;
+      FinishCondition: Unbounded_String;
+      Chance: Natural;
    begin
       if CurrentStory.CurrentStep = 0 then
          Step := Stories_List(CurrentStory.Index).StartingStep;
@@ -397,27 +403,91 @@ package body Stories is
       else
          Step := Stories_List(CurrentStory.Index).FinalStep;
       end if;
-      case Step.FinishCondition is
-         when ASKINBASE | EXPLORE | LOOT =>
-            MaxRandom :=
-              Positive'Value
-                (To_String(GetStepData(Step.FinishData, "chance")));
-         when DESTROYSHIP =>
-            MaxRandom :=
-              Positive'Value
-                (To_String(GetStepData(Step.FinishData, "chance")));
-            if NextStep then
-               MaxRandom := 1;
-            end if;
-         when others =>
-            null;
-      end case;
-      if GetRandom(1, MaxRandom) > 1 then
-         UpdateGame(10);
-         return False;
+      MaxRandom :=
+        Positive'Value(To_String(GetStepData(Step.FinishData, "chance")));
+      if Step.FinishCondition = DESTROYSHIP and NextStep then
+         MaxRandom := 1;
+      end if;
+      FinishCondition := GetStepData(Step.FinishData, "condition");
+      if FinishCondition = To_Unbounded_String("random") then
+         if GetRandom(1, MaxRandom) > 1 then
+            UpdateGame(10);
+            return False;
+         end if;
+      else
+         Chance := 0;
+         case Step.FinishCondition is
+            when ASKINBASE =>
+               declare
+                  TraderIndex: constant Natural := FindMember(Talk);
+               begin
+                  if TraderIndex > 0 then
+                     Chance :=
+                       GetSkillLevel
+                         (PlayerShip.Crew(TraderIndex),
+                          FindSkillIndex(FinishCondition));
+                  end if;
+               end;
+            when DESTROYSHIP | EXPLORE =>
+               for Member of PlayerShip.Crew loop
+                  if Member.Order = Pilot or Member.Order = Gunner then
+                     Chance :=
+                       Chance +
+                       GetSkillLevel(Member, FindSkillIndex(FinishCondition));
+                  end if;
+               end loop;
+            when LOOT =>
+               for Member of PlayerShip.Crew loop
+                  if Member.Order = Boarding then
+                     Chance :=
+                       Chance +
+                       GetSkillLevel(Member, FindSkillIndex(FinishCondition));
+                  end if;
+               end loop;
+            when ANY =>
+               null;
+         end case;
+         Chance := Chance + GetRandom(1, 100);
+         if Chance < MaxRandom then
+            UpdateGame(10);
+            return False;
+         end if;
       end if;
       if Step.FinishCondition = DESTROYSHIP and not NextStep then
          return True;
+      end if;
+      if FinishCondition /= To_Unbounded_String("random") then
+         case Step.FinishCondition is
+            when ASKINBASE =>
+               declare
+                  TraderIndex: constant Natural := FindMember(Talk);
+               begin
+                  if TraderIndex > 0 then
+                     GainExp(10, FindSkillIndex(FinishCondition), TraderIndex);
+                  end if;
+               end;
+            when DESTROYSHIP | EXPLORE =>
+               for I in PlayerShip.Crew.Iterate loop
+                  if PlayerShip.Crew(I).Order = Pilot or
+                    PlayerShip.Crew(I).Order = Gunner then
+                     GainExp
+                       (10,
+                        FindSkillIndex(FinishCondition),
+                        Crew_Container.To_Index(I));
+                  end if;
+               end loop;
+            when LOOT =>
+               for I in PlayerShip.Crew.Iterate loop
+                  if PlayerShip.Crew(I).Order = Boarding then
+                     GainExp
+                       (10,
+                        FindSkillIndex(FinishCondition),
+                        Crew_Container.To_Index(I));
+                  end if;
+               end loop;
+            when ANY =>
+               null;
+         end case;
       end if;
       UpdateGame(30);
       for FinishedStory of FinishedStories loop
