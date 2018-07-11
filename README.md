@@ -54,7 +54,7 @@ If you use downloaded binaries, you don't need any additional libraries. Just
 run `steamsky` program to start game.
 
 ### Windows
-If you compiled the game just clicking on `steamsky.exe` should run it
+If you compiled the game just clicking on `steamsky.exe` should run it.
 
 ### Starting parameters
 You can set game directories by starting parameters. Possible options are:
@@ -79,6 +79,11 @@ You can set game directories by starting parameters. Possible options are:
   only on Linux). Path must be absolute to file `steamsky`. Example `./steamsky
   --etcdir=/home/user/tmp/etc`. Default value is 
   *[path to game directory]/etc/*.
+
+* --sharedir=[directory] set directory where are GTK icons files are (this works
+  only on Linux). Path must be absolute to file `steamsky`. Example `./steamsky
+  --sharedir=/home/user/tmp/share`. Default value is 
+  *[path to game directory]/share/*.
 
 Of course, you can set all parameters together: `./steamsky --datadir=somedir/
 --savedir=otherdir/ --docdir=anotherdir/`
