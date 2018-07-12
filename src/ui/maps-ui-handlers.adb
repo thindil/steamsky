@@ -693,7 +693,10 @@ package body Maps.UI.Handlers is
                         False);
                   end if;
                   for Mission of PlayerShip.Missions loop
-                     if HaveTrader then
+                     if HaveTrader and
+                       Mission.TargetX = PlayerShip.SkyX and
+                       Mission.TargetY = PlayerShip.SkyY and
+                       Mission.Finished then
                         case Mission.MType is
                            when Deliver =>
                               Set_Label
@@ -734,9 +737,6 @@ package body Maps.UI.Handlers is
                         end case;
                         Set_No_Show_All
                           (Gtk_Widget(Get_Object(Object, "btnfinishmission")),
-                           False);
-                        Set_No_Show_All
-                          (Gtk_Widget(Get_Object(Object, "btnstory")),
                            False);
                      end if;
                   end loop;
@@ -790,9 +790,6 @@ package body Maps.UI.Handlers is
                Set_Label
                  (Gtk_Button(Get_Object(Object, "btnattack")),
                   "Attack");
-               Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnstory")),
-                  False);
             when FriendlyShip =>
                if HaveTrader then
                   if Index
@@ -821,9 +818,6 @@ package body Maps.UI.Handlers is
                Set_Label
                  (Gtk_Button(Get_Object(Object, "btnattack")),
                   "Attack");
-               Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnstory")),
-                  False);
          end case;
       end if;
       ButtonsVisible := False;
