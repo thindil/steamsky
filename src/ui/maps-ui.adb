@@ -537,6 +537,20 @@ package body Maps.UI is
                   MapChar := '!';
                elsif SkyMap(X, Y).EventIndex > 0 then
                   MapChar := '?';
+                  case Events_List(SkyMap(X, Y).EventIndex).EType is
+                     when EnemyShip | AttackOnBase | EnemyPatrol =>
+                        MapColor := RedColor;
+                     when Disease =>
+                        MapColor := YellowColor;
+                     when FullDocks =>
+                        MapColor := CyanColor;
+                     when DoublePrice =>
+                        MapColor := LimeColor;
+                     when Trader | FriendlyShip =>
+                        MapColor := GreenColor;
+                     when others =>
+                        null;
+                  end case;
                elsif SkyMap(X, Y).BaseIndex > 0 then
                   if SkyBases(SkyMap(X, Y).BaseIndex).Known then
                      MapChar := 'o';
