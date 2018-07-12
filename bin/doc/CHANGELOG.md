@@ -46,6 +46,7 @@ All notable changes to this project will be documented in this file.
 - Showing buy option when trader don't have that item
 - Moving map near borders
 - Crash during selecting event as destination for player ship
+- Showing complete mission button on wrong bases
 
 ## [2.5] - 2018-06-17
 
