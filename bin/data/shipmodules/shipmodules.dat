@@ -218,5 +218,6 @@ Text between "module" tags is module description.
  <module durability="500" index="179" installtime="90" material="Orichalcum" maxvalue="0" name="Small orichalcum water collector" price="12000" size="1" skill="Engineering" type="WATER_COLLECTOR" value="0" weight="1800">Allows collection of water from air. Made of orichalcum.</module>
  <module durability="500" index="180" installtime="90" material="Orichalcum" maxvalue="0" name="Small orichalcum medical room" price="12000" size="1" skill="Engineering" type="MEDICAL_ROOM" unique="Y" value="0" weight="1000">Allows treatment of wounded crew members. Made of orichalcum.</module>
  <module durability="250" index="181" installtime="120" material="Orichalcum" maxvalue="40" name="Small advanced orichalcum cabin" price="4000" size="1" skill="Engineering" type="CABIN" value="40" weight="1000">Small, decorated cabin made of orichalcum.</module>
+ <module durability="250" index="182" installtime="150" material="Orichalcum" maxvalue="60" name="Small extended orichalcum cabin" price="6000" size="1" skill="Engineering" type="CABIN" value="60" weight="1600">Small, decorated cabin made of orichalcum with some better quality furniture.</module>
 </modules>
 
