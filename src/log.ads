@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -29,7 +29,10 @@ package Log is
    procedure StartLogging; -- Open/create debug.log file
    procedure LogMessage
      (Message: String;
-      MessageType: Debug_Types); -- Log message (if proper type) to file in debug mode
+      MessageType: Debug_Types;
+      NewLine,
+      TimeStamp: Boolean :=
+        True); -- Log message (if proper type) to file in debug mode
    procedure EndLogging; -- Close debug.file
 
 end Log;

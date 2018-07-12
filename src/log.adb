@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -38,15 +38,29 @@ package body Log is
          DebugMode);
    end StartLogging;
 
-   procedure LogMessage(Message: String; MessageType: Debug_Types) is
+   procedure LogMessage
+     (Message: String;
+      MessageType: Debug_Types;
+      NewLine, TimeStamp: Boolean := True) is
+      NewMessage: Unbounded_String;
    begin
       if DebugMode = None or
         (MessageType /= DebugMode and DebugMode /= Everything) then
          return;
       end if;
-      Put_Line
-        (LogFile,
-         "[" & Ada.Calendar.Formatting.Image(Clock) & "]: " & Message);
+      if TimeStamp then
+         NewMessage := To_Unbounded_String("[");
+         Append
+           (NewMessage,
+            Ada.Calendar.Formatting.Image(Clock) & "]:" & Message);
+      else
+         NewMessage := To_Unbounded_String(Message);
+      end if;
+      if NewLine then
+         Put_Line(LogFile, To_String(NewMessage));
+      else
+         Put(LogFile, To_String(NewMessage));
+      end if;
    end LogMessage;
 
    procedure EndLogging is
