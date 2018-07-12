@@ -51,8 +51,7 @@ procedure SteamSky is
         Dir_Separator);
    procedure UpdatePath(Path: in out Unbounded_String) is
    begin
-      if Element(Path, Length(Path)) /=
-         Dir_Separator then
+      if Element(Path, Length(Path)) /= Dir_Separator then
          Append(Path, Dir_Separator);
       end if;
    end UpdatePath;
