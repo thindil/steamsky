@@ -65,7 +65,9 @@ package body Game.SaveLoad is
          end loop;
       end SaveStatistics;
    begin
-      LogMessage("Start saving game.", Everything);
+      LogMessage
+        ("Start saving game in file " & To_String(SaveName) & ".",
+         Everything);
       SaveData := Create_Document(Save);
       MainNode := Create_Element(SaveData, "save");
       MainNode := Append_Child(SaveData, MainNode);
@@ -405,7 +407,7 @@ package body Game.SaveLoad is
             Set_Attribute(CategoryNode, "finished", "N");
          end if;
       end loop;
-      Create(SaveFile, Out_File, To_String(SaveDirectory) & "savegame.dat");
+      Create(SaveFile, Out_File, To_String(SaveName));
       Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => False);
       Close(SaveFile);
       LogMessage("Finished saving game.", Everything);
@@ -416,8 +418,10 @@ package body Game.SaveLoad is
       Reader: Tree_Reader;
       NodesList, ChildNodes: Node_List;
    begin
-      LogMessage("Start loading game.", Everything);
-      Open(To_String(SaveDirectory) & "savegame.dat", SaveFile);
+      LogMessage
+        ("Start loading game from file " & To_String(SaveName) & ".",
+         Everything);
+      Open(To_String(SaveName), SaveFile);
       Parse(Reader, SaveFile);
       Close(SaveFile);
       SaveData := Get_Tree(Reader);
@@ -673,7 +677,9 @@ package body Game.SaveLoad is
          LogMessage("done.", Everything, True, False);
       end;
       NodesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "acceptedmission");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (SaveData,
+           "acceptedmission");
       declare
          MType: Missions_Types;
          Target, TargetX, TargetY, StartBase: Natural;

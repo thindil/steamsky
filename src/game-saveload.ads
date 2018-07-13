@@ -17,6 +17,7 @@
 
 package Game.SaveLoad is
 
+   SaveName: Unbounded_String; -- Full path with file name for current savegame
    SaveGame_Invalid_Data: exception; -- Raised when invalid data found in savegame
 
    procedure SaveGame; -- Save game to file

@@ -65,6 +65,8 @@ package Game is
    SaveDirectory: Unbounded_String :=
      To_Unbounded_String
        ("data" &
+        Dir_Separator &
+        "saves" &
         Dir_Separator); -- Path to directory where are savegame and logs
    DataDirectory: Unbounded_String :=
      To_Unbounded_String
