@@ -45,7 +45,6 @@ package body Ships is
       TmpShip: ShipRecord;
       ShipModules: Modules_Container.Vector;
       ShipCrew: Crew_Container.Vector;
-      ShipMissions: Mission_Container.Vector;
       NewName: Unbounded_String;
       TurretIndex,
       GunIndex,
@@ -269,7 +268,6 @@ package body Ships is
          DestinationX => 0,
          DestinationY => 0,
          RepairModule => 0,
-         Missions => ShipMissions,
          Description => ProtoShip.Description,
          HomeBase => 0);
       Amount := 0;

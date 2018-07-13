@@ -24,6 +24,7 @@ with Maps; use Maps;
 with Events; use Events;
 with Crew.Inventory; use Crew.Inventory;
 with Utils; use Utils;
+with Missions; use Missions;
 
 package body Ships.Crew is
 
@@ -121,18 +122,21 @@ package body Ships.Crew is
             Module.Owner := Module.Owner - 1;
          end if;
       end loop;
-      for I in Ship.Missions.First_Index .. Ship.Missions.Last_Index loop
-         if Ship.Missions(I).MType = Passenger and
-           Ship.Missions(I).Target = MemberIndex then
-            DeleteMission(I);
-            exit;
-         end if;
-      end loop;
-      for Mission of Ship.Missions loop
-         if Mission.MType = Passenger and Mission.Target > MemberIndex then
-            Mission.Target := Mission.Target - 1;
-         end if;
-      end loop;
+      if Ship = PlayerShip then
+         for I in
+           AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
+            if AcceptedMissions(I).MType = Passenger and
+              AcceptedMissions(I).Target = MemberIndex then
+               DeleteMission(I);
+               exit;
+            end if;
+         end loop;
+         for Mission of AcceptedMissions loop
+            if Mission.MType = Passenger and Mission.Target > MemberIndex then
+               Mission.Target := Mission.Target - 1;
+            end if;
+         end loop;
+      end if;
    end DeleteMember;
 
    function FindMember
