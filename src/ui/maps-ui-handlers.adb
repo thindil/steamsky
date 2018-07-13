@@ -573,7 +573,7 @@ package body Maps.UI.Handlers is
                   when others =>
                      MissionsLimit := 0;
                end case;
-               for Mission of PlayerShip.Missions loop
+               for Mission of AcceptedMissions loop
                   if (Mission.Finished and Mission.StartBase = BaseIndex) or
                     (Mission.TargetX = PlayerShip.SkyX and
                      Mission.TargetY = PlayerShip.SkyY) then
@@ -692,7 +692,7 @@ package body Maps.UI.Handlers is
                        (Gtk_Widget(Get_Object(Object, "btndock")),
                         False);
                   end if;
-                  for Mission of PlayerShip.Missions loop
+                  for Mission of AcceptedMissions loop
                      if HaveTrader and
                        Mission.TargetX = PlayerShip.SkyX and
                        Mission.TargetY = PlayerShip.SkyY and
@@ -741,7 +741,7 @@ package body Maps.UI.Handlers is
                      end if;
                   end loop;
                else
-                  for Mission of PlayerShip.Missions loop
+                  for Mission of AcceptedMissions loop
                      if Mission.TargetX = PlayerShip.SkyX and
                        Mission.TargetY = PlayerShip.SkyY and
                        not Mission.Finished then
@@ -915,7 +915,7 @@ package body Maps.UI.Handlers is
    procedure ShowInfo(User_Data: access GObject_Record'Class) is
    begin
       if User_Data = Get_Object(Builder, "menumissions") then
-         if PlayerShip.Missions.Length = 0 then
+         if AcceptedMissions.Length = 0 then
             ShowDialog
               ("You didn't accepted any mission yet.",
                Gtk_Window(Get_Object(Builder, "skymapwindow")));
@@ -1007,7 +1007,7 @@ package body Maps.UI.Handlers is
       StartsCombat: Boolean := False;
    begin
       Hide(Gtk_Widget(Get_Object(Object, "orderswindow")));
-      for Mission of PlayerShip.Missions loop
+      for Mission of AcceptedMissions loop
          if Mission.TargetX = PlayerShip.SkyX and
            Mission.TargetY = PlayerShip.SkyY and
            not Mission.Finished then
@@ -1020,7 +1020,7 @@ package body Maps.UI.Handlers is
                   if not StartsCombat then
                      StartsCombat :=
                        StartCombat
-                         (PlayerShip.Missions
+                         (AcceptedMissions
                             (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
                                .MissionIndex)
                             .Target,

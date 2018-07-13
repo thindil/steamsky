@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -32,6 +32,8 @@ package Missions is
       Finished: Boolean; -- Did mission is finished
    end record;
    package Mission_Container is new Vectors(Positive, Mission_Data);
+   AcceptedMissions: Mission_Container
+     .Vector; -- List of missions accepted by player
    Missions_Accepting_Error: exception; -- Raised when mission can't be accepted
    Missions_Finishing_Error: exception; -- Raised when mission can't be finished
 

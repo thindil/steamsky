@@ -31,6 +31,7 @@ with Glib.Object; use Glib.Object;
 with Messages; use Messages;
 with Crew.Inventory; use Crew.Inventory;
 with Stories; use Stories;
+with Missions; use Missions;
 
 package body Ships.Cargo.UI is
 
@@ -170,10 +171,9 @@ package body Ships.Cargo.UI is
         MissionItemsType then
          for J in 1 .. DropAmount2 loop
             for I in
-              PlayerShip.Missions.First_Index ..
-                  PlayerShip.Missions.Last_Index loop
-               if PlayerShip.Missions(I).MType = Deliver and
-                 PlayerShip.Missions(I).Target =
+              AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
+               if AcceptedMissions(I).MType = Deliver and
+                 AcceptedMissions(I).Target =
                    PlayerShip.Cargo(ItemIndex).ProtoIndex then
                   DeleteMission(I);
                   DropAmount := DropAmount - 1;

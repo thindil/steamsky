@@ -19,8 +19,6 @@ with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with ShipModules; use ShipModules;
-with Maps; use Maps;
-with Bases; use Bases;
 
 package body Ships.SaveLoad is
 
@@ -269,54 +267,6 @@ package body Ships.SaveLoad is
             end loop;
          end loop;
       end;
-      if PlayerShip.Missions.Length > 0 then
-         for Mission of PlayerShip.Missions loop
-            DataNode := Create_Element(SaveData, "mission");
-            DataNode := Append_Child(CategoryNode, DataNode);
-            RawValue :=
-              To_Unbounded_String
-                (Integer'Image(Missions_Types'Pos(Mission.MType)));
-            Set_Attribute
-              (DataNode,
-               "type",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Mission.Target));
-            Set_Attribute
-              (DataNode,
-               "target",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Mission.Time));
-            Set_Attribute
-              (DataNode,
-               "time",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Mission.TargetX));
-            Set_Attribute
-              (DataNode,
-               "targetx",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Mission.TargetY));
-            Set_Attribute
-              (DataNode,
-               "targety",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Mission.Reward));
-            Set_Attribute
-              (DataNode,
-               "reward",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Mission.StartBase));
-            Set_Attribute
-              (DataNode,
-               "startbase",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            if Mission.Finished then
-               Set_Attribute(DataNode, "finished", "Y");
-            else
-               Set_Attribute(DataNode, "finished", "N");
-            end if;
-         end loop;
-      end if;
    end SavePlayerShip;
 
    procedure LoadPlayerShip(SaveData: Document) is
@@ -345,7 +295,6 @@ package body Ships.SaveLoad is
       PlayerShip.Modules.Clear;
       PlayerShip.Cargo.Clear;
       PlayerShip.Crew.Clear;
-      PlayerShip.Missions.Clear;
       ChildNodes := Child_Nodes(Item(ShipNode, 0));
       for I in 0 .. Length(ChildNodes) - 1 loop
          if Node_Name(Item(ChildNodes, I)) = "module" then
@@ -578,59 +527,6 @@ package body Ships.SaveLoad is
                    ContractLength => ContractLength,
                    Morale => Morale,
                    Loyalty => Loyalty));
-            end;
-         elsif Node_Name(Item(ChildNodes, I)) = "mission" then
-            declare
-               MType: Missions_Types;
-               Target, TargetX, TargetY, StartBase: Natural;
-               Time, Reward, MIndex: Positive;
-               Finished: Boolean;
-            begin
-               MType :=
-                 Missions_Types'Val
-                   (Integer'Value(Get_Attribute(Item(ChildNodes, I), "type")));
-               Target :=
-                 Natural'Value(Get_Attribute(Item(ChildNodes, I), "target"));
-               Time :=
-                 Positive'Value(Get_Attribute(Item(ChildNodes, I), "time"));
-               TargetX :=
-                 Natural'Value(Get_Attribute(Item(ChildNodes, I), "targetx"));
-               TargetY :=
-                 Natural'Value(Get_Attribute(Item(ChildNodes, I), "targety"));
-               Reward :=
-                 Positive'Value(Get_Attribute(Item(ChildNodes, I), "reward"));
-               StartBase :=
-                 Natural'Value
-                   (Get_Attribute(Item(ChildNodes, I), "startbase"));
-               if Get_Attribute(Item(ChildNodes, I), "finished") = "Y" then
-                  Finished := True;
-               else
-                  Finished := False;
-               end if;
-               PlayerShip.Missions.Append
-               (New_Item =>
-                  (MType => MType,
-                   Target => Target,
-                   Time => Time,
-                   TargetX => TargetX,
-                   TargetY => TargetY,
-                   Reward => Reward,
-                   StartBase => StartBase,
-                   Finished => Finished));
-               MIndex := PlayerShip.Missions.Last_Index;
-               if not Finished then
-                  SkyMap
-                    (PlayerShip.Missions(MIndex).TargetX,
-                     PlayerShip.Missions(MIndex).TargetY)
-                    .MissionIndex :=
-                    MIndex;
-               else
-                  SkyMap
-                    (SkyBases(PlayerShip.Missions(MIndex).StartBase).SkyX,
-                     SkyBases(PlayerShip.Missions(MIndex).StartBase).SkyY)
-                    .MissionIndex :=
-                    MIndex;
-               end if;
             end;
          end if;
       end loop;

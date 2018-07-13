@@ -34,6 +34,7 @@ with Maps; use Maps;
 with ShipModules; use ShipModules;
 with Ships.UI.Handlers; use Ships.UI.Handlers;
 with Bases; use Bases;
+with Missions; use Missions;
 
 package body Ships.UI is
 
@@ -182,7 +183,7 @@ package body Ships.UI is
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             end if;
-            for Mission of PlayerShip.Missions loop
+            for Mission of AcceptedMissions loop
                if Mission.MType = Passenger and
                  Mission.Target = PlayerShip.Modules(ModuleIndex).Owner then
                   IsPassenger := True;

@@ -244,7 +244,7 @@ package body Missions is
          when others =>
             MissionsLimit := 0;
       end case;
-      for Mission of PlayerShip.Missions loop
+      for Mission of AcceptedMissions loop
          if Mission.StartBase = BaseIndex then
             MissionsLimit := MissionsLimit - 1;
          end if;
@@ -330,9 +330,9 @@ package body Missions is
             Mission.Target := PlayerShip.Crew.Last_Index;
       end case;
       SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex);
-      PlayerShip.Missions.Append(New_Item => Mission);
+      AcceptedMissions.Append(New_Item => Mission);
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex :=
-        PlayerShip.Missions.Last_Index;
+        AcceptedMissions.Last_Index;
       AddMessage(To_String(AcceptMessage), MissionMessage);
       GainExp(1, TalkingSkill, TraderIndex);
       GameStats.AcceptedMissions := GameStats.AcceptedMissions + 1;
@@ -341,14 +341,14 @@ package body Missions is
 
    procedure UpdateMissions(Minutes: Positive) is
       Time: Integer;
-      I: Positive := PlayerShip.Missions.First_Index;
+      I: Positive := AcceptedMissions.First_Index;
    begin
-      while I <= PlayerShip.Missions.Last_Index loop
-         Time := PlayerShip.Missions(I).Time - Minutes;
+      while I <= AcceptedMissions.Last_Index loop
+         Time := AcceptedMissions(I).Time - Minutes;
          if Time < 1 then
             DeleteMission(I);
          else
-            PlayerShip.Missions(I).Time := Time;
+            AcceptedMissions(I).Time := Time;
             I := I + 1;
          end if;
       end loop;
@@ -364,12 +364,12 @@ package body Missions is
          end if;
       end if;
       UpdateGame(5);
-      case PlayerShip.Missions(MissionIndex).MType is
+      case AcceptedMissions(MissionIndex).MType is
          when Deliver =>
             AddMessage
               ("You finished mission 'Deliver " &
                To_String
-                 (Items_List(PlayerShip.Missions(MissionIndex).Target).Name) &
+                 (Items_List(AcceptedMissions(MissionIndex).Target).Name) &
                "'.",
                MissionMessage,
                2);
@@ -377,7 +377,7 @@ package body Missions is
             AddMessage
               ("You finished mission 'Destroy " &
                To_String
-                 (ProtoShips_List(PlayerShip.Missions(MissionIndex).Target)
+                 (ProtoShips_List(AcceptedMissions(MissionIndex).Target)
                     .Name) &
                "'.",
                MissionMessage);
@@ -400,18 +400,18 @@ package body Missions is
       UpdateGoal
         (MISSION,
          To_Unbounded_String
-           (Missions_Types'Image(PlayerShip.Missions(MissionIndex).MType)));
+           (Missions_Types'Image(AcceptedMissions(MissionIndex).MType)));
       UpdateFinishedMissions
         (To_Unbounded_String
            (Natural'Image
-              (Missions_Types'Pos(PlayerShip.Missions(MissionIndex).MType))));
+              (Missions_Types'Pos(AcceptedMissions(MissionIndex).MType))));
       DeleteMission(MissionIndex, False);
    end FinishMission;
 
    procedure DeleteMission(MissionIndex: Positive; Failed: Boolean := True) is
       MessageText: Unbounded_String :=
         To_Unbounded_String("You failed mission ");
-      Mission: constant Mission_Data := PlayerShip.Missions(MissionIndex);
+      Mission: constant Mission_Data := AcceptedMissions(MissionIndex);
       FreeSpace, RewardAmount: Integer;
       Reputation: Natural;
    begin
@@ -473,24 +473,21 @@ package body Missions is
          SkyBases(Mission.StartBase).SkyY)
         .MissionIndex :=
         0;
-      PlayerShip.Missions.Delete(Index => MissionIndex);
+      AcceptedMissions.Delete(Index => MissionIndex);
       if Mission.MType = Deliver then
          UpdateCargo(PlayerShip, Mission.Target, -1);
       elsif Mission.MType = Passenger then
          DeleteMember(Mission.Target, PlayerShip);
       end if;
-      for I in
-        PlayerShip.Missions.First_Index .. PlayerShip.Missions.Last_Index loop
-         if PlayerShip.Missions(I).Finished then
+      for I in AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
+         if AcceptedMissions(I).Finished then
             SkyMap
-              (SkyBases(PlayerShip.Missions(I).StartBase).SkyX,
-               SkyBases(PlayerShip.Missions(I).StartBase).SkyY)
+              (SkyBases(AcceptedMissions(I).StartBase).SkyX,
+               SkyBases(AcceptedMissions(I).StartBase).SkyY)
               .MissionIndex :=
               I;
          else
-            SkyMap
-              (PlayerShip.Missions(I).TargetX,
-               PlayerShip.Missions(I).TargetY)
+            SkyMap(AcceptedMissions(I).TargetX, AcceptedMissions(I).TargetY)
               .MissionIndex :=
               I;
          end if;
@@ -498,33 +495,33 @@ package body Missions is
    end DeleteMission;
 
    procedure UpdateMission(MissionIndex: Positive) is
-      Mission: constant Mission_Data := PlayerShip.Missions(MissionIndex);
+      Mission: constant Mission_Data := AcceptedMissions(MissionIndex);
       MessageText: Unbounded_String :=
         To_Unbounded_String("Return to ") &
         SkyBases(Mission.StartBase).Name &
         To_Unbounded_String(" to finish mission ");
    begin
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := 0;
-      PlayerShip.Missions(MissionIndex).Finished := True;
+      AcceptedMissions(MissionIndex).Finished := True;
       SkyMap
         (SkyBases(Mission.StartBase).SkyX,
          SkyBases(Mission.StartBase).SkyY)
         .MissionIndex :=
         MissionIndex;
-      case PlayerShip.Missions(MissionIndex).MType is
+      case AcceptedMissions(MissionIndex).MType is
          when Deliver =>
             Append
               (MessageText,
                "'Deliver " &
                To_String
-                 (Items_List(PlayerShip.Missions(MissionIndex).Target).Name) &
+                 (Items_List(AcceptedMissions(MissionIndex).Target).Name) &
                "'.");
          when Destroy =>
             Append
               (MessageText,
                "'Destroy " &
                To_String
-                 (ProtoShips_List(PlayerShip.Missions(MissionIndex).Target)
+                 (ProtoShips_List(AcceptedMissions(MissionIndex).Target)
                     .Name) &
                "'.");
          when Patrol =>
@@ -545,7 +542,7 @@ package body Missions is
    function AutoFinishMissions return String is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      I: Natural := PlayerShip.Missions.First_Index;
+      I: Natural := AcceptedMissions.First_Index;
    begin
       if BaseIndex = 0 then
          return "";
@@ -560,12 +557,12 @@ package body Missions is
       if FindMember(Talk) = 0 then
          return "";
       end if;
-      while I <= PlayerShip.Missions.Last_Index loop
+      while I <= AcceptedMissions.Last_Index loop
          if
-           (PlayerShip.Missions(I).Finished and
-            PlayerShip.Missions(I).StartBase = BaseIndex) or
-           (PlayerShip.Missions(I).TargetX = PlayerShip.SkyX and
-            PlayerShip.Missions(I).TargetY = PlayerShip.SkyY) then
+           (AcceptedMissions(I).Finished and
+            AcceptedMissions(I).StartBase = BaseIndex) or
+           (AcceptedMissions(I).TargetX = PlayerShip.SkyX and
+            AcceptedMissions(I).TargetY = PlayerShip.SkyY) then
             FinishMission(I);
             I := I - 1;
          end if;

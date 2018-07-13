@@ -810,21 +810,20 @@ package body Maps.UI is
               SkyMap(MapX, MapY).EventIndex > 0 then
                Append(MapInfoText, ASCII.LF & ASCII.LF);
             end if;
-            case PlayerShip.Missions(MissionIndex).MType is
+            case AcceptedMissions(MissionIndex).MType is
                when Deliver =>
                   Append
                     (MapInfoText,
                      "Deliver " &
                      To_String
-                       (Items_List(PlayerShip.Missions(MissionIndex).Target)
+                       (Items_List(AcceptedMissions(MissionIndex).Target)
                           .Name));
                when Destroy =>
                   Append
                     (MapInfoText,
                      "Destroy " &
                      To_String
-                       (ProtoShips_List
-                          (PlayerShip.Missions(MissionIndex).Target)
+                       (ProtoShips_List(AcceptedMissions(MissionIndex).Target)
                           .Name));
                when Patrol =>
                   Append(MapInfoText, "Patrol area");
