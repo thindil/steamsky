@@ -252,7 +252,8 @@ package body Game is
         CharName &
         To_Unbounded_String("-") &
         ShipName &
-        To_Unbounded_String("-" & Positive'Image(GetRandom(1, 999))(2..4) & ".save");
+        To_Unbounded_String
+          ("-" & Positive'Image(GetRandom(1, 999))(2 .. 4) & ".save");
    end NewGame;
 
    procedure UpdateGame(Minutes: Positive) is
