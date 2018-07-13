@@ -1086,7 +1086,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnheal">
-            <property name="label" translatable="yes">_Heal wounded</property>
+            <property name="label" translatable="yes">Heal _wounded</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -1191,7 +1191,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
         <child>
           <object class="GtkButton" id="btnsethome">
-            <property name="label" translatable="yes">Se_t as home</property>
+            <property name="label" translatable="yes">Set as _home</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
