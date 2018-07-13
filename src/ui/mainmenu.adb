@@ -19,8 +19,10 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Ada.Calendar; use Ada.Calendar;
 with Ada.Calendar.Formatting;
+with Ada.Calendar.Time_Zones; use Ada.Calendar.Time_Zones;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
+with GNAT.String_Split; use GNAT.String_Split;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
@@ -36,6 +38,9 @@ with Gtk.Css_Provider; use Gtk.Css_Provider;
 with Gtk.Style_Context; use Gtk.Style_Context;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Image; use Gtk.Image;
+with Gtk.Tree_Selection; use Gtk.Tree_Selection;
+with Gtk.Tree_View; use Gtk.Tree_View;
+with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -87,7 +92,6 @@ package body MainMenu is
       LoadStories;
       SetToolsList;
       if not NewGame then
-         SaveName := SaveDirectory & To_Unbounded_String("savegame.dat");
          LoadGame;
       end if;
       return True;
@@ -280,6 +284,44 @@ package body MainMenu is
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
             "page5");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback5")));
+      elsif User_Data = Get_Object(Builder, "btnloadgame") then
+         declare
+            SavesList: constant Gtk_List_Store :=
+              Gtk_List_Store(Get_Object(Builder, "saveslist"));
+            Iter: Gtk_Tree_Iter;
+            Files: Search_Type;
+            FoundFile: Directory_Entry_Type;
+            Tokens: Slice_Set;
+         begin
+            Clear(SavesList);
+            Start_Search(Files, To_String(SaveDirectory), "*.save");
+            while More_Entries(Files) loop
+               Get_Next_Entry(Files, FoundFile);
+               Create(Tokens, Simple_Name(FoundFile), "-");
+               Append(SavesList, Iter);
+               Set(SavesList, Iter, 0, Slice(Tokens, 1));
+               Set(SavesList, Iter, 1, Slice(Tokens, 2));
+               Set
+                 (SavesList,
+                  Iter,
+                  2,
+                  Ada.Calendar.Formatting.Image
+                    (Modification_Time(FoundFile),
+                     False,
+                     UTC_Time_Offset));
+               Set(SavesList, Iter, 3, Full_Name(FoundFile));
+            end loop;
+            End_Search(Files);
+         end;
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
+            "page6");
+         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback6")));
+         Set_Cursor
+           (Gtk_Tree_View(Get_Object(Builder, "treesaves")),
+            Gtk_Tree_Path_New_From_String("0"),
+            Gtk_Tree_View_Column(Get_Object(Builder, "columnplayername")),
+            False);
       end if;
    end ShowPage;
 
@@ -358,11 +400,19 @@ package body MainMenu is
    end StartGame;
 
    procedure LoadGame(Object: access Gtkada_Builder_Record'Class) is
+      SavesIter: Gtk_Tree_Iter;
+      SavesModel: Gtk_Tree_Model;
    begin
+      Get_Selected
+        (Get_Selection(Gtk_Tree_View(Get_Object(Object, "treesaves"))),
+         SavesModel,
+         SavesIter);
+      if SavesIter = Null_Iter then
+         return;
+      end if;
+      SaveName := To_Unbounded_String(Get_String(SavesModel, SavesIter, 3));
       if LoadGameData(False) then
          StartGame;
-      else
-         Hide(Gtk_Widget(Get_Object(Object, "btnloadgame")));
       end if;
    end LoadGame;
 
@@ -486,17 +536,20 @@ package body MainMenu is
    end UpdateGoalButton;
 
    procedure ShowMainMenu is
+      Files: Search_Type;
    begin
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
          "page0");
-      if not Exists(To_String(SaveDirectory) & "savegame.dat") then
+      Start_Search(Files, To_String(SaveDirectory), "*.save");
+      if not More_Entries(Files) then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
       else
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
       end if;
+      End_Search(Files);
       if not Exists(To_String(SaveDirectory) & "halloffame.dat") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
       end if;
