@@ -246,6 +246,13 @@ package body Game is
            Goals_List
              (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
       end if;
+      -- Set name of savegame
+      SaveName :=
+        SaveDirectory &
+        CharName &
+        To_Unbounded_String("-") &
+        ShipName &
+        To_Unbounded_String("-" & Positive'Image(GetRandom(1, 999))(2..4) & ".save");
    end NewGame;
 
    procedure UpdateGame(Minutes: Positive) is
@@ -351,7 +358,7 @@ package body Game is
       if not Exists(To_String(DataDirectory) & "game.dat") then
          return False;
       end if;
-      Open(To_String(SaveDirectory) & "game.dat", DataFile);
+      Open(To_String(DataDirectory) & "game.dat", DataFile);
       Parse(Reader, DataFile);
       Close(DataFile);
       GameData := Get_Tree(Reader);
