@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 - Moving map near borders
 - Crash during selecting event as destination for player ship
 - Showing complete mission button on wrong bases
+- Keyboard shortcuts for some orders
 
 ## [2.5] - 2018-06-17
 
