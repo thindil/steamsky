@@ -87,6 +87,7 @@ package body MainMenu is
       LoadStories;
       SetToolsList;
       if not NewGame then
+         SaveName := SaveDirectory & To_Unbounded_String("savegame.dat");
          LoadGame;
       end if;
       return True;
