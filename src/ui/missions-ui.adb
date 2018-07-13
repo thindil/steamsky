@@ -80,10 +80,10 @@ package body Missions.UI is
              .Missions
              (MissionIndex);
       else
-         if MissionIndex > Positive(PlayerShip.Missions.Length) then
+         if MissionIndex > Positive(AcceptedMissions.Length) then
             return;
          end if;
-         Mission := PlayerShip.Missions(MissionIndex);
+         Mission := AcceptedMissions(MissionIndex);
       end if;
       case Mission.MType is
          when Deliver =>
@@ -210,7 +210,7 @@ package body Missions.UI is
             when others =>
                MissionsLimit := 0;
          end case;
-         for Mission of PlayerShip.Missions loop
+         for Mission of AcceptedMissions loop
             if Mission.StartBase =
               SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex then
                MissionsLimit := MissionsLimit - 1;
@@ -288,15 +288,15 @@ package body Missions.UI is
    begin
       if User_Data = Get_Object(Builder, "btnmissioncenter") then
          ShowSkyMap
-           (PlayerShip.Missions(MissionIndex).TargetX,
-            PlayerShip.Missions(MissionIndex).TargetY);
+           (AcceptedMissions(MissionIndex).TargetX,
+            AcceptedMissions(MissionIndex).TargetY);
       else
-         if not PlayerShip.Missions(MissionIndex).Finished then
-            X := PlayerShip.Missions(MissionIndex).TargetX;
-            Y := PlayerShip.Missions(MissionIndex).TargetY;
+         if not AcceptedMissions(MissionIndex).Finished then
+            X := AcceptedMissions(MissionIndex).TargetX;
+            Y := AcceptedMissions(MissionIndex).TargetY;
          else
-            X := SkyBases(PlayerShip.Missions(MissionIndex).StartBase).SkyX;
-            Y := SkyBases(PlayerShip.Missions(MissionIndex).StartBase).SkyY;
+            X := SkyBases(AcceptedMissions(MissionIndex).StartBase).SkyX;
+            Y := SkyBases(AcceptedMissions(MissionIndex).StartBase).SkyY;
          end if;
          if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
             ShowDialog
@@ -391,9 +391,9 @@ package body Missions.UI is
       Cleaning := True;
       Clear(MissionsList);
       Cleaning := False;
-      for I in PlayerShip.Missions.Iterate loop
+      for I in AcceptedMissions.Iterate loop
          Append(MissionsList, MissionsIter);
-         case PlayerShip.Missions(I).MType is
+         case AcceptedMissions(I).MType is
             when Deliver =>
                Set(MissionsList, MissionsIter, 0, "Deliver item to base");
             when Patrol =>
@@ -420,8 +420,8 @@ package body Missions.UI is
             2,
             Gint
               (CountDistance
-                 (PlayerShip.Missions(I).TargetX,
-                  PlayerShip.Missions(I).TargetY)));
+                 (AcceptedMissions(I).TargetX,
+                  AcceptedMissions(I).TargetY)));
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name

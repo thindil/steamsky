@@ -37,6 +37,7 @@ with Goals; use Goals;
 with Config; use Config;
 with Stories; use Stories;
 with Log; use Log;
+with Missions; use Missions;
 
 package body Game.SaveLoad is
 
@@ -357,6 +358,53 @@ package body Game.SaveLoad is
          end loop;
          LogMessage("done.", Everything, True, False);
       end;
+      -- Save missions accepted by player
+      for Mission of AcceptedMissions loop
+         CategoryNode := Create_Element(SaveData, "acceptedmission");
+         CategoryNode := Append_Child(MainNode, CategoryNode);
+         RawValue :=
+           To_Unbounded_String
+             (Integer'Image(Missions_Types'Pos(Mission.MType)));
+         Set_Attribute
+           (CategoryNode,
+            "type",
+            To_String(Trim(RawValue, Ada.Strings.Left)));
+         RawValue := To_Unbounded_String(Integer'Image(Mission.Target));
+         Set_Attribute
+           (CategoryNode,
+            "target",
+            To_String(Trim(RawValue, Ada.Strings.Left)));
+         RawValue := To_Unbounded_String(Integer'Image(Mission.Time));
+         Set_Attribute
+           (CategoryNode,
+            "time",
+            To_String(Trim(RawValue, Ada.Strings.Left)));
+         RawValue := To_Unbounded_String(Integer'Image(Mission.TargetX));
+         Set_Attribute
+           (CategoryNode,
+            "targetx",
+            To_String(Trim(RawValue, Ada.Strings.Left)));
+         RawValue := To_Unbounded_String(Integer'Image(Mission.TargetY));
+         Set_Attribute
+           (CategoryNode,
+            "targety",
+            To_String(Trim(RawValue, Ada.Strings.Left)));
+         RawValue := To_Unbounded_String(Integer'Image(Mission.Reward));
+         Set_Attribute
+           (CategoryNode,
+            "reward",
+            To_String(Trim(RawValue, Ada.Strings.Left)));
+         RawValue := To_Unbounded_String(Integer'Image(Mission.StartBase));
+         Set_Attribute
+           (CategoryNode,
+            "startbase",
+            To_String(Trim(RawValue, Ada.Strings.Left)));
+         if Mission.Finished then
+            Set_Attribute(CategoryNode, "finished", "Y");
+         else
+            Set_Attribute(CategoryNode, "finished", "N");
+         end if;
+      end loop;
       Create(SaveFile, Out_File, To_String(SaveDirectory) & "savegame.dat");
       Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => False);
       Close(SaveFile);
@@ -623,6 +671,61 @@ package body Game.SaveLoad is
                 StepsTexts => TempTexts));
          end loop;
          LogMessage("done.", Everything, True, False);
+      end;
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "acceptedmission");
+      declare
+         MType: Missions_Types;
+         Target, TargetX, TargetY, StartBase: Natural;
+         Time, Reward, MIndex: Positive;
+         Finished: Boolean;
+      begin
+         LogMessage("Loading accepted missions...", Everything, False);
+         for I in 0 .. Length(NodesList) - 1 loop
+            MType :=
+              Missions_Types'Val
+                (Integer'Value(Get_Attribute(Item(NodesList, I), "type")));
+            Target :=
+              Natural'Value(Get_Attribute(Item(NodesList, I), "target"));
+            Time := Positive'Value(Get_Attribute(Item(NodesList, I), "time"));
+            TargetX :=
+              Natural'Value(Get_Attribute(Item(NodesList, I), "targetx"));
+            TargetY :=
+              Natural'Value(Get_Attribute(Item(NodesList, I), "targety"));
+            Reward :=
+              Positive'Value(Get_Attribute(Item(NodesList, I), "reward"));
+            StartBase :=
+              Natural'Value(Get_Attribute(Item(NodesList, I), "startbase"));
+            if Get_Attribute(Item(NodesList, I), "finished") = "Y" then
+               Finished := True;
+            else
+               Finished := False;
+            end if;
+            AcceptedMissions.Append
+            (New_Item =>
+               (MType => MType,
+                Target => Target,
+                Time => Time,
+                TargetX => TargetX,
+                TargetY => TargetY,
+                Reward => Reward,
+                StartBase => StartBase,
+                Finished => Finished));
+            MIndex := AcceptedMissions.Last_Index;
+            if not Finished then
+               SkyMap
+                 (AcceptedMissions(MIndex).TargetX,
+                  AcceptedMissions(MIndex).TargetY)
+                 .MissionIndex :=
+                 MIndex;
+            else
+               SkyMap
+                 (SkyBases(AcceptedMissions(MIndex).StartBase).SkyX,
+                  SkyBases(AcceptedMissions(MIndex).StartBase).SkyY)
+                 .MissionIndex :=
+                 MIndex;
+            end if;
+         end loop;
       end;
       Free(Reader);
       LogMessage("Finished loading game.", Everything);

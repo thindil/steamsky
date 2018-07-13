@@ -19,7 +19,6 @@ with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Crew; use Crew;
 with Game; use Game;
-with Missions; use Missions;
 with Items; use Items;
 
 package Ships is
@@ -55,7 +54,6 @@ package Ships is
       DestinationX: Integer; -- Destination X coordinate
       DestinationY: Integer; -- Destination Y coordinate
       RepairModule: Natural; -- Number of module to repair as first
-      Missions: Mission_Container.Vector; -- List of accepted missions
       Description: Unbounded_String; -- Description of ship
       HomeBase: Natural; -- Index of home base of ship
    end record;

@@ -1439,12 +1439,12 @@ package body Combat is
             DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
          end if;
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
-            if PlayerShip.Missions
+            if AcceptedMissions
                 (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
                 .MType =
               Destroy then
                if ProtoShips_List
-                   (PlayerShip.Missions
+                   (AcceptedMissions
                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
                       .Target)
                    .Name =

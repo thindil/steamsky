@@ -619,6 +619,7 @@ package body Game is
       ClearGameStats;
       Known_Recipes.Clear;
       ClearCurrentGoal;
+      AcceptedMissions.Clear;
       SaveConfig;
    end EndGame;
 
