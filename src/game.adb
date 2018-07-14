@@ -253,7 +253,7 @@ package body Game is
         To_Unbounded_String("-") &
         ShipName &
         To_Unbounded_String
-          ("-" & Positive'Image(GetRandom(1, 999))(2 .. 4) & ".save");
+          ("-" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".save");
    end NewGame;
 
    procedure UpdateGame(Minutes: Positive) is
@@ -618,8 +618,8 @@ package body Game is
       if Save then
          SaveGame;
       else
-         if Exists(To_String(SaveDirectory) & "savegame.dat") then
-            Delete_File(To_String(SaveDirectory) & "savegame.dat");
+         if Exists(To_String(SaveName)) then
+            Delete_File(To_String(SaveName));
          end if;
       end if;
       ClearMessages;

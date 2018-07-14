@@ -214,6 +214,35 @@ package body MainMenu is
          return False;
    end LoadGameData;
 
+   procedure RefreshSavesList is
+      SavesList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "saveslist"));
+      Iter: Gtk_Tree_Iter;
+      Files: Search_Type;
+      FoundFile: Directory_Entry_Type;
+      Tokens: Slice_Set;
+   begin
+      Clear(SavesList);
+      Start_Search(Files, To_String(SaveDirectory), "*.save");
+      while More_Entries(Files) loop
+         Get_Next_Entry(Files, FoundFile);
+         Create(Tokens, Simple_Name(FoundFile), "-");
+         Append(SavesList, Iter);
+         Set(SavesList, Iter, 0, Slice(Tokens, 1));
+         Set(SavesList, Iter, 1, Slice(Tokens, 2));
+         Set
+           (SavesList,
+            Iter,
+            2,
+            Ada.Calendar.Formatting.Image
+              (Modification_Time(FoundFile),
+               False,
+               UTC_Time_Offset));
+         Set(SavesList, Iter, 3, Full_Name(FoundFile));
+      end loop;
+      End_Search(Files);
+   end RefreshSavesList;
+
    procedure ShowPage(User_Data: access GObject_Record'Class) is
    begin
       if User_Data = Get_Object(Builder, "btnnewgame") then
@@ -241,6 +270,16 @@ package body MainMenu is
             "page1");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "entrycharactername")));
       elsif User_Data = Get_Object(Builder, "btnback") then
+         declare
+            Files: Search_Type;
+         begin
+            Start_Search(Files, To_String(SaveDirectory), "*.save");
+            if not More_Entries(Files) then
+               Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+            else
+               Show_All(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+            end if;
+         end;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
             "page0");
@@ -285,38 +324,11 @@ package body MainMenu is
             "page5");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback5")));
       elsif User_Data = Get_Object(Builder, "btnloadgame") then
-         declare
-            SavesList: constant Gtk_List_Store :=
-              Gtk_List_Store(Get_Object(Builder, "saveslist"));
-            Iter: Gtk_Tree_Iter;
-            Files: Search_Type;
-            FoundFile: Directory_Entry_Type;
-            Tokens: Slice_Set;
-         begin
-            Clear(SavesList);
-            Start_Search(Files, To_String(SaveDirectory), "*.save");
-            while More_Entries(Files) loop
-               Get_Next_Entry(Files, FoundFile);
-               Create(Tokens, Simple_Name(FoundFile), "-");
-               Append(SavesList, Iter);
-               Set(SavesList, Iter, 0, Slice(Tokens, 1));
-               Set(SavesList, Iter, 1, Slice(Tokens, 2));
-               Set
-                 (SavesList,
-                  Iter,
-                  2,
-                  Ada.Calendar.Formatting.Image
-                    (Modification_Time(FoundFile),
-                     False,
-                     UTC_Time_Offset));
-               Set(SavesList, Iter, 3, Full_Name(FoundFile));
-            end loop;
-            End_Search(Files);
-         end;
+         RefreshSavesList;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
             "page6");
-         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback6")));
+         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnload")));
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treesaves")),
             Gtk_Tree_Path_New_From_String("0"),
@@ -458,6 +470,36 @@ package body MainMenu is
          To_String(LicenseText));
    end LoadLicense;
 
+   procedure DeleteGame(Object: access Gtkada_Builder_Record'Class) is
+      SavesIter: Gtk_Tree_Iter;
+      SavesModel: Gtk_Tree_Model;
+   begin
+      if not ShowConfirmDialog
+          ("Are you sure you want delete this savegame?",
+           Gtk_Window(Get_Object(Object, "mainmenuwindow"))) then
+         return;
+      end if;
+      Get_Selected
+        (Get_Selection(Gtk_Tree_View(Get_Object(Object, "treesaves"))),
+         SavesModel,
+         SavesIter);
+      if SavesIter = Null_Iter then
+         return;
+      end if;
+      SaveName := To_Unbounded_String(Get_String(SavesModel, SavesIter, 3));
+      Delete_File(To_String(SaveName));
+      RefreshSavesList;
+      if N_Children(SavesModel) = 0 then
+         ShowPage(Get_Object(Builder, "btnback"));
+      else
+         Set_Cursor
+           (Gtk_Tree_View(Get_Object(Builder, "treesaves")),
+            Gtk_Tree_Path_New_From_String("0"),
+            Gtk_Tree_View_Column(Get_Object(Builder, "columnplayername")),
+            False);
+      end if;
+   end DeleteGame;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       CssProvider: Gtk_Css_Provider;
@@ -491,6 +533,7 @@ package body MainMenu is
       Register_Handler(Builder, "Load_Game", LoadGame'Access);
       Register_Handler(Builder, "New_Game", NewGame'Access);
       Register_Handler(Builder, "Show_Page", ShowPage'Access);
+      Register_Handler(Builder, "Delete_Game", DeleteGame'Access);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if HallOfFame_Array(1).Name = Null_Unbounded_String then
