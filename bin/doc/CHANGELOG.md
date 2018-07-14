@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 - Crash during selecting event as destination for player ship
 - Showing complete mission button on wrong bases
 - Keyboard shortcuts for some orders
+- Don't show item amount in base/trader ship if player can't buy them
 
 ## [2.5] - 2018-06-17
 
