@@ -490,6 +490,17 @@ package body Maps.UI is
       YellowColor: constant Gtk_Text_Tag := Lookup(Tags, "yellow");
       CyanColor: constant Gtk_Text_Tag := Lookup(Tags, "cyan");
       LimeColor: constant Gtk_Text_Tag := Lookup(Tags, "lime");
+      RedGrayColor: constant Gtk_Text_Tag := Lookup(Tags, "redgray");
+      GreenGrayColor: constant Gtk_Text_Tag := Lookup(Tags, "greengray");
+      YellowGrayColor: constant Gtk_Text_Tag := Lookup(Tags, "yellowgray");
+      CyanGrayColor: constant Gtk_Text_Tag := Lookup(Tags, "cyangray");
+      LimeGrayColor: constant Gtk_Text_Tag := Lookup(Tags, "limegray");
+      Red2Color: constant Gtk_Text_Tag := Lookup(Tags, "red2");
+      Red3Color: constant Gtk_Text_Tag := Lookup(Tags, "red3");
+      Red2GrayColor: constant Gtk_Text_Tag := Lookup(Tags, "red2gray");
+      Red3GrayColor: constant Gtk_Text_Tag := Lookup(Tags, "red3gray");
+      Green2Color: constant Gtk_Text_Tag := Lookup(Tags, "green2");
+      Green2GrayColor: constant Gtk_Text_Tag := Lookup(Tags, "green2gray");
       MapChar: Character;
       MapColor: Gtk_Text_Tag;
       TextWindow: constant Gdk_Window :=
@@ -537,20 +548,49 @@ package body Maps.UI is
                   MapChar := '!';
                elsif SkyMap(X, Y).EventIndex > 0 then
                   MapChar := '?';
-                  case Events_List(SkyMap(X, Y).EventIndex).EType is
-                     when EnemyShip | AttackOnBase | EnemyPatrol =>
-                        MapColor := RedColor;
-                     when Disease =>
-                        MapColor := YellowColor;
-                     when FullDocks =>
-                        MapColor := CyanColor;
-                     when DoublePrice =>
-                        MapColor := LimeColor;
-                     when Trader | FriendlyShip =>
-                        MapColor := GreenColor;
-                     when others =>
-                        null;
-                  end case;
+                  if SkyMap(X, Y).Visited then
+                     case Events_List(SkyMap(X, Y).EventIndex).EType is
+                        when EnemyShip =>
+                           MapColor := RedColor;
+                        when AttackOnBase =>
+                           MapColor := Red2Color;
+                        when EnemyPatrol =>
+                           MapColor := Red3Color;
+                        when Disease =>
+                           MapColor := YellowColor;
+                        when FullDocks =>
+                           MapColor := CyanColor;
+                        when DoublePrice =>
+                           MapColor := LimeColor;
+                        when Trader =>
+                           MapColor := GreenColor;
+                        when FriendlyShip =>
+                           MapColor := Green2Color;
+                        when others =>
+                           null;
+                     end case;
+                  else
+                     case Events_List(SkyMap(X, Y).EventIndex).EType is
+                        when EnemyShip =>
+                           MapColor := RedGrayColor;
+                        when AttackOnBase =>
+                           MapColor := Red2GrayColor;
+                        when EnemyPatrol =>
+                           MapColor := Red3GrayColor;
+                        when Disease =>
+                           MapColor := YellowGrayColor;
+                        when FullDocks =>
+                           MapColor := CyanGrayColor;
+                        when DoublePrice =>
+                           MapColor := LimeGrayColor;
+                        when Trader =>
+                           MapColor := GreenGrayColor;
+                        when FriendlyShip =>
+                           MapColor := Green2GrayColor;
+                        when others =>
+                           null;
+                     end case;
+                  end if;
                elsif SkyMap(X, Y).BaseIndex > 0 then
                   if SkyBases(SkyMap(X, Y).BaseIndex).Known then
                      MapChar := 'o';
