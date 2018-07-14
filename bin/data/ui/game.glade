@@ -648,6 +648,94 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="font">Normal</property>
       </object>
     </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="yellowgray">
+        <property name="name">yellowgray</property>
+        <property name="background">gray</property>
+        <property name="foreground">yellow</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="greengray">
+        <property name="name">greengray</property>
+        <property name="background">gray</property>
+        <property name="foreground_rgba">rgb(78,154,6)</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="redgray">
+        <property name="name">redgray</property>
+        <property name="background">gray</property>
+        <property name="foreground">red</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="cyangray">
+        <property name="name">cyangray</property>
+        <property name="background">gray</property>
+        <property name="foreground">cyan</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="limegray">
+        <property name="name">limegray</property>
+        <property name="background">gray</property>
+        <property name="foreground">lime</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="red2">
+        <property name="name">red2</property>
+        <property name="background">black</property>
+        <property name="foreground_rgba">rgb(164,0,0)</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="red3">
+        <property name="name">red3</property>
+        <property name="background">black</property>
+        <property name="foreground_rgba">rgb(115,39,39)</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="red2gray">
+        <property name="name">red2gray</property>
+        <property name="background">gray</property>
+        <property name="foreground_rgba">rgb(164,0,0)</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="red3gray">
+        <property name="name">red3gray</property>
+        <property name="background">gray</property>
+        <property name="foreground_rgba">rgb(115,39,39)</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="green2">
+        <property name="name">green2</property>
+        <property name="background">black</property>
+        <property name="foreground_rgba">rgb(115,210,22)</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="green2grey">
+        <property name="name">green2grey</property>
+        <property name="background">grey</property>
+        <property name="foreground_rgba">rgb(115,210,22)</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
   </object>
   <object class="GtkTextBuffer" id="txtmap">
     <property name="tag_table">maptags</property>
