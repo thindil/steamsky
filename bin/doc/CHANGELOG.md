@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Keyboard shortcut (and option to set it) for selecting map field
 - Randomly generated stories
 - Option to set GTK share directory via console parameter (Linux only)
+- Ability to have few saved games at once
 
 ### Changed
 - Updated help
