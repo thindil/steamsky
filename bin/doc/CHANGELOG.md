@@ -19,7 +19,8 @@ All notable changes to this project will be documented in this file.
   orichalcum furnace, large orichalcum hull, advanced large orichalcum hull,
   heavy orichalcum armor, small orichalcum greenhouse, small orichalcum water
   collector, small orichalcum medical room, small advanced orichalcum cabin,
-  small extended orichalcum cabin and small luxury orichalcum cabin
+  small extended orichalcum cabin, small luxury orichalcum cabin and heavy
+  orichalcum turret
 - Ability to train skills on ship
 - Keyboard shortcuts (and option to set them) to move map
 - New item type: storyitem
