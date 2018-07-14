@@ -200,7 +200,7 @@ package body Trades.UI is
            (PlayerShip.Cargo(CargoIndex).Durability,
             Get_Object(Object, "tradedamagebar"));
       end if;
-      if BaseCargoIndex > 0 then
+      if BaseCargoIndex > 0 and Items_List(ProtoIndex).Buyable(BaseType) then
          if BaseIndex > 0 then
             Append(ItemInfo, ASCII.LF & "In base:");
          else
