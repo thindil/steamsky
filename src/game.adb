@@ -253,7 +253,7 @@ package body Game is
         To_Unbounded_String("-") &
         ShipName &
         To_Unbounded_String
-          ("-" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".save");
+          ("-" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".sav");
    end NewGame;
 
    procedure UpdateGame(Minutes: Positive) is
