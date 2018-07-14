@@ -223,7 +223,7 @@ package body MainMenu is
       Tokens: Slice_Set;
    begin
       Clear(SavesList);
-      Start_Search(Files, To_String(SaveDirectory), "*.save");
+      Start_Search(Files, To_String(SaveDirectory), "*.sav");
       while More_Entries(Files) loop
          Get_Next_Entry(Files, FoundFile);
          Create(Tokens, Simple_Name(FoundFile), "-");
@@ -273,7 +273,7 @@ package body MainMenu is
          declare
             Files: Search_Type;
          begin
-            Start_Search(Files, To_String(SaveDirectory), "*.save");
+            Start_Search(Files, To_String(SaveDirectory), "*.sav");
             if not More_Entries(Files) then
                Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
             else
@@ -585,7 +585,7 @@ package body MainMenu is
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
          "page0");
-      Start_Search(Files, To_String(SaveDirectory), "*.save");
+      Start_Search(Files, To_String(SaveDirectory), "*.sav");
       if not More_Entries(Files) then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
