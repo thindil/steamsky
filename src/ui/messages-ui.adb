@@ -111,7 +111,7 @@ package body Messages.UI is
    begin
       if ShowConfirmDialog
           ("Are you sure you want to clear all messages?",
-           Gtk_Window(Get_Object(Object, "messageswindow"))) then
+           Gtk_Window(Get_Object(Object, "skymapwindow"))) then
          ClearMessages;
          ShowMessages(Default);
       end if;
