@@ -65,7 +65,7 @@ You can set game directories by starting parameters. Possible options are:
 
 * --savedir=[directory] set directory where game (or logs) will be saved. Game
   must have write permission to this directory. Example: `./steamsky
-  --savedir=/home/user/.saves`. Default value is *data/*
+  --savedir=/home/user/.saves`. Default value is *data/saves/*
 
 * --docdir=[directory] set directory where game documentation is (at this
   moment important only for license and changelog files). Example `./steamsky
