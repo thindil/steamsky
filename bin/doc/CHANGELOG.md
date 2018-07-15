@@ -51,6 +51,7 @@ All notable changes to this project will be documented in this file.
 - Showing complete mission button on wrong bases
 - Keyboard shortcuts for some orders
 - Don't show item amount in base/trader ship if player can't buy them
+- Possible crash on deleting messages
 
 ## [2.5] - 2018-06-17
 
