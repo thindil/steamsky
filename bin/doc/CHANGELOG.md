@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.6] - 2018-07-15
 
 ### Added
 - New goals: kill 800 inquisitors in melee combat, kill 1000 inquisitors in
