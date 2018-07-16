@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New ship module: huge orichalcum hull
+
 ## [2.6] - 2018-07-15
 
 ### Added
