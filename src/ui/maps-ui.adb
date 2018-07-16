@@ -481,7 +481,7 @@ package body Maps.UI is
       Iter: Gtk_Text_Iter;
       MapBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Builder, "txtmap"));
-      EndY, EndX: Integer;
+      EndY, EndX, StoryX, StoryY: Integer := 0;
       Tags: constant Gtk_Text_Tag_Table := Get_Tag_Table(MapBuffer);
       WhiteColor: constant Gtk_Text_Tag := Lookup(Tags, "white");
       GrayColor: constant Gtk_Text_Tag := Lookup(Tags, "gray");
@@ -528,6 +528,13 @@ package body Maps.UI is
          EndX := 1024;
          StartX := 1024 - MapWidth;
       end if;
+      if CurrentStory.Index > 0 then
+         GetStoryLocation(StoryX, StoryY);
+         if StoryX = PlayerShip.SkyX and StoryY = PlayerShip.SkyY then
+            StoryX := 0;
+            StoryY := 0;
+         end if;
+      end if;
       Get_Start_Iter(MapBuffer, Iter);
       for Y in StartY .. EndY loop
          for X in StartX .. EndX loop
@@ -544,6 +551,9 @@ package body Maps.UI is
                if X = PlayerShip.DestinationX and
                  Y = PlayerShip.DestinationY then
                   MapChar := 'X';
+               elsif X = StoryX and Y = StoryY then
+                  MapChar := '+';
+                  MapColor := GreenColor;
                elsif SkyMap(X, Y).MissionIndex > 0 then
                   MapChar := '!';
                   if SkyMap(X, Y).Visited then
@@ -899,6 +909,38 @@ package body Maps.UI is
                when Passenger =>
                   Append(MapInfoText, "Transport passenger");
             end case;
+         end;
+      end if;
+      if CurrentStory.Index > 0 then
+         declare
+            StoryX, StoryY: Integer := 0;
+            FinishCondition: StepConditionType;
+         begin
+            GetStoryLocation(StoryX, StoryY);
+            if StoryX = PlayerShip.SkyX and StoryY = PlayerShip.SkyY then
+               StoryX := 0;
+               StoryY := 0;
+            end if;
+            if MapX = StoryX and MapY = StoryY then
+               if CurrentStory.CurrentStep = 0 then
+                  FinishCondition :=
+                    Stories_List(CurrentStory.Index).StartingStep
+                      .FinishCondition;
+               elsif CurrentStory.CurrentStep > 0 then
+                  FinishCondition :=
+                    Stories_List(CurrentStory.Index).Steps
+                      (CurrentStory.CurrentStep)
+                      .FinishCondition;
+               else
+                  FinishCondition :=
+                    Stories_List(CurrentStory.Index).FinalStep.FinishCondition;
+               end if;
+               if FinishCondition = ASKINBASE or
+                 FinishCondition = DESTROYSHIP or
+                 FinishCondition = EXPLORE then
+                  Append(MapInfoText, ASCII.LF & "Story leads you here");
+               end if;
+            end if;
          end;
       end if;
       if MapX = PlayerShip.SkyX and MapY = PlayerShip.SkyY then

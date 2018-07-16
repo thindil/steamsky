@@ -38,29 +38,6 @@ package body Stories.UI is
    Builder: Gtkada_Builder;
    Setting: Boolean;
 
-   procedure GetStoryLocation(StoryX, StoryY: in out Positive) is
-      Tokens: Slice_Set;
-   begin
-      if CurrentStory.Data /= Null_Unbounded_String then
-         Create(Tokens, To_String(CurrentStory.Data), ";");
-         if Slice_Count(Tokens) < 3 then
-            for I in SkyBases'Range loop
-               if SkyBases(I).Name = CurrentStory.Data then
-                  StoryX := SkyBases(I).SkyX;
-                  StoryY := SkyBases(I).SkyY;
-                  exit;
-               end if;
-            end loop;
-         else
-            StoryX := Integer'Value(Slice(Tokens, 1));
-            StoryY := Integer'Value(Slice(Tokens, 2));
-         end if;
-      else
-         StoryX := PlayerShip.SkyX;
-         StoryY := PlayerShip.SkyY;
-      end if;
-   end GetStoryLocation;
-
    procedure ShowStoryInfo(Object: access Gtkada_Builder_Record'Class) is
       StoryIndex: Positive;
       StoryBuffer: constant Gtk_Text_Buffer :=
