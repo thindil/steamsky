@@ -546,6 +546,33 @@ package body Maps.UI is
                   MapChar := 'X';
                elsif SkyMap(X, Y).MissionIndex > 0 then
                   MapChar := '!';
+                  if SkyMap(X, Y).Visited then
+                     case AcceptedMissions(SkyMap(X, Y).MissionIndex).MType is
+                        when Deliver =>
+                           MapColor := YellowColor;
+                        when Destroy =>
+                           MapColor := RedColor;
+                        when Patrol =>
+                           MapColor := LimeColor;
+                        when Explore =>
+                           MapColor := GreenColor;
+                        when Passenger =>
+                           MapColor := CyanColor;
+                     end case;
+                  else
+                     case AcceptedMissions(SkyMap(X, Y).MissionIndex).MType is
+                        when Deliver =>
+                           MapColor := YellowGrayColor;
+                        when Destroy =>
+                           MapColor := RedGrayColor;
+                        when Patrol =>
+                           MapColor := LimeGrayColor;
+                        when Explore =>
+                           MapColor := GreenGrayColor;
+                        when Passenger =>
+                           MapColor := CyanGrayColor;
+                     end case;
+                  end if;
                elsif SkyMap(X, Y).EventIndex > 0 then
                   MapChar := '?';
                   if SkyMap(X, Y).Visited then
