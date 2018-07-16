@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship module: huge orichalcum hull
 
+### Changed
+- Updated interface
+
 ### Fixed
 - Keyboard shortcuts for some orders
 
