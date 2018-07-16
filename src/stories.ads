@@ -108,5 +108,7 @@ package Stories is
      (FinishData: StepData_Container.Vector;
       Name: String)
      return Unbounded_String; -- Get step finish data with selected name
+   procedure GetStoryLocation
+     (StoryX, StoryY: in out Positive); -- Get target location of current story
 
 end Stories;
