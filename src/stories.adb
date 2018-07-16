@@ -17,6 +17,7 @@
 
 with Ada.Directories; use Ada.Directories;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.String_Split; use GNAT.String_Split;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -561,5 +562,28 @@ package body Stories is
       end loop;
       return Null_Unbounded_String;
    end GetStepData;
+
+   procedure GetStoryLocation(StoryX, StoryY: in out Positive) is
+      Tokens: Slice_Set;
+   begin
+      if CurrentStory.Data /= Null_Unbounded_String then
+         Create(Tokens, To_String(CurrentStory.Data), ";");
+         if Slice_Count(Tokens) < 3 then
+            for I in SkyBases'Range loop
+               if SkyBases(I).Name = CurrentStory.Data then
+                  StoryX := SkyBases(I).SkyX;
+                  StoryY := SkyBases(I).SkyY;
+                  exit;
+               end if;
+            end loop;
+         else
+            StoryX := Integer'Value(Slice(Tokens, 1));
+            StoryY := Integer'Value(Slice(Tokens, 2));
+         end if;
+      else
+         StoryX := PlayerShip.SkyX;
+         StoryY := PlayerShip.SkyY;
+      end if;
+   end GetStoryLocation;
 
 end Stories;
