@@ -455,7 +455,7 @@ package body Maps.UI.Handlers is
                        CurrentStory.Data = SkyBases(BaseIndex).Name then
                         Set_Label
                           (Gtk_Button(Get_Object(Builder, "btnstory")),
-                           "Ask for " &
+                           "Ask _for " &
                            To_String
                              (Items_List
                                 (Positive'Value
@@ -476,7 +476,7 @@ package body Maps.UI.Handlers is
                        PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) then
                         Set_Label
                           (Gtk_Button(Get_Object(Builder, "btnstory")),
-                           "Search for " &
+                           "_Search for " &
                            To_String
                              (ProtoShips_List(Positive'Value(Slice(Tokens, 3)))
                                 .Name));
@@ -494,7 +494,7 @@ package body Maps.UI.Handlers is
                        PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) then
                         Set_Label
                           (Gtk_Button(Get_Object(Builder, "btnstory")),
-                           "Search area");
+                           "_Search area");
                         Set_No_Show_All
                           (Gtk_Widget(Get_Object(Object, "btnstory")),
                            False);
@@ -652,7 +652,7 @@ package body Maps.UI.Handlers is
                   False);
                Set_Label
                  (Gtk_Button(Get_Object(Object, "btnattack")),
-                  "Attack");
+                  "_Attack");
             when FullDocks =>
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btndock")),
@@ -666,7 +666,7 @@ package body Maps.UI.Handlers is
                   False);
                Set_Label
                  (Gtk_Button(Get_Object(Object, "btnattack")),
-                  "Defend");
+                  "_Defend");
             when Disease =>
                if HaveTrader then
                   ItemIndex :=
