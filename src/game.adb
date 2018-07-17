@@ -250,10 +250,10 @@ package body Game is
       SaveName :=
         SaveDirectory &
         CharName &
-        To_Unbounded_String("-") &
+        To_Unbounded_String("_") &
         ShipName &
         To_Unbounded_String
-          ("-" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".sav");
+          ("_" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".sav");
    end NewGame;
 
    procedure UpdateGame(Minutes: Positive) is
