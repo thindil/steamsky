@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated interface
+- Updated README.md
 
 ### Fixed
 - Keyboard shortcuts for some orders
