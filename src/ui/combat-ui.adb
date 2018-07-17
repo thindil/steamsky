@@ -713,17 +713,6 @@ package body Combat.UI is
       end if;
    end NextTurn;
 
-   procedure CloseCombat(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), True);
-      ShowSkyMap;
-      Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "skymap");
-      Show_All(Gtk_Widget(Get_Object(Object, "btnmenu")));
-      Hide(Gtk_Widget(Get_Object(Object, "btnclose")));
-   end CloseCombat;
-
    procedure ShowCombatInfo(User_Data: access GObject_Record'Class) is
    begin
       Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
@@ -764,7 +753,6 @@ package body Combat.UI is
    procedure CreateCombatUI(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
-      Register_Handler(Builder, "Close_Combat", CloseCombat'Access);
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);
       Register_Handler(Builder, "Next_Turn", NextTurn'Access);
       Register_Handler(Builder, "Show_Combat_Info", ShowCombatInfo'Access);
