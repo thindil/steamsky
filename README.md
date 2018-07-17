@@ -100,8 +100,10 @@ For detailed informations about contributing to the project (bugs reporting,
 ideas propositions, code conduct, etc), see 
 [CONTRIBUTING.md](bin/doc/CONTRIBUTING.md)
 
-## License
+## Licenses
 Game is available under [GPLv3](bin/doc/COPYING) license.
+GtkAda and XmlAda libraries distributed with game are under GPLv3 license.
+Gtk library distributed with game is under LGPLv2.1 license.
 
 More documentation about game (changelog, license) you can find in
 [doc](bin/doc) directory.
