@@ -226,7 +226,10 @@ package body MainMenu is
       Start_Search(Files, To_String(SaveDirectory), "*.sav");
       while More_Entries(Files) loop
          Get_Next_Entry(Files, FoundFile);
-         Create(Tokens, Simple_Name(FoundFile), "-");
+         Create(Tokens, Simple_Name(FoundFile), "_");
+         if Slice_Count(Tokens) < 2 then
+            Create(Tokens, Simple_Name(FoundFile), "-");
+         end if;
          Append(SavesList, Iter);
          Set(SavesList, Iter, 0, Slice(Tokens, 1));
          Set(SavesList, Iter, 1, Slice(Tokens, 2));
