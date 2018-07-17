@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 - Updated README.md
+- Base name of savegame files
 
 ### Fixed
 - Keyboard shortcuts for some orders
