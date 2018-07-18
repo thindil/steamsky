@@ -31,6 +31,8 @@ with Maps.UI; use Maps.UI;
 with Combat.UI; use Combat.UI;
 with GameOptions; use GameOptions;
 with Statistics.UI; use Statistics.UI;
+with Ships; use Ships;
+with Ships.Crew; use Ships.Crew;
 
 package body Utils.UI is
 
@@ -144,6 +146,7 @@ package body Utils.UI is
       end if;
       if VisibleChildName = "combat" then
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), True);
+         UpdateOrders(PlayerShip);
       end if;
       Hide(Gtk_Widget(Get_Object(Object, "btnclose")));
       Hide(Gtk_Widget(Get_Object(Object, "btnshowhelp")));
