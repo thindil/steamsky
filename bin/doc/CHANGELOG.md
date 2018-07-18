@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Keyboard shortcuts for some orders
+- Updating crew orders after combat
 
 ## [2.6] - 2018-07-15
 
