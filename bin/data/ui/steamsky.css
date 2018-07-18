@@ -6,13 +6,16 @@
    text-shadow:none;
 }
 
-*:hover, 
-   GtkButton:hover *, 
-   GtkMenuItem:hover *,
-   .entry:selected,
+.entry:selected,
    GtkButton:focus,
    GtkButton:focus * {
-  background:rgb(64,69,82);
+   background:rgb(64,69,82);
+}
+
+*:hover {
+   border-style:dotted;
+   border-width:1px;
+   border-color:red;
 }
 
 GtkButton:active,
