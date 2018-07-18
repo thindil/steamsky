@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New ship modules: huge orichalcum hull and advanced huge orichalcum hull
+- New ship modules: huge orichalcum hull, advanced huge orichalcum hull and
+  huge orichalcum engine
 
 ### Changed
 - Updated interface
