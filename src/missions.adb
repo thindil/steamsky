@@ -421,6 +421,7 @@ package body Missions is
       end if;
       if Failed then
          GainRep(Mission.StartBase, (Reputation * (-1)));
+         UpdateMorale(PlayerShip, 1, GetRandom(-10, -5));
          case Mission.MType is
             when Deliver =>
                Append
@@ -451,6 +452,7 @@ package body Missions is
          else
             GainRep(Mission.StartBase, Reputation);
          end if;
+         UpdateMorale(PlayerShip, 1, 1);
          RewardAmount := Mission.Reward;
          FreeSpace := FreeCargo((0 - RewardAmount));
          if FreeSpace < 0 then
