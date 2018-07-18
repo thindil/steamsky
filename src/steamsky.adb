@@ -20,9 +20,9 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Environment_Variables; use Ada.Environment_Variables;
 with Interfaces.C; use Interfaces.C;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Gtk.Main; use Gtk.Main;
 with Gtk.Settings; use Gtk.Settings;
 with Gtkada.Bindings; use Gtkada.Bindings;
@@ -77,7 +77,7 @@ begin
             LogMessage
               ("Data directory sets to: " & To_String(DataDirectory),
                Everything);
-            if not Exists(To_String(DataDirectory)) then
+            if not Ada.Directories.Exists(To_String(DataDirectory)) then
                Put_Line
                  ("Directory " &
                   To_String(DataDirectory) &
@@ -91,7 +91,7 @@ begin
             LogMessage
               ("Save directory sets to: " & To_String(SaveDirectory),
                Everything);
-            if not Exists(To_String(SaveDirectory)) then
+            if not Ada.Directories.Exists(To_String(SaveDirectory)) then
                Put_Line
                  ("Directory " &
                   To_String(SaveDirectory) &
@@ -109,7 +109,7 @@ begin
             LogMessage
               ("Documentation directory sets to: " & To_String(DocDirectory),
                Everything);
-            if not Exists(To_String(DocDirectory)) then
+            if not Ada.Directories.Exists(To_String(DocDirectory)) then
                Put_Line
                  ("Directory " &
                   To_String(DocDirectory) &
@@ -123,7 +123,7 @@ begin
             LogMessage
               ("Library directory sets to: " & To_String(LibraryDirectory),
                Everything);
-            if not Exists(To_String(LibraryDirectory)) then
+            if not Ada.Directories.Exists(To_String(LibraryDirectory)) then
                Put_Line
                  ("Directory " &
                   To_String(LibraryDirectory) &
@@ -138,7 +138,7 @@ begin
               ("Configuration directory sets to: " &
                To_String(ConfigDirectory),
                Everything);
-            if not Exists(To_String(ConfigDirectory)) then
+            if not Ada.Directories.Exists(To_String(ConfigDirectory)) then
                Put_Line
                  ("Directory " &
                   To_String(ConfigDirectory) &
@@ -152,7 +152,7 @@ begin
             LogMessage
               ("Share directory sets to: " & To_String(ShareDirectory),
                Everything);
-            if not Exists(To_String(ShareDirectory)) then
+            if not Ada.Directories.Exists(To_String(ShareDirectory)) then
                Put_Line
                  ("Directory " &
                   To_String(ShareDirectory) &
@@ -185,7 +185,7 @@ begin
             To_Unbounded_String("XDG_DATA_DIRS"));
          VariablesValues: array(1 .. 5) of Unbounded_String;
       begin
-         if Exists(To_String(LibraryDirectory)) then
+         if Ada.Directories.Exists(To_String(LibraryDirectory)) then
             VariablesValues(1) := LibraryDirectory;
             VariablesValues(2) :=
               LibraryDirectory &
@@ -236,11 +236,9 @@ begin
             end;
          end if;
          for I in VariablesNames'Range loop
-            Setenv
-              (To_String(VariablesNames(I)),
-               To_String(VariablesValues(I)));
+            Set(To_String(VariablesNames(I)), To_String(VariablesValues(I)));
          end loop;
-         Setenv("GSETTINGS_BACKEND", "memory");
+         Set("GSETTINGS_BACKEND", "memory");
       end;
    end if;
 
