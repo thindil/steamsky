@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship modules: huge orichalcum hull, advanced huge orichalcum hull and
   huge orichalcum engine
+- Finishing missions raise or lower (if failed) player character morale
 
 ### Changed
 - Updated interface
