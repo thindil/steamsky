@@ -65,7 +65,7 @@ package body Ships.UI.Handlers is
       if Module.Durability < Module.MaxDurability then
          Show_All(Gtk_Widget(DamageBar));
          DamagePercent :=
-           1.0 - (Gdouble(Module.Durability) / Gdouble(Module.MaxDurability));
+           (Gdouble(Module.Durability) / Gdouble(Module.MaxDurability));
          if DamagePercent < 1.0 and DamagePercent > 0.79 then
             Set_Text(DamageBar, "Slightly damaged");
          elsif DamagePercent < 0.8 and DamagePercent > 0.49 then
