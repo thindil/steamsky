@@ -4,6 +4,8 @@
    border-style:none;
    box-shadow:none;
    text-shadow:none;
+   font-family:Z003;
+   font-size:16px;
 }
 
 .entry:selected,
@@ -44,10 +46,6 @@ GtkButton:active,
 
 .button:insensitive, .button:insensitive * {
    color:black;
-}
-
-GtkButton * {
-   font-weight:bold;
 }
 
 .progressbar, 
@@ -121,4 +119,14 @@ GtkScale, GtkScale:hover {
 
 GtkDialog, GtkMessageDialog {
    box-shadow:5px 5px rgba(0, 0, 0, 0.1);
+}
+
+GtkTextView#mapview {
+   font-family:Hack;
+   font-size:10px;
+}
+
+*#normalfont {
+   font-family:Roboto;
+   font-size:12px;
 }
