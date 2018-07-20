@@ -226,5 +226,6 @@ Text between "module" tags is module description.
  <module durability="600" index="187" installtime="350" material="Orichalcum" maxvalue="53" name="Advanced huge orichalcum hull" price="50000" skill="Engineering" type="HULL" value="0" weight="22000">Base module of each ship, made of orichalcum. The entire ship goes down if the hull is destroyed.</module>
  <module durability="450" index="188" installtime="280" material="Orichalcum" maxvalue="50000" name="Huge orichalcum engine" price="65000" size="4" skill="Engineering" type="ENGINE" value="10" weight="12000">Huge engine made of orichalcum. Each ship needs at least one engine to fly.</module>
  <module durability="550" index="189" installtime="300" material="Orichalcum" maxvalue="55000" name="Advanced huge orichalcum engine" price="70000" size="4" skill="Engineering" type="ENGINE" value="11" weight="15000">Updated version of huge engine made of orichalcum. Each ship needs at least one engine to fly.</module>
+ <module durability="40" index="190" installtime="50" material="Orichalcum" maxvalue="16" name="Orichalcum harpoon gun" price="4000" skill="Gunsmith" type="HARPOON_GUN" value="45" weight="60">Harpoon gun made of orichalcum. Like other guns, requires an empty turret to install.</module>
 </modules>
 
