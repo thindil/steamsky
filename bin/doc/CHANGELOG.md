@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Keyboard shortcuts for some orders
 - Updating crew orders after combat
 - Info about module damage on ship info screen
+- Refreshing combat UI after change crew orders on crew screen
 
 ## [2.6] - 2018-07-15
 
