@@ -118,3 +118,7 @@ GtkLabel#overlaylabel {
 GtkScale, GtkScale:hover {
    background:grey;
 }
+
+GtkDialog, GtkMessageDialog {
+   box-shadow:5px 5px rgba(0, 0, 0, 0.1);
+}
