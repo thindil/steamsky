@@ -107,6 +107,12 @@ GtkAda and XmlAda libraries distributed with game are under GPLv3 license.
 
 Gtk library distributed with game is under LGPLv2.1 license.
 
+Font Roboto is under Apache v2.0 license.
+
+Font Hack is under MIT license.
+
+Font Z003 is under AGPL v3 license.
+
 
 
 More documentation about game (changelog, license) you can find in
