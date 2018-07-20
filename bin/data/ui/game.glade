@@ -1708,6 +1708,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
             <child>
               <object class="GtkLabel" id="lblpilot">
+                <property name="name">normalfont</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">[P]</property>
@@ -1721,6 +1722,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
             <child>
               <object class="GtkLabel" id="lblengineer">
+                <property name="name">normalfont</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">[E]</property>
@@ -1734,6 +1736,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
             <child>
               <object class="GtkLabel" id="lblgunners">
+                <property name="name">normalfont</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">[G]</property>
@@ -1747,6 +1750,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
             <child>
               <object class="GtkLabel" id="lblrepairs">
+                <property name="name">normalfont</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">[R]</property>
@@ -1760,6 +1764,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
             <child>
               <object class="GtkLabel" id="lblcrafting">
+                <property name="name">normalfont</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">[M]</property>
@@ -1773,6 +1778,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
             <child>
               <object class="GtkLabel" id="lblupgrade">
+                <property name="name">normalfont</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">[U]</property>
@@ -1786,6 +1792,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
             <child>
               <object class="GtkLabel" id="lbltalk">
+                <property name="name">normalfont</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">[T]</property>
@@ -1799,6 +1806,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
             <child>
               <object class="GtkLabel" id="lblclean">
+                <property name="name">normalfont</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">[C]</property>
