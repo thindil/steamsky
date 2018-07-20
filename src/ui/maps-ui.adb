@@ -38,7 +38,6 @@ with Gtk.Overlay; use Gtk.Overlay;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
-with Pango.Font; use Pango.Font;
 with Gdk; use Gdk;
 with Gdk.Device; use Gdk.Device;
 with Gdk.Window; use Gdk.Window;
@@ -953,8 +952,6 @@ package body Maps.UI is
 
    procedure CreateSkyMap is
       Error: aliased GError;
-      FontDescription: constant Pango_Font_Description :=
-        Pango_Font_Description_New;
       Accelerators: Gtk_Accel_Group;
    begin
       if Builder /= null then
@@ -1016,10 +1013,6 @@ package body Maps.UI is
       Register_Handler(Builder, "Update_Tooltip", UpdateTooltip'Access);
       Register_Handler(Builder, "Deliver_Medicines", DeliverMedicines'Access);
       Do_Connect(Builder);
-      Set_Family(FontDescription, "monospace");
-      Override_Font
-        (Gtk_Widget(Get_Object(Builder, "mapview")),
-         FontDescription);
       Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
       Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
       Add_Entry("<skymapwindow>/btnupright", GDK_KP_9, 0);
