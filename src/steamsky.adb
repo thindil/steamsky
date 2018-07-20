@@ -241,6 +241,7 @@ begin
          Set("GSETTINGS_BACKEND", "memory");
       end;
    end if;
+   Set("XDG_DATA_HOME", To_String(ShareDirectory));
 
    --  Initializes GtkAda
    Init;
