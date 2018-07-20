@@ -436,9 +436,7 @@ package body Combat.UI is
         ProtoShips_List(EnemyShipIndex).Crew.Length = 0 then
          Hide(Gtk_Widget(Get_Object(Builder, "expboard")));
       end if;
-      if NewCombat then
-         RefreshCombatUI;
-      end if;
+      RefreshCombatUI;
    end ShowCombatUI;
 
    procedure SetOrdersList(Object: access Gtkada_Builder_Record'Class) is
