@@ -402,20 +402,35 @@ package body Events is
 
    procedure RecoverBase(BaseIndex: Positive) is
       FactionRoll: constant Positive := GetRandom(1, 100);
+      PlayerFactionIndex: Positive;
    begin
+      for I in Factions_List.Iterate loop
+         if To_Lower(To_String(Factions_List(I).Index)) =
+           To_Lower(To_String(PlayerFaction)) then
+            PlayerFactionIndex := Factions_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
       for I in Factions_List.Iterate loop
          if (FactionRoll = Factions_List(I).SpawnChance(1)) or
            (FactionRoll > Factions_List(I).SpawnChance(1) and
             FactionRoll <= Factions_List(I).SpawnChance(2)) then
             SkyBases(BaseIndex).Owner := Factions_Container.To_Index(I);
-            if Factions_List(I).Reputation(2) = 0 then
+            if Factions_List(PlayerFactionIndex).Reputation
+                (Factions_Container.To_Index(I))
+                (2) =
+              0 then
                SkyBases(BaseIndex).Reputation(1) :=
-                 Factions_List(I).Reputation(1);
+                 Factions_List(PlayerFactionIndex).Reputation
+                   (Factions_Container.To_Index(I))
+                   (1);
             else
                SkyBases(BaseIndex).Reputation(1) :=
                  GetRandom
-                   (Factions_List(I).Reputation(1),
-                    Factions_List(I).Reputation(2));
+                   (Factions_List(I).Reputation(Factions_Container.To_Index(I))
+                      (1),
+                    Factions_List(I).Reputation(Factions_Container.To_Index(I))
+                      (2));
             end if;
             exit;
          end if;
