@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New ship modules: huge orichalcum hull, advanced huge orichalcum hull, huge
-  orichalcum engine, advanced huge orichalcum engine and orichalcum harpoon gun
+  orichalcum engine, advanced huge orichalcum engine, orichalcum harpoon gun
+  and orichalcum 60mm gun
 - Finishing missions raise or lower (if failed) player character morale
 
 ### Changed
