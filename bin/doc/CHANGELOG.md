@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Base name of savegame files
 - Updated help
+- Each faction have separated reputation with each other
 
 ### Fixed
 - Keyboard shortcuts for some orders
