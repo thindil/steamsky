@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Updating crew orders after combat
 - Info about module damage on ship info screen
 - Refreshing combat UI after change crew orders on crew screen
+- Showing info about events in bases
 
 ## [2.6] - 2018-07-15
 
