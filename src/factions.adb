@@ -34,8 +34,9 @@ package body Factions is
       FoundFile: Directory_Entry_Type;
       FactionsFile: File_Input;
       Reader: Tree_Reader;
-      NodesList: Node_List;
+      NodesList, ChildNodes: Node_List;
       FactionsData: Document;
+      TmpReputation: Reputation_Container.Vector;
    begin
       if Factions_List.Length > 0 then
          return;
@@ -59,7 +60,7 @@ package body Factions is
             PluralMemberName => Null_Unbounded_String,
             SpawnChance => (0, 0),
             Population => (0, 0),
-            Reputation => (0, 0),
+            Reputation => TmpReputation,
             Friendly => False,
             NamesType => To_Unbounded_String("standard"));
          LogMessage
@@ -111,19 +112,6 @@ package body Factions is
                  Natural'Value
                    (Get_Attribute(Item(NodesList, I), "maxpopulation"));
             end if;
-            if Get_Attribute(Item(NodesList, I), "reputation") /= "" then
-               TempRecord.Reputation(1) :=
-                 Integer'Value
-                   (Get_Attribute(Item(NodesList, I), "reputation"));
-            end if;
-            if Get_Attribute(Item(NodesList, I), "minreputation") /= "" then
-               TempRecord.Reputation(1) :=
-                 Integer'Value
-                   (Get_Attribute(Item(NodesList, I), "minreputation"));
-               TempRecord.Reputation(2) :=
-                 Integer'Value
-                   (Get_Attribute(Item(NodesList, I), "maxreputation"));
-            end if;
             if Get_Attribute(Item(NodesList, I), "friendly") = "Y" then
                TempRecord.Friendly := True;
             end if;
@@ -132,6 +120,29 @@ package body Factions is
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "namestype"));
             end if;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "relation");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               if Get_Attribute(Item(ChildNodes, J), "reputation") /= "" then
+                  TempRecord.Reputation.Append
+                  (New_Item =>
+                     (Integer'Value
+                        (Get_Attribute(Item(ChildNodes, J), "reputation")),
+                      0));
+               elsif Get_Attribute(Item(ChildNodes, J), "minreputation") /=
+                 "" then
+                  TempRecord.Reputation.Append
+                  (New_Item =>
+                     (Integer'Value
+                        (Get_Attribute(Item(ChildNodes, J), "minreputation")),
+                      Integer'Value
+                        (Get_Attribute
+                           (Item(ChildNodes, J),
+                            "maxreputation"))));
+               end if;
+            end loop;
             Factions_List.Append(New_Item => TempRecord);
             LogMessage
               ("Faction added: " & To_String(TempRecord.Name),
@@ -143,7 +154,7 @@ package body Factions is
                PluralMemberName => Null_Unbounded_String,
                SpawnChance => (0, 0),
                Population => (0, 0),
-               Reputation => (0, 0),
+               Reputation => TmpReputation,
                Friendly => False,
                NamesType => To_Unbounded_String("standard"));
          end loop;

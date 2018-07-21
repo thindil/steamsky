@@ -63,6 +63,7 @@ package body Game is
       TmpCargo: BaseCargo_Container.Vector;
       TmpInventory: Inventory_Container.Vector;
       PlayerIndex2: constant Positive := FindProtoMob(PlayerIndex);
+      PlayerFactionIndex: Positive;
    begin
       -- Save new game configuration
       NewGameSettings :=
@@ -73,6 +74,14 @@ package body Game is
       -- Set Game time
       GameDate :=
         (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
+      -- Get player faction index
+      for I in Factions_List.Iterate loop
+         if To_Lower(To_String(Factions_List(I).Index)) =
+           To_Lower(To_String(PlayerFaction)) then
+            PlayerFactionIndex := Factions_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
       -- Generate world
       SkyMap :=
         (others =>
@@ -135,13 +144,23 @@ package body Game is
                       (Factions_List(J).Population(1),
                        Factions_List(J).Population(2));
                end if;
-               if Factions_List(J).Reputation(2) = 0 then
-                  BaseReputation := Factions_List(J).Reputation(1);
+               if Factions_List(PlayerFactionIndex).Reputation
+                   (Factions_Container.To_Index(J))
+                   (2) =
+                 0 then
+                  BaseReputation :=
+                    Factions_List(PlayerFactionIndex).Reputation
+                      (Factions_Container.To_Index(J))
+                      (1);
                else
                   BaseReputation :=
                     GetRandom
-                      (Factions_List(J).Reputation(1),
-                       Factions_List(J).Reputation(2));
+                      (Factions_List(PlayerFactionIndex).Reputation
+                         (Factions_Container.To_Index(J))
+                         (1),
+                       Factions_List(PlayerFactionIndex).Reputation
+                         (Factions_Container.To_Index(J))
+                         (2));
                end if;
                exit;
             end if;
@@ -168,9 +187,7 @@ package body Game is
       loop
          RandomBase := GetRandom(1, 1024);
          exit when SkyBases(RandomBase).Population > 299 and
-           To_Lower
-               (To_String(Factions_List(SkyBases(RandomBase).Owner).Index)) =
-             To_Lower(To_String(PlayerFaction));
+           SkyBases(RandomBase).Owner = PlayerFactionIndex;
       end loop;
       -- Create player ship
       for I in ProtoShips_List.Iterate loop
