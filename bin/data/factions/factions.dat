@@ -20,21 +20,69 @@ population of base owned by that faction. If it should be constant value, use
 attribute "population". If it should be random value, use attribute 
 "minpopulation" for minimum population and "maxpopulation" for maximum 
 population. Minumum value is 0.
-- Attributes "reputation", "minreputation" and "maxreputation": starting 
-reputation of player in bases owned by that faction. If it should be constant
-value, use attribute "reputation". If it should be random value, use attribute
-"minreputation" for minimum level of reputation and "maxreputation" for maximum
-level of reputation. Minumum value is -100 and maximum is 100.
 - Attribute "friendly": did that faction is friendly to player or not. Value "Y"
 means "Yes", value "N" means "No". Used mostly to generate enemy ships.
 - Optional attribute "namestype": Used in generating ship names of that faction
 and names of all bases. Can be "standard" (default value) or "robotic".
 -->
- <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="95" minpopulation="0" maxpopulation="500" reputation="0" friendly="Y"/>
- <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="96" minpopulation="0" maxpopulation="500" minreputation="-3" maxreputation="2" friendly="Y"/>
- <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="97" minpopulation="0" maxpopulation="500" reputation="-10" friendly="N"/>
- <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="98" minpopulation="0" maxpopulation="500" reputation="-100" friendly="N"/>
- <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" spawn="99" minpopulation="0" maxpopulation="500" reputation="-100" friendly="N" namestype="robotic"/>
- <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="100" minpopulation="0" maxpopulation="500" reputation="-50" friendly="N"/>
+ <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="95" minpopulation="0" maxpopulation="500" friendly="Y">
+<!--
+- Tags "relation": Relation of this faction with other faction. All factions
+must have this tags for each faction (even for self).
+- Attribute "faction" is faction index to which relation will be set. 
+- Attributes "minreputation", "maxreputation", "reputation": starting 
+reputation with selected faction. If it should have random reputation, use 
+attribute "minreputation" for minimum level of reputation and 
+"maxreputation" for maximum level of reputation. If it should be constant
+reputation, use attribute "reputation". Minumum value is -100 and maximum
+is 100.
+-->
+  <relation faction="POLEIS" reputation="0" />
+  <relation faction="INDEPENDENT" minreputation="-3" maxreputation="2"/>
+  <relation faction="PIRATES" reputation="-10" />
+  <relation faction="UNDEAD" reputation="-100" />
+  <relation faction="DRONES" reputation="-100" />
+  <relation faction="INQUISITION" reputation="-50" />
+ </faction>
+ <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="96" minpopulation="0" maxpopulation="500" friendly="Y">
+  <relation faction="POLEIS" reputation="0" />
+  <relation faction="INDEPENDENT" minreputation="-3" maxreputation="2"/>
+  <relation faction="PIRATES" reputation="-10" />
+  <relation faction="UNDEAD" reputation="-100" />
+  <relation faction="DRONES" reputation="-100" />
+  <relation faction="INQUISITION" reputation="-50" />
+ </faction>
+ <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="97" minpopulation="0" maxpopulation="500" friendly="N">
+  <relation faction="POLEIS" reputation="-10" />
+  <relation faction="INDEPENDENT" minreputation="-20" maxreputation="-5"/>
+  <relation faction="PIRATES" reputation="0" />
+  <relation faction="UNDEAD" reputation="-100" />
+  <relation faction="DRONES" reputation="-100" />
+  <relation faction="INQUISITION" reputation="-50" />
+ </faction>
+ <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="98" minpopulation="0" maxpopulation="500" friendly="N">
+  <relation faction="POLEIS" reputation="-100" />
+  <relation faction="INDEPENDENT" reputation="-100"/>
+  <relation faction="PIRATES" reputation="-100" />
+  <relation faction="UNDEAD" reputation="0" />
+  <relation faction="DRONES" reputation="-100" />
+  <relation faction="INQUISITION" reputation="-100" />
+ </faction>
+ <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" spawn="99" minpopulation="0" maxpopulation="500" friendly="N" namestype="robotic">
+  <relation faction="POLEIS" reputation="-100" />
+  <relation faction="INDEPENDENT" reputation="-100"/>
+  <relation faction="PIRATES" reputation="-100" />
+  <relation faction="UNDEAD" reputation="-100" />
+  <relation faction="DRONES" reputation="0" />
+  <relation faction="INQUISITION" reputation="-100" />
+ </faction>
+ <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="100" minpopulation="0" maxpopulation="500" friendly="N">
+  <relation faction="POLEIS" reputation="-50" />
+  <relation faction="INDEPENDENT" minreputation="-40" maxreputation="-25"/>
+  <relation faction="PIRATES" reputation="-10" />
+  <relation faction="UNDEAD" reputation="-100" />
+  <relation faction="DRONES" reputation="-100" />
+  <relation faction="INQUISITION" reputation="0" />
+ </faction>
 </factions>
 
