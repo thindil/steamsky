@@ -850,7 +850,7 @@ package body Maps.UI is
             end if;
             if Events_List(EventIndex).EType /= BaseRecovery and
               SkyMap(MapX, MapY).BaseIndex > 0 then
-               Append(MapInfoText, ASCII.LF & ASCII.LF);
+               Append(MapInfoText, ASCII.LF);
             end if;
             case Events_List(EventIndex).EType is
                when EnemyShip | Trader | FriendlyShip =>
