@@ -742,11 +742,16 @@ package body Maps.UI is
          MouseY,
          Mask,
          Window);
-      if MouseX < 0 or MouseY < 0 then
-         return;
+      if MouseX < 0 then
+         MapX := StartX;
+      else
+         MapX := (Natural(MouseX) / MapCellWidth) + StartX;
       end if;
-      MapX := (Natural(MouseX) / MapCellWidth) + StartX;
-      MapY := (Natural(MouseY) / MapCellHeight) + StartY;
+      if MouseY < 0 then
+         MapY := StartY;
+      else
+         MapY := (Natural(MouseY) / MapCellHeight) + StartY;
+      end if;
       if MapX > SkyMap'Last then
          MapX := SkyMap'Last;
       end if;
