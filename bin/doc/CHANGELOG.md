@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Info about module damage on ship info screen
 - Refreshing combat UI after change crew orders on crew screen
 - Showing info about events in bases
+- Crash on start game
 
 ## [2.6] - 2018-07-15
 
