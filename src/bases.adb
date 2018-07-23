@@ -520,13 +520,17 @@ package body Bases is
          PlayerValue := CountCombatValue;
          for C in ProtoShips_List.Iterate loop
             if ProtoShips_List(C).CombatValue <= PlayerValue and
-              not Factions_List(ProtoShips_List(C).Owner).Friendly then
+              not IsFriendly
+                (PlayerFaction,
+                 Factions_List(ProtoShips_List(C).Owner).Index) then
                Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
             end if;
          end loop;
       else
          for C in ProtoShips_List.Iterate loop
-            if not Factions_List(ProtoShips_List(C).Owner).Friendly then
+            if not IsFriendly
+                (PlayerFaction,
+                 Factions_List(ProtoShips_List(C).Owner).Index) then
                Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
             end if;
          end loop;
@@ -569,9 +573,11 @@ package body Bases is
                      exit;
                   end if;
                   if (Event = Disease or Event = DoublePrice) and
-                    Factions_List
-                      (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner)
-                      .Friendly then
+                    IsFriendly
+                      (PlayerFaction,
+                       Factions_List
+                         (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner)
+                         .Index) then
                      exit;
                   end if;
                   if Event = BaseRecovery and

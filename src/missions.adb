@@ -136,7 +136,9 @@ package body Missions is
       end loop;
       for I in ProtoShips_List.Iterate loop
          if ProtoShips_List(I).CombatValue <= PlayerValue and
-           not Factions_List(ProtoShips_List(I).Owner).Friendly then
+           not IsFriendly
+             (PlayerFaction,
+              Factions_List(ProtoShips_List(I).Owner).Index) then
             Enemies.Append(New_Item => ProtoShips_Container.To_Index(I));
          end if;
       end loop;

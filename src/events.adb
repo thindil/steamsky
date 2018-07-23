@@ -243,8 +243,9 @@ package body Events is
                          ItemIndex));
                   when others => -- Full docks or enemy patrol
                      if Roll in 20 .. 40 and
-                       not Factions_List(SkyBases(BaseIndex).Owner)
-                         .Friendly then
+                       not IsFriendly
+                         (PlayerFaction,
+                          Factions_List(SkyBases(BaseIndex).Owner).Index) then
                         GenerateEnemies
                           (Enemies,
                            Factions_List(SkyBases(BaseIndex).Owner).Index);
@@ -392,7 +393,7 @@ package body Events is
       end loop;
       TraderIndex := ProtoShips_List.First_Index;
       for Ship of ProtoShips_List loop
-         if Factions_List(Ship.Owner).Friendly and
+         if IsFriendly(PlayerFaction, Factions_List(Ship.Owner).Index) and
            Ship.Index /= PlayerShipIndex then
             FriendlyShips.Append(New_Item => TraderIndex);
          end if;
@@ -402,36 +403,14 @@ package body Events is
 
    procedure RecoverBase(BaseIndex: Positive) is
       FactionRoll: constant Positive := GetRandom(1, 100);
-      PlayerFactionIndex: Positive;
    begin
-      for I in Factions_List.Iterate loop
-         if To_Lower(To_String(Factions_List(I).Index)) =
-           To_Lower(To_String(PlayerFaction)) then
-            PlayerFactionIndex := Factions_Container.To_Index(I);
-            exit;
-         end if;
-      end loop;
       for I in Factions_List.Iterate loop
          if (FactionRoll = Factions_List(I).SpawnChance(1)) or
            (FactionRoll > Factions_List(I).SpawnChance(1) and
             FactionRoll <= Factions_List(I).SpawnChance(2)) then
             SkyBases(BaseIndex).Owner := Factions_Container.To_Index(I);
-            if Factions_List(PlayerFactionIndex).Reputation
-                (Factions_Container.To_Index(I))
-                (2) =
-              0 then
-               SkyBases(BaseIndex).Reputation(1) :=
-                 Factions_List(PlayerFactionIndex).Reputation
-                   (Factions_Container.To_Index(I))
-                   (1);
-            else
-               SkyBases(BaseIndex).Reputation(1) :=
-                 GetRandom
-                   (Factions_List(I).Reputation(Factions_Container.To_Index(I))
-                      (1),
-                    Factions_List(I).Reputation(Factions_Container.To_Index(I))
-                      (2));
-            end if;
+            SkyBases(BaseIndex).Reputation(1) :=
+              GetReputation(PlayerFaction, Factions_List(I).Index);
             exit;
          end if;
       end loop;
@@ -459,7 +438,9 @@ package body Events is
               (Owner = To_Unbounded_String("Any") or
                To_Lower(To_String(Factions_List(Ship.Owner).Index)) =
                  To_Lower(To_String(Owner))) and
-              not Factions_List(Ship.Owner).Friendly then
+              not IsFriendly
+                (PlayerFaction,
+                 Factions_List(Ship.Owner).Index) then
                Enemies.Append(New_Item => EnemyIndex);
             end if;
             EnemyIndex := EnemyIndex + 1;
@@ -470,7 +451,9 @@ package body Events is
               (Owner = To_Unbounded_String("Any") or
                To_Lower(To_String(Factions_List(Ship.Owner).Index)) =
                  To_Lower(To_String(Owner))) and
-              not Factions_List(Ship.Owner).Friendly then
+              not IsFriendly
+                (PlayerFaction,
+                 Factions_List(Ship.Owner).Index) then
                Enemies.Append(New_Item => EnemyIndex);
             end if;
             EnemyIndex := EnemyIndex + 1;

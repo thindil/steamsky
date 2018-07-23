@@ -144,24 +144,8 @@ package body Game is
                       (Factions_List(J).Population(1),
                        Factions_List(J).Population(2));
                end if;
-               if Factions_List(PlayerFactionIndex).Reputation
-                   (Factions_Container.To_Index(J))
-                   (2) =
-                 0 then
-                  BaseReputation :=
-                    Factions_List(PlayerFactionIndex).Reputation
-                      (Factions_Container.To_Index(J))
-                      (1);
-               else
-                  BaseReputation :=
-                    GetRandom
-                      (Factions_List(PlayerFactionIndex).Reputation
-                         (Factions_Container.To_Index(J))
-                         (1),
-                       Factions_List(PlayerFactionIndex).Reputation
-                         (Factions_Container.To_Index(J))
-                         (2));
-               end if;
+               BaseReputation :=
+                 GetReputation(PlayerFaction, Factions_List(J).Index);
                exit;
             end if;
          end loop;

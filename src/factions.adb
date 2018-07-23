@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Directories; use Ada.Directories;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
@@ -25,6 +26,7 @@ with DOM.Readers; use DOM.Readers;
 with Input_Sources.File; use Input_Sources.File;
 with Log; use Log;
 with Game; use Game;
+with Utils; use Utils;
 
 package body Factions is
 
@@ -36,7 +38,8 @@ package body Factions is
       Reader: Tree_Reader;
       NodesList, ChildNodes: Node_List;
       FactionsData: Document;
-      TmpReputation: Reputation_Container.Vector;
+      TmpRelations: Relations_Container.Vector;
+      TmpRelation: RelationsRecord;
    begin
       if Factions_List.Length > 0 then
          return;
@@ -60,9 +63,8 @@ package body Factions is
             PluralMemberName => Null_Unbounded_String,
             SpawnChance => (0, 0),
             Population => (0, 0),
-            Reputation => TmpReputation,
-            Friendly => False,
-            NamesType => To_Unbounded_String("standard"));
+            NamesType => To_Unbounded_String("standard"),
+            Relations => TmpRelations);
          LogMessage
            ("Loading factions file: " & Full_Name(FoundFile),
             Everything);
@@ -112,9 +114,6 @@ package body Factions is
                  Natural'Value
                    (Get_Attribute(Item(NodesList, I), "maxpopulation"));
             end if;
-            if Get_Attribute(Item(NodesList, I), "friendly") = "Y" then
-               TempRecord.Friendly := True;
-            end if;
             if Get_Attribute(Item(NodesList, I), "namestype") /= "" then
                TempRecord.NamesType :=
                  To_Unbounded_String
@@ -125,23 +124,27 @@ package body Factions is
                 (Item(NodesList, I),
                  "relation");
             for J in 0 .. Length(ChildNodes) - 1 loop
+               TmpRelation.TargetFaction :=
+                 To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "faction"));
                if Get_Attribute(Item(ChildNodes, J), "reputation") /= "" then
-                  TempRecord.Reputation.Append
-                  (New_Item =>
-                     (Integer'Value
-                        (Get_Attribute(Item(ChildNodes, J), "reputation")),
-                      0));
-               elsif Get_Attribute(Item(ChildNodes, J), "minreputation") /=
-                 "" then
-                  TempRecord.Reputation.Append
-                  (New_Item =>
-                     (Integer'Value
-                        (Get_Attribute(Item(ChildNodes, J), "minreputation")),
-                      Integer'Value
-                        (Get_Attribute
-                           (Item(ChildNodes, J),
-                            "maxreputation"))));
+                  TmpRelation.Reputation :=
+                    (Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "reputation")),
+                     0);
+               else
+                  TmpRelation.Reputation :=
+                    (Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "minreputation")),
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "maxreputation")));
                end if;
+               if Get_Attribute(Item(ChildNodes, J), "friendly") = "Y" then
+                  TmpRelation.Friendly := True;
+               else
+                  TmpRelation.Friendly := False;
+               end if;
+               TempRecord.Relations.Append(New_Item => TmpRelation);
             end loop;
             Factions_List.Append(New_Item => TempRecord);
             LogMessage
@@ -154,13 +157,52 @@ package body Factions is
                PluralMemberName => Null_Unbounded_String,
                SpawnChance => (0, 0),
                Population => (0, 0),
-               Reputation => TmpReputation,
-               Friendly => False,
-               NamesType => To_Unbounded_String("standard"));
+               NamesType => To_Unbounded_String("standard"),
+               Relations => TmpRelations);
          end loop;
          Free(Reader);
       end loop;
       End_Search(Files);
    end LoadFactions;
+
+   function GetReputation
+     (SourceFaction, TargetFaction: Unbounded_String) return Integer is
+   begin
+      for Source of Factions_List loop
+         if To_Lower(To_String(Source.Index)) =
+           To_Lower(To_String(SourceFaction)) then
+            for Target of Source.Relations loop
+               if To_Lower(To_String(Target.TargetFaction)) =
+                 To_Lower(To_String(TargetFaction)) then
+                  if Target.Reputation(2) = 0 then
+                     return Target.Reputation(1);
+                  else
+                     return GetRandom
+                         (Target.Reputation(1),
+                          Target.Reputation(2));
+                  end if;
+               end if;
+            end loop;
+         end if;
+      end loop;
+      return 0;
+   end GetReputation;
+
+   function IsFriendly
+     (SourceFaction, TargetFaction: Unbounded_String) return Boolean is
+   begin
+      for Source of Factions_List loop
+         if To_Lower(To_String(Source.Index)) =
+           To_Lower(To_String(SourceFaction)) then
+            for Target of Source.Relations loop
+               if To_Lower(To_String(Target.TargetFaction)) =
+                 To_Lower(To_String(TargetFaction)) then
+                  return Target.Friendly;
+               end if;
+            end loop;
+         end if;
+      end loop;
+      return True;
+   end IsFriendly;
 
 end Factions;
