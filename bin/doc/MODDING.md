@@ -536,8 +536,6 @@ To change which faction is player faction, edit `value` attribute of tag
   attribute `population`. If it should be random value, use attribute 
   `minpopulation` for minimum population and `maxpopulation` for maximum 
   population. Minumum value is 0.
-- Attribute `friendly`: did that faction is friendly to player or not. Value `Y`
-  means `Yes`, value `N` means `No`. Used mostly to generate enemy ships.
 - Optional attribute `namestype`: Used in generating ship names of that faction
   and names of all bases. Can be `standard` (default value) or `robotic`.
 - Tags `relation`: Relation of this faction with other faction. All factions
@@ -549,6 +547,9 @@ To change which faction is player faction, edit `value` attribute of tag
   `maxreputation` for maximum level of reputation. If it should be constant
   reputation, use attribute `reputation`. Minumum value is -100 and maximum
   is 100.
+- Attribute `friendly`: did selected faction is friendly to this faction.
+  Value `Y` means `Yes`, value `N` means `No`. Used mostly to generate 
+  enemy ships.
 
 ## Stories
 
