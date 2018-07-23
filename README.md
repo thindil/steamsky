@@ -105,13 +105,21 @@ Game is available under [GPLv3](bin/doc/COPYING) license.
 
 GtkAda and XmlAda libraries distributed with game are under GPLv3 license.
 
-Gtk library distributed with game is under LGPLv2.1 license.
+Gtk library distributed with game is under LGPLv2.1 license:
 
-Font Roboto is under Apache v2.0 license.
+https://www.gtk.org/
 
-Font Hack is under MIT license.
+Font Roboto is under Apache v2.0 license:
 
-Font Z003 is under AGPL v3 license.
+https://fonts.google.com/specimen/Roboto
+
+Font Hack is under MIT license:
+
+https://sourcefoundry.org/hack/
+
+Font Z003 is under AGPL v3 license:
+
+https://github.com/ArtifexSoftware/urw-base35-fonts
 
 
 
