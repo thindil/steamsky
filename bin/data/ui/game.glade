@@ -595,23 +595,23 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child type="tag">
       <object class="GtkTextTag" id="white">
         <property name="name">white</property>
-        <property name="background">black</property>
         <property name="foreground">white</property>
+        <property name="background_rgba">rgb(32,74,135)</property>
         <property name="font">Normal</property>
       </object>
     </child>
     <child type="tag">
       <object class="GtkTextTag" id="yellow">
         <property name="name">yellow</property>
-        <property name="background">black</property>
         <property name="foreground">yellow</property>
+        <property name="background_rgba">rgb(32,74,135)</property>
         <property name="font">Normal</property>
       </object>
     </child>
     <child type="tag">
       <object class="GtkTextTag" id="green">
         <property name="name">green</property>
-        <property name="background">black</property>
+        <property name="background_rgba">rgb(32,74,135)</property>
         <property name="foreground_rgba">rgb(78,154,6)</property>
         <property name="font">Normal</property>
       </object>
@@ -619,16 +619,16 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child type="tag">
       <object class="GtkTextTag" id="red">
         <property name="name">red</property>
-        <property name="background">black</property>
         <property name="foreground">red</property>
+        <property name="background_rgba">rgb(32,74,135)</property>
         <property name="font">Normal</property>
       </object>
     </child>
     <child type="tag">
       <object class="GtkTextTag" id="cyan">
         <property name="name">cyan</property>
-        <property name="background">black</property>
         <property name="foreground">cyan</property>
+        <property name="background_rgba">rgb(32,74,135)</property>
         <property name="font">Normal</property>
       </object>
     </child>
@@ -643,8 +643,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child type="tag">
       <object class="GtkTextTag" id="lime">
         <property name="name">lime</property>
-        <property name="background">black</property>
         <property name="foreground">lime</property>
+        <property name="background_rgba">rgb(32,74,135)</property>
         <property name="font">Normal</property>
       </object>
     </child>
@@ -691,7 +691,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child type="tag">
       <object class="GtkTextTag" id="red2">
         <property name="name">red2</property>
-        <property name="background">black</property>
+        <property name="background_rgba">rgb(32,74,135)</property>
         <property name="foreground_rgba">rgb(164,0,0)</property>
         <property name="font">Normal</property>
       </object>
@@ -699,7 +699,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child type="tag">
       <object class="GtkTextTag" id="red3">
         <property name="name">red3</property>
-        <property name="background">black</property>
+        <property name="background_rgba">rgb(32,74,135)</property>
         <property name="foreground_rgba">rgb(115,39,39)</property>
         <property name="font">Normal</property>
       </object>
@@ -723,7 +723,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <child type="tag">
       <object class="GtkTextTag" id="green2">
         <property name="name">green2</property>
-        <property name="background">black</property>
+        <property name="background_rgba">rgb(32,74,135)</property>
         <property name="foreground_rgba">rgb(115,210,22)</property>
         <property name="font">Normal</property>
       </object>
