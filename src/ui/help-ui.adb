@@ -82,23 +82,23 @@ package body Help.UI is
    end CreateHelpUI;
 
    procedure ShowHelpUI(Topic: Positive) is
-      NewText: Unbounded_String;
-      VariableIndex: Natural;
+      NewText, TagText: Unbounded_String;
+      StartIndex, EndIndex, OldIndex: Natural;
       Key: Gtk_Accel_Key;
       Found: Boolean;
       VariablesNames: constant array(Positive range <>) of Unbounded_String :=
-        (To_Unbounded_String("{MoneyName}"),
-         To_Unbounded_String("{FuelName}"),
-         To_Unbounded_String("{StrengthName}"),
-         To_Unbounded_String("{HealingTools}"),
-         To_Unbounded_String("{HealingSkill}"),
-         To_Unbounded_String("{PilotingSkill}"),
-         To_Unbounded_String("{EngineeringSkill}"),
-         To_Unbounded_String("{GunnerySkill}"),
-         To_Unbounded_String("{TalkingSkill}"),
-         To_Unbounded_String("{PerceptionSkill}"),
-         To_Unbounded_String("{ConditionName}"),
-         To_Unbounded_String("{DodgeSkill}"));
+        (To_Unbounded_String("MoneyName"),
+         To_Unbounded_String("FuelName"),
+         To_Unbounded_String("StrengthName"),
+         To_Unbounded_String("HealingTools"),
+         To_Unbounded_String("HealingSkill"),
+         To_Unbounded_String("PilotingSkill"),
+         To_Unbounded_String("EngineeringSkill"),
+         To_Unbounded_String("GunnerySkill"),
+         To_Unbounded_String("TalkingSkill"),
+         To_Unbounded_String("PerceptionSkill"),
+         To_Unbounded_String("ConditionName"),
+         To_Unbounded_String("DodgeSkill"));
       VariablesValues: constant array(Positive range <>) of Unbounded_String :=
         (MoneyName,
          Items_List(FindProtoItem(ItemType => FuelType)).Name,
@@ -142,61 +142,50 @@ package body Help.UI is
          To_Unbounded_String("<skymapwindow>/Menu/WaitOrders"));
       HelpBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Builder, "helpbuffer"));
-      StartIter, EndIter: Gtk_Text_Iter;
+      Iter: Gtk_Text_Iter;
       Tags: constant Gtk_Text_Tag_Table := Get_Tag_Table(HelpBuffer);
-      BoldText: constant Gtk_Text_Tag := Lookup(Tags, "bold");
+      SpecialText: constant Gtk_Text_Tag := Lookup(Tags, "special");
+      type FontTag is
+      record
+         Tag: String(1..1);
+         TextTag: Gtk_Text_Tag;
+      end record;
+      FontTags: constant array(Positive range<>) of FontTag := (1 => (Tag => "b", TextTag => Lookup(Tags, "bold"))); 
    begin
       NewText := Help_List(Topic).Text;
-      Set_Text(HelpBuffer, To_String(NewText));
-      for I in VariablesNames'Range loop
-         loop
-            VariableIndex := Index(NewText, To_String(VariablesNames(I)));
-            exit when VariableIndex = 0;
-            Get_Iter_At_Offset(HelpBuffer, StartIter, Gint(VariableIndex - 1));
-            Get_Iter_At_Offset
-              (HelpBuffer,
-               EndIter,
-               Gint(VariableIndex + Length(VariablesNames(I)) - 1));
-            Delete(HelpBuffer, StartIter, EndIter);
-            Insert_With_Tags
-              (HelpBuffer,
-               StartIter,
-               To_String(VariablesValues(I)),
-               BoldText);
-            Replace_Slice
-              (NewText,
-               VariableIndex,
-               (VariableIndex + Length(VariablesNames(I)) - 1),
-               To_String(VariablesValues(I)));
+      OldIndex := 1;
+      Set_Text(HelpBuffer, "");
+      Get_Start_Iter(HelpBuffer, Iter);
+      loop
+         StartIndex := Index(NewText, "{", OldIndex);
+         if StartIndex > 0 then
+            Insert(HelpBuffer, Iter, Slice(NewText, OldIndex, StartIndex - 1));
+         else
+            Insert(HelpBuffer, Iter, Slice(NewText, OldIndex, Length(NewText)));
+            exit;
+         end if;
+         EndIndex := Index(NewText, "}", StartIndex) - 1;
+         TagText := Unbounded_Slice(NewText, StartIndex + 1, EndIndex);
+         for I in VariablesNames'Range loop
+            if TagText = VariablesNames(I) then
+               Insert_With_Tags(HelpBuffer, Iter, To_String(VariablesValues(I)), SpecialText);
+               exit;
+            end if;
          end loop;
-      end loop;
-      for I in AccelNames'Range loop
-         loop
-            VariableIndex :=
-              Index(NewText, "{GameKey" & Positive'Image(I) & "}");
-            exit when VariableIndex = 0;
-            Lookup_Entry(To_String(AccelNames(I)), Key, Found);
-            Get_Iter_At_Offset(HelpBuffer, StartIter, Gint(VariableIndex - 1));
-            Get_Iter_At_Offset
-              (HelpBuffer,
-               EndIter,
-               Gint(VariableIndex + 8 + Positive'Image(I)'Length));
-            Delete(HelpBuffer, StartIter, EndIter);
-            Insert_With_Tags
-              (HelpBuffer,
-               StartIter,
-               "'" &
-               Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
-               "'",
-               BoldText);
-            Replace_Slice
-              (NewText,
-               VariableIndex,
-               (VariableIndex + 8 + Positive'Image(I)'Length),
-               "'" &
-               Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
-               "'");
+         for I in AccelNames'Range loop
+            if TagText = To_Unbounded_String("GameKey") & To_Unbounded_String(Positive'Image(I)) then
+               Lookup_Entry(To_String(AccelNames(I)), Key, Found);
+               Insert_With_Tags(HelpBuffer, Iter, "'" & Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) & "'", SpecialText);
+               exit;
+            end if;
          end loop;
+         for I in FontTags'Range loop
+            if TagText = To_Unbounded_String(FontTags(I).Tag) then
+               Put_Line("here");
+               exit;
+            end if;
+         end loop;
+         OldIndex := EndIndex + 2;
       end loop;
       Set_Text
         (Gtk_Label(Get_Object(Builder, "lblhelptopic")),
