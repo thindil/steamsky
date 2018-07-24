@@ -230,5 +230,6 @@ Text between "module" tags is module description.
  <module durability="200" index="191" installtime="90" material="Orichalcum" maxvalue="100" name="Orichalcum 60mm gun" price="16000" skill="Gunsmith" type="GUN" value="19" weight="160">Upgraded 60mm ship gun, made of orichalcum. Requires an empty turret.</module>
  <module durability="250" index="192" installtime="120" material="Orichalcum" maxvalue="200" name="Orichalcum 80mm gun" price="32000" skill="Gunsmith" type="GUN" value="23" weight="320">Upgraded 80mm ship gun, made of orichalcum. Requires an empty turret.</module>
  <module durability="400" index="193" installtime="150" material="Orichalcum" maxvalue="320" name="Orichalcum 100mm gun" price="64000" skill="Gunsmith" type="GUN" value="24" weight="700">Upgraded 100mm ship gun, made of orichalcum. Requires an empty turret.</module>
+ <module durability="500" index="194" installtime="180" material="Orichalcum" maxvalue="560" name="Orichalcum 120mm gun" price="128000" skill="Gunsmith" type="GUN" value="25" weight="1600">Upgraded 120mm ship gun, made of orichalcum. Requires an empty turret.</module>
 </modules>
 
