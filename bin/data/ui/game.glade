@@ -3672,6 +3672,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     </child>
                                     <child>
                                       <object class="GtkTreeView" id="treestats">
+                                        <property name="name">redbar</property>
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">False</property>
@@ -4043,6 +4044,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkProgressBar" id="lootdamagebar">
+                                    <property name="name">redbar</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="tooltip_text" translatable="yes">How much item is damaged</property>
@@ -4728,6 +4730,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         </child>
                                         <child>
                                           <object class="GtkProgressBar" id="removedamagebar">
+                                            <property name="name">redbar</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="show_text">True</property>
@@ -4921,6 +4924,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="shadow_type">in</property>
                                 <child>
                                   <object class="GtkTreeView" id="treedamage">
+                                    <property name="name">redbar</property>
                                     <property name="visible">True</property>
                                     <property name="sensitive">False</property>
                                     <property name="can_focus">False</property>
@@ -5024,6 +5028,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                     <property name="shadow_type">in</property>
                                                     <child>
                                                       <object class="GtkTreeView" id="enemyinfotree">
+                                                        <property name="name">redbar</property>
                                                         <property name="visible">True</property>
                                                         <property name="sensitive">False</property>
                                                         <property name="can_focus">False</property>
@@ -5252,6 +5257,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="shadow_type">in</property>
                                 <child>
                                   <object class="GtkTreeView" id="treecrew3">
+                                    <property name="name">redbar</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="model">crewlist3</property>
@@ -5319,6 +5325,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="shadow_type">in</property>
                                 <child>
                                   <object class="GtkTreeView">
+                                    <property name="name">redbar</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="model">enemycrewlist</property>
@@ -7157,6 +7164,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                             </child>
                                             <child>
                                               <object class="GtkProgressBar" id="progresshealth">
+                                                <property name="name">redbar</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="show_text">True</property>
@@ -7169,6 +7177,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                             </child>
                                             <child>
                                               <object class="GtkProgressBar" id="progresstired">
+                                                <property name="name">greenbar</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="show_text">True</property>
@@ -7193,6 +7202,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                             </child>
                                             <child>
                                               <object class="GtkProgressBar" id="progresshunger">
+                                                <property name="name">yellowbar</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="show_text">True</property>
@@ -7579,6 +7589,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkProgressBar" id="itemdamagebar">
+                                    <property name="name">redbar</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="show_text">True</property>
@@ -7746,6 +7757,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkProgressBar" id="upgradebar">
+                        <property name="name">greenbar</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="show_text">True</property>
@@ -7843,6 +7855,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkProgressBar" id="moduledamagebar">
+                                    <property name="name">redbar</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="show_text">True</property>
@@ -7869,6 +7882,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkProgressBar" id="cleanbar">
+                                    <property name="name">yellowbar</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="show_text">True</property>
@@ -7893,6 +7907,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkProgressBar" id="upgradebar2">
+                                    <property name="name">greenbar</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="show_text">True</property>
@@ -8295,6 +8310,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkProgressBar" id="itemdamagebar2">
+                                    <property name="name">redbar</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="show_text">True</property>
@@ -8555,6 +8571,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkProgressBar" id="tradedamagebar">
+                                    <property name="name">redbar</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="show_text">True</property>
