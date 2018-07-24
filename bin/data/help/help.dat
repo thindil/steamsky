@@ -33,6 +33,9 @@
   which later will be replaced with name of attribute used to raise crew
   member condition, `{DodgeSkill}` which later will be replaced with name of
   skill used to dodge enemy attacks in character's combat.
+- Inside help text you can use some tags for formatting text: {u}some text{/u}
+  for add underline for text, {b}some text{/b} to made bold characters and
+  {i}some text{/i} for italic font.
 -->
  <entry title="General Informations">Steam Sky is a roguelike game where you are commandeer of a flying ship. You must take care of ship and crew. You can trade items between sky bases, fight with enemies or manufacture items. The game ends when your character dies.
 On most screens you can see information about needed crew positions in the top right corner. P means pilot, E - engineer, G - gunner, R - repairs, M - manufacturing, U - upgrading ship module, T - talking in bases, C - clean ship. 
