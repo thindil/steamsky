@@ -34,7 +34,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="name">underline</property>
         <property name="font">Normal</property>
         <property name="underline">single</property>
-        <property name="underline_rgba">rgb(255,255,255)</property>
       </object>
     </child>
     <child type="tag">
