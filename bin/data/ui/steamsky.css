@@ -130,3 +130,24 @@ GtkTextView#mapview {
    font-family:Roboto;
    font-size:12px;
 }
+
+.progressbar#redbar, 
+   .progressbar:selected#redbar, 
+   .progressbar:selected#redbar:focus {
+   background:linear-gradient(to bottom, red, black);
+   border-radius:10px;
+}
+
+.progressbar#greenbar, 
+   .progressbar:selected#greenbar, 
+   .progressbar:selected#greenbar:focus {
+   background:linear-gradient(to bottom, green, black);
+   border-radius:10px;
+}
+
+.progressbar#yellowbar, 
+   .progressbar:selected#yellowbar, 
+   .progressbar:selected#yellowbar:focus {
+   background:linear-gradient(to bottom, rgb(232, 179, 0), black);
+   border-radius:10px;
+}
