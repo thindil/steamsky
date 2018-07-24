@@ -150,7 +150,9 @@ package body Help.UI is
          TextTag: Gtk_Text_Tag;
       end record;
       FontTags: constant array(Positive range <>) of FontTag :=
-        (1 => (Tag => "b", TextTag => Lookup(Tags, "bold")));
+        (1 => (Tag => "b", TextTag => Lookup(Tags, "bold")),
+         2 => (Tag => "u", TextTag => Lookup(Tags, "underline")),
+         3 => (Tag => "i", TextTag => Lookup(Tags, "italic")));
    begin
       NewText := Help_List(Topic).Text;
       OldIndex := 1;
