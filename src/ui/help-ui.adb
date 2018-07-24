@@ -145,12 +145,12 @@ package body Help.UI is
       Iter: Gtk_Text_Iter;
       Tags: constant Gtk_Text_Tag_Table := Get_Tag_Table(HelpBuffer);
       SpecialText: constant Gtk_Text_Tag := Lookup(Tags, "special");
-      type FontTag is
-      record
-         Tag: String(1..1);
+      type FontTag is record
+         Tag: String(1 .. 1);
          TextTag: Gtk_Text_Tag;
       end record;
-      FontTags: constant array(Positive range<>) of FontTag := (1 => (Tag => "b", TextTag => Lookup(Tags, "bold"))); 
+      FontTags: constant array(Positive range <>) of FontTag :=
+        (1 => (Tag => "b", TextTag => Lookup(Tags, "bold")));
    begin
       NewText := Help_List(Topic).Text;
       OldIndex := 1;
@@ -161,27 +161,48 @@ package body Help.UI is
          if StartIndex > 0 then
             Insert(HelpBuffer, Iter, Slice(NewText, OldIndex, StartIndex - 1));
          else
-            Insert(HelpBuffer, Iter, Slice(NewText, OldIndex, Length(NewText)));
+            Insert
+              (HelpBuffer,
+               Iter,
+               Slice(NewText, OldIndex, Length(NewText)));
             exit;
          end if;
          EndIndex := Index(NewText, "}", StartIndex) - 1;
          TagText := Unbounded_Slice(NewText, StartIndex + 1, EndIndex);
          for I in VariablesNames'Range loop
             if TagText = VariablesNames(I) then
-               Insert_With_Tags(HelpBuffer, Iter, To_String(VariablesValues(I)), SpecialText);
+               Insert_With_Tags
+                 (HelpBuffer,
+                  Iter,
+                  To_String(VariablesValues(I)),
+                  SpecialText);
                exit;
             end if;
          end loop;
          for I in AccelNames'Range loop
-            if TagText = To_Unbounded_String("GameKey") & To_Unbounded_String(Positive'Image(I)) then
+            if TagText =
+              To_Unbounded_String("GameKey") &
+                To_Unbounded_String(Positive'Image(I)) then
                Lookup_Entry(To_String(AccelNames(I)), Key, Found);
-               Insert_With_Tags(HelpBuffer, Iter, "'" & Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) & "'", SpecialText);
+               Insert_With_Tags
+                 (HelpBuffer,
+                  Iter,
+                  "'" &
+                  Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
+                  "'",
+                  SpecialText);
                exit;
             end if;
          end loop;
          for I in FontTags'Range loop
             if TagText = To_Unbounded_String(FontTags(I).Tag) then
-               Put_Line("here");
+               StartIndex := Index(NewText, "{", EndIndex) - 1;
+               Insert_With_Tags
+                 (HelpBuffer,
+                  Iter,
+                  Slice(NewText, EndIndex + 2, StartIndex),
+                  FontTags(I).TextTag);
+               EndIndex := Index(NewText, "}", StartIndex) - 1;
                exit;
             end if;
          end loop;
