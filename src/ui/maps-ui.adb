@@ -440,11 +440,24 @@ package body Maps.UI is
          To_Unbounded_String("btnbottomleft"),
          To_Unbounded_String("btnbottom"),
          To_Unbounded_String("btnbottomright"));
+      MoveButtonsTooltips: constant array
+      (MoveButtonsNames'Range) of Unbounded_String :=
+        (To_Unbounded_String("Move ship north and west"),
+         To_Unbounded_String("Move ship north"),
+         To_Unbounded_String("Move ship north and east"),
+         To_Unbounded_String("Move ship west"),
+         To_Unbounded_String("Move ship east"),
+         To_Unbounded_String("Move ship south and west"),
+         To_Unbounded_String("Move ship south"),
+         To_Unbounded_String("Move ship south and east"));
    begin
       if PlayerShip.Speed = DOCKED then
          Hide(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
          Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Wait");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblmovewait")),
+            "Wait 1 minute.");
          for I in MoveButtonsNames'Range loop
             Set_Sensitive
               (Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I)))),
@@ -461,9 +474,15 @@ package body Maps.UI is
          if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
             Show_All(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
             Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Move");
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, "lblmovewait")),
+               "Move ship one map field toward destination.");
          else
             Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
             Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Wait");
+            Set_Tooltip_Text
+              (Gtk_Widget(Get_Object(Builder, "lblmovewait")),
+               "Wait 1 minute.");
          end if;
          for I in MoveButtonsNames'Range loop
             Set_Sensitive
@@ -471,7 +490,7 @@ package body Maps.UI is
                True);
             Set_Tooltip_Text
               (Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I)))),
-               "");
+               To_String(MoveButtonsTooltips(I)));
          end loop;
       end if;
    end UpdateMoveButtons;

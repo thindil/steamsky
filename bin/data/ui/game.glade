@@ -1662,6 +1662,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkLabel" id="lbltime">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="tooltip_text" translatable="yes">Game time.</property>
                 <property name="label" translatable="yes">1600-03-01 8:00</property>
               </object>
               <packing>
@@ -1829,6 +1830,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkInfoBar" id="infolastmessage">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="tooltip_text" translatable="yes">Newest game message.</property>
             <property name="show_close_button">True</property>
             <signal name="response" handler="Hide_Last_Message" swapped="no"/>
             <child internal-child="action_area">
@@ -2010,6 +2012,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkTextView" id="messagesview">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Last game messages.</property>
                             <property name="editable">False</property>
                             <property name="wrap_mode">word</property>
                             <property name="cursor_visible">False</property>
@@ -2035,6 +2038,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <child>
                               <object class="GtkComboBox" id="cmbspeed">
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Set ship speed.</property>
                                 <property name="model">speedlist</property>
                                 <property name="active">3</property>
                                 <property name="button_sensitivity">on</property>
@@ -2057,6 +2061,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkButton" id="btnmoveto">
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes">Travel to ship destination.</property>
                                 <signal name="clicked" handler="Move_Ship" object="btnmoveto" swapped="no"/>
                                 <child>
                                   <object class="GtkAccelLabel">
