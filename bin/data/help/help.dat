@@ -37,13 +37,14 @@
   for add underline for text, {b}some text{/b} to made bold characters and
   {i}some text{/i} for italic font.
 -->
- <entry title="General Informations">Steam Sky is a roguelike game where you are commandeer of a flying ship. You must take care of ship and crew. You can trade items between sky bases, fight with enemies or manufacture items. The game ends when your character dies.
-On most screens you can see information about needed crew positions in the top right corner. P means pilot, E - engineer, G - gunner, R - repairs, M - manufacturing, U - upgrading ship module, T - talking in bases, C - clean ship. 
+ <entry title="General Informations">{u}Overview{/u}
+    Steam Sky is a roguelike game where you are commandeer of a flying ship. You must take care of ship and crew. You can trade items between sky bases, fight with enemies or manufacture items. The game ends when your character dies. At this moment, help is under development (as whole game). To see other help topics, click on topic title (for example {b}&quot;General Informations&quot;{/b} for this screen) above help text.
+
+{u}Ship info{/u}
+   On most screens you can see information about needed crew positions in the top right corner. {b}P{/b} means pilot, {b}E{/b} - engineer, {b}G{/b} - gunner, {b}R{/b} - repairs, {b}M{/b} - manufacturing, {b}U{/b} - upgrading ship module, {b}T{/b} - trader, {b}C{/b} - clean ship. 
 For pilots and engineers: if their letter is green, the position is taken by a crew member, and if it's red you don't have anyone assigned to this position.
 For gunners and manufacturing: a green letter mean all positions are taken (all guns, all crafting modules), a red letter means you have free positions (not all guns/crafting modules are taken), and a white letter means you don't have or don't need anyone assigned to this positions.
-For repairs, upgrading ship modules, talking in bases and cleaning ship, green means you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white letter means you don't have anyone assigned to this position and you don't need anyone.
-By left clicking on the map, you can get information about selected map field (like bases, other ships, etc).
-At this moment, help is under development (as whole game). To see other help topics, click on topic title (for example &quot;General Informations&quot; for this screen) above help text.</entry>
+For repairs, upgrading ship modules, trader and cleaning ship, green means you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white letter means you don't have anyone assigned to this position and you don't need anyone.</entry>
  <entry title="Ship movement">{u}Undocking from bases{/u}
     Your ship starts docked to base. To move it, you must first give order {b}&quot;Undock&quot;{/b} from base, by clicking on {b}&quot;Undock&quot;{/b} button. To see other orders available for ship, press {GameKey 14} key (or first {GameKey 26} key for see game menu) for open orders menu.
 Each docking operation cost some money, depending on your ship size (bigger ships have bigger docking cost) and your reputation in that base. Same is with staying longer in base - for each day you pay this same price as for docking. Undocking from bases is free.
