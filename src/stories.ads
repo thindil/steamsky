@@ -64,6 +64,8 @@ package Stories is
       FinalStep: Step_Data; -- Final step of story
       EndText: Unbounded_String; -- Text which will be show to player when story ends.
       Name: Unbounded_String; -- Name of story, show in game
+      ForbiddenFactions: UnboundedString_Container
+        .Vector; -- If player is in one of this factions, he/she can't start this story.
    end record;
    package Stories_Container is new Vectors(Positive, Story_Data);
    type CurrentStory_Data is -- Data structure for stories
