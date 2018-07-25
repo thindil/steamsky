@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
   orichalcum 60mm gun, orichalcum 80mm gun, orichalcum 100mm gun and orichalcum
   120mm gun
 - Finishing missions raise or lower (if failed) player character morale
+- New enemy ship: large clockwork drone mk V
 
 ### Changed
 - Updated interface
