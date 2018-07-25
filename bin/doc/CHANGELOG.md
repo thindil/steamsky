@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
   120mm gun
 - Finishing missions raise or lower (if failed) player character morale
 - New enemy ship: large clockwork drone mk V
+- More text formatting options to help
 
 ### Changed
 - Updated interface
