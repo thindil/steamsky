@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - More text formatting options to help
 - Option to stories to set which factions are not allowed to start selected 
   story
+- Option to enable or disable ship engines
 
 ### Changed
 - Updated interface
