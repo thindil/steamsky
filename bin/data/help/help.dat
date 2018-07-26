@@ -65,6 +65,7 @@ Fuel cost of travel depends on selected speed (faster = more fuel usage) and eac
 To move ship in desired direction, use (by default setting) keys on keypad. You may change which keys move ship in game options.
 Ship speed depends on engine power, engine damage, ship weight (with cargo) and bit on Engineer and Pilot experience.
 With higher set ship speed, there is bigger chance that one of engines will be damaged. More experienced Engineer have better chances to prevent engine damage during fly.
+You may disable or enable selected ship engine in ship info screen. Press key {GameKey 11} then select engine from list and press button {b}Disable engine{/b} for turning it off or {b}Enable engine{/b} for turning it on. When you fly you must have at least one working engine (when you docked to base you can disable all engines).
 
 {u}Events{/u}
    During travel you may encounter various events. Some events may bring new options to orders (for example, attack on other ships) or take options away (for example, full docks in bases prevent docking to base). Most events exists by some time. Events on map are marked with mark {b}'?'{/b}. You may also ask for events in bases in which you are docked. You can ask in every base once on 7 game days. To ask, press {GameKey 14} key and then select option {b}'Ask for events'{/b}. Each ask take 30 minutes of game time. Amount of discovered events depends on current base size (in larger bases they know more other bases). From time to time, you can meet friendly ship which you can ask for events too.
