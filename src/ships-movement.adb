@@ -35,7 +35,8 @@ package body Ships.Movement is
            Module.Durability > 0 then
             HaveCockpit := True;
          elsif Modules_List(Module.ProtoIndex).MType = ENGINE and
-           Module.Durability > 1 then
+           Module.Durability > 1 and
+           Module.Data(3) = 0 then
             HaveEngine := True;
          end if;
          exit when HaveEngine and HaveCockpit;
@@ -332,7 +333,8 @@ package body Ships.Movement is
          end if;
       end if;
       for Module of Ship.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = ENGINE then
+         if Modules_List(Module.ProtoIndex).MType = ENGINE and
+           Module.Data(3) = 0 then
             BaseSpeed := Module.Data(2) * 10;
             Damage :=
               1.0 -
@@ -378,7 +380,8 @@ package body Ships.Movement is
       FuelNeeded: Integer := 0;
    begin
       for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = ENGINE then
+         if Modules_List(Module.ProtoIndex).MType = ENGINE and
+           Module.Data(3) = 0 then
             case PlayerShip.Speed is
                when QUARTER_SPEED =>
                   FuelNeeded := FuelNeeded - (Module.Data(1) / 4);
