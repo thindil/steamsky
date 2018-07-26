@@ -134,6 +134,9 @@ package body Ships.UI.Handlers is
             if Module.Data(2) = MaxValue then
                Append(ModuleInfo, " (max upgrade)");
             end if;
+            if Module.Data(3) = 1 then
+               Append(ModuleInfo, " (disabled)");
+            end if;
             Append
               (ModuleInfo,
                ASCII.LF & "Fuel usage:" & Integer'Image(Module.Data(1)));
@@ -591,5 +594,47 @@ package body Ships.UI.Handlers is
       ShowShipInfo;
       ShowModuleInfo(Builder);
    end Assign;
+
+   procedure DisableEngine(Object: access Gtkada_Builder_Record'Class) is
+      CanDisable: Boolean := False;
+   begin
+      if PlayerShip.Modules(ModuleIndex).Data(3) = 0 then
+         if PlayerShip.Speed /= DOCKED then
+            for I in PlayerShip.Modules.Iterate loop
+               if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType =
+                 ENGINE and
+                 PlayerShip.Modules(I).Data(3) = 0 and
+                 Modules_Container.To_Index(I) /= ModuleIndex then
+                  CanDisable := True;
+                  exit;
+               end if;
+            end loop;
+         else
+            CanDisable := True;
+         end if;
+         if not CanDisable then
+            ShowDialog
+              ("You can't disable this engine because it is your last working engine.",
+               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            return;
+         end if;
+         PlayerShip.Modules(ModuleIndex).Data(3) := 1;
+         AddMessage
+           ("You disabled " &
+            To_String(PlayerShip.Modules(ModuleIndex).Name) &
+            ".",
+            OrderMessage);
+      else
+         PlayerShip.Modules(ModuleIndex).Data(3) := 0;
+         AddMessage
+           ("You enabled " &
+            To_String(PlayerShip.Modules(ModuleIndex).Name) &
+            ".",
+            OrderMessage);
+      end if;
+      ShowLastMessage(Object);
+      ShowShipInfo;
+      ShowModuleInfo(Object);
+   end DisableEngine;
 
 end Ships.UI.Handlers;

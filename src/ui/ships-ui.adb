@@ -127,6 +127,7 @@ package body Ships.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
       Hide(Gtk_Widget(Get_Object(Builder, "boxassignammo")));
       Hide(Gtk_Widget(Get_Object(Builder, "boxassignskill")));
+      Hide(Gtk_Widget(Get_Object(Builder, "btndisableengine")));
       MaxValue :=
         Natural
           (Float
@@ -167,6 +168,18 @@ package body Ships.UI is
                Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
+            end if;
+            Show_All(Gtk_Widget(Get_Object(Builder, "btndisableengine")));
+            if PlayerShip.Modules(ModuleIndex).Data(3) = 0 then
+               Set_Label
+                 (Gtk_Button
+                    (Gtk_Widget(Get_Object(Builder, "btndisableengine"))),
+                  "Disable engine");
+            else
+               Set_Label
+                 (Gtk_Button
+                    (Gtk_Widget(Get_Object(Builder, "btndisableengine"))),
+                  "Enable engine");
             end if;
          when CABIN =>
             MaxValue :=
@@ -442,6 +455,7 @@ package body Ships.UI is
       Register_Handler(Builder, "Stop_Upgrading", StopUpgrading'Access);
       Register_Handler(Builder, "Set_Repair", SetRepair'Access);
       Register_Handler(Builder, "Assign", Assign'Access);
+      Register_Handler(Builder, "Disable_Engine", DisableEngine'Access);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "rendername")),
          ChangeModuleName'Access);

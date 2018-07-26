@@ -43,5 +43,8 @@ package Ships.UI.Handlers is
    procedure Assign
      (User_Data: access GObject_Record'
         Class); -- Assign crew member or ammo to selected module
+   procedure DisableEngine
+     (Object: access Gtkada_Builder_Record'
+        Class); -- Enable/disable selected engine
 
 end Ships.UI.Handlers;
