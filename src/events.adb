@@ -96,7 +96,8 @@ package body Events is
                               PlayerShip.Modules.Last_Index loop
                            if Modules_List(PlayerShip.Modules(I).ProtoIndex)
                                .MType =
-                             ENGINE then
+                             ENGINE and
+                             PlayerShip.Modules(I).Data(3) = 0 then
                               Engines.Append(New_Item => I);
                            end if;
                         end loop;
