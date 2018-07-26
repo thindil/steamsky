@@ -2636,5 +2636,27 @@ during combat. -->
   <cargo index="116" maxamount="250" minamount="120"/>
   <description>Large, well armored upgraded and aggresive clockwork drone.</description>
  </ship>
+ <ship combatai="DISARMER" index="151" maxloot="500" minloot="300" name="Large pirate ship mk V" owner="PIRATES">
+  <module index="175"/>
+  <module index="177"/>
+  <module index="172"/>
+  <module amount="9" index="93"/>
+  <module index="169"/>
+  <module amount="6" index="171"/>
+  <module amount="4" index="145"/>
+  <module amount="3" index="191"/>
+  <module index="190"/>
+  <cargo index="1" maxamount="3000" minamount="1500"/>
+  <cargo index="2" maxamount="400" minamount="200"/>
+  <cargo index="3" maxamount="600" minamount="400"/>
+  <cargo index="118" maxamount="1000" minamount="500"/>
+  <cargo index="116" maxamount="400" minamount="200"/>
+  <cargo index="122" maxamount="150" minamount="100"/>
+  <member index="23"/>
+  <member amount="4" index="24"/>
+  <member index="25"/>
+  <member index="61" maxamount="5" minamount="3"/>
+  <description>Large, well armored upgraded version of pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
+ </ship>
 </ships>
 
