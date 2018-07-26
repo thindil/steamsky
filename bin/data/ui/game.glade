@@ -7745,6 +7745,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkEntry" id="edtname">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Insert new name and press Enter to change your ship name.</property>
                             <signal name="changed" handler="Change_Ship_Name" swapped="no"/>
                           </object>
                           <packing>
@@ -7796,6 +7797,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkTreeView" id="treemodules">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Double left click or press Enter to change module name.</property>
                             <property name="model">moduleslist</property>
                             <property name="headers_visible">False</property>
                             <property name="headers_clickable">False</property>
@@ -7853,6 +7855,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="left_padding">12</property>
+                            <property name="right_padding">12</property>
                             <child>
                               <object class="GtkBox">
                                 <property name="visible">True</property>
