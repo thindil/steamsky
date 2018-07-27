@@ -22,6 +22,7 @@ package Game.SaveLoad is
 
    procedure SaveGame; -- Save game to file
    procedure LoadGame; -- Load game from file
-   procedure GenerateSaveName; -- Generate unique name for save game file
+   procedure GenerateSaveName
+     (RenameSave: Boolean := False); -- Generate unique name for save game file
 
 end Game.SaveLoad;
