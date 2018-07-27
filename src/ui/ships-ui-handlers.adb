@@ -32,6 +32,7 @@ with ShipModules; use ShipModules;
 with Crafts; use Crafts;
 with Ships.Upgrade; use Ships.Upgrade;
 with Ships.Crew; use Ships.Crew;
+with Game.SaveLoad; use Game.SaveLoad;
 
 package body Ships.UI.Handlers is
 
@@ -426,6 +427,7 @@ package body Ships.UI.Handlers is
          SemicolonIndex := Index(NewName, ";");
       end loop;
       PlayerShip.Name := NewName;
+      GenerateSaveName(True);
    end ChangeShipName;
 
    procedure ChangeModuleName
