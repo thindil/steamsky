@@ -248,13 +248,7 @@ package body Game is
              (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
       end if;
       -- Set name of savegame
-      SaveName :=
-        SaveDirectory &
-        CharName &
-        To_Unbounded_String("_") &
-        ShipName &
-        To_Unbounded_String
-          ("_" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".sav");
+      GenerateSaveName;
    end NewGame;
 
    procedure UpdateGame(Minutes: Positive) is

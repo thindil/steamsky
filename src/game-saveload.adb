@@ -18,6 +18,7 @@
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Text_IO.Text_Streams; use Ada.Text_IO.Text_Streams;
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Directories; use Ada.Directories;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -38,6 +39,7 @@ with Config; use Config;
 with Stories; use Stories;
 with Log; use Log;
 with Missions; use Missions;
+with Utils; use Utils;
 
 package body Game.SaveLoad is
 
@@ -741,5 +743,19 @@ package body Game.SaveLoad is
          PlayerShip.Crew.Clear;
          raise SaveGame_Invalid_Data with Exception_Message(An_Exception);
    end LoadGame;
+
+   procedure GenerateSaveName is
+   begin
+      loop
+         SaveName :=
+           SaveDirectory &
+           PlayerShip.Crew(1).Name &
+           To_Unbounded_String("_") &
+           PlayerShip.Name &
+           To_Unbounded_String
+             ("_" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".sav");
+         exit when not Exists(To_String(SaveName));
+      end loop;
+   end GenerateSaveName;
 
 end Game.SaveLoad;
