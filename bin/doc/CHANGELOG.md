@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Refreshing combat UI after change crew orders on crew screen
 - Showing info about events in bases
 - Crash on start game
+- Renaming ship in game not change save game file name
 
 ## [2.6] - 2018-07-15
 
