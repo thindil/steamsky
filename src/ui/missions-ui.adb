@@ -269,6 +269,12 @@ package body Missions.UI is
       if MissionsIter = Null_Iter then
          return;
       end if;
+      if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+          .Missions.Length =
+        0 then
+         CloseMessages(Object);
+         return;
+      end if;
       Remove(-(MissionsModel), MissionsIter);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions")),
