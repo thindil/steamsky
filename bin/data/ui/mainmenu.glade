@@ -756,6 +756,7 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
                     <property name="can_focus">True</property>
                     <property name="model">saveslist</property>
                     <property name="enable_search">False</property>
+                    <signal name="row-activated" handler="Load_Game" swapped="no"/>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection"/>
                     </child>
