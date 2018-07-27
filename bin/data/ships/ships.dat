@@ -2658,5 +2658,18 @@ during combat. -->
   <member index="61" maxamount="5" minamount="3"/>
   <description>Large, well armored upgraded version of pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
+ <ship combatai="BERSERKER" index="152" maxloot="400" minloot="200" name="Large undead ship mk V" owner="UNDEAD">
+  <module index="175"/>
+  <module index="177"/>
+  <module index="172"/>
+  <module index="169"/>
+  <module amount="6" index="171"/>
+  <module index="185"/>
+  <cargo index="1" maxamount="4000" minamount="3000"/>
+  <cargo index="116" maxamount="400" minamount="300"/>
+  <member index="28"/>
+  <member index="63" maxamount="12" minamount="8"/>
+  <description>Large, well armored upgraded version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
 </ships>
 
