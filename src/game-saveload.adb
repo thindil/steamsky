@@ -744,7 +744,8 @@ package body Game.SaveLoad is
          raise SaveGame_Invalid_Data with Exception_Message(An_Exception);
    end LoadGame;
 
-   procedure GenerateSaveName is
+   procedure GenerateSaveName(RenameSave: Boolean := False) is
+      OldSaveName: constant String := To_String(SaveName);
    begin
       loop
          SaveName :=
@@ -756,6 +757,9 @@ package body Game.SaveLoad is
              ("_" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".sav");
          exit when not Exists(To_String(SaveName));
       end loop;
+      if RenameSave then
+         Rename(OldSaveName, To_String(SaveName));
+      end if;
    end GenerateSaveName;
 
 end Game.SaveLoad;
