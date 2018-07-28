@@ -86,32 +86,48 @@ package body Help.UI is
       StartIndex, EndIndex, OldIndex: Natural;
       Key: Gtk_Accel_Key;
       Found: Boolean;
-      VariablesNames: constant array(Positive range <>) of Unbounded_String :=
-        (To_Unbounded_String("MoneyName"),
-         To_Unbounded_String("FuelName"),
-         To_Unbounded_String("StrengthName"),
-         To_Unbounded_String("HealingTools"),
-         To_Unbounded_String("HealingSkill"),
-         To_Unbounded_String("PilotingSkill"),
-         To_Unbounded_String("EngineeringSkill"),
-         To_Unbounded_String("GunnerySkill"),
-         To_Unbounded_String("TalkingSkill"),
-         To_Unbounded_String("PerceptionSkill"),
-         To_Unbounded_String("ConditionName"),
-         To_Unbounded_String("DodgeSkill"));
-      VariablesValues: constant array(Positive range <>) of Unbounded_String :=
-        (MoneyName,
-         Items_List(FindProtoItem(ItemType => FuelType)).Name,
-         Attributes_List(StrengthIndex).Name,
-         HealingTools,
-         Skills_List(HealingSkill).Name,
-         Skills_List(PilotingSkill).Name,
-         Skills_List(EngineeringSkill).Name,
-         Skills_List(GunnerySkill).Name,
-         Skills_List(TalkingSkill).Name,
-         Skills_List(PerceptionSkill).Name,
-         Attributes_List(ConditionIndex).Name,
-         Skills_List(DodgeSkill).Name);
+      type Variables_Data is record
+         Name: Unbounded_String;
+         Value: Unbounded_String;
+      end record;
+      Variables: constant array(Positive range <>) of Variables_Data :=
+        (1 => (Name => To_Unbounded_String("MoneyName"), Value => MoneyName),
+         2 =>
+           (Name => To_Unbounded_String("FuelName"),
+            Value => Items_List(FindProtoItem(ItemType => FuelType)).Name),
+         3 =>
+           (Name => To_Unbounded_String("StrengthName"),
+            Value => Attributes_List(StrengthIndex).Name),
+         4 =>
+           (Name => To_Unbounded_String("HealingTools"),
+            Value => HealingTools),
+         5 =>
+           (Name => To_Unbounded_String("HealingSkill"),
+            Value => Skills_List(HealingSkill).Name),
+         6 =>
+           (Name => To_Unbounded_String("PilotingSkill"),
+            Value => Skills_List(PilotingSkill).Name),
+         7 =>
+           (Name => To_Unbounded_String("EngineeringSkill"),
+            Value => Skills_List(EngineeringSkill).Name),
+         8 =>
+           (Name => To_Unbounded_String("GunnerySkill"),
+            Value => Skills_List(GunnerySkill).Name),
+         9 =>
+           (Name => To_Unbounded_String("TalkingSkill"),
+            Value => Skills_List(TalkingSkill).Name),
+         10 =>
+           (Name => To_Unbounded_String("PerceptionSkill"),
+            Value => Skills_List(PerceptionSkill).Name),
+         11 =>
+           (Name => To_Unbounded_String("ConditionName"),
+            Value => Attributes_List(ConditionIndex).Name),
+         12 =>
+           (Name => To_Unbounded_String("DodgeSkill"),
+            Value => Skills_List(DodgeSkill).Name),
+         13 =>
+           (Name => To_Unbounded_String("UnarmedSkill"),
+            Value => Skills_List(UnarmedSkill).Name));
       AccelNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("<skymapwindow>/btnupleft"),
          To_Unbounded_String("<skymapwindow>/btnup"),
@@ -171,12 +187,12 @@ package body Help.UI is
          end if;
          EndIndex := Index(NewText, "}", StartIndex) - 1;
          TagText := Unbounded_Slice(NewText, StartIndex + 1, EndIndex);
-         for I in VariablesNames'Range loop
-            if TagText = VariablesNames(I) then
+         for I in Variables'Range loop
+            if TagText = Variables(I).Name then
                Insert_With_Tags
                  (HelpBuffer,
                   Iter,
-                  To_String(VariablesValues(I)),
+                  To_String(Variables(I).Value),
                   SpecialText);
                exit;
             end if;
