@@ -2649,9 +2649,9 @@ during combat. -->
   <cargo index="1" maxamount="3000" minamount="1500"/>
   <cargo index="2" maxamount="400" minamount="200"/>
   <cargo index="3" maxamount="600" minamount="400"/>
-  <cargo index="118" maxamount="1000" minamount="500"/>
+  <cargo index="152" maxamount="1000" minamount="500"/>
   <cargo index="116" maxamount="400" minamount="200"/>
-  <cargo index="122" maxamount="150" minamount="100"/>
+  <cargo index="156" maxamount="150" minamount="100"/>
   <member index="23"/>
   <member amount="4" index="24"/>
   <member index="25"/>
@@ -2670,6 +2670,26 @@ during combat. -->
   <member index="28"/>
   <member index="63" maxamount="12" minamount="8"/>
   <description>Large, well armored upgraded version of undead flying vessel. Dangerous at close range.</description>
+ </ship>
+ <ship combatai="ATTACKER" index="153" maxloot="500" minloot="250" name="Large inquisition ship mk V" owner="INQUISITION">
+  <module index="175"/>
+  <module index="177"/>
+  <module index="172"/>
+  <module amount="10" index="93"/>
+  <module index="169"/>
+  <module amount="7" index="171"/>
+  <module amount="2" index="145"/>
+  <module amount="2" index="160"/>
+  <cargo index="1" maxamount="3000" minamount="2000"/>
+  <cargo index="2" maxamount="300" minamount="150"/>
+  <cargo index="3" maxamount="500" minamount="400"/>
+  <cargo index="117" maxamount="600" minamount="300"/>
+  <cargo index="116" maxamount="400" minamount="200"/>
+  <member index="29"/>
+  <member index="30"/>
+  <member index="31"/>
+  <member index="64" maxamount="9" minamount="5"/>
+  <description>Large, well armored upgraded version of inquisition flying vessel.</description>
  </ship>
 </ships>
 
