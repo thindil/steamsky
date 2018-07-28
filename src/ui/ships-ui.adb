@@ -150,7 +150,7 @@ package body Ships.UI is
             if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
-                  "Upgrade engine power");
+                  "Upgrade e_ngine power");
                Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
@@ -164,7 +164,7 @@ package body Ships.UI is
             if PlayerShip.Modules(ModuleIndex).Data(1) > MaxValue then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade2")),
-                  "Reduce fuel usage");
+                  "Reduce _fuel usage");
                Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
@@ -174,12 +174,12 @@ package body Ships.UI is
                Set_Label
                  (Gtk_Button
                     (Gtk_Widget(Get_Object(Builder, "btndisableengine"))),
-                  "Disable engine");
+                  "Disable _engine");
             else
                Set_Label
                  (Gtk_Button
                     (Gtk_Widget(Get_Object(Builder, "btndisableengine"))),
-                  "Enable engine");
+                  "Enable _engine");
             end if;
          when CABIN =>
             MaxValue :=
@@ -191,7 +191,7 @@ package body Ships.UI is
             if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
-                  "Upgrade quality");
+                  "Upgrade _quality");
                Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
@@ -206,7 +206,7 @@ package body Ships.UI is
             if not IsPassenger then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
-                  "Assign as owner");
+                  "Assign as _owner");
                Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
             end if;
          when GUN | HARPOON_GUN =>
@@ -222,11 +222,11 @@ package body Ships.UI is
                  GUN then
                   Set_Label
                     (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
-                     "Upgrade damage");
+                     "Upgrade da_mage");
                else
                   Set_Label
                     (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
-                     "Upgrade strength");
+                     "Upgrade str_ength");
                end if;
                Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
@@ -234,7 +234,7 @@ package body Ships.UI is
             end if;
             Set_Label
               (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
-               "Assign as gunner");
+               "Assign as _gunner");
             Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
             Show_All(Gtk_Widget(Get_Object(Builder, "boxassignammo")));
          when BATTERING_RAM =>
@@ -247,7 +247,7 @@ package body Ships.UI is
             if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
-                  "Upgrade damage");
+                  "Upgrade d_amage");
                Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
@@ -262,7 +262,7 @@ package body Ships.UI is
             if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
-                  "Enlarge hull");
+                  "Enlarge _hull");
                Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
@@ -271,7 +271,7 @@ package body Ships.UI is
             if PlayerShip.Modules(ModuleIndex).Data(1) /= 0 then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
-                  "Assign as worker");
+                  "Assign as _worker");
                Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
             end if;
          when MEDICAL_ROOM =>
@@ -283,7 +283,7 @@ package body Ships.UI is
                    0 then
                   Set_Label
                     (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
-                     "Assign as medic");
+                     "Assign as _medic");
                   Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
                   exit;
                end if;

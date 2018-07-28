@@ -7968,11 +7968,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkButton" id="btnupgradedur">
-                                <property name="label" translatable="yes">Upgrade durabilty</property>
+                                <property name="label" translatable="yes">Upgrade _durabilty</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="halign">center</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Set_Upgrade" object="btnupgradedur" swapped="no"/>
                               </object>
                               <packing>
@@ -7988,6 +7989,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="halign">center</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Set_Upgrade" object="btnupgrade1" swapped="no"/>
                               </object>
                               <packing>
@@ -8003,6 +8005,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="halign">center</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Set_Upgrade" object="btnupgrade2" swapped="no"/>
                               </object>
                               <packing>
@@ -8018,10 +8021,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="halign">center</property>
                                 <child>
                                   <object class="GtkButton" id="btnassigncrew">
-                                    <property name="label" translatable="yes">Assign crew</property>
+                                    <property name="label" translatable="yes">Assign _crew</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <property name="use_underline">True</property>
                                     <signal name="clicked" handler="Assign" object="btnassigncrew" swapped="no"/>
                                   </object>
                                   <packing>
@@ -8062,10 +8066,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="halign">center</property>
                                 <child>
                                   <object class="GtkButton" id="btnassignammo">
-                                    <property name="label" translatable="yes">Assign as ammo</property>
+                                    <property name="label" translatable="yes">Assign as _ammo</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <property name="use_underline">True</property>
                                     <signal name="clicked" handler="Assign" object="btnassignammo" swapped="no"/>
                                   </object>
                                   <packing>
@@ -8106,10 +8111,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="halign">center</property>
                                 <child>
                                   <object class="GtkButton" id="btnassignskill">
-                                    <property name="label" translatable="yes">Train</property>
+                                    <property name="label" translatable="yes">Tra_in</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <property name="use_underline">True</property>
                                     <signal name="clicked" handler="Assign" object="btnassignskill" swapped="no"/>
                                   </object>
                                   <packing>
@@ -8145,11 +8151,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                             <child>
                               <object class="GtkButton" id="btndisableengine">
-                                <property name="label" translatable="yes">Disable engine</property>
+                                <property name="label" translatable="yes">Disable _engine</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="halign">center</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Disable_Engine" swapped="no"/>
                               </object>
                               <packing>
@@ -8160,11 +8167,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                             <child>
                               <object class="GtkButton" id="btncontinue">
-                                <property name="label" translatable="yes">Continue upgrading</property>
+                                <property name="label" translatable="yes">C_ontinue upgrading</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="halign">center</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Set_Upgrade" object="btncontinue" swapped="no"/>
                               </object>
                               <packing>
@@ -8175,11 +8183,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                             <child>
                               <object class="GtkButton" id="btnstop">
-                                <property name="label" translatable="yes">Stop upgrading</property>
+                                <property name="label" translatable="yes">_Stop upgrading</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="halign">center</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Stop_Upgrading" swapped="no"/>
                               </object>
                               <packing>
@@ -8190,11 +8199,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                             <child>
                               <object class="GtkButton" id="btnrepairfirst">
-                                <property name="label" translatable="yes">Repair as first</property>
+                                <property name="label" translatable="yes">_Repair as first</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="halign">center</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Set_Repair" object="btnrepairfirst" swapped="no"/>
                               </object>
                               <packing>
@@ -8205,11 +8215,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                             <child>
                               <object class="GtkButton" id="btnremovepriority">
-                                <property name="label" translatable="yes">Remove repair priority</property>
+                                <property name="label" translatable="yes">Remove repair _priority</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="halign">center</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Set_Repair" object="btnremovepriority" swapped="no"/>
                               </object>
                               <packing>
