@@ -2691,5 +2691,18 @@ during combat. -->
   <member index="64" maxamount="9" minamount="5"/>
   <description>Large, well armored upgraded version of inquisition flying vessel.</description>
  </ship>
+ <ship combatai="BERSERKER" index="154" maxaccuracy="35" maxevasion="35" maxloot="450" maxperception="50" minaccuracy="25" minevasion="25" minloot="250" minperception="40" name="Large attacking drone mk V" owner="DRONES">
+  <module index="175"/>
+  <module index="177"/>
+  <module index="172"/>
+  <module amount="6" index="171"/>
+  <module index="185"/>
+  <module amount="2" index="145"/>
+  <module amount="2" index="160"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="117" maxamount="500" minamount="450"/>
+  <cargo index="116" maxamount="300" minamount="150"/>
+  <description>Large, well armored upgraded version of attacking clockwork drone.</description>
+ </ship>
 </ships>
 
