@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
   120mm gun
 - Finishing missions raise or lower (if failed) player character morale
 - New enemy ships: large clockwork drone mk V, large pirate ship mk V, large
-  undead ship mk V, large inquisition ship mk V and large attacking drone mk V
+  undead ship mk V, large inquisition ship mk V, large attacking drone mk V and
+  huge pirate ship mk V
 - More text formatting options to help
 - Option to stories to set which factions are not allowed to start selected 
   story
