@@ -36,6 +36,9 @@ All notable changes to this project will be documented in this file.
 - Crash on start game
 - Renaming ship in game not change save game file name
 
+### Removed
+- HealingTool variable from help
+
 ## [2.6] - 2018-07-15
 
 ### Added
