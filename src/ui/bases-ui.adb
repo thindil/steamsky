@@ -215,6 +215,7 @@ package body Bases.UI is
       MoneyIndex2: Natural;
       ObjectIndex: Integer;
       MinChildren: Gint;
+      FormattedTime: Unbounded_String;
       procedure ShowMap is
       begin
          ShowSkyMap;
@@ -223,6 +224,30 @@ package body Bases.UI is
             "skymap");
          Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
       end ShowMap;
+      procedure FormatTime is
+      begin
+         if Time < 60 then
+            FormattedTime :=
+              To_Unbounded_String(Natural'Image(Time) & " minute");
+            if Time > 1 then
+               Append(FormattedTime, "s");
+            end if;
+         else
+            FormattedTime :=
+              To_Unbounded_String(Positive'Image(Time / 60) & " hour");
+            if (Time / 60) > 1 then
+               Append(FormattedTime, "s");
+            end if;
+            if (Time mod 60) > 0 then
+               Append
+                 (FormattedTime,
+                  " and" & Positive'Image(Time mod 60) & " minute");
+               if (Time mod 60) > 1 then
+                  Append(FormattedTime, "s");
+               end if;
+            end if;
+         end if;
+      end FormatTime;
    begin
       if CurrentState = CLEARING then
          return;
@@ -286,6 +311,7 @@ package body Bases.UI is
          when REPAIRS =>
             RepairCost(Cost, Time, ObjectIndex);
             CountPrice(Cost, FindMember(Talk));
+            FormatTime;
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblbaseinfo2")),
                "Repair cost:" &
@@ -294,10 +320,10 @@ package body Bases.UI is
                To_String(MoneyName) &
                ASCII.LF &
                "Repair time:" &
-               Natural'Image(Time) &
-               " minutes");
+               To_String(FormattedTime));
          when HEAL =>
             HealCost(Cost, Time, ObjectIndex);
+            FormatTime;
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblbaseinfo2")),
                "Heal cost:" &
@@ -306,8 +332,7 @@ package body Bases.UI is
                To_String(MoneyName) &
                ASCII.LF &
                "Heal time:" &
-               Natural'Image(Time) &
-               " minutes");
+               To_String(FormattedTime));
          when CLEARING =>
             null;
       end case;
