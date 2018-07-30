@@ -40,6 +40,7 @@ package Factions is
       NamesType: Unbounded_String; -- Type of names of members of faction (used in generating names of ships)
       Relations: Relations_Container
         .Vector; -- Relations of this faction with others factions
+      PlayerIndex: Unbounded_String; -- Index of mobile which will be used as starting character for player
    end record;
    package Factions_Container is new Vectors(Positive, FactionRecord);
    Factions_List: Factions_Container.Vector;

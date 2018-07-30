@@ -47,8 +47,6 @@ with Factions; use Factions;
 
 package body Game is
 
-   PlayerIndex: Unbounded_String; -- Index of mob used for player starting data
-
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
       Gender: Character) is
@@ -62,7 +60,7 @@ package body Game is
       BasePopulation: Natural;
       TmpCargo: BaseCargo_Container.Vector;
       TmpInventory: Inventory_Container.Vector;
-      PlayerIndex2: constant Positive := FindProtoMob(PlayerIndex);
+      PlayerIndex2: Positive;
       PlayerFactionIndex: Positive;
    begin
       -- Save new game configuration
@@ -189,6 +187,8 @@ package body Game is
            DOCKED,
            False);
       -- Add player to ship
+      PlayerIndex2 :=
+        FindProtoMob(Factions_List(PlayerFactionIndex).PlayerIndex);
       for Item of ProtoMobs_List(PlayerIndex2).Inventory loop
          if Item(3) > 0 then
             Amount := GetRandom(Item(2), Item(3));
@@ -560,9 +560,6 @@ package body Game is
               FindSkillIndex
                 (To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "playerindex" then
-            PlayerIndex :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
          elsif Node_Name(Item(NodesList, I)) = "headarmor" then
             HeadArmor :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
