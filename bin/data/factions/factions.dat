@@ -22,8 +22,11 @@ attribute "population". If it should be random value, use attribute
 population. Minumum value is 0.
 - Optional attribute "namestype": Used in generating ship names of that faction
 and names of all bases. Can be "standard" (default value) or "robotic".
+- Attribute "playerindex": index of mobile used for starting player character.
+Value must be existing mobile index from any mobiles file from *data/mobs*
+directory.
 -->
- <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="95" minpopulation="0" maxpopulation="500">
+ <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="95" minpopulation="0" maxpopulation="500" playerindex="1">
 <!--
 - Tags "relation": Relation of this faction with other faction. All factions
 must have this tags for each faction (even for self).
@@ -45,7 +48,7 @@ enemy ships.
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
  </faction>
- <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="96" minpopulation="0" maxpopulation="500">
+ <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="96" minpopulation="0" maxpopulation="500" playerindex="1">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
   <relation faction="INDEPENDENT" minreputation="-3" maxreputation="2" friendly="Y" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />
@@ -53,7 +56,7 @@ enemy ships.
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
  </faction>
- <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="97" minpopulation="0" maxpopulation="500" friendly="N">
+ <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="97" minpopulation="0" maxpopulation="500" friendly="N" playerindex="1">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
   <relation faction="INDEPENDENT" minreputation="-20" maxreputation="-5" friendly="N" />
   <relation faction="PIRATES" reputation="0" friendly="Y" />
@@ -77,7 +80,7 @@ enemy ships.
   <relation faction="DRONES" reputation="0" friendly="Y" />
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
  </faction>
- <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="100" minpopulation="0" maxpopulation="500" friendly="N">
+ <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="100" minpopulation="0" maxpopulation="500" friendly="N" playerindex="1">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
   <relation faction="INDEPENDENT" minreputation="-40" maxreputation="-25" friendly="N" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />
