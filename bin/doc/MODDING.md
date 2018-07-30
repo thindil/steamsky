@@ -426,8 +426,7 @@ To change which faction is player faction, edit `value` attribute of tag
   will be replaced with name of game money, `{FuelName}` which later will be
   replaced with name of fuel for ship, `{StrengthName}` which later will be
   replaced with name of attribute used to count max character encumbrance,
-  `{HealingTools}` which later will be replaced with name of tool used for 
-  healing, `{HealingSkill}` which later will be replaced with name of skill
+  `{HealingSkill}` which later will be replaced with name of skill
   used for healing, `{PilotingSkill}` which later will be replaced with name
   of skill used for piloting ship, `{EngineeringSkill}` which later will be
   replaced with name of skill used by ship engineer, `{GunnerySkill}` which
