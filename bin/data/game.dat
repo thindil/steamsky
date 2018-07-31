@@ -788,10 +788,6 @@ Value must be existing skill name. -->
 <!-- To change which skill is used for spotting things (other ships, etc), edit
 `value` attribute of tag `perceptionskill`. Value must be existing skill name. -->
  <perceptionskill value="Perception"/>
-<!-- To change which mobile data is used for starting player character data 
-(attributes, skills, etc), edit `value` attribute of tag `playerindex`. Value 
-must be existing mobile index from any mobiles file from *data/mobs* directory.-->
- <playerindex value="1"/>
 <!-- To change which item type is used as a head armor for characters, edit 
 `value` attribute of tag `headarmor`. Value must be existing item type. -->
  <headarmor value="HeadArmor"/>
