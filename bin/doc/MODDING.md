@@ -175,12 +175,6 @@ To change which skill is used for spotting things (other ships, etc), open
 file *game.dat* in *data* directory and edit `value` attribute of tag 
 `perceptionskill`. Value must be existing skill name.
 
-## Player character index
-To change which mobile data is used for starting player character data 
-(attributes, skills, etc), open file *game.dat* in *data* directory and edit
-`value` attribute of tag `playerindex`. Value must be existing mobile index 
-from any mobiles file from *data/mobs* directory.
-
 ## Head armor type
 To change which item type is used as a head armor for characters, open file 
 *game.dat* in *data* directory and edit `value` attribute of tag `headarmor`.
@@ -542,6 +536,9 @@ To change which faction is player faction, edit `value` attribute of tag
   population. Minumum value is 0.
 - Optional attribute `namestype`: Used in generating ship names of that faction
   and names of all bases. Can be `standard` (default value) or `robotic`.
+- Attribute `playerindex`: index of mobile used for starting player character.
+  Value must be existing mobile index from any mobiles file from *data/mobs*
+  directory.
 - Tags `relation`: Relation of this faction with other faction. All factions
   must have this tags for each faction (even for self).
 - Attribute `faction` is faction index to which relation will be set. 
