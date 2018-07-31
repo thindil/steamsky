@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
   story
 - Option to enable or disable ship engines
 - Showing current unarmed skill name in help
+- Separated player starting character for each faction
 
 ### Changed
 - Updated interface
