@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Each faction have separated reputation with each other
 - Updated MODDING.md
 - Separated friendly/enemy relations between factions
+- Updated game data
 
 ### Fixed
 - Keyboard shortcuts for some orders
