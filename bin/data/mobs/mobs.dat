@@ -1647,5 +1647,20 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <equipment index="3" slot="Arms"/>
   <equipment index="4" slot="Legs"/>
  </mobile>
+ <mobile index="76" order="TALK">
+  <skill level="5" name="Rhetoric"/>
+  <skill level="5" name="Brawling"/>
+  <skill level="5" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Repair ship" value="Normal"/>
+  <priority name="Manufacturing" value="Normal"/>
+  <priority name="Upgrading ship" value="Normal"/>
+  <priority name="Talking in bases" value="High"/>
+  <priority name="Cleaning ship" value="Normal"/>
+  <priority name="Defend ship" value="Normal"/>
+ </mobile>
 </mobiles>
 
