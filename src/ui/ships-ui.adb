@@ -151,6 +151,9 @@ package body Ships.UI is
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
                   "Upgrade e_ngine power");
+               Set_Tooltip_Text
+                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+                  "Start upgrading engine power");
                Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
@@ -165,6 +168,9 @@ package body Ships.UI is
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade2")),
                   "Reduce _fuel usage");
+               Set_Tooltip_Text
+                 (Gtk_Button(Get_Object(Builder, "btnupgrade2")),
+                  "Start working on reduce fuel usage of this engine");
                Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
@@ -175,11 +181,17 @@ package body Ships.UI is
                  (Gtk_Button
                     (Gtk_Widget(Get_Object(Builder, "btndisableengine"))),
                   "Disable _engine");
+               Set_Tooltip_Text
+                 (Gtk_Button(Get_Object(Builder, "btndisableengine")),
+                  "Turn off engine so it stop using fuel");
             else
                Set_Label
                  (Gtk_Button
                     (Gtk_Widget(Get_Object(Builder, "btndisableengine"))),
                   "Enable _engine");
+               Set_Tooltip_Text
+                 (Gtk_Button(Get_Object(Builder, "btndisableengine")),
+                  "Turn on engine so ship will be fly faster");
             end if;
          when CABIN =>
             MaxValue :=
@@ -192,6 +204,9 @@ package body Ships.UI is
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
                   "Upgrade _quality");
+               Set_Tooltip_Text
+                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+                  "Start upgrading cabin quality");
                Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
@@ -207,6 +222,9 @@ package body Ships.UI is
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
                   "Assign as _owner");
+               Set_Tooltip_Text
+                 (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+                  "Assign selected crew member as owner of module");
                Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
             end if;
          when GUN | HARPOON_GUN =>
@@ -223,10 +241,16 @@ package body Ships.UI is
                   Set_Label
                     (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
                      "Upgrade da_mage");
+                  Set_Tooltip_Text
+                    (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+                     "Start upgrading damage of gun");
                else
                   Set_Label
                     (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
                      "Upgrade str_ength");
+                  Set_Tooltip_Text
+                    (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+                     "Start upgrading strength of gun");
                end if;
                Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
@@ -235,6 +259,9 @@ package body Ships.UI is
             Set_Label
               (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
                "Assign as _gunner");
+            Set_Tooltip_Text
+              (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+               "Assign selected crew member as gunner");
             Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
             Show_All(Gtk_Widget(Get_Object(Builder, "boxassignammo")));
          when BATTERING_RAM =>
@@ -248,6 +275,9 @@ package body Ships.UI is
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
                   "Upgrade d_amage");
+               Set_Tooltip_Text
+                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+                  "Start upgrading damage of battering ram");
                Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
@@ -263,6 +293,9 @@ package body Ships.UI is
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
                   "Enlarge _hull");
+               Set_Tooltip_Text
+                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+                  "Start enlarging hull so it can have more modules installed");
                Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
@@ -272,6 +305,9 @@ package body Ships.UI is
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
                   "Assign as _worker");
+               Set_Tooltip_Text
+                 (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+                  "Assign selected crew member as worker");
                Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
             end if;
          when MEDICAL_ROOM =>
@@ -284,6 +320,9 @@ package body Ships.UI is
                   Set_Label
                     (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
                      "Assign as _medic");
+                  Set_Tooltip_Text
+                    (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+                     "Assign selected crew member as medic");
                   Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
                   exit;
                end if;

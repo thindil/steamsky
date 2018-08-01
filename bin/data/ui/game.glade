@@ -7974,6 +7974,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes">Start upgrading module durability</property>
                                 <property name="halign">center</property>
                                 <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Set_Upgrade" object="btnupgradedur" swapped="no"/>
@@ -8072,6 +8073,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <property name="tooltip_text" translatable="yes">Assign selected ammo to gun</property>
                                     <property name="use_underline">True</property>
                                     <signal name="clicked" handler="Assign" object="btnassignammo" swapped="no"/>
                                   </object>
@@ -8117,6 +8119,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <property name="tooltip_text" translatable="yes">Train selected skill in this module</property>
                                     <property name="use_underline">True</property>
                                     <signal name="clicked" handler="Assign" object="btnassignskill" swapped="no"/>
                                   </object>
@@ -8173,6 +8176,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes">Continue previous module upgrade</property>
                                 <property name="halign">center</property>
                                 <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Set_Upgrade" object="btncontinue" swapped="no"/>
@@ -8189,6 +8193,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes">Stop current module upgrade</property>
                                 <property name="halign">center</property>
                                 <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Stop_Upgrading" swapped="no"/>
@@ -8205,6 +8210,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes">Repair selected module as first when damaged</property>
                                 <property name="halign">center</property>
                                 <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Set_Repair" object="btnrepairfirst" swapped="no"/>
@@ -8221,6 +8227,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes">Remove previous repair priority from this module</property>
                                 <property name="halign">center</property>
                                 <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Set_Repair" object="btnremovepriority" swapped="no"/>
