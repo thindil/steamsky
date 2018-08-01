@@ -19,7 +19,7 @@ All notable changes to this project will be documented in this file.
 - Option to enable or disable ship engines
 - Showing current unarmed skill name in help
 - Separated player starting character for each faction
-- Starting player character data for undead faction
+- Starting player character data for undead and drones factions
 
 ### Changed
 - Updated interface
