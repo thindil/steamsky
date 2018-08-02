@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Separated friendly/enemy relations between factions
 - Updated game data
+- Final enemy for story with undead
 
 ### Fixed
 - Keyboard shortcuts for some orders
