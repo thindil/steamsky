@@ -123,6 +123,7 @@ package body Ships.UI is
          Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassignskill")), 0);
       end ShowAssignSkill;
    begin
+      Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
       Hide(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
       Hide(Gtk_Widget(Get_Object(Builder, "boxassignammo")));
