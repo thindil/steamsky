@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about events in bases
 - Crash on start game
 - Renaming ship in game not change save game file name
+- Showing upgrade button when upgrade is unavailable for that ship module
 
 ### Removed
 - HealingTool variable from help
