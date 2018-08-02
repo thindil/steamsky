@@ -90,7 +90,7 @@ next.
    <finishdata name="x" value="random" />
    <finishdata name="y" value="random" />
    <finishdata name="faction" value="UNDEAD" />
-   <finishdata name="ship" value="146" />
+   <finishdata name="ship" value="158" />
    <finishdata name="chance" value="1" />
    <finishdata name="condition" value="random" />
    <text condition="askinbase">You asked different people in base but no one can answered your questions about medalion. Resigned you goes to bar. After spend there some time, you hear like one captain tells other about gigantic undead ship which he saw in distance. This ship was symbols near identical like on strange medalion. You asked that captain about direction to area where he saw this ship and you marked it at your map.</text>
