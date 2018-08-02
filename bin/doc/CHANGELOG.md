@@ -11,8 +11,8 @@ All notable changes to this project will be documented in this file.
 - Finishing missions raise or lower (if failed) player character morale
 - New enemy ships: large clockwork drone mk V, large pirate ship mk V, large
   undead ship mk V, large inquisition ship mk V, large attacking drone mk V,
-  huge pirate ship mk V, advanced huge pirate ship mk V and huge undead ship
-  mk V
+  huge pirate ship mk V, advanced huge pirate ship mk V, huge undead ship mk V
+  and advanced huge undead ship mk V
 - More text formatting options to help
 - Option to stories to set which factions are not allowed to start selected 
   story
