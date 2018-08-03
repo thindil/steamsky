@@ -25,8 +25,11 @@ and names of all bases. Can be "standard" (default value) or "robotic".
 - Attribute "playerindex": index of mobile used for starting player character.
 Value must be existing mobile index from any mobiles file from *data/mobs*
 directory.
+- Attribute "playershipindex": index of ship used for starting player ship.
+Value must be existing ship index from any ships file form *data/ships*
+directory.
 -->
- <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="95" minpopulation="0" maxpopulation="500" playerindex="1">
+ <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="95" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1">
 <!--
 - Tags "relation": Relation of this faction with other faction. All factions
 must have this tags for each faction (even for self).
@@ -48,7 +51,7 @@ enemy ships.
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
  </faction>
- <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="96" minpopulation="0" maxpopulation="500" playerindex="1">
+ <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="96" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
   <relation faction="INDEPENDENT" minreputation="-3" maxreputation="2" friendly="Y" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />
