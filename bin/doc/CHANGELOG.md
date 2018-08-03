@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Separated player starting character for each faction
 - Starting player character data for undead and drones factions
 - Starting crew data for undead
+- Separated player starting ship for each faction
 
 ### Changed
 - Updated interface
