@@ -395,7 +395,7 @@ package body Events is
       TraderIndex := ProtoShips_List.First_Index;
       for Ship of ProtoShips_List loop
          if IsFriendly(PlayerFaction, Factions_List(Ship.Owner).Index) and
-           Ship.Index /= PlayerShipIndex then
+           Ship.Index /= Factions_List(Ship.Owner).PlayerShipIndex then
             FriendlyShips.Append(New_Item => TraderIndex);
          end if;
          TraderIndex := TraderIndex + 1;
@@ -434,32 +434,20 @@ package body Events is
       EnemyIndex := ProtoShips_List.First_Index;
       if GetRandom(1, 100) < 99 then
          PlayerValue := CountCombatValue;
-         for Ship of ProtoShips_List loop
-            if Ship.CombatValue <= PlayerValue and
-              (Owner = To_Unbounded_String("Any") or
-               To_Lower(To_String(Factions_List(Ship.Owner).Index)) =
-                 To_Lower(To_String(Owner))) and
-              not IsFriendly
-                (PlayerFaction,
-                 Factions_List(Ship.Owner).Index) then
-               Enemies.Append(New_Item => EnemyIndex);
-            end if;
-            EnemyIndex := EnemyIndex + 1;
-         end loop;
       else
-         for Ship of ProtoShips_List loop
-            if
-              (Owner = To_Unbounded_String("Any") or
-               To_Lower(To_String(Factions_List(Ship.Owner).Index)) =
-                 To_Lower(To_String(Owner))) and
-              not IsFriendly
-                (PlayerFaction,
-                 Factions_List(Ship.Owner).Index) then
-               Enemies.Append(New_Item => EnemyIndex);
-            end if;
-            EnemyIndex := EnemyIndex + 1;
-         end loop;
+         PlayerValue := Natural'Last;
       end if;
+      for Ship of ProtoShips_List loop
+         if Ship.CombatValue <= PlayerValue and
+           (Owner = To_Unbounded_String("Any") or
+            To_Lower(To_String(Factions_List(Ship.Owner).Index)) =
+              To_Lower(To_String(Owner))) and
+           not IsFriendly(PlayerFaction, Factions_List(Ship.Owner).Index) and
+           Ship.Index /= Factions_List(Ship.Owner).PlayerShipIndex then
+            Enemies.Append(New_Item => EnemyIndex);
+         end if;
+         EnemyIndex := EnemyIndex + 1;
+      end loop;
    end GenerateEnemies;
 
 end Events;

@@ -65,7 +65,8 @@ package body Factions is
             Population => (0, 0),
             NamesType => To_Unbounded_String("standard"),
             Relations => TmpRelations,
-            PlayerIndex => Null_Unbounded_String);
+            PlayerIndex => Null_Unbounded_String,
+            PlayerShipIndex => Null_Unbounded_String);
          LogMessage
            ("Loading factions file: " & Full_Name(FoundFile),
             Everything);
@@ -125,6 +126,11 @@ package body Factions is
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "playerindex"));
             end if;
+            if Get_Attribute(Item(NodesList, I), "playershipindex") /= "" then
+               TempRecord.PlayerShipIndex :=
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "playershipindex"));
+            end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (Item(NodesList, I),
@@ -165,7 +171,8 @@ package body Factions is
                Population => (0, 0),
                NamesType => To_Unbounded_String("standard"),
                Relations => TmpRelations,
-               PlayerIndex => Null_Unbounded_String);
+               PlayerIndex => Null_Unbounded_String,
+               PlayerShipIndex => Null_Unbounded_String);
          end loop;
          Free(Reader);
       end loop;

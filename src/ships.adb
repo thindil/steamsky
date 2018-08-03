@@ -290,7 +290,7 @@ package body Ships is
          Amount := Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
       end loop;
       TmpShip.Modules(HullIndex).Data(1) := Amount;
-      if ProtoShip.Index = PlayerShipIndex then
+      if ProtoShip.Index = Factions_List(ProtoShip.Owner).PlayerShipIndex then
          for Recipe of ProtoShip.KnownRecipes loop
             Known_Recipes.Append(New_Item => Recipe);
          end loop;

@@ -173,7 +173,8 @@ package body Game is
       end loop;
       -- Create player ship
       for I in ProtoShips_List.Iterate loop
-         if ProtoShips_List(I).Index = PlayerShipIndex then
+         if ProtoShips_List(I).Index =
+           Factions_List(PlayerFactionIndex).PlayerShipIndex then
             ShipIndex := ProtoShips_Container.To_Index(I);
             exit;
          end if;
@@ -456,9 +457,6 @@ package body Game is
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
          elsif Node_Name(Item(NodesList, I)) = "alchemytools" then
             AlchemyTools :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "playershipindex" then
-            PlayerShipIndex :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
          elsif Node_Name(Item(NodesList, I)) = "drinkstype" then
             DrinksType :=

@@ -518,23 +518,19 @@ package body Bases is
       end if;
       if GetRandom(1, 100) < 99 then
          PlayerValue := CountCombatValue;
-         for C in ProtoShips_List.Iterate loop
-            if ProtoShips_List(C).CombatValue <= PlayerValue and
-              not IsFriendly
-                (PlayerFaction,
-                 Factions_List(ProtoShips_List(C).Owner).Index) then
-               Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
-            end if;
-         end loop;
       else
-         for C in ProtoShips_List.Iterate loop
-            if not IsFriendly
-                (PlayerFaction,
-                 Factions_List(ProtoShips_List(C).Owner).Index) then
-               Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
-            end if;
-         end loop;
+         PlayerValue := Natural'Last;
       end if;
+      for C in ProtoShips_List.Iterate loop
+         if ProtoShips_List(C).CombatValue <= PlayerValue and
+           not IsFriendly
+             (PlayerFaction,
+              Factions_List(ProtoShips_List(C).Owner).Index) and
+           ProtoShips_List(C).Index /=
+             Factions_List(ProtoShips_List(C).Owner).PlayerShipIndex then
+            Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
+         end if;
+      end loop;
       for I in 1 .. EventsAmount loop
          Event := Events_Types'Val(GetRandom(1, 5));
          Attempts := 10;
