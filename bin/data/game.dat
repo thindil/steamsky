@@ -687,10 +687,6 @@ Value must be existing item type. -->
 <!-- To change which item type is used for deconstruct items, edit `value` 
 attribute of tag `alchemytools`. Value must be existing item type. -->
  <alchemytools value="AlchemySet"/>
-<!-- To change which ship is used as a player ship, `value` attribute of tag 
-`playershipindex`. Value must be existing ship index from any ships file from
-*data/ships* directory. -->
- <playershipindex value="1"/>
 <!-- To change which item type is used for reduce thirst, edit `value` 
 attribute of tag `drinkstype`. Value must be existing item type. -->
  <drinkstype value="Drink"/>
