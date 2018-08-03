@@ -53,7 +53,6 @@ package Game is
    RepairTools: Unbounded_String; -- Name of item type used as tool in repairing/upgrading ship
    CleaningTools: Unbounded_String; -- Name of item type used as tool in cleaning ship
    HealingTools: Unbounded_String; -- Name of item type used as tool in healing crew members
-   PlayerShipIndex: Unbounded_String; -- Index of ship prototype used as player ship
    AlchemyTools: Unbounded_String; -- Name of item type used as alchemy tools (mainly in deconstructing orders)
    DrinksType: Unbounded_String; -- Name of item type used as drinks
    CorpseIndex: Unbounded_String; -- Index of item used to create mobs corpses
