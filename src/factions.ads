@@ -41,6 +41,7 @@ package Factions is
       Relations: Relations_Container
         .Vector; -- Relations of this faction with others factions
       PlayerIndex: Unbounded_String; -- Index of mobile which will be used as starting character for player
+      PlayerShipIndex: Unbounded_String; -- Index of proto ship which will be used as starting ship for player
    end record;
    package Factions_Container is new Vectors(Positive, FactionRecord);
    Factions_List: Factions_Container.Vector;
