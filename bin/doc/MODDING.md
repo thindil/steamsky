@@ -42,11 +42,6 @@ To change which item type is used for healing crew members and for deliver
 medicines to bases, open file *game.dat* in *data* directory and edit `value`
 attribute of tag `healingtools`. Value must be existing item type.
 
-## Player Ship index
-To change which ship is used as a player ship, open file *game.dat* in *data*
-directory and edit `value` attribute of tag `playershipindex`. Value must be 
-existing ship index from any ships file from *data/ships* directory.
-
 ## Alchemy tools type
 To change which item type is used for deconstruct items, open file *game.dat* 
 in *data* directory and edit `value` attribute of tag `alchemytools`. Value 
@@ -538,6 +533,9 @@ To change which faction is player faction, edit `value` attribute of tag
   and names of all bases. Can be `standard` (default value) or `robotic`.
 - Attribute `playerindex`: index of mobile used for starting player character.
   Value must be existing mobile index from any mobiles file from *data/mobs*
+  directory.
+- Attribute `playershipindex`: index of ship used for starting player ship.
+  Value must be existing ship index from any ships file form *data/ships*
   directory.
 - Tags `relation`: Relation of this faction with other faction. All factions
   must have this tags for each faction (even for self).
